@@ -55,6 +55,10 @@ listeners.tcp.default {
 
 For information on enabling Proxy Protocol on your LB, refer to the respective documentation for your LB. Some LB products do not support Proxy Protocol but still allow the backend service to obtain the actual client IP. Configure accordingly based on the specific requirements of your LB and cloud service provider.
 
+## Certificate Information from Proxy Protocol
+
+EMQX only supports extracting certificate information from Proxy Protocol v2 headers.
+
 ## Select an LB Product
 
 Many LB products are currently available, including open-source and commercial editions, and public cloud providers also have their load-balancing services.
