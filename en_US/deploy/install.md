@@ -15,67 +15,6 @@ This chapter also covers how to migrate from EMQX 4.4 to EMQX 5.1.
 
 {% endemqxce %}
 
-## Installation Environment
-
-The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
-
-If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. Click the tabs to see how to enable the UTF-8 locale on different platforms:
-
-:::: tabs
-
-::: tab Amazon Linux
-
-Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
-
-```bash
-cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
-#cloud-config
-locale: C.utf8
-EOF
-```
-
-:::
-
-::: tab CentOS
-
-It is usually enabled by `localectl` under systemd:
-
-```bash
-sudo localectl set-locale LANG=C.UTF-8
-```
-
-:::
-
-::: tab Debian
-
-Enable the UTF-8 locale in two ways:
-
-- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
-
-  ```bash
-  sudo localectl set-locale LANG=C.UTF-8
-  ```
-
-- Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
-
-  ```bash
-  sudo update-locale LANG=C.UTF-8
-  ```
-
-:::
-
-::: tab Ubuntu
-
-Enable the UTF-8 locale with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
-
-```bash
-sudo update-locale LANG=C.UTF-8
-```
-
-:::
-
-::::
-
 ## Download
 
 {% emqxce %}
@@ -145,6 +84,87 @@ Below are hardware specifications for running EMQX with simple workloads, suppor
 In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
 
 ::: -->
+
+## Installation Environment
+
+The Erlang VM powering EMQX relies on system locale settings to enable Unicode support for various functionalities, including [filenames](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#unicode-filenames) and [terminal IO](https://www.erlang.org/doc/apps/stdlib/unicode_usage.html#the-interactive-shell) in interactive Erlang shells.
+
+If you use the Linux operating system, it is recommended to make sure that UTF-8 locale is enabled in the system environment before starting EMQX. Click the tabs to see how to enable the UTF-8 locale on different platforms:
+
+:::: tabs
+
+::: tab Amazon Linux
+
+Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
+
+```bash
+cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
+#cloud-config
+locale: C.utf8
+EOF
+```
+
+:::
+
+::: tab CentOS
+
+It is usually enabled by `localectl` under systemd:
+
+```bash
+sudo localectl set-locale LANG=C.UTF-8
+```
+
+:::
+
+::: tab Debian
+
+Enable the UTF-8 locale in two ways:
+
+- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
+
+  ```bash
+  sudo localectl set-locale LANG=C.UTF-8
+  ```
+
+- Otherwise, it can be enabled with [`update-locale`](https://manpages.debian.org/buster/locales/update-locale.8.en.html).
+
+  ```bash
+  sudo update-locale LANG=C.UTF-8
+  ```
+
+:::
+
+::: tab Ubuntu
+
+Enable the UTF-8 locale with [`update-locale`](https://manpages.ubuntu.com/manpages/jammy/man8/update-locale.8.html):
+
+```bash
+sudo update-locale LANG=C.UTF-8
+```
+
+:::
+
+::::
+
+## Port Usage
+
+EMQX uses the following ports by default. Ensure these ports are not occupied by other applications, and open the firewall as needed to ensure EMQX runs properly.
+
+| Port  | Protocol | Description                                                  |
+| ----- | -------- | ------------------------------------------------------------ |
+| 1883  | TCP      | MQTT over TCP listener port, mainly used for unencrypted MQTT connections. |
+| 8883  | TCP      | MQTT over SSL/TLS listener port for encrypted MQTT connections. |
+| 8083  | TCP      | MQTT over WebSocket listener port for MQTT communication over WebSocket. |
+| 8084  | TCP      | MQTT over WSS (WebSocket over SSL) listener port for encrypted WebSocket connections. |
+| 18083 | HTTP     | EMQX Dashboard and REST API port for management console and API interfaces. |
+| 4370  | TCP      | Erlang distribution port, the actual port may be `BasePort (4370) + Offset` depending on the node name. |
+| 5370  | TCP      | Cluster RPC port (5369 in Docker environment), the actual port may be `BasePort (5370) + Offset` depending on the node name. |
+
+::: tip Note
+
+Even if a cluster is not formed, EMQX will still listen on ports 4370 and 5370. These two ports are fixed and cannot be modified. The Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, the default is 0. For more information, refer to [Port Mapping](./cluster/security.md#port-mapping).
+
+:::
 
 ## Files and Directories
 

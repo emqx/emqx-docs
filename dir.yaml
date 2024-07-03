@@ -35,7 +35,20 @@
       path: getting-started/restrictions
     - title_en: FAQ
       title_cn: 常见问题解答
-      path: faq/faq
+      collapsed: true
+      children:
+        - title_en: Concept FAQs
+          title_cn: 概念问题
+          path: faq/concept
+        - title_en: Deployment FAQs
+          title_cn: 部署问题
+          path: faq/deployment
+        - title_en: Feature FAQs
+          title_cn: 功能问题
+          path: faq/feature
+        - title_en: Usage FAQs
+          title_cn: 使用问题
+          path: faq/faq
     - title_en: Technical Support
       title_cn: 技术支持
       path: support/technical-support
@@ -64,7 +77,20 @@
       path: getting-started/restrictions
     - title_en: FAQ
       title_cn: 常见问题解答
-      path: faq/faq
+      collapsed: true
+      children:
+        - title_en: Concept FAQs
+          title_cn: 概念问题
+          path: faq/concept
+        - title_en: Deployment FAQs
+          title_cn: 部署问题
+          path: faq/deployment
+        - title_en: Feature FAQs
+          title_cn: 功能问题
+          path: faq/feature
+        - title_en: Usage FAQs
+          title_cn: 使用问题
+          path: faq/faq
     - title_en: Technical Support
       title_cn: 技术支持
       path: support/technical-support
@@ -107,7 +133,6 @@
     # - deploy/install-marketplace
     - title_en: Work with License
       title_cn: 配置 License
-      edition: ee
       path: deploy/license
     - title_en: Upgrade Guide
       title_cn: 升级指南
@@ -537,6 +562,7 @@
         - observability/tracer
         - observability/mqtt-system-topics
         - observability/prometheus
+        - observability/datadog
         - title_en: Integrate with OpenTlelemetry
           title_cn: 集成 OpenTelemetry
           path: observability/open-telemetry/open-telemetry

@@ -49,6 +49,7 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 - 连接断开（$events/client_disconnected）
 - 连接确认（$events/client_connack）
 - 鉴权完成（$events/client_check_authz_complete）
+- 认证完成（$events/client_check_authn_complete）
 - 订阅（$events/session_subscribed）
 - 取消订阅（$events/session_unsubscribed）
 

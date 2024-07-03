@@ -315,14 +315,13 @@ Then the output will be:
     ```
 
 ::: tip
-- Topics in the `FROM` clause need to be enclosed in double quotes (`""`).
-- The `WHERE` clause is followed by the filter condition. If a string is used in the condition, it needs to be enclosed in single quotes (`''`).
-- If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example, `SELECT * FROM "topic1", "topic2" WHERE topic1.id = topic2.id`.
 
-    ```sql
-    SELECT * FROM "t/1", "t/2".
-    ```
-- You can use the period symbol (`.`) to access inner fields of the payload. For example, if the payload is a nested JSON structure, you can use `payload.outer_field.inner_field` to access the `inner_field` of the `outer_field`. 
+- Topics in the `FROM` clause need to be enclosed in double quotes (`""`) or single quotes (`''`).
+- The `WHERE` clause is followed by the filter condition. If a string is used in the condition, it needs to be enclosed in single quotes (`''`).
+- If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example, `SELECT * FROM "t/1", "t/2".`
+- You can use the period symbol (`.`) to access inner fields of the payload. For example, if the payload is a nested JSON structure, you can use `payload.outer_field.inner_field` to access the `inner_field` of the `outer_field`.
+- Try not to create aliases for payload, as this will affect performance. That is, try not to use this: `SELECT payload as p`.
+- Some escape sequences need to be unescaped when used, see [unescape function](./rule-sql-builtin-functions.md#unescapestring-string---string).
 :::
 
 ### Examples of `FOREACH` Statements
