@@ -1,6 +1,6 @@
 # Use HTTP Service
 
-::: tip Tip
+::: tip
 Starting from EMQX v5.8.0, the HTTP authenticator supports ACL rules in the response body. You are recommended to use the new format for better performance. For details, see [HTTP Authentication](../authn/http.md).
 :::
 
