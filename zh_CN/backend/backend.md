@@ -1928,13 +1928,11 @@ MQTT 消息中的数据。
 
 **$payload 与 $<Number\>:**
 
-你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
+你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
 
 例如 `payload` 为 `{"data": {"temperature": 23.9}}`, 你可以通过占位符 `["$payload",
 "data", "temperature"]` 来获取其中的 `23.9`。
-
-![image](./assets/backends_3.png)
 
 考虑到 Json 还有数组这一数据类型的情况, 我们引入了 `$0` 与 `$<pos_integer>`, `$0` 表示获取数组内所有元素,
 `$<pos_integer>` 表示获取数组内第 `<pos_integer>` 个元素。
