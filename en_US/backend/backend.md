@@ -1,26 +1,11 @@
----
-# 标题
-title: 数据存储
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # Backends
 
 {% emqxce %}
+
 ::: danger
-Data storage is an exclusive feature of EMQ X Enterprise.
+Data storage is an exclusive feature of EMQX Enterprise.
 :::
+
 {% endemqxce %}
 
 ## MQTT Message Persistence
@@ -51,17 +36,17 @@ Data storage is an exclusive feature of EMQ X Enterprise.
 
 ### Client Connection State
 
-EMQ X supports retaining the client's connection state in Redis or DB.
+EMQX supports retaining the client's connection state in Redis or DB.
 
 ### Client Subscription by Broker
 
-EMQ X Persistence supports subscription by broker. When a client goes
+EMQX Persistence supports subscription by broker. When a client goes
 online, the persistence module loads the subscriptions of the client
 from Redis or Databases.
 
 ### List of Persistence Plugins
 
-EMQ X allowes storing messages in Redis, MySQL, PostgreSQL, MongoDB,
+EMQX allowes storing messages in Redis, MySQL, PostgreSQL, MongoDB,
 Cassandra, DynamoDB, InfluxDB, OpenTSDB and
 Timescale:
 
@@ -179,7 +164,7 @@ Redis backend supports raw 'commands' in 'action',
 e.g.:
 
 ```bash
-## After a client connected to the EMQ X server, it executes a redis command (multiple redis commands also supported)
+## After a client connected to the EMQX server, it executes a redis command (multiple redis commands also supported)
 backend.redis.hook.client.connected.3 = {"action": {"commands": ["SET conn:${clientid} clientid"]}, "pool": "pool1"}
 ```
 
@@ -323,7 +308,7 @@ HGETALL mqtt:sub:test
 ```
 ### Redis SUB/UNSUB Publish
 
-When a device subscribes / unsubscribes to topics, EMQ X broker publish
+When a device subscribes / unsubscribes to topics, EMQX broker publish
 an event to the Redis:
 
 ```bash
@@ -458,7 +443,7 @@ MySQL backend supports SQL in
 'action':
 
 ```bash
-## After a client is connected to the EMQ X server, it executes a SQL command (multiple SQL commands also supported)
+## After a client is connected to the EMQX server, it executes a SQL command (multiple SQL commands also supported)
 backend.mysql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -792,7 +777,7 @@ PostgreSQL backend supports SQL in
 'action':
 
 ```bash
-## After a client is connected to the EMQ X server, it executes a SQL command (multiple command also supported)
+## After a client is connected to the EMQX server, it executes a SQL command (multiple command also supported)
 backend.pgsql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -1432,7 +1417,7 @@ Cassandra backend supports CLQ in
 'action':
 
 ```bash
-## After a client is connected to the EMQ X server, it executes a CQL command(multiple command also supported):
+## After a client is connected to the EMQX server, it executes a CQL command(multiple command also supported):
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -2020,7 +2005,7 @@ follows:
 
 | Placeholder | Description                                                                         |
 | ----------- | ----------------------------------------------------------------------------------- |
-| $id         | MQTT Message UUID, assigned by EMQ X                                                |
+| $id         | MQTT Message UUID, assigned by EMQX                                                |
 | $clientid   | Client ID used by the Client                                                        |
 | $username   | Username used by the Client                                                         |
 | $peerhost   | IP of Client                                                                        |
@@ -2028,9 +2013,9 @@ follows:
 | $topic      | Topic of MQTT Message                                                               |
 | $payload    | Payload of MQTT Message, must be valid Json data                                    |
 | $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
-| $timestamp  | The timestamp EMQ X sets when preparing to forward messages, precision: Nanoseconds |
+| $timestamp  | The timestamp EMQX sets when preparing to forward messages, precision: Nanoseconds |
 
-**$payload and `$<Number>`:**
+**$payload and $<Number\>:**
 
 You can directly use `$content` to obtain the complete message payload,
 you can use `["$payload", <Key>, ...]` to get the data inside the
@@ -2041,7 +2026,7 @@ For example `payload` is `{"data": {"temperature": 23.9}}`, you can via
 
 In the case of array data type in Json, we introduced `$0` and
 `$<pos_integer>`, `$0` means to get all elements in the array, and
-`$<pos_integer>` means to get the \<pos_integer>th element in the
+`$<pos_integer>` means to get the <pos\_integer\>th element in the
 array.
 
 A simple example, `["$payload", "$0", "temp"]` will get `[20, 21]` from
@@ -2259,7 +2244,7 @@ follows:
 
 | Placeholder | Description                                                                         |
 | ----------- | ----------------------------------------------------------------------------------- |
-| $id         | MQTT Message UUID, assigned by EMQ X                                                |
+| $id         | MQTT Message UUID, assigned by EMQX                                                |
 | $clientid   | Client ID used by the Client                                                        |
 | $username   | Username used by the Client                                                         |
 | $peerhost   | IP of Client                                                                        |
@@ -2267,7 +2252,7 @@ follows:
 | $topic      | Topic of MQTT Message                                                               |
 | $payload    | Payload of MQTT Message, must be valid Json data                                    |
 | $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
-| $timestamp  | The timestamp EMQ X sets when preparing to forward messages, precision: Nanoseconds |
+| $timestamp  | The timestamp EMQX sets when preparing to forward messages, precision: Nanoseconds |
 
 **$payload and $<Number\>:**
 
@@ -2487,7 +2472,7 @@ follows:
 
 | Placeholder | Description                                                                         |
 | ----------- | ----------------------------------------------------------------------------------- |
-| $id         | MQTT Message UUID, assigned by EMQ X                                                |
+| $id         | MQTT Message UUID, assigned by EMQX                                                |
 | $clientid   | Client ID used by the Client                                                        |
 | $username   | Username used by the Client                                                         |
 | $peerhost   | IP of Client                                                                        |
@@ -2495,7 +2480,7 @@ follows:
 | $topic      | Topic of MQTT Message                                                               |
 | $payload    | Payload of MQTT Message, must be valid Json data                                    |
 | $<Number\> | It must be used with $paylaod to retrieve data from Json Array                      |
-| $timestamp  | The timestamp EMQ X sets when preparing to forward messages, precision: Nanoseconds |
+| $timestamp  | The timestamp EMQX sets when preparing to forward messages, precision: Nanoseconds |
 
 **$payload and $<Number\>:**
 

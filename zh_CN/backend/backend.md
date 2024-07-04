@@ -1,30 +1,11 @@
----
-# 标题
-title: 数据存储
-# 编写日期
-date: 2020-02-07 17:15:26
-# 作者 Github 名称
-author: wivwiv
-# 关键字
-keywords:
-# 描述
-description:
-# 分类
-category: 
-# 引用
-ref:
----
-
 # 数据存储
 
 
 数据存储的主要使用场景包括将客户端上下线状态，订阅主题信息，消息内容，消息抵达后发送消息回执等操作记录到 Redis、MySQL、PostgreSQL、MongoDB、Cassandra 等各种数据库中。用户也可以通过订阅相关主题的方式来实现类似的功能，但是在企业版中内置了对这些持久化的支持；相比于前者，后者的执行效率更高，也能大大降低开发者的工作量。
 
-{% emqxce %}
 ::: danger
-数据存储是 EMQ X Enterprise 专属功能。
+数据存储是 EMQX Enterprise 专属功能。
 :::
-{% endemqxce %}
 
 ## 数据存储设计
 
@@ -61,7 +42,7 @@ ref:
 
 ### 存储插件列表
 
-EMQ X 支持 MQTT 消息直接存储 Redis、MySQL、PostgreSQL、MongoDB、Cassandra、DynamoDB、InfluxDB、OpenTSDB 数据库:
+EMQX 支持 MQTT 消息直接存储 Redis、MySQL、PostgreSQL、MongoDB、Cassandra、DynamoDB、InfluxDB、OpenTSDB 数据库:
 
 | 存储插件                    | 配置文件                         | 说明              |
 | ----------------------- | ---------------------------- | --------------- |
@@ -77,7 +58,7 @@ EMQ X 支持 MQTT 消息直接存储 Redis、MySQL、PostgreSQL、MongoDB、Cass
 
 ### 配置步骤
 
-EMQ X 中支持不同类型的数据库的持久化，虽然在一些细节的配置上有所不同，但是任何一种类型的持久化配置主要做两步操作：
+EMQX 中支持不同类型的数据库的持久化，虽然在一些细节的配置上有所不同，但是任何一种类型的持久化配置主要做两步操作：
 
 - 数据源连接配置：这部分主要用于配置数据库的连接信息，包括服务器地址，数据库名称，以及用户名和密码等信息，针对每种不同的数据库，这部分配置可能会有所不同；
 - 事件注册与行为：根据不同的事件，你可以在配置文件中配置相关的行为（action），相关的行为可以是函数，也可以是SQL语句。
@@ -168,7 +149,7 @@ backend.redis.hook.message.acked.2       = {"topic": "pubsub/#", "action": {"fun
 Redis 存储支持用户采用 Redis Commands 语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 redis
+## 在客户端连接到 EMQX 服务器后，执行一条 redis
 backend.redis.hook.client.connected.3 = {"action": {"commands": ["SET conn:${clientid} ${clientid}"]}, "pool": "pool1"}
 ```
 
@@ -433,7 +414,7 @@ backend.mysql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 MySQL 存储支持用户采用 SQL 语句配置 Action:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条 sql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条 sql 语句)
 backend.mysql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -743,7 +724,7 @@ backend.pgsql.hook.message.acked.1       = {"topic": "#", "action": {"function":
 PostgreSQL 存储支持用户采用SQL语句配置 Action，例如:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 sql 语句(支持多条sql语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 sql 语句(支持多条sql语句)
 backend.pgsql.hook.client.connected.3 = {"action": {"sql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -1338,7 +1319,7 @@ backend.cassa.hook.message.acked.1       = {"topic": "#", "action": {"function":
 在 etc/plugins/emqx_backend_cassa.conf 中添加如下配置:
 
 ```bash
-## 在客户端连接到 EMQ X 服务器后，执行一条 cql 语句(支持多条 cql 语句)
+## 在客户端连接到 EMQX 服务器后，执行一条 cql 语句(支持多条 cql 语句)
 backend.cassa.hook.client.connected.3 = {"action": {"cql": ["insert into conn(clientid) values(${clientid})"]}, "pool": "pool1"}
 ```
 
@@ -1827,7 +1808,7 @@ aws dynamodb scan --table-name mqtt_topic_msg_map --region us-west-2  --endpoint
 
 ### InfluxDB 配置
 
-EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
+EMQX 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置文件：
 
 ```bash
 [[udp]]
@@ -1837,7 +1818,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
   database = "emqx"
 
   # InfluxDB precision for timestamps on received points ("" or "n", "u", "ms", "s", "m", "h")
-  # EMQ X 默认时间戳是毫秒
+  # EMQX 默认时间戳是毫秒
   precision = "ms"
   
   # 其他配置根据需要自行修改
@@ -1849,7 +1830,7 @@ EMQ X 仅支持通过 UDP 协议连接 InfluxDB，需要修改 InfluxDB 配置�
 
 ### 配置 InfluxDB 消息存储
 
-配置文件: etc/plugins/emqx_backend_influxdb.conf:
+配置文件 etc/plugins/emqx_backend_influxdb.conf:
 
 ```bash
 ## InfluxDB UDP 服务地址
@@ -1935,7 +1916,7 @@ MQTT 消息中的数据。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -1943,9 +1924,9 @@ MQTT 消息中的数据。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 纳秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 纳秒            |
 
-**$payload 与 `$<Number>`:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -1953,14 +1934,22 @@ MQTT 消息中的数据。
 例如 `payload` 为 `{"data": {"temperature": 23.9}}`, 你可以通过占位符 `["$payload",
 "data", "temperature"]` 来获取其中的 `23.9`。
 
+![image](./assets/backends_3.png)
+
 考虑到 Json 还有数组这一数据类型的情况, 我们引入了 `$0` 与 `$<pos_integer>`, `$0` 表示获取数组内所有元素,
 `$<pos_integer>` 表示获取数组内第 `<pos_integer>` 个元素。
 
 一个简单例子, `["$payload", "$0", "temp"]` 将从 `[{"temp": 20}, {"temp": 21}]`
 中取得 `[20, 21]`, 而 `["$payload", "$1", "temp"]` 将只取得 `20`。
 
+![image](./assets/backends_4.png)
+
+![image](./assets/backends_5.png)
+
 值得注意的是, 当你使用 `$0` 时，我们希望你取得的数据个数都是相等的。因为我们需要将这些数组转换为多条记录写入 InfluxDB,
 而当你一个字段取得了 3 份数据, 另一个字段却取得了 2 份数据, 我们将无从判断应当怎样为你组合这些数据。
+
+![image](./assets/backends_6.png)
 
 **Example**
 
@@ -2165,7 +2154,7 @@ MQTT 消息中的数据。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -2173,9 +2162,9 @@ MQTT 消息中的数据。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 `$<Number>`:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
@@ -2376,7 +2365,7 @@ $2, $3)`。
 
 | Placeholder | Description                            |
 | ----------- | -------------------------------------- |
-| $id         | MQTT 消息 UUID, 由 EMQ X 分配               |
+| $id         | MQTT 消息 UUID, 由 EMQX 分配               |
 | $clientid   | 客户端使用的 Client ID                       |
 | $username   | 客户端使用的 Username                        |
 | $peerhost   | 客户端 IP                                 |
@@ -2384,9 +2373,9 @@ $2, $3)`。
 | $topic      | MQTT 消息主题                              |
 | $payload    | MQTT 消息载荷, 必须为合法的 Json                 |
 | $<Number\> | 必须配合 $paylaod 使用, 用于从 Json Array 中获取数据 |
-| $timestamp  | EMQ X 准备转发消息时设置的时间戳, 精度: 毫秒            |
+| $timestamp  | EMQX 准备转发消息时设置的时间戳, 精度: 毫秒            |
 
-**$payload 与 `$<Number>`:**
+**$payload 与 $<Number\>:**
 
 你可以直接使用 `$payload` 取得完整的消息载荷, 也可以通过 `["$payload", <Key>, ...]`
 取得消息载荷内部的数据。
