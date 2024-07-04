@@ -1,7 +1,7 @@
 # Use HTTP Service
 
 ::: tip
-Starting from EMQX v5.8.0, the HTTP authenticator supports ACL rules in the response body. You are recommended to use the new format for better performance. For details, see [HTTP Authentication](../authn/http.md).
+Starting from EMQX v5.8.0, the HTTP authenticator supports including ACL rules in the response body to preset permissions for clients. You are recommended to use the new format for better performance. For details, see [HTTP Authentication](../authn/http.md).
 :::
 
 EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX makes requests to the HTTP service and determines the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
