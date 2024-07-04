@@ -115,9 +115,9 @@ The `eq` syntax is to match exactly a topic filter, but not any topic that match
 
 ### Authorization Check Priority
 
-Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission](../authn/authn.md) set during the authentication phase.
+Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission set](../authn/authn.md#super-user) during the authentication phase.
 
-For super users, all their operations will be skipped from the authorization check; if the permission list is set, EMQX will first follow the client's permission data to run the authorization checker. The priority is as follows:
+For super users, all their operations will be skipped from the authorization check. If the [Access Control List (ACL) list](../authn/acl.md) is set, EMQX will first follow the client's permission data before running the authorization checker. The priority is as follows:
 
 ```bash
 Super user > permission data > authorization check

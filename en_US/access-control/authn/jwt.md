@@ -2,7 +2,7 @@
 
 [JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. EMQX supports using JWT for user authentication. 
 
-::: tip
+::: tip Prerequisite
 
 Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
@@ -32,7 +32,7 @@ To reduce the possibility of JWT leakage and theft, it is recommended to set a r
 
 ## Access Control List (Optional)
 
-The Access Control List (ACL) is an optional extension of authentication result to control the permissions of the client after login. The JWT can include an `acl` field to specify the permissions of the client.
+The Access Control List (ACL) is an optional extension of an authentication result to control the client's permissions after login. The JWT can include an `acl` field to specify the client's permissions.
 
 See [Access Control List (ACL)](./acl.md) for more information.
 
@@ -94,6 +94,3 @@ Click **Create** to complete the configuration.
 <!-- ## Configure with Configuration Items
 
 You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
-
-
-```

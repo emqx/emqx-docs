@@ -1,19 +1,19 @@
 # Access Control List
 
-::: tip
-This document discusses the Access Control List (ACL) rules specific to each client, included in the authentication response. This approach is concise and performant, and should meet most requirements. For For more comprehensive but generic authorization methods, refer to [Authorization](../authz/authz.md).
-:::
+EMQX allows presetting client permissions during the authentication phase to control the publish-subscribe permission checks after the client logs in. Currently, both JWT authentication and HTTP authentication support permission presets, using Access Control Lists (ACL) as an optional extension of the authentication result. For example, this can be a private claim `acl` defined in JWT, or an `acl` JSON property returned as part of the HTTP authentication response. After a client connects, its publish and subscribe actions are restricted by these ACL rules.
 
-The Access Control List (ACL) is an optional extension of authentication result to control the permissions of the client after login. For example a private Claim `acl` defined in JWT, or a `acl` JSON property returned as a part of the HTTP authentication response.
+This page introduces the ACL rules for presetting client permissions. Authorizing a client using the ACL rules included in the authentication response is concise, efficient, and generally sufficient for most use cases. For more comprehensive but generic authorization methods, refer to [Authorization](../authz/authz.md).
 
 ::: tip
 
 ACL rules returned by authentication are checked before all Authorizers. For details, see [Authorization Check Priority](../authz/authz.md#authorization-check-priority).
 :::
 
-:::: tabs type:board-card
+## ACL Format
 
-::: tab New Format
+This section introduces 2 ACL formats supported in EMQX.
+
+### New Format
 
 The new format, supported starting from v5.5.0, utilizes an ACL to specify multiple permissions, closely resembling the semantics of ACL rules and offering greater flexibility.
 
@@ -67,11 +67,9 @@ Example:
 }
 ```
 
-:::
+### Old Format
 
-::: tab Old Format
-
-The permission list defines `pub`, `sub`, and `all` as three optional fields, specifying the whitelist of topics for publishing, subscribing, or both. Topics may include topic wildcards and placeholders (currently supports `${clientid}` and `${username}`). To address potential conflicts between topic content and placeholder syntax, the `eq` syntax is provided to bypass placeholder interpolation. Example:
+In the following JWT ACL example, the permission list defines `pub`, `sub`, and `all` as three optional fields, specifying the whitelist of topics for publishing, subscribing, or both. Topics may include topic wildcards and placeholders (currently supports `${clientid}` and `${username}`). To address potential conflicts between topic content and placeholder syntax, the `eq` syntax is provided to bypass placeholder interpolation.
 
 ```json
 {
@@ -97,7 +95,3 @@ The permission list defines `pub`, `sub`, and `all` as three optional fields, sp
 ```
 
 In this example, `testpub1/${username}` is replaced at runtime with `testpub1/emqx_u`, whereas `eq testpub2/${username}` is processed as `testpub2/${username}` at runtime.
-
-:::
-
-::::

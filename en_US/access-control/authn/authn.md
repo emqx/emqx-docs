@@ -111,7 +111,7 @@ Usually, authentication only verifies the client's identity credentials, and whe
 
 ::: tip
 
-Permission preset is currently only supported in JWT authentication. The list of publish/subscribe permissions owned by the current client will be carried via the JWT Payload, and will be preset to the client after passing the authentication.
+Permission preset is supported in JWT and HTTP authentication. An [Access Control List (ACL)](./acl.md) of publish/subscribe permissions owned by the current client will be carried via the JWT Payload and HTTP response body. Permissions will be preset to the client after passing the authentication.
 
 :::
 
