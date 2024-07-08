@@ -52,7 +52,7 @@ listeners.tcp.default {
 
 有关在 LB 上启用 Proxy Protocol 的配置请参考各自的操作文档，一些 LB 产品并不支持 Proxy Protocol，但仍然支持后端服务获取客户端真实 IP，请根据具体的 LB 和云服务提供商的要求进行相应的配置。
 
-## 客户端证书信息
+### 客户端证书信息
 
 EMQX 仅支持从 Proxy Protocol v2 中提取客户端证书信息。例如 CN (common name)，DN (subject)。
 
