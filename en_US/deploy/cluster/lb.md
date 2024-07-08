@@ -7,9 +7,9 @@ Load Balancer (LB) balances the load among multiple network components and optim
 - Reduce the load of EMQX clusters by TLS/SSL termination;
 - Improve cluster security, with LB configured at the front end of the cluster, unwanted traffic can be blocked to protect the EMQX cluster from malicious attacks. 
 
-This chapter introduces how to configure LB in EMQX. 
+This section introduces how to configure LB in EMQX. 
 
-## Architecture
+## Deployment Architecture
 
 This section introduces three different load balancer deployment architectures.
 
@@ -38,7 +38,7 @@ Compared to directly using EMQX to handle TLS connections, this approach can get
 
 In addition to load balancing deployment clusters, you can also use DNS round-robin to connect directly to the EMQX cluster, which involves adding all nodes to the DNS round-robin list. Devices access the cluster via domain names or IP address lists. However, it is generally not recommended to use DNS round-robin for production environments.
 
-## Real IP and Proxy Protocol
+## Obtain Real IP and TLS Certificate Information
 
 After deploying LB, EMQX typically needs to obtain the actual source IP of the client or TLS certificate information. You will need to enable [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol) configuration on the LB or enable relevant configurations to retrieve the real IP.
 
@@ -55,9 +55,9 @@ listeners.tcp.default {
 
 For information on enabling Proxy Protocol on your LB, refer to the respective documentation for your LB. Some LB products do not support Proxy Protocol but still allow the backend service to obtain the actual client IP. Configure accordingly based on the specific requirements of your LB and cloud service provider.
 
-### Certificate Information from Proxy Protocol
+### Client TLS Certificate Information
 
-EMQX only supports extracting certificate information, such as Common Name (CN) and Subject, from Proxy Protocol v2 headers.
+Only Proxy Protocol v2 support extracting client certificate information, such as Common Name (CN) and Subject. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 
 ## Select an LB Product
 
