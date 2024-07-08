@@ -57,7 +57,7 @@ For information on enabling Proxy Protocol on your LB, refer to the respective d
 
 ### Certificate Information from Proxy Protocol
 
-EMQX only supports extracting certificate information from Proxy Protocol v2 headers.
+EMQX only supports extracting certificate information, such as Common Name (CN) and Subject, from Proxy Protocol v2 headers.
 
 ## Select an LB Product
 

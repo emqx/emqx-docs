@@ -7,7 +7,7 @@
 - TLS/SSL 终结，减轻 EMQX 集群的负担；
 - 提高安全性，有了负载均衡在集群前端，能够通过设置阻止不需要的流量，保护 EMQX 集群免受恶意攻击。
 
-本章节将指导您为 EMQX 集群选择并启用负载器。
+本章节将指导您为 EMQX 集群选择并启用负载均衡。
 
 ## 部署架构
 
@@ -54,7 +54,7 @@ listeners.tcp.default {
 
 ### 客户端证书信息
 
-EMQX 仅支持从 Proxy Protocol v2 中提取客户端证书信息。例如 CN (common name)，DN (subject)。
+EMQX 仅支持从 Proxy Protocol v2 中提取客户端证书信息，例如通用名称 (Common Name, CN) 和主题 (Subject)。
 
 ## 选择负载均衡产品
 
