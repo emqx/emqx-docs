@@ -3,7 +3,7 @@
 
 ## 2024 Roadmap
 
-- **Session Durable**: Built-in high-availability session durable based on RocksDB.
+- **Durable Sessions**: Built-in high-availability durable sessions based on RocksDB.
 - **Client Attributes**: Set additional attributes for each MQTT client for authentication, authorization, data integration, and MQTT extension features.
 - **Kerberos Authentication**: Client access supports Kerberos authentication.
 - **Message Queue**: Implement message queue functionality with a producer/consumer model using persistent queues.
