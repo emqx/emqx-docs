@@ -54,7 +54,7 @@ listeners.tcp.default {
 
 ### 客户端 TLS 证书信息
 
-仅 Proxy Protocol v2 支持提取客户端 TLS 证书信息，例如通用名称 (Common Name, CN) 和主题 (Subject)。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+仅 Proxy Protocol v2 支持发送客户端 TLS 证书信息，例如通用名称 (Common Name, CN) 和主题 (Subject)。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
 ## 选择负载均衡产品
 
