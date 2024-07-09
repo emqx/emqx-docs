@@ -57,7 +57,7 @@ For information on enabling Proxy Protocol on your LB, refer to the respective d
 
 ### Client TLS Certificate Information
 
-Only Proxy Protocol v2 support extracting client certificate information, such as Common Name (CN) and Subject. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+Only Proxy Protocol v2 supports forwarding client certificate information, such as Common Name (CN) and Subject. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 
 ## Select an LB Product
 
