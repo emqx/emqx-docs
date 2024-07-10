@@ -7,36 +7,34 @@ description: Dive into the roadmap of EMQX and stay updated with its latest feat
 
 ## 2024 Roadmap
 
-- **Rule Engine Debug and Tracing**: End-to-end testing and tracing of rules and data integration.
-
-- **Event History**: Save events such as client online/offline status, subscriptions/unsubscriptions, and message discards.
-
-- **Cluster Connection**: Clusters in different regions can connect as a federated cluster in a unified namespace.
-
-- **Message Validation**: Use Schema Registry to verify if messages meet expectations.
-
-- **Message Transformation**: Transform, enrich, and restructure message content and format.
-
-- **Message Queue**: Implement message queue functionality with a producer/consumer model using persistent queues.
-
-- **MQTT Stream**: Persistently stores published messages into built-in streams, which other services can consume.
-
-- **Hot Upgrades and Patches**: Perform incremental upgrades and patch installations via the Dashboard.
-
-- **Multi-Tenancy**: Cluster reuse functionality within a unified namespace.
-
-- **OIDC SSO**: The Dashboard supports the OIDC SSO protocol.
-
+- **Durable Sessions**: Built-in high-availability durable sessions based on RocksDB.
+- **Client Attributes**: Set additional attributes for each MQTT client for authentication, authorization, data integration, and MQTT extension features.
 - **Kerberos Authentication**: Client access supports Kerberos authentication.
-
+- **Message Queue**: Implement message queue functionality with a producer/consumer model using persistent queues.
+- **Schema Validation**: Use Avro, Protobuf, and JSON Schema to validate messages against expected formats.
+- **Message Transformation**: Transform, enrich, and restructure message content and format.
+- **Rule Engine Debug and Tracing**: End-to-end testing and tracing of rules and data integration.
+- **More Flexible Rule Engine**:
+  - Error Actions
+  - Fallback Actions
+  - Conditional Actions
+- **Global Multi-Region Distributed Cluster**: Deploy a cluster across different regions.
+- **Cluster Linking**: Clusters in different regions can connect as a federated cluster in a unified namespace, enabling message replication.
+- **MQTT Stream**: Persistently stores published messages into built-in streams, which other services can consume.
+- **Hot Upgrades and Patches**: Perform incremental upgrades and patch installations via the Dashboard.
+- **OIDC SSO**: The Dashboard supports the OIDC SSO protocol.
+- **Multi-Tenancy**: Cluster reuse functionality within a unified namespace.
 - **More Data Integrations**:
-
-  - AWS S3 Data Integration
-
-  - CouchBase Data Integration
-
-  - Snowflake Data Integration
-
+  - Elasticsearch Data Integration
+  - Amazon S3 Data Integration
   - Azure Blob Storage Data Integration
+  - CouchbaseDB Data Integration
+  - Snowflake Data Integration
+  - Message bridging supports SysKeeper firewall traversal.
 
-  - Database CDC Data Integration
+## Future Versions
+
+- Default release using Elixir.
+- Splitting EMQX node roles.
+- Using QUIC protocol in cluster communication.
+- Supporting other languages and external runtimes (e.g., JavaScript, Python) in the rule engine.
