@@ -4,9 +4,9 @@ Cluster Linking is a feature that connects multiple, separate EMQX clusters, fac
 
 This section introduces the Cluster Linking and how to use and configure the feature.
 
-## Why Cluster Linking
+## Why Use Cluster Linking
 
-This section explains how Cluster Linking becomes the solution for efficient client communication between different clusters and why it is more beneficial in bandwidth usage, network tolerance, and scalability compared with the MQTT bridge.
+This section explains how Cluster Linking provides an efficient solution for client communication between different clusters. It highlights the benefits of Cluster Linking over the MQTT bridge in terms of bandwidth usage, network tolerance, and scalability.
 
 ### Challengers with a Single Cluster
 
@@ -52,12 +52,12 @@ In this scenario, Cluster A acts as the local cluster and Cluster B as the remot
    - Enter the MQTT address of Cluster B.
    - Provide the necessary authentication information.
    - Specify the topics to be replicated: `t/#` and `c/1`.
-3. **Configure Peer Cluster Linking in Cluster B:**
+3. **Configure Cluster Linking in Cluster B:**
    - Enter the MQTT address of Cluster A.
    - Provide the necessary authentication information.
    - No need to specify topics (Cluster B does not require messages from Cluster A).
 4. **Establish Mutual Connections:**
-   - Ensure that both clusters are connected to each other.
+   - Ensure that clusters are connected.
 5. **Bootstrap Route Information Push (A → B):**
    - Initiate a route information push from Cluster A to Cluster B.
 6. **Subscription and Message Flow:**
@@ -74,21 +74,12 @@ In this scenario, Cluster A acts as the local cluster and Cluster B as the remot
 
 In this scenario, Cluster A is the old cluster, and Cluster B is the new cluster. The goal is to replicate all messages fully from Cluster A to Cluster B.
 
-1. **Establish Peer Connection:**
-   - Set up a peer connection between Cluster A and Cluster B.
-2. **Configure Topics:**
-   - Configure the topics to `#` in both clusters.
-3. **Establish Mutual Connections:**
-   - Ensure that both clusters are connected to each other.
-4. **DNS Change/Load Balancer Traffic Switch:**
-   - Implement DNS changes or load balancer traffic switching.
-5. **Client Migration:**
-   - Migrate clients to the new cluster. Messages will not be interrupted, but sessions cannot be migrated, requiring clients to re-subscribe.
-6. **Disconnect Cluster A:**
-   - Disconnect Cluster A from the network.
-7. **New Connection in Cluster B:**
-   - Establish new connections in Cluster B, and clients need to initiate active subscriptions again.
-8. **Completion:** The migration process is complete.
+1. Set up a symmetrical link between Cluster A and Cluster B. Configure the topics to `#` in both clusters.
+2. Ensure that clusters are connected.
+3. Implement DNS changes or load balancer traffic switching.
+4. Migrate clients to the new cluster. Messages will not be interrupted, but sessions cannot be migrated, requiring clients to re-subscribe.
+5. Disconnect Cluster A from the network.
+6. Establish new connections in Cluster B, and clients need to initiate active subscriptions again. The migration process is complete.
 
 ## Next Steps
 

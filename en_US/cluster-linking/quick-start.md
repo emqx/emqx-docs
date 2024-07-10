@@ -1,29 +1,24 @@
-# Setup Cluster Link
+# Quick Start with Cluster Linking
 
-This page provides a quick start guide to set up a Cluster Link between two distant EMQX clusters.
+This page provides a quick start guide to set up the Cluster Linking between two distant EMQX clusters.
 
 ## Prerequisites
 
-Suppose you have compute resources in two different regions and you want to have a EMQX cluster in each region, with the ability to link the two clusters together. Let's say the regions are `us-east` and `eu-west`, thus the clusters are named `cluster-us-east` and `cluster-eu-west` respectively.
+Ensure you have compute resources in two different regions, each hosting an EMQX cluster. For this example, you can use `us-east` and `eu-west` regions, naming the clusters `cluster-us-east` and `cluster-eu-west`, respectively.
 
-This is easily achievable if those clusters:
-1. Are running EMQX 5.8.0 or later.
-2. Have distinct, unique Cluster names.
-3. Are able to communicate with each other over the network.
+### Requirements
 
-Last point is crucial. Cluster Linking requires both `cluster-us-east` MQTT listener to be reachable from the `cluster-eu-west` network, and vice versa, otherwise the link will not be fully operational. While not strictly necessary, it is strongly recommended to put those MQTT listeners behind a load balancer, to ensure even distribution of Cluster Linking protocol traffic.
+- EMQX version 5.8.0 or later
+- Unique cluster names
+- Network communication between clusters
 
-For simplicity, suppose also that the clusters will talk to each other over a VPN or similar mechanism, essentially taking care of most of the security concerns, thus simplifying all our example configurations. If you are going to use the public internet in your setup, make sure to secure the communication between the clusters using [TLS][1], and strict [TLS or MQTT client authentication][2].
+Cluster Linking requires the MQTT listener of each cluster to be reachable from the other cluster's network. It is recommended to place these MQTT listeners behind a load balancer for even traffic distribution. For security, if using the public internet, ensure communication between clusters is secured using [TLS](./configuration.md) and strict [TLS or MQTT client authentication](../access-control/authn/authn.md).
 
-[1]: ./configuration.md
-[2]: ../access-control/authn/authn.md
+## Set Up the First Cluster (cluster-us-east)
 
-## Spin up first cluster
+Set up the first cluster `cluster-us-east` using the following configuration snippet in the cluster's configuration file:
 
-Let's start by setting up the first cluster, `cluster-us-east`.
-
-Here's a configuration snippet that does the job:
-```
+```bash
 # Cluster Linking configuration
 cluster {
   # This cluster's name
@@ -49,17 +44,17 @@ listeners {
 }
 ```
 
-This configuration basically states that:
-1. The remote cluster is named `cluster-eu-west`.
-2. It's reachable at `emqx.us-east.myinfra.net:11883`.
-3. Use `clink-us-east` as the Client ID prefix for Cluster Linking MQTT connections.
-4. Indicate that _all_ messages (i.e. having topics matching `#` wildcard) should be forwarded to the local cluster.
-5. Enable a dedicated listener for Cluster Linking connections on port 11883.
+This configuration specifies the following:
+- The remote cluster is named `cluster-eu-west`.
+- The cluster can be accessed at `emqx.us-east.myinfra.net:11883`.
+- The Client ID prefix for Cluster Linking MQTT connections is `clink-us-east`.
+- All messages (matching the `#` wildcard topic) will be forwarded to the local cluster.
+- A dedicated listener for Cluster Linking connections is enabled on port 11883.
 
-## Spin up second cluster
+## Set Up the Second Cluster (cluster-eu-west)
 
-Next, let's set up the second cluster, `cluster-eu-west`. The configuration snippet is similar to the first cluster:
-```
+Set up the second cluster `cluster-eu-west` using the following configuration snippet in the cluster's configuration file:
+```bash
 # Cluster Linking configuration
 cluster {
   name = "cluster-eu-west"
@@ -82,69 +77,81 @@ listeners {
 }
 ```
 
-As you can see, the configuration is almost symmetrical to the first cluster. With this configuration in place, once both clusters are up a _symmetrical_ bidirectional Cluster Link should be established between these two clusters. Actually, _asymmetrical_ links are also possible, but more on that later.
+This configuration is symmetrical to that of the first cluster. With both configurations in place, a symmetrical, bidirectional Cluster Link will be established between the two clusters once they are up and running. It is also possible to create _asymmetrical_ links, which will be covered later.
 
-## Verify Cluster Link works
+## Verify Cluster Linking
 
-The expectation is that the clients talking to different clusters can now communicate with each other through usual MQTT mechanisms. To verify this, let's use `mqttx` CLI tool to publish messages from one cluster and subscribe to them from the other.
+To confirm that clients connected to different clusters can now communicate using standard MQTT mechanisms, you can use the [MQTTX CLI](https://mqttx.app/cli) tool to publish messages from one cluster and subscribe to them from the other.
 
 1. Start a subscriber on `cluster-us-east`:
-```bash
-$ mqttx sub -h emqx.us-east.myinfra.net --topic linked/# --qos 1 --verbose
-[6/4/2024] [3:53:32 PM] › …  Connecting...
-[6/4/2024] [3:53:32 PM] › ✔  Connected
-[6/4/2024] [3:53:32 PM] › …  Subscribing to linked/#...
-[6/4/2024] [3:53:32 PM] › ✔  Subscribed to linked/#
-```
+
+   ```bash
+   mqttx sub -h emqx.us-east.myinfra.net --topic linked/# --qos 1 --verbose
+   [6/4/2024] [3:53:32 PM] › …  Connecting...
+   [6/4/2024] [3:53:32 PM] › ✔  Connected
+   [6/4/2024] [3:53:32 PM] › …  Subscribing to linked/#...
+   [6/4/2024] [3:53:32 PM] › ✔  Subscribed to linked/#
+   ```
 
 2. Publish a message from `cluster-eu-west`:
-```bash
-$ mqttx pub -h emqx.eu-west.myinfra.net --topic linked/42 --message "Hello from the other side!"
-[6/4/2024] [3:53:35 PM] › …  Connecting...
-[6/4/2024] [3:53:35 PM] › ✔  Connected
-[6/4/2024] [3:53:35 PM] › …  Message publishing...
-[6/4/2024] [3:53:35 PM] › ✔  Message published
-```
 
-3. Observe the message being received by the subscriber.
-```
-[6/4/2024] [3:53:35 PM] › topic: linked/42
-payload: Hello from the other side!
-```
+   ```bash
+   mqttx pub -h emqx.eu-west.myinfra.net --topic linked/42 --message "Hello from the other side!"
+   [6/4/2024] [3:53:35 PM] › …  Connecting...
+   [6/4/2024] [3:53:35 PM] › ✔  Connected
+   [6/4/2024] [3:53:35 PM] › …  Message publishing...
+   [6/4/2024] [3:53:35 PM] › ✔  Message published
+   ```
 
-4. Do the same in the opposite direction.
-```bash
-$ mqttx sub -h emqx.eu-west.myinfra.net --topic linked/# --qos 1 --verbose
-[6/4/2024] [3:54:12 PM] › …  Connecting...
-[6/4/2024] [3:54:12 PM] › ✔  Connected
-[6/4/2024] [3:54:12 PM] › …  Subscribing to linked/#...
-[6/4/2024] [3:54:12 PM] › ✔  Subscribed to linked/#
-```
+3. Observe that the message is received by the subscriber:
 
-```bash
-$ mqttx pub -h emqx.us-east.myinfra.net --topic linked/1 --message "Hello from US!"
-[6/4/2024] [3:54:15 PM] › …  Connecting...
-[6/4/2024] [3:54:15 PM] › ✔  Connected
-[6/4/2024] [3:54:15 PM] › …  Message publishing...
-[6/4/2024] [3:54:15 PM] › ✔  Message published
-```
+   ```bash
+   [6/4/2024] [3:53:35 PM] › topic: linked/42
+   payload: Hello from the other side!
+   ```
 
-```
-[6/4/2024] [3:54:15 PM] › topic: linked/1
-payload: Hello from US!
-```
+4. Repeat the process in the opposite direction:
 
-Perfect! The Cluster Link is working.
+   - Start a subscriber on `cluster-eu-west`:
+
+     ```bash
+     mqttx sub -h emqx.eu-west.myinfra.net --topic linked/# --qos 1 --verbose
+     [6/4/2024] [3:54:12 PM] › …  Connecting...
+     [6/4/2024] [3:54:12 PM] › ✔  Connected
+     [6/4/2024] [3:54:12 PM] › …  Subscribing to linked/#...
+     [6/4/2024] [3:54:12 PM] › ✔  Subscribed to linked/#
+     ```
+
+   - Publish a message from `cluster-us-east`:
+
+     ```bash
+     mqttx pub -h emqx.us-east.myinfra.net --topic linked/1 --message "Hello from US!"
+     [6/4/2024] [3:54:15 PM] › …  Connecting...
+     [6/4/2024] [3:54:15 PM] › ✔  Connected
+     [6/4/2024] [3:54:15 PM] › …  Message publishing...
+     [6/4/2024] [3:54:15 PM] › ✔  Message published
+     ```
+
+   - Observe that the message is received by the subscriber:
+
+     ```bash
+     [6/4/2024] [3:54:15 PM] › topic: linked/1
+     payload: Hello from US!
+     ```
+
+Perfect! The Cluster Linking is working.
 
 ::: tip
-Cluster Linking protocol involves propagation of subscription information between clusters, which is an asynchronous process. It is unlikely to take more than a few tens of milliseconds, but it still means that the message may not be delivered if you publish it _immediately_ after subscribing.
+
+Cluster Linking involves the propagation of subscription information between clusters, which is an asynchronous process. This typically takes only a few milliseconds, but it may cause a slight delay in message delivery if you publish a message immediately after subscribing.
+
 :::
 
-## Make the Link asymmetrical
+## Set Up Asymmetrical Links
 
-Next, let's slightly modify the `cluster-eu-west` configuration.
+To create an asymmetrical link, you need to slightly modify the `cluster-eu-west` configuration:
 
-```
+```bash
 cluster {
   name = "cluster-eu-west"
   links = [
@@ -158,6 +165,6 @@ cluster {
 }
 ```
 
-As you can see, the configuration is almost identical to the previous one, with the exception that the `topics` field is empty. This means that `cluster-eu-west` is now _not_ interested in _any_ messages from `cluster-us-east`. This makes the Cluster Link _asymmetrical_, and is useful when you want to have a one-way forwarding of messages between clusters.
+As you can see, the configuration is almost identical to the previous one, except the `topics` field is empty. This means that `cluster-eu-west` is now not interested in _any_ messages from `cluster-us-east`. This makes the Cluster Link _asymmetrical_, which is useful for one-way message forwarding between clusters.
 
-If you were to repeat the message publishing and subscribing steps outlined above, you would notice that the message published from `cluster-us-east` is not received by the subscriber on `cluster-eu-west`.
+If you repeat the message publishing and subscribing steps outlined above, you will notice that the message published from `cluster-us-east` is not received by the subscriber on `cluster-eu-west`.
