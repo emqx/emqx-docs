@@ -1,5 +1,11 @@
 # Flow Designer
 
+::: tip Note
+
+Flow Designer is an EMQX Enterprise feature.
+
+:::
+
 Flow Designer is a powerful visual tool based on an earlier version of the visual viewing tool, Flows. It adds capabilities for creating and editing, aiming to make the configuration of data processing and integration simpler and more efficient.
 
 <img src="./assets/flow-designer.jpg" alt="EMQX Flow Designer" style="zoom:67%;" />

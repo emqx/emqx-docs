@@ -1,6 +1,12 @@
 # Slow Subscriptions
 
-Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a slow subscriptions feature.
+::: tip Note
+
+The Slow Subscriptions feature is only available in EMQX Enterprise.
+
+:::
+
+Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a Slow Subscriptions feature.
 
 ## How It Works
 

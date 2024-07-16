@@ -1,5 +1,11 @@
 # Flow 设计器
 
+::: tip 注意
+
+Flow 设计器是 EMQX 企业版功能。
+
+:::
+
 Flow 设计器是强大的可视化工具，它基于早些版本的可视化查看工具 Flows，增加了创建和编辑的能力，旨在使数据处理和集成的配置变得更加简单和高效。
 
 ![EMQX Flow Designer](./assets/flow-designer.png)

@@ -1,5 +1,11 @@
 # Manage Replication
 
+::: tip Note
+
+Managing Replication is an EMQX Enterprise feature.
+
+:::
+
 This guide provides instructions on configuring data replication and ensuring high availability for EMQX durable sessions. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable sessions and upgrading an existing cluster to enable durable sessions.
 
 ## Initial Cluster Setup

@@ -4,12 +4,6 @@ EMQX includes a durable sessions feature, which allows MQTT sessions and message
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
-::: warning Important Notice
-
-This feature is available starting from EMQX v5.7.0. However, it does not yet support the persistence of shared subscription sessions, which is planned to be implemented in future versions.
-
-:::
-
 ## Basic Concepts
 
 Before learning the durable sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
@@ -76,6 +70,12 @@ It is important to note that message dispatch protocol depends on the durability
 Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This ensures efficient message fan-out and minimizes disk writes.
 
 Durable storage provides robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+
+::: tip Note
+
+The high-availability replica feature is available in the EMQX Enterprise edition. In the open-source edition, session data is only stored on the current node, which means that if a node goes down, the data can be restored once that node recovers.
+
+:::
 
 Advantages of durable sessions include:
 
