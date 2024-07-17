@@ -1089,8 +1089,6 @@
 </div>
 
 
-
-
 ## 可扩展性
 
 <div style="text-align: center;">
@@ -1116,7 +1114,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/zh/latest/extensions/hooks.html">钩子</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/extensions/hooks.html">钩子</a></td>
   </tr>
   <tr>
     <td><b>插件</b></td>
@@ -1124,7 +1122,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a ref="https://www.emqx.io/docs/zh/latest/extensions/plugins.html">插件</a></td>
+    <td><a ref="https://docs.emqx.com/zh/emqx/latest/extensions/plugins.html">插件</a></td>
   </tr>
   <tr>
     <td><b>插件热加载</b></td>
@@ -1161,6 +1159,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 ## 可操作性

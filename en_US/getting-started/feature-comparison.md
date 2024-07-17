@@ -131,9 +131,9 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
+    <td><a href="href="https://docs.emqx.com/en/enterprise/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
   </tr>
-  <tr>
+<tr>
     <td><b>Flow Designer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -192,6 +192,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -1116,7 +1117,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/extensions/hooks.html#hooks">Hooks</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks">Hooks</a></td>
   </tr>
   <tr>
     <td><b>Plugins</b></td>
@@ -1124,7 +1125,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/extensions/plugins.html#plugins">Plugins</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins">Plugins</a></td>
   </tr>
   <tr>
     <td><b>Plugin Hot Loading</b></td>
@@ -1161,6 +1162,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 ## Operability

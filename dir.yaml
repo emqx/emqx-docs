@@ -474,7 +474,7 @@
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
-    - title_en: MQTT Durable Session
+    - title_en: MQTT Durable Sessions
       title_cn: MQTT 会话持久化
       collapsed: true
       children:

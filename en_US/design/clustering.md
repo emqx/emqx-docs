@@ -1,4 +1,4 @@
-# EMQX Clustering
+# Design for EMQX Clustering
 
 MQTT is a stateful protocol, which necessitates that the broker maintains state information for each MQTT session, including subscribed topics and incomplete message transmissions. One of the primary challenges in clustering MQTT brokers is ensuring efficient and reliable synchronization and replication of these states across all clustered nodes.
 
