@@ -43,7 +43,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://docs.emqx.com/en/enterprise/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a><br>More customization options</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a><br>More customization options</td>
   </tr>
   <tr>
     <td><b>Multi-protocol Gateways</b></td>
@@ -99,7 +99,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/en/enterprise/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
+    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -107,7 +107,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/data-integration/schema-registry.html">Schema Registry</a> ensures data consistency and compatibility</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html">Schema Registry</a> ensures data consistency and compatibility</td>
   </tr>
   <tr>
     <td><b>Message Codec</b></td>
@@ -131,7 +131,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="href="https://docs.emqx.com/en/enterprise/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
+    <td><a href="href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
   </tr>
 <tr>
     <td><b>Flow Designer</b></td>
@@ -139,7 +139,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
   </tr>
   <tr>
     <td><b>File Transfer</b></td>
@@ -155,7 +155,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/data-integration/data-bridge-kafka.html">Stream MQTT Data into Apache Kafka</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html">Stream MQTT Data into Apache Kafka</a></td>
   </tr>
   <tr>
     <td><b>Enterprise Data Integrations</b></td>
@@ -171,7 +171,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/enterprise/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -687,7 +687,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -695,7 +695,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Enhanced Authentication</b></td>
@@ -703,7 +703,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
   </tr>
    <tr>
     <td><b>LDAP Authentication</b></td>
@@ -719,7 +719,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
   </tr>
   <tr>
     <td><b>X.509 Certificates</b></td>
@@ -756,6 +756,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -1068,7 +1069,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements, rich built-in libraries, support custom extensions</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements, rich built-in libraries, support custom extensions</a></td>
   </tr>
   <tr>
     <td><b>jq Functions</b></td>
@@ -1089,6 +1090,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 
 

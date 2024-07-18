@@ -43,7 +43,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/messaging/mqtt-shared-subscription.html">共享订阅</a><br><a href="https://docs.emqx.com/zh/enterprise/latest/messaging/mqtt-exclusive-subscription.html">排他订阅</a><br><a href="https://docs.emqx.com/zh/enterprise/latest/messaging/mqtt-delayed-publish.html">延迟发布</a><br><a href="https://docs.emqx.com/zh/enterprise/latest/messaging/mqtt-auto-subscription.html">自动订阅</a><br><a href="https://docs.emqx.com/zh/enterprise/latest/messaging/mqtt-topic-rewrite.html">主题重写</a><br>更多个性化选项</td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-shared-subscription.html">共享订阅</a><br><a href="https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-exclusive-subscription.html">排他订阅</a><br><a href="https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-delayed-publish.html">延迟发布</a><br><a href="https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-auto-subscription.html">自动订阅</a><br><a href="https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-topic-rewrite.html">主题重写</a><br>更多个性化选项</td>
   </tr>
   <tr>
     <td><b>多协议网关</b></td>
@@ -99,7 +99,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内置的 RocksDB 数据库或外部数据库</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/zh/enterprise/latest/durability/durability_introduction.html">提高了稳定性和可靠性</a></td>
+    <td> <a href="https://docs.emqx.com/zh/emqx/latest/durability/durability_introduction.html">提高了稳定性和可靠性</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -107,7 +107,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/schema-registry.html">编解码</a>保证数据一致性和可兼容性</td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/schema-registry.html">编解码</a>保证数据一致性和可兼容性</td>
   </tr>
   <tr>
     <td><b>消息编解码</b></td>
@@ -131,7 +131,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/rules.html">基于 SQL 的内置规则引擎</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/rules.html">基于 SQL 的内置规则引擎</a></td>
   </tr>
   <tr>
     <td><b>Flow 设计器</b></td>
@@ -139,7 +139,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 已规划</td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/flow-designer/introduction.html">更简便的数据集成编排</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/flow-designer/introduction.html">更简便的数据集成编排</a></td>
   </tr>
   <tr>
     <td><b>文件传输</b></td>
@@ -155,7 +155,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/data-bridge-kafka.html">将 MQTT 数据传输到 Apache Kafka</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/data-bridge-kafka.html">将 MQTT 数据传输到 Apache Kafka</a></td>
   </tr>
   <tr>
     <td><b>企业级数据集成</b></td>
@@ -171,7 +171,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/observability/tracer.html">日志追踪 (Trace)</a><br><a href="https://docs.emqx.com/zh/enterprise/latest/observability/slow-subscribers-statistics.html">慢订阅统计</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/observability/tracer.html">日志追踪 (Trace)</a><br><a href="https://docs.emqx.com/zh/emqx/latest/observability/slow-subscribers-statistics.html">慢订阅统计</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -192,6 +192,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -637,7 +638,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="https://docs.emqx.com/zh/enterprise/latest/dashboard/sso.html">安全并简便的认证流程</a></td>
+    <td><a src="https://docs.emqx.com/zh/emqx/latest/dashboard/sso.html">安全并简便的认证流程</a></td>
   </tr>
   <tr>
     <td><b>Dashboard/REST API 基于角色的访问控制 (RBAC)</b></td>
@@ -658,6 +659,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 ## 认证与授权
@@ -685,7 +687,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/access-control/authn/pwoverview.html">密码认证</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/access-control/authn/pwoverview.html">密码认证</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -693,7 +695,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/access-control/authn/jwt.html">JWT 认证</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/access-control/authn/jwt.html">JWT 认证</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 增强认证</b></td>
@@ -701,7 +703,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/access-control/authn/scram.html">MQTT 5.0 增强认证</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/access-control/authn/scram.html">MQTT 5.0 增强认证</a></td>
   </tr>
   <tr>
     <td><b>LDAP 认证</b></td>
@@ -717,7 +719,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="https://docs.emqx.com/zh/enterprise/latest/network/psk-authentication.html">启用 PSK 验证</a></td>
+    <td><a src="https://docs.emqx.com/zh/emqx/latest/network/psk-authentication.html">启用 PSK 验证</a></td>
   </tr>
   <tr>
     <td><b>X.509 证书</b></td>
@@ -754,6 +756,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -1066,7 +1069,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/rule-sql-builtin-functions.html">丰富的内置 SQL 函数，支持自定义扩展</a></td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/rule-sql-builtin-functions.html">丰富的内置 SQL 函数，支持自定义扩展</a></td>
   </tr>
   <tr>
     <td><b>jq 函数</b></td>
@@ -1082,11 +1085,12 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/zh/enterprise/latest/data-integration/rule-sql-events-and-fields.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%8B%E4%BB%B6">客户端事件</a>，事件驱动的业务开发</td>
+    <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/rule-sql-events-and-fields.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%8B%E4%BB%B6">客户端事件</a>，事件驱动的业务开发</td>
   </tr>
   </tbody>
 </table>
 </div>
+
 
 
 ## 可扩展性

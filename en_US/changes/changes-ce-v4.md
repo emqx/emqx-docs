@@ -1930,7 +1930,7 @@ EMQX 4.2.0 is released now, it mainly includes the following changes:
 
 - Support the use of third-party languages to write extension plugins to access other non-MQTT protocols, and currently supports Java and Python two programming languages. Visit [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) for more information
 - Support hot upgrade between revisions
-- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [EMQX Telemetry](https://docs.emqx.com/en/enterprise/latest/en/advanced/telemetry.html) for more telemetry related information.
+- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [EMQX Telemetry](https://docs.emqx.com/en/emqx/latest/en/advanced/telemetry.html) for more telemetry related information.
 - Support message flow control in the form of quotas
 
 **Enhancement:**
