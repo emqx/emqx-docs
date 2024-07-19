@@ -1,10 +1,10 @@
 # Ingest MQTT Data into Redis
 
-{% emqxce %}
-:::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+::: tip
+
+The Redis data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [Redis](https://redis.io/) is an open-source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker. EMQX supports integration with Redis so you can save MQTT messages and client events to Redis. With Redis data integration, you can use Redis for message caching and statistics of client events.
 

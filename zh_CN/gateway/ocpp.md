@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+OCPP 协议网关是 EMQX 企业版功能。
 
 :::
 

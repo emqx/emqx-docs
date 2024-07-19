@@ -1,10 +1,10 @@
 # 将 MQTT 数据写入到 MySQL
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+
+MySQL 数据集成是 EMQX 企业版功能。
+
 :::
-{% endemqxce %}
 
 [MySQL](https://www.mysql.com/) 是一个广泛使用的关系数据库，具备高度的可靠性和稳定性，能够快速安装和配置使用。MySQL Sink 能够将 MQTT 消息高效地存储至 MySQL 数据库中，同时也支持通过事件触发实时更新或删除 MySQL 中的数据。借助 MySQl 数据集成，用户能够轻松实现消息存储、设备在线状态更新以及设备行为记录等功能，实现灵活的物联网数据存储与设备管理功能。
 

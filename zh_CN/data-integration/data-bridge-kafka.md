@@ -1,14 +1,10 @@
 # 将 MQTT 数据传输到 Apache Kafka
 
-{% emqxce %}
+::: tip 
 
-:::tip 
-
-Kafka 数据集成是 EMQX 企业版的功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+Kafka 数据集成是 EMQX 企业版的功能。
 
 :::
-
-{% endemqxce %}
 
 [Apache Kafka](https://kafka.apache.org/) 是一个广泛使用的开源分布式事件流处理平台，能够处理应用程序和系统之间数据流的实时传输。然而，Kafka 并不是为边缘物联网通信构建的，Kafka 客户端需要稳定的网络连接和更多的硬件资源。在物联网领域，设备和应用程序生成的数据使用轻量级 MQTT 协议传输。EMQX 与 Kafka/[Confluent](https://www.confluent.io/) 的集成使用户能够无缝地将 MQTT 数据流入或流出 Kafka。MQTT 数据流被引入 Kafka 主题，确保实时处理、存储和分析。反过来，Kafka 主题的数据可以被 MQTT 设备消费，实现及时处理。
 

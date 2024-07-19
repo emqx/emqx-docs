@@ -70,11 +70,9 @@ my_emqx_plugin
 
 ### 测试您的开发环境
 
-{% emqxce %}
 ::: tip 提示
 要使用可工作的开发环境，请参阅[从源代码安装](../deploy/install-source.md)。
 :::
-{% endemqxce %}
 
 运行 `make rel` 以测试插件是否可以成功编译和打包，此时无需编写代码。
 
@@ -180,32 +178,20 @@ make rel
 您可以在项目目录中找到几个个示例文件：`priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example`, `priv/config_i18n.json.example`。
 可以根据这些文件来编写支持配置及配置验证的 Plugin 。
 
-{% emqxce %}
-
 注意 `priv/config_schema.avsc.enterprise.example`, `priv/config_i18n.json.example` 包含了 UI 声明及其国际化配置，使用 UI 声明渲染插件配置表单页面为企业版功能。
-
-{% endemqxce %}
 
 :::
 
 
 这需要您的插件包提供一个 Avro Schema 配置文件，它应位于 `priv/config_schema.avsc`。该文件应当遵守 Apache Avro 规范，详情请参阅 [Apache Avro Specification (1.11.1)](https://avro.apache.org/docs/1.11.1/specification/)。
 
-{% emqxee %}
-
 此外它也同时也包含了关于 UI 的描述声明。即可以使用 Avro Schema 的 metadata 配置一个 `$ui` 字段，EMQX Dashborad 将根据 `$ui` 字段中提供的信息来生成一份配置表单页。
-
-{% endemqxee %}
 
 #### 声明式 UI 使用参考 （可选）
 
-{% emqxce %}
-
 ::: tip **提示**
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+声明式 UI 仅在 EMQX 企业版中使用。
 :::
-
-{% endemqxce %}
 
 UI 声明被用于动态渲染表单，从而使 EMQX Dashboard 能够动态生成配置表单，方便插件的配置和管理。
 支持各种字段类型和自定义组件。以下是可用组件及其配置说明。

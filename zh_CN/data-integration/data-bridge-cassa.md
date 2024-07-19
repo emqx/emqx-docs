@@ -1,25 +1,19 @@
 # 将 MQTT 数据写入到 Cassandra
 
-{% emqxce %}
 ::: tip
 
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+Cassandra 数据集成是 EMQX 企业版功能。
 
 :::
-{% endemqxce %}
 
 [Apache Cassandra](https://cassandra.apache.org/_/index.html) 是一种流行的开源分布式 NoSQL 数据库管理系统，旨在处理大规模数据集并用于构建高吞吐量的应用程序。EMQX 与 Apache Cassandra 的集成提供了将消息和事件存储在 Cassandra 数据库中的能力，实现时间序列数据存储、设备注册和管理以及实时数据分析等功能。
 
 本页详细介绍了 EMQX 与 Cassandra 的数据集成并提供了实用的规则和 Sink 创建指导。
 
-{% emqxee %}
-
 当前实现中：
 
 - 仅支持 Cassandra v3.x，不兼容 v4.x。
 - 仅支持同步方式存储数据。
-
-{% endemqxee %}
 
 ## 工作原理
 

@@ -161,26 +161,7 @@ The EMQX authorization mechanism supports integration with various data storage 
 
 In addition, EMQX can also connect to HTTP services developed by our users to meet different authorization requirements.
 
-{% emqxce %}
-
-According to the backend data storage used, there are currently 7 different types of EMQX authorizers. Each authorizer has its own configuration options. You can click the corresponding links in the following table for more details.
-
-| Database          | Description                                                          |
-| ----------------- | -------------------------------------------------------------------- |
-| ACL File          | [Authorization with static rules configured in a file](./file.md)    |
-| Built-in database | [Authorization with built-in database as rules storage](./mnesia.md) |
-| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)              |
-| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md)    |
-| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)          |
-| Redis             | [Authorization with Redis as rules storage](./redis.md)              |
-| HTTP              | [Authorization with external HTTP service](./http.md)                |
-
-{% endemqxce %}
-
-
-{% emqxee %}
-
-According to the backend data storage used, there are currently 8 different types of EMQX authorizers. Each authorizer has its own configuration options. You can click the corresponding links in the following table for more details.
+According to the backend data storage used, there are different types of EMQX authorizers as listed below. Each authorizer has its own configuration options. You can click the corresponding links in the table for more details.
 
 | Database          | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
@@ -192,8 +173,6 @@ According to the backend data storage used, there are currently 8 different type
 | Redis             | [Authorization with Redis as rules storage](./redis.md)      |
 | LDAP              | [Authorization with LDAP directory as rules storage](./ldap.md) |
 | HTTP              | [Authorization with external HTTP service](./http.md)        |
-
-{% endemqxee %}
 
 Below is an example of how to configure an EMQX MySQL authorizer.
 

@@ -77,14 +77,8 @@ log {
 | `time_offset`      | 时间偏移量   | 定义日志中时间相对 UTC 的偏移量，默认情况下跟随系统。        | `system`  | --                                                           |
 | `timestamp_format` | 时间戳格式   | 从下拉列表中选择日志时间戳格式。                             | `auto`    | `auto`: 对于文本格式类型，使用 `rfc3339` 格式；对于 JSON 格式类型，则使用 `epoch`格式。<br />`epoch`: 以微秒精度的 Unix 纪元时间格式。<br />`rfc3339`: 符合 RFC3339 标准的日期时间字符串格式。 |
 
-{% emqxce %}
+::: tip
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+:::

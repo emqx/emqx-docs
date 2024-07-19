@@ -14,17 +14,11 @@
 
 :::
 
-{% emqxce %}
+::: tip
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+:::
 
 ## 配置 TCP 监听器
 

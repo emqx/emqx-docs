@@ -2,7 +2,7 @@
 
 This page lists features supported across different deployment types in detail.
 
-## Core Features
+## Core / Enterprise Features
 
 <div style="text-align: center;">
 <table>
@@ -27,15 +27,15 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Complete MQTT 5.0 protocol implementation</td>
   </tr>
   <tr>
     <td><b>MQTT over QUIC</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> In development for Cloud</td>
+    <td> Globally Poineering Support<br>In development for Cloud</td>
   </tr>
   <tr>
     <td><b>MQTT Add-ons</b></td>
@@ -43,7 +43,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://www.emqx.io/docs/en/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a><br>More customization options</td>
   </tr>
   <tr>
     <td><b>Multi-protocol Gateways</b></td>
@@ -51,15 +51,47 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
+    <td> More industry device access</td>
   </tr>
   <tr>
-    <td><b>Geo-replication</b></td>
+    <td><b>Multi-tenancy</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Higer system flexibility and utilization<br>(Coming soon)</td>
+  </tr>
+  <tr>
+    <td><b>Cluster Linking</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/getting-started/roadmap.html">In Product Roadmap</a></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Seamless connection of devices and application data<br>(Coming soon)</td>
+  </tr>
+  <tr>
+    <td><b>Event History</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Client fault diagnosis and behavioral audit</td>
+  </tr>
+  <tr>
+    <td><b>Message Queuing</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Unified architecture for data transmission and analysis<br>(Coming soon)</td>
+  </tr>
+  <tr>
+    <td><b>Stream Processing</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Higher reliability and disaster recovery capabilities<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Data Persistence</b></td>
@@ -67,7 +99,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>Coming in EMQX 5.4 (preview function)<br><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">Highly Reliable MQTT Data Persistence Based on RocksDB</a></td>
+    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
   </tr>
   <tr>
     <td><b>Schema Registry</b></td>
@@ -75,7 +107,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/data-integration/schema-registry.html">Schema Registry</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html">Schema Registry</a> ensures data consistency and compatibility</td>
   </tr>
   <tr>
     <td><b>Message Codec</b></td>
@@ -83,7 +115,15 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>JSON<br>Avro<br>Protobuf<br>Custom codec (HTTP/gRPC)</td>
+    <td>Flexible message format conversion for:<br>JSON<br>Avro<br>Protobuf<br>Custom codec (HTTP/gRPC)</td>
+  </tr>
+<tr>
+    <td><b>Schema Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> Ensuring integrity and legality of messages</td>
   </tr>
   <tr>
     <td><b>Rule Engine</b></td>
@@ -91,23 +131,23 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a src="./data-integration/rules.html">SQL-based built-in Rule Engine</a></td>
+    <td><a href="href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
   </tr>
-  <tr>
+<tr>
     <td><b>Flow Designer</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/flow-designer/introduction.html">Flow Designer</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
   </tr>
   <tr>
     <td><b>File Transfer</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td></td>
+    <td>Unified platform data transmission</td>
   </tr>
   <tr>
     <td><b>Kafka Integration</b></td>
@@ -115,24 +155,23 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/data-integration/data-bridge-kafka.html">Stream MQTT Data into Apache Kafka</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html">Stream MQTT Data into Apache Kafka</a></td>
   </tr>
   <tr>
-    <td><b>Enterprise Integrations</b></td>
+    <td><b>Enterprise Data Integrations</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40+</td>
-    <td><a href="https://www.emqx.com/en/integrations">Integration with Everything
-via Rule Engine and Data Bridge</a></td>
+    <td><a href="https://www.emqx.com/en/integrations">Accelerate business development and delivery speed</a></td>
   </tr>
   <tr>
     <td><b>Troubleshooting</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/observability/tracer.html">Log Trace</a><br><a href="https://www.emqx.io/docs/en/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
   </tr>
   <tr>
     <td><b>Cloud-Native &amp; K8s</b></td>
@@ -140,7 +179,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/deployments">Deployment Options</a></td>
+    <td><a href="https://www.emqx.com/en/deployments">Reduce system deployment and management costs</a></td>
   </tr>
   <tr>
     <td><b>Edge Computing</b></td>
@@ -148,11 +187,13 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://neugates.io/">Neuron</a><br><a href="https://nanomq.io/">NanoMQ</a></td>
+    <td> Reduce data transmission latency and costs<br><a href="https://www.emqx.com/en/products/neuronex">Neuron</a><br><a href="https://www.emqx.com/en/products/nanomq">NanoMQ</a></td>
   </tr>
 </tbody>
 </table>
 </div>
+
+
 
 
 ## Scalability and Performance
@@ -176,8 +217,8 @@ via Rule Engine and Data Bridge</a></td>
 <tbody>
   <tr>
     <td><b>Scalability</b></td>
-    <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
-    <td><span style="font-weight:normal">Up to 100M MQTT connections per cluster</span></td>
+    <td><span style="font-weight:normal">Up to 3 nodes cluster<br>Up to 100,000 connections in production</span></td>
+    <td><span style="font-weight:normal">Up to 100 nodes cluster<br>Up to 100 million MQTT connections per cluster</span></td>
     <td><span style="font-weight:normal">1000 auto scale</span></td>
     <td><span style="font-weight:normal">1000 - unlimited</span></td>
     <td><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">Reaching 100M MQTT connections with EMQX 5.0</a></td>
@@ -185,22 +226,22 @@ via Rule Engine and Data Bridge</a></td>
   <tr>
     <td><b>Availability</b></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
+    <td><span style="font-weight:normal">Core-Replica cluster</span></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
     <td><span style="font-weight:normal">Masterless cluster</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
     <td><b>Reliability</b></td>
-    <td><span style="font-weight:normal">Data storage in memory</span></td>
-    <td><span style="font-weight:normal">Data persistence in RocksDB</span></td>
-    <td><span style="font-weight:normal">N/A</span></td>
-    <td><span style="font-weight:normal">N/A</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
+    <td><span style="font-weight:normal">Data persistence in RocksDB with highly available replication</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
+    <td><span style="font-weight:normal">Session persistence</span></td>
     <td><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">Highly Reliable MQTT Data Persistence Based on RocksDB</a></td>
   </tr>
   <tr>
     <td><b>Performance</b></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
+    <td><span style="font-weight:normal">100,000 MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
     <td><span style="font-weight:normal">1000 MQTT messages per second</span></td>
     <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
@@ -226,6 +267,7 @@ via Rule Engine and Data Bridge</a></td>
 </table>
 </div>
 
+
 ## Clustering Architecture
 
 <div style="text-align: center;">
@@ -247,11 +289,11 @@ via Rule Engine and Data Bridge</a></td>
 <tbody>
   <tr>
     <td><b>Nodes of Cluster</b></td>
-    <td>20+</td>
-    <td>20+</td>
+    <td>No more than 3</td>
+    <td>100+</td>
     <td>confidential</td>
     <td>confidential</td>
-    <td> </td>
+    <td> Large-scale clusters</td>
   </tr>
   <tr>
     <td><b>Elastic and resilient scaling at runtime</b></td>
@@ -259,7 +301,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Higer system stability and resource utilization</td>
   </tr>
   <tr>
     <td><b>Autoscaling</b></td>
@@ -275,7 +317,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Strong consistency</td>
+    <td></td>
   </tr>
   <tr>
     <td><b>Transaction</b></td>
@@ -283,7 +325,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Ensuring the atomicity and reliability of data operations</td>
   </tr>
   <tr>
     <td><b>Network Split Recovery</b></td>
@@ -291,7 +333,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Cluster failure automatic repair</td>
   </tr>
   <tr>
     <td><b>Node Evacuation &amp; Cluster Rebalance</b></td>
@@ -299,7 +341,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> </td>
+    <td> Non-stop cluster maintenance</td>
   </tr>
   <tr>
     <td><b>Autocluster Discoveries</b></td>
@@ -315,7 +357,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> </td>
+    <td> Immediate repair of system vulnerabilities</td>
   </tr>
   <tr>
     <td><b>Hot Patch</b></td>
@@ -323,7 +365,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> </td>
+    <td> Ensuring stable system operation</td>
   </tr>
   <tr>
     <td><b>Overload Protection</b></td>
@@ -331,7 +373,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> </td>
+    <td> Improving system management efficiency</td>
   </tr>
   <tr>
     <td><b>Multi-cluster Management</b></td>
@@ -339,11 +381,11 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> </td>
+    <td> Enhancing system stability</td>
   </tr>
   <tr>
     <td><b>Cluster Metrics</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
@@ -352,6 +394,8 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
+
 
 ## MQTT and Connectivity
 
@@ -424,8 +468,8 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>MQTT over QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>EMQX is now the only MQTT broker in the world that supports QUIC transport.</td>
   </tr>
   <tr>
@@ -435,6 +479,14 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>Proxy protocol v1, v2</td>
+  </tr>
+  <tr>
+    <td><b>LB (Custom)</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>GmSSL<br>Smooth connection migration</td>
   </tr>
   <tr>
     <td><b>IPv6 Support</b></td>
@@ -503,7 +555,7 @@ via Rule Engine and Data Bridge</a></td>
   <tr>
     <td><b>JT/808</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Coming in EMQX v5.4</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
@@ -511,7 +563,7 @@ via Rule Engine and Data Bridge</a></td>
   <tr>
     <td><b>GBT32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Coming in EMQX v5.4</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
@@ -519,6 +571,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Security
 
@@ -545,15 +598,31 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX Open Source and Enterprise: TLS 1.1, 1.2, 1.3</td>
+    <td> Protect data transmission security: TLS 1.1, 1.2, 1.3</td>
+  </tr>
+   <tr>
+    <td><b>QUIC</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Enhance efficiency of weak network and mobile network data transmission</td>
   </tr>
   <tr>
     <td><b>OCSP Stapling</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Provide more flexible security practices</td>
+  </tr>
+  <tr>
+    <td><b>Flapping Detect</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> Detect and intercept frequent online and offline connections</td>
   </tr>
   <tr>
     <td><b>Audit Logs</b></td>
@@ -561,27 +630,37 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Support audit tracing for important operations</td>
   </tr>
   <tr>
-    <td><b>SQL Injections Protection</b></td>
+    <td><b>Dashboard SSO</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Secure and simplified authentication processes</td>
+  </tr>
+  <tr>
+    <td><b>Dashboard/REST API RBAC</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Minimize permissions to ensure system security</td>
   </tr>
   <tr>
     <td><b>Black Duck Analysis</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>Partner with Synopsis</td>
+    <td> Secure and simplified authentication processes</td>
   </tr>
 </tbody>
 </table>
 </div>
+
+
 
 ## Authentication and Authorization
 
@@ -608,7 +687,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
@@ -616,7 +695,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
   </tr>
   <tr>
     <td><b>MQTT 5.0 Enhanced Authentication</b></td>
@@ -624,7 +703,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
   </tr>
    <tr>
     <td><b>LDAP Authentication</b></td>
@@ -640,7 +719,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
   </tr>
   <tr>
     <td><b>X.509 Certificates</b></td>
@@ -649,22 +728,6 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Managed by EMQX Cloud</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
-  </tr>
-  <tr>
-    <td><b>SSO</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/dashboard/sso.html">Single Sign-On</a> </td>
-  </tr>
-  <tr>
-    <td><b>RBAC</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/enterprise/latest/dashboard/system.html#users">Role-Based Access Control</a> </td>
   </tr>
   <tr>
     <td><b>Fine-grained Access Control</b></td>
@@ -678,7 +741,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Authentication Database Backends</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
@@ -686,13 +749,16 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>ACL Database Backends</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
 </tbody>
 </table>
 </div>
+
+
+
 
 ## Data Integration
 
@@ -713,20 +779,6 @@ via Rule Engine and Data Bridge</a></td>
 </thead>
 <tbody>
   <tr>
-    <td><b>Rule Engine</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
-    <td><b>Data Bridge</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>MQTT Bridge</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -737,14 +789,14 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Webhook/HTTP Server</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> On-line soon</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
     <td><b>Apache Kafka/Confluent</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> On-line soon</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
@@ -763,6 +815,13 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>AWS Kinesis</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>AWS S3</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -791,6 +850,13 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
   <tr>
     <td><b>DynamoDB</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Elasticsearch</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -844,7 +910,6 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
   </tr>
   <tr>
     <td><b>OpenTSDB</b></td>
@@ -889,6 +954,13 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
+    <td><b>Syskeeper</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
     <td><b>TDengine</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -902,16 +974,12 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
-  <tr>
-    <td><b>SAP Event Mesh</b></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
 </tbody>
 </table>
 </div>
+
+
+
 ## Rule Engine
 
 <div style="text-align: center;">
@@ -931,37 +999,13 @@ via Rule Engine and Data Bridge</a></td>
   </tr>
 </thead>
 <tbody>
-   <tr>
-    <td><b>Event Trigger</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">MQTT Events</a></td>
-  </tr>
-  <tr>
-    <td><b>Built-in Functions</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://www.emqx.io/docs/en/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements</a></td>
-  </tr>
-  <tr>
-    <td><b>jq Functions</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
   <tr>
     <td><b>Schema Registry</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
+    <td> Ensure data format consistency</td>
   </tr>
   <tr>
     <td><b>JSON Codec</b></td>
@@ -980,16 +1024,74 @@ via Rule Engine and Data Bridge</a></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>ProtoBuf Codec</b></td>
+    <td><b>Protobuf Codec</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
+  <tr>
+    <td><b>Sparkplug B Codec</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>JSON Schema Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Avro Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>ProtoBuf Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Built-in Functions</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements, rich built-in libraries, support custom extensions</a></td>
+  </tr>
+  <tr>
+    <td><b>jq Functions</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> Efficient JSON data processing</td>
+  </tr>
+  <tr>
+    <td><b>Event Trigger</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">Client events</a>, event-driven business development</td>
+  </tr>
 </tbody>
 </table>
 </div>
+
+
 
 
 ## Extensibility
@@ -1017,7 +1119,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/extensions/hooks.html#hooks">Hooks</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks">Hooks</a></td>
   </tr>
   <tr>
     <td><b>Plugins</b></td>
@@ -1025,10 +1127,18 @@ via Rule Engine and Data Bridge</a></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.io/docs/en/latest/extensions/plugins.html#plugins">Plugins</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins">Plugins</a></td>
   </tr>
   <tr>
-    <td><b>Plugin Hot-loading</b></td>
+    <td><b>Plugin Hot Loading</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Plugin Hot Configuration</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
@@ -1054,6 +1164,8 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
+
 
 ## Operability
 
@@ -1170,46 +1282,6 @@ via Rule Engine and Data Bridge</a></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Cluster Metrics</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Alarm Alerts</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Slow Subscription Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Topic Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Client Monitoring</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
     <td><b>Prometheus</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1221,13 +1293,70 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Datadog</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>OpenTelemetry</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td>Coming in EMQX Enterprise 5.4</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>Cluster Metrics</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Alarm Alerts</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Slow Subscription Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Topic Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Client Monitoring</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>Log Trace</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
   </tr>
 </tbody>
 </table>
 </div>
+
 
 ## Cloud Native and K8S
 
@@ -1275,6 +1404,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## Cloud Platform Availability
 
@@ -1330,7 +1460,7 @@ via Rule Engine and Data Bridge</a></td>
     <td><b>Azure</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td></td>
   </tr>
@@ -1345,6 +1475,7 @@ via Rule Engine and Data Bridge</a></td>
 </tbody>
 </table>
 </div>
+
 
 ## MQTT Tools and SDKs
 

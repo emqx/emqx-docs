@@ -1,203 +1,21 @@
----
-titleTemplate: false
----
-
-{% emqxee %}
-# EMQX 企业版概览
-{% endemqxee %}
-
-{% emqxce %}
 # EMQX 概览
-{% endemqxce %}
 
+EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。EMQX 累计拥有来自 50 多个国家的 20,000 多家企业用户，连接全球超过 1 亿台物联网设备，服务企业数字化、实时化、智能化转型。
 
-{% emqxce %}
+[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是 EMQX 的商业版本，单集群支持最高 1 亿 MQTT 并发连接，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
 
-EMQX 是一款[开源](https://github.com/emqx/emqx)的大规模分布式 MQTT 消息服务器，功能丰富，专为物联网和实时通信应用而设计。EMQX 5.0 单集群支持 MQTT 并发连接数高达 1 亿条，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。
-
-EMQX 支持多种协议，包括 MQTT (3.1、3.1.1 和 5.0)、HTTP、QUIC 和 WebSocket 等，保证各种网络环境和硬件设备的可访问性。EMQX 还提供了全面的 SSL/TLS 功能支持，比如双向认证以及多种身份验证机制，为物联网设备和应用程序提供可靠和高效的通信基础设施。
-
-<img src="./assets/architecture_image.png" alt="architecture_image" style="zoom:50%;" />
-
-内置基于 SQL 的[规则引擎](https://www.emqx.com/zh/solutions/iot-rule-engine)，EMQX 可以实时提取、过滤、丰富和转换物联网数据。此外，EMQX 采用了无主分布式架构，以确保高可用性和水平扩展性，并提供操作友好的用户体验和出色的可观测性。
-
-EMQX 拥有来自 50 多个国家的 20,000 多家企业用户，连接全球超过 1 亿台物联网设备，服务企业数字化、实时化、智能化转型。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
-
-<img src="./assets/EMQX-enterprise.png" alt="EMQX-enterprise" style="zoom:50%;" />
-
-{% endemqxee %}
+<img src="./assets/emqx_platform.jpg" alt="emqx_platform" style="zoom:70%;" />
 
 ## 产品优势
 
-{% emqxce %}
-
-[**超大规模**](https://www.emqx.com/zh/blog/how-emqx-5-0-achieves-100-million-mqtt-connections)
-
-EMQX 5.0 单集群可支持 MQTT 并发连接数高达 **1 亿**条。
-
-[**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)
-
-单服务器的传输与处理吞吐量可达**每秒百万级** MQTT 消息。
-
-[**低延时**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)
-
-近乎实时的信息传递，保证延迟在亚毫秒级。
-
-[**全面支持 MQTT 5.0 标准**](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)
-
-100% 符合 MQTT 5.0 和 3.x 标准，具有更好的可扩展性、安全性和可靠性。
-
-[**高可用**](./deploy/cluster/mria-introduction.md)
-
-通过无主节点分布式架构实现高可用和水平扩展性。
-
-[**云原生**](https://www.emqx.com/zh/emqx-kubernetes-operator)
-
-通过 Kubernetes Operator 和 Terraform，可以轻松地在企业内部和公共云中进行部署。
-
-<!-- Add a section called Use Cases when optimizing the use case-->
-
-{% endemqxce %}
-
-{% emqxee %}
-
 - [**海量连接**](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持 1 亿并发的 MQTT 连接。
-
 - [**高可靠**](./deploy/cluster/mria-introduction.md)：弹性伸缩，无单点故障。内置 RocksDB 可靠地持久化 MQTT 消息，确保无数据损失。
-
 - [**数据安全**](https://www.emqx.com/zh/use-cases/mqtt-security)：端到端数据加密（支持国密），细粒度访问控制，保障数据安全，满足企业合规需求。
-
 - [**多协议**](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
-
+- [**全面支持 MQTT 5.0 标准**](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)：100% 符合 MQTT 5.0 和 3.x 标准，具有更好的可扩展性、安全性和可靠性。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。[毫秒级](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)消息交付时延。
-
 - [**易运维**](./dashboard/introduction.md)：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
-
-{% endemqxee %}
-
-{% emqxce %}
-
-## 产品对比
-
-EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
-
-<table>
-<thead>
-  <tr>
-     <th colspan="2">自托管模式</th>
-    <th colspan="2">云服务模式</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td>EMQX 开源版</td>
-    <td>EMQX 企业版</td>
-    <td>EMQX Cloud Serverless</td>
-    <td>EMQX Cloud 专有版</td>
-  </tr>
-  <tr>
-    <td><a href="https://www.emqx.com/en/try?product=broker">立即下载</a></td>
-    <td><a href="https://www.emqx.com/en/apply-licenses/emqx">免费试用</a></td>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
-    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
-  </tr>
-  <tr>
-    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 数据存储在内存中<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
-    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 基于 RocksDB 的会话持久化<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息编解码<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
-    <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
-    <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
-  </tr>
-</tbody>
-</table>
-
-## 应用场景
-
-作为专为物联网和实时消息传递应用设计的 MQTT 代理，EMQX 常用于以下场景以满足各种业务需求。
-
-### 可靠且高效的发布/订阅消息传递
-
-EMQX支持多种协议，包括 MQTT（3.1、3.1.1 和 5.0）、HTTP、QUIC 和 WebSocket。它还通过 TLS/SSL 提供 MQTT 的安全双向通信和多种认证机制，确保为物联网设备和应用提供可靠高效的通信基础设施。
-
-在关键任务应用中使用 EMQX 可以带来以下优势：
-
-- **基于主题的发布/订阅消息传递：**EMQX 的主题基发布/订阅模型优化了数据流，确保消息路由的高效和灵活。
-- **超低延迟传输：**实现低至1毫秒的数据传输延迟，确保实时响应。
-- **全面的服务质量（QoS）保证：**EMQX 提供端到端的多级 QoS 保证，实现可靠和灵活的消息传递。
-
-EMQX 可以帮助您在下列各种场景中实现。
-
-### 点对点通信
-
-![use_case_1_ce](./assets/use_case_1_ce.png)
-
-您可以使用 EMQX 建立点对点通信。在异步发布/订阅模型中，消息发布者和订阅者是解耦的，根据需要可以动态添加或移除。这种解耦为您的应用程序和消息通信提供了灵活性。
-
-### 向大量客户端广播消息
-
-![use_case_2_ce](./assets/use_case_2_ce.png)
-
-在需要一对多消息传递的场景中，如金融市场更新，EMQX 表现出色。它能有效地向大量客户端广播消息，确保信息及时传达。
-
-### 从大量端点整合数据
-
-![use_case_3_ce](./assets/use_case_3_ce.png)
-
-EMQX 中的多对一消息模式非常适合在如工厂、现代建筑、零售连锁或电网等大规模网络中整合数据。EMQX 可以帮助您将网络端点的数据传输和传送到云端或现场的中心后端服务器。
-
-### 可追踪的通信与请求-响应感知
-
-![use_case_4_ce](./assets/use_case_4_ce.png)
-
-EMQX 支持 MQTT 5.0 的请求-响应功能。利用此功能，您现在可以增强您的异步通信架构中的通信感知和可追踪性。
-
-### 跨网络的数据集成
-
-![use_case_5_ce](./assets/use_case_5_ce.png)
-
-在分区或网络环境受限的情况下，EMQX 可以实现数据集成，为您提供无缝的消息传递环境。
-
-### 流数据转换
-
-![use_case_6_ce](./assets/use_case_6_ce.png)
-
-通过基于 SQL 的内置强大[规则引擎](./data-integration/rules.md)，EMQX 可以实时提取、过滤、丰富和转换流数据。处理后的数据可以轻松摄取到外部 HTTP 服务和MQTT 服务。如果您使用的是 EMQX 企业版，还可以将数据摄取到主流数据库、数据存储和消息队列。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-<!-- 
-
-以下列出了 EMQX 企业版和开源版的主要功能对比。
-
-| **项目**                 | **EMQX 企业版**                                             | **EMQX 开源版**                                             |
-| ------------------------ | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| **伸缩性**               | 单集群至多 1 亿 MQTT 连接                                   | 单集群至多 1 亿 MQTT 连接                                   |
-| **性能**                 | > 500 万 MQTT 消息每秒                                      | > 500 万 MQTT 消息每秒                                      |
-| **可靠性**               | RocksDB 数据存储（即将支持）                                | 内存数据存储                                                |
-| **延迟**                 | 1~5 毫秒                                                    | 1~5 毫秒                                                    |
-| **数据集成（开箱即用）** | 40+                                                         | 2                                                           |
-| **License**              | Commercial License (Business source license)                | Apache Version 2.0                                          |
-| **技术支持**             | 7x24 全球支持                                               | 开源社区                                                    |
-| **MQTT 5.0**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT over QUIC**       | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **MQTT 扩展**            | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **多协议网关**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **Schema Registry**      | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **消息编解码**           | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **规则引擎**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **文件传输**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **企业系统集成**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/cross_mark_64.png" style="zoom:40%;" />  |
-| **故障排查**             | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-| **云原生 & K8s**         | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> | <img src="./assets/check_mark_64.png"  style="zoom:40%;" /> |
-
--->
+- [**云原生**](https://www.emqx.com/zh/emqx-kubernetes-operator)：通过 Kubernetes Operator 和 Terraform，可以轻松地在企业内部和公共云中进行部署。
 
 ## 核心组件
 
@@ -243,21 +61,112 @@ EMQX 企业版包含一个强大的[规则引擎](./data-integration/rules.md)�
 
 通过开箱即用的 Webhook 与数据集成组件，将物联网数据与 40 多个云服务和企业系统进行完美整合，包括 Kafka、AWS RDS、MongoDB、Oracle、SAP 以及时序数据库等。助力企业有效地管理、分析和利用来自物联网设备的数据，从而支持各种应用和业务需求。
 
-### 管理与监控仪表板
+### 管理与监控 Dashboard
 
 EMQX 企业版提供图形化的管理系统 [Dashboard](./dashboard/introduction.md)，能够实时监控关键指标与运行状态，轻松管理客户端连接与功能配置。它还允许对客户端和集群异常行为进行诊断与调试，在线进行 MQTT 设备端到端的问题分析，大大缩短故障排查的时间。除此之外，还支持将可观测性指标集成到外部 Prometheus，Datadog 以及支持 OpenTelemetry 的服务中，实现更完善的运维监控能力。
 
-## 典型用例及行业解决方案
+## 部署模式和版本对比
+
+EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
+
+<table>
+<thead>
+  <tr>
+     <th colspan="2">自托管模式</th>
+    <th colspan="2">云服务模式</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>EMQX 开源版</td>
+    <td>EMQX 企业版</td>
+    <td>EMQX Cloud Serverless</td>
+    <td>EMQX Cloud 专有版</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.emqx.com/zh/try?product=broker">立即下载</a></td>
+    <td><a href="https://www.emqx.com/zh/apply-licenses/emqx">免费试用</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
+    <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
+  </tr>
+  <tr>
+    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
+    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 高可用副本持久存储<br>✔️ 先进集群架构、跨 IDC 集群<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 可视化 Flow 设计器<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息验证<br>✔️ 消息转换与编解码<br>✔️ 消息队列与流处理<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
+    <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
+    <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
+  </tr>
+</tbody>
+</table>
+
+以下列出了 EMQX 企业版和开源版的主要功能对比。
+
+|                          | **EMQX 企业版**                                              | **EMQX 开源版**                                              |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **定位**                 | 可靠且可扩展的企业级 MQTT 平台                               | 全球第一的开源 MQTT Broker                                   |
+| **伸缩性**               | 支持最多 100 个节点的集群<br />每个集群最多支持 1 亿个 MQTT 连接 | 支持最多 3 个节点的集群<br />在生产环境中支持最多 100,000 个连接 |
+| **性能**                 | 500 万 MQTT 消息每秒                                         | 10 万 MQTT 消息每秒                                          |
+| **可用性**               | 核心-副本集群                                                | 无主集群                                                     |
+| **可靠性**               | RocksDB 消息持久化，具备高可用副本                           | 会话持久化                                                   |
+| **延迟**                 | 1~5 毫秒                                                     | 1~5 毫秒                                                     |
+| **数据集成（开箱即用）** | 40+                                                          | 2                                                            |
+| **License**              | Commercial License (Business source license)                 | Apache Version 2.0                                           |
+| **技术支持**             | 7x24 全球支持                                                | 开源社区                                                     |
+
+## 典型用例
 
 EMQX 企业版是一个全面的物联网消息平台，它在物联网接入与数据传输的不同阶段发挥着关键作用，为各类业务需求提供了多种强大功能和灵活性。
 
-基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据集成组件，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例以及针对不同行业的解决方案：
+基于发布-订阅的消息传递模型，EMQX 企业版能够实现数百万主题、不同模式的灵活消息通信，满足各类场景下的实时消息传递。通过内置的规则引擎和数据集成组件，EMQX 企业版允许您将消息发送到云端各类服务中，实现设备数据与企业系统之间的无缝集成，能够轻松实现数据处理、存储、分析以及业务指令下发等用例。以下是常见的用例：
 
 ### 双向通信
 
 EMQX 企业版支持各类设备与应用端连接，为设备及应用程序提供双向通信。例如智能家居场景下，手机 App 能够获取各类设备传感器数据，并在需要时将控制指令下发到设备。此模式允许设备与设备、设备与应用进行灵活的一对一或一对多通信。
 
 <img src="./assets/use_case_1.png" alt="use_case_1" style="zoom:50%;" />
+
+双向通信在关键任务中的应用可以带来以下优势：
+
+- **基于主题的发布/订阅消息传递**：EMQX 的主题基发布/订阅模型优化了数据流，确保消息路由的高效和灵活。
+- **超低延迟传输**：实现低至1毫秒的数据传输延迟，确保实时响应。
+- **全面的服务质量（QoS）保证**：EMQX 提供端到端的多级 QoS 保证，实现可靠和灵活的消息传递。
+
+以下是更多详细的使用场景：
+
+#### 点对点通信
+
+您可以使用 EMQX 建立点对点通信。在异步发布/订阅模型中，消息发布者和订阅者是解耦的，根据需要可以动态添加或移除。这种解耦为您的应用程序和消息通信提供了灵活性。
+
+![use_case_1_ce](./assets/use_case_1_ce.png)
+
+#### 向大量客户端广播消息
+
+在需要一对多消息传递的场景中，如金融市场更新，EMQX 表现出色。它能有效地向大量客户端广播消息，确保信息及时传达。
+
+![use_case_2_ce](./assets/use_case_2_ce.png)
+
+#### 从大量端点整合数据
+
+EMQX 中的多对一消息模式非常适合在如工厂、现代建筑、零售连锁或电网等大规模网络中整合数据。EMQX 可以帮助您将网络端点的数据传输和传送到云端或现场的中心后端服务器。
+
+![use_case_3_ce](./assets/use_case_3_ce.png)
+
+#### 可追踪的通信与请求-响应感知
+
+EMQX 支持 MQTT 5.0 的请求-响应功能。利用此功能，您现在可以增强您的异步通信架构中的通信感知和可追踪性。
+
+![use_case_4_ce](./assets/use_case_4_ce.png)
+
+### 流数据转换
+
+通过基于 SQL 的内置强大[规则引擎](./data-integration/rules.md)，EMQX 可以实时提取、过滤、丰富和转换流数据。处理后的数据可以轻松摄取到外部 HTTP 服务和MQTT 服务。如果您使用的是 EMQX 企业版，还可以将数据摄取到主流数据库、数据存储和消息队列。
+
+![use_case_6_ce](./assets/use_case_6_ce.png)
+
+### 跨网络的数据集成
+
+在分区或网络环境受限的情况下，EMQX 可以实现数据集成，为您提供无缝的消息传递环境。
+
+![use_case_5_ce](./assets/use_case_5_ce.png)
 
 ### 遥测数据上传
 
@@ -276,6 +185,10 @@ EMQX 企业版提供了 MQTT 协议[文件传输](./file-transfer/introduction.m
 EMQX 企业版允许通过 MQTT 消息、REST API 以及 Kafka 进行消息下发，推送数据或远程控制设备。例如金融交易场景下，云端服务可以根据用户关注列表，进行分组实时数据推送。此模式提供了主题映射、下发数据处理以及数据触达统计，能够实现灵活且可靠的数据下发。
 
 <img src="./assets/use_case_4.png" alt="use_case_4" style="zoom:50%;" />
+
+## 行业解决方案
+
+EMQX 企业版为各行各业提供多功能的物联网解决方案，确保可靠的数据连接、高效的传输和灵活的处理，助力创新与卓越运营。
 
 ### 汽车行业
 
@@ -311,7 +224,7 @@ EMQX 提供一个全面的数据驱动解决方案，用于物流资产管理，
 
 鉴于物流行业的复杂和动态性质，有效地监控、调度和优化车队在运输和交付过程中至关重要。及时可靠的货物交付、成本优化和顾客满意度都严重依赖于高效的车队管理实践。[**了解更多 →**](https://www.emqx.com/zh/blog/how-emqx-revolutionizes-logistics-fleet-management)
 
-![design_9](./assets/use_case_9.png)
+<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
 
 #### 车辆与一切通信 (V2X)
 
@@ -329,7 +242,7 @@ EMQ 智能工厂解决方案旨在建立全面的数据收集、传输、分发�
 
 EMQ 为石油行业提供物联网数据收集解决方案，支持油田物联网终端设备的实时数据收集和云端协同管理。[**了解更多 →**](https://www.emqx.com/zh/use-cases/oil-extraction-transportation)
 
-![use_case_11](./assets/use_case_12.png)
+![use_case_12](./assets/use_case_12.png)
 
 ### 金融与支付
 
@@ -348,5 +261,3 @@ EMQ 的金融支付行业解决方案帮助客户实现7*24小时连续服务，
 ### 消费电子与AIoT
 
 基于 EMQX 的物联网数据访问平台为一家智能服务机器人公司提供了稳定高效的数据访问服务，帮助其服务超过5000名终端客户。[**了解更多 →**](https://www.emqx.com/zh/customers/intelligent-service-robot-aiot)
-
-{% endemqxee %}

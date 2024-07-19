@@ -1,165 +1,145 @@
-# EMQX Clustering
+# EMQX 集群设计
 
-MQTT is a stateful protocol, which means the broker needs to maintain state information about each MQTT session including subscribed messages and unfinished message transmissions.
-One of the biggest challenges of MQTT broker clustering is ensuring that the clustered nodes are able to synchronize and replicate such states efficiently and reliably.
+MQTT 是一种有状态协议，这要求消息服务器必须维护每个 MQTT 会话的状态信息，包括已订阅的主题和未完成的消息传输。在集群化 MQTT 消息服务器时，一个主要的挑战是确保这些状态在所有集群节点之间能够高效且可靠地同步和复制。
 
-EMQX is a highly scalable and fault-tolerant MQTT broker that can be distributed and run in a cluster mode with multiple nodes.
-In this chapter, we will discuss the reasons why we need the cluster MQTT brokers and how it is done EMQX which enables millions of unique wildcard subscribers in one single cluster.
+EMQX 是一个高度可扩展且具备容错能力的 MQTT 消息服务器，能够在多节点集群模式下运行。集群化的 EMQX 提高了物联网消息系统的可扩展性、可用性、可靠性和管理性，因此对于大型或关键业务应用来说，集群化是推荐的方式。本页面将探讨为何需要集群化 MQTT 消息服务器以及 EMQX 如何实现这一点，从而支持一个集群内数百万个不同的通配符订阅者。
 
-For instructions to create and run a EMQX version 5 cluster, you can find more inforamtion here: [EMQX Cluster](../deploy/cluster/introduction.md).
+有关创建和运行 EMQX 5.0 集群的详细说明，请参阅 [分布式集群介绍](../deploy/cluster/introduction.md)。
 
-Clustering EMQX can help improve the scalability, availability, reliability and management of IoT messaging systems, which is why clustering is recommended for larger or mission-critical applications.
+## 集群设计的关键方面
 
-## Key Aspects of Clustering
+在设计集群时，需要考虑多个关键因素，这些因素通常决定了集群的成功与否。简要概述如下：
 
-When designing a cluster, there are several key aspects that need to be considered. Often these are the most important factors that determine the success of the cluster. A quick summary is as follows:
+- **集中管理**：集群应具备集中管理的能力，这意味着可以通过单一的管理控制台监控和控制集群中的所有节点。
+- **数据一致性**：集群确保所有节点对路由信息具有一致的视图。这是通过在集群中的所有节点之间复制数据来实现的。
+- **易于扩展**：为减少集群管理的复杂性，添加新节点到集群应该是一个简单的过程。集群应能够自动检测新节点并将其添加到集群中。
+- **集群再平衡**：集群应能以最小的操作开销检测和处理节点负载不平衡问题，并将工作负载重新分配给负载较轻的节点。这确保了即使一个或多个节点发生故障，集群也能继续运行。
+- **大规模集群**：为了满足系统日益增长的需求，集群可以通过增加节点来进行扩展。这使得集群能够横向扩展，以满足系统的不断增长需求。
+- **自动故障切换**：如果某个节点发生故障，集群将自动检测故障并将工作负载重新分配给剩余的节点。这确保了即使一个或多个节点发生故障，集群也能继续运行。
+- **网络分区容忍度**：集群应具备容忍网络分区的能力，这意味着即使发生网络分区，集群仍能继续运行。
 
-* **Centralized Management**: The cluster should be able to be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console.
+在接下来的章节中，我们将详细讨论集群的这些关键方面。
 
-* **Data Consistency**: The cluster ensures that all nodes in the cluster have a consistent view of the r. This is achieved by replicating data across all nodes in the cluster.
+## 集中管理
 
-* **Easy To Scale**: To reduce the complexity of the cluster management, it should not be a complex task to add more nodes to the cluster. The cluster should be able to automatically detect the new nodes and add them to the cluster.
+EMQX 可以集中管理，因为集群中的所有节点都可以通过一个管理控制台进行监控和控制。这使得管理大量设备和消息变得简单。该控制台通过网页浏览器访问，并提供了一个用户友好的界面来管理集群。任何 `core` 类型的节点都可以作为管理 HTTP API 的终端（我们将在下一节讨论不同的节点类型）。
 
-* **Cluster Rebalance**: With minimal operational overhead, the cluster should be able to reflect on detect unblanced load of each node and reassign the workloads to the nodes with the least load. This ensures that the cluster can continue to function even if one or more nodes fail.
+在线配置管理功能允许您在不重启节点的情况下对集群中的所有节点进行配置更改。这在需要更改集群配置（如添加或删除节点）时特别有用。
 
-* **Large Cluster Size**: To meet the increasing demands of the system, the cluster can be expanded by adding more nodes to the cluster. This allows the cluster to scale horizontally to meet the increasing demands of the system.
+## 数据一致性
 
-* **Automatic Failover**: If a node fails, the cluster will automatically detect the failure and reassign the workloads to the remaining nodes. This ensures that the cluster can continue to function even if one or more nodes fail.
+在 MQTT 消息服务器集群中，最重要的分布式数据结构是路由表，它用于存储所有主题的路由信息。路由表用于确定哪些节点应接收发布到特定主题的消息。在本节中，我们将讨论 EMQX 如何确保集群中所有节点的路由表一致性。
 
-* **Network Partition Tolerance**: The cluster should be able to tolerate network partitions, as the cluster can continue to function even if one or more nodes fail.
+EMQX 集群使用完整的 ACID（原子性、一致性、隔离性、持久性）事务，确保集群中所有 `core` 节点的路由表一致性，并通过 `core` 节点到 `replica` 节点的异步复制，确保集群中所有节点的路由表最终一致性。
 
-In the following sections, we will discuss the key aspects of clustering in more detail.
+接下来，我们将深入探讨 EMQX 数据一致性是如何实现的。
 
-## Centralized Management
+### 数据复制通道
 
-EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages. The console is accessible via a web browser and provides a user-friendly interface for managing the cluster. Any `core` type node can serve as the management HTTP API endpoint (we will discuss the different node types in the next section).
+在 EMQX 集群中，有两个数据复制通道。
 
-The online configuration management feature allows you to make configuration changes to all nodes the cluster without having to restart the nodes. This is especially useful when you need to make changes to the cluster configuration, such as adding or removing nodes.
+- 元数据复制，例如各个节点订阅的（通配符）主题的路由信息。
+- 消息传递，例如将消息从一个节点转发到另一个节点时。
 
-## Data Consistency
+下图展示了包含发布-订阅流程的两个数据复制通道。虚线连接节点表示元数据复制，而实线箭头线表示消息传递通道。
 
-The most important distributed data structure in a MQTT broker cluster is the routing table, which is used to store the routing information of all topics. The routing table is used to determine which nodes should receive a message published to a particular topic. In this section, we will discuss how EMQX ensures that the routing table is consistent across all nodes in the cluster.
+<img src="./assets/clustering.png" alt="Data replication channels" style="zoom: 50%;" />
 
-EQMX cluster makes use of full ACID (Atomicity, Consistency, Isolation, Durability) transactions to ensure that the routing table is consistent across all the `core` nodes in the cluster. and employs asynchronous replication from the `core` nodes to the `replica` nodes to ensure that the routing table is eventually consistent across all nodes in the cluster.
+### EMQX 节点如何通信
 
-Let's dive into the details of how EMQX data consistency is achieved.
+EMQX 使用 Erlang/OTP 内置数据库 Mnesia 来存储 MQTT 会话状态。为了便于数据库和消息复制，使用了 Erlang 分布协议和自定义分布协议进行消息服务器间的远程过程调用。
 
-### Data Replication Channels
+数据库复制通道由“Erlang 分布”协议驱动，使每个节点既可以作为客户端，也可以作为服务器。该协议的默认监听端口号是 4370。
 
-* In a EMQX cluster, there are two data replication channels.
+相反，消息传递通道使用连接池，并且每个节点默认配置监听端口号为 5370（在 Docker 容器中运行时为 5369）。这种方法不同于使用单一连接的 Erlang 分布协议。
 
-  Metadata replication. Such as routing information which (wildcard) topics are being subscribed by which nodes.
+### 路由表复制
 
-* Message delivery. Such as when forwarding messages from one node to another.
-
-Below diagram illustrates the two data replication channels with a pub-sub flow.
-
-<img src="./assets/clustering.png" alt="Data replication channels" style="zoom: 40%;" />
-
-The dashed lines connecting the nodes indicate metadata replications, while the solid arrow lines represent the message delivery channel.
-
-### How EMQX Nodes Communicate
-
-EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. To facilitate database and message replication, the Erlang distribution protocol a custom distribution protocol are utilized for inter-broker remote procedure calls.
-
-The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370.
-
-In contrast, the message delivery channel employs a connection pool and each node is configured to listen on port number 5370 by default (5369 when running in a Docker container). This approach differs from the Erlang distribution protocol, which utilizes a single connection.
-
-### Routing Table Replication
-
-A Mnesia cluster is designed using a full mesh topology where each node in the cluster connects to every other node and continuously checks their liveliness.
+Mnesia 集群采用全网状拓扑设计，其中集群中的每个节点相互连接并持续检查其活跃状态。
 
 <img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
 
-However, the full mesh topology imposes a practical limit on the cluster size.
-For EMQX versions prior to 5, it is recommended to keep the cluster size under 5 nodes.
-Beyond this, vertical scaling, which involves using more powerful machines, is a preferable option to maintain the cluster's performance and stability.
+然而，全网状拓扑对集群规模有实际限制。对于 EMQX 5.0 之前的版本，建议将集群规模控制在 5 个节点以内。超过此数量时，垂直扩展（使用更强大的机器）是保持集群性能和稳定性的更佳选择。
 
-In our benchmark environment, we managed to reach [ten million concurrent connections with EMQX Enterprise 4.3](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report).
+在我们的基准测试环境中，我们成功实现了 [EMQX Enterprise 4.3 的 1 千万并发连接](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)。
 
-While our customers are not required to report their production deployment details, based on the information shared with us, the largest known in-production cluster consists of 7 nodes.
+虽然我们不要求客户报告其生产部署的详细信息，但根据与我们分享的信息，已知最大的生产集群由 7 个节点组成。
 
-One of the major challenges of managing a large Mnesia cluster is the risk of a split-brain situation, which can occur when a network partition isolates nodes into multiple subclusters, with each subcluster believing it is the only active cluster. This risk is especially pronounced in large clusters, where the N^2 complexity of networking overheads can cause nodes to become less responsive under high load. In addition, head-of-line blocking in the Erlang distribution channel can delay the sending of heartbeat messages, further increasing the risk of a split-brain situation.
+管理大型 Mnesia 集群的主要挑战之一是脑裂风险。当网络分区将节点隔离成多个子集群时，每个子集群都认为自己是唯一的活动集群。这种风险在大型集群中特别明显，因为网络开销的 N^2 复杂性会导致节点在高负载下响应变慢。此外，Erlang 分布通道中的队头阻塞可能会延迟心跳消息的发送，进一步增加脑裂风险。
 
-In version 5, we have greatly improved the cluster scalability by introducing [Mria](https://github.com/emqx/mria) (an enhanced version of Mnesia with async transaction log replication). Mria uses a new network topology which consists two type of node roles: `core` and `replicant` (sometimes referred to as `replica` for short).
+在 EMQX 5.0 中，我们通过引入 [Mria](https://github.com/emqx/mria)（一种带有异步事务日志复制的增强版 Mnesia），大大提高了集群的可扩展性。Mria 使用了一种新的网络拓扑，包括两种类型的节点角色：`core` 和 `replicant`（有时简称为 `replica`）。
 
 <img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
 
-In a EMQX Enterprise version 5 cluster, the `core` nodes still form the same full-mesh network as in older versions. The `replicant` nodes, however, only connects to one or more core nodes, but not to each other.
+在 EMQX 5.0 集群中，`core` 节点仍然形成与旧版本相同的全网状网络。然而，`replicant` 节点仅连接到一个或多个 `core` 节点，而不相互连接。
 
-### Core and Replicant Nodes
+### 核心节点和副本节点
 
-The behavior of Core nodes is the same as that of Mnesia nodes in 4.x: Core nodes form a cluster in a fully connected manner, and each node can initiate transactions, hold locks, and so on. Therefore, EMQX 5.0 still requires Core nodes to be as reliable as possible in deployment.
+核心节点的行为与 4.x 版本中的 Mnesia 节点相同：核心节点以全连接的方式形成集群，每个节点都可以发起事务、持有锁等。因此，EMQX 5.0 仍然要求核心节点在部署时尽可能可靠。
 
-Replicant nodes are no longer directly involved in the processing of transactions. But they connect to Core nodes and passively replicate data updates from Core nodes. Replicant nodes are not allowed to perform any write operations. Instead, it is handed over to the Core node for execution. In addition, because Replicants will replicate data from Core nodes, they have a complete local copy of data to achieve the highest efficiency of read operations, which helps to reduce the latency of EMQX routing.
+副本节点不再直接参与事务处理。它们连接到核心节点并被动地复制来自核心节点的数据更新。副本节点不允许执行任何写操作，而是将写操作交由核心节点执行。此外，由于副本节点会从核心节点复制数据，它们拥有完整的本地数据副本，以实现最高效的读操作，从而有助于减少 EMQX 路由的延迟。
 
-Since Replicant nodes do not participate in write operations, the latency of write operations will not be affected when more Replicant nodes join the cluster. This allows creating larger EMQX clusters.
+由于副本节点不参与写操作，当更多副本节点加入集群时，写操作的延迟不会受到影响。这允许创建更大的 EMQX 集群。
 
-For performance reasons, the replication of irrelevant data can be divided into independent data streams, that is, multiple related data tables can be assigned to the same RLOG Shard (replicated log shard), and transactions are sequentially replicated from Core nodes to the Replicant node. But different RLOG Shards are asynchronous.
+出于性能考虑，不相关数据的复制可以分为独立的数据流，即多个相关的数据表可以分配到同一个 RLOG 分片（复制日志分片），事务从核心节点顺序复制到副本节点。但是不同的 RLOG 分片是异步的。
 
-## Easy to Scale
+## 易于扩展
 
-EMQX is designed to be easy to scale horizontally.
-You can choose to add/delete nodes to/from the cluster at any time from the CLI, API or even the dashboard.
+EMQX 设计易于横向扩展。您可以随时通过 CLI、API 甚至 Dashboard 添加或删除集群中的节点。
 
-For example, to add a new node to the cluster it can be as simple as exeucting a command like this:
+例如，要向集群中添加新节点，只需执行如下命令：
 
 ```bash
 $ emqx ctl cluster join emqx@node1.my.net
 ```
 
-Where `emqx@node1.my.net` is one of the nodes in the cluster.
+其中 `emqx@node1.my.net` 是集群中的节点之一。
 
-Or you can, from the dashboard, click a button to invite a new node to join the cluster.
+或者，您可以在 Dashboard 上点击一个按钮来邀请新节点加入集群。
 
-With the help of the rich management interfaces, you can easiy script the cluster management make it part of your DevOps pipeline.
+借助丰富的管理接口，您可以轻松编写脚本进行集群管理，并将其作为 DevOps 管道的一部分。
 
-In EMQX version 5, the `replica` nodes are designed to be stateless, so they can be placed in an autoscaling group for better DevOps practices.
+在 EMQX 5.0 中，`replica` 节点被设计为无状态，因此它们可以放置在自动扩展组中，以实现更好的 DevOps 实践。
 
-## Cluster Rebalance
+## 集群重平衡
 
-When a node newly joins the cluster, it will start off with an empty state. With a good load balancer, the newly connected clients maybe have a better chance to connect to the new node. But the existing clients will still be connected to the old nodes.
+当一个新节点加入集群时，它将从空状态开始。通过一个良好的负载均衡器，新连接的客户端可能更有机会连接到新节点。然而，现有的客户端仍然会连接到旧节点。
 
-If the clients reconnect in a relatively short period of time, the cluster can reach balance quickly. But if the clients are not reconnecting, the cluster may remain unbalanced for a long time.
+如果客户端在相对较短的时间内重新连接，集群可以快速达到平衡。如果客户端没有重新连接，集群可能会长时间保持不平衡状态。
 
-In order to address this issue, EMQX Enterprise (since version 4.4) introduced a new feature called "Cluster Rebalance". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
+为了解决这个问题，EMQX Enterprise（从版本 4.4 开始）引入了一个新功能，称为“[集群负载重平衡](../deploy/cluster/rebalancing.md)”。该功能允许集群通过将会话从过载节点迁移到负载较轻的节点来自动重新平衡负载。
 
-An extreme version of "rebalance" is "evacuation", in which all the sessions are migrated off the given node. This is useful when you want to remove a node from the cluster.
+“重平衡”的一种极端版本是“疏散”，即将所有会话从指定节点迁移走。这在您希望从集群中移除某个节点时非常有用。
 
-## Cluster Size
+## 集群规模
 
-At the scale of millions of concurrent connections, you have no choice but to scale horizontally, because there is simply no single machine that can handle that many connections.
+在数百万并发连接的规模下，您别无选择，只能进行横向扩展，因为没有单一机器能够处理这么多连接。
 
-In EMQX version 5, the `core`-`replica` clustering architecture allows us to scale the cluster to a much larger size.
+在 EMQX 5.0 中，`core`-`replica` 集群架构使我们能够将集群扩展到更大的规模。
 
-In our benchmark, we tested 50 million publishers plus 50 million wildcard subscribers in a 23 nodes cluster. You can read our [blog post](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0) to find more details.
+在我们的基准测试中，我们在一个由 23 个节点组成的集群中测试了 5000 万发布者加上 5000 万通配符订阅者的场景。您可以阅读我们的[博客文章](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)了解更多细节。
 
-Why wildcards? Because wildcards subscriptions are the gold standard when benchmarking MQTT broker cluster scalability. It challenges the underlying data structures and algorithms to the limit.
+为什么选择通配符？因为在基准测试中，通配符订阅是衡量 MQTT 消息服务器集群可扩展性的黄金标准。它将底层数据结构和算法的能力挑战到极限。
 
-## Automatic Failover
+## 自动故障切换
 
-In MQTT protocol specification, there is no concept of session affinity. This means that a client can connect to any node in the cluster and still be able to receive messages published to the topics it has subscribed to.
-There is also not any service discovery mechanism in MQTT, so the client needs to know the address of the cluster nodes.
-This often requires the client to be configured with a list of all the nodes in the cluster or even better a load balancer that can route the client to the right node.
+在 MQTT 协议规范中，没有会话亲和性的概念。这意味着客户端可以连接到集群中的任何节点，并仍然能够接收它所订阅主题的消息。同时，MQTT 也没有服务发现机制，因此客户端需要知道集群节点的地址。这通常要求客户端配置一个包含所有集群节点地址的列表，或者更好的方法是使用一个负载均衡器，将客户端路由到正确的节点。
 
-EMQX is designed to work with a load balancer in front of the cluster. With a health check endpoint, the load balancer can detect the health of the nodes in the cluster and route the client to the right node.
+EMQX 设计时考虑到了与集群前端的负载均衡器配合使用。通过健康检查端点，负载均衡器可以检测集群中节点的健康状况，并将客户端路由到合适的节点。
 
-Using Erlang's node monitoring mechanism, EMQX nodes monitor each other's health status and will automatically remove unhealthy nodes from the cluster.
+利用 Erlang 的节点监控机制，EMQX 节点能够监控彼此的健康状态，并会自动从集群中移除不健康的节点。这样确保了即使某些节点出现问题，集群仍能继续运行，并且客户端可以无缝地连接到健康的节点上。
 
-## Network Partition Tolerance
+## 网络分区容错
 
-When a network partition occurs, the cluster may split into multiple isolated subclusters, each believing it is the only active cluster. This is known as the "split-brain" problem.
-A production cluster should be able to recover from a network partition automatically.
+当网络分区发生时，集群可能会分裂成多个孤立的子集群，每个子集群都认为自己是唯一的活动集群，这被称为“脑裂”问题。生产环境中的集群应能够自动从网络分区中恢复。
 
-EMQX's 'autoheal' feature can automatically heal the cluster after a network partition.
-When the feature is enabled, after network partition has occurred and then recovered, the nodes in the cluster will follow the steps below to heal the cluster.
+EMQX 的“自动修复”功能可以在网络分区后自动恢复集群。当启用此功能时，在网络分区发生并恢复后，集群中的节点将按照以下步骤进行修复：
 
-1. Node reports the partitions to a leader node which has the longest uptime.
-1. Leader node create a global netsplit view and choose one node in the majority as coordinator.
-1. Leader node requests the coordinator to command the minority side to reboot.
-1. requests all the nodes in the minority side.
+1. 节点向具有最长正常运行时间的领导节点报告分区情况。
+2. 领导节点创建一个全局的网络分裂视图，并选择多数派中的一个节点作为协调员。
+3. 领导节点请求协调员指挥少数派一侧的节点重新启动。
+4. 请求少数派一侧的所有节点执行重启操作。
 
-## Summary
+## 总结
 
-In this article, we have introduced the new clustering architecture in EMQX version 5. We have also discussed the key aspects of a production-ready MQTT broker cluster, including scalability, automatic failover, network partition tolerance, and so on. and how EMQX can help you achieve these goals.
+在本文中，我们介绍了 EMQX 5.0 的新集群架构。我们还讨论了适用于生产环境的 MQTT 消息服务器集群的关键方面，包括可扩展性、自动故障切换、网络分区容忍等，以及 EMQX 如何帮助您实现这些目标。
