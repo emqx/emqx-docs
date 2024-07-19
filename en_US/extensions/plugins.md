@@ -347,7 +347,4 @@ When the plugin is no longer needed, you can uninstall it using the CLI with thi
 ./bin/emqx ctl plugins uninstall {pluginName}
 ```
 
-<!-- {% emqxee %} -->
-<!-- **Note**: Plugins need to be reinstalled after hot upgrades. -->
-
-<!-- {% endemqxee %} -->
+<!-- **Note**: (EMQX enterprise) Plugins need to be reinstalled after hot upgrades. -->
