@@ -131,7 +131,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
   </tr>
 <tr>
     <td><b>Flow Designer</b></td>
@@ -192,9 +192,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
-
-
 
 ## Scalability and Performance
 
@@ -266,7 +263,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
 
 ## Clustering Architecture
 
@@ -394,8 +390,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
-
 
 ## MQTT and Connectivity
 
@@ -572,7 +566,6 @@ This page lists features supported across different deployment types in detail.
 </table>
 </div>
 
-
 ## Security
 
 <div style="text-align: center;">
@@ -659,8 +652,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
-
 
 ## Authentication and Authorization
 
@@ -756,9 +747,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
-
-
 
 ## Data Integration
 
@@ -978,8 +966,6 @@ This page lists features supported across different deployment types in detail.
 </table>
 </div>
 
-
-
 ## Rule Engine
 
 <div style="text-align: center;">
@@ -1091,9 +1077,6 @@ This page lists features supported across different deployment types in detail.
 </table>
 </div>
 
-
-
-
 ## Extensibility
 
 <div style="text-align: center;">
@@ -1164,8 +1147,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
-
 
 ## Operability
 
@@ -1357,7 +1338,6 @@ This page lists features supported across different deployment types in detail.
 </table>
 </div>
 
-
 ## Cloud Native and K8S
 
 <div style="text-align: center;">
@@ -1404,7 +1384,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
 
 ## Cloud Platform Availability
 
@@ -1475,7 +1454,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
 
 ## MQTT Tools and SDKs
 
@@ -1579,7 +1557,6 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
 
 ## Support Services
 
