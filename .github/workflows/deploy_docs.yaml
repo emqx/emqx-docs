@@ -118,6 +118,7 @@ jobs:
         python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
 
     - name: setup hocon
+      if: ${{ matrix.version != 'latest' }}
       run: |
         echo "HOCON=true" >> $GITHUB_ENV
         cp -r docs-files/hocon/*.json frontend/docs/public/api/
@@ -151,6 +152,7 @@ jobs:
         pnpm build
 
     - name: build redoc
+      if: ${{ matrix.version != 'latest' }}
       run: |
         cd frontend
         yarn global add redoc-cli
