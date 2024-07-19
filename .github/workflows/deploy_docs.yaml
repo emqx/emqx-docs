@@ -15,22 +15,25 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 0
+
       - name: set_environment
         id: set_environment
         run: |
           current_branch=$(echo ${{ github.ref_name }})
           current_version=$(echo ${{ github.ref_name }} | sed -r "s/^(.*)-.*$/\1/")
           current_version=${current_version/e/v}
-          if [[ $current_branch == v* ]];
+
           tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
           docs_types='["emqx"]'
           latest_version=$(python3 .github/scripts/generate_version.py $tag_list | jq -r '.[0]')
+
           if [[ $current_version == $latest_version ]];
           then
             build_version_list='["'latest'","'$current_version'"]'
           else
             build_version_list='["'$current_version'"]'
           fi
+
           echo "versions=$build_version_list" >> $GITHUB_OUTPUT
           echo "docs_types=$docs_types" >> $GITHUB_OUTPUT
 
