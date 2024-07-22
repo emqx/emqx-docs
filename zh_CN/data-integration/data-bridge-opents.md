@@ -1,10 +1,10 @@
 # 将 MQTT 数据写入到 OpenTSDB
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+
+OpenTSDB 数据集成是 EMQX 企业版功能。
+
 :::
-{% endemqxce %}
 
 [OpenTSDB](http://opentsdb.net/) 是一个可扩展的分布式时间序列数据库。EMQX 支持与 OpenTSDB 集成，因此可以将 MQTT 消息保存到 OpenTSDB 以便后续进行分析和检索。
 

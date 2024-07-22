@@ -7,7 +7,7 @@
 - TLS/SSL 终结，减轻 EMQX 集群的负担；
 - 提高安全性，有了负载均衡在集群前端，能够通过设置阻止不需要的流量，保护 EMQX 集群免受恶意攻击。
 
-本章节将指导您为 EMQX 集群选择并启用负载器。
+本节将指导您为 EMQX 集群选择并启用负载均衡。
 
 ## 部署架构
 
@@ -35,7 +35,7 @@
 
 除了负载均衡部署集群外，还可以使用 DNS 轮询直连 EMQX 集群，即将所有节点加入 DNS 轮询列表，设备通过域名或者 IP 地址列表访问集群，通常不建议在生产环境中采用 DNS 轮询直连方式。
 
-## 真实 IP 与 Proxy Protocol
+## 获取真实 IP 和客户端 TLS 证书信息
 
 部署 LB 之后 EMQX 通常需要拿到客户端真实的源 IP 或是 TLS 证书信息，您需要 LB 上打开 [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)（代理协议）配置或启用相关的获取真实 IP 的配置。
 
@@ -51,6 +51,10 @@ listeners.tcp.default {
 ```
 
 有关在 LB 上启用 Proxy Protocol 的配置请参考各自的操作文档，一些 LB 产品并不支持 Proxy Protocol，但仍然支持后端服务获取客户端真实 IP，请根据具体的 LB 和云服务提供商的要求进行相应的配置。
+
+### 客户端 TLS 证书信息
+
+仅 Proxy Protocol v2 支持发送客户端 TLS 证书信息，例如通用名称 (Common Name, CN) 和主题 (Subject)。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
 ## 选择负载均衡产品
 

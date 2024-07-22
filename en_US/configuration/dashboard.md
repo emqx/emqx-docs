@@ -41,22 +41,8 @@ Where,
 - `ssl_options.keyfile`: Path to the PEM format private key file.
 - `default_password`: The password used to **initialize** the database record for `admin` user. NOTE: Changing this config after EMQX has booted for the first time has no effect. Once initialized, the default password `public` (which comes with the installation) must be changed from dashboard or CLI.
 
-{% emqxce %}
-
 ::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/#V-dashboard).
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-::: tip
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard).
-
-:::
-
-{% endemqxee %}

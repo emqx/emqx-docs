@@ -1,37 +1,16 @@
 # 安装部署和迁移
 
-本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。
-
-{% emqxee %}
-
-本章还介绍了许可证的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
-
-{% endemqxee %}
-
-{% emqxce %}
-
-本章还介绍了如何从 EMQX 4.4 迁移至 EMQX 5.1。
-
-{% endemqxce %}
+本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。本章还介绍了 EMQX 企业版 License 的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
 
 ## 下载
 
-{% emqxce %}
+EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可以点击以下链接下载：
 
-在每个 EMQX 版本中，我们都会针对不同的操作系统与平台发布不同的安装包选项，您可点击以下链接下载：
+EMQX 开源版：<https://www.emqx.com/zh/downloads-and-install/broker>
 
-- 官网下载：<https://www.emqx.io/zh/downloads>
+EMQX 企业版：<https://www.emqx.com/zh/downloads-and-install/enterprise>
 
 此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
-
-{% endemqxce %}
-
-{% emqxee %}
-EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可点击以下链接下载：
-
-官网下载：<https://www.emqx.com/zh/try?product=enterprise>
-
-{% endemqxee %}
 
 :::tip
 除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
@@ -41,28 +20,13 @@ EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜�
 
 EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
 
-{% emqxce %}
 | 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
 | :-------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
-
-{% endemqxce %}
-
-{% emqxee %}
-
-| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
-| :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | 是   | 是  |
-
-{% endemqxee %}
+| Ubuntu     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是   | 是  |
+| Debian     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
+| CentOS/RHEL  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
+| Amazon Linux | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
+| macOS       | macOS 13<br />macOS 14 | 是   | 是  |
 
 <!-- ## 硬件规格
 

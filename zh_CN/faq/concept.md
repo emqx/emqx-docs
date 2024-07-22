@@ -6,7 +6,7 @@
 
 ## EMQX 有哪些产品？
 
-EMQX 产品系列目前主要包含以下 [三款产品](https://www.emqx.com/zh/products/emqx)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
+EMQX 产品系列目前主要包含以下 [3 款产品](https://www.emqx.com/zh/products/emqx)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
 
 - EMQX：EMQX 开源版，提供 MQTT 协议、CoAP 和 LwM2M 等常见物联网协议的支持；
 

@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - v*
-      - e*
 
 jobs:
   prepare:
@@ -16,27 +15,25 @@ jobs:
       - uses: actions/checkout@main
         with:
           fetch-depth: 0
+
       - name: set_environment
         id: set_environment
         run: |
           current_branch=$(echo ${{ github.ref_name }})
           current_version=$(echo ${{ github.ref_name }} | sed -r "s/^(.*)-.*$/\1/")
           current_version=${current_version/e/v}
-          if [[ $current_branch == v* ]];
-          then
-            tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
-            docs_types='["emqx"]'
-          else
-            tag_list=$(git tag | egrep "^e.*$" | xargs echo -n)
-            docs_types='["enterprise"]'
-          fi
+
+          tag_list=$(git tag | egrep "^v.*$" | xargs echo -n)
+          docs_types='["emqx"]'
           latest_version=$(python3 .github/scripts/generate_version.py $tag_list | jq -r '.[0]')
+
           if [[ $current_version == $latest_version ]];
           then
             build_version_list='["'latest'","'$current_version'"]'
           else
             build_version_list='["'$current_version'"]'
           fi
+
           echo "versions=$build_version_list" >> $GITHUB_OUTPUT
           echo "docs_types=$docs_types" >> $GITHUB_OUTPUT
 
@@ -87,16 +84,7 @@ jobs:
       run: |
         cd docs-files
         pip3 install pyyaml
-        if [[ $DOCS_TYPE == "emqx" ]];
-        then
-          ./gen.py ce | tee directory.json
-        else
-          ./gen.py ee | tee directory.json
-        fi
-
-    - name: remove unused files
-      run: |
-        cd docs-files
+        ./gen.py ce | tee directory.json
         python3 .github/scripts/remove_unused.py directory.json $(pwd)
 
     - name: set current emqx version
@@ -126,43 +114,35 @@ jobs:
     - name: generate version config
       run: |
         cd docs-files
-        if [[ $DOCS_TYPE == "emqx" ]];
-        then
-          version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
-        else
-          version_list=$(git tag | egrep "^e.*$" | xargs echo -n)
-        fi
+        version_list=$(git tag | egrep "^v.*$" | xargs echo -n)
         python3 .github/scripts/generate_version.py $version_list > ../frontend/docs/public/api/${DOCS_TYPE}_versions.json
 
     - name: setup hocon
+      if: ${{ matrix.version != 'latest' }}
       run: |
-        version_number=$(echo "${VERSION}" | tr -d v | awk -F. '{ printf("%d%02d%02d", $1,$2,$3) }')
-        if [ $version_number -lt 50300 ];
-        then
-          echo "Skip set hocon"
-          exit 0
-        fi
-
         echo "HOCON=true" >> $GITHUB_ENV
-        if [[ $DOCS_TYPE == "emqx" ]];
-        then
-          cp -r docs-files/hocon/ce/*.json frontend/docs/public/api/
-        else
-          cp -r docs-files/hocon/ee/*.json frontend/docs/public/api/
-        fi
-        online_versions=$(curl -s https://docs.emqx.com/api/${DOCS_TYPE}_hocon_versions.json)
+        cp -r docs-files/hocon/*.json frontend/docs/public/api/
+        hocon_products=(emqx enterprise)
+        for hocon_product in "${hocon_products[@]}"; do
+          online_versions=$(curl -s https://docs.emqx.com/api/${hocon_product}_hocon_versions.json)
 
-        if [ $? -eq 0 ]; then
-          online_versions=$(echo $online_versions | jq -r '.'[])
-        else
-          online_versions=""
-        fi
+          if [ $? -eq 0 ]; then
+              online_versions=$(echo $online_versions | jq -r '.'[])
+          else
+              online_versions=""
+          fi
 
-        local_versions=$(ls frontend/docs/public/api/hocon-*-*on | sed -E 's_.*/hocon-(.*)-(en|zh).json_\1_g' | uniq)
-        all_versions=$(echo -e "$online_versions\n$local_versions" | sort -u | awk NF | uniq)
-        all_versions=$(echo "$all_versions" | sort -rV)
-        jq -nR '[inputs]' <<< "$all_versions" > frontend/docs/public/api/${DOCS_TYPE}_hocon_versions.json
-        cat frontend/docs/public/api/${DOCS_TYPE}_hocon_versions.json
+          if [[ $hocon_product == "emqx" ]]; then
+            local_versions=$(ls frontend/docs/public/api/hocon-ce-*-*on | sed -E 's_.*/hocon-ce-(.*)-(en|zh).json_\1_g' | uniq)
+          else
+            local_versions=$(ls frontend/docs/public/api/hocon-ee-*-*on | sed -E 's_.*/hocon-ee-(.*)-(en|zh).json_\1_g' | uniq)
+          fi
+
+          all_versions=$(echo -e "$online_versions\n$local_versions" | sort -u | awk NF | uniq)
+          all_versions=$(echo "$all_versions" | sort -rV)
+          jq -nR '[inputs]' <<< "$all_versions" > frontend/docs/public/api/${hocon_product}_hocon_versions.json
+          cat frontend/docs/public/api/${hocon_product}_hocon_versions.json
+        done
 
     - name: build docs
       run: |
@@ -171,32 +151,24 @@ jobs:
         pnpm install
         pnpm build
 
-    - name: build ce redoc
-      if: matrix.docs_type == 'emqx' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
+    - name: build redoc
+      if: ${{ matrix.version != 'latest' }}
       run: |
         cd frontend
         yarn global add redoc-cli
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template.hbs \
-            --output docs/.vitepress/dist/${lang}/${DOCS_TYPE}/${VERSION}/admin/api-docs.html \
-            --options.theme.colors.primary.main=#00b173 \
+          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template-emqx.hbs \
+            --output docs/.vitepress/dist/${lang}/emqx/${VERSION}/admin/api-docs.html \
+            --options.theme.colors.primary.main=#5e4eff \
             --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
             --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
-        done
 
-    - name: build ee redoc
-      if: matrix.docs_type == 'enterprise' && !contains(fromJSON('["v1.", "v2.", "v3.", "v4."]'), matrix.version)
-      run: |
-        cd frontend
-        yarn global add redoc-cli
-        LANGS=(zh en)
-        for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template.hbs \
-            --output docs/.vitepress/dist/${lang}/${DOCS_TYPE}/${VERSION}/admin/api-docs.html \
+          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
+            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --options.theme.colors.primary.main=#5e4eff \
             --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
             --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
@@ -217,7 +189,7 @@ jobs:
         aws s3 rm --recursive s3://docs-emqx-com/zh/${DOCS_TYPE}/${VERSION} || true
         aws s3 rm --recursive s3://docs-emqx-com/en/${DOCS_TYPE}/${VERSION} || true
         aws s3 cp --recursive frontend/docs/.vitepress/dist/ s3://docs-emqx-com/
-        aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/${DOCS_TYPE}/${VERSION}/*" "/en/${DOCS_TYPE}/${VERSION}/*" "/api/${DOCS_TYPE}_versions.json" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DOCS_CLOUDFRONT_ID }} --paths "/zh/emqx/*" "/en/emqx/*" "/zh/enterprise/*" "/en/enterprise/*" "/api/*" "/sitemap_${DOCS_TYPE}_${VERSION}.xml"
 
     - name: upload files to tencent cos
       run: |
@@ -237,15 +209,15 @@ jobs:
 
     - name: flush cdn
       run: |
-        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/${DOCS_TYPE}/${VERSION}/ https://docs.emqx.com/en/${DOCS_TYPE}/${VERSION}/ --FlushType delete
-        tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/api/${DOCS_TYPE}_versions.json https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
+        tccli cdn PurgePathCache --cli-unfold-argument --Paths https://docs.emqx.com/zh/emqx/ https://docs.emqx.com/en/emqx/ https://docs.emqx.com/zh/enterprise/ https://docs.emqx.com/en/enterprise/ https://docs.emqx.com/api/ --FlushType delete
+        tccli cdn PurgeUrlsCache --cli-unfold-argument --Urls https://docs.emqx.com/sitemap_${DOCS_TYPE}_${VERSION}.xml
 
     - name: update ee search index
       if: matrix.docs_type == 'enterprise'
       uses: Swilder-M/docsearch-scraper-simple@next
       env:
-        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_NEXT }}
-        API_KEY: ${{ secrets.ALGOLIA_API_KEY_NEXT }}
+        APPLICATION_ID: ${{ secrets.ALGOLIA_APPLICATION_ID_CE }}
+        API_KEY: ${{ secrets.ALGOLIA_API_KEY_CE }}
       with:
         docs_type: ${{ env.DOCS_TYPE }}
         docs_version: ${{ env.VERSION }}

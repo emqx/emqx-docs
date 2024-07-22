@@ -43,17 +43,7 @@ Go to EMQX Dashboard. Click **Management** -> **Logging** on the left navigation
 
 On the **Logging** page, select the **Console Log** tab.
 
-{% emqxee %}
-
 <img src="./assets/config-console-log-1-ee.png" alt="config-console-log-1-ee" style="zoom:67%;" />
-
-{% endemqxee %}
-
-{% emqxce %}
-
-<img src="./assets/config-console-log-1-ce.png" alt="config-console-log-1-ce" style="zoom:67%;" />
-
-{% endemqxce %}
 
 Configure the following settings for the console log handler:
 
@@ -77,17 +67,7 @@ After you finish the configurations, click **Save Changes**.
 
 On the **Logging** page, select the **File Log** tab.
 
-{% emqxee %}
-
 <img src="./assets/config-file-log-1-ee.png" alt="config-file-log-1-ee" style="zoom:67%;" />
-
-{% endemqxee %}
-
-{% emqxce %}
-
-<img src="./assets/config-file-log-1-ce.png" alt="config-file-log-1-ce" style="zoom:67%;" />
-
-{% endemqxce %}
 
 Configure the following settings for file log handler:
 

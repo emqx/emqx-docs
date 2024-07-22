@@ -61,14 +61,9 @@ Where,
 | `ssl_options.keyfile`    | PEM file containing the private key corresponding to the SSL/TLS certificate. | --            | --                                                |
 | `ssl_options.fail_if_no_peer_cert` | If set to `true`, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to `false`, it fails only if the client sends an invalid certificate (an empty certificate is considered valid). | --            | --                                                |
 
-{% emqxce %}
+::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/).
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-{% endemqxce %}
+:::
 
-{% emqxee %}
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}

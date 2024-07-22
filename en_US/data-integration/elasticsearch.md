@@ -1,14 +1,10 @@
 # Ingest MQTT Data into Elasticsearch
 
-{% emqxce %}
-
 ::: tip
 
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The Elasticsearch data integration is an EMQX Enterprise edition feature.
 
 :::
-
-{% endemqxce %}
 
 [Elasticsearch](https://www.elastic.co/elasticsearch/) is a distributed search and data analysis engine that offers full-text search, structured search, and analysis capabilities for diverse data types. By integrating with Elasticsearch, EMQX enables seamless incorporation of MQTT data into Elasticsearch for storage. This integration leverages the powerful scalability and analysis capabilities of Elasticsearch, providing efficient and scalable data storage and analysis solutions for IoT applications.
 

@@ -1,10 +1,10 @@
 # Ingest MQTT Data into OpenTSDB
 
-{% emqxce %}
-:::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+::: tip
+
+The OpenTSDB data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [OpenTSDB](http://opentsdb.net/) is a scalable, distributed time series database. EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
 

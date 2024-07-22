@@ -455,19 +455,15 @@ The WebHook plugin (`emqx_web_hook`) is converted to a native feature, and it is
 
 The MQTT bridge plugin (`emqx_bridge_mqtt`) has been removed. Use the built-in MQTT data bridge in Data Integration instead.
 
-{% emqxee %}
-
 ## Offline Messages
 
-The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.x.
+The [offline messages](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) provided in EMQX Enterprise version 4.x are based on an external database. EMQX plans to provide native offline messages (based on the built-in database) in future versions, so the offline messages for the external database is no longer supported in version 5.x.
 
 The upcoming native offline messaging feature will provide improved performance and reduce usage and maintenance costs. Stay tuned for more updates.
 
 ## Auto Subscription (Server Side Subscriptions)
 
-As of version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
-
-{% endemqxee %}
+As of EMQX Enterprise version 5.0.0, EMQX no longer provides [Auto subscription](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) (server side subscriptions) based on an external database.
 
 ## Prometheus
 

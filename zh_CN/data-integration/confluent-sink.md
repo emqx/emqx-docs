@@ -1,14 +1,10 @@
 # 将 MQTT 数据传输到 Confluent
 
-{% emqxce %}
-
 :::tip
 
-Confluent Sink 是 EMQX 企业版的功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+Confluent 数据集成是 EMQX 企业版的功能。
 
 :::
-
-{% endemqxce %}
 
 [Confluent Cloud](https://www.confluent.io/) 基于 Apache Kafka，是一项弹性、可扩展、并完全托管的流式数据服务。EMQX 支持通过规则引擎与 Sink 实现与 Confluent 的数据集成，使您能够轻松将 MQTT 数据流式传输到 Confluent，实现数据的实时处理、存储和分析。
 

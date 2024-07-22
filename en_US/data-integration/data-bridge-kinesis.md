@@ -1,10 +1,10 @@
 # Stream MQTT Data into Amazon Kinesis
 
-{% emqxce %}
 ::: tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+
+The Amazon Kinesis data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [AWS Kinesis](https://aws.amazon.com/cn/kinesis/) is a fully managed real-time streaming data processing service on AWS that facilitates easy collection, processing, and analysis of streaming data. It can economically and efficiently handle streaming data of any scale in real-time and offers high flexibility, capable of low-latency processing of any amount of streaming data from hundreds of thousands of sources.
 
