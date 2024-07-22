@@ -1,14 +1,10 @@
 # Stream MQTT Data into Confluent
 
-{% emqxce %}
+::: tip
 
-:::tip
-
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The Confluent data integration is an EMQX Enterprise edition feature.
 
 :::
-
-{% endemqxce %}
 
 [Confluent Cloud](https://www.confluent.io/), based on Apache Kafka, is a resilient, scalable, and fully managed streaming data service. EMQX supports data integration with Confluent through its rule engine and Sink, enabling easy streaming of MQTT data into Confluent for real-time processing, storage, and analysis.
 

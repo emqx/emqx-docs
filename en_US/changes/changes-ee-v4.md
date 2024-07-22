@@ -1,5 +1,105 @@
 # Version 4
 
+## 4.4.24
+
+*Release Date: 2024-04-16*
+
+### Enhancements
+
+- Make `/load_rebalance/availability_check` public, i.e. not requiring authentication. This simplifies load balancer setup. Also make this API method maximally lightweight to avoid possible overloading the broker.
+
+- Made rebalance/evacuation more graceful during the wait health check phase. The connections to nodes
+  marked for eviction are now not prohibited during this phase.
+
+  During this phase it is unknown whether these nodes are all marked unhealthy by the load balancer, so prohibiting connections to them may cause multiple unsuccessful attempts to reconnect.
+
+- Improved the issue of a too short Idle Timeout for the HTTP API.
+
+  Previously, the `idle_timeout` for the HTTP API was set to 5 seconds. If the HTTP API did not receive any requests within 5 seconds, the TCP connection of HTTP would be closed by EMQX. This change increases the HTTP API's `idle_timeout` to 60 seconds.
+
+- Enhanced the descriptions of certain configuration fields and options.
+
+  * Improved descriptions of the `Base URL` and `Path` parameters in Webhook resources and actions.
+  * Enhanced the description of the `idle_timeout` configuration for WS/WSS listeners in hot configurations.
+  * Improved the detailed description of the `Max Returned Count` parameter in offline message-related actions.
+  * Renamed the English parameter `Key` in ClickHouse resources to `Password`.
+  * Renamed the `PartitionKey` parameter in HStreamDB actions to `Partition Key`.
+  * Updated the detailed description of the `Maximum Retained Message Size` parameter in the Retainer module from `0B` to `0`.
+  * Renamed `Message Interception` to `Intercept Empty Messages` in the Retainer module and improved its description.
+
+- Checked the value ranges and validity of certain configuration options.
+
+  * Checked that the `mqtt.max_topic_levels`, `mqtt.max_packet_size`, `keepalive_backoff` configuration options must be non-negative.
+  * When starting SSL listeners, checked the dependencies of the `verify_peer`, `fail_if_no_peer_cert`, and `cacertfile` parameters. Previously, this check only occurred when SSL clients attempted to establish a connection.
+  * Checked that the `acceptors`, `max_connections`, `max_conn_rate`, and `active_n` parameters in listener configurations must be non-negative.
+  * Checked that the `Heartbeat Interval` and `Automatic Reconnection Interval` parameters in RabbitMQ resources must be correct time length strings.
+  * Fixed an issue where duplicate ports were not checked for GB/T 32960 and JT/T808 listeners.
+  * Fixed an issue in the GB/T 32960 and JT/T808 gateway configurations where certain parameter values were not validated.
+
+- Optimized log formats and addressed some display issues on the Dashboard.
+
+  * Improved the precision of rule engine rate values occasionally showing very long floating-point numbers on the Dashboard, now accurate to two decimal places.
+  * In the alert messages for system resource usage, the CPU usage value is now precise to two decimal places.
+  * Removed debug fields like `mfa` from logs.
+
+- Rule engine now supports user-defined SQL functions.
+
+  Assuming a user-customized plugin contains a module named `emqx_rule_funcs1` with a function named `func`, in the rule engine, users can use it like this:
+
+  ```SQL
+  SELECT emqx_rule_funcs1.func() FROM "t/#"
+  ```
+
+  Note that the module name must be prefixed with either `emqx_rule_funcs` or `EmqxRuleFuncs`.
+
+- The Kafka consumer group module now supports more authentication methods.
+
+  Now, the Kafka consumer group module supports multiple authentication methods, including PLAIN, SCRAM_SHA_256, and KERBEROS, just like Kafka resources.
+
+- Added overload protection for certain HTTP API methods that consume more system resources.
+
+  * The `GET /api/v4/clients/*` related APIs
+  * The `GET /api/v4/routes` API
+  * The `GET /api/v4/subscriptions` API
+  * The `GET /api/v4/rules` API
+  * The `GET /api/v4/banned` API
+  * The `GET /api/v4/audits` API
+  * APIs for searching usernames and client IDs in the built-in authentication module.
+
+### Bug Fixes
+
+- Fixed the `date_to_unix_ts()` SQL function in the rule engine returns an incorrect value when the input date is a leap year.
+
+- During node evacuation, evacuate all disconnected sessions, not only those started with `clean_start` set to `false`.
+
+  Before the fix, if the client sets `clean_start = true` and a non-zero `Session-Expiry-Interval`, the session will not be evacuated, resulting in the loss of the session after the node is closed.
+
+- Fixed the Redis authentication exception when corresponding authentication information is not found in Redis.
+
+- Fixed the exception caused by uninitialized ETS table during the startup process of an EMQX node when accessing the HTTP API.
+
+- Fixed the issue of failing to load extension plugins under certain circumstances.
+
+  The `plugins.expand_plugins_dir` configuration can specify a directory where EMQX will search for and load plugins during startup.
+  Under certain circumstances, plugin files may be loaded multiple times, causing EMQX to fail to start.
+
+- Fixed the issue of being unable to clear the ACL cache for a single client using the command line.
+
+  Previously, the command `emqx ctl acl cache-clean 'mqttx_458d5222'` did not work.
+
+- Fixed the problem where fuzzy searches on the rule list, built-in authentication/authorization list pages did not show more pagination, causing incomplete data display.
+
+- Fixed the inaccurate error logs printed by EMQX when attempting to download trace log files in the "waiting to start" state.
+
+- Fixed the issue with the SSL listener configuration during the first use of the hot configuration feature, where the `backlog` configuration item was displayed as empty and required, causing form submission failure.
+
+  After the fix, the `backlog` configuration is made optional with a default value of 1024.
+
+- Fixed the issue where validators related to `zone` in the configured `emqx.schema` file were not effective.
+
+- Fixed the problem in the response of the audit log query API, where the `operation_result` field remained `success` even when the HTTP Status Code for the queried information was 500.
+
+- Fixed the issue of duplicate GB/T 32960 client IDs on the Dashboard.
 
 ## 4.4.23
 
@@ -416,7 +516,7 @@
 
 - Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
-  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
+  For more information on `Erlang distribution`, see [here](https://docs.emqx.com/en/enterprise/v4.4/advanced/cluster.html).
 
 - Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
 
@@ -900,7 +1000,7 @@ a node restart (and configuration change) is required.
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
   Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
-  Find more about flapping detection in [EMQX document](https://www.emqx.io/docs/en/v4.3/configuration/configuration.html#flapping-detect-policy)
+  Find more about flapping detection in [EMQX document](https://docs.emqx.com/en/enterprise/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).

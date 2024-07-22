@@ -58,22 +58,11 @@ gateway.mqttsn {
 
 ::::
 
-
 ::: tip
 注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-{% emqxce %}
-
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表参考：[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
 
 ## 认证
 
@@ -158,19 +147,9 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 
 ## 用户层接口
 
-{% emqxce %}
+- 详细配置说明参考：[网关配置 - MQTT-SN 网关（开源版）](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和[网关配置 - MQTT-SN 网关（企业版）](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
-
-{% endemqxce %}
-
-{% emqxee %}
-
-- 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
-
-{% endemqxee %}
+- 详细 HTTP API 接口参考：[HTTP API - 网关（开源版）](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs)和 [HTTP API - 网关（企业版）](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 

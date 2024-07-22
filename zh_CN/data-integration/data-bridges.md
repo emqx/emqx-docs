@@ -10,7 +10,7 @@
 
 - 自 EMQX v5.4.0 版本开始，原数据桥接按照数据流方向拆分并重命名为 Sink 与 Source。
 
-- 目前，EMQX 仅支持 MQTT、Kafka 和 GCP PubSub Source。
+- 目前，EMQX 支持 MQTT 服务、Kafka 和 GCP PubSub 这三种外部数据系统作为 Source，其中，Kafka 和 GCP PubSub Source 仅在企业版中支持。
 
 :::
 
@@ -70,13 +70,12 @@ D1 -->|发布消息| E[客户端]
 
 ## 支持的集成
 
-{% emqxce %}
-EMQX 开源版中支持以下两种数据集成：
+目前，EMQX 开源版支持以下两种数据集成：
 
-- [MQTT](./data-bridge-mqtt.md)
+- [MQTT Services](./data-bridge-mqtt.md)
 - [Webhook](./webhook.md)/[HTTP Server](./data-bridge-webhook.md)
 
-下列数据系统仅在 EMQX 企业版中支持：
+EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下这些数据系统的集成：
 
 **云服务**
 
@@ -122,63 +121,6 @@ EMQX 开源版中支持以下两种数据集成：
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 支持与以下数据系统的集成：
-
-**默认支持**
-
-- [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
-
-**云服务**
-
-- [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [GCP PubSub](./data-bridge-gcp-pubsub.md)
-
-**时序数据库**
-
-- [Apache IoTDB](./data-bridge-iotdb.md)
-- [InfluxDB](./data-bridge-influxdb.md)
-- [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
-
-**SQL**
-
-- [Cassandra](./data-bridge-cassa.md)
-- [Microsoft SQL Server](./data-bridge-sqlserver.md)
-- [MySQL](./data-bridge-mysql.md)
-- [Oracle](./data-bridge-oracle.md)
-- [PostgreSQL](./data-bridge-pgsql.md)
-
-**NoSQL**
-
-- [ClickHouse](./data-bridge-clickhouse.md)
-- [DynamoDB](./data-bridge-dynamo.md)
-- [Greptime](./data-bridge-greptimedb.md)
-- [MongoDB](./data-bridge-mongodb.md)
-- [Redis](./data-bridge-redis.md)
-- [TDengine](./data-bridge-tdengine.md)
-- [Elasticsearch](./elasticsearch.md)
-
-**消息队列**
-
-- [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
-- [Pulsar](./data-bridge-pulsar.md)
-- [RabbitMQ](./data-bridge-rabbitmq.md)
-- [RocketMQ](./data-bridge-rocketmq.md)
-
-**其他**
-
-- [SysKeeper](./syskeeper.md)
-- [Amazon S3](./s3.md)
-
-{% endemqxee %}
-
 ## Sink 的特性
 
 Sink 借助以下特性以增强易用性、进一步提高数据集成的性能和可靠性，并非所有 Sink 都完全实现了这些特性，具体支持情况请参照各自的说明文档。
@@ -189,7 +131,7 @@ Sink 借助以下特性以增强易用性、进一步提高数据集成的性能
 
 为了提高数据处理效率，EMQX 默认开启异步请求模式。如果您对消息到达订阅端和外部数据系统的时序有严格要求，请禁用异步请求模式。
 
-异步请求中另一个影响消息顺序的参数是**请求飞行队列窗口**(`max_inflight`)。部分 Sink 有这个参数，当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
+异步请求中另一个影响消息顺序的参数是**请求飞行队列窗口** (`max_inflight`)。部分 Sink 有这个参数，当请求模式为异步时，如果需要严格保证来自同一 MQTT 客户端的消息有序，则必须将此值设为 1。
 
 ### 批量模式
 

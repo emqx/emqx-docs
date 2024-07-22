@@ -19,17 +19,11 @@ flapping_detect {
 - `window_time` 用于设置计算客户端最大连接尝试次数的时间窗口。
 - `ban_time` 用于设置在检测到客户端为连接抖动后，禁止客户端连接到 EMQX 的持续时间。
 
-{% emqxce %}
+::: tip
 
-EMQX 还提供了更多配置项以更好地满足定制化需求。更多详细信息请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 还提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+:::
 
 ::: tip
 

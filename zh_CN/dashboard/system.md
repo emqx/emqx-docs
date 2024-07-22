@@ -1,16 +1,12 @@
 # 系统设置
 
-{% emqxce %}
-
-EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**和**设置**子菜单。每个子菜单都允许您在其各自的页面上高效管理和配置用户帐户、API密钥和仪表板设置首选项。
-
-{% endemqxce %}
-
-{% emqxee %}
-
 EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License** 和**单点登录**子菜单。每个子菜单都允许您在其各自的页面上高效管理和配置用户帐户、API 密钥、License 设置和单点登录选项。
 
-{% endemqxee %}
+::: tip
+
+License 和单点登录仅适用于 EMQX 企业版。
+
+:::
 
 ## 用户
 
@@ -18,21 +14,12 @@ EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License*
 
 要添加新用户，只需点击页面右上角的**创建**按钮。一个弹出的对话框将提示您输入必要的用户详细信息。输入完毕后，点击**创建**按钮即可生成用户帐户。对于进一步的用户管理，如编辑用户信息、更新密码或删除用户，您可以通过**操作**列轻松访问这些选项。
 
-
-{% emqxce %}
-
-<img src="./assets/users.png" alt="image" style="zoom:67%;" />
-
 > EMQX 开源版本不提供基于角色的权限管理能力，所有的用户都有管理员权限可删除其他用户，但无法在 Dashboard 上删除当前登录用户。
 > 出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户无法用于 REST API 认证。
 
-{% endemqxce %}
-
-{% emqxee %}
-
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
-从 EMQX 5.3 开始，Dashboard 用户引入了 基于角色的访问控制 （RBAC）功能。RBAC 允许根据用户在组织中的角色为其分配权限。此功能简化了授权管理，通过限制访问权限提高安全性，并改善组织合规性，因此是 Dashboard 必不可少的访问控制机制。
+从 EMQX 企业版 5.3 开始，Dashboard 用户引入了 基于角色的访问控制 （RBAC）功能。RBAC 允许根据用户在组织中的角色为其分配权限。此功能简化了授权管理，通过限制访问权限提高安全性，并改善组织合规性，因此是 Dashboard 必不可少的访问控制机制。
 
 目前，可以为用户设置以下两种预定义角色之一。您可以在创建用户时从**角色**下拉菜单中选择角色。
 + 管理员 
@@ -42,8 +29,6 @@ EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License*
 + 查看者
 
     查看者可以访问 EMQX 的所有数据和配置信息，对应 REST API 中的所有 `GET` 请求，但无权进行创建、修改和删除操作。
-
-{% endemqxee %}
 
 ## API 密钥
 
@@ -74,35 +59,27 @@ EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License*
 
 <img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
 
-{% emqxee %}
-
 ## License
+
+::: tip
+
+本节仅适用于 EMQX 企业版。
+
+:::
 
 点击左侧**系统设置**菜单下的 **License** 可以来到 License 页面。在该页面上可以查看当前 License 的基础信息，包括**签发对象**、 **License 使用情况**、**EMQX 版本信息**、**签发邮箱**、**签发时间**和**到期时间**。点击**更新 License** 可以上传 License Key。在 **License 设置**区域可以设置 License 连接配额使用量的高低水位线。
 
 <img src="./assets/license.png" alt="license" style="zoom:35%;" />
 
-{% endemqxee %}
-
-{% emqxce %}
-
-## 设置
-
-点击左侧**系统设置**菜单或页面右上角**用户名**下拉菜单下的**设置**，可以来到设置页面。用户可以在设置页面修改 Dashboard 的语言及主题色，主题色可选择是否需要同步操作系统主题，如开启同步操作系统主题，Dashboard 主题将自动同步用户的操作系统主题，无法手动进行选择；页面最下方可切换是否启动遥测，如启动遥测，用户将与 EMQX 共享使用情况的信息来帮助 EMQX 研发团队了解用户如果使用 EMQX 以持续地改进产品。
-
-![image](./assets/settings.png)
-
-{% endemqxce %}
-
-{% emqxee %}
-
 ## 单点登录
 
+::: tip
+
+单点登录为 EMQX 企业版功能。
+
+:::
+
 单点登录页面为管理员提供了用户登录管理中单点登录功能的配置。有关单点登录功能的详细介绍，参阅[单点登录](./sso.md)。
-
-{% endemqxee %}
-
-{% emqxee %}
 
 ## 设置
 
@@ -110,4 +87,7 @@ EMQX Dashboard 的**系统**菜单包括**用户**、**API 密钥**、**License*
 
 <img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
 
-{% endemqxee %}
+在 EMQX 开源版中，您可以启动遥测与 EMQX 共享使用情况的信息来帮助 EMQX 研发团队了解用户如果使用 EMQX 以持续地改进产品。
+
+![image](./assets/settings.png)
+

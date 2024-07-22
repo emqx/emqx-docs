@@ -1,5 +1,105 @@
 # v4 版本
 
+## 4.4.24
+
+*发布日期: 2024-04-16*
+
+### 增强
+
+- 开放 `/load_rebalance/availability_check` 接口，即不需要身份验证，这将会简化负载均衡器的搭建。同时改进该接口，使其尽可能轻量，以避免 Broker 过载。
+
+- 改进重平衡/节点疏散功能，更优雅地处理 “等待健康检查” 阶段的业务逻辑，不再阻止新的客户端与即将被疏散的节点建立连接。
+
+  在此阶段，我们不知道负载均衡器是否已认定这些节点 “不健康”，因此禁止到它们的连接可能会导致多次重连失败。
+
+- 改进 HTTP API 的 Idle Timeout 过短的问题。
+
+  此前，HTTP API 的 `idle_timeout` 为 5 秒。如果 HTTP API 在 5 秒内没有收到任何请求，HTTP 的 TCP 连接就会被 EMQX 关闭。此改动将 HTTP API 的 `idle_timeout` 改为 60 秒。
+
+- 改进某些配置字段和选项的描述。
+
+  * 改进 Webhook 资源和动作中，关于 `Base URL` 和 `Path` 两个参数详情的描述。
+  * 改进热配置中 WS/WSS 监听器的 `idle_timeout` 配置的描述。
+  * 改进离线消息相关动作中，关于 `Max Returned Count` 参数的详细描述。
+  * 将 ClickHouse 资源的英文参数 `Key` 改名为 `Password`。
+  * 将 HStreamDB 动作中的 `PartitionKey` 参数改名为 `Partition Key`。
+  * 将 Retainer 模块的 `最大保留消息大小` 参数的详细描述中的 `0B` 改为 `0`。
+  * 将 Retainer 模块中的 `拦截清理消息` 改名为 `拦截空消息`，并改进其描述。
+
+- 检查某些配置项的取值范围和合法性。
+
+  * 检查 `mqtt.max_topic_levels`，`mqtt.max_packet_size`，`keepalive_backoff` 配置项，须为非负值。
+  * 在启动 SSL 监听器时，检查 `verify_peer`，`fail_if_no_peer_cert` 以及 `cacertfile` 参数的依赖关系。此前只会在 SSL 客户端尝试建立连接时检查。
+  * 检查监听器配置的 `acceptors`，`max_connections`，`max_conn_rate`，`active_n` 参数，须为非负值。
+  * 检查 RabbitMQ 资源的 `心跳间隔` 和 `自动重连间隔` 参数，须为正确的时间长度字符串。
+  * 修复 GB/T 32960、JT/T808 监听器未校验重复端口的问题。
+  * 修复 GB/T 32960、JT/T808 网关配置中，对某些参数的取值未作校验的问题。
+
+- 优化日志格式和 Dashboard 上的一些展示问题。
+
+  * Dashboard 上规则引擎的速率值偶尔出现非常长的浮点数，改进后精确到小数点后两位。
+  * 系统资源使用率的告警信息中，CPU 使用率的值精确到小数点后两位。
+  * 从日志中去掉 `mfa` 等调试字段。
+
+- 规则引擎支持用户自定义的 SQL 函数。
+
+  假设用户定制的插件里包含一个名为 `emqx_rule_funcs1` 的模块，且该模块包含一个名为 `func` 的函数，那么规则引擎中，用户可以这样使用它：
+
+  ```SQL
+  SELECT emqx_rule_funcs1.func() FROM "t/#"
+  ```
+
+  请注意模块名必须以 `emqx_rule_funcs` 或者 `EmqxRuleFuncs` 为前缀。
+
+- Kafka 消费组模块支持更多的认证方式。
+
+  现在 Kafka 消费组模块跟 Kafka 资源一样，也支持 PLAIN，SCRAM_SHA_256，KERBEROS 多种认证方式了。
+
+- 为某些较为消耗系统资源的 HTTP API 增加了过载保护。
+
+  * GET `/api/v4/clients/*` 相关接口
+  * GET `/api/v4/routes` 接口
+  * GET `/api/v4/subscriptions` 接口
+  * GET `/api/v4/rules` 接口
+  * GET `/api/v4/banned` 接口
+  * GET `/api/v4/audits` 接口
+  * 内置认证模块里用于搜索用户名和客户端 ID 的接口。
+
+### 修复
+
+- 修复规则引擎 `date_to_unix_ts()` SQL 函数在输入日期为闰年时将返回错误数值的问题。
+
+- 在节点疏散期间，疏散所有连接已断开的会话，而不仅仅是那些以 `clean_start = false` 启动的会话。
+
+  修复前，如果客户端设置了 `clean_start = true` 和非零的 `Session-Expiry-Interval`，那么该会话不会被疏散，这将导致会话在节点关闭之后丢失。
+
+- 修复从 Redis 中找不到对应的认证信息时，Redis 认证异常的问题。
+
+- 修复在 EMQX 节点启动过程中访问 HTTP API 时，ETS 表为初始化导致的异常。
+
+- 修复某些情况下加载扩展插件失败的问题。
+
+  `plugins.expand_plugins_dir` 配置可以指定一个目录，EMQX 在启动时会查找并加载该目录下的插件。
+  在某些情况下，插件文件可能会被重复加载，导致 EMQX 无法启动。
+
+- 修复无法使用命令行清除单个客户端的 ACL 缓存的问题。
+
+  此前这个命令不起作用：`emqx ctl acl cache-clean 'mqttx_458d5222'`。
+
+- 修复在规则列表、内置认证/鉴权列表页面执行模糊搜索时，无法展示更多分页，导致数据展示不全的问题。
+
+- 修复尝试下载处于 “等待开始” 状态的追踪日志文件时，EMQX 打印的错误日志不准确的问题。
+
+- 修复首次使用热配置功能更新 SSL 监听器的配置时，`backlog` 配置项显示为空且为必选字段，导致无法表单提交的问题。
+
+  修复后，将 `backlog` 配置改为可选，默认值为 1024。
+
+- 修复配置的 `emqx.schema` 文件中，与 `zone` 相关的 validators 不生效的问题。
+
+- 修复审计日志查询 API 的返回中，即使所查信息的 HTTP Status Code 为 500 时，`operation_result` 字段仍是 `success` 的问题。
+
+- 修复 Dashboard 上 GB/T 32960 客户端 ID 重复的问题。
+
 ## 4.4.23
 
 *发布日期: 2023-11-24*
@@ -410,7 +510,7 @@
 
 - 修复 `Erlang distribution` 无法使用 TLS 的问题 [#9981](https://github.com/emqx/emqx/pull/9981)。
 
-  关于 `Erlang distribution`, 详见 [这里](https://www.emqx.io/docs/zh/v4.4/advanced/cluster.html)。
+  关于 `Erlang distribution`, 详见 [这里](https://docs.emqx.com/zh/enterprise/v4.4/advanced/cluster.html)。
 
 - 修复 MQTT 桥接无法验证对端带通配符的 TLS 证书的问题 [#10094](https://github.com/emqx/emqx/pull/10094)。
 
@@ -1525,7 +1625,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 使规则引擎 API 在 HTTP 请求路径中支持百分号编码的 `rule_id` 及 `resource_id` [#9190](https://github.com/emqx/emqx/pull/9190)。
   注意在创建规则或资源时，HTTP body 中的 `id` 字段仍为字面值，而不是编码之后的值。
-  详情请参考 [创建规则](https://www.emqx.io/docs/zh/v4.3/advanced/http-api.html#post-api-v4-rules) 和 [创建资源](https://www.emqx.io/docs/zh/v4.3/advanced/http-api.html#post-api-v4-resources)。
+  详情请参考 [创建规则](https://docs.emqx.com/zh/enterprise/v4.3/advanced/http-api.html#post-api-v4-rules) 和 [创建资源](https://docs.emqx.com/zh/enterprise/v4.3/advanced/http-api.html#post-api-v4-resources)。
 
 - 修复调用 'DELETE /alarms/deactivated' 只在单个节点上生效的问题，现在将会删除所有节点上的非活跃警告 [#9280](https://github.com/emqx/emqx/pull/9280)。
 
@@ -2536,7 +2636,7 @@ EMQX 4.0.5 现已发布。此版本主要进行了错误修复。
 
  Github issue: [emqx/emqx#3274](https://github.com/emqx/emqx/pull/3274)
   Github PR: [emqx/emqx-rel#462](https://github.com/emqx/emqx-rel/pull/462)
-  
+
 - 修复配置文件中 node.* 配置项不生效的问题
 
   Github issue: [emqx/emqx#3302](https://github.com/emqx/emqx/pull/3302)

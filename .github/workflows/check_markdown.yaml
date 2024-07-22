@@ -14,7 +14,7 @@ jobs:
         sudo npm install -g markdownlint-cli
         markdownlint -c .github/workflows/markdown_config.json ./
 
-  ce_directory_check:
+  directory_check:
     runs-on: ubuntu-latest
     steps:
     - name: check out code
@@ -24,14 +24,3 @@ jobs:
       run: |
         python3 ./gen.py ce | tee directory.json
         python3 .github/scripts/directory_check.py directory.json $(pwd)
-
-  ee_directory_check:
-    runs-on: ubuntu-latest
-    steps:
-    - name: check out code
-      uses: actions/checkout@main
-
-    - name: check enterprise directory config
-      run: |
-        python3 ./gen.py ee | tee directory_ee.json
-        python3 .github/scripts/directory_check.py directory_ee.json $(pwd)

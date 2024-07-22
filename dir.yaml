@@ -14,53 +14,10 @@
 #   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
 # - A node with 'title_en' 'title_cn' and 'path'
 
-- title_en: EMQX Enterprise Overview
-  title_cn: EMQX 企业版概览
-  path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
-  collapsed: true
-  edition: ee
-  children:
-    - title_en: What's New
-      title_cn: 全新功能
-      path: getting-started/new-features
-    - title_en: Feature Comparison
-      title_cn: 功能对比
-      path: getting-started/feature-comparison
-      edition: ce
-    - title_en: Get Started
-      title_cn: 快速开始
-      path: getting-started/getting-started
-    - title_en: Operating Limitations
-      title_cn: 使用限制
-      path: getting-started/restrictions
-    - title_en: FAQ
-      title_cn: 常见问题解答
-      collapsed: true
-      children:
-        - title_en: Concept FAQs
-          title_cn: 概念问题
-          path: faq/concept
-        - title_en: Deployment FAQs
-          title_cn: 部署问题
-          path: faq/deployment
-        - title_en: Feature FAQs
-          title_cn: 功能问题
-          path: faq/feature
-        - title_en: Usage FAQs
-          title_cn: 使用问题
-          path: faq/faq
-    - title_en: Technical Support
-      title_cn: 技术支持
-      path: support/technical-support
-    - title_en: Product Roadmap
-      title_cn: 产品路线图
-      path: getting-started/roadmap
-
 - title_en: EMQX Overview
   title_cn: EMQX 概览
   path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
   collapsed: true
-  edition: ce
   children:
     - title_en: What's New
       title_cn: 全新功能
@@ -68,7 +25,6 @@
     - title_en: Feature Comparison
       title_cn: 功能对比
       path: getting-started/feature-comparison
-      edition: ce
     - title_en: Get Started
       title_cn: 快速开始
       path: getting-started/getting-started
@@ -98,42 +54,74 @@
       title_cn: 产品路线图
       path: getting-started/roadmap
 
-- title_en: Installation and Migration
-  title_cn: 安装部署和迁移
+- title_en: Installation and Deployment
+  title_cn: 安装部署
   path: deploy/install
   collapsed: true
   children:
-    - title_en: Deploy
-      title_cn: Docker
-      path: deploy/install-docker
-    - title_en: Debian
-      title_cn: Debian
-      path: deploy/install-debian
-    - title_en: Ubuntu
-      title_cn: Ubuntu
-      path: deploy/install-ubuntu
-    - title_en: CentOS/RHEL
-      title_cn: CentOS/RHEL
-      path: deploy/install-rhel
-    - title_en: macOS
-      title_cn: macOS
-      path: deploy/install-macOS
-    - title_en: Kubernetes
-      title_cn: Kubernetes
-      lang: en
-      path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
-    - title_en: Kubernetes
-      title_cn: Kubernetes
-      lang: cn
-      path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
-    - title_en: Install from Source Code
-      title_cn: 源码编译安装
-      path: deploy/install-source
-      edition: ce
-    # - deploy/install-marketplace
-    - title_en: Work with License
-      title_cn: 配置 License
-      path: deploy/license
+    - title_en: Install EMQX Enterprise
+      title_cn: 安装 EMQX 企业版
+      path: deploy/install-enterprise
+      collapsed: true
+      children:
+        - title_en: Deploy
+          title_cn: Docker
+          path: deploy/install-docker
+        - title_en: Debian
+          title_cn: Debian
+          path: deploy/install-debian
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: deploy/install-ubuntu
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: deploy/install-rhel
+        - title_en: macOS
+          title_cn: macOS
+          path: deploy/install-macOS
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+          # - deploy/install-marketplace
+        - title_en: Work with License
+          title_cn: 配置 License
+          path: deploy/license
+    - title_en: Install EMQX Open Source
+      title_cn: 安装 EMQX 开源版
+      path: deploy/install-open-source
+      collapsed: true
+      children:
+        - title_en: Deploy
+          title_cn: Docker
+          path: deploy/install-docker-ce
+        - title_en: Debian
+          title_cn: Debian
+          path: deploy/install-debian-ce
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: deploy/install-ubuntu-ce
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: deploy/install-rhel-ce
+        - title_en: macOS
+          title_cn: macOS
+          path: deploy/install-macOS-ce
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Install from Source Code
+          title_cn: 源码编译安装
+          path: deploy/install-source
     - title_en: Upgrade Guide
       title_cn: 升级指南
       collapsed: true
@@ -178,6 +166,7 @@
         - messaging/mqtt-wildcard-subscription
       # - messaging/nanomq
       # - messaging/neuron
+    - durability/durability_introduction
     - title_en: Client SDK
       title_cn: 客户端 SDK
       path: connect-emqx/introduction
@@ -197,26 +186,22 @@
       path: admin/api
       collapsed: true
       children:
-        - title_en: API Docs
-          title_cn: API 文档
+        - title_en: EMQX Enterprise API Docs
+          title_cn: EMQX Enterprise API Docs
           lang: en
-          edition: ce
-          path: https://www.emqx.io/docs/en/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: cn
-          edition: ce
-          path: https://www.emqx.io/docs/zh/v${CE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
-          lang: en
-          edition: ee
           path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: API Docs
-          title_cn: API 文档
+        - title_en: EMQX 企业版 API 文档
+          title_cn: EMQX 企业版 API 文档
           lang: cn
-          edition: ee
           path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX Open Source API Docs
+          title_cn: EMQX Open Source API Docs
+          lang: en
+          path: https://docs.emqx.com/en/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX 开源版 API 文档
+          title_cn: EMQX 开源版 API 文档
+          lang: cn
+          path: https://docs.emqx.com/zh/emqx/v${CE_MINOR_VERSION}/admin/api-docs.html
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
@@ -234,7 +219,6 @@
         - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
-      edition: ee
       path: deploy/cluster/rebalancing
     - title_en: Performance and Tuning
       title_cn: 性能与调优
@@ -318,7 +302,6 @@
     - title_en: Schema Registry
       title_cn: Schema
       path: data-integration/schema-registry
-      edition: ee
       collapsed: true
       children:
         - data-integration/schema-registry-example-avro
@@ -326,11 +309,9 @@
     - title_en: Schema Validation
       title_cn: Schema 验证
       path: data-integration/schema-validation
-      edition: ee
     - title_en: Sparkplug
       title_cn: Sparkplug
       path: data-integration/sparkplug
-      edition: ee
   
 - title_en: Flow Designer
   title_cn: Flow 设计器
@@ -443,7 +424,7 @@
   path: admin/admin-guide
   collapsed: true
   children:
-    - title_en: Configuration
+    - title_en: Configuration Files
       title_cn: 配置文件
       path: configuration/configuration
       collapsed: true
@@ -475,38 +456,31 @@
         - title_en: License
           title_cn: License
           path: configuration/license
-          edition: ee
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+    - title_en: EMQX Enterprise Configuration Manual
+      title_cn: EMQX 企业版配置手册
       lang: cn
-      edition: ce
-      path: https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
-      lang: en
-      edition: ce
-      path: https://www.emqx.io/docs/en/v${CE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
-      lang: cn
-      edition: ee
       path: https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/
-    - title_en: Configuration Manual
-      title_cn: 配置手册
+    - title_en: EMQX Enterprise Configuration Manual
+      title_cn: EMQX 企业版配置手册
       lang: en
-      edition: ee
       path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
+      lang: cn
+      path: https://docs.emqx.com/zh/emqx/v${CE_VERSION}/hocon/
+    - title_en: EMQX Open Source Configuration Manual
+      title_cn: EMQX 开源版配置手册
+      lang: en
+      path: https://docs.emqx.com/en/emqx/v${CE_VERSION}/hocon/
     - title_en: Command Line Interface
       title_cn: 命令行接口
       path: admin/cli
     - title_en: MQTT Durable Sessions
       title_cn: MQTT 会话持久化
-      path: durability/durability_introduction
       collapsed: true
-      edition: ee
       children:
-        - durability/managing-replication
         - durability/management
+        - durability/managing-replication
     - title_en: EMQX Dashboard
       title_cn: EMQX Dashboard
       path: dashboard/introduction
@@ -593,7 +567,6 @@
     - title_en: Telemetry
       title_cn: 遥测
       path: telemetry/telemetry
-      edition: ce
 
 - title_en: Advanced Features
   title_cn: 高级功能
@@ -613,7 +586,6 @@
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       path: file-transfer/introduction
-      edition: ee
       collapsed: true
       children:
         - file-transfer/quick-start
@@ -632,18 +604,15 @@
         - title_en: OCPP Gateway
           title_cn: OCPP 网关
           path: gateway/ocpp
-          edition: ee
         - title_en: JT/T 808 Gateway
           title_cn: JT/T 808 协议网关
           path: gateway/jt808
           collapsed: true
-          edition: ee
           children:
             - gateway/jt808_data_exchange
         - title_en: GB/T 32960 Gateway
           title_cn: GB/T 32960 协议网关
           path: gateway/gbt32960
-          edition: ee
         #- gateway/tcp
     - client-attributes/client-attributes
 
@@ -711,10 +680,7 @@
       path: design/overview
       collapsed: true
       children:
-        - title_en: Clustering
-          title_cn: Clustering
-          lang: en
-          path: design/clustering
+        - design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
       # - design/design
@@ -745,32 +711,67 @@
       title_cn: MQTT 术语
       path: https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003
     - title_en: MQTT 5.0 Features
+      title_cn: MQTT 5.0 Features
+      lang: en
+      path: https://www.emqx.com/en/blog/introduction-to-mqtt-5
+    - title_en: MQTT 5.0 特性
       title_cn: MQTT 5.0 特性
-      path: https://www.emqx.com/en/mqtt/mqtt5
+      lang: cn
+      path: https://www.emqx.com/zh/blog/introduction-to-mqtt-5
     - title_en: MQTT Reason Code
       title_cn: MQTT 原因码
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: Release Notes
-  title_cn: 版本发布历史
-  collapsed: true
-  path: changes/all-changes-${edition}
-  children:
-    - changes/changes-${edition}-v5
-    - changes/changes-${edition}-v4
-    - title_en: Version 0.1 to 3.x
-      title_cn: v0.1-v3.x 版本
-      edition: ce
-      path: changes/changes-ce-v3
-    - title_en: Incompatible Changes
-      title_cn: 不兼容变更
-      collapsed: true
-      children:
-        - changes/breaking-changes-5.7
-        - changes/breaking-changes-5.6
-        - changes/breaking-changes-5.5
-        - changes/breaking-changes-5.4
-        - changes/breaking-changes-5.1.0
-        - changes/auth-4.4-to-5.1-compatibility
-        - changes/data-integration-4.4-to-5.1-incompatibility
-        - changes/gateway-4.4-to-5.1-incompatibility
+-  title_en: Release Notes
+   title_cn: 版本发布历史
+   collapsed: true
+   children:
+       - title_en: EMQX Enterprise Release Notes
+         title_cn: EMQX 企业版版本发布历史
+         collapsed: true
+         path: changes/all-changes-ee
+         children:
+             - changes/changes-ee-v5
+             - changes/changes-ee-v4
+             - title_en: Incompatible Changes
+               title_cn: 不兼容变更
+               collapsed: true
+               children:
+                   - changes/breaking-changes-ee-5.7
+                   - changes/breaking-changes-ee-5.6
+                   - changes/breaking-changes-ee-5.5
+                   - changes/breaking-changes-ee-5.4
+                   - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+                     title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+                     path: changes/breaking-changes-5.1.0
+                     collapsed: true
+                     children:
+                         - changes/auth-4.4-to-5.1-compatibility
+                         - changes/data-integration-4.4-to-5.1-incompatibility
+                         - changes/gateway-4.4-to-5.1-incompatibility
+       - title_en: EMQX Open Source Release Notes
+         title_cn: EMQX 开源版版本发布历史
+         collapsed: true
+         path: changes/all-changes-ce
+         children:
+             - changes/changes-ce-v5
+             - changes/changes-ce-v4
+             - title_en: Version 0.1 to 3.x
+               title_cn: v0.1-v3.x 版本
+               path: changes/changes-ce-v3
+             - title_en: Incompatible Changes
+               title_cn: 不兼容变更
+               collapsed: true
+               children:
+                   - changes/breaking-changes-ce-5.7
+                   - changes/breaking-changes-ce-5.6
+                   - changes/breaking-changes-ce-5.5
+                   - changes/breaking-changes-ce-5.4
+                   - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
+                     title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
+                     path: changes/breaking-changes-5.1.0
+                     collapsed: true
+                     children:
+                         - changes/auth-4.4-to-5.1-compatibility
+                         - changes/data-integration-4.4-to-5.1-incompatibility
+                         - changes/gateway-4.4-to-5.1-incompatibility

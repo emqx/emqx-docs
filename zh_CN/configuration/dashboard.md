@@ -40,22 +40,8 @@ dashboard {
 - `ssl_options.keyfile`: 指向包含 PEM 格式的私钥文件。
 - `default_password`: 用于为 `admin` 用户初始化数据库条目的默认密码。注意：一旦 EMQX 初次启动成功，修改这个密码将不再不起作用。初始化后，密码必须在控制台或者命令行进行修改。
 
-{% emqxce %}
-
 ::: tip
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-::: tip
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参考[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-:::
-
-{% endemqxee %}
