@@ -1,20 +1,28 @@
 # Dashboard Home Page
 
-Once you have successfully logged in, you will be able to access the EMQX Dashboard home page, which contains three tabs.
+After successful login, you can access the home page of the EMQX Dashboard, specifically the **Cluster Overview** page. This page includes the following tabs:
 
-- Overview: Monitor the overview of data in the whole cluster
-- Nodes: View the list of nodes and node information in the cluster
-- Metrics: Monitor all data metrics within the cluster or individual nodes
+- **Cluster Overview**: Displays an overview of the data across the entire cluster.
+- **Nodes**: View the list of nodes and node-specific information within the cluster.
+- **Metrics**: View all data metrics within the cluster or individual nodes.
 
-## Overview
+## Cluster Overview
 
 This page provides an overview of the data for the entire EMQX cluster in operation, including the following information.
 
+### Message Rate
+
+Messages are the key data in EMQX. Messages are the data content being transmitted by all MQTT clients or real devices connected to EMQX. Clients or devices send or receive messages through topics as a way to complete data communication between them.
+
+The card in the upper left corner of this overview page provides a clearer and easier way to monitor the rate changes in the current volume of messages incoming and outgoing in the system (message rate is measured in how many messages per second) by visualizing the rate spectrum with real-time rate values.
+
+![image](./assets/overview-3.png)
+
 ### Connections and Subscriptions
 
-As an MQTT broker, the number of connections and topics subscribed to EMQX is one of the most important metrics to observe. The connections is the number of MQTT clients or real devices currently connected to EMQX, the number of subscriptions is the total number of topics currently subscribed to in each client, and topics is the unique subscriptions.
+As an MQTT broker, the number of connections and topics subscribed to EMQX is one of the most important metrics to observe. The connections are the number of MQTT clients or real devices currently connected to EMQX, the number of subscriptions is the total number of topics currently subscribed to in each client, and topics are the unique subscriptions.
 
-In the tab on the top right of the overview page, we can quickly see the number of connections, subscriptions and topics in the cluster. The statistics in the card will be updated in real time when a connection or a subscription topic is updated.
+In the tab on the top right of the overview page, we can quickly see the number of connections, subscriptions, and topics in the cluster. The statistics in the card will be updated in real-time when a connection or a subscription topic is updated.
 
 ![image](./assets/overview-1.png)
 
@@ -25,14 +33,6 @@ Subscriptions are differentiated by client, while topics are unique subscription
 In addition to providing real-time statistics, the bottom of the page also provides a visual chart that allows you to view historical and current changes in the number of connections and subscriptions by time (the time format: YYYY/MM/DD HH:mm), which allows you to monitor the trend of the number of connections and subscriptions within the entire EMQX cluster more clearly and intuitively.
 
 ![image](./assets/overview-2.png)
-
-### Message Rate
-
-Messages are the key data in EMQX. Messages are the content of data that is currently being transmitted by all MQTT clients or real devices connected to EMQX. Clients or devices send or receive messages through topics as a way to complete data communication between them.
-
-The card in the upper left corner of this overview page provides a clearer and easier way to monitor the rate changes in the current volume of messages incoming and outgoing in the system (message rate is measured in how many messages per second) by visualizing the rate spectrum with real-time rate values.
-
-![image](./assets/overview-3.png)
 
 ### Messages
 
@@ -46,6 +46,10 @@ In the chart at the bottom of the page, you can see a visual chart of the number
 In the above, all charts over time are available in the top left corner: statistics for the last 1 hour, last 6 hours, last 12 hours, last 1 day, last 3 days and last 7 days
 :::
 
+## Nodes
+
+EMQX, the most scalable MQTT broker for IoT, cluster deployment is supported, and each EMQX in a cluster is a node.
+
 ### Node Data
 
 You can monitor the whole EMQX cluster by the card in the middle of the overview page, including the topology diagram to visualize the association and distribution of all nodes in the cluster.
@@ -58,41 +62,32 @@ Click on a single node in the topology diagram to view the basic information and
 When the green node in the topology diagram turns gray, it means that the node is currently stopped
 :::
 
-## Nodes
+### Node List
 
-EMQX, the most scalable MQTT broker for IoT, cluster deployment is supported, and each EMQX in a cluster is a node.
-
-### Nodes List
-
-We can access the node page by clicking the `Nodes` tab at the top.
-
-The Nodes page provides a list of all the nodes in the current EMQX cluster, where we can simply view the node name, running status, uptime, version, Erlang process usage, memory usage and CPU load of each node.
-
-Click the `Refresh` button in the upper right corner to see the latest data of the current node list in real time.
+Clicking **View Nodes** in the Node Information section allows access to the Nodes page, or you can click the **Nodes** tab at the top to access it. The Nodes page lists all nodes currently in the EMQX cluster, providing a quick overview of each node's name, operational status, uptime, version information, Erlang process count, memory usage, CPU load, and other details. Clicking the **Refresh** button in the top right corner enables real-time updates of the latest information in the current node list.
 
 ![image](./assets/nodes.png)
 
-### Node Detail
+### Node Details
 
-In the nodes list, we only support to view some basic information of the node, if you want to view more detailed of the node, you can click `Node Name` to access the node details page. We can view more complete node information in the Node Info and Node Statistics cards.
+The node list can only show partial basic information about nodes. To view the comprehensive information about a node, click the node name in the **Name** column to access the node's details page. On the details page, you will find the following cards:
 
-In the Node Info card, we also support viewing basic information such as node name, role, running status, uptime, version, CPU load, Erlang process usage, system memory, etc. You can also view file descriptors limit, the system path and log path of the node (Show the log path requires the file log handler to be enabled).
-
-In the node statistics card, we can see some statistics of the current node, including: Connections, Topics, Retained, Sessions, Subscriptions, Shared Subscriptions.
-
-The values of the node data statistics are divided into two parts, split by a slash. The data on the left is the real-time data display, and the data on the right is the high watermark, i.e. the maximum value that the current data has reached.
+- In the **Node Info** card, in addition to basic node information, you can also view details such as the maximum file handle count for the current node, system paths, and log paths (displaying log paths requires enabling file log processing in the configuration).
+- In the **Node Statistics** card, you can see various statistics about the current node, including the number of connections, subscriptions, topics, retained messages, sessions, and shared subscriptions. The statistics values are divided into two parts separated by a slash ("/"): the left side shows real-time data and the right side shows the high watermark data, which represents the peak values reached by the current data.
 
 ![image](./assets/node-detail.png)
 
 ## Metrics
 
-In the metrics page, users can monitor all the data metrics generated during the use of EMQX cluster or a node, including packets, messages statistics and traffic sending and receiving statistics, etc. Based on these metrics, you can learn about the current service status.
+Clicking the **Metrics** tab at the top allows you to access the metrics page, where you can view all data metrics generated during the operation of the EMQX cluster or a specific node. This includes message information, message statistics, and traffic send/receive statistics. These metrics provide insights into the current service status.
 
-Click the `Metrics` tab at the top to enter the metrics page, where we can select whether it is a cluster or a node in the upper right corner and click the `Refresh` button to monitor the metrics data updates in real time.
+In the dropdown menu at the top right corner, you can choose to view either cluster-wide data or data specific to a single node. Clicking the adjacent **Refresh** button enables real-time monitoring of metrics data on the current page.
 
-### Connections, Session and Access
+For detailed explanations and comprehensive details of metric data, please visit [Metrics](../observability/metrics-and-stats.md).
 
-The metrics data covers four areas: bytes, packets, messages and events. We can monitor the event-related metrics data in the top three cards, containing statistics on the number of connections, sessions and access (authentication & authorization), etc.
+### Connections, Sessions, and Access
+
+The metric data covers 4 aspects: bytes, packets, messages, and events. In the card, you can view metric data related to events, including counts of events such as connection sessions and authentication and authorization events.
 
 ![image](./assets/metrics-1.png)
 
@@ -101,5 +96,3 @@ The metrics data covers four areas: bytes, packets, messages and events. We can 
 The four cards below provide statistics on the data generated during message transmission, such as statistics on traffic sent and received (in bytes), statistics on the number of packets, the number of messages and the number of messages delivered.
 
 ![image](./assets/metrics-2.png)
-
-For more details and content of metrics, please visit [Metrics](../observability/metrics-and-stats.md) page.

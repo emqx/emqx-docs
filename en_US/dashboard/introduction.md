@@ -6,6 +6,44 @@ The new UI / UX design of EMQX Dashboard optimizes the display and content of ke
 
 ![image](./assets/dashboard-preview.png)
 
+## Key Features
+
+This section introduces various features of EMQX that you can configure and manage through the Dashboard.
+
+### [Monitoring](./monitoring.md)
+
+View overall information of the running EMQX cluster, including connection count, subscribed topics, message delivery counts, inbound rates, and outbound rates. It also includes node lists, node information, and various system metric information. Additionally, you can view and manage client connections and subscription data.
+
+### Access Control
+
+Add and configure authentication and authorization mechanisms in EMQX visually.
+
+### Integration
+
+Utilize a powerful SQL-based rule engine and data integration, or the Flow editor's visual capabilities, for low-code data processing and integration. This helps in real-time extraction, filtering, enrichment, transformation, storage, and validation of MQTT data.
+
+### Management
+
+#### Cluster Settings
+
+Supports online modification and update of MQTT, log, listeners, and other configuration items, which take effect immediately after successful updates.
+
+#### Advanced MQTT
+
+Manage and configure topic rewriting, automatic subscription, delayed publishing, and file transfer functionalities.
+
+#### Extensions
+
+Custom plugin integration to extend connection protocols through built-in gateway management and configuration. Also, use Hooks to modify or extend system functionality by intercepting function calls, message passing and event passing between modules.
+
+### Problem Analysis and Diagnostics
+
+In addition to debugging through online MQTT over WebSocket client connections and topic metrics, support is also available for diagnostics and issue discovery using features like slow subscriptions and log trace.
+
+### System
+
+Manage and configure user accounts, audit logs, API keys, license settings, and single sign-on functionalities.
+
 ## Main Features
 
 ### Monitor and manage data in EMQX clusters
@@ -32,9 +70,9 @@ Support for custom plug-in integration, Extend EMQX connectivity protocols throu
 
 In addition to debugging through online MQTT over WebSocket client connections and publishing subscriptions, we also support diagnosing and finding issues using things like slow subscriptions and online logs tracing and alarms.
 
-## Running
+## Launch Dashboard
 
-EMQX Dashboard is a web application that listens to port `18083` by default. After installing EMQX successfully, you can access and use EMQX Dashboard by opening <http://localhost:18083/> (replace localhost with the actual IP address if deployed on a non-local machine) through your browser.
+EMQX Dashboard is a web application that listens to port `18083` by default. After installing EMQX successfully, you can access and use the EMQX Dashboard by opening <http://localhost:18083/> (replace localhost with the actual IP address if deployed on a non-local machine) through your browser.
 
 ::: tip
 EMQX can still be used normally without Dashboard enabled, Dashboard just provides the option for users to use it visually.
@@ -46,7 +84,7 @@ For users who have installed EMQX for the first time, you can use the default us
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password, and will force you to change the default password, which is good for the security of accessing Dashboard, note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
 
-## Reset password
+### Reset password
 
 You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).
 

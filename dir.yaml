@@ -487,14 +487,14 @@
       collapsed: true
       children:
         - dashboard/dashboard
-        - dashboard/connections/connections
-        - title_en: Topics and subscription
-          title_cn: 主题与订阅
-          path: dashboard/subscriptions/overview
+        - title_en: Monitoring
+          title_cn: 监控
+          path: dashboard/monitoring
           children:
-            - dashboard/subscriptions/topics
-            - dashboard/subscriptions/subscriptions
-        - dashboard/retained
+            - dashboard/connections/connections
+            - dashboard/subscriptions/overview
+            - dashboard/retained
+            - dashboard/delay-pub
         - title_en: Access Control
           title_cn: 访问控制
           path: dashboard/acloverview

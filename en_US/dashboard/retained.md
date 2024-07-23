@@ -1,26 +1,22 @@
 # Retained Messages
 
-You can view all retained messages in the EMQX on Retained Messages page by clicking **Monitoring** -> **Retained Messages** from the left navigation menu.
-
-When a user publishes a retained message, EMQX will save this message in the system. The user can view this message on the Retained Messages page. When the user subscribes to the topic of this retained message, EMQX will publish this message to the topic, and users can receive this message immediately.
-
-The retained message is never expired by default unless the user manually deletes this message.
+You can view all retained messages in the EMQX on the **Retained Messages** page. When a user publishes a retained message, EMQX will save this message in the system. The user can view this message on the Retained Messages page. When the user subscribes to the topic of this retained message, EMQX will publish this message to the topic, and users can receive this message immediately. The retained message is never expired by default unless the user manually deletes this message.
 
 ## Retained Messages List
 
-The Retained Messages list includes the topic, QoS, client ID, and time when the retained message was published. In the list, you can click the **Show Payload** and **Delete** buttons to view the Payload of the retained message and delete a retained message. Click the **Refresh** button in the upper right corner of the list to refresh the current retained message list, and click the **Settings** button to jump to the retained message settings page.
+The Retained Messages List displays all retained messages currently stored in the system. The list includes the topic, Quality of Service (QoS) level, Client ID of the publisher, and the time when the retained message was published. Within the list, you can click the **Show Payload** and **Delete** buttons to inspect the payload of a retained message and delete a retained message respectively. Clicking the **Refresh** button in the top-right corner refreshes the current retained messages list while clicking **Settings** redirects to the retained messages settings page.
 
-Three types of system topics are saved as retained messages by default. If it is a cluster environment, it will keep different system topics' retained messages according to other node names. They are:
+EMQX by default retains messages for three system topics. In a clustered environment, retained messages under different system topics are stored based on the node name:
 
-- $SYS/brokers/+/sysdescr - The system description of the current EMQX node
-- $SYS/brokers/+/version - The version number of the current EMQX node
-- $SYS/brokers - The number and name of all nodes of the current EMQX
+- $SYS/brokers/+/sysdescr: System description of the current EMQX node.
+- $SYS/brokers/+/version: The version number of the current EMQX node.
+- $SYS/brokers: Number and names of all nodes in the current EMQX cluster.
 
 ![image](./assets/retained-messages.png)
 
 ### Delete Retained Message
 
-In most cases, you can delete retained messages in the client by publishing an empty message to the topic of the retained message. In addition, you can also delete retained messages in EMQX Dashboard. Click the **Delete** button on the Retained Messages list page to delete a retained message. You can also set the expiration time of the retained message on the Retained Messages configuration page. When the retained message expires, EMQX will automatically delete this retained message.
+Usually, you can delete retained messages from the client by publishing an empty message to the topic of the retained message. In addition to this method, you can also delete a specified retained message by clicking the **Delete** button in the retained messages list. Furthermore, you have the option to delete all retained messages across the cluster by using the **Clear All** button. You can also set the expiration time for retained messages on the retained messages configuration page. When a retained message reaches its expiration time, EMQX will automatically delete the message.
 
 ### View Payload
 
