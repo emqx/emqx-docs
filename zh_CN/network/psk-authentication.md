@@ -9,13 +9,14 @@ PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验
    ::: tip
 
    密钥支持任意字符串。
+   但其长度必须与所选套件匹配，例如，如果套件是 `TLS_PSK_WITH_AES_128_CBC_SHA`，则密钥必须是 128 位。
 
    :::
 
    ```bash
    # 以 PSKIdentity:SharedSecret 的格式设置认证凭证，每行一个数据
-   emqx_c:BA0DB2A3-4483-45A3-A13A-91C2ADA44778
-   emqx_a:A6FC9EDF-6286-4125-AAE7-658BEAE6170C
+   emqx_c:BA0DB2A3448345A3A13A91C2ADA44778
+   emqx_a:A6FC9EDF62864125AAE7658BEAE6170C
    ```
 
 2. 在配置文件 `emqx.conf` 中添加 `psk_authentication` 配置组。
