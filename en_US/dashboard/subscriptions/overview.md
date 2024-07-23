@@ -23,6 +23,6 @@ The Topics page displays all topics subscribed by connections across various nod
 
 > Note: The Subscription List is client-specific, whereas the Topics List shows all currently subscribed topics. The same topic may be subscribed to by different clients.
 
-Clicking **Create Monitor** in the **Actions** column redirects to the **Diagnose** -> **Topic Metrics** page. Here, you can create [Topic Metrics](../observability/topic-metrics.md) to track message counts, rates, and other metrics for a specific topic.
+Clicking **Create Monitor** in the **Actions** column redirects to the **Diagnose** -> **Topic Metrics** page. Here, you can create [Topic Metrics](../../observability/topic-metrics.md) to track message counts, rates, and other metrics for a specific topic.
 
 <img src="./assets/topics.png" alt="topics" style="zoom:50%;" />
