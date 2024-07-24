@@ -8,8 +8,7 @@ This page introduces how to enable PSK authentication in EMQX.
 
    ::: tip
 
-   The secret value can be any string.
-   But its length must match with the chosen cipher, for example, if the ciper is `TLS_PSK_WITH_AES_128_CBC_SHA`, the secret must be 128 bits.
+   The secret value can be any string, but its length must correspond to the selected cipher. For example, if the cipher is TLS_PSK_WITH_AES_128_CBC_SHA, the secret must be 128 bits long.
 
    :::
 
