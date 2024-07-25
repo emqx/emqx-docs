@@ -1,20 +1,18 @@
 # Authentication
 
-EMQX Dashboard provides out-of-the-box authentication and authorization management, users can quickly configure the client mechanism through the user interface only, without writing code or manually editing the configuration file, you can interface with various data sources and authentication services to achieve various levels and scenarios of security configuration, with higher development efficiency to obtain a more secure security.
-
-Under the Access Control menu on the left, users can access the Authentication page, where they can manage the created authenticators.
+EMQX Dashboard provides out-of-the-box authentication and user management capabilities. Users can quickly configure client authentication mechanisms through the user interface without writing code or manually editing configuration files. This allows integration with various data sources and authentication services to achieve secure configurations across different levels and scenarios, ensuring higher development efficiency with enhanced security guarantees. On the **Authentication** page, you can quickly create and manage various authentication resources.
 
 :::tip
-When authentication is enabled, the device or MQTT client needs to carry authentication data in order to successfully connect to EMQX.
+After configuring authentication backends, you must set up corresponding authentication information for devices or MQTT clients to securely connect to EMQX.
 :::
 
-## Create
+## Create Authentication
 
-Click the `Create` button to go to the page of creating authentication. To create an authentication, you need to select a mechanism and then select a backend to store or obtain authentication data (except JWT authentication). The data can be obtained from these backend, including databases or HTTP server, and finally configure the connection.
+Click the **Create** button to go to the **Create Authentication** page. To create an authentication, you need to select a mechanism and then select a backend to store or obtain authentication data (except JWT authentication). The data can be obtained from these backends, including databases or HTTP servers. Finally, you need to configure the connection information to connect to the backends.
 
-### How It Works
+### Mechanism
 
-EMQX provides three mechanisms, including:
+You can select from the following mechanisms provided by EMQX:
 
 1. Password-Based, using the client ID or username and password.
 2. JWT, where the client can carry a JWT Token in the username or password.
@@ -24,6 +22,16 @@ EMQX provides three mechanisms, including:
 
 ### Backend
 
+In this step, you can select a backend based on the mechanism selected in last step.
+
+::: tip
+
+A backend that has been used for authentication cannot be reselected.
+
+:::
+
+For a comprehensive introduction to backends, refer to [EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticator).
+
 #### Password-Based
 
 When the `Password-Based` is selected, the user can choose either the database that stores the data or the HTTP server that provides the data, which contains two types of databases.
@@ -32,8 +40,6 @@ When the `Password-Based` is selected, the user can choose either the database t
 - External database, which supports selecting and connecting to some mainstream databases, including: `MySQL`, `PostgreSQL`, `MongoDB`, `Redis`, etc.
 
 You can also directly use HTTP services that can provide authentication data, i.e., the `HTTP Server`.
-
-<img src="./assets/authn-data-source.png" alt="image" style="zoom:50%;" />
 
 #### JWT
 
@@ -45,35 +51,29 @@ The enhanced authentication feature in MQTT 5.0, if selected, currently only pro
 
 Enhanced authentication enables two-way authentication of the client and server, where the server can verify that the connected client is the real client and the client can verify that the connected server is the real server, thus providing higher security.
 
-For more details about MQTT 5.0 Enhanced Authentication, please visit [SCRAM Authentication](../access-control/authn/scram.md).
+For more details about MQTT 5.0 Enhanced Authentication, refer to [SCRAM Authentication](../access-control/authn/scram.md).
 
 ### Configuration
 
-The final step in creating authentication is to configure the selected backend. Each backend has some connection and usage configuration that needs to be configured by the user.
+The final step is to configure the selected backend. Each backend has some connection and usage configuration that needs to be configured by the user. After completing the configuration, just click **Create**. 
 
 #### Built-in Database
 
 For example, if you use the `Built-in Database`, you need to choose whether to use the Username or the Client ID, seting the encryption method of the password, etc. If you use the enhanced authentication of MQTT 5.0 and use the built-in database, you only need to configure the encryption method.
 
-<img src="./assets/authn-built-db-config.png" alt="image" style="zoom:50%;" />
-
-For more details about Built-in Database, please visit [Password Authentication Using Built-in Database](../access-control/authn/mnesia.md).
+For more details about Built-in Database, refer to [Use Built-in Database](../access-control/authn/mnesia.md).
 
 #### External Database
 
-If you use an external database, you need to configure the server address of the database, the database name, username and password, the authentication configuration, and the SQL statements or other query statements on how to get data from the database. Take MySQL as an example.
+If you use an external database, you need to configure the server address of the database, the database name, username and password, the authentication configuration, and the SQL statements or other query statements on how to get data from the database.
 
-<img src="./assets/authn-mysql-config.png" alt="image" style="zoom:50%;" />
-
-For more details about MySQL or other external databases, please visit [Password Authentication Using MySQL](../access-control/authn/mysql.md) or see Using other databases.
+For more details about MySQL or other external databases, refer to [Integrate with MySQL](../access-control/authn/mysql.md) or configuration documents for other databases.
 
 #### HTTP Server
 
 To use HTTP Server, you need to configure the request method of the HTTP service, POST or GET. The request URL, note that the URL needs to fill in the protocol is http or https. Then there is the configuration of the HTTP request Headers. The authentication information is entered into the `Body` field, e.g. `username` and `password` are filled in the JSON data.
 
-<img src="./assets/authn-http-config.png" alt="image" style="zoom:50%;" />
-
-For more details about HTTP Server, please visit [Password Authentication Using HTTP](../access-control/authn/http.md).
+For more details about HTTP Server, refer to [Use HTTP Service](../access-control/authn/http.md).
 
 #### JWT & JWKS
 
@@ -81,37 +81,33 @@ To use JWT, you can configure JWT directly without selecting a backend, and set 
 
 You can get the latest JWKS from the `JWKS Endpoint` periodically, which is essentially a set of public keys that will be used to verify any JWT issued by the authorization server and signed using RSA or ECDSA algorithms, and configure the refresh interval (in seconds) for the JWKS. Finally, configure the `Payload` entry to complete the JWKS configuration.
 
-<img src="./assets/authn-jwt-config.png" alt="image" style="zoom:50%;" />
+For more details about JWT, refer to [JWT Authentication](../access-control/authn/jwt.md).
 
-For more details about JWT, please visit [JWT Authentication](../access-control/authn/jwt.md).
+## Authentication List
 
-After completing the configuration, just click `Create`. Note: It is not available to reselect a backend that has been used for authentication.
+After successfully creating an authenticator, you can view and manage it in the authenticator list.
 
-## List
+In the list, you can see the backend and mechanism of each authenticator, and the status of the backend. For example, if the external database deployment fails to connect, the status will indicate `Disconnected`. Hovering over this field provides further details on the connection status of all nodes in the EMQX cluster linked to this data source. You can quickly enable or disable the authentication configuration by toggling the **Enable** switch.
 
-After the successful creation of the authenticator, you can manage in the authentication list.
+Each entry in the authenticator list can be reordered by dragging with the mouse or by adjusting the sequence in the **Actions** column. The order in the authenticator list is significant because EMQX supports multiple authenticators that operate sequentially in the authentication chain. If the current authenticator fails to retrieve matching authentication information, the process continues with the next authenticator in the chain.
 
-In the list we can see the backend and mechanism of the item, the backend status, for example, if the external database is not deployed successfully and connected, you can see that the backend status is currently disconnected. If you hover over this field, you can see the status of all nodes in the EMQX cluster that are connected to the backend. Click the Enabled switch to quickly turn the authenticator on and off.
-
-Each column of the certification list can be dragged by the mouse to adjust the order, or through the actions bar to adjust the order of the list, the order has some importance for the certification list, because the EMQX will allow any client to connect until the user has created an authenticator. The authenticator will authenticate the client according to the authentication information provided by it, and the client can connect successfully only if the authentication is passed.
-
-In the action bar you can also click to settings or delete the authenticator, etc.
+In the **Actions** column, you can also click to configure or delete an authenticator.
 
 <img src="./assets/authn-list.png" alt="image" style="zoom:50%;" />
 
-:::tip
-Disabled authentication will not authenticate any client, all clients can connect to EMQX. Please be careful.
+:::tip Note
+Disabled authentication will not authenticate any client, which means all clients can connect to EMQX. Please proceed with caution.
 :::
 
-## Users
+## User Management
 
-For users using the built-in database, click `Users` to get to the user management page, where you can manage authentication information, such as adding or deleting users, or you can download a template, fill in the template with relevant authentication information, and click `Import` to create authentication data in bulk.
+For users using the built-in database, clicking **User Management** on the Authenticator List page allows you to manage authentication information. You can add or delete usernames and passwords, and also batch-create authentication-related user information by downloading a template, filling in the relevant authentication details, and clicking **Import**.
 
 <img src="./assets/authn-users.png" alt="image" style="zoom:50%;" />
 
 ## Overview
 
-Click on backend and mechanism in the list page to go to the Authenticator overview page. This page provides some metrics of the authenticators in the EMQX cluster, such as the number of successes and failures of authentication, the number of mismatches and the rate of authentication currently being connected.
+You can click the authenticator name in the **Mechanism and Backend** list on the list page to go to the Overview page. This page provides some metrics of the authenticators in the EMQX cluster, such as the number of successes and failures of authentication, the number of mismatches and the rate of authentication currently being connected.
 
 You can monitor the metrics data under each node from the list at the bottom of the page.
 
@@ -119,14 +115,16 @@ You can monitor the metrics data under each node from the list at the bottom of 
 
 ## Settings
 
-Click `Settings` in the list page to modify the authentication configuration.
+Click **Settings** in the list page to modify the authentication configuration.
 
 In the settings page, you can modify the current authenticator configuration, such as when some connection information of the external database changes, when you need to modify the `UserID Type` of the built-in database as username or client ID, or modify the encryption method of the password, etc.
 
-:::tip
-When using the built-in database, updating the password `Password Hash` or `Salt Position` will cause the added authentication data to be unavailable, please be careful.
+:::tip Note
+When using the built-in database, updating the **Password Hash** or **Salt Position** will cause the added authentication data to be unavailable, please proceed with caution.
 :::
 
 <img src="./assets/authn-settings.png" alt="image" style="zoom:50%;" />
 
-For more details about Authentication, please visit [Authentication Introduction](../access-control/authn/authn.md).
+## More Information
+
+For more details about authentication, refer to [Authentication](../access-control/authn/authn.md).
