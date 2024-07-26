@@ -524,6 +524,8 @@ Below are the functions that can be used in the expressions:
   - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
   - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
   - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
+- **System functions**:
+  - `getenv(Name)`: Returns the value of the environment variable named `A`, note this value is immutable once loaded.
 
 #### Conditions
 
