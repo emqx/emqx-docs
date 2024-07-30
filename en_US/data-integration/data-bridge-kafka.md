@@ -49,7 +49,7 @@ These features enhance the integration capabilities and flexibility that help yo
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the Kafka Sink and Source in EMQX Dashboard.
+This section describes the preparations you need to complete before you start to create the Kafka Sink and Source in the EMQX Dashboard.
 
 ### Prerequisites
 
@@ -131,13 +131,26 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. In the **Connector** dropdown box, select the `my-kafka` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
 
-8. Configure the data sending method for the Sink, including:
+8. Configure the data-sending method for the Sink, including:
 
-   - **Kafka Topic**: Enter `testtopic-in`. Note: Variables are not supported here.
+   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX 5.7.2, this field supports templating for dynamic topic settings. For example, you can specify topics like `t-${payload.t}`. 
+
+     ::: tip Note
+
+     For this specific example, ensure that the `payload` object in the message to be forwarded to Kafka includes a `t` key for proper rendering. Failure to include this key will result in topic rendering failure, leading to message drops with unrecoverable errors.
+
+     You also need to pre-configure all resolved topics in Kafka. If a template resolves to a topic name (e.g., `t-99`) that does not exist in Kafka, or if Kafka does not allow automatic topic creation, messages will also be dropped with unrecoverable errors.
+
+     :::
+
    - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
+
    - **Message Key**: The key of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+
    - **Message Value**: The value of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+
    - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
+
    - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
 9. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
