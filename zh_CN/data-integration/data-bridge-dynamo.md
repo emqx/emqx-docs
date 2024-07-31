@@ -1,10 +1,8 @@
 # 将 MQTT 数据写入到 DynamoDB
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+DynamoDB 数据集成是 EMQX 企业版功能。
 :::
-{% endemqxce %}
 
 [DynamoDB](https://www.amazonaws.cn/en/dynamodb/) 是 AWS 上的一种完全托管的、高性能的、无服务器的键值存储数据库服务。它被设计用于那些需要快速、可扩展和可靠数据存储的应用程序。EMQX 支持与 DynamoDB 集成，使您能够将 MQTT 消息和客户端事件保存到 DynamoDB，从而便于物联网设备的注册和管理，以及设备数据的长期存储和实时分析。通过 DynamoDB Sink 可以将 MQTT 消息和客户端事件存储到 DynamoDB 中，也可以通过事件触发对 DynamoDB 中数据的更新或删除操作，从而实现对诸如设备在线状态、上下线历史等的记录。
 
@@ -47,88 +45,87 @@ DynamoDB 数据集成是 EMQX 中的开箱即用功能，它结合了 EMQX 的�
 
 1. 使用以下命令在本地运行 DynamoDB 服务器：
 
-   - 区域： `us-west-2`
    - 访问 ID：`root`
    - 访问密钥：`public`
-
-```bash
-docker run -d -p 8000:8000 --name dynamodb-local \
-  -e AWS_ACCESS_KEY_ID=root \
-  -e AWS_SECRET_ACCESS_KEY=public \
-  -e AWS_DEFAULT_REGION=us-west-2 \
-  amazon/dynamodb-local:2.4.0
-```
+   - 区域： `us-west-2`
+   
+   ```bash
+   docker run -d -p 8000:8000 --name dynamodb-local \
+     -e AWS_ACCESS_KEY_ID=root \
+     -e AWS_SECRET_ACCESS_KEY=public \
+     -e AWS_DEFAULT_REGION=us-west-2 \
+     amazon/dynamodb-local:2.4.0
+   ```
 
 2. 准备一份数据表定义文件，将其存放到当前目录，并取名为 `mqtt_msg.json`，该表含义如下：
 
-   - 定义 `device_id` 为主键中的哈希键（分区键）
-   - 定义 `timestamp` 为主键中的范围键（排序键）
-
-   - 定义一个名为 `device_id` 的属性，其类型为字符串（S）
-   - 定义一个名为 `timestamp` 的属性，其类型为数字（N）
-
-```json
-{
-    "TableName": "mqtt_msg",
-    "AttributeDefinitions": [
-        {
-            "AttributeName": "device_id",
-            "AttributeType": "S"
-        },
-        {
-            "AttributeName": "timestamp",
-            "AttributeType": "N"
-        }
-    ],
-    "KeySchema": [
-        {
-            "AttributeName": "device_id",
-            "KeyType": "HASH"
-        },
-        {
-            "AttributeName": "timestamp",
-            "KeyType": "RANGE"
-        }
-    ],
-    "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
-    }
-}
-```
+   - 定义 `device_id` 为主键中的哈希键（分区键）。
+   - 定义 `timestamp` 为主键中的范围键（排序键）。
+   - 定义一个名为 `device_id` 的属性，其类型为字符串（S）。
+   - 定义一个名为 `timestamp` 的属性，其类型为数字（N）。
+   
+   ```json
+   {
+       "TableName": "mqtt_msg",
+       "AttributeDefinitions": [
+           {
+               "AttributeName": "device_id",
+               "AttributeType": "S"
+           },
+           {
+               "AttributeName": "timestamp",
+               "AttributeType": "N"
+           }
+       ],
+       "KeySchema": [
+           {
+               "AttributeName": "device_id",
+               "KeyType": "HASH"
+           },
+           {
+               "AttributeName": "timestamp",
+               "KeyType": "RANGE"
+           }
+       ],
+       "ProvisionedThroughput": {
+           "ReadCapacityUnits": 5,
+           "WriteCapacityUnits": 5
+       }
+   }
+   ```
 
 3. 使用 Docker 运行 `aws-cli` 命令，通过这份文件创建一个新的表：
 
-```bash
-docker run --rm -v $PWD:/dynamo_data \
-    -e AWS_ACCESS_KEY_ID=root \
-    -e AWS_SECRET_ACCESS_KEY=public \
-    -e AWS_DEFAULT_REGION=us-west-2 \
-    amazon/aws-cli:2.15.57 dynamodb create-table \
-    --cli-input-json file:///dynamo_data/mqtt_msg.json \
-    --endpoint-url http://host.docker.internal:8000
-```
+   ```bash
+   docker run --rm -v $PWD:/dynamo_data \
+       -e AWS_ACCESS_KEY_ID=root \
+       -e AWS_SECRET_ACCESS_KEY=public \
+       -e AWS_DEFAULT_REGION=us-west-2 \
+       amazon/aws-cli:2.15.57 dynamodb create-table \
+       --cli-input-json file:///dynamo_data/mqtt_msg.json \
+       --endpoint-url http://host.docker.internal:8000
+   ```
 
 4. 使用 Docker 运行 `aws-cli` 命令，检查表创建是否成功：
 
-```bash
-docker run --rm \
-    -e AWS_ACCESS_KEY_ID=root \
-    -e AWS_SECRET_ACCESS_KEY=public \
-    -e AWS_DEFAULT_REGION=us-west-2 \
-    amazon/aws-cli:2.15.57 dynamodb list-tables \
-    --endpoint-url http://host.docker.internal:8000
-```
+   ```bash
+   docker run --rm \
+       -e AWS_ACCESS_KEY_ID=root \
+       -e AWS_SECRET_ACCESS_KEY=public \
+       -e AWS_DEFAULT_REGION=us-west-2 \
+       amazon/aws-cli:2.15.57 dynamodb list-tables \
+       --endpoint-url http://host.docker.internal:8000
+   ```
 
-如果创建成功了，我们将会看到下面的输出。
+   如果创建成功，将会看到以下输出:
 
-```json
-{
-    "TableNames": [
-        "mqtt_msg"
-    ]
-}
-```
+   ```json
+   {
+       "TableNames": [
+           "mqtt_msg"
+       ]
+   }
+   ```
 
 ## 创建连接器
 
@@ -141,10 +138,8 @@ docker run --rm \
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_dynamodb`。
    - **DynamoDB 区域**：填写 `us-west-2`。
    - **DynamoDB 地址**：填写 `http://127.0.0.1:8000`。
-   - **表名**：填写 `mqtt_msg`。
    - **连接访问 ID**：填写 `root`。
    - **连接访问密钥**：填写 `public`。
-
 4. 点击**创建**按钮完成连接器创建。
 5. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 DynamoDB 的数据。您也可以按照[创建消息存储 Sink 规则](#创建消息存储-sink-规则)和[创建事件记录 Sink 规则](#创建事件记录-sink-规则)章节的步骤来创建规则。
 
@@ -183,10 +178,10 @@ docker run --rm \
 
 8. 配置以下设置：
 
-   - **表**：填写之前创建的 `mqtt_msg` 表名称
-   - **哈希键**：使用客户端 ID 作为哈希键，输入 `${clientid}`
-   - **范围键**（可选）：使用消息时间戳作为范围键，输入 `${timestamp}`
-   - **消息模版**：留空，表示将整个消息转发给 DynamoDB，实际值为 JSON 模版数据
+   - **表**：填写之前创建的 `mqtt_msg` 表名称。
+   - **哈希键**：使用客户端 ID 作为哈希键，输入 `${clientid}`。
+   - **范围键**（可选）：使用消息时间戳作为范围键，输入 `${timestamp}`。
+   - **消息模版**：留空，表示将整个消息转发给 DynamoDB，实际值为 JSON 模版数据。
 
 9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
