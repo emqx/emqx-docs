@@ -37,7 +37,7 @@ The data integration with Pulsar brings the following features and advantages to
 - **MQTT Message Transformation**: Using the rule engine, EMQX can filter and transform MQTT messages. Messages can undergo data extraction, filtering, enrichment, and transformation before being sent to Pulsar.
 - **Flexible Topic Mapping**: The Pulsar Sink supports flexible mapping of MQTT topics to Pulsar topics, allowing easy configuration of keys (Key) and values (Value) for data in Pulsar messages.
 - **Flexible Partition Selection**: The Pulsar Sink can select Pulsar partitions based on MQTT topics or clients using different strategies, providing flexibility in organizing and identifying data.
-- **Processing Capabilities in High-Throughput Scenarios**: The Pulsar Sink supports synchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
+- **Processing Capabilities in High-Throughput Scenarios**: The Pulsar Sink supports both synchronous and asynchronous write modes, allowing for a flexible balance between latency and throughput according to different scenarios.
 
 ## Before You Start
 
