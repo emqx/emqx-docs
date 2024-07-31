@@ -1,10 +1,8 @@
 # Bridge MQTT Data into RocketMQ
 
-{% emqxce %}
 ::: tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The RocketMQ data integration is an EMQX Enterprise Edition feature.
 :::
-{% endemqxce %}
 
 EMQX supports bridging data into [RocketMQ](https://rocketmq.apache.org/), so you can forward MQTT messages and client events to RocketMQ. For example, you can use RocketMQ to collect sensor data from devices, log data, etc.
 
@@ -151,8 +149,9 @@ The following steps assume that you run both EMQX and RocketMQ on the local mach
 3. On the **Create Connector** page, select **RocketMQ** and then click **Next**.
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_rocketmq`.
-   - **Server**: Enter `127.0.0.1:9876`.
-   - **Topic**: Enter `TopicTest`.
+   - **Servers**: Enter `127.0.0.1:9876`.
+   - **Namespace**: Leave this field empty unless your RocketMQ service is configured with a namespace. For RocketMQ services hosted on Alibaba Cloud, the namespace corresponds to the instance ID.
+   - **AccessKey**, **SecretKey,** and **Secret Token**: Leave these fields empty or fill them according to your specific RocketMQ service configurations.
    - Leave others as default.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the RocketMQ server.
@@ -190,6 +189,8 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
 8. From the **Connector** dropdown box, select the `my_rocketmq` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+
+8. In the **RocketMQ Topic** field, enter `TopicTest`.
 
 9. Leave the **Template** empty by default.
 

@@ -1,10 +1,8 @@
 # 将 MQTT 数据传输到 RocketMQ
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+RocketMQ 数据集成是 EMQX 企业版功能。
 :::
-{% endemqxce %}
 
 通过 [RocketMQ](https://rocketmq.apache.org/) 数据集成可以将 MQTT 消息和客户端事件转发到 RocketMQ 中。例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。
 
@@ -153,7 +151,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_rocketmq`。
    - **服务器列表**：输入 `127.0.0.1:9876`。
    - **命名空间**：此处留空。如果您的 RocketMQ 服务配置了命名空间，则必须填写此项。对于阿里云的 RocketMQ 服务来说，命名空间就是实例 ID。
-   - **Accesskey**、**Secretkey**与**安全令牌**：此处留空，根据您的 RocketMQ 实际配置填写。
+   - **Accesskey**、**Secretkey** 与**安全令牌**：此处留空，或根据您的 RocketMQ 实际配置填写。
 4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 RocketMQ 服务器。
 6. 点击**创建**按钮完成连接器创建。
@@ -192,7 +190,7 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_rocketmq`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-7. **RocketMQ 主题**：输入 `TopicTest`。
+7. 在 **RocketMQ 主题**字段中输入 `TopicTest`。
 
 8. **消息模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
 
