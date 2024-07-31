@@ -123,7 +123,7 @@ docker run -d --name iotdb-service \
      "root/#"
    ```
 
-   ::: 提示
+   ::: tip 提示
 
    如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试SQL规则。
 
