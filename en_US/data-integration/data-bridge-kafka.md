@@ -133,15 +133,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 8. Configure the data-sending method for the Sink, including:
 
-   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX 5.7.2, this field supports templating for dynamic topic settings. For example, you can specify topics like `t-${payload.t}`. 
-
-     ::: tip Note
-
-     For this specific example, ensure that the `payload` object in the message to be forwarded to Kafka includes a `t` key for proper rendering. Failure to include this key will result in topic rendering failure, leading to message drops with unrecoverable errors.
-
-     You also need to pre-configure all resolved topics in Kafka. If a template resolves to a topic name (e.g., `t-99`) that does not exist in Kafka, or if Kafka does not allow automatic topic creation, messages will also be dropped with unrecoverable errors.
-
-     :::
+   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamically generating topics. Refer to [Configure Kafka Dynamic Topics](#configure-kafka-dynamic-topics) for details. 
 
    - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
 
@@ -164,6 +156,74 @@ Now you have successfully created the rule, and you can see the newly created ru
 You can also click **Integration** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages under topic `t/#` are sent and saved to Kafka after being parsed by rule `my_rule`.
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+
+### Configure Kafka Dynamic Topics
+
+When adding actions to Kafka Sink rules, you can configure Kafka topics by setting [environment variables](../configuration/configuration.md#environment-variables) and specifying the format of [variable templates](#variable-templates). This enables the dynamic generation of Kafka topics based on message content, facilitating flexible message processing and distribution. This functionality uses the `getenv` function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results, allowing them to be referenced when configuring Kafka topics in Kafka Sink rule actions. This section provides a step-by-step demonstration of configuring Kafka dynamic topics.
+
+::: tip Note
+
+To prevent leakage of other system environment variables, the names of environment variables must have a fixed prefix `EMQXVAR_`. For example, if the function variable name read by `getenv` is `KAFKA_TOPIC`, the environment variable name set must be `EMQXVAR_KAFKA_TOPIC`.
+
+:::
+
+1. Start Kafka and pre-create a kafka topic named `testtopic-in`. Refer to [Before You Start](#before-you-start) for related steps.
+
+2. Start EMQX and configure environment variables. Assuming EMQX is installed via zip, you can directly specify environment variables during startup. For example, set Kafka topic `testtopic-in` as the value of environment variable `EMQXVAR_KAFKA_TOPIC`:
+
+   ```bash
+   EMQXVAR_KAFKA_TOPIC=testtopic-in bin/emqx start
+   ```
+
+3. Create a connector. Refer to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector) for details.
+
+4. Configure a Kafka Sink rule. Enter the following statement in the **SQL Editor**:
+
+   ```sql
+   SELECT
+     getenv(`EMQXVAR_KAFKA_TOPIC`) as kafka_topic,
+     payload
+   FROM
+     "t/#"
+   ```
+
+   ![kafka_dynamic_topic_sql](./assets/kafka_dynamic_topic_sql.png)
+
+5. Enable the SQL test. Verify that the environment variable value `testtopic-in` is successfully retrieved.
+
+   ![kafka_dynamic_topic_sql_test](./assets/kafka_dynamic_topic_sql_test.png)
+
+6. Add an action to the Kafka Producer Sink. Under **Action Outputs** on the right-hand side of the rule, click **Add Action** to proceed.
+
+   - **Connector**: Select the previously created connector `test-kafka`.
+   - **Kafka Topic Name**: Configure using the variable template format `${kafka_topic}` based on the SQL rule output.
+
+   ![kafka_dynamic_topic](./assets/kafka_dynamic_topic.png)
+
+7. Complete additional configuration by referring to [Create a Rule with Kafka Sink](#create-a-rule-with-kafka-sink) for further steps, and finally click **Create** to the rule creation.
+
+8. Refer to steps in [Test Kafka Producer Rule](#test-kafka-producer-rule) to send a message to Kafka and the message should be received under the Kafka topic `testtopic-in`.
+
+#### Variable Templates
+
+Starting from EMQX v5.7.2, the **Kafka Topic** field not only supports static topic names but also allows dynamic topic generation using variable templates. For example, you can specify formats like `device-${payload.device}` in the field to easily send messages from a specific device to topics suffixed with the device ID, such as `device-1`.
+
+For this specific example, ensure that the message payload sent to Kafka contains a `device` key to correctly render the topic. Below is an example payload:
+
+```json
+{
+    "topic": "t/devices/data",
+    "payload": {
+        "device": "1",
+        "temperature": 25.6,
+        "humidity": 60.2
+    }
+}
+```
+
+Failure to include this key will result in topic rendering failure, leading to message drops that cannot be recovered.
+
+You also need to pre-create all resolved topics in Kafka, such as `device-1`, `device-2`, and so on. If the template resolves to a topic name that does not exist in Kafka or if Kafka does not allow automatic topic creation, messages will also be dropped due to unrecoverable errors.
 
 ## Test Kafka Producer Rule
 
