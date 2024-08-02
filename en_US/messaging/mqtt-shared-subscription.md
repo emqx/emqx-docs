@@ -38,6 +38,8 @@ To avoid this problem, it is recommended to use a clean session for shared subsc
 
 When clients talk MQTT v5, it is a good practice to set a short session expiry interval (if not 0). This allows the client to temporarily disconnect and reconnect to receive messages published during the disconnection.
 
+When a session expires, the QoS1 and QoS2 messages in the send queue, or the QoS1 messages in the infight queue will be re-dispatched to other sessions in the same group. When it's the last session to expire, all the pending messages will be discarded.
+
 For more information on the persistent session, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
 
 ## Try Shared Subscription with MQTTX Desktop
