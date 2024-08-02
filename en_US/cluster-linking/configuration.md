@@ -12,7 +12,7 @@ Maintaining consistent cluster names across each link is important to ensure pro
 cluster {
   name = "emqx-us-east"
   links = [
-    { enable = true
+    {
       name = "emqx-eu-west"
       server = "emqx.us-east.myinfra.net"
       username = "clink-user:us-east"

@@ -24,7 +24,7 @@ cluster {
   # 本集群名称
   name = "cluster-us-east"
   links = [
-    { enable = true
+    {
       # 第二个集群名称
       name = "cluster-eu-west"
       # 第二个集群的 MQTT 监听器端点
@@ -38,7 +38,6 @@ cluster {
 # 集群连接专用监听器
 listeners {
   tcp.clink {
-    enable = true
     bind = 11883
   }
 }
@@ -61,7 +60,7 @@ listeners {
 cluster {
   name = "cluster-eu-west"
   links = [
-    { enable = true
+    {
       name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"
@@ -73,7 +72,6 @@ cluster {
 # Dedicated listener for Cluster Linking connections
 listeners {
   tcp.clink {
-    enable = true
     bind = 11883
   }
 }
@@ -157,7 +155,7 @@ listeners {
 cluster {
   name = "cluster-eu-west"
   links = [
-    { enable = true
+    {
       name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"

@@ -24,7 +24,7 @@ cluster {
   # This cluster's name
   name = "cluster-us-east"
   links = [
-    { enable = true
+    {
       # Name of the second cluster
       name = "cluster-eu-west"
       # Endpoint of the second cluster's MQTT listener
@@ -38,7 +38,6 @@ cluster {
 # Dedicated listener for Cluster Linking connections
 listeners {
   tcp.clink {
-    enable = true
     bind = 11883
   }
 }
@@ -59,7 +58,7 @@ Set up the second cluster `cluster-eu-west` using the following configuration sn
 cluster {
   name = "cluster-eu-west"
   links = [
-    { enable = true
+    {
       name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"
@@ -71,7 +70,6 @@ cluster {
 # Dedicated listener for Cluster Linking connections
 listeners {
   tcp.clink {
-    enable = true
     bind = 11883
   }
 }
@@ -155,7 +153,7 @@ To create an asymmetrical link, you need to slightly modify the `cluster-eu-west
 cluster {
   name = "cluster-eu-west"
   links = [
-    { enable = true
+    {
       name = "cluster-us-east"
       server = "emqx.eu-west.myinfra.net:11883"
       clientid = "clink-eu-west"

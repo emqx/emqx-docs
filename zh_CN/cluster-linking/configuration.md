@@ -8,13 +8,11 @@
 
 保持每个连接中的集群名称一致对于确保正确功能至关重要。在下面的示例中，远程集群名称应在其对应的配置文件中为 `emqx-eu-west`。
 
-```
-bash
-复制代码
+```bash
 cluster {
   name = "emqx-us-east"
   links = [
-    { enable = true
+    {
       name = "emqx-eu-west"
       server = "emqx.us-east.myinfra.net"
       username = "clink-user:us-east"
