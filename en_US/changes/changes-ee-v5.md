@@ -6,7 +6,7 @@
 
 - [#13317](https://github.com/emqx/emqx/pull/13317) Added a new per-authorization source metric type: `ignore`.  The meaning of this counter is that it's increased whenever the authorization source attempts to authorize a request, but either it's not applicable, or an error was encountered and the result is undecidable.
 
-- [#13336](https://github.com/emqx/emqx/pull/13336) Added new configs `bootstrap_file` and `bootstrap_type` for built-in database for authentication to support bootstrapping the table with csv and json file.
+- [#13336](https://github.com/emqx/emqx/pull/13336) Added support for initializing authentication data in built-in database an empty EMQX node or cluster with a bootstrap file in CSV or JSON format. The corresponding config entries are `bootstrap_file` and `bootstrap_type`.
 
 - [#13348](https://github.com/emqx/emqx/pull/13348) Added a new field `payload_encode` to the log configuration to determine the format of the payload in the log data.
 
@@ -22,17 +22,14 @@
   Previously, LDAP query timeout may cause the underlying connection to be unusable.
   Fixed to always reconnect if timeout happens.
 
-- [#13528](https://github.com/emqx/emqx/pull/13528) Add log throttling for data integration unrecoverable errors.
+- [#13528](https://github.com/emqx/emqx/pull/13528) Add log throttling for unrecoverable errors in data integrations.
 
-- [#13548](https://github.com/emqx/emqx/pull/13548) Optionally calls the `on_config_changed/2` callback function when the plugin configuration is updated via the REST API.
+- [#13548](https://github.com/emqx/emqx/pull/13548) EMQX now can optionally call the `on_config_changed/2` callback function when the plugin configuration is updated via the REST API.
 
   This callback function is assumed to be exported by the `<PluginName>_app` module.
-  i.e:
-  Plugin NameVsn: `my_plugin-1.0.0`
-  This callback function is assumed to be `my_plugin_app:on_config_changed/2`
+  I.e, if plugin name and version are `my_plugin-1.0.0`, then the callback function is assumed to be `my_plugin_app:on_config_changed/2`.
 
-- [#13386](https://github.com/emqx/emqx/pull/13386) Added a bootstrap file to batch loading banned data when initializing a single node or cluster, in other words, the import operation is performed only if there is no data in the database.
-
+- [#13386](https://github.com/emqx/emqx/pull/13386) Added support for initializing list of banned clients on an empty EMQX node or cluster with a bootstrap file in CSV format. The corresponding config entry to specify file path is `banned.bootstrap_file`.
 
   This file is a CSV file with `,` as its delimiter.
 
@@ -47,7 +44,7 @@
   See the documentation for details on each field.
 
   Each row in the rest of this file must contain the same number of columns as the header line,
-  and column can be omitted then its value will be `undefined`.
+  and column can be omitted then its value is `undefined`.
 
 - [#13452](https://github.com/emqx/emqx/pull/13452) Kafka producer action's `topic` config now supports templates.
 
@@ -55,7 +52,7 @@
 
   This same feature is also available for Azure Event Hubs and Confluent Platform producer integrations.
 
-- [#13504](https://github.com/emqx/emqx/pull/13504) Added a HTTP backend for the authentication mechanism `scram`.
+- [#13504](https://github.com/emqx/emqx/pull/13504) Added an HTTP backend for the authentication mechanism `scram`.
 
   Note: This is not an implementation of the RFC 7804: Salted Challenge Response HTTP Authentication Mechanism.
 
@@ -86,15 +83,15 @@
 
 - [#13344](https://github.com/emqx/emqx/pull/13344) Fixed an issue that prevented the `POST /clients/:clientid/subscribe/bulk` API from working properly if the node receiving the API request did not hold the connection to the targeted clientid.
 
-- [#13358](https://github.com/emqx/emqx/pull/13358) Fixed that the `reason` in the `authn_complete_event` event was not displayed correctly.
+- [#13358](https://github.com/emqx/emqx/pull/13358) Fixed an issue when the `reason` in the `authn_complete_event` event was not displayed correctly.
 
-- [#13375](https://github.com/emqx/emqx/pull/13375) The value infinity has been added as default value to the listener configuration fields max_conn_rate, messages_rate and bytes_rate.
+- [#13375](https://github.com/emqx/emqx/pull/13375) The value infinity has been added as default value to the listener configuration fields `max_conn_rate`, `messages_rate` and `bytes_rate`.
 
-- [#13382](https://github.com/emqx/emqx/pull/13382) Update `emqtt` library to version 0.4.14 that includes a fix that prevents `emqtt_pool`s from reusing existing pools in an inconsistent state.
+- [#13382](https://github.com/emqx/emqx/pull/13382) Updated `emqtt` library to version 0.4.14 that includes a fix that prevents `emqtt_pool`s from reusing existing pools in an inconsistent state.
 
-- [#13389](https://github.com/emqx/emqx/pull/13389) Fixed that the `Derived Key Length` for `pbkdf2` could be set to a negative integer.
+- [#13389](https://github.com/emqx/emqx/pull/13389) Fixed an issue when the `Derived Key Length` for `pbkdf2` could be set to a negative integer.
 
-  Fixed topics in the authorization rules might be parsed incorrectly.
+- [#13389](https://github.com/emqx/emqx/pull/13389) Fixed an issue when topics in the authorization rules might be parsed incorrectly.
 
 - [#13393](https://github.com/emqx/emqx/pull/13393) Fixed an issue where plugin applications were not restarted after a node joins a cluster, leading to an inconsistent state where hooks were not properly installed.
 
@@ -102,13 +99,13 @@
 
 - [#13403](https://github.com/emqx/emqx/pull/13403) Fixed environment variable config override logging behaviour to avoid logging passwords.
 
-- [#13408](https://github.com/emqx/emqx/pull/13408) Fix function_clause crash that occurs when attempting to authenticate with an invalid type of salt or password.
+- [#13408](https://github.com/emqx/emqx/pull/13408) Fix `function_clause` crash that occurs when attempting to authenticate with an invalid type of salt or password.
 
-- [#13419](https://github.com/emqx/emqx/pull/13419) Fix garbled hints in crash log message when calling /configs API
+- [#13419](https://github.com/emqx/emqx/pull/13419) Fix garbled hints in crash log message when calling `/configs` API.
 
 - [#13422](https://github.com/emqx/emqx/pull/13422) Fixed an issue where the option `force_shutdown.max_heap_size` could not be set to 0 to disable this tuning.
 
-- [#13442](https://github.com/emqx/emqx/pull/13442) Fixed an issue where the health check interval values of actions/sources were not being taken into account.
+- [#13442](https://github.com/emqx/emqx/pull/13442) Fixed an issue where the health check interval values of actions/sources were not taken into account.
 
 - [#13503](https://github.com/emqx/emqx/pull/13503) Fixed an issue where a connector wouldn't respect the configured health check interval when first starting up, and would need an update/restart for the correct value to take effect.
 
@@ -116,7 +113,7 @@
 
 - [#13527](https://github.com/emqx/emqx/pull/13527) Fixed an issue where running a SQL test in Rule Engine for the Message Publish event when a `$bridges/...` source was included in the `FROM` clause would always yield no results.
 
-- [#13541](https://github.com/emqx/emqx/pull/13541) Previously, if CRL checks were ever enabled for a listener, later disabling them via the configuration would not actually disable them until the listener restarted.  This has been fixed.
+- [#13541](https://github.com/emqx/emqx/pull/13541) Fixed an issue where CRL checks for a listener could not be disabled without listener restart.
 
 - [#13305](https://github.com/emqx/emqx/pull/13305) Improved error handling for Redis connectors. Previously, Redis connectors of type single or sentinel would always encounter a timeout error during the connector test in the dashboard if no username or password was provided. This update ensures that users now receive an informative error message in such scenarios. Additionally, more detailed error information has been added for all Redis connector types to enhance diagnostics and troubleshooting.
 
@@ -130,6 +127,10 @@
 
 - [#13332](https://github.com/emqx/emqx/pull/13332) When an S3 Bridge is improperly configured, error messages now contain more informative and easy to read details.
 
+- [#13552](https://github.com/emqx/emqx/pull/13552) Add a startup timeout limit for EMQX plugins with default timeout of 10 seconds.
+
+  Starting a bad plugin while EMQX is running will result in a thrown runtime error.
+  When EMQX is stopped and restarted, the main starting process may hang due to the plugin application startup failures.
 
 ## 5.7.1
 
