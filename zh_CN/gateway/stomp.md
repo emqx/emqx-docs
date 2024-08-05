@@ -53,22 +53,11 @@ gateway.stomp {
 
 ::::
 
-
 ::: tip
 通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
 :::
 
-{% emqxce %}
-
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表参考配置手册中的[网关配置 - 监听器](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
 
 
 ## 认证
@@ -150,19 +139,8 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 
 ## 用户层接口
 
-{% emqxee %}
-
-- 详细配置说明参考：[网关配置 - Stomp 网关](https://docs.emqx.com/zh/enterprise/v${EE_VERSION}/hocon/)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
-
-{% endemqxee %}
-
-{% emqxce %}
-
-- 详细配置说明参考：[网关配置 - Stomp 网关](https://www.emqx.io/docs/zh/v${CE_VERSION}/hocon/)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](../admin/api.md)
-
-{% endemqxce %}
+- 详细配置说明参考：[网关配置 - Stomp 网关（开源版）](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和[网关配置 - Stomp 网关（企业版）](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
+- 详细 HTTP API 接口参考：[HTTP API - 网关（开源版）](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs)和 [HTTP API - 网关（企业版）](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 

@@ -116,7 +116,7 @@
 
 - Fixed the issue where `Erlang distribution` could not use TLS [#9981](https://github.com/emqx/emqx/pull/9981).
 
-  For more information on `Erlang distribution`, see [here](https://www.emqx.io/docs/en/v4.4/advanced/cluster.html).
+  For more information on `Erlang distribution`, see [here](https://docs.emqx.com/en/emqx/v4.4/advanced/cluster.html).
 
 - Fixed the issue where MQTT bridging could not verify TLS certificates with wildcard domains on the peer side [#10094](https://github.com/emqx/emqx/pull/10094).
 
@@ -353,7 +353,7 @@ a node restart (and configuration change) is required.
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
   Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
-  Find more about flapping detection in [EMQX document](https://www.emqx.io/docs/en/v4.3/configuration/configuration.html#flapping-detect-policy)
+  Find more about flapping detection in [EMQX document](https://docs.emqx.com/en/enterprise/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
   when the session terminates [#9094](https://github.com/emqx/emqx/pull/9094).
@@ -1194,7 +1194,7 @@ EMQX 4.3.8 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
 
-> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Vesion](https://docs.emqx.io/en/broker/v4.3/faq/error.html#incorrect-openssl-version)
+> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Vesion](https://docs.emqx.com/en/enterprise/v4.3/faq/error.html#incorrect-openssl-version)
 
 ## 4.3.7
 
@@ -1418,7 +1418,7 @@ EMQX 4.3.1 is released now, it mainly includes the following changes:
 - Support cluster metrics for Prometheus
 - Redis sentinel mode supports SSL connection
 - Support single-line log output, and support rfc3339 time format
-- `emqx_auth_clientid` and `emqx_auth_username` are merged to `emqx_auth_mnesia`. Please refer to [doc](https://docs.emqx.io/en/broker/v4.3/advanced/data-import-and-export.html) to export data from older versions, and import to v4.3
+- `emqx_auth_clientid` and `emqx_auth_username` are merged to `emqx_auth_mnesia`. Please refer to [doc](https://docs.emqx.com/en/enterprise/v4.3/advanced/data-import-and-export.html) to export data from older versions, and import to v4.3
 - By default, docker only logs to console, set EMQX_LOG__TO=file to switch to file
 - Support Json format log
 - Support IPv6 auto probe
@@ -1930,7 +1930,7 @@ EMQX 4.2.0 is released now, it mainly includes the following changes:
 
 - Support the use of third-party languages to write extension plugins to access other non-MQTT protocols, and currently supports Java and Python two programming languages. Visit [Read Me](https://github.com/emqx/emqx-exproto/blob/master/README.md) for more information
 - Support hot upgrade between revisions
-- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [EMQX Telemetry](https://docs.emqx.io/broker/latest/en/advanced/telemetry.html) for more telemetry related information.
+- A new telemetry function is added to collect information about the usage of EMQX Broker to help us improve the product. This function is enabled by default and supports manual disabled. Visit [EMQX Telemetry](https://docs.emqx.com/en/emqx/latest/en/advanced/telemetry.html) for more telemetry related information.
 - Support message flow control in the form of quotas
 
 **Enhancement:**

@@ -1,6 +1,6 @@
 # 全新功能
 
-本章节描述了 EMQX 5.0 之后版本引入的全新功能。
+本章节描述了 EMQX 企业版 5.0 之后版本引入的全新功能。
 
 ## Mria 集群架构
 
@@ -14,19 +14,23 @@
 
 ## 无停机滚动升级
 
-从 EMQX Enterprise 5.1.0版本开始，系统现在支持集群的无缝滚动升级，让您无需任何服务中断就能过渡到新版本，增强了整体系统的可用性和可靠性。
+从 EMQX 5.1 开始，系统现在支持集群的无缝滚动升级，让您无需任何服务中断就能过渡到新版本，增强了整体系统的可用性和可靠性。
 
 ## MQTT over QUIC 支持
 
-EMQX 5.0引入了QUIC 支持（MQTT over QUIC）作为一项实验性功能，并设计了独特的消息传递机制和管理方法。在 EMQX 5.1 中，我们增加了 [QUIC多流](https://www.emqx.com/zh/blog/emqx-newsletter-202302)支持，并且从现在开始将此功能视为“常规可用”。
+EMQX 5.0 引入了QUIC 支持（MQTT over QUIC）作为一项实验性功能，并设计了独特的消息传递机制和管理方法。在 EMQX 5.1 中，我们增加了 [QUIC多流](https://www.emqx.com/zh/blog/emqx-newsletter-202302)支持，并且从现在开始将此功能视为“常规可用”。
 
 作为下一代互联网协议 HTTP/3的底层传输协议，[QUIC](https://datatracker.ietf.org/doc/html/rfc9000) 相对于 TCP/TLS 协议，可以为现代移动互联网提供更低的连接开销和消息延迟。因此，EMQX 尝试使用 QUIC 替代 MQTT 的传输层，从而产生了MQTT over QUIC。
 
 为了评估 MQTT over QUIC 并验证它如何改善网络连接，请阅读[使用 MQTT over QUIC](../mqtt-over-quic/getting-started.md)。
 
-{% emqxee %}
-
 ## 基于 MQTT 的文件传输
+
+::: tip
+
+MQTT 文件传输是 EMQX 企业版功能。
+
+:::
 
 EMQX 5.1 引入了 MQTT 文件传输功能，支持通过 MQTT 协议传输文件。
 
@@ -35,8 +39,6 @@ EMQX 5.1 引入了 MQTT 文件传输功能，支持通过 MQTT 协议传输文�
 相比于 HTTP/FTP 协议，MQTT 具有低带宽消耗和资源占用少的特点，能够快速且高效的进行文件传输。统一的物联网数据通道也简化了系统架构，减少应用的复杂性和维护成本。
 
 立即开始使用[基于 MQTT 的文件传输](../file-transfer/introduction.md)。
-
-{% endemqxee %}
 
 ## 备份与恢复
 
@@ -62,19 +64,9 @@ Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-
 
 EMQX 5.x 的规则引擎在原有 SQL 的基础上集成了 [jq](https://stedolan.github.io/jq/)，支持更多复杂格式 JSON 数据的处理。更多信息详见：[jq 函数](../data-integration/rule-sql-jq.md)。
 
-{% emqxce %}
+EMQX 开源版支持将数据发送到 Webhook，或与外部 MQTT 服务建立双向桥接。
 
-支持将数据发送到 Webhook，或与外部 MQTT 服务建立双向桥接。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-支持双向数据集成，您可以实时地将物联网数据实时处理并发送到 40 多个云服务和企业系统，或者从其中获取数据，经处理后下发到指定 MQTT 主题中。
-
-{% endemqxee %}
-
-同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
+EMQX 企业版支持双向数据集成，您可以实时地将物联网数据实时处理并发送到 40 多个云服务和企业系统，或者从其中获取数据，经处理后下发到指定 MQTT 主题中。同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
 
 关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据集成](../data-integration/data-bridges.md)。
 

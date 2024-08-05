@@ -90,22 +90,29 @@ delay {
 
 ## Keep Alive 设置
 
-Keep Alive 是一种机制，确保即使没有数据传输，MQTT 客户端和 EMQX 之间的连接仍然保持活动。其工作原理如下：当 MQTT 客户端创建到 EMQX 的连接时，可以在连接请求协议包的 Keep Alive 变量头字段中设置非零值。有关 Keep Alive 工作原理的详细信息，请参见 [MQTT 协议 Keep Alive 详解](https://www.emqx.com/zh/blog/mqtt-keep-alive)。
+Keep Alive 是是一个两字节整数，表示以秒为单位的时间间隔。它是一种机制，确保即使没有数据传输，MQTT 客户端和 EMQX 之间的连接仍然保持活动。当 MQTT 客户端创建和 EMQX 的连接时，在连接请求协议包的 Keep Alive 变量头字段中设置非零值就可以在通信双方之间启用 Keep Alive 机制。有关 Keep Alive 工作原理的详细信息，请参见 [MQTT 协议 Keep Alive 详解](https://www.emqx.com/zh/blog/mqtt-keep-alive)。
 
-对于启用了 Keep Alive 的客户端，您可以继续自定义 EMQX 用来确认客户端 Keep Alive 时长是否过期的系数。
+根据 MQTT 5.0 协议，对于启用了 Keep Alive 的客户端，如果服务器在 Keep Alive 时长的 1.5 倍时间内没有收到来自客户端的 MQTT 控制报文，它必须关闭与客户端的网络连接。因此，EMQX 引入了一个配置项 `keepalive_multiplier`，用来周期性地检查客户端的 Keep Alive 超时状态。`keepalive_multiplier` 的默认值是 `1.5`：
 
 ```bash
-keepalive_backoff = 0.75
+keepalive_multiplier = 1.5
 ```
 
-其中，**Keep Alive Backoff**（`keepalive_backoff`）是 EMQX 用来确认客户端 Keep Alive 时长是否过期的系数。默认值：`0.75`。计算公式如下：
+超时计算公式如下：
+
 $$
-Keep Alive * Backoff * 2
+\text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
 ## 会话设置
 
-本节介绍如何配置会话。在 MQTT 中，会话指的是客户端与代理之间的连接。如在 EMQX 中，当客户端连接到 EMQX 时，它建立了一个会话，允许它订阅主题并接收消息，以及向 EMQX 发布消息。
+本节介绍如何配置会话。在 MQTT 中，会话指的是客户端与消息服务器之间的连接。如在 EMQX 中，当客户端连接到 EMQX 时，它建立了一个会话，允许它订阅主题并接收消息，以及向 EMQX 发布消息。
+
+::: tip
+
+您也可以在 EMQX Dashboard 中找到对应的配置项（**管理** -> **MQTT 配置** -> **会话**和**会话持久化**）。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
+
+:::
 
 **示例代码：**
 
@@ -157,26 +164,8 @@ session {
 | `force_gc.count`                      | --                   | 此设置将触发强制垃圾回收的接收消息数量。                     | `16000`                                                      | `0` - `infinity`                    |
 | `force_gc.bytes`                      | --                   | 此设置将触发强制垃圾回收的接收字节数量。                     | `16 MB`<br />单位: `MB`                                      | --                                  |
 
-{% emqxce %}
+::: tip
 
-:::tip
-
-要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-:::tip
-
-要通过 Dashboard 配置 MQTT，请点击 Dashboard 左侧导航菜单的 **管理** -> **MQTT 配置**。一旦您通过 Dashboard 配置了这些项，您的设置将覆盖 `emqx.conf` 中的相同配置项。
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-:::
-
-{% endemqxee %}

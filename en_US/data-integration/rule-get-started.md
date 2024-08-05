@@ -11,11 +11,7 @@ In the **SQL Editor**, you can customize the statements to add a data source tha
 
 ::: tip
 
-{% emqxee %}
-
 This tutorial assumes the payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
-
-{% endemqxee %}
 
 EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
@@ -38,11 +34,7 @@ Follow the instructions below to test the SQL statement:
 
 The processing result of SQL will be presented in the **Output Result** section in JSON format. All the fields in SQL processing results can be referenced in the form of `${key}` by the subsequent actions (built-in actions or Sink). For a detailed explanation of the fields, see [SQL Data Sources and Fields](./rule-sql-events-and-fields.md).
 
-{% emqxee %}
-
 This demonstration assumes that the Payload is in JSON format. In actual use, you can also use [Schema Registry](./schema-registry.md) to handle messages in other formats.
-
-{% endemqxee %}
 
 Next, you can click the **Add Action** button on the right side of the **Create Rule** page to add different types of actions to the rule.
 

@@ -22,7 +22,7 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 ## 更新和设置 License 
 
-您可以通过 Dashboard 或配置文件更新 License 并且设置 License 连接配额使用水位线。
+您可以通过 Dashboard、命令行或配置文件更新 License 并且设置 License 连接配额使用水位线。
 
 ### Dashboard 
 
@@ -37,6 +37,17 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 4. 点击**保存修改**保存您的设置。
 
    <img src="./assets/license.png" alt="license" style="zoom:33%;" />
+
+### 命令行
+
+您还可以使用以下命令来更新您的 EMQX 企业版 license：
+
+```bash
+./bin/emqx ctl 
+
+    license info             # 显示 license 信息 
+    license update <License> # 更新 license，<License> 为 license 字符串
+```
 
 ### 配置文件
 

@@ -1,10 +1,10 @@
 # 将 MQTT 数据写入到 TimescaleDB
 
-{% emqxce %}
-:::tip
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+::: tip
+
+TimescaleDB 数据集成是 EMQX 企业版功能。
+
 :::
-{% endemqxce %}
 
 [Timescale](https://www.timescale.com/) (TimescaleDB) 是一个专门用于存储和分析时间序列数据的数据库，它的出色数据吞吐能力和可靠的性能表现使其成为物联网领域的理想选择，EMQX 通过与 TimescaleDB 集成，能够将 MQTT 数据无缝的集成到 TimescaleDB 进行存储，并借助其丰富的数据分析能力，为物联网应用提供了高效、可扩展的数据存储和分析解决方案。
 

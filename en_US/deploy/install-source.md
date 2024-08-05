@@ -1,16 +1,5 @@
 # Install from Source Code
 
-## Dependencies
-
-To compile and install EMQX from the source code, the following dependencies are needed: 
-
-- Erlang/OTP OTP 24 or 25 
-- GCC 4.8 or higher versions
-- Git
-- make
-- openssl-devel
-- libcurl-devel
-
 You can use the Docker compilation environment [EMQX Builder](https://github.com/emqx/emqx-builder) to compile and install EMQX from source code.
 
 With the following commands, you can create an EMQX Builder container, configure the port mapping (optional), and start the preview after the compilation is complete:
@@ -25,6 +14,17 @@ docker run -d --name emqx-builder \
   ghcr.io/emqx/emqx-builder/5.0-17:1.13.4-24.2.1-1-ubuntu20.04 \
   bash -c "tail -f /dev/null"
 ```
+
+## Dependencies
+
+To compile and install EMQX from the source code, the following dependencies are needed: 
+
+- Erlang/OTP OTP 24 or 25 
+- GCC 4.8 or higher versions
+- Git
+- make
+- openssl-devel
+- libcurl-devel
 
 ## Compile and Start EMQX
 

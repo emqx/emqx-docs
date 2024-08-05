@@ -33,20 +33,6 @@ The reference examples listed on this page provide detailed step-by-step instruc
 - [Connecting to MQTT with Kotlin in Android](https://www.emqx.com/en/blog/android-connects-mqtt-using-kotlin)
 - [MQTT TLS/SSL Authentication in Android](https://www.emqx.com/en/blog/android-mqtt-ssl-tls-authentication)
 
-{% emqxee %}
-
-**Embedded Hardware Development**
-
-- [Using MQTT on Raspberry Pi](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
-- [MQTT Tutorial with MicroPython on Raspberry Pi](https://www.emqx.com/en/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi)
-- [ESP32 Connects to Free Public MQTT Broker](https://www.emqx.com/en/blog/esp32-connects-to-the-free-public-mqtt-broker)
-- [ESP8266 Connects to Free Public MQTT Broker](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
-- [ESP8266 + MQTT: Remote Control of LED Lights](https://www.emqx.com/en/blog/esp8266_mqtt_led)
-
-{% endemqxee %}
-
-{% emqxce %}
-
 **Embedded Hardware Development**
 
 - [Using MQTT on Raspberry Pi](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
@@ -55,6 +41,4 @@ The reference examples listed on this page provide detailed step-by-step instruc
 - [ESP8266 Connects to Free Public MQTT Broker](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
 - [ESP8266 + MQTT: Remote Control of LED Lights](https://www.emqx.com/en/blog/esp8266_mqtt_led)
 - [Uploading Sensor Data to MQTT Cloud Service via NodeMCU (ESP8266)](https://www.emqx.com/en/blog/upload-sensor-data-to-mqtt-cloud-service-via-nodemcu-esp8266)
-
-{% endemqxce %}
 

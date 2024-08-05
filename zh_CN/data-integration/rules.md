@@ -17,7 +17,6 @@
   - [控制台输出](./rule-get-started.md#添加控制台输出动作)：将结果输出到控制台或日志中
   - [发送到各类 Sink](./data-bridges.md)：将结果发送到外部数据系统中，如 MQTT 服务，Kafka，PostgreSQL 等。
 
-
 ## 规则 SQL 示例
 
 规则 SQL 用于指定规则的数据来源、定义数据处理过程等。下面给出了一个 SQL 语句的例子：

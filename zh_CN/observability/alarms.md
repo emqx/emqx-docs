@@ -47,11 +47,9 @@ EMQX 内置监控与告警功能，目前支持监控 CPU 占用率、系统与�
 | sysmon.top.db_password            | string            | "system_monitor_password" | PostgreSQL 数据库的密码                                      |
 | sysmon.top.db_name                | string            | "postgres"                | PostgreSQL 数据库的数据库名                                  |
 
-{% emqxee %}
 EMQX 企业版在证书到期日小于30天或连接数超过高水位线时会发出告警。用户可以根据实际情况对连接数的高/低水位线进行调整：
 
 | 配置项                        | 类型     | 默认值      | 说明                                                         |
 | ----------------------------- | -------- | ----------- | ------------------------------------------------------------ |
 | license.connection_high_watermark_alarm  | percent  | 80%         | 证书允许的最大连接数高水位，即实时在线数/最大允许连接数达到多少时激活告警 |
 | icense.connection_low_watermark_alarm    | percent  | 75%         | 证书允许的最大连接数低水位，即实时在线数/最大允许连接数达到多少时取消告警 |
-|{% endemqxee %}||||

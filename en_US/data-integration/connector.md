@@ -34,15 +34,11 @@ You can also create a connector while creating a Sink/Source, which will automat
 
 3. On the connector type selection page, select the required connector and click **Next** to fill in the connection parameters. Supported connectors can be referenced [here](./data-bridges.md#supported-integrations).
 
-   {% emqxce %}
-
    :::tip 
 
-   In the EMQX open-source version, only HTTP and MQTT connectors are supported. 
+   In the EMQX Open Source edition, only HTTP and MQTT connectors are supported. 
 
    :::
-
-   {% endemqxce %}
 
    ![EMQX Select Connector](./assets/choose-connector-type.png)
 

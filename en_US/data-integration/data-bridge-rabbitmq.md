@@ -1,10 +1,10 @@
 # Ingest MQTT Data into RabbitMQ
 
-{% emqxce %}
-:::tip
-The RabbitMQ data integration is an EMQX Enterprise Edition feature. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+::: tip
+
+The RabbitMQ data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [RabbitMQ](https://www.rabbitmq.com/) is a widely used open-source message broker that implements the Advanced Message Queuing Protocol (AMQP). It provides a robust and scalable platform for messaging between distributed systems. EMQX supports integration with RabbitMQ, allowing you to forward MQTT messages and events to RabbitMQ. It also enables consuming data from the RabbitMQ Server and publishing it to specific topics in EMQX, achieving message delivery from RabbitMQ to MQTT.
 

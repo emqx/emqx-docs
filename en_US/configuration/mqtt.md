@@ -92,17 +92,17 @@ Where,
 
 ## Keep Alive Settings
 
-Keep Alive is the mechanism that ensures that a connection between an MQTT client and EMQX remains active even if no data is transmitted. This is how it works: when an MQTT client creates a connection to EMQX, it can set the Keep Alive variable header field in the connection request protocol packet to a non-zero value. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive).
+The Keep Alive is a Two Byte Integer, a time interval measured in seconds. It is a mechanism to ensure that an MQTT client and EMQX connection remain active even if no data is transmitted. When an MQTT client establishes a connection with EMQX, setting a non-zero value in the Keep Alive variable header field of the CONNECT packet can enable the Keep Alive mechanism between both parties. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive).
 
-For clients with Keep Alive enabled, you can continue to customize the coefficient EMQX uses to confirm whether the keep alive duration of the client expires.
+According to the MQTT 5.0 protocol, for clients with Keep Alive enabled, if the server does not receive an MQTT Control Packet from the client within 1.5 times the Keep Alive duration, it must close the network connection with the client. Therefore, EMQX introduces a configuration option `keepalive_multiplier` to periodically check clients' Keep Alive timeout status. The default value for `keepalive_multiplier` is `1.5`:
 
 ```bash
-keepalive_backoff = 0.75
+keepalive_multiplier = 1.5
 ```
 
-Where, **Keep Alive Backoff** (`keepalive_backoff`) is the coefficient EMQX uses to confirm whether the keep alive duration of the client expires. Default: `0.75`. The calculation formular is as follows:
+The timeout calculation formula is as follows:
 $$
-Keep Alive * Backoff * 2
+\text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
 ## Session Settings
@@ -161,26 +161,14 @@ Where,
 | `force_gc.count`                      | --                          | This sets the received message number that will trigger the forced garbage collection. | `16000`                                                      | `0` - `infinity`                    |
 | `force_gc.bytes`                      | --                          | This sets the received byte number that will trigger the forced garbage collection. | `16MB`<br />Unit: `MB`                                       | --                                  |
 
-{% emqxce %}
-
 :::tip
 
 To Configure MQTT via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
-
 :::
 
-{% endemqxce %}
+::: tip
 
-{% emqxee %}
-
-:::tip
-
-To Configure MQTT via Dashboard,  click **Configuration** -> **MQTT** on the left navigation menu of the Dashboard. Once you configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
-
-{% endemqxee %}

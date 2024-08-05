@@ -1,5 +1,111 @@
 # Version 5
 
+## 5.7.2
+
+### Enhancements
+
+- [#13317](https://github.com/emqx/emqx/pull/13317) Added a new per-authorization source metric type: `ignore`.  The meaning of this counter is that it's increased whenever the authorization source attempts to authorize a request, but either it's not applicable, or an error was encountered and the result is undecidable.
+
+- [#13336](https://github.com/emqx/emqx/pull/13336) Added support for initializing authentication data in built-in database an empty EMQX node or cluster with a bootstrap file in CSV or JSON format. The corresponding config entries are `bootstrap_file` and `bootstrap_type`.
+
+- [#13348](https://github.com/emqx/emqx/pull/13348) Added a new field `payload_encode` to the log configuration to determine the format of the payload in the log data.
+
+- [#13436](https://github.com/emqx/emqx/pull/13436) Added the option to add custom request headers to JWKS requests.
+
+- [#13507](https://github.com/emqx/emqx/pull/13507) Added a new builtin function `getenv` in the rule engine and variform expression to access the environment variables with below limitations.
+
+  - Prefix `EMQXVAR_` is added before reading from OS environment variables. i.e. `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
+  - The values are immutable once loaded from the OS environment.
+
+- [#13521](https://github.com/emqx/emqx/pull/13521) Fix LDAP query timeout issue.
+
+  Previously, LDAP query timeout may cause the underlying connection to be unusable.
+  Fixed to always reconnect if timeout happens.
+
+- [#13528](https://github.com/emqx/emqx/pull/13528) Add log throttling for unrecoverable errors in data integrations.
+
+- [#13548](https://github.com/emqx/emqx/pull/13548) EMQX now can optionally call the `on_config_changed/2` callback function when the plugin configuration is updated via the REST API.
+
+  This callback function is assumed to be exported by the `<PluginName>_app` module.
+  I.e, if plugin name and version are `my_plugin-1.0.0`, then the callback function is assumed to be `my_plugin_app:on_config_changed/2`.
+
+- [#13386](https://github.com/emqx/emqx/pull/13386) Added support for initializing list of banned clients on an empty EMQX node or cluster with a bootstrap file in CSV format. The corresponding config entry to specify file path is `banned.bootstrap_file`.
+
+  This file is a CSV file with `,` as its delimiter.
+
+  The first line of this file must be a header line. All valid headers are listed here:
+  - as :: required
+  - who :: required
+  - by  :: optional
+  - reason :: optional
+  - at :: optional
+  - until :: optional
+
+  See the documentation for details on each field.
+
+  Each row in the rest of this file must contain the same number of columns as the header line,
+  and column can be omitted then its value will be `undefined`.
+
+### Bug Fixes
+
+- [#13222](https://github.com/emqx/emqx/pull/13222) Fix the flags check and error handling related to the Will message in the `CONNECT` packet.
+  See also:
+  - MQTT-v3.1.1-[MQTT-3.1.2-13], MQTT-v5.0-[MQTT-3.1.2-11]
+  - MQTT-v3.1.1-[MQTT-3.1.2-14], MQTT-v5.0-[MQTT-3.1.2-12]
+  - MQTT-v3.1.1-[MQTT-3.1.2-15], MQTT-v5.0-[MQTT-3.1.2-13]
+
+- [#13307](https://github.com/emqx/emqx/pull/13307) Upgrade ekka lib to 0.19.5
+
+  ekka 0.19.5 uses mria 0.8.8 that improves auto-heal functionality.
+  Previously, the auto-heal worked only when all core nodes were reachable again.
+  This update allows to apply auto-heal once the majority of core nodes are alive.
+
+  [Mria PR](https://github.com/emqx/mria/pull/180)
+
+- [#13334](https://github.com/emqx/emqx/pull/13334) Check the `PasswordFlag` of the MQTT v3.1.1 CONNECT packet in strict mode to comply with the protocol.
+
+  > [!NOTE]
+  > To ensure BUG-TO-BUG compatibility, this check is performed only in strict mode.
+
+- [#13344](https://github.com/emqx/emqx/pull/13344) Fixed an issue that prevented the `POST /clients/:clientid/subscribe/bulk` API from working properly if the node receiving the API request did not hold the connection to the targeted clientid.
+
+- [#13358](https://github.com/emqx/emqx/pull/13358) Fixed an issue when the `reason` in the `authn_complete_event` event was not displayed correctly.
+
+- [#13375](https://github.com/emqx/emqx/pull/13375) The value infinity has been added as default value to the listener configuration fields `max_conn_rate`, `messages_rate` and `bytes_rate`.
+
+- [#13382](https://github.com/emqx/emqx/pull/13382) Updated `emqtt` library to version 0.4.14 that includes a fix that prevents `emqtt_pool`s from reusing existing pools in an inconsistent state.
+
+- [#13389](https://github.com/emqx/emqx/pull/13389) Fixed an issue when the `Derived Key Length` for `pbkdf2` could be set to a negative integer.
+
+- [#13389](https://github.com/emqx/emqx/pull/13389) Fixed an issue when topics in the authorization rules might be parsed incorrectly.
+
+- [#13393](https://github.com/emqx/emqx/pull/13393) Fixed an issue where plugin applications were not restarted after a node joins a cluster, leading to an inconsistent state where hooks were not properly installed.
+
+- [#13398](https://github.com/emqx/emqx/pull/13398) Fix acl rule clearing when reloading built-in-database for authorization using command line.
+
+- [#13403](https://github.com/emqx/emqx/pull/13403) Fixed environment variable config override logging behaviour to avoid logging passwords.
+
+- [#13408](https://github.com/emqx/emqx/pull/13408) Fix `function_clause` crash that occurs when attempting to authenticate with an invalid type of salt or password.
+
+- [#13419](https://github.com/emqx/emqx/pull/13419) Fix garbled hints in crash log message when calling `/configs` API.
+
+- [#13422](https://github.com/emqx/emqx/pull/13422) Fixed an issue where the option `force_shutdown.max_heap_size` could not be set to 0 to disable this tuning.
+
+- [#13442](https://github.com/emqx/emqx/pull/13442) Fixed an issue where the health check interval values of actions/sources were not taken into account.
+
+- [#13503](https://github.com/emqx/emqx/pull/13503) Fixed an issue where a connector wouldn't respect the configured health check interval when first starting up, and would need an update/restart for the correct value to take effect.
+
+- [#13515](https://github.com/emqx/emqx/pull/13515) Fixed an issue where the same client could not subscribe to the same exclusive topic when the node was down for some reason.
+
+- [#13527](https://github.com/emqx/emqx/pull/13527) Fixed an issue where running a SQL test in Rule Engine for the Message Publish event when a `$bridges/...` source was included in the `FROM` clause would always yield no results.
+
+- [#13541](https://github.com/emqx/emqx/pull/13541) Fixed an issue where CRL checks for a listener could not be disabled without listener restart.
+
+- [#13552](https://github.com/emqx/emqx/pull/13552) Add a startup timeout limit for EMQX plugins with default timeout of 10 seconds.
+
+  Starting a bad plugin while EMQX is running will result in a thrown runtime error.
+  When EMQX is stopped and restarted, the main starting process may hang due to the plugin application startup failur
+
 ## 5.7.1
 
 *Release Date: 2024-06-26*
@@ -1695,7 +1801,7 @@ _Release Date: 2023-04-18_
 - [#10426](https://github.com/emqx/emqx/pull/10426) Optimize the configuration priority mechanism to fix the issue where the configuration
   changes made to `etc/emqx.conf` do not take effect after restarting EMQX.
 
-  More introduction about the new mechanism: [Configure Override Rules](https://www.emqx.io/docs/en/v5.0/configuration/configuration.html#configure-override-rules)
+  More introduction about the new mechanism: [Configure Override Rules](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration.html#configure-override-rules)
 
 - [#10376](https://github.com/emqx/emqx/pull/10376) Simplify the configuration of the limiter feature and optimize some codes
 
@@ -2607,7 +2713,7 @@ _Release Date: 2023-05-26_
 
 - [#10426](https://github.com/emqx/emqx/pull/10426) Optimized the configuration priority mechanism to fix the issue where the configuration changes made to `etc/emqx.conf` do not take effect after restarting EMQX.
 
-  More information about the new mechanism: [Configure Override Rules](https://www.emqx.io/docs/en/v5.0/configuration/configuration.html#configure-override-rules)
+  More information about the new mechanism: [Configure Override Rules](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration.html#configure-override-rules)
 
 - [#10457](https://github.com/emqx/emqx/pull/10457) Deprecated the integration with StatsD.
 

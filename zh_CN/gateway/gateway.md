@@ -2,33 +2,7 @@
 
 网关（Gateway）负责处理所有非 MQTT 协议的连接、认证和消息收发，并为其提供统一的用户层接口和概念。
 
-在 EMQX 5.0 之前，非 MQTT 协议的接入分别由不同的接入插件实现（例如，`emqx_lwm2m` 插件用于处理 LwM2M 的协议接入）
-这些插件之间存在设计和实现上差异，这导致使用这些接入插件会很难以理解。 在 5.0 中，EMQX 为其定义了统一的概念和操作模型以降低使用难度。
-
-常用的网关快速开始：
-
-{% emqxce %}
-
-- [MQTT-SN](./mqttsn.md)
-- [STOMP](./stomp.md)
-- [CoAP](./coap.md)
-- [LwM2M](./lwm2m.md)
-- [ExProto](./exproto.md)
-
-{% endemqxce %}
-
-{% emqxee %}
-
-- [MQTT-SN](./mqttsn.md)
-- [STOMP](./stomp.md)
-- [CoAP](./coap.md)
-- [LwM2M](./lwm2m.md)
-- [ExProto](./exproto.md)
-- [OCPP](./ocpp.md)
-- [GB/T 32960](./gbt32960.md)
-- [JT/T 808](./jt808.md)
-
-{% endemqxee %}
+在 EMQX 5.0 之前，非 MQTT 协议的接入分别由不同的接入插件实现（例如，`emqx_lwm2m` 插件用于处理 LwM2M 的协议接入）。这些插件之间存在设计和实现上差异，这导致使用这些接入插件会很难以理解。 在 5.0 中，EMQX 为其定义了统一的概念和操作模型以降低使用难度。
 
 ## 设计
 
@@ -79,7 +53,19 @@
 但是网关中不存在单独的授权（Authorization）概念，如果需要给某网关的客户端主题设置权限，需要在全局的授权中进行配置。
 :::
 
-详细的介绍可参考各个协议的文档。
+详细的介绍可参考各个协议的文档。本节包含了以下这些常用网关的快速开始文档：
+
+- [MQTT-SN](./mqttsn.md)
+- [STOMP](./stomp.md)
+- [CoAP](./coap.md)
+- [LwM2M](./lwm2m.md)
+- [ExProto](./exproto.md)
+
+以下几种网关仅在 EMQX 企业版中支持：
+
+- [OCPP](./ocpp.md) 
+- [GB/T 32960](./gbt32960.md)
+- [JT/T 808](./jt808.md)
 
 ## 使用与集成
 
@@ -135,23 +121,10 @@ gateway.stomp {
 
 ::::
 
-{% emqxce %}
-
 详细参考：
 
-- [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)
-
-{% endemqxce %}
-
-{% emqxee %}
-
-详细参考：
-
-- [HTTP API - Gateway](../admin/api.md)
-- [配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
-
-{% endemqxee %}
+- [EMQX 开源版 API - Gateway](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) 和 [EMQX 企业版 API - Gateway](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)
+- [EMQX 开源版配置文档-网关配置](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。

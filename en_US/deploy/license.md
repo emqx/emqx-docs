@@ -14,7 +14,7 @@ This page guides you through the process of obtaining a license and importing it
 
 ## Apply for a License
 
-To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a license. Our sales representative will contact you as soon as possible. 
+To apply for a license, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a License. Our sales representative will contact you as soon as possible. 
 
 If you prefer to try EMQX Enterprise before purchasing, you can apply for a trial license on our [trial license application page](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
 
@@ -31,7 +31,7 @@ As EMQX Enterprise 5.0 uses a different license format, make sure that the versi
 
 ## Update and Configure License Settings
 
-You can update your license file and configure the settings for the license connection quota usage through EMQX Dashboard or the configuration file.
+You can update your license file and configure the settings for the license connection quota usage through EMQX Dashboard, command line interface (CLI), or the configuration file.
 
 ### Dashboard
 
@@ -49,6 +49,17 @@ You can update your license file and configure the settings for the license conn
 4. Click **Save Changes** to save your License settings.
 
    <img src="./assets/license.png" alt="license" style="zoom: 33%;" />
+
+### CLI
+
+You can also use the following command to update your EMQX Enterprise License:
+
+```bash
+./bin/emqx ctl 
+
+    license info             # Show license info 
+    license update <License> # Update license given as a string
+```
 
 ### Configuration File
 

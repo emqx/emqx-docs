@@ -1,18 +1,50 @@
 # 安装部署和迁移
 
-本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。
+本章将向您介绍如何下载和安装 EMQX，支持的操作系统和平台，以及安装完成后 EMQX 所在目录的文件夹结构，以便后续的配置和维护操作。本章还介绍了 EMQX 企业版 License 的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
 
-{% emqxee %}
+## 下载
 
-本章还介绍了许可证的配置，以及如何从 EMQX 4.4 迁移至 EMQX 5.1。
+EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可以点击以下链接下载：
 
-{% endemqxee %}
+EMQX 开源版：<https://www.emqx.com/zh/downloads-and-install/broker>
 
-{% emqxce %}
+EMQX 企业版：<https://www.emqx.com/zh/downloads-and-install/enterprise>
 
-本章还介绍了如何从 EMQX 4.4 迁移至 EMQX 5.1。
+此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
 
-{% endemqxce %}
+:::tip
+除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
+:::
+
+## 支持的操作系统与平台
+
+EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
+
+| 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
+| :-------------------------------- | :----------------------- | :----------- | :---- |
+| Ubuntu     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是   | 是  |
+| Debian     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
+| CentOS/RHEL  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
+| Amazon Linux | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
+| macOS       | macOS 13<br />macOS 14 | 是   | 是  |
+
+<!-- ## 硬件规格
+
+EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小以及启用的功能而异。
+下面的最低硬件规格适用于运行 EMQX 并进行简单的功能验证，推荐配置能够支撑 10 万客户端连接以及每秒 10 万条消息吞吐。
+
+| 项目         | 最低要求 | 推荐配置 |
+| ------------ | -------- | -------- |
+| **节点数**   | 1        | 2        |
+| **CPU**      | 1 核     | 16 核    |
+| **内存**     | 512 MB   | 32 GB    |
+| **磁盘空间** | 1 GB     | 50 GB    |
+
+::: tip
+
+在生产环境中，您可通过我们的[配置估算计算器](https://www.emqx.com/zh/server-estimate)来计算不同连接与消息吞吐下的推荐硬件规格。
+
+::: -->
 
 ## 安装环境
 
@@ -22,7 +54,7 @@ EMQX 所使用的 Erlang 虚拟机依赖于系统区域设置来启用各种功�
 
 :::: tabs
 
-::: tab Amazon Linux 
+::: tab Amazon Linux
 
 使用 [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) 配置启用 UTF-8 locale 区域设置：
 
@@ -75,73 +107,23 @@ sudo update-locale LANG=C.UTF-8
 
 ::::
 
-## 下载
+## 端口占用
 
-{% emqxce %}
+EMQX 默认使用以下端口，请确保这些端口未被其他应用程序占用，并按照需求开放防火墙以保证 EMQX 正常运行。
 
-在每个 EMQX 版本中，我们都会针对不同的操作系统与平台发布不同的安装包选项，您可点击以下链接下载：
+| 端口  | 协议 | 描述 |
+| ----- | ---- | ---- |
+| 1883  | TCP  | MQTT over TCP 监听器端口，主要用于未加密的 MQTT 连接。 |
+| 8883  | TCP  | MQTT over SSL/TLS 监听器端口，用于加密的 MQTT 连接。 |
+| 8083  | TCP  | MQTT over WebSocket 监听器端口，使 MQTT 能通过 WebSocket 进行通信。 |
+| 8084  | TCP  | MQTT over WSS (WebSocket over SSL) 监听器端口，提供加密的 WebSocket 连接。 |
+| 18083 | HTTP  | EMQX Dashboard 和 REST API 端口，用于管理控制台和 API 接口。 |
+| 4370  | TCP  | Erlang 分布式传输端口，根据节点名称不同实际端口可能是 `BasePort (4370) + Offset`。 |
+| 5370  | TCP  | 集群 RPC 端口（在 Docker 环境下为 5369），根据节点名称不同实际端口可能是 `BasePort (5370) + Offset`。 |
 
-- 官网下载：<https://www.emqx.io/zh/downloads>
-
-此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
-
-{% endemqxce %}
-
-{% emqxee %}
-EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可点击以下链接下载：
-
-官网下载：<https://www.emqx.com/zh/try?product=enterprise>
-
-{% endemqxee %}
-
-:::tip
-除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
+::: tip 提示
+即使没有组建集群，EMQX 也会监听 4370 跟 5370 端口。这 2 个端口固定无法修改，且会根据节点名称（`Name@Host`）中 Name 部分的数字后缀决定 Offset，没有数字后缀则默认为 0。更多信息请参考[集群内通信端口](./cluster/security.md#集群内通信端口)。
 :::
-
-## 支持的操作系统与平台
-
-EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是支持情况：
-
-{% emqxce %}
-| 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
-| :-------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
-
-{% endemqxce %}
-
-{% emqxee %}
-
-| 操作系统                                  | 支持版本                 | x86_64/amd64 | arm64 |
-| :---------------------------------------- | :----------------------- | :----------- | :---- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | 是   | 是  |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | 是   | 是  |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | 是   | 是  |
-
-{% endemqxee %}
- 
-<!-- ## 硬件规格
-
-EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小以及启用的功能而异。
-下面的最低硬件规格适用于运行 EMQX 并进行简单的功能验证，推荐配置能够支撑 10 万客户端连接以及每秒 10 万条消息吞吐。
-
-| 项目         | 最低要求 | 推荐配置 |
-| ------------ | -------- | -------- |
-| **节点数**   | 1        | 2        |
-| **CPU**      | 1 核     | 16 核    |
-| **内存**     | 512 MB   | 32 GB    |
-| **磁盘空间** | 1 GB     | 50 GB    |
-
-::: tip
-
-在生产环境中，您可通过我们的[配置估算计算器](https://www.emqx.com/zh/server-estimate)来计算不同连接与消息吞吐下的推荐硬件规格。
-
-::: -->
 
 ## 文件和目录
 

@@ -136,9 +136,13 @@ password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
-  dk_length = 256           # optional
+  dk_length = 32           # optional, Unit: Byte
 }
 ```
+
+注意，不同散列算法之间可能存在较大的性能差异，请酌情选择。作为参考，以下是在 4 核 8GB 的机器中将各散列算法运行 100 次后取得的平均运行时间：
+
+![](./assets/hash-compare.png)
 
 ## 认证占位符
 
@@ -166,9 +170,9 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 
-- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
+- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
-- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
+- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
 

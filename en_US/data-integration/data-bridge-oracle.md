@@ -1,10 +1,10 @@
 # Ingest MQTT Data into Oracle Database
 
-{% emqxce %}
 ::: tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+
+The Oracle Database data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [Oracle Database](https://www.oracle.com/database/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with Oracle Database, enabling you to save MQTT messages and client events to Oracle Database. This allows for the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP and CRM.
 

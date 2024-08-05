@@ -966,9 +966,13 @@ Actions:
 
 CLI is only for inspection, Rule and action managements are managed from dashboard.
 
-{% emqxee %}
-
 ## license
+
+::: tip
+
+This section applies to the EMQX Enterprise edition only.
+
+:::
 
 | Command                | Description                  |
 | ---------------------- | ---------------------------- |
@@ -997,5 +1001,3 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
 You need to replace `YOUR_LICENSE_STRING` with the actual License string.
-
-{% endemqxee %}

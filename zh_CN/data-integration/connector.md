@@ -32,14 +32,10 @@ EMQX 连接器是数据集成的关键概念，它作为 Sink/Source 的底层�
 
 3. 在连接器类型选择页面，选择所需的连接器，点击**下一步**填写连接参数。支持的连接器参考[此处](./data-bridges.md#支持的集成)。
 
-   {% emqxce %}
-
    :::tip
-   在 EMQX 开源版中，仅支持 HTTP 与 MQTT 连接器。
+在 EMQX 开源版中，仅支持 HTTP 与 MQTT 连接器。
    :::
-
-   {% endemqxce %}
-
+   
    ![EMQX 选择连接器](./assets/choose-connector-type.png)
 
 4. 在连接器配置信息页面，填写连接器的基本信息，包括连接器名称、描述，以及连接器的连接参数，此处内容请参考各个 Sink/Source 使用文档中的连接器参数部分，不在此处赘述。

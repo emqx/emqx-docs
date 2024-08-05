@@ -1,6 +1,6 @@
 # Logs and Observability
 
-EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on Dashboard under the following menu items:
+EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on the Dashboard under the following menu items:
 
 **Monitoring**:
 
@@ -16,17 +16,21 @@ EMQX provides a series of observability-related features to help with system mon
 
 - [Logs](./log.md)
 
-  Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating or network issues from EMQX logs.
+  Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating, or network issues from EMQX logs.
 
 - [Integrate with Prometheus](./prometheus.md)
 
-  [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support to multidimensional data model, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and as well as pushing metrics to `pushgateway`.
+  [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for multidimensional data models, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and pushing metrics to `pushgateway`.
+
+- [Integrate with Datadog](./datadog)
+
+  [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
 
 **Diagnose**:
 
 - [Topic Metrics](./topic-metrics.md)
 
-  EMQX provides a topic monitoring feature(called Topic Metrics) that allows you to count the number of messages sent and received, the rate and other metrics for a given topic. You can view and use this feature through the **Diagnose** -> **Topic Metrics** page on Dashboard, or you can configure it through the HTTP API.
+  EMQX provides a topic monitoring feature(called Topic Metrics) that allows you to count the number of messages sent and received, the rate, and other metrics for a given topic. You can view and use this feature through the **Diagnose** -> **Topic Metrics** page on Dashboard, or you can configure it through the HTTP API.
 
 - [Slow Subscriptions](./slow-subscribers-statistics.md)
 

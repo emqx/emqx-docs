@@ -84,6 +84,15 @@ For example, if the client ID prefix is `myprefix` and the Connector name is `fo
 myprefix:foo2bd61c44:1
 ```
 
+Starting from version 5.4.1, EMQX has limited the MQTT client ID length to 23 bytes. If the client ID exceeds this length, it will be replaced with a hashed value. This can result in a poor user experience when the prefix or connector name is too long.
+
+To address this issue, from version 5.7.1 onwards, EMQX has implemented the following rules:
+
+- **No prefix**: Behavior remains unchanged; EMQX will hash the long (> 23 bytes) client ID into a 23-byte space.
+- **With prefix**:
+  - **Prefix up to 19 bytes**: The prefix is preserved, and the remainder of the client ID is hashed into a 4-byte space capping the length within 23 bytes.
+  - **Prefix of 20 bytes or more**: EMQX will use the configured prefix, and no longer attempts to shorten the client ID.
+
 ## Create a Rule with MQTT Broker Sink
 
 This section demonstrates how to create a rule for specifying data to be forwarded to a remote MQTT service.

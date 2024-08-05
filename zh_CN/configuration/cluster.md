@@ -61,20 +61,8 @@ cluster {
 | `ssl_options.keyfile`              | 包含与 SSL/TLS 证书对应的私钥的 PEM 文件。                   | --       | --                                       |
 | `ssl_options.fail_if_no_peer_cert` | 如果设置为 `true`，服务器在客户端没有发送证书（即发送空证书）的情况下失败。如果设置为 `false`，则只在客户端发送无效证书时失败（一个空证书被认为是有效的）。 | --       | --                                       |
 
-{% emqxce %}
+::: tip
 
-:::tip
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
-
-:::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-:::tip
-
-EMQX提供了更多配置项以更好地满足定制化需求。详情请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::

@@ -404,19 +404,15 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 规则 SQL 完全兼容 4.x 的语法，但规则下的动作拆分为内置动作 (republish、console) 与数据桥接 (HTTP Server、MQTT 桥接)。
 
-{% emqxee %}
-
 ## 离线消息
 
-目前 EMQX 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此在 5 版本中不再支持外置数据库的离线消息功能。
+目前 EMQX 企业版 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此在 5 版本中不再支持外置数据库的离线消息功能。
 
 后续的原生离线消息能够提供更高的性能，并有效降低使用和维护成本，敬请期待。
 
 ## 代理订阅（从数据库中获取订阅关系）
 
-从 5.0.0 版本开始，EMQX 不再提供基于外置数据库的[代理订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（从数据库中获取订阅关系）功能。
-
-{% endemqxee %}
+从 EMQX 企业版 5.0.0 版本开始，EMQX 不再提供基于外置数据库的[代理订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（从数据库中获取订阅关系）功能。
 
 ## HTTP Server
 

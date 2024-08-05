@@ -78,14 +78,8 @@ Where,
 | `time_offset`         | Time Offset      | The time offset relative to UTC in the log.                  | `system`      | --                                                           |
 | `timestamp_formatter` | Timestamp Format | The format of the timestamp in the log.                      | `auto`        | `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.<br />`epoch`: Microseconds precision Unix epoch format.<br />`rfc3339`: RFC3339 compliant format for date-time strings. |
 
-{% emqxce %}
+::: tip
 
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}
+:::

@@ -1,10 +1,10 @@
-# Manage Replication
+# Manage Data Replicas
 
-This guide provides instructions on configuring data replication and ensuring high availability for EMQX durable sessions. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable sessions and upgrading an existing cluster to enable durable sessions.
+For an EMQX cluster, durable storage achieves high availability through multiple data replicas. If a node crashes, clients can immediately connect to a new node and recover data from the replicas on other nodes. This guide provides instructions on configuring data replication and ensuring high availability for durable storage. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable storage and upgrading an existing cluster to enable durable storage.
 
 ## Initial Cluster Setup
 
-During the initial setup of the cluster, several configuration parameters influence how durable sessions is established and data replication starts. These parameters cannot be changed in the runtime, and modifying them will not take any effect once the durable sessions is initialized.
+During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed in the runtime, and modifying them will not take any effect once the durable storage is initialized.
 
 ### Replication Factor
 
@@ -23,11 +23,11 @@ In smaller clusters, the replication factor is not strictly enforced. For instan
 The built-in durable storages are split into shards, which are replicated independently from each other.
 A higher number of shards allows for more parallel publishing and consuming of MQTT messages. However, each shard consumes system resources, such as file descriptors, and increases the volume of metadata stored per session.
 
-The `durable_storage.messages.n_shards` parameter controls the number of shards, which remains fixed once the durable sessions is initialized.
+The `durable_storage.messages.n_shards` parameter controls the number of shards, which remains fixed once the durable storage is initialized.
 
 ### Number of Sites
 
-The `durable_storage.messages.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storages begins allocating shards to the available sites in a balanced manner.
+The `durable_storage.messages.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storage begins allocating shards to the available sites in a balanced manner.
 
 The default value is `1`, meaning each node may initially consider itself the sole site responsible for data storage. This setup is optimized for single-node EMQX clusters. When the cluster forms, one node's view will eventually dominate, causing other nodes to abandon their stored data.
 
@@ -35,9 +35,9 @@ In multi-node clusters, it is recommended to set the number of sites to the init
 
 ## Change Existing Cluster
 
-Existing clusters may require reconfiguration due to changes in capacity, durability, or client traffic, or the need to decommission old nodes and replace them with new ones. This can be achieved by adding new sites to the set of sites with durable sessions replication or removing sites no longer required.
+Existing clusters may require reconfiguration due to changes in capacity, durability, client traffic, or the need to decommission old nodes and replace them with new ones. This can be achieved by adding new sites to the set of sites with durable storage replications or removing sites no longer required.
 
-You can use the `emqx ctl` CLI can be used with the `ds` subcommand to view the current shard allocation:
+You can use the `emqx ctl` CLI with the `ds` subcommand to view the current shard allocation:
 
 ```shell
 $ emqx ctl ds info
@@ -56,7 +56,7 @@ $ emqx ctl ds join messages <Site ID>
 ok
 ```
 
-Depending on the cluster's data volume, joining a new site may take some time. While this process does not compromise the availability of durable storages, it may temporarily affect cluster performance due to the background data transfer between sites.
+Depending on the cluster's data volume, joining a new site may take some time. While this process does not compromise the availability of durable storage, it may temporarily affect cluster performance due to the background data transfer between sites.
 
 Changes to the replica set are durably stored, ensuring that node restarts or network partitions do not affect the outcome. The cluster will eventually achieve the desired state consistently.
 

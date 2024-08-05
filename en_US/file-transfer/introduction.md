@@ -1,5 +1,11 @@
 # File Transfer over MQTT
 
+::: tip
+
+The File Transfer over MQTT is an EMQX Enterprise edition feature.
+
+:::
+
 In the world of IoT applications, there's a growing need for diverse data transmission, where devices must swiftly and reliably transfer different types of data to and from the cloud. As IoT finds applications across more industries, a variety of use cases are emerging. Beyond real-time structured data like sensor readings and control commands, offline file data such as audio/video files, images, and diagnostic logs are playing an increasingly important role in the IoT field.
 
 EMQX offers file transfer capabilities based on the standard MQTT protocol, ensuring efficiency and reliability in data transfer.

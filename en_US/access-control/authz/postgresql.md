@@ -64,25 +64,19 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
    <img src="./assets/authz-PostgreSQL_ee.png" alt="authz-PostgreSQL_ee" style="zoom:67%;" />
 
-3. Follow the instructions below to do the configuration.
-
-   **Connect**: Fill in the information needed to connect PostgreSQL.
+3. Follow the instructions below to configure the settings:
 
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: PostgreSQL database name.
    - **Username** (optional): Specify user name. 
    - **Password** (optional): Specify user password. 
-
-   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
-
-   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
-
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
-
-   **Authorization configuration**: Fill in the authorization-related settings:
-
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. 
+   
+   - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
+   - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
+   
    - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
-
+   
 4. Click **Create** to finish the settings.
 
 ## Configure with Configuration Items

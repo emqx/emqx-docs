@@ -20,17 +20,11 @@ prometheus {
 - `headers` 用于设置向 Prometheus Pushgateway 服务器发出的 HTTP 请求中要包含的额外头信息。
 - `job_name` 用于设置 Prometheus 中将导出指标的 Job 名称，默认为：`"${name}/instance/${name}~${host}"`
 
-{% emqxce %}
+::: tip
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://www.emqx.io/docs/zh/v@CE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX 提供了更多配置项以更好地满足定制化需求。详细信息请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
-
-{% endemqxee %}
+:::
 
 ::: tip
 

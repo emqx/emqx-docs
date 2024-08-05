@@ -1,10 +1,10 @@
 # Ingest MQTT Data into PostgreSQL
 
-{% emqxce %}
 ::: tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+
+The PostgreSQL data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [PostgreSQL](https://www.postgresql.org/) is the world's most advanced open-source relational database, possessing robust data processing capabilities suitable for everything from simple applications to complex data tasks. EMQX supports integration with PostgreSQL, enabling efficient handling of real-time data streams from IoT devices. This integration supports large-scale data storage, precise querying, and complex data association analysis while ensuring data integrity. Leveraging EMQX's efficient message routing and PostgreSQL's flexible data model, it's easy to monitor device statuses, track events, and audit operations, providing businesses with deep data insights and robust business intelligence support.
 
@@ -122,7 +122,13 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
-8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-sink-for-events-recording).
+8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
+
+:::tip Note
+
+EMQX v5.7.1 introduced a **Disable Prepared Statements** option. If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option in the Advanced Settings.
+
+:::
 
 ## Create a Rule with PostgreSQL Sink for Message Storage
 
