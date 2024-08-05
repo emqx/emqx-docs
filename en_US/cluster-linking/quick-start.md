@@ -1,6 +1,6 @@
 # Quick Start with Cluster Linking
 
-This page provides a quick start guide to set up the Cluster Linking between two distant EMQX clusters.
+This page provides a quick start guide to setting up cluster linking between two distant EMQX clusters.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Ensure you have compute resources in two different regions, each hosting an EMQX
 - Unique cluster names
 - Network communication between clusters
 
-Cluster Linking requires the MQTT listener of each cluster to be reachable from the other cluster's network. It is recommended to place these MQTT listeners behind a load balancer for even traffic distribution. For security, if using the public internet, ensure communication between clusters is secured using [TLS](./configuration.md) and strict [TLS or MQTT client authentication](../access-control/authn/authn.md).
+Cluster Linking requires the MQTT listener of each cluster to be reachable from the other cluster's network. It is recommended that these MQTT listeners be placed behind a load balancer for even traffic distribution. For security, if using the public internet, ensure communication between clusters is secured using [TLS](./configuration.md) and strict [TLS or MQTT client authentication](../access-control/authn/authn.md).
 
 ## Set Up the First Cluster (cluster-us-east)
 
