@@ -4,10 +4,10 @@ EMQX implements the shared subscription feature of MQTT. A shared subscription i
 
 Examples of two shared subscription prefixes formats are as follows.
 
-| Prefixes formats                  | Example        | Prefix      | Real topic name |
+| Prefixes format                  | Example        | Prefix      | Real topic name |
 | --------------------------------- | -------------- | ----------- | --------------- |
-| Shared subscription for groups    | $share/abc/t/1 | $share/abc/ | t/1             |
-| Shared subscription not for group | $queue/t/1     | $queue/     | t/1             |
+| Shared subscription for groups    | $share/abc/t/1 | $share/abc/ |t/1|
+| Shared subscription not for group | $queue/t/1     | $queue/     |t/1|
 
 You can use client tools to connect to EMQX and try this messaging service. This section introduces how shared subscription works and provides a demonstration of how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try the shared subscription feature.
 
@@ -31,14 +31,9 @@ Shared subscription topics prefixed with `$queue/` are for subscribers not in gr
 
 ## Shared Subscription and Session
 
-When a client has a persistent session and subscribes to a shared subscription, the session will continue to receive messages published to the shared subscription topic while the client is disconnected.
-If the client stays disconnected for a long time and the message publishing rate is high, it risks overflowing the internal message queue in the session state.
+When a client has a persistent session and subscribes to shared subscriptions, the session continues to receive messages published to the shared subscription topics while the client disconnects. If the client stays disconnected for a long time and the message publishing rate is high, the internal message queue in the session state may overflow. To avoid this problem, it is recommended to use a clean session ( `clean_session=true` ) for shared subscriptions. A clean session expires immediately after the client disconnects.
 
-To avoid this problem, it is recommended to use a clean session for shared subscriptions. A clean session expires immediately after the client disconnects.
-
-When clients talk MQTT v5, it is a good practice to set a short session expiry interval (if not 0). This allows the client to temporarily disconnect and reconnect to receive messages published during the disconnection.
-
-When a session expires, the QoS1 and QoS2 messages in the send queue, or the QoS1 messages in the infight queue will be re-dispatched to other sessions in the same group. When it's the last session to expire, all the pending messages will be discarded.
+When clients use MQTT v5, it is a good practice to set a short session expiry interval (if not 0). This allows the client to temporarily disconnect and reconnect to receive messages published during the disconnection period. When a session expires, the QoS1 and QoS2 messages in the send queue or the QoS1 messages in the infight queue will be re-dispatched to other sessions in the same group. When the last session expires, all pending messages will be discarded.
 
 For more information on the persistent session, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
 
