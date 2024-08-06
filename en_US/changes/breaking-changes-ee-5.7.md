@@ -1,7 +1,7 @@
 # Incompatible Changes in EMQX 5.7
 
 
-## 5.7.2
+## e5.7.2
 
 - [#13327](https://github.com/emqx/emqx/pull/13327) The directory path scheme for on-disk Kafka/Confluent/Azure Event Hub buffers has changed.  It now uses the Action name instead of the topic name.
 
