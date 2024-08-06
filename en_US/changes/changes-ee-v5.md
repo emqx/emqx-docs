@@ -39,7 +39,7 @@
   
   Each row in the rest of this file must contain the same number of columns as the header line, and the column can be omitted then its value is `undefined`.
   
-- [#13452](https://github.com/emqx/emqx/pull/13452) Kafka producer action's `topic` configuration now supports templates.
+- [#13452](https://github.com/emqx/emqx/pull/13518) Kafka producer action's `topic` configuration now supports templates.
 
   Ensure that topics are pre-existing in Kafka. If a message is directed to a non-existent topic (given Kafka's disabled topic auto-creation), the message will fail with an unrecoverable error. Additionally, if a message lacks sufficient information to match the configured template, it will also fail with an unrecoverable error. For example, the template is `t-${t}` but the message context lacks a `t` definition. For detailed information, see [Kafka Dynamic Topics](../data-integration/data-bridge-kafka.md#kafka-dynamic-topics).
 
