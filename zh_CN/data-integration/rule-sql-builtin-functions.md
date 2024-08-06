@@ -1483,7 +1483,7 @@ uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 
 ### getenv(Name)
 
-返回环境变量 `Name` 的值，注意以下限制：
+返回环境变量 `Name` 的值，并遵循以下限制：
 
 - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
 - 这些值一旦从操作系统环境加载便不会再改变。

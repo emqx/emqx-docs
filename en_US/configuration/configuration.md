@@ -525,7 +525,7 @@ Below are the functions that can be used in the expressions:
   - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
   - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
 - **System functions**:
-  - `getenv(Name)`: Return the value of the environment variable `Name` with the following limitations:
+  - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
     - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
     - Values are immutable once loaded from the OS environment.
 
