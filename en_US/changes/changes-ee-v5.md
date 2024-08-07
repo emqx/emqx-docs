@@ -104,7 +104,7 @@
 
 - [#13305](https://github.com/emqx/emqx/pull/13305) Improved error handling for Redis connectors. Previously, Redis connectors with Redis Mode set as `single` or `sentinel` would always encounter a timeout error during the connector test in the Dashboard if no username or password was provided. This update ensures that users now receive an informative error message in such scenarios. Additionally, more detailed error information has been added for all Redis connector types to enhance diagnostics and troubleshooting.
 
-- [#13327](https://github.com/emqx/emqx/pull/13327) Fixed an issue in Kafka, Confluent, and Azure Event Hub integrations where multiple actions reusing the same connector and configured with the same topic could interfere with each other when one of the actions was deleted or disabled. For example, data writing of other actions might be affected.
+- [#13327](https://github.com/emqx/emqx/pull/13327) Fixed an issue in Kafka, Confluent, and Azure Event Hubs integrations where multiple actions reusing the same connector and configured with the same topic could interfere with each other when one of the actions was deleted or disabled. For example, data writing of other actions might be affected.
 
 - [#13345](https://github.com/emqx/emqx/pull/13345) Improved error message clarity for Schema Registry to provide clearer feedback when creating a schema with a name exceeds length limits or contains invalid formatting.
 
