@@ -79,7 +79,7 @@
 - [#13527](https://github.com/emqx/emqx/pull/13527) 在规则引擎中修复了一个问题，即当 `$bridges/...` 被包含在 `FROM` 子句中时，执行消息发布事件的 SQL 测试始终返回空结果。
 - [#13541](https://github.com/emqx/emqx/pull/13541) 修复了禁用监听器的 CRL 检查需要监听器重启才能生效的问题。
 - [#13305](https://github.com/emqx/emqx/pull/13305) 改进了 Redis 连接器的错误处理。之前，如果 Redis 连接器的 Redis 模式设置为 `single` 或 `sentinel`，且未提供用户名或密码，那么在 Dashboard 中进行连接器测试时会始终遇到连接超时错误。此更新确保用户现在能在这种情况下收到详细的错误信息。此外，还为所有 Redis 连接器类型添加了更详细的错误信息，以增强诊断和故障排除能力。
-- [#13327](https://github.com/emqx/emqx/pull/13327) 修复了 Kafka、Confluent 和 Azure Event Hub 集成中的问题，如果多个动作复用同一个 connector 并配置了相同的主题，当删除或禁用其中一个动作时可能会相互干扰，比如影响其他动作的数据写入。
+- [#13327](https://github.com/emqx/emqx/pull/13327) 修复了 Kafka、Confluent 和 Azure Event Hubs 集成中的问题，如果多个动作复用同一个 connector 并配置了相同的主题，当删除或禁用其中一个动作时可能会相互干扰，比如影响其他动作的数据写入。
 - [#13345](https://github.com/emqx/emqx/pull/13345) 改进了 Schema Registry 的错误消息清晰度，现在在创建 Schema 时，如果名称超出长度限制或包含无效格式，将提供更明确的反馈。
 - [#13420](https://github.com/emqx/emqx/pull/13420) 增加了对 Schema 验证配置的校验，防止在配置 Schema 验证时使用空主题过滤器列表。此前允许空列表可能导致创建缺乏实际功能的消息转换，因为它们不会应用于任何特定主题。
 - [#13543](https://github.com/emqx/emqx/pull/13543) 修复了在 Schema Registry 中删除或更新 schema 后，Protobuf schemas 的内部缓存未能正确清理的问题。
