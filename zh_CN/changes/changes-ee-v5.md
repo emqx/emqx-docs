@@ -38,7 +38,7 @@
 
   除标题行外，文件中的每一行必须包含与标题行相同数量的列，且列可以省略，其值为`undefined`。
 
-- [#13452](https://github.com/emqx/emqx/pull/13452) 支持在 Kafka 生产者动作的 `topic` 配置中使用模板。
+- [#13518](https://github.com/emqx/emqx/pull/13518) 支持在 Kafka 生产者动作的 `topic` 配置中使用模板。
 
   需确保在 Kafka 中预先存在这些主题。如果消息发送到一个不存在的主题（如果 Kafka 禁用了主题自动创建），则该消息将失败，并显示不可恢复的错误。此外，如果消息缺少足够的信息来匹配配置的模板，也会导致不可恢复的错误。例如，模板为 `t-${t}`，但消息上下文中缺少 `t` 的定义。详细信息，参考 [Kafka 动态主题](../data-integration/data-bridge-kafka.md#kafka-动态主题)。
 
@@ -79,9 +79,9 @@
 - [#13527](https://github.com/emqx/emqx/pull/13527) 在规则引擎中修复了一个问题，即当 `$bridges/...` 被包含在 `FROM` 子句中时，执行消息发布事件的 SQL 测试始终返回空结果。
 - [#13541](https://github.com/emqx/emqx/pull/13541) 修复了禁用监听器的 CRL 检查需要监听器重启才能生效的问题。
 - [#13305](https://github.com/emqx/emqx/pull/13305) 改进了 Redis 连接器的错误处理。之前，如果 Redis 连接器的 Redis 模式设置为 `single` 或 `sentinel`，且未提供用户名或密码，那么在 Dashboard 中进行连接器测试时会始终遇到连接超时错误。此更新确保用户现在能在这种情况下收到详细的错误信息。此外，还为所有 Redis 连接器类型添加了更详细的错误信息，以增强诊断和故障排除能力。
-- [#13327](https://github.com/emqx/emqx/pull/13327) 修复了 Kafka、Confluent 和 Azure Event Hub 集成中的问题，当删除或禁用针对同一主题的不同动作时可能会相互干扰。
+- [#13327](https://github.com/emqx/emqx/pull/13327) 修复了 Kafka、Confluent 和 Azure Event Hub 集成中的问题，如果多个动作复用同一个 connector 并配置了相同的主题，当删除或禁用其中一个动作时可能会相互干扰，比如影响其他动作的数据写入。
 - [#13345](https://github.com/emqx/emqx/pull/13345) 改进了 Schema Registry 的错误消息清晰度，现在在创建 Schema 时，如果名称超出长度限制或包含无效格式，将提供更明确的反馈。
-- [#13420](https://github.com/emqx/emqx/pull/13420) 添加了 Schema 验证，防止配置 Schema Validation 时使用空主题过滤器列表。此前允许空列表可能导致创建缺乏实际功能的消息转换，因为它们不会应用于任何特定主题。
+- [#13420](https://github.com/emqx/emqx/pull/13420) 增加了对 Schema 验证配置的校验，防止在配置 Schema 验证时使用空主题过滤器列表。此前允许空列表可能导致创建缺乏实际功能的消息转换，因为它们不会应用于任何特定主题。
 - [#13543](https://github.com/emqx/emqx/pull/13543) 修复了在 Schema Registry 中删除或更新 schema 后，Protobuf schemas 的内部缓存未能正确清理的问题。
 - [#13332](https://github.com/emqx/emqx/pull/13332) 改进了错误消息，当 Amazon S3 连接器配置错误时，提供更具信息量且易于阅读的细节。
 - [#13552](https://github.com/emqx/emqx/pull/13552) 添加了 EMQX 插件的启动超时限制，默认超时时间为 10 秒。在此更新之前，问题插件在启动期间可能会导致运行时错误，从而可能导致主启动进程在 EMQX 停止和重新启动时出现挂起。

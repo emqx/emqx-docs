@@ -104,11 +104,11 @@
 
 - [#13305](https://github.com/emqx/emqx/pull/13305) Improved error handling for Redis connectors. Previously, Redis connectors with Redis Mode set as `single` or `sentinel` would always encounter a timeout error during the connector test in the Dashboard if no username or password was provided. This update ensures that users now receive an informative error message in such scenarios. Additionally, more detailed error information has been added for all Redis connector types to enhance diagnostics and troubleshooting.
 
-- [#13327](https://github.com/emqx/emqx/pull/13327) Fixed an issue with Kafka, Confluent and Azure Event Hub integrations where different actions targeting the same topic could break one another when being deleted or disabled.
+- [#13327](https://github.com/emqx/emqx/pull/13327) Fixed an issue in Kafka, Confluent, and Azure Event Hub integrations where multiple actions reusing the same connector and configured with the same topic could interfere with each other when one of the actions was deleted or disabled. For example, data writing of other actions might be affected.
 
 - [#13345](https://github.com/emqx/emqx/pull/13345) Improved error message clarity for Schema Registry to provide clearer feedback when creating a schema with a name exceeds length limits or contains invalid formatting.
 
-- [#13420](https://github.com/emqx/emqx/pull/13420) Added a schema validation to prevent the configuration of Schema Validation with empty topic filter lists. Previously, allowing empty lists could create message transformations that lack meaningful functionality, as they wouldn't apply to specific topics.
+- [#13420](https://github.com/emqx/emqx/pull/13420) Implemented a validation rule to the Schema Validation configuration to avoid empty topic filter lists in the configuration. Previously, allowing empty lists could create message transformations that lack meaningful functionality, as they wouldn't apply to specific topics.
 
 - [#13543](https://github.com/emqx/emqx/pull/13543) Fixed an issue where the internal cache for Protobuf schemas in Schema Registry was not properly cleaned up after deleting or updating a schema.
 

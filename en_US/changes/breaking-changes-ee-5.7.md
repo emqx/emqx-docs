@@ -3,15 +3,9 @@
 
 ## e5.7.2
 
-- [#13327](https://github.com/emqx/emqx/pull/13327) The directory path scheme for on-disk Kafka/Confluent/Azure Event Hub buffers has changed.  It now uses the Action name instead of the topic name.
-
-  Upgrading to this version will invalidate (not use) old buffer files, and will require manual cleanup of the old directories.
-
-- [#13332](https://github.com/emqx/emqx/pull/13332) When an S3 Bridge is improperly configured, error messages now contain more informative and easy to read details.
-
-  * S3 Bridge configuration with invalid aggregated upload key template will no longer work. Before this change, such configuration was considered valid but the bridge would never work anyway.
-
-- [#13420](https://github.com/emqx/emqx/pull/13420) Added a schema validation that prevents configuring an empty set of topic filters for a Schema Validation.  Any such configurations will have to define at least one topic filter to be valid.  Such configurations, though, are probably very rare, as a Schema Validation with empty topics is essentially the same as having no validation at all.
+- [#13327](https://github.com/emqx/emqx/pull/13327) The fix for issues in Kafka, Confluent, and Azure Event Hubs integrations has resulted in a change to the directory path scheme for on-disk buffers of these integrations. The new scheme uses the action name instead of the topic name. Upgrading to this version will invalidate old buffer files, and require manual cleanup of the old directories.
+- [#13332](https://github.com/emqx/emqx/pull/13332) Error messages for misconfigured Amazon S3 integrations are now more descriptive and user-friendly. The Amazon S3 Sink configurations with an invalid object key templates for aggregated upload will no longer work. Before this change, such configurations were considered valid but but resulted in non-functional integrations.
+- [#13420](https://github.com/emqx/emqx/pull/13420) Added a configuration validation that prevents configuring an empty set of topic filters for a Schema Validation.  Any such configurations have to define at least one topic filter to be valid.  Such configurations, though, are probably very rare, as a Schema Validation with empty topics is essentially the same as having no validation at all.
 
 ## e5.7.0
 
