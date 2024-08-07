@@ -6,7 +6,7 @@
 
 ### 增强
 
-- [#13317](https://github.com/emqx/emqx/pull/13317) 增加了一种新的针对授权源的指标类型：`ignore`。当授权源尝试对请求进行授权但遇到不适用或出现错误导致无法决定结果的情况时，此指标计数将递增。
+- [#13317](https://github.com/emqx/emqx/pull/13317) 增加了一种新的针对授权源的指标类型：`ignore`。当授权源尝试对请求进行授权但遇到授权源不适用或出现错误导致无法决定结果的情况时，此指标计数将递增。
 
 - [#13336](https://github.com/emqx/emqx/pull/13336) 使用 CSV 或 JSON 格式的引导文件在空的 EMQX 节点或集群的内置数据库中初始化认证数据。此功能引入了新的配置项 `bootstrap_file` 和 `bootstrap_type`。
 
@@ -40,7 +40,7 @@
 
 - [#13518](https://github.com/emqx/emqx/pull/13518) 支持在 Kafka 生产者动作的 `topic` 配置中使用模板。
 
-  需确保在 Kafka 中预先存在这些主题。如果消息发送到一个不存在的主题（如果 Kafka 禁用了主题自动创建），则该消息将失败，并显示不可恢复的错误。此外，如果消息缺少足够的信息来匹配配置的模板，也会导致不可恢复的错误。例如，模板为 `t-${t}`，但消息上下文中缺少 `t` 的定义。详细信息，参考 [Kafka 动态主题](../data-integration/data-bridge-kafka.md#kafka-动态主题)。
+  需确保在 Kafka 中预先存在这些主题。如果消息发送到一个不存在的主题（如果 Kafka 禁用了主题自动创建），则该消息将失败，并显示不可恢复的错误。此外，如果消息缺少足够的信息来匹配配置的模板，也会导致不可恢复的错误。例如，模板为 `t-${t}`，但消息上下文中缺少 `t` 的定义。详细信息，参考 [配置 Kafka 动态主题](../data-integration/data-bridge-kafka.md#配置-kafka-动态主题)。
 
   此功能也适用于 Azure Event Hubs 和 Confluent 平台的生产者集成。
 
