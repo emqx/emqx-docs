@@ -177,7 +177,7 @@ EMQX v5.7.2 introduces a new functionality of dynamically assigning the values r
 
 ::: tip Note
 
-To prevent leakage of other system environment variables, the names of environment variables must have a fixed prefix `EMQXVAR_`. For example, if the function variable name read by `getenv` is `KAFKA_TOPIC`, the environment variable name set must be `EMQXVAR_KAFKA_TOPIC`.
+To prevent leakage of other system environment variables, the names of environment variables used by rule engine must have a fixed prefix `EMQXVAR_`. For example, if the variable name read by `getenv` function is `KAFKA_TOPIC`, the environment variable name must be set to `EMQXVAR_KAFKA_TOPIC`.
 
 :::
 
