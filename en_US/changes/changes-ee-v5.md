@@ -6,7 +6,7 @@
 
 ### Enhancements
 
-- [#13317](https://github.com/emqx/emqx/pull/13317) Added a new per-authorization source metric type: `ignore`.  This metric increments when an authorization source attempts to authorize a request but encounters scenarios where the authorization is not applicable or encounters an error, resulting in an undecidable outcome.
+- [#13317](https://github.com/emqx/emqx/pull/13317) Added a new per-authorization source metric type: `ignore`.  This metric increments when an authorization source attempts to authorize a request but encounters scenarios where the authorizer is not applicable or encounters an error, resulting in an undecidable outcome.
 
 - [#13336](https://github.com/emqx/emqx/pull/13336) Added functionality to initialize authentication data in the built-in database of an empty EMQX node or cluster using a bootstrap file in CSV or JSON format. This feature introduces new configuration entries, `bootstrap_file` and `bootstrap_type`.
 
