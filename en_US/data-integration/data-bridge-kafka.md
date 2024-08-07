@@ -131,7 +131,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   EMQX v5.7.2 introduced the functionality to read environment variables in rule SQL, detailed in [Use Environment Variables in Rule SQL](#use-environment-variables-in-rule-sql).
+   EMQX v5.7.2 introduced the functionality to read environment variables in Rule SQL, detailed in [Use Environment Variables in Rule SQL](#use-environment-variables).
 
    :::
 
@@ -143,7 +143,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 8. Configure the data-sending method for the Sink, including:
 
-   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Kafka Dynamic Topics](#kafka-dynamic-topics) for details. 
+   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details. 
 
    - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
 
@@ -167,9 +167,13 @@ You can also click **Integration** -> **Flow Designer** to view the topology. Th
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-### Use Environment Variables in Rule SQL
+### Configure Kafka Dynamic Topics
 
-Starting from EMQX v5.7.2, values retrieved from [environment variables](../configuration/configuration.md/#environment-variables) can be dynamically assigned to a field within messages during the SQL processing phase. This functionality uses the [getenv](../data-integration/rule-sql-builtin-functions.md#system-function) function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results. As an application of this feature, when configuring Kafka topics in Kafka Sink rule actions, you can reference fields from rule output results to set the Kafka topic. The following is a demonstration of this application:
+Starting from EMQX v5.7.2, you can dynamically configure the Kafka topics in the Kafka Producer Sink configuration using the environment variables or variable templates. This section introduces these two use cases in dynamic topic configuration.
+
+#### Use Environment Variables
+
+EMQX v5.7.2 introduces a new functionality of dynamically assigning the values retrieved from [environment variables](../configuration/configuration.md/#environment-variables) to a field within messages during the SQL processing phase. This functionality uses the [getenv](../data-integration/rule-sql-builtin-functions.md#system-function) function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results. As an application of this feature, when configuring Kafka topics in Kafka Sink rule actions, you can reference fields from rule output results to set the Kafka topic. The following is a demonstration of this application:
 
 ::: tip Note
 
@@ -177,7 +181,7 @@ To prevent leakage of other system environment variables, the names of environme
 
 :::
 
-1. Start Kafka and pre-create a kafka topic named `testtopic-in`. Refer to [Before You Start](#before-you-start) for related steps.
+1. Start Kafka and pre-create a Kafka topic named `testtopic-in`. Refer to [Before You Start](#before-you-start) for related steps.
 
 2. Start EMQX and configure environment variables. Assuming EMQX is installed via zip, you can directly specify environment variables during startup. For example, set Kafka topic `testtopic-in` as the value of environment variable `EMQXVAR_KAFKA_TOPIC`:
 
@@ -210,9 +214,9 @@ To prevent leakage of other system environment variables, the names of environme
 
    ![kafka_dynamic_topic](./assets/kafka_dynamic_topic.png)
 
-7. Complete additional configuration by referring to [Create a Rule with Kafka Sink](#create-a-rule-with-kafka-sink) for further steps, and finally click **Create** to the rule creation.
+7. Complete additional configuration by referring to [Create a Rule with Kafka Sink](#create-a-rule-with-kafka-sink) for further steps, and finally click **Create** to complete the rule creation.
 
-8. Refer to steps in [Test Kafka Producer Rule](#test-kafka-producer-rule) to send a message to Kafka:
+8. Refer to the steps in [Test Kafka Producer Rule](#test-kafka-producer-rule) to send a message to Kafka:
 
    ```bash
    mqttx pub -h 127.0.0.1 -p 1883 -i pub -t t/Connection -q 1 -m 'payload string'
@@ -228,9 +232,9 @@ To prevent leakage of other system environment variables, the names of environme
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
 
-### Kafka Dynamic Topics
+#### Use Variable Templates
 
-Starting from EMQX v5.7.2, the **Kafka Topic** field not only supports setting static topic names but also allows dynamic topic generation using variable templates. This enables constructing Kafka topics based on message content, facilitating flexible message processing and distribution. For example, you can specify formats like `device-${payload.device}` in the field to easily send messages from a specific device to topics suffixed with the device ID, such as `device-1`.
+Except for setting static topic names in the **Kafka Topic** field, you can also generate dynamic topics using variable templates. This enables constructing Kafka topics based on message content, facilitating flexible message processing and distribution. For example, you can specify formats like `device-${payload.device}` in the field to easily send messages from a specific device to topics suffixed with the device ID, such as `device-1`.
 
 For this specific example, ensure that the message payload sent to Kafka contains a `device` key to correctly render the topic. Below is an example payload:
 

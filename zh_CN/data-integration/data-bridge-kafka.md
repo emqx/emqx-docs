@@ -130,7 +130,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
    ::: tip
 
-   EMQX v5.7.2 引入了在规则 SQL 中设置读取环境变量的功能，详见[在规则 SQL 中使用环境变量](#在规则-sql-中使用环境变量)。
+   EMQX v5.7.2 引入了在规则 SQL 中设置读取环境变量的功能，详见[使用环境变量](#使用环境变量)。
 
    :::
 
@@ -142,7 +142,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 8. 配置 Sink 的数据发送方式，包括：
 
-   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见 [Kafka 动态主题](#kafka-动态主题)。
+   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[使用变量模版](#使用变量模版)。
 
    - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
 
@@ -166,9 +166,13 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-### 在规则 SQL 中使用环境变量
+### 配置 Kafka 动态主题
 
-从 EMQX v5.7.2 开始，在 SQL 处理阶段可以将从设置的[环境变量](../configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
+从 EMQX v5.7.2 开始，您可以在 Kafka 成产者 Sink 配置中使用环境变量或变量模版动态配置 Kafka 主题。本节介绍了动态主题配置的这两种用例。
+
+#### 使用环境变量
+
+EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的[环境变量](../configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
 
 ::: tip 注意
 
@@ -227,9 +231,9 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
 
-### Kafka 动态主题
+#### 使用变量模版
 
-从 EMQX v5.7.2 开始，**Kafka 主题名称**字段不仅支持设置静态主题，还支持通过变量模版构建动态主题。该功能可以根据消息内容动态地生成主题，实现灵活的消息处理和分发。例如，您可以在字段中指定类似 `device-${payload.device}` 这种格式的 Kafka 主题，便于将来自某个设备的消息发送到包含该设备 ID 后缀的主题，如 `device-1`。
+除了为 **Kafka 主题名称**字段设置静态主题，您还可以通过变量模版生成动态主题。该功能根据消息内容动态地构建主题，有助于实现灵活的消息处理和分发。例如，您可以在字段中指定类似 `device-${payload.device}` 这种格式的 Kafka 主题，便于将来自某个设备的消息发送到包含该设备 ID 后缀的主题，如 `device-1`。
 
 对于这个具体的例子，确保要发送到 Kafka 的消息 payload 对象中包含一个 `device` 键，以正确渲染主题。以下是一个 payload 示例：
 
