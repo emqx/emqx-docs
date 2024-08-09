@@ -996,3 +996,27 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
 请将 `YOUR_LICENSE_STRING` 替换为实际的 License 字符串。
+
+## exclusive topics
+
+此命令用于查看当前系统中所有排它订阅的主题。
+
+| Command               | Description                                                  |
+| --------------------- | ------------------------------------------------------------ |
+| exclusive list           | 列出所有排它主题。                                            |
+| exclusive delete \<Topic\> | 删除排它主题。                                             |
+
+### exclusive list
+
+```bash
+$ emqx ctl exclusive list
+t/1 -> client1
+```
+
+### exclusive delete \<Topic\>
+
+```bash
+$ emqx ctl topics show t/1
+ok
+```
+
