@@ -6,7 +6,7 @@ Flow Designer is an EMQX Enterprise feature.
 
 :::
 
-The Flow Designer is a powerful visual tool built upon earlier versions of the visual viewing tool Flows. It provides the capability to visualize data flows and create and edit flows, aiming to simplify and streamline the configuration and management of data processing and integration tasks.
+The Flow Designer is a powerful visual tool built upon earlier versions of the visual viewing tool called "Flows". It provides the capability to visualize data flows and create and edit flows, aiming to simplify and streamline the configuration and management of data processing and integration tasks.
 
 To access the Flows page in the EMQX Dashboard, click **Integrations** -> **Flow Designer** on the left menu. If you have already created rules or data integrations, you will see a directed acyclic graph composed of multiple nodes. Each node represents a data processing step, such as reading data from a topic, event, or Source, transforming data through rules, and forwarding data using actions or Sinks. Through Flows, you can visualize how data flows—from devices or clients through rule processing to external data systems, or vice versa, from external data systems through rule processing back to devices. Refreshing the page updates it with the latest changes in rules and data integrations.
 
