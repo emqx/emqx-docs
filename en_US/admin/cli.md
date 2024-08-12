@@ -339,6 +339,29 @@ t/1 -> emqx@127.0.0.1
 If there are a large number of topic subscriptions in the cluster, the `list` command may be time-consuming and resource-intensive.
 :::
 
+## exclusive topics
+
+This command is to view all exclusive topics in the current system or delete an exclusive topic.
+
+| Command                    | Description                |
+| -------------------------- | -------------------------- |
+| exclusive list             | List all exclusive topics. |
+| exclusive delete \<Topic\> | Delete an exclusive topic. |
+
+### exclusive list
+
+```bash
+$ emqx ctl exclusive list
+t/1 -> client1
+```
+
+### exclusive delete \<Topic\>
+
+```bash
+$ emqx ctl exclusive delete t/1
+ok
+```
+
 ## subscriptions
 
 This command is to view, add or delete clients' subscriptions.
@@ -1001,27 +1024,3 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
 You need to replace `YOUR_LICENSE_STRING` with the actual License string.
-
-## exclusive topics
-
-This command is to view all exclusived subscribed topics in current system.
-
-| Command               | Description                                                  |
-| --------------------- | ------------------------------------------------------------ |
-| exclusive list           | List all exclusived topics.                                  |
-| exclusive delete \<Topic\> | To delete a exclusived topic.                              |
-
-### exclusive list
-
-```bash
-$ emqx ctl exclusive list
-t/1 -> client1
-```
-
-### exclusive delete \<Topic\>
-
-```bash
-$ emqx ctl topics show t/1
-ok
-```
-
