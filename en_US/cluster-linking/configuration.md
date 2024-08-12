@@ -80,8 +80,69 @@ On the pop-up dialog, fill in the following fields:
 
 Click **Create** after you complete the setting. 
 
-You can see an entry for the linking to the remote cluster is created. From the **Actions** column, you can delete the linking or edit the settings.
+You can see an entry for the link to the remote cluster is created. From the **Actions** column, you can delete the linking or edit the settings.
 
-## Configure and Manage Cluster Linking via REST API
+## Manage Cluster Linking via REST API
 
-<!-- to do -->
+Cluster Linking in EMQX includes a REST API for managing links between clusters, allowing you to perform configuration tasks and monitor link statuses. The API provides both basic and advanced operations, ensuring flexibility for different management needs.
+
+### Basic REST API Operations
+
+For simpler use cases, EMQX supports basic REST API operations using the following endpoints:
+
+- **Configure a Cluster Link**:
+  - **Endpoint**: `PUT /cluster/links`
+  - **Function**: This operation allows you to update or create a new cluster link by providing the necessary configuration parameters in a single request. It is suitable for straightforward, hot configuration scenarios.
+- **Retrieve Cluster Link Information**:
+  - **Endpoint**: `GET /cluster/links`
+  - **Function**: This operation returns the current configuration and status of all existing cluster links. It is a quick way to verify and review the active links between clusters.
+
+### Advanced CRUD API Operations
+
+For more granular control over Cluster Linking, the following CRUD (Create, Read, Update, Delete) operations are available:
+
+| **Operation**                        | **Endpoint**                   | **Function**                                                 |
+| ------------------------------------ | ------------------------------ | ------------------------------------------------------------ |
+| **Create a Cluster Link**            | `POST /cluster/links`          | Establishes a new link between clusters, providing the initial configuration. |
+| **Retrieve a Specific Cluster Link** | `GET /cluster/links/{name}`    | Retrieves detailed information about a specific cluster link identified by its name. |
+| **Update a Cluster Link**            | `PUT /cluster/links/{name}`    | Modifies the settings of an existing cluster link, allowing you to update configuration details such as topics, server addresses, or authentication credentials. |
+| **Delete a Cluster Link**            | `DELETE /cluster/links/{name}` | Removes a cluster link, terminating the connection between the specified clusters. |
+
+### Monitor Cluster Link Status and Metrics
+
+In addition to configuration tasks, the API provides endpoints for monitoring the status and performance of cluster links:
+
+**Retrieve Cluster Link Status**:
+
+- **Endpoint**: `GET /cluster/links` or `GET /cluster/links/{name}`
+
+- **Function**: These endpoints return the status of all cluster links or a specific link. The response includes the overall status (`running`, `stopped`, etc.) and detailed node status information.
+
+- **Response sample**:
+
+  ```json
+  {
+    ...
+    "server": "broker.emqx.io:1883",
+    "topics": ["t/#"],
+    "status": "running",
+    "node_status": [
+      {"node": "emqx@127.0.0.1", "status": "running"}
+    ]
+  }
+  ```
+
+**Retrieve Cluster Link Metrics**:
+
+- **Endpoint**: `GET /cluster/links/{name}/metrics`
+
+- **Description**: Provides metrics related to the cluster link, such as the number of active routes (gauge type), which can help you assess the link's current load and performance.
+
+- **Response sample**:
+
+  ```json
+  {
+    "metrics": {"routers": 10240},
+    "node_metrics": [{}]
+  }
+  ```
