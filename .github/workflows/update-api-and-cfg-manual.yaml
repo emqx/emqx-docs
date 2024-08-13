@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 jobs:
-  sync-en-doc:
+  update-api-cfg-manual:
     runs-on: ubuntu-latest
     env:
       EMQX_VERSION: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.event.inputs.version }}
