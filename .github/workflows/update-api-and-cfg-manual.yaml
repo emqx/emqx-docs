@@ -45,6 +45,20 @@ jobs:
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
           merge-multiple: true
 
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: "emqx-docker"
+          repository: ${{ env.REPOSITORY }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: "emqx-enterprise-docker"
+          repository: ${{ env.REPOSITORY }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+
       - name: Create PR to update api docs and config manual
         env:
           GH_TOKEN: ${{ github.token }}
@@ -64,11 +78,22 @@ jobs:
           sed -i "s/EE_VERSION=.*/EE_VERSION=${VERSION}/" ./current-version.env
           sed -i "s/EE_MINOR_VERSION=.*/EE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
           git add current-version.env
+          EMQX_TAG=$(docker load < emqx-docker-*.tar.gz | sed 's/Loaded image: //g')
+          EMQX_ENTERPRISE_TAG=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
 
           for edition in ce ee; do
-            PROFILE=$(echo "${edition}" | sed 's/ce/emqx/g' | sed 's/ee/emqx-enterprise/g')
+            case "${edition}" in
+              ce)
+                PROFILE=emqx
+                DOCKER_IMAGE=${EMQX_TAG}
+                ;;
+              ee)
+                PROFILE=emqx-enterprise
+                DOCKER_IMAGE=${EMQX_ENTERPRISE_TAG}
+                ;;
+            esac
             for lang in en zh; do
-              docker run -d --name emqx -p 18083:18083 -e EMQX_dashboard__i18n_lang=${lang} "emqx/${PROFILE}:${EMQX_VERSION}"
+              docker run -d --name emqx -p 18083:18083 -e EMQX_dashboard__i18n_lang=${lang} "${DOCKER_IMAGE}"
               curl -fsS -m 10 --retry 10 --retry-all-errors -o /dev/null http://localhost:18083/api-docs/swagger.json
               ./rewrite-swagger.sh ${edition} ${lang}
               docker logs emqx
