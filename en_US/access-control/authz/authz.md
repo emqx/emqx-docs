@@ -145,11 +145,11 @@ You can check the connection status in the **Status** column:
 
 You can view the statistic metrics of each authorizer on the Overview page of the authorizer. The following metrics are listed:
 
-- **Allow**: Number of authorizations passed
-- **Deny**: Number of authorizations failed
-- **No match**: Number of times client authorizations data is not found
-
-- **Rate(tps)**: Execution rates of authorizations
+- **Allow**: Number of authorizations passed.
+- **Deny**: Number of authorizations failed.
+- **No match**: Number of times client authorization data is not found.
+- **Ignored**: Number of ignored authorization queries because the authorization is not applicable or encounters an error, resulting in an undecidable outcome.
+- **Rate(tps)**: Execution rates of authorizations.
 
 You can also check the authorization status and execution status on each node through **Node Status**.
 

@@ -8,14 +8,14 @@ This page introduces how to enable PSK authentication in EMQX.
 
    ::: tip
 
-   The secret value can be any string.
+   The secret value can be any string, but its length must correspond to the selected cipher. For example, if the cipher is TLS_PSK_WITH_AES_128_CBC_SHA, the secret must be 128 bits long.
 
    :::
 
    ```bash
    # One data per line, in the format of PSKIdentity:SharedSecret
-   emqx_c:BA0DB2A3-4483-45A3-A13A-91C2ADA44778
-   emqx_a:A6FC9EDF-6286-4125-AAE7-658BEAE6170C
+   emqx_c:BA0DB2A3448345A3A13A91C2ADA44778
+   emqx_a:A6FC9EDF62864125AAE7658BEAE6170C
    ```
 
 2. Add the `psk_authentication` configuration group in the `emqx.conf` configuration file.
