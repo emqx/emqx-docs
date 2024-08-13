@@ -24,6 +24,7 @@ SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中�
 | timestamp           | 事件触发时间 (单位：毫秒)                   |
 | publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
 | node                | 事件触发所在节点                            |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 SQL 示例
 
@@ -306,6 +307,7 @@ FROM "$events/delivery_dropped"
 | conn\_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
 | timestamp        | 事件触发时间 (单位：毫秒)              |
 | node             | 事件触发所在节点                       |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -345,6 +347,7 @@ FROM
 | disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
 | timestamp        | 事件触发时间 (单位：毫秒)                                    |
 | node             | 事件触发所在节点                                             |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -468,6 +471,7 @@ FROM
 | authz\_source | 认证源                                 |
 | timestamp     | 事件触发时间 (ms)                      |
 | node          | 事件触发所在节点                       |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -510,6 +514,7 @@ FROM
 | `reason_code`     | 认证结果                           |
 | `is_superuser`    | 是否是超级用户                      |
 | `is_anonymous`    | 是否是匿名用户                      |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -550,6 +555,7 @@ FROM
 | sub_props | SUBSCRIBE Properties (仅适用于 5.0) |
 | timestamp | 事件触发时间 (单位：毫秒)           |
 | node      | 事件触发所在节点                    |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -588,6 +594,7 @@ FROM
 | unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0) |
 | timestamp   | 事件触发时间 (单位：毫秒)             |
 | node        | 事件触发所在节点                      |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
