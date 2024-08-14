@@ -24,7 +24,7 @@ To ensure successful authentication, the HTTP response must adhere to the follow
 - **Authentication Data**: Must include `stored_key`, `server_key`, and `salt`, all encoded in hexadecimal.
 - **Superuser Indicator**: Use the `is_superuser` field, with possible values `true` or `false`.
 - **Client Attributes**: Optionally, you can specify [client attributes](../../client-attributes/client-attributes.md) using the `client_attrs` field. Both keys and values must be strings.
-- **Access Control List (ACL)**: Optionally include an `acl` field to define the client's permissions. Refer to [Access Control List](./acl.md) for more details.
+- **Access Control List (ACL)**: Optionally include an `acl` field to define the client's permissions. Refer to the [Access Control List](./jwt.md#access-control-list-optional) for more details.
 - **Expiration Time**: Optionally, you can set the `expire_at` field to specify when the client's authentication expires, after which the client must disconnect and re-authenticate. The value should be a Unix timestamp in seconds.
 - **HTTP Status Code**: The HTTP response should return a `200 OK` status code. Any `4xx` or `5xx` status codes will be interpreted as `ignore`, and the authentication chain will proceed without this authenticator.
 
