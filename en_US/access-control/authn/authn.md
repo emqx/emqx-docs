@@ -66,7 +66,7 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
-| SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_http.md) |
+| SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_restapi.md) |
 
 ## Authentication Chain
 
