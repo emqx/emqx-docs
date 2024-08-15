@@ -10,20 +10,21 @@ SQL 语句使用 `FROM` 来指定数据源，在 `SELECT` 和 `WHERE` 子句中�
 规则的 SQL 语句可以处理消息发布。 在一个规则语句中，用户可以用 FROM 子句指定一个或者多个主题，
 当任何消息发布到指定的主题时都会触发该规则。
 
-| 字段                | 解释                                        |
-| :------------------ | :------------------------------------------ |
-| id                  | MQTT 消息 ID                                |
-| clientid            | 消息来源 Client ID                          |
-| username            | 消息来源用户名                              |
-| payload             | MQTT 消息体                                 |
-| peerhost            | 客户端的 IPAddress                          |
-| topic               | MQTT 主题                                   |
-| qos                 | MQTT 消息的 QoS                             |
-| flags               | MQTT 消息的 Flags                           |
-| pub\_props          | PUBLISH Properties (仅适用于 MQTT 5.0)      |
-| timestamp           | 事件触发时间 (单位：毫秒)                   |
-| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒) |
-| node                | 事件触发所在节点                            |
+| 字段                | 解释                                                    |
+| :------------------ | :------------------------------------------------------ |
+| id                  | MQTT 消息 ID                                            |
+| clientid            | 消息来源 Client ID                                      |
+| username            | 消息来源用户名                                          |
+| payload             | MQTT 消息体                                             |
+| peerhost            | 客户端的 IPAddress                                      |
+| topic               | MQTT 主题                                               |
+| qos                 | MQTT 消息的 QoS                                         |
+| flags               | MQTT 消息的 Flags                                       |
+| pub\_props          | PUBLISH Properties (仅适用于 MQTT 5.0)                  |
+| timestamp           | 事件触发时间 (单位：毫秒)                               |
+| publish_received_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)             |
+| node                | 事件触发所在节点                                        |
+| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
 SQL 示例
 
@@ -214,7 +215,9 @@ FROM
 | timestamp             | 事件触发时间 (单位：毫秒)                                                                                                                                         |
 | publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)                                                                                                                       |
 | node                  | 事件触发所在节点                                                                                                                                                  |
+
 示例
+
 
 ```sql
 SELECT
@@ -306,6 +309,7 @@ FROM "$events/delivery_dropped"
 | conn\_props      | CONNECT Properties (仅适用于 MQTT 5.0) |
 | timestamp        | 事件触发时间 (单位：毫秒)              |
 | node             | 事件触发所在节点                       |
+| client_attrs | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -345,6 +349,7 @@ FROM
 | disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
 | timestamp        | 事件触发时间 (单位：毫秒)                                    |
 | node             | 事件触发所在节点                                             |
+| client_attrs     | [客户端属性](../client-attributes/client-attributes.md)      |
 
 示例
 
@@ -457,17 +462,18 @@ FROM
 
 当客户端鉴权结束时触发规则。
 
-| 字段          | 解释                                   |
-| ------------- | :------------------------------------- |
-| clientid      | 消息目的 Client ID                     |
-| username      | 消息目的用户名                         |
-| peerhost      | 客户端的 IPAddress                     |
-| topic         | MQTT 主题                              |
-| action        | publish or subscribe，发布或者订阅事件 |
-| result        | allow or deny，鉴权完成                |
-| authz\_source | 认证源                                 |
-| timestamp     | 事件触发时间 (ms)                      |
-| node          | 事件触发所在节点                       |
+| 字段          | 解释                                                    |
+| ------------- | :------------------------------------------------------ |
+| clientid      | 消息目的 Client ID                                      |
+| username      | 消息目的用户名                                          |
+| peerhost      | 客户端的 IPAddress                                      |
+| topic         | MQTT 主题                                               |
+| action        | publish or subscribe，发布或者订阅事件                  |
+| result        | allow or deny，鉴权完成                                 |
+| authz\_source | 认证源                                                  |
+| timestamp     | 事件触发时间 (ms)                                       |
+| node          | 事件触发所在节点                                        |
+| client_attrs  | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -510,6 +516,7 @@ FROM
 | `reason_code`     | 认证结果                           |
 | `is_superuser`    | 是否是超级用户                      |
 | `is_anonymous`    | 是否是匿名用户                      |
+| `client_attrs` | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -540,16 +547,17 @@ FROM
 
 当客户端订阅成功时触发规则。
 
-| 字段      | 解释                                |
-| :-------- | :---------------------------------- |
-| clientid  | 消息目的 Client ID                  |
-| username  | 消息目的用户名                      |
-| peerhost  | 客户端的 IPAddress                  |
-| topic     | MQTT 主题                           |
-| qos       | MQTT 消息的 QoS                     |
-| sub_props | SUBSCRIBE Properties (仅适用于 5.0) |
-| timestamp | 事件触发时间 (单位：毫秒)           |
-| node      | 事件触发所在节点                    |
+| 字段         | 解释                                                    |
+| :----------- | :------------------------------------------------------ |
+| clientid     | 消息目的 Client ID                                      |
+| username     | 消息目的用户名                                          |
+| peerhost     | 客户端的 IPAddress                                      |
+| topic        | MQTT 主题                                               |
+| qos          | MQTT 消息的 QoS                                         |
+| sub_props    | SUBSCRIBE Properties (仅适用于 5.0)                     |
+| timestamp    | 事件触发时间 (单位：毫秒)                               |
+| node         | 事件触发所在节点                                        |
+| client_attrs | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
@@ -578,16 +586,17 @@ FROM
 
 当客户端取消订阅成功时触发规则。
 
-| 字段        | 解释                                  |
-| :---------- | :------------------------------------ |
-| clientid    | 消息目的 Client ID                    |
-| username    | 消息目的用户名                        |
-| peerhost    | 客户端的 IPAddress                    |
-| topic       | MQTT 主题                             |
-| qos         | MQTT 消息的 QoS                       |
-| unsub_props | UNSUBSCRIBE Properties (仅适用于 5.0) |
-| timestamp   | 事件触发时间 (单位：毫秒)             |
-| node        | 事件触发所在节点                      |
+| 字段         | 解释                                                    |
+| :----------- | :------------------------------------------------------ |
+| clientid     | 消息目的 Client ID                                      |
+| username     | 消息目的用户名                                          |
+| peerhost     | 客户端的 IPAddress                                      |
+| topic        | MQTT 主题                                               |
+| qos          | MQTT 消息的 QoS                                         |
+| unsub_props  | UNSUBSCRIBE Properties (仅适用于 5.0)                   |
+| timestamp    | 事件触发时间 (单位：毫秒)                               |
+| node         | 事件触发所在节点                                        |
+| client_attrs | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
