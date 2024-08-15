@@ -269,7 +269,7 @@
             - access-control/authn/ldap
             - access-control/authn/http
         - access-control/authn/scram
-        - access-control/authn/scram_http
+        - access-control/authn/scram_restapi
         - network/psk-authentication
         - access-control/authn/user_management
     - title_en: Authorization
