@@ -1,6 +1,27 @@
 # Configure Cluster Linking
 
-This page provides guidelines for configuring the Cluster Linking feature through the configuration file and EMQX Dashboard.
+This page provides guidelines for configuring and managing the Cluster Linking feature through the EMQX Dashboard, configuration file, and REST API.
+
+## Configure Cluster Linking via Dashboard
+
+Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from the left menu. On the **Cluster Linking** page, click **Create** at the upper right corner to start creating cluster linking.
+
+![create_cluster_linking](./assets/create_cluster_linking.png)
+
+On the pop-up dialog, fill in the following fields:
+
+- **Cluster Name**: Enter the name of the remote cluster.
+- **Server Address**: Provide the MQTT listener endpoint of the remote cluster.
+- **Client ID Prefix**: Specify a prefix for ClientIDs used by MQTT connections to the remote cluster.
+- **Username**: Username for authentication to the remote cluster, if required.
+- **Password**: Password for authentication to the remote cluster, if required.
+- **Topics**: List of MQTT topic filters that specify which messages the local cluster will receive from the remote cluster.
+- **Enable TLS**: Enable this option if communication between clusters requires TLS encryption. Configure the settings such as SSL certificates.
+- **Advanced Settings**: Configure additional settings such as MQTT protocol parameters.
+
+Click **Create** after you complete the setting. 
+
+You can see an entry for the link to the remote cluster is created. From the **Actions** column, you can delete the linking or edit the settings.
 
 ## Configure Cluster Linking via Configuration File
 
@@ -60,27 +81,6 @@ Other MQTT protocol aspects, such as authentication and authorization parameters
 This rule allows MQTT clients with ClientIDs that match the regex pattern `^clink-us-east` to publish and subscribe to any topic that starts with `$LINK/`. The `$LINK/` is the control topic prefix used for Cluster Linking-related messages. This ensures that the subscribing entity receives all relevant messages under the `$LINK/` namespace, which are necessary for maintaining and managing the cluster link.
 
 Cluster Linking supports [TLS connections](../network/overview.md). If you plan to have clusters communicate over the public internet, or any other untrusted network in general, TLS is a must. EMQX also supports mutual TLS authentication, ensuring that communication is secure, confidential, and trusted.
-
-## Configure Cluster Linking via Dashboard
-
-Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from the left menu. On the **Cluster Linking** page, click **Create** at the upper right corner to start creating cluster linking.
-
-![create_cluster_linking](./assets/create_cluster_linking.png)
-
-On the pop-up dialog, fill in the following fields:
-
-- **Cluster Name**: Enter the name of the remote cluster.
-- **Server Address**: Provide the MQTT listener endpoint of the remote cluster.
-- **Client ID Prefix**: Specify a prefix for ClientIDs used by MQTT connections to the remote cluster.
-- **Username**: Username for authentication to the remote cluster, if required.
-- **Password**: Password for authentication to the remote cluster, if required.
-- **Topics**: List of MQTT topic filters that specify which messages the local cluster will receive from the remote cluster.
-- **Enable TLS**: Enable this option if communication between clusters requires TLS encryption. Configure the settings such as SSL certificates.
-- **Advanced Settings**: Configure additional settings such as MQTT protocol parameters.
-
-Click **Create** after you complete the setting. 
-
-You can see an entry for the link to the remote cluster is created. From the **Actions** column, you can delete the linking or edit the settings.
 
 ## Manage Cluster Linking via REST API
 
