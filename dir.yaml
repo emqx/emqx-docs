@@ -583,6 +583,13 @@
           path: mqtt-over-quic/features-mqtt-over-quic
         - mqtt-over-quic/getting-started
       # - mqtt-over-quic/client
+    - title_en: Cluster Linking
+      path: cluster-linking/introduction
+      edition: ee
+      collapsed: true
+      children:
+        - cluster-linking/quick-start
+        - cluster-linking/configuration
     - title_en: File Transfer over MQTT
       title_cn: 基于 MQTT 的文件传输
       path: file-transfer/introduction
