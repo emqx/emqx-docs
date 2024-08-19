@@ -75,7 +75,7 @@ Body:
 
 4. 选择 **SCRAM** 作为**认证方式**，选择 **HTTP 服务** 作为**数据源**。点击**下一步**进入**配置参数**步骤页面，如下图所示。
 
-   ![authn-scram-http](./assets/authn-scram-http.png)
+   ![authn-scram-http](./assets/authn-scram-restapi.png)
 
 5. 配置以下设置：
 

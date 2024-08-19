@@ -76,7 +76,7 @@ You can configure the SCRAM authenticator through the EMQX Dashboard.
 
 4. Select **SCRAM** as the **Mechanism** and **HTTP Server** as the **Backend**. By clicking **Next**, you will enter the **Configuration** step page, as shown below.
 
-   ![authn-scram-http](./assets/authn-scram-http.png)
+   ![authn-scram-http](./assets/authn-scram-restapi.png)
 
 5. Configure the following settings:
 
