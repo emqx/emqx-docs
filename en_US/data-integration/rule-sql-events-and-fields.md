@@ -39,22 +39,21 @@ Output:
 Refer to the table below for fields that can be selected from the received MQTT messages: <!--need tech review @WIVWIV-->
 
 
-| Field                 | Explanation                                                  |
-| :-------------------- | :----------------------------------------------------------- |
-| `id`                  | MQTT message ID                                              |
-| `clientid`            | Client ID of the publisher                                   |
-| `username`            | Username of the publisher                                    |
-| `payload`             | MQTT payload                                                 |
-| `peerhost`            | Client IP Address                                            |
-| `topic`               | MQTT topic                                                   |
-| `qos`                 | QoS level                                                    |
-| `flags`               | Flags <!--do we need more explanation?-->                    |
-| `headers`             | Internal data related to the message processing              |
-| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)                   |
-| `timestamp`           | Timestamp (unit: ms)                                         |
-| `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms)            |
-| `node`                | Node where the event is triggered<!--tech review-->          |
-| `client_attr`         | [Client attributes](../client-attributes/client-attributes.md) |
+| Field                 | Explanation                                         |
+| :-------------------- | :-------------------------------------------------- |
+| `id`                  | MQTT message ID                                     |
+| `clientid`            | Client ID of the publisher                          |
+| `username`            | Username of the publisher                           |
+| `payload`             | MQTT payload                                        |
+| `peerhost`            | Client IP Address                                   |
+| `topic`               | MQTT topic                                          |
+| `qos`                 | QoS level                                           |
+| `flags`               | Flags <!--do we need more explanation?-->           |
+| `headers`             | Internal data related to the message processing     |
+| `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)          |
+| `timestamp`           | Timestamp (unit: ms)                                |
+| `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms)   |
+| `node`                | Node where the event is triggered<!--tech review--> |
 
 ## MQTT Events
 
@@ -324,7 +323,6 @@ Refer to the table below for fields that can be selected from the received MQTT 
 | `conn_props`      | CONNECT Properties (MQTT 5.0 clients only)                   |
 | `timestamp`       | Event trigger time (unit: ms)                                |
 | `node`            | EMQX node where the event is triggered                       |
-| `client_attr`     | [Client attributes](../client-attributes/client-attributes.md) |
 
 ### Disconnect Event ("$events/client_disconnected")
 
@@ -367,7 +365,6 @@ Output:
 | `disconn_props`   | DISCONNECT Properties (MQTT 5.0 clients only)                |
 | `timestamp`       | Event trigger time (unit: ms)                                |
 | `node`            | EMQX node where the event is triggered                       |
-| `client_attr`     | [Client attributes](../client-attributes/client-attributes.md) |
 
 ### Connection Acknowlege Event ("$events/client_connack")
 
@@ -510,7 +507,6 @@ Refer to the table below for fields that can be extracted.
 | `authz_source `  | The authorization source |
 | `timestamp` | Timestamp (unit: ms)                                         |
 | `node`      | EMQX node where the event is triggered.                      |
-| `client_attr` | [Client attributes](../client-attributes/client-attributes.md) |
 
 ### Authentication Check Complete Event ("$events/client_check_authn_complete")
 
@@ -551,7 +547,6 @@ Refer to the table below for fields that can be extracted.
 | `reason_code`     | Authentication result                                  |
 | `is_superuser`    | Whether this client is a super user                    |
 | `is_anonymous`    | Whether this client is a anonymous user                |
-| `client_attr` | [Client attributes](../client-attributes/client-attributes.md) |
 
 ### Subscriber Event ("$events/session_subscribed")
 
@@ -582,17 +577,16 @@ Output:
 
 Refer to the table below for fields that can be extracted.
 
-| Field         | Explanation                                                  |
-| :------------ | :----------------------------------------------------------- |
-| `clientid`    | Client ID                                                    |
-| `username`    | Client username                                              |
-| `peerhost`    | Client IP Address                                            |
-| `topic`       | MQTT topic                                                   |
-| `qos`         | QoS levels                                                   |
-| `sub_props`   | SUBSCRIBE Properties (MQTT 5.0 client only)                  |
-| `timestamp`   | Event trigger time (unit: ms)                                |
-| `node`        | EMQX node where the event is triggered                       |
-| `client_attr` | [Client attributes](../client-attributes/client-attributes.md) |
+| Field       | Explanation                                 |
+| :---------- | :------------------------------------------ |
+| `clientid`  | Client ID                                   |
+| `username`  | Client username                             |
+| `peerhost`  | Client IP Address                           |
+| `topic`     | MQTT topic                                  |
+| `qos`       | QoS levels                                  |
+| `sub_props` | SUBSCRIBE Properties (MQTT 5.0 client only) |
+| `timestamp` | Event trigger time (unit: ms)               |
+| `node`      | EMQX node where the event is triggered      |
 
 ### Unsubcribe Event ("$events/session_unsubscribed")
 
@@ -620,17 +614,16 @@ Output:
 ```
 Refer to the table below for fields that can be extracted.
 
-| Field         | Explanation                                                  |
-| ------------- | :----------------------------------------------------------- |
-| `clientid`    | Client ID                                                    |
-| `username`    | Client username                                              |
-| `peerhost`    | Client IP Address                                            |
-| `topic`       | MQTT topic                                                   |
-| `qos`         | QoS levels                                                   |
-| `unsub_props` | UNSUBSCRIBE Properties (MQTT 5.0 clients only)               |
-| `timestamp`   | Event trigger time (unit: ms)                                |
-| `node`        | EMQX node where the event is triggered                       |
-| `client_attr` | [Client attributes](../client-attributes/client-attributes.md) |
+| Field         | Explanation                                    |
+| ------------- | :--------------------------------------------- |
+| `clientid`    | Client ID                                      |
+| `username`    | Client username                                |
+| `peerhost`    | Client IP Address                              |
+| `topic`       | MQTT topic                                     |
+| `qos`         | QoS levels                                     |
+| `unsub_props` | UNSUBSCRIBE Properties (MQTT 5.0 clients only) |
+| `timestamp`   | Event trigger time (unit: ms)                  |
+| `node`        | EMQX node where the event is triggered         |
 
 ## Data Bridges
 
