@@ -1,6 +1,22 @@
 # Built-in SQL Functions
 
-The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, encompassing [Mathematical](#mathematical-functions), [Data Type Judgment](#data-type-judgment-functions),[Data Type Conversion](#data-type-conversion-functions), [String Operations](#string-operation-functions), [Map Operations](#map-operation-functions), [Array Operations](#array-operation-functions), [Hashing](#hashing-functions), [Compression and Decompression](#compression-and-decompression-functions), [Bit Operations](#bit-operation-functions), [Bit Sequence Operations](#bit-sequence-operation-functions), [Encoding and Decoding](#encoding-and-decoding-functions), as well as [Date and Time Conversion](#date-and-time-conversion-functions).
+The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, including:
+
+- [Mathematical](#mathematical-functions),
+- [Data Type Judgment](#data-type-judgment-functions)
+- [Data Type Conversion](#data-type-conversion-functions),
+- [String Operations](#string-operation-functions),
+- [Map Operations](#map-operation-functions),
+- [Array Operations](#array-operation-functions),
+- [Hashing](#hashing-functions)
+- [Compression and Decompression](#compression-and-decompression-functions)
+- [Bit Operations](#bit-operation-functions)
+- [Bit Sequence Operations](#bit-sequence-operation-functions)
+- [Encoding and Decoding](#encoding-and-decoding-functions)
+- [Date and Time Conversion](#date-and-time-conversion-functions)
+- [UUID Functions](#uuid-functions)
+- [System Function](#system-function)
+- [Conditional Functions](#conditional-functions)
 
 In this section, all function declarations conform to the following format:
 
@@ -1492,3 +1508,29 @@ Return the value of the environment variable `Name` with the following constrain
 
 - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
 - Values are immutable once loaded from the OS environment.
+
+## Conditional Functions
+
+### coalesce(Value1: any, Value2: any) -> any
+
+Returns `Value2` if `Value1` is null.
+This is useful in cases where you want to check if a data field is null and replace it with a default value.
+
+For example, `coalesce(payload.value, 0)` returns `payload.value` if it is not null, or `0` if it is null.
+It's equivalent to SQL expression `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END`, but more concise.
+
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::
+
+### coalesce_ne(Value1: any, Value2: any) -> any
+
+Similar to `coalesce`, but returns `Value2` if `Value1` is null or empty string.
+
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::
