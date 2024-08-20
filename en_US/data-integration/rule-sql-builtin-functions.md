@@ -1,6 +1,21 @@
 # Built-in SQL Functions
 
-The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, encompassing [Mathematical](#mathematical-functions), [Data Type Judgment](#data-type-judgment-functions),[Data Type Conversion](#data-type-conversion-functions), [String Operations](#string-operation-functions), [Map Operations](#map-operation-functions), [Array Operations](#array-operation-functions), [Hashing](#hashing-functions), [Compression and Decompression](#compression-and-decompression-functions), [Bit Operations](#bit-operation-functions), [Bit Sequence Operations](#bit-sequence-operation-functions), [Encoding and Decoding](#encoding-and-decoding-functions), as well as [Date and Time Conversion](#date-and-time-conversion-functions).
+The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, including:
+
+- [Mathematical](#mathematical-functions),
+- [Data Type Judgment](#data-type-judgment-functions)
+- [Data Type Conversion](#data-type-conversion-functions),
+- [String Operations](#string-operation-functions),
+- [Map Operations](#map-operation-functions),
+- [Array Operations](#array-operation-functions),
+- [Hashing](#hashing-functions)
+- [Compression and Decompression](#compression-and-decompression-functions)
+- [Bit Operations](#bit-operation-functions)
+- [Bit Sequence Operations](#bit-sequence-operation-functions)
+- [Encoding and Decoding](#encoding-and-decoding-functions)
+- [Date and Time Conversion](#date-and-time-conversion-functions)
+- [UUID Functions](#uuid-functions)
+- [Conditional Functions](#conditional-functions)
 
 In this section, all function declarations conform to the following format:
 
@@ -1496,12 +1511,20 @@ This is useful in cases where you want to check if a data field is null and repl
 For example, `coalesce(payload.value, 0)` returns `payload.value` if it is not null, or `0` if it is null.
 It's equivalent to SQL expression `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END`, but more concise.
 
-NOTE: in EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::
 
 ### coalesce_ne(Value1: any, Value2: any) -> any
 
 Similar to `coalesce`, but returns `Value2` if `Value1` is null or empty string.
 
-NOTE: in EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::
 
 <!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
