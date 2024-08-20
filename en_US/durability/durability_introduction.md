@@ -10,6 +10,12 @@ EMQX includes a Durable Sessions feature, which allows MQTT sessions and message
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
+::: warning Important Notice
+
+This feature is available starting from EMQX v5.7.0. However, it does not yet support the persistence of shared subscription sessions, which is planned to be implemented in future versions.
+
+:::
+
 ## Basic Concepts
 
 Before learning the Durable Sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
