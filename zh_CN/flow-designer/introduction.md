@@ -55,7 +55,7 @@ Flows 页面展示了通过规则引擎、Webhook 以及 Flow 设计器创建的
 
 Flow 创建时系统将随机产生一个编号，点击编号旁边的编辑图标可以修改 Flow 的名称和描述。
 
-将鼠标移动到 Flow 中的节点上，点击节点右上角的叉便可以删除该节点。点击节点可以编辑此节点中配置的信息并保存修改。点击**开始测试**按钮可以输入模拟数据或通过真实客户端测试 Flow 是否能正确执行。
+将鼠标移动到 Flow 中的节点上，点击节点右上角的叉便可以删除该节点。点击节点可以进入编辑模式，您可以修改此节点中配置的信息并保存修改，最后点击**保存**以保存整个 Flow。点击**开始测试**按钮可以输入模拟数据或通过真实客户端测试 Flow 是否能正确执行。
 
 ## 特性与优势
 
@@ -100,6 +100,8 @@ Flow 设计器是一个功能丰富且易于使用的工具，有助于用户更
 
 2. 从数据输入（**Source**） 中拖动一个**消息**节点到画布上，并配置一个消息源主题，例如 `sensor/temperature`，然后点击**保存**。这一步通过主题指定客户端发布的消息来源。
 
+   ![messages_node](./assets/messages_node.png)
+
 3. 从数据处理 （**Processing**） 中拖动一个`数据处理`节点到画布上，并配置数据处理规则，从消息中提取以下字段：
 
    - `payload.device_id`：设置别名为 `device_id`。
@@ -112,7 +114,11 @@ Flow 设计器是一个功能丰富且易于使用的工具，有助于用户更
 
    完成后点击**保存**。
 
+   ![data_processing_node](./assets/data_processing_node.png)
+
 4. 从 **Processing** 中再拖动一个**过滤器**节点，并配置一个过滤条件以实现一个数据过滤规则。添加一个过滤项并输入 `payload.temperature`，选择操作符 `>=`，输入 `40`，然后点击**保存**。
+
+   ![filter_rule](./assets/filter_rule.png)
 
 5. 从数据输出（**Sink**）中选择一个**消息重发布**节点，并配置转发消息的主题，这里设置为 `alert`。通过设置以下 payload 将处理和转换后的数据整理为一条告警信息：
 
@@ -122,14 +128,36 @@ Flow 设计器是一个功能丰富且易于使用的工具，有助于用户更
 
    点击**保存**。
 
+   ![republish_node](./assets/republish_node.png)
+
 6. 您可以在页面上看到新建的 Flow。击页面右上角的**保存**以保存 Flow。
 
-Flow 和表单规则是互通的，您也可以在规则页面里查看刚才创建的规则 SQL 和相关配置。
+   ![flow_created](./assets/flow_created.png)
+
+   Flow 和表单规则是互通的，您也可以在规则页面里查看刚才创建的规则 SQL 和相关配置。
+
+   ![rule_in_rules_page](./assets/rule_in_rules_page.png)
 
 ### 测试 Flow
 
 1. 创建完成后，点击**保存**按钮旁的**开始测试**，将出现一个底部弹出框。
+
+   ![start_test](./assets/start_test.png)
+
 2. 点击**输入模拟数据**。您可以在弹出的页面中输入模拟数据，也可以直接使用一个真实的客户端发布消息来查看结果。该演示将使用 [MQTTX](https://mqttx.app/zh)，发布一条真实数据。
+
 3. 先发送一个低于 40 度的消息。可以看到消息没有达到条件，规则 SQL 没有执行结果。
+
+   ![message_publish_1](./assets/message_publish_1.png)
+
 4. 再发布一条温度大于 40 度的消息。可以看到 `alert` 主题接收到了告警信息。
-5. 回到测试页面，同样可以查看到测试结果成功。如果测试结果失败，有错误信息，也会显示到对应的测试结果中。
+
+   ![message_publish_2](./assets/message_publish_2.png)
+
+5. 回到测试页面，同样可以查看到测试结果成功。
+
+   ![test_success](./assets/test_success.png)
+
+   如果测试结果失败，有错误信息，也会显示到对应的测试结果中。
+
+   ![test_fail](./assets/test_fail.png)

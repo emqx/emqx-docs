@@ -10,7 +10,7 @@ The Flow Designer is a powerful visual tool that extends the capabilities of the
 
 Rules created on the Rule page and rules created in Flows are interoperable. This means you can create a rule in Flows and view its SQL and related configurations on the Rule page, or create the rule in the SQL Editor on the Rule page and then view the rule’s data flow processing configurations in Flows.
 
-<img src="./assets/flow-designer.jpg" alt="EMQX Flow Designer" style="zoom:67%;" />
+![flow-designer](./assets/flow-designer.png)
 
 ## Main Features
 
@@ -20,7 +20,7 @@ The Flows page displays all data processing workflows created using the Rules, W
 
 Clicking the **Create** button allows you to enter the Flow creation page for visual configuration. You can drag and drop to select the nodes needed for each step and connect them to implement the workflow.
 
-<img src="./assets/create-flow.jpg" alt="image-20230914175657995" style="zoom:67%;" />
+![drag_node](./assets/drag_node.png)
 
 ### Source
 
@@ -55,7 +55,7 @@ Outputs the data sources and processing results to specific nodes and external d
 
 When a Flow is created, the system will randomly generate an ID for it. Click the edit icon next to the ID to modify the Flow's name and description.
 
-To delete a node in the Flow, hover over the node and click the delete icon in the upper right corner of the node. Click on a node to edit its configuration details and save the changes. Click the **Start Testing** button to input simulated data or test the Flow with a real client to verify if it executes correctly.
+To delete a node in the Flow, hover over the node and click the delete icon in the upper right corner of the node. Click on a node to enter the editing mode, you can modify its configuration details and save the changes, then, click **Save** to save the entire Flow. Click the **Start Testing** button to input simulated data or test the Flow with a real client to verify if it executes correctly.
 
 ## Advantages
 
@@ -133,8 +133,10 @@ Sample data to be republished:
 6. You will see the newly created Flow on the page. Click **Save** in the upper right corner to save the Flow.
 
    ![flow_created](./assets/flow_created.png)
-
-Flows and form rules are interoperable; you can also view the SQL and related configurations of the rules created earlier on the Rule page.
+   
+   Flows and form rules are interoperable. You can also view the SQL and related configurations of the rules created earlier on the Rule page.
+   
+   ![rule_in_sql_editor](./assets/rule_in_sql_editor.png)
 
 ### Test the Flow
 
