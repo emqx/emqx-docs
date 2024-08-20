@@ -15,6 +15,7 @@ The rule engine proffers a variety of built-in functions. You can utilize these 
 - [Encoding and Decoding](#encoding-and-decoding-functions)
 - [Date and Time Conversion](#date-and-time-conversion-functions)
 - [UUID Functions](#uuid-functions)
+- [System Function](#system-function)
 - [Conditional Functions](#conditional-functions)
 
 In this section, all function declarations conform to the following format:
