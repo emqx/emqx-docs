@@ -104,7 +104,7 @@ This section demonstrates how to create a rule with an Azure Event Hubs Sink add
 7. Select the `my-azure-event-hubs` you just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-connector).
 
 8. Configure the Sink information.
-   - **Event Hub Name**: Enter the name of the Event Hub to be used. Note: Variables are not supported here.
+   - **Event Hub Name**: Enter the name of the Event Hub to be used. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Configure Kafka Dynamic Topics](./data-bridge-kafka.md#configure-kafka-dynamic-topics) for details. 
    - **Azure Event Hub Headers**: Enter a placeholder to be used as headers that will be added to the messages when being published to Azure Event Hub.
    - **Azure Event Hub Header value encode mode**: Select the value encode mode for the header; optional values are `none` or `json`.
    - **Extra Azure Event Hub headers**: You can click **Add** to provide more key-value pairs for Azure Event Hubs headers.

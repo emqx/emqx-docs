@@ -88,6 +88,9 @@ You need to configure the following JWKS-specific configuration items:
 
 - **JWKS Server**: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
 - **JWKS Refresh Interval**: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
+- **Headers**: Specify any additional HTTP headers that must be included in the requests to the JWKS server. Adding these HTTP headers ensures that the requests to the JWKS server are properly formatted according to your server's requirements. This configuration allows users to add key-value pairs, for example:
+  - **Key**: `Accept`
+  - **Value**: `application/json`
 
 Click **Create** to complete the configuration.
 

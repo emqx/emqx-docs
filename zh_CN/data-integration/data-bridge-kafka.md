@@ -122,9 +122,19 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
      "t/#"
    ```
 
-   注意：如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试 SQL 规则。
+   ::: tip
 
-5. 点击 + **添加动作** 按钮来定义规则触发的动作。从**动作类型**下拉列表中选择 **Kafka 生产者**，保持**动作**下拉框为默认的”创建动作“选项，您也可以从**动作**下拉框中选择一个之前已经创建好的 Kafka 生产者动作。此处我们创建一个全新的规则并添加到规则中
+   如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试 SQL 规则。
+
+   :::
+
+   ::: tip
+
+   EMQX v5.7.2 引入了在规则 SQL 中设置读取环境变量的功能，详见[使用环境变量](#使用环境变量)。
+
+   :::
+
+5. 点击 + **添加动作** 来创建规则将触发的动作。从**动作类型**下拉列表中选择 **Kafka 生产者**，保持**动作**下拉框为默认的`创建动作`选项，您也可以从**动作**下拉框中选择一个之前已经创建好的 Kafka 生产者动作。此处我们创建一个全新的规则并添加到规则中。
 
 6. 在下方的表单中输入 Sink 的名称与描述。
 
@@ -132,11 +142,16 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 8. 配置 Sink 的数据发送方式，包括：
 
-   - **Kafka 主题名称**：输入 `testtopic-in`。注意：此处不支持变量。
+   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[使用变量模版](#使用变量模版)。
+
    - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
+
    - **消息的键**：Kafka 消息键。在此输入一个字符串，可以是纯字符串或包含占位符 (${var}) 的字符串。
+
    - **消息的值**：Kafka 消息值。在此输入一个字符串，可以是纯字符串或包含占位符 (${var}) 的字符串。
+
    - **分区选择策略**：选择生产者向 Kafka 分区分发消息的方式。
+
    - **压缩**：指定是否使用压缩算法压缩/解压 Kafka 消息中的记录。
 
 9. 高级设置（可选）：请参阅 [高级配置](#高级配置)。
@@ -150,6 +165,91 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 您也可以点击 **集成** -> **Flow 设计器** 查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送并保存到 Kafka。
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+
+### 配置 Kafka 动态主题
+
+从 EMQX v5.7.2 开始，您可以在 Kafka 成产者 Sink 配置中使用环境变量或变量模版动态配置 Kafka 主题。本节介绍了动态主题配置的这两种用例。
+
+#### 使用环境变量
+
+EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的[环境变量](../configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
+
+::: tip 注意
+
+为了防⽌系统其他的环境变量泄露，环境变量的名称必须有⼀个固定前缀 `EMQXVAR_ `。例如， `getenv` 读取的函数变量名为 `KAFKA_TOPIC` ，那么设置的环境变量名称必须是 `EMQXVAR_KAFKA_TOPIC` 。 
+
+:::
+
+1. 启动 Kafka 并预先创建 Kafka 主题 `testtopic-in`，可以参考[准备工作](#准备工作)中的相关步骤。
+
+2. 启动 EMQX 并配置环境变量。假设 EMQX 使⽤ zip 的⽅式安装，可以在启动时直接为其指定环境变量，例如，将 Kafka 主题 `testtopic-in` 设置为环境变量 `EMQXVAR_KAFKA_TOPIC` 的值。
+
+   ```bash
+   EMQXVAR_KAFKA_TOPIC=testtopic-in bin/emqx start
+   ```
+
+3. 配置连接器，可以参考[创建 Kafka 生产者连接器](#创建-kafka-生产者连接器)。
+
+4. 配置 Kafka Sink 规则。在 **SQL 编辑器** 中输入以下语句：
+
+   ```sql
+   SELECT
+     getenv(`EMQXVAR_KAFKA_TOPIC`) as kafka_topic,
+     payload
+   FROM
+     "t/#"
+   ```
+
+   ![kafka_dynamic_topic_sql](./assets/kafka_dynamic_topic_sql.png)
+
+5. 启用调试功能测试 SQL，环境变量的值 `testtopic-in` 应被成功读取。
+
+   ![kafka_dynamic_topic_sql_test](./assets/kafka_dynamic_topic_sql_test.png)
+
+6. 点击右侧**动作输出**下的**添加动作**，为规则添加一个 Kafka 生产者动作。
+
+   - **连接器**：选择之前创建的连接器 `test-kafka`。
+   - **Kafka 主题名称**：使用变量模版的格式配置为 SQL 规则的输出变量 `${kafka_topic}`。
+
+   ![kafka_dynamic_topic](./assets/kafka_dynamic_topic.png)
+
+7. 其余配置可以参考[创建 Kafka Sink 规则](#创建-kafka-sink-规则)中的相关步骤，最后点击**创建**完成 Sink 规则创建。
+
+8. 参考[测试 Kafka Sink 规则](#测试-kafka-sink-规则)中的步骤向 Kafka 发送一条消息：
+
+   ```bash
+   mqttx pub -h 127.0.0.1 -p 1883 -i pub -t t/Connection -q 1 -m 'payload string'
+   ```
+
+   可以看到 Kafka `testtopic-in` 主题有消息产⽣:
+
+   ```bash
+   bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
+     --topic testtopic-in
+   
+   {"payload":"payload string","kafka_topic":"testtopic-in"}
+   {"payload":"payload string","kafka_topic":"testtopic-in"}
+   ```
+
+#### 使用变量模版
+
+除了为 **Kafka 主题名称**字段设置静态主题，您还可以通过变量模版生成动态主题。该功能根据消息内容动态地构建主题，有助于实现灵活的消息处理和分发。例如，您可以在字段中指定类似 `device-${payload.device}` 这种格式的 Kafka 主题，便于将来自某个设备的消息发送到包含该设备 ID 后缀的主题，如 `device-1`。
+
+对于这个具体的例子，确保要发送到 Kafka 的消息 payload 对象中包含一个 `device` 键，以正确渲染主题。以下是一个 payload 示例：
+
+```json
+{
+    "topic": "t/devices/data",
+    "payload": {
+        "device": "1",
+        "temperature": 25.6,
+        "humidity": 60.2,
+    }
+```
+
+如果未包含此键，将导致主题渲染失败，进而导致消息被丢弃且无法恢复。
+
+您还需要在 Kafka 中预先创建所有被解析出的主题，例如 `device-1`，`device-2` 等。如果模板解析为一个在 Kafka 中不存在的主题名称，或者 Kafka 不允许自动创建主题，消息同样会因无法恢复的错误而被丢弃。
 
 ## 测试 Kafka Sink 规则
 

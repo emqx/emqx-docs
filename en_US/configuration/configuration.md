@@ -48,6 +48,20 @@ Some configuration items cannot be overridden, for example, `node.name`.
 
 Since version 5.1, when cluster configuration changes, EMQX backups the `cluster.hocon` file before overwriting it. The backup files are suffixed with a timestamp of the node's local time. At most 10 backup files can be kept.
 
+## Configuration Paths
+
+If we consider the whole EMQX config as a tree, to reference a primitive value, we can use dot-separated names from string for the path from the tree root (always a Struct) down to the primitive values at tree-leaves.
+
+Each segment of the dotted string is a Struct filed name or Map key. For Array elements, 1-based index is used.
+
+Below are some examples:
+
+```bash
+node.name = "emqx.127.0.0.1"
+zone.zone1.max_packet_size = "10M"
+authentication.1.enable = true
+```
+
 ## HOCON Configuration Format
 
 From EMQX v5.0, EMQX uses [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
@@ -524,6 +538,10 @@ Below are the functions that can be used in the expressions:
   - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
   - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
   - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
+- **System functions**:
+  - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
+    - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
+    - Values are immutable once loaded from the OS environment.
 
 #### Conditions
 
@@ -562,18 +580,3 @@ As the default behavior of scripting environments like Bash, Variform expression
 - `iif("", "Value if true", "Value if false")`: Returns `Value if false`
 - `iif("hello", "Value if true", "Value if false")`: Returns `Value if true`
 - `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`: Returns `foo` if `clientid` starts with `foo.`, otherwise `bar`.
-
-
-## Configuration Paths
-
-If we consider the whole EMQX config as a tree, to reference a primitive value, we can use dot-separated names from string for the path from the tree root (always a Struct) down to the primitive values at tree-leaves.
-
-Each segment of the dotted string is a Struct filed name or Map key. For Array elements, 1-based index is used.
-
-Below are some examples
-
-```bash
-node.name = "emqx.127.0.0.1"
-zone.zone1.max_packet_size = "10M"
-authentication.1.enable = true
-```
