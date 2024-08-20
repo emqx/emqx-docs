@@ -1486,6 +1486,22 @@ Generates a version 4 UUID without hyphens. Example:
 uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
-## <!--Schema Registry and Sparkplug B Functions-->
+## Conditional Functions
+
+### coalesce(Value1: any, Value2: any) -> any
+
+Returns `Value2` if `Value1` is null.
+This is useful in cases where you want to check if a data field is null and replace it with a default value.
+
+For example, `coalesce(payload.value, 0)` returns `payload.value` if it is not null, or `0` if it is null.
+It's equivalent to SQL expression `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END`, but more concise.
+
+NOTE: in EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+### coalesce_ne(Value1: any, Value2: any) -> any
+
+Similar to `coalesce`, but returns `Value2` if `Value1` is null or empty string.
+
+NOTE: in EMQX rule SQL, a null-value's string form is by default `'undefined'`.
 
 <!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->

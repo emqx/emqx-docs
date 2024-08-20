@@ -1479,3 +1479,21 @@ uuid_v4() = 'f5bb7bea-a371-4df7-aa30-479add04632b'
 uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
+
+## 条件函数
+
+### coallesce(Value1: any, Value2: any, ...) -> any
+
+如果 `Value1` 为空值，则返回 `Value2`。
+在需要检查数据字段是否为空值，并替换为默认值的情况下非常有用。
+
+例如，`coalesce(payload.value, 0)` 如果 `payload.value` 不为 null，则返回 `payload.value`，否则返回 `0`。
+它相当于 SQL 表达式 `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END`，但更简洁。
+
+注意：在 EMQX 规则 SQL 中，默认情况下，空值转换为字符串后是 `'undefined'`。
+
+### coalesce_ne(Value1: any, Value2: any) -> any
+
+类似于 `coalesce`，但如果 `Value1` 为空值或空字符串，则返回 `Value2`。
+
+注意：在 EMQX 规则 SQL 中，默认情况下，空值转换为字符串后是 `'undefined'`。
