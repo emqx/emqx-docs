@@ -732,6 +732,7 @@ Del cluster_trace mytraces_ip successfully
 | listeners stop \<Identifier\>    | 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。 |
 | listeners start \<Identifier\>   | 启动一个监听器。                                             |
 | listeners restart \<Identifier\> | 重启一个监听器。                                             |
+| listeners enable \<Identifier\> <true/false> | 启用或禁用一个监听器。                           |
 
 ### listeners
 

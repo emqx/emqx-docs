@@ -737,6 +737,7 @@ This command is used to manage listeners.
 | listeners stop \<Identifier\>    | Stop a listener. Identifier is in the format `{type}:{name}`, e.g., `tcp:default`. |
 | listeners start \<Identifier\>   | Start a listener.                                            |
 | listeners restart \<Identifier\> | Restart a listener.                                          |
+| listeners enable \<Identifier\> <true/false> | Enable or disable a listener.                    |
 
 ### listeners
 
