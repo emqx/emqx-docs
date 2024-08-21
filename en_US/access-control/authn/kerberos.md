@@ -1,24 +1,34 @@
 # MQTT 5.0 Enhanced Authentication - Kerberos
 
-Kerberos is a network authentication protocol that works on the basis of "tickets" to allow nodes communicating over a non-secure network to prove their identity to one another in a secure manner. It is designed to provide strong authentication for client/server applications by using secret-key cryptography.
+Kerberos is a network authentication protocol that uses "tickets" to allow nodes to securely prove their identity to one another over a non-secure network. It is designed to provide strong authentication for client/server applications through secret-key cryptography. 
+
+EMQX integrates Kerberos authentication following the SASL/GSSAPI mechanism from RFC 4422. The Generic Security Services Application Program Interface (GSSAPI) provides a standardized API that abstracts the details of the Kerberos protocol, allowing secure communication between the MQTT clients and the server without requiring the application to manage the specifics of the Kerberos authentication process.
+
+This page introduces how to configure the Kerberos authenticator in EMQX.
 
 ::: tip
-Kerberos authenticator only supports MQTT 5.0 connection.
+Enhanced authentication in MQTT is only supported starting from protocol version 5.
+
+Since there is no mechanism negotiation, the client must explicitly specify `GSSAPI-KERBEROS` as the authentication mechanism.
+
 :::
 
-## Prerequisites
+## Prerequisites for Configuration
+
+Before configuring Kerberos authentication in EMQX, ensure that your environment meets the requirements, including installing essential libraries and properly setting up the Kerberos system.
 
 ### Install Kerberos Library
 
-EMQX makes use of the MIT Kerberos library to authenticate both server itself and clients. Before configuring the Kerberos authenticator, you need to install the MIT Kerberos library on the EMQX node.
+Before configuring the Kerberos authenticator, you must install the MIT Kerberos library on the EMQX node.
 
-On Debian/Ubuntu, the required package are `libsasl2-2` and `libsasl2-modules-gssapi-mit`.
+- On Debian/Ubuntu, the required packages are `libsasl2-2` and `libsasl2-modules-gssapi-mit`.
 
-On Redhat, the required package are `krb5-libs` and `cyrus-sasl-gssapi`.
+- On Redhat, the required packages are `krb5-libs` and `cyrus-sasl-gssapi`.
+
 
 ### Configure Kerberos Library
 
-The Kerberos library configuration file is `/etc/krb5.conf`. The file contains the configuration information for the Kerberos library, including the realms and KDCs. The Kerberos library uses this file to locate the KDCs and realms.
+The Kerberos library configuration file is `/etc/krb5.conf`. The file contains the configuration information for the Kerberos library, including the realms and Key Distribution Centers (KDCs). The Kerberos library uses this file to locate the KDCs and realms.
 
 Here is an example of a `krb5.conf` file:
 
@@ -36,19 +46,27 @@ Here is an example of a `krb5.conf` file:
 
 ### Keytab Files
 
-To test the Kerberos authenticator, you need to have a KDC (Key Distribution Center) server running and a valid keytab files for the server and clients.
+To configure the Kerberos authenticator, you need a running KDC (Key Distribution Center) server and valid keytab files for both the server and clients. Keytab files store cryptographic keys associated with the server's principal. They allow the server to authenticate to the Kerberos KDC without manual password entry.
 
-EMQX can only support keytab file at the default location. You may try to configure system default value using environment variable `KRB5_KTNAME` or set `default_keytab_name` in `/etc/krb5.conf`.
+EMQX can only support keytab files at the default location. You can configure the system default value by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
 
-## Configure with Dashboard
+## Configure via Dashboard
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **GSSAPI** as **Mechanism**, and **Kerberos** as **Backend**, this will lead us to the **Configuration** tab.
+In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page. Click **Create** at the top right corner, then select **GSSAPI** as the **Mechanism**, and **Kerberos** as the **Backend**. Click **Next** to go to the **Configuration** step.
 
-Set Kerberos principal for the server. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`.
+Configure the following fields:
 
-NOTE: The realm in use has to be configured in `/etc/krb5.conf` in EMQX nodes.
+- **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`. 
 
-## Configure with Configuration Items
+  Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
+
+- **Keytab File**: Specify the path to the Kerberos keytab file.
+
+  Note: The keytab file must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+
+Click **Create** to complete the configuration.
+
+## Configure via Configuration Items
 
 Sample configuration:
 
@@ -60,32 +78,70 @@ Sample configuration:
   }
 ```
 
-where `principal` is the server principal which must be found in the system default keytab file.
+The `principal` is the server principal, which must be present in the system's default keytab file.
 
-## Common Issues
+## Authentication Flow
 
-- Error message `Keytab contains no suitable keys for mqtt/cluster1.example.com@EXAMPLE.COM`: The keytab file does not contain the required keys for the principal. Check if the default keytab file is correctly configured. Inspect the keytab file using `klist -k` command. e.g. `klist -kte /etc/krb5.keytab`. Please note that currently EMQX can only support keytab file at the default location. When this error happenss, the current system default keytab file path is also returned in the error message. You may try to configure system default value using environment variable `KRB5_KTNAME` or set `default_keytab_name` in `/etc/krb5.conf`.
+The following diagram shows how the authentication process works.
 
-- Error message `invalid_server_principal_string`: The Kerberos principal string must be of the form `service/SERVER-FQDN@REALM.NAME`.
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
 
-- Error message `Cannot find KDC for realm "EXAMPLE.COM"`: The `EXAMPLE.COM` realm is missing in the `/etc/krb5.conf` file's `realms` section.
+    Client->>Server: CONNECT (Authentication Method="GSSAPI-KERBEROS", Authentication Data=ClientInitialToken)
+    Server-->>Client: AUTH (rc=0x18, Authentication Method="GSSAPI-KERBEROS", Authentication Data=ServerInitialToken)
+    loop SASL Challenge-Response
+        Client->>Server: AUTH (Authentication Method="GSSAPI-KERBEROS")
+        Server-->>Client: AUTH (Authentication Method="GSSAPI-KERBEROS")
+    end
+    Server-->>Client: CONNACK (rc=0, Authentication Method="GSSAPI-KERBEROS")
+```
 
-- Error message `Cannot contact any KDC for realm 'EXAMPLE.COM'`: The KDC service is not running or not reachable.
+## Common Issues and Troubleshooting
 
-- Error message `Resource temporarily unavailable`: The kdc service configured in `/etc/krb5.conf` is not running or not reachable.
+Here’s a guide to resolving some common issues you may encounter when configuring Kerberos authentication in EMQX:
 
-- Error message `Preauthentication failed`: The server ticket is not valid. Check if the keytab file is outdated.
+### `Keytab contains no suitable keys for mqtt/cluster1.example.com@EXAMPLE.COM`
 
-## Authtiocation Flow
+**Cause:** The keytab file does not contain the required keys for the principal. 
 
-- Client to Server CONNECT Authentication Method="GS2-KRB5"
+**Solution:**
 
-- Server to Client AUTH rc=0x18 Authentication Method="GS2-KRB5"
+- Ensure that the default keytab file is correctly configured.
 
-- Client to Server AUTH rc=0x18 Authentication Method="GS2-KRB5" Authentication Data=initial context token
+- Use the `klist -k` command to inspect the keytab file. For example: `klist -kte /etc/krb5.keytab`.
 
-- Server to Client AUTH rc=0x18 Authentication Method="GS2-KRB5" Authentication Data=reply context token
+  Note that EMQX currently supports keytab files only at the default location. If this error occurs, the system will return the path of the current default keytab file in the error message.
 
-- Client to Server AUTH rc=0x18 Authentication Method="GS2-KRB5"
+- Try to configure the system default keytab file path by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
 
-- Server to Client CONNACK rc=0 Authentication Method="GS2-KRB5" Authentication Data=outcome of authentication
+### `invalid_server_principal_string`
+
+**Cause:** The Kerberos principal string is incorrectly formatted. 
+
+**Solution:** Ensure that the Kerberos principal string is in the correct format: `service/SERVER-FQDN@REALM.NAME`.
+
+### `Cannot find KDC for realm "EXAMPLE.COM"`
+
+**Cause:** The specified Kerberos realm (`EXAMPLE.COM`) is not listed in the `/etc/krb5.conf` file's `realms` section. 
+
+**Solution:** Add the missing realm information to the `realms` section of your `/etc/krb5.conf` file.
+
+### `Cannot contact any KDC for realm "EXAMPLE.COM"`
+
+**Cause:** The KDC service for the specified realm is either not running or cannot be reached. 
+
+**Solution:** Verify that the KDC service is running and accessible. Check network connectivity and ensure the KDC server is correctly configured.
+
+### `Resource temporarily unavailable`
+
+**Cause:** The KDC service configured in `/etc/krb5.conf` is either not running or not reachable. 
+
+**Solution:** Make sure the KDC service is operational and that the EMQX node can communicate with it.
+
+### `Preauthentication failed`
+
+**Cause:** The server ticket is invalid, possibly due to an outdated keytab file.
+
+**Solution:** Verify that the keytab file is up to date and contains the correct credentials.
