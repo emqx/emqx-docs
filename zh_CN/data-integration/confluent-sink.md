@@ -220,7 +220,7 @@ confluent kafka topic consume -b testtopic-in
 
 8. 配置 Sink 的数据发送方式，包括：
 
-   - **Kafka 主题名称**：输入 `testtopic-in`。注意：此处不支持变量。
+   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[配置 Kafka 动态主题](./data-bridge-kafka.md#配置-kafka-动态主题)。
 
    - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
 
