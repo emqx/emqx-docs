@@ -514,7 +514,7 @@ FROM
 | `reason_code`     | 认证结果                           |
 | `is_superuser`    | 是否是超级用户                      |
 | `is_anonymous`    | 是否是匿名用户                      |
-| client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
+| `client_attrs`        | [客户端属性](../client-attributes/client-attributes.md) |
 
 示例
 
