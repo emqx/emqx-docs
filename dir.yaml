@@ -340,6 +340,9 @@
     - title_en: AWS S3
       title_cn: AWS S3
       path: data-integration/s3
+    - title_en: Azure Blob Storage
+      title_cn: Azure Blob Storage
+      path: data-integration/azure-blob-storage
     - title_en: Azure Event Hubs
       title_cn: Azure Event Hubs
       path: data-integration/data-bridge-azure-event-hub
