@@ -520,6 +520,7 @@
       children:
         - dashboard/sso-ldap
         - dashboard/sso-saml
+        - dashboard/sso-oidc
     - dashboard/audit-log
     - title_en: Rate Limit
       title_cn: 速率限制
