@@ -101,8 +101,7 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IotDB 通信。
 3. 在 **创建连接器** 页面上，选择 **Apache IoTDB** 作为连接器类型，然后点击 **下一步**。
 4. 输入连接器的名称和描述。名称应为大写和小写字母以及数字的组合，例如，`my_iotdb`。
 5. 如果要为该连接器使用 Thrift 协议，请将 `driver` 更改为 `thrift`. 
-6. 在 **IoTDB REST 服务基础 URL** 中输入 `http://localhost:18080`。
-   如果这是一个基于 Thrift 的连接器，则将 `Server` 设置为 IotDB 的 Thrift 服务器地址。
+6. 如果使用通过 REST API 连接，在 **IoTDB REST 服务基础 URL** 中输入 `http://localhost:18080`。如果这是一个基于 Thrift 协议的连接器，则将 **Server** 设置为 IotDB 的 Thrift 服务器地址。
 7. 输入连接器访问 Apache IoTDB 服务器的用户名和密码。
 8. 其他选项保留默认。关于 **高级设置** 的配置（可选）：参见[高级配置](#高级配置)。
 9. 在点击 **创建** 之前，您可以点击 **测试连接** 以测试连接器是否能够连接到 Apache IoTDB。
