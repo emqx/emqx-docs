@@ -36,3 +36,5 @@
   This change doesn't affect Enterprise Edition users.
 
   - Obsolete and unused `cluster.core_nodes` configuration parameter has been removed.
+
+- [#13372](https://github.com/emqx/emqx/pull/13372) Now connections accepted by gatewas are limited by the license.

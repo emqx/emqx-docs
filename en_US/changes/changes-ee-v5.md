@@ -6,14 +6,20 @@
 
 ### Enhancements
 
-- [#12418](https://github.com/emqx/emqx/pull/12418) For JWT authentication, the claims to verify now may be provided as a list of maps:
+### Core MQTT Functionality
+
+- [#13009](https://github.com/emqx/emqx/pull/13009) Changed the log level of message receive pause from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
+
+### Authentication and Authorization
+
+- [#12418](https://github.com/emqx/emqx/pull/12418) For JWT authentication, the claims to verify now may be provided as a list of objects:
   ```
   [
-  {
-  name = "claim_name"
-  value = "${username}"
-  },
-  ...
+    {
+      name = "claim_name",
+      value = "${username}"
+    },
+    ...
   ]
   ```
 
@@ -23,21 +29,11 @@
 
   Improved the documentation for the `verify_claims` parameter.
 
-- [#13009](https://github.com/emqx/emqx/pull/13009) Changed the log level of message receive pause from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
+- [#13534](https://github.com/emqx/emqx/pull/13534) Add trace logging when superuser skipped authz check.
 
-- [#13144](https://github.com/emqx/emqx/pull/13144) Emit a `warning` level throttled log when bridge buffers are overflown and messages get dropped. Previously, the log events had `info` level and were not visible with the default log level.
+### Data Integrations
 
-- [#13202](https://github.com/emqx/emqx/pull/13202) Introduce `emqx_cli conf cluster_sync fix` to address cluster inconsistencies. It synchronizes the configuration of the node with the largest `tnx_id` to all nodes.
-
-- [#13250](https://github.com/emqx/emqx/pull/13250) Added a new `cluster.discovery_strategy` value: `singleton`.  By choosing this option, there will be effectively no clustering, and the node will reject connection attempts to and from other nodes.
-
-- [#13370](https://github.com/emqx/emqx/pull/13370) Add a new version of `wildcard_optimized` storage layout for the durable storage.
-
-  Improvements:
-
-  - New layout does not have an inherent latency
-
-  - MQTT messages are serialized into a much more space-efficient format
+- [#13144](https://github.com/emqx/emqx/pull/13144) Emit a `warning` level throttled log when bridge buffers are overflown and messages get dropped. Previously, the log events had `info` level and were not visible with the default log level. The log message `data_bridge_buffer_overflow` is throttled to avoid excessive logging.
 
 - [#13492](https://github.com/emqx/emqx/pull/13492) The lists of actions and sources that depend on a given connector are now returned in the `GET /connectors` and `GET /connectors/:id` APIs.
 
@@ -52,18 +48,8 @@
   When `direct_dispatch` is set to `true` (or rendered as `true` from template) the message will be directly dispatched to subscribers.
   This can be used to avoid to triggering other rules or recursively trigger the self-rule.
 
-- [#13524](https://github.com/emqx/emqx/pull/13524) Added CLI interface `emqx ctl exclusive` for the feature exclusive topics.
-
-- [#13534](https://github.com/emqx/emqx/pull/13534) Add trace logging when superuser skipped authz check.
-
 - [#13573](https://github.com/emqx/emqx/pull/13573) Add `client_attrs` to SQL context for client connectivity events and message `publish` event.
   Now one can access client attributes in rule SQL like `SELECT client_attrs.attr1 AS attribute1` and use `${attribute1}` in data integration actions.
-
-
-- [#13597](https://github.com/emqx/emqx/pull/13597) Add thin wrapper functions for plugins to let them store and manage the certificate files used by the plugins themselves.
-  This can prevent the certificates used by the plugins from being accidentally deleted by the certificate gc function.
-
-- [#13626](https://github.com/emqx/emqx/pull/13626) Added a new command `emqx ctl listeners enable <Identifier> <Bool>` to enable/disable a listener.
 
 - [#13640](https://github.com/emqx/emqx/pull/13640) Add two new rule SQL functions `coalesce/2` and `coalesce_ne/2`.
 
@@ -72,19 +58,17 @@
 
   ```
   SELECT
-  CASE
-  WHEN is_null(payload.path.to.value) THEN
-  0
-  ELSE
-  payload.path.to.value
-  END AS my_value
+    CASE
+      WHEN is_null(payload.path.to.value) THEN
+        0
+      ELSE
+        payload.path.to.value
+    END AS my_value
   ```
 
   can be as simple as: `SELECT coalesce(payload.path.to.value, 0) AS my_value`.
 
-
 - [#12959](https://github.com/emqx/emqx/pull/12959) Added a new option to configure a topic solely for health check purposes in Kafka Producer connectors.
-
   By configuring this option, it's now possible to more accurately detect connection issues towards partition leaders, such as wrong or missing credentials that prevent establishing the connection.
 
 - [#12961](https://github.com/emqx/emqx/pull/12961) Added the option to customize group ids in advance for Kafka Consumer sources.
@@ -99,43 +83,64 @@
 
   ```hocon
   message_transformation {
-  transformations = [
-  {
-  name = mytransformation
-  failure_action = drop
-  payload_decoder = {type = avro, schema = myschema}
-  payload_encoder = {type = json}
-  operations = [
-  {key = "topic", value = "concat([client_attrs.tenant, '/', topic])"}
-  ]
+    transformations = [
+      {
+        name = mytransformation
+        failure_action = drop
+        payload_decoder = {type = avro, schema = myschema}
+        payload_encoder = {type = json}
+        operations = [
+          {key = "topic", value = "concat([client_attrs.tenant, '/', topic])"}
+        ]
+      }
+    ]
   }
-  ]
-  }
-
   ```
 
 - [#13415](https://github.com/emqx/emqx/pull/13415) Implemented Couchbase data integration.
 
 - [#13463](https://github.com/emqx/emqx/pull/13463) Now, when GCP PubSub Producer action receives a response from PubSub with the HTTP status codes 502 or 503, it'll retry the request until it succeeds or the message TTL is reached.
 
+- [#13546](https://github.com/emqx/emqx/pull/13546) Added the option to configure the query mode for Pulsar Producer action.
+
+
+
+### Operations
+
+- [#13202](https://github.com/emqx/emqx/pull/13202) Introduce `emqx_cli conf cluster_sync fix` to address cluster inconsistencies. It synchronizes the configuration of the node with the largest `tnx_id` to all nodes.
+
+- [#13250](https://github.com/emqx/emqx/pull/13250) Added a new `cluster.discovery_strategy` value: `singleton`.  By choosing this option, there will be effectively no clustering, and the node will reject connection attempts to and from other nodes.
+
+- [#13370](https://github.com/emqx/emqx/pull/13370) Add a new version of `wildcard_optimized` storage layout for the durable storage.
+
+  Improvements:
+
+  - New layout does not have an inherent latency
+
+  - MQTT messages are serialized into a much more space-efficient format
+
+- [#13524](https://github.com/emqx/emqx/pull/13524) Added CLI interface `emqx ctl exclusive` for the feature exclusive topics.
+
+- [#13597](https://github.com/emqx/emqx/pull/13597) Add thin wrapper functions for plugins to let them store and manage the certificate files used by the plugins themselves.
+  This can prevent the certificates used by the plugins from being accidentally deleted by the certificate gc function.
+
+- [#13626](https://github.com/emqx/emqx/pull/13626) Added a new command `emqx ctl listeners enable <Identifier> <Bool>` to enable/disable a listener.
+
 - [#13493](https://github.com/emqx/emqx/pull/13493) Upgrade RPC library `gen_rpc` to 3.4.0
 
   The default RPC server socket option in `gen_rpc` 3.4.0 has been changed from `true` to `active-100` which should provide back-pressure towards peer nodes when the RPC server is under heavy load.
 
-- [#13546](https://github.com/emqx/emqx/pull/13546) Added the option to configure the query mode for Pulsar Producer action.
-
-
 ### Bug Fixes
 
-- [#12514](https://github.com/emqx/emqx/pull/12514) Fixed file transfer command result reporting to the `$file-response/${clientid}` channel.
-
-  Previously, if a channel issued an `assemble` command but disconnected before the assemble was completed, the status message was lost (not sent to the response topic).
+### Core MQTT Functionality
 
 - [#12944](https://github.com/emqx/emqx/pull/12944) Fixed crash on non-UTF8 client IDs with strict_mode=false.
 
 - [#13006](https://github.com/emqx/emqx/pull/13006) Check retained messages, delayed messages and taken over session messages against actual banned client regular expressions.
 
   Previously, messages that were delayed by some reasons, could surpass actual client ID ban specified with regular expression.
+
+### Authentication and Authorization
 
 - [#13024](https://github.com/emqx/emqx/pull/13024) Add a default ACL deny-rule to reject subscription to `+/#` topic.
 
@@ -149,30 +154,32 @@
   authentication HTTP request but JSON template cannot be rendered into a valid JSON. E.g.
   when a template contains `${password}` placeholder, but a client passed non-utf8 password.
 
-- [#13078](https://github.com/emqx/emqx/pull/13078) Added validation and error handling to ensure requests with a JSON body include the required 'application/json' Content-Type header. If missing, the API now returns a 415 Unsupported Media Type status instead of a 400.
-
 - [#13196](https://github.com/emqx/emqx/pull/13196) In the built-in database of authorization, added a limit for the number of rules per client/user, and the default values is 100.
+
+### Data Integrations
 
 - [#13207](https://github.com/emqx/emqx/pull/13207) Previously, if the `republish` rule engine action failed to publish the message, the action success metrics were always increased.  Now, if the action detects it doesn't reach at least one subscriber, action failure metrics are increased.
 
-- [#13225](https://github.com/emqx/emqx/pull/13225) Redacted sensitive data from authentication and authorization APIs.
 
 - [#13425](https://github.com/emqx/emqx/pull/13425) The MQTT connector error log messages have been improved to provide clearer and more detailed information.
 
-- [#13589](https://github.com/emqx/emqx/pull/13589) Fixed an issue where creating a rule with a null id via the HTTP API was allowed, which could lead to an inconsistent configuration.
+- [#13589](https://github.com/emqx/emqx/pull/13589) Fixed an issue where creating a rule with a string `"null"` for ID via the HTTP API was allowed, which could lead to an inconsistent configuration.
 
-- [#13607](https://github.com/emqx/emqx/pull/13607) Fixed that the CoAP subscription QoS displayed through the API was inconsistent with the actual QoS.
+- [#12514](https://github.com/emqx/emqx/pull/12514) Fixed file transfer command result reporting to the `$file-response/${clientid}` channel.
 
-
-- [#13618](https://github.com/emqx/emqx/pull/13618) Enhanced type specification for the `authorization/sources` endpoint.
-
-
-- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue that when updating rules in the built-in authorizer for a client/user, the rules could exceed the `max_rules`.
-
-
-- [#13372](https://github.com/emqx/emqx/pull/13372) Fixed that the license did not count the number of gateway connections
+  Previously, if a channel issued an `assemble` command but disconnected before the assemble was completed, the status message was lost (not sent to the response topic).
 
 - [#13414](https://github.com/emqx/emqx/pull/13414) The RabbitMQ error log messages have been improved to provide clearer and more detailed information.
+
+### Operations
+
+- [#13078](https://github.com/emqx/emqx/pull/13078) Added validation and error handling to ensure EMQX Management API requests with a JSON body include the required 'application/json' Content-Type header. If missing, the API now returns a 415 Unsupported Media Type status instead of a 400.
+
+- [#13225](https://github.com/emqx/emqx/pull/13225) Redacted sensitive data from authentication and authorization APIs.
+
+### Gateways
+
+- [#13607](https://github.com/emqx/emqx/pull/13607) Fixed that the CoAP subscription QoS displayed through the API was inconsistent with the actual QoS.
 
 ## 5.7.2
 
