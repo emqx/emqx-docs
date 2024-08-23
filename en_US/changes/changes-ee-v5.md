@@ -124,7 +124,6 @@
 
 - [#13546](https://github.com/emqx/emqx/pull/13546) Added the option to configure the query mode for Pulsar Producer action.
 
-- [#13560](https://github.com/emqx/emqx/pull/13560) Introduced a Thrift driver for the IotDB connector.
 
 ### Bug Fixes
 
