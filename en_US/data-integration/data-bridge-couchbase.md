@@ -6,11 +6,11 @@ The Couchbase data integration is an EMQX Enterprise edition feature.
 
 :::
 
-[Couchbase](https://couchbase.com/) is a multipurpose, distributed database that fuses the strengths of relational databases such as SQL and ACID transactions with JSON’s versatility, with a foundation that is extremely fast and scalable. It’s used across industries for things like user profiles, dynamic product catalogs, GenAI apps, vector search, high-speed caching, and much more.
+[Couchbase](https://couchbase.com/) is a multipurpose, distributed database that combines the strengths of relational databases, including SQL and ACID transactions, with the versatility of JSON. Built on a foundation that is both highly performant and scalable, Couchbase is widely used across various industries for applications such as user profiles, dynamic product catalogs, generative AI applications, vector search, high-speed caching, and more.
 
 ## How It Works
 
-Couchbase data integration is an out-of-the-box feature in EMQX designed to combine the MQTT's real-time data capturing and transmission capabilities with Couchbase's powerful data processing functionality. With a built-in [rule engine](https://docs.emqx.com/en/emqx/latest/data-integration/rules.html) component, the integration simplifies the process of ingesting data from EMQX to Couchbase for storage and analysis, eliminating the need for complex coding.
+Couchbase data integration is an out-of-the-box feature in EMQX designed to combine the MQTT's real-time data capturing and transmission capabilities with Couchbase's powerful data processing functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Couchbase for storage and analysis, eliminating the need for complex coding.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Couchbase.
 
@@ -19,9 +19,9 @@ The diagram below illustrates a typical architecture of data integration between
 Ingesting MQTT data into Couchbase works as follows:
 
 1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to ClickHouse. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
+3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Couchbase. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
 4. **Data ingestion into Couchbase**: Once the rule engine identifies a message for Couchbase storage, it triggers an action of forwarding the messages to Couchbase. Processed data will be seamlessly written into the dataset of the Couchbase database.
-5. **Data Storage and Utilization**: With the data now stored in Couchbase, businesses can harness its querying power for various use cases. For instance, in logistics and supply chain management fields, data from IoT devices such as GPS trackers, temperature sensors, and inventory management systems can be monitored and analyzed for real-time tracking, route optimization, demand forecasting, and efficient inventory management.
+5. **Data Storage and Utilization**: With the data now stored in Couchbase, businesses can harness its querying power for various use cases. For example, in the context of dynamic product catalogs, businesses can use Couchbase to efficiently manage and retrieve product information, support real-time inventory updates, and deliver personalized recommendations to customers, enhancing the shopping experience and increasing sales.
 
 ## Features and Benefits
 
@@ -54,13 +54,14 @@ This section introduces how to start a Couchbase server using [Docker](https://w
    ```bash
    docker run -t --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase/server:enterprise-7.2.0
    ```
-
-When you run the command, Docker downloads and installs Couchbase Server. You should see the following message once Couchbase Server is started in a Docker virtual environment:
-
-```
-Starting Couchbase Server -- Web UI available at http://<ip>:8091
-and logs available in /opt/couchbase/var/lib/couchbase/logs
-```
+   
+   When you run the command, Docker downloads and installs Couchbase Server. You should see the following message once Couchbase Server is started in a Docker virtual environment:
+   
+   ```
+   Starting Couchbase Server -- Web UI available at http://<ip>:8091
+   and logs available in /opt/couchbase/var/lib/couchbase/logs
+   ```
+   
 
 2. Open Couchbase Web Console in your browser by visiting `http://localhost:8091`.
 
@@ -72,19 +73,19 @@ and logs available in /opt/couchbase/var/lib/couchbase/logs
 
 4. Accept the Terms and Conditions and click **Finish with Defaults** to complete configuration with default values.
 
-5. When you have finished entering your configuration details, click the **Save & Finish** button, at the lower right. This configures the server accordingly, and brings up the Couchbase Web Console Dashboard. Select **Buckets** in the navigation panel on the left side, and click the **Add Bucket** button.
+5. When you have finished entering your configuration details, click the **Save & Finish** button, at the lower right. This configures the server accordingly, and brings up the Couchbase Web Console Dashboard. Select **Buckets** in the navigation panel on the left side, and click the **ADD BUCKET** button.
 
-<img src="./assets/couchbase-consoleBuckets.png" alt="couchbase-consoleBuckets" style="zoom:67%;" />
+   <img src="./assets/couchbase-consoleBuckets.png" alt="couchbase-consoleBuckets" style="zoom:67%;" />
 
 7. Enter a name for the bucket, for example, `emqx`, and click **Create** to create the bucket.
-
-You can find more information about running Couchbase in docker [on the official documentation page](https://docs.couchbase.com/server/current/getting-started/do-a-quick-install.html).
 
 8. Create a primary index for the default collection:
 
     ```
     docker exec -t db /opt/couchbase/bin/cbq -u admin -p password -engine=http://127.0.0.1:8091/ -script "create primary index on default:emqx_data._default._default;"
     ```
+
+You can find more information about running Couchbase in docker [on the official documentation page](https://docs.couchbase.com/server/current/getting-started/do-a-quick-install.html).
 
 ## Create a Connector
 
