@@ -339,7 +339,7 @@ t/1 -> emqx@127.0.0.1
 If there are a large number of topic subscriptions in the cluster, the `list` command may be time-consuming and resource-intensive.
 :::
 
-## exclusive topics
+## exclusive
 
 This command is to view all exclusive topics in the current system or delete an exclusive topic.
 
