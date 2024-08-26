@@ -54,7 +54,7 @@ Refer to the table below for fields that can be selected from the received MQTT 
 | `timestamp`           | Timestamp (unit: ms)                                |
 | `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms)   |
 | `node`                | Node where the event is triggered<!--tech review--> |
-| `client_attrs`        | [client attributes](../client-attributes/client-attributes.md) |
+| `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
 ## MQTT Events
 
