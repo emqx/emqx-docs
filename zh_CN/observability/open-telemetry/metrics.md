@@ -56,7 +56,6 @@ scrape_configs:
    opentelemetry {
      exporter { endpoint = "http://localhost:4317" }
      metrics {
-        enable = true
         interval = "10s"
      }
    }

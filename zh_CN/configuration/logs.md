@@ -28,7 +28,6 @@ EMQX 的日志输出目录由环境变量 `EMQX_LOG_DIR` 确定，如果通过 R
 ```bash
 log {
   file {
-    enable = true
     formatter = text
     level = warning
     path = "/var/log/emqx/emqx.log"
@@ -59,7 +58,6 @@ log {
 ```bash
 log {
   console {
-    enable = true
     formatter = json
     level = warning
     time_offset = system

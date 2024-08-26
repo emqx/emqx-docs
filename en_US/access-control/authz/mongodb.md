@@ -99,7 +99,6 @@ Sample configuration:
 ```bash
 {
   type = mongodb
-  enable = true
 
   collection = "mqtt_user"
   filter { username = "${username}" }
@@ -120,7 +119,6 @@ Sample configuration:
 ```bash
 {
   type = mongodb
-  enable = true
 
   collection = "mqtt_user"
   filter { username = "${username}" }

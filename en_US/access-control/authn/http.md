@@ -110,7 +110,6 @@ Below are the HTTP `POST` and `GET` request examples:
 {
     mechanism = password_based
     backend = http
-    enable = true
 
     method = post
     url = "http://127.0.0.1:8080/auth?clientid=${clientid}"
@@ -135,7 +134,6 @@ Note: The "body" will be converted to a query string.
 {
     mechanism = password_based
     backend = http
-    enable = true
 
     method = get
     url = "http://127.0.0.1:32333/auth"

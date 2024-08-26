@@ -68,7 +68,7 @@
    ```bash
    opentelemetry {
      exporter {endpoint = "http://localhost:4317"}
-     logs {enable = true, level = warning}
+     logs {level = warning}
    }
    ```
 

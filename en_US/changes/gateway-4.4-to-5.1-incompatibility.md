@@ -104,7 +104,6 @@ But in EMQX 5.0, you need to configure a separate authenticator for each gateway
 gateway.coap {
     ...
     authentication {
-      enable = true
       backend = "http"
       method = "post"
       url = "http://127.0.0.1:8080/auth"

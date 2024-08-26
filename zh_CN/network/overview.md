@@ -44,7 +44,6 @@ authentication {
   ...
 
   ssl {
-    enable = true
     # PEM 格式的文件，包含一个或多个用于验证 HTTP 服务器证书的根 CA 证书
     cacertfile = "etc/certs/cacert.pem"
     # PEM 格式的客户端证书，如果证书不是直接由根 CA 签发，那么中间 CA 的证书必须加在服务器证书的后面组成一个证书链

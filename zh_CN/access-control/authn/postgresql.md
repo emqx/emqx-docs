@@ -98,7 +98,6 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 {
   mechanism = password_based
   backend = postgresql
-  enable = true
 
   password_hash_algorithm {
     name = sha256

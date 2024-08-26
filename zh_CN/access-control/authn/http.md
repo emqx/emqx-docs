@@ -104,7 +104,6 @@ Body:
 {
     mechanism = password_based
     backend = http
-    enable = true
 
     method = post
     url = "http://127.0.0.1:8080/auth?clientid=${clientid}"
@@ -129,7 +128,6 @@ Body:
 {
     mechanism = password_based
     backend = http
-    enable = true
 
     method = get
     url = "http://127.0.0.1:32333/auth"

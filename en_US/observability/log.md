@@ -112,7 +112,6 @@ You can also configure EMQX logging through configuration files. For example, if
 log {
   file {
     default {
-      enable = true
       formatter = text
       level = warning
       path = "/Users/emqx/Downloads/emqx-560/log/emqx.log"
@@ -122,7 +121,6 @@ log {
       timestamp_format = auto
   }
   console {
-    enable = true
     formatter = json
     level = debug
     time_offset = system

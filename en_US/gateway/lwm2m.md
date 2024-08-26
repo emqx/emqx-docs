@@ -142,7 +142,6 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
 ```properties
 gateway.lwm2m {
   authentication {
-    enable = true
     backend = "http"
     mechanism = "password_based"
     method = "post"

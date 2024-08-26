@@ -80,7 +80,6 @@ PostgreSQL authorizer 由 `type=postgresql` 标识。
 ```hcl
 {
   type = postgresql
-  enable = true
 
   database = "mqtt"
   username = "postgres"

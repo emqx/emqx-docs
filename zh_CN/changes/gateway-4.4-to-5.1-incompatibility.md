@@ -104,7 +104,6 @@ gateway.exproto {
 gateway.coap {
     ...
     authentication {
-      enable = true
       backend = "http"
       method = "post"
       url = "http://127.0.0.1:8080/auth"

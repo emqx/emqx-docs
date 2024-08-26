@@ -61,7 +61,6 @@ Standalone：
 ```hcl
 {
   type = mongodb
-  enable = true
 
   collection = "mqtt_user"
   filter { username = "${username}" }
@@ -80,7 +79,6 @@ Standalone：
 ```hcl
 {
   type = mongodb
-  enable = true
 
   collection = "mqtt_user"
   filter { username = "${username}" }
@@ -100,7 +98,6 @@ Standalone：
 ```hcl
 {
   type = mongodb
-  enable = true
 
   collection = "mqtt_user"
   filter { username = "${username}" }

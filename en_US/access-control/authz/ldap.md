@@ -162,7 +162,6 @@ Sample configuration:
 ```bash
 {
   type = ldap
-  enable = true
 
   server = "127.0.0.1:389"
   publish_attribute = "mqttPublishTopic"

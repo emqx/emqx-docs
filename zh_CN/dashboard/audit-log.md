@@ -34,7 +34,6 @@ Dashboard 上审计日志位于 **系统设置** -> **审计日志** 页面，�
 
 ```bash
 log.audit {
-  enable = true
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB

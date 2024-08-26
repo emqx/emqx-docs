@@ -180,7 +180,6 @@ Example:
 
 ```bash
 {
-    enable = true
 
     type = mysql
     database = "mqtt"
@@ -215,7 +214,6 @@ authorization {
   no_match = allow
   deny_action = ignore
   cache {
-    enable = true
     max_size = 32
     excludes = ["t/1", "t/2"]
     ttl = 1m

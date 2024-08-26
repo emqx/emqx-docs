@@ -104,7 +104,6 @@ Sample configuration:
 {
   mechanism = password_based
   backend = postgresql
-  enable = true
 
   password_hash_algorithm {
     name = sha256

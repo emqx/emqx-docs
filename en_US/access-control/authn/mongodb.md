@@ -113,7 +113,6 @@ Below are code examples you may refer to:
 {
   mechanism = password_based
   backend = mongodb
-  enable = true
 
   password_hash_algorithm {
     name = sha256
@@ -140,7 +139,6 @@ Below are code examples you may refer to:
 {
   mechanism = password_based
   backend = mongodb
-  enable = true
 
   password_hash_algorithm {
     name = sha256

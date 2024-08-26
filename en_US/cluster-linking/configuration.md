@@ -41,7 +41,6 @@ cluster {
       clientid = "clink-us-east"
       topics = ["global/#", "fwd/#", "cluster/+/status", ...]
       ssl {
-        enable = true
         verify = verify_peer
         certfile = "etc/certs/client/emqx-us-east.pem"
         ...
