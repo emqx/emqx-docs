@@ -89,6 +89,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
+- [Datalayers](./data-bridge-datalayers.md)
 
 **SQL**
 

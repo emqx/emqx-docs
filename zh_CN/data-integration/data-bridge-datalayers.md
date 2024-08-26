@@ -53,12 +53,12 @@ Datalayers 数据集成具有以下特性与优势：
 
 1. 通过 Docker 安装并启动 Datalayers，详细步骤请参考 [Install Datalayers](https://docs.datalayers.cn/datalayers/latest/getting-started/docker.html)。
 
-```bash
-# 启动一个 Datalayers 容器
-docker run --name datalayers -p 8361:8361 datalayers/datalayers:nightly
-```
+   ```bash
+   # 启动一个 Datalayers 容器
+   docker run --name datalayers -p 8361:8361 datalayers/datalayers:nightly
+   ```
 
-2. Datalayers 服务启动后，其默认的用户和密码为 `admin`/`public`，我们可以通过以下步骤进入 Datalayers CLI 中创建数据库：
+2. Datalayers 服务启动后，您可以通过以下步骤进入 Datalayers CLI 中创建数据库，默认的用户和密码为 `admin`/`public`：
 
    - 进入 Datalayers 容器：
 
@@ -92,10 +92,10 @@ docker run --name datalayers -p 8361:8361 datalayers/datalayers:nightly
    - 输入连接器名称，要求是大小写英文字母和数字的组合，例如：`my_datalayers`。
    - 输入 Datalayers 服务器连接信息：
      - 服务器地址填写 `127.0.0.1:8361`。
-     - 按照[安装和设置 Datalayers](#安装和设置-datalayers) 中的设定完成 **用户名**、**密码** 及 **数据库** 设置。
-   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅 [启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
+     - 按照[安装和设置 Datalayers](#安装和设置-datalayers) 中的设定完成**用户名**、**密码**及**数据库**设置。
+   - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 Datalayers 服务器。
-6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击 **返回连接器列表** 或点击 **创建规则** 继续创建规则和 Sink，以指定要转发到 Datalayers 的数据。具体步骤请参见[创建 Datalayers Sink 规则](#创建-datalayers-sink-规则)。
+6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击**返回连接器列表**或点击**创建规则** 继续创建规则和 Sink，以指定要转发到 Datalayers 的数据。具体步骤请参见[创建 Datalayers Sink 规则](#创建-datalayers-sink-规则)。
 
 ## 创建 Datalayers Sink 规则
 
