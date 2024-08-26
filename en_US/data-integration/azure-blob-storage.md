@@ -5,7 +5,7 @@ The Azure Blob Storage data integration is an EMQX Enterprise edition feature.
 
 :::
 
-[Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/) is Microsoft's object storage solution for the cloud. Blob Storage is optimized for storing massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a particular data model or definition, such as text or binary data. EMQX is capable of efficiently storing MQTT messages into Blob Storage containers, enabling flexible Internet of Things (IoT) data storage functionalities.
+[Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/) is Microsoft's cloud-based object storage solution, designed specifically for handling large volumes of unstructured data. Unstructured data refers to data types that do not follow a specific data model or format, such as text files or binary data. EMQX can efficiently store MQTT messages in Blob Storage containers, providing a versatile solution for storing Internet of Things (IoT) data.
 
 This page provides a detailed introduction to the data integration between EMQX and Azure Blob Storage, and offers practical guidance on the rule and Sink creation.
 
@@ -53,13 +53,13 @@ This section introduces the preparations required before creating an Azure Blob 
 
 2. All access to Azure Storage takes place through a storage account. For this quickstart, create a storage account using the [Azure portal](https://portal.azure.com/), Azure PowerShell, or Azure CLI. For help creating a storage account, see [Create a storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create).
 
-3. To create a container in the Azure portal, navigate to your new storage account in the Azure portal. In the left menu for the storage account, scroll to the Data storage section, then select Containers. Select the + Container button, use `iot-data` as a name for your new container, and select Create to create the container.
+3. To create a container in the Azure portal, navigate to your new storage account in the Azure portal. In the left menu for the storage account, scroll to the Data storage section, then select Containers. Select the + **Container** button, use `iot-data` as a name for your new container, and click **Create** to create the container.
 
-![azure-storage-container-create](./assets/azure-storage-container-create.png)
+   ![azure-storage-container-create](./assets/azure-storage-container-create.png)
 
-4. Navigate to Security+Networking -> Access keys in the storage account, and copy the **Key**. You will need this key to configure the Sink in EMQX.
+4. Navigate to **Security+Networking** -> **Access keys** in the storage account, and copy the **Key**. You will need this key to configure the Sink in EMQX.
 
-![azure-storage-access-keys](./assets/azure-storage-access-keys.png)
+   ![azure-storage-access-keys](./assets/azure-storage-access-keys.png)
 
 ## Create a Connector
 
@@ -156,8 +156,6 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    ::: 
 
    ::::
-
-10. Set the **Object Content**. By default, it is a JSON text format containing all fields. It supports `${var}` format placeholders. Here, enter `${payload}` to indicate using the message body as the object content. In this case, the object's storage format depends on the message body's format, supporting compressed packages, images, or other binary formats.
 
 11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
