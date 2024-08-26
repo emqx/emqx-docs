@@ -14,7 +14,7 @@ Azure Blob Storage 数据集成是 EMQX 企业版功能。
 
 Azure Blob Storage 数据集成是 EMQX 中一个开箱即用的功能，可以轻松配置以应对复杂的业务发展。在典型的 IoT 应用中，EMQX 作为负责设备连接和消息传输的物联网平台，而 Azure Blob Storage 则作为数据存储平台，处理消息数据的存储。
 
-![emqx-integration-azure-blob-storage](./assets/emqx-integration-azure-blob-storage.jpg)
+![azure-blob-storage-architecture](./assets/azure-blob-storage-architecture.png)
 
 EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure Blob Storage。应用程序可以从 Azure Blob Storage 中读取数据，用于进一步的数据应用。具体工作流程如下：
 

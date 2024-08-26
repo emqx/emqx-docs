@@ -13,7 +13,7 @@ This page provides a detailed introduction to the data integration between EMQX 
 
 Azure Blob Storage data integration in EMQX is a ready-to-use feature that can be easily configured for complex business development. In a typical IoT application, EMQX acts as the IoT platform responsible for device connectivity and message transmission, while Azure Blob Storage serves as the data storage platform, handling message data storage.
 
-![emqx-integration-azure-blob-storage](./assets/emqx-integration-azure-blob-storage.jpg)
+![azure-blob-storage-architecture](./assets/azure-blob-storage-architecture.png)
 
 EMQX utilizes rules engines and Sinks to forward device events and data to Azure Blob Storage. Applications can read data from Azure Blob Storage for further data applications. The specific workflow is as follows:
 
