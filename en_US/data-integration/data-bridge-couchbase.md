@@ -14,7 +14,7 @@ Couchbase data integration is an out-of-the-box feature in EMQX designed to comb
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Couchbase.
 
-<img src="./assets/clickhouse_architecture.png" alt="clickhouse_architecture" style="zoom:67%;" />
+![couchbase_architecture](./assets/couchbase_architecture.png)
 
 Ingesting MQTT data into Couchbase works as follows:
 
@@ -62,7 +62,6 @@ This section introduces how to start a Couchbase server using [Docker](https://w
    and logs available in /opt/couchbase/var/lib/couchbase/logs
    ```
    
-
 2. Open Couchbase Web Console in your browser by visiting `http://localhost:8091`.
 
 <img src="./assets/couchbase-consoleSetup.png" alt="couchbase-consoleSetup" style="zoom:67%;" />
@@ -204,7 +203,7 @@ This section delves deeper into the advanced configuration options available for
 
 | **Fields**                | **Descriptions**                                             | **Recommended Value** |
 | ------------------------- | ------------------------------------------------------------ | --------------------- |
-| HTTP Pipelining           | Specifies the number of HTTP requests that can be sent to the server in a continuous sequence without waiting for individual responses. This option takes a positive integer value that represents the maximum number of HTTP requests that will be pipelined. <br />When set to `1`, it indicates a traditional request-response model where each HTTP request will be sent, and then the client will wait for a server response before sending the next request. Higher values enable more efficient use of network resources by allowing multiple requests to be sent in a batch, reducing the round-trip time. | `100`              |
+| **HTTP Pipelining**       | Specifies the number of HTTP requests that can be sent to the server in a continuous sequence without waiting for individual responses. This option takes a positive integer value that represents the maximum number of HTTP requests that will be pipelined. <br />When set to `1`, it indicates a traditional request-response model where each HTTP request will be sent, and then the client will wait for a server response before sending the next request. Higher values enable more efficient use of network resources by allowing multiple requests to be sent in a batch, reducing the round-trip time. | `100`              |
 | **Connection Pool Size**  | Specifies the number of concurrent connections that can be maintained in the connection pool when interfacing with the Couchbase service. This option helps in managing the application's scalability and performance by limiting or increasing the number of active connections between EMQX and Couchbase.<br/>**Note**: Setting an appropriate connection pool size depends on various factors such as system resources, network latency, and the specific workload of your application. Too large a pool size may lead to resource exhaustion, while too small a size may limit throughput.   | `8`                   |
 | **Connect Timeout**       | Specifies the maximum amount of time, in seconds, that the Connector will wait while attempting to establish a connection with the Couchbase server.<br/>**Note**: A carefully chosen timeout setting is crucial for balancing system performance and resource utilization. It is advisable to test the system under various network conditions to find the optimal timeout value for your specific use case. | `15`                  |
 | **Start Timeout**         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in Couchbase—is fully operational and ready to handle data transactions. | `5`                   |

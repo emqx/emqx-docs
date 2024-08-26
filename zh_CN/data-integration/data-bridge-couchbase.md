@@ -1,4 +1,4 @@
-# 将 MQTT 数据导入到 Couchbase
+# 将 MQTT 数据写入到 Couchbase
 
 ::: tip
 
@@ -14,7 +14,7 @@ Couchbase 数据集成是 EMQX 中开箱即用的功能，旨在将 MQTT 的实�
 
 下图展示了 EMQX 与 Couchbase 数据集成的典型架构。
 
-<img src="./assets/clickhouse_architecture.png" alt="clickhouse_architecture" style="zoom:67%;" />
+![couchbase_architecture](./assets/couchbase_architecture.png)
 
 将 MQTT 数据导入 Couchbase 的工作流程如下：
 
@@ -86,7 +86,7 @@ Couchbase 数据集成是 EMQX 中开箱即用的功能，旨在将 MQTT 的实�
 
 ## 创建连接器
 
-本节演示如何创建一个连接器，将数据接收器连接到 Couchbase 服务器。
+本节演示如何创建一个连接器，将 Sink 连接到 Couchbase 服务器。
 
 以下步骤假设您在本地机器上运行 EMQX 和 Couchbase。如果 Couchbase 和 EMQX 远程运行，请相应调整设置。
 
