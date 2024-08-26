@@ -352,6 +352,9 @@
     - title_en: Confluent
       title_cn: Confluent
       path: data-integration/confluent-sink
+    - title_en: Datalayers
+      title_cn: Datalayers
+      path: data-integration/data-bridge-datalayers
     - title_en: DynamoDB
       title_cn: DynamoDB
       path: data-integration/data-bridge-dynamo
