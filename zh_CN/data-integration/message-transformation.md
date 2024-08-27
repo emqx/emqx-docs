@@ -1,92 +1,94 @@
-# Message Transformation
+# 消息转换
 
-::: tip Note
+::: tip 提示 
 
-Message Transformation is an EMQX Enterprise feature.
+消息转换是 EMQX 企业版的功能。 
 
 :::
 
-## Workflow
+## 概述
 
-When a message is published, it first goes through the [Schema Validation](./schema-validation) pipeline, if any matches the incoming message topic.  Please see the corresponding chapter for more information on Schema Validation.  If the messages passes the schema validation, then it enters the message transformation pipeline, if any transformation matches the incoming message topic.
+消息转换允许您根据用户定义的规则修改和格式化消息，然后再进一步处理或发送给订阅者。该功能高度可定制，支持多种编码格式和高级转换。
 
-1. When a message is published and passes both authorization and schema validations, transformation rules are matched based on the publishing topic from a user-configured list of transformations. A transformation can be set for multiple topics or topic filters.
+## 工作流程
 
-2. Once one or more transformations are matched, the message then enters the transformation pipeline, which obeys the order in which the user configured the transformations.
+当一条消息发布时，它会经历以下工作流程：
 
-   - Supports multiple types of decoders and encoders: JSON, Protobuf, and Avro.
-   - Supports [Variform expressions](../configuration/configuration.md#variform-expressions) that can enrich and transform the outgoing message.
+1. **Schema 验证**：当消息发布并通过授权后，首先会进行 [Schema 验证](./schema-validation.md)。如果消息通过验证，则进入下一步。
 
-3. Once the messages successfully passes through the transformation pipeline, the message continues to the next process, such as triggering the rule engine or dispatching to subscribers.
+2. **消息转换管道**：
 
-4. If transformation fails, the following user-configured actions can be executed:
+   - **转换匹配**：根据消息的主题，将其与用户定义的转换规则列表进行匹配。可以为不同的主题或主题过滤器设置多个转换。
+   - **转换执行**：匹配到的转换将按照用户配置的顺序依次执行。管道支持多种编码器和解码器，如 JSON、Protobuf 和 Avro，并允许使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)来丰富或修改消息。
+   - **转换后处理**：消息成功通过转换管道后，将继续进行下一步处理，如触发规则引擎或将消息分发给订阅者。
 
-   - **Discard Message**: Terminate the publish and discard the message, returning a specific reason code (131 - Implementation Specific Error) for QoS 1 and QoS 2 messages via PUBACK.
-   - **Disconnect and Discard Message**: Discard the message and disconnect the publishing client.
-   - **Ignore**: No additional actions are taken.
+3. **故障处理**：如果转换失败，将执行用户配置的操作：
 
-   Regardless of the configured action, a log entry can be generated upon transformation failure; users can configure the log's output level, which defaults to `warning`.  A transformation failure can also trigger a rule engine event `$events/message_transformation_failed`, allowing users to catch this event for custom handling, such as publishing the erroneous message to another topic or sending it to Kafka for analysis.
+   - **丢弃消息**：终止发布并丢弃消息，对于 QoS 1 和 QoS 2 消息，通过 PUBACK 返回特定的原因代码（131 - 实现特定错误）。
+   - **断开连接并丢弃消息**：丢弃消息并断开发布客户端的连接。
+   - **忽略**：不执行任何额外操作。
 
-## User Guide
+   无论配置了何种操作，转换失败时都可以生成日志记录。用户可以配置日志的输出级别，默认级别为 `warning`。此外，转换失败还可以触发规则引擎事件（`$events/message_transformation_failed`），允许用户进行自定义处理，例如将错误的消息重新发布到其他主题或发送到 Kafka 进行进一步分析。
 
-This section demonstrates how to configure the message transformation feature and how to test your setup.
+## 用户指南
 
-### Configure Message Transformation in Dashboard
+本节演示如何配置消息转换功能以及如何测试您的设置。
 
-This section demonstrates how to create and configure a message transformation in the Dashboard.
+### 在 Dashboard 中配置消息转换
 
-1. Click on **Integrations** -> **Message Transform** in the left navigation of the Dashboard.
-2. Click **Create** at the top right of the **Message Transform** page.
-3. On the Create Message Transform page, configure the following information:
-   - **Name**: Enter the name of the transformation.
-   - **Message Source Topic**: Set the topics whose messages need to be transformed. Multiple topics or topic filters can be set.
-   - **Note** (optional): Enter any notes.
-   - **Message Format Transformation**:
-     - **Source Format**: the payload decoder that should be applied to messages entering the transformation pipeline.  Can be one of `none` (for no decoding at all), `JSON`, `Avro` or `Protobuf`.  The decoders will internally convert the binary input payload into a structured map.  Chosing `Avro` and `Protobuf` requires their schemas to first be defined in [Schema Registry](./schema-registry).  Between multiple transformations in a pipeline, there's no need to decode multiple times.  That is: if transformation `T2` is preceded by transformation `T1`, `T2` _may opt to not use any decoders_, assuming that `T1` already decoded the payload correctly.
-     - **Target Format**: the final message payload at the end of the transformation pipeline must be encoded as a binary value.  For that, the same options as in **Source Format** are supported: `none`, `JSON`, `Avro` or `Protobuf`.  Note that only the last transformation in a pipeline must ensure the binary encoding.  Intermediate transformations do not need to do so.
-   - **Message Properties Transformation**:
-     - **Properties**: defines the destination where the transformed value as a result of an expression will be written to.  Only a few destinations are valid here: `payload`, `topic`, `qos`, `retain` (to set the corresponding flag), `user_property` (for the `User-Property` MQTT property).  When using `user_property`, exactly one key under that field **must** be specified (e.g.: `user_property.my_custom_prop`).  `payload` may be used as-is, thus overwriting the whole contents of the message payload, or a nested key path may be specified, thus treating the payload like a nested JSON object (e.g.: `payload.x.y`).
-     - **Target Value**: this defines the value that will be written to the configured property.  It may simply copy values from other fields, such as `qos`, `retain`, `topic`, `payload` and `payload.x.y`, or it can be a [variform expression](../configuration/configuration.md#variform-expressions).
-   - **Transformation Failure Operation**:
-     - **Action After Failure**: Select the actions to perform if transformation fails:
-       - **Drop Message**: Terminate the publish and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.
-       - **Disconnect and Drop Message**: Discard the message and disconnect the publishing client.
-       - **Ignore**: Perform no additional actions.
-   - **Output Logs**: Select whether to log a message upon transformation failure; default is enabled.
-   - **Logs Level**: Set the log output level; the default is `warning`.
+本节演示如何在 Dashboard 中创建和配置消息转换。
 
-4. Click **Create** to complete the settings.
+1. 进入 Dashboard，点击左侧导航菜单中的**集成** -> **消息转换**。
+2. 在**消息转换**页面右上角点击**创建**。
+3. 在创建消息转换页面，配置以下信息：
+   - **名称**：输入转换的名称。
+   - **消息来源主题**：设置需要转换消息的主题。可以设置多个主题或主题过滤器。
+   - **备注**（可选）：输入任何备注信息。
+   - **消息格式转换**：
+     - **源格式**：指定进入转换管道时应用的有效 payload 解码格式。可选项包括 `None`（不解码）、`JSON`、`Avro` 或 `Protobuf`。这些解码格式会将二进制输入 payload 转换为结构化映射。如果选择 `Avro` 或 `Protobuf`，则必须首先在 [Schema Registry ](./schema-registry.md)中定义其模式。在具有多个转换的管道中，无需在每一步都进行解码。例如，如果转换 `T1` 已经解码了 payloa，则后续的转换 `T2` 可以跳过解码，直接使用已正确格式化的 payload。
+     - **目标格式**：指定当转换管道结束时，将最终的消息 payload 编码为二进制值的编码格式。编码格式选项与**源格式**相同：`None`、`JSON`、`Avro` 或 `Protobuf`。只有管道中的最后一个转换需要确保 payload 被编码为二进制值，中间的转换不需要处理二进制编码。
+   - **消息属性转换**：
+     - **属性**：指定转换后的值（由表达式生成）的写入目标位置。有效目标包括 `payload`、`topic`、`qos`、`retain`（设置相应的标志）以及 `user_property`（用于 `User-Property` MQTT 属性）。使用 `user_property` 时，必须指定一个具体的键（例如：`user_property.my_custom_prop`）。`payload` 可以按原样使用，覆盖整个消息 payload，或者指定一个嵌套键路径，将 payload 视为嵌套的 JSON 对象（例如：`payload.x.y`）。
+     - **目标值**：定义将写入配置的属性的值。此值可以从其他字段复制，如 `qos`、`retain`、`topic`、`payload` 和 `payload.x.y`，也可以通过[Variform表达式](../configuration/configuration.md#variform-表达式)生成。
+   - **转换失败后的操作**：
+     - **失败操作**：选择在转换失败时执行的操作：
+       - **丢弃消息**：终止发布过程并丢弃消息，通过 PUBACK 返回 QoS 1 和 QoS 2 消息的特定原因代码。
+       - **断开连接并丢弃消息**：丢弃消息并断开发布客户端的连接。
+       - **忽略**：不执行任何额外操作。
+   - **输出日志**：选择是否在转换失败时生成日志条目；日志记录默认启用。
+   - **日志级别**：设置日志的输出级别，默认级别为 `warning`。
+4. 点击**创建**完成设置。
 
-Now you can see an enabled new transformation appears in the list on the Message Transformation page. You can disable it as you need. You can update the transformation settings by clicking **Settings** in the **Actions** column. You can also delete the transformation or move its position by clicking **More**.
+您可以在创建转换前通过点击**预览**来测试您的转换。这将打开一个新窗口，您可以在其中输入传入消息的上下文信息，例如 QoS、payload、是否设置了保留标志、发布者的用户名和客户端 ID 等。提供必要的详细信息后，点击**运行转换**以指定的上下文运行转换，并查看结果输出。
 
-You may also test your transformation before it is created by clicking on **Preview**.  When doing so, a new pane shifts into view, where you may fill in the incoming message context for the transformation, such as QoS, payload, if the message retain flag is set, the username and clientid of the publisher, among other fields.  After you fill in the details and click **Execute Transformation**, the provided context will be run against the configured transformation and the final result will be shown.
+创建转换后，它将默认启用并显示在消息转换页面的列表中。您可以根据需要禁用它，或通过点击**操作**列中的**设置**来更新转换设置。要删除转换或更改其位置，请点击**更多**。
 
-### Configure Message Transformation in Configuration File
+### 在配置文件中配置消息转换
 
-For configuration details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-### Creating Decode / Encode Schemas
-
-For more information on how to create decoder and encoder schemas, please consult the chapter on [Schema Registry](./schema-registry).
+有关配置详情，请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 ### REST API
 
-For detailed information on how to use message transformation through the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+有关通过 REST API 使用消息转换的详细信息，请参见 [EMQX 企业版 API](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
-## Statistics and Indicators
+### 创建解码/编码模式
 
-When enabled, the message transformation exposes statistics and indicators on the Dashboard. You can click the name of the transformation on the Message Transformation page to see the following:
+有关如何创建解码和编码模式的更多信息，请参阅 [Schema Registry](./schema-registry.md)部分。
 
-**Statistics**:
+## 统计与指标
 
-- **Total**: The total number of triggers since the system started.
-- **Success**: Number of successful data transformations.
-- **Failed**: Number of failed data transformations.
+启用后，消息转换功能将在 Dashboard 上显示统计数据和指标。您可以点击消息转换页面中的转换名称，查看以下内容：
 
-**Rate Indicators**:
+**统计数据**：
 
-- Current transformation speed
-- Speed in the last 5 minutes
-- Historical maximum speed
+- **总计**：系统启动以来的触发总次数。
+- **成功**：成功的数据转换次数。
+- **失败**：失败的数据转换次数。
 
-Statistics are resettable and also added to Prometheus, accessible via the `/prometheus/message_transformation` path.
+**速率指标**：
+
+- 当前转换速度
+- 最近 5 分钟的速度
+- 历史最高速度
+
+统计数据可以重置，并通过 `/prometheus/message_transformation` 路径在 Prometheus 中获取。
