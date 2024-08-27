@@ -55,7 +55,7 @@ Datalayers 数据集成具有以下特性与优势：
 
    ```bash
    # 启动一个 Datalayers 容器
-   docker run --name datalayers -p 8361:8361 datalayers/datalayers:nightly
+   docker run --name datalayers -p 8361:8361 datalayers/datalayers:v2.1.7
    ```
 
 2. Datalayers 服务启动后，您可以通过以下步骤进入 Datalayers CLI 中创建数据库，默认的用户和密码为 `admin`/`public`：
@@ -92,7 +92,7 @@ Datalayers 数据集成具有以下特性与优势：
    - 输入连接器名称，要求是大小写英文字母和数字的组合，例如：`my_datalayers`。
    - 输入 Datalayers 服务器连接信息：
      - 服务器地址填写 `127.0.0.1:8361`。
-     - 按照[安装和设置 Datalayers](#安装和设置-datalayers) 中的设定完成**用户名**、**密码**及**数据库**设置。
+     - 按照[安装和设置 Datalayers](#安装和设置-datalayers) 中的设定完成**数据库**、**用户名**及**密码**设置。
    - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 Datalayers 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击**返回连接器列表**或点击**创建规则** 继续创建规则和 Sink，以指定要转发到 Datalayers 的数据。具体步骤请参见[创建 Datalayers Sink 规则](#创建-datalayers-sink-规则)。
@@ -138,15 +138,24 @@ Datalayers 数据集成具有以下特性与优势：
 
 9. 设定**时间精度**，默认为毫秒。
 
-10. 定义解析数据， 指定**数据格式**与内容，使其能被解析并写入到 Datalayers 中，此处仅支持 `InfluxDB Line Protocol` 格式。
+10. 定义解析数据， 指定**数据格式**与内容，使其能被解析并写入到 Datalayers 中，可选项为 `JSON` 或 `Line Protocol`。
 
-    - 在 Line Protocol 格式下，需通过一段语句指定数据点的 Table、Fields、Timestamp 与 Tags，键值均支持常量或占位符变量，可按照[行协议](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)进行设置。
+    - 对于 JSON 格式，需设置数据的 **Measurement**，**Fields**，**Timestamp** 与 **Tags**，键值均支持常量或占位符变量，可按照[行协议](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)进行设置。其中 **Fields** 字段支持通过 CSV 文件批量设置，详细请参考[批量设置](#批量设置)。
+
+    - 对于 Line Protocol 格式，请通过一段语句指定数据点的 Measurement、Fields、Timestamp 与 Tags，键值均支持常量或占位符变量，可按照[行协议](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html)进行设置。
 
     ::: tip
 
-    如希望输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。参见 [Datalayers 1.8 写入整型值](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)。
+    由于 Datalayers 的写入完全兼容 InfluxDB v1 行协议，因此您可以参考 [InfluxDB 行协议](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/) 来设置数据格式。
 
+    例如，输入带符号的整型值，请在占位符后添加 `i` 作为类型标识，例如 `${payload.int}i`。参见 [InfluxDB 1.8 写入整型值](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)。
     :::
+
+    - 此处，我们可以使用 Line Protocol 格式，将其设置为
+    
+        ```sql
+        devices,clientid=${clientid} temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
+        ```
 
 11. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
 
@@ -190,12 +199,26 @@ Datalayers 数据集成具有以下特性与优势：
 使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Datalayers" }'
+mqttx pub -i emqx_c -t t/1 -m '{ "temp": "23.5", "hum": "62", "precip": 2}'
 ```
 
 分别查看两个 Sink 运行统计，命中、发送成功次数均 +1。
 
-前往 [Datalayers UI Data Explorer](http://localhost:8086) 查看数据是否已经写入 Datalayers 中。
+前往 Datalayers CLI，查看数据是否成功写入到数据库，执行以下命令：
+
+1. 进入 Datalayers 控制台：
+
+```bash
+docker exec -it datalayers bash
+dlsql -u admin -p public
+```
+
+2. 执行 SQL 查询数据：
+
+```sql
+use mqtt
+select * from devices
+```
 
 ## 高级设置
 
