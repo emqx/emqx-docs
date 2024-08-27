@@ -6,6 +6,8 @@
 
 ### Enhancements
 
+- [#13126](https://github.com/emqx/emqx/pull/13126) Implement Cluster Linking feature. Cluster Linking is a feature that connects multiple, separate EMQX clusters, facilitating communication between clients on different, often geographically dispersed clusters.
+
 #### Core MQTT Functionality
 
 - [#13009](https://github.com/emqx/emqx/pull/13009) Updated the log level for message receive pause due to rate limiting from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
