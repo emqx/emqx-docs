@@ -137,15 +137,25 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 9. Set the **Time Precision** to milliseconds by default.
 
-10. Define the data parsing, specify the **Data Format** and content to be parsed and written to Datalayers. Currently, only `InfluxDB Line Protocol` format is supported.
+10. Define the data parsing, and specify the **Data Format** and content to be parsed and written to Datalayers. The `JSON` and `InfluxDB Line Protocol` formats are supported.
 
-    - In the Line Protocol format, specify the Table, Fields, Timestamp, and Tags of the data points using a statement. Keys and values support constants or placeholder variables and can be set according to the [line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html).
+    - For JSON format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html) to set them. The **Fields** field supports batch setting via a CSV file; for details, refer to [Batch Setting](#batch-setting).
 
-    ::: tip
+    - For the Line Protocol format, specify the Table, Fields, Timestamp, and Tags of the data points using a statement. Keys and values support constants or placeholder variables and can be set according to the [InfluxDB line protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html).
 
-    To input signed integers, add an `i` as a type identifier after the placeholder, for example, `${payload.int}i`. Refer to [Datalayers 1.8 Writing Integer Values](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+      ::: tip
 
-    :::
+      Since the data written to Datalayers is fully compatible with the InfluxDB v1 line protocol, you can refer to the [InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/) for setting up the data format.
+
+      For example, to input a signed integer value, add an `i` as a type indicator after the placeholder, such as `${payload.int}i`. See [InfluxDB 1.8 Write Integer Values](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+
+      :::
+
+      Here, we can use the Line Protocol format and set it up as:
+
+      ```sql
+      devices,clientid=${clientid} temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
+      ```
 
 11. Expand **Advanced Settings** and configure advanced options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
@@ -195,7 +205,21 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Datalayers" }'
 
 Check the running statistics of both Sinks. The hit and successful send counts should each increase by 1.
 
-Go to [Datalayers UI Data Explorer](http://localhost:8086) to see if the data has been written into Datalayers.
+Go to the Datalayers CLI to check if the data has been successfully written to the database by executing the following commands:
+
+1. Enter the Datalayers console:
+
+   ```bash
+   docker exec -it datalayers bash
+   dlsql -u admin -p public
+   ```
+
+2. Execute an SQL query to view the data:
+
+   ```sql
+   use mqtt;
+   select * from devices;
+   ```
 
 ## Advanced Settings
 
