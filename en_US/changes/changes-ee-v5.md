@@ -6,13 +6,14 @@
 
 ### Enhancements
 
-### Core MQTT Functionality
+#### Core MQTT Functionality
 
-- [#13009](https://github.com/emqx/emqx/pull/13009) Changed the log level of message receive pause from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
+- [#13009](https://github.com/emqx/emqx/pull/13009) Updated the log level for message receive pause due to rate limiting from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
 
-### Authentication and Authorization
+#### Authentication and Authorization
 
-- [#12418](https://github.com/emqx/emqx/pull/12418) For JWT authentication, the claims to verify now may be provided as a list of objects:
+- [#12418](https://github.com/emqx/emqx/pull/12418) Enhanced JWT authentication to support claims verification using a list of objects:
+  
   ```
   [
     {
@@ -22,40 +23,34 @@
     ...
   ]
   ```
-
-  Expected values now treated as templates, uniformly with the oither authenticators.
-  They now allow arbitrary expressions including `${username}` and `${clientid}` variables.
-  Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
-
+  
+  Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
+  
   Improved the documentation for the `verify_claims` parameter.
+  
+- [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
 
-- [#13534](https://github.com/emqx/emqx/pull/13534) Add trace logging when superuser skipped authz check.
+#### Data Integrations
 
-### Data Integrations
+- [#13144](https://github.com/emqx/emqx/pull/13144) Changed the log level to `warning` and added throttling for the log message `data_bridge_buffer_overflow` when bridge buffers overflow and messages are dropped. Previously, these events were logged at the `info` level and were not visible with the default log settings.
 
-- [#13144](https://github.com/emqx/emqx/pull/13144) Emit a `warning` level throttled log when bridge buffers are overflown and messages get dropped. Previously, the log events had `info` level and were not visible with the default log level. The log message `data_bridge_buffer_overflow` is throttled to avoid excessive logging.
+- [#13492](https://github.com/emqx/emqx/pull/13492) Enhanced the `GET /connectors` and `GET /connectors/:id` APIs to include lists of actions and sources that depend on a specific connector. Additionally, the `GET /actions`, `GET /sources`, `GET /actions/:id`, and `GET /sources/:id` APIs now return the list of rules associated with a specific action or source.
 
-- [#13492](https://github.com/emqx/emqx/pull/13492) The lists of actions and sources that depend on a given connector are now returned in the `GET /connectors` and `GET /connectors/:id` APIs.
+- [#13505](https://github.com/emqx/emqx/pull/13505) Added the ability to filter rules in the HTTP API based on the IDs of data integration actions or sources used.
 
-  The list of rules that depend on a given action or source is now returned in the `GET /actions`, `GET /sources`, `GET /actions/:id` and `GET /sources/:id` APIs.
+- [#13506](https://github.com/emqx/emqx/pull/13506) Introduced the `peername` field to all rule engine events that already include the `peerhost` field. The `peername` field is a string formatted as `IP:PORT`.
 
-- [#13505](https://github.com/emqx/emqx/pull/13505) Now, it's possible to filter rules in the HTTP API by the IDs of used data integration actions/sources.
+- [#13516](https://github.com/emqx/emqx/pull/13516) Added a `direct_dispatch` argument to the `republish` action.
 
-- [#13506](https://github.com/emqx/emqx/pull/13506) Added the `peername` field to all rule engine events that already contained the `peerhost` field.  `peername` is a string and has the `IP:PORT` format.
+  When `direct_dispatch` is set to `true` (or rendered as `true` from template) the message is dispatched directly to subscribers. This feature helps prevent the triggering of additional rules or the recursive activation of the same rule.
+  
+- [#13573](https://github.com/emqx/emqx/pull/13573) Introduced `client_attrs` to the SQL context for client connectivity events and the message `publish` event.
+  Users can now access client attributes within rule SQL statements, such as `SELECT client_attrs.attr1 AS attribute1`, and utilize `${attribute1}` in data integration actions.
 
-- [#13516](https://github.com/emqx/emqx/pull/13516) Add a `direct_dispatch` argument for `republish` action.
+- [#13640](https://github.com/emqx/emqx/pull/13640) Added two new SQL functions for rules: `coalesce/2` and `coalesce_ne/2`.
 
-  When `direct_dispatch` is set to `true` (or rendered as `true` from template) the message will be directly dispatched to subscribers.
-  This can be used to avoid to triggering other rules or recursively trigger the self-rule.
-
-- [#13573](https://github.com/emqx/emqx/pull/13573) Add `client_attrs` to SQL context for client connectivity events and message `publish` event.
-  Now one can access client attributes in rule SQL like `SELECT client_attrs.attr1 AS attribute1` and use `${attribute1}` in data integration actions.
-
-- [#13640](https://github.com/emqx/emqx/pull/13640) Add two new rule SQL functions `coalesce/2` and `coalesce_ne/2`.
-
-  The two functions can help to simplify null-checks in rule SQL.
-  For example
-
+  These functions simplify handling null values in rule SQL expressions. For instance, instead of using:
+  
   ```
   SELECT
     CASE
@@ -65,21 +60,21 @@
         payload.path.to.value
     END AS my_value
   ```
-
-  can be as simple as: `SELECT coalesce(payload.path.to.value, 0) AS my_value`.
-
-- [#12959](https://github.com/emqx/emqx/pull/12959) Added a new option to configure a topic solely for health check purposes in Kafka Producer connectors.
-  By configuring this option, it's now possible to more accurately detect connection issues towards partition leaders, such as wrong or missing credentials that prevent establishing the connection.
-
-- [#12961](https://github.com/emqx/emqx/pull/12961) Added the option to customize group ids in advance for Kafka Consumer sources.
+  
+  you can now write a more concise expression: `SELECT coalesce(payload.path.to.value, 0) AS my_value`.
+  
+- [#12959](https://github.com/emqx/emqx/pull/12959) Introduced a new option to configure a dedicated topic for health check purposes in Kafka Producer connectors. This feature enables more precise detection of connection issues with partition leaders, such as incorrect or missing credentials that could prevent establishing the connections.
+  
+- [#12961](https://github.com/emqx/emqx/pull/12961) Added a configuration option to customize group IDs in advance for Kafka Consumer sources.
 
 - [#13069](https://github.com/emqx/emqx/pull/13069) Implemented Azure Blob Storage data integration.
 
 - [#13199](https://github.com/emqx/emqx/pull/13199) Implemented the Message Enrichment and Transformation feature.
 
-  This allows users to transform incoming messages without the need to define SQL rules in the Rule Engine, just by using simple variform syntax.
+  This allows users to transform incoming messages just by using simple variform syntax, without the need to define SQL rules in the Rule Engine.
 
-  For example: if we want to take an incoming message encoded as Avro, decode it to JSON and then take the `tenant` client attribute from the publishing client and prefix it to the topic, before processing the result in Rule Engine, one would only need a transformation with the following configuration:
+  **Example Use Case:**
+  Suppose you receive a message encoded in Avro format, and you want to decode it into JSON. After decoding, you want to prepend a `tenant` attribute (retrieved from the client attributes of the publishing client) to the topic before processing the message in the Rule Engine. With this new feature, you can achieve this transformation with the following configuration:
 
   ```hocon
   message_transformation {
@@ -97,15 +92,19 @@
   }
   ```
 
+  This configuration specifies a transformation named `mytransformation` that:
+
+  - **Decodes** the message payload from Avro format using a specified schema.
+  - **Encodes** the payload into JSON format.
+  - **Concatenates** the `tenant` attribute from client attributes with the original topic, thereby modifying the topic before further processing.
+
 - [#13415](https://github.com/emqx/emqx/pull/13415) Implemented Couchbase data integration.
 
-- [#13463](https://github.com/emqx/emqx/pull/13463) Now, when GCP PubSub Producer action receives a response from PubSub with the HTTP status codes 502 or 503, it'll retry the request until it succeeds or the message TTL is reached.
+- [#13463](https://github.com/emqx/emqx/pull/13463) Enhanced the GCP PubSub Producer action to automatically retry requests when receiving HTTP status codes 502 (Bad Gateway) or 503 (Service Unavailable) from PubSub. The retries will continue until the request is successful or the message's Time-To-Live (TTL) is reached.
 
-- [#13546](https://github.com/emqx/emqx/pull/13546) Added the option to configure the query mode for Pulsar Producer action.
+- [#13546](https://github.com/emqx/emqx/pull/13546) Added a configurable option for the query mode in the Pulsar Producer action, allowing users to customize how data is queried before it is sent to the Pulsar service.
 
-
-
-### Operations
+#### Operations
 
 - [#13202](https://github.com/emqx/emqx/pull/13202) Introduce `emqx_cli conf cluster_sync fix` to address cluster inconsistencies. It synchronizes the configuration of the node with the largest `tnx_id` to all nodes.
 
@@ -132,7 +131,7 @@
 
 ### Bug Fixes
 
-### Core MQTT Functionality
+#### Core MQTT Functionality
 
 - [#12944](https://github.com/emqx/emqx/pull/12944) Fixed crash on non-UTF8 client IDs with strict_mode=false.
 
@@ -140,7 +139,7 @@
 
   Previously, messages that were delayed by some reasons, could surpass actual client ID ban specified with regular expression.
 
-### Authentication and Authorization
+#### Authentication and Authorization
 
 - [#13024](https://github.com/emqx/emqx/pull/13024) Add a default ACL deny-rule to reject subscription to `+/#` topic.
 
@@ -156,7 +155,7 @@
 
 - [#13196](https://github.com/emqx/emqx/pull/13196) In the built-in database of authorization, added a limit for the number of rules per client/user, and the default values is 100.
 
-### Data Integrations
+#### Data Integrations
 
 - [#13207](https://github.com/emqx/emqx/pull/13207) Previously, if the `republish` rule engine action failed to publish the message, the action success metrics were always increased.  Now, if the action detects it doesn't reach at least one subscriber, action failure metrics are increased.
 
@@ -171,13 +170,13 @@
 
 - [#13414](https://github.com/emqx/emqx/pull/13414) The RabbitMQ error log messages have been improved to provide clearer and more detailed information.
 
-### Operations
+#### Operations
 
 - [#13078](https://github.com/emqx/emqx/pull/13078) Added validation and error handling to ensure EMQX Management API requests with a JSON body include the required 'application/json' Content-Type header. If missing, the API now returns a 415 Unsupported Media Type status instead of a 400.
 
 - [#13225](https://github.com/emqx/emqx/pull/13225) Redacted sensitive data from authentication and authorization APIs.
 
-### Gateways
+#### Gateways
 
 - [#13607](https://github.com/emqx/emqx/pull/13607) Fixed that the CoAP subscription QoS displayed through the API was inconsistent with the actual QoS.
 
@@ -441,9 +440,9 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
 #### Security
 
-[#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
+- [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, support new `disconnect_after_expire` option. When enabled, the client will be disconnected after the JWT token expires.
 
-Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
+  Note: This is a breaking change. This option is enabled by default, so the default behavior is changed. Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
 
 #### Data Processing and Integration
 
