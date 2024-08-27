@@ -35,3 +35,24 @@
   This change doesn't affect Enterprise Edition users.
 
   - Obsolete and unused `cluster.core_nodes` configuration parameter has been removed.
+
+- [Dashboard Updates] The following features have been removed or limited in the Open-Source Edition Dashboard:
+
+  - Monitoring:
+    - Delayed Publish
+    - Alarms
+  - Access Control:
+    - Authentication (LDAP)
+    - Authorization (LDAP)
+    - Flapping Detect
+  - Integration:
+    - Flow Designer
+  - Management:
+    - Monitoring
+    - Advanced MQTT
+      - Topic Rewrite
+      - Auto Subscribe
+      - Delayed Publish
+  - Diagnose:
+    - Topic Metrics
+    - Slow Subscriptions
