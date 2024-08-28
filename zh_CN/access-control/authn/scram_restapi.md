@@ -1,4 +1,4 @@
-# 基于 REST API 的 MQTT 5.0 增强认证
+# 基于 REST API 的 MQTT 5.0 SCRAM 认证
 
 EMQX 支持通过 REST API 实现的 MQTT 5.0 增强认证，采用了[加盐挑战响应认证机制（SCRAM）](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism)。在此实现中，SCRAM 认证器利用外部 Web 资源来获取所需的认证数据。当启用该认证器后，如果客户端通过 SCRAM 发起连接请求，EMQX 将使用提供的用户名构建一个 HTTP 请求，并发送至外部服务，从而获取认证过程中所需的认证数据。
 
