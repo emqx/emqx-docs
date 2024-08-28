@@ -1,4 +1,4 @@
-# REST API-Based MQTT 5.0 Enhanced Authentication
+# REST API-Based MQTT 5.0 SCRAM Authentication
 
 EMQX supports MQTT 5.0 enhanced authentication using REST API, implementing the [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism). The SCRAM authenticator utilizes an external web resource to retrieve the necessary authentication data in this implementation. When enabled, and a client initiates a connection request with SCRAM, EMQX uses the provided username to construct an HTTP request to the external service, obtaining the authentication data required for the authentication process.
 
