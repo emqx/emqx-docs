@@ -56,7 +56,8 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | 密码认证 | LDAP        | [使用 LDAP 进行密码认证](./ldap.md)                 |
 | 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
 | JWT      | --          | [JWT 认证](./jwt.md)                                |
-| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证(SCRAM 认证)](./scram.md)         |
+| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)       |
+| 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos)          |
 
 ## 认证链
 

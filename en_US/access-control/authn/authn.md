@@ -65,7 +65,8 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
-| SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+| SCRAM          | Built-in Database | [Authentication using SCRAM with built-in database](./scram.md) |
+| GSSAPI         | Kerberos          | [Authentication using GSSAPI with Kerberos](./kerberos.md)   |
 
 ## Authentication Chain
 

@@ -269,6 +269,7 @@
             - access-control/authn/ldap
             - access-control/authn/http
         - access-control/authn/scram
+        - access-control/authn/kerberos
         - network/psk-authentication
         - access-control/authn/user_management
         - access-control/authn/acl
@@ -352,6 +353,9 @@
     - title_en: Confluent
       title_cn: Confluent
       path: data-integration/confluent-sink
+    - title_en: Couchbase
+      title_cn: Couchbase
+      path: data-integration/data-bridge-couchbase
     - title_en: Datalayers
       title_cn: Datalayers
       path: data-integration/data-bridge-datalayers
@@ -523,6 +527,7 @@
       children:
         - dashboard/sso-ldap
         - dashboard/sso-saml
+        - dashboard/sso-oidc
     - dashboard/audit-log
     - title_en: Rate Limit
       title_cn: 速率限制
