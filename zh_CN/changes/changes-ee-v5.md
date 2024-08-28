@@ -112,7 +112,7 @@
 
 #### 运维
 
-- [#13202](https://github.com/emqx/emqx/pull/13202) 引入了 `emqx_cli conf cluster_sync fix` 命令，用于解决集群配置不一致的问题。该命令将所有节点的配置与具有最高 `tnx_id` 的节点的配置进行同步，确保集群配置的一致性。
+- [#13202](https://github.com/emqx/emqx/pull/13202) 引入了 `emqx ctl conf cluster_sync fix` 命令，用于解决集群配置不一致的问题。该命令将所有节点的配置与具有最高 `tnx_id` 的节点的配置进行同步，确保集群配置的一致性。
 - [#13250](https://github.com/emqx/emqx/pull/13250) 为 `cluster.discovery_strategy` 添加了一个新的值：`singleton`。选择此选项后，将不会形成集群，并且节点将拒绝与其他节点之间的连接尝试。
 - [#13370](https://github.com/emqx/emqx/pull/13370) 为持久存储添加了新版 `wildcard_optimized` 存储布局，提供了以下改进：
   - 新布局没有固有的延迟。
