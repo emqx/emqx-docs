@@ -749,12 +749,13 @@ Del cluster_trace mytraces_ip successfully
 
 管理监听器。
 
-| 命令                             | 描述                                                         |
-| -------------------------------- | ------------------------------------------------------------ |
-| listeners                        | 列出所有监听器的信息。                                       |
-| listeners stop \<Identifier\>    | 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。 |
-| listeners start \<Identifier\>   | 启动一个监听器。                                             |
-| listeners restart \<Identifier\> | 重启一个监听器。                                             |
+| 命令                                         | 描述                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| listeners                                    | 列出所有监听器的信息。                                       |
+| listeners stop \<Identifier\>                | 停止一个监听器，Identifier 为 `{type}:{name}` 格式，如 `tcp:default`。（临时生效，当 EMQX 重启后将恢复原先状态。） |
+| listeners start \<Identifier\>               | 启动一个监听器。（临时生效，当 EMQX 重启后将恢复原先状态。） |
+| listeners restart \<Identifier\>             | 重启一个监听器。                                             |
+| listeners enable \<Identifier\> <true/false> | 启用或禁用一个监听器。（持久化到配置，永久生效）             |
 
 ### listeners
 
@@ -797,6 +798,10 @@ $ emqx ctl listeners stop tcp:default
 Stop tcp:default listener successfully.
 ```
 
+::: tip
+停止监听器会导致所有通过该监听器接入的客户端都断开连接。
+:::
+
 ### listeners start \<Identifier\>
 
 ```bash
@@ -812,8 +817,20 @@ Restarted tcp:default listener successfully.
 ```
 
 ::: tip
-停止监听器会导致所有通过该监听器接入的客户端都断开连接。
+重启监听器会导致所有通过该监听器接入的客户端都断开连接。
 :::
+
+### listeners enable \<Identifier\> <true/false> 
+
+```bash
+$ emqx ctl listeners enable tcp:default true
+Enabled tcp:default listener successfully.
+```
+
+```bash
+$ emqx ctl listeners enable tcp:default false
+Disabled tcp:default listener successfully.
+```
 
 ## authz cache-clean
 
