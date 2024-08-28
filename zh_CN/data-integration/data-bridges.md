@@ -101,6 +101,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 **NoSQL**
 
 - [ClickHouse](./data-bridge-clickhouse.md)
+- [Couchbase](./data-bridge-couchbase.md)
 - [DynamoDB](./data-bridge-dynamo.md)
 - [Greptime](./data-bridge-greptimedb.md)
 - [MongoDB](./data-bridge-mongodb.md)

@@ -353,6 +353,9 @@
     - title_en: Confluent
       title_cn: Confluent
       path: data-integration/confluent-sink
+    - title_en: Couchbase
+      title_cn: Couchbase
+      path: data-integration/data-bridge-couchbase
     - title_en: DynamoDB
       title_cn: DynamoDB
       path: data-integration/data-bridge-dynamo

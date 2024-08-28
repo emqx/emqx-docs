@@ -101,6 +101,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 **NoSQL**
 
 - [ClickHouse](./data-bridge-clickhouse.md)
+- [Couchbase](./data-bridge-couchbase.md)
 - [DynamoDB](./data-bridge-dynamo.md)
 - [Greptime](./data-bridge-greptimedb.md)
 - [MongoDB](./data-bridge-mongodb.md)
