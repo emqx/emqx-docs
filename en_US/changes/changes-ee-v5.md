@@ -104,13 +104,13 @@
   - **Encodes** the payload into JSON format.
   - **Concatenates** the `tenant` attribute from client attributes with the original topic, thereby modifying the topic before further processing.
   
-- [#13415](https://github.com/emqx/emqx/pull/13415) EMQX supported data integration with Couchbase.
+- [#13415](https://github.com/emqx/emqx/pull/13415) EMQX now supports data integration with Couchbase.
 
 - [#13463](https://github.com/emqx/emqx/pull/13463) Enhanced the GCP PubSub Producer action to automatically retry requests when receiving HTTP status codes 502 (Bad Gateway) or 503 (Service Unavailable) from PubSub. The retries will continue until the request is successful or the message's Time-To-Live (TTL) is reached.
 
 - [#13546](https://github.com/emqx/emqx/pull/13546) Added a configurable option for the query mode in the Pulsar Producer action, allowing users to customize how data is queried before it is sent to the Pulsar service.
 
-- [#13650](https://github.com/emqx/emqx/pull/13650) EMQX supported data integration with DataLayers.
+- [#13650](https://github.com/emqx/emqx/pull/13650) EMQX now supports data integration with DataLayers.
 
 #### Operations
 
