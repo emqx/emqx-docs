@@ -1,5 +1,134 @@
 # Version 5
 
+## 5.8.0
+
+*Release Date: 2024-08-28*
+
+### Enhancements
+
+#### Core MQTT Functionality
+
+- [#13009](https://github.com/emqx/emqx/pull/13009) Updated the log level for message receiving pause due to rate limiting from `debug` to `warning`. The log message `socket_receive_paused_by_rate_limit` is throttled to avoid excessive logging.
+
+#### Authentication and Authorization
+
+- [#12418](https://github.com/emqx/emqx/pull/12418) Enhanced JWT authentication to support claims verification using a list of objects:
+  
+  ```
+  [
+    {
+      name = "claim_name",
+      value = "${username}"
+    },
+    ...
+  ]
+  ```
+  
+  Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
+  
+  Improved the documentation for the `verify_claims` parameter.
+  
+- [#13229](https://github.com/emqx/emqx/pull/13229) Added support for `${cert_pem}` placeholder in authentication templates.
+
+- [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
+
+#### Data Integrations
+
+- [#13144](https://github.com/emqx/emqx/pull/13144) Changed the log level to `warning` and added throttling for the log message `data_bridge_buffer_overflow` when bridge buffers overflow and messages are dropped. Previously, these events were logged at the `info` level and were not visible with the default log settings.
+
+- [#13492](https://github.com/emqx/emqx/pull/13492) Enhanced the `GET /connectors` and `GET /connectors/:id` APIs to include lists of actions and sources that depend on a specific connector. Additionally, the `GET /actions`, `GET /sources`, `GET /actions/:id`, and `GET /sources/:id` APIs now return the list of rules associated with a specific action or source.
+
+- [#13505](https://github.com/emqx/emqx/pull/13505) Added the ability to filter rules in the HTTP API based on the IDs of data integration actions or sources used.
+
+- [#13506](https://github.com/emqx/emqx/pull/13506) Introduced the `peername` field to all rule engine events that already include the `peerhost` field. The `peername` field is a string formatted as `IP:PORT`.
+
+- [#13516](https://github.com/emqx/emqx/pull/13516) Added a `direct_dispatch` argument to the `republish` action.
+
+  When `direct_dispatch` is set to `true` (or rendered as `true` from template) the message is dispatched directly to subscribers. This feature helps prevent the triggering of additional rules or the recursive activation of the same rule.
+
+- [#13573](https://github.com/emqx/emqx/pull/13573) Introduced `client_attrs` to the SQL context for client connectivity events and the message `publish` event.
+  Users can now access client attributes within rule SQL statements, such as `SELECT client_attrs.attr1 AS attribute1`, and utilize `${attribute1}` in data integration actions.
+
+- [#13640](https://github.com/emqx/emqx/pull/13640) Added two new SQL functions for rules: `coalesce/2` and `coalesce_ne/2`.
+
+  These functions simplify handling null values in rule SQL expressions. For instance, instead of using:
+
+  ```
+  SELECT
+    CASE
+      WHEN is_null(payload.path.to.value) THEN
+        0
+      ELSE
+        payload.path.to.value
+    END AS my_value
+  ```
+
+  you can now write a more concise expression: `SELECT coalesce(payload.path.to.value, 0) AS my_value`.
+
+
+#### Operations
+
+- [#13202](https://github.com/emqx/emqx/pull/13202) Introduced the `emqx ctl conf cluster_sync fix` command to address cluster configuration inconsistencies. This command synchronizes the configuration of all nodes with the configuration of the node that has the highest `tnx_id`, ensuring consistency across the cluster.
+
+
+- [#13250](https://github.com/emqx/emqx/pull/13250) Added a new value for `cluster.discovery_strategy`: `singleton`.  By choosing this option, there will be effectively no clustering, and the node will reject connection attempts to and from other nodes.
+
+- [#13370](https://github.com/emqx/emqx/pull/13370) Added a new version of `wildcard_optimized` storage layout for durable storage, offering the following improvements:
+  - The new layout does not have an inherent latency.
+
+  - MQTT messages are serialized into a more space-efficient format.
+
+- [#13524](https://github.com/emqx/emqx/pull/13524) Added the `emqx ctl exclusive` CLI interface to manage exclusive topics more effectively. It allows administrators to better manage and troubleshoot exclusive topic subscriptions, ensuring that subscription states are accurately reflected and preventing unexpected failures.
+
+- [#13597](https://github.com/emqx/emqx/pull/13597) Added thin wrapper functions for plugins to store and manage the certificate files used by the plugins themselves. This fix prevents plugin certificates from being inadvertently deleted by the certificate garbage collection (GC) function.
+
+- [#13626](https://github.com/emqx/emqx/pull/13626) Added a new command `emqx ctl listeners enable <Identifier> <Bool>` to enable/disable a listener.
+
+- [#13493](https://github.com/emqx/emqx/pull/13493) Upgraded the RPC library `gen_rpc` to version 3.4.0. This update changes the default RPC server socket option from `true` to `active-100`, which introduces back-pressure to peer nodes when the RPC server experiences heavy load. 
+
+- [#13665](https://github.com/emqx/emqx/pull/13665) Added a new metric `emqx_actions_count` to the prometheus endpoint. It contains the number of all actions added by all rules, including Republish actions and Console Output actions.
+
+### Bug Fixes
+
+#### Core MQTT Functionality
+
+- [#12944](https://github.com/emqx/emqx/pull/12944) Fixed an issue that caused a crash when clients with non-UTF8 client IDs attempted to connect with `strict_mode=false`.
+
+- [#13006](https://github.com/emqx/emqx/pull/13006) Improved the validation of retained, delayed, and taken-over session messages to ensure they comply with banned client ID rules implemented through regular expression matching. Previously, certain messages, such as those delayed due to network issues or taken over by another session, could bypass the client ID bans set by regular expressions.
+
+#### Authentication and Authorization
+
+- [#13024](https://github.com/emqx/emqx/pull/13024) Added a default ACL deny rule to reject subscriptions to the `+/#` topic pattern. Since EMQX by default rejects subscriptions to `#` topic, for completeness, it should reject `+/#` as well.
+- [#13040](https://github.com/emqx/emqx/pull/13040) Improved HTTP authentication:
+  * Improved error logging for cases where the HTTP `Content-Type` header is missing or unrecognized, providing more detailed information.
+  * Fixed an issue causing double encoding of query parameters in authentication HTTP requests
+  * Enhanced error messages when a POST method with a JSON content type is configured for authentication requests but the JSON template fails to render into valid JSON. This can occur, for example, when a template contains a placeholder like `${password}` but receives a non-UTF8 password input, leading to better transparency and easier debugging for such scenarios.
+- [#13196](https://github.com/emqx/emqx/pull/13196) Added a limit to the built-in authorization database, restricting the number of Access Control List (ACL) rules per client or user to a default of 100.
+- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue with creating HTTP authorization that resulted in errors when the HTTP header list was empty.
+- [#13618](https://github.com/emqx/emqx/pull/13618) Improved the type specifications for the `authorization/sources` endpoint to provide clearer and more concise error messages.
+
+- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue in the built-in authorizer where updating rules for a client or user could result in the total number of rules exceeding the `max_rules` limit.
+
+- [#13678](https://github.com/emqx/emqx/pull/13678) Made the deletion of an authenticator in the chain an idempotent operation, ensuring that deleting a non-existing authenticator always succeeds.
+
+#### Data Integrations
+
+- [#13207](https://github.com/emqx/emqx/pull/13207) Improved the `republish` rule engine action to accurately reflect the success and failure of message publishing. Previously, the success metrics were incremented even when the republish action failed to deliver the message to any subscribers. Now, if the action detects that a message fails to reach any subscriber, the failure metrics are correctly incremented.
+
+- [#13425](https://github.com/emqx/emqx/pull/13425) Improved the MQTT connector error log messages to provide clearer and more detailed information.
+
+- [#13589](https://github.com/emqx/emqx/pull/13589) Fixed an issue where creating a rule with a string `"null"` for ID via the HTTP API was allowed, which could lead to an inconsistent configuration.
+
+#### Operations
+
+- [#13078](https://github.com/emqx/emqx/pull/13078) Improved validation and error handling in the EMQX Management API to ensure that requests with a JSON body include the `Content-Type: application/json` header. If the header is missing for APIs that expect JSON input, the server now correctly responds with a `415 Unsupported Media Type` status code instead of `400 Bad Request`.
+
+- [#13225](https://github.com/emqx/emqx/pull/13225) Enhanced security in authentication and authorization APIs by redacting sensitive data such as passwords. Previously, the APIs could return the original password values in responses. With this update, sensitive information is replaced with `******` to prevent accidental exposure and protect user credentials.
+
+#### Gateways
+
+- [#13607](https://github.com/emqx/emqx/pull/13607) Fixed an issue where the QoS level for CoAP subscriptions displayed through the API did not match the actual QoS level being used. This discrepancy could cause confusion as successful subscriptions were not accurately reflected on the Dashboard.
+
 ## 5.7.2
 
 *Release Date: 2024-08-07*
