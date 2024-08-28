@@ -75,15 +75,13 @@
   
 - [#12961](https://github.com/emqx/emqx/pull/12961) Added a configuration option to customize group IDs in advance for Kafka Consumer sources.
 
-- [#13069](https://github.com/emqx/emqx/pull/13069) Implemented Azure Blob Storage data integration.
+- [#13069](https://github.com/emqx/emqx/pull/13069) EMQX supports the data integration with Azure Blob Storage.
 
-- [#13199](https://github.com/emqx/emqx/pull/13199) Implemented the Message Enrichment and Transformation feature.
-
-  This allows users to transform incoming messages just by using simple variform syntax, without the need to define SQL rules in the Rule Engine.
+- [#13199](https://github.com/emqx/emqx/pull/13199) Implemented the Message Transformation feature. This feature allows users to transform and enrich incoming messages just by using simple variform syntax, without the need to define SQL rules in the Rule Engine.
 
   **Example Use Case:**
   Suppose you receive a message encoded in Avro format, and you want to decode it into JSON. After decoding, you want to prepend a `tenant` attribute (retrieved from the client attributes of the publishing client) to the topic before processing the message in the Rule Engine. With this new feature, you can achieve this transformation with the following configuration:
-
+  
   ```hocon
   message_transformation {
     transformations = [
@@ -99,14 +97,14 @@
     ]
   }
   ```
-
+  
   This configuration specifies a transformation named `mytransformation` that:
 
   - **Decodes** the message payload from Avro format using a specified schema.
   - **Encodes** the payload into JSON format.
   - **Concatenates** the `tenant` attribute from client attributes with the original topic, thereby modifying the topic before further processing.
-
-- [#13415](https://github.com/emqx/emqx/pull/13415) Implemented Couchbase data integration.
+  
+- [#13415](https://github.com/emqx/emqx/pull/13415) EMQX supported data integration with Couchbase.
 
 - [#13463](https://github.com/emqx/emqx/pull/13463) Enhanced the GCP PubSub Producer action to automatically retry requests when receiving HTTP status codes 502 (Bad Gateway) or 503 (Service Unavailable) from PubSub. The retries will continue until the request is successful or the message's Time-To-Live (TTL) is reached.
 
@@ -139,7 +137,7 @@
 
 - [#12944](https://github.com/emqx/emqx/pull/12944) Fixed an issue that caused a crash when clients with non-UTF8 client IDs attempted to connect with `strict_mode=false`.
 
-- [#13006](https://github.com/emqx/emqx/pull/13006) Improved the validation of retained, delayed, and taken-over session messages to ensure they comply with banned client ID regular expression rules. Previously, certain messages, such as those delayed due to network issues or taken over by another session, could bypass the client ID bans set by regular expressions.
+- [#13006](https://github.com/emqx/emqx/pull/13006) Improved the validation of retained, delayed, and taken-over session messages to ensure they comply with banned client ID rules implemented through regular expression matching. Previously, certain messages, such as those delayed due to network issues or taken over by another session, could bypass the client ID bans set by regular expressions.
 
 #### Authentication and Authorization
 
@@ -154,12 +152,12 @@
 
 #### Data Integrations
 
-- [#13207](https://github.com/emqx/emqx/pull/13207) Improved the `republish` rule engine action to accurately reflect the success and failure of message publishing. Previously, the success metrics were incremented even when the republish action failed to deliver the message to any subscribers. Now, if the action detects that a message does not reach at least one subscriber, the failure metrics are correctly incremented.
+- [#13207](https://github.com/emqx/emqx/pull/13207) Improved the `republish` rule engine action to accurately reflect the success and failure of message publishing. Previously, the success metrics were incremented even when the republish action failed to deliver the message to any subscribers. Now, if the action detects that a message fails to reach any subscriber, the failure metrics are correctly incremented.
 
 
 - [#13425](https://github.com/emqx/emqx/pull/13425) Improved the MQTT connector error log messages to provide clearer and more detailed information.
 - [#13589](https://github.com/emqx/emqx/pull/13589) Fixed an issue where creating a rule with a string `"null"` for ID via the HTTP API was allowed, which could lead to an inconsistent configuration.
-- [#13414](https://github.com/emqx/emqx/pull/13414) Improved the RabbitMQ error log messages to provide clearer and more detailed information.
+- [#13414](https://github.com/emqx/emqx/pull/13414) Improved the RabbitMQ connector error log messages to provide clearer and more detailed information.
 
 #### File Transfer
 
