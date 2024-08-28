@@ -5,10 +5,17 @@ EMQX enables users to restrict access from particular clients through its bannin
 Banning can also be applied through rules that include:
 
 - Regular patterns to match client identifiers and usernames.
+
+  ::: tip
+
+  Banning through regular expressions does not apply to clients that are already connected.
+
+  :::
+
 - CIDR ranges to match source IP addresses.
 
 ::: tip
-Consider that a high volume of matching rules can adversely affect performance. This is because the system checks all rules for each client attempting to connect, in contrast to direct bans.
+Be aware that a high volume of matching rules can adversely affect performance. This is because the system checks all rules for each client attempting to connect, in contrast to direct bans.
 :::
 
 This page focuses on managing banned clients via the EMQX Dashboard. The banning functionality can also be accessed through the [REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned).
