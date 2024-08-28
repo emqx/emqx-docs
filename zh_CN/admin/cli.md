@@ -337,6 +337,29 @@ t/1 -> emqx@127.0.0.1
 如果集群中有大量的主题订阅，`list` 指令可能会比较耗时且耗资源。
 :::
 
+## exclusive
+
+此命令用于查看当前系统中所有排它订阅的主题或删除一个排它订阅主题。
+
+| Command                    | Description              |
+| -------------------------- | ------------------------ |
+| exclusive list             | 列出所有排它订阅的主题。 |
+| exclusive delete \<Topic\> | 删除排它订阅主题。       |
+
+### exclusive list
+
+```bash
+$ emqx ctl exclusive list
+t/1 -> client1
+```
+
+### exclusive delete \<Topic\>
+
+```bash
+$ emqx ctl exclusive delete t/1
+ok
+```
+
 ## subscriptions
 
 查看、增加或者删除某个客户端的订阅。
