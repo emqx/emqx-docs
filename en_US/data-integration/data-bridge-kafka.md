@@ -98,6 +98,7 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
    - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
    - Leave other options as default or configure them according to your business needs.
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 5. Click the **Create** button to complete the creation of the connector.
 
 Once created, the connector will automatically connect to Kafka. Next, you need to create a rule based on this connector to forward data to the Kafka cluster configured in the connector.
@@ -135,7 +136,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    :::
 
-5. Click the + **Add Action** button to define the action triggered by the rule. From the **Type of Action** dropdown list, select `Kafka Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Kafka Producer action from the **Action** dropdown box. This demonstration creates a new rule and adds it to the rule.
+5. Click the + **Add Action** button to define the action triggered by the rule. From the **Type of Action** dropdown list, select `Kafka Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Kafka Producer action from the **Action** dropdown box. This demonstration creates a new producer action and adds it to the rule.
 
 6. Enter the name and description of the Sink in the corresponding text boxes below.
 
@@ -274,69 +275,25 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 
 ## Create a Kafka Consumer Connector
 
-Before adding a Kafka Source action, you need to create a Kafka producer connector to establish a connection between EMQX and Kafka.
+Before adding a Kafka Source action, you need to create a Kafka consumer connector to establish a connection between EMQX and Kafka.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-
 2. Click **Create** on the top right corner of the page.
-
 3. In the **Create Connector** page, click to select **Kafka Consumer**, and then click **Next**.
-
-4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers.
-
+4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers, for example, `my-kafka-source`.
 5. Enter the connection information for the source.
    - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
    - Leave other options as default or configure according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Reesource Access**.
-
-6. **Key Encoding Mode** and **Value Encoding Mode**: Select the encoding mode for Kafka message key and message value.
-
-7. Click **Add** to add at least one Kafka-to-MQTT topic mapping in the **Topic Mapping** field. For example, enter `testtopic-out` in **Kafka Topic** and `t/1` in **MQTT Topic** for this demonstration. The **MQTT Payload Template** subfield specifies the MQTT payload that should be used, and has the following Kafka message fields available for templating:
-
-   | **Field Name** | **Description**                                              |
-   | :------------- | :----------------------------------------------------------- |
-   | `headers`      | An object containing string key-value pairs                  |
-   | `key`          | Kafka message key (uses the same encoding method as the selected key) |
-   | `offset`       | Offset for the message in Kafka's topic partition            |
-   | `topic`        | Original Kafka topic                                         |
-   | `ts`           | Message timestamp                                            |
-   | `ts_type`      | Message timestamp type, which is one of `create`, `append` or `undefined` |
-   | `value`        | Kafka message value (uses the same encoding method as the selected key) |
-
-   The default value for **MQTT Payload Template** is `${.}`, which includes all available data encoded as a JSON object. For example, choosing `${.}` as a template will produce the following for a Kafka message:
-
-   ```json
-   {
-       "value": "value",
-       "ts_type": "create",
-       "ts": 1679665968238,
-       "topic": "testtopic-out",
-       "offset": 2,
-       "key": "key",
-       "headers": {"header_key": "header_value"}
-   }
-   ```
-
-   Subfields from the Kafka message may be accessed with dot notation. For example, `${.value}` will resolve to the Kafka message value, and `${.headers.h1}` will resolve to the value of the `h1` Kafka header if such a subfield exists. Absent values will be replaced by empty strings.
-
-   **Note**: Each Kafka-to-MQTT topic mapping must contain a unique Kafka topic name. That is, the Kafka topic must not be present in more than one mapping.
-
-8. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
-
-   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
-   - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-
-9. Advanced settings (optional): See **Advanced Configurations.**
-
-10. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
-
-11. Click **Create**. You will be offered the option of creating an associated rule. For the Kafka source, it is not strictly necessary to create a rule for further data processing. If you need to create a rule for the source, see [Create Rule for Kafka Source](#create-rule-for-kafka-source-optional).
-
-<img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Resource Access**.
+6. Advanced settings (optional): See **Advanced Configurations.**
+7. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
+11. Click **Create**. You will be offered the option of creating an associated rule. See [Create a Rule with Kafka Consumer Source](#create-a-rule-with-kafka-consumer-source).
 
 ## Create a Rule with Kafka Consumer Source
 
 This section demonstrates how to create a rule in EMQX to further process the message forwarded by a configured Kafka Consumer source and republish the message to an MQTT topic.
+
+### Create a Rule SQL
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -357,10 +314,32 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
    Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. Select **Republish** from the drop-down list.
-6. In **Topic** and **Payload** fields, you can enter the topic and payload for the messages you want to republish. For example, enter `t/1` and `${.}` for this demonstration.
-7. Click **Add** to include the action to the rule.
-8. Back on the **Create Rule** page, click **Create**.
+### Add Kafka Consumer Source as Data Input
+
+1. Select the **Data Inputs** tab on the right side of the Create Rule page and click **Add Input**. 
+2. Select **Kafka Consumer** from the **Input Type** dropdown list. keep the **Source** dropdown box to the default `Create Source` option, or choose a previously created Kafka Consumer source from the **Source** dropdown box. This demonstration creates a new consumer source and adds it to the rule.
+3. Enter the name and description of the Source in the corresponding text boxes below.
+4. In the **Connector** dropdown box, select the `my-kafka-consumer` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Consumer Connector](#create-a-kafka-consumer-connector).
+5. Configure the following fields:
+
+   - **Kafka Topic**: Specify the Kafka topic from which the consumer source will subscribe to for receiving messages.
+   - **Group ID**: Specify the consumer group identifier for this source. If not provided, a group ID will be automatically generated based on the source name.
+   - **Key Encoding Mode** and **Value Encoding Mode**: Select the encoding mode for Kafka message key and message value.
+7. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
+
+   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
+   - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
+8. Advanced settings (optional): See **Advanced Configurations.**
+9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.
+10. Click **Create** to complete the Source creation. Back on the **Create Rule** page, you will see the new Source appear under the **Data Inputs** tab.
+
+### Add a Republish Action
+
+1. Select the **Action Outputs** tab and click the + **Add Action** button to define an action that will be triggered by the rule. 
+2. Select **Republish** from the **Type of Action** drop-down list.
+3. In **Topic** and **Payload** fields, you can enter the topic and payload for the messages you want to republish. For example, enter `t/1` and `${.}` for this demonstration.
+4. Click **Add** to include the action to the rule.
+8. Back on the **Create Rule** page, click **Save**.
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
