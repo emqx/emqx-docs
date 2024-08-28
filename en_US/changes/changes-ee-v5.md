@@ -131,6 +131,7 @@
 
 - [#13493](https://github.com/emqx/emqx/pull/13493) Upgraded the RPC library `gen_rpc` to version 3.4.0. This update changes the default RPC server socket option from `true` to `active-100`, which introduces back-pressure to peer nodes when the RPC server experiences heavy load. 
 
+- [#13665](https://github.com/emqx/emqx/pull/13665) Added a new metric `emqx_actions_count` to the prometheus endpoint. It contains the number of all actions added by all rules, including Republish actions and Console Output actions.
 ### Bug Fixes
 
 #### Core MQTT Functionality
@@ -149,6 +150,14 @@
   * Enhanced error messages when a POST method with a JSON content type is configured for authentication requests but the JSON template fails to render into valid JSON. This can occur, for example, when a template contains a placeholder like `${password}` but receives a non-UTF8 password input, leading to better transparency and easier debugging for such scenarios.
   
 - [#13196](https://github.com/emqx/emqx/pull/13196) Added a limit to the built-in authorization database, restricting the number of Access Control List (ACL) rules per client or user to a default of 100.
+
+- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue when creating HTTP authorization with empty HTTP header list.
+
+- [#13618](https://github.com/emqx/emqx/pull/13618) Enhanced type specification for the `authorization/sources` endpoint.
+
+- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue when updating rules in the built-in authorizer for a client/user could lead to the total number of rules exceeding the `max_rules` limit.
+
+- [#13678](https://github.com/emqx/emqx/pull/13678) This fix makes the deletion of authenticator in the chain an idempotent operation, meaning, deleting a non-existing authenticator always succeeeds.
 
 #### Data Integrations
 
