@@ -32,11 +32,11 @@
   
   Improved the documentation for the `verify_claims` parameter.
 
-- [#13324](https://github.com/emqx/emqx/pull/13324) The EMQX Dashboard can now integrate with identity services that support the OIDC protocol to enable OIDC-based SSO, such as [Okta](https://www.okta.com/).
+- [#13324](https://github.com/emqx/emqx/pull/13324) The EMQX Dashboard can now integrate with identity services that support the OIDC protocol, such as [Okta](https://www.okta.com/), to enable OIDC-based Single Sign-On (SSO).
   
 - [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
 
-- [#13601](https://github.com/emqx/emqx/pull/13601) Implement GSSAPI (SASL-GSSAPI with Kerberos V5) authentication.
+- [#13601](https://github.com/emqx/emqx/pull/13601) Added support for Kerberos authentication in EMQX using the GSSAPI mechanism (SASL-GSSAPI with Kerberos V5). This enhancement allows MQTT clients and servers to authenticate securely over a non-secure network using the `GSSAPI-KERBEROS` method.
 
 #### Data Integrations
 
@@ -110,7 +110,7 @@
 
 - [#13546](https://github.com/emqx/emqx/pull/13546) Added a configurable option for the query mode in the Pulsar Producer action, allowing users to customize how data is queried before it is sent to the Pulsar service.
 
-- [#13650](https://github.com/emqx/emqx/pull/13650) Implemented DataLayers data integration.
+- [#13650](https://github.com/emqx/emqx/pull/13650) EMQX supported data integration with DataLayers.
 
 #### Operations
 

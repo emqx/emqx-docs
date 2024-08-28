@@ -32,7 +32,10 @@
 
   改进了 `verify_claims` 参数的文档。
 
+- [#13324](https://github.com/emqx/emqx/pull/13324) EMQX Dashboard 现在可以与支持 OIDC 协议的身份服务集成，例如 [Okta](https://www.okta.com/)，以实现基于 OIDC 的单点登录（SSO）。
+
 - [#13534](https://github.com/emqx/emqx/pull/13534) 添加了日志追踪，用于记录超级用户绕过授权检查的情况。
+- [#13601](https://github.com/emqx/emqx/pull/13601) EMQX 支持 Kerberos 认证，该认证使用 GSSAPI 机制（基于 Kerberos V5 的 SASL-GSSAPI）。此增强功能允许 MQTT 客户端和服务器使用 `GSSAPI-KERBEROS` 方法在不安全的网络上进行安全认证。
 
 #### 数据集成
 
@@ -99,8 +102,12 @@
   - 将客户端属性中的 `tenant` 属性与原始主题**连接**，从而在进一步处理之前修改主题。
 
 - [#13415](https://github.com/emqx/emqx/pull/13415) EMQX 支持与 Couchbase 的数据集成。
+
 - [#13463](https://github.com/emqx/emqx/pull/13463) 增强了 GCP PubSub 生产者动作，当从 PubSub 接收到 HTTP 状态代码 502（Bad Gateway）或 503（Service Unavailable）时，自动重试请求。重试将持续进行，直到请求成功或消息的生存时间（TTL）到达。
+
 - [#13546](https://github.com/emqx/emqx/pull/13546) 为 Pulsar 生产者动作添加了一个可配置的查询模式选项，允许用户在数据发送到 Pulsar 服务之前自定义数据查询方式。
+
+- [#13650](https://github.com/emqx/emqx/pull/13650) EMQX 支持与 DataLayers 的数据集成。
 
 #### 运维
 
