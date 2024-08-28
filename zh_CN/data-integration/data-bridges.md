@@ -89,6 +89,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
+- [Datalayers](./data-bridge-datalayers.md)
 
 **SQL**
 

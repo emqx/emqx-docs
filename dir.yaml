@@ -356,6 +356,9 @@
     - title_en: Couchbase
       title_cn: Couchbase
       path: data-integration/data-bridge-couchbase
+    - title_en: Datalayers
+      title_cn: Datalayers
+      path: data-integration/data-bridge-datalayers
     - title_en: DynamoDB
       title_cn: DynamoDB
       path: data-integration/data-bridge-dynamo
