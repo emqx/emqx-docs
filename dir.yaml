@@ -269,6 +269,7 @@
             - access-control/authn/ldap
             - access-control/authn/http
         - access-control/authn/scram
+        - access-control/authn/scram_restapi
         - access-control/authn/kerberos
         - network/psk-authentication
         - access-control/authn/user_management

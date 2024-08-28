@@ -36,7 +36,7 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ### MQTT 5.0 增强认证
 
-[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
+[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中或通过 REST API 访问外部 HTTP 服务获取认证数据。
 
 ### PSK 认证
 
@@ -57,6 +57,7 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
 | JWT      | --          | [JWT 认证](./jwt.md)                                |
 | 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)       |
+| 增强认证 | HTTP 服务   | [基于 REST API 的 MQTT 5.0 增强认证 （SCRAM 认证）](./scram_restapi.md) |
 | 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos)          |
 
 ## 认证链
