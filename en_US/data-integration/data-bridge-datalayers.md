@@ -200,7 +200,7 @@ When setting the data format using JSON, you can use the batch settings feature 
 Use MQTTX to publish a message to the `t/1` topic. This operation will also trigger online and offline events:
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Datalayers" }'
+mqttx pub -i emqx_c -t t/1 -m '{ "temp": "23.5", "hum": "62", "precip": 2}'
 ```
 
 Check the running statistics of both Sinks. The hit and successful send counts should each increase by 1.
