@@ -45,7 +45,7 @@ EMQX can also be configured to delegate authentication work to external services
 
 ### MQTT 5.0 Enhanced Authentication
 
-[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM and provides support for SCRAM user management through our built-in database.
+[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM user management through our built-in database and external HTTP services.
 
 ### PSK Authentication
 
@@ -65,7 +65,8 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
-| SCRAM          | Built-in Database | [Authentication using SCRAM with built-in database](./scram.md) |
+| SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+| SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_restapi.md) |
 | GSSAPI         | Kerberos          | [Authentication using GSSAPI with Kerberos](./kerberos.md)   |
 
 ## Authentication Chain
