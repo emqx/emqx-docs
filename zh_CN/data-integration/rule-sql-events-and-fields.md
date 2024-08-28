@@ -214,7 +214,9 @@ FROM
 | timestamp             | 事件触发时间 (单位：毫秒)                                                                                                                                         |
 | publish\_received\_at | PUBLISH 消息到达 Broker 的时间 (单位：毫秒)                                                                                                                       |
 | node                  | 事件触发所在节点                                                                                                                                                  |
+
 示例
+
 
 ```sql
 SELECT
