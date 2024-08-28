@@ -29,13 +29,14 @@ EMQX 节点名称是不可变的，因为它们被固定在数据库架构和数
 
 手动集群是通过使用命令来指定哪些节点应该成为集群的一部分来创建 EMQX 集群。自动集群是另一种方法，它允许多个 EMQX 节点在无需手动配置的情况下自动形成集群。自动集群简化了设置 EMQX 集群的过程，使动态地添加或从集群中移除节点变得更加容易。EMQX 支持基于静态节点列表、DNS 记录、etcd 和 Kubernetes 的自动集群。以下表格展示了 EMQX 支持的不同节点发现策略和集群创建方法：
 
-| 方式   | 说明                    |
-| ------ | ----------------------- |
-| manual | 手动命令创建集群        |
-| static | 静态节点列表自动集群    |
-| DNS    | DNS A 记录自动集群      |
-| etcd   | 通过 etcd 自动集群      |
-| K8s    | Kubernetes 服务自动集群 |
+| 方式      | 说明                    |
+| --------- | ----------------------- |
+| manual    | 手动命令创建集群        |
+| static    | 静态节点列表自动集群    |
+| dns       | DNS A 记录自动集群      |
+| etcd      | 通过 etcd 自动集群      |
+| k8s       | Kubernetes 服务自动集群 |
+| singleton | Clustering is disabled, the node will reject connection attempts to, and from other nodes |
 
 EMQX 也支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，实现了 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、 网络分区自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean) 等功能。
 
@@ -43,7 +44,7 @@ EMQX 默认配置为手动创建集群，您可以通过 `emqx.conf` 配置文�
 
 ```bash
 cluster {
-    ## 可选 manual | static | dns | etcd | K8s
+    ## 可选 manual | static | dns | etcd | k8s | singleton
     discovery_strategy  =  manual
 }
 ```
@@ -281,7 +282,7 @@ Cluster status: #{running_nodes =>
 
    ```bash
    cluster {
-       ## 可选 manual | static | dns | etcd | K8s
+       ## 可选 manual | static | dns | etcd | k8s | singleton
        discovery_strategy  =  manual
    }
    ```
@@ -438,7 +439,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 ```bash
 cluster {
     discovery_strategy = k8s
-    K8s {
+    k8s {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
         address_type = ip
@@ -451,11 +452,11 @@ cluster {
 其中：
 
 - `discovery_strategy` 是节点发现策略，设置为 `k8s`。
-- `cluster.K8s.apiserver` 是 Kubernetes API 端点 URL，默认值：`http://10.110.111.204:8080`。
-- `cluster.K8s.service_name` 是 EMQX 服务名称，默认值：`emqx`。
-- `cluster.K8s.address_type` 是连接发现节点的地址类型，默认值：`ip`，可选值：`ip`、`dns`、`hostname`。
-- [可选] `cluster.K8s.suffix` 是节点名称后缀，仅当 `cluster.K8s.address_type` 设置为 `dns` 时需要，默认值：`pod.local`。
-- `cluster.K8s.namespace` 是 Kubernetes 命名空间，它是一个字符串对象，默认值：`default`。
+- `cluster.k8s.apiserver` 是 Kubernetes API 端点 URL，默认值：`http://10.110.111.204:8080`。
+- `cluster.k8s.service_name` 是 EMQX 服务名称，默认值：`emqx`。
+- `cluster.k8s.address_type` 是连接发现节点的地址类型，默认值：`ip`，可选值：`ip`、`dns`、`hostname`。
+- [可选] `cluster.k8s.suffix` 是节点名称后缀，仅当 `cluster.k8s.address_type` 设置为 `dns` 时需要，默认值：`pod.local`。
+- `cluster.k8s.namespace` 是 Kubernetes 命名空间，它是一个字符串对象，默认值：`default`。
 
 配置完成后逐一启动所有节点即可完成集群。
 
