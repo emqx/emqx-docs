@@ -286,7 +286,7 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Resource Access**.
 6. Advanced settings (optional): See **Advanced Configurations.**
 7. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
-11. Click **Create**. You will be offered the option of creating an associated rule. For the Kafka source, it is not strictly necessary to create a rule for further data processing. If you need to create a rule for the source, see [Create Rule for Kafka Source](#create-rule-for-kafka-source-optional).
+11. Click **Create**. You will be offered the option of creating an associated rule. See [Create Rule for Kafka Source](#create-rule-for-kafka-source-optional).
 
 <img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
 
