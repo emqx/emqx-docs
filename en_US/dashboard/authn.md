@@ -51,7 +51,7 @@ The enhanced authentication feature in MQTT 5.0, if selected, currently only pro
 
 Enhanced authentication enables two-way authentication of the client and server, where the server can verify that the connected client is the real client and the client can verify that the connected server is the real server, thus providing higher security.
 
-For more details about MQTT 5.0 Enhanced Authentication, refer to [SCRAM Authentication](../access-control/authn/scram.md).
+For more details about MQTT 5.0 Enhanced Authentication, refer to [SCRAM Authentication](../access-control/authn/scram.md) and [MQTT 5.0 Enhanced Authentication - Kerberos](../access-control/authn/kerberos.md).
 
 ### Configuration
 

@@ -43,7 +43,7 @@ MQTT 5.0 中的增强认证功能，如果选择了该认证方式的话，目�
 
 增强认证包含质询/响应风格的认证，可以实现对客户端和服务器的双向认证，服务器可以验证连接的客户端是否是真正的客户端，客户端也可以验证连接的服务器是否是真正的服务器，从而提供了更高的安全性。
 
-更多关于 MQTT 5.0 增强认证的介绍与使用方式，参阅 [SCRAM 认证](../access-control/authn/scram.md)。
+更多关于 MQTT 5.0 增强认证的介绍与使用方式，参阅 [SCRAM 认证](../access-control/authn/scram.md)和 [MQTT 5.0 增强认证](../access-control/authn/kerberos.md)。
 
 ### 配置参数
 
