@@ -98,21 +98,17 @@
 #### Authentication and Authorization
 
 - [#13024](https://github.com/emqx/emqx/pull/13024) Added a default ACL deny rule to reject subscriptions to the `+/#` topic pattern. Since EMQX by default rejects subscriptions to `#` topic, for completeness, it should reject `+/#` as well.
-
 - [#13040](https://github.com/emqx/emqx/pull/13040) Improved HTTP authentication:
   * Improved error logging for cases where the HTTP `Content-Type` header is missing or unrecognized, providing more detailed information.
   * Fixed an issue causing double encoding of query parameters in authentication HTTP requests
   * Enhanced error messages when a POST method with a JSON content type is configured for authentication requests but the JSON template fails to render into valid JSON. This can occur, for example, when a template contains a placeholder like `${password}` but receives a non-UTF8 password input, leading to better transparency and easier debugging for such scenarios.
-
 - [#13196](https://github.com/emqx/emqx/pull/13196) Added a limit to the built-in authorization database, restricting the number of Access Control List (ACL) rules per client or user to a default of 100.
+- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue with creating HTTP authorization that resulted in errors when the HTTP header list was empty.
+- [#13618](https://github.com/emqx/emqx/pull/13618) Improved the type specifications for the `authorization/sources` endpoint to provide clearer and more concise error messages.
 
-- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue when creating HTTP authorization with empty HTTP header list.
+- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue in the built-in authorizer where updating rules for a client or user could result in the total number of rules exceeding the `max_rules` limit.
 
-- [#13618](https://github.com/emqx/emqx/pull/13618) Enhanced type specification for the `authorization/sources` endpoint.
-
-- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue when updating rules in the built-in authorizer for a client/user could lead to the total number of rules exceeding the `max_rules` limit.
-
-- [#13678](https://github.com/emqx/emqx/pull/13678) This fix makes the deletion of authenticator in the chain an idempotent operation, meaning, deleting a non-existing authenticator always succeeeds.
+- [#13678](https://github.com/emqx/emqx/pull/13678) Made the deletion of an authenticator in the chain an idempotent operation, ensuring that deleting a non-existing authenticator always succeeds.
 
 #### Data Integrations
 

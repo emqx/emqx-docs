@@ -117,22 +117,15 @@
 #### Operations
 
 - [#13202](https://github.com/emqx/emqx/pull/13202) Introduced the `emqx_cli conf cluster_sync fix` command to address cluster configuration inconsistencies. This command synchronizes the configuration of all nodes with the configuration of the node that has the highest `tnx_id`, ensuring consistency across the cluster.
-
 - [#13250](https://github.com/emqx/emqx/pull/13250) Added a new value for `cluster.discovery_strategy`: `singleton`.  By choosing this option, there will be effectively no clustering, and the node will reject connection attempts to and from other nodes.
-
 - [#13370](https://github.com/emqx/emqx/pull/13370) Added a new version of `wildcard_optimized` storage layout for durable storage, offering the following improvements:
   - The new layout does not have an inherent latency.
   
   - MQTT messages are serialized into a more space-efficient format.
-  
 - [#13524](https://github.com/emqx/emqx/pull/13524) Added the `emqx ctl exclusive` CLI interface to manage exclusive topics more effectively. It allows administrators to better manage and troubleshoot exclusive topic subscriptions, ensuring that subscription states are accurately reflected and preventing unexpected failures.
-
 - [#13597](https://github.com/emqx/emqx/pull/13597) Added thin wrapper functions for plugins to store and manage the certificate files used by the plugins themselves. This fix prevents plugin certificates from being inadvertently deleted by the certificate garbage collection (GC) function.
-  
 - [#13626](https://github.com/emqx/emqx/pull/13626) Added a new command `emqx ctl listeners enable <Identifier> <Bool>` to enable/disable a listener.
-
 - [#13493](https://github.com/emqx/emqx/pull/13493) Upgraded the RPC library `gen_rpc` to version 3.4.0. This update changes the default RPC server socket option from `true` to `active-100`, which introduces back-pressure to peer nodes when the RPC server experiences heavy load. 
-
 - [#13665](https://github.com/emqx/emqx/pull/13665) Added a new metric `emqx_actions_count` to the prometheus endpoint. It contains the number of all actions added by all rules, including Republish actions and Console Output actions.
 ### Bug Fixes
 
@@ -153,13 +146,13 @@
   
 - [#13196](https://github.com/emqx/emqx/pull/13196) Added a limit to the built-in authorization database, restricting the number of Access Control List (ACL) rules per client or user to a default of 100.
 
-- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue when creating HTTP authorization with empty HTTP header list.
+- [#13584](https://github.com/emqx/emqx/pull/13584) Fixed an issue with creating HTTP authorization that resulted in errors when the HTTP header list was empty.
 
-- [#13618](https://github.com/emqx/emqx/pull/13618) Enhanced type specification for the `authorization/sources` endpoint.
+- [#13618](https://github.com/emqx/emqx/pull/13618) Improved the type specifications for the `authorization/sources` endpoint to provide clearer and more concise error messages.
 
-- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue when updating rules in the built-in authorizer for a client/user could lead to the total number of rules exceeding the `max_rules` limit.
+- [#13624](https://github.com/emqx/emqx/pull/13624) Fixed an issue in the built-in authorizer where updating rules for a client or user could result in the total number of rules exceeding the `max_rules` limit.
 
-- [#13678](https://github.com/emqx/emqx/pull/13678) This fix makes the deletion of authenticator in the chain an idempotent operation, meaning, deleting a non-existing authenticator always succeeeds.
+- [#13678](https://github.com/emqx/emqx/pull/13678) Made the deletion of an authenticator in the chain an idempotent operation, ensuring that deleting a non-existing authenticator always succeeds.
 
 #### Data Integrations
 

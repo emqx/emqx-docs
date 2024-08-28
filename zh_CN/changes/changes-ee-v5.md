@@ -32,8 +32,9 @@
 
   改进了 `verify_claims` 参数的文档。
 
-- [#13324](https://github.com/emqx/emqx/pull/13324) EMQX Dashboard 现在可以与支持 OIDC 协议的身份服务集成，例如 [Okta](https://www.okta.com/)，以实现基于 OIDC 的单点登录（SSO）。
+- [#13229](https://github.com/emqx/emqx/pull/13229) 在认证模板中添加了对 `${cert_pem}` 占位符的支持。
 
+- [#13324](https://github.com/emqx/emqx/pull/13324) EMQX Dashboard 现在可以与支持 OIDC 协议的身份服务集成，例如 [Okta](https://www.okta.com/)，以实现基于 OIDC 的单点登录（SSO）。
 - [#13534](https://github.com/emqx/emqx/pull/13534) 添加了日志追踪，用于记录超级用户绕过授权检查的情况。
 - [#13601](https://github.com/emqx/emqx/pull/13601) EMQX 支持 Kerberos 认证，该认证使用 GSSAPI 机制（基于 Kerberos V5 的 SASL-GSSAPI）。此增强功能允许 MQTT 客户端和服务器使用 `GSSAPI-KERBEROS` 方法在不安全的网络上进行安全认证。
 
@@ -120,6 +121,7 @@
 - [#13597](https://github.com/emqx/emqx/pull/13597) 添加了轻量级的封装函数，供插件自行存储和管理证书文件。此修复措施防止插件证书被证书垃圾回收（GC）功能意外删除。
 - [#13626](https://github.com/emqx/emqx/pull/13626) 添加了一个新命令 `emqx ctl listeners enable <Identifier> <Bool>` 用于启用/禁用监听器。
 - [#13493](https://github.com/emqx/emqx/pull/13493) 将 RPC 库 `gen_rpc` 升级到 3.4.0 版本。此更新将默认的 RPC 服务器套接字选项从 `true` 更改为 `active-100`，在 RPC 服务器负载较重时对对等节点引入了反压机制。
+- [#13665](https://github.com/emqx/emqx/pull/13665) 在 Prometheus 端点中新增了一个指标 `emqx_actions_count`。该指标包含所有规则添加的动作数量，包括重发布（Republish）动作和控制台输出（Console Output）动作。
 
 ### 修复
 
@@ -136,6 +138,10 @@
   - 修复了在认证 HTTP 请求中导致查询参数双重编码的问题。
   - 改进了在配置为使用 POST 方法和 JSON 内容类型的认证请求中，当 JSON 模板无法渲染为有效 JSON 时的错误提示。此类情况通常发生在模板包含类似 `${password}` 的占位符但收到非 UTF-8 编码的密码输入时，改进后提高了透明度并简化了调试过程。
 - [#13196](https://github.com/emqx/emqx/pull/13196) 为内置授权数据库添加了限制，将每个客户端或用户的权限列表（ACL）规则数量限制为默认的 100 条。
+- [#13584](https://github.com/emqx/emqx/pull/13584) 修复了创建 HTTP 授权时，当 HTTP 头列表为空时导致错误的问题。
+- [#13618](https://github.com/emqx/emqx/pull/13618) 改进了 `authorization/sources` 端点的类型规范，以提供更清晰和简洁的错误消息。
+- [#13624](https://github.com/emqx/emqx/pull/13624) 修复了内置数据库授权检查器中的一个问题，即在更新客户端或用户的规则时，可能导致规则总数超出 `max_rules` 限制。
+- [#13678](https://github.com/emqx/emqx/pull/13678) 使删除链中认证器的操作幂等化，确保即使删除的认证器不存在，该操作也能成功。
 
 #### 数据集成
 
