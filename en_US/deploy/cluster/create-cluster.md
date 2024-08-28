@@ -29,14 +29,14 @@ Manual clustering is the method that creates an EMQX cluster by manually specify
 
 The following table shows different node discovery strategies and cluster creation methods supported by EMQX:
 
-| Strategy    | Description                               |
-| ----------- | ----------------------------------------- |
-| `manual`    | Manually create a cluster with commands   |
-| `static`    | Autocluster through static node list      |
-| `dns`       | Autocluster through DNS A and SRV records |
-| `etcd`      | Autocluster through etcd                  |
-| `k8s`       | Autocluster provided by Kubernetes        |
-| `singleton` | Clustering is disabled, the node will reject connection attempts to, and from other nodes |
+| Strategy    | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `manual`    | Manually create a cluster with commands                      |
+| `static`    | Autocluster through static node list                         |
+| `dns`       | Autocluster through DNS A and SRV records                    |
+| `etcd`      | Autocluster through etcd                                     |
+| `k8s`       | Autocluster provided by Kubernetes                           |
+| `singleton` | Clustering is disabled. The node rejects all connection attempts to and from other nodes. |
 
 EMQX supports automatic cluster creation based on the [Ekka](https://github.com/emqx/ekka) library. Ekka is a cluster management library developed for Erlang/OTP applications. Except for automatic discovery of Erlang nodes (Service Discovery) and automatic clustering (Autocluster), it also implements functionalities such as automatic healing of network partitions (Network Partition Autoheal) and automatic removal of downed nodes (Autoclean).
 

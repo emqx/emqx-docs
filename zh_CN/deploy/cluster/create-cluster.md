@@ -29,14 +29,14 @@ EMQX 节点名称是不可变的，因为它们被固定在数据库架构和数
 
 手动集群是通过使用命令来指定哪些节点应该成为集群的一部分来创建 EMQX 集群。自动集群是另一种方法，它允许多个 EMQX 节点在无需手动配置的情况下自动形成集群。自动集群简化了设置 EMQX 集群的过程，使动态地添加或从集群中移除节点变得更加容易。EMQX 支持基于静态节点列表、DNS 记录、etcd 和 Kubernetes 的自动集群。以下表格展示了 EMQX 支持的不同节点发现策略和集群创建方法：
 
-| 方式      | 说明                    |
-| --------- | ----------------------- |
-| manual    | 手动命令创建集群        |
-| static    | 静态节点列表自动集群    |
-| dns       | DNS A 记录自动集群      |
-| etcd      | 通过 etcd 自动集群      |
-| k8s       | Kubernetes 服务自动集群 |
-| singleton | Clustering is disabled, the node will reject connection attempts to, and from other nodes |
+| 方式      | 说明                                                 |
+| --------- | ---------------------------------------------------- |
+| manual    | 手动命令创建集群                                     |
+| static    | 静态节点列表自动集群                                 |
+| dns       | DNS A 记录自动集群                                   |
+| etcd      | 通过 etcd 自动集群                                   |
+| k8s       | Kubernetes 服务自动集群                              |
+| singleton | 禁止集群。该节点会拒绝所有与其他节点之间的连接尝试。 |
 
 EMQX 也支持基于 [Ekka](https://github.com/emqx/ekka) 库自动创建集群。Ekka 是为 Erlang/OTP 应用开发的集群管理库，实现了 Erlang 节点自动发现 (Service Discovery)、自动集群 (Autocluster)、 网络分区自动愈合 (Network Partition Autoheal)、自动删除宕机节点 (Autoclean) 等功能。
 
