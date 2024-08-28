@@ -31,8 +31,12 @@
   Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
   
   Improved the documentation for the `verify_claims` parameter.
+
+- [#13324](https://github.com/emqx/emqx/pull/13324) The EMQX Dashboard can now integrate with identity services that support the OIDC protocol to enable OIDC-based SSO, such as [Okta](https://www.okta.com/).
   
 - [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
+
+- [#13601](https://github.com/emqx/emqx/pull/13601) Implement GSSAPI (SASL-GSSAPI with Kerberos V5) authentication.
 
 #### Data Integrations
 
@@ -107,6 +111,8 @@
 - [#13463](https://github.com/emqx/emqx/pull/13463) Enhanced the GCP PubSub Producer action to automatically retry requests when receiving HTTP status codes 502 (Bad Gateway) or 503 (Service Unavailable) from PubSub. The retries will continue until the request is successful or the message's Time-To-Live (TTL) is reached.
 
 - [#13546](https://github.com/emqx/emqx/pull/13546) Added a configurable option for the query mode in the Pulsar Producer action, allowing users to customize how data is queried before it is sent to the Pulsar service.
+
+- [#13650](https://github.com/emqx/emqx/pull/13650) Implemented DataLayers data integration.
 
 #### Operations
 
