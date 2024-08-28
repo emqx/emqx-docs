@@ -32,6 +32,8 @@
   
   Improved the documentation for the `verify_claims` parameter.
 
+- [#13229](https://github.com/emqx/emqx/pull/13229) Added support for `${cert_pem}` placeholder in authentication templates.
+
 - [#13324](https://github.com/emqx/emqx/pull/13324) The EMQX Dashboard can now integrate with identity services that support the OIDC protocol, such as [Okta](https://www.okta.com/), to enable OIDC-based Single Sign-On (SSO).
   
 - [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
@@ -163,9 +165,10 @@
 
 - [#13207](https://github.com/emqx/emqx/pull/13207) Improved the `republish` rule engine action to accurately reflect the success and failure of message publishing. Previously, the success metrics were incremented even when the republish action failed to deliver the message to any subscribers. Now, if the action detects that a message fails to reach any subscriber, the failure metrics are correctly incremented.
 
-
 - [#13425](https://github.com/emqx/emqx/pull/13425) Improved the MQTT connector error log messages to provide clearer and more detailed information.
+
 - [#13589](https://github.com/emqx/emqx/pull/13589) Fixed an issue where creating a rule with a string `"null"` for ID via the HTTP API was allowed, which could lead to an inconsistent configuration.
+
 - [#13414](https://github.com/emqx/emqx/pull/13414) Improved the RabbitMQ connector error log messages to provide clearer and more detailed information.
 
 #### File Transfer
