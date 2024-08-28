@@ -311,10 +311,13 @@
     - title_en: Schema Validation
       title_cn: Schema 验证
       path: data-integration/schema-validation
+    - title_en: Message Transformation
+      title_cn: 信息转换
+      path: data-integration/message-transformation
     - title_en: Sparkplug
       title_cn: Sparkplug
       path: data-integration/sparkplug
-  
+
 - title_en: Flow Designer
   title_cn: Flow 设计器
   path: flow-designer/introduction
