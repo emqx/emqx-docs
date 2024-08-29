@@ -1631,7 +1631,7 @@
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -30652,13 +30652,13 @@
             "type": "integer",
             "description": "Sent messages per 10 seconds"
           },
-          "received_msg_rate": {
-            "type": "integer",
-            "description": "Dropped messages per 10 seconds"
-          },
           "persisted_rate": {
             "type": "integer",
             "description": "Messages saved to the durable storage per 10 seconds"
+          },
+          "received_msg_rate": {
+            "type": "integer",
+            "description": "Dropped messages per 10 seconds"
           },
           "transformation_failed_rate": {
             "type": "integer",
@@ -39399,13 +39399,13 @@
             "type": "integer",
             "description": "Sent messages per 10 seconds"
           },
-          "received_msg_rate": {
-            "type": "integer",
-            "description": "Dropped messages per 10 seconds"
-          },
           "persisted_rate": {
             "type": "integer",
             "description": "Messages saved to the durable storage per 10 seconds"
+          },
+          "received_msg_rate": {
+            "type": "integer",
+            "description": "Dropped messages per 10 seconds"
           },
           "transformation_failed_rate": {
             "type": "integer",
@@ -45153,7 +45153,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -46316,7 +46316,7 @@
           "site": {
             "type": "string",
             "description": "Site ID",
-            "example": "2A8F19D4FC7008B0"
+            "example": "B27B408E9767E891"
           },
           "status": {
             "type": "string",
@@ -54040,10 +54040,10 @@
                             "key": "topic"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
                         },
-                        "failure_action": "drop",
                         "payload_encoder": {
                           "type": "json"
                         },
@@ -54067,10 +54067,10 @@
                             "key": "topic"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
                         },
-                        "failure_action": "drop",
                         "payload_encoder": {
                           "type": "json"
                         },
@@ -54134,10 +54134,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_encoder": {
                         "type": "json"
                       },
@@ -54220,10 +54220,10 @@
                         "key": "topic"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
                     },
-                    "failure_action": "drop",
                     "payload_encoder": {
                       "type": "json"
                     },
@@ -54279,10 +54279,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_encoder": {
                         "type": "json"
                       },
@@ -54343,10 +54343,10 @@
                         "key": "topic"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
                     },
-                    "failure_action": "drop",
                     "payload_encoder": {
                       "type": "json"
                     },
@@ -54438,10 +54438,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_encoder": {
                         "type": "json"
                       },
@@ -55263,11 +55263,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_msacc": "disabled",
+                    "vm_dist": "disabled",
                     "vm_memory": "disabled",
-                    "vm_system_info": "disabled",
+                    "vm_msacc": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_dist": "disabled"
+                    "vm_system_info": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -55309,11 +55309,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_msacc": "disabled",
+                    "vm_dist": "disabled",
                     "vm_memory": "disabled",
-                    "vm_system_info": "disabled",
+                    "vm_msacc": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_dist": "disabled"
+                    "vm_system_info": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -55340,11 +55340,11 @@
                   "value": {
                     "collectors": {
                       "mnesia": "disabled",
-                      "vm_msacc": "disabled",
+                      "vm_dist": "disabled",
                       "vm_memory": "disabled",
-                      "vm_system_info": "disabled",
+                      "vm_msacc": "disabled",
                       "vm_statistics": "disabled",
-                      "vm_dist": "disabled"
+                      "vm_system_info": "disabled"
                     },
                     "enable_basic_auth": false,
                     "push_gateway": {
@@ -55365,14 +55365,14 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
-                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
-                    "vm_msacc_collector": "disabled",
-                    "vm_memory_collector": "disabled",
-                    "vm_system_info_collector": "disabled",
-                    "vm_statistics_collector": "disabled",
                     "mnesia_collector": "disabled",
-                    "vm_dist_collector": "disabled"
+                    "push_gateway_server": "http://127.0.0.1:9091",
+                    "vm_dist_collector": "disabled",
+                    "vm_memory_collector": "disabled",
+                    "vm_msacc_collector": "disabled",
+                    "vm_statistics_collector": "disabled",
+                    "vm_system_info_collector": "disabled"
                   },
                   "summary": "legacy_deprecated_setting"
                 }
@@ -55687,8 +55687,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -55934,8 +55934,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -56129,8 +56129,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -56424,8 +56424,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -56619,8 +56619,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -56820,9 +56820,6 @@
                         }
                       }
                     ],
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "dtls_options": {
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -56834,8 +56831,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "ssl-def",
@@ -56877,8 +56877,8 @@
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "tcp-def",
@@ -56913,75 +56913,8 @@
                         }
                       }
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  {
-                    "name": "dtls-psk",
-                    "status": {
-                      "running": true,
-                      "max_connections": 1024000,
-                      "current_connections": 10
-                    },
-                    "type": "dtls",
-                    "bind": "22214",
-                    "max_connections": 1024000,
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "running": true,
-                          "max_connections": 1024000,
-                          "current_connections": 10
-                        }
-                      }
-                    ],
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "verify": "verify_none",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
-                    },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  {
-                    "name": "tcp-with-authn",
-                    "status": {
-                      "running": true,
-                      "max_connections": 1024000,
-                      "current_connections": 10
-                    },
-                    "type": "tcp",
-                    "bind": "22215",
-                    "authentication": {
-                      "mechanism": "password_based",
-                      "backend": "built_in_database",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "max_connections": 1024000,
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "running": true,
-                          "max_connections": 1024000,
-                          "current_connections": 10
-                        }
-                      }
-                    ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "ws-def",
@@ -57025,8 +56958,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   {
                     "name": "ws-ssl-def",
@@ -57083,8 +57016,75 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  {
+                    "name": "dtls-psk",
+                    "status": {
+                      "running": true,
+                      "max_connections": 1024000,
+                      "current_connections": 10
+                    },
+                    "type": "dtls",
+                    "bind": "22214",
+                    "max_connections": 1024000,
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "running": true,
+                          "max_connections": 1024000,
+                          "current_connections": 10
+                        }
+                      }
+                    ],
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "verify": "verify_none",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                    },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  {
+                    "name": "tcp-with-authn",
+                    "status": {
+                      "running": true,
+                      "max_connections": 1024000,
+                      "current_connections": 10
+                    },
+                    "type": "tcp",
+                    "bind": "22215",
+                    "authentication": {
+                      "mechanism": "password_based",
+                      "backend": "built_in_database",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "max_connections": 1024000,
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "running": true,
+                          "max_connections": 1024000,
+                          "current_connections": 10
+                        }
+                      }
+                    ],
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   }
                 ],
                 "schema": {
@@ -57223,9 +57223,6 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "dtls_options": {
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -57237,8 +57234,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -57268,8 +57268,8 @@
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -57292,53 +57292,10 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
-                  },
-                  "dtls_listener_with_psk_ciphers": {
-                    "value": {
-                      "name": "dtls-psk",
-                      "type": "dtls",
-                      "bind": "22214",
-                      "max_connections": 1024000,
-                      "dtls_options": {
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "verify": "verify_none",
-                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                        "versions": [
-                          "dtlsv1.2",
-                          "dtlsv1"
-                        ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
-                      },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A DTLS listener with PSK example"
-                  },
-                  "lisetner_with_authn": {
-                    "value": {
-                      "name": "tcp-with-authn",
-                      "type": "tcp",
-                      "bind": "22215",
-                      "authentication": {
-                        "mechanism": "password_based",
-                        "backend": "built_in_database",
-                        "password_hash_algorithm": {
-                          "name": "sha256"
-                        },
-                        "user_id_type": "username"
-                      },
-                      "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A TCP listener with authentication example"
                   },
                   "ws_listener": {
                     "value": {
@@ -57368,8 +57325,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -57414,10 +57371,53 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket/TLS listener example"
+                  },
+                  "dtls_listener_with_psk_ciphers": {
+                    "value": {
+                      "name": "dtls-psk",
+                      "type": "dtls",
+                      "bind": "22214",
+                      "max_connections": 1024000,
+                      "dtls_options": {
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "verify": "verify_none",
+                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                        "versions": [
+                          "dtlsv1.2",
+                          "dtlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                      },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A DTLS listener with PSK example"
+                  },
+                  "lisetner_with_authn": {
+                    "value": {
+                      "name": "tcp-with-authn",
+                      "type": "tcp",
+                      "bind": "22215",
+                      "authentication": {
+                        "mechanism": "password_based",
+                        "backend": "built_in_database",
+                        "password_hash_algorithm": {
+                          "name": "sha256"
+                        },
+                        "user_id_type": "username"
+                      },
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A TCP listener with authentication example"
                   }
                 },
                 "schema": {
@@ -57520,9 +57520,6 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "dtls_options": {
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -57534,8 +57531,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -57565,8 +57565,8 @@
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -57589,53 +57589,10 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
-                },
-                "dtls_listener_with_psk_ciphers": {
-                  "value": {
-                    "name": "dtls-psk",
-                    "type": "dtls",
-                    "bind": "22214",
-                    "max_connections": 1024000,
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "verify": "verify_none",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
-                    },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  "summary": "A DTLS listener with PSK example"
-                },
-                "lisetner_with_authn": {
-                  "value": {
-                    "name": "tcp-with-authn",
-                    "type": "tcp",
-                    "bind": "22215",
-                    "authentication": {
-                      "mechanism": "password_based",
-                      "backend": "built_in_database",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  "summary": "A TCP listener with authentication example"
                 },
                 "ws_listener": {
                   "value": {
@@ -57665,8 +57622,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple WebSocket listener example"
                 },
@@ -57711,10 +57668,53 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple WebSocket/TLS listener example"
+                },
+                "dtls_listener_with_psk_ciphers": {
+                  "value": {
+                    "name": "dtls-psk",
+                    "type": "dtls",
+                    "bind": "22214",
+                    "max_connections": 1024000,
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "verify": "verify_none",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                    },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  "summary": "A DTLS listener with PSK example"
+                },
+                "lisetner_with_authn": {
+                  "value": {
+                    "name": "tcp-with-authn",
+                    "type": "tcp",
+                    "bind": "22215",
+                    "authentication": {
+                      "mechanism": "password_based",
+                      "backend": "built_in_database",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  "summary": "A TCP listener with authentication example"
                 }
               },
               "schema": {
@@ -58317,8 +58317,8 @@
                     "type": "syskeeper_proxy",
                     "listen": "127.0.0.1:9092",
                     "enable": true,
-                    "acceptors": 16,
-                    "handshake_timeout": "16s"
+                    "handshake_timeout": "16s",
+                    "acceptors": 16
                   },
                   "summary": "Syskeeper Proxy Connector"
                 },
@@ -58475,8 +58475,8 @@
                       "start_after_created": true,
                       "health_check_interval": "45s"
                     },
-                    "account_key": "******",
-                    "account_name": "my_account_name"
+                    "account_name": "my_account_name",
+                    "account_key": "******"
                   },
                   "summary": "Azure Blob Storage Connector"
                 },
@@ -61642,8 +61642,8 @@
                   "types": {
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "summary": "Source types"
@@ -61655,8 +61655,8 @@
                     "type": "string",
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -61828,83 +61828,83 @@
                 "examples": {
                   "lwm2m_client": {
                     "value": {
-                      "username": "guest",
-                      "ip_address": "127.0.0.1",
-                      "recv_oct": 56,
-                      "recv_msg": 0,
-                      "recv_pkt": 1,
-                      "proto_ver": "1.0",
-                      "mqueue_max": "infinity",
                       "subscriptions_cnt": 0,
+                      "recv_oct": 56,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "proto_name": "LwM2M",
+                      "awaiting_rel_cnt": 0,
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
                       "keepalive": 0,
-                      "expiry_interval": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
+                      "username": "guest",
+                      "mqueue_max": "infinity",
                       "lifetime": 86400,
-                      "inflight_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "disconnected_at": null,
+                      "mailbox_len": 0,
+                      "proto_ver": "1.0",
+                      "clean_start": true,
                       "send_oct": 61,
-                      "send_msg": 0,
+                      "send_pkt": 1,
                       "heap_size": 4185,
                       "endpoint_name": "urn:imei:154928475237123",
-                      "clean_start": true,
-                      "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_msg": 0,
                       "mqueue_len": 0,
-                      "proto_name": "LwM2M",
-                      "mailbox_len": 0,
-                      "awaiting_rel_max": "infinity",
+                      "port": 50675,
+                      "is_bridge": false,
+                      "inflight_max": "infinity",
+                      "subscriptions_max": "infinity",
+                      "recv_msg": 0,
                       "mqueue_dropped": 0,
+                      "expiry_interval": 0,
+                      "disconnected_at": null,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
                       "connected": true,
                       "reductions": 72022,
-                      "subscriptions_max": "infinity",
-                      "is_bridge": false,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_cnt": 1,
-                      "inflight_cnt": 0
+                      "ip_address": "127.0.0.1"
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
-                      "username": "guest",
-                      "ip_address": "127.0.0.1",
-                      "recv_oct": 56,
-                      "recv_msg": 0,
-                      "recv_pkt": 1,
-                      "proto_ver": "1.0",
-                      "mqueue_max": "infinity",
                       "subscriptions_cnt": 0,
+                      "recv_oct": 56,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "proto_name": "STOMP",
+                      "awaiting_rel_cnt": 0,
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
                       "keepalive": 0,
-                      "expiry_interval": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_pkt": 1,
-                      "inflight_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "disconnected_at": null,
-                      "send_oct": 61,
-                      "send_msg": 0,
-                      "heap_size": 4185,
-                      "clean_start": true,
-                      "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "mqueue_len": 0,
-                      "proto_name": "STOMP",
+                      "username": "guest",
+                      "mqueue_max": "infinity",
                       "mailbox_len": 0,
-                      "awaiting_rel_max": "infinity",
+                      "proto_ver": "1.0",
+                      "clean_start": true,
+                      "send_oct": 61,
+                      "send_pkt": 1,
+                      "heap_size": 4185,
+                      "send_msg": 0,
+                      "mqueue_len": 0,
+                      "port": 50675,
+                      "is_bridge": false,
+                      "inflight_max": "infinity",
+                      "subscriptions_max": "infinity",
+                      "recv_msg": 0,
                       "mqueue_dropped": 0,
+                      "expiry_interval": 0,
+                      "disconnected_at": null,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
                       "connected": true,
                       "reductions": 72022,
-                      "subscriptions_max": "infinity",
-                      "is_bridge": false,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_cnt": 1,
-                      "inflight_cnt": 0
+                      "ip_address": "127.0.0.1"
                     },
                     "summary": "General client info"
                   }
@@ -63109,8 +63109,8 @@
                           "status": "connected"
                         }
                       ],
-                      "acceptors": 16,
                       "handshake_timeout": "16s",
+                      "acceptors": 16,
                       "actions": [
                         "my_action"
                       ]
@@ -63355,8 +63355,8 @@
                         "start_after_created": true,
                         "health_check_interval": "45s"
                       },
-                      "account_key": "******",
-                      "account_name": "my_account_name"
+                      "account_name": "my_account_name",
+                      "account_key": "******"
                     },
                     "summary": "Azure Blob Storage Connector"
                   },
@@ -64407,8 +64407,8 @@
                           "status": "connected"
                         }
                       ],
-                      "acceptors": 16,
                       "handshake_timeout": "16s",
+                      "acceptors": 16,
                       "actions": [
                         "my_action"
                       ]
@@ -64653,8 +64653,8 @@
                         "start_after_created": true,
                         "health_check_interval": "45s"
                       },
-                      "account_key": "******",
-                      "account_name": "my_account_name"
+                      "account_name": "my_account_name",
+                      "account_key": "******"
                     },
                     "summary": "Azure Blob Storage Connector"
                   },
@@ -65573,8 +65573,8 @@
                   "value": {
                     "listen": "127.0.0.1:9092",
                     "enable": true,
-                    "acceptors": 16,
-                    "handshake_timeout": "16s"
+                    "handshake_timeout": "16s",
+                    "acceptors": 16
                   },
                   "summary": "Syskeeper Proxy Connector"
                 },
@@ -65721,8 +65721,8 @@
                       "start_after_created": true,
                       "health_check_interval": "45s"
                     },
-                    "account_key": "******",
-                    "account_name": "my_account_name"
+                    "account_name": "my_account_name",
+                    "account_key": "******"
                   },
                   "summary": "Azure Blob Storage Connector"
                 },
@@ -66631,9 +66631,6 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "dtls_options": {
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -66645,8 +66642,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -66676,8 +66676,8 @@
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -66700,53 +66700,10 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
-                  },
-                  "dtls_listener_with_psk_ciphers": {
-                    "value": {
-                      "name": "dtls-psk",
-                      "type": "dtls",
-                      "bind": "22214",
-                      "max_connections": 1024000,
-                      "dtls_options": {
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "verify": "verify_none",
-                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                        "versions": [
-                          "dtlsv1.2",
-                          "dtlsv1"
-                        ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
-                      },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A DTLS listener with PSK example"
-                  },
-                  "lisetner_with_authn": {
-                    "value": {
-                      "name": "tcp-with-authn",
-                      "type": "tcp",
-                      "bind": "22215",
-                      "authentication": {
-                        "mechanism": "password_based",
-                        "backend": "built_in_database",
-                        "password_hash_algorithm": {
-                          "name": "sha256"
-                        },
-                        "user_id_type": "username"
-                      },
-                      "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A TCP listener with authentication example"
                   },
                   "ws_listener": {
                     "value": {
@@ -66776,8 +66733,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -66822,10 +66779,53 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket/TLS listener example"
+                  },
+                  "dtls_listener_with_psk_ciphers": {
+                    "value": {
+                      "name": "dtls-psk",
+                      "type": "dtls",
+                      "bind": "22214",
+                      "max_connections": 1024000,
+                      "dtls_options": {
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "verify": "verify_none",
+                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                        "versions": [
+                          "dtlsv1.2",
+                          "dtlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                      },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A DTLS listener with PSK example"
+                  },
+                  "lisetner_with_authn": {
+                    "value": {
+                      "name": "tcp-with-authn",
+                      "type": "tcp",
+                      "bind": "22215",
+                      "authentication": {
+                        "mechanism": "password_based",
+                        "backend": "built_in_database",
+                        "password_hash_algorithm": {
+                          "name": "sha256"
+                        },
+                        "user_id_type": "username"
+                      },
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A TCP listener with authentication example"
                   }
                 },
                 "schema": {
@@ -66977,9 +66977,6 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "dtls_options": {
                         "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -66991,8 +66988,11 @@
                         ],
                         "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "access_rules": [
+                        "allow all"
+                      ],
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple DTLS listener example"
                   },
@@ -67022,8 +67022,8 @@
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple SSL listener example"
                   },
@@ -67046,53 +67046,10 @@
                         "active_n": 100
                       },
                       "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple TCP listener example"
-                  },
-                  "dtls_listener_with_psk_ciphers": {
-                    "value": {
-                      "name": "dtls-psk",
-                      "type": "dtls",
-                      "bind": "22214",
-                      "max_connections": 1024000,
-                      "dtls_options": {
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "verify": "verify_none",
-                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                        "versions": [
-                          "dtlsv1.2",
-                          "dtlsv1"
-                        ],
-                        "fail_if_no_peer_cert": false,
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
-                      },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A DTLS listener with PSK example"
-                  },
-                  "lisetner_with_authn": {
-                    "value": {
-                      "name": "tcp-with-authn",
-                      "type": "tcp",
-                      "bind": "22215",
-                      "authentication": {
-                        "mechanism": "password_based",
-                        "backend": "built_in_database",
-                        "password_hash_algorithm": {
-                          "name": "sha256"
-                        },
-                        "user_id_type": "username"
-                      },
-                      "max_connections": 1024000,
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
-                    },
-                    "summary": "A TCP listener with authentication example"
                   },
                   "ws_listener": {
                     "value": {
@@ -67122,8 +67079,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket listener example"
                   },
@@ -67168,10 +67125,53 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "acceptors": 16,
-                      "max_conn_rate": 1000
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
                     },
                     "summary": "A simple WebSocket/TLS listener example"
+                  },
+                  "dtls_listener_with_psk_ciphers": {
+                    "value": {
+                      "name": "dtls-psk",
+                      "type": "dtls",
+                      "bind": "22214",
+                      "max_connections": 1024000,
+                      "dtls_options": {
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "verify": "verify_none",
+                        "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                        "versions": [
+                          "dtlsv1.2",
+                          "dtlsv1"
+                        ],
+                        "fail_if_no_peer_cert": false,
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                      },
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A DTLS listener with PSK example"
+                  },
+                  "lisetner_with_authn": {
+                    "value": {
+                      "name": "tcp-with-authn",
+                      "type": "tcp",
+                      "bind": "22215",
+                      "authentication": {
+                        "mechanism": "password_based",
+                        "backend": "built_in_database",
+                        "password_hash_algorithm": {
+                          "name": "sha256"
+                        },
+                        "user_id_type": "username"
+                      },
+                      "max_connections": 1024000,
+                      "max_conn_rate": 1000,
+                      "acceptors": 16
+                    },
+                    "summary": "A TCP listener with authentication example"
                   }
                 },
                 "schema": {
@@ -67274,9 +67274,6 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "dtls_options": {
                       "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
@@ -67288,8 +67285,11 @@
                       ],
                       "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "access_rules": [
+                      "allow all"
+                    ],
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple DTLS listener example"
                 },
@@ -67319,8 +67319,8 @@
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple SSL listener example"
                 },
@@ -67343,53 +67343,10 @@
                       "active_n": 100
                     },
                     "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple TCP listener example"
-                },
-                "dtls_listener_with_psk_ciphers": {
-                  "value": {
-                    "name": "dtls-psk",
-                    "type": "dtls",
-                    "bind": "22214",
-                    "max_connections": 1024000,
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "verify": "verify_none",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ],
-                      "fail_if_no_peer_cert": false,
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
-                    },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  "summary": "A DTLS listener with PSK example"
-                },
-                "lisetner_with_authn": {
-                  "value": {
-                    "name": "tcp-with-authn",
-                    "type": "tcp",
-                    "bind": "22215",
-                    "authentication": {
-                      "mechanism": "password_based",
-                      "backend": "built_in_database",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "max_connections": 1024000,
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
-                  },
-                  "summary": "A TCP listener with authentication example"
                 },
                 "ws_listener": {
                   "value": {
@@ -67419,8 +67376,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple WebSocket listener example"
                 },
@@ -67465,10 +67422,53 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "acceptors": 16,
-                    "max_conn_rate": 1000
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
                   },
                   "summary": "A simple WebSocket/TLS listener example"
+                },
+                "dtls_listener_with_psk_ciphers": {
+                  "value": {
+                    "name": "dtls-psk",
+                    "type": "dtls",
+                    "bind": "22214",
+                    "max_connections": 1024000,
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "verify": "verify_none",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ],
+                      "fail_if_no_peer_cert": false,
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                    },
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  "summary": "A DTLS listener with PSK example"
+                },
+                "lisetner_with_authn": {
+                  "value": {
+                    "name": "tcp-with-authn",
+                    "type": "tcp",
+                    "bind": "22215",
+                    "authentication": {
+                      "mechanism": "password_based",
+                      "backend": "built_in_database",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "max_connections": 1024000,
+                    "max_conn_rate": 1000,
+                    "acceptors": 16
+                  },
+                  "summary": "A TCP listener with authentication example"
                 }
               },
               "schema": {
@@ -68308,9 +68308,9 @@
                         "total": 0,
                         "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_status": [
                         {
@@ -68322,9 +68322,9 @@
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_error": [],
                       "node_metrics": [
@@ -68335,9 +68335,9 @@
                             "total": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -68348,9 +68348,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -68885,8 +68885,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "max_buffer_bytes": 268435456,
                       "query_mode": "async",
+                      "max_buffer_bytes": 268435456,
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -69082,9 +69082,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69129,9 +69129,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69147,9 +69147,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -69170,16 +69170,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -69205,9 +69205,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -69230,9 +69230,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -69254,9 +69254,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69311,9 +69311,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enabledb": true
@@ -69370,9 +69370,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -69393,8 +69393,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "batch_time": "20ms",
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "batch_time": "20ms"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -69484,8 +69484,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -69527,9 +69527,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -69589,9 +69589,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -69614,9 +69614,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69637,9 +69637,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69701,9 +69701,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -69724,9 +69724,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -70152,8 +70152,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -70429,8 +70429,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -71702,9 +71702,9 @@
                         "total": 0,
                         "allow": 0,
                         "deny": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_status": [
                         {
@@ -71716,9 +71716,9 @@
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_metrics": [
                         {
@@ -71728,9 +71728,9 @@
                             "total": 0,
                             "allow": 0,
                             "deny": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -71741,9 +71741,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -72909,8 +72909,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -73146,8 +73146,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -73341,8 +73341,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -73616,8 +73616,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -73811,8 +73811,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -74820,10 +74820,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "0ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -74843,9 +74843,9 @@
                     ],
                     "resource_opts": {
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -75162,8 +75162,8 @@
                       }
                     ],
                     "resource_opts": {
-                      "inflight_window": 10,
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "inflight_window": 10
                     }
                   },
                   {
@@ -75393,10 +75393,10 @@
                     "resource_opts": {
                       "batch_size": 100,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "10ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -75499,8 +75499,8 @@
                       }
                     ],
                     "resource_opts": {
-                      "inflight_window": 100,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": "10s"
                     }
                   },
@@ -75533,14 +75533,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
+                      "ordering_key_template": "${payload.ok}",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
-                      ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      ]
                     },
                     "connector": "my_connector_name",
                     "node_status": [
@@ -75858,10 +75858,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "0ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -75884,9 +75884,9 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -76239,8 +76239,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 10,
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "inflight_window": 10
                       }
                     },
                     "summary": "S3 Direct Upload"
@@ -76500,10 +76500,10 @@
                       "resource_opts": {
                         "batch_size": 100,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "10ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -76618,8 +76618,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 100,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": "10s"
                       }
                     },
@@ -76658,14 +76658,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
+                        "ordering_key_template": "${payload.ok}",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
-                        ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        ]
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -76966,10 +76966,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "0ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -76987,9 +76987,9 @@
                     "connector": "my_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -77262,8 +77262,8 @@
                     },
                     "connector": "my_s3_connector",
                     "resource_opts": {
-                      "inflight_window": 10,
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "inflight_window": 10
                     }
                   },
                   "summary": "S3 Direct Upload"
@@ -77455,10 +77455,10 @@
                     "resource_opts": {
                       "batch_size": 100,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "10ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -77547,8 +77547,8 @@
                     },
                     "connector": "my_s3_connector",
                     "resource_opts": {
-                      "inflight_window": 100,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": "10s"
                     }
                   },
@@ -77581,14 +77581,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
+                      "ordering_key_template": "${payload.ok}",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
-                      ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      ]
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -77834,7 +77834,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "2A8F19D4FC7008B0"
+            "example": "B27B408E9767E891"
           }
         ],
         "responses": {
@@ -77922,7 +77922,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "2A8F19D4FC7008B0"
+            "example": "B27B408E9767E891"
           }
         ],
         "responses": {
@@ -78882,8 +78882,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "max_buffer_bytes": 268435456,
                         "query_mode": "async",
+                        "max_buffer_bytes": 268435456,
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -79100,9 +79100,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79147,9 +79147,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79165,9 +79165,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -79188,16 +79188,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -79223,9 +79223,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -79248,9 +79248,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -79272,9 +79272,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79329,9 +79329,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enabledb": true
@@ -79388,9 +79388,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -79411,8 +79411,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "batch_time": "20ms",
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "batch_time": "20ms"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -79502,8 +79502,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -79545,9 +79545,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -79607,9 +79607,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -79632,9 +79632,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79662,9 +79662,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79733,9 +79733,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79763,9 +79763,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -79976,8 +79976,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "max_buffer_bytes": 268435456,
                         "query_mode": "async",
+                        "max_buffer_bytes": 268435456,
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -80194,9 +80194,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80241,9 +80241,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80259,9 +80259,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -80282,16 +80282,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -80317,9 +80317,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -80342,9 +80342,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -80366,9 +80366,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80423,9 +80423,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enabledb": true
@@ -80482,9 +80482,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -80505,8 +80505,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "batch_time": "20ms",
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "batch_time": "20ms"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -80596,8 +80596,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -80639,9 +80639,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -80701,9 +80701,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -80726,9 +80726,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80756,9 +80756,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80827,9 +80827,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -80857,9 +80857,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -81063,8 +81063,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "max_buffer_bytes": 268435456,
                       "query_mode": "async",
+                      "max_buffer_bytes": 268435456,
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -81256,9 +81256,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81301,9 +81301,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81319,9 +81319,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -81340,16 +81340,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -81375,9 +81375,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -81400,9 +81400,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -81424,9 +81424,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81481,9 +81481,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enabledb": true
@@ -81540,9 +81540,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -81563,8 +81563,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "batch_time": "20ms",
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "batch_time": "20ms"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -81650,8 +81650,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -81693,9 +81693,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -81755,9 +81755,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -81780,9 +81780,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81803,9 +81803,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81865,9 +81865,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -81888,9 +81888,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -82302,8 +82302,8 @@
                         "nl": 0,
                         "topic": "test/topic",
                         "qos": 1,
-                        "rh": 0,
-                        "rap": 0
+                        "rap": 0,
+                        "rh": 0
                       }
                     ],
                     "summary": "A general subscription list"
@@ -82426,8 +82426,8 @@
                       "nl": 0,
                       "topic": "test/topic",
                       "qos": 1,
-                      "rh": 0,
-                      "rap": 0
+                      "rap": 0,
+                      "rh": 0
                     },
                     "summary": "A general subscription"
                   },
@@ -82436,11 +82436,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rh": 0,
-                      "rap": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -82506,8 +82506,8 @@
                     "nl": 0,
                     "topic": "test/topic",
                     "qos": 1,
-                    "rh": 0,
-                    "rap": 0
+                    "rap": 0,
+                    "rh": 0
                   },
                   "summary": "A general subscription"
                 },
@@ -82516,11 +82516,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rh": 0,
-                    "rap": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -82725,10 +82725,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_encoder": {
                         "type": "json"
                       },
@@ -84663,8 +84663,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -84834,8 +84834,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -85037,8 +85037,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -85934,10 +85934,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "0ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -85955,9 +85955,9 @@
                     "connector": "my_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -86230,8 +86230,8 @@
                     },
                     "connector": "my_s3_connector",
                     "resource_opts": {
-                      "inflight_window": 10,
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "inflight_window": 10
                     }
                   },
                   "summary": "S3 Direct Upload"
@@ -86423,10 +86423,10 @@
                     "resource_opts": {
                       "batch_size": 100,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "10ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -86515,8 +86515,8 @@
                     },
                     "connector": "my_s3_connector",
                     "resource_opts": {
-                      "inflight_window": 100,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": "10s"
                     }
                   },
@@ -86549,14 +86549,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
+                      "ordering_key_template": "${payload.ok}",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
-                      ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      ]
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -87777,20 +87777,20 @@
                   "types": {
                     "value": [
                       "http",
+                      "cassandra",
                       "rocketmq",
                       "rabbitmq",
-                      "cassandra",
-                      "syskeeper_forwarder",
-                      "kafka_producer",
                       "azure_event_hub_producer",
                       "greptimedb",
                       "pulsar",
                       "influxdb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "mongodb",
                       "iotdb",
+                      "confluent_producer",
+                      "sqlserver",
+                      "kafka_producer",
+                      "gcp_pubsub_producer",
+                      "mongodb",
+                      "syskeeper_forwarder",
                       "hstreamdb",
                       "s3",
                       "datalayers",
@@ -87819,20 +87819,20 @@
                     "type": "string",
                     "enum": [
                       "http",
+                      "cassandra",
                       "rocketmq",
                       "rabbitmq",
-                      "cassandra",
-                      "syskeeper_forwarder",
-                      "kafka_producer",
                       "azure_event_hub_producer",
                       "greptimedb",
                       "pulsar",
                       "influxdb",
-                      "confluent_producer",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "mongodb",
                       "iotdb",
+                      "confluent_producer",
+                      "sqlserver",
+                      "kafka_producer",
+                      "gcp_pubsub_producer",
+                      "mongodb",
+                      "syskeeper_forwarder",
                       "hstreamdb",
                       "s3",
                       "datalayers",
@@ -88534,7 +88534,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "2A8F19D4FC7008B0"
+            "example": "B27B408E9767E891"
           }
         ],
         "responses": {
@@ -89893,10 +89893,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "0ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -89919,9 +89919,9 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -90274,8 +90274,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 10,
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "inflight_window": 10
                       }
                     },
                     "summary": "S3 Direct Upload"
@@ -90535,10 +90535,10 @@
                       "resource_opts": {
                         "batch_size": 100,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "10ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -90653,8 +90653,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 100,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": "10s"
                       }
                     },
@@ -90693,14 +90693,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
+                        "ordering_key_template": "${payload.ok}",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
-                        ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        ]
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -91056,10 +91056,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "0ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -91082,9 +91082,9 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -91437,8 +91437,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 10,
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "inflight_window": 10
                       }
                     },
                     "summary": "S3 Direct Upload"
@@ -91698,10 +91698,10 @@
                       "resource_opts": {
                         "batch_size": 100,
                         "worker_pool_size": 16,
+                        "query_mode": "sync",
                         "batch_time": "10ms",
                         "inflight_window": 100,
                         "request_ttl": "45s",
-                        "query_mode": "sync",
                         "health_check_interval": "30s"
                       }
                     },
@@ -91816,8 +91816,8 @@
                         }
                       ],
                       "resource_opts": {
-                        "inflight_window": 100,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": "10s"
                       }
                     },
@@ -91856,14 +91856,14 @@
                       "enable": true,
                       "parameters": {
                         "payload_template": "${payload}",
+                        "pubsub_topic": "mytopic",
+                        "ordering_key_template": "${payload.ok}",
                         "attributes_template": [
                           {
                             "value": "${payload.attrs.v}",
                             "key": "${payload.attrs.k}"
                           }
-                        ],
-                        "ordering_key_template": "${payload.ok}",
-                        "pubsub_topic": "mytopic"
+                        ]
                       },
                       "connector": "my_connector_name",
                       "node_status": [
@@ -92178,10 +92178,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "0ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -92197,9 +92197,9 @@
                     "connector": "my_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -92448,8 +92448,8 @@
                       "acl": "public_read"
                     },
                     "resource_opts": {
-                      "inflight_window": 10,
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "inflight_window": 10
                     }
                   },
                   "summary": "S3 Direct Upload"
@@ -92623,10 +92623,10 @@
                     "resource_opts": {
                       "batch_size": 100,
                       "worker_pool_size": 16,
+                      "query_mode": "sync",
                       "batch_time": "10ms",
                       "inflight_window": 100,
                       "request_ttl": "45s",
-                      "query_mode": "sync",
                       "health_check_interval": "30s"
                     }
                   },
@@ -92705,8 +92705,8 @@
                       }
                     },
                     "resource_opts": {
-                      "inflight_window": 100,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": "10s"
                     }
                   },
@@ -92735,14 +92735,14 @@
                     "enable": true,
                     "parameters": {
                       "payload_template": "${payload}",
+                      "pubsub_topic": "mytopic",
+                      "ordering_key_template": "${payload.ok}",
                       "attributes_template": [
                         {
                           "value": "${payload.attrs.v}",
                           "key": "${payload.attrs.k}"
                         }
-                      ],
-                      "ordering_key_template": "${payload.ok}",
-                      "pubsub_topic": "mytopic"
+                      ]
                     },
                     "connector": "my_connector_name",
                     "resource_opts": {
@@ -94606,8 +94606,8 @@
                         "status": "connected"
                       }
                     ],
-                    "acceptors": 16,
                     "handshake_timeout": "16s",
+                    "acceptors": 16,
                     "actions": [
                       "my_action"
                     ]
@@ -94825,8 +94825,8 @@
                       "start_after_created": true,
                       "health_check_interval": "45s"
                     },
-                    "account_key": "******",
-                    "account_name": "my_account_name"
+                    "account_name": "my_account_name",
+                    "account_key": "******"
                   },
                   {
                     "name": "mongodb_sharded_connector",
@@ -95782,8 +95782,8 @@
                           "status": "connected"
                         }
                       ],
-                      "acceptors": 16,
                       "handshake_timeout": "16s",
+                      "acceptors": 16,
                       "actions": [
                         "my_action"
                       ]
@@ -96028,8 +96028,8 @@
                         "start_after_created": true,
                         "health_check_interval": "45s"
                       },
-                      "account_key": "******",
-                      "account_name": "my_account_name"
+                      "account_name": "my_account_name",
+                      "account_key": "******"
                     },
                     "summary": "Azure Blob Storage Connector"
                   },
@@ -96962,8 +96962,8 @@
                     "type": "syskeeper_proxy",
                     "listen": "127.0.0.1:9092",
                     "enable": true,
-                    "acceptors": 16,
-                    "handshake_timeout": "16s"
+                    "handshake_timeout": "16s",
+                    "acceptors": 16
                   },
                   "summary": "Syskeeper Proxy Connector"
                 },
@@ -97120,8 +97120,8 @@
                       "start_after_created": true,
                       "health_check_interval": "45s"
                     },
-                    "account_key": "******",
-                    "account_name": "my_account_name"
+                    "account_name": "my_account_name",
+                    "account_key": "******"
                   },
                   "summary": "Azure Blob Storage Connector"
                 },
@@ -97752,10 +97752,10 @@
                           "schema": "my_avro_schema"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using an Avro schema check"
                   },
@@ -97777,10 +97777,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using a SQL check"
                   }
@@ -99698,10 +99698,10 @@
                             "sql": "select payload.temp as t where t > 10"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
-                        },
-                        "failure_action": "drop"
+                        }
                       },
                       {
                         "name": "other_validation",
@@ -99720,10 +99720,10 @@
                             "schema": "my_avro_schema"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
-                        },
-                        "failure_action": "drop"
+                        }
                       }
                     ],
                     "summary": "List"
@@ -99782,10 +99782,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Update"
                   }
@@ -99863,10 +99863,10 @@
                         "sql": "select payload.temp as t where t > 10"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Update"
                 }
@@ -99917,10 +99917,10 @@
                           "schema": "my_avro_schema"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using an Avro schema check"
                   },
@@ -99942,10 +99942,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using a SQL check"
                   }
@@ -100001,10 +100001,10 @@
                         "schema": "my_avro_schema"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Using an Avro schema check"
                 },
@@ -100026,10 +100026,10 @@
                         "sql": "select payload.temp as t where t > 10"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Using a SQL check"
                 }
@@ -103289,9 +103289,9 @@
                       "start_at": "2022-01-11",
                       "expiry": false,
                       "customer_type": 10,
+                      "expiry_at": "2295-10-27",
                       "customer": "Foo",
-                      "deployment": "bar-deployment",
-                      "expiry_at": "2295-10-27"
+                      "deployment": "bar-deployment"
                     }
                   }
                 },
@@ -103333,9 +103333,9 @@
                       "start_at": "2022-01-11",
                       "expiry": false,
                       "customer_type": 10,
+                      "expiry_at": "2295-10-27",
                       "customer": "Foo",
-                      "deployment": "bar-deployment",
-                      "expiry_at": "2295-10-27"
+                      "deployment": "bar-deployment"
                     }
                   }
                 },
@@ -104126,8 +104126,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "max_buffer_bytes": 268435456,
                       "query_mode": "async",
+                      "max_buffer_bytes": 268435456,
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -104329,9 +104329,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104370,9 +104370,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104385,9 +104385,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -104405,16 +104405,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -104437,9 +104437,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -104459,9 +104459,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -104480,9 +104480,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104528,9 +104528,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enabledb": true
@@ -104578,9 +104578,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -104598,8 +104598,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "batch_time": "20ms",
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "batch_time": "20ms"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -104677,8 +104677,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -104717,9 +104717,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -104773,9 +104773,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -104795,9 +104795,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104822,9 +104822,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104887,9 +104887,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -104914,9 +104914,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -105095,8 +105095,8 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 8,
-                        "max_buffer_bytes": 268435456,
                         "query_mode": "async",
+                        "max_buffer_bytes": 268435456,
                         "health_check_interval": "15s"
                       },
                       "enable_pipelining": 100,
@@ -105313,9 +105313,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105360,9 +105360,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105378,9 +105378,9 @@
                       "aws_secret_access_key": "******",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -105401,16 +105401,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -105436,9 +105436,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "payload_template": "",
@@ -105461,9 +105461,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -105485,9 +105485,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105542,9 +105542,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "enabledb": true
@@ -105601,9 +105601,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -105624,8 +105624,8 @@
                       "url": "http://127.0.0.1:6570",
                       "resource_opts": {
                         "batch_size": 100,
-                        "batch_time": "20ms",
-                        "query_mode": "sync"
+                        "query_mode": "sync",
+                        "batch_time": "20ms"
                       },
                       "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                     },
@@ -105715,8 +105715,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -105758,9 +105758,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -105820,9 +105820,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#",
@@ -105845,9 +105845,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105875,9 +105875,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105946,9 +105946,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 1,
+                        "query_mode": "sync",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -105976,9 +105976,9 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 8,
+                        "query_mode": "async",
                         "max_buffer_bytes": 268435456,
                         "batch_time": 0,
-                        "query_mode": "async",
                         "health_check_interval": "15s"
                       },
                       "local_topic": "local/topic/#"
@@ -106160,8 +106160,8 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 8,
-                      "max_buffer_bytes": 268435456,
                       "query_mode": "async",
+                      "max_buffer_bytes": 268435456,
                       "health_check_interval": "15s"
                     },
                     "enable_pipelining": 100,
@@ -106357,9 +106357,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106404,9 +106404,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106422,9 +106422,9 @@
                     "aws_secret_access_key": "******",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
@@ -106445,16 +106445,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -106480,9 +106480,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "payload_template": "",
@@ -106505,9 +106505,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -106529,9 +106529,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106586,9 +106586,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "enabledb": true
@@ -106645,9 +106645,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -106668,8 +106668,8 @@
                     "url": "http://127.0.0.1:6570",
                     "resource_opts": {
                       "batch_size": 100,
-                      "batch_time": "20ms",
-                      "query_mode": "sync"
+                      "query_mode": "sync",
+                      "batch_time": "20ms"
                     },
                     "record_template": "{ \"temperature\": ${payload.temperature}, \"humidity\": ${payload.humidity} }"
                   },
@@ -106759,8 +106759,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -106802,9 +106802,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -106864,9 +106864,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#",
@@ -106889,9 +106889,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106912,9 +106912,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106976,9 +106976,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 1,
+                      "query_mode": "sync",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
@@ -106999,9 +106999,9 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 8,
+                      "query_mode": "async",
                       "max_buffer_bytes": 268435456,
                       "batch_time": 0,
-                      "query_mode": "async",
                       "health_check_interval": "15s"
                     },
                     "local_topic": "local/topic/#"
