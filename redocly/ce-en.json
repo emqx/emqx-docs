@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.7.2",
+    "version": "5.8.0",
     "title": "EMQX API"
   },
   "components": {
@@ -253,6 +253,17 @@
         },
         "example": "none"
       },
+      "relup.node_name": {
+        "in": "path",
+        "name": "node",
+        "description": "The node to be upgraded",
+        "required": true,
+        "schema": {
+          "default": "all",
+          "type": "string"
+        },
+        "example": "emqx@127.0.0.1"
+      },
       "trace.bytes": {
         "in": "query",
         "name": "bytes",
@@ -366,6 +377,16 @@
             "default": "system",
             "type": "string",
             "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.<br/>This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch."
+          },
+          "payload_encode": {
+            "default": "text",
+            "type": "string",
+            "enum": [
+              "hex",
+              "text",
+              "hidden"
+            ],
+            "description": "Determine the format of the payload format in the trace file.<br/><br/>`text`: Text-based protocol or plain text protocol.<br/> It is recommended when payload is JSON encoded.<br/><br/>`hex`: Binary hexadecimal encode. It is recommended when payload is a custom binary protocol.<br/><br/>`hidden`: payload is obfuscated as `******`"
           }
         },
         "type": "object"
@@ -655,10 +676,20 @@
             "example": "12m"
           },
           "retry_interval": {
-            "default": "30s",
-            "type": "string",
+            "default": "infinity",
             "description": "Retry interval for QoS 1/2 message delivering.",
-            "example": "12m"
+            "oneOf": [
+              {
+                "type": "string",
+                "example": "12m"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "infinity"
+                ]
+              }
+            ]
           },
           "use_username_as_clientid": {
             "default": false,
@@ -908,11 +939,11 @@
           "bind": {
             "default": 0,
             "type": "string",
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
+            "description": "Bind the listener to a specified address and port number, for example `127.0.0.1:18083`.<br/>If configured with just the port number (e.g. `18083`) it's equivalent to binding to all addresses `0.0.0.0`.<br/>The listener is disabled if `bind` is `0`.",
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 20,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -1383,6 +1414,62 @@
         },
         "type": "object"
       },
+      "relup.running_status": {
+        "properties": {
+          "node": {
+            "type": "string",
+            "example": "emqx@127.0.0.1"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in-progress",
+              "idle"
+            ],
+            "description": "The upgrade status of a node:<br/>1. in-progress: hot upgrade is in progress.<br/>2. idle: hot upgrade is not started.<br/>"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "core",
+              "replicant"
+            ],
+            "description": "The role of the node",
+            "example": "core"
+          },
+          "live_connections": {
+            "type": "integer",
+            "description": "The number of live connections",
+            "example": 100
+          },
+          "current_vsn": {
+            "type": "string",
+            "description": "The current version of the node",
+            "example": "5.8.0"
+          },
+          "upgrade_history": {
+            "type": "array",
+            "description": "The upgrade history of the node",
+            "items": {
+              "$ref": "#/components/schemas/relup.upgrade_history"
+            },
+            "example": [
+              {
+                "status": "finished",
+                "started_at": "2024-07-15T13:48:02.648559+08:00",
+                "result": "success",
+                "upgrade_opts": {
+                  "deploy_inplace": false
+                },
+                "target_vsn": "5.8.1",
+                "from_vsn": "5.8.0",
+                "finished_at": "2024-07-16T11:00:01.875627+08:00"
+              }
+            ]
+          }
+        },
+        "type": "object"
+      },
       "connector_mqtt.ingress_local": {
         "properties": {
           "topic": {
@@ -1699,7 +1786,7 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this action."
+            "description": "Enable (true) or disable (false) this action."
           },
           "connector": {
             "type": "string",
@@ -1890,6 +1977,12 @@
             "default": true,
             "type": "boolean",
             "description": "Set to <code>true</code> or <code>false</code> to disable this ACL provider"
+          },
+          "max_rules": {
+            "default": 100,
+            "type": "integer",
+            "description": "Maximum number of rules per client/user. Note that performance may decrease as number of rules increases.",
+            "minimum": 1
           }
         },
         "type": "object"
@@ -1973,7 +2066,7 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this action."
+            "description": "Enable (true) or disable (false) this action."
           },
           "connector": {
             "type": "string",
@@ -2535,6 +2628,18 @@
             "type": "string",
             "description": "From which variable should the MQTT message's User-Property pairs be taken from.<br/>The value must be a map.<br/>You may configure it to <code>${pub_props.'User-Property'}</code> or<br/>use <code>SELECT *,pub_props.'User-Property' as user_properties</code><br/>to forward the original user properties to the republished message.<br/>You may also call <code>map_put</code> function like<br/><code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code><br/>to inject user properties.<br/>NOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.",
             "example": "${pub_props.'User-Property'}"
+          },
+          "direct_dispatch": {
+            "default": false,
+            "description": "Enable direct dispatch to subscribers without initiating a new message publish event.<br/>When set to `true`, this prevents the recursive processing of a message by the same action<br/>and is used when the output message does not require further processing.<br/><br/>However, enabling this feature has several limitations:<br/><br/>- The output message from this action is not retained.<br/>- It does not trigger other rules that operate based on the output topic of this action.<br/>- It does not activate rules that select from the `$events/message_publish`.<br/>- It does not trigger plugins that use the `'message.publish'` hook.<br/>- Topic metrics are not collected for the output message of this action.<br/>- Message schema validation is not applied (feature of EMQX Enterprise).<br/>- Message transformation processes are not applied (feature of EMQX Enterprise).",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
           }
         },
         "type": "object"
@@ -4225,9 +4330,9 @@
             "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
-            "default": [],
+            "default": {},
             "type": "object",
-            "description": "A list of custom claims to validate, which is a list of name/value pairs.<br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
             "example": {}
           },
           "disconnect_after_expire": {
@@ -4721,6 +4826,9 @@
               "$ref": "#/components/schemas/bridge.node_status"
             }
           },
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -4741,9 +4849,6 @@
             "default": "",
             "type": "string",
             "description": "Descriptive text."
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
           },
           "resource_opts": {
             "default": {},
@@ -5122,6 +5227,10 @@
             "type": "string",
             "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
           },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -5142,10 +5251,6 @@
             "default": "",
             "type": "string",
             "description": "Descriptive text."
-          },
-          "parameters": {
-            "description": "Action specific configs.",
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
           },
           "resource_opts": {
             "default": {},
@@ -7009,23 +7114,6 @@
         },
         "type": "object"
       },
-      "emqx_mgmt_api_ds.db_shard": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "Shard ID",
-            "example": "1"
-          },
-          "replicas": {
-            "type": "array",
-            "description": "List of sites containing replicas of the storage",
-            "items": {
-              "$ref": "#/components/schemas/emqx_mgmt_api_ds.db_site"
-            }
-          }
-        },
-        "type": "object"
-      },
       "rule_engine.ctx_message_transformation_failed": {
         "required": [
           "event_type"
@@ -7393,9 +7481,9 @@
             "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
-            "default": [],
+            "default": {},
             "type": "object",
-            "description": "A list of custom claims to validate, which is a list of name/value pairs.<br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
             "example": {}
           },
           "disconnect_after_expire": {
@@ -7682,6 +7770,24 @@
           "rules": {
             "type": "string",
             "example": "{allow,{username,{re,\"^dashboard$\"}},subscribe,[\"$SYS/#\"]}.\n{allow,{ipaddr,\"127.0.0.1\"},all,[\"$SYS/#\",\"#\"]}."
+          }
+        },
+        "type": "object"
+      },
+      "relup.upgrade_error": {
+        "properties": {
+          "err_type": {
+            "type": "string",
+            "description": "The type of the error",
+            "example": "no_write_permission"
+          },
+          "details": {
+            "type": "object",
+            "description": "The details of the error",
+            "example": {
+              "msg": "no write permission in dir 'emqx/relup'",
+              "dir": "emqx/relup"
+            }
           }
         },
         "type": "object"
@@ -8595,7 +8701,7 @@
           "enable": {
             "default": true,
             "type": "boolean",
-            "description": "Enable or disable this action."
+            "description": "Enable (true) or disable (false) this action."
           },
           "connector": {
             "type": "string",
@@ -11539,7 +11645,7 @@
           "node": {
             "type": "string",
             "description": "The name of the node that triggered this alarm.",
-            "example": "emqx@172.17.0.2"
+            "example": "emqx@127.0.0.1"
           },
           "name": {
             "type": "string",
@@ -11970,6 +12076,9 @@
           "parameters"
         ],
         "properties": {
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -11991,30 +12100,10 @@
             "type": "string",
             "description": "Descriptive text."
           },
-          "parameters": {
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
-          },
           "resource_opts": {
             "default": {},
             "description": "Resource options.",
             "$ref": "#/components/schemas/bridge_mqtt_publisher.source_resource_opts"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_mgmt_api_ds.db": {
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Name of the durable storage",
-            "example": "messages"
-          },
-          "shards": {
-            "type": "array",
-            "description": "List of storage shards",
-            "items": {
-              "$ref": "#/components/schemas/emqx_mgmt_api_ds.db_shard"
-            }
           }
         },
         "type": "object"
@@ -12608,9 +12697,9 @@
             "description": "The JWT claim designated for accessing ACL (Access Control List) rules can be specified,<br/>such as using the `acl` claim. A typical decoded JWT with this claim might appear as:<br/>`{\"username\": \"user1\", \"acl\": ...}`.<br/><br/>Supported ACL Rule Formats:<br/><br/>- Object Format:<br/>  Utilizes action types pub (publish), sub (subscribe), or all (both publish and subscribe).<br/>  The value is a list of topic filters.<br/>  Example: `{\"pub\": [\"topic1\"], \"sub\": [], \"all\": [\"${username}/#\"]}`.<br/>  This example signifies that the token owner can publish to topic1 and perform both publish and subscribe<br/>  actions on topics starting with their username.<br/>  Note: In this format, if no topic matches, the action is denied, and the authorization process terminates.<br/><br/>- Array Format (resembles File-Based ACL Rules):<br/>  Example: `[{\"permission\": \"allow\", \"action\": \"all\", \"topic\": \"${username}/#\"}]`.<br/>  Additionally, the `pub` or `publish` action rules can be extended with `qos` and `retain` field,<br/>  and `sub` or `subscribe` action rules can be extended with a `qos` field.<br/>  Note: Here, if no rule matches, the action is not immediately denied.<br/>  The process continues to other configured authorization sources,<br/>  and ultimately falls back to the default permission in config `authorization.no_match`.<br/><br/>The ACL claim utilizes MQTT topic wildcard matching rules for publishing or subscribing.<br/>A special syntax for the 'subscribe' action allows the use of `eq` for an exact match.<br/>For instance, `eq t/#` permits or denies subscription to `t/#`, but not to `t/1`."
           },
           "verify_claims": {
-            "default": [],
+            "default": {},
             "type": "object",
-            "description": "A list of custom claims to validate, which is a list of name/value pairs.<br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
             "example": {}
           },
           "disconnect_after_expire": {
@@ -15676,6 +15765,11 @@
             "type": "string",
             "description": "Path to a file containing PEM-encoded Diffie-Hellman parameters<br/>to be used by the server if a cipher suite using Diffie-Hellman<br/>key exchange is negotiated. If not specified, default parameters<br/>are used.<br/><br/>NOTE: The <code>dhfile</code> option is not supported by TLS 1.3."
           },
+          "fail_if_no_peer_cert": {
+            "default": false,
+            "type": "boolean",
+            "description": "This option is only effective if `verify` is set to `verify_peer`.<br/><br/>If set to `true`, EMQX will reject the connection if the client fails to provide a certificate.<br/><br/>If set to `false`, EMQX will accept clients which don't present a certificate."
+          },
           "honor_cipher_order": {
             "default": true,
             "type": "boolean",
@@ -17011,6 +17105,9 @@
           "name": {
             "type": "string"
           },
+          "parameters": {
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -17031,9 +17128,6 @@
             "default": "",
             "type": "string",
             "description": "Descriptive text."
-          },
-          "parameters": {
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.ingress_parameters"
           },
           "resource_opts": {
             "default": {},
@@ -17343,7 +17437,7 @@
           "bind": {
             "default": 0,
             "type": "string",
-            "description": "Port without IP(18083) or port with specified IP(127.0.0.1:18083).<br/>Disabled when setting bind to `0`.",
+            "description": "Bind the listener to a specified address and port number, for example `127.0.0.1:18083`.<br/>If configured with just the port number (e.g. `18083`) it's equivalent to binding to all addresses `0.0.0.0`.<br/>The listener is disabled if `bind` is `0`.",
             "example": "0.0.0.0:18084"
           },
           "ssl_options": {
@@ -17351,7 +17445,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 20,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -17598,26 +17692,6 @@
         },
         "type": "object"
       },
-      "emqx_mgmt_api_ds.sites_shard": {
-        "properties": {
-          "storage": {
-            "type": "string",
-            "description": "Durable storage ID",
-            "example": "messages"
-          },
-          "id": {
-            "type": "string",
-            "description": "Shard ID",
-            "example": "1"
-          },
-          "status": {
-            "type": "string",
-            "description": "Shard status",
-            "example": "up"
-          }
-        },
-        "type": "object"
-      },
       "emqx_authz_api_sources.request_sources_order": {
         "required": [
           "type"
@@ -17651,24 +17725,6 @@
           },
           "meta": {
             "$ref": "#/components/schemas/public.meta"
-          }
-        },
-        "type": "object"
-      },
-      "emqx_mgmt_api_ds.db_site": {
-        "properties": {
-          "site": {
-            "type": "string",
-            "description": "Site ID",
-            "example": "AFA18CB1C22F0157"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "up",
-              "joining"
-            ],
-            "description": "Status of the replica"
           }
         },
         "type": "object"
@@ -18013,27 +18069,6 @@
         },
         "type": "object"
       },
-      "emqx_mgmt_api_ds.site": {
-        "properties": {
-          "node": {
-            "type": "string",
-            "description": "Name of the EMQX handling the site",
-            "example": "'emqx@example.com'"
-          },
-          "up": {
-            "type": "boolean",
-            "description": "Site is up and running"
-          },
-          "shards": {
-            "type": "array",
-            "description": "Durable storages that have replicas at the site",
-            "items": {
-              "$ref": "#/components/schemas/emqx_mgmt_api_ds.sites_shard"
-            }
-          }
-        },
-        "type": "object"
-      },
       "emqx.log_file_handler": {
         "properties": {
           "path": {
@@ -18108,6 +18143,16 @@
             "default": "system",
             "type": "string",
             "description": "The time offset to be used when formatting the timestamp.<br/>Can be one of:<br/>  - <code>system</code>: the time offset used by the local system<br/>  - <code>utc</code>: the UTC time offset<br/>  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"<br/>Defaults to: <code>system</code>.<br/>This config has no effect for when formatter is <code>json</code> as the timestamp in JSON is milliseconds since epoch."
+          },
+          "payload_encode": {
+            "default": "text",
+            "type": "string",
+            "enum": [
+              "hex",
+              "text",
+              "hidden"
+            ],
+            "description": "Determine the format of the payload format in the trace file.<br/><br/>`text`: Text-based protocol or plain text protocol.<br/> It is recommended when payload is JSON encoded.<br/><br/>`hex`: Binary hexadecimal encode. It is recommended when payload is a custom binary protocol.<br/><br/>`hidden`: payload is obfuscated as `******`"
           }
         },
         "type": "object"
@@ -18323,6 +18368,10 @@
             "type": "string",
             "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
           },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -18343,10 +18392,6 @@
             "default": "",
             "type": "string",
             "description": "Descriptive text."
-          },
-          "parameters": {
-            "description": "Action specific configs.",
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
           },
           "resource_opts": {
             "default": {},
@@ -19412,6 +19457,55 @@
         },
         "type": "object"
       },
+      "relup.package": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "File name of the package",
+            "example": "emqx_relup-5.8.2.tar.gz"
+          },
+          "target_vsn": {
+            "type": "string",
+            "description": "Target emqx version for this package",
+            "example": "5.8.2"
+          },
+          "built_on_otp_release": {
+            "type": "string",
+            "example": "24"
+          },
+          "applicable_vsns": {
+            "type": "array",
+            "description": "The emqx versions that this package can be applied to.",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "5.8.0",
+              "5.8.1"
+            ]
+          },
+          "build_date": {
+            "type": "string",
+            "description": "The date when the package was built.",
+            "example": "2021-12-25"
+          },
+          "change_logs": {
+            "type": "array",
+            "description": "Changes that this package brings",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "1. Fix a bug foo in the plugin.2. Add a new bar feature."
+            ]
+          },
+          "md5_sum": {
+            "type": "string",
+            "example": "d41d8cd98f00b204e9800998ecf8427e"
+          }
+        },
+        "type": "object"
+      },
       "public.continuation_meta": {
         "required": [
           "start"
@@ -19561,10 +19655,19 @@
         "type": "object"
       },
       "dashboard.dashboard": {
+        "required": [
+          "default_password"
+        ],
         "properties": {
           "listeners": {
             "description": "HTTP(s) listeners are identified by their protocol type and are<br/>used to serve dashboard UI and restful HTTP API.<br/>Listeners must have a unique combination of port number and IP address.<br/>For example, an HTTP listener can listen on all configured IP addresses<br/>on a given port for a machine by specifying the IP address 0.0.0.0.<br/>Alternatively, the HTTP listener can specify a unique IP address for each listener,<br/>but use the same port.",
             "$ref": "#/components/schemas/dashboard.listeners"
+          },
+          "default_password": {
+            "default": "public",
+            "type": "string",
+            "description": "The password used to initialize a database record for `admin` user.<br/>NOTE: Changing the default password after it has been initialized (boot up for the fist time) has no effect.<br/>Once initialized, the default password `public` must be changed from dashboard or CLI as soon as possible.",
+            "readOnly": true
           },
           "token_expired_time": {
             "default": "60m",
@@ -19724,6 +19827,10 @@
             "type": "string",
             "description": "MQTT topic or topic filter as data source (action input).  If rule action is used as data source, this config should be left empty, otherwise messages will be duplicated in the remote system."
           },
+          "parameters": {
+            "description": "Action specific configs.",
+            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
+          },
           "enable": {
             "default": true,
             "type": "boolean",
@@ -19745,10 +19852,6 @@
             "type": "string",
             "description": "Descriptive text."
           },
-          "parameters": {
-            "description": "Action specific configs.",
-            "$ref": "#/components/schemas/bridge_mqtt_publisher.action_parameters"
-          },
           "resource_opts": {
             "default": {},
             "description": "Resource options.",
@@ -19762,7 +19865,7 @@
           "node": {
             "type": "string",
             "enum": [
-              "emqx@172.17.0.2"
+              "emqx@127.0.0.1"
             ],
             "description": "Node Name"
           },
@@ -19929,6 +20032,62 @@
             "deprecated": true,
             "description": "HTTP request timeout.",
             "example": "32s"
+          }
+        },
+        "type": "object"
+      },
+      "relup.upgrade_history": {
+        "properties": {
+          "started_at": {
+            "type": "string",
+            "description": "The timestamp (in format of RFC3339) when the upgrade started",
+            "example": "2024-07-15T13:48:02.648559+08:00"
+          },
+          "finished_at": {
+            "type": "string",
+            "description": "The timestamp (in format of RFC3339) when the upgrade finished",
+            "example": "2024-07-16T11:00:01.875627+08:00"
+          },
+          "from_vsn": {
+            "type": "string",
+            "description": "The version before the upgrade",
+            "example": "5.8.0"
+          },
+          "target_vsn": {
+            "type": "string",
+            "description": "The target version of the upgrade",
+            "example": "5.8.2"
+          },
+          "upgrade_opts": {
+            "type": "object",
+            "description": "The options used for the upgrade",
+            "example": {
+              "deploy_inplace": false
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "in-progress",
+              "finished"
+            ],
+            "description": "The upgrade status of the node",
+            "example": "in-progress"
+          },
+          "result": {
+            "description": "The upgrade result",
+            "example": "success",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/relup.upgrade_error"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "success"
+                ]
+              }
+            ]
           }
         },
         "type": "object"
@@ -21798,7 +21957,6 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
-                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -21806,7 +21964,8 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  }
+                  },
+                  "enable_basic_auth": false
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -21844,7 +22003,6 @@
                     "vm_statistics": "disabled",
                     "vm_dist": "disabled"
                   },
-                  "enable_basic_auth": false,
                   "push_gateway": {
                     "interval": "15s",
                     "headers": {
@@ -21852,7 +22010,8 @@
                     },
                     "url": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}"
-                  }
+                  },
+                  "enable_basic_auth": false
                 },
                 "schema": {
                   "$ref": "#/components/schemas/prometheus.recommend_setting"
@@ -21875,7 +22034,6 @@
                       "vm_statistics": "disabled",
                       "vm_dist": "disabled"
                     },
-                    "enable_basic_auth": false,
                     "push_gateway": {
                       "interval": "15s",
                       "headers": {
@@ -21883,7 +22041,8 @@
                       },
                       "url": "http://127.0.0.1:9091",
                       "job_name": "${name}/instance/${name}~${host}"
-                    }
+                    },
+                    "enable_basic_auth": false
                   },
                   "summary": "recommend_setting"
                 },
@@ -21894,14 +22053,14 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
-                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
                     "vm_msacc_collector": "disabled",
                     "vm_memory_collector": "disabled",
                     "vm_system_info_collector": "disabled",
                     "vm_statistics_collector": "disabled",
                     "mnesia_collector": "disabled",
-                    "vm_dist_collector": "disabled"
+                    "vm_dist_collector": "disabled",
+                    "push_gateway_server": "http://127.0.0.1:9091"
                   },
                   "summary": "legacy_deprecated_setting"
                 }
@@ -22138,8 +22297,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22376,8 +22535,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22565,8 +22724,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -22848,8 +23007,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -23037,8 +23196,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -25072,7 +25231,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "emqx@172.17.0.2"
+            "example": "emqx@127.0.0.1"
           }
         ],
         "responses": {
@@ -26543,82 +26702,82 @@
                 "examples": {
                   "lwm2m_client": {
                     "value": {
-                      "subscriptions_max": "infinity",
+                      "username": "guest",
                       "recv_oct": 56,
-                      "mailbox_len": 0,
-                      "mqueue_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "mqueue_len": 0,
-                      "subscriptions_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "lifetime": 86400,
+                      "subscriptions_max": "infinity",
                       "recv_pkt": 1,
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "send_oct": 61,
+                      "mqueue_dropped": 0,
                       "is_bridge": false,
-                      "inflight_max": "infinity",
+                      "send_msg": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "mailbox_len": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
                       "heap_size": 4185,
                       "recv_msg": 0,
-                      "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "mqueue_dropped": 0,
-                      "send_msg": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "proto_ver": "1.0",
-                      "ip_address": "127.0.0.1",
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
-                      "inflight_cnt": 0,
-                      "proto_name": "LwM2M",
-                      "connected": true,
                       "disconnected_at": null,
-                      "reductions": 72022,
+                      "subscriptions_cnt": 0,
+                      "awaiting_rel_cnt": 0,
+                      "port": 50675,
+                      "proto_name": "LwM2M",
+                      "ip_address": "127.0.0.1",
+                      "mqueue_max": "infinity",
                       "clean_start": true,
+                      "lifetime": 86400,
+                      "inflight_cnt": 0,
+                      "send_pkt": 1,
+                      "mqueue_len": 0,
+                      "connected": true,
+                      "reductions": 72022,
+                      "expiry_interval": 0,
                       "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
-                      "subscriptions_max": "infinity",
+                      "username": "guest",
                       "recv_oct": 56,
-                      "mailbox_len": 0,
-                      "mqueue_max": "infinity",
-                      "awaiting_rel_cnt": 0,
-                      "mqueue_len": 0,
-                      "subscriptions_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0",
+                      "inflight_max": "infinity",
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "awaiting_rel_max": "infinity",
+                      "subscriptions_max": "infinity",
                       "recv_pkt": 1,
-                      "send_oct": 61,
+                      "mqueue_dropped": 0,
                       "is_bridge": false,
-                      "inflight_max": "infinity",
+                      "send_msg": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_oct": 61,
+                      "mailbox_len": 0,
                       "heap_size": 4185,
                       "recv_msg": 0,
-                      "port": 50675,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "mqueue_dropped": 0,
-                      "send_msg": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "username": "guest",
-                      "proto_ver": "1.0",
-                      "ip_address": "127.0.0.1",
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
-                      "inflight_cnt": 0,
-                      "proto_name": "STOMP",
-                      "connected": true,
                       "disconnected_at": null,
-                      "reductions": 72022,
+                      "subscriptions_cnt": 0,
+                      "awaiting_rel_cnt": 0,
+                      "port": 50675,
+                      "proto_name": "STOMP",
+                      "ip_address": "127.0.0.1",
+                      "mqueue_max": "infinity",
                       "clean_start": true,
+                      "inflight_cnt": 0,
+                      "send_pkt": 1,
+                      "mqueue_len": 0,
+                      "connected": true,
+                      "reductions": 72022,
+                      "expiry_interval": 0,
                       "recv_cnt": 1
                     },
                     "summary": "General client info"
@@ -29099,6 +29258,99 @@
         ]
       }
     },
+    "/relup/upgrade/{node}": {
+      "post": {
+        "description": "Upgrade a specified node to the target version with the installed package.",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/relup.node_name"
+          }
+        ],
+        "summary": "Upgrade a specified node",
+        "responses": {
+          "204": {
+            "description": "Upgrade is started successfully"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "UNEXPECTED_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Upgrade failed because of invalid input or environment"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Node not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Upgrade failed because of internal errors"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/sources/{id}/metrics/reset": {
       "put": {
         "description": "Reset a bridge metrics by id.",
@@ -29263,6 +29515,73 @@
         ]
       }
     },
+    "/relup/upgrade": {
+      "post": {
+        "description": "Upgrade all nodes to the target version with the installed package.",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [],
+        "summary": "Upgrade all nodes",
+        "responses": {
+          "204": {
+            "description": "Upgrade is started successfully"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "UNEXPECTED_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Upgrade failed because of invalid input or environment"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Upgrade failed because of internal errors"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/gateways/{name}/enable/{enable}": {
       "put": {
         "description": "Update the gateway basic configurations and running status.<br/><br/>Note: The Authentication and Listener configurations should be updated by other special APIs.",
@@ -29337,6 +29656,73 @@
         ]
       }
     },
+    "/relup/package/upload": {
+      "post": {
+        "description": "Upload a hot upgrade package (emqx_relup-vsn.tar.gz).<br/>Note that only one package is alllowed to be installed at a time.",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [],
+        "summary": "Upload a hot upgrade package",
+        "responses": {
+          "204": {
+            "description": "Package is uploaded successfully"
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "UNEXPECTED_ERROR",
+                        "ALREADY_INSTALLED",
+                        "BAD_PLUGIN_INFO"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error code to troubleshoot problems."
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "encoding": {
+                "plugin": {
+                  "contentType": "application/gzip"
+                }
+              },
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "plugin": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/rules": {
       "get": {
         "description": "List all rules",
@@ -29396,6 +29782,28 @@
             "required": false,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "description": "Filters rules that contain any of the given action id(s).  When used in conjunction with source id filtering, the rules must contain sources *and* actions that match some of the criteria.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "source",
+            "description": "Filters rules that contain any of the given source id(s).  When used in conjunction with action id filtering, the rules must contain sources *and* actions that match some of the criteria.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
             }
           },
           {
@@ -29549,7 +29957,7 @@
                       "status": "connected",
                       "node_status": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "status": "connected"
                         }
                       ],
@@ -29558,43 +29966,43 @@
                         "total": 0,
                         "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_error": [],
                       "node_metrics": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "metrics": {
                             "nomatch": 0,
                             "total": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
                       "node_resource_metrics": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -30106,9 +30514,9 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -30128,24 +30536,13 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
-                      }
-                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -30158,6 +30555,17 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
+                      }
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -30202,7 +30610,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "emqx@172.17.0.2"
+            "example": "emqx@127.0.0.1"
           },
           {
             "in": "query",
@@ -30446,8 +30854,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -30711,8 +31119,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -30810,28 +31218,6 @@
         "responses": {
           "204": {
             "description": "Authenticator deleted"
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Not Found"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -31661,7 +32047,7 @@
                       "status": "connected",
                       "node_status": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "status": "connected"
                         }
                       ],
@@ -31670,42 +32056,42 @@
                         "total": 0,
                         "allow": 0,
                         "deny": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_metrics": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "metrics": {
                             "nomatch": 0,
                             "total": 0,
                             "allow": 0,
                             "deny": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
                       "node_resource_metrics": [
                         {
-                          "node": "emqx@172.17.0.2",
+                          "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -32514,8 +32900,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -32742,8 +33128,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -32931,8 +33317,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33194,8 +33580,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33383,8 +33769,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -34318,184 +34704,6 @@
         ]
       }
     },
-    "/ds/storages/{ds}/replicas/{site}": {
-      "put": {
-        "description": "Add site as a replica for the durable storage",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ds",
-            "description": "Durable storage ID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "messages"
-              ]
-            },
-            "example": "messages"
-          },
-          {
-            "in": "path",
-            "name": "site",
-            "description": "Site ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "AFA18CB1C22F0157"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "BAD_REQUEST"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Bad request"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Object not found"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "delete": {
-        "description": "Remove site as a replica for the durable storage",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ds",
-            "description": "Durable storage ID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "messages"
-              ]
-            },
-            "example": "messages"
-          },
-          {
-            "in": "path",
-            "name": "site",
-            "description": "Site ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "AFA18CB1C22F0157"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "BAD_REQUEST"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Bad request"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Object not found"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/mqtt/delayed/messages/{topic}": {
       "delete": {
         "description": "Delete delayed message",
@@ -34790,7 +34998,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "emqx@172.17.0.2"
+            "example": "emqx@127.0.0.1"
           },
           {
             "$ref": "#/components/parameters/public.page"
@@ -35169,9 +35377,9 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35191,24 +35399,13 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
-                        }
-                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35221,6 +35418,17 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
+                        }
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -35314,9 +35522,9 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35336,24 +35544,13 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
-                        }
-                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35366,6 +35563,17 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
+                        }
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -35450,9 +35658,9 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -35470,24 +35678,13 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
-                      }
-                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -35500,6 +35697,17 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
+                      }
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -36817,38 +37025,6 @@
         ]
       }
     },
-    "/ds/storages": {
-      "get": {
-        "description": "List durable storages",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List durable storages",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/subscriptions": {
       "get": {
         "description": "List subscriptions",
@@ -36870,7 +37046,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "emqx@172.17.0.2"
+            "example": "emqx@127.0.0.1"
           },
           {
             "in": "query",
@@ -36984,38 +37160,6 @@
                     }
                   },
                   "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/ds/sites": {
-      "get": {
-        "description": "List sites",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "List sites",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
                 }
               }
             }
@@ -37725,8 +37869,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -37890,8 +38034,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -38081,8 +38225,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -39018,6 +39162,39 @@
         ]
       }
     },
+    "/relup/status": {
+      "get": {
+        "description": "Get the hot upgrade status of all nodes",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [],
+        "summary": "Get the hot upgrade status of all nodes",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/relup.running_status"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/exhooks/{name}/move": {
       "post": {
         "description": "Move the server.<br/>NOTE: The position should be \"front | rear | before:{name} | after:{name}",
@@ -39452,7 +39629,8 @@
                 "SOURCE_ERROR",
                 "UPDATE_FAILED",
                 "REST_FAILED",
-                "CLIENT_NOT_RESPONSE"
+                "CLIENT_NOT_RESPONSE",
+                "UNSUPPORTED_MEDIA_TYPE"
               ]
             },
             "example": "BAD_USERNAME_OR_PWD"
@@ -39744,152 +39922,6 @@
                       "mqtt"
                     ]
                   }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/ds/storages/{ds}/replicas": {
-      "get": {
-        "description": "List replicas of the durable storage",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ds",
-            "description": "Durable storage ID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "messages"
-              ]
-            },
-            "example": "messages"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List sites that contain replicas of the durable storage",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Durable storage not found"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "put": {
-        "description": "Update replicas of the durable storage",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "ds",
-            "description": "Durable storage ID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "messages"
-              ]
-            },
-            "example": "messages"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "BAD_REQUEST"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Bad request"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "string"
                 }
               }
             }
@@ -40268,68 +40300,6 @@
         ]
       }
     },
-    "/ds/sites/{site}": {
-      "get": {
-        "description": "Get sites",
-        "tags": [
-          "Durable storage"
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "site",
-            "description": "Site ID",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "AFA18CB1C22F0157"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Get information about the site",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_mgmt_api_ds.site"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Site not found"
-                    }
-                  },
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          },
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
     "/gateways/lwm2m/clients/{clientid}/lookup": {
       "get": {
         "description": "Look up a resource",
@@ -40608,8 +40578,8 @@
                       ],
                       "idle_timeout": "30s",
                       "mountpoint": "coap/",
-                      "enable_stats": true,
                       "connection_required": false,
+                      "enable_stats": true,
                       "notify_type": "qos",
                       "publish_qos": "coap",
                       "subscribe_qos": "coap"
@@ -40928,8 +40898,8 @@
                     "heartbeat": "30s",
                     "idle_timeout": "30s",
                     "mountpoint": "coap2/",
-                    "enable_stats": true,
                     "connection_required": false,
+                    "enable_stats": true,
                     "notify_type": "qos",
                     "publish_qos": "coap",
                     "subscribe_qos": "coap"
@@ -44510,6 +44480,7 @@
                 "crl_cache",
                 "dashboard",
                 "delayed",
+                "durable_sessions",
                 "durable_storage",
                 "exhook",
                 "flapping_detect",
@@ -47592,9 +47563,9 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47611,24 +47582,13 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
-                      }
-                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -47641,6 +47601,17 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
+                      }
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   }
@@ -47702,9 +47673,9 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -47724,24 +47695,13 @@
                       "enable": true,
                       "password": "******",
                       "username": "foo",
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
-                        }
-                      },
                       "proto_ver": "v4",
                       "clean_start": true,
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -47754,6 +47714,17 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
+                        }
+                      },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
                         }
                       }
                     },
@@ -47818,9 +47789,9 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47840,24 +47811,13 @@
                     "enable": true,
                     "password": "******",
                     "username": "foo",
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
-                      }
-                    },
                     "proto_ver": "v4",
                     "clean_start": true,
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -47870,6 +47830,17 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
+                      }
+                    },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
                       }
                     }
                   },
@@ -48047,6 +48018,79 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/relup/package": {
+      "get": {
+        "description": "Get information of the installed hot upgrade package.<br/>",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [],
+        "summary": "Get the installed hot upgrade package",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/relup.package"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "NOT_FOUND"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "No relup package is installed"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "description": "Delete the installed hot upgrade package.<br/>",
+        "tags": [
+          "Relup"
+        ],
+        "parameters": [],
+        "summary": "Delete the installed hot upgrade package",
+        "responses": {
+          "204": {
+            "description": "Packages are deleted successfully"
           }
         },
         "security": [
@@ -48305,56 +48349,25 @@
         ]
       }
     },
-    "/ds/storages/{ds}": {
+    "/relup/status/{node}": {
       "get": {
-        "description": "Get durable storage",
+        "description": "Get the hot upgrade status of a specified node",
         "tags": [
-          "Durable storage"
+          "Relup"
         ],
         "parameters": [
           {
-            "in": "path",
-            "name": "ds",
-            "description": "Durable storage ID",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "messages"
-              ]
-            },
-            "example": "messages"
+            "$ref": "#/components/parameters/relup.node_name"
           }
         ],
+        "summary": "Get the hot upgrade status of a specified node",
         "responses": {
           "200": {
-            "description": "Get information about a durable storage",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/emqx_mgmt_api_ds.db"
-                }
-              }
-            }
-          },
-          "400": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "enum": [
-                        "NOT_FOUND"
-                      ]
-                    },
-                    "message": {
-                      "type": "string",
-                      "description": "Durable storage not found"
-                    }
-                  },
-                  "type": "object"
+                  "$ref": "#/components/schemas/relup.running_status"
                 }
               }
             }
