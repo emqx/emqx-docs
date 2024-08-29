@@ -94,6 +94,7 @@ debug < info < notice < warning < error < critical < alert < emergency
 ```bash
 log {
   file {
+    enable = true
     level = warning
     file = "/var/log/emqx/emqx.log"
     routation_count = 10
