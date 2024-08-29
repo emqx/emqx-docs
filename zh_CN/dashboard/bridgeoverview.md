@@ -8,6 +8,7 @@
 - **连接器**：作为数据集成不可或缺的组件，连接器用于连接外部数据系统。有关如何创建和管理连接器，请参考[连接器](../data-integration/connector.md)。
 - **Schema 验证**（企业版功能）：您使用验证规则来确保发布到特定主题的数据必须符合预定义的数据格式。有关如何创建验证规则，请参考[在 Dashboard 中配置 Schema 验证](../data-integration/schema-validation.md#在-dashboard-中配置-schema-验证)。
 - **Schema**（企业版功能）: 您可以在本页创建一个 Schema 用于模式验证或 SQL 规则。有关如何创建模式，请参考[编解码举例 - Avro](../data-integration/schema-registry-example-avro.md) or [编解码举例 - Protobuf](../data-integration/schema-registry-example-protobuf.md)。
+- **消息转换**（企业版功能）：通过定义消息转换表达式，在数据流经系统时对其进行适配。有关如何创建消息转换的详细信息，请参阅[在 Dashboard 中配置消息转换](../data-integration/message-transformation.md#在-dashboard-中配置消息转换)。
 
 
 
