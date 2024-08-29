@@ -24,7 +24,7 @@ The default SQL statement is `SELECT * FROM "t/#"`, which means that when the cl
 
 The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). 
 
-The `FROM` keyword followed by data source. That is, the event topic, the **Try It Out** area below the SQL Editor can view all the optional data source events, using the `WHERE` keyword, you can add conditional judgment, for more detailed SQL syntax usage, see [SQL syntax and examples](./../data-integration/rule-sql-syntax.md).
+The `FROM` keyword is followed by one or more data sources. To see possible event topics, the **Try It Out** area below the SQL Editor can view all the optional data source events. Using the `WHERE` keyword, you can add conditional filtering. For more detailed SQL syntax usage, see [SQL syntax and examples](./../data-integration/rule-sql-syntax.md).
 
 ### Try It Out
 
