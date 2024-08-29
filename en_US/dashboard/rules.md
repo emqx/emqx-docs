@@ -20,7 +20,7 @@ By clicking the **SQL Examples** below the SQL Editor, you can see some common S
 
 <img src="./assets/rule-sql.png" alt="image" style="zoom:67%;" />
 
-The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publish a message to the topic `t/#`, the Rule Engine will take out all the data under the current event. 
+The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publishes a message to the topic `t/#`, the Rule Engine will take out all the data under the current event. 
 
 The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). 
 
