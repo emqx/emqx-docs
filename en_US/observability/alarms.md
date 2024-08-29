@@ -113,7 +113,7 @@ Alarm thresholds can be configured on EMQX Dashboard. There are two ways to laun
 1. On the **Alarms** page, click the **Setting** button and you will be led to the **Monitoring** page. 
 2. From the left navigation menu, click **Management** -> **Monitoring**. 
 
-On the  **Monitoring** -> **Systm** tab, click the **Erlang VM** tab, you can configure the following items for the system performance of the Erlang Virtual Machine:
+On the  **Monitoring** -> **System** tab, click the **Erlang VM** tab, you can configure the following items for the system performance of the Erlang Virtual Machine:
 
 <img src="./assets/monitoring-system-ee.png" alt="monitoring-system" style="zoom:40%;" />
 
