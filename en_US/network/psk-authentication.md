@@ -22,6 +22,7 @@ This page introduces how to enable PSK authentication in EMQX.
 
    ```bash
    psk_authentication {
+     enable = true
      init_file = "data/psk_file.txt"
    }
    ```

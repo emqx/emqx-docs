@@ -6,6 +6,7 @@ For example, if you want to mark clients that make 15 connection attempts within
 
 ```bash
 flapping_detect {
+  enable = true
   max_count  =  15
   window_time  =  1m
   ban_time  =  5m

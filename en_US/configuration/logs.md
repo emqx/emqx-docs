@@ -29,6 +29,7 @@ To output logs as a file, you may either configure the log handler in the Dashbo
 ```bash
 log {
   file {
+    enable = true
     formatter = text
     level = warning
     path = "/var/log/emqx/emqx.log"

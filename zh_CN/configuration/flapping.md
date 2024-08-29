@@ -6,6 +6,7 @@
 
 ```bash
 flapping_detect {
+  enable = true
   max_count  =  15
   window_time  =  1m
   ban_time  =  5m

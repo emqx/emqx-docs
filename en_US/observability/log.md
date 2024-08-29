@@ -112,6 +112,7 @@ You can also configure EMQX logging through configuration files. For example, if
 log {
   file {
     default {
+      enable = true
       formatter = text
       level = warning
       path = "/Users/emqx/Downloads/emqx-560/log/emqx.log"
