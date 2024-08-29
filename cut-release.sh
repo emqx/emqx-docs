@@ -1,35 +1,19 @@
 #!/bin/bash
 
+# starting from 5.7, there is no more 'v' tags (for ce) and 'e' tags (for ee)
+# always tag a new release using 'v' prefix
+
 set -euo pipefail
 
-EDITION="${1:-}"
-
-case $EDITION in
-    ce|open*)
-        PREFIX='v'
-        ;;
-    ee|ent*)
-        PREFIX='e'
-        ;;
-    *)
-        echo "Usage: $0 ce|ee # ce for opensource edition, ee for enterprise"
-        exit 1
-esac
-
-branch="$(git branch | grep -E "^\*" | tr -d "* ")"
-
-case $branch in
-    'release-5.0')
-        VSN='5.0'
-        ;;
-    *)
-        echo "can not cut release on branch $branch"
-        exit 1
-esac
+VSN="${1:-}"
+if [ -z "${VSN}" ]; then
+    echo "usage: $0 VERSION"
+    echo "e.g. $0 v5.8"
+fi
 
 TODAY="$(date +%Y%m%d)"
 
-TAG="${PREFIX}${VSN}-${TODAY}"
+TAG="${VSN}-${TODAY}"
 git tag -f "$TAG"
 
 echo "$TAG"
