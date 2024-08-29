@@ -943,7 +943,7 @@
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -1458,12 +1458,12 @@
                 "status": "finished",
                 "started_at": "2024-07-15T13:48:02.648559+08:00",
                 "result": "success",
+                "finished_at": "2024-07-16T11:00:01.875627+08:00",
                 "upgrade_opts": {
                   "deploy_inplace": false
                 },
                 "target_vsn": "5.8.1",
-                "from_vsn": "5.8.0",
-                "finished_at": "2024-07-16T11:00:01.875627+08:00"
+                "from_vsn": "5.8.0"
               }
             ]
           }
@@ -17445,7 +17445,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -21834,9 +21834,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
+                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem",
-                  "cacertfile": "/etc/emqx/certs/cacert.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -22266,8 +22266,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22504,8 +22504,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22693,8 +22693,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -22976,8 +22976,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -23165,8 +23165,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -23356,18 +23356,18 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
@@ -23395,10 +23395,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "node_status": [
                       {
@@ -23528,10 +23528,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "node_status": [
                       {
@@ -23575,6 +23575,7 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -23582,13 +23583,12 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
@@ -23756,18 +23756,18 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
@@ -23793,10 +23793,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
                       "max_connections": 1024000,
@@ -23890,10 +23890,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -23915,6 +23915,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -23922,13 +23923,12 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
@@ -24053,18 +24053,18 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
@@ -24090,10 +24090,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "acceptors": 16,
                     "max_connections": 1024000,
@@ -24187,10 +24187,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "websocket": {
                       "path": "/ocpp",
@@ -24212,6 +24212,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -24219,13 +24220,12 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
@@ -26702,83 +26702,83 @@
                 "examples": {
                   "lwm2m_client": {
                     "value": {
-                      "disconnected_at": null,
                       "recv_oct": 56,
-                      "subscriptions_cnt": 0,
-                      "mailbox_len": 0,
-                      "clean_start": true,
+                      "lifetime": 86400,
+                      "awaiting_rel_max": "infinity",
                       "keepalive": 0,
+                      "awaiting_rel_cnt": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "inflight_cnt": 0,
-                      "awaiting_rel_max": "infinity",
-                      "send_msg": 0,
+                      "expiry_interval": 0,
                       "ip_address": "127.0.0.1",
-                      "mqueue_dropped": 0,
+                      "clean_start": true,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "mqueue_max": "infinity",
                       "send_oct": 61,
-                      "proto_name": "LwM2M",
+                      "send_msg": 0,
                       "username": "guest",
-                      "send_pkt": 1,
-                      "recv_msg": 0,
                       "heap_size": 4185,
                       "is_bridge": false,
-                      "proto_ver": "1.0",
+                      "recv_msg": 0,
+                      "mailbox_len": 0,
                       "port": 50675,
-                      "endpoint_name": "urn:imei:154928475237123",
+                      "send_pkt": 1,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "lifetime": 86400,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
+                      "proto_name": "LwM2M",
+                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
+                      "subscriptions_cnt": 0,
                       "mqueue_len": 0,
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_max": "infinity",
-                      "expiry_interval": 0,
                       "connected": true,
+                      "subscriptions_max": "infinity",
                       "reductions": 72022,
+                      "inflight_max": "infinity",
                       "recv_cnt": 1,
-                      "awaiting_rel_cnt": 0,
-                      "recv_pkt": 1
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0"
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
-                      "disconnected_at": null,
                       "recv_oct": 56,
-                      "subscriptions_cnt": 0,
-                      "mailbox_len": 0,
-                      "clean_start": true,
+                      "awaiting_rel_max": "infinity",
                       "keepalive": 0,
+                      "awaiting_rel_cnt": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "inflight_cnt": 0,
-                      "awaiting_rel_max": "infinity",
-                      "send_msg": 0,
+                      "expiry_interval": 0,
                       "ip_address": "127.0.0.1",
-                      "mqueue_dropped": 0,
+                      "clean_start": true,
+                      "mqueue_max": "infinity",
                       "send_oct": 61,
-                      "proto_name": "STOMP",
+                      "send_msg": 0,
                       "username": "guest",
-                      "send_pkt": 1,
-                      "recv_msg": 0,
                       "heap_size": 4185,
                       "is_bridge": false,
-                      "proto_ver": "1.0",
+                      "recv_msg": 0,
+                      "mailbox_len": 0,
                       "port": 50675,
+                      "send_pkt": 1,
                       "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
+                      "proto_name": "STOMP",
+                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
+                      "inflight_cnt": 0,
+                      "recv_pkt": 1,
+                      "subscriptions_cnt": 0,
                       "mqueue_len": 0,
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_max": "infinity",
-                      "expiry_interval": 0,
                       "connected": true,
+                      "subscriptions_max": "infinity",
                       "reductions": 72022,
+                      "inflight_max": "infinity",
                       "recv_cnt": 1,
-                      "awaiting_rel_cnt": 0,
-                      "recv_pkt": 1
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0"
                     },
                     "summary": "General client info"
                   }
@@ -28291,18 +28291,18 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
@@ -28328,10 +28328,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
                       "max_connections": 1024000,
@@ -28425,10 +28425,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -28450,6 +28450,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -28457,13 +28458,12 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
@@ -28634,18 +28634,18 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "versions": [
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
@@ -28671,10 +28671,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "acceptors": 16,
                       "max_connections": 1024000,
@@ -28768,10 +28768,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                        "fail_if_no_peer_cert": false
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -28793,6 +28793,7 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
+                      "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
                         "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -28800,13 +28801,12 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "fail_if_no_peer_cert": false,
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                         "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup"
+                        "fail_if_no_peer_cert": false
                       },
-                      "acceptors": 16,
                       "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
@@ -28931,18 +28931,18 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "versions": [
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
@@ -28968,10 +28968,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "acceptors": 16,
                     "max_connections": 1024000,
@@ -29065,10 +29065,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
+                      "fail_if_no_peer_cert": false
                     },
                     "websocket": {
                       "path": "/ocpp",
@@ -29090,6 +29090,7 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
+                    "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
                       "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
@@ -29097,13 +29098,12 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "fail_if_no_peer_cert": false,
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
                       "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup"
+                      "fail_if_no_peer_cert": false
                     },
-                    "acceptors": 16,
                     "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
@@ -29966,17 +29966,17 @@
                         "total": 0,
                         "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_error": [],
                       "node_metrics": [
@@ -29987,9 +29987,9 @@
                             "total": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -30000,9 +30000,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -30507,8 +30507,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -30545,6 +30545,17 @@
                       "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "ingress": {
                       "local": {
                         "retain": "${retain}",
@@ -30555,17 +30566,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
@@ -30823,8 +30823,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -31088,8 +31088,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -32056,17 +32056,17 @@
                         "total": 0,
                         "allow": 0,
                         "deny": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_metrics": [
                         {
@@ -32076,9 +32076,9 @@
                             "total": 0,
                             "allow": 0,
                             "deny": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -32089,9 +32089,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -32869,8 +32869,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33097,8 +33097,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33286,8 +33286,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33549,8 +33549,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33738,8 +33738,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -35370,8 +35370,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -35408,6 +35408,17 @@
                         "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "ingress": {
                         "local": {
                           "retain": "${retain}",
@@ -35418,17 +35429,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -35515,8 +35515,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -35553,6 +35553,17 @@
                         "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "ingress": {
                         "local": {
                           "retain": "${retain}",
@@ -35563,17 +35574,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -35651,8 +35651,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -35687,6 +35687,17 @@
                       "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "ingress": {
                       "local": {
                         "retain": "${retain}",
@@ -35697,17 +35708,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
@@ -37324,17 +37324,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "front example"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "rear example"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "front example"
                 },
                 "relative_after": {
                   "value": {
@@ -37844,8 +37844,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38003,8 +38003,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38194,8 +38194,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -39266,17 +39266,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "absolute position 'front'"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "absolute position 'rear'"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "absolute position 'front'"
                 },
                 "related_after": {
                   "value": {
@@ -40273,9 +40273,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
+                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem",
-                  "cacertfile": "/etc/emqx/certs/cacert.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -47556,8 +47556,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -47591,6 +47591,17 @@
                       "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "ingress": {
                       "local": {
                         "retain": "${retain}",
@@ -47601,17 +47612,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   }
@@ -47666,8 +47666,8 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
@@ -47704,6 +47704,17 @@
                         "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
+                      "egress": {
+                        "local": {
+                          "topic": "emqx/#"
+                        },
+                        "remote": {
+                          "retain": false,
+                          "payload": "${payload}",
+                          "topic": "from_emqx/${topic}",
+                          "qos": "${qos}"
+                        }
+                      },
                       "ingress": {
                         "local": {
                           "retain": "${retain}",
@@ -47714,17 +47725,6 @@
                         "remote": {
                           "topic": "aws/#",
                           "qos": 1
-                        }
-                      },
-                      "egress": {
-                        "local": {
-                          "topic": "emqx/#"
-                        },
-                        "remote": {
-                          "retain": false,
-                          "payload": "${payload}",
-                          "topic": "from_emqx/${topic}",
-                          "qos": "${qos}"
                         }
                       }
                     },
@@ -47782,8 +47782,8 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
@@ -47820,6 +47820,17 @@
                       "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
+                    "egress": {
+                      "local": {
+                        "topic": "emqx/#"
+                      },
+                      "remote": {
+                        "retain": false,
+                        "payload": "${payload}",
+                        "topic": "from_emqx/${topic}",
+                        "qos": "${qos}"
+                      }
+                    },
                     "ingress": {
                       "local": {
                         "retain": "${retain}",
@@ -47830,17 +47841,6 @@
                       "remote": {
                         "topic": "aws/#",
                         "qos": 1
-                      }
-                    },
-                    "egress": {
-                      "local": {
-                        "topic": "emqx/#"
-                      },
-                      "remote": {
-                        "retain": false,
-                        "payload": "${payload}",
-                        "topic": "from_emqx/${topic}",
-                        "qos": "${qos}"
                       }
                     }
                   },
