@@ -36,7 +36,7 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ### MQTT 5.0 增强认证
 
-[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
+[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中或通过 REST API 访问外部 HTTP 服务获取认证数据。
 
 ### PSK 认证
 
@@ -46,17 +46,18 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 
 按照认证方式和数据源来划分，EMQX 内置了以下 9 种认证器：
 
-| 认证方式 | 数据源      | 说明                                                |
-| -------- | ----------- | --------------------------------------------------- |
-| 密码认证 | 内置数据库  | [使用内置数据库（Mnesia）进行密码认证](./mnesia.md) |
-| 密码认证 | MySQL       | [使用 MySQL 进行密码认证](mysql.md)                 |
-| 密码认证 | PostgreSQL  | [使用 PostgreSQL 进行密码认证](postgresql.md)       |
-| 密码认证 | MongoDB     | [使用 MongoDB 进行密码认证](./mongodb.md)           |
-| 密码认证 | Redis       | [使用 Redis 进行密码认证](./redis.md)               |
-| 密码认证 | LDAP        | [使用 LDAP 进行密码认证](./ldap.md)                 |
-| 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
-| JWT      | --          | [JWT 认证](./jwt.md)                                |
-| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证(SCRAM 认证)](./scram.md)         |
+| 认证方式 | 数据源      | 说明                                                         |
+| -------- | ----------- | ------------------------------------------------------------ |
+| 密码认证 | 内置数据库  | [使用内置数据库（Mnesia）进行密码认证](./mnesia.md)          |
+| 密码认证 | MySQL       | [使用 MySQL 进行密码认证](mysql.md)                          |
+| 密码认证 | PostgreSQL  | [使用 PostgreSQL 进行密码认证](postgresql.md)                |
+| 密码认证 | MongoDB     | [使用 MongoDB 进行密码认证](./mongodb.md)                    |
+| 密码认证 | Redis       | [使用 Redis 进行密码认证](./redis.md)                        |
+| 密码认证 | LDAP        | [使用 LDAP 进行密码认证](./ldap.md)                          |
+| 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)                      |
+| JWT      | --          | [JWT 认证](./jwt.md)                                         |
+| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)                |
+| 增强认证 | HTTP 服务   | [基于 REST API 的 MQTT 5.0 增强认证 （SCRAM 认证）](./scram_restapi.md) |
 
 ## 认证链
 
@@ -136,9 +137,13 @@ password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
-  dk_length = 256           # optional
+  dk_length = 32           # optional, Unit: Byte
 }
 ```
+
+注意，不同散列算法之间可能存在较大的性能差异，请酌情选择。作为参考，以下是在 4 核 8GB 的机器中将各散列算法运行 100 次后取得的平均运行时间：
+
+![](./assets/hash-compare.png)
 
 ## 认证占位符
 
@@ -166,9 +171,11 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 
-- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject），仅适用于 TLS 连接。
+- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
-- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name），仅适用于 TLS 连接。
+- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+
+- `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
 
 ## 认证配置方式
 

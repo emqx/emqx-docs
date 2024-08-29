@@ -1,14 +1,12 @@
 # 将 MQTT 数据传输到 Azure Event Hubs
 
-{% emqxce %}
 ::: tip
 
-EMQX 企业版功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+Azure Event Hubs 数据集成是 EMQX 企业版功能。
 
 :::
-{% endemqxce %}
 
-[Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) 是一个用于数据摄取的实时托管事件流平台。EMQX 与 Azure Event Hub 的集成为用户在高吞吐量情况下提供了可靠的数据传输和处理能力。Azure Event Hubs 可作为 EMQX 与 Azure 丰富的云服务应用之间的数据通道，将物联网数据集成到 Azure Blob Storage、Azure Stream Analytics 以及部署在 Azure 虚拟机上的各类应用和服务当中。目前，EMQX 支持使用 SASL/PLAIN 身份验证、通过与 Kafka 协议兼容的 Apache Kafka 终端点进行 Azure Event Hub 集成。
+[Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) 是一个用于数据摄取的实时托管事件流平台。EMQX 与 Azure Event Hub 的集成为用户在高吞吐量情况下提供了可靠的数据传输和处理能力。Azure Event Hubs 可作为 EMQX 与 Azure 丰富的云服务应用之间的数据通道，将物联网数据集成到 Azure Blob Storage、Azure Stream Analytics 以及部署在 Azure 虚拟机上的各类应用和服务当中。目前， EMQX 支持使用 SASL/PLAIN 身份验证、通过与 Kafka 协议兼容的 Apache Kafka 终端点进行 Azure Event Hub 集成。
 
 本页详细介绍了 EMQX 与 Azure Event Hubs 的数据集成并提供了实用的规则和 Sink 创建指导。
 
@@ -111,7 +109,7 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
 8. 配置 Sink 信息，完成数据的写入：
 
-   - **事件中心名称**：输入要使用的事件中心的名称。注意：此处不支持变量。
+   - **事件中心名称**：输入要使用的事件中心的名称。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[配置 Kafka 动态主题](./data-bridge-kafka.md#配置-kafka-动态主题)。
    - **Azure Event Hub 头部**：输入一个占位符，作为将在发布到 Azure Event Hub 时添加到消息中的消息标头。
    - **Azure Event Hub 头部值编码模式**：选择消息标头的值编码模式；可选值为 `none` 或 `json`。
    - **额外的 Azure Event Hub 头部信息**：您可以点击**添加**为 Azure Event Hub 消息标头提供更多的键值对。

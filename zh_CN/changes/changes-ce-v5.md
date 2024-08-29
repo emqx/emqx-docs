@@ -1,5 +1,282 @@
 # v5 版本
 
+## 5.7.2
+
+*发布日期：2024-08-07*
+
+### 增强
+
+- [#13317](https://github.com/emqx/emqx/pull/13317) 增加了一种新的针对授权源的指标类型：`ignore`。当授权源尝试对请求进行授权但遇到授权源不适用或出现错误导致无法决定结果的情况时，此指标计数将递增。
+
+
+- [#13336](https://github.com/emqx/emqx/pull/13336) 使用 CSV 或 JSON 格式的引导文件在空的 EMQX 节点或集群的内置数据库中初始化认证数据。此功能引入了新的配置项 `bootstrap_file` 和 `bootstrap_type`。
+
+- [#13348](https://github.com/emqx/emqx/pull/13348) 在日志配置中新增字段 `payload_encode`，用于确定日志数据中 payload 的格式。
+
+- [#13436](https://github.com/emqx/emqx/pull/13436) 在 JWKS 请求中添加了自定义请求头的选项。
+
+- [#13507](https://github.com/emqx/emqx/pull/13507) 在规则引擎和变量表达式中引入了新的内置函数 `getenv`，用于访问环境变量。此函数遵循以下限制：
+
+  - 在从操作系统环境变量读取之前，会添加前缀 `EMQXVAR_`。例如，`getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
+  - 一旦从操作系统环境加载，这些值就是不可变的。
+
+- [#13521](https://github.com/emqx/emqx/pull/13521) 解决了 LDAP 查询超时将导致底层连接不可用的问题，该问题可能会导致后续查询返回过时结果的情况。此修复确保系统在超时情况下能够自动重新连接。
+
+- [#13528](https://github.com/emqx/emqx/pull/13528) 对数据集成中导致不可恢复错误的事件应用了日志截流。
+
+- [#13548](https://github.com/emqx/emqx/pull/13548) 现在 EMQX 可以选择在通过 REST API 更新插件配置时调用 `on_config_changed/2` 回调函数。预期该回调函数由 `<PluginName>_app` 模块导出。 例如，如果插件名称和版本为 `my_plugin-1.0.0`，则回调函数为 `my_plugin_app:on_config_changed/2`。
+
+- [#13386](https://github.com/emqx/emqx/pull/13386) 支持在空的 EMQX 节点或集群上使用CSV 格式的引导文件初始化封禁客户端列表。用于指定文件路径的相应配置条目是`banned.bootstrap_file`。该文件是一个以`,`为分隔符的CSV文件，第一行必须是标题行。所有有效的标题如下：
+
+  - as :: 必需
+  - who :: 必需
+  - by :: 可选
+  - reason :: 可选
+  - at :: 可选
+  - until :: 可选
+
+  详细信息请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中关于每个字段的说明。
+
+  除标题行外，文件中的每一行必须包含与标题行相同数量的列，且列可以省略，其值为`undefined`。
+
+### Bug Fixes
+
+- [#13222](https://github.com/emqx/emqx/pull/13222) 解决了与`CONNECT`数据包中遗嘱消息相关的标志检查和错误处理问题。 详细的规范，请参考：
+  - MQTT-v3.1.1-[MQTT-3.1.2-13], MQTT-v5.0-[MQTT-3.1.2-11]
+  - MQTT-v3.1.1-[MQTT-3.1.2-14], MQTT-v5.0-[MQTT-3.1.2-12]
+  - MQTT-v3.1.1-[MQTT-3.1.2-15], MQTT-v5.0-[MQTT-3.1.2-13]
+- [#13307](https://github.com/emqx/emqx/pull/13307) 更新了 `ekka` 库至版本 0.19.5。该版本的 `ekka` 使用了 `mria` 0.8.8，增强了自动愈合功能。先前的自动愈合仅在所有核心节点可访问时生效。此更新允许在大多数核心节点处于运行状态时应用自动修复。详情请参考 [Mria PR](https://github.com/emqx/mria/pull/180)。
+- [#13334](https://github.com/emqx/emqx/pull/13334) 实现了对 MQTT v3.1.1 CONNECT 数据包中 `PasswordFlag` 的严格模式检查，以符合协议规范。注意：此检查仅在严格模式下执行，以确保与现有错误兼容性。
+
+- [#13344](https://github.com/emqx/emqx/pull/13344) 修复了当接收 API 请求的节点未能维持与指定 `clientid` 的连接时，`POST /clients/:clientid/subscribe/bulk` API无法正常工作的问题。
+- [#13358](https://github.com/emqx/emqx/pull/13358) 修复了`authn_complete_event` 事件中 `reason` 字段显示不正确的问题。
+- [#13375](https://github.com/emqx/emqx/pull/13375) 将 `infinity` 作为默认值添加到监听器配置字段 `max_conn_rate`、`messages_rate `和 `bytes_rate。
+- [#13382](https://github.com/emqx/emqx/pull/13382) 更新了 `emqtt` 库至版本 0.4.14，解决了 `emqtt_pool` 无法重用处于不一致状态的池的问题。
+- [#13389](https://github.com/emqx/emqx/pull/13389) 修复了 `pbkdf2` 中`Derived Key Length` 可能被设置为负整数的问题。
+- [#13389](https://github.com/emqx/emqx/pull/13389) 修复了授权规则中可能会错误解析主题的问题。
+- [#13393](https://github.com/emqx/emqx/pull/13393) 修复了节点加入集群后插件应用程序无法重新启动的问题，导致钩子未能正确安装并引起状态不一致。
+- [#13398](https://github.com/emqx/emqx/pull/13398) 修复了使用命令行重新加载用于授权的内置数据库时，ACL 规则被错误地清除的问题。
+- [#13403](https://github.com/emqx/emqx/pull/13403) 解决了一个安全问题，该问题导致环境变量配置覆盖会意外记录密码。此修复确保环境变量中的密码不会被记录。
+- [#13408](https://github.com/emqx/emqx/pull/13408) 解决了因认证尝试中使用无效盐或密码类型而触发的 `function_clause` 崩溃问题。此修复增强了错误处理，更好地处理涉及不正确盐或密码类型的认证失败。
+- [#13419](https://github.com/emqx/emqx/pull/13419) 修复了由 `/configs` API 引起崩溃的日志消息内容显示混乱的问题，此修复确保与 API 调用相关的日志消息清晰易懂。
+- [#13422](https://github.com/emqx/emqx/pull/13422) 解决了无法将选项 `force_shutdown.max_heap_size` 设置为 0 以禁用此调试的问题。
+- [#13442](https://github.com/emqx/emqx/pull/13442) 解决了动作和 Source 的健康检查间隔配置未被遵守的问题。之前，EMQX 忽略了为动作指定的健康检查间隔，并使用连接器的间隔。此修复确保 EMQX 现在正确使用为动作/ Source 配置的健康检查间隔，允许独立和准确的健康监控频率。
+- [#13503](https://github.com/emqx/emqx/pull/13503) 修复了连接器在初始启动时未遵循配置的健康检查间隔的问题，需要更新或重启以应用正确的间隔。
+- [#13515](https://github.com/emqx/emqx/pull/13515) 修复了当节点因某些原因宕机时，同一客户端无法订阅相同的排它主题的问题。
+- [#13527](https://github.com/emqx/emqx/pull/13527) 在规则引擎中修复了一个问题，即当 `$bridges/...` 被包含在 `FROM` 子句中时，执行消息发布事件的 SQL 测试始终返回空结果。
+- [#13541](https://github.com/emqx/emqx/pull/13541) 修复了禁用监听器的 CRL 检查需要监听器重启才能生效的问题。
+- [#13552](https://github.com/emqx/emqx/pull/13552) 添加了 EMQX 插件的启动超时限制，默认超时时间为 10 秒。在此更新之前，问题插件在启动期间可能会导致运行时错误，从而可能导致主启动进程在 EMQX 停止和重新启动时出现挂起。
+
+## 5.7.1
+
+*发布日期: 2024-06-26*
+
+### 增强
+
+- [#12983](https://github.com/emqx/emqx/pull/12983) 添加了新的规则引擎事件 `$events/client_check_authn_complete`，用于认证完成事件。
+
+- [#13180](https://github.com/emqx/emqx/pull/13180) 改进了 EMQX 在 Erlang/OTP 26 上运行时客户端消息处理性能，并在 fan-in 模式下将消息吞吐量提高了10%。
+
+- [#13191](https://github.com/emqx/emqx/pull/13191) 将 EMQX Docker 镜像升级至运行在Erlang/OTP 26上。
+
+  自 v5.5 版本以来，EMQX 一直在Erlang/OTP 26上运行，但 Docker 镜像仍在 Erlang/OTP 25 上。现在所有版本都升级到 Erlang/OTP 26。
+
+- [#13242](https://github.com/emqx/emqx/pull/13242) 显著提高了 EMQX Dashboard 监听器的启动速度。
+
+### 修复
+
+- [#13156](https://github.com/emqx/emqx/pull/13156) 解决了更新至 EMQX v5.7.0 后，Dashboard 的监控页面崩溃的问题。
+
+- [#13164](https://github.com/emqx/emqx/pull/13164) 修复了 HTTP 授权请求体编码问题。原本，HTTP 授权请求体的编码格式依据 `accept` 头部来设置。现在调整为根据 `content-type` 头部来确定编码格式。同时，为了兼容 v4 版本，添加了 `access` 模板变量。其中，SUBSCRIBE 操作的访问代码为 `1`，PUBLISH 操作的访问代码为 `2`。
+
+- [#13238](https://github.com/emqx/emqx/pull/13238) 优化了在返回不支持的内容类型头部的 HTTP 授权请求时的错误消息记录。
+
+- [#13258](https://github.com/emqx/emqx/pull/13258) 修复了 MQTT-SN 网关因依赖启动顺序错误而无法正确重启的问题。
+
+- [#13273](https://github.com/emqx/emqx/pull/13273) 修复并改进了在以下几个配置中对URI的处理，具体包括：
+
+  - 认证和授权配置：纠正了先前的错误，之前错误地拒绝了没有路径的有效 URI，如 `https://example.com?q=x`。这些URI现在被正确识别为有效。
+
+  - 连接器配置：增强了检查，确保不再错误接受包含潜在问题组件的 URI，如用户信息或片段部分。
+
+- [#13276](https://github.com/emqx/emqx/pull/13276) 修复了在设置新的存储代时，部分内部存储状态未被正确持久化的问题。这里的“代”是内部用于管理消息过期和清理的一个关键概念。此问题可能会导致EMQX重启后消息丢失。
+
+- [#13291](https://github.com/emqx/emqx/pull/13291) 修复了一个问题，错误地将已宕机的持久存储站点报告为正常在线的情况。
+
+- [#13290](https://github.com/emqx/emqx/pull/13290) 修复了使用 `$ bin/emqx ctl rules show rule_0hyd` 命令显示带有数据集成动作的规则时无输出的问题。
+
+- [#13293](https://github.com/emqx/emqx/pull/13293) 通过自动重新索引导入到备份文件的保留消息，改进了数据备份恢复过程。之前，导入数据备份文件后需要手动使用 `emqx ctl retainer reindex start` 命令进行重新索引。
+
+  此修复还扩展了功能，当 `retainer.backend.storage_type` 配置为 `ram` 时，现在也支持将保留消息导出到备份文件。之前，只有将存储类型配置为 `disc` 的设置支持导出保留消息。
+
+- [#13140](https://github.com/emqx/emqx/pull/13140) 修复了导致消息重发布动作的文本追踪崩溃并无法正确显示的问题。
+
+- [#13148](https://github.com/emqx/emqx/pull/13148) 修复了在等待资源连接时 `/connectors/:connector-id/start` 可能返回 500 HTTP 状态码的问题。
+
+- [#13181](https://github.com/emqx/emqx/pull/13181) 当尝试停止连接器操作超时时，EMQX 现在会强制关闭连接器进程。此修复还提高了当底层连接器无响应导致无法停用动作或源时，错误消息的清晰性和准确性。
+
+- [#13216](https://github.com/emqx/emqx/pull/13216) 调整了 MQTT 桥接中 `clientid_prefix` 配置的处理方式。自 EMQX v5.4.1 起，MQTT 客户端 ID 的长度被限制为最多 23 字节。之前，系统将 `clientid_prefix` 计入原始更长客户端 ID 的哈希值中，这影响了最终的 ID 缩短处理。此修复涵盖以下具体变更：
+
+  - 无前缀情况：处理方式保持不变。EMQX 对超过 23 字节的长客户端 ID 进行哈希处理，以符合 23 字节的限制。
+  - 带前缀情况：
+    - 前缀长度 ≤ 19 字节：保留前缀，并将客户端 ID 的剩余部分缩减到 4 字节，确保总长度不超过 23 字节。
+    - 前缀长度 ≥ 20 字节：EMQX 将不尝试缩短客户端 ID，而是完全保留设定的前缀，无论其长度如何。
+
+## 5.7.0
+
+*发布日期: 2024-05-27*
+
+### 增强
+
+#### 安全
+
+[#12947](https://github.com/emqx/emqx/pull/12947) 对于 JWT 认证，支持新的 `disconnect_after_expire` 选项。启用时，客户端将在 JWT token 过期后断开连接。
+
+
+注意：这是一个不兼容变更。此选项默认启用，因此默认行为已更改。以前，带有实际 JWT 的客户端可以连接到服务器并在 JWT token 过期后保持连接。现在，客户端将在 JWT token 过期后断开连接。要保留以前的行为，请将 `disconnect_after_expire` 设置为 `false`。
+
+#### 数据处理和集成
+
+- [#12671](https://github.com/emqx/emqx/pull/12671) 在规则引擎 SQL 语言中添加了一个 `unescape` 函数，用于处理字符串中转义序列的展开。之所以添加这个功能，是因为 SQL 语言中的字符串字面量不支持任何转义码（例如 `\n` 和 `\t`）。这一增强功能使得在 SQL 表达式中对字符串进行更灵活的处理成为可能。
+
+
+#### 扩展
+
+- [#12872](https://github.com/emqx/emqx/pull/12872) 实现了客户端属性功能。允许使用键值对的方式为每个客户端设置额外的属性。属性值可以从 MQTT 客户端连接信息（如用户名、客户端 ID、TLS 证书）处理生成，也可以从认证成功返回的附带的数据中设置。属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中。相较于直接使用客户端 ID 等静态属性，客户端属性能够更灵活的用在各类业务场景中，并简化开发流程，增强开发工作的适应性和效率。
+
+  **初始化客户端属性**
+
+  `client_attrs` 字段可以从以下 `clientinfo` 字段之一初始填充：
+
+  - `cn`: TLS 客户端证书中的通用名称。
+  - `dn`: TLS 客户端证书中的专有名称，即证书的 "Subject"。
+  - `clientid`: 客户端提供的 MQTT 客户端 ID。
+  - `username`: 客户端提供的用户名。
+  - `user_property`: 从 MQTT CONNECT 数据包的 'User-Property' 中提取属性值。
+
+  **通过认证响应扩展**
+
+  可以从认证响应中合并额外的属性到 `client_attrs` 中。支持的认证后端包括：
+
+  - **HTTP**：可以通过 `client_attrs` 字段将属性包含在 HTTP 响应体的 JSON 对象中。
+  - **JWT**：可以通过 JWT 中的 `client_attrs` 声明包含属性。
+
+  **在认证和授权中的使用**
+
+  如果在认证之前初始化了 `client_attrs`，它可以在外部认证请求中使用。例如，`${client_attrs.property1}` 可以在请求模板中使用，用于指向 HTTP 服务器进行真实性验证。
+
+  - `client_attrs` 可以在授权配置或请求模板中使用，增强灵活性和控制。例如：
+
+    在 `acl.conf` 中，使用 `{allow, all, all, ["${client_attrs.namespace}/#"]}` 来基于 `namespace` 属性应用权限。
+
+  - 在其他授权后端中，可以在请求模板中使用 `${client_attrs.namespace}` 动态包含客户端属性。
+
+  更多关于客户端属性功能的详细信息，参见[客户端属性](../client-attributes/client-attributes.md)。
+
+- [#12910](https://github.com/emqx/emqx/pull/12910) 添加了插件配置管理和 schema 验证功能。还可以使用元数据注释 schema，以便在 Dashboard 中进行 UI 渲染。更多详细信息请参见[插件模板](https://github.com/emqx/emqx-plugin-template/pull/126)和[插件文档](../extensions/plugins.md)。
+
+#### 运维和管理
+
+<!-- This is not ready to GA in 5.7
+
+- [#12798](https://github.com/emqx/emqx/pull/12798) 新增 `GET /api/v5/clients_v2` API，该 API 使用游标代替页码进行分页。这样比旧的 API 端点更高效，因为旧的 API 会多次遍历表。
+
+  -->
+
+
+- [#12923](https://github.com/emqx/emqx/pull/12923) 在将错误格式导入内置认证数据库时提供了更具体的错误信息。
+
+- [#12940](https://github.com/emqx/emqx/pull/12940) 向 `PUT /configs` API 添加了 `ignore_readonly` 参数。
+
+  在此更改之前，如果原始配置包含只读根键（`cluster`、`rpc` 和 `node`），EMQX 将返回 400（BAD_REQUEST）。
+
+  这一增强功能后，可以调用 `PUT /configs?ignore_readonly=true`，在这种情况下 EMQX 将忽略只读根配置键并应用其余配置。出于可观察性目的，如果丢弃了任何只读键，会记录一条信息级别的日志。
+
+  还修复了配置中存在错误的 HOCON 语法时出现的异常（返回 500）。现在错误的语法将导致 API 返回 400（BAD_REQUEST）。
+
+- [#12957](https://github.com/emqx/emqx/pull/12957) 开始为 macOS 14（Apple Silicon）和 Ubuntu 24.04 Noble Numbat（LTS）构建包。
+
+### 修复
+
+#### 安全
+
+- [#12887](https://github.com/emqx/emqx/pull/12887) 修复了使用 SASL SCRAM 的 MQTT 增强型身份验证。
+- [#12962](https://github.com/emqx/emqx/pull/12962) TLS 客户端现在可以使用通配符证书验证服务器主机名。例如，如果证书是为主机 `*.example.com` 颁发的，则 TLS 客户端可以验证类似 `srv1.example.com` 的服务器主机名。
+
+#### MQTT
+
+- [#12996](https://github.com/emqx/emqx/pull/12996) 修复了 `emqx_retainer` 应用程序中的进程泄漏问题。以前，当接收到保留消息时客户端断开连接，可能会导致进程泄漏。
+
+
+#### 数据处理和集成
+
+- [#12653](https://github.com/emqx/emqx/pull/12653) 规则引擎函数 `bin2hexstr` 现在支持位字符串输入的位数不是8的倍数。规则引擎函数 `subbits` 可能返回这样的位字符串。
+
+- [#12657](https://github.com/emqx/emqx/pull/12657) 规则引擎基于 SQL 的语言以前不允许在数组文字中将任何表达式作为数组元素（只允许常量和变量引用）。现在已修复此问题，可以将任何表达式用作数组元素。
+
+  例如，现在可以执行以下操作：
+
+  ```bash
+  select
+  [21 + 21, abs(-abs(-2)), [1 + 1], 4] as my_array
+  from "t/#"
+  ```
+
+<!-- This is a fix for not new feature in this release
+
+- [#12707](https://github.com/emqx/emqx/pull/12707) 在数据库中保留持久客户端会话的 IP 地址和端口。
+
+  -->
+
+- [#12932](https://github.com/emqx/emqx/pull/12932) 以前，如果 HTTP 操作请求收到503（服务不可用）状态，它将被标记为失败，并且请求不会重试。现在已修复此问题，使得请求将重试配置的次数。
+
+- [#12948](https://github.com/emqx/emqx/pull/12948) 修复了更新连接器后敏感的 HTTP 标头值（如 `Authorization`）被 `******` 替换的问题。
+
+- [#13118](https://github.com/emqx/emqx/pull/13118) 修复了规则引擎模板渲染中的性能问题。
+
+#### 可观测性
+
+- [#12765](https://github.com/emqx/emqx/pull/12765) 确保统计信息 `subscribers.count` 和 `subscribers.max` 包含共享订阅者。先前它只包含非共享订阅者。
+
+
+#### 运维和管理
+
+- [#12812](https://github.com/emqx/emqx/pull/12812) 将资源健康检查操作改为非阻塞操作。这意味着更新或删除资源等操作不会被长时间运行的健康检查阻塞。
+- [#12830](https://github.com/emqx/emqx/pull/12830) 将通道（操作/源）健康检查操作改为非阻塞操作。这意味着更新或删除一个动作/ source 数据集成等操作不会被长时间运行的健康检查阻塞。
+
+<!-- This is a fix for not new feature in this release
+
+- [#12874](https://github.com/emqx/emqx/pull/12874) 在会话重新连接前修改订阅时，确保持久消息重新发送的一致性：
+
+  - 持久会话保存接收到的 QoS2 消息的飞行数据包 ID。
+
+  - 确保持久会话与非持久会话在重叠订阅方面的行为一致。
+
+  - 在 REST API 中列出持久订阅。
+
+    -->
+
+- [#12993](https://github.com/emqx/emqx/pull/12993) 修复了处理未知 zone 时的监听器配置更新 API。
+
+  在此修复之前，当使用未知 zone 更新监听器配置时，例如 `{"zone": "unknown"}`，更改会被接受，导致所有客户端连接时崩溃。 在此修复后，使用未知 zone 名称更新监听器将获得 “Bad request” 响应。
+
+- [#13012](https://github.com/emqx/emqx/pull/13012) MQTT 监听器配置选项 `access_rules` 已通过以下方式进行改进：
+
+  - 如果配置了无效的访问规则，监听器不再以难以理解的错误消息崩溃。而是生成配置错误。
+  - 现在可以通过逗号分隔在单个字符串中添加多个规则（例如，“allow 10.0.1.0/24，deny all”）。
+
+- [#13041](https://github.com/emqx/emqx/pull/13041) 改进了 HTTP 认证错误日志消息。如果 POST 方法缺少 HTTP 内容类型标头，它现在会发出一个有意义的错误消息，而不是一个不太可读的带有堆栈跟踪的异常。
+
+- [#13077](https://github.com/emqx/emqx/pull/13077) 此修复使 EMQX 只在连接器启动/重新启动时从全局配置中读取动作配置，并在连接器中存储动作的最新配置。之前更新到动作配置有时不会生效，需要禁用并启用动作才能生效。这意味着，即使动作配置看起来已成功更新，动作有时也可能使用旧的（先前的）配置运行。
+
+- [#13090](https://github.com/emqx/emqx/pull/13090) 如果动作或 source 的连接器被停用，尝试启动它们时将不再尝试启动连接器本身。
+
+#### 网关
+
+- [#12909](https://github.com/emqx/emqx/pull/12909) 修复了 UDP 监听器进程在出现错误或关闭时的处理。修复确保 UDP 监听器在需要时能够干净地停止和重新启动。
+- [#13001](https://github.com/emqx/emqx/pull/13001) 修复了 syskeeper 转发器在连接丢失时永远不会重新连接的问题。
+- [#13010](https://github.com/emqx/emqx/pull/13010) 修复了 JT/T 808 网关在请求注册服务进行身份验证失败时无法正确回复 REGISTER_ACK 消息的问题。
+
 ## 5.6.1
 
 *发布日期：2024-04-18*
@@ -1909,7 +2186,7 @@ EMQX 节点可以像以前的版本一样继续形成集群（命名为 `core`�
 
 - 只有核心节点参与事务写入
 - 数据完全复制到副本节点，因此它们可以从本地副本（即，从 RAM）读取
-- 虽然核心节点是功能完备的 MQTT 代理，但也可以选择将它们专用作纯数据库节点
+- 虽然核心节点是功能完备的 MQTT 消息服务器，但也可以选择将它们专用作纯数据库节点
 
 ### 全新 Dashboard
 

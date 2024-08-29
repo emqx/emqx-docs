@@ -4,7 +4,7 @@ The rule engine proffers a variety of built-in functions. You can utilize these 
 
 In this section, all function declarations conform to the following format:
 
-```
+```bash
 FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
@@ -14,7 +14,8 @@ Be aware that if the provided argument exceeds the stipulated range or employs a
 
 :::tip
 
-Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
+1. Some escape sequences need to be unescaped when used, see [unescape function](#unescapestring-string---string).
+2. Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
 
 :::
 
@@ -30,7 +31,7 @@ EMQX supports a wide range of mathematical functions:
 
 Returns the absolute value of number `X`. Example:
 
-```
+```bash
 abs(-12) = 12
 abs(-1.2) = 1.2
 ```
@@ -39,7 +40,7 @@ abs(-1.2) = 1.2
 
 Returns the arc cosine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
 
-```
+```bash
 acos(0.5) = 1.0471975511965976
 ```
 
@@ -47,7 +48,7 @@ acos(0.5) = 1.0471975511965976
 
 Returns the hyperbolic arccosine of `X`, expressed in radians. `X` must be greater than or equal to 1. Example:
 
-```
+```bash
 acosh(1.5) = 0.9624236501192069
 ```
 
@@ -55,7 +56,7 @@ acosh(1.5) = 0.9624236501192069
 
 Returns the arc sine of `X`, expressed in radians. The range of `X` is `[-1, 1]`. Example:
 
-```
+```bash
 asin(0.5) = 0.5235987755982988
 ```
 
@@ -63,7 +64,7 @@ asin(0.5) = 0.5235987755982988
 
 Returns the hyperbolic arcsine of `X`. Example:
 
-```
+```bash
 asinh(0.5) = 0.48121182505960347
 ```
 
@@ -71,7 +72,7 @@ asinh(0.5) = 0.48121182505960347
 
 Returns the arc tangent of `X`, expressed in radians. Example:
 
-```
+```bash
 atan(0.5) = 0.46364760900080615
 ```
 
@@ -79,7 +80,7 @@ atan(0.5) = 0.46364760900080615
 
 Returns the hyperbolic arctangent of `X`, where `X` ranges between `(-1, 1)`. Example:
 
-```
+```bash
 atanh(0.5) = 0.5493061443340549
 ```
 
@@ -87,7 +88,7 @@ atanh(0.5) = 0.5493061443340549
 
 Rounds upward, yielding the smallest integer greater than or equal to the given `X`. Example:
 
-```
+```bash
 ceil(0.8) = 1
 ```
 
@@ -95,7 +96,7 @@ ceil(0.8) = 1
 
 Returns the cosine of the angle `X` expressed in radians. Example:
 
-```
+```bash
 cos(0.5) = 0.8775825618903728
 ```
 
@@ -103,7 +104,7 @@ cos(0.5) = 0.8775825618903728
 
 Returns the hyperbolic cosine of `X`. Example:
 
-```
+```bash
 cosh(0.5) = 1.1276259652063807
 ```
 
@@ -111,7 +112,7 @@ cosh(0.5) = 1.1276259652063807
 
 Returns the natural number e to the power of `X`, i.e., `e^X`. Example:
 
-```
+```bash
 exp(1) = 2.718281828459045
 ```
 
@@ -119,7 +120,7 @@ exp(1) = 2.718281828459045
 
 Returns the largest integer less than or equal to the given `X`. Example:
 
-```
+```bash
 floor(3.6) = 3
 ```
 
@@ -127,7 +128,7 @@ floor(3.6) = 3
 
 Returns the remainder of `X` divided by `Y` as a floating-point number. Example:
 
-```
+```bash
 fmod(6.5, 2.5) = 1.5
 ```
 
@@ -135,7 +136,7 @@ fmod(6.5, 2.5) = 1.5
 
 Returns the natural logarithm of the number `X`, where `X` must be greater than 0. Example:
 
-```
+```bash
 log(7.38905609893065) = 2.0
 ```
 
@@ -143,7 +144,7 @@ log(7.38905609893065) = 2.0
 
 Returns the logarithm base 10 of the number `X`, where `X` must be greater than 0. Example:
 
-```
+```bash
 log10(100) = 2.0
 ```
 
@@ -151,7 +152,7 @@ log10(100) = 2.0
 
 Returns the logarithm base 2 of the number `X`, where `X` must be greater than 0. Example:
 
-```
+```bash
 log2(8) = 3.0
 log2(8.5) = 3.0874628412503395
 ```
@@ -160,7 +161,7 @@ log2(8.5) = 3.0874628412503395
 
 Rounds the number `X` to the nearest integer. Example:
 
-```
+```bash
 round(4.5) = 5
 ```
 
@@ -168,7 +169,7 @@ round(4.5) = 5
 
 Returns `X` to the power of `Y`, i.e., `X^Y`. Example:
 
-```
+```bash
 power(2, 3) = 8.0
 ```
 
@@ -176,7 +177,7 @@ power(2, 3) = 8.0
 
 Returns a random floating-point number in the range `[0, 1)`. Example:
 
-```
+```bash
 random() = 0.5400050092601868
 ```
 
@@ -184,7 +185,7 @@ random() = 0.5400050092601868
 
 Returns the sine of angle `X`, expressed in radians. Example:
 
-```
+```bash
 sin(0.5) = 0.479425538604203
 ```
 
@@ -192,7 +193,7 @@ sin(0.5) = 0.479425538604203
 
 Returns the hyperbolic sine of `X`. Example:
 
-```
+```bash
 sinh(0.5) = 0.5210953054937474
 ```
 
@@ -200,7 +201,7 @@ sinh(0.5) = 0.5210953054937474
 
 Returns the square root of the number `X`. Example:
 
-```
+```bash
 sqrt(9) = 3.0
 ```
 
@@ -208,7 +209,7 @@ sqrt(9) = 3.0
 
 Returns the tangent of angle `X` (expressed in radians). Example:
 
-```
+```bash
 tan(0.5) = 0.5463024898437905
 ```
 
@@ -216,7 +217,7 @@ tan(0.5) = 0.5463024898437905
 
 Returns the hyperbolic tangent of `X`. Example:
 
-```
+```bash
 tanh(0.5) = 0.46211715726000974
 ```
 
@@ -230,7 +231,7 @@ Data type judgment functions can be used to check the data type of a specified f
 
 Determine whether `Term` is of array type. Example:
 
-```
+```bash
 is_array([1, 2]) = true
 is_array(json_decode('[{"value": 1}]')) = true
 is_array(json_decode('{"value": 1}')) = false
@@ -242,7 +243,7 @@ is_array('[1, 2]') = false
 
 Determine whether `Term` is of boolean type. Example:
 
-```
+```bash
 is_bool(true) = true
 is_bool(false) = false
 is_bool('true') = false
@@ -252,7 +253,7 @@ is_bool('true') = false
 
 Determine whether `Term` is of float type. Example:
 
-```
+```bash
 is_float(123.4) = true
 is_float(123) = false
 ```
@@ -261,7 +262,7 @@ is_float(123) = false
 
 Determine whether `Term` is of integer type. Example:
 
-```
+```bash
 is_int(123) = true
 is_int(123.4) = false
 ```
@@ -270,7 +271,7 @@ is_int(123.4) = false
 
 Determine whether `Term` is of map type. Example:
 
-```
+```bash
 is_map(json_decode('{"value": 1}')) = true
 is_map(json_decode('[{"value": 1}]')) = false
 ```
@@ -288,7 +289,7 @@ is_null(map_get('b', json_decode('{"a": 1}'))) = true
 
 Determine whether `Term` is of integer or float type. Example:
 
-```
+```bash
 is_num(123) = true
 is_num(123.4) = true
 is_num('123') = false
@@ -298,7 +299,7 @@ is_num('123') = false
 
 Determine whether `Term` is of string type. Example:
 
-```
+```bash
 is_str('123') = true
 is_str(123) = false
 ```
@@ -311,7 +312,7 @@ Convert `Term` to a boolean. `Term` can only be boolean type, integer type with 
 
 Example:
 
-```
+```bash
 # Correct
 bool(true) = true
 bool(0) = false
@@ -330,7 +331,7 @@ if the type of `Term` is string, scientific notation can be used, such as `float
 
 Example:
 
-```
+```bash
 float(20) = 20.0
 
 float('3.14') = 3.14
@@ -348,7 +349,7 @@ float('0.12345678901234567') = 0.12345678901234566
 
 Convert `Term` to a floating-point number containing at most `Decimals` digits after the decimal point, with the range of `Decimals` being `(0, 253]`. The other behavior is the same as `float/1`. Example:
 
-```
+```bash
 float('3.1415926', 3) = 3.142
 float('0.000012345', 5) = 0.00001
 ```
@@ -361,7 +362,7 @@ Since floating-point numbers cannot be stored precisely in computers, when `Deci
 
 Example:
 
-```
+```bash
 float2str(0.1, 5) = '0.1'
 float2str(0.1, 20) = '0.10000000000000000555'
 float2str(0.1, 25) = '0.1000000000000000055511151'
@@ -389,7 +390,7 @@ When `Term` is an integer, `Term` will be returned as is.
 
 Example:
 
-```
+```bash
 # Correct
 int(true) = 1
 int(3.14) = 3
@@ -415,7 +416,7 @@ When `Term` is a float, the `str` function will return the corresponding string,
 
 Example:
 
-```
+```bash
 str(100) = '100'
 str(nth(1, json_decode('[false]'))) = 'false'
 str(json_decode({"msg": "hello"})) = '{"msg":"hello"}'
@@ -431,13 +432,13 @@ str(0.000000314159265359) = '0.0000003142'
 
 ## String Operation Functions
 
-String functions can be used for case transformations, space removal, substring extraction, replacement, and other operations.
+String functions can be used for case transformations, space removal, substring extraction, replacement, escaping/unescaping, and other operations.
 
 ### ascii(Char: string) -> integer
 
 Returns the ASCII code corresponding to character `Char`. If `Char` contains multiple characters, only the code for the first character is returned. Example:
 
-```
+```bash
 ascii('a') = 97
 ascii('abc') = 97
 ```
@@ -446,7 +447,7 @@ ascii('abc') = 97
 
 Concatenates `Str1` and `Str2` into a single string. Example:
 
-```
+```bash
 concat('Name:', 'John') = 'Name:John'
 ```
 
@@ -456,7 +457,7 @@ Searches for the substring `SearchPattern` in `String`, deletes all content befo
 
 Example:
 
-```
+```bash
 find('..., Value: 1.2', 'Value:') = 'Value: 1.2'
 find('..., Value: 1.2', 'Data') = ''
 ```
@@ -465,7 +466,7 @@ find('..., Value: 1.2', 'Data') = ''
 
 Same as `find/2`, but allows the specification of the direction of the search for the substring `SearchPattern` using `Direction`. Example:
 
-```
+```bash
 find('Front, Middle, End', ', ', 'leading') = ', Middle, End'
 find('Front, Middle, End', ', ', 'trailing') = ', End'
 ```
@@ -474,7 +475,7 @@ find('Front, Middle, End', ', ', 'trailing') = ', End'
 
 Converts uppercase letters in the string `String` to lowercase. Example:
 
-```
+```bash
 lower('Hello') = 'hello'
 ```
 
@@ -482,7 +483,7 @@ lower('Hello') = 'hello'
 
 Same as `trim/1`, but only removes leading whitespace characters from the `String`. Example:
 
-```
+```bash
 ltrim('\t  hello  \n') = 'hello  \n'
 ltrim('\t  hello \r\n') = 'hello  \r\n'
 ```
@@ -491,7 +492,7 @@ ltrim('\t  hello \r\n') = 'hello  \r\n'
 
 Pads a `String` with trailing spaces to the specified length. Example:
 
-```
+```bash
 pad('hello', 8) = 'hello   '
 ```
 
@@ -503,7 +504,7 @@ When specifying `Direction` as `both`, if the number of spaces to be filled is a
 
 Example:
 
-```
+```bash
 pad('hello', 8, 'leading') = '   hello'
 pad('hello', 8, 'trailing') = 'hello   '
 pad('hello', 8, 'both') = ' hello  '
@@ -515,7 +516,7 @@ Same as `pad/3`, but can be padded with the specified grapheme cluster `Char`.
 
 Since the rule engine does not check whether `Char` is a legal grapheme cluster, `Char` will be processed as one character length no matter how many characters it contains. Example:
 
-```
+```bash
 pad('hello', 8, 'trailing', '!') = 'hello!!!'
 pad('hello', 8, 'trailing', '\r\n') = 'hello\r\n\r\n\r\n'
 pad('hello', 8, 'trailing', 'abc') = 'helloabcabcabc'
@@ -525,7 +526,7 @@ pad('hello', 8, 'trailing', 'abc') = 'helloabcabcabc'
 
 Determine whether the string `String`matches the regular expression `Expression`. Example:
 
-```
+```bash
 regex_match('123', '^\d+$') = true
 regex_match('a23', '^\d+$') = false
 ```
@@ -534,16 +535,38 @@ regex_match('a23', '^\d+$') = false
 
 Use string `Replacement` to replace the portion of `String` that matches the regular expression `Expression`. If no matching part is found, the original `String` will be returned. Example:
 
-```
+```bash
 regex_replace('hello 123', '\d+', 'world') = 'hello world'
 regex_replace('a;b; c', ';\s*', ',') = 'a,b,c'
+```
+
+### regex_extract(String: string, Expression: string) -> [string]
+
+::: tip
+
+This function has been introduced since EMQX v5.7.1.
+
+:::
+
+This function non-global searches for the regular expression pattern with capture groups in the given string.
+It can be used to extract parts of a string based on a regular expression, excluding the complete match itself.
+
+If matches are found, it returns a list of all captured groups from these matches. If no matches are found or there are no groups captured, it returns an empty list.
+
+Examples:
+
+```bash
+regex_extract('Number: 12345', '(\d+)') -> ['12345']
+regex_extract('Hello, world!', '(\w+).*\s(\w+)') -> ['Hello', 'world']
+regex_extract('No numbers here!', '(\d+)') -> []
+regex_extract('Date: 2021-05-20', '(\d{4})-(\d{2})-(\d{2})') -> ['2021', '05', '20']
 ```
 
 ### replace(String: string, SearchPattern: string, Replacement: string) -> string
 
 Replaces all `SearchPatterns` in `String` with `Replacement`. Example:
 
-```
+```bash
 replace('ab..cd..ef', '..', '**') = 'ab**cd**ef'
 replace('ab..cd..ef', '..', '') = 'abcdef'
 ```
@@ -560,7 +583,7 @@ Replaces occurrences of `SearchPattern` in `String` with `Replacement`.
 
 Example:
 
-```
+```bash
 replace('ab..cd..ef', '..', '**', 'all') = 'ab**cd**ef'
 replace('ab..cd..ef', '..', '**', 'leading') = 'ab**cd..ef'
 replace('ab..cd..ef', '..', '**', 'trailing') = 'ab..cd**ef'
@@ -570,7 +593,7 @@ replace('ab..cd..ef', '..', '**', 'trailing') = 'ab..cd**ef'
 
 Reverse a string. Example:
 
-```
+```bash
 reverse('hello') = 'olleh'
 ```
 
@@ -578,7 +601,7 @@ reverse('hello') = 'olleh'
 
 Same as `trim/1`, but only removes trailing whitespace characters from the `String`. Example:
 
-```
+```bash
 rtrim('\t  hello  \n') = '\t  hello'
 rtrim('\t  hello \r\n') = '\t  hello'
 ```
@@ -593,7 +616,7 @@ Separator can be composed of multiple characters, but they will be treated as a 
 
 Example:
 
-```
+```bash
 split('a;', ';') = ['a']
 split('a;b;c', ';') = ['a', 'b', 'c']
 split('a;;b;;c', ';') = ['a', 'b', 'c']
@@ -617,7 +640,7 @@ Same as `split/2`, but you can use `Option` to specify the position of the delim
 
 Example:
 
-```
+```bash
 split('a;;b;;c', ';', 'notrim') = ['a', '', 'b', '', 'c']
 split('a;b;c', ';', 'leading') = ['a', 'b;c']
 split('a;b;c', ';', 'trailing') = ['a;b', 'c']
@@ -635,7 +658,7 @@ Character `C` determines the type of control sequence to use. This is the only r
 
 Example:
 
-```
+```bash
 sprintf('hello, ~s!', 'steve') = 'hello, steve!'
 sprintf('count: ~p~n', 100) = 'count: 100\n'
 ```
@@ -644,7 +667,7 @@ sprintf('count: ~p~n', 100) = 'count: 100\n'
 
 Returns the length of `String`. Example:
 
-```
+```bash
 strlen('hello') = 5
 strlen('hello\n') = 6
 ```
@@ -653,7 +676,7 @@ strlen('hello\n') = 6
 
 Returns all characters in `String` starting from position `Start` to the end of the string. The subscript of the string starts from 0, that is, position 0 corresponds to "h" in the string "hello". Example:
 
-```
+```bash
 substr('hello', 0) = 'hello'
 substr('hello world', 6) = 'world'
 ```
@@ -662,7 +685,7 @@ substr('hello world', 6) = 'world'
 
 Returns the substring starting from position `Start` in `String` and having a maximum length of `Length`. The subscript of the string starts from 0. Example:
 
-```
+```bash
 substr('hello world!', 6, 5) = 'world'
 ```
 
@@ -674,7 +697,7 @@ Two or more adjacent delimiters will be treated as one, so no empty string will 
 
 Example:
 
-```
+```bash
 tokens('a,b;c,d', ',;') = ['a', 'b', 'c', 'd']
 tokens('a;;b', ';') = ['a', 'b']
 ```
@@ -683,7 +706,7 @@ tokens('a;;b', ';') = ['a', 'b']
 
 Same as `tokens/2`, but you can specify `NoCRLF` as `nocrlf` to split carriage return and line feed characters at the same time. Example:
 
-```
+```bash
 tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
 ```
 
@@ -691,16 +714,92 @@ tokens('a\rb\nc\r\nd', ';', 'nocrlf') = ['a', 'b', 'c', 'd']
 
 Removes leading and trailing characters from a `String` that should be considered whitespace, such as spaces, tabs, form feeds, and newline characters. Note that `\r\n` is considered a grapheme cluster in the Unicode standard, so `\r\n` will be deleted altogether. Example:
 
-```
+```bash
 trim('\t  hello  \n') = 'hello'
 trim('\t  hello \r\n') = 'hello'
 ```
+
+### unescape(String: string) -> string
+
+The unescape function converts escape sequences back to their represented characters. When escape sequences are used in SQL, this function should be used to unescape them first for proper processing.
+
+::: tip
+
+This function has been introduced since EMQX v5.7.0.
+
+:::
+
+For example, when the Payload is a newline-separated string:
+
+```bash
+32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3
+87.2
+12.3
+my-device
+```
+
+If you want to split the Payload into an array using `\n`. The following SQL will not execute as expected:
+
+```sql
+SELECT split(payload, '\n') as device_info FROM 't/#'
+```
+
+Output result:
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3\n87.2\n12.3\nmy-device"
+  ]
+}
+```
+
+Using the unescape function to unescape `\n`, you can get the desired result:
+
+```sql
+SELECT split(payload, unescape('\n')) as device_info FROM 't/#'
+```
+
+Output result:
+
+```json
+{
+  "device_info": [
+    "32A48702-1FA6-4E7C-97F7-8EA3EA48E8A3",
+    "87.2",
+    "12.3",
+    "my-device"
+  ]
+}
+```
+
+**The unescape function supports the following escape sequences:**
+
+- Standard C escape sequences:
+
+  - `\n` for newline (LF)
+  - `\t` for horizontal tab (HT)
+  - `\r` for carriage return (CR)
+  - `\b` for backspace (BS)
+  - `\f` for formfeed (FF)
+  - `\v` for vertical tab (VT)
+  - `\'` for single quote (')
+  - `\"` for double quote (")
+  - `\\` for backslash ()
+  - `\?` for question mark (?)
+  - `\a` for alert (bell, BEL)
+
+- Hexadecimal escape codes:
+
+  - `\xH...` where `H...` is one or more hexadecimal digits (0-9, A-F, a-f), allowing for the encoding of arbitrary utf32 characters.
+
+If an escape sequence is not recognized, or if the hexadecimal escape does not form a valid Unicode character, the function throws an exception.
 
 ### upper(String: string) -> string
 
 Converts lowercase letters in a `String` to uppercase letters. Example:
 
-```
+```bash
 upper('hello') = 'Hello'
 ```
 
@@ -710,7 +809,7 @@ upper('hello') = 'Hello'
 
 Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the Map. Example:
 
-```
+```bash
 map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
@@ -719,7 +818,7 @@ map_get('data', json_decode('{"msg": "hello"}')) = undefined
 
 Same as `map_get/2`, but when `Key` does not exist, the specified `Default` will be returned. Example:
 
-```
+```bash
 map_get('data', json_decode('{"msg": "hello"}'), '') = ''
 map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 ```
@@ -728,16 +827,30 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new Value. Example:
 
-```
+```bash
 map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
 map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 ```
+
+### map_to_redis_hset_args(Map) -> list
+
+::: tip 
+
+This function has been introduced since EMQX v5.7.1.
+
+:::
+
+This function transforms a map into a list of field names and values, used for formatting the Redis `HSET` (or `HMSET`) command.
+
+The conversion is specified by a rule such as `SELECT map_to_redis_hset_args(payload.value) as hset_fields FROM t/1`. This prepares the `hset_fields` variable for integration into a Redis action command template, formatted as `HMSET name1 ${hset_fields}`.
+
+For instance, if `payload.value` is the map `{"a" : 1, "b": 2}`, the resulting command could be `HMSET name1 b 2 a 1`. Note that the order of the fields in the map is non-deterministic.
 
 ### mget(Key: string | array, Map: map) -> any
 
 Returns the value of the specified `Key` in the `Map`, or `undefined` if the `Key` does not exist in the `Map`. You can use an array to specify multiple keys at once to get associated values from a nested map. Example:
 
-```
+```bash
 mget('c', json_decode('{"a": {"b": 1}}')) = undefined
 json_decode(mget('a', json_decode('{"a": {"b": 1}}'))) = '{"b": 1}'
 mget(['a', 'b'], json_decode('{"a": {"b": 1}}')) = 1
@@ -747,7 +860,7 @@ mget(['a', 'b'], json_decode('{"a": {"b": 1}}')) = 1
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new value. You can use an array to specify multiple keys at once to insert data into a nested map. Example:
 
-```
+```bash
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"a": {"b": 1}}'))) = 2
 mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 ```
@@ -758,7 +871,7 @@ mget(['a', 'b'], mput(['a', 'b'], 2, json_decode('{"c": 1}'))) = 2
 
 Determine whether the array `Array` contains the specified `Item`. Example:
 
-```
+```bash
 contains(2, [1, 2, 3]) = true
 contains(2.3, [1.8, 2.5, 2.0]) = false
 contains('John', ['John', 'David']) = true
@@ -770,7 +883,7 @@ contains(json_decode('{"a": 1}'), [json_decode('{"a": 1}'), json_decode('{"b": 2
 
 Returns the first element in the array `Array`. `Array` cannot be empty. Example:
 
-```
+```bash
 # Correct
 first(['John', 'David']) = 'John'
 
@@ -782,7 +895,7 @@ first([])
 
 Returns the last element in the array `Array`. `Array` cannot be empty. Example:
 
-```
+```bash
 # Correct
 last(['John', 'David']) = 'David'
 
@@ -794,7 +907,7 @@ last([])
 
 Returns the length of the array `Array`, that is, the number of elements in the `Array`. Example:
 
-```
+```bash
 length([1,2,3,4]) = 4
 length([]) = 0
 ```
@@ -803,7 +916,7 @@ length([]) = 0
 
 Returns the Nth element in `Array`. `N` should not be larger than the length of `Array`. Example:
 
-```
+```bash
 # Correct
 nth(1, [1,2,3]) = 1
 
@@ -816,7 +929,7 @@ nth(4, [1,2,3])
 
 Returns a subarray starting from the 1st element in the array `Array` and having a maximum length of `Length`. If `Length` is greater than the length of `Array`, the entire array will be returned. Example:
 
-```
+```bash
 sublist(3, [1,2,3,4]) = [1,2,3]
 sublist(10, [1,2,3,4]) = [1,2,3,4]
 ```
@@ -825,7 +938,7 @@ sublist(10, [1,2,3,4]) = [1,2,3,4]
 
 Same as `sublist/2`, but you can use `Start` to specify which element to start returning from. If `Start` + `Length` is greater than the length of `Array`, the entire array will be returned. Example:
 
-```
+```bash
 sublist(2, 10, [1,2,3,4]) = [2,3,4]
 ```
 
@@ -837,7 +950,7 @@ Computes an MD5 hash value of a fixed length of 128 bits for a `String` of any l
 
 Example:
 
-```
+```bash
 md5('hello') = '5d41402abc4b2a76b9719d911017c592'
 ```
 
@@ -847,7 +960,7 @@ Computes a SHA hash value of a fixed length of 160 bits for a `String` of any le
 
 Example:
 
-```
+```bash
 sha('hello') = 'aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d'
 ```
 
@@ -857,7 +970,7 @@ Computes a SHA hash value of a fixed length of 256 bits for a `String` of any le
 
 Example:
 
-```
+```bash
 sha256('hello') = '2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824'
 ```
 
@@ -869,7 +982,7 @@ Note: Binary data cannot be JSON encoded directly, you must call the `bin2hexstr
 
 To decompress `Data`, `Data` must contain a gz header and a checksum at the end. Example:
 
-```
+```bash
 gunzip(hexstr2bin('1F8B0800000000000013CB48CDC9C9070086A6103605000000')) = 'hello'
 ```
 
@@ -877,7 +990,7 @@ gunzip(hexstr2bin('1F8B0800000000000013CB48CDC9C9070086A6103605000000')) = 'hell
 
 Use the DEFLATE algorithm to compress `Data`, and the returned compression result includes the gz header and the checksum at the tail. Example:
 
-```
+```bash
 bin2hexstr(gzip('hello')) = '1F8B0800000000000013CB48CDC9C9070086A6103605000000'
 ```
 
@@ -885,7 +998,7 @@ bin2hexstr(gzip('hello')) = '1F8B0800000000000013CB48CDC9C9070086A6103605000000'
 
 Decompress `Data`. `Data` should not contain the zlib header and the checksum at the tail. Example:
 
-```
+```bash
 unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 ```
 
@@ -893,7 +1006,7 @@ unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 
 Use the DEFLATE algorithm to compress `Data`, and the returned compression result does not include the zlib header and the checksum at the tail. Example:
 
-```
+```bash
 bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 ```
 
@@ -901,7 +1014,7 @@ bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 
 Use the DEFLATE algorithm to compress `Data`. The returned compression result contains the zlib header and the checksum at the tail. Example:
 
-```
+```bash
 bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
 ```
 
@@ -909,7 +1022,7 @@ bin2hexstr(zip_compress('hello')) = '789CCB48CDC9C90700062C0215'
 
 To decompress `Data`, `Data` must contain a zlib header and a checksum at the end. Example:
 
-```
+```bash
 zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 ```
 
@@ -919,7 +1032,7 @@ zip_uncompress(hexstr2bin('789CCB48CDC9C90700062C0215')) = 'hello'
 
 Returns the **bitwise AND** result of `Num1` and `Num2`. Both input and output are signed integers. Example:
 
-```
+```bash
 bitand(10, 8) = 8
 bitand(-10, -8) = -16
 ```
@@ -928,7 +1041,7 @@ bitand(-10, -8) = -16
 
 Returns the **bitwise negation** result of `Num`. Both input and output are signed integers. Example:
 
-```
+```bash
 bitnot(10) = -11
 bitnot(-12) = 11
 ```
@@ -937,7 +1050,7 @@ bitnot(-12) = 11
 
 Shift `Num` bitwise to the left by `Shift` bits, filling the right margin with 0. Example:
 
-```
+```bash
 bitsl(8, 2) = 32
 bitsl(-8, 2) = -32
 ```
@@ -946,7 +1059,7 @@ bitsl(-8, 2) = -32
 
 Shift `Num` to the right by `Shift` bits, and fill the left blank with the sign bit (that is, 0 for positive numbers and 1 for negative numbers). Example:
 
-```
+```bash
 bitsr(8, 2) = 2
 bitsr(8, 4) = 0
 bitsr(-8, 2) = -2
@@ -957,7 +1070,7 @@ bitsr(-8, 6) = -1
 
 Returns the **bitwise OR** result of `Num1` and `Num2`. Example:
 
-```
+```bash
 bitor(10, 8) = 10
 bitor(-10, -8) = -2
 ```
@@ -966,7 +1079,7 @@ bitor(-10, -8) = -2
 
 Returns the **bitwise XOR** result of `Num1` and `Num2`. Example:
 
-```
+```bash
 bitxor(10, 8) = 2
 bitxor(-10, -8) = 14
 ```
@@ -991,7 +1104,7 @@ Typically, it serves as an intermediate value before being converted to an integ
 
 Returns the number of bits in the bit sequence `Bin`. Example:
 
-```
+```bash
 bitsize('abc') = 24
 bitsize('你好') = 48
 ```
@@ -1000,7 +1113,7 @@ bitsize('你好') = 48
 
 Returns the number of bytes in the byte sequence `Bin`. Example:
 
-```
+```bash
 byteszie('abc') = 3
 byteszie('你好') = 6
 ```
@@ -1011,7 +1124,7 @@ Starting from the starting position of the byte sequence `Bin`, obtain the bits 
 
 Example:
 
-```
+```bash
 # 159 = 0x9F
 subbits(hexstr2bin('9F4E58'), 8) = 159
 
@@ -1028,7 +1141,7 @@ Starting from the position `Start` of the byte sequence `Bin` (the starting posi
 
 Example:
 
-```
+```bash
 # 159 = 0x9F
 subbits(hexstr2bin('9F4E58'), 1, 8) = 159
 
@@ -1063,7 +1176,7 @@ Note that when `OutputType` is `float`, the parameter `Signedness` does not take
 
 Example:
 
-```
+```bash
 # 40782 = 0x9F4E
 subbits(hexstr2bin('9F4E58'), 1, 16, 'integer', 'unsigned', 'big') = 40782
 subbits(hexstr2bin('9F4E58'), 1, 16, 'integer', 'signed', 'big') = -24754
@@ -1081,7 +1194,7 @@ subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.007133483886
 
 Encode `Data` to base64 format. Example:
 
-```
+```bash
 base64_decode('aGVsbG8=') = 'hello'
 bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```
@@ -1090,7 +1203,7 @@ bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 
 Decode `Data` from base64 format. Example:
 
-```
+```bash
 base64_encode('hello') = 'aGVsbG8='
 base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
 ```
@@ -1099,7 +1212,7 @@ base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
 
 Decode `Data` from JSON format. Example:
 
-```
+```bash
 map_get('a', json_decode('{"a": 1}')) = 1
 ```
 
@@ -1107,7 +1220,7 @@ map_get('a', json_decode('{"a": 1}')) = 1
 
 Encode `Data` to JSON format. Example:
 
-```
+```bash
 json_encode([1,2,3]) = '[1,2,3]'
 ```
 
@@ -1115,7 +1228,7 @@ json_encode([1,2,3]) = '[1,2,3]'
 
 Convert binary data to the corresponding string of hexadecimal digits. Example:
 
-```
+```bash
 bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 ```
 
@@ -1123,17 +1236,19 @@ bin2hexstr(zip('hello')) = 'CB48CDC9C90700'
 
 Converts a string of hexadecimal digits to the corresponding binary data. Example:
 
-```
+```bash
 unzip(hexstr2bin('CB48CDC9C90700')) = 'hello'
 ```
 
-{% emqxee %}
-
 ### Schema Registry Functions
 
-EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
+::: tip
 
-See the table below for a detailed explanation of the functions. 
+The Schema Resigtry is an EMQX Enterprise edition feature.
+
+:::
+
+EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
@@ -1153,9 +1268,7 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 
 ### **Sparkplug B Functions**
 
-In EMQX Enterprise, there are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
-
-{% endemqxee %}
+EMQX Enterprise also has special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 ## Date and Time Conversion Functions
 
@@ -1184,7 +1297,7 @@ The placeholders that can be used in `FormatString` are as follows:
 
 Example:
 
-```
+```bash
 date_to_unix_ts('second', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00+08:00') = 1708671600
 ```
 
@@ -1200,7 +1313,7 @@ When `Offset` is a string, the following format can be used:
 
 Example:
 
-```
+```bash
 date_to_unix_ts('second', '+08:00', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') = 1708671600
 date_to_unix_ts('second', 'Z', '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 07:00:00') = 1708671600
 date_to_unix_ts('second', 14400, '%Y-%m-%d %H:%M:%S%:z', '2024-02-23 15:00:00') = 1708686000
@@ -1214,7 +1327,7 @@ See `date_to_unix_ts/3, 4` for possible values of `Unit`, `Offset` and `FormatSt
 
 Example:
 
-```
+```bash
 format_date('millisecond', '+08:00', '%Y-%m-%d %H:%M:%S.%6N%z', 1708933353472) = '2024-02-26 15:42:33.472000+0800'
 format_date('millisecond', '+08:00', '%Y-%m-%d %H:%M:%S.%6N%:z', 1708933353472) = '2024-02-26 15:42:33.472000+08:00'
 format_date('millisecond', '+08:20:30', '%Y-%m-%d %H:%M:%S.%3N%::z', 1708933353472) = '2024-02-26 16:03:03.472+08:20:30'
@@ -1226,7 +1339,7 @@ format_date('millisecond', 28800, '%Y-%m-%d %H:%M:%S.%3N%:z', 1708933353472) = '
 
 Returns the current system time as an RFC3339 datetime string in seconds. Example:
 
-```
+```bash
 now_rfc3339() = '2024-02-23T10:26:20+08:00'
 ```
 
@@ -1234,7 +1347,7 @@ now_rfc3339() = '2024-02-23T10:26:20+08:00'
 
 Same as `now_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
-```
+```bash
 now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
 ```
 
@@ -1242,7 +1355,7 @@ now_rfc3339('microsecond') = '2024-02-23T10:26:38.009706+08:00'
 
 Returns the current system time as a Unix timestamp in seconds. Example:
 
-```
+```bash
 now_timestamp() = 1708913853
 ```
 
@@ -1250,7 +1363,7 @@ now_timestamp() = 1708913853
 
 Same as `now_timestamp/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
-```
+```bash
 now_timestamp('microsecond') = 1708913828814315
 ```
 
@@ -1260,7 +1373,7 @@ Converts an RFC3339-compliant datetime string to a Unix timestamp. `2024-02-23T1
 
 Example:
 
-```
+```bash
 rfc3339_to_unix_ts('2024-02-23T15:56:30Z') = 1708703790
 rfc3339_to_unix_ts('2024-02-23T15:56:30+08:00') = 1708674990
 ```
@@ -1269,7 +1382,7 @@ rfc3339_to_unix_ts('2024-02-23T15:56:30+08:00') = 1708674990
 
 Same as `rfc3339_to_unix_ts/1`, but you can use `Unit` to specify the unit of returned Unix timestamp, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
-```
+```bash
 rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'second') = 1708703790
 rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'millisecond') = 1708703790870
 rfc3339_to_unix_ts('2024-02-23T15:56:30.87Z', 'microsecond') = 1708703790870000
@@ -1286,7 +1399,7 @@ Converts a time zone offset as a string to an integer in seconds. The following 
 
 Example:
 
-```
+```bash
 timezone_to_offset_seconds('Z') = 0
 timezone_to_offset_seconds('+08:00') = 28800
 timezone_to_offset_seconds('local') = 28800
@@ -1296,7 +1409,7 @@ timezone_to_offset_seconds('local') = 28800
 
 Converts a Unix timestamp in seconds to an RFC3339-compliant datetime string, using the system's local time zone. Example:
 
-```
+```bash
 unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
 ```
 
@@ -1304,13 +1417,17 @@ unix_ts_to_rfc3339(1708671600) = '2024-02-23T15:00:00+08:00'
 
 Same as `unix_ts_to_rfc3339/0`, but you can use `Unit` to specify the time unit, supporting `second`, `millisecond`, `microsecond` and `nanosecond`. Example:
 
-```
+```bash
 unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:00'
 ```
 
-{% emqxee %}
-
 ### MongoDB Time Functions
+
+::: tip
+
+Functions in this section applies to the EMQX Enterprise edition only.
+
+:::
 
 ### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 
@@ -1318,7 +1435,7 @@ Returns the current time as a MongoDB ISODate type or string. Only supported for
 
 Example:
 
-```
+```bash
 mongo_date() = 'ISODate("2024-02-23T15:00:00.123Z")'
 ```
 
@@ -1328,7 +1445,7 @@ Converts the specified Unix timestamp in milliseconds to the MongoDB ISODate typ
 
 Example:
 
-```
+```bash
 mongo_date(now_timestamp('millisecond')) = 'ISODate(2024-02-23T15:48:57.871Z)'
 ```
 
@@ -1345,11 +1462,9 @@ Possible values for `Unit` are:
 
 Example:
 
-```
+```bash
 mongo_date(now_timestamp('microsecond'), 'microsecond') = 'ISODate(2024-02-23T15:51:01.232Z)'
 ```
-
-{% endemqxee %}
 
 ## UUID Functions
 
@@ -1357,7 +1472,7 @@ mongo_date(now_timestamp('microsecond'), 'microsecond') = 'ISODate(2024-02-23T15
 
 Generates a version 4 UUID. Example:
 
-```
+```bash
 uuid_v4() = 'f5bb7bea-a371-4df7-aa30-479add04632b'
 ```
 
@@ -1365,14 +1480,15 @@ uuid_v4() = 'f5bb7bea-a371-4df7-aa30-479add04632b'
 
 Generates a version 4 UUID without hyphens. Example:
 
-```
+```bash
 uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
-{% emqxee %}
+## System Function
 
-## <!--Schema Registry and Sparkplug B Functions-->
+### getenv(Name)
 
-<!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+Return the value of the environment variable `Name` with the following constraints:
 
-{% endemqxee %}
+- Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
+- Values are immutable once loaded from the OS environment.

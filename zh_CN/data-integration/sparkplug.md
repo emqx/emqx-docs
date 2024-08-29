@@ -1,5 +1,11 @@
 # Sparkplug B
 
+::: tip 注意
+
+Schema Registry 是 EMQX 企业版功能。目前仅在 EMQX 企业版中支持对 Sparkplug B 数据格式的编解码。
+
+:::
+
 [Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) 是由 [Eclipse Foundation 的 TAHU 项目](https://www.eclipse.org/tahu/) 开发的开源规范，旨在为 MQTT 提供一套明确定义的 payload 和状态管理体系。其主要目标是在工业物联网领域实现互操作性和一致性。
 
 Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时控制系统和设备的 MQTT 命名空间。它通过封装结构化数据格式，包括指标、过程变量和设备状态信息，确保了标准化的数据传输，使其呈现为简洁易处理的格式。通过使用Sparkplug B，组织可以提高运营效率，避免数据孤岛，并在 MQTT 网络中实现设备间的无缝通信。
@@ -33,11 +39,13 @@ EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数
 
 ```sql
 select
-  sparkplug_encode(json_decode(payload)) as encoded
+  sparkplug_decode(payload) as decoded
 from t
 ```
 
 上面的示例中，`payload` 指的是要解码的原始 Sparkplug B 消息。
+
+[Sparkplug B Protobuf schema](https://github.com/emqx/emqx/blob/039e27a153422028e3d0e7d517a521a84787d4a8/lib-ee/emqx_ee_schema_registry/priv/sparkplug_b.proto) 可以进一步揭示消息结构的详细信息。
 
 ### sparkplug_encode
 
@@ -135,7 +143,7 @@ from t
 
 您可以使用 MQTTX 客户端工具模拟一个 MQTT 客户端，将 Sparkplug B 消息发布到主题 `my/sparkplug/topic`。然后，您可以验证该消息是否以 JSON 格式转换并转发到主题 `intresting_counters/counter1_run_updates`：
 
-1. 打开 MQTTX 客户端桌面版并连接到 EMQX 代理。有关使用 MQTTX 的详细信息，请参阅 [MQTTX](../messaging/publish-and-subscribe.md/#mqttx-client)。
+1. 打开 MQTTX 客户端桌面版并连接到 EMQX。有关使用 MQTTX 的详细信息，请参阅 [MQTTX](../messaging/publish-and-subscribe.md/#mqttx-client)。
 
 2. 创建新的订阅并订阅主题 `intresting_counters/counter1_run_updates`。
 

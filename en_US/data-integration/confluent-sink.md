@@ -1,14 +1,10 @@
 # Stream MQTT Data into Confluent
 
-{% emqxce %}
+::: tip
 
-:::tip
-
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+The Confluent data integration is an EMQX Enterprise edition feature.
 
 :::
-
-{% endemqxce %}
 
 [Confluent Cloud](https://www.confluent.io/), based on Apache Kafka, is a resilient, scalable, and fully managed streaming data service. EMQX supports data integration with Confluent through its rule engine and Sink, enabling easy streaming of MQTT data into Confluent for real-time processing, storage, and analysis.
 
@@ -224,7 +220,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 8. Configure the data sending method for the Sink, including:
 
-   - **Kafka Topic**: Enter `testtopic-in`. Note: Variables are not supported here.
+   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Configure Kafka Dynamic Topics](./data-bridge-kafka.md#configure-kafka-dynamic-topics) for details. 
    - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
    - **Message Key**: The key of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
    - **Message Value**: The value of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).

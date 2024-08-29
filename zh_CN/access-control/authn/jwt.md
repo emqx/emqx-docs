@@ -67,10 +67,11 @@
       "topic": "t/${clientid}"
     },
     {
-      // 允许客户端以 QoS 1 订阅 t/1 主题，使用 QoS 0 或 2 则是允许的
-      "permission": "deny",
+      "permission": "allow",
       "action": "subscribe",
-      "topic": "t/1",
+      // `eq` 前缀意味着该规则仅适用于主题过滤器 t/1/#，但不适用于 t/1/x 或 t/1/y 等
+      "topic": "eq t/1/#",
+      // 该规则只匹配 QoS 1 但不匹配 QoS 0 或 2
       "qos": [1]
     },
     {
@@ -125,6 +126,23 @@ JWT 权限列表定义了 `pub`、`sub` 和 `all` 3 个可选字段，分别用�
 
 ::::
 
+## 客户端属性
+
+从 EMQX v5.7.0 版本开始，您可以在 JWT Payload 中使用可选的 `client_attrs` 字段设置[客户端属性](../../client-attributes/client-attributes.md)。请注意，键和值都必须是字符串类型。
+
+示例：
+
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+```
+
 ## 通过 Dashboard 配置 JWT 认证
 
 1. 在 EMQX Dashboard 中点击左侧导航栏的**访问控制** -> **认证**。
@@ -159,6 +177,9 @@ EMQX 还支持定期从 JWKS 端点获取最新的 JWKS，这本质上是一组�
 
 - **JWKS Endpoint**：指定 EMQX 查询 JWKS 的服务器端点地址，该端点需要支持 GET 请求，并且返回符合规范的 JWKS。
 - **JWKS 刷新间隔**：指定 JWKS 的刷新间隔，也就是 EMQX 查询 JWKS 的间隔。<!--需要补充 可选值-->默认值：300 单位为秒（s）。
+- **请求头**：指定必须包含在对 JWKS 服务器请求中的任何其他 HTTP 请求头。添加这些 HTTP 请求头可以确保对 JWKS 服务器的请求根据服务器的要求进行正确格式化。此配置允许用户添加键值对，例如：
+  - **键**：`Accept`
+  - **值**：`application/json`
 
 点击**创建**完成相关配置。
 

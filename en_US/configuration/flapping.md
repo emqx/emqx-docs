@@ -18,24 +18,14 @@ Where, <!--did not add the dashboard UI as it seems that most configurations lis
 - `window_time` is to set the time window in which the maximum number of connection attempts from a client are counted.
 - `ban_time` is to set the duration for which a client is banned from connecting to the EMQX after it has been detected as flapping. 
 
-{% emqxce %}
-
-::: tip
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://www.emqx.io/docs/en/v@CE_VERSION@/hocon/).
-
-:::
-
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX has offered more configuration items to serve customized needs better. For details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
-{% endemqxee %}
-
 ::: tip
 
 You can also customize the settings via Dashboard by clicking **Access Control** -> **Flapping Detect** on the left navigation menu of the Dashboard. Once you configured these items with Dashboard, your settings will override the same configuration items in `emqx.conf`.
+
+:::
+
+::: tip
+
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

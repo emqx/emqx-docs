@@ -28,10 +28,11 @@ Example:
 %% Allow users with IP address "127.0.0.1" to publish/subscribe to topics "$SYS/#", "#"
 {allow, {ipaddr, "127.0.0.1"}, all, ["$SYS/#", "#"]}.
 
-%% Deny "All Users" subscribe to "$SYS/#" "#" Topics
-{deny, all, subscribe, ["$SYS/#", {eq, "#"}]}.
+%% Deny "All Users" subscribe to `$SYS/#`, `#` and `+/#`
+{deny, all, subscribe, ["$SYS/#", {eq, "#"}, {eq, "+/#"}]}.
 
 %% Allow any other publish/subscribe operation
+%% NOTE: In production, change the last rule to `{deny, all}`, and set config: `authorization.no_match = deny`
 {allow, all}.
 ```
 

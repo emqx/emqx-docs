@@ -68,25 +68,26 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 2. 打开配置文件 `emqx.conf`，根据您的安装方式，可能位于 `./etc` 或 `/etc/emqx/etc` 目录。
 3. `emqx.conf` 中默认没有监听器配置，添加以下配置内容：
 
-   ```bash
-    listeners.ssl.default {
-      bind = "0.0.0.0:8883"
-      ssl_options {
-        # PEM 格式的文件，包含一个或多个用于验证客户端证书的根 CA 证书
-        cacertfile = "etc/certs/rootCAs.pem"
-        # PEM 格式的服务器证书，如果证书不是直接由根 CA 签发，那么中间 CA 的证书必须加在服务器证书的后面组成一个证书链
-        certfile = "etc/certs/server-cert.pem"
-        # PEM 格式的密钥文件
-        keyfile = "etc/certs/server-keyi.pem"
-        # 私钥文件受密码保护时需要输入密码
-        # password = "123456"
-        # 设置成 'verify_peer' 来验证客户端证书是否为 cacertfile 中某个根证书签发
-        verify = verify_none
-        # 如果设置成 true，但是客户端在握手时候没有发送证书，服务端会终止握手，如果设置成 false，那么服务端只有在客户端发送一个非法证书时才会终止握手
-        fail_if_no_peer_cert = false
-      }
-    }
-   ```
+```bash
+listeners.ssl.default {
+  bind = "0.0.0.0:8883"
+    ssl_options {
+      # PEM 格式的文件，包含一个或多个用于验证客户端证书的根 CA 证书
+      # 单向认证时，该文件内容可以为空
+      cacertfile = "etc/certs/rootCAs.pem"
+      # PEM 格式的服务器证书，如果证书不是直接由根 CA 签发，那么中间 CA 的证书必须加在服务器证书的后面组成一个证书链
+      certfile = "etc/certs/server-cert.pem"
+      # PEM 格式的密钥文件
+      keyfile = "etc/certs/server-keyi.pem"
+      # 设置成 'verify_peer' 来验证客户端证书是否为 cacertfile 中某个根证书签发。双向认证时，必须设置成 'verify_peer'。
+      # 设置成 'verify_none' 则不验证客户端证书，即单向认证。
+      verify = verify_none
+      # 如果设置成 true，但是客户端在握手时候没有发送证书，服务端会终止握手。双向认证时，必须设置成 true。
+      # 如果设置成 false，那么服务端只有在客户端发送一个非法证书时才会终止握手
+      fail_if_no_peer_cert = false
+  }
+}
+```
 
 4. 重启 EMQX，应用以上配置。
 

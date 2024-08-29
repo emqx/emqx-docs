@@ -48,9 +48,9 @@ In EMQX 4.x, there is no separate HTTP API and webpage for management. For examp
 
 In EMQX 5.x, we provided more proprietary interfaces to accomplish these functions. For example, `GET /api/v5/gateways/mqttsn/clients`, and more newly added HTTP APIs:
 
-- [Gateways](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateways) 
-- [Gateway-Authentication](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
-- [Gateway-Clients](https://www.emqx.io/docs/zh/v5.0/admin/api-docs.html#tag/Gateway-Clients) 
+- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways) 
+- [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
+- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients) 
 
 It also provides dedicated Dashboard pages for managing clients, gateway configurations, listeners, and more.
 

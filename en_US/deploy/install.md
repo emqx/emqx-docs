@@ -1,19 +1,37 @@
 # Installation and Migration
 
+This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs. It also covers how to configure a license for EMQX Enterprise and migrate from EMQX 4.4 to EMQX 5.1.
 
-This chapter walks you through the basic installation steps for EMQX, the minimum hardware specification, and the file and directory locations to facilitate future configuration and maintenance jobs.
+## Supported Operating Systems
 
-{% emqxee %}
+The table below lists the operating systems and versions that EMQX supports.
 
-This chapter also covers how to configure a license for EMQX and how to migrate from EMQX 4.4 to EMQX 5.1.
+| Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
+| :---------------------------------| :----------------------------------------------- | :-- | :-- |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | Yes | Yes |
+| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
+| [macOS](./install-macOS.md)       | macOS 13<br />macOS 14 | Yes | Yes |
 
-{% endemqxee %}
+<!-- ## Hardware Specification
 
-{% emqxce %}
+Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies. 
 
-This chapter also covers how to migrate from EMQX 4.4 to EMQX 5.1.
+Below are hardware specifications for running EMQX with simple workloads, supporting 100,000 client connections and 100,000 messages per second of throughput.
 
-{% endemqxce %}
+| Item           | Minimum configuration | Recommended configuration |
+| -------------- | --------------------- | ------------------------- |
+| **Node**       | 1                     | 2                         |
+| **CPU**        | 1 core                | 16 core                   |
+| **Memory**     | 512 MB                | 32 GB                     |
+| **Disk space** | 1 GB                  | 50 GB                     |
+
+::: tip
+
+In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
+
+::: -->
 
 ## Installation Environment
 
@@ -76,75 +94,25 @@ sudo update-locale LANG=C.UTF-8
 
 ::::
 
-## Download
+## Port Usage
 
-{% emqxce %}
+EMQX uses the following ports by default. Ensure these ports are not occupied by other applications, and open the firewall as needed to ensure EMQX runs properly.
 
-EMQX releases the installation packages for different operating systems or platforms in each release. You may click the links below to download.
+| Port  | Protocol | Description                                                  |
+| ----- | -------- | ------------------------------------------------------------ |
+| 1883  | TCP      | MQTT over TCP listener port, mainly used for unencrypted MQTT connections. |
+| 8883  | TCP      | MQTT over SSL/TLS listener port for encrypted MQTT connections. |
+| 8083  | TCP      | MQTT over WebSocket listener port for MQTT communication over WebSocket. |
+| 8084  | TCP      | MQTT over WSS (WebSocket over SSL) listener port for encrypted WebSocket connections. |
+| 18083 | HTTP     | EMQX Dashboard and REST API port for management console and API interfaces. |
+| 4370  | TCP      | Erlang distribution port, the actual port may be `BasePort (4370) + Offset` depending on the node name. |
+| 5370  | TCP      | Cluster RPC port (5369 in Docker environment), the actual port may be `BasePort (5370) + Offset` depending on the node name. |
 
-EMQX website: <https://www.emqx.io/downloads>
+::: tip Note
 
-You can also download the alpha, beta, or rc versions from our [GitHub pages](https://github.com/emqx/emqx/releases).
-{% endemqxce %}
+Even if a cluster is not formed, EMQX will still listen on ports 4370 and 5370. These two ports are fixed and cannot be modified. The Offset is determined by the numeric suffix of the Name part in the node name (`Name@Host`). If there is no numeric suffix, the default is 0. For more information, refer to [Port Mapping](./cluster/security.md#port-mapping).
 
-{% emqxee %}
-
-EMQX releases the corresponding Docker image and the installation packages for different operating systems or platforms in each release. You may click the link below to download it.
-
-EMQX website: <https://www.emqx.com/en/try?product=enterprise>
-
-{% endemqxee %}
-
-:::tip
-
-Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 :::
-
-## Supported Operating Systems
-
-The table below lists the operating systems and versions that EMQX supports.
-
-{% emqxce %}
-| Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
-| :---------------------------------| :----------------------------------------------- | :-- | :-- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | Yes | Yes |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
-| [macOS](./install-macOS.md)       | macOS 11<br />macOS 12<br />macOS 13 (Homebrew)  | Yes | Yes |
-
-{% endemqxce %}
-
-{% emqxee %}
-
-| Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
-| :---------------------------------| :----------------------------------------------- | :-- | :-- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04 | Yes | Yes |
-| [Debian](./install-debian.md)     | Debian 10<br />Debian 11<br />Debian 12          | Yes | Yes |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
-| [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | Yes | Yes |
-
-{% endemqxee %}
-
-## <!--Hardware Specification
-
-Depending on the number of client connections, message rate, message size, and enabled features, the minimum hardware specification for EMQX varies. 
-
-Below are hardware specifications for running EMQX with simple workloads, supporting 100,000 client connections and 100,000 messages per second of throughput.
-
-| Item           | Minimum configuration | Recommended configuration |
-| -------------- | --------------------- | ------------------------- |
-| **Node**       | 1                     | 2                         |
-| **CPU**        | 1 core                | 16 core                   |
-| **Memory**     | 512 MB                | 32 GB                     |
-| **Disk space** | 1 GB                  | 50 GB                     |
-
-::: tip
-
-In production environments, you can use the [Server Estimate](https://www.emqx.com/en/server-estimate) calculator to calculate the recommended hardware specification under various maximum connections and message throughput.
-
-::: -->
 
 ## Files and Directories
 

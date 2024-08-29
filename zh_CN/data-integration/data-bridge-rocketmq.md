@@ -1,7 +1,9 @@
 # 将 MQTT 数据传输到 RocketMQ
 
 ::: tip
-RocketMQ 数据集成是 EMQX 企业版功能。
+
+RockeMQ 数据集成是 EMQX 企业版功能。
+
 :::
 
 通过 [RocketMQ](https://rocketmq.apache.org/) 数据集成可以将 MQTT 消息和客户端事件转发到 RocketMQ 中。例如，可以通过事件触发转发消息到 RocketMQ 中，从而实现对诸如设备在线状态、上下线历史等的记录。

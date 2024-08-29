@@ -106,7 +106,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
 2. 启动第一个节点，通过环境变量设置节点名。EMQX 默认的集群方式是手动集群，因此不需要进行额外设置。将节点添加到 Docker 网络中，并设置与节点 host 相同的网络别名。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -122,9 +122,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -137,14 +135,12 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -p 8084:8084 \
        -p 8883:8883 \
        -p 18083:18083 \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 3. 当第一个节点启动完成后，启动第二个节点。新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -155,9 +151,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -165,11 +159,9 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
        --network emqx-bridge \
        --network-alias node2.emqx.com \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 4. 在任意一个节点上执行[手动创建集群](#手动创建集群)的命令，将当前节点与另一节点连接创建集群：
 
    ```bash
@@ -195,7 +187,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
    还需要将节点加入到 Docker 网络中，并设置与节点 host 相同的网络别名。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -213,9 +205,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -230,14 +220,12 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        -p 8084:8084 \
        -p 8883:8883 \
        -p 18083:18083 \
-       emqx/emqx-enterprise:@CE_VERSION@
+       emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
-
+   
 3. 当第一个节点启动完成后，启动第二个节点。集群方式以及新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
 
-   {% emqxce %}
+   对于 EMQX 开源版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -250,9 +238,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
        emqx/emqx:@CE_VERSION@
    ```
 
-   {% endemqxce %}
-
-   {% emqxee %}
+   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -262,10 +248,9 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
       -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
       --network emqx-bridge \
       --network-alias node2.emqx.com \
-      emqx/emqx-enterprise:@CE_VERSION@
+      emqx/emqx-enterprise:@EE_VERSION@
    ```
-
-   {% endemqxee %}
+   
 
 :::
 
@@ -446,13 +431,13 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考 [使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
 
-您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 K8s 上的服务名，地址类型:
+您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 k8s 上的服务名，地址类型:
 
 <!-- TODO 补充几个参数的作用介绍 -->
 
 ```bash
 cluster {
-    discovery_strategy = K8s
+    discovery_strategy = k8s
     K8s {
         apiserver = "http://10.110.111.204:8080"
         service_name = emqx
@@ -465,7 +450,7 @@ cluster {
 
 其中：
 
-- `discovery_strategy` 是节点发现策略，设置为 `K8s`。
+- `discovery_strategy` 是节点发现策略，设置为 `k8s`。
 - `cluster.K8s.apiserver` 是 Kubernetes API 端点 URL，默认值：`http://10.110.111.204:8080`。
 - `cluster.K8s.service_name` 是 EMQX 服务名称，默认值：`emqx`。
 - `cluster.K8s.address_type` 是连接发现节点的地址类型，默认值：`ip`，可选值：`ip`、`dns`、`hostname`。

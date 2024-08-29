@@ -1,8 +1,8 @@
 # Ingest MQTT Data into DynamoDB
 
-:::tip
+::: tip
 
-The DynamoDB data integration is an EMQX Enterprise edition feature. 
+The DynamoDB data integration is an EMQX Enterprise edition feature.
 
 :::
 

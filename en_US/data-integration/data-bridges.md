@@ -9,7 +9,14 @@ This process allows EMQX to extend beyond just message transmission between IoT 
 ::: tip Note
 
 - Starting from EMQX v5.4.0, the original data bridge was separated according to the data flow direction and renamed as Sink and Source.
-- Currently, EMQX only supports MQTT, Kafka, and GCP PubSub Sources.
+
+- Currently, EMQX only supports the following external data systems to be served as Source:
+
+  - MQTT Services
+  - Kafka 
+  - GCP PubSub
+
+  Among them, Kafka and GCP PubSub Sources are only supported in the EMQX Enterprise edition.
 
 :::
 
@@ -46,7 +53,7 @@ D -->|Message storage| E[Kafka]
 The variable extraction syntax supported in Sink is as follows:
 
 - `${var}`: This syntax is used to extract variables from the output results of a rule, for example, `${topic}`. If you wish to extract nested variables, you can use a period `.` for this, such as `${payload.temp}`. Note that if the variable you want to extract is not included in the output result, you will get the string `undefined`.
-- `${.var}`: This syntax first tries to extract a variable from the rule's output results. If the variable does not exist in the output, it attempts to extract it from the corresponding event data, for example, `${.topic}`. This also supports the use of `.` for extracting nested variables, such as `${.payload.temp}`. If the variable you want to extract is not present in either the rule output results or event data, you will receive the string `undefined`. You can also use `${.}` to extract all variables merged from the rule output results and event data.
+- `${.}`, `${.var}`: The `${.}` syntax is used to extract the JSON string containing all the output results of the rule, while `${.var}` has the same meaning as `${var}` syntax.
 
 ### Source
 
@@ -68,11 +75,7 @@ D1 -->|Publish message| E[Client]
 
 ## Supported Integrations
 
-{% emqxce %}
-
-EMQX open-source version currently supports data bridges to [MQTT](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md). 
-
-The following data systems are only supported in the EMQX enterprise version:
+The EMQX Open Source edition only supports two types of data integrations: [MQTT Services](./data-bridge-mqtt.md) and [HTTP Server](./data-bridge-webhook.md). The EMQX Enterprise edition also supports data integrations with the following types of data systems:
 
 **Cloud**
 
@@ -117,63 +120,6 @@ The following data systems are only supported in the EMQX enterprise version:
 
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
-
-{% endemqxce %}
-
-{% emqxee %}
-
-EMQX supports data integration with the following types of data systems.
-
-**Default**
-
-- [MQTT](./data-bridge-mqtt.md)
-- [Webhook](./webhook.md)/[HTTPServer](./data-bridge-webhook.md)
-
-**Cloud**
-
-- [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Azure EventHub](./data-bridge-azure-event-hub.md)
-- [GCP PubSub](./data-bridge-gcp-pubsub.md)
-
-**TSDB**
-
-- [Apache IoTDB](./data-bridge-iotdb.md)
-- [InfluxDB](./data-bridge-influxdb.md)
-- [OpenTSDB](./data-bridge-opents.md)
-- [TimescalesDB](./data-bridge-timescale.md)
-
-**SQL**
-
-- [Cassandra](./data-bridge-cassa.md)
-- [Microsoft SQL Server](./data-bridge-sqlserver.md)
-- [MySQL](./data-bridge-mysql.md)
-- [Oracle](./data-bridge-oracle.md)
-- [PostgreSQL](./data-bridge-pgsql.md)
-
-**NoSQL**
-
-- [ClickHouse](./data-bridge-clickhouse.md)
-- [DynamoDB](./data-bridge-dynamo.md)
-- [Greptime](./data-bridge-greptimedb.md)
-- [MongoDB](./data-bridge-mongodb.md)
-- [Redis](./data-bridge-redis.md)
-- [TDengine](./data-bridge-tdengine.md)
-- [Elasticsearch](./elasticsearch.md)
-
-**Message Queue**
-
-- [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
-- [Pulsar](./data-bridge-pulsar.md)
-- [RabbitMQ](./data-bridge-rabbitmq.md)
-- [RocketMQ](./data-bridge-rocketmq.md)
-
-**Others**
-
-- [SysKeeper](./syskeeper.md)
-- [Amazon S3](./s3.md)
-
-{% endemqxee %}
 
 ## Features of Sink
 

@@ -1,24 +1,20 @@
 # Stream MQTT Data into HStreamDB
 
-{% emqxce %}
-:::tip
-EMQX Enterprise Edition features. EMQX Enterprise Edition provides comprehensive coverage of key business scenarios, rich data integration, product-level reliability, and 24/7 global technical support. Experience the benefits of this [enterprise-ready MQTT messaging platform](https://www.emqx.com/en/try?product=enterprise) today.
+::: tip
+
+The HStreamDB data integration is an EMQX Enterprise edition feature.
+
 :::
-{% endemqxce %}
 
 [HStreamDB](https://hstream.io/) is an open-source streaming data platform that enables you to efficiently ingest, store, process, and distribute all real-time messages, events, and other data streams in one unified platform. Through EMQX's integration with HStreamDB, you can save MQTT messages and client events to HStreamDB, achieving large-scale IoT data collection, transmission, and storage, and enabling real-time processing, monitoring, and analysis of data streams using standard SQL and materialized views.
 
 This page provides a comprehensive introduction to the data integration between EMQX and HStreamDB with practical instructions on creating and validating the data integration.
-
-{% emqxee %}
 
 ::: tip
 
 HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 :::
-
-{% emqxee %}
 
 ## How It Works
 
@@ -62,11 +58,15 @@ The sub-sections below describe how to install and connect to HStreamDB on Linux
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [data integration](./data-bridges.md)
 
-### Start HStreamDB TCP Service and Create Streams
+### Start HStreamDB Service and Create Streams
+
+::::: tabs
+
+:::: tab Start HStreamDB TCP Service and Create Streams
 
 This section describes how to start a single-node HStreamDB TCP service in your local Docker environment and then create Streams in HStreamDB.
 
-::: Note
+::: tip Note
 
 Once HStreamDB resources are in a connected state, if you perform operations on Streams in HStreamDB, such as deleting and recreating a Stream, you need to reconnect to HStreamDB, which means restarting HStreamDB resources.
 
@@ -74,8 +74,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
 
 1. Create a `docker-compose-tcp.yaml` file with the following contents.
 
-   <details>
-   <summary><code>docker-compose-tcp.yaml</code></summary>
+   ::: details `docker-compose-tcp.yaml`
 
    ```yaml
    version: "3.9"
@@ -160,7 +159,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        name: quickstart_tcp_data_zk_datalog
    ```
 
-   </details>
+   :::
 
 2. Run the following shell command to start the HStreamDB TCP service.
 
@@ -175,10 +174,6 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
    You can also use HStreamDB interactive SQL CLI to create Stream. Use `hstream --help` to get more information about using `hstream` command.
 
    :::
-
-   <details>
-   <summary><b>Command for entering HStreamDB container and creating Stream</b></summary>
-
 
    ```bash
    $ docker container exec -it quickstart-tcp-hserver bash
@@ -207,19 +202,18 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
    +--------------+---------+----------------+-------------+
    ```
 
-   </details>
-
-### Start HStreamDB TLS Service and Create Streams
+::::
+:::: tab Start HStreamDB TLS Service and Create Streams
 
 This section describes how to start a dual-node HStreamDB TCP service in your local Docker environment and then create Streams in HStreamDB.
 
-::: Note
+::: tip Note
 
 Once HStreamDB resources are in a connected state, if you perform operations on Streams in HStreamDB, such as deleting and recreating a Stream, you need to reconnect to HStreamDB, which means restarting HStreamDB resources.
 
 :::
 
-:::tip About Docker Network Environment and Certificate Files
+::: tip About Docker Network Environment and Certificate Files
 
 - This Docker Compose file uses the `172.100.0.0/24` network subnet as the Docker network bridge. If you have other network configuration requirements, please modify the Docker Compose file accordingly.
 - Please be aware not to set default environment variables like `http_proxy`, `https_proxy`, `all_proxy`, etc., for containers, as these environment variables may affect communication between different containers in HStream in the current version. Refer to [_Docker Network Proxy_](https://docs.docker.com/network/proxy/).
@@ -237,12 +231,11 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
 
 2. Create a `docker-compose-tcp.yaml` file with the following contents under `tls-deploy`.
 
-   <details>
-   <summary><code>docker-compose-tls.yaml</code></summary>
+   ::: details `docker-compose-tls.yaml`
 
    ```yaml
    version: "3.9"
-   
+
    services:
      step-ca:
        image: smallstep/step-ca:0.23.0
@@ -254,7 +247,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        environment:
          - DOCKER_STEPCA_INIT_NAME=HStream
          - DOCKER_STEPCA_INIT_DNS_NAMES=step-ca
-   
+
      generate-hstream-cert:
        image: smallstep/step-ca:0.23.0
        container_name: quickstart-tls-generate-hstream-cert
@@ -280,7 +273,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --san 172.100.0.11 \
            --san quickstart-tls-hserver-0 \
            --san quickstart-tls-hserver-1
-   
+
      hserver0:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-0
@@ -328,10 +321,10 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --tls-key-path /data/server/hstream.key \
            --advertised-listeners l1:hstream://172.100.0.10:6570 \
            --listeners-security-protocol-map l1:tls
-   
+
            # NOTE:
            # advertised-listeners ip addr should same as container addr for tls listener
-   
+
      hserver1:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-1
@@ -381,10 +374,10 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --tls-key-path /data/server/hstream.key \
            --advertised-listeners l1:hstream://172.100.0.11:6572 \
            --listeners-security-protocol-map l1:tls
-   
+
            # NOTE:
            # advertised-listeners ip addr should same as container addr for tls listener
-   
+
      hserver-init:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hserver-init
@@ -408,7 +401,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
                [ $$timeout -le 0 ] && echo 'Timeout!' && exit 1;
            done; \
            /usr/local/bin/hadmin server --host hserver0 --port 26570 init
-   
+
      hstore:
        image: hstreamdb/hstream:v0.17.0
        container_name: quickstart-tls-hstore
@@ -425,7 +418,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
            --use-tcp --tcp-host $$(hostname -I | awk '{print $$1}') \
            --user-admin-port 6440 \
            --no-interactive
-   
+
      zookeeper:
        image: zookeeper:3.8.1
        container_name: quickstart-tls-zk
@@ -436,7 +429,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        volumes:
          - data_zk_data:/data
          - data_zk_datalog:/datalog
-   
+
    networks:
      quickstart-tls:
        ipam:
@@ -444,7 +437,7 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
          config:
            - subnet: "172.100.0.0/24"
        name: quickstart-tls
-   
+
    volumes:
      data_store:
        name: quickstart_tls_data_store
@@ -454,9 +447,9 @@ Once HStreamDB resources are in a connected state, if you perform operations on 
        name: quickstart_tls_data_zk_datalog
    ```
 
-   </details>
+   :::
 
-Now the directory structure should be:
+   Now the directory structure should be:
 
    ```bash
    $ tree tls-deploy
@@ -474,15 +467,12 @@ Now the directory structure should be:
    ```
 
 4. Enter HStreamDB container and create to Streams named `mqtt_connect` and `mqtt_message`.
+
    :::tip TLS connection command options
 
    Similar to the HStreamDB TCP service, here you only need to add the `--tls-ca [CA_PATH]` option to the command line. Please note that if you want to execute the command on node `quickstart-tls-hserver-1`, you need to specify the `--port 6572` option additionally to ensure consistency with the port specified in the docker-compose file.
 
    :::
-
-   <details>
-   <summary><b>Command for entering HStreamDB container and creating Stream</b></summary>
-
 
    ```bash
    $ docker container exec -it quickstart-tls-hserver-0 bash
@@ -511,7 +501,8 @@ Now the directory structure should be:
    +--------------+---------+----------------+-------------+
    ```
 
-   </details>
+::::
+:::::
 
 ## Create a Connector
 
@@ -542,7 +533,7 @@ The following steps assume that you run both EMQX and HStreamDB on the local mac
 
 ## Create a Rule with HStreamDB Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the HStreamDB stream `mqtt_message` via configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the HStreamDB stream `mqtt_message` via configured Sink.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -558,13 +549,13 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    FROM
      "t/#"
    ```
-   
+
    ::: tip
 
    If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
-   
+
 4. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to HStreamDB.
 
 5. Select `HStreamDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
@@ -578,14 +569,14 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    ```json
    {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
    ```
-   
+
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the HStreamDB server.
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data and recording online/offline status through the HStreamDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new HStreamDB Sink.
 

@@ -22,20 +22,18 @@ EMQ 公司成立于 2017 年，总部位于杭州，海外研发中心设在斯�
 
 **地址**： 
 
-- 公司总部：浙江省杭州余杭区仓前街道龙园路88号3-A-303	
-- 北京办公室：北京朝阳区建外大街光华里8号中海广场
-- 上海办公室：上海黄浦区湖滨路168号无限极大厦26楼26032室
-- 成都办公室：成都高新区交子大道177号B座4层13号
-- 昆明办公室：昆明五华区学府路745号海伦先生1栋1814室
-- 深圳办公室：深圳南山区高新南九道深圳湾科技生态园10栋A座5层
-
-{% emqxee %}
+- 公司总部：浙江省杭州余杭区仓前街道龙园路 88 号 3-A-303	
+- 北京办公室：北京朝阳区建外大街光华里 8 号中海广场
+- 上海办公室：上海杨浦区淞沪路 290 号创智天地广场 10 号 307
+- 成都办公室：成都高新区交子大道 177 号 B 座 4 层 13 号
+- 昆明办公室：昆明五华区学府路 745 号海伦先生 1 栋 1814 室
+- 深圳办公室：深圳南山区高新南九道深圳湾科技生态园 10 栋 A 座 5 层
 
 EMQX 服务团队为您提供专业的支持：
 
-- 您可以借助 [专家支持和服务](https://www.emqx.com/zh/contact?product=emqx) 来帮助您设计、部署和拓展，量身定制最佳实践的物联网解决方案；
-- 或浏览 [EMQX 技术支持 ](https://www.emqx.com/zh/support)页面，了解详细的商业支持列表。
-- 对于 EMQX 产品使用中遇到的任何问题，可以通过 [提交工单 ](http://support.emqx.cn/hc/)的形式获取技术支持。
+- 您可以借助[专家支持和服务](https://www.emqx.com/zh/contact?product=emqx)来帮助您设计、部署和拓展，量身定制最佳实践的物联网解决方案；
+- 或浏览 [EMQX 技术支持](https://www.emqx.com/zh/support)页面，了解详细的商业支持列表。
+- 对于 EMQX 产品使用中遇到的任何问题，可以通过[提交工单](http://support.emqx.cn/hc/)的形式获取技术支持。
 
 **商业服务等级**
 
@@ -48,10 +46,6 @@ EMQX 服务团队为您提供专业的支持：
 | 响应时间           | 8 小时（工作时间内）                                         | 2 小时                                                       |
 | 补丁热修复         | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 第三方插件技术支持 | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-
-{% endemqxee %}
-
-{% emqxce %}
 
 EMQX 通过以下方式与世界各地的 EMQX 开发者及用户共同交流学习，获取帮助，分享见解。
 
@@ -67,5 +61,3 @@ EMQX 通过以下方式与世界各地的 EMQX 开发者及用户共同交流学
 - [Bilibili](https://space.bilibili.com/522222081)
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)
-
-{% endemqxce %}

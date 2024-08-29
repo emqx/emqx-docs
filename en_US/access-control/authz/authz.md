@@ -89,8 +89,9 @@ The following placeholders are supported in query statements:
 * `${username}`:  It is replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it is overridden by the fields or the content of the certificate.
 * `${clientid}`:  It is replaced by the client ID at runtime. The client ID is normally explicitly specified by the client in the `CONNECT` packet. If `use_username_as_clientid` or `peer_cert_as_clientid` is enabled, this field is overridden by the username, fields in the certificate, or the content of the certificate.
 * `${peerhost}`: It is replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
-* `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime, only applicable to TLS connections.
-* `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime, only applicable to TLS connections.
+* `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+* `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+* `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
 
 #### Topic Placeholders
 
@@ -98,10 +99,19 @@ EMQX also allows placeholders to be used in topics to support dynamic themes. Th
 
 * `${clientid}`
 * `${username}`
+* `${client_attrs.NAME}`: A client attribute. `NAME` is to be replaced by an attribute name extraction rule configured in `mqtt.client_attrs_init`.
 
 Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
 
-To avoid placeholder interpolation, one may use special `eq` syntax: `eq a/b/${username}/c/d`. This topic is treated as `a/b/${username}/c/d` literally, without interpolation.
+To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` as `${$}`. For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
+
+::: tip
+
+If you use the `eq` syntax in query statements, note that the topic following `eq` does not support placeholder interpolation. This behavior can change in future versions. 
+
+The `eq` syntax is to match exactly a topic filter, but not any topic that matches the filter. For example, `eq t/#` matches `t/#`, not `t/1` or `t/2`.
+
+:::
 
 ### Authorization Check Priority
 
@@ -135,11 +145,11 @@ You can check the connection status in the **Status** column:
 
 You can view the statistic metrics of each authorizer on the Overview page of the authorizer. The following metrics are listed:
 
-- **Allow**: Number of authorizations passed
-- **Deny**: Number of authorizations failed
-- **No match**: Number of times client authorizations data is not found
-
-- **Rate(tps)**: Execution rates of authorizations
+- **Allow**: Number of authorizations passed.
+- **Deny**: Number of authorizations failed.
+- **No match**: Number of times client authorization data is not found.
+- **Ignored**: Number of ignored authorization queries because the authorization is not applicable or encounters an error, resulting in an undecidable outcome.
+- **Rate(tps)**: Execution rates of authorizations.
 
 You can also check the authorization status and execution status on each node through **Node Status**.
 
@@ -151,26 +161,7 @@ The EMQX authorization mechanism supports integration with various data storage 
 
 In addition, EMQX can also connect to HTTP services developed by our users to meet different authorization requirements.
 
-{% emqxce %}
-
-According to the backend data storage used, there are currently 7 different types of EMQX authorizers. Each authorizer has its own configuration options. You can click the corresponding links in the following table for more details.
-
-| Database          | Description                                                          |
-| ----------------- | -------------------------------------------------------------------- |
-| ACL File          | [Authorization with static rules configured in a file](./file.md)    |
-| Built-in database | [Authorization with built-in database as rules storage](./mnesia.md) |
-| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)              |
-| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md)    |
-| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)          |
-| Redis             | [Authorization with Redis as rules storage](./redis.md)              |
-| HTTP              | [Authorization with external HTTP service](./http.md)                |
-
-{% endemqxce %}
-
-
-{% emqxee %}
-
-According to the backend data storage used, there are currently 8 different types of EMQX authorizers. Each authorizer has its own configuration options. You can click the corresponding links in the following table for more details.
+According to the backend data storage used, there are different types of EMQX authorizers as listed below. Each authorizer has its own configuration options. You can click the corresponding links in the table for more details.
 
 | Database          | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
@@ -182,8 +173,6 @@ According to the backend data storage used, there are currently 8 different type
 | Redis             | [Authorization with Redis as rules storage](./redis.md)      |
 | LDAP              | [Authorization with LDAP directory as rules storage](./ldap.md) |
 | HTTP              | [Authorization with external HTTP service](./http.md)        |
-
-{% endemqxee %}
 
 Below is an example of how to configure an EMQX MySQL authorizer.
 

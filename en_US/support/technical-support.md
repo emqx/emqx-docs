@@ -27,12 +27,10 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 
 **Address**: 
 
-- Headquarters: #A303, Building 3, No.88 Longyuan Road, Yuhang District, Hangzhou, Zhejiang, China
+- Headquarter: #A303, Building 3, No.88 Longyuan Road, Yuhang District, Hangzhou, Zhejiang, China
 - Global R&D center: Stockholm Mazarinvägen 36 Sköndal, Stockholm, Sweden
 - Europe office: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
 - US office: Silicon Valley 305 Vineyard Town Center #140 Morgan Hill CA 95037
-
-{% emqxee %}
 
 The EMQX service team provides you with professional support:
 
@@ -51,15 +49,11 @@ The EMQX service team provides you with professional support:
 | Hot bug fixes             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 | 3rd-party plug-in support | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 
-{% endemqxee %}
+For EMQX developers and users, you are welcome to join the EMQX forum, slack channel or visit Github pages to ask questions, find answers, and share ideas and best practices:
 
-{% emqxce %}
-
-For EMQX developers and users, you are welcome to join EMQX forum, slack channel or visit Github pages to ask questions, find answers, and share ideas and best practices:
-
-- [EMQX forum](https://www.emqx.io/forum/): Join EMQX forum to ask questions about EMQX. 
+- [EMQX forum](https://www.emqx.io/forum/): Join the EMQX forum to ask questions about EMQX. 
 - [Slack](https://slack-invite.emqx.io/): To connect with EMQX developers and users worldwide.
-- [GitHub](https://github.com/emqx/emqx): To get EMQX codes, report issues and request new features.
+- [GitHub](https://github.com/emqx/emqx): To get EMQX codes, report issues, and request new features.
 
 You may also reach us at:
 
@@ -67,5 +61,3 @@ You may also reach us at:
 - [Youtube](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q)
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)
-
-{% endemqxce %}

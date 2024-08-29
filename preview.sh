@@ -27,23 +27,13 @@ THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 
 docker rm "$CONTAINER_NAME" > /dev/null 2>&1 || true
 
-if [ "$PRODUCT" = "ce" ]; then
-    python3 "$THIS_DIR/gen.py" ce > directory.json
-    docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
-        -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
-        -v "$THIS_DIR"/en_US:/app/docs/en/latest \
-        -v "$THIS_DIR"/zh_CN:/app/docs/zh/latest \
-        -v "$THIS_DIR"/swagger:/app/docs/.vitepress/public/api \
-        -e DOCS_TYPE=broker \
-        -e VERSION=latest \
-    ghcr.io/emqx/emqx-io-docs-next:latest
-else
-    python3 "$THIS_DIR/gen.py" ee > directory_ee.json
-    docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
-        -v "$THIS_DIR"/directory_ee.json:/app/docs/.vitepress/config/directory.json \
-        -v "$THIS_DIR"/en_US:/app/docs/en/enterprise/latest \
-        -v "$THIS_DIR"/zh_CN:/app/docs/zh/enterprise/latest \
-        -e DOCS_TYPE=enterprise \
-        -e VERSION=latest \
-    ghcr.io/emqx/docs-emqx-com-next:latest
-fi
+python3 "$THIS_DIR/gen.py" ce > directory.json
+docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
+    -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
+    -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \
+    -v "$THIS_DIR"/zh_CN:/app/docs/zh/emqx/latest \
+    -v "$THIS_DIR"/hocon:/app/docs/.vitepress/public/api \
+    -e DOCS_TYPE=emqx \
+    -e VERSION=latest \
+    -e HOCON=true \
+ghcr.io/emqx/docs-emqx-com-next:latest

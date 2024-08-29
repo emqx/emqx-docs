@@ -84,6 +84,15 @@ For example, if the client ID prefix is `myprefix` and the Connector name is `fo
 myprefix:foo2bd61c44:1
 ```
 
+Starting from version 5.4.1, EMQX has limited the MQTT client ID length to 23 bytes. If the client ID exceeds this length, it will be replaced with a hashed value. This can result in a poor user experience when the prefix or connector name is too long.
+
+To address this issue, from version 5.7.1 onwards, EMQX has implemented the following rules:
+
+- **No prefix**: Behavior remains unchanged; EMQX will hash the long (> 23 bytes) client ID into a 23-byte space.
+- **With prefix**:
+  - **Prefix up to 19 bytes**: The prefix is preserved, and the remainder of the client ID is hashed into a 4-byte space capping the length within 23 bytes.
+  - **Prefix of 20 bytes or more**: EMQX will use the configured prefix, and no longer attempts to shorten the client ID.
+
 ## Create a Rule with MQTT Broker Sink
 
 This section demonstrates how to create a rule for specifying data to be forwarded to a remote MQTT service.
@@ -113,7 +122,7 @@ This section demonstrates how to create a rule for specifying data to be forward
 
    - **Topic**: The topic to publish to the external MQTT service, supporting `${var}` placeholders. Enter `pub/${topic}` here, meaning the original topic will be prefixed with `pub/` for forwarding. For example, if the original message topic is `t/1`, the topic forwarded to the external MQTT service will be `pub/t/1`.
    - **QoS**: The QoS for message publishing. Select from the dropdown options: `0`, `1`, `2`, or `${qos}`, or enter a placeholder to set QoS from another field. Here, select `${qos}` to follow the QoS of the original message.
-   - **Retain**: Select `true`, `false`, or `${falgs.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${falgs.retain}` to follow the retain flag of the original message.
+   - **Retain**: Select `true`, `false`, or `${flags.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${flags.retain}` to follow the retain flag of the original message.
    - **Payload**: The template used to generate the payload for the forwarded message. Leave blank by default, which means forwarding the rule output result. Here, you can enter `${payload}` to forward only the payload.
 
 9. Use default values for other configurations and click the **Create** button to complete the creation of the Sink. Once created, you will be directed back to the Create Rule page, and the new Sink will be added to the Action Outputs of the rule.

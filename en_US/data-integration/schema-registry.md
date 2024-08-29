@@ -1,5 +1,10 @@
-# Introduction to Schema Registry
+# Schema Registry
 
+::: tip Note
+
+Schema Registry is an EMQX Enterprise feature.
+
+:::
 
 Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
 
@@ -22,7 +27,9 @@ The diagram below shows an example of a Schema Registry application. Multiple de
 
 ## Architecture Design
 
-The Schema Registry can perform both decoding and encoding and it maintains schema text for built-in encoding formats Avro and Protobuf. The Schema API provides for add, query, and delete operations via schema name, so the schema name needs to be specified when encoding and decoding.
+EMQX can use schema for encoding, decoding, and validating whether the published messages comply with the schema specifications. It maintains schema text for built-in encoding formats, including Avro and Protobuf.
+
+The Schema API provides for add, query, and delete operations via schema name, so the schema name needs to be specified when encoding and decoding.
 
 ![architecture](./assets/schema_registry/schema_registry1.svg)
 

@@ -44,7 +44,7 @@ file_transfer {
   storage.local.segments = {
     # Segment storage directory, preferably set on high I/O performance disks.
     root = "./data/file_transfer/segments"
-    
+
     # Scheduled cleaning of expired segment files
     gc {
       # Cleaning interval
@@ -84,7 +84,6 @@ file_transfer {
 
   # Enable local disk file export
   storage.local.exporter.local {
-    enable = true
     # Export file storage directory, preferably set on high I/O performance disks.
     root = "./data/transfers/exports"
   }
@@ -103,9 +102,7 @@ file_transfer {
   # Segment storage configuration
   # ...
 
-  # Enable S3 bucket file export
   storage.local.exporter.s3 {
-    enable = true
 
     host = "s3.us-east-1.amazonaws.com"
     port = 443
@@ -137,7 +134,6 @@ To optimize file transfer operations and prevent clients from waiting excessivel
 ```bash
 file_transfer {
     enable = true
-    
     init_timeout = "10s"
     store_segment_timeout = "10s"
     assemble_timeout = "60s"

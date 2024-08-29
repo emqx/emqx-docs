@@ -4,7 +4,7 @@
 
 ::: tip
 
-- Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 :::
 
@@ -71,10 +71,11 @@ Example:
       "topic": "t/${clientid}"
     },
     {
-      // Allows the client to subscribe to the topic t/1 with QoS 1, while QoS 0 or 2 is allowed
-      "permission": "deny",
+      "permission": "allow",
       "action": "subscribe",
-      "topic": "t/1",
+      // The 'eq' prefix means the rule matches 't/1/#', but not 't/1/x' or 't/1/y'
+      "topic": "eq t/1/#",
+      // Matches QoS 1, but not QoS 0 or 2
       "qos": [1]
     },
     {
@@ -129,6 +130,23 @@ In this example, `testpub1/${username}` is replaced at runtime with `testpub1/em
 
 ::::
 
+## Client Attributes
+
+Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
+
+Example:
+
+```json
+{
+  "exp": 1654254601,
+  "username": "emqx_u",
+  "client_attrs": {
+      "role": "admin",
+      "sn": "10c61f1a1f47"
+  }
+}
+```
+
 ## Configure JWT Authentication in Dashboard
 
 1. Select **Access Control** -> **Authentication** from the left navigation menu. 
@@ -151,9 +169,10 @@ In this example, `testpub1/${username}` is replaced at runtime with `testpub1/em
         - `Public Key`: Specify the public key in PEM format used to verify the signature.
 
    - **Disconnect After Expiration**: Configures whether to disconnect clients after their JWT expires, enabled by default.
-   - **Payload**: Allows specification of additional claims checks. Users can define multiple key-value pairs under **Claim** and **Expected Value** fields. The `Claim` should match the JWT claim's name for accurate retrieval, and the `Expected Value` is compared against the claim's actual value. Currently the placeholders supported are `${clientid}` and `${username}`, 
+   - **Payload**: Specify additional claims checks that the user wants to perform. Users can define multiple key-value pairs with the **Claim** and **Expacted Value** fields, where the key is used to find the corresponding claim in the JWT, so it needs to have the same name as the JWT claim to be checked, and the value is used to compare with the actual value of the claim. Currently, the placeholders supported are `${clientid}` and `${username}`. 
 
 4. Click **Create** to complete the configuration.
+
 
 EMQX also supports periodically obtaining the latest JWKS from the JWKS endpoint, which is essentially a set of public keys used to verify any JWT issued by the authorization server and signed using the RSA or ECDSA algorithm. If you want to use this feature, you need to switch to the **JWKS** configuration page.
 
@@ -163,10 +182,12 @@ You need to configure the following JWKS-specific configuration items:
 
 - **JWKS Server**: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
 - **JWKS Refresh Interval**: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
+- **Headers**: Specify any additional HTTP headers that must be included in the requests to the JWKS server. Adding these HTTP headers ensures that the requests to the JWKS server are properly formatted according to your server's requirements. This configuration allows users to add key-value pairs, for example:
+  - **Key**: `Accept`
+  - **Value**: `application/json`
 
 Click **Create** to complete the configuration.
 
-## <!--Configure with Configuration Items-->
+<!-- ## Configure with Configuration Items
 
-<!--You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
-
+You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->

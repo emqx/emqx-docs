@@ -4,7 +4,7 @@ EMQX 5.0 系列引入了一些重大变更，可能会影响与旧版本 EMQX �
 
 本章节旨在为计划从 EMQX 4.x 升级到 EMQX 5.1 版本的用户提供帮助，以明确并了解可能遇到的潜在问题，方便进行版本升级。
 
-::: 提示
+::: tip 提示
 
 1. 建议升级到版本 5.1 之前，先升级到最新的 4.4 版本。
 2. 如需升级到 5.0 系列更高版本，请先按照此文档完成 5.1 版本升级，之后您可以继续升级到更高版本。
@@ -148,10 +148,10 @@ API 经历了重大变化，其中一些 API 已经兼容。以下是常用 API 
 | emqx_sasl        | AuthN/AuthZ - MQTT 5 增强认证                     |
 | emqx_auth_ldap   | -                                                 |
 | emqx_rule_engine | 数据集成                                          |
-| emqx_bridge_mqtt | Sink - MQTT 桥接                              |
-| emqx_web_hook    | Sink - HTTP 服务                              |
+| emqx_bridge_mqtt | Sink - MQTT 桥接                                  |
+| emqx_web_hook    | Sink - HTTP 服务                                  |
 | emqx_coap        | CoAP 网关                                         |
-| emqx_dashboard   | 仪表板                                            |
+| emqx_dashboard   | Dashboard                                         |
 | emqx_exhook      | ExHook                                            |
 | emqx_exproto     | ExProto 网关                                      |
 | emqx_lwm2m       | LwM2M 网关                                        |
@@ -306,19 +306,15 @@ Rule SQL 与 EMQX 4.x 语法完全兼容，但规则下的操作被分为内置�
 
 WebHook 插件（`emqx_web_hook`）已转换为内置功能，现在称为 "HTTP 服务" 动作。
 
-{% emqxee %}
-
 ## 离线消息
 
-在 EMQX 4.x 中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x 中不再支持外部数据库的离线消息。
+在 EMQX 企业版 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)基于外部数据库。EMQX 计划在以后的版本中提供基于内置数据库的本地离线消息支持，因此在版本 5.x 中不再支持外部数据库的离线消息。
 
 即将推出的本地离线消息功能将提供更高的性能，并降低使用和维护成本。敬请关注更多更新。
 
 ## 自动订阅（服务器端订阅）
 
-从版本 5.0.0 开始，EMQX 不再基于外部数据库提供[自动订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（服务器端订阅）。
-
-{% endemqxee %}
+从 EMQX 企业版 5.0.0 版本开始，EMQX 不再基于外部数据库提供[自动订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（服务器端订阅）。
 
 ## 数据持久化
 

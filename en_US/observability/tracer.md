@@ -1,6 +1,6 @@
 # Log Trace
 
-EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, or IP addresses. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
+EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, IP addresses, or rule IDs. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
 
 ## How It Works 
 
@@ -63,6 +63,14 @@ This section demonstrates how to create Log Trace rules by client ID, Topic, or 
    <img src="./assets/create-trace-ip-ee.png" alt="create-trace-ip-ee" style="zoom:67%;" />
 
 4. Click **Create**. You can see the trace record after successful creation. You can view it or choose to download the log. The log contains the current IP interaction with the EMQX connection.
+
+### Trace by Rule ID
+
+Trace according to the rule ID by selecting the type as Rule ID and entering the rule ID you need to trace.
+
+The trace results will include the execution results of the rule SQL and the execution logs of all actions added to the rule. This can be used for debugging and optimizing the rule.
+
+The [Test Rule](../data-integration/rule-get-started.md#test-rule) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
 
 ## View Log Trace 
 

@@ -1,35 +1,28 @@
 # System
 
-{% emqxce %}
+The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Key**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) configurations on their respective pages.
 
-The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, and **Settings**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, and Dashboard setting preferences on their respective pages.
+::: tip
 
-{% endemqxce %}
+The License and SSO submenus only apply to the EMQX Enterprise edition.
 
-{% emqxee %}
-
-The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Keys**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) configurations on their respective pages.
-
-{% endemqxee %}
+:::
 
 ## Users
 
 The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
 
-To add new users, simply click the **+ Create** button located in the top-right corner of the page. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. For further user management, such as editing user information, updating passwords, or deleting users, you can easily access these options through the **Actions** column.
+To add new users, click the + Create button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
 
-{% emqxce %}
-<img src="./assets/users.png" alt="image" style="zoom:67%;" />
+> The EMQX Open Source edition does not provide role-based access control (RBAC). All users have administrator permissions and can delete other users, but they cannot delete the currently logged-in user from the Dashboard.
+>
+> For security reasons, starting with EMQX 5.0.0, Dashboard users cannot be used for REST API authentication.
 
-> All users have admin rights to delete other users, but you cannot delete the currently logged in user on the Dashboard.
-> For security reasons, starting with EMQX 5.0.0, Dashboard user cannot be used for REST API authentication.
-
-{% endemqxce %}
-
-{% emqxee %}
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
 
-Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (RBAC) feature for its users. RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
+Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (RBAC) feature for EMQX Enterprise users.
+
+RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
 
 Currently, either of the following two predefined roles can be set for a user. You can select the role from the **Role** dropdown when you create users.
 + Administrator
@@ -40,8 +33,6 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
     Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the rights to create, modify, or delete any data.
 
-{% endemqxee %}
-
 ## API Key
 
 On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
@@ -50,7 +41,8 @@ On the API Keys page, you can generate an API key and secret key for accessing t
 
 2. On the Create API Key dialog, configure in the detailed information for the API key. 
 
-   If the **Expire At** textbox is left empty, the API key will never expire.
+   - The API key will never expire if the Expire At box is left empty.
+   - Select a role for API key (optional), applicable only in the Enterprise edition. For more information about roles, see [Roles and Permissions](../admin/api.md#roles-and-permissions).
 
 3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
 
@@ -68,39 +60,35 @@ You can view the details of the API key by clicking the name in the **Name** col
 
 <img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
 
-{% emqxee %}
-
 ## License
+
+::: tip
+
+This section applies to the EMQX Enterprise only.
+
+:::
 
 Click on **License** under the **System** menu on the left to access the License page. On this page, you can view the basic information of your current License, including the License connection quota usage, EMQX version, customer, and issue information. Click **Update License** to upload your License Key. In the **License Settings** section, you can set the high and low watermark limits for the license connection quota usage.
 
 <img src="./assets/license.png" alt="license" style="zoom:35%;" />
 
-{% endemqxee %}
-
 ## Settings
-
-{% emqxce %}
-
-The Settings page can be accessed by clicking on the System menu on the left or under the username drop-down menu in the top right corner of the page. You can change the language and theme color of the Dashboard on the settings page, the theme color can be selected if you want to synchronize the OS theme, if this is enabled, the Dashboard theme will be automatically synchronize with the user's OS theme and cannot be selected manually. If telemetry is enabled, users will share usage information with EMQX to help the EMQX development team understand how users are using EMQX and to continuously improve the product.
-
-![image](./assets/settings.png)
-
-{% endemqxce %}
-
-{% emqxee %}
 
 The Settings can be accessed by clicking the setting icon on the top right corner of the page. You can change the language and theme color of the Dashboard, the theme color can be selected if you want to synchronize the OS theme, if this is enabled, the Dashboard theme will be automatically synchronized with the user's OS theme and cannot be selected manually. 
 
 <img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
 
-{% endemqxee %}
+For EMQX Open Source users, you can enable the telemetry to share usage information with EMQX to help the EMQX development team understand how users are using EMQX for continuous improvement.
 
-{% emqxee %}
+![image](./assets/settings.png)
 
 ## SSO
 
-The Single Sign-On (SSO) page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+::: tip
 
-{% endemqxee %}
+The Single Sign-On (SSO) is an EMQX Enterprise feature.
+
+:::
+
+The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
 

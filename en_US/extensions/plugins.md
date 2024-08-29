@@ -1,6 +1,6 @@
 # Plugins
 
-EMQX allows users to customize the business logic or implement other protocols using plugins written in Erlang. In this chapter, you will learn how to develop such a custom plugin.
+EMQX allows users to customize the business logic or implement other protocols using plugins written in Erlang. This page introduces how to develop a customized plugin.
 
 The basic process of plugin development and operation is as follows:
 
@@ -9,19 +9,20 @@ The basic process of plugin development and operation is as follows:
 - Install the plugin package via Dashboard or CLI.
 - Start/stop/uninstall your plugin via Dashboard or CLI.
 
-:::tip
-Prerequisites
+:::tip Prerequisite
 
-- Knowledge of EMQX [hooks](./hooks.md)
-  :::
+Knowledge of EMQX [hooks](./hooks.md)
+:::
 
 ## Develop EMQX Plugins
 
-EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) to create a custom emqx-plugin project. In the section below, we will create a custom access control plugin as an example to give you a step-by-step guide to plugin development.
+This section provides a step-by-step guide on developing custom EMQX plugins, using the creation of an access control plugin as an example.
 
-### Download, install and use the rebar3 plugin template
+### Download and Install the rebar3 Plugin Template
 
-1. Download the  [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template), run:
+EMQX offers an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) to facilitate the creation of custom emqx-plugin projects.
+
+1. Use the following commands to download the `emqx-plugin-template`:
 
 ```shell
 $ mkdir -p ~/.config/rebar3/templates
@@ -30,57 +31,67 @@ $ git clone https://github.com/emqx/emqx-plugin-template
 $ popd
 ```
 
-2. Now create your custom plugin from the template
+2. Generate your customized plugin using the template with this command:
 
 ```shell
 $ rebar3 new emqx-plugin my_emqx_plugin
 ```
 
-This will create a standard Erlang application with `emqx` as a dependency. Have a look at `rebar.config` and tune to your needs.
+This command creates a standard Erlang application structured as follows, with `emqx` included as a dependency:
 
 ```shell
 $ tree my_emqx_plugin
 my_emqx_plugin
-├── License
+├── LICENSE
 ├── Makefile
 ├── README.md
-├── check-svn.sh
 ├── erlang_ls.config
-├── get-rebar3
 ├── priv
-│   └── config.hocon
+│   ├── config.hocon.example
+│   ├── config_i18n.json.example
+│   ├── config_schema.avsc.enterprise.example
+│   └── config_schema.avsc.example
 ├── rebar.config
+├── scripts
+│   ├── ensure-rebar3.sh
+│   └── get-otp-vsn.sh
 └── src
-    ├── emqx_cli_demo.erl
-    ├── my_emqx_plugin.app.src
-    ├── my_emqx_plugin.erl
     ├── my_emqx_plugin_app.erl
+    ├── my_emqx_plugin.app.src
+    ├── my_emqx_plugin_cli.erl
+    ├── my_emqx_plugin.erl
     └── my_emqx_plugin_sup.erl
 
-3 directories, 13 files
+4 directories, 16 files
 ```
 
-It also ships an example module on how to add your own custom `emqx ctl` commands (`emqx_cli_demo`).
+Review the `rebar.config` file and adjust it as necessary for your plugin's requirements.
 
-**Note** Since the example depends on `emqx` this plugin needs a customized version of `rebar3`, which will be installed using the provided `get-rebar3` script.
+The project also includes an example module demonstrating how to add custom `emqx ctl` commands (`emqx_cli_demo.erl`).
 
-### Test your development environment
+**Note:** As the template depends on `emqx`, it requires a custom version of `rebar3`, which you can install using the included `./scripts/ensure-rebar3.sh` script.
 
-{% emqxce %}
-:::tip
-For a working development environment, see [Install from Source code](../deploy/install-source.md).
-:::
-{% endemqxce %}
+### Test Your Development Environment
 
-Run `make rel` to test whether the plugin can be successfully compiled and packaged. No coding is needed at this point.
+If you are using the EMQX Open Source edition, ensure your development environment is correctly set up. You can refer to the information in [Install from Source Code](../deploy/install-source.md).
 
-As the example plugin relies on the EMQX main application, it needs to be downloaded along with its dependencies and subsequently compiled as part of the main project. Please note that the compilation process may take a significant amount of time to finish.
+Execute the following command to verify if your plugin compiles and packages successfully:
 
-### Customize the example project
+```shell
+$ make rel
+```
 
-Now that things are working, you can start customizing the project to suit your needs. We've provided a core module that registers all currently [known hooks](https://www.emqx.io/docs/en/v5.0/extensions/hooks.html). This code can be found in `src/my_emqx_plugin.erl`. You will want to remove all unused hooks and then fill in the callbacks for the remaining ones with your own custom code.
+At this stage, no additional coding is required.
 
-In the example below, we only need 2 hooks for authentication and access control, so we modify `my_emqx_plugin:load/1` as follows:
+Since the example plugin depends on the EMQX core application, you must download and compile it along with its dependencies. This step integrates the plugin into the main EMQX project. Be aware that this compilation process can be time-intensive.
+
+### Customize the Example Project
+
+After verifying that your setup works correctly, you can start tailoring the example project to meet your specific requirements. The initial template provides a core module at `src/my_emqx_plugin.erl`, which includes registration for all [currently known hooks](./hooks.md). Begin by removing any hooks that are not needed and implement your own logic in the callbacks for the ones you retain.
+
+#### Example Customization for Authentication and Access Control
+
+For instance, if you need hooks for authentication and access control, modify the `my_emqx_plugin:load/1` function as shown:
 
 ```erlang
 load(Env) ->
@@ -89,20 +100,22 @@ load(Env) ->
   ok.
 ```
 
-We will use `on_client_authenticate/3` for client authentication and `on_client_authorize/5`  for access control.
+Here, `on_client_authenticate/3` handles client authentication, while `on_client_authorize/5` manages access control.
 
-As one hook function may be mounted both by EMQX and customized plugins, we also need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
+As one hook function may be mounted by both EMQX and customized plugins, you need to specify the execution order when mounting it to the plugin.  `HP_HIGHEST` specifies that the current hook function has the highest priority and is executed first.
 
-#### Customize access control code
+#### Customize Access Control Code
+
+Consider the following access control implementations:
 
 ```erlang
-%% Only allow connections with clientID name matching any of the following characters: A-Z, a-z, 0-9, and underscore.
+%% Only allow connections with client IDs that match any of the characters: A-Z, a-z, 0-9, and underscore.
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result, _Env) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
     nomatch -> {stop, {error, banned}}
   end.
-%% Can only subscribe topic /room/{clientid}, but can send messages to any topics.
+%% Clients can only subscribe to topics formatted as /room/{clientid}, but can send messages to any topics.
 on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Result, _Env) ->
   case emqx_topic:match(Topic, <<"/room/", ClientId/binary>>) of
     true -> {ok, Result};
@@ -111,21 +124,21 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Res
 on_client_authorize(_ClientInfo, _Pub, _Topic, Result, _Env) -> {ok, Result}.
 ```
 
-In the above code example, we only allow clients with clientID matching the specification to log in. These clients can only subscribe to topic `/room/{clientid}`, thus building a simple chat room, that is, clients can send messages to any other clients, but each client can only subscribe to topics related to itself.
+In the provided code example, only clients with a client ID matching the specified pattern can log in. These clients are restricted to subscribing only to the topic `/room/{clientid}`, effectively creating a simple chat room setup. While clients can send messages to any topic, they are limited to subscribing to topics that directly pertain to their own client ID.
 
-:::tip
+::: tip
 
-1. Be sure to set `authorization.no_match` to `deny` in the configuration first, that is, EMQX will reject any unauthorized connection requests.
-2. In this example, we illustrate how to customize an access control plugin, you can also [set similar authorization rules based on File](../access-control/authz/file.md).
+1. Ensure `authorization.no_match` is set to `deny` in your configuration to prevent unauthorized connections.
+2. This example details customizing an access control plugin. Similar authorization rules can be based on files as detailed in the [File-Based Authorization documentation](../access-control/authz/file.md).
 
 :::
 
-**Pack the customized plugin**
+#### Pack the Customized Plugin
 
 Modify the version information of the plugin via `rebar.config`:
 
 ```erlang
-{relx, [ {release, {my_emqx_plugin, "1.0.0"}, %% this is the release version, different from app vsn in .app file
+{relx, [ {release, {my_emqx_plugin, "1.0.0"}, %% This is the release version, different from app vsn in .app file
             [ my_emqx_plugin
             , map_sets
             ]}
@@ -151,7 +164,7 @@ Modify the version information of the plugin via `rebar.config`:
 }..
 ```
 
-Now rerun the release command:
+After updating the configuration, re-run the release command:
 
 ```shell
 make rel
@@ -160,25 +173,178 @@ make rel
 ===> [emqx_plugrel] creating _build/default/emqx_plugrel/my_emqx_plugin-1.0.0.tar.gz
 ```
 
-This created a new EMQX plugin tarball  `my_emqx_plugin-1.0.0.tar.gz` that you can now upload and install to your running EMQX cluster.
+This generates a new tarball, `my_emqx_plugin-1.0.0.tar.gz`, which you can upload and deploy to your EMQX cluster.
 
-## Install/launch the plugin
+#### Write Configuration Schema for the Plugin (Optional)
 
-Use CLI to install the compiled package:
+EMQX version 5.7.0 introduced REST API for plugin configuration management and Avro Schema for configuration validation, enhancing the ability to update plugin configurations dynamically during runtime.
+In addition, if you write an Avro Schema to validate the plugin's configuration, you are required to provide a default configuration file that matches the Avro Schema rules. This file should be located at `priv/config.hocon`.
+
+Configuration updates made at runtime will be written in HOCON format to `data/plugins/<PLUGIN_NAME>/config.hocon`, and the old configuration file will be backed up each time the configuration is updated.
+
+
+::: tip
+
+Check out the example files in your project directory: `priv/config.hocon.example`, `priv/config_schema.avsc.example`, `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example`.
+Plugins that support configuration and configuration validation can be written based on these files.
+
+Note that `priv/config_schema.avsc.enterprise.example` and `priv/config_i18n.json.example` contain the UI declarations and their internationalization configurations. Using UI declarations to render plugin configuration form pages is an EMQX Enterprise edition feature.
+
+:::
+
+
+Your plugin package needs to include an Avro Schema configuration file, located at the relative path `priv/config_schema.avsc`. This file must adhere to the [Apache Avro specification](https://avro.apache.org/docs/1.11.1/specification/).
+
+Additionally, it also includes descriptive declarations about the UI. Specifically, an `$ui` field can be configured using the metadata of the Avro Schema. The EMQX Dashboard will generate a configuration form page based on the information provided in the `$ui` field.
+
+
+#### Declarative UI Usage Reference (Optional)
+
+::: tip
+
+Using the declarative UI components is an EMQX Enterprise edition feature.
+
+:::
+
+Declarative UI components enable dynamic form rendering within the Dashboard, accommodating a variety of field types and custom components. Below is a description of the available components and their configurations.
+
+UI declarations are used for dynamic form rendering, allowing the EMQX Dashboard to dynamically generate configuration forms, making it easier to configure and manage plugins. Various field types and custom components are supported. Below are the available components and their configuration descriptions.
+
+There is also an **optional** internationalization (i18n) config file, located at `priv/config_i18n.json`. This file is structured as key-value pairs, for example: `{ "$msgid": { "zh": "消息", "en": "Message" } }`.
+To support multiple languages in field names, descriptions, validation rule messages, and other UI elements in the `$ui` configuration, use `$msgid` prefixed with `$` in the relevant UI configurations.
+
+**Configuration Item Descriptions**
+
+- `component`<br />
+  Required. Specifies the component type for displaying and configuring data of different values and types. Supported components include:
+
+  | Component Name     | Description                                                  |
+  | :----------------- | :----------------------------------------------------------- |
+  | `input`            | Text input box for short texts or strings                    |
+  | `input-password`   | Password input box that conceals input                       |
+  | `input-number`     | Numeric input box allowing only numeric input                |
+  | `input-textarea`   | Text area for longer text entries                            |
+  | `input-array`      | Array input box for comma-separated values, supporting string and numeric arrays |
+  | `switch`           | Toggle switch for boolean values                             |
+  | `select`           | Dropdown selection box for enumerated types                  |
+  | `code-editor`      | Code editor for specific formats (e.g., SQL, JSON)           |
+  | `key-value-editor` | Editor for editing key-value pairs in Avro maps              |
+  | `maps-editor`      | Editor for editing object arrays in Avro objects             |
+- `label`<br />
+  Required. Defines the field's label or name, supports `$msgid` for internationalization. If i18n is not configured, the original text will be displayed directly.
+- `description`<br />
+  Optional. Provides a detailed description of the field, supports `$msgid` for internationalization. If i18n is not configured, the original text will be displayed directly.
+- `flex`<br />
+  Required. Defines the proportion of the field in the grid layout; a full grid (24) spans an entire row, while a half grid (12) covers half a row.
+- `required`<br />
+  Optional. Indicates whether the field is mandatory.
+- `format` (Applicable only for `code-editor` component)<br />
+  Optional. Specifies the supported data formats, such as `sql` or `json`.
+- `options` (Applicable only for `select` component)<br />
+  Optional. Lists the selectable options, aligned with the symbols in the Avro Schema. Example:
+
+  ```json
+  [
+    {
+      "label": "$mysql",
+      "value": "MySQL"
+    },
+    {
+      "label": "$pgsql",
+      "value": "postgreSQL"
+    }
+  ]
+  ```
+- `items` (Applicable only for maps-editor component)<br />
+  Optional. When using the maps-editor component, specify the field name and description of the items in the form. For example:
+
+  ```json
+  {
+    "items": {
+      "optionName": {
+        "label": "$optionNameLabel",
+        "description": "$optionDesc",
+        "type": "string"
+      },
+      "optionValue": {
+        "label": "$optionValueLabel",
+        "description": "$optionValueDesc",
+        "type": "string"
+      }
+    }
+  }
+  ```
+- `rules`<br />
+  Optional. Defines validation rules for the field, where multiple rules can be configured. Supported types include:
+
+  - `pattern`: Requires a regular expression for validation.
+  - `range`: Validates numeric input within a specified range. This validation can be configured with both a minimum value (`min`) and a maximum value (`max`), which can be set either together or independently.
+  - `length`: Validates the character count of input, ensuring it falls within a specified range. This validation rule allows for the configuration of both a minimum length (`minLength`) and a maximum length (`maxLength`), which can be set either together or individually.
+  - `message`: Specifies an error message to display when validation fails. This supports internationalization using `$msgid` to accommodate multiple languages.
+
+**Example Validation Rules**:
+
+The following are several example snippets. For more detailed examples, refer to `priv/config_schema.avsc.example`:
+
+```json
+{
+    "rules": [
+    {
+      "type": "pattern",
+      "pattern": "^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])(\\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9]))*$",
+      "message": "$hostname_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "range",
+      "min": 1,
+      "max": 65535,
+      "message": "$port_range_validate"
+    }
+  ]
+}
+```
+
+```json
+{
+    "rules": [
+    {
+      "type": "length",
+      "minLength": 8,
+      "maxLength": 128,
+      "message": "$password_length_validate"
+    },
+    {
+      "type": "pattern",
+      "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]*$",
+      "message": "$password_validate"
+    }
+  ]
+}
+```
+
+Including Avro Schema and i18n files in your plugin package ensures they are incorporated during plugin compilation and packaging. You can use the `emqx_plugins:get_config/1,2,3,4` function in your plugin code to retrieve configuration settings.
+
+## Install and Launch the Plugin
+
+To install the compiled plugin package, use the command line interface (CLI) as follows:
 
 ```bash
 ./bin/emqx ctl plugins install {pluginName}
 ```
 
-## Uninstall the plugin
+## Uninstall the Plugin
 
-When you don't need the plugin, you can easily uninstall it with CLI:
+When the plugin is no longer needed, you can uninstall it using the CLI with this command:
 
 ```bash
 ./bin/emqx ctl plugins uninstall {pluginName}
 ```
 
-<!-- {% emqxee %} -->
-<!-- **Note**: Plugins need to be reinstalled after hot upgrades. -->
-
-<!-- {% endemqxee %} -->
+<!-- **Note**: (EMQX enterprise) Plugins need to be reinstalled after hot upgrades. -->

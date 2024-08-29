@@ -1,5 +1,11 @@
 # 编解码举例 - Protobuf
 
+::: tip 注意
+
+Schema Registry 是 EMQX 企业版功能。
+
+:::
+
 本页通过一个例子来让您了解在 EMQX 中使用 Protobuf 编码的消息数据是如何通过编解码进行格式转换并在规则引擎中进行匹配的。
 
 ## 解码场景
@@ -10,7 +16,7 @@
 
 ### 创建 Schema
 
-1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **编解码**。
+1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **Schema**。
 
 2. 使用下面的参数创建一个 Protobuf Schema:
 

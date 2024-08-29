@@ -1,14 +1,10 @@
 # 将 MQTT 数据传输到 Confluent
 
-{% emqxce %}
-
 :::tip
 
-Confluent Sink 是 EMQX 企业版的功能。EMQX 企业版可以为您带来更全面的关键业务场景覆盖、更丰富的数据集成支持，更高的生产级可靠性保证以及 24/7 的全球技术支持，欢迎[免费试用](https://www.emqx.com/zh/try?product=enterprise)。
+Confluent 数据集成是 EMQX 企业版的功能。
 
 :::
-
-{% endemqxce %}
 
 [Confluent Cloud](https://www.confluent.io/) 基于 Apache Kafka，是一项弹性、可扩展、并完全托管的流式数据服务。EMQX 支持通过规则引擎与 Sink 实现与 Confluent 的数据集成，使您能够轻松将 MQTT 数据流式传输到 Confluent，实现数据的实时处理、存储和分析。
 
@@ -224,7 +220,7 @@ confluent kafka topic consume -b testtopic-in
 
 8. 配置 Sink 的数据发送方式，包括：
 
-   - **Kafka 主题名称**：输入 `testtopic-in`。注意：此处不支持变量。
+   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[配置 Kafka 动态主题](./data-bridge-kafka.md#配置-kafka-动态主题)。
 
    - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
 

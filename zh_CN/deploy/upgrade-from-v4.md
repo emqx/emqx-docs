@@ -415,19 +415,15 @@ WebHook 插件（`emqx_web_hook`）已转换为原生功能，现在被称为 �
 
 MQTT 桥接插件 (`emqx_bridge_mqtt`) 已被移除，请使用数据集成中的 MQTT 数据桥接功能替代。
 
-{% emqxee %}
-
 ## 离线消息
 
-目前 EMQX 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此在 5.x 版本中不再支持外置数据库的离线消息功能。
+目前 EMQX 企业版 4.x 版本中提供的[离线消息](https://docs.emqx.com/zh/enterprise/v4.4/rule/offline_msg_to_redis.html)是基于外置数据库实现的，EMQX 计划在后续版本提供原生的离线消息功能（基于内置数据库），因此在 5.x 版本中不再支持外置数据库的离线消息功能。
 
 后续的原生离线消息能够提供更高的性能，并有效降低使用和维护成本，敬请期待。
 
 ## 代理订阅（从数据库中获取订阅关系）
 
-从 5.0.0 版本开始，EMQX 不再提供基于外置数据库的[代理订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（从数据库中获取订阅关系）功能。
-
-{% endemqxee %}
+从 EMQX 企业版 5.0.0 版本开始，EMQX 不再提供基于外置数据库的[代理订阅](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)（从数据库中获取订阅关系）功能。
 
 ## Prometheus
 

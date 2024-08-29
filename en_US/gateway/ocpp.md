@@ -2,7 +2,7 @@
 
 ::: tip
 
-EMQX Enterprise Edition feature. EMQX Enterprise Edition offers comprehensive coverage of critical business scenarios, richer data integration support, higher production-grade reliability, and 24/7 global technical support. Feel free to [try it for free](https://www.emqx.com/zh/try?product=enterprise).
+The OCPP Gateway is an EMQX Enterprise edition feature. 
 
 :::
 

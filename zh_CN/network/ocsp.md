@@ -1,16 +1,6 @@
 # OCSP Stapling
 
-{% emqxce %}
-
-在线证书状态协议 (OCSP) 是一种在线服务和协议，用于获取 X509 数字证书的撤销状态，它是维护服务器和其它网络资源安全性的普遍模式之一。作为业界领先的 MQTT 消息中间件，EMQX 始终将用户的数据安全做为首要考虑，从 5.0.23 版本开始，EMQX 支持针对 MQTT SSL 监听器设置 OCSP Stapling，以更好地满足用户对安全性的要求。
-
-{% endemqxce %}
-
-{% emqxee %}
-
-在线证书状态协议 (OCSP) 是一种在线服务和协议，用于获取 X509 数字证书的撤销状态，是维护服务器和其它网络资源安全性的普遍模式之一。作为业界领先的 MQTT 消息中间件，EMQX 始终将用户的数据安全做为首要考虑，从 5.0.3 版本开始，EMQX 支持针对 MQTT SSL 监听器设置 OCSP Stapling，以更好地满足用户对安全性的要求。
-
-{% endemqxee %}
+在线证书状态协议 (OCSP) 是一种在线服务和协议，用于获取 X509 数字证书的撤销状态，它是维护服务器和其它网络资源安全性的普遍模式之一。作为业界领先的 MQTT 消息中间件，EMQX 始终将用户的数据安全做为首要考虑，从 EMQX 开源版 5.0.23 和 EMQX 企业版 5.0.3 开始，EMQX 支持针对 MQTT SSL 监听器设置 OCSP Stapling，以更好地满足用户对安全性的要求。
 
 注意：QUIC 类型监听器暂不支持此功能。
 
@@ -26,7 +16,7 @@ EMQX 支持通过 Dashboard 和配置文件启用 SSL 监听器 OCSP Stapling。
 
 ## 通过 Dashboard 配置
 
-登陆 EMQX Dashboard，点击左侧导航目录的**管理**->**监听器**，访问**监听器**页面。在本章我们将为默认的 SSL 监听器启用 OCSP Stapling，点击监听器名称进入**编辑监听器**页面。拖动到页面底部，找到**启用 OCSP Stapling**的设置开关。
+登录 EMQX Dashboard，点击左侧导航目录的**管理**->**监听器**，访问**监听器**页面。在本章我们将为默认的 SSL 监听器启用 OCSP Stapling，点击监听器名称进入**编辑监听器**页面。拖动到页面底部，找到**启用 OCSP Stapling**的设置开关。
 
 <img src="./assets/OCSP.png" alt="OCSP" style="zoom:50%;" />
 
