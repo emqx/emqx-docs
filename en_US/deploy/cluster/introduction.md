@@ -8,11 +8,11 @@ This chapter introduces the [benefits of clustering](#reasons-for-clustering), t
 
 EMQX cluster is recommended for larger or mission-critical applications and can bring the users the following benefits.
 
-1. **Scalability**: EMQX can be easily scaled horizontally by adding more nodes to the cluster, allowing it to handle an increasing number of MQTT messages and clients.
-2. **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
-3. **Load Balancing**: EMQX nodes in the cluster can be configured to distribute the load of handling MQTT messages, which helps to avoid overload of a single node and allows for better use of available resources.
-4. **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
-4. **Data Consistency and Security**: The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency and security.
+- **Scalability**: EMQX can be easily scaled horizontally by adding more nodes to the cluster, allowing it to handle an increasing number of MQTT messages and clients.
+- **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
+- **Load Balancing**: EMQX nodes in the cluster can be configured to distribute the load of handling MQTT messages, which helps to avoid overload of a single node and allows for better use of available resources.
+- **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
+- **Data Consistency and Security**: The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency and security.
 
 ## How Clustering in EMQX Works
 
@@ -34,7 +34,13 @@ To provide our customers with a better cluster salability performance, EMQX 5.0 
 
 
 
-To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md). 
+To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md).
+
+::: tip Note
+
+While there is no strict upper limit, it is advisable to limit the cluster size to three nodes in the open-source edition of EMQX. Using only core-type nodes, a smaller cluster size typically ensures greater stability.
+
+:::
 
 ## Key Features
 

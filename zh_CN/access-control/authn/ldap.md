@@ -1,10 +1,16 @@
 # 使用 LDAP 进行密码认证
 
+::: tip 注意
+
+使用 LDAP 进行密码认证是 EMQX 企业版功能。
+
+:::
+
 [轻量级目录访问协议（LDAP）](https://ldap.com/) 是一种用于访问和管理目录信息的协议。EMQX 支持与 LDAP 服务器集成，用于密码认证。这种集成使用户能够使用其 LDAP 认证信息在 EMQX 中进行身份验证。
 
 ::: tip 前置准备
 
-- 熟悉 [EMQX 认证基本概念](../authn/authn.md)。
+熟悉 [EMQX 认证基本概念](../authn/authn.md)。
 
 :::
 
@@ -22,7 +28,7 @@ EMQX 的 LDAP 集成包括两种不同的密码认证方式：
 
 ## LDAP 数据结构与查询
 
-::: tip
+::: tip 注意
 
 本节内容仅适用于使用"本地密码比对"的认证方式。如果您使用的是 “LDAP 绑定验证“方式，请跳过。
 
@@ -101,7 +107,7 @@ userPassword:: e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
 
 编辑 LDAP 配置文件 `sladp.conf`，使其包含数据结构和 LDIF 文件。在启动 LDAP 服务器时将引用数据结构。下面是一个示例`sladp.conf` 文件：
 
-::: tip
+::: tip 提示
 
 您可以根据您的业务需求决定如何存储和访问认证信息。
 
@@ -152,7 +158,7 @@ directory       /usr/local/etc/openldap/data
 
 - **基本 DN**：相对于要执行搜索的基本对象条目（或可能是根）的名称。有关更多信息，请参见 [RFC 4511搜索请求](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)，支持使用占位符。
 
-  ::: 提示
+  ::: tip 提示
 
   DN 指的是专有名称。这是每个条目的唯一标识符，它还描述了条目在信息树中的位置。
 

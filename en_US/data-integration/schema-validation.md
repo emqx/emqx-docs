@@ -54,7 +54,7 @@ This section demonstrates how to create and configure a schema validator in the 
 
 1. Click on **Integrations** -> **Schema Validation** in the left navigation of the Dashboard.
 2. Click **Create** at the top right of the **Schema Validation** page.
-3. On the Create Schema Validation page, configure the following information:
+3. On the Create Schema Validation page, configure the following settings:
    - **Name**: Enter the name of the validator.
    - **Message Source Topic**: Set the topics whose messages need to be validated. Multiple topics or topic filters can be set.
    - **Note** (optional): Enter any notes.

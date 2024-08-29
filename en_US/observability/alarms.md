@@ -1,8 +1,8 @@
 # Alarm
 
-EMQX offers a built-in monitoring and alarm functionality for monitoring the internal state changes, such as CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, and cluster partition and healing. EMQX triggers and records these changes when they exceed a threshold or deviate from expectations, and removes them from the list once they are restored. 
+EMQX offers a built-in monitoring and alarm functionality for monitoring the internal state changes, such as CPU occupancy, system, and process memory occupancy, number of processes, rule engine resource status, and cluster partition and healing. EMQX triggers and records these changes when they exceed a threshold or deviate from expectations, and removes them from the list once they are restored. 
 
-This page introduces which alarm information EMQX provides, how you can obtain and check the detailed alarm information, and how to configure the alarm settings and thresholds in EMQX. The monitoring and alarm function keeps you notified of potential problems during operation. By configuring alarms and setting appropriate thresholds, you can make sure that EMQX remains secure, stable, and reliable.
+This page introduces the alarm information EMQX provides, how to obtain and check the detailed alarm information, and how to configure the alarm settings and thresholds in EMQX. The monitoring and alarm function keeps you notified of potential problems during operation. By configuring alarms and setting appropriate thresholds, you can make sure that EMQX remains secure, stable, and reliable.
 
 ## Alarm List
 
@@ -14,11 +14,11 @@ Depending on the severance and impacts on the system, alarms can have 3 levels:
 
 - **Error**: Errors caused by user presets. The client can perceive the error and retry.
 
-- **Warning**: Occasional errors, and need to be taken seriously if they occur frequently.
+- **Warning**: Occasional errors must be taken seriously if they occur frequently.
 
 - **Critical**: Irreversible data loss between the client and server, causing communication and business interruption.
 
-The levels are defined from development perspectives and are only for a recommendation. You can define your own alarm levels according to the business needs.
+The levels are defined from development perspectives and are only for recommendation. You can define your own alarm levels according to the business needs.
 
 :::
 
@@ -94,7 +94,7 @@ You can query and manage alarms through the API. Click **Alarms** on the left na
 
 ## Alarm Configuration
 
-Alarm configuration includes configuring alarm settings and thresholds. Alarm settings determine how the alarm message is displayed and stored, while alarm thresholds establish limits or values that trigger the alarm when potential problems are detected. The alarm configuration feature allows you to customize the alarm settings and thresholds to meet your business needs.
+Alarm configuration includes configuring alarm settings and alarm thresholds. Alarm settings determine how the alarm message is displayed and stored, while alarm thresholds establish limits or values that trigger the alarm when potential problems are detected. The alarm configuration feature allows you to customize the alarm settings and thresholds to meet your business needs.
 
 ### Configure Alarm Settings
 
@@ -113,7 +113,7 @@ Alarm thresholds can be configured on EMQX Dashboard. There are two ways to laun
 1. On the **Alarms** page, click the **Setting** button and you will be led to the **Monitoring** page. 
 2. From the left navigation menu, click **Management** -> **Monitoring**. 
 
-On the  **Monitoring** page, click the **Erlang** tab, you can configure the following items for the system performance of the Erlang Virtual Machine:
+On the  **Monitoring** -> **System** tab, click the **Erlang VM** tab, you can configure the following items for the system performance of the Erlang Virtual Machine:
 
 <img src="./assets/monitoring-system-ee.png" alt="monitoring-system" style="zoom:40%;" />
 
@@ -165,13 +165,14 @@ You can also configure alarm thresholds by modifying the configuration items for
 | sysmonn.vm.process_check_interval | Check interval for the number of processes.                  | `30s`         |
 | sysmon.vm.process_high_watermark  | The high watermark of the process occupancy rate; The alarm will be activated when this threshold is reached; Measured as a ratio of the number of created processes/maximum number limit. | `80%`         |
 | sysmon.vm.process_low_watermark   | The low water mark of the process occupancy rate; The alarm will be deactivated when it goes below this threshold; Measured as a ratio of the number of created processes/maximum number limit. | `60%`         |
-| sysmonn.vm.long_gc                | Whether to enable Long GC monitoring                         | `disabled`    |
-| sysmon.vm.long_schedule           | Whether to enable Long Schedule monitoring                   | `disabled`    |
-| sysmon.vm.large_heap              | Whether to enable Large Heap monitoring                      | `disabled`    |
-| sysmon.vm.busy_port               | Whether to enable Busy Distribution Port monitoring          | `true`        |
+| sysmonn.vm.long_gc                | Whether to enable Long GC monitoring.                        | `disabled`    |
+| sysmon.vm.long_schedule           | Whether to enable Long Schedule monitoring.                  | `disabled`    |
+| sysmon.vm.large_heap              | Whether to enable Large Heap monitoring.                     | `disabled`    |
+| sysmon.vm.busy_dist_port          | Whether to enable Busy Distribution Port monitoring.         | `true`        |
+| sysmon.vm.busy_port               | Whether to enable Busy Port monitoring.                      | `true`        |
 | sysmonn.top.num_items             | Number of top processes per monitoring group                 | `10`          |
-| sysmon.top.sample_interlval       | Check interval for top processes                             | `2s`          |
-| sysmon.top.max_procs              | Stop collecting data when the number of processes in the VM exceeds this value | `1000000`     |
+| sysmon.top.sample_interlval       | Check interval for top processes.                            | `2s`          |
+| sysmon.top.max_procs              | Stop collecting data when the number of processes in the VM exceeds this value. | `1000000`     |
 
 The EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in `emqx.conf` file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
 

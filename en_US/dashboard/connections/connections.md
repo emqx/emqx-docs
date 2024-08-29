@@ -1,27 +1,34 @@
-# Connections
+# Clients
 
-Users can view clients currently connecting to the broker or session which has not expired and can view detailed information and metrics for a client. You can use [MQTTX](https://mqttx.app/) as a client to connect to EMQX for publishing subscriptions. You can also quickly implement a client connection to EMQX using the [client libraries available in each language](../../connect-emqx/introduction.md).
+You can use [MQTTX](https://mqttx.app) as a client to connect to EMQX for publishing and subscribing. Alternatively, you can quickly implement client connections to EMQX using [client libraries provided in various languages](../../connect-emqx/introduction.md). On the **Clients** page, you can view details and metric statistics of clients currently connected to the server or sessions that have not expired.
 
-## Connection List
+## Client List
 
-In the connection list, users can view the list of connections that are currently connected to the EMQX or the session has not expired and the basic information of the connection. The list will show the ID and username set by each client when connecting to EMQX, the current connection status, the IP address of the client, the heartbeat time set for the connection which is the maximum idle time of the connection and which time the client connected to EMQX, and about the session, including the Clean Start Session and Expiry Interval.
+In the client list, users can view basic information about currently connected clients, including:
 
-The IP address data of the client consists of the IP address of the client and the port of the client used by the client when connecting to EMQX.
+- Client ID and username set when connecting to EMQX
+- Current connection status
+- Client's IP address
+- Heartbeat duration set for the connection and maximum idle time
+- Information about connection sessions, including whether the session is cleared and the session expiration interval
+- The time when the client connected to EMQX
 
-By default only the client ID, username and node filters are displayed on the page, click on the arrow button to the right of the search bar to display all the fields available for filtering; you can perform a fuzzy search using the client ID and username to filter the list of connections, select the node to which the connection belongs, the connection status or the time range of the connection to filter the list, or enter the exact IP of the connected client to filter the clients with the target IP address, click on the Refresh button to reset all the filter fields and reload the list of connections.
+The client's IP address data is concatenated from the client's IP address and the port used by the client when connecting to EMQX.
 
-![Connection list](../assets/connections.png)
+The top filter condition fields by default display only client ID, username, and IP address. You can use client ID and username for fuzzy searching to filter the connection list. Clicking the right arrow button next to the search bar displays all available filter condition fields. You can also select the connection status, or connection time range to filter the list or enter the client's IP to filter by target IP address.
 
-## Connection Details
+At the top of the list, the **Select Column** button allows you to choose which columns to display. Clicking the **Refresh** button resets all filter conditions and reloads the connection list. You can also select a client and click **Kick Out** to manually disconnect that client.
 
-On the connection list page, select a connection and click on the client ID to access the connection details page for that connection.
+<img src="./assets/connections.png" alt="Connection Management List" style="zoom:50%;" />
 
-The connection details page allows you to refresh the connection information and metrics at the top manually. You can also use this page to kick out or clear the connection manually.
+## Client Details
 
-On the connection details page, in addition to the basic connection information already displayed on the list page, more detailed information is provided for the user to view, such as the protocol version used for the connection, whether the session is cleared after ending the connection, etc. In the case of a connection with a disconnected status, the time of the last disconnection is also displayed; the right side of the connection information shows the session information for the connection, including the session expiry interval, session creation time, process stack, number of subscriptions, heap size, inflight and QoS 2 message receive queue.
+Selecting a connection from the client list and clicking on the client ID takes you to the details page of that client connection, where you can view connection metric statistics. At the top of the page, you can manually refresh the connection information and manually clear the session.
 
-Below the connection information, the statistics of the current connection are displayed according to three categories: traffic sent and received, messages and number of messages, which can be viewed by the user as required.
+In addition to the connection's basic information already displayed on the list page, this page provides more detailed information for users to view, such as the protocol version used by the connection, whether sessions are cleared after ending the connection, and for disconnected connections, the time of the last disconnection. On the right side of the **Connection Information**, it displays **Session Information** for the connection, including session expiration interval, session creation time, process stack, number of subscriptions, message queue length, flight window length, and QoS2 message receive queue length.
 
-The bottom of the details page shows the topics to which the connection is currently subscribed. Users can click on the Add Subscription button to perform a simpler subscription operation, or click on the Unsubscribe button in the subscription list to cancel a topic to which they are currently subscribed.
+Below the connection information, statistics metrics for current connections are displayed based on traffic transmission, messages, and packet counts, which users can view as needed.
 
-![Connection details](../assets/connection-details.png)
+At the bottom of the page, it shows the topics currently subscribed by the connection. Users can click the **Add Subscription** button for simple subscription operations or click **Unsubscribe** in the subscription list to cancel the subscription to a specific topic.
+
+<img src="./assets/connection-details.png" alt="connection-details" style="zoom:50%;" />

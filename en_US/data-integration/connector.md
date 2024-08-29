@@ -1,6 +1,6 @@
 # Connector
 
-The EMQX connector is a key concept in data integration, serving as the underlying connection channel for Sink/Source, used to connect to external data systems.
+The EMQX connector is a key concept in data integration, serving as the underlying connection channel for Sink/Source, used to connect to external data systems. 
 
 ## Basic Concepts
 
@@ -20,11 +20,11 @@ When creating Sinks/Sources, users can choose an existing connector, without wor
 
 ## Create a Connector
 
-Users can create and manage connectors via the Dashboard. The steps to create a connector are as follows:
+When you create a data integration, you must create a connector for the Sink/Source for the integration to work. You can create and manage connectors via the Dashboard. One connector can be reused for different Sink/Source.
 
 :::tip 
 
-You can also create a connector while creating a Sink/Source, which will automatically enter the connector creation process. 
+You can also create a connector during the process of creating a Sink/Source, which will automatically enter the connector creation process. 
 
 :::
 
@@ -46,9 +46,11 @@ You can also create a connector while creating a Sink/Source, which will automat
 
    ![EMQX Connector Configuration](./assets/config-connector.png)
 
-## Update a Connector
+## View and Manage Connectors
 
-After the connector is created, users can update the connector on the Dashboard, including its basic information and connection parameters.
+After a connector is created, you can view its basic information on the Connector page. You can also enable or disable it, and manage it, such as editing the settings, creating rules, duplicating the connector, or deleting it through the **Actions** column of the connector list. 
+
+<img src="./assets/view_connector.png" alt="view_connector"  />
 
 If the connector is used by a Sink/Source, updating the connector configuration will cause the Sink/Source to reload, which may cause data processing interruptions. It is recommended to update during off-peak business hours.
 
@@ -60,10 +62,10 @@ You can view the running status of connectors on the Dashboard for troubleshooti
 
 Connectors have the following statuses:
 
-- Connecting: The initial state before any health check is performed, where the connector is still trying to connect to the external data system.
-- Connected: The connector has successfully connected to the external data system. In this state, if a health check fails, the bridge may switch to a "connecting" or "disconnected" state, depending on the severity of the failure.
-- Disconnected: The connector has failed the health check and is in an unhealthy state. Depending on its configuration, it may periodically attempt to automatically reconnect.
-- Inconsistent: The connector status is inconsistent across cluster nodes. For example, the connector is in the connected state on some nodes and in the disconnected state on others.
+- **Connecting**: The initial state before any health check is performed, where the connector is still trying to connect to the external data system.
+- **Connected**: The connector has successfully connected to the external data system. In this state, if a health check fails, the bridge may switch to a "connecting" or "disconnected" state, depending on the severity of the failure.
+- **Disconnected**: The connector has failed the health check and is in an unhealthy state. Depending on its configuration, it may periodically attempt to automatically reconnect.
+- **Inconsistent**: The connector status is inconsistent across cluster nodes. For example, the connector is in the connected state on some nodes and in the disconnected state on others.
 
 ## Considerations - Connection Pool
 

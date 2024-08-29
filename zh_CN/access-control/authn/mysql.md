@@ -91,7 +91,7 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
   
 - **SQL**：根据表结构填入查询 SQL，具体要求见 [SQL 表结构与查询语句](#sql-表结构与查询语句)。
 
-### 通过配置文件配置
+## 通过配置文件配置
 
 您也可以通过配置文件完成以上配置。<!--具体操作，请参考[配置手册](../../configuration/configuration-manual.html)。-->
 

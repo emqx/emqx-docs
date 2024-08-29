@@ -10,7 +10,7 @@ This process allows EMQX to extend beyond just message transmission between IoT 
 
 - Starting from EMQX v5.4.0, the original data bridge was separated according to the data flow direction and renamed as Sink and Source.
 
-- Currently, EMQX only supports the following external data systems to be served as Source:
+- Currently, EMQX only supports the following external data systems to be served as Sources:
 
   - MQTT Services
   - Kafka 
@@ -147,8 +147,7 @@ Batch mode allows writing multiple data entries simultaneously into an external 
 
 **Issues:**
 
-- Longer data writing delays: Data will only be written after reaching the set time or number of entries, resulting in longer delays. <!--Note: You can adjust the settings for time or number of entries through the parameters below.-->
-- Some delay: Data will not be written immediately until the set time is reached or the accumulated number of data entries is met. This can be adjusted through parameters.
+Delayed Data Writing: Data is held back from immediate writing until a set time is reached or a specified number of entries accumulates, causing delays. You can modify these settings, adjusting either the time delay or the number of entries, using the available parameters.
 
 ### Buffer Queue
 

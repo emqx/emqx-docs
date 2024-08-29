@@ -100,7 +100,7 @@ In EMQX 5.x, we have redesigned the EMQX Dashboard, enhancing the visual experie
 - Optimized menu structure: Fast and direct access to contents
 - Data monitoring and management: Important data at a glance
 - Visualized access control: Out-of-the-box authentication/authorization management
-- Visualized data flows: Using [Flows](../dashboard/flows.md) users can clearly see how data flows from devices or clients through the rule engine
+- Visualized data flows: Using [Flows](../flow-designer/introduction.md) users can clearly see how data flows from devices or clients through the rule engine
 - Configuration updates during runtime: Hot update that takes effect immediately
 
 ## Overload Protection, Limiter and Buffer Queue for Bridges

@@ -25,7 +25,7 @@ You can use simulated data to execute SQL statements. Before adding actions and 
 
 Follow the instructions below to test the SQL statement:
 
-1. Turn on the **Enable Test** toggle switch to enable the SQL statement testing.
+1. Turn on the **Try It Out** toggle switch to enable the SQL statement testing.
 2. Select the **Data Source** that matches the SQL and ensure it is consistent with the specified source in the rule (FROM clause).
 3. Enter test data. Once you select the data source, EMQX provides default values for all simulated data fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them to appropriate values as needed.
 4. Click the **Run Test** button to submit the test. If everything is normal, a **Test Passed** prompt will be displayed.
@@ -38,7 +38,7 @@ This demonstration assumes that the Payload is in JSON format. In actual use, yo
 
 Next, you can click the **Add Action** button on the right side of the **Create Rule** page to add different types of actions to the rule.
 
-## Add Action
+## Add Actions
 
 On the **Create Rule** page, click the **Add Action** button on the right side to bring up the **Add Action** page. You can select either of the three types of actions from the **Action** drop-down list: Republish, Console Output, and Forwarding with Data Bridge.
 
@@ -107,7 +107,7 @@ Where
 
 You can also add actions to forward the processed results using sinks. All you need is to select the target Sink from the Type of Action drop-down list in the Dashboard. For details on each sink in EMQX, see [Data Integration](./data-bridges.md).
 
-## Test Rule
+## Test Rules
 
 The rule engine provides a rule testing feature, which allows you to trigger rules using simulated data or real client data, execute rule SQL, and perform all actions added to the rule, obtaining the execution results for each step.
 
@@ -115,7 +115,7 @@ By testing rules, you can verify whether the rules work as expected, and quickly
 
 ### Testing Steps
 
-1. Toggle the **Enable Test** switch and select **Rule** as the test target. Note that before starting the test, you need to save the rule.
+1. Toggle the **Try It Out** switch and select **Rule** as the test target. Note that before starting the test, you need to save the rule.
 2. Click the **Start Test** button to begin the test. The browser will wait for the current rule to be triggered to generate the test results.
 3. Trigger the rule for testing. The following 2 methods are supported:
    - **Use simulated data**: Click the **Input Simulated Data** button, select the **Data Source** that matches the SQL in the pop-up window, and ensure it matches the specified source in the rule (FROM clause). EMQX provides default values for all fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them as needed, and click the **Submit Test** button to trigger the rule for testing once.
@@ -140,6 +140,8 @@ When the execution of the rule SQL or any action fails, the entire rule record w
 <img src="./assets/rule-test-result.png" alt="test-rules" style="zoom:50%;" />
 
 From the above example, it can be seen that the rule was triggered 4 times, with 3 times the rule execution being completely successful. The 4th time failed due to the **HTTP Server** action execution failure, with the error reason being a response with a 302 status code.
+
+For more usage guides on testing rules, you can refer to the blog [Enhancing Data Integration Stability: A Guide on EMQX Platform E2E Rule Testing](https://www.emqx.com/en/blog/emqx-platform-e2e-rule-testing-guide).
 
 ## View Rules
 

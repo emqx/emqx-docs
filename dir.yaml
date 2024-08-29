@@ -312,7 +312,7 @@
       title_cn: Schema 验证
       path: data-integration/schema-validation
     - title_en: Message Transformation
-      title_cn: 信息转换
+      title_cn: 消息转换
       path: data-integration/message-transformation
     - title_en: Sparkplug
       title_cn: Sparkplug
@@ -501,28 +501,25 @@
       collapsed: true
       children:
         - dashboard/dashboard
-        - dashboard/connections/connections
-        - title_en: Topics and subscription
-          title_cn: 主题与订阅
-          path: dashboard/subscriptions/overview
+        - title_en: Monitoring
+          title_cn: 监控
+          path: dashboard/monitoring
           children:
-            - dashboard/subscriptions/topics
-            - dashboard/subscriptions/subscriptions
-        - dashboard/retained
+            - dashboard/connections/connections
+            - dashboard/subscriptions/overview
+            - dashboard/retained
+            - dashboard/delay-pub
         - title_en: Access Control
           title_cn: 访问控制
           path: dashboard/acloverview
           children:
             - dashboard/authn
             - dashboard/authz
-            - dashboard/blacklist
-        - title_en: Data Integration
-          title_cn: 数据集成
+        - title_en: Integration
+          title_cn: 集成
           path: dashboard/bridgeoverview
           children:
-            - dashboard/flows
             - dashboard/rules
-            - dashboard/bridge
         - dashboard/configuration
         - dashboard/extensions
         - dashboard/diagnose
