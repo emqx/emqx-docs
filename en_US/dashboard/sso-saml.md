@@ -2,7 +2,7 @@
 
 This page explains how to configure and use Single Sign-On (SSO) based on the Security Assertion Markup Language (SAML) 2.0 standard protocol.
 
-::: Prerequisite
+::: tip Prerequisite
 
 Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 
@@ -10,7 +10,7 @@ Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 
 ## Supported SAML Services
 
-The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based single sign-on, such as:
+The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based SSO, such as:
 
 - [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
@@ -24,10 +24,12 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 ### Step 1: Enable Okta in EMQX Dashboard
 
 1. Go to **System** -> **SSO** in the Dashboard.
-2. Select the **SAML 2.0** option and click the **Enable** button.
+2. Click the **Enable** button on the **SAML 2.0** card.
 3. On the configuration page, enter the following information:
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
+4. Click **Update** to finish the configuration.
+
 ### Step 2: Add a SAML 2.0 Application in Okta's Application Catalog
 
 1. Log in to Okta as an administrator and go to the **Okta Admin Console**.
@@ -57,13 +59,13 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
 ## Login and User Management
 
-After enabling SAML Single Sign-On, the EMQX Dashboard will display the Single Sign-On option on the login page. Click the **SAML** button to go to the IdP preset login page, where you can enter the credentials assigned to the user for login.
+After enabling SAML Single Sign-On, the EMQX Dashboard will display the SSO option on the login page. Click the **SAML** button to go to the IdP preset login page, where you can enter the credentials assigned to the user for login.
 
 <img src="./assets/sso_saml.png" alt="sso_saml" style="zoom:67%;" />
 
 <img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
 
-After successful LDAP authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
+After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
 
 ## Logout
 

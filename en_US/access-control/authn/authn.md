@@ -45,7 +45,7 @@ EMQX can also be configured to delegate authentication work to external services
 
 ### MQTT 5.0 Enhanced Authentication
 
-[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM and provides support for SCRAM user management through our built-in database.
+[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM user management through our built-in database and external HTTP services.
 
 ### PSK Authentication
 
@@ -66,6 +66,8 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 | Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
 | JWT            |                   | [Authentication using JWT](./jwt.md)                         |
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
+| SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_restapi.md) |
+| GSSAPI         | Kerberos          | [Authentication using GSSAPI with Kerberos](./kerberos.md)   |
 
 ## Authentication Chain
 
@@ -180,6 +182,7 @@ EMQX currently supports the following placeholders:
 - `${username}`: It will be replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it will be overridden by the fields or the content of the certificate.
 - `${password}`: It will be replaced with the password at runtime. The password comes from the `Password` field in the `CONNECT` packet.
 - `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
+- `${peername}`: It will be replaced with the client's IP address and port in runtime, and the format is `IP: PORT`.
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 - `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 - `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).

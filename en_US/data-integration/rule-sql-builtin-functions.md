@@ -1,6 +1,22 @@
 # Built-in SQL Functions
 
-The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, encompassing [Mathematical](#mathematical-functions), [Data Type Judgment](#data-type-judgment-functions),[Data Type Conversion](#data-type-conversion-functions), [String Operations](#string-operation-functions), [Map Operations](#map-operation-functions), [Array Operations](#array-operation-functions), [Hashing](#hashing-functions), [Compression and Decompression](#compression-and-decompression-functions), [Bit Operations](#bit-operation-functions), [Bit Sequence Operations](#bit-sequence-operation-functions), [Encoding and Decoding](#encoding-and-decoding-functions), as well as [Date and Time Conversion](#date-and-time-conversion-functions).
+The rule engine proffers a variety of built-in functions. You can utilize these functions within SQL to accomplish basic data processing, including:
+
+- [Mathematical](#mathematical-functions),
+- [Data Type Judgment](#data-type-judgment-functions)
+- [Data Type Conversion](#data-type-conversion-functions),
+- [String Operations](#string-operation-functions),
+- [Map Operations](#map-operation-functions),
+- [Array Operations](#array-operation-functions),
+- [Hashing](#hashing-functions)
+- [Compression and Decompression](#compression-and-decompression-functions)
+- [Bit Operations](#bit-operation-functions)
+- [Bit Sequence Operations](#bit-sequence-operation-functions)
+- [Encoding and Decoding](#encoding-and-decoding-functions)
+- [Date and Time Conversion](#date-and-time-conversion-functions)
+- [UUID Functions](#uuid-functions)
+- [System Function](#system-function)
+- [Conditional Functions](#conditional-functions)
 
 In this section, all function declarations conform to the following format:
 
@@ -1250,8 +1266,6 @@ The Schema Resigtry is an EMQX Enterprise edition feature.
 
 EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
 
-See the table below for a detailed explanation of the functions. 
-
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
 Encodes `Data` using the specified Avro Schema. Create a schema in the Schema Registry to get the ID.
@@ -1270,7 +1284,7 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 
 ### **Sparkplug B Functions**
 
-In EMQX Enterprise, there are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+EMQX Enterprise also has special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 ## Date and Time Conversion Functions
 
@@ -1486,6 +1500,37 @@ Generates a version 4 UUID without hyphens. Example:
 uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 ```
 
-## <!--Schema Registry and Sparkplug B Functions-->
+## System Function
 
-<!--In the enterprise version of EMQX, the [schema registry](./schema-registry.md) provide the `schema_decode` and `schema_encode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data. You can read more about these functions in [Schema registry](./schema-registry.md). There are also special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about [the sparkplug function on their documentation page](./sparkplug.md).-->
+### getenv(Name)
+
+Return the value of the environment variable `Name` with the following constraints:
+
+- Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
+- Values are immutable once loaded from the OS environment.
+
+## Conditional Functions
+
+### coalesce(Value1: any, Value2: any) -> any
+
+Returns `Value2` if `Value1` is null.
+This is useful in cases where you want to check if a data field is null and replace it with a default value.
+
+For example, `coalesce(payload.value, 0)` returns `payload.value` if it is not null, or `0` if it is null.
+It's equivalent to SQL expression `CASE WHEN is_null(payload.value) THEN 0 ELSE payload.value END`, but more concise.
+
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::
+
+### coalesce_ne(Value1: any, Value2: any) -> any
+
+Similar to `coalesce`, but returns `Value2` if `Value1` is null or empty string.
+
+::: tip Note
+
+In EMQX rule SQL, a null-value's string form is by default `'undefined'`.
+
+:::

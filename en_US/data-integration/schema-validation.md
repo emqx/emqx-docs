@@ -46,7 +46,7 @@ When a message is published, it is validated against predefined rules. If valida
 
 ## User Guide
 
-This section demonstrates how to configure the schema validation feature and how to test your setup. 
+This section demonstrates how to configure the schema validation feature and how to test your setup.
 
 ### Configure Schema Validation in Dashboard
 
@@ -63,14 +63,14 @@ This section demonstrates how to create and configure a schema validator in the 
        - **All Pass** (by default): Considered passing only when all validation methods pass.
        - **Any Pass**: Stops further validation and is considered passing if any validation method passes.
      - **Validation List**: select the schema from the **Type** dropdown, and add schema or SQL. For how to create a schema, see [Create Validation Schema](#create-validation-schema).
-   - **Validation Failure Operation**: 
+   - **Validation Failure Operation**:
      - **Action After Failure**: Select the actions to perform if validation fails:
        - **Drop Message**: Terminate the publish and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.
        - **Disconnect and Drop Message**: Discard the message and disconnect the publishing client.
        - **Ignore**: Perform no additional actions.
    - **Output Logs**: Select whether to log a message upon validation failure; default is enabled.
    - **Logs Level**: Set the log output level; the default is `warning`.
-   
+
 4. Click **Create** to complete the settings.
 
 Now you can see an enabled new validator appears in the list on the Schema Validation page. You can disable it as you need. You can update the validator settings by clicking **Settings** in the **Actions** column. You can also delete the validator or move the position of the validator by clicking **More**.
@@ -140,7 +140,7 @@ When enabled, the schema validation exposes statistics and indicators on the Das
 **Rate Indicators**:
 
 - Current verification speed
-- Seed in the last 5 minutes
+- Speed in the last 5 minutes
 - Historical maximum speed
 
 Statistics are resettable and also added to Prometheus, accessible via the `/prometheus/schema_validation` path.

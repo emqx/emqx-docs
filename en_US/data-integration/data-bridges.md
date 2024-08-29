@@ -89,6 +89,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
+- [Datalayers](./data-bridge-datalayers.md)
 
 **SQL**
 
@@ -101,6 +102,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 **NoSQL**
 
 - [ClickHouse](./data-bridge-clickhouse.md)
+- [Couchbase](./data-bridge-couchbase.md)
 - [DynamoDB](./data-bridge-dynamo.md)
 - [Greptime](./data-bridge-greptimedb.md)
 - [MongoDB](./data-bridge-mongodb.md)
@@ -120,6 +122,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
+- [Azure Blob Storage](./azure-blob-storage.md)
 
 ## Features of Sink
 

@@ -1,0 +1,112 @@
+name: Update API and config manual
+
+concurrency:
+  group: update-api-cfg-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  repository_dispatch:
+    types:
+      - release
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+      repository:
+        type: string
+        required: true
+      run_id:
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  update-api-cfg-manual:
+    runs-on: ubuntu-latest
+    env:
+      EMQX_VERSION: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.event.inputs.version }}
+      REPOSITORY: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.repository || github.event.inputs.repository }}
+      RUN_ID: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.run-id || github.event.inputs.run_id }}
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: "emqx*-schema-dump"
+          repository: ${{ env.REPOSITORY }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+          merge-multiple: true
+
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: "emqx-docker"
+          repository: ${{ env.REPOSITORY }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: "emqx-enterprise-docker"
+          repository: ${{ env.REPOSITORY }}
+          run-id: ${{ env.RUN_ID }}
+          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+
+      - name: Create PR to update api docs and config manual
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euxo pipefail
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          BASE_BRANCH="$(echo release-$(echo $EMQX_VERSION | cut -d '.' -f 1-2))"
+          NEW_BRANCH="update-api-cfg-${EMQX_VERSION}"
+          git fetch origin ${BASE_BRANCH}
+          git checkout -b ${NEW_BRANCH} --track origin/${BASE_BRANCH}
+
+          VERSION=$(echo "${EMQX_VERSION}" | cut -d '-' -f 1)
+          MINOR_VERSION=$(echo "${EMQX_VERSION}" | cut -d '.' -f 1-2)
+          sed -i "s/CE_VERSION=.*/CE_VERSION=${VERSION}/" ./current-version.env
+          sed -i "s/CE_MINOR_VERSION=.*/CE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
+          sed -i "s/EE_VERSION=.*/EE_VERSION=${VERSION}/" ./current-version.env
+          sed -i "s/EE_MINOR_VERSION=.*/EE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
+          git add current-version.env
+          EMQX_TAG=$(docker load < emqx-docker-*.tar.gz | sed 's/Loaded image: //g')
+          EMQX_ENTERPRISE_TAG=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
+
+          for edition in ce ee; do
+            case "${edition}" in
+              ce)
+                PROFILE=emqx
+                DOCKER_IMAGE=${EMQX_TAG}
+                ;;
+              ee)
+                PROFILE=emqx-enterprise
+                DOCKER_IMAGE=${EMQX_ENTERPRISE_TAG}
+                ;;
+            esac
+            for lang in en zh; do
+              docker run -d --name emqx -p 18083:18083 -e EMQX_dashboard__i18n_lang=${lang} "${DOCKER_IMAGE}"
+              curl -fsS -m 10 --retry 10 --retry-all-errors -o /dev/null http://localhost:18083/api-docs/swagger.json
+              ./rewrite-swagger.sh ${edition} ${lang}
+              docker logs emqx
+              docker rm -f emqx
+              cp "_build/docgen/${PROFILE}/schema-v2-${lang}.json" "hocon/hocon-${edition}-v${VERSION}-${lang}.json"
+              git add "redocly/${edition}-${lang}.json"
+              git add "hocon/hocon-${edition}-v${VERSION}-${lang}.json"
+            done
+          done
+
+          git commit -m "chore($VERSION): update api and cfg manual"
+          git push origin ${NEW_BRANCH}:${NEW_BRANCH}
+          for pr in $(gh pr list --state open --base ${BASE_BRANCH} --label update-api-cfg --search "update api and cfg manual ${VERSION} in:title" --repo ${{ github.repository }} --json number --jq '.[] | .number'); do
+            gh pr close $pr --repo ${{ github.repository }} --delete-branch || true
+          done
+          gh pr create --title "update api and cfg manual ${VERSION}" --body '' --base ${BASE_BRANCH} --head ${NEW_BRANCH} --label update-api-cfg --repo ${{ github.repository }}

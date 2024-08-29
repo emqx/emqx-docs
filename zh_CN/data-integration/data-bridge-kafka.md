@@ -122,9 +122,19 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
      "t/#"
    ```
 
-   注意：如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试 SQL 规则。
+   ::: tip
 
-5. 点击 + **添加动作** 按钮来定义规则触发的动作。从**动作类型**下拉列表中选择 **Kafka 生产者**，保持**动作**下拉框为默认的”创建动作“选项，您也可以从**动作**下拉框中选择一个之前已经创建好的 Kafka 生产者动作。此处我们创建一个全新的规则并添加到规则中
+   如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试 SQL 规则。
+
+   :::
+
+   ::: tip
+
+   EMQX v5.7.2 引入了在规则 SQL 中设置读取环境变量的功能，详见[使用环境变量](#使用环境变量)。
+
+   :::
+
+5. 点击 + **添加动作** 来创建规则将触发的动作。从**动作类型**下拉列表中选择 **Kafka 生产者**，保持**动作**下拉框为默认的`创建动作`选项，您也可以从**动作**下拉框中选择一个之前已经创建好的 Kafka 生产者动作。此处我们创建一个全新的规则并添加到规则中。
 
 6. 在下方的表单中输入 Sink 的名称与描述。
 
@@ -132,11 +142,16 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 8. 配置 Sink 的数据发送方式，包括：
 
-   - **Kafka 主题名称**：输入 `testtopic-in`。注意：此处不支持变量。
+   - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[使用变量模版](#使用变量模版)。
+
    - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
+
    - **消息的键**：Kafka 消息键。在此输入一个字符串，可以是纯字符串或包含占位符 (${var}) 的字符串。
+
    - **消息的值**：Kafka 消息值。在此输入一个字符串，可以是纯字符串或包含占位符 (${var}) 的字符串。
+
    - **分区选择策略**：选择生产者向 Kafka 分区分发消息的方式。
+
    - **压缩**：指定是否使用压缩算法压缩/解压 Kafka 消息中的记录。
 
 9. 高级设置（可选）：请参阅 [高级配置](#高级配置)。
@@ -150,6 +165,91 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 您也可以点击 **集成** -> **Flow 设计器** 查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送并保存到 Kafka。
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+
+### 配置 Kafka 动态主题
+
+从 EMQX v5.7.2 开始，您可以在 Kafka 成产者 Sink 配置中使用环境变量或变量模版动态配置 Kafka 主题。本节介绍了动态主题配置的这两种用例。
+
+#### 使用环境变量
+
+EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的[环境变量](../configuration/configuration.md#环境变量)中读取的值赋值给消息中的一个字段。这项功能通过使用规则引擎内置 SQL 函数中的 [`getenv` 函数](../data-integration/rule-sql-builtin-functions.md#系统函数)来获取 EMQX 运⾏的环境变量并将环境变量的值设置到 SQL 处理结果中。作为该功能的一项应用，您可以在添加 Kafka Sink 规则动作中配置 Kafka 主题时，将规则输出结果中的字段引用到主题的设置中。以下是这项应用的一个演示：
+
+::: tip 注意
+
+为了防⽌系统其他的环境变量泄露，环境变量的名称必须有⼀个固定前缀 `EMQXVAR_ `。例如， `getenv` 读取的函数变量名为 `KAFKA_TOPIC` ，那么设置的环境变量名称必须是 `EMQXVAR_KAFKA_TOPIC` 。 
+
+:::
+
+1. 启动 Kafka 并预先创建 Kafka 主题 `testtopic-in`，可以参考[准备工作](#准备工作)中的相关步骤。
+
+2. 启动 EMQX 并配置环境变量。假设 EMQX 使⽤ zip 的⽅式安装，可以在启动时直接为其指定环境变量，例如，将 Kafka 主题 `testtopic-in` 设置为环境变量 `EMQXVAR_KAFKA_TOPIC` 的值。
+
+   ```bash
+   EMQXVAR_KAFKA_TOPIC=testtopic-in bin/emqx start
+   ```
+
+3. 配置连接器，可以参考[创建 Kafka 生产者连接器](#创建-kafka-生产者连接器)。
+
+4. 配置 Kafka Sink 规则。在 **SQL 编辑器** 中输入以下语句：
+
+   ```sql
+   SELECT
+     getenv(`EMQXVAR_KAFKA_TOPIC`) as kafka_topic,
+     payload
+   FROM
+     "t/#"
+   ```
+
+   ![kafka_dynamic_topic_sql](./assets/kafka_dynamic_topic_sql.png)
+
+5. 启用调试功能测试 SQL，环境变量的值 `testtopic-in` 应被成功读取。
+
+   ![kafka_dynamic_topic_sql_test](./assets/kafka_dynamic_topic_sql_test.png)
+
+6. 点击右侧**动作输出**下的**添加动作**，为规则添加一个 Kafka 生产者动作。
+
+   - **连接器**：选择之前创建的连接器 `test-kafka`。
+   - **Kafka 主题名称**：使用变量模版的格式配置为 SQL 规则的输出变量 `${kafka_topic}`。
+
+   ![kafka_dynamic_topic](./assets/kafka_dynamic_topic.png)
+
+7. 其余配置可以参考[创建 Kafka Sink 规则](#创建-kafka-sink-规则)中的相关步骤，最后点击**创建**完成 Sink 规则创建。
+
+8. 参考[测试 Kafka Sink 规则](#测试-kafka-sink-规则)中的步骤向 Kafka 发送一条消息：
+
+   ```bash
+   mqttx pub -h 127.0.0.1 -p 1883 -i pub -t t/Connection -q 1 -m 'payload string'
+   ```
+
+   可以看到 Kafka `testtopic-in` 主题有消息产⽣:
+
+   ```bash
+   bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
+     --topic testtopic-in
+   
+   {"payload":"payload string","kafka_topic":"testtopic-in"}
+   {"payload":"payload string","kafka_topic":"testtopic-in"}
+   ```
+
+#### 使用变量模版
+
+除了为 **Kafka 主题名称**字段设置静态主题，您还可以通过变量模版生成动态主题。该功能根据消息内容动态地构建主题，有助于实现灵活的消息处理和分发。例如，您可以在字段中指定类似 `device-${payload.device}` 这种格式的 Kafka 主题，便于将来自某个设备的消息发送到包含该设备 ID 后缀的主题，如 `device-1`。
+
+对于这个具体的例子，确保要发送到 Kafka 的消息 payload 对象中包含一个 `device` 键，以正确渲染主题。以下是一个 payload 示例：
+
+```json
+{
+    "topic": "t/devices/data",
+    "payload": {
+        "device": "1",
+        "temperature": 25.6,
+        "humidity": 60.2,
+    }
+```
+
+如果未包含此键，将导致主题渲染失败，进而导致消息被丢弃且无法恢复。
+
+您还需要在 Kafka 中预先创建所有被解析出的主题，例如 `device-1`，`device-2` 等。如果模板解析为一个在 Kafka 中不存在的主题名称，或者 Kafka 不允许自动创建主题，消息同样会因无法恢复的错误而被丢弃。
 
 ## 测试 Kafka Sink 规则
 
@@ -174,93 +274,68 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 在添加 Kafka Soure 前，您需要创建 Kafka 消费者连接器，以便 EMQX 与 Kafka 建立连接。
 
 1. 进入 EMQX Dashboard，并点击 **集成** -> **连接器**。
-
 2. 点击页面右上角的 **创建**。
-
 3. 在**创建连接器**页面中，选择 **Kafka 消费者**，然后点击 **下一步**。
-
 4. 输入一个名称，名称应为大小写字母和数字的组合，例如 `my_kafka_source`。
-
 5. 输入连接信息。
 
    - 对于 **主机列表**，输入 `127.0.0.1:9092`。注意：此演示假设您在本地机器上运行 EMQX 和 Kafka。如果您在远程运行 Kafka 和 EMQX，请相应调整设置。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
    - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
-
-6. **Key 编码模式** 和 **Value 编码模式**：选择 Kafka 消息键和消息值的编码模式。
-
-7. 点击 **添加** 在 **主题映射关系** 字段中至少添加一个 Kafka 到 MQTT 的主题映射。例如，对于此演示，在 **Kafka 主题名称** 中输入 `testtopic-out`，在 **MQTT 主题** 中输入 `t/1`。**MQTT Payload Template** 子字段指定了应使用的 MQTT Payload，可用于模板化的 Kafka 消息字段如下：
-
-   | **字段名称** | **描述**                                                          |
-   | :----------- | :---------------------------------------------------------------- |
-   | `headers`    | 包含字符串键值对的对象                                            |
-   | `key`        | Kafka 消息键（使用所选键的相同编码方法）                          |
-   | `offset`     | Kafka 主题分区中消息的偏移量                                      |
-   | `topic`      | 原始 Kafka 主题                                                   |
-   | `ts`         | 消息时间戳                                                        |
-   | `ts_type`    | 消息时间戳类型，可以是 `create`、`append` 或 `undefined` 中的一个 |
-   | `value`      | Kafka 消息值（使用所选键的相同编码方法）                          |
-
-   **MQTT Payload Template** 的默认值为 `${.}`，包括所有以 JSON 对象编码的可用数据。例如，选择 `${.}` 作为模板将为 Kafka 消息产生以下内容：
-
-   ```json
-   {
-     "value": "value",
-     "ts_type": "create",
-     "ts": 1679665968238,
-     "topic": "testtopic-out",
-     "offset": 2,
-     "key": "key",
-     "headers": { "header_key": "header_value" }
-   }
-   ```
-
-   Kafka 消息的子字段可以通过点表示法访问。例如，`${.value}` 将解析为 Kafka 消息值，`${.headers.h1}` 将解析为 `h1` Kafka Header 的值（如果该子字段存在）。缺失的值将被空字符串替换。
-
-   **注意**：每个 Kafka 到 MQTT 的主题映射必须包含一个独特的 Kafka 主题名称。也就是说，Kafka 主题不能出现在多个映射中。
-
-8. **偏移重置策略**：选择当没有消费者偏移量或偏移量变得无效时，Kafka 消费者开始从 Kafka 主题分区读取的偏移量重置策略。
-
-   - 如果您希望消费者从最新偏移量开始读取消息，跳过消费者启动前产生的消息，请选择 `latest`。
-   - 如果您希望消费者从分区的开始读取消息，包括消费者启动前产生的消息，即读取主题中的所有历史数据，请选择 `earliest`。
-
-9. 高级设置（可选）：参见 **[高级配置](#高级配置)**。
-
-10. 在点击 **创建** 之前，您可以点击 **测试连接** 来测试桥是否能连接到 Kafka 服务器。
-
-11. 点击 **创建**。您将被提供创建关联规则的选项。对于 Kafka Source，不严格要求创建规则以进一步处理数据。如果您需要为其创建规则，请参见 [为 Kafka Source 创建规则](#为-kafka-source-创建规则)。
-
-<img src="./assets/Kafka_consumer_bridge.png" alt="Kafka_consumer_bridge" style="zoom:67%;" />
+6. 高级设置（可选）：参见 **[高级配置](#高级配置)**。
+7. 在点击 **创建** 之前，您可以点击 **测试连接** 来测试连接器是否能连接到 Kafka 服务器。
+11. 点击 **创建**。您将被提供创建关联规则的选项。请参见 [创建 Kafka Source 规则](#创建-kafka-source-规则)。
 
 ## 创建 Kafka Source 规则
 
 本节演示了如何在 EMQX 中创建规则，以进一步处理由配置的 Kafka Source 转发的消息，并将消息重新发布到 MQTT 主题。
+
+### 创建规则 SQL
 
 1. 进入 EMQX Dashboard，并点击 **集成** -> **规则**。
 
 2. 点击页面右上角的 **创建**。
 
 3. 输入一个规则 ID，例如 `my_rule`。
-4. 如果您想使用规则处理名为 `my_kafka_source` 的 Kafka Source  中消费到的消息，请在  **SQL 编辑器**  中输入以下语句：
 
-   注意：如果您想指定自己的 SQL 语法，请确保 `SELECT` 部分包含了稍后步骤中设置的消息重发布操作所需的所有字段。
+4. 如果您想将从 Kafka Source `$bridges/kafka_consumer:<sourceName>` 转换的消息转发到 EMQX，请在 **SQL 编辑器**中输入以下语句。
+
+   注意：如果您想指定自己的 SQL 语法，请确保 `SELECT` 部分包含了稍后步骤中设置的消息重发布动作所需的所有字段。
 
    ```sql
    SELECT
      *
    FROM
-     "$bridges/kafka_consumer:my_kafka_source"
+     "$bridges/kafka_consumer:<sourceName>"
    ```
 
    注意：如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 来学习和测试 SQL 规则。
 
-5. 点击 + **添加操作** 按钮来定义规则触发的操作。从下拉列表中选择 **消息重发布**。
+### 添加 Kafka Source 作为数据输入
 
-6. 在 **主题** 和 **Payload** 字段中，您可以输入您想重新发布的消息的主题和 payload。例如，对于此演示，输入 `t/1` 和 `${.}`。
+1. 在**创建规则**页面的右侧，选择**数据输入**选项卡，然后点击**添加输入**。
+2. 从 **输入类型** 下拉列表中选择 **Kafka 消费者**。保持 **Source** 下拉框的默认`创建 Source` 选项，或者从 **Source** 下拉框中选择一个之前创建的 Kafka 消费者 Source。本示例将创建一个新的消费者 Source 并将其添加到规则中。
+3. 在下面的相应文本框中输入 Source 的名称和描述。
+4. 在**连接器**下拉框中，选择刚刚创建的 `kafka-consumer` 连接器。您也可以点击下拉框旁边的按钮，在弹出窗口中快速创建一个新连接器，所需的配置参数请参考[创建 Kafka 消费者连接器](#创建-kafka-消费者连接器)。
+5. 配置以下字段：
+   - **Kafka 主题名称**：指定消费者 Source 将订阅的 Kafka 主题，以接收消息。
+   - **消费组 ID**：指定此 Source 的消费组标识符。如果未提供，系统将基于 Source 名称自动生成一个组 ID。
+   - **Key 编码模式** 和 **编码模式**：选择 Kafka 消息键和消息值的编码模式。
+2. **偏移重置策略**：选择当没有消费者偏移量或偏移量变得无效时，Kafka 消费者开始从 Kafka 主题分区读取的偏移量重置策略。
 
-7. 点击 **添加** 将此动作包含在规则中。
+   - 如果您希望消费者从最新偏移量开始读取消息，跳过消费者启动前产生的消息，请选择 `latest`。
+   - 如果您希望消费者从分区的开始读取消息，包括消费者启动前产生的消息，即读取主题中的所有历史数据，请选择 `earliest`。
+7. 高级设置（可选）：参见 **[高级配置](#高级配置)**。
+8. 在点击 **创建** 之前，您可以点击**测试连接**来测试 Source 是否能连接到 Kafka 服务器。
+10. 点击**创建**完成 Source 创建。回到创建规则页面，您将看到新建的 Kafka 消费者 Source 出现在**数据输入**选项卡中。
 
-8. 回到 **创建规则** 页面，点击 **创建**。
+### 添加一个消息重发布动作
+
+1. 选择**动作输出**选项卡并点击 + **添加动作**按钮来定义规则触发的操作。
+1. 从**动作类型**下拉列表中选择**消息重发布**。
+2. 在 **主题** 和 **Payload** 字段中，您可以输入您想重新发布的消息的主题和 payload。例如，对于此演示，输入 `t/1` 和 `${.}`。
+3. 点击**添加**将此动作包含在规则中。
+4. 回到**创建规则**页面，点击页面最下方的**保存**以完成规则创建。
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 

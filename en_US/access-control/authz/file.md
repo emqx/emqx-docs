@@ -32,7 +32,7 @@ Example:
 {deny, all, subscribe, ["$SYS/#", {eq, "#"}, {eq, "+/#"}]}.
 
 %% Allow any other publish/subscribe operation
-%% NOTE: In production, change the last rule to `{reject, all}`, and set config: `authorization.no_match = deny`
+%% NOTE: In production, change the last rule to `{deny, all}`, and set config: `authorization.no_match = deny`
 {allow, all}.
 ```
 

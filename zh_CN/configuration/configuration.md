@@ -49,6 +49,18 @@ EMQX 主配置文件为 `emqx.conf`，根据安装方式其所在位置有所不
 则不能被添加到重载文件 `cluster.hocon` 中。 -->
 :::
 
+## 配置路径
+
+如果我们把 EMQX 的配置值理解成一个类似目录树的结构，如果文件系统中使用斜杠或反斜杠进行层级分割，则 EMQX 的层级分割符是 `.`：
+
+下面有几个例子：
+
+```bash
+node.name = "emqx.127.0.0.1"
+zone.zone1.max_packet_size = "10M"
+authentication.1.enable = true
+```
+
 ## HOCON 配置格式
 
 从 5.0 版本开始，EMQX 采用 [HOCON](https://github.com/emqx/hocon) 作为配置文件格式。
@@ -525,6 +537,10 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `str_gte(A, B)`：如果 A 在字典顺序上不位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lt(A, B)`：如果 A 在字典顺序上位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lte(A, B)`：如果 A 在字典顺序上不位于 B 之后，则返回 'true'，否则返回 'false'。
+- **系统函数**:
+  - `getenv(Name)`：返回环境变量 `Name` 的值，并遵循以下限制：
+    - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
+    - 这些值一旦从操作系统环境加载便不会再改变。
 
 #### 条件
 
@@ -563,15 +579,3 @@ iif(条件, 真值表达式, 假值表达式)
 - `iif("", "如果为真的值", "如果为假的值")`：返回 `如果为假的值`
 - `iif("hello", "如果为真的值", "如果为假的值")`：返回 `如果为真的值`
 - `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：如果 `clientid` 以 `foo.` 开头，则返回 `foo`，否则返回 `bar`。
-
-## 配置路径
-
-如果我们把 EMQX 的配置值理解成一个类似目录树的结构，如果文件系统中使用斜杠或反斜杠进行层级分割，则 EMQX 的层级分割符是 `.`：
-
-下面有几个例子：
-
-```bash
-node.name = "emqx.127.0.0.1"
-zone.zone1.max_packet_size = "10M"
-authentication.1.enable = true
-```

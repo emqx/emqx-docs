@@ -2,8 +2,13 @@
 
 The release notes page for EMQX provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX.
 
+## v5.8
+
+- [5.8.0](./changes-ce-v5.md#_5-8-0): 2024-08-28
+
 ## v5.7
 
+- [5.7.2](./changes-ce-v5.md#_5-7-2): 2024-08-07
 - [5.7.1](./changes-ce-v5.md#_5-7-1): 2024-06-26
 - [5.7.0](./changes-ce-v5.md#_5-7-0): 2024-05-27
 

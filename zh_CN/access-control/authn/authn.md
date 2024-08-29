@@ -36,7 +36,7 @@ EMQX 支持通过密码进行身份验证。启用密码认证后，当客户端
 
 ### MQTT 5.0 增强认证
 
-[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中。
+[MQTT 5.0 增强认证](https://www.emqx.com/zh/blog/mqtt5-enhanced-authentication)是对密码认证的扩展，增强认证特性允许使用各种更安全的认证机制，例如 SCRAM 认证、Kerberos 认证等。目前 EMQX 具体实施了 SCRAM 认证，并支持将认证数据存储在内置数据库中或通过 REST API 访问外部 HTTP 服务获取认证数据。
 
 ### PSK 认证
 
@@ -56,7 +56,9 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | 密码认证 | LDAP        | [使用 LDAP 进行密码认证](./ldap.md)                 |
 | 密码认证 | HTTP Server | [使用 HTTP 服务进行密码认证](./http.md)             |
 | JWT      | --          | [JWT 认证](./jwt.md)                                |
-| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证(SCRAM 认证)](./scram.md)         |
+| 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)       |
+| 增强认证 | HTTP 服务   | [基于 REST API 的 MQTT 5.0 增强认证 （SCRAM 认证）](./scram_restapi.md) |
+| 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos)          |
 
 ## 认证链
 
@@ -163,17 +165,12 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 目前 EMQX 支持以下占位符：
 
 - `${clientid}`: 将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
-
 - `${username}`: 将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
-
 - `${password}`: 将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
-
 - `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
-
+- `${peername}`: 将在运行时被替换为客户端的 IP 地址和端口，格式为 `IP:PORT`。
 - `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
-
 - `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
-
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
 
 ## 认证配置方式

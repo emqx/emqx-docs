@@ -24,12 +24,13 @@ The request can use JSON format, with the following placeholders in the URL and 
 - `${username}`: The username used by the client on login.
 - `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
 - `${peerhost}`: The source IP address of the client.
+- `${peername}`: The IP address and port of the client. The format is `IP: PORT`.
 - `${proto_name}`: The protocol name used by the client, e.g. `MQTT`, `CoAP`.
 - `${mountpoint}`: The mountpoint of the gateway listener (topic prefix).
 - `${action}`: The action being requested, e.g. `publish`, `subscribe`.
 - `${topic}`: The topic (or topic filter) to be published or subscribed in the current request.
 - `${qos}`: The QoS of the message to be published or subscribed in the current request.
-- `${retain}`: Whether the message to be published in current request is a retained message.
+- `${retain}`: Whether the message to be published in the current request is a retained message.
 
 
 

@@ -80,7 +80,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 **云服务**
 
 - [Amazon Kinesis](./data-bridge-kinesis.md)
-- [Azure EventHub](./data-bridge-azure-event-hub.md)
+- [Azure Event Hubs](./data-bridge-azure-event-hub.md)
 - [GCP PubSub](./data-bridge-gcp-pubsub.md)
 
 **时序数据库**
@@ -89,6 +89,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 - [InfluxDB](./data-bridge-influxdb.md)
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
+- [Datalayers](./data-bridge-datalayers.md)
 
 **SQL**
 
@@ -101,6 +102,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 **NoSQL**
 
 - [ClickHouse](./data-bridge-clickhouse.md)
+- [Couchbase](./data-bridge-couchbase.md)
 - [DynamoDB](./data-bridge-dynamo.md)
 - [Greptime](./data-bridge-greptimedb.md)
 - [MongoDB](./data-bridge-mongodb.md)
@@ -120,6 +122,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
+- [Azure Blob Storage](./azure-blob-storage.md)
 
 ## Sink 的特性
 
