@@ -943,7 +943,7 @@
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -17445,7 +17445,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online"
           },
@@ -21834,9 +21834,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
-                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -21951,11 +21951,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_msacc": "disabled",
+                    "vm_dist": "disabled",
                     "vm_memory": "disabled",
-                    "vm_system_info": "disabled",
+                    "vm_msacc": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_dist": "disabled"
+                    "vm_system_info": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -21997,11 +21997,11 @@
                 "example": {
                   "collectors": {
                     "mnesia": "disabled",
-                    "vm_msacc": "disabled",
+                    "vm_dist": "disabled",
                     "vm_memory": "disabled",
-                    "vm_system_info": "disabled",
+                    "vm_msacc": "disabled",
                     "vm_statistics": "disabled",
-                    "vm_dist": "disabled"
+                    "vm_system_info": "disabled"
                   },
                   "enable_basic_auth": false,
                   "push_gateway": {
@@ -22028,11 +22028,11 @@
                   "value": {
                     "collectors": {
                       "mnesia": "disabled",
-                      "vm_msacc": "disabled",
+                      "vm_dist": "disabled",
                       "vm_memory": "disabled",
-                      "vm_system_info": "disabled",
+                      "vm_msacc": "disabled",
                       "vm_statistics": "disabled",
-                      "vm_dist": "disabled"
+                      "vm_system_info": "disabled"
                     },
                     "enable_basic_auth": false,
                     "push_gateway": {
@@ -22053,14 +22053,14 @@
                     "headers": {
                       "Authorization": "Basic YWRtaW46Y2JraG55eWd5QDE="
                     },
-                    "push_gateway_server": "http://127.0.0.1:9091",
                     "job_name": "${name}/instance/${name}~${host}",
-                    "vm_msacc_collector": "disabled",
-                    "vm_memory_collector": "disabled",
-                    "vm_system_info_collector": "disabled",
-                    "vm_statistics_collector": "disabled",
                     "mnesia_collector": "disabled",
-                    "vm_dist_collector": "disabled"
+                    "push_gateway_server": "http://127.0.0.1:9091",
+                    "vm_dist_collector": "disabled",
+                    "vm_memory_collector": "disabled",
+                    "vm_msacc_collector": "disabled",
+                    "vm_statistics_collector": "disabled",
+                    "vm_system_info_collector": "disabled"
                   },
                   "summary": "legacy_deprecated_setting"
                 }
@@ -23356,10 +23356,6 @@
                         }
                       }
                     ],
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -23367,11 +23363,15 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
                     "max_conn_rate": 1000
                   },
                   {
@@ -23395,10 +23395,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
                     "node_status": [
                       {
@@ -23410,11 +23410,11 @@
                         }
                       }
                     ],
+                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
                     "max_conn_rate": 1000
                   },
                   {
@@ -23449,8 +23449,8 @@
                         }
                       }
                     ],
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   {
@@ -23494,8 +23494,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   {
@@ -23528,10 +23528,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
                     "node_status": [
                       {
@@ -23552,8 +23552,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   {
@@ -23575,7 +23575,6 @@
                         }
                       }
                     ],
-                    "max_connections": 1024000,
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -23584,12 +23583,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   {
@@ -23619,8 +23619,8 @@
                         }
                       }
                     ],
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   }
                 ],
@@ -23756,10 +23756,6 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -23767,11 +23763,15 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
@@ -23793,16 +23793,16 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
@@ -23825,8 +23825,8 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
@@ -23858,8 +23858,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
@@ -23890,10 +23890,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -23904,8 +23904,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
@@ -23915,7 +23915,6 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_connections": 1024000,
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -23924,12 +23923,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
@@ -23947,8 +23947,8 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
@@ -24053,10 +24053,6 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -24064,11 +24060,15 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
@@ -24090,16 +24090,16 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
+                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
@@ -24122,8 +24122,8 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
@@ -24155,8 +24155,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket listener example"
@@ -24187,10 +24187,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
                     "websocket": {
                       "path": "/ocpp",
@@ -24201,8 +24201,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket/TLS listener example"
@@ -24212,7 +24212,6 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_connections": 1024000,
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -24221,12 +24220,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
@@ -24244,8 +24244,8 @@
                       },
                       "user_id_type": "username"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
@@ -26702,82 +26702,82 @@
                 "examples": {
                   "lwm2m_client": {
                     "value": {
-                      "is_bridge": false,
+                      "proto_ver": "1.0",
                       "recv_oct": 56,
-                      "send_msg": 0,
-                      "awaiting_rel_max": "infinity",
                       "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "mqueue_dropped": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_pkt": 1,
+                      "expiry_interval": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "ip_address": "127.0.0.1",
                       "keepalive": 0,
-                      "mqueue_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "heap_size": 4185,
-                      "port": 50675,
-                      "recv_msg": 0,
+                      "send_msg": 0,
                       "clean_start": true,
-                      "mqueue_len": 0,
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
-                      "proto_name": "LwM2M",
-                      "subscriptions_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mqueue_dropped": 0,
+                      "send_oct": 61,
+                      "inflight_cnt": 0,
                       "username": "guest",
-                      "lifetime": 86400,
-                      "ip_address": "127.0.0.1",
+                      "awaiting_rel_cnt": 0,
+                      "heap_size": 4185,
+                      "recv_msg": 0,
+                      "mqueue_len": 0,
+                      "awaiting_rel_max": "infinity",
+                      "port": 50675,
                       "endpoint_name": "urn:imei:154928475237123",
-                      "proto_ver": "1.0",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "disconnected_at": null,
+                      "subscriptions_max": "infinity",
+                      "mailbox_len": 0,
+                      "proto_name": "LwM2M",
+                      "lifetime": 86400,
+                      "is_bridge": false,
                       "connected": true,
                       "reductions": 72022,
-                      "inflight_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
-                      "is_bridge": false,
+                      "proto_ver": "1.0",
                       "recv_oct": 56,
-                      "send_msg": 0,
-                      "awaiting_rel_max": "infinity",
                       "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "mqueue_dropped": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "send_pkt": 1,
+                      "expiry_interval": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "ip_address": "127.0.0.1",
                       "keepalive": 0,
-                      "mqueue_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "disconnected_at": null,
-                      "awaiting_rel_cnt": 0,
-                      "send_oct": 61,
-                      "subscriptions_cnt": 0,
-                      "heap_size": 4185,
-                      "port": 50675,
-                      "recv_msg": 0,
+                      "send_msg": 0,
                       "clean_start": true,
-                      "mqueue_len": 0,
-                      "mailbox_len": 0,
-                      "expiry_interval": 0,
-                      "send_pkt": 1,
-                      "proto_name": "STOMP",
-                      "subscriptions_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mqueue_dropped": 0,
+                      "send_oct": 61,
+                      "inflight_cnt": 0,
                       "username": "guest",
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_cnt": 0,
+                      "heap_size": 4185,
+                      "recv_msg": 0,
+                      "mqueue_len": 0,
+                      "awaiting_rel_max": "infinity",
+                      "port": 50675,
+                      "inflight_max": "infinity",
+                      "subscriptions_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "disconnected_at": null,
+                      "subscriptions_max": "infinity",
+                      "mailbox_len": 0,
+                      "proto_name": "STOMP",
+                      "is_bridge": false,
                       "connected": true,
                       "reductions": 72022,
-                      "inflight_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
                       "recv_cnt": 1
                     },
                     "summary": "General client info"
@@ -28291,10 +28291,6 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -28302,11 +28298,15 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
@@ -28328,16 +28328,16 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
@@ -28360,8 +28360,8 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
@@ -28393,8 +28393,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
@@ -28425,10 +28425,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -28439,8 +28439,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
@@ -28450,7 +28450,6 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_connections": 1024000,
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -28459,12 +28458,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
@@ -28482,8 +28482,8 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
@@ -28634,10 +28634,6 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
-                      "access_rules": [
-                        "allow all"
-                      ],
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -28645,11 +28641,15 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "max_connections": 1024000,
+                      "access_rules": [
+                        "allow all"
+                      ],
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple DTLS listener example"
@@ -28671,16 +28671,16 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
+                      "acceptors": 16,
                       "max_connections": 1024000,
                       "access_rules": [
                         "allow all"
                       ],
-                      "acceptors": 16,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple SSL listener example"
@@ -28703,8 +28703,8 @@
                         "backlog": 1024,
                         "active_n": 100
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple TCP listener example"
@@ -28736,8 +28736,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket listener example"
@@ -28768,10 +28768,10 @@
                           "tlsv1.1",
                           "tlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                       },
                       "websocket": {
                         "path": "/ocpp",
@@ -28782,8 +28782,8 @@
                         "check_origin_enable": false,
                         "piggyback": "single"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A simple WebSocket/TLS listener example"
@@ -28793,7 +28793,6 @@
                       "name": "dtls-psk",
                       "type": "dtls",
                       "bind": "22214",
-                      "max_connections": 1024000,
                       "acceptors": 16,
                       "dtls_options": {
                         "verify": "verify_none",
@@ -28802,12 +28801,13 @@
                           "dtlsv1.2",
                           "dtlsv1"
                         ],
-                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                        "user_lookup_fun": "emqx_tls_psk:lookup",
                         "fail_if_no_peer_cert": false,
                         "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                        "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                        "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                        "user_lookup_fun": "emqx_tls_psk:lookup"
                       },
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A DTLS listener with PSK example"
@@ -28825,8 +28825,8 @@
                         },
                         "user_id_type": "username"
                       },
-                      "max_connections": 1024000,
                       "acceptors": 16,
+                      "max_connections": 1024000,
                       "max_conn_rate": 1000
                     },
                     "summary": "A TCP listener with authentication example"
@@ -28931,10 +28931,6 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_connections": 1024000,
-                    "access_rules": [
-                      "allow all"
-                    ],
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -28942,11 +28938,15 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
+                    "max_connections": 1024000,
+                    "access_rules": [
+                      "allow all"
+                    ],
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple DTLS listener example"
@@ -28968,16 +28968,16 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
+                    "acceptors": 16,
                     "max_connections": 1024000,
                     "access_rules": [
                       "allow all"
                     ],
-                    "acceptors": 16,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple SSL listener example"
@@ -29000,8 +29000,8 @@
                       "backlog": 1024,
                       "active_n": 100
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple TCP listener example"
@@ -29033,8 +29033,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket listener example"
@@ -29065,10 +29065,10 @@
                         "tlsv1.1",
                         "tlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem"
                     },
                     "websocket": {
                       "path": "/ocpp",
@@ -29079,8 +29079,8 @@
                       "check_origin_enable": false,
                       "piggyback": "single"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A simple WebSocket/TLS listener example"
@@ -29090,7 +29090,6 @@
                     "name": "dtls-psk",
                     "type": "dtls",
                     "bind": "22214",
-                    "max_connections": 1024000,
                     "acceptors": 16,
                     "dtls_options": {
                       "verify": "verify_none",
@@ -29099,12 +29098,13 @@
                         "dtlsv1.2",
                         "dtlsv1"
                       ],
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
                       "fail_if_no_peer_cert": false,
                       "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem"
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup"
                     },
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A DTLS listener with PSK example"
@@ -29122,8 +29122,8 @@
                       },
                       "user_id_type": "username"
                     },
-                    "max_connections": 1024000,
                     "acceptors": 16,
+                    "max_connections": 1024000,
                     "max_conn_rate": 1000
                   },
                   "summary": "A TCP listener with authentication example"
@@ -29966,17 +29966,17 @@
                         "total": 0,
                         "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_error": [],
                       "node_metrics": [
@@ -29987,9 +29987,9 @@
                             "total": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -30000,9 +30000,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -30514,10 +30514,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "health_check_interval": 15000
+                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
+                      "query_mode": "async"
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -30541,9 +30541,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
+                      "health_check_interval": "15s",
                       "max_buffer_bytes": 104857600,
-                      "health_check_interval": "15s"
+                      "query_mode": "sync"
                     },
                     "ingress": {
                       "local": {
@@ -32056,17 +32056,17 @@
                         "total": 0,
                         "allow": 0,
                         "deny": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "resource_metrics": {
                         "success": 0,
                         "matched": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_metrics": [
                         {
@@ -32076,9 +32076,9 @@
                             "total": 0,
                             "allow": 0,
                             "deny": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -32089,9 +32089,9 @@
                             "success": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -32378,12 +32378,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
@@ -32453,12 +32453,12 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
+                "acceptors": 16,
+                "proxy_protocol": false,
                 "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "acceptors": 16,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "zone": "default",
                 "mountpoint": "/",
@@ -34425,8 +34425,8 @@
                     ],
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   {
@@ -34513,8 +34513,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -34600,8 +34600,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -35377,10 +35377,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "health_check_interval": 15000
+                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
+                        "query_mode": "async"
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -35404,9 +35404,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
+                        "health_check_interval": "15s",
                         "max_buffer_bytes": 104857600,
-                        "health_check_interval": "15s"
+                        "query_mode": "sync"
                       },
                       "ingress": {
                         "local": {
@@ -35522,10 +35522,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "health_check_interval": 15000
+                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
+                        "query_mode": "async"
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -35549,9 +35549,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
+                        "health_check_interval": "15s",
                         "max_buffer_bytes": 104857600,
-                        "health_check_interval": "15s"
+                        "query_mode": "sync"
                       },
                       "ingress": {
                         "local": {
@@ -35658,10 +35658,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "health_check_interval": 15000
+                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
+                      "query_mode": "async"
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -35683,9 +35683,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
+                      "health_check_interval": "15s",
                       "max_buffer_bytes": 104857600,
-                      "health_check_interval": "15s"
+                      "query_mode": "sync"
                     },
                     "ingress": {
                       "local": {
@@ -36153,11 +36153,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
-                      "rap": 0,
-                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      }
+                      },
+                      "rap": 0,
+                      "rh": 0
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -36233,11 +36233,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
-                    "rap": 0,
-                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    }
+                    },
+                    "rap": 0,
+                    "rh": 0
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -37324,17 +37324,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "front example"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "rear example"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "front example"
                 },
                 "relative_after": {
                   "value": {
@@ -38961,8 +38961,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -39266,17 +39266,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "absolute position 'front'"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "absolute position 'rear'"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "absolute position 'front'"
                 },
                 "related_after": {
                   "value": {
@@ -40273,9 +40273,9 @@
                 "name": "default",
                 "ssl": {
                   "enable": false,
-                  "cacertfile": "/etc/emqx/certs/cacert.pem",
                   "certfile": "/etc/emqx/certs/cert.pem",
-                  "keyfile": "/etc/emqx/certs/key.pem"
+                  "keyfile": "/etc/emqx/certs/key.pem",
+                  "cacertfile": "/etc/emqx/certs/cacert.pem"
                 },
                 "pool_size": 8,
                 "enable": true,
@@ -41140,8 +41140,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -41263,8 +41263,8 @@
                       ],
                       "resource_opts": {
                         "worker_pool_size": 16,
-                        "query_mode": "async",
-                        "health_check_interval": "15s"
+                        "health_check_interval": "15s",
+                        "query_mode": "async"
                       }
                     },
                     "summary": "HTTP Action"
@@ -41370,8 +41370,8 @@
                     "connector": "my_http_connector",
                     "resource_opts": {
                       "worker_pool_size": 16,
-                      "query_mode": "async",
-                      "health_check_interval": "15s"
+                      "health_check_interval": "15s",
+                      "query_mode": "async"
                     }
                   },
                   "summary": "HTTP Action"
@@ -45305,12 +45305,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
@@ -45401,12 +45401,12 @@
                     "backlog": 1024,
                     "active_n": 100
                   },
+                  "acceptors": 16,
+                  "proxy_protocol": false,
                   "max_connections": 204800,
                   "access_rules": [
                     "allow all"
                   ],
-                  "acceptors": 16,
-                  "proxy_protocol": false,
                   "proxy_protocol_timeout": "3s",
                   "zone": "default",
                   "mountpoint": "/",
@@ -45498,12 +45498,12 @@
                   "backlog": 1024,
                   "active_n": 100
                 },
+                "acceptors": 16,
+                "proxy_protocol": false,
                 "max_connections": 204800,
                 "access_rules": [
                   "allow all"
                 ],
-                "acceptors": 16,
-                "proxy_protocol": false,
                 "proxy_protocol_timeout": "3s",
                 "zone": "default",
                 "mountpoint": "/",
@@ -47563,10 +47563,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "health_check_interval": 15000
+                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
+                      "query_mode": "async"
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -47587,9 +47587,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
+                      "health_check_interval": "15s",
                       "max_buffer_bytes": 104857600,
-                      "health_check_interval": "15s"
+                      "query_mode": "sync"
                     },
                     "ingress": {
                       "local": {
@@ -47673,10 +47673,10 @@
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
-                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "health_check_interval": 15000
+                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
+                        "query_mode": "async"
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -47700,9 +47700,9 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
+                        "health_check_interval": "15s",
                         "max_buffer_bytes": 104857600,
-                        "health_check_interval": "15s"
+                        "query_mode": "sync"
                       },
                       "ingress": {
                         "local": {
@@ -47789,10 +47789,10 @@
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
-                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "health_check_interval": 15000
+                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
+                      "query_mode": "async"
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -47816,9 +47816,9 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
+                      "health_check_interval": "15s",
                       "max_buffer_bytes": 104857600,
-                      "health_check_interval": "15s"
+                      "query_mode": "sync"
                     },
                     "ingress": {
                       "local": {
