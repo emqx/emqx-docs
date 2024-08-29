@@ -13,12 +13,21 @@ on:
       version:
         type: string
         required: true
+        description: 'EMQX version without v/e prefix'
       repository:
-        type: string
+        type: choice
         required: true
+        options:
+        - emqx/emqx
+        - emqx/emqx-platform
       run_id:
         type: string
         required: true
+        description: 'The run id of the workflow that generates the schema dump'
+      docker_pull:
+        type: boolean
+        default: true
+        description: 'Pull official docker images'
 
 permissions:
   contents: read
@@ -46,6 +55,7 @@ jobs:
           merge-multiple: true
 
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        if: github.event.inputs.docker_pull == false
         with:
           name: "emqx-docker"
           repository: ${{ env.REPOSITORY }}
@@ -53,6 +63,7 @@ jobs:
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
 
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        if: github.event.inputs.docker_pull == false
         with:
           name: "emqx-enterprise-docker"
           repository: ${{ env.REPOSITORY }}
@@ -62,6 +73,7 @@ jobs:
       - name: Create PR to update api docs and config manual
         env:
           GH_TOKEN: ${{ github.token }}
+          DOCKER_PULL: ${{ github.event.inputs.docker_pull }}
         run: |
           set -euxo pipefail
           git config --global user.name "${GITHUB_ACTOR}"
@@ -78,8 +90,13 @@ jobs:
           sed -i "s/EE_VERSION=.*/EE_VERSION=${VERSION}/" ./current-version.env
           sed -i "s/EE_MINOR_VERSION=.*/EE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
           git add current-version.env
-          EMQX_TAG=$(docker load < emqx-docker-*.tar.gz | sed 's/Loaded image: //g')
-          EMQX_ENTERPRISE_TAG=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
+          if [ "${DOCKER_PULL}" = true ]; then
+            EMQX_TAG="emqx/emqx:${EMQX_VERSION}"
+            EMQX_ENTERPRISE_TAG="emqx/emqx-enterprise:${EMQX_VERSION}"
+          else
+            EMQX_TAG=$(docker load < emqx-docker-*.tar.gz | sed 's/Loaded image: //g')
+            EMQX_ENTERPRISE_TAG=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
+          fi
 
           for edition in ce ee; do
             case "${edition}" in
