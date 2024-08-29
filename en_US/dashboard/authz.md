@@ -98,7 +98,7 @@ Disabling authorization will affect client operations for publishing/subscribing
 
 When you need to modify the backend of authorization, you can click **Settings** in the **Actions** column on the list page, and you can modify the configuration on the settings page, such as when you need to modify the content of the permission rules of the ACL file, or when some connection information of the external database occurs or the query statement is changed.
 
-When you need to modify the backend of an authorization configuration. For example, when you need to change ACL permission rules, or when there are changes in connection information or query statements for an external database, you can click **Settings** in the **Actions** column of the list page. This will allow you to modify the configuration information on the settings page.
+For example, when you need to modify the backend of an authorization configuration, change ACL permission rules, or when there are changes in connection information or query statements for an external database, you can click **Settings** in the **Actions** column of the list page. This will allow you to modify the configuration information on the settings page.
 
 ## More Information
 

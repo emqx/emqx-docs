@@ -28,7 +28,7 @@ The `FROM` keyword is followed by one or more data sources. To see possible even
 
 ### Try It Out
 
-When the SQL statement is completed, you can click the **Try It Out** toggle switch at the bottom of the page to run the SQL test or Rule test in the this area.
+When the SQL statement is completed, you can click the **Try It Out** toggle switch at the bottom of the page to run the Rule test in this area.
 
 For the SQL test, you can select the event or data source from the **Data Source** drop-down box and enter the simulated test data, and click **Run Test** to see the execution output data in the **Output Result** on the right.
 
@@ -65,7 +65,7 @@ You can also test the rule in the testing area. For detailed testing steps, you 
 
 ### Action Outputs
 
-After completing the editing of the SQL statement and the rule debugging, you can get output data that meets our requirements. At this time, you can select the action that needs to be executed after the rule is triggered in the **Action Outputs** tab on the right side of the page. Click the **Add Action** button, and you can select the type of the actions, including 2 built-in actions and various Sink/Source to continue to process the output data of the rule. For more detailed information about creating actions, see [Add Action](../data-integration/rule-get-started.md#add-action).
+After completing the editing of the SQL statement and the rule debugging, you can get output data that meets your requirements. At this time, you can select the action that needs to be executed after the rule is triggered in the **Action Outputs** tab on the right side of the page. Click the **Add Action** button, and you can select the type of the actions, including 2 built-in actions and various Sink/Source to continue to process the output data of the rule. For more detailed information about creating actions, see [Add Action](../data-integration/rule-get-started.md#add-action).
 
 ## View Rules
 

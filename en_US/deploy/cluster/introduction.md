@@ -38,7 +38,7 @@ To better understand how clustering in EMQX works, you can continue to read the 
 
 ::: tip Note
 
-The cluster size of the open-source version of EMQX does not exceed 3 nodes. The cluster will retain the basic masterless architecture to meet users' needs for reliability and scalability.
+The cluster size of the open-source edition of EMQX does not exceed 3 nodes. The cluster will retain the basic masterless architecture to meet users' needs for reliability and scalability.
 
 :::
 

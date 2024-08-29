@@ -15,7 +15,7 @@ In the client list, users can view basic information about currently connected c
 
 The client's IP address data is concatenated from the client's IP address and the port used by the client when connecting to EMQX.
 
-The top filter condition fields by default display only client ID, username, and node. You can use client ID and username for fuzzy searching to filter the connection list. Clicking the right arrow button next to the search bar displays all available filter condition fields. You can also select the node to which the connection belongs, connection status, or connection time range to filter the list or enter the client's IP to filter by target IP address.
+The top filter condition fields by default display only client ID, username, and IP address. You can use client ID and username for fuzzy searching to filter the connection list. Clicking the right arrow button next to the search bar displays all available filter condition fields. You can also select the connection status, or connection time range to filter the list or enter the client's IP to filter by target IP address.
 
 At the top of the list, the **Select Column** button allows you to choose which columns to display. Clicking the **Refresh** button resets all filter conditions and reloads the connection list. You can also select a client and click **Kick Out** to manually disconnect that client.
 

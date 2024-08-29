@@ -8,7 +8,7 @@ The Integration section on the Dashboard provides functions for creating rules, 
 - **Connector**: As an indispensable component of the data integration, connectors are used to connect with external data systems. For how to create and manage connectors, see [Connector](../data-integration/connector.md).
 - **Schema Validation (EMQX Enterprise feature)**: Use validation rule to ensure that data to be published to specific topics must conform to predefined data formats. For how to create validation rules, see [Configure Schema Validation in Dashboard](../data-integration/schema-validation.md#configure-schema-validation-in-dashboard).
 - **Schema (EMQX Enterprise feature)**: You can create a schema to be used in the schema validation or SQL rules. For how to create a schema on Dashboard, see [Schema Registry Example - Avro](../data-integration/schema-registry-example-avro.md) or [Schema Registry Example - Protobuf](../data-integration/schema-registry-example-protobuf.md).
-
+- **Message Transform (EMQX Enterprise feature)**: Define transformation expressions to adapt data as it flows through the system. For how to create transformations, see [Configure Message Transformation in Dashboard](../data-integration/message-transformation.md#configure-message-transformation-in-dashboard).
 
 
 

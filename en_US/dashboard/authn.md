@@ -83,7 +83,7 @@ You can get the latest JWKS from the `JWKS Endpoint` periodically, which is esse
 
 For more details about JWT, refer to [JWT Authentication](../access-control/authn/jwt.md).
 
-## Authentication List
+## Authenticator List
 
 After successfully creating an authenticator, you can view and manage it in the authenticator list.
 

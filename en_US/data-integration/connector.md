@@ -56,7 +56,7 @@ If the connector is used by a Sink/Source, updating the connector configuration 
 
 A connector that is in use cannot be deleted. To delete a connector, first delete the Sink/Source using the connector.
 
-## Connection Status
+## Connector Status
 
 You can view the running status of connectors on the Dashboard for troubleshooting and monitoring.
 
