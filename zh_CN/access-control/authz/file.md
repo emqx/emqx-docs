@@ -109,7 +109,6 @@ authorization {
   sources = [
     {
       type = file
-      enable = true
       path = "etc/acl.conf"
     }
   ]

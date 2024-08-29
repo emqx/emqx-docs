@@ -130,7 +130,6 @@ $ mqttx sub -u emqx_u -t t/3 -q 1
 ```hcl
 {
   type = mysql
-  enable = true
 
   database = "mqtt"
   username = "root"

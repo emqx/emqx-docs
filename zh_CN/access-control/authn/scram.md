@@ -24,7 +24,6 @@ SCRAM 认证仅支持使用 MQTT v5.0 的连接。
 {
     mechanism = scram
     backend = built_in_database
-    enable = true
 
     algorithm = sha512
     iteration_count = 4096

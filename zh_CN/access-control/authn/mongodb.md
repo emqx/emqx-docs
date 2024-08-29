@@ -109,7 +109,6 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 {
   mechanism = password_based
   backend = mongodb
-  enable = true
 
   password_hash_algorithm {
     name = sha256
@@ -136,7 +135,6 @@ MongoDB 认证器支持将认证数据存储为 MongoDB 文档。用户需要提
 {
   mechanism = password_based
   backend = mongodb
-  enable = true
 
   password_hash_algorithm {
     name = sha256

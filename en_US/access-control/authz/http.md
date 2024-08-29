@@ -113,7 +113,6 @@ Example of an HTTP authorizer configured with `POST` request:
 ```bash
 {
     type = http
-    enable = true
 
     method = post
     url = "http://127.0.0.1:32333/authz/${peercert}?clientid=${clientid}"
@@ -134,7 +133,6 @@ Example of an HTTP authorizer configured with `GET` request:
 ```bash
 {
     type = http
-    enable = true
 
     method = get
     url = "http://127.0.0.1:32333/authz"

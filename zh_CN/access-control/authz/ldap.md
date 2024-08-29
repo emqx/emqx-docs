@@ -159,7 +159,6 @@ LDAP 授权通过 `type = ldap` 进行标识。
 ```bash
 {
   type = ldap
-  enable = true
 
   server = "127.0.0.1:389"
   publish_attribute = "mqttPublishTopic"

@@ -194,7 +194,6 @@ EMQX 授权支持与多种数据源集成，包括内置数据库、文件、MyS
 
 ```hcl
 {
-    enable = true
 
     type = mysql
     database = "mqtt"
@@ -231,7 +230,6 @@ authorization {
   no_match = allow
   deny_action = ignore
   cache {
-    enable = true
     max_size = 32
     excludes = ["t/1", "t/2"]
     ttl = 1m

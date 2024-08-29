@@ -97,7 +97,6 @@ Sample configuration:
 ```bash
 {
     type = redis
-    enable = true
 
     redis_type = single
     server = "127.0.0.1:6379"
@@ -117,7 +116,6 @@ Sample configuration:
 ```bash
 {
     type = redis
-    enable = true
 
     redis_type = sentinel
     servers = "10.123.13.11:6379,10.123.13.12:6379"
@@ -137,7 +135,6 @@ Sample configuration:
 ```bash
 {
     type = redis
-    enable = true
 
     redis_type = cluster
     servers = "10.123.13.11:6379,10.123.13.12:6379"

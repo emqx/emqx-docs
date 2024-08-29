@@ -32,7 +32,6 @@ You can also enable the audit log and modify the configuration options under `lo
 
 ```bash
 log.audit {
-  enable = true
   path = "./log/audit.log"
   rotation_count = 10
   rotation_size = 50MB

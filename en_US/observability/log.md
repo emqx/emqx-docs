@@ -122,7 +122,6 @@ log {
       timestamp_format = auto
   }
   console {
-    enable = true
     formatter = json
     level = debug
     time_offset = system

@@ -56,7 +56,6 @@ Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs
 opentelemetry {
   exporter { endpoint = "http://localhost:4317" }
   metrics {
-     enable = true
      interval = "10s"
   }
 }

@@ -102,7 +102,6 @@ log {
     formatter = text
   }
   console {
-    enable = true
     level = warning
     formatter = text
   }

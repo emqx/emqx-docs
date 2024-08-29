@@ -84,7 +84,6 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 {
   mechanism = password_based
   backend = redis
-  enable = true
 
   redis_type = single
   server = "127.0.0.1:6379"
@@ -109,7 +108,6 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 {
   mechanism = password_based
   backend = redis
-  enable = true
 
   redis_type = sentinel
   servers = "10.123.13.11:6379,10.123.13.12:6379"
@@ -135,7 +133,6 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 {
   mechanism = password_based
   backend = redis
-  enable = true
 
   redis_type = cluster
   servers = "10.123.13.11:6379,10.123.13.12:6379"

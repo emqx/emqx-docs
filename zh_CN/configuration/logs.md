@@ -59,7 +59,6 @@ log {
 ```bash
 log {
   console {
-    enable = true
     formatter = json
     level = warning
     time_offset = system

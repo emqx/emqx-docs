@@ -90,7 +90,6 @@ Sample configuration:
 ```bash
 {
   type = postgresql
-  enable = true
 
   database = "mqtt"
   username = "postgres"

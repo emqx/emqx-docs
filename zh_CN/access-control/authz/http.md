@@ -115,7 +115,6 @@ HTTP 授权必需使用 `type=http`的配置。
 ```hcl
 {
     type = http
-    enable = true
 
     method = post
     url = "http://127.0.0.1:8080/authz?clientid=${clientid}"
@@ -136,7 +135,6 @@ HTTP 授权必需使用 `type=http`的配置。
 ```hcl
 {
     type = http
-    enable = true
 
     method = get
     url = "http://127.0.0.1:8080/authz"

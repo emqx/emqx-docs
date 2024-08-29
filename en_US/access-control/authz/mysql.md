@@ -97,7 +97,6 @@ Sample configuration:
 ```bash
 {
   type = mysql
-  enable = true
 
   database = "mqtt"
   username = "root"

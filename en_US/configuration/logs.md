@@ -60,7 +60,6 @@ You can configure the log level and log format with the following configuration 
 ```bash
 log {
   console {
-    enable = true
     formatter = json
     level = warning
     time_offset = system
