@@ -16,7 +16,7 @@ The Create Rule page features an SQL editor where you can define rule logic usin
 
 To identify and organize rules, you'll provide a Rule ID and optional Note. A unique Rule ID is automatically generated, but you can also specify your own. The Note field allows for brief descriptions to clarify the rule's purpose.
 
-By clicking the **SQL Examples** below the SQL Editor, you can see some common SQL examples on the right side. You can quickly create rule by refercing to one of the following SQL examples:
+By clicking the **SQL Examples** below the SQL Editor, you can see some common SQL examples on the right side. You can quickly create rule by referring to one of the following SQL examples:
 
 <img src="./assets/rule-sql.png" alt="image" style="zoom:67%;" />
 
