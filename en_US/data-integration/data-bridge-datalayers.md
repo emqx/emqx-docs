@@ -2,7 +2,7 @@
 
 ::: tip
 
-Datalayers data integration is an EMQX Enterprise feature.
+The datalayers data integration is an EMQX Enterprise feature.
 
 :::
 

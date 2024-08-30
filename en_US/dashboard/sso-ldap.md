@@ -7,7 +7,7 @@ EMQX implements the LDAP-based SSO by integrating the directory services that su
 - [OpenLDAP](https://www.openldap.org/)
 - [Microsoft Entra ID（previous Azure AD）](https://azure.microsoft.com/en-in/products/active-directory)
 
-::: Prerequisite
+::: tip Prerequisite
 
 Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 

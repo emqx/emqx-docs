@@ -596,8 +596,8 @@
         - mqtt-over-quic/getting-started
       # - mqtt-over-quic/client
     - title_en: Cluster Linking
+      title_cn: 集群连接
       path: cluster-linking/introduction
-      edition: ee
       collapsed: true
       children:
         - cluster-linking/quick-start

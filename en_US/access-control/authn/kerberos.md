@@ -84,19 +84,7 @@ The `principal` is the server principal, which must be present in the system's d
 
 The following diagram shows how the authentication process works.
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-
-    Client->>Server: CONNECT (Authentication Method="GSSAPI-KERBEROS", Authentication Data=ClientInitialToken)
-    Server-->>Client: AUTH (rc=0x18, Authentication Method="GSSAPI-KERBEROS", Authentication Data=ServerInitialToken)
-    loop SASL Challenge-Response
-        Client->>Server: AUTH (Authentication Method="GSSAPI-KERBEROS")
-        Server-->>Client: AUTH (Authentication Method="GSSAPI-KERBEROS")
-    end
-    Server-->>Client: CONNACK (rc=0, Authentication Method="GSSAPI-KERBEROS")
-```
+![kerberos_workflow](./assets/kerberos_workflow.png)
 
 ## Common Issues and Troubleshooting
 
