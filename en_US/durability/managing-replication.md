@@ -86,3 +86,43 @@ $ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
+
+## Recover from Disasters
+
+When things go extremely wrong it's important to know how to recover efficiently. This section provides guidance on how to recover from common disaster scenarios.
+
+### Complete Loss of a Node
+
+Probably the most common disaster scenario is losing a node completely, due to a unrecoverable hardware failure, disk corruption or plain human mistake.
+
+1. Once a node is completely lost, availability is partially compromised. Hence, it's probably a good idea to first restore desired availability, by moving the lost node's shards to other sites.
+    
+    Usual `leave` command should be enough to achieve this. It works even if the node is not reachable. However, in this case transitions may take longer time to complete.
+    ```shell
+    $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+    ```
+
+2. Watch the cluster status, transitions should eventually complete.
+
+    ```shell
+    $ emqx ctl ds info
+    <...>
+
+    SITES:
+    D8894F95DC86DFDB    'emqx@n1.local'        up
+    5C6028D6CE9459C7    'emqx@n2.local'        (x) down
+    <...>
+
+    REPLICA TRANSITIONS:
+    Shard                         Transitions
+    messages/0                    -5C6028D6CE9459C7 +D8894F95DC86DFDB
+    <...>
+    ```
+
+3. Once there are no more transitions, it's time to tell the cluster that the lost node is not coming back.
+
+    ```shell
+    $ emqx ctl ds forget messages 5C6028D6CE9459C7
+    ```
+
+    It's very important to perform this step if the plan is to replace the lost node with a new one, preserving the original node name. Otherwise, the cluster will have the same node name known under two different Site IDs, which will cause a lot of confusion down the road.
