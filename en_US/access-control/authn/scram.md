@@ -34,15 +34,4 @@ where,
 
 ## Authentication Flow
 
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Server
-
-    Client->>Server: CONNECT (Authentication Method="SCRAM-SHA-256", Authentication Data=client-first-data)
-    Server-->>Client: AUTH (rc=0x18, Authentication Method="SCRAM-SHA-256", Authentication Data=server-first-data)
-    Client->>Server: AUTH (rc=0x18, Authentication Method="SCRAM-SHA-256", Authentication Data=client-final-data)
-    Server-->>Client: CONNACK (rc=0, Authentication Method="SCRAM-SHA-256", Authentication Data=server-final-data)
-
-```
-
+![scram_workflow](./assets/scram_workflow.png)

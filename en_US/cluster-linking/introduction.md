@@ -1,5 +1,11 @@
 # EMQX Cluster Linking
 
+::: tip
+
+Cluster Linking is EMQX Enterprise feature.
+
+:::
+
 Cluster Linking is a feature that connects multiple, separate EMQX clusters, facilitating communication between clients on different, often geographically dispersed clusters. Compared to traditional MQTT bridging, Cluster Linking is more efficient, reliable, and scalable. It minimizes bandwidth requirements and tolerates network interruptions.
 
 This section introduces the Cluster Linking and how to use and configure the feature.
