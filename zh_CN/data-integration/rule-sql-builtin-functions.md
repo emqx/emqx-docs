@@ -280,12 +280,29 @@ is_map(json_decode('[{"value": 1}]')) = false
 
 ### is_null(Term: any) -> boolean
 
-判断变量 `Term` 是否未定义。示例：
+判断变量 `Term` 是否未定义。
+注意，is_null 函数只能用于判断变量是否未定义，不能用于判断变量是否为 `null`。
+示例：
 
 ```sql
 is_null(this_is_an_unassigned_variable) = true
 is_null(map_get('b', json_decode('{"a": 1}'))) = true
+is_null(map_get('b', json_decode('{"b": null}'))) = false
 ```
+
+### is_null_var(Term: any) -> boolean
+
+判断变量 `Term` 是否未定义，或者是 `null`。示例：
+
+```sql
+is_null_var(this_is_an_unassigned_variable) = true
+is_null_var(map_get('b', json_decode('{"a": 1}'))) = true
+is_null_var(map_get('b', json_decode('{"b": null}'))) = true
+```
+
+### is_not_null_var(Term: any) -> boolean
+
+与 `is_null_var` 相反，判断变量 `Term` 是否已定义且不为 `null`。
 
 ### is_num(Term: any) -> boolean
 
@@ -471,6 +488,14 @@ find('..., Value: 1.2', 'Data') = ''
 ```
 find('Front, Middle, End', ', ', 'leading') = ', Middle, End'
 find('Front, Middle, End', ', ', 'trailing') = ', End'
+```
+
+### join_to_string(Sep: string, Array: array) -> string
+
+将数组 Array 中的所有元素连接成一个字符串，元素之间使用 Sep 分隔。示例：
+
+```bash
+join_to_string(', ', ['a', 'b', 'c']) = 'a, b, c'
 ```
 
 ### lower(String: string) -> string
@@ -711,7 +736,7 @@ upper('hello') = 'Hello'
 
 ### map_get(Key: string, Map: map) -> any
 
-返回 Map 中指定 Key 的值，如果该 Key 在 Map 中不存在，则返回 undefined。示例：
+返回 Map 中指定 Key 的值，如果该 Key 在 Map 中不存在，则返回 `undefined`。示例：
 
 ```
 map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
@@ -727,6 +752,14 @@ map_get('data', json_decode('{"msg": "hello"}'), '') = ''
 map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 ```
 
+### map_keys(Map: map) -> array
+
+返回 Map 中所有的 Key。示例：
+
+```bash
+map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
+```
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 将 Key 与关联的 Value 插入到 Map 中，返回更新后的 Map。如果原始 Map 中该 Key 已经存在，那么旧的关联值将被替换为新的 Value。示例：
@@ -734,6 +767,22 @@ map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 ```
 map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
 map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
+```
+
+### map_to_entries(Map: map) -> array
+
+将 Map 转换为包含 `key`, `value` 字段的对象数组。示例：
+
+```bash
+map_to_entries(json_decode('{"a": 1, "b": 2}')) = [{"key": "a", "value": 1},{"key": "b", "value": 2}]
+```
+
+### map_values(Map: map) -> array
+
+返回 Map 中所有的 Value。示例：
+
+```bash
+map_values(json_decode('{"a": 1, "b": 2}')) = [1, 2]
 ```
 
 ### mget(Key: string | array, Map: map) -> any
