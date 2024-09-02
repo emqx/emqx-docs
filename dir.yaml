@@ -538,7 +538,7 @@
         - observability/mqtt-system-topics
         - observability/prometheus
         - observability/datadog
-        - title_en: Integrate with OpenTlelemetry
+        - title_en: Integrate with OpenTelemetry
           title_cn: 集成 OpenTelemetry
           path: observability/open-telemetry/open-telemetry
           collapsed: true
