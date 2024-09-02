@@ -277,12 +277,31 @@ is_map(json_decode('[{"value": 1}]')) = false
 
 ### is_null(Term: any) -> boolean
 
-Determine whether the variable `Term` is undefined. Example:
+Determine whether the variable `Term` is undefined.
+This function is used to determine whether a variable is assigned a value, but the value can be JSON `null`.
+
+Example:
 
 ```sql
 is_null(this_is_an_unassigned_variable) = true
 is_null(map_get('b', json_decode('{"a": 1}'))) = true
+is_null(map_get('b', json_decode('{"b": null}'))) = false
 ```
+
+### is_null_var(Term: any) -> boolean
+
+Determine whether the variable `Term` is undefined, or `null`.
+Example:
+
+```sql
+is_null_var(this_is_an_unassigned_variable) = true
+is_null_var(map_get('b', json_decode('{"a": 1}'))) = true
+is_null_var(map_get('b', json_decode('{"b": null}'))) = true
+```
+
+### is_not_null_var(Term: any) -> boolean
+
+The inverse of `is_null_var`, determine whether the variable `Term` is defined and not `null`.
 
 ### is_num(Term: any) -> boolean
 
@@ -468,6 +487,14 @@ Same as `find/2`, but allows the specification of the direction of the search fo
 ```
 find('Front, Middle, End', ', ', 'leading') = ', Middle, End'
 find('Front, Middle, End', ', ', 'trailing') = ', End'
+```
+
+### join_to_string(Sep: string, Array: array) -> string
+
+Joins the elements of `Array` into a single string using the separator `Sep`. Example:
+
+```bash
+join_to_string(', ', ['a', 'b', 'c']) = 'a, b, c'
 ```
 
 ### lower(String: string) -> string
@@ -724,6 +751,14 @@ map_get('data', json_decode('{"msg": "hello"}'), '') = ''
 map_get('value', json_decode('{"data": [1.2, 1.3]}'), []) = []
 ```
 
+### map_keys(Map: map) -> array
+
+Returns an array of all keys in the `Map`. Example:
+
+```bash
+map_keys(json_decode('{"a": 1, "b": 2}')) = ['a', 'b']
+```
+
 ### map_put(Key: string, Value: any, Map: map) -> map
 
 Insert the `Key` and associated `Value` into the `Map` and return the updated map. If the `Key` already exists in the original `Map`, the old associated value will be replaced with the new Value. Example:
@@ -731,6 +766,22 @@ Insert the `Key` and associated `Value` into the `Map` and return the updated ma
 ```
 map_get('b', map_put('b', 1, json_decode('{"a": 1}'))) = 1
 map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
+```
+
+### map_to_entries(Map: map) -> array
+
+Converts a `Map` into an array of objects containing `key` and `value` fields. Example:
+
+```bash
+map_to_entries(json_decode('{"a": 1, "b": 2}')) = [{"key": "a", "value": 1},{"key": "b", "value": 2}]
+```
+
+### map_values(Map: map) -> array
+
+Returns an array of all values in the `Map`. Example:
+
+```bash
+map_values(json_decode('{"a": 1, "b": 2}')) = [1, 2]
 ```
 
 ### mget(Key: string | array, Map: map) -> any
