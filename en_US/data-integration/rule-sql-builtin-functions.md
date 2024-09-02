@@ -1541,9 +1541,5 @@ uuid_v4_no_hyphen() = 'd7a39aa4195a42068b962eb9a665503e'
 
 Return the value of the environment variable `Name` with the following constraints:
 
-<<<<<<< HEAD
 - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
 - Values are immutable once loaded from the OS environment.
-=======
-{% endemqxee %}
->>>>>>> origin/release-5.6
