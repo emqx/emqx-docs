@@ -34,19 +34,19 @@ From Dashboard: click the Settings icon on the ribbon area, and turn off the **E
 
 ## Telemetry Metrics
 
-The telemetry data we collect includes:
+We collect telemetry data that includes the following:
 
-1. hardware specifications of the cluster, not including hardware UUID
-2. cluster topology
-3. EMQX version
-4. some configuration enable state
-5. feature enablement
-6. plug-in usage
-7. metrics
+- Hardware specifications of the cluster (excluding hardware UUIDs)
+- Cluster topology
+- EMQX version
+- The enabled state of certain configurations
+- Feature enablement
+- Plug-in usage
+- Metrics
 
-Telemetry reports data to by encrypting HTTP requests [https://telemetry.emqx.io/api/telemetry](https://telemetry.emqx.io/api/telemetry)y. The data is stored securely in our private environment and is not exposed to any public network.
+Telemetry data is reported through encrypted HTTP requests to `https://telemetry.emqx.io/api/telemetry`. The data is stored securely in our private environment and is not exposed to any public network.
 
-For telemetry data collection codes, please refer to [apps/emqx_modules/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_modules/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
+For telemetry data collection codes, please refer to [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
 
 The data transferred example is as follows：
 
