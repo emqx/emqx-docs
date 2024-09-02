@@ -38,17 +38,17 @@ export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 
 我们收集的遥测数据主要包括：
 
-1. 集群相关硬件信息（仅包括硬件规格，不包含硬件唯一编码）
-2. 集群相关拓扑信息
-3. 集群相关软件版本信息
-4. 集群配置信息(仅包括配置项，不包含配置值)
-5. 集群节点的组件使用信息
-6. 集群节点的插件使用情况
-7. 集群使用指标信息
+- 集群相关硬件信息（仅包括硬件规格，不包含硬件唯一编码）
+- 集群相关拓扑信息
+- 集群相关软件版本信息
+- 集群配置信息(仅包括配置项，不包含配置值)
+- 集群节点的组件使用信息
+- 集群节点的插件使用情况
+- 集群使用指标信息
 
-遥测通过加密 HTTP 请求将数据上报至 [https://telemetry.emqx.io/api/telemetry](https://telemetry.emqx.io/api/telemetry)，数据将安全存储在我们的私有环境中，不会暴露在任何共有网络环境或者云端。
+遥测通过加密 HTTP 请求将数据上报至 `https://telemetry.emqx.io/api/telemetry`，数据将安全存储在我们的私有环境中，不会暴露在任何共有网络环境或者云端。
 
-遥测数据收集代码请参考 [apps/emqx_modules/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_modules/src/emqx_telemetry.erl)，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues)联系我们：
+遥测数据收集代码请参考 [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl)，如果您有任何疑问请通过 [Issues](http://github.com/emqx/emqx/issues)联系我们：
 
 传输的数据示例如下：
 
