@@ -15,6 +15,7 @@ emqx ctl license update <license>
 or
 
 ```bash
+# Make sure the license file is uploaded to all nodes in the cluster at the same file path.
 emqx ctl license update 'file://<license_file_path>'
 ```
 
