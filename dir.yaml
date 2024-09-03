@@ -771,7 +771,7 @@
                          - changes/gateway-4.4-to-5.1-incompatibility
              - title_en: End of Life Dates
                title_cn: 产品生命周期结束日期
-               path: changes/eol
+               path: changes/eol-ee
        - title_en: EMQX Open Source Release Notes
          title_cn: EMQX 开源版版本发布历史
          collapsed: true
