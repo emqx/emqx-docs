@@ -21,7 +21,7 @@ emqx ctl license update 'file://<license_file_path>'
 
 Where,
 
-- `<license>` is the license key string without new lines.
+- `<license_key>` is the license key string without new lines.
 - `<license_file_path>` is the path to the file where the license key is stored.
 
 If the license is configured via `'file://<license_file_path>'` notation, EMQX will be automatically reloading it every 2 minutes.
