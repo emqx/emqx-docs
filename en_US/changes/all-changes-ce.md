@@ -1,4 +1,4 @@
-# Release Notes
+# Release Notes for EMQX Open Source
 
 The release notes page for EMQX provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX.
 
