@@ -140,7 +140,7 @@ Below are detailed explanations of each field.
 | `flags`               | Flags                                                 |
 | `pub_props`           | PUBLISH Properties (MQTT 5.0 clients only)            |
 | `timestamp`           | Event trigger time (unit: ms)                         |
-| `publish_received_at` | Time when PUBLISH message reaches EMQX <br>(unit: ms) |
+| `publish_received_at` | Time when PUBLISH message reaches EMQX <br/>(unit: ms) |
 | `node`                | EMQX node where the event triggered                   |
 
 ### Message Acknowledged Event ("$events/message_acked")

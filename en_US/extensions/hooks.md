@@ -60,16 +60,16 @@ We call this chain composed of multiple callback functions executed sequentially
 - **In Parameter**: There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**.
 - **Output Result**: Each function in the chain must have an output, and `ok` should be used as the function return value for callback functions that do not care about the result of execution. For example, in a notification class event, "A client has successfully logged in" does not require a return value.
 - **Transitive**: The result of callback functions in the chain is transitive. And to allow more flexibility in the use of hooks, we have designed **two modes** of handling the return values of callback functions in the chain.
-  - **Result Transitive**</br>
+  - **Result Transitive**<br/>
     It means that each callback function in the chain accepts the entry of the chain, and the return of the previous callback function (which can be interpreted as a cumulative value) as arguments. Until the last function, the return value of the last function is then the return value of the whole chain. Specially, the chain is called with an initial value for the cumulative value to be used by the first callback function in the chain.
-  - **Result Transparent**</br>
-    Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.</br>
-    This is actually a special case of the first type of **Result Transitive**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.</br>
+  - **Result Transparent**<br/>
+    Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.<br/>
+    This is actually a special case of the first type of **Result Transitive**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.<br/>
     Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
 - **Callback Functions Chain** needs to allow the functions with it to *terminate the chain in advance* and *ignore this operation.*
-  - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.</br>
+  - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.<br/>
     For example, an authentication believes that such clients do not need to check other authentication plugins after they are allowed to log in, so they need to be terminated in advance.
-  - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.</br>
+  - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.<br/>
     For example, when there are multiple authentication plugins, an authentication plugin believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
 
 Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
@@ -163,24 +163,24 @@ The input parameters and returned value of the callback function are shown in th
 
 | Name                 | Input Parameter                                              | Returned Value     |
 | -------------------- | ------------------------------------------------------------ | ------------------ |
-| client.connect       | `ConnInfo`: Client connection layer parameters<br>`Props`: Properties of MQTT v5.0 connection packets | New `Props`        |
-| client.connack       | `ConnInfo`: Client connection layer parameters <br>`Rc`: returned code<br>`Props`: Properties of MQTT v5.0 connection response packets | New `Props`        |
-| client.connected     | `ClientInfo`: Client information parameters<br>`ConnInfo`: Client connection layer parameters | -                  |
-| client.disconnected  | `ClientInfo`: Client information parameters<br>`ConnInfo`: Client connection layer parameters<br>`ReasonCode`: Reason code | -                  |
-| client.authenticate  | `ClientInfo`: Client information parameters<br>`AuthNResult`: Authentication results | New `AuthNResult`  |
-| client.authorize     | `ClientInfo`: Client information parameters<br>`Topic`: Publish/subscribe topic<br>`PubSub`: Publish/subscribe<br>`AuthZResult`: Authentication result | New `AuthZResult`  |
-| client.subscribe     | `ClientInfo`: Client information parameters<br/>`Props`: Properties parameters of MQTT v5.0 subscription messages<br>`TopicFilters`: List of topics of subscription | New `TopicFilters` |
+| client.connect       | `ConnInfo`: Client connection layer parameters<br/>`Props`: Properties of MQTT v5.0 connection packets | New `Props`        |
+| client.connack       | `ConnInfo`: Client connection layer parameters <br/>`Rc`: returned code<br/>`Props`: Properties of MQTT v5.0 connection response packets | New `Props`        |
+| client.connected     | `ClientInfo`: Client information parameters<br/>`ConnInfo`: Client connection layer parameters | -                  |
+| client.disconnected  | `ClientInfo`: Client information parameters<br/>`ConnInfo`: Client connection layer parameters<br/>`ReasonCode`: Reason code | -                  |
+| client.authenticate  | `ClientInfo`: Client information parameters<br/>`AuthNResult`: Authentication results | New `AuthNResult`  |
+| client.authorize     | `ClientInfo`: Client information parameters<br/>`Topic`: Publish/subscribe topic<br/>`PubSub`: Publish/subscribe<br/>`AuthZResult`: Authentication result | New `AuthZResult`  |
+| client.subscribe     | `ClientInfo`: Client information parameters<br/>`Props`: Properties parameters of MQTT v5.0 subscription messages<br/>`TopicFilters`: List of topics of subscription | New `TopicFilters` |
 | client.unsubscribe   | `ClientInfo`: Client information parameters<br/>`Props`: Properties parameters of MQTT v5.0 unsubscription messages<br/>`TopicFilters`: List of topics of unsubscription | New `TopicFilters` |
 | session.created      | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
-| session.subscribed   | `ClientInfo`: Client information parameters<br/>`Topic`: subscribed topic<br>`SubOpts`: Configuration options for subscribe operations | -                  |
+| session.subscribed   | `ClientInfo`: Client information parameters<br/>`Topic`: subscribed topic<br/>`SubOpts`: Configuration options for subscribe operations | -                  |
 | session.unsubscribed | `ClientInfo`: Client information parameters<br/>`Topic`: unsubscribed topic<br/>`SubOpts`: Configuration options for unsubscribe operations | -                  |
 | session.resumed      | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
 | session.discarded    | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information | -                  |
 | session.takenover    | `ClientInfo`: Client information parameters<br/>`SessInfo`: Session information |                    |
-| session.terminated   | `ClientInfo`: Client information parameters<br/>`Reason`: Termination reason <br>`SessInfo`: Session information | -                  |
+| session.terminated   | `ClientInfo`: Client information parameters<br/>`Reason`: Termination reason <br/>`SessInfo`: Session information | -                  |
 | message.publish      | `Message`: Message object                                    | New `Message`      |
 | message.delivered    | `ClientInfo`: Client information parameters<br/>`Message`: Message object | New `Message`      |
 | message.acked        | `ClientInfo`: Client information parameters<br/>`Message`: Message object | -                  |
-| message.dropped      | `Message`: Message object<br>`By`: Dropped by<br>`Reason`: Drop reason | -                  |
+| message.dropped      | `Message`: Message object<br/>`By`: Dropped by<br/>`Reason`: Drop reason | -                  |
 
 For the application of these hooks, see [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)

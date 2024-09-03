@@ -17,7 +17,7 @@
 
 - title_en: Introduction
   title_cn: 概览
-  path: "./" # this is the index page, {en_US,zh_CN}/README.md is the content
+  path: "./" # this is the index page, {en_US,zh_CN}/index.md is the content
 
 - title_en: Get Started
   title_cn: 快速开始
@@ -91,6 +91,7 @@
   children:
     - title_en: Authentication
       title_cn: 认证
+      collection: true
       path: access-control/authn/authn
       children:
         - title_en: Password based
@@ -109,6 +110,7 @@
 
     - title_en: Authorization
       title_cn: 授权
+      collection: true
       path: access-control/authz/authz
       children:
         - access-control/authz/file
@@ -295,6 +297,7 @@
     - title_en: Topics and subscription
       title_cn: 主题与订阅
       path: dashboard/subscriptions/overview
+      collection: true
       children:
         - dashboard/subscriptions/topics
         - dashboard/subscriptions/subscriptions
@@ -302,6 +305,7 @@
     - title_en: Access Control
       title_cn: 访问控制
       path: dashboard/acloverview
+      collection: true
       children:
         - dashboard/authn
         - dashboard/authz
@@ -309,6 +313,7 @@
     - title_en: Data Integration
       title_cn: 数据集成
       path: dashboard/bridgeoverview
+      collection: true
       children:
         - dashboard/bridge
         - dashboard/rules

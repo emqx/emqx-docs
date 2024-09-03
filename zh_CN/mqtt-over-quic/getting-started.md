@@ -160,8 +160,8 @@ NanoMQ 还提供了 nanomq_cli ，其中包含有 MQTT over QUIC 的客户端工
 ```bash
 nanomq_cli quic --help
 Usage: quic conn <url>
-       quic sub  <url> <qos> <topic>
-       quic pub  <url> <qos> <topic> <data>
+       quic sub  <url> \<qos> \<topic>
+       quic pub  <url> \<qos> \<topic> \<data>
 
 ## subscribe example
 nanomq_cli quic sub mqtt-quic://54.75.171.11:14567 2 msg

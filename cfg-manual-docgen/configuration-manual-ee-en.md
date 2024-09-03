@@ -549,7 +549,7 @@ see [Create and manage clusters](../deploy/cluster/create-cluster.md)。
 
 ### Create cluster manually
 
-This is the default configuration of clustering, nodes join a cluster by executing ./bin/emqx_ctl join <Node> CLI command:
+This is the default configuration of clustering, nodes join a cluster by executing ./bin/emqx_ctl join \<Node> CLI command:
 
 ```bash
 cluster.discovery = manual
