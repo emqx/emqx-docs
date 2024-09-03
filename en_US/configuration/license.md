@@ -9,7 +9,7 @@ The license configuration applies to the EMQX Enterprise edition only.
 You can update your license by using `emqx ctl license update` command. The command will update the license file and reload the license. 
 
 ```bash
-emqx ctl license update <license>
+emqx ctl license update <license_key>
 ```
 
 or
