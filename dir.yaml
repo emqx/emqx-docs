@@ -684,5 +684,5 @@
         - changes/gateway-4.4-to-5.1-incompatibility
 - title_en: End of Life Dates
   title_cn: 产品生命周期结束日期
-  path: changes/eol-ee
   edition: ee
+  path: changes/eol-ee
