@@ -44,8 +44,6 @@ Mria 是 Mnesia 的一个开源扩展，它为集群增加了最终的一致性�
 
 只有集群规模超过 3 个节点，才建议使用 Core + Replicant 复制模式。
 
-此时您可以通过设置 `emqx.conf` 中的 `node.db_role` 参数或 `EMQX_NODE__DB_ROLE` 环境变量，将某个节点设置为复制节点，同时设置 `cluster.core_nodes` 指定需要连接到的核心节点。
-
 :::tip
 
 集群中至少要有一个核心节点，我们建议设置 3 个核心节点 + N 个复制节点作为初始集群规格。
@@ -57,6 +55,28 @@ Mria 是 Mnesia 的一个开源扩展，它为集群增加了最终的一致性�
 - 在小型集群中（3 个节点或更少），没有必要使用 Core + Replicant 复制模式，而是让核心节点承载所有连接。
 - 在超大的集群中（10 个节点或更多），核心节点不承载 MQTT 连接，这样更加稳定性和水平扩展性更好。
 - 在中型集群中，核心节点是否承载 MQTT 连接取决于许多因素，需要根据您实际的场景测试才能知道哪个选择更优。
+
+### 启用 Core + Replicant 模式
+
+为了启用 Core + Replicant 模式，需要将某些节点指定为复制节点。这可以通过设置 `node.role` 参数为 `replicant` 来实现。此外，您需要启用一个自动集群发现策略（`cluster.discovery_strategy`）。
+
+:::tip
+Replicant 节点不能使用 `manual` 策略来发现 Core 节点集群。
+:::
+
+配置示例：
+
+```bash
+node {
+    ## 将节点设置为复制节点：
+    role = replicant
+}
+cluster {
+    ## 启用静态发现策略：
+    discovery_strategy = static
+    static.seeds = [emqx@host1.local, emqx@host2.local]
+}
+```
 
 ## 网络与硬件配置
 
