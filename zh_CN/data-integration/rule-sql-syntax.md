@@ -202,7 +202,11 @@ SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
 
 ```sql
 FOREACH
-    payload.sensors
+    payload.sensors as e
+DO
+    clientid,
+    e.name as name,
+    e.idx as idx
 FROM "t/#"
 ```
 
