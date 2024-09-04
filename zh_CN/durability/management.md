@@ -11,17 +11,22 @@
 
 ### 持久会话配置
 
-| 参数                                        | 描述                                                         |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| `durable_sessions.enable`                   | 启用会话持久性。注意：需要重新启动 EMQX 节点才能使更改生效。 |
-| `durable_sessions.batch_size`               | 控制持久会话从存储中消费的消息批次的最大大小。               |
-| `durable_sessions.idle_poll_interval`       | 控制持久会话查询新消息的频率。如果发现新消息，则下一批将立即从存储中检索，如果客户端的传输队列有空间的话。 |
-| `durable_sessions.heartbeat_interval`       | 指定保存会话元数据的间隔。                                   |
-| `durable_sessions.renew_streams_interval`   | 定义会话多久查询存储以获取新流。                             |
-| `durable_sessions.session_gc_interval`      | 指定清除会话并删除过期会话的间隔。                           |
-| `durable_sessions.message_retention_period` | 定义会话持久化中 MQTT 消息的保留期。注意：此参数是全局的。   |
+您可以在 Dashboard 中配置持久会话的相关参数。点击 Dashboard 左侧菜单中的 **管理** -> **MQTT 配置**，选择**会话持久化**标签页进行参数配置。
+
+<img src="./assets/dashboard_session_config.png" alt="dashboard_session_config" style="zoom:67%;" />
+
+| 参数                                        | Dashboard   配置项 | 描述                                                         |
+| ------------------------------------------- | ------------------ | ------------------------------------------------------------ |
+| `durable_sessions.enable`                   | 启用会话持久化     | 启用会话持久化。该配置项不支持通过热配置修改，您需要在配置文件中设置`启用`或`禁用`。注意：需要重新启动 EMQX 节点才能使更改生效。 |
+| `durable_sessions.message_retention_period` | 消息保留时长       | 定义会话持久化中 MQTT 消息的保留期。注意：此参数是全局的。   |
+| `durable_sessions.batch_size`               | 消息查询批大小     | 控制持久会话从存储中消费的消息批次的最大大小。               |
+| `durable_sessions.idle_poll_interval`       | 空闲轮询间隔       | 控制持久会话查询新消息的频率。如果发现新消息，则下一批将立即从存储中检索，如果客户端的传输队列有空间的话。 |
+| `durable_sessions.heartbeat_interval`       | 会话心跳间隔       | 指定保存会话元数据的间隔。                                   |
+| `durable_sessions.renew_streams_interval`   | -                  | 定义会话多久查询存储以获取新流。                             |
+| `durable_sessions.session_gc_interval`      | 会话垃圾回收批大小 | 指定清除会话并删除过期会话的间隔。                           |
 
 以下参数可以在 [zone](../configuration/configuration.md#zone-override) 级别覆盖：
+
 - `durable_sessions.enable`
 - `durable_sessions.batch_size`
 - `durable_sessions.idle_poll_interval`

@@ -89,20 +89,22 @@ This approach minimizes the volume of data transferred between sites, while ensu
 
 ## Recover from Disasters
 
-When things go extremely wrong it's important to know how to recover efficiently. This section provides guidance on how to recover from common disaster scenarios.
+When disasters occur, knowing how to efficiently recover is crucial to maintaining service continuity. This section provides guidance on recovering from common disaster scenarios.
 
 ### Complete Loss of a Node
 
-Probably the most common disaster scenario is losing a node completely, due to a unrecoverable hardware failure, disk corruption or plain human mistake.
+One of the most common disaster scenarios is the complete loss of a node, which can occur due to unrecoverable hardware failure, disk corruption, or even human error.
 
-1. Once a node is completely lost, availability is partially compromised. Hence, it's probably a good idea to first restore desired availability, by moving the lost node's shards to other sites.
+1. Restore availability by reallocating shards.
+   
+    If a node is completely lost, the cluster's availability is compromised to some extent. The first step is to restore availability by reallocating the lost node’s shards to other nodes in the cluster.
     
-    Usual `leave` command should be enough to achieve this. It works even if the node is not reachable. However, in this case transitions may take longer time to complete.
+    You can use the standard `leave` command to achieve this. This command can still function even if the lost node is unreachable, although the transition may take longer to complete.
     ```shell
-    $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
-    ```
-
-2. Watch the cluster status, transitions should eventually complete.
+   $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+   ```
+   
+2. Monitor the cluster status and wait for all shard transitions to complete successfully. Ensure there are no more transitions before proceeding to the next step.
 
     ```shell
     $ emqx ctl ds info
@@ -119,10 +121,10 @@ Probably the most common disaster scenario is losing a node completely, due to a
     <...>
     ```
 
-3. Once there are no more transitions, it's time to tell the cluster that the lost node is not coming back.
+3. Once all shard transitions are complete, you need to inform the cluster that the lost node will not be returning.
 
     ```shell
     $ emqx ctl ds forget messages 5C6028D6CE9459C7
     ```
 
-    It's very important to perform this step if the plan is to replace the lost node with a new one, preserving the original node name. Otherwise, the cluster will have the same node name known under two different Site IDs, which will cause a lot of confusion down the road.
+    This step is crucial if you plan to replace the lost node with a new one using the original node name. Failing to do so could result in the cluster recognizing the same node name under two different Site IDs, leading to significant confusion and potential issues.
