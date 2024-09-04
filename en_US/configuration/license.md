@@ -6,9 +6,27 @@ The license configuration applies to the EMQX Enterprise edition only.
 
 :::
 
-You can update your license file and configure the settings for the license connection quota usage the configuration file `emqx.conf`. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license.  
+You can update your license by using `emqx ctl license update` command. The command will update the license file and reload the license. 
 
-Below is an example of configuring the EMQX Enterprise license settings: 
+```bash
+emqx ctl license update <license_key>
+```
+
+or
+
+```bash
+# Make sure the license file is uploaded to all nodes in the cluster at the same file path.
+emqx ctl license update 'file://<license_file_path>'
+```
+
+Where,
+
+- `<license_key>` is the license key string without new lines.
+- `<license_file_path>` is the path to the file where the license key is stored.
+
+If the license is configured via `'file://<license_file_path>'` notation, EMQX will be automatically reloading it every 2 minutes.
+
+Additionally, you can configure the settings for the license connection quota usage in the configuration file `emqx.conf`.
 
 ```bash
 license {
