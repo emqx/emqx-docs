@@ -1631,7 +1631,7 @@
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -2705,12 +2705,12 @@
                 "status": "finished",
                 "started_at": "2024-07-15T13:48:02.648559+08:00",
                 "result": "success",
+                "finished_at": "2024-07-16T11:00:01.875627+08:00",
                 "upgrade_opts": {
                   "deploy_inplace": false
                 },
                 "target_vsn": "5.8.1",
-                "from_vsn": "5.8.0",
-                "finished_at": "2024-07-16T11:00:01.875627+08:00"
+                "from_vsn": "5.8.0"
               }
             ]
           }
@@ -41416,8 +41416,8 @@
             "type": "string",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "description": "----"
           },
@@ -45161,7 +45161,7 @@
             "$ref": "#/components/schemas/dashboard.ssl_options"
           },
           "num_acceptors": {
-            "default": 10,
+            "default": 4,
             "type": "integer",
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数"
           },
@@ -46325,7 +46325,7 @@
           "site": {
             "type": "string",
             "description": "Site ID",
-            "example": "206F0F0D014EBAD0"
+            "example": "9A2E3BED4DC90681"
           },
           "status": {
             "type": "string",
@@ -50615,11 +50615,11 @@
           "ldap": {
             "$ref": "#/components/schemas/sso.ldap"
           },
-          "oidc": {
-            "$ref": "#/components/schemas/sso.oidc"
-          },
           "saml": {
             "$ref": "#/components/schemas/dashboard.saml"
+          },
+          "oidc": {
+            "$ref": "#/components/schemas/sso.oidc"
           }
         },
         "type": "object"
@@ -54052,10 +54052,10 @@
                             "key": "topic"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
                         },
-                        "failure_action": "drop",
                         "payload_decoder": {
                           "type": "json"
                         },
@@ -54079,10 +54079,10 @@
                             "key": "topic"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
                         },
-                        "failure_action": "drop",
                         "payload_decoder": {
                           "type": "json"
                         },
@@ -54146,10 +54146,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_decoder": {
                         "type": "json"
                       },
@@ -54232,10 +54232,10 @@
                         "key": "topic"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
                     },
-                    "failure_action": "drop",
                     "payload_decoder": {
                       "type": "json"
                     },
@@ -54291,10 +54291,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_decoder": {
                         "type": "json"
                       },
@@ -54355,10 +54355,10 @@
                         "key": "topic"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
                     },
-                    "failure_action": "drop",
                     "payload_decoder": {
                       "type": "json"
                     },
@@ -54427,8 +54427,8 @@
                 "test": {
                   "value": {
                     "message": {
-                      "retain": true,
                       "user_property": {},
+                      "retain": true,
                       "payload": "{}",
                       "client_attrs": {},
                       "topic": "t/u/v",
@@ -54450,10 +54450,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_decoder": {
                         "type": "json"
                       },
@@ -55730,8 +55730,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -55977,8 +55977,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -56172,8 +56172,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -56467,8 +56467,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -56662,8 +56662,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -58192,8 +58192,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Confluent Connector"
                 },
@@ -58232,9 +58232,9 @@
                     "password": "******",
                     "username": "admin",
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     }
                   },
                   "summary": "Couchbase Connector"
@@ -58282,8 +58282,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Connector"
                 },
@@ -58305,8 +58305,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Connector"
                 },
@@ -58483,9 +58483,9 @@
                     "description": "My connector",
                     "enable": true,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     },
                     "account_key": "******",
                     "account_name": "my_account_name"
@@ -58646,9 +58646,9 @@
                     "enable": true,
                     "max_retries": 2,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "pipelining": 100,
                     "service_account_json": {
@@ -58747,9 +58747,9 @@
                     "name": "my_connector",
                     "type": "kafka_consumer",
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "bootstrap_hosts": "kafka.emqx.net:9092"
                   },
@@ -61840,83 +61840,83 @@
                 "examples": {
                   "lwm2m_client": {
                     "value": {
-                      "lifetime": 86400,
-                      "awaiting_rel_cnt": 0,
+                      "username": "guest",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_oct": 56,
-                      "send_msg": 0,
+                      "send_pkt": 1,
                       "is_bridge": false,
-                      "mqueue_max": "infinity",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "recv_msg": 0,
-                      "proto_name": "LwM2M",
-                      "disconnected_at": null,
+                      "expiry_interval": 0,
+                      "awaiting_rel_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mqueue_len": 0,
+                      "inflight_cnt": 0,
+                      "clean_start": true,
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "username": "guest",
-                      "inflight_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "ip_address": "127.0.0.1",
-                      "subscriptions_cnt": 0,
-                      "mqueue_dropped": 0,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "send_oct": 61,
-                      "recv_pkt": 1,
-                      "proto_ver": "1.0",
-                      "heap_size": 4185,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "port": 50675,
+                      "send_msg": 0,
                       "subscriptions_max": "infinity",
-                      "send_pkt": 1,
-                      "expiry_interval": 0,
+                      "ip_address": "127.0.0.1",
+                      "disconnected_at": null,
+                      "send_oct": 61,
+                      "proto_name": "LwM2M",
+                      "heap_size": 4185,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "mqueue_max": "infinity",
+                      "port": 50675,
+                      "recv_pkt": 1,
+                      "recv_msg": 0,
+                      "inflight_max": "infinity",
                       "mailbox_len": 0,
-                      "inflight_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_cnt": 0,
+                      "lifetime": 86400,
+                      "proto_ver": "1.0",
                       "connected": true,
                       "reductions": 72022,
-                      "recv_cnt": 1,
-                      "awaiting_rel_max": "infinity"
+                      "mqueue_dropped": 0,
+                      "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
-                      "awaiting_rel_cnt": 0,
+                      "username": "guest",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
                       "recv_oct": 56,
-                      "send_msg": 0,
+                      "send_pkt": 1,
                       "is_bridge": false,
-                      "mqueue_max": "infinity",
-                      "recv_msg": 0,
-                      "proto_name": "STOMP",
-                      "disconnected_at": null,
+                      "expiry_interval": 0,
+                      "awaiting_rel_cnt": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mqueue_len": 0,
+                      "inflight_cnt": 0,
+                      "clean_start": true,
                       "keepalive": 0,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "username": "guest",
-                      "inflight_max": "infinity",
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "ip_address": "127.0.0.1",
-                      "subscriptions_cnt": 0,
-                      "mqueue_dropped": 0,
-                      "mqueue_len": 0,
-                      "clean_start": true,
-                      "send_oct": 61,
-                      "recv_pkt": 1,
-                      "proto_ver": "1.0",
-                      "heap_size": 4185,
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "port": 50675,
+                      "send_msg": 0,
                       "subscriptions_max": "infinity",
-                      "send_pkt": 1,
-                      "expiry_interval": 0,
+                      "ip_address": "127.0.0.1",
+                      "disconnected_at": null,
+                      "send_oct": 61,
+                      "proto_name": "STOMP",
+                      "heap_size": 4185,
+                      "mqueue_max": "infinity",
+                      "port": 50675,
+                      "recv_pkt": 1,
+                      "recv_msg": 0,
+                      "inflight_max": "infinity",
                       "mailbox_len": 0,
-                      "inflight_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "subscriptions_cnt": 0,
+                      "proto_ver": "1.0",
                       "connected": true,
                       "reductions": 72022,
-                      "recv_cnt": 1,
-                      "awaiting_rel_max": "infinity"
+                      "mqueue_dropped": 0,
+                      "recv_cnt": 1
                     },
                     "summary": "General client info"
                   }
@@ -62922,8 +62922,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Confluent Connector"
                   },
@@ -62977,9 +62977,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       }
                     },
                     "summary": "Couchbase Connector"
@@ -63047,8 +63047,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Connector"
                   },
@@ -63080,8 +63080,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Connector"
                   },
@@ -63363,9 +63363,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       },
                       "account_key": "******",
                       "account_name": "my_account_name"
@@ -63606,9 +63606,9 @@
                         "my_action"
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "pipelining": 100,
                       "service_account_json": {
@@ -63749,9 +63749,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "bootstrap_hosts": "kafka.emqx.net:9092"
                     },
@@ -64220,8 +64220,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Confluent Connector"
                   },
@@ -64275,9 +64275,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       }
                     },
                     "summary": "Couchbase Connector"
@@ -64345,8 +64345,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Connector"
                   },
@@ -64378,8 +64378,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Connector"
                   },
@@ -64661,9 +64661,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       },
                       "account_key": "******",
                       "account_name": "my_account_name"
@@ -64904,9 +64904,9 @@
                         "my_action"
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "pipelining": 100,
                       "service_account_json": {
@@ -65047,9 +65047,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "bootstrap_hosts": "kafka.emqx.net:9092"
                     },
@@ -65469,8 +65469,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Confluent Connector"
                 },
@@ -65507,9 +65507,9 @@
                     "password": "******",
                     "username": "admin",
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     }
                   },
                   "summary": "Couchbase Connector"
@@ -65544,8 +65544,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Connector"
                 },
@@ -65565,8 +65565,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Connector"
                 },
@@ -65729,9 +65729,9 @@
                     "description": "My connector",
                     "enable": true,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     },
                     "account_key": "******",
                     "account_name": "my_account_name"
@@ -65874,9 +65874,9 @@
                     "enable": true,
                     "max_retries": 2,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "pipelining": 100,
                     "service_account_json": {
@@ -65965,9 +65965,9 @@
                 "kafka_consumer": {
                   "value": {
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "bootstrap_hosts": "kafka.emqx.net:9092"
                   },
@@ -68320,9 +68320,9 @@
                         "total": 0,
                         "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_status": [
                         {
@@ -68331,12 +68331,12 @@
                         }
                       ],
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_error": [],
                       "node_metrics": [
@@ -68347,9 +68347,9 @@
                             "total": 0,
                             "matched": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -68357,12 +68357,12 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -68632,8 +68632,8 @@
                       }
                     ],
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
-                    "current_connections": 0
+                    "current_connections": 0,
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
                   },
                   {
                     "name": "stomp",
@@ -68955,8 +68955,8 @@
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Producer Bridge"
                 },
@@ -68977,7 +68977,6 @@
                       "sndbuf": "1024KB",
                       "tcp_keepalive": "none"
                     },
-                    "local_topic": "mqtt/local/topic",
                     "kafka": {
                       "message": {
                         "timestamp": "${.timestamp}",
@@ -69011,9 +69010,10 @@
                       "kafka_headers": "${pub_props}",
                       "partition_strategy": "random"
                     },
+                    "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Bridge"
                 },
@@ -69096,8 +69096,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69143,8 +69143,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69160,14 +69160,14 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                     "partition_key": "key",
-                    "aws_access_key_id": "aws_access_key_id",
-                    "stream_name": "stream_name"
+                    "stream_name": "stream_name",
+                    "aws_access_key_id": "aws_access_key_id"
                   },
                   "summary": "Amazon Kinesis Producer Bridge"
                 },
@@ -69190,9 +69190,9 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -69219,8 +69219,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "payload_template": "",
                     "routing_key": "my_routing_key",
@@ -69244,8 +69244,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "aws_access_key_id": "root"
@@ -69268,8 +69268,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69325,8 +69325,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "enabledb": true
                   },
@@ -69384,8 +69384,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "sid": "ORCL"
@@ -69437,6 +69437,7 @@
                 },
                 "gcp_pubsub": {
                   "value": {
+                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -69448,8 +69449,7 @@
                       "private_key_id": "kid",
                       "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    },
-                    "pubsub_topic": "mytopic"
+                    }
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -69541,8 +69541,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "keyspace": "mqtt"
@@ -69603,8 +69603,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "batch_value_separator": ", "
@@ -69628,8 +69628,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69651,8 +69651,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69677,12 +69677,10 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
                     "topic_mapping": [
                       {
                         "qos": 1,
@@ -69697,8 +69695,10 @@
                         "kafka_topic": "kafka-topic-2"
                       }
                     ],
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "value_encoding_mode": "none",
+                    "key_encoding_mode": "none",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
@@ -69715,8 +69715,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -69738,8 +69738,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -70195,8 +70195,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -70472,8 +70472,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -71714,9 +71714,9 @@
                         "total": 0,
                         "allow": 0,
                         "deny": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_status": [
                         {
@@ -71725,12 +71725,12 @@
                         }
                       ],
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
-                        "rate": 0.0,
-                        "rate_last5m": 0.0,
-                        "rate_max": 0.0
+                        "rate": 0,
+                        "rate_last5m": 0,
+                        "rate_max": 0
                       },
                       "node_metrics": [
                         {
@@ -71740,9 +71740,9 @@
                             "total": 0,
                             "allow": 0,
                             "deny": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ],
@@ -71750,12 +71750,12 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
-                            "rate": 0.0,
-                            "rate_last5m": 0.0,
-                            "rate_max": 0.0
+                            "rate": 0,
+                            "rate_last5m": 0,
+                            "rate_max": 0
                           }
                         }
                       ]
@@ -72952,8 +72952,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -73189,8 +73189,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -73384,8 +73384,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -73659,8 +73659,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -73854,8 +73854,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -74833,10 +74833,10 @@
                       "batch_size": 1,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "0ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "0ms"
                     }
                   },
                   {
@@ -74856,8 +74856,8 @@
                     "resource_opts": {
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
                       "inflight_window": 100,
+                      "health_check_interval": "30s",
                       "request_ttl": "45s"
                     }
                   },
@@ -75013,10 +75013,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -75366,10 +75366,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -75406,10 +75406,10 @@
                       "batch_size": 100,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "10ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "10ms"
                     }
                   },
                   {
@@ -75512,8 +75512,8 @@
                     ],
                     "resource_opts": {
                       "query_mode": "async",
-                      "health_check_interval": "10s",
-                      "inflight_window": 100
+                      "inflight_window": 100,
+                      "health_check_interval": "10s"
                     }
                   },
                   {
@@ -75601,10 +75601,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -75871,10 +75871,10 @@
                         "batch_size": 1,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "0ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "0ms"
                       }
                     },
                     "summary": "Azure Blob Storage Direct Upload Action"
@@ -75897,8 +75897,8 @@
                       "resource_opts": {
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
                         "inflight_window": 100,
+                        "health_check_interval": "30s",
                         "request_ttl": "45s"
                       }
                     },
@@ -76069,10 +76069,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -76470,10 +76470,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -76513,10 +76513,10 @@
                         "batch_size": 100,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "10ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "10ms"
                       }
                     },
                     "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -76631,8 +76631,8 @@
                       ],
                       "resource_opts": {
                         "query_mode": "async",
-                        "health_check_interval": "10s",
-                        "inflight_window": 100
+                        "inflight_window": 100,
+                        "health_check_interval": "10s"
                       }
                     },
                     "summary": "S3 Aggregated Upload"
@@ -76732,10 +76732,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -76979,10 +76979,10 @@
                       "batch_size": 1,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "0ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "0ms"
                     }
                   },
                   "summary": "Azure Blob Storage Direct Upload Action"
@@ -77000,8 +77000,8 @@
                     "resource_opts": {
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
                       "inflight_window": 100,
+                      "health_check_interval": "30s",
                       "request_ttl": "45s"
                     }
                   },
@@ -77137,10 +77137,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -77430,10 +77430,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -77468,10 +77468,10 @@
                       "batch_size": 100,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "10ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "10ms"
                     }
                   },
                   "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -77560,8 +77560,8 @@
                     "connector": "my_s3_connector",
                     "resource_opts": {
                       "query_mode": "async",
-                      "health_check_interval": "10s",
-                      "inflight_window": 100
+                      "inflight_window": 100,
+                      "health_check_interval": "10s"
                     }
                   },
                   "summary": "S3 Aggregated Upload"
@@ -77635,10 +77635,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -77846,7 +77846,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "206F0F0D014EBAD0"
+            "example": "9A2E3BED4DC90681"
           }
         ],
         "responses": {
@@ -77934,7 +77934,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "206F0F0D014EBAD0"
+            "example": "9A2E3BED4DC90681"
           }
         ],
         "responses": {
@@ -78468,8 +78468,8 @@
                   "conn_evict_rate": 10,
                   "wait_health_check": "10s",
                   "rel_sess_threshold": 1.5,
-                  "abs_sess_threshold": 10,
                   "rel_conn_threshold": 1.5,
+                  "abs_sess_threshold": 10,
                   "abs_conn_threshold": 10
                 }
               },
@@ -78959,8 +78959,8 @@
                       ],
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Producer Bridge"
                   },
@@ -78988,7 +78988,6 @@
                           "status": "connected"
                         }
                       ],
-                      "local_topic": "mqtt/local/topic",
                       "kafka": {
                         "message": {
                           "timestamp": "${.timestamp}",
@@ -79022,9 +79021,10 @@
                         "kafka_headers": "${pub_props}",
                         "partition_strategy": "random"
                       },
+                      "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Bridge"
                   },
@@ -79114,8 +79114,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79161,8 +79161,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79178,14 +79178,14 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                       "partition_key": "key",
-                      "aws_access_key_id": "aws_access_key_id",
-                      "stream_name": "stream_name"
+                      "stream_name": "stream_name",
+                      "aws_access_key_id": "aws_access_key_id"
                     },
                     "summary": "Amazon Kinesis Producer Bridge"
                   },
@@ -79208,9 +79208,9 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -79237,8 +79237,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "payload_template": "",
                       "routing_key": "my_routing_key",
@@ -79262,8 +79262,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "aws_access_key_id": "root"
@@ -79286,8 +79286,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79343,8 +79343,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "enabledb": true
                     },
@@ -79402,8 +79402,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "sid": "ORCL"
@@ -79455,6 +79455,7 @@
                   },
                   "gcp_pubsub": {
                     "value": {
+                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -79466,8 +79467,7 @@
                         "private_key_id": "kid",
                         "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      },
-                      "pubsub_topic": "mytopic"
+                      }
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -79559,8 +79559,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "keyspace": "mqtt"
@@ -79621,8 +79621,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "batch_value_separator": ", "
@@ -79646,8 +79646,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79676,8 +79676,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79709,12 +79709,10 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
-                      "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
                       "topic_mapping": [
                         {
                           "qos": 1,
@@ -79729,8 +79727,10 @@
                           "kafka_topic": "kafka-topic-2"
                         }
                       ],
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "value_encoding_mode": "none",
+                      "key_encoding_mode": "none",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -79747,8 +79747,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -79777,8 +79777,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80053,8 +80053,8 @@
                       ],
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Producer Bridge"
                   },
@@ -80082,7 +80082,6 @@
                           "status": "connected"
                         }
                       ],
-                      "local_topic": "mqtt/local/topic",
                       "kafka": {
                         "message": {
                           "timestamp": "${.timestamp}",
@@ -80116,9 +80115,10 @@
                         "kafka_headers": "${pub_props}",
                         "partition_strategy": "random"
                       },
+                      "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Bridge"
                   },
@@ -80208,8 +80208,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80255,8 +80255,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80272,14 +80272,14 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                       "partition_key": "key",
-                      "aws_access_key_id": "aws_access_key_id",
-                      "stream_name": "stream_name"
+                      "stream_name": "stream_name",
+                      "aws_access_key_id": "aws_access_key_id"
                     },
                     "summary": "Amazon Kinesis Producer Bridge"
                   },
@@ -80302,9 +80302,9 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -80331,8 +80331,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "payload_template": "",
                       "routing_key": "my_routing_key",
@@ -80356,8 +80356,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "aws_access_key_id": "root"
@@ -80380,8 +80380,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80437,8 +80437,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "enabledb": true
                     },
@@ -80496,8 +80496,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "sid": "ORCL"
@@ -80549,6 +80549,7 @@
                   },
                   "gcp_pubsub": {
                     "value": {
+                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -80560,8 +80561,7 @@
                         "private_key_id": "kid",
                         "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      },
-                      "pubsub_topic": "mytopic"
+                      }
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -80653,8 +80653,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "keyspace": "mqtt"
@@ -80715,8 +80715,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "batch_value_separator": ", "
@@ -80740,8 +80740,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80770,8 +80770,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80803,12 +80803,10 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
-                      "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
                       "topic_mapping": [
                         {
                           "qos": 1,
@@ -80823,8 +80821,10 @@
                           "kafka_topic": "kafka-topic-2"
                         }
                       ],
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "value_encoding_mode": "none",
+                      "key_encoding_mode": "none",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -80841,8 +80841,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -80871,8 +80871,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -81133,8 +81133,8 @@
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Producer Bridge"
                 },
@@ -81153,7 +81153,6 @@
                       "sndbuf": "1024KB",
                       "tcp_keepalive": "none"
                     },
-                    "local_topic": "mqtt/local/topic",
                     "kafka": {
                       "message": {
                         "timestamp": "${.timestamp}",
@@ -81187,9 +81186,10 @@
                       "kafka_headers": "${pub_props}",
                       "partition_strategy": "random"
                     },
+                    "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Bridge"
                 },
@@ -81270,8 +81270,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81315,8 +81315,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81332,14 +81332,14 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                     "partition_key": "key",
-                    "aws_access_key_id": "aws_access_key_id",
-                    "stream_name": "stream_name"
+                    "stream_name": "stream_name",
+                    "aws_access_key_id": "aws_access_key_id"
                   },
                   "summary": "Amazon Kinesis Producer Bridge"
                 },
@@ -81360,9 +81360,9 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -81389,8 +81389,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "payload_template": "",
                     "routing_key": "my_routing_key",
@@ -81414,8 +81414,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "aws_access_key_id": "root"
@@ -81438,8 +81438,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81495,8 +81495,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "enabledb": true
                   },
@@ -81554,8 +81554,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "sid": "ORCL"
@@ -81607,6 +81607,7 @@
                 },
                 "gcp_pubsub": {
                   "value": {
+                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -81618,8 +81619,7 @@
                       "private_key_id": "kid",
                       "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    },
-                    "pubsub_topic": "mytopic"
+                    }
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -81707,8 +81707,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "keyspace": "mqtt"
@@ -81769,8 +81769,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "batch_value_separator": ", "
@@ -81794,8 +81794,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81817,8 +81817,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81841,12 +81841,10 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
                     "topic_mapping": [
                       {
                         "qos": 1,
@@ -81861,8 +81859,10 @@
                         "kafka_topic": "kafka-topic-2"
                       }
                     ],
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "value_encoding_mode": "none",
+                    "key_encoding_mode": "none",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
@@ -81879,8 +81879,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -81902,8 +81902,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -82737,10 +82737,10 @@
                           "key": "topic"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
                       },
-                      "failure_action": "drop",
                       "payload_decoder": {
                         "type": "json"
                       },
@@ -83655,8 +83655,8 @@
               "type": "string",
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "ldap"
@@ -83774,10 +83774,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -84700,8 +84700,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -84877,8 +84877,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -85080,8 +85080,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -85947,10 +85947,10 @@
                       "batch_size": 1,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "0ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "0ms"
                     }
                   },
                   "summary": "Azure Blob Storage Direct Upload Action"
@@ -85968,8 +85968,8 @@
                     "resource_opts": {
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
                       "inflight_window": 100,
+                      "health_check_interval": "30s",
                       "request_ttl": "45s"
                     }
                   },
@@ -86105,10 +86105,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -86398,10 +86398,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -86436,10 +86436,10 @@
                       "batch_size": 100,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "10ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "10ms"
                     }
                   },
                   "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -86528,8 +86528,8 @@
                     "connector": "my_s3_connector",
                     "resource_opts": {
                       "query_mode": "async",
-                      "health_check_interval": "10s",
-                      "inflight_window": 100
+                      "inflight_window": 100,
+                      "health_check_interval": "10s"
                     }
                   },
                   "summary": "S3 Aggregated Upload"
@@ -86603,10 +86603,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -87654,8 +87654,8 @@
                     "type": "string",
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ]
                   }
                 }
@@ -87789,30 +87789,30 @@
                   "types": {
                     "value": [
                       "http",
-                      "cassandra",
                       "rocketmq",
+                      "cassandra",
                       "rabbitmq",
                       "syskeeper_forwarder",
-                      "sqlserver",
+                      "iotdb",
                       "greptimedb",
                       "pulsar",
                       "influxdb",
-                      "azure_event_hub_producer",
-                      "kafka_producer",
                       "confluent_producer",
                       "gcp_pubsub_producer",
+                      "sqlserver",
+                      "azure_event_hub_producer",
                       "mongodb",
-                      "iotdb",
                       "hstreamdb",
-                      "datalayers",
-                      "opents",
+                      "kafka_producer",
                       "s3",
+                      "datalayers",
                       "redis",
                       "kinesis",
+                      "opents",
                       "mqtt",
-                      "timescale",
                       "clickhouse",
                       "oracle",
+                      "timescale",
                       "couchbase",
                       "azure_blob_storage",
                       "tdengine",
@@ -87831,30 +87831,30 @@
                     "type": "string",
                     "enum": [
                       "http",
-                      "cassandra",
                       "rocketmq",
+                      "cassandra",
                       "rabbitmq",
                       "syskeeper_forwarder",
-                      "sqlserver",
+                      "iotdb",
                       "greptimedb",
                       "pulsar",
                       "influxdb",
-                      "azure_event_hub_producer",
-                      "kafka_producer",
                       "confluent_producer",
                       "gcp_pubsub_producer",
+                      "sqlserver",
+                      "azure_event_hub_producer",
                       "mongodb",
-                      "iotdb",
                       "hstreamdb",
-                      "datalayers",
-                      "opents",
+                      "kafka_producer",
                       "s3",
+                      "datalayers",
                       "redis",
                       "kinesis",
+                      "opents",
                       "mqtt",
-                      "timescale",
                       "clickhouse",
                       "oracle",
+                      "timescale",
                       "couchbase",
                       "azure_blob_storage",
                       "tdengine",
@@ -88150,8 +88150,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "local"
@@ -88271,8 +88271,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "local"
@@ -88546,7 +88546,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "206F0F0D014EBAD0"
+            "example": "9A2E3BED4DC90681"
           }
         ],
         "responses": {
@@ -89906,10 +89906,10 @@
                         "batch_size": 1,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "0ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "0ms"
                       }
                     },
                     "summary": "Azure Blob Storage Direct Upload Action"
@@ -89932,8 +89932,8 @@
                       "resource_opts": {
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
                         "inflight_window": 100,
+                        "health_check_interval": "30s",
                         "request_ttl": "45s"
                       }
                     },
@@ -90104,10 +90104,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -90505,10 +90505,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -90548,10 +90548,10 @@
                         "batch_size": 100,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "10ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "10ms"
                       }
                     },
                     "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -90666,8 +90666,8 @@
                       ],
                       "resource_opts": {
                         "query_mode": "async",
-                        "health_check_interval": "10s",
-                        "inflight_window": 100
+                        "inflight_window": 100,
+                        "health_check_interval": "10s"
                       }
                     },
                     "summary": "S3 Aggregated Upload"
@@ -90767,10 +90767,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -91069,10 +91069,10 @@
                         "batch_size": 1,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "0ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "0ms"
                       }
                     },
                     "summary": "Azure Blob Storage Direct Upload Action"
@@ -91095,8 +91095,8 @@
                       "resource_opts": {
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
                         "inflight_window": 100,
+                        "health_check_interval": "30s",
                         "request_ttl": "45s"
                       }
                     },
@@ -91267,10 +91267,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -91668,10 +91668,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -91711,10 +91711,10 @@
                         "batch_size": 100,
                         "worker_pool_size": 16,
                         "query_mode": "sync",
-                        "health_check_interval": "30s",
-                        "batch_time": "10ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "health_check_interval": "30s",
+                        "request_ttl": "45s",
+                        "batch_time": "10ms"
                       }
                     },
                     "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -91829,8 +91829,8 @@
                       ],
                       "resource_opts": {
                         "query_mode": "async",
-                        "health_check_interval": "10s",
-                        "inflight_window": 100
+                        "inflight_window": 100,
+                        "health_check_interval": "10s"
                       }
                     },
                     "summary": "S3 Aggregated Upload"
@@ -91930,10 +91930,10 @@
                       "resource_opts": {
                         "batch_size": 1,
                         "worker_pool_size": 16,
-                        "max_buffer_bytes": "256MB",
-                        "batch_time": "50ms",
                         "inflight_window": 100,
-                        "request_ttl": "45s"
+                        "request_ttl": "45s",
+                        "batch_time": "50ms",
+                        "max_buffer_bytes": "256MB"
                       },
                       "parameters": {
                         "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -92191,10 +92191,10 @@
                       "batch_size": 1,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "0ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "0ms"
                     }
                   },
                   "summary": "Azure Blob Storage Direct Upload Action"
@@ -92210,8 +92210,8 @@
                     "resource_opts": {
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
                       "inflight_window": 100,
+                      "health_check_interval": "30s",
                       "request_ttl": "45s"
                     }
                   },
@@ -92339,10 +92339,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -92600,10 +92600,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -92636,10 +92636,10 @@
                       "batch_size": 100,
                       "worker_pool_size": 16,
                       "query_mode": "sync",
-                      "health_check_interval": "30s",
-                      "batch_time": "10ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "health_check_interval": "30s",
+                      "request_ttl": "45s",
+                      "batch_time": "10ms"
                     }
                   },
                   "summary": "Azure Blob Storage Aggregated Upload Action"
@@ -92718,8 +92718,8 @@
                     },
                     "resource_opts": {
                       "query_mode": "async",
-                      "health_check_interval": "10s",
-                      "inflight_window": 100
+                      "inflight_window": 100,
+                      "health_check_interval": "10s"
                     }
                   },
                   "summary": "S3 Aggregated Upload"
@@ -92787,10 +92787,10 @@
                     "resource_opts": {
                       "batch_size": 1,
                       "worker_pool_size": 16,
-                      "max_buffer_bytes": "256MB",
-                      "batch_time": "50ms",
                       "inflight_window": 100,
-                      "request_ttl": "45s"
+                      "request_ttl": "45s",
+                      "batch_time": "50ms",
+                      "max_buffer_bytes": "256MB"
                     },
                     "parameters": {
                       "sql": "INSERT INTO client_events(clientid, event, created_at)VALUES (\n  ${clientid},\n  ${event},\n  TO_TIMESTAMP((${timestamp} :: bigint))\n)"
@@ -94440,8 +94440,8 @@
                       "my_action"
                     ],
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "iotdb_connector",
@@ -94489,9 +94489,9 @@
                       }
                     ],
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     }
                   },
                   {
@@ -94553,8 +94553,8 @@
                       "my_action"
                     ],
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "my_kafka_producer_connector",
@@ -94583,8 +94583,8 @@
                       "my_action"
                     ],
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "kinesis_connector",
@@ -94833,9 +94833,9 @@
                       }
                     ],
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     },
                     "account_key": "******",
                     "account_name": "my_account_name"
@@ -95049,9 +95049,9 @@
                       "my_action"
                     ],
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "pipelining": 100,
                     "service_account_json": {
@@ -95177,9 +95177,9 @@
                       }
                     ],
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "bootstrap_hosts": "kafka.emqx.net:9092"
                   },
@@ -95595,8 +95595,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                      "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Confluent Connector"
                   },
@@ -95650,9 +95650,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       }
                     },
                     "summary": "Couchbase Connector"
@@ -95720,8 +95720,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Connector"
                   },
@@ -95753,8 +95753,8 @@
                         "my_action"
                       ],
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Connector"
                   },
@@ -96036,9 +96036,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "45s",
                         "start_timeout": "5s",
-                        "health_check_interval": "45s"
+                        "start_after_created": true
                       },
                       "account_key": "******",
                       "account_name": "my_account_name"
@@ -96279,9 +96279,9 @@
                         "my_action"
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "pipelining": 100,
                       "service_account_json": {
@@ -96422,9 +96422,9 @@
                         }
                       ],
                       "resource_opts": {
-                        "start_after_created": true,
+                        "health_check_interval": "30s",
                         "start_timeout": "5s",
-                        "health_check_interval": "30s"
+                        "start_after_created": true
                       },
                       "bootstrap_hosts": "kafka.emqx.net:9092"
                     },
@@ -96837,8 +96837,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092"
+                    "bootstrap_hosts": "xyz.sa-east1.gcp.confluent.cloud:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Confluent Connector"
                 },
@@ -96877,9 +96877,9 @@
                     "password": "******",
                     "username": "admin",
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     }
                   },
                   "summary": "Couchbase Connector"
@@ -96927,8 +96927,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Connector"
                 },
@@ -96950,8 +96950,8 @@
                       "tcp_keepalive": "none"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Connector"
                 },
@@ -97128,9 +97128,9 @@
                     "description": "My connector",
                     "enable": true,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "45s",
                       "start_timeout": "5s",
-                      "health_check_interval": "45s"
+                      "start_after_created": true
                     },
                     "account_key": "******",
                     "account_name": "my_account_name"
@@ -97291,9 +97291,9 @@
                     "enable": true,
                     "max_retries": 2,
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "pipelining": 100,
                     "service_account_json": {
@@ -97392,9 +97392,9 @@
                     "name": "my_connector",
                     "type": "kafka_consumer",
                     "resource_opts": {
-                      "start_after_created": true,
+                      "health_check_interval": "30s",
                       "start_timeout": "5s",
-                      "health_check_interval": "30s"
+                      "start_after_created": true
                     },
                     "bootstrap_hosts": "kafka.emqx.net:9092"
                   },
@@ -97764,10 +97764,10 @@
                           "schema": "my_avro_schema"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using an Avro schema check"
                   },
@@ -97789,10 +97789,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using a SQL check"
                   }
@@ -98299,8 +98299,8 @@
               "type": "string",
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "ldap"
@@ -98314,10 +98314,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -98371,8 +98371,8 @@
               "type": "string",
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "ldap"
@@ -98386,10 +98386,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -98427,10 +98427,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -98462,8 +98462,8 @@
               "type": "string",
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "ldap"
@@ -99710,10 +99710,10 @@
                             "sql": "select payload.temp as t where t > 10"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
-                        },
-                        "failure_action": "drop"
+                        }
                       },
                       {
                         "name": "other_validation",
@@ -99732,10 +99732,10 @@
                             "schema": "my_avro_schema"
                           }
                         ],
+                        "failure_action": "drop",
                         "log_failure": {
                           "level": "info"
-                        },
-                        "failure_action": "drop"
+                        }
                       }
                     ],
                     "summary": "List"
@@ -99794,10 +99794,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Update"
                   }
@@ -99875,10 +99875,10 @@
                         "sql": "select payload.temp as t where t > 10"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Update"
                 }
@@ -99929,10 +99929,10 @@
                           "schema": "my_avro_schema"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using an Avro schema check"
                   },
@@ -99954,10 +99954,10 @@
                           "sql": "select payload.temp as t where t > 10"
                         }
                       ],
+                      "failure_action": "drop",
                       "log_failure": {
                         "level": "info"
-                      },
-                      "failure_action": "drop"
+                      }
                     },
                     "summary": "Using a SQL check"
                   }
@@ -100013,10 +100013,10 @@
                         "schema": "my_avro_schema"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Using an Avro schema check"
                 },
@@ -100038,10 +100038,10 @@
                         "sql": "select payload.temp as t where t > 10"
                       }
                     ],
+                    "failure_action": "drop",
                     "log_failure": {
                       "level": "info"
-                    },
-                    "failure_action": "drop"
+                    }
                   },
                   "summary": "Using a SQL check"
                 }
@@ -103300,9 +103300,9 @@
                       "email": "contact@foo.com",
                       "start_at": "2022-01-11",
                       "expiry": false,
-                      "deployment": "bar-deployment",
                       "customer_type": 10,
                       "customer": "Foo",
+                      "deployment": "bar-deployment",
                       "expiry_at": "2295-10-27"
                     }
                   }
@@ -103344,9 +103344,9 @@
                       "email": "contact@foo.com",
                       "start_at": "2022-01-11",
                       "expiry": false,
-                      "deployment": "bar-deployment",
                       "customer_type": 10,
                       "customer": "Foo",
+                      "deployment": "bar-deployment",
                       "expiry_at": "2295-10-27"
                     }
                   }
@@ -104200,8 +104200,8 @@
                     ],
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "my_kafka_producer_action",
@@ -104226,7 +104226,6 @@
                         "status": "connected"
                       }
                     ],
-                    "local_topic": "mqtt/local/topic",
                     "kafka": {
                       "message": {
                         "timestamp": "${.timestamp}",
@@ -104260,9 +104259,10 @@
                       "kafka_headers": "${pub_props}",
                       "partition_strategy": "random"
                     },
+                    "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "redis_bridge",
@@ -104343,8 +104343,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104384,8 +104384,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104398,14 +104398,14 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                     "partition_key": "key",
-                    "aws_access_key_id": "aws_access_key_id",
-                    "stream_name": "stream_name"
+                    "stream_name": "stream_name",
+                    "aws_access_key_id": "aws_access_key_id"
                   },
                   {
                     "name": "http_example",
@@ -104425,9 +104425,9 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -104451,8 +104451,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "payload_template": "",
                     "routing_key": "my_routing_key",
@@ -104473,8 +104473,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "aws_access_key_id": "root"
@@ -104494,8 +104494,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104542,8 +104542,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "enabledb": true
                   },
@@ -104592,8 +104592,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "sid": "ORCL"
@@ -104636,6 +104636,7 @@
                     "influxdb_type": "influxdb_api_v1"
                   },
                   {
+                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -104647,8 +104648,7 @@
                       "private_key_id": "kid",
                       "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    },
-                    "pubsub_topic": "mytopic"
+                    }
                   },
                   {
                     "name": "redis_bridge",
@@ -104731,8 +104731,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "keyspace": "mqtt"
@@ -104787,8 +104787,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "batch_value_separator": ", "
@@ -104809,8 +104809,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104836,8 +104836,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104866,12 +104866,10 @@
                     ],
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
                     "topic_mapping": [
                       {
                         "qos": 1,
@@ -104886,8 +104884,10 @@
                         "kafka_topic": "kafka-topic-2"
                       }
                     ],
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "value_encoding_mode": "none",
+                    "key_encoding_mode": "none",
+                    "metadata_request_timeout": "4s"
                   },
                   {
                     "name": "foo",
@@ -104901,8 +104901,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -104928,8 +104928,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   }
@@ -105172,8 +105172,8 @@
                       ],
                       "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                      "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Azure Event Hub Producer Bridge"
                   },
@@ -105201,7 +105201,6 @@
                           "status": "connected"
                         }
                       ],
-                      "local_topic": "mqtt/local/topic",
                       "kafka": {
                         "message": {
                           "timestamp": "${.timestamp}",
@@ -105235,9 +105234,10 @@
                         "kafka_headers": "${pub_props}",
                         "partition_strategy": "random"
                       },
+                      "local_topic": "mqtt/local/topic",
                       "min_metadata_refresh_interval": "3s",
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Producer Bridge"
                   },
@@ -105327,8 +105327,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105374,8 +105374,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105391,14 +105391,14 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                       "partition_key": "key",
-                      "aws_access_key_id": "aws_access_key_id",
-                      "stream_name": "stream_name"
+                      "stream_name": "stream_name",
+                      "aws_access_key_id": "aws_access_key_id"
                     },
                     "summary": "Amazon Kinesis Producer Bridge"
                   },
@@ -105421,9 +105421,9 @@
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
+                        "inflight_window": 100,
                         "health_check_interval": 15000,
-                        "max_buffer_bytes": 104857600,
-                        "inflight_window": 100
+                        "max_buffer_bytes": 104857600
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -105450,8 +105450,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "payload_template": "",
                       "routing_key": "my_routing_key",
@@ -105475,8 +105475,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "aws_access_key_id": "root"
@@ -105499,8 +105499,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105556,8 +105556,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "enabledb": true
                     },
@@ -105615,8 +105615,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "sid": "ORCL"
@@ -105668,6 +105668,7 @@
                   },
                   "gcp_pubsub": {
                     "value": {
+                      "pubsub_topic": "mytopic",
                       "service_account_json": {
                         "type": "service_account",
                         "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -105679,8 +105680,7 @@
                         "private_key_id": "kid",
                         "project_id": "myproject",
                         "token_uri": "https://oauth2.googleapis.com/token"
-                      },
-                      "pubsub_topic": "mytopic"
+                      }
                     },
                     "summary": "GCP PubSub Producer Bridge"
                   },
@@ -105772,8 +105772,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "keyspace": "mqtt"
@@ -105834,8 +105834,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#",
                       "batch_value_separator": ", "
@@ -105859,8 +105859,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105889,8 +105889,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105922,12 +105922,10 @@
                       ],
                       "kafka": {
                         "max_batch_bytes": "896KB",
-                        "offset_reset_policy": "latest",
-                        "offset_commit_interval_seconds": 5
+                        "offset_commit_interval_seconds": 5,
+                        "offset_reset_policy": "latest"
                       },
                       "min_metadata_refresh_interval": "3s",
-                      "value_encoding_mode": "none",
-                      "key_encoding_mode": "none",
                       "topic_mapping": [
                         {
                           "qos": 1,
@@ -105942,8 +105940,10 @@
                           "kafka_topic": "kafka-topic-2"
                         }
                       ],
-                      "metadata_request_timeout": "4s",
-                      "bootstrap_hosts": "localhost:9092"
+                      "bootstrap_hosts": "localhost:9092",
+                      "value_encoding_mode": "none",
+                      "key_encoding_mode": "none",
+                      "metadata_request_timeout": "4s"
                     },
                     "summary": "Kafka Consumer Bridge"
                   },
@@ -105960,8 +105960,8 @@
                         "worker_pool_size": 1,
                         "query_mode": "sync",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -105990,8 +105990,8 @@
                         "worker_pool_size": 8,
                         "query_mode": "async",
                         "health_check_interval": "15s",
-                        "max_buffer_bytes": 268435456,
-                        "batch_time": 0
+                        "batch_time": 0,
+                        "max_buffer_bytes": 268435456
                       },
                       "local_topic": "local/topic/#"
                     },
@@ -106230,8 +106230,8 @@
                     },
                     "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093"
+                    "bootstrap_hosts": "namespace.servicebus.windows.net:9093",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Azure Event Hub Producer Bridge"
                 },
@@ -106252,7 +106252,6 @@
                       "sndbuf": "1024KB",
                       "tcp_keepalive": "none"
                     },
-                    "local_topic": "mqtt/local/topic",
                     "kafka": {
                       "message": {
                         "timestamp": "${.timestamp}",
@@ -106286,9 +106285,10 @@
                       "kafka_headers": "${pub_props}",
                       "partition_strategy": "random"
                     },
+                    "local_topic": "mqtt/local/topic",
                     "min_metadata_refresh_interval": "3s",
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Producer Bridge"
                 },
@@ -106371,8 +106371,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -106418,8 +106418,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -106435,14 +106435,14 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "endpoint": "https://kinesis.us-east-1.amazonaws.com",
                     "partition_key": "key",
-                    "aws_access_key_id": "aws_access_key_id",
-                    "stream_name": "stream_name"
+                    "stream_name": "stream_name",
+                    "aws_access_key_id": "aws_access_key_id"
                   },
                   "summary": "Amazon Kinesis Producer Bridge"
                 },
@@ -106465,9 +106465,9 @@
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
+                      "inflight_window": 100,
                       "health_check_interval": 15000,
-                      "max_buffer_bytes": 104857600,
-                      "inflight_window": 100
+                      "max_buffer_bytes": 104857600
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -106494,8 +106494,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "payload_template": "",
                     "routing_key": "my_routing_key",
@@ -106519,8 +106519,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "aws_access_key_id": "root"
@@ -106543,8 +106543,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -106600,8 +106600,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "enabledb": true
                   },
@@ -106659,8 +106659,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "sid": "ORCL"
@@ -106712,6 +106712,7 @@
                 },
                 "gcp_pubsub": {
                   "value": {
+                    "pubsub_topic": "mytopic",
                     "service_account_json": {
                       "type": "service_account",
                       "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQI...",
@@ -106723,8 +106724,7 @@
                       "private_key_id": "kid",
                       "project_id": "myproject",
                       "token_uri": "https://oauth2.googleapis.com/token"
-                    },
-                    "pubsub_topic": "mytopic"
+                    }
                   },
                   "summary": "GCP PubSub Producer Bridge"
                 },
@@ -106816,8 +106816,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "keyspace": "mqtt"
@@ -106878,8 +106878,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#",
                     "batch_value_separator": ", "
@@ -106903,8 +106903,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -106926,8 +106926,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -106952,12 +106952,10 @@
                     },
                     "kafka": {
                       "max_batch_bytes": "896KB",
-                      "offset_reset_policy": "latest",
-                      "offset_commit_interval_seconds": 5
+                      "offset_commit_interval_seconds": 5,
+                      "offset_reset_policy": "latest"
                     },
                     "min_metadata_refresh_interval": "3s",
-                    "value_encoding_mode": "none",
-                    "key_encoding_mode": "none",
                     "topic_mapping": [
                       {
                         "qos": 1,
@@ -106972,8 +106970,10 @@
                         "kafka_topic": "kafka-topic-2"
                       }
                     ],
-                    "metadata_request_timeout": "4s",
-                    "bootstrap_hosts": "localhost:9092"
+                    "bootstrap_hosts": "localhost:9092",
+                    "value_encoding_mode": "none",
+                    "key_encoding_mode": "none",
+                    "metadata_request_timeout": "4s"
                   },
                   "summary": "Kafka Consumer Bridge"
                 },
@@ -106990,8 +106990,8 @@
                       "worker_pool_size": 1,
                       "query_mode": "sync",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -107013,8 +107013,8 @@
                       "worker_pool_size": 8,
                       "query_mode": "async",
                       "health_check_interval": "15s",
-                      "max_buffer_bytes": 268435456,
-                      "batch_time": 0
+                      "batch_time": 0,
+                      "max_buffer_bytes": 268435456
                     },
                     "local_topic": "local/topic/#"
                   },
@@ -107423,8 +107423,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ]
             },
             "example": "local"
