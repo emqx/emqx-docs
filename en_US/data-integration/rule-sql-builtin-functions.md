@@ -640,6 +640,15 @@ Reverse a string. Example:
 reverse('hello') = 'olleh'
 ```
 
+### rm_prefix(String: string, Prefix: string) -> string
+
+Removes the prefix `Prefix` from the string `String`. If `String` does not start with `Prefix`, the original `String` will be returned. Example:
+
+```bash
+rm_prefix('foo/bar', 'foo/') = 'bar'
+rm_prefix('foo/bar', 'xxx/') = 'foo/bar'
+```
+
 ### rtrim(String: string) -> string
 
 Same as `trim/1`, but only removes trailing whitespace characters from the `String`. Example:

@@ -641,6 +641,15 @@ replace('ab..cd..ef', '..', '**', 'trailing') = 'ab..cd**ef'
 reverse('hello') = 'olleh'
 ```
 
+### rm_prefix(String: string, Prefix: string) -> string
+
+从字符串 String 中删除前缀 Prefix。示例：
+
+```bash
+rm_prefix('foo/bar', 'foo/') = 'bar'
+rm_prefix('foo/bar', 'xxx/') = 'foo/bar'
+```
+
 ### rtrim(String: string) -> string
 
 同 `trim/1`，但仅删除字符串 String 中尾随的空白字符。示例：
