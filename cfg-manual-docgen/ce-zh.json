@@ -26,7 +26,7 @@
         },
         "name" : "mqtt",
         "importance" : "medium",
-        "desc" : "全局的 MQTT 配置项。\nmqtt 下所有的配置作为全局的默认值存在，它可以被 <code>zone</code> 中的配置覆盖。",
+        "desc" : "全局的 MQTT 配置项。\nmqtt 下所有的配置作为全局的默认值存在，它可以被 `zone` 中的配置覆盖。",
         "aliases" : [
           
         ]
@@ -42,7 +42,7 @@
         },
         "name" : "zones",
         "importance" : "low",
-        "desc" : "<code>zone</code> 是按<code>name</code> 分组的一组配置。\n对于灵活的配置映射，可以将 <code>name</code> 设置为侦听器的 <code>zone</code> 配置。\n注：名为 <code>default</code> 的内置区域是自动创建的，无法删除。",
+        "desc" : "`zone` 是按`name` 分组的一组配置。\n对于灵活的配置映射，可以将 `name` 设置为侦听器的 `zone` 配置。\n注：名为 `default` 的内置区域是自动创建的，无法删除。",
         "aliases" : [
           
         ]
@@ -118,7 +118,7 @@
         },
         "name" : "authentication",
         "importance" : "low",
-        "desc" : "全局 MQTT 监听器的默认认证配置。 为每个监听器配置认证参考监听器器配置中的<code>authentication</code> 配置。\n\n该配置可以被配置为：\n<ul>\n  <li><code>[]</code>: 默认值，允许所有的登录请求\n  <li>配置为单认证器，例如 <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li>\n  <li>配置为认证器数组</li>\n</ul>\n\n当配置为认证链后，登录凭证会按照配置的顺序进行检查，直到做出<code>allow</code> 或 <code>deny</code>的结果。\n\n如果在所有的认证器都执行完后，还是没有结果，登录将被拒绝。",
+        "desc" : "全局 MQTT 监听器的默认认证配置。 为每个监听器配置认证参考监听器器配置中的`authentication` 配置。\n\n该配置可以被配置为：\n<ul>\n  <li>`[]`: 默认值，允许所有的登录请求\n  <li>配置为单认证器，例如 `{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}`</li>\n  <li>配置为认证器数组</li>\n</ul>\n\n当配置为认证链后，登录凭证会按照配置的顺序进行检查，直到做出`allow` 或 `deny`的结果。\n\n如果在所有的认证器都执行完后，还是没有结果，登录将被拒绝。",
         "aliases" : [
           
         ]
@@ -409,7 +409,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -448,7 +448,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -498,7 +498,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -667,7 +667,7 @@
           "accept" : "application/json"
         },
         "name" : "headers",
-        "desc" : "HTTP Headers 列表 (无 <code>content-type</code>) 。",
+        "desc" : "HTTP Headers 列表 (无 `content-type`) 。",
         "default" : {
           "oneliner" : false,
           "hocon" : "{\n  accept = \"application/json\"\n  \"cache-control\" = \"no-cache\"\n  connection = \"keep-alive\"\n  \"keep-alive\" = \"timeout=30, max=1000\"\n}\n"
@@ -706,7 +706,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -915,7 +915,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -944,7 +944,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>\n- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>\n- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1163,7 +1163,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1192,7 +1192,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>\n- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>\n- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1381,7 +1381,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1410,7 +1410,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>\n- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：<br/>\n- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>\n- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1599,7 +1599,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1754,7 +1754,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1904,7 +1904,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2037,7 +2037,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2197,7 +2197,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此访问控制数据源",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2347,7 +2347,7 @@
             "publish"
           ]
         ],
-        "desc" : "警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.\n<code>log</code> 将告警写入日志 (控制台或者文件).\n<code>publish</code> 将告警作为 MQTT 消息发布到系统主题:\n<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and\n<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
+        "desc" : "警报激活时触发的动作。<br/>目前，支持以下操作：`log` 和 `publish`.\n`log` 将告警写入日志 (控制台或者文件).\n`publish` 将告警作为 MQTT 消息发布到系统主题:\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[log, publish]"
@@ -3234,7 +3234,7 @@
         ],
         "name" : "versions",
         "importance" : "high",
-        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `[\"tlsv1.2\",\"tlsv1.1\"]`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -3255,7 +3255,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -3302,7 +3302,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持<code>dhfile</code>选项。",
+        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持`dhfile`选项。",
         "aliases" : [
           
         ]
@@ -3540,7 +3540,7 @@
         ],
         "name" : "versions",
         "importance" : "high",
-        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `[\"tlsv1.2\",\"tlsv1.1\"]`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -3561,7 +3561,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -3608,7 +3608,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持<code>dhfile</code>选项。",
+        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持`dhfile`选项。",
         "aliases" : [
           
         ]
@@ -3952,7 +3952,7 @@
         },
         "raw_default" : false,
         "name" : "ignore_loop_deliver",
-        "desc" : "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 <code>No Local</code> 选项。",
+        "desc" : "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 `No Local` 选项。",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -3984,7 +3984,7 @@
         },
         "raw_default" : "",
         "name" : "response_information",
-        "desc" : "UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入<code>\"\"</code>；仅适用于 MQTT 5.0 客户端。",
+        "desc" : "UTF-8 字符串，用于指定返回给客户端的响应主题，如 `reqrsp/`，此时请求和应答客户端都需要使用 `reqrsp/` 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入`\"\"`；仅适用于 MQTT 5.0 客户端。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4205,7 +4205,7 @@
         },
         "raw_default" : "disabled",
         "name" : "mqueue_priorities",
-        "desc" : "主题优先级。取值范围 [1-255]\n默认优先级表为空，即所有的主题优先级相同。\n\n注：优先主题名称中不支持使用逗号和等号。\n注：不在此列表中的主题，被视为最高/最低优先级，这取决于<code>mqtt.mqueue_default_priority</code> 的配置\n\n示例：\n配置 <code>\"topic/1\" > \"topic/2\"</code>:\n<code>mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}</code>",
+        "desc" : "主题优先级。取值范围 [1-255]\n默认优先级表为空，即所有的主题优先级相同。\n\n注：优先主题名称中不支持使用逗号和等号。\n注：不在此列表中的主题，被视为最高/最低优先级，这取决于`mqtt.mqueue_default_priority` 的配置\n\n示例：\n配置 `\"topic/1\" > \"topic/2\"`:\n`mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4224,7 +4224,7 @@
         },
         "raw_default" : "lowest",
         "name" : "mqueue_default_priority",
-        "desc" : "默认的主题优先级，不在 <code>主题优先级</code>（<code>mqueue_priorities</code>） 中的主题将会使用该优先级。",
+        "desc" : "默认的主题优先级，不在 `主题优先级`（`mqueue_priorities`） 中的主题将会使用该优先级。",
         "default" : {
           "oneliner" : true,
           "hocon" : "lowest"
@@ -4256,7 +4256,7 @@
         },
         "raw_default" : false,
         "name" : "use_username_as_clientid",
-        "desc" : "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>对端证书作为用户名</code> 和 <code>对端证书作为客户端 ID</code>。",
+        "desc" : "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 `对端证书作为用户名` 和 `对端证书作为客户端 ID`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -4279,7 +4279,7 @@
         },
         "raw_default" : "disabled",
         "name" : "peer_cert_as_username",
-        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 的证书内容\n- <code>pem</code>: 将 <code>DER</code> 证书转换为 <code>PEM</code> 格式作为用户名\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
+        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- `cn`: 取证书的 CN 字段\n- `dn`: 取证书的 DN 字段\n- `crt`: 取 `DER` 或 `PEM` 的证书内容\n- `pem`: 将 `DER` 证书转换为 `PEM` 格式作为用户名\n- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4302,7 +4302,7 @@
         },
         "raw_default" : "disabled",
         "name" : "peer_cert_as_clientid",
-        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
+        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- `cn`: 取证书的 CN 字段\n- `dn`: 取证书的 DN 字段\n- `crt`: 取 `DER` 或 `PEM` 证书的内容\n- `pem`: 将 `DER` 证书内容转换为 `PEM` 格式作为客户端 ID\n- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4312,7 +4312,7 @@
         ]
       }
     ],
-    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin <code>zone</code> configs"
+    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin `zone` configs"
   },
   {
     "tags" : [
@@ -4359,7 +4359,7 @@
           "TLS_CHACHA20_POLY1305_SHA256"
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/>\n\n注：QUIC 监听器不支持 tlsv1.3 的 ciphers",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件，`tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`<br/>\n\n注：QUIC 监听器不支持 tlsv1.3 的 ciphers",
         "default" : {
           "oneliner" : true,
           "hocon" : "[\"TLS_AES_256_GCM_SHA384\", \"TLS_AES_128_GCM_SHA256\", \"TLS_CHACHA20_POLY1305_SHA256\"]"
@@ -4516,7 +4516,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为<code>\"\"</code> 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- <code>${clientid}</code>: clientid\n- <code>${username}</code>: username",
+        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 `listeners.tcp.\\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为`\"\"` 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- `${clientid}`: clientid\n- `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4563,7 +4563,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+        "desc" : "配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -4673,7 +4673,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为<code>\"\"</code> 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- <code>${clientid}</code>: clientid\n- <code>${username}</code>: username",
+        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 `listeners.tcp.\\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为`\"\"` 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- `${clientid}`: clientid\n- `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4720,7 +4720,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+        "desc" : "配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -4903,7 +4903,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为<code>\"\"</code> 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- <code>${clientid}</code>: clientid\n- <code>${username}</code>: username",
+        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 `listeners.tcp.\\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为`\"\"` 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- `${clientid}`: clientid\n- `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4950,7 +4950,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+        "desc" : "配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5123,7 +5123,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为<code>\"\"</code> 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- <code>${clientid}</code>: clientid\n- <code>${username}</code>: username",
+        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 `listeners.tcp.\\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为`\"\"` 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- `${clientid}`: clientid\n- `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -5170,7 +5170,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+        "desc" : "配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5353,7 +5353,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 <code>listeners.tcp.\\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为<code>\"\"</code> 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- <code>${clientid}</code>: clientid\n- <code>${username}</code>: username",
+        "desc" : "发布或订阅时，请在所有主题前面加上 mountpoint 字符串。\n\n将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。\n\n例如，如果客户机 A 使用 `listeners.tcp.\\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>\n类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>\n\n设置为`\"\"` 以禁用该功能<br/>\n\nmountpoint 字符串中的变量：\n- `${clientid}`: clientid\n- `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -5400,7 +5400,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
+        "desc" : "配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。\n配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。\n配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名\n客户直接拒绝，不做使用任何认证器对客户端进行身份检查。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5704,7 +5704,7 @@
         ],
         "name" : "versions",
         "importance" : "high",
-        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `[\"tlsv1.2\",\"tlsv1.1\"]`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -5725,7 +5725,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -5800,7 +5800,7 @@
         "examples" : [
           "disable"
         ],
-        "desc" : "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>\n例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，\n例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>\n如果未指定，它将默认为使用的主机名字符串\n建立连接，除非使用 IP 地址<br/>\n然后，主机名也用于对等机的主机名验证证书<br/>\n特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
+        "desc" : "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>\n例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，\n例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>\n如果未指定，它将默认为使用的主机名字符串\n建立连接，除非使用 IP 地址<br/>\n然后，主机名也用于对等机的主机名验证证书<br/>\n特殊值 `disable` 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
         "aliases" : [
           
         ]
@@ -6103,7 +6103,7 @@
         },
         "raw_default" : "disabled",
         "name" : "long_gc",
-        "desc" : "当系统检测到某个 Erlang 进程垃圾回收占用过长时间，会触发一条带有 <code>long_gc</code> 关键字的日志。\n同时还会发布一条主题为 <code>$SYS/sysmon/long_gc</code> 的 MQTT 系统消息。",
+        "desc" : "当系统检测到某个 Erlang 进程垃圾回收占用过长时间，会触发一条带有 `long_gc` 关键字的日志。\n同时还会发布一条主题为 `$SYS/sysmon/long_gc` 的 MQTT 系统消息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -6128,7 +6128,7 @@
         },
         "raw_default" : "240ms",
         "name" : "long_schedule",
-        "desc" : "启用后，如果 Erlang VM 调度器出现某个任务占用时间过长时，会触发一条带有 'long_schedule' 关键字的日志。\n同时还会发布一条主题为 <code>$SYS/sysmon/long_schedule</code> 的 MQTT 系统消息。",
+        "desc" : "启用后，如果 Erlang VM 调度器出现某个任务占用时间过长时，会触发一条带有 'long_schedule' 关键字的日志。\n同时还会发布一条主题为 `$SYS/sysmon/long_schedule` 的 MQTT 系统消息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"240ms\""
@@ -6153,7 +6153,7 @@
         },
         "raw_default" : "32MB",
         "name" : "large_heap",
-        "desc" : "启用后，当一个 Erlang 进程申请了大量内存，系统会触发一条带有 <code>large_heap</code> 关键字的\nwarning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。",
+        "desc" : "启用后，当一个 Erlang 进程申请了大量内存，系统会触发一条带有 `large_heap` 关键字的\nwarning 级别日志。同时还会发布一条主题为 `$SYS/sysmon/busy_dist_port` 的 MQTT 系统消息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"32MB\""
@@ -6169,7 +6169,7 @@
         },
         "raw_default" : true,
         "name" : "busy_dist_port",
-        "desc" : "启用后，当用于集群接点之间 RPC 的连接过忙时，会触发一条带有 <code>busy_dist_port</code> 关键字的 warning 级别日志。\n同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。",
+        "desc" : "启用后，当用于集群接点之间 RPC 的连接过忙时，会触发一条带有 `busy_dist_port` 关键字的 warning 级别日志。\n同时还会发布一条主题为 `$SYS/sysmon/busy_dist_port` 的 MQTT 系统消息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6185,7 +6185,7 @@
         },
         "raw_default" : true,
         "name" : "busy_port",
-        "desc" : "当一个系统接口（例如 TCP socket）过忙，会触发一条带有 <code>busy_port</code> 关键字的 warning 级别的日志。\n同时还会发布一条主题为 <code>$SYS/sysmon/busy_port</code> 的 MQTT 系统消息。",
+        "desc" : "当一个系统接口（例如 TCP socket）过忙，会触发一条带有 `busy_port` 关键字的 warning 级别的日志。\n同时还会发布一条主题为 `$SYS/sysmon/busy_port` 的 MQTT 系统消息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6388,7 +6388,7 @@
         },
         "raw_default" : "/mqtt",
         "name" : "mqtt_path",
-        "desc" : "WebSocket 的 MQTT 协议路径。因此，EMQX Broker的WebSocket地址为：\n<code>ws://{ip}:{port}/mqtt</code>",
+        "desc" : "WebSocket 的 MQTT 协议路径。因此，EMQX Broker的WebSocket地址为：\n`ws://{ip}:{port}/mqtt`",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"/mqtt\""
@@ -6423,7 +6423,7 @@
         },
         "raw_default" : false,
         "name" : "compress",
-        "desc" : "如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息<br/>\n<code>deflate_opts</code> 下的配置项属于压缩相关参数配置。",
+        "desc" : "如果 `true`，则使用`zlib` 压缩 WebSocket 消息<br/>\n`deflate_opts` 下的配置项属于压缩相关参数配置。",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -6480,7 +6480,7 @@
         },
         "raw_default" : true,
         "name" : "fail_if_no_subprotocol",
-        "desc" : "如果<code>true</code>，当客户端未携带<code>Sec WebSocket Protocol</code>字段时，服务器将返回一个错误。\n<br/>注意：微信小程序需要禁用此验证。",
+        "desc" : "如果`true`，当客户端未携带`Sec WebSocket Protocol`字段时，服务器将返回一个错误。\n<br/>注意：微信小程序需要禁用此验证。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6512,7 +6512,7 @@
         },
         "raw_default" : false,
         "name" : "check_origin_enable",
-        "desc" : "如果<code>true</code>，<code>origin</code>HTTP 头将根据<code>check_origins</code>参数中配置的允许来源列表进行验证。",
+        "desc" : "如果`true`，`origin`HTTP 头将根据`check_origins`参数中配置的允许来源列表进行验证。",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -6528,7 +6528,7 @@
         },
         "raw_default" : true,
         "name" : "allow_origin_absence",
-        "desc" : "If <code>false</code> and <code>check_origin_enable</code> is <code>true</code>, the server will reject requests that don't have <code>origin</code> HTTP header.",
+        "desc" : "If `false` and `check_origin_enable` is `true`, the server will reject requests that don't have `origin` HTTP header.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6638,7 +6638,7 @@
         ]
       }
     ],
-    "desc" : "A `Zone` defines a set of configuration items (such as the maximum number of connections) that can be shared between multiple listeners.\n\n`Listener` can refer to a `Zone` through the configuration item <code>listener.\\<Protocol>.\\<Listener Name>.zone</code>.\n\nThe configs defined in the zones will override the global configs with the same key.\n\nFor example, given the following config:\n```\na {\n    b: 1, c: 1\n}\nzone.my_zone {\n  a {\n    b:2\n  }\n}\n```\n\nThe global config `a` is overridden by the configs `a` inside the zone `my_zone`.\n\nIf there is a listener using the zone `my_zone`, the value of config `a` will be: `{b:2, c: 1}`.\nNote that although the default value of `a.c` is `0`, the global value is used, i.e. configs in the zone have no default values. To override `a.c` one must configure it explicitly in the zone.\n\nAll the global configs that can be overridden in zones are:\n - `stats.*`\n - `mqtt.*`\n - `authorization.*`\n - `flapping_detect.*`\n - `force_shutdown.*`\n - `conn_congestion.*`\n - `force_gc.*`\n\n"
+    "desc" : "A `Zone` defines a set of configuration items (such as the maximum number of connections) that can be shared between multiple listeners.\n\n`Listener` can refer to a `Zone` through the configuration item `listener.\\<Protocol>.\\<Listener Name>.zone`.\n\nThe configs defined in the zones will override the global configs with the same key.\n\nFor example, given the following config:\n```\na {\n    b: 1, c: 1\n}\nzone.my_zone {\n  a {\n    b:2\n  }\n}\n```\n\nThe global config `a` is overridden by the configs `a` inside the zone `my_zone`.\n\nIf there is a listener using the zone `my_zone`, the value of config `a` will be: `{b:2, c: 1}`.\nNote that although the default value of `a.c` is `0`, the global value is used, i.e. configs in the zone have no default values. To override `a.c` one must configure it explicitly in the zone.\n\nAll the global configs that can be overridden in zones are:\n - `stats.*`\n - `mqtt.*`\n - `authorization.*`\n - `flapping_detect.*`\n - `force_shutdown.*`\n - `conn_congestion.*`\n - `force_gc.*`\n\n"
   },
   {
     "tags" : [
@@ -7156,7 +7156,7 @@
         ],
         "name" : "versions",
         "importance" : "high",
-        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `[\"tlsv1.2\",\"tlsv1.1\"]`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -7177,7 +7177,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -7224,7 +7224,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持<code>dhfile</code>选项。",
+        "desc" : "如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>\n注意：TLS 1.3不支持`dhfile`选项。",
         "aliases" : [
           
         ]
@@ -7702,7 +7702,7 @@
         ],
         "name" : "versions",
         "importance" : "high",
-        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>[\"tlsv1.2\",\"tlsv1.1\"]</code>。",
+        "desc" : "支持所有TLS/DTLS版本<br/>\n注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `[\"tlsv1.2\",\"tlsv1.1\"]`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -7723,7 +7723,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code>或\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。\n\n<br/>\nPSK 密码套件：\n<code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"`或\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`。\n<br/>\n密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。\n选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。\n\n名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。\nEMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>\n注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。\n不兼容的密码套件将被自动删除。\n\n例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。\n\n<br/>\n注：PSK 的 Ciphers 不支持 tlsv1.3<br/>\n如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。\n\n<br/>\nPSK 密码套件：\n`\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -7798,7 +7798,7 @@
         "examples" : [
           "disable"
         ],
-        "desc" : "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>\n例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，\n例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>\n如果未指定，它将默认为使用的主机名字符串\n建立连接，除非使用 IP 地址<br/>\n然后，主机名也用于对等机的主机名验证证书<br/>\n特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
+        "desc" : "指定要在 TLS 服务器名称指示扩展中使用的主机名。<br/>\n例如，当连接到 \"server.example.net\" 时，接受连接并执行 TLS 握手的真正服务器可能与 TLS 客户端最初连接到的主机不同，\n例如，当连接到 IP 地址时，或者当主机具有多个可解析的 DNS 记录时<br/>\n如果未指定，它将默认为使用的主机名字符串\n建立连接，除非使用 IP 地址<br/>\n然后，主机名也用于对等机的主机名验证证书<br/>\n特殊值 `disable` 阻止发送服务器名称指示扩展，并禁用主机名验证检查。",
         "aliases" : [
           
         ]
@@ -8214,7 +8214,7 @@
         "examples" : [
           "${pub_props.'User-Property'}"
         ],
-        "desc" : "指定使用哪个变量来填充 MQTT 消息的 User-Property 列表。这个变量的值必须是一个 map 类型。\n可以设置成 <code>${pub_props.'User-Property'}</code> 或者\n使用 <code>SELECT *,pub_props.'User-Property' as user_properties</code> 来把源 MQTT 消息\n的 User-Property 列表用于填充。\n也可以使用 <code>map_put</code> 函数来添加新的 User-Property，\n<code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code>\n注意：MQTT 协议允许一个消息中出现多次同一个 property 名，但是 EMQX 的规则引擎不允许。",
+        "desc" : "指定使用哪个变量来填充 MQTT 消息的 User-Property 列表。这个变量的值必须是一个 map 类型。\n可以设置成 `${pub_props.'User-Property'}` 或者\n使用 `SELECT *,pub_props.'User-Property' as user_properties` 来把源 MQTT 消息\n的 User-Property 列表用于填充。\n也可以使用 `map_put` 函数来添加新的 User-Property，\n`map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties`\n注意：MQTT 协议允许一个消息中出现多次同一个 property 名，但是 EMQX 的规则引擎不允许。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${user_properties}\""
@@ -8224,7 +8224,7 @@
         ]
       }
     ],
-    "desc" : "内置 'republish' 动作的参数。\n可以在参数中使用变量。\n变量是规则中选择的字段。 例如规则 SQL 定义如下：\n<code>\n    SELECT clientid, qos, payload FROM \"t/1\"\n</code>\n然后有 3 个变量可用：<code>clientid</code>、<code>qos</code> 和 <code>payload</code>。 如果我们将参数设置为：\n<code>\n    {\n        topic = \"t/${clientid}\"\n        qos = \"${qos}\"\n        payload = \"msg: ${payload}\"\n    }\n</code>\n当收到一条消息 payload = `hello`, qos = 1, clientid = `Steve` 时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`\n消息内容为 payload = `msg: hello`, and `qos = 1"
+    "desc" : "内置 'republish' 动作的参数。\n可以在参数中使用变量。\n变量是规则中选择的字段。 例如规则 SQL 定义如下：\n`\n    SELECT clientid, qos, payload FROM \"t/1\"\n`\n然后有 3 个变量可用：`clientid`、`qos` 和 `payload`。 如果我们将参数设置为：\n`\n    {\n        topic = \"t/${clientid}\"\n        qos = \"${qos}\"\n        payload = \"msg: ${payload}\"\n    }\n`\n当收到一条消息 payload = `hello`, qos = 1, clientid = `Steve` 时，将重新发布一条新的 MQTT 消息到主题 `t/Steve`\n消息内容为 payload = `msg: hello`, and `qos = 1"
   },
   {
     "tags" : [
@@ -8380,7 +8380,7 @@
             49
           ]
         ],
-        "desc" : "用于处理消息的 SQL 。\n示例：<code>SELECT * FROM \"test/topic\" WHERE payload.x = 1</code>",
+        "desc" : "用于处理消息的 SQL 。\n示例：`SELECT * FROM \"test/topic\" WHERE payload.x = 1`",
         "aliases" : [
           
         ]
@@ -8538,7 +8538,7 @@
             110
           ]
         ],
-        "desc" : "用户提供的函数。 格式应为：'{module}:{function}'。\n其中 {module} 是 Erlang 回调模块， {function} 是 Erlang 函数。\n要编写自己的函数，请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和<code>republish</code> 。",
+        "desc" : "用户提供的函数。 格式应为：'{module}:{function}'。\n其中 {module} 是 Erlang 回调模块， {function} 是 Erlang 函数。\n要编写自己的函数，请检查源文件：`apps/emqx_rule_engine/src/emqx_rule_actions.erl` 中的示例函数 `console` 和`republish` 。",
         "aliases" : [
           
         ]
@@ -8552,7 +8552,7 @@
           
         },
         "name" : "args",
-        "desc" : "用户提供的参数将作为函数 module:function/3 的第三个参数，\n请检查源文件：<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> 中的示例函数 <code>console</code> 和<code>republish</code> 。",
+        "desc" : "用户提供的参数将作为函数 module:function/3 的第三个参数，\n请检查源文件：`apps/emqx_rule_engine/src/emqx_rule_actions.erl` 中的示例函数 `console` 和`republish` 。",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -8580,7 +8580,7 @@
         },
         "raw_default" : "localhost",
         "name" : "name",
-        "desc" : "指定 DNS A 记录的名字。emqx 会通过访问这个 DNS A 记录来获取 IP 地址列表。\n当<code>cluster.discovery_strategy</code> 为 <code>dns</code> 时有效。",
+        "desc" : "指定 DNS A 记录的名字。emqx 会通过访问这个 DNS A 记录来获取 IP 地址列表。\n当`cluster.discovery_strategy` 为 `dns` 时有效。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"localhost\""
@@ -8729,7 +8729,7 @@
         },
         "raw_default" : "ip",
         "name" : "address_type",
-        "desc" : "当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。\n指定 <code>cluster.k8s.address_type</code> 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点\n的IP地址。",
+        "desc" : "当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。\n指定 `cluster.k8s.address_type` 为 `ip`，则将从 Kubernetes 接口中获取集群中其他节点\n的IP地址。",
         "default" : {
           "oneliner" : true,
           "hocon" : "ip"
@@ -9134,7 +9134,7 @@
         },
         "raw_default" : "manual",
         "name" : "discovery_strategy",
-        "desc" : "集群节点发现方式。可选值为:\n- manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br/>\n- static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br/>\n- dns: 使用 DNS A 记录的方式发现节点。<br/>\n- etcd: 使用 etcd 发现节点。<br/>\n- k8s: 使用 Kubernetes API 发现节点。",
+        "desc" : "集群节点发现方式。可选值为:\n- manual: 使用 `emqx ctl cluster` 命令管理集群。<br/>\n- static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br/>\n- dns: 使用 DNS A 记录的方式发现节点。<br/>\n- etcd: 使用 etcd 发现节点。<br/>\n- k8s: 使用 Kubernetes API 发现节点。",
         "default" : {
           "oneliner" : true,
           "hocon" : "manual"
@@ -9164,7 +9164,7 @@
           
         ],
         "name" : "core_nodes",
-        "desc" : "当前节点连接的核心节点列表。<br/>\n注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>\n并且设置<code>role</code>为<code>replicant</code>时生效。<br/>\n该值需要在手动或静态集群发现机制下设置。<br/>\n如果使用了自动集群发现机制（如<code>etcd</code>），则不需要设置该值。",
+        "desc" : "当前节点连接的核心节点列表。<br/>\n注意：该参数仅在设置`backend`时生效到 `rlog`\n并且设置`role`为`replicant`时生效。<br/>\n该值需要在手动或静态集群发现机制下设置。<br/>\n如果使用了自动集群发现机制（如`etcd`），则不需要设置该值。",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -9216,7 +9216,7 @@
         },
         "raw_default" : "inet_tcp",
         "name" : "proto_dist",
-        "desc" : "分布式 Erlang 集群协议类型。可选值为:<br/>\n- inet_tcp: 使用 IPv4 <br/>\n- inet_tls: 使用 TLS，需要配合 <code>etc/ssl_dist.conf</code> 一起使用。",
+        "desc" : "分布式 Erlang 集群协议类型。可选值为:<br/>\n- inet_tcp: 使用 IPv4 <br/>\n- inet_tls: 使用 TLS，需要配合 `etc/ssl_dist.conf` 一起使用。",
         "default" : {
           "oneliner" : true,
           "hocon" : "inet_tcp"
@@ -9326,7 +9326,7 @@
         },
         "raw_default" : "system",
         "name" : "time_offset",
-        "desc" : "日志中的时间戳使用的时间偏移量。\n可选值为：\n  - <code>system</code>: 本地系统使用的时区偏移量\n  - <code>utc</code>: 0 时区的偏移量\n  - <code>+-[hh]:[mm]</code>: 自定义偏移量，比如 \"-02:00\" 或者 \"+00:00\"\n默认值为本地系统的时区偏移量：<code>system</code>。",
+        "desc" : "日志中的时间戳使用的时间偏移量。\n可选值为：\n  - `system`: 本地系统使用的时区偏移量\n  - `utc`: 0 时区的偏移量\n  - `+-[hh]:[mm]`: 自定义偏移量，比如 \"-02:00\" 或者 \"+00:00\"\n默认值为本地系统的时区偏移量：`system`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"system\""
@@ -9370,7 +9370,7 @@
         },
         "raw_default" : "text",
         "name" : "formatter",
-        "desc" : "选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。",
+        "desc" : "选择日志格式类型。 `text` 用于纯文本，`json` 用于结构化日志记录。",
         "default" : {
           "oneliner" : true,
           "hocon" : "text"
@@ -9418,7 +9418,7 @@
         },
         "raw_default" : 3000,
         "name" : "drop_mode_qlen",
-        "desc" : "当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。\n为了使过载保护算法正常工作必须要：<code> sync_mode_qlen =< drop_mode_qlen =< flush_qlen </code> 且 drop_mode_qlen > 1\n要禁用某些模式，请执行以下操作。\n- 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。\n- 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。\n- 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。",
+        "desc" : "当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。\n为了使过载保护算法正常工作必须要：` sync_mode_qlen =< drop_mode_qlen =< flush_qlen ` 且 drop_mode_qlen > 1\n要禁用某些模式，请执行以下操作。\n- 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。\n- 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。\n- 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。",
         "default" : {
           "oneliner" : true,
           "hocon" : "3000"
@@ -9473,7 +9473,7 @@
         },
         "raw_default" : "error",
         "name" : "supervisor_reports",
-        "desc" : "Supervisor 报告的类型。默认为 error 类型。<br/>\n  - <code>error</code>：仅记录 Erlang 进程中的错误。\n  - <code>progress</code>：除了 error 信息外，还需要记录进程启动的详细信息。",
+        "desc" : "Supervisor 报告的类型。默认为 error 类型。<br/>\n  - `error`：仅记录 Erlang 进程中的错误。\n  - `progress`：除了 error 信息外，还需要记录进程启动的详细信息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "error"
@@ -9596,7 +9596,7 @@
         },
         "raw_default" : "1s",
         "name" : "window_time",
-        "desc" : "参考 <code>max_count</code>。",
+        "desc" : "参考 `max_count`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"1s\""
@@ -9702,7 +9702,7 @@
         },
         "raw_default" : "system",
         "name" : "time_offset",
-        "desc" : "日志中的时间戳使用的时间偏移量。\n可选值为：\n  - <code>system</code>: 本地系统使用的时区偏移量\n  - <code>utc</code>: 0 时区的偏移量\n  - <code>+-[hh]:[mm]</code>: 自定义偏移量，比如 \"-02:00\" 或者 \"+00:00\"\n默认值为本地系统的时区偏移量：<code>system</code>。",
+        "desc" : "日志中的时间戳使用的时间偏移量。\n可选值为：\n  - `system`: 本地系统使用的时区偏移量\n  - `utc`: 0 时区的偏移量\n  - `+-[hh]:[mm]`: 自定义偏移量，比如 \"-02:00\" 或者 \"+00:00\"\n默认值为本地系统的时区偏移量：`system`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"system\""
@@ -9746,7 +9746,7 @@
         },
         "raw_default" : "text",
         "name" : "formatter",
-        "desc" : "选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。",
+        "desc" : "选择日志格式类型。 `text` 用于纯文本，`json` 用于结构化日志记录。",
         "default" : {
           "oneliner" : true,
           "hocon" : "text"
@@ -9794,7 +9794,7 @@
         },
         "raw_default" : 3000,
         "name" : "drop_mode_qlen",
-        "desc" : "当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。\n为了使过载保护算法正常工作必须要：<code> sync_mode_qlen =< drop_mode_qlen =< flush_qlen </code> 且 drop_mode_qlen > 1\n要禁用某些模式，请执行以下操作。\n- 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。\n- 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。\n- 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。",
+        "desc" : "当缓冲的日志事件数大于此值时，新的日志事件将被丢弃。起到过载保护的功能。\n为了使过载保护算法正常工作必须要：` sync_mode_qlen =< drop_mode_qlen =< flush_qlen ` 且 drop_mode_qlen > 1\n要禁用某些模式，请执行以下操作。\n- 如果sync_mode_qlen被设置为0，所有的日志事件都被同步处理。也就是说，异步日志被禁用。\n- 如果sync_mode_qlen被设置为与drop_mode_qlen相同的值，同步模式被禁用。也就是说，处理程序总是以异步模式运行，除非调用drop或flushing。\n- 如果drop_mode_qlen被设置为与flush_qlen相同的值，则drop模式被禁用，永远不会发生。",
         "default" : {
           "oneliner" : true,
           "hocon" : "3000"
@@ -9849,7 +9849,7 @@
         },
         "raw_default" : "error",
         "name" : "supervisor_reports",
-        "desc" : "Supervisor 报告的类型。默认为 error 类型。<br/>\n  - <code>error</code>：仅记录 Erlang 进程中的错误。\n  - <code>progress</code>：除了 error 信息外，还需要记录进程启动的详细信息。",
+        "desc" : "Supervisor 报告的类型。默认为 error 类型。<br/>\n  - `error`：仅记录 Erlang 进程中的错误。\n  - `progress`：除了 error 信息外，还需要记录进程启动的详细信息。",
         "default" : {
           "oneliner" : true,
           "hocon" : "error"
@@ -9960,7 +9960,7 @@
         },
         "raw_default" : "5s",
         "name" : "restart_after",
-        "desc" : "处理进程停止后，会在该延迟时间后自动重新启动。除非该值设置为 <code>infinity</code>，这会阻止任何后续的重启。",
+        "desc" : "处理进程停止后，会在该延迟时间后自动重新启动。除非该值设置为 `infinity`，这会阻止任何后续的重启。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"5s\""
@@ -9988,7 +9988,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。\n系统会默认生成<code>*.siz/*.idx</code>用于记录日志位置，请不要手动修改这两个文件。",
+        "desc" : "启用日志轮换功能。启动后生成日志文件后缀会加上对应的索引数字，比如：log/emqx.log.1。\n系统会默认生成`*.siz/*.idx`用于记录日志位置，请不要手动修改这两个文件。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -10122,7 +10122,7 @@
         "raw_default" : "15m",
         "name" : "global_gc_interval",
         "importance" : "low",
-        "desc" : "系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。禁用设置为 <code>disabled</code>。",
+        "desc" : "系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。禁用设置为 `disabled`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"15m\""
@@ -10142,7 +10142,7 @@
         "raw_default" : "core",
         "name" : "role",
         "importance" : "high",
-        "desc" : "选择节点的角色。<br/>\n<code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>\n<code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>\n建议复制节点多于核心节点。<br/>\n注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>。",
+        "desc" : "选择节点的角色。<br/>\n`core` 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>\n`repliant` 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>\n建议复制节点多于核心节点。<br/>\n注意：该参数仅在设置`backend`时生效到 `rlog`。",
         "default" : {
           "oneliner" : true,
           "hocon" : "core"
@@ -10173,7 +10173,7 @@
         },
         "raw_default" : "async",
         "name" : "mode",
-        "desc" : "在 <code>sync</code> 模式下，发送端等待接收端的 ack信号。",
+        "desc" : "在 `sync` 模式下，发送端等待接收端的 ack信号。",
         "default" : {
           "oneliner" : true,
           "hocon" : "async"
@@ -10227,7 +10227,7 @@
         },
         "raw_default" : "stateless",
         "name" : "port_discovery",
-        "desc" : "<code>manual</code>: 通过 <code>tcp_server_port</code> 来发现端口。\n<br/><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>\nemqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。",
+        "desc" : "`manual`: 通过 `tcp_server_port` 来发现端口。\n<br/>`stateless`: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 `\nemqxN@127.0.0.1`, N 是一个数字，那么监听端口就是 5370 + N。",
         "default" : {
           "oneliner" : true,
           "hocon" : "stateless"
@@ -10259,7 +10259,7 @@
         },
         "raw_default" : 5369,
         "name" : "ssl_server_port",
-        "desc" : "RPC 本地服务使用的监听SSL端口。<br/>\n只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，\n此配置才会生效。",
+        "desc" : "RPC 本地服务使用的监听SSL端口。<br/>\n只有当 rpc.port_discovery 设置为 manual 且 ` dirver ` 设置为 `ssl`，\n此配置才会生效。",
         "default" : {
           "oneliner" : true,
           "hocon" : "5369"
@@ -10306,7 +10306,7 @@
           "kind" : "primitive"
         },
         "name" : "certfile",
-        "desc" : "TLS 证书文件的路径，用于验证集群节点的身份。\n只有当 <code>rpc.driver</code> 设置为 <code>ssl</code> 时，此配置才会生效。",
+        "desc" : "TLS 证书文件的路径，用于验证集群节点的身份。\n只有当 `rpc.driver` 设置为 `ssl` 时，此配置才会生效。",
         "aliases" : [
           
         ]
@@ -10317,7 +10317,7 @@
           "kind" : "primitive"
         },
         "name" : "keyfile",
-        "desc" : "<code>rpc.certfile</code> 的私钥文件的路径。<br/>\n注意：此文件内容是私钥，所以需要设置权限为 600。",
+        "desc" : "`rpc.certfile` 的私钥文件的路径。<br/>\n注意：此文件内容是私钥，所以需要设置权限为 600。",
         "aliases" : [
           
         ]
@@ -10328,7 +10328,7 @@
           "kind" : "primitive"
         },
         "name" : "cacertfile",
-        "desc" : "验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。<br/>\n注意：集群中所有节点的证书必须使用同一个 CA 签发。",
+        "desc" : "验证 `rpc.certfile` 的 CA 证书文件的路径。<br/>\n注意：集群中所有节点的证书必须使用同一个 CA 签发。",
         "aliases" : [
           
         ]
@@ -10494,7 +10494,7 @@
         ]
       }
     ],
-    "desc" : "EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>\n大多数情况下，默认的配置应该可以工作，但如果你需要做一些性能优化或者实验，可以尝试调整这些参数。"
+    "desc" : "EMQX 使用 `gen_rpc` 库来实现跨节点通信。<br/>\n大多数情况下，默认的配置应该可以工作，但如果你需要做一些性能优化或者实验，可以尝试调整这些参数。"
   },
   {
     "tags" : [
@@ -10869,7 +10869,7 @@
           "kind" : "primitive"
         },
         "name" : "ignore_loop_deliver",
-        "desc" : "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 <code>No Local</code> 选项。",
+        "desc" : "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 `No Local` 选项。",
         "aliases" : [
           
         ]
@@ -10891,7 +10891,7 @@
           "kind" : "primitive"
         },
         "name" : "response_information",
-        "desc" : "UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入<code>\"\"</code>；仅适用于 MQTT 5.0 客户端。",
+        "desc" : "UTF-8 字符串，用于指定返回给客户端的响应主题，如 `reqrsp/`，此时请求和应答客户端都需要使用 `reqrsp/` 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入`\"\"`；仅适用于 MQTT 5.0 客户端。",
         "aliases" : [
           
         ]
@@ -11057,7 +11057,7 @@
           "kind" : "union"
         },
         "name" : "mqueue_priorities",
-        "desc" : "主题优先级。取值范围 [1-255]\n默认优先级表为空，即所有的主题优先级相同。\n\n注：优先主题名称中不支持使用逗号和等号。\n注：不在此列表中的主题，被视为最高/最低优先级，这取决于<code>mqtt.mqueue_default_priority</code> 的配置\n\n示例：\n配置 <code>\"topic/1\" > \"topic/2\"</code>:\n<code>mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}</code>",
+        "desc" : "主题优先级。取值范围 [1-255]\n默认优先级表为空，即所有的主题优先级相同。\n\n注：优先主题名称中不支持使用逗号和等号。\n注：不在此列表中的主题，被视为最高/最低优先级，这取决于`mqtt.mqueue_default_priority` 的配置\n\n示例：\n配置 `\"topic/1\" > \"topic/2\"`:\n`mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}`",
         "aliases" : [
           
         ]
@@ -11071,7 +11071,7 @@
           "kind" : "enum"
         },
         "name" : "mqueue_default_priority",
-        "desc" : "默认的主题优先级，不在 <code>主题优先级</code>（<code>mqueue_priorities</code>） 中的主题将会使用该优先级。",
+        "desc" : "默认的主题优先级，不在 `主题优先级`（`mqueue_priorities`） 中的主题将会使用该优先级。",
         "aliases" : [
           
         ]
@@ -11093,7 +11093,7 @@
           "kind" : "primitive"
         },
         "name" : "use_username_as_clientid",
-        "desc" : "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>对端证书作为用户名</code> 和 <code>对端证书作为客户端 ID</code>。",
+        "desc" : "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 `对端证书作为用户名` 和 `对端证书作为客户端 ID`。",
         "aliases" : [
           
         ]
@@ -11111,7 +11111,7 @@
           "kind" : "enum"
         },
         "name" : "peer_cert_as_username",
-        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 的证书内容\n- <code>pem</code>: 将 <code>DER</code> 证书转换为 <code>PEM</code> 格式作为用户名\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
+        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- `cn`: 取证书的 CN 字段\n- `dn`: 取证书的 DN 字段\n- `crt`: 取 `DER` 或 `PEM` 的证书内容\n- `pem`: 将 `DER` 证书转换为 `PEM` 格式作为用户名\n- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值",
         "aliases" : [
           
         ]
@@ -11129,13 +11129,13 @@
           "kind" : "enum"
         },
         "name" : "peer_cert_as_clientid",
-        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
+        "desc" : "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- `cn`: 取证书的 CN 字段\n- `dn`: 取证书的 DN 字段\n- `crt`: 取 `DER` 或 `PEM` 证书的内容\n- `pem`: 将 `DER` 证书内容转换为 `PEM` 格式作为客户端 ID\n- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值",
         "aliases" : [
           
         ]
       }
     ],
-    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin <code>zone</code> configs"
+    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin `zone` configs"
   },
   {
     "tags" : [
@@ -11169,7 +11169,7 @@
           "accept" : "application/json"
         },
         "name" : "headers",
-        "desc" : "HTTP Headers 列表 (无 <code>content-type</code>) 。",
+        "desc" : "HTTP Headers 列表 (无 `content-type`) 。",
         "default" : {
           "oneliner" : false,
           "hocon" : "{\n  accept = \"application/json\"\n  \"cache-control\" = \"no-cache\"\n  connection = \"keep-alive\"\n  \"keep-alive\" = \"timeout=30, max=1000\"\n}\n"
@@ -11245,7 +11245,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -11465,7 +11465,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -11593,7 +11593,7 @@
           "kind" : "enum"
         },
         "name" : "algorithm",
-        "desc" : "JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。",
+        "desc" : "JWT 签名算法，支持 HMAC (配置为 `hmac-based`）和 RSA、ECDSA (配置为 `public-key`)。",
         "aliases" : [
           
         ]
@@ -11661,7 +11661,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。",
+        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -11696,7 +11696,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -11827,7 +11827,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。",
+        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -11862,7 +11862,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -11891,7 +11891,7 @@
           "kind" : "enum"
         },
         "name" : "algorithm",
-        "desc" : "JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。",
+        "desc" : "JWT 签名算法，支持 HMAC (配置为 `hmac-based`）和 RSA、ECDSA (配置为 `public-key`)。",
         "aliases" : [
           
         ]
@@ -11943,7 +11943,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。",
+        "desc" : "需要验证的自定义声明列表，它是一个名称/值对列表。\n值可以使用以下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符\n认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -11978,7 +11978,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12079,7 +12079,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12142,7 +12142,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -12238,7 +12238,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12481,7 +12481,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -12577,7 +12577,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12790,7 +12790,7 @@
           
         },
         "name" : "filter",
-        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名\n- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符",
+        "desc" : "在查询中定义过滤条件的条件表达式。\n过滤器支持如下占位符：\n- `${username}`: 将在运行时被替换为客户端连接时使用的用户名\n- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -12886,7 +12886,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13145,7 +13145,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13332,7 +13332,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13470,7 +13470,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。",
+        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。",
         "aliases" : [
           
         ]
@@ -13514,7 +13514,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13646,7 +13646,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。",
+        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。",
         "aliases" : [
           
         ]
@@ -13690,7 +13690,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13849,7 +13849,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。",
+        "desc" : "用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。",
         "aliases" : [
           
         ]
@@ -13893,7 +13893,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14077,7 +14077,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。",
+        "desc" : "设为 `true` 或 `false` 以启用或禁用此认证数据源。",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14299,7 +14299,7 @@
           "kind" : "primitive"
         },
         "name" : "init_file",
-        "desc" : "如果设置了初始化文件，EMQX 将在启动时从初始化文件中导入 PSK 信息到内建数据库中。\n这个文件需要按行进行组织，每一行必须遵守如下格式: <code>PSKIdentity:SharedSecret</code>\n例如: <code>mydevice1:c2VjcmV0</code>",
+        "desc" : "如果设置了初始化文件，EMQX 将在启动时从初始化文件中导入 PSK 信息到内建数据库中。\n这个文件需要按行进行组织，每一行必须遵守如下格式: `PSKIdentity:SharedSecret`\n例如: `mydevice1:c2VjcmV0`",
         "aliases" : [
           
         ]
@@ -14311,7 +14311,7 @@
         },
         "raw_default" : ":",
         "name" : "separator",
-        "desc" : "PSK 文件中 <code>PSKIdentity</code> 和 <code>SharedSecret</code> 之间的分隔符",
+        "desc" : "PSK 文件中 `PSKIdentity` 和 `SharedSecret` 之间的分隔符",
         "default" : {
           "oneliner" : true,
           "hocon" : "\":\""
@@ -14433,7 +14433,7 @@
         },
         "raw_default" : "cluster_shareload",
         "name" : "mode",
-        "desc" : "MQTT 桥的模式。 <br/>\n- cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。<br/>\n在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。<br/>\n请注意，<code>clientid</code> 以节点名称为后缀，这是为了避免不同节点之间的 <code> clientid</code> 冲突。\n而且对于入口连接的 <code>remote.topic</code>，我们只能使用共享订阅主题过滤器。",
+        "desc" : "MQTT 桥的模式。 <br/>\n- cluster_shareload：在 emqx 集群的每个节点上创建一个 MQTT 连接。<br/>\n在“cluster_shareload”模式下，来自远程代理的传入负载通过共享订阅的方式接收。<br/>\n请注意，`clientid` 以节点名称为后缀，这是为了避免不同节点之间的 ` clientid` 冲突。\n而且对于入口连接的 `remote.topic`，我们只能使用共享订阅主题过滤器。",
         "default" : {
           "oneliner" : true,
           "hocon" : "cluster_shareload"
@@ -14981,7 +14981,7 @@
           "kind" : "primitive"
         },
         "name" : "url",
-        "desc" : "HTTP Bridge 的 URL。<br/>\n路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br/>\n例如，<code> http://localhost:9901/${topic} </code> 是允许的，\n但是<code> http://${host}:9901/message </code>\n或 <code> http://localhost:${port}/message </code>\n不允许。",
+        "desc" : "HTTP Bridge 的 URL。<br/>\n路径中允许使用带变量的模板，但是 host， port 不允许使用变量模板。<br/>\n例如，` http://localhost:9901/${topic} ` 是允许的，\n但是` http://${host}:9901/message `\n或 ` http://localhost:${port}/message `\n不允许。",
         "aliases" : [
           
         ]
@@ -15702,7 +15702,7 @@
         "raw_default" : "plugins",
         "name" : "install_dir",
         "importance" : "low",
-        "desc" : "插件安装包的目录，出于安全考虑，该目录应该值允许 <code>emqx</code>，或用于运行 EMQX 服务的用户拥有写入权限。",
+        "desc" : "插件安装包的目录，出于安全考虑，该目录应该值允许 `emqx`，或用于运行 EMQX 服务的用户拥有写入权限。",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"plugins\""
@@ -15809,7 +15809,7 @@
           
         },
         "name" : "headers",
-        "desc" : "推送到 Push Gateway 的 HTTP Headers 列表。<br/>\n例如，<code> { Authorization = \"some-authz-tokens\"}</code>",
+        "desc" : "推送到 Push Gateway 的 HTTP Headers 列表。<br/>\n例如，` { Authorization = \"some-authz-tokens\"}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -15825,7 +15825,7 @@
         },
         "raw_default" : "${name}/instance/${name}~${host}",
         "name" : "job_name",
-        "desc" : "推送到 Push Gateway 的 Job 名称。可用变量为：<br/>\n- ${name}: EMQX 节点的名称。\n- ${host}: EMQX 节点主机名。\n例如，当 EMQX 节点名为 <code>emqx@127.0.0.1</code> 则 name 变量的值为 <code>emqx</code>，host 变量的值为 <code>127.0.0.1</code>。<br/>\n默认值为: <code>${name}/instance/${name}~${host}</code>",
+        "desc" : "推送到 Push Gateway 的 Job 名称。可用变量为：<br/>\n- ${name}: EMQX 节点的名称。\n- ${host}: EMQX 节点主机名。\n例如，当 EMQX 节点名为 `emqx@127.0.0.1` 则 name 变量的值为 `emqx`，host 变量的值为 `127.0.0.1`。<br/>\n默认值为: `${name}/instance/${name}~${host}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${name}/instance/${name}~${host}\""
@@ -15952,7 +15952,7 @@
             ]
           ]
         ],
-        "desc" : "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.",
+        "desc" : "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have `[2, 4]` index to optimize `+/X/+/Y/...` topic wildcard subscriptions.",
         "default" : {
           "oneliner" : false,
           "hocon" : "[\n  [1, 2, 3],\n  [1, 3],\n  [2, 3],\n  [3]\n]\n"
