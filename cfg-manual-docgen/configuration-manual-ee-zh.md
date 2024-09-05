@@ -67,7 +67,7 @@ EMQX 配置文件手册。
 
   *默认值*: `15m`
 
-  系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。禁用设置为 <code>disabled</code>。
+  系统调优参数，设置节点运行多久强制进行一次全局垃圾回收。禁用设置为 `disabled`。
 
 
 **node.role**
@@ -79,17 +79,17 @@ EMQX 配置文件手册。
   *可选值*: `core | replicant`
 
   选择节点的角色。<br/>
-<code>core</code> 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>
-<code>repliant</code> 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>
+`core` 节点提供数据的持久性，并负责写入。建议将核心节点放置在不同的机架或不同的可用区。<br/>
+`repliant` 节点是临时工作节点。 从集群中删除它们，不影响数据库冗余<br/>
 建议复制节点多于核心节点。<br/>
-注意：该参数仅在设置<code>backend</code>时生效到 <code>rlog</code>。
+注意：该参数仅在设置`backend`时生效到 `rlog`。
 
 
 
 ## RPC 设置
 
 
-EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
+EMQX 使用 `gen_rpc` 库来实现跨节点通信。<br/>
 大多数情况下，默认的配置应该可以工作，但如果你需要做一些性能优化或者实验，可以尝试调整这些参数。
 
 **rpc.mode**
@@ -100,7 +100,7 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 
   *可选值*: `sync | async`
 
-  在 <code>sync</code> 模式下，发送端等待接收端的 ack信号。
+  在 `sync` 模式下，发送端等待接收端的 ack信号。
 
 
 **rpc.protocol**
@@ -131,9 +131,9 @@ EMQX 使用 <code>gen_rpc</code> 库来实现跨节点通信。<br/>
 
   *可选值*: `manual | stateless`
 
-  <code>manual</code>: 通过 <code>tcp_server_port</code> 来发现端口。
-<br/><code>stateless</code>: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 <code>
-emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
+  `manual`: 通过 `tcp_server_port` 来发现端口。
+<br/>`stateless`: 使用无状态的方式来发现端口，使用如下算法。如果节点名称是 `
+emqxN@127.0.0.1`, N 是一个数字，那么监听端口就是 5370 + N。
 
 
 **rpc.tcp_server_port**
@@ -153,7 +153,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
   *默认值*: `5369`
 
   RPC 本地服务使用的监听SSL端口。<br/>
-只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，
+只有当 rpc.port_discovery 设置为 manual 且 ` dirver ` 设置为 `ssl`，
 此配置才会生效。
 
 
@@ -182,14 +182,14 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
   *类型*: `file`
 
   TLS 证书文件的路径，用于验证集群节点的身份。
-只有当 <code>rpc.driver</code> 设置为 <code>ssl</code> 时，此配置才会生效。
+只有当 `rpc.driver` 设置为 `ssl` 时，此配置才会生效。
 
 
 **rpc.keyfile**
 
   *类型*: `file`
 
-  <code>rpc.certfile</code> 的私钥文件的路径。<br/>
+  `rpc.certfile` 的私钥文件的路径。<br/>
 注意：此文件内容是私钥，所以需要设置权限为 600。
 
 
@@ -197,7 +197,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
 
   *类型*: `file`
 
-  验证 <code>rpc.certfile</code> 的 CA 证书文件的路径。<br/>
+  验证 `rpc.certfile` 的 CA 证书文件的路径。<br/>
 注意：集群中所有节点的证书必须使用同一个 CA 签发。
 
 
@@ -315,7 +315,7 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
   *可选值*: `manual | static | dns | etcd | k8s | mcast`
 
   集群节点发现方式。可选值为:
-- manual: 使用 <code>emqx ctl cluster</code> 命令管理集群。<br/>
+- manual: 使用 `emqx ctl cluster` 命令管理集群。<br/>
 - static: 配置静态节点。配置几个固定的节点，新节点通过连接固定节点中的某一个来加入集群。<br/>
 - dns: 使用 DNS A 记录的方式发现节点。<br/>
 - etcd: 使用 etcd 发现节点。<br/>
@@ -350,7 +350,7 @@ EMQX 节点可以组成一个集群，以提高总容量。<br/> 这里指定了
 
   分布式 Erlang 集群协议类型。可选值为:<br/>
 - inet_tcp: 使用 IPv4 <br/>
-- inet_tls: 使用 TLS，需要配合 <code>etc/ssl_dist.conf</code> 一起使用。
+- inet_tls: 使用 TLS，需要配合 `etc/ssl_dist.conf` 一起使用。
 
 
 **cluster.static**
@@ -425,7 +425,7 @@ DNS SRV 记录服务发现。
   *默认值*: `localhost`
 
   指定 DNS A 记录的名字。emqx 会通过访问这个 DNS A 记录来获取 IP 地址列表。
-当<code>cluster.discovery_strategy</code> 为 <code>dns</code> 时有效。
+当`cluster.discovery_strategy` 为 `dns` 时有效。
 
 
 **cluster.dns.record_type**
@@ -517,7 +517,7 @@ Kubernetes 服务发现。
   *可选值*: `ip | dns | hostname`
 
   当使用 k8s 方式集群时，address_type 用来从 Kubernetes 接口的应答里获取什么形式的 Host 列表。
-指定 <code>cluster.k8s.address_type</code> 为 <code>ip</code>，则将从 Kubernetes 接口中获取集群中其他节点
+指定 `cluster.k8s.address_type` 为 `ip`，则将从 Kubernetes 接口中获取集群中其他节点
 的IP地址。
 
 
@@ -608,7 +608,7 @@ Kubernetes 服务发现。
 
   *可选值*: `text | json`
 
-  选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
+  选择日志格式类型。 `text` 用于纯文本，`json` 用于结构化日志记录。
 
 
 **log_file_handler.time_offset**
@@ -619,10 +619,10 @@ Kubernetes 服务发现。
 
   日志中的时间戳使用的时间偏移量。
 可选值为：
-  - <code>system</code>: 本地系统使用的时区偏移量
-  - <code>utc</code>: 0 时区的偏移量
-  - <code>+-[hh]:[mm]</code>: 自定义偏移量，比如 "-02:00" 或者 "+00:00"
-默认值为本地系统的时区偏移量：<code>system</code>。
+  - `system`: 本地系统使用的时区偏移量
+  - `utc`: 0 时区的偏移量
+  - `+-[hh]:[mm]`: 自定义偏移量，比如 "-02:00" 或者 "+00:00"
+默认值为本地系统的时区偏移量：`system`。
 
 
 
@@ -658,7 +658,7 @@ Kubernetes 服务发现。
 
   *可选值*: `text | json`
 
-  选择日志格式类型。 <code>text</code> 用于纯文本，<code>json</code> 用于结构化日志记录。
+  选择日志格式类型。 `text` 用于纯文本，`json` 用于结构化日志记录。
 
 
 **log.console.time_offset**
@@ -669,10 +669,10 @@ Kubernetes 服务发现。
 
   日志中的时间戳使用的时间偏移量。
 可选值为：
-  - <code>system</code>: 本地系统使用的时区偏移量
-  - <code>utc</code>: 0 时区的偏移量
-  - <code>+-[hh]:[mm]</code>: 自定义偏移量，比如 "-02:00" 或者 "+00:00"
-默认值为本地系统的时区偏移量：<code>system</code>。
+  - `system`: 本地系统使用的时区偏移量
+  - `utc`: 0 时区的偏移量
+  - `+-[hh]:[mm]`: 自定义偏移量，比如 "-02:00" 或者 "+00:00"
+默认值为本地系统的时区偏移量：`system`。
 
 
 
@@ -776,14 +776,14 @@ EMQX 支持配置多个监听器，默认 MQTT/TCP 监听器端口为 `1883`。
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+例如，如果客户机 A 使用 `listeners.tcp.\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
 类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为`""` 以禁用该功能<br/>
 
 mountpoint 字符串中的变量：
-- <code>${clientid}</code>: clientid
-- <code>${username}</code>: username
+- `${clientid}`: clientid
+- `${username}`: username
 
 
 **listeners.tcp.$name.enable_authn**
@@ -794,9 +794,9 @@ mountpoint 字符串中的变量：
 
   *可选值*: `true | false | quick_deny_anonymous`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
-配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
-配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
@@ -912,14 +912,14 @@ Settings for the MQTT over SSL listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+例如，如果客户机 A 使用 `listeners.tcp.\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
 类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为`""` 以禁用该功能<br/>
 
 mountpoint 字符串中的变量：
-- <code>${clientid}</code>: clientid
-- <code>${username}</code>: username
+- `${clientid}`: clientid
+- `${username}`: username
 
 
 **listeners.ssl.$name.enable_authn**
@@ -930,9 +930,9 @@ mountpoint 字符串中的变量：
 
   *可选值*: `true | false | quick_deny_anonymous`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
-配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
-配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
@@ -1016,29 +1016,29 @@ Settings for the MQTT over QUIC listener.
   *默认值*: `["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256","TLS_CHACHA20_POLY1305_SHA256"]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件，<code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件，`tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`<br/>
 
 注：QUIC 监听器不支持 tlsv1.3 的 ciphers
 
@@ -1096,14 +1096,14 @@ RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+例如，如果客户机 A 使用 `listeners.tcp.\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
 类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为`""` 以禁用该功能<br/>
 
 mountpoint 字符串中的变量：
-- <code>${clientid}</code>: clientid
-- <code>${username}</code>: username
+- `${clientid}`: clientid
+- `${username}`: username
 
 
 **listeners.quic.$name.enable_authn**
@@ -1114,9 +1114,9 @@ mountpoint 字符串中的变量：
 
   *可选值*: `true | false | quick_deny_anonymous`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
-配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
-配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
@@ -1255,14 +1255,14 @@ Settings for the MQTT over WebSocket listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+例如，如果客户机 A 使用 `listeners.tcp.\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
 类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为`""` 以禁用该功能<br/>
 
 mountpoint 字符串中的变量：
-- <code>${clientid}</code>: clientid
-- <code>${username}</code>: username
+- `${clientid}`: clientid
+- `${username}`: username
 
 
 **listeners.ws.$name.enable_authn**
@@ -1273,9 +1273,9 @@ mountpoint 字符串中的变量：
 
   *可选值*: `true | false | quick_deny_anonymous`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
-配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
-配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
@@ -1396,14 +1396,14 @@ Settings for the MQTT over WebSocket/SSL listener.
 
 将消息传递给订阅者时，将从主题名称中删除带前缀的字符串。挂载点是一种用户可以用来实现不同侦听器之间消息路由隔离的方法。
 
-例如，如果客户机 A 使用 <code>listeners.tcp.\<name>.mountpoint</code> 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
+例如，如果客户机 A 使用 `listeners.tcp.\<name>.mountpoint` 设置为'some_tenant'，那么客户端实际上订阅了主题'some_tenant/t'。<br/>
 类似地，如果另一个客户端B（与客户端A连接到同一个侦听器）向主题 't' 发送消息，该消息将路由到所有订阅了'some_租户/t'的客户端，因此客户端 A 将接收主题名为't'的消息<br/>
 
-设置为<code>""</code> 以禁用该功能<br/>
+设置为`""` 以禁用该功能<br/>
 
 mountpoint 字符串中的变量：
-- <code>${clientid}</code>: clientid
-- <code>${username}</code>: username
+- `${clientid}`: clientid
+- `${username}`: username
 
 
 **listeners.wss.$name.enable_authn**
@@ -1414,9 +1414,9 @@ mountpoint 字符串中的变量：
 
   *可选值*: `true | false | quick_deny_anonymous`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
-配置 <code>false</code> 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
-配置 <code>quick_deny_anonymous</code> 时，行为跟 <code>true</code> 类似，但是会对匿名
+  配置 `true` （默认值）启用客户端进行身份认证，通过检查认配置的认认证器链来决定是否允许接入。
+配置 `false` 时，将不对客户端做任何认证，任何客户端，不论是不是携带用户名等认证信息，都可以接入。
+配置 `quick_deny_anonymous` 时，行为跟 `true` 类似，但是会对匿名
 客户直接拒绝，不做使用任何认证器对客户端进行身份检查。
 
 
@@ -1613,7 +1613,7 @@ Global MQTT configuration.
 
   *默认值*: `false`
 
-  设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 <code>No Local</code> 选项。
+  设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 `No Local` 选项。
 
 
 **mqtt.strict_mode**
@@ -1632,8 +1632,8 @@ Global MQTT configuration.
 
   *默认值*: `""`
 
-  UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。
-如希望禁用此功能，请在下方的文字框中输入<code>""</code>；仅适用于 MQTT 5.0 客户端。
+  UTF-8 字符串，用于指定返回给客户端的响应主题，如 `reqrsp/`，此时请求和应答客户端都需要使用 `reqrsp/` 前缀的主题来完成通讯。
+如希望禁用此功能，请在下方的文字框中输入`""`；仅适用于 MQTT 5.0 客户端。
 
 
 **mqtt.server_keepalive**
@@ -1670,7 +1670,7 @@ Global MQTT configuration.
   *默认值*: `false`
 
   是否使用用户名作为客户端 ID。
-此设置的作用时间晚于 <code>对端证书作为用户名</code> 和 <code>对端证书作为客户端 ID</code>。
+此设置的作用时间晚于 `对端证书作为用户名` 和 `对端证书作为客户端 ID`。
 
 
 **mqtt.peer_cert_as_username**
@@ -1683,11 +1683,11 @@ Global MQTT configuration.
 
   使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。
 目前支持：
-- <code>cn</code>: 取证书的 CN 字段
-- <code>dn</code>: 取证书的 DN 字段
-- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 的证书内容
-- <code>pem</code>: 将 <code>DER</code> 证书转换为 <code>PEM</code> 格式作为用户名
-- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值
+- `cn`: 取证书的 CN 字段
+- `dn`: 取证书的 DN 字段
+- `crt`: 取 `DER` 或 `PEM` 的证书内容
+- `pem`: 将 `DER` 证书转换为 `PEM` 格式作为用户名
+- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值
 
 
 **mqtt.peer_cert_as_clientid**
@@ -1700,11 +1700,11 @@ Global MQTT configuration.
 
   使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；
 目前支持：
-- <code>cn</code>: 取证书的 CN 字段
-- <code>dn</code>: 取证书的 DN 字段
-- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容
-- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID
-- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值
+- `cn`: 取证书的 CN 字段
+- `dn`: 取证书的 DN 字段
+- `crt`: 取 `DER` 或 `PEM` 证书的内容
+- `pem`: 将 `DER` 证书内容转换为 `PEM` 格式作为客户端 ID
+- `md5`: 取 `DER` 或 `PEM` 证书内容的 MD5 值
 
 
 **mqtt.session_expiry_interval**
@@ -1744,11 +1744,11 @@ Global MQTT configuration.
 默认优先级表为空，即所有的主题优先级相同。
 
 注：优先主题名称中不支持使用逗号和等号。
-注：不在此列表中的主题，被视为最高/最低优先级，这取决于<code>mqtt.mqueue_default_priority</code> 的配置
+注：不在此列表中的主题，被视为最高/最低优先级，这取决于`mqtt.mqueue_default_priority` 的配置
 
 示例：
-配置 <code>"topic/1" > "topic/2"</code>:
-<code>mqueue_priorities: {"topic/1": 10, "topic/2": 8}</code>
+配置 `"topic/1" > "topic/2"`:
+`mqueue_priorities: {"topic/1": 10, "topic/2": 8}`
 
 
 **mqtt.mqueue_default_priority**
@@ -1759,7 +1759,7 @@ Global MQTT configuration.
 
   *可选值*: `highest | lowest`
 
-  默认的主题优先级，不在 <code>主题优先级</code>（<code>mqueue_priorities</code>） 中的主题将会使用该优先级。
+  默认的主题优先级，不在 `主题优先级`（`mqueue_priorities`） 中的主题将会使用该优先级。
 
 
 **mqtt.mqueue_store_qos0**
@@ -1929,7 +1929,7 @@ Configuration of the internal database storing retained messages.
 
   *默认值*: `[[1,2,3],[1,3],[2,3],[3]]`
 
-  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
+  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have `[2, 4]` index to optimize `+/X/+/Y/...` topic wildcard subscriptions.
 
 
 
@@ -2418,7 +2418,7 @@ Prometheus 监控数据推送
   *默认值*: `{}`
 
   推送到 Push Gateway 的 HTTP Headers 列表。<br/>
-例如，<code> { Authorization = "some-authz-tokens"}</code>
+例如，` { Authorization = "some-authz-tokens"}`
 
 
 **prometheus.job_name**
@@ -2430,8 +2430,8 @@ Prometheus 监控数据推送
   推送到 Push Gateway 的 Job 名称。可用变量为：<br/>
 - ${name}: EMQX 节点的名称。
 - ${host}: EMQX 节点主机名。
-例如，当 EMQX 节点名为 <code>emqx@127.0.0.1</code> 则 name 变量的值为 <code>emqx</code>，host 变量的值为 <code>127.0.0.1</code>。<br/>
-默认值为: <code>${name}/instance/${name}~${host}</code>
+例如，当 EMQX 节点名为 `emqx@127.0.0.1` 则 name 变量的值为 `emqx`，host 变量的值为 `127.0.0.1`。<br/>
+默认值为: `${name}/instance/${name}~${host}`
 
 
 **prometheus.enable**
@@ -2588,11 +2588,11 @@ Settings for the alarms.
 
   *默认值*: `["log","publish"]`
 
-  警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
-<code>log</code> 将告警写入日志 (控制台或者文件).
-<code>publish</code> 将告警作为 MQTT 消息发布到系统主题:
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>
+  警报激活时触发的动作。<br/>目前，支持以下操作：`log` 和 `publish`.
+`log` 将告警写入日志 (控制台或者文件).
+`publish` 将告警作为 MQTT 消息发布到系统主题:
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`
 
 
 **alarm.size_limit**
@@ -2719,8 +2719,8 @@ This part of the configuration is responsible for collecting
 
   *默认值*: `disabled`
 
-  当系统检测到某个 Erlang 进程垃圾回收占用过长时间，会触发一条带有 <code>long_gc</code> 关键字的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/long_gc</code> 的 MQTT 系统消息。
+  当系统检测到某个 Erlang 进程垃圾回收占用过长时间，会触发一条带有 `long_gc` 关键字的日志。
+同时还会发布一条主题为 `$SYS/sysmon/long_gc` 的 MQTT 系统消息。
 
 
 **sysmon.vm.long_schedule**
@@ -2730,7 +2730,7 @@ This part of the configuration is responsible for collecting
   *默认值*: `240ms`
 
   启用后，如果 Erlang VM 调度器出现某个任务占用时间过长时，会触发一条带有 'long_schedule' 关键字的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/long_schedule</code> 的 MQTT 系统消息。
+同时还会发布一条主题为 `$SYS/sysmon/long_schedule` 的 MQTT 系统消息。
 
 
 **sysmon.vm.large_heap**
@@ -2739,8 +2739,8 @@ This part of the configuration is responsible for collecting
 
   *默认值*: `32MB`
 
-  启用后，当一个 Erlang 进程申请了大量内存，系统会触发一条带有 <code>large_heap</code> 关键字的
-warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
+  启用后，当一个 Erlang 进程申请了大量内存，系统会触发一条带有 `large_heap` 关键字的
+warning 级别日志。同时还会发布一条主题为 `$SYS/sysmon/busy_dist_port` 的 MQTT 系统消息。
 
 
 **sysmon.vm.busy_dist_port**
@@ -2749,8 +2749,8 @@ warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_
 
   *默认值*: `true`
 
-  启用后，当用于集群接点之间 RPC 的连接过忙时，会触发一条带有 <code>busy_dist_port</code> 关键字的 warning 级别日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
+  启用后，当用于集群接点之间 RPC 的连接过忙时，会触发一条带有 `busy_dist_port` 关键字的 warning 级别日志。
+同时还会发布一条主题为 `$SYS/sysmon/busy_dist_port` 的 MQTT 系统消息。
 
 
 **sysmon.vm.busy_port**
@@ -2759,8 +2759,8 @@ warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_
 
   *默认值*: `true`
 
-  当一个系统接口（例如 TCP socket）过忙，会触发一条带有 <code>busy_port</code> 关键字的 warning 级别的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/busy_port</code> 的 MQTT 系统消息。
+  当一个系统接口（例如 TCP socket）过忙，会触发一条带有 `busy_port` 关键字的 warning 级别的日志。
+同时还会发布一条主题为 `$SYS/sysmon/busy_port` 的 MQTT 系统消息。
 
 
 
@@ -3212,7 +3212,7 @@ SSL/TLS options for the dashboard listener.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **dashboard.listeners.https.ssl_options.ciphers**
@@ -3222,29 +3222,29 @@ SSL/TLS options for the dashboard listener.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **dashboard.listeners.https.ssl_options.secure_renegotiate**
@@ -3282,7 +3282,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   *类型*: `string`
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
+注意：TLS 1.3不支持`dhfile`选项。
 
 
 **dashboard.listeners.https.ssl_options.honor_cipher_order**
@@ -3434,7 +3434,7 @@ are distinguished by the topic prefix:
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 
@@ -3488,7 +3488,7 @@ are distinguished by the topic prefix:
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.server**
@@ -3585,8 +3585,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authentication.$INDEX.password_hash_field**
@@ -3631,7 +3631,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.mongo_type**
@@ -3758,8 +3758,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authentication.$INDEX.password_hash_field**
@@ -3804,7 +3804,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.mongo_type**
@@ -3950,8 +3950,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authentication.$INDEX.password_hash_field**
@@ -3996,7 +3996,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.mongo_type**
@@ -4131,7 +4131,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.server**
@@ -4215,7 +4215,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *类型*: `string`
 
-  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4233,7 +4233,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.server**
@@ -4319,7 +4319,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *类型*: `string`
 
-  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4337,7 +4337,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.servers**
@@ -4415,7 +4415,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *类型*: `string`
 
-  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 <code>HGET</code> 与 <code>HMGET</code>。
+  用于查询密码散列等用于认证的数据的 Redis Command，目前仅支持 `HGET` 与 `HMGET`。
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4433,7 +4433,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.servers**
@@ -4524,7 +4524,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  HTTP Headers 列表 (无 <code>content-type</code>) 。
+  HTTP Headers 列表 (无 `content-type`) 。
 
 
 **authentication.$INDEX.mechanism**
@@ -4573,7 +4573,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.connect_timeout**
@@ -4701,7 +4701,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 **authentication.$INDEX.connect_timeout**
@@ -4872,7 +4872,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   *可选值*: `hmac-based`
 
-  JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。
+  JWT 签名算法，支持 HMAC (配置为 `hmac-based`）和 RSA、ECDSA (配置为 `public-key`)。
 
 
 **authentication.$INDEX.secret**
@@ -4915,9 +4915,9 @@ Settings for PBKDF2 password hashing algorithm.
 
   需要验证的自定义声明列表，它是一个名称/值对列表。
 值可以使用以下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
-认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。
 
 
 **authentication.$INDEX.from**
@@ -4937,7 +4937,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 
@@ -5011,9 +5011,9 @@ Settings for PBKDF2 password hashing algorithm.
 
   需要验证的自定义声明列表，它是一个名称/值对列表。
 值可以使用以下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
-认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。
 
 
 **authentication.$INDEX.from**
@@ -5033,7 +5033,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 
@@ -5046,7 +5046,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   *可选值*: `public-key`
 
-  JWT 签名算法，支持 HMAC (配置为 <code>hmac-based</code>）和 RSA、ECDSA (配置为 <code>public-key</code>)。
+  JWT 签名算法，支持 HMAC (配置为 `hmac-based`）和 RSA、ECDSA (配置为 `public-key`)。
 
 
 **authentication.$INDEX.public_key**
@@ -5080,9 +5080,9 @@ Settings for PBKDF2 password hashing algorithm.
 
   需要验证的自定义声明列表，它是一个名称/值对列表。
 值可以使用以下占位符：
-- <code>${username}</code>: 将在运行时被替换为客户端连接时使用的用户名
-- <code>${clientid}</code>: 将在运行时被替换为客户端连接时使用的客户端标识符
-认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 <code>verify_claims</code> 中要求的相匹配。
+- `${username}`: 将在运行时被替换为客户端连接时使用的用户名
+- `${clientid}`: 将在运行时被替换为客户端连接时使用的客户端标识符
+认证时将验证 JWT（取自 Password 字段）中 claims 的值是否与 `verify_claims` 中要求的相匹配。
 
 
 **authentication.$INDEX.from**
@@ -5102,7 +5102,7 @@ Settings for PBKDF2 password hashing algorithm.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 
@@ -5152,7 +5152,7 @@ Settings for Salted Challenge Response Authentication Mechanism
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此认证数据源。
+  设为 `true` 或 `false` 以启用或禁用此认证数据源。
 
 
 
@@ -5186,8 +5186,8 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
   *类型*: `string`
 
   如果设置了初始化文件，EMQX 将在启动时从初始化文件中导入 PSK 信息到内建数据库中。
-这个文件需要按行进行组织，每一行必须遵守如下格式: <code>PSKIdentity:SharedSecret</code>
-例如: <code>mydevice1:c2VjcmV0</code>
+这个文件需要按行进行组织，每一行必须遵守如下格式: `PSKIdentity:SharedSecret`
+例如: `mydevice1:c2VjcmV0`
 
 
 **psk_authentication.separator**
@@ -5196,7 +5196,7 @@ PSK 是 “Pre-Shared-Keys” 的缩写。
 
   *默认值*: `:`
 
-  PSK 文件中 <code>PSKIdentity</code> 和 <code>SharedSecret</code> 之间的分隔符
+  PSK 文件中 `PSKIdentity` 和 `SharedSecret` 之间的分隔符
 
 
 **psk_authentication.chunk_size**
@@ -5322,7 +5322,7 @@ Settings for the authorization cache.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.path**
@@ -5357,7 +5357,7 @@ Settings for the authorization cache.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 
@@ -5379,7 +5379,7 @@ Settings for the authorization cache.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.server**
@@ -5471,7 +5471,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.server**
@@ -5564,7 +5564,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.collection**
@@ -5582,8 +5582,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：<br/>
-- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
-- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>
+- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -5694,7 +5694,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.collection**
@@ -5712,8 +5712,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：<br/>
-- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
-- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>
+- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -5843,7 +5843,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.collection**
@@ -5861,8 +5861,8 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   在查询中定义过滤条件的条件表达式。
 过滤器支持如下占位符：<br/>
-- <code>${username}</code>：将在运行时被替换为客户端连接时使用的用户名<br/>
-- <code>${clientid}</code>：将在运行时被替换为客户端连接时使用的客户端标识符
+- `${username}`：将在运行时被替换为客户端连接时使用的用户名<br/>
+- `${clientid}`：将在运行时被替换为客户端连接时使用的客户端标识符
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -5976,7 +5976,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.servers**
@@ -6056,7 +6056,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.server**
@@ -6144,7 +6144,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.servers**
@@ -6250,7 +6250,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.url**
@@ -6346,7 +6346,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  HTTP Headers 列表 (无 <code>content-type</code>) 。
+  HTTP Headers 列表 (无 `content-type`) 。
 
 
 
@@ -6368,7 +6368,7 @@ The MySQL default port 3306 is used if `[:Port]` is not specified.
 
   *默认值*: `true`
 
-  设为 <code>true</code> 或 <code>false</code> 以启用或禁用此访问控制数据源
+  设为 `true` 或 `false` 以启用或禁用此访问控制数据源
 
 
 **authorization.sources.$INDEX.url**
@@ -6894,8 +6894,8 @@ Configuration for an HTTP bridge.
   The URL of the HTTP Bridge.<br/>
 Template with variables is allowed in the path, but variables cannot be used in the scheme, host,
 or port part.<br/>
-For example, <code> http://localhost:9901/${topic} </code> is allowed, but
-<code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
+For example, ` http://localhost:9901/${topic} ` is allowed, but
+` http://${host}:9901/message ` or ` http://localhost:${port}/message `
 is not allowed.
 
 
@@ -7101,7 +7101,7 @@ Template with variables is allowed.
 
   *默认值*: `plugins`
 
-  插件安装包的目录，出于安全考虑，该目录应该值允许 <code>emqx</code>，或用于运行 EMQX 服务的用户拥有写入权限。
+  插件安装包的目录，出于安全考虑，该目录应该值允许 `emqx`，或用于运行 EMQX 服务的用户拥有写入权限。
 
 
 **plugins.check_interval**
@@ -7337,7 +7337,7 @@ SSL client configuration.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **exhook.servers.$INDEX.ssl.ciphers**
@@ -7347,29 +7347,29 @@ SSL client configuration.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **exhook.servers.$INDEX.ssl.secure_renegotiate**
@@ -7421,7 +7421,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 如果未指定，它将默认为使用的主机名字符串
 建立连接，除非使用 IP 地址<br/>
 然后，主机名也用于对等机的主机名验证证书<br/>
-特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+特殊值 `disable` 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
 
@@ -7441,7 +7441,7 @@ with a certain defined CoAP message format.
   *默认值*: `30s`
 
   CoAP 网关要求客户端的最小心跳间隔时间。
-当 <code>connection_required</code> 开启后，该参数用于检查客户端连接是否存活
+当 `connection_required` 开启后，该参数用于检查客户端连接是否存活
 
 
 **gateway.coap.connection_required**
@@ -7513,8 +7513,8 @@ with a certain defined CoAP message format.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway.coap.listeners**
@@ -7641,8 +7641,8 @@ The LwM2M protocol gateway.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway.lwm2m.listeners**
@@ -7838,7 +7838,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
   *默认值*: `1`
 
   MQTT-SN 网关 ID。
-当 <code>broadcast</code> 打开时，MQTT-SN 网关会使用该 ID 来广播 ADVERTISE 消息
+当 `broadcast` 打开时，MQTT-SN 网关会使用该 ID 来广播 ADVERTISE 消息
 
 
 **gateway.mqttsn.broadcast**
@@ -7892,8 +7892,8 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway.mqttsn.listeners**
@@ -7985,8 +7985,8 @@ The STOMP protocol gateway provides EMQX with the ability to access STOMP
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway.stomp.listeners**
@@ -8071,7 +8071,7 @@ Settings for EMQX extension protocol (exproto).
 
   *类型*: `exproto_grpc_server`
 
-  配置 ExProto 网关需要启动的 <code>ConnectionAdapter</code> 服务。
+  配置 ExProto 网关需要启动的 `ConnectionAdapter` 服务。
 该服务用于提供客户端的认证、发布、订阅和数据下行等功能。
 
 
@@ -8079,7 +8079,7 @@ Settings for EMQX extension protocol (exproto).
 
   *类型*: `exproto_grpc_handler`
 
-  配置 ExProto 网关需要请求的 <code>ConnectionHandler</code> 服务地址。
+  配置 ExProto 网关需要请求的 `ConnectionHandler` 服务地址。
 该服务用于给 ExProto 提供客户端的 Socket 事件处理、字节解码、订阅消息接收等功能。
 
 
@@ -8096,8 +8096,8 @@ Settings for EMQX extension protocol (exproto).
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway.exproto.listeners**
@@ -8276,7 +8276,7 @@ SSL configuration for the server.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **gateway.exproto.server.ssl_options.ciphers**
@@ -8286,29 +8286,29 @@ SSL configuration for the server.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **gateway.exproto.server.ssl_options.secure_renegotiate**
@@ -8346,7 +8346,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   *类型*: `string`
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
+注意：TLS 1.3不支持`dhfile`选项。
 
 
 **gateway.exproto.server.ssl_options.fail_if_no_peer_cert**
@@ -8497,8 +8497,8 @@ Settings for TCP listener.
 
   *默认值*: `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 `true` （默认值）启用客户端进行身份认证。
+配置 `false` 时，将不对客户端做任何认证。
 
 
 **gateway:tcp_listener.mountpoint**
@@ -8512,8 +8512,8 @@ Settings for TCP listener.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway:tcp_listener.access_rules**
@@ -8656,8 +8656,8 @@ Settings for SSL listener.
 
   *默认值*: `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 `true` （默认值）启用客户端进行身份认证。
+配置 `false` 时，将不对客户端做任何认证。
 
 
 **gateway:ssl_listener.mountpoint**
@@ -8671,8 +8671,8 @@ Settings for SSL listener.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway:ssl_listener.access_rules**
@@ -8743,8 +8743,8 @@ Settings for UDP listener.
 
   *默认值*: `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 `true` （默认值）启用客户端进行身份认证。
+配置 `false` 时，将不对客户端做任何认证。
 
 
 **gateway:udp_listener.mountpoint**
@@ -8758,8 +8758,8 @@ Settings for UDP listener.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway:udp_listener.access_rules**
@@ -8894,8 +8894,8 @@ Settings for DTLS listener.
 
   *默认值*: `true`
 
-  配置 <code>true</code> （默认值）启用客户端进行身份认证。
-配置 <code>false</code> 时，将不对客户端做任何认证。
+  配置 `true` （默认值）启用客户端进行身份认证。
+配置 `false` 时，将不对客户端做任何认证。
 
 
 **gateway:dtls_listener.mountpoint**
@@ -8909,8 +8909,8 @@ Settings for DTLS listener.
 类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，
 则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `""` 以禁用该功能。
 挂载点字符串中可用的变量：<br/>
-   - <code>${clientid}</code>：clientid<br/>
-   - <code>${username}</code>：用户名
+   - `${clientid}`：clientid<br/>
+   - `${username}`：用户名
 
 
 **gateway:dtls_listener.access_rules**
@@ -9014,7 +9014,7 @@ Settings for DTLS protocol.
   *默认值*: `["dtlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **gateway:dtls_opts.ciphers**
@@ -9024,29 +9024,29 @@ Settings for DTLS protocol.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **gateway:dtls_opts.secure_renegotiate**
@@ -9084,7 +9084,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   *类型*: `string`
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
+注意：TLS 1.3不支持`dhfile`选项。
 
 
 **gateway:dtls_opts.fail_if_no_peer_cert**
@@ -9233,7 +9233,7 @@ Socket options for SSL clients.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **ssl_client_opts.ciphers**
@@ -9243,29 +9243,29 @@ Socket options for SSL clients.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **ssl_client_opts.secure_renegotiate**
@@ -9317,7 +9317,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
 如果未指定，它将默认为使用的主机名字符串
 建立连接，除非使用 IP 地址<br/>
 然后，主机名也用于对等机的主机名验证证书<br/>
-特殊值 <code>disable</code> 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
+特殊值 `disable` 阻止发送服务器名称指示扩展，并禁用主机名验证检查。
 
 
 
@@ -9406,7 +9406,7 @@ Socket options for SSL connections.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **listener_ssl_opts.ciphers**
@@ -9416,29 +9416,29 @@ Socket options for SSL connections.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **listener_ssl_opts.secure_renegotiate**
@@ -9476,7 +9476,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   *类型*: `string`
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
+注意：TLS 1.3不支持`dhfile`选项。
 
 
 **listener_ssl_opts.fail_if_no_peer_cert**
@@ -9664,7 +9664,7 @@ WebSocket listener options.
   *默认值*: `/mqtt`
 
   WebSocket 的 MQTT 协议路径。因此，EMQX Broker的WebSocket地址为：
-<code>ws://{ip}:{port}/mqtt</code>
+`ws://{ip}:{port}/mqtt`
 
 
 **ws_opts.mqtt_piggyback**
@@ -9684,8 +9684,8 @@ WebSocket listener options.
 
   *默认值*: `false`
 
-  如果 <code>true</code>，则使用<code>zlib</code> 压缩 WebSocket 消息<br/>
-<code>deflate_opts</code> 下的配置项属于压缩相关参数配置。
+  如果 `true`，则使用`zlib` 压缩 WebSocket 消息<br/>
+`deflate_opts` 下的配置项属于压缩相关参数配置。
 
 
 **ws_opts.idle_timeout**
@@ -9712,7 +9712,7 @@ WebSocket listener options.
 
   *默认值*: `true`
 
-  如果<code>true</code>，当客户端未携带<code>Sec WebSocket Protocol</code>字段时，服务器将返回一个错误。
+  如果`true`，当客户端未携带`Sec WebSocket Protocol`字段时，服务器将返回一个错误。
 <br/>注意：微信小程序需要禁用此验证。
 
 
@@ -9731,7 +9731,7 @@ WebSocket listener options.
 
   *默认值*: `false`
 
-  如果<code>true</code>，<code>origin</code>HTTP 头将根据<code>check_origins</code>参数中配置的允许来源列表进行验证。
+  如果`true`，`origin`HTTP 头将根据`check_origins`参数中配置的允许来源列表进行验证。
 
 
 **ws_opts.allow_origin_absence**
@@ -9740,7 +9740,7 @@ WebSocket listener options.
 
   *默认值*: `true`
 
-  If <code>false</code> and <code>check_origin_enable</code> is <code>true</code>, the server will reject requests that don't have <code>origin</code> HTTP header.
+  If `false` and `check_origin_enable` is `true`, the server will reject requests that don't have `origin` HTTP header.
 
 
 **ws_opts.check_origins**
@@ -9862,7 +9862,7 @@ Socket options for WebSocket/SSL connections.
   *默认值*: `["tlsv1.3","tlsv1.2"]`
 
   支持所有TLS/DTLS版本<br/>
-注：PSK 的 Ciphers 无法在 <code>tlsv1.3</code> 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 <code>["tlsv1.2","tlsv1.1"]</code>。
+注：PSK 的 Ciphers 无法在 `tlsv1.3` 中使用，如果打算使用 PSK 密码套件，请确保这里配置为 `["tlsv1.2","tlsv1.1"]`。
 
 
 **listeners.wss.$name.ssl_options.ciphers**
@@ -9872,29 +9872,29 @@ Socket options for WebSocket/SSL connections.
   *默认值*: `[]`
 
   此配置保存由逗号分隔的 TLS 密码套件名称，或作为字符串数组。例如
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code>或
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>。
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"`或
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`。
 <br/>
 密码（及其顺序）定义了客户端和服务器通过网络连接加密信息的方式。
 选择一个好的密码套件对于应用程序的数据安全性、机密性和性能至关重要。
 
 名称应为 OpenSSL 字符串格式（而不是 RFC 格式）。
 EMQX 配置文档提供的所有默认值和示例都是 OpenSSL 格式<br/>
-注意：某些密码套件仅与特定的 TLS <code>版本</code>兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
+注意：某些密码套件仅与特定的 TLS `版本`兼容（'tlsv1.1'、'tlsv1.2'或'tlsv1.3'）。
 不兼容的密码套件将被自动删除。
 
-例如，如果只有 <code>versions</code> 仅配置为 <code>tlsv1.3</code>。为其他版本配置密码套件将无效。
+例如，如果只有 `versions` 仅配置为 `tlsv1.3`。为其他版本配置密码套件将无效。
 
 <br/>
 注：PSK 的 Ciphers 不支持 tlsv1.3<br/>
-如果打算使用PSK密码套件 <code>tlsv1.3</code>。应在<code>ssl.versions</code>中禁用。
+如果打算使用PSK密码套件 `tlsv1.3`。应在`ssl.versions`中禁用。
 
 <br/>
 PSK 密码套件：
-<code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+`"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **listeners.wss.$name.ssl_options.secure_renegotiate**
@@ -9932,7 +9932,7 @@ RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商�
   *类型*: `string`
 
   如果协商使用Diffie-Hellman密钥交换的密码套件，则服务器将使用包含PEM编码的Diffie-Hellman参数的文件的路径。如果未指定，则使用默认参数。<br/>
-注意：TLS 1.3不支持<code>dhfile</code>选项。
+注意：TLS 1.3不支持`dhfile`选项。
 
 
 **listeners.wss.$name.ssl_options.fail_if_no_peer_cert**

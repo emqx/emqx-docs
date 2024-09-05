@@ -12,8 +12,8 @@ The Erlang/OTP platform application is composed of distributed Erlang nodes (pro
 
   *Default*: `emqx@127.0.0.1`
 
-  Unique name of the EMQX node. It must follow <code>%name%@FQDN</code> or
-<code>%name%@IPv4</code> format.
+  Unique name of the EMQX node. It must follow `%name%@FQDN` or
+`%name%@IPv4` format.
 
 
 **node.cookie**
@@ -72,7 +72,7 @@ the old dir should be deleted first.<br/>
 
   *Default*: `15m`
 
-  Periodic garbage collection interval. Set to <code>disabled</code> to have it disabled.
+  Periodic garbage collection interval. Set to `disabled` to have it disabled.
 
 
 **node.role**
@@ -84,20 +84,20 @@ the old dir should be deleted first.<br/>
   *Optional*: `core | replicant`
 
   Select a node role.<br/>
-<code>core</code> nodes provide durability of the data, and take care of writes.
+`core` nodes provide durability of the data, and take care of writes.
 It is recommended to place core nodes in different racks or different availability zones.<br/>
-<code>replicant</code> nodes are ephemeral worker nodes. Removing them from the cluster
+`replicant` nodes are ephemeral worker nodes. Removing them from the cluster
 doesn't affect database redundancy<br/>
 It is recommended to have more replicant nodes than core nodes.<br/>
-Note: this parameter only takes effect when the <code>backend</code> is set
-to <code>rlog</code>.
+Note: this parameter only takes effect when the `backend` is set
+to `rlog`.
 
 
 
 ## RPC
 
 
-EMQX uses a library called <code>gen_rpc</code> for inter-broker communication.<br/>
+EMQX uses a library called `gen_rpc` for inter-broker communication.<br/>
 Most of the time the default config should work,
 but in case you need to do performance fine-tuning or experiment a bit,
 this is where to look.
@@ -110,7 +110,7 @@ this is where to look.
 
   *Optional*: `sync | async`
 
-  In <code>sync</code> mode the sending side waits for the ack from the receiving side.
+  In `sync` mode the sending side waits for the ack from the receiving side.
 
 
 **rpc.protocol**
@@ -142,9 +142,9 @@ this is where to look.
 
   *Optional*: `manual | stateless`
 
-  <code>manual</code>: discover ports by <code>tcp_server_port</code>.<br/>
-<code>stateless</code>: discover ports in a stateless manner, using the following algorithm.
-If node name is <code>emqxN@127.0.0.1</code>, where the N is an integer,
+  `manual`: discover ports by `tcp_server_port`.<br/>
+`stateless`: discover ports in a stateless manner, using the following algorithm.
+If node name is `emqxN@127.0.0.1`, where the N is an integer,
 then the listening port will be 5370 + N.
 
 
@@ -166,7 +166,7 @@ Note that this config only takes effect when rpc.port_discovery is set to manual
 
   Listening port used by RPC local service.<br/>
 Note that this config only takes effect when rpc.port_discovery is set to manual
-and <code>driver</code> is set to <code>ssl</code>.
+and `driver` is set to `ssl`.
 
 
 **rpc.tcp_client_num**
@@ -194,14 +194,14 @@ and <code>driver</code> is set to <code>ssl</code>.
   *Type*: `file`
 
   Path to TLS certificate file used to validate identity of the cluster nodes.
-Note that this config only takes effect when <code>rpc.driver</code> is set to <code>ssl</code>.
+Note that this config only takes effect when `rpc.driver` is set to `ssl`.
 
 
 **rpc.keyfile**
 
   *Type*: `file`
 
-  Path to the private key file for the <code>rpc.certfile</code>.<br/>
+  Path to the private key file for the `rpc.certfile`.<br/>
 Note: contents of this file are secret, so it's necessary to set permissions to 600.
 
 
@@ -209,7 +209,7 @@ Note: contents of this file are secret, so it's necessary to set permissions to 
 
   *Type*: `file`
 
-  Path to certification authority TLS certificate file used to validate <code>rpc.certfile</code>.<br/>
+  Path to certification authority TLS certificate file used to validate `rpc.certfile`.<br/>
 Note: certificates of all nodes in the cluster must be signed by the same CA.
 
 
@@ -329,8 +329,8 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
   *Optional*: `manual | static | dns | etcd | k8s | mcast`
 
   Service discovery method for the cluster nodes. Possible values are:
-- manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>
-- static: Configure static nodes list by setting <code>seeds</code> in config file.<br/>
+- manual: Use `emqx ctl cluster` command to manage cluster.<br/>
+- static: Configure static nodes list by setting `seeds` in config file.<br/>
 - dns: Use DNS A record to discover peer nodes.<br/>
 - etcd: Use etcd to discover peer nodes.<br/>
 - k8s: Use Kubernetes API to discover peer pods.
@@ -353,7 +353,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   *Default*: `true`
 
-  If <code>true</code>, the node will try to heal network partitions automatically.
+  If `true`, the node will try to heal network partitions automatically.
 
 
 **cluster.proto_dist**
@@ -366,7 +366,7 @@ EMQX nodes can form a cluster to scale up the total capacity.<br/>
 
   The Erlang distribution protocol for the cluster.<br/>
 - inet_tcp: IPv4 TCP <br/>
-- inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code>
+- inet_tls: IPv4 TLS, works together with `etc/ssl_dist.conf`
 
 
 **cluster.static**
@@ -424,7 +424,7 @@ The new node joins the cluster by connecting to one of the bootstrap nodes.
 
   *Default*: `[]`
 
-  List EMQX node names in the static cluster. See <code>node.name</code>.
+  List EMQX node names in the static cluster. See `node.name`.
 
 
 
@@ -440,7 +440,7 @@ Service discovery via DNS SRV records.
   *Default*: `localhost`
 
   The domain name from which to discover peer EMQX nodes' IP addresses.
-Applicable when <code>cluster.discovery_strategy = dns</code>
+Applicable when `cluster.discovery_strategy = dns`
 
 
 **cluster.dns.record_type**
@@ -526,7 +526,7 @@ Service discovery via Kubernetes API server.
   *Optional*: `ip | dns | hostname`
 
   Address type used for connecting to the discovered nodes.
-Setting <code>cluster.k8s.address_type</code> to <code>ip</code> will
+Setting `cluster.k8s.address_type` to `ip` will
 make EMQX to discover IP addresses of peer nodes from Kubernetes API.
 
 
@@ -546,8 +546,8 @@ make EMQX to discover IP addresses of peer nodes from Kubernetes API.
   *Default*: `pod.local`
 
   Node name suffix.<br/>
-Note: this parameter is only relevant when <code>address_type</code> is <code>dns</code>
-or <code>hostname</code>.
+Note: this parameter is only relevant when `address_type` is `dns`
+or `hostname`.
 
 
 
@@ -616,7 +616,7 @@ Defaults to warning.
 
   *Optional*: `text | json`
 
-  Choose log formatter. <code>text</code> for free text, and <code>json</code> for structured logging.
+  Choose log formatter. `text` for free text, and `json` for structured logging.
 
 
 **log_file_handler.time_offset**
@@ -627,10 +627,10 @@ Defaults to warning.
 
   The time offset to be used when formatting the timestamp.
 Can be one of:
-  - <code>system</code>: the time offset used by the local system
-  - <code>utc</code>: the UTC time offset
-  - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
-Defaults to: <code>system</code>.
+  - `system`: the time offset used by the local system
+  - `utc`: the UTC time offset
+  - `+-[hh]:[mm]`: user specified time offset, such as "-02:00" or "+00:00"
+Defaults to: `system`.
 
 
 
@@ -666,7 +666,7 @@ Defaults to warning.
 
   *Optional*: `text | json`
 
-  Choose log formatter. <code>text</code> for free text, and <code>json</code> for structured logging.
+  Choose log formatter. `text` for free text, and `json` for structured logging.
 
 
 **log.console.time_offset**
@@ -677,10 +677,10 @@ Defaults to warning.
 
   The time offset to be used when formatting the timestamp.
 Can be one of:
-  - <code>system</code>: the time offset used by the local system
-  - <code>utc</code>: the UTC time offset
-  - <code>+-[hh]:[mm]</code>: user specified time offset, such as "-02:00" or "+00:00"
-Defaults to: <code>system</code>.
+  - `system`: the time offset used by the local system
+  - `utc`: the UTC time offset
+  - `+-[hh]:[mm]`: user specified time offset, such as "-02:00" or "+00:00"
+Defaults to: `system`.
 
 
 
@@ -794,8 +794,8 @@ message, with topic name `t`.<br/>
 Set to `""` to disable the feature.<br/>
 
 Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid
+  - `${username}`: username
 
 
 **listeners.tcp.$name.enable_authn**
@@ -806,11 +806,11 @@ Variables in mountpoint string:
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set `true` (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
-When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
-denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+When set to `false` to allow any clients with or without authentication information such as username or password to log in.
+When set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be
+denied immediately without going through any authenticators if `username` is not provided. This is useful to fence off
 anonymous clients early.
 
 
@@ -935,8 +935,8 @@ message, with topic name `t`.<br/>
 Set to `""` to disable the feature.<br/>
 
 Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid
+  - `${username}`: username
 
 
 **listeners.ssl.$name.enable_authn**
@@ -947,11 +947,11 @@ Variables in mountpoint string:
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set `true` (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
-When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
-denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+When set to `false` to allow any clients with or without authentication information such as username or password to log in.
+When set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be
+denied immediately without going through any authenticators if `username` is not provided. This is useful to fence off
 anonymous clients early.
 
 
@@ -1038,8 +1038,8 @@ Settings for the MQTT over QUIC listener.
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -1051,18 +1051,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code><br/>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`<br/>
 
 NOTE: QUIC listener supports only 'tlsv1.3' ciphers
 
@@ -1129,8 +1129,8 @@ message, with topic name `t`.<br/>
 Set to `""` to disable the feature.<br/>
 
 Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid
+  - `${username}`: username
 
 
 **listeners.quic.$name.enable_authn**
@@ -1141,11 +1141,11 @@ Variables in mountpoint string:
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set `true` (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
-When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
-denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+When set to `false` to allow any clients with or without authentication information such as username or password to log in.
+When set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be
+denied immediately without going through any authenticators if `username` is not provided. This is useful to fence off
 anonymous clients early.
 
 
@@ -1297,8 +1297,8 @@ message, with topic name `t`.<br/>
 Set to `""` to disable the feature.<br/>
 
 Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid
+  - `${username}`: username
 
 
 **listeners.ws.$name.enable_authn**
@@ -1309,11 +1309,11 @@ Variables in mountpoint string:
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set `true` (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
-When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
-denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+When set to `false` to allow any clients with or without authentication information such as username or password to log in.
+When set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be
+denied immediately without going through any authenticators if `username` is not provided. This is useful to fence off
 anonymous clients early.
 
 
@@ -1443,8 +1443,8 @@ message, with topic name `t`.<br/>
 Set to `""` to disable the feature.<br/>
 
 Variables in mountpoint string:
-  - <code>${clientid}</code>: clientid
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid
+  - `${username}`: username
 
 
 **listeners.wss.$name.enable_authn**
@@ -1455,11 +1455,11 @@ Variables in mountpoint string:
 
   *Optional*: `true | false | quick_deny_anonymous`
 
-  Set <code>true</code> (default) to enable client authentication on this listener, the authentication
+  Set `true` (default) to enable client authentication on this listener, the authentication
 process goes through the configured authentication chain.
-When set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.
-When set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be
-denied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off
+When set to `false` to allow any clients with or without authentication information such as username or password to log in.
+When set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be
+denied immediately without going through any authenticators if `username` is not provided. This is useful to fence off
 anonymous clients early.
 
 
@@ -1655,7 +1655,7 @@ Note: Please set the parameter with caution as long idle time will lead to resou
 
   *Default*: `false`
 
-  Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to <code>No Local</code> in MQTT 5.0.
+  Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to `No Local` in MQTT 5.0.
 
 
 **mqtt.strict_mode**
@@ -1674,8 +1674,8 @@ In strict mode, invalid utf8 strings in for example client ID, topic name, etc. 
 
   *Default*: `""`
 
-  UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.
-To disable this feature, input <code>""</code> in the text box below. Only applicable to MQTT 5.0 clients.
+  UTF-8 string, for creating the response topic, for example, if set to `reqrsp/`, the publisher/subscriber will communicate using the topic prefix `reqrsp/`.
+To disable this feature, input `""` in the text box below. Only applicable to MQTT 5.0 clients.
 
 
 **mqtt.server_keepalive**
@@ -1713,7 +1713,7 @@ The default value 1.5 is following the MQTT 5.0 specification. This multiplier i
   *Default*: `false`
 
   Whether to use Username as Client ID.
-This setting takes effect later than <code>Use Peer Certificate as Username</code> and <code>Use peer certificate as Client ID</code>.
+This setting takes effect later than `Use Peer Certificate as Username` and `Use peer certificate as Client ID`.
 
 
 **mqtt.peer_cert_as_username**
@@ -1726,11 +1726,11 @@ This setting takes effect later than <code>Use Peer Certificate as Username</cod
 
   Use the CN, DN field in the peer certificate or the entire certificate content as Username. Only works for the TLS connection.
 Supported configurations are the following:
-- <code>cn</code>: CN field of the certificate
-- <code>dn</code>: DN field of the certificate
-- <code>crt</code>: Content of the <code>DER</code> or <code>PEM</code> certificate
-- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Username
-- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate
+- `cn`: CN field of the certificate
+- `dn`: DN field of the certificate
+- `crt`: Content of the `DER` or `PEM` certificate
+- `pem`: Convert `DER` certificate content to `PEM` format and use as Username
+- `md5`: MD5 value of the `DER` or `PEM` certificate
 
 
 **mqtt.peer_cert_as_clientid**
@@ -1743,11 +1743,11 @@ Supported configurations are the following:
 
   Use the CN, DN field in the peer certificate or the entire certificate content as Client ID. Only works for the TLS connection.
 Supported configurations are the following:
-- <code>cn</code>: CN field of the certificate
-- <code>dn</code>: DN field of the certificate
-- <code>crt</code>: <code>DER</code> or <code>PEM</code> certificate
-- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Client ID
-- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate
+- `cn`: CN field of the certificate
+- `dn`: DN field of the certificate
+- `crt`: `DER` or `PEM` certificate
+- `pem`: Convert `DER` certificate content to `PEM` format and use as Client ID
+- `md5`: MD5 value of the `DER` or `PEM` certificate
 
 
 **mqtt.session_expiry_interval**
@@ -1787,11 +1787,11 @@ Supported configurations are the following:
 There's no priority table by default, hence all messages are treated equal.
 
 **NOTE**: Comma and equal signs are not allowed for priority topic names.
-**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for <code>mqtt.mqueue_default_priority</code>.
+**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for `mqtt.mqueue_default_priority`.
 
 **Examples**:
-To configure <code>"topic/1" > "topic/2"</code>:
-<code>mqueue_priorities: {"topic/1": 10, "topic/2": 8}</code>
+To configure `"topic/1" > "topic/2"`:
+`mqueue_priorities: {"topic/1": 10, "topic/2": 8}`
 
 
 **mqtt.mqueue_default_priority**
@@ -1802,7 +1802,7 @@ To configure <code>"topic/1" > "topic/2"</code>:
 
   *Optional*: `highest | lowest`
 
-  Default topic priority, which will be used by topics not in <code>Topic Priorities</code> (<code>mqueue_priorities</code>).
+  Default topic priority, which will be used by topics not in `Topic Priorities` (`mqueue_priorities`).
 
 
 **mqtt.mqueue_store_qos0**
@@ -1975,7 +1975,7 @@ Configuration of the internal database storing retained messages.
 
   *Default*: `[[1,2,3],[1,3],[2,3],[3]]`
 
-  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.
+  Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have `[2, 4]` index to optimize `+/X/+/Y/...` topic wildcard subscriptions.
 
 
 
@@ -2472,7 +2472,7 @@ The 'enable' flag is used to turn on and off for the push-gateway integration.
   *Default*: `{}`
 
   An HTTP Headers when pushing to Push Gateway.<br/>
-For example, <code> { Authorization = "some-authz-tokens"}</code>
+For example, ` { Authorization = "some-authz-tokens"}`
 
 
 **prometheus.job_name**
@@ -2484,8 +2484,8 @@ For example, <code> { Authorization = "some-authz-tokens"}</code>
   Job Name that is pushed to the Push Gateway. Available variables:<br/>
 - ${name}: Name of EMQX node.<br/>
 - ${host}: Host name of EMQX node.<br/>
-For example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>
-Default value is: <code>${name}/instance/${name}~${host}</code>
+For example, when the EMQX node name is `emqx@127.0.0.1` then the `name` variable takes value `emqx` and the `host` variable takes value `127.0.0.1`.<br/>
+Default value is: `${name}/instance/${name}~${host}`
 
 
 **prometheus.enable**
@@ -2637,11 +2637,11 @@ Settings for the alarms.
 
   *Default*: `["log","publish"]`
 
-  The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: <code>log</code> and <code>publish</code>.
-<code>log</code> is to write the alarm to log (console or file).
-<code>publish</code> is to publish the alarm as an MQTT message to the system topics:
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>
+  The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: `log` and `publish`.
+`log` is to write the alarm to log (console or file).
+`publish` is to publish the alarm as an MQTT message to the system topics:
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`
 
 
 **alarm.size_limit**
@@ -2778,8 +2778,8 @@ This part of the configuration is responsible for collecting
 
   *Default*: `disabled`
 
-  When an Erlang process spends long time to perform garbage collection, a warning level <code>long_gc</code> log is emitted,
-and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</code>.
+  When an Erlang process spends long time to perform garbage collection, a warning level `long_gc` log is emitted,
+and an MQTT message is published to the system topic `$SYS/sysmon/long_gc`.
 
 
 **sysmon.vm.long_schedule**
@@ -2789,7 +2789,7 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</
   *Default*: `240ms`
 
   When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,
-and an MQTT message is published to the system topic <code>$SYS/sysmon/long_schedule</code>.
+and an MQTT message is published to the system topic `$SYS/sysmon/long_schedule`.
 
 
 **sysmon.vm.large_heap**
@@ -2799,8 +2799,8 @@ and an MQTT message is published to the system topic <code>$SYS/sysmon/long_sche
   *Default*: `32MB`
 
   When an Erlang process consumed a large amount of memory for its heap space,
-the system will write a warning level <code>large_heap</code> log, and an MQTT message is published to
-the system topic <code>$SYS/sysmon/large_heap</code>.
+the system will write a warning level `large_heap` log, and an MQTT message is published to
+the system topic `$SYS/sysmon/large_heap`.
 
 
 **sysmon.vm.busy_dist_port**
@@ -2810,8 +2810,8 @@ the system topic <code>$SYS/sysmon/large_heap</code>.
   *Default*: `true`
 
   When the RPC connection used to communicate with other nodes in the cluster is overloaded,
-there will be a <code>busy_dist_port</code> warning log,
-and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_port</code>.
+there will be a `busy_dist_port` warning log,
+and an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.
 
 
 **sysmon.vm.busy_port**
@@ -2820,8 +2820,8 @@ and an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_por
 
   *Default*: `true`
 
-  When a port (e.g. TCP socket) is overloaded, there will be a <code>busy_port</code> warning log,
-and an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port</code>.
+  When a port (e.g. TCP socket) is overloaded, there will be a `busy_port` warning log,
+and an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.
 
 
 
@@ -3291,7 +3291,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **dashboard.listeners.https.ssl_options.ciphers**
@@ -3302,8 +3302,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -3315,18 +3315,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **dashboard.listeners.https.ssl_options.secure_renegotiate**
@@ -3370,7 +3370,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
+NOTE: The `dhfile` option is not supported by TLS 1.3.
 
 
 **dashboard.listeners.https.ssl_options.honor_cipher_order**
@@ -3530,7 +3530,7 @@ Configuration of authenticator using built-in database as data source.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 
@@ -3584,7 +3584,7 @@ Configuration of authenticator using MySQL as authentication data source.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.server**
@@ -3681,8 +3681,8 @@ Configuration of authenticator using MongoDB (Standalone) as authentication data
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authentication.$INDEX.password_hash_field**
@@ -3727,7 +3727,7 @@ Filter supports the following placeholders:
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.mongo_type**
@@ -3854,8 +3854,8 @@ Configuration of authenticator using MongoDB (Replica Set) as authentication dat
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authentication.$INDEX.password_hash_field**
@@ -3900,7 +3900,7 @@ Filter supports the following placeholders:
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.mongo_type**
@@ -4046,8 +4046,8 @@ Configuration of authenticator using MongoDB (Sharded Cluster) as authentication
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authentication.$INDEX.password_hash_field**
@@ -4092,7 +4092,7 @@ Filter supports the following placeholders:
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.mongo_type**
@@ -4227,7 +4227,7 @@ Configuration of authenticator using PostgreSQL as authentication data source.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.server**
@@ -4311,7 +4311,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
   *Type*: `string`
 
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
+  The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4329,7 +4329,7 @@ Configuration of authenticator using Redis (Standalone) as authentication data s
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.server**
@@ -4415,7 +4415,7 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
   *Type*: `string`
 
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
+  The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4433,7 +4433,7 @@ Configuration of authenticator using Redis (Cluster) as authentication data sour
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.servers**
@@ -4511,7 +4511,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
   *Type*: `string`
 
-  The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.
+  The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.
 
 
 **authentication.$INDEX.password_hash_algorithm**
@@ -4529,7 +4529,7 @@ Configuration of authenticator using Redis (Sentinel) as authentication data sou
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.servers**
@@ -4620,7 +4620,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
   *Default*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  List of HTTP headers (without <code>content-type</code>).
+  List of HTTP headers (without `content-type`).
 
 
 **authentication.$INDEX.mechanism**
@@ -4666,7 +4666,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.connect_timeout**
@@ -4791,7 +4791,7 @@ Configuration of authenticator using HTTP Server as authentication service (Usin
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 **authentication.$INDEX.connect_timeout**
@@ -4962,7 +4962,7 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
   *Optional*: `hmac-based`
 
-  JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).
+  JWT signing algorithm, Supports HMAC (configured as `hmac-based`) and RSA, ECDSA (configured as `public-key`).
 
 
 **authentication.$INDEX.secret**
@@ -5005,9 +5005,9 @@ Configuration when the JWT for authentication is issued using the HMAC algorithm
 
   A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
+Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.
 
 
 **authentication.$INDEX.from**
@@ -5027,7 +5027,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 
@@ -5100,9 +5100,9 @@ Configuration when JWTs used for authentication need to be fetched from the JWKS
 
   A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
+Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.
 
 
 **authentication.$INDEX.from**
@@ -5122,7 +5122,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 " 
 
@@ -5134,7 +5134,7 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
   *Optional*: `public-key`
 
-  JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).
+  JWT signing algorithm, Supports HMAC (configured as `hmac-based`) and RSA, ECDSA (configured as `public-key`).
 
 
 **authentication.$INDEX.public_key**
@@ -5168,9 +5168,9 @@ Configuration when the JWT for authentication is issued using RSA or ECDSA algor
 
   A list of custom claims to validate, which is a list of name/value pairs.
 Values can use the following placeholders:
-- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting
-- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
-Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.
+- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting
+- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
+Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.
 
 
 **authentication.$INDEX.from**
@@ -5190,7 +5190,7 @@ Authentication will verify that the value of claims in the JWT (taken from the P
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 
@@ -5240,7 +5240,7 @@ Settings for Salted Challenge Response Authentication Mechanism
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this auth provider.
+  Set to `true` or `false` to disable this auth provider.
 
 
 
@@ -5250,12 +5250,12 @@ Settings for Salted Challenge Response Authentication Mechanism
 PSK stands for 'Pre-Shared Keys'.
 This config to enable TLS-PSK authentication.
 
-Important! Make sure the SSL listener with only <code>tlsv1.2</code> enabled, and also PSK cipher suites
-configured, such as <code>RSA-PSK-AES256-GCM-SHA384</code>.
+Important! Make sure the SSL listener with only `tlsv1.2` enabled, and also PSK cipher suites
+configured, such as `RSA-PSK-AES256-GCM-SHA384`.
 
 See listener SSL options config for more details.
 
-The IDs and secrets can be provided from a file which is configurable by the <code>init_file</code> field.
+The IDs and secrets can be provided from a file which is configurable by the `init_file` field.
 
 **psk_authentication.enable**
 
@@ -5271,8 +5271,8 @@ The IDs and secrets can be provided from a file which is configurable by the <co
   *Type*: `string`
 
   If init_file is specified, EMQX will import PSKs from the file into the built-in database at startup for use by the runtime.
-The file has to be structured line-by-line, each line must be in the format of <code>PSKIdentity:SharedSecret</code>.
-For example: <code>mydevice1:c2VjcmV0</code>
+The file has to be structured line-by-line, each line must be in the format of `PSKIdentity:SharedSecret`.
+For example: `mydevice1:c2VjcmV0`
 
 
 **psk_authentication.separator**
@@ -5281,7 +5281,7 @@ For example: <code>mydevice1:c2VjcmV0</code>
 
   *Default*: `:`
 
-  The separator between <code>PSKIdentity</code> and <code>SharedSecret</code> in the PSK file
+  The separator between `PSKIdentity` and `SharedSecret` in the PSK file
 
 
 **psk_authentication.chunk_size**
@@ -5407,7 +5407,7 @@ Authorization using a static file.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.path**
@@ -5443,7 +5443,7 @@ Authorization using a built-in database (mnesia).
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 
@@ -5465,7 +5465,7 @@ Authorization using a MySQL database.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.server**
@@ -5558,7 +5558,7 @@ Authorization using a PostgreSQL database.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.server**
@@ -5651,7 +5651,7 @@ Authorization using a single MongoDB instance.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.collection**
@@ -5669,8 +5669,8 @@ Authorization using a single MongoDB instance.
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+ - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>
+ - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -5781,7 +5781,7 @@ Authorization using a MongoDB replica set.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.collection**
@@ -5799,8 +5799,8 @@ Authorization using a MongoDB replica set.
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+ - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>
+ - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -5930,7 +5930,7 @@ Authorization using a sharded MongoDB cluster.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.collection**
@@ -5948,8 +5948,8 @@ Authorization using a sharded MongoDB cluster.
 
   Conditional expression that defines the filter condition in the query.
 Filter supports the following placeholders<br/>
- - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>
- - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting
+ - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>
+ - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting
 
 
 **authorization.sources.$INDEX.mongo_type**
@@ -6063,7 +6063,7 @@ Authorization using a single Redis instance.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.server**
@@ -6151,7 +6151,7 @@ Authorization using a Redis cluster.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.servers**
@@ -6231,7 +6231,7 @@ Authorization using a Redis Sentinel.
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.servers**
@@ -6337,7 +6337,7 @@ Authorization using an external HTTP server (via GET requests).
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.url**
@@ -6433,7 +6433,7 @@ Authorization using an external HTTP server (via GET requests).
 
   *Default*: `{"keep-alive":"timeout=30, max=1000","connection":"keep-alive","cache-control":"no-cache","accept":"application/json"}`
 
-  List of HTTP headers (without <code>content-type</code>).
+  List of HTTP headers (without `content-type`).
 
 
 
@@ -6455,7 +6455,7 @@ Authorization using an external HTTP server (via POST requests).
 
   *Default*: `true`
 
-  Set to <code>true</code> or <code>false</code> to disable this ACL provider
+  Set to `true` or `false` to disable this ACL provider
 
 
 **authorization.sources.$INDEX.url**
@@ -6982,8 +6982,8 @@ Configuration for an HTTP bridge.
   The URL of the HTTP Bridge.<br/>
 Template with variables is allowed in the path, but variables cannot be used in the scheme, host,
 or port part.<br/>
-For example, <code> http://localhost:9901/${topic} </code> is allowed, but
-<code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>
+For example, ` http://localhost:9901/${topic} ` is allowed, but
+` http://${host}:9901/message ` or ` http://localhost:${port}/message `
 is not allowed.
 
 
@@ -7175,7 +7175,7 @@ For bridges only have ingress direction data flow, it can be set to 0 otherwise 
 Manage EMQX plugins.<br/>
 Plugins can be pre-built as a part of EMQX package,
 or installed as a standalone package in a location specified by
-<code>install_dir</code> config key<br/>
+`install_dir` config key<br/>
 The standalone-installed plugins are referred to as 'external' plugins.
 
 **plugins.states**
@@ -7196,10 +7196,10 @@ The plugins are started in the defined order
 
   The installation directory for the external plugins.
 The plugin beam files and configuration files should reside in
-the subdirectory named as <code>emqx_foo_bar-0.1.0</code>.
+the subdirectory named as `emqx_foo_bar-0.1.0`.
 <br/>
 NOTE: For security reasons, this directory should **NOT** be writable
-by anyone except <code>emqx</code> (or any user which runs EMQX).
+by anyone except `emqx` (or any user which runs EMQX).
 
 
 **plugins.check_interval**
@@ -7445,7 +7445,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **exhook.servers.$INDEX.ssl.ciphers**
@@ -7456,8 +7456,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -7469,18 +7469,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **exhook.servers.$INDEX.ssl.secure_renegotiate**
@@ -7634,8 +7634,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway.coap.listeners**
@@ -7764,8 +7764,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway.lwm2m.listeners**
@@ -7961,7 +7961,7 @@ The MQTT-SN (MQTT for Sensor Networks) protocol gateway.
   *Default*: `1`
 
   MQTT-SN Gateway ID.
-When the <code>broadcast</code> option is enabled, the gateway will broadcast ADVERTISE message with this value
+When the `broadcast` option is enabled, the gateway will broadcast ADVERTISE message with this value
 
 
 **gateway.mqttsn.broadcast**
@@ -8017,8 +8017,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway.mqttsn.listeners**
@@ -8112,8 +8112,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway.stomp.listeners**
@@ -8198,14 +8198,14 @@ Settings for EMQX extension protocol (exproto).
 
   *Type*: `exproto_grpc_server`
 
-  Configurations for starting the <code>ConnectionAdapter</code> service
+  Configurations for starting the `ConnectionAdapter` service
 
 
 **gateway.exproto.handler**
 
   *Type*: `exproto_grpc_handler`
 
-  Configurations for request to <code>ConnectionHandler</code> service
+  Configurations for request to `ConnectionHandler` service
 
 
 **gateway.exproto.mountpoint**
@@ -8223,8 +8223,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway.exproto.listeners**
@@ -8410,7 +8410,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **gateway.exproto.server.ssl_options.ciphers**
@@ -8421,8 +8421,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -8434,18 +8434,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **gateway.exproto.server.ssl_options.secure_renegotiate**
@@ -8489,7 +8489,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
+NOTE: The `dhfile` option is not supported by TLS 1.3.
 
 
 **gateway.exproto.server.ssl_options.fail_if_no_peer_cert**
@@ -8652,8 +8652,8 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
   *Default*: `true`
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
-When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set `true` (default) to enable client authentication on this listener. 
+When set to `false` clients will be allowed to connect without authentication.
 
 
 **gateway:tcp_listener.mountpoint**
@@ -8669,8 +8669,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway:tcp_listener.access_rules**
@@ -8815,8 +8815,8 @@ EMQX will close the TCP connection if proxy protocol packet is not received with
 
   *Default*: `true`
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
-When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set `true` (default) to enable client authentication on this listener. 
+When set to `false` clients will be allowed to connect without authentication.
 
 
 **gateway:ssl_listener.mountpoint**
@@ -8832,8 +8832,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway:ssl_listener.access_rules**
@@ -8904,8 +8904,8 @@ Settings for UDP listener.
 
   *Default*: `true`
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
-When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set `true` (default) to enable client authentication on this listener. 
+When set to `false` clients will be allowed to connect without authentication.
 
 
 **gateway:udp_listener.mountpoint**
@@ -8921,8 +8921,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway:udp_listener.access_rules**
@@ -9057,8 +9057,8 @@ Settings for DTLS listener.
 
   *Default*: `true`
 
-  Set <code>true</code> (default) to enable client authentication on this listener. 
-When set to <code>false</code> clients will be allowed to connect without authentication.
+  Set `true` (default) to enable client authentication on this listener. 
+When set to `false` clients will be allowed to connect without authentication.
 
 
 **gateway:dtls_listener.mountpoint**
@@ -9074,8 +9074,8 @@ Similarly, if another client B (connected to the same listener as the client A) 
 the message is routed to all the clients subscribed `some_tenant/t`,
 so client A will receive the message, with topic name `t`. Set to `""` to disable the feature.
 Variables in mountpoint string:<br/>
-  - <code>${clientid}</code>: clientid<br/>
-  - <code>${username}</code>: username
+  - `${clientid}`: clientid<br/>
+  - `${username}`: username
 
 
 **gateway:dtls_listener.access_rules**
@@ -9186,7 +9186,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **gateway:dtls_opts.ciphers**
@@ -9197,8 +9197,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -9210,18 +9210,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **gateway:dtls_opts.secure_renegotiate**
@@ -9265,7 +9265,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
+NOTE: The `dhfile` option is not supported by TLS 1.3.
 
 
 **gateway:dtls_opts.fail_if_no_peer_cert**
@@ -9431,7 +9431,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **ssl_client_opts.ciphers**
@@ -9442,8 +9442,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -9455,18 +9455,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **ssl_client_opts.secure_renegotiate**
@@ -9621,7 +9621,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **listener_ssl_opts.ciphers**
@@ -9632,8 +9632,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -9645,18 +9645,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **listener_ssl_opts.secure_renegotiate**
@@ -9700,7 +9700,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
+NOTE: The `dhfile` option is not supported by TLS 1.3.
 
 
 **listener_ssl_opts.fail_if_no_peer_cert**
@@ -9900,7 +9900,7 @@ WebSocket listener options.
   *Default*: `/mqtt`
 
   WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:
-<code>ws://{ip}:{port}/mqtt</code>
+`ws://{ip}:{port}/mqtt`
 
 
 **ws_opts.mqtt_piggyback**
@@ -9920,8 +9920,8 @@ WebSocket listener options.
 
   *Default*: `false`
 
-  If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br/>
-The configuration items under <code>deflate_opts</code> belong to the compression-related parameter configuration.
+  If `true`, compress WebSocket messages using `zlib`.<br/>
+The configuration items under `deflate_opts` belong to the compression-related parameter configuration.
 
 
 **ws_opts.idle_timeout**
@@ -9948,8 +9948,8 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `true`
 
-  If <code>true</code>, the server will return an error when
- the client does not carry the <code>Sec-WebSocket-Protocol</code> field.
+  If `true`, the server will return an error when
+ the client does not carry the `Sec-WebSocket-Protocol` field.
  <br/>Note: WeChat applet needs to disable this verification.
 
 
@@ -9968,8 +9968,8 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `false`
 
-  If <code>true</code>, <code>origin</code> HTTP header will be
- validated against the list of allowed origins configured in <code>check_origins</code>
+  If `true`, `origin` HTTP header will be
+ validated against the list of allowed origins configured in `check_origins`
  parameter.
 
 
@@ -9979,8 +9979,8 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `true`
 
-  If <code>false</code> and <code>check_origin_enable</code> is
- <code>true</code>, the server will reject requests that don't have <code>origin</code>
+  If `false` and `check_origin_enable` is
+ `true`, the server will reject requests that don't have `origin`
  HTTP header.
 
 
@@ -9990,7 +9990,7 @@ The configuration items under <code>deflate_opts</code> belong to the compressio
 
   *Default*: `http://localhost:18083, http://127.0.0.1:18083`
 
-  List of allowed origins.<br/>See <code>check_origin_enable</code>.
+  List of allowed origins.<br/>See `check_origin_enable`.
 
 
 **ws_opts.proxy_address_header**
@@ -10110,7 +10110,7 @@ if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.
   All TLS/DTLS versions to be supported.<br/>
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>
 In case PSK cipher suites are intended, make sure to configure
-<code>['tlsv1.2', 'tlsv1.1']</code> here.
+`['tlsv1.2', 'tlsv1.1']` here.
 
 
 **listeners.wss.$name.ssl_options.ciphers**
@@ -10121,8 +10121,8 @@ In case PSK cipher suites are intended, make sure to configure
 
   This config holds TLS cipher suite names separated by comma,
 or as an array of strings. e.g.
-<code>"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"</code> or
-<code>["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]</code>.
+`"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256"` or
+`["TLS_AES_256_GCM_SHA384","TLS_AES_128_GCM_SHA256"]`.
 <br/>
 Ciphers (and their ordering) define the way in which the
 client and server encrypts information over the network connection.
@@ -10134,18 +10134,18 @@ All default values and examples provided by EMQX config
 documentation are all in OpenSSL format.<br/>
 
 NOTE: Certain cipher suites are only compatible with
-specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
+specific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')
 incompatible cipher suites will be silently dropped.
-For instance, if only 'tlsv1.3' is given in the <code>versions</code>,
+For instance, if only 'tlsv1.3' is given in the `versions`,
 configuring cipher suites for other versions will have no effect.
 <br/>
 
 NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>
-If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>
-PSK cipher suites: <code>"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
+If PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>
+PSK cipher suites: `"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,
 RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,
 RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,
-RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"</code>
+RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA"`
 
 
 **listeners.wss.$name.ssl_options.secure_renegotiate**
@@ -10189,7 +10189,7 @@ Has no effect when TLS version is configured (or negotiated) to 1.3
 to be used by the server if a cipher suite using Diffie-Hellman
 key exchange is negotiated. If not specified, default parameters
 are used.<br/>
-NOTE: The <code>dhfile</code> option is not supported by TLS 1.3.
+NOTE: The `dhfile` option is not supported by TLS 1.3.
 
 
 **listeners.wss.$name.ssl_options.fail_if_no_peer_cert**
