@@ -2773,8 +2773,8 @@ Settings for the alarms.
   The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: `log` and `publish`.
 `log` is to write the alarm to log (console or file).
 `publish` is to publish the alarm as an MQTT message to the system topics:
-`\$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and
-`\$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and
+`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`
 
 
 **alarm.size_limit**
@@ -2912,7 +2912,7 @@ This part of the configuration is responsible for collecting
   *Default*: `disabled`
 
   When an Erlang process spends long time to perform garbage collection, a warning level `long_gc` log is emitted,
-and an MQTT message is published to the system topic `\$SYS/sysmon/long_gc`.
+and an MQTT message is published to the system topic `$SYS/sysmon/long_gc`.
 
 
 **sysmon.vm.long_schedule**
@@ -2922,7 +2922,7 @@ and an MQTT message is published to the system topic `\$SYS/sysmon/long_gc`.
   *Default*: `240ms`
 
   When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,
-and an MQTT message is published to the system topic `\$SYS/sysmon/long_schedule`.
+and an MQTT message is published to the system topic `$SYS/sysmon/long_schedule`.
 
 
 **sysmon.vm.large_heap**
@@ -2933,7 +2933,7 @@ and an MQTT message is published to the system topic `\$SYS/sysmon/long_schedule
 
   When an Erlang process consumed a large amount of memory for its heap space,
 the system will write a warning level `large_heap` log, and an MQTT message is published to
-the system topic `\$SYS/sysmon/large_heap`.
+the system topic `$SYS/sysmon/large_heap`.
 
 
 **sysmon.vm.busy_dist_port**
@@ -2944,7 +2944,7 @@ the system topic `\$SYS/sysmon/large_heap`.
 
   When the RPC connection used to communicate with other nodes in the cluster is overloaded,
 there will be a `busy_dist_port` warning log,
-and an MQTT message is published to system topic `\$SYS/sysmon/busy_dist_port`.
+and an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.
 
 
 **sysmon.vm.busy_port**
@@ -2954,7 +2954,7 @@ and an MQTT message is published to system topic `\$SYS/sysmon/busy_dist_port`.
   *Default*: `true`
 
   When a port (e.g. TCP socket) is overloaded, there will be a `busy_port` warning log,
-and an MQTT message is published to the system topic `\$SYS/sysmon/busy_port`.
+and an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.
 
 
 

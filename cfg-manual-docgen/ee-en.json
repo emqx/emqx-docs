@@ -2395,7 +2395,7 @@
             "publish"
           ]
         ],
-        "desc" : "The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: `log` and `publish`.\n`log` is to write the alarm to log (console or file).\n`publish` is to publish the alarm as an MQTT message to the system topics:\n`\\$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and\n`\\$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`",
+        "desc" : "The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: `log` and `publish`.\n`log` is to write the alarm to log (console or file).\n`publish` is to publish the alarm as an MQTT message to the system topics:\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[log, publish]"
@@ -6235,7 +6235,7 @@
         },
         "raw_default" : "disabled",
         "name" : "long_gc",
-        "desc" : "When an Erlang process spends long time to perform garbage collection, a warning level `long_gc` log is emitted,\nand an MQTT message is published to the system topic `\\$SYS/sysmon/long_gc`.",
+        "desc" : "When an Erlang process spends long time to perform garbage collection, a warning level `long_gc` log is emitted,\nand an MQTT message is published to the system topic `$SYS/sysmon/long_gc`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -6260,7 +6260,7 @@
         },
         "raw_default" : "240ms",
         "name" : "long_schedule",
-        "desc" : "When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,\nand an MQTT message is published to the system topic `\\$SYS/sysmon/long_schedule`.",
+        "desc" : "When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,\nand an MQTT message is published to the system topic `$SYS/sysmon/long_schedule`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"240ms\""
@@ -6285,7 +6285,7 @@
         },
         "raw_default" : "32MB",
         "name" : "large_heap",
-        "desc" : "When an Erlang process consumed a large amount of memory for its heap space,\nthe system will write a warning level `large_heap` log, and an MQTT message is published to\nthe system topic `\\$SYS/sysmon/large_heap`.",
+        "desc" : "When an Erlang process consumed a large amount of memory for its heap space,\nthe system will write a warning level `large_heap` log, and an MQTT message is published to\nthe system topic `$SYS/sysmon/large_heap`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"32MB\""
@@ -6301,7 +6301,7 @@
         },
         "raw_default" : true,
         "name" : "busy_dist_port",
-        "desc" : "When the RPC connection used to communicate with other nodes in the cluster is overloaded,\nthere will be a `busy_dist_port` warning log,\nand an MQTT message is published to system topic `\\$SYS/sysmon/busy_dist_port`.",
+        "desc" : "When the RPC connection used to communicate with other nodes in the cluster is overloaded,\nthere will be a `busy_dist_port` warning log,\nand an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6317,7 +6317,7 @@
         },
         "raw_default" : true,
         "name" : "busy_port",
-        "desc" : "When a port (e.g. TCP socket) is overloaded, there will be a `busy_port` warning log,\nand an MQTT message is published to the system topic `\\$SYS/sysmon/busy_port`.",
+        "desc" : "When a port (e.g. TCP socket) is overloaded, there will be a `busy_port` warning log,\nand an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
