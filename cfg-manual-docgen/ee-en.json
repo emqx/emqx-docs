@@ -26,7 +26,7 @@
         },
         "name" : "mqtt",
         "importance" : "medium",
-        "desc" : "Global MQTT configuration.\nThe configs here work as default values which can be overridden in <code>zone</code> configs",
+        "desc" : "Global MQTT configuration.\nThe configs here work as default values which can be overridden in `zone` configs",
         "aliases" : [
           
         ]
@@ -42,7 +42,7 @@
         },
         "name" : "zones",
         "importance" : "low",
-        "desc" : "A zone is a set of configs grouped by the zone <code>name</code>.\nFor flexible configuration mapping, the <code>name</code> can be set to a listener's <code>zone</code> config.\nNOTE: A built-in zone named <code>default</code> is auto created and can not be deleted.",
+        "desc" : "A zone is a set of configs grouped by the zone `name`.\nFor flexible configuration mapping, the `name` can be set to a listener's `zone` config.\nNOTE: A built-in zone named `default` is auto created and can not be deleted.",
         "aliases" : [
           
         ]
@@ -121,7 +121,7 @@
         ],
         "name" : "authentication",
         "importance" : "low",
-        "desc" : "Default authentication configs for all MQTT listeners.\n\nFor per-listener overrides see <code>authentication</code> in listener configs\n\nThis option can be configured with:\n<ul>\n  <li><code>[]</code>: The default value, it allows *ALL* logins</li>\n  <li>one: For example <code>{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}</code></li>\n  <li>chain: An array of structs.</li>\n</ul>\n\nWhen a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.\n\nIf there is no decision after a full chain exhaustion, the login is rejected.",
+        "desc" : "Default authentication configs for all MQTT listeners.\n\nFor per-listener overrides see `authentication` in listener configs\n\nThis option can be configured with:\n<ul>\n  <li>`[]`: The default value, it allows *ALL* logins</li>\n  <li>one: For example `{enable:true,backend:\"built_in_database\",mechanism=\"password_based\"}`</li>\n  <li>chain: An array of structs.</li>\n</ul>\n\nWhen a chain is configured, the login credentials are checked against the backends per the configured order, until an 'allow' or 'deny' decision can be made.\n\nIf there is no decision after a full chain exhaustion, the login is rejected.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -457,7 +457,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -507,7 +507,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -676,7 +676,7 @@
           "accept" : "application/json"
         },
         "name" : "headers",
-        "desc" : "List of HTTP headers (without <code>content-type</code>).",
+        "desc" : "List of HTTP headers (without `content-type`).",
         "default" : {
           "oneliner" : false,
           "hocon" : "{\n  accept = \"application/json\"\n  \"cache-control\" = \"no-cache\"\n  connection = \"keep-alive\"\n  \"keep-alive\" = \"timeout=30, max=1000\"\n}\n"
@@ -715,7 +715,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -924,7 +924,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -963,7 +963,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -992,7 +992,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>\n - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>\n - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1211,7 +1211,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1240,7 +1240,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>\n - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>\n - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1429,7 +1429,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1458,7 +1458,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>\n - <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders<br/>\n - `${username}`: Will be replaced at runtime with `Username` used by the client when connecting<br/>\n - `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -1647,7 +1647,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1802,7 +1802,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -1952,7 +1952,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2085,7 +2085,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2245,7 +2245,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this ACL provider",
+        "desc" : "Set to `true` or `false` to disable this ACL provider",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -2395,7 +2395,7 @@
             "publish"
           ]
         ],
-        "desc" : "The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: <code>log</code> and <code>publish</code>.\n<code>log</code> is to write the alarm to log (console or file).\n<code>publish</code> is to publish the alarm as an MQTT message to the system topics:\n<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and\n<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
+        "desc" : "The actions triggered when the alarm is activated.<br/>Currently, the following actions are supported: `log` and `publish`.\n`log` is to write the alarm to log (console or file).\n`publish` is to publish the alarm as an MQTT message to the system topics:\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate` and\n`$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[log, publish]"
@@ -3307,7 +3307,7 @@
           "tlsv1"
         ],
         "name" : "versions",
-        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n<code>['tlsv1.2', 'tlsv1.1']</code> here.",
+        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n`['tlsv1.2', 'tlsv1.1']` here.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -3328,7 +3328,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -3375,7 +3375,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The <code>dhfile</code> option is not supported by TLS 1.3.",
+        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The `dhfile` option is not supported by TLS 1.3.",
         "aliases" : [
           
         ]
@@ -3612,7 +3612,7 @@
           "tlsv1"
         ],
         "name" : "versions",
-        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n<code>['tlsv1.2', 'tlsv1.1']</code> here.",
+        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n`['tlsv1.2', 'tlsv1.1']` here.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -3633,7 +3633,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -3680,7 +3680,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The <code>dhfile</code> option is not supported by TLS 1.3.",
+        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The `dhfile` option is not supported by TLS 1.3.",
         "aliases" : [
           
         ]
@@ -4069,7 +4069,7 @@
         },
         "raw_default" : false,
         "name" : "ignore_loop_deliver",
-        "desc" : "Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to <code>No Local</code> in MQTT 5.0.",
+        "desc" : "Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to `No Local` in MQTT 5.0.",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -4101,7 +4101,7 @@
         },
         "raw_default" : "",
         "name" : "response_information",
-        "desc" : "UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.\nTo disable this feature, input <code>\"\"</code> in the text box below. Only applicable to MQTT 5.0 clients.",
+        "desc" : "UTF-8 string, for creating the response topic, for example, if set to `reqrsp/`, the publisher/subscriber will communicate using the topic prefix `reqrsp/`.\nTo disable this feature, input `\"\"` in the text box below. Only applicable to MQTT 5.0 clients.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4322,7 +4322,7 @@
         },
         "raw_default" : "disabled",
         "name" : "mqueue_priorities",
-        "desc" : "Topic priorities. Priority number [1-255]\nThere's no priority table by default, hence all messages are treated equal.\n\n**NOTE**: Comma and equal signs are not allowed for priority topic names.\n**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for <code>mqtt.mqueue_default_priority</code>.\n\n**Examples**:\nTo configure <code>\"topic/1\" > \"topic/2\"</code>:\n<code>mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}</code>",
+        "desc" : "Topic priorities. Priority number [1-255]\nThere's no priority table by default, hence all messages are treated equal.\n\n**NOTE**: Comma and equal signs are not allowed for priority topic names.\n**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for `mqtt.mqueue_default_priority`.\n\n**Examples**:\nTo configure `\"topic/1\" > \"topic/2\"`:\n`mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4341,7 +4341,7 @@
         },
         "raw_default" : "lowest",
         "name" : "mqueue_default_priority",
-        "desc" : "Default topic priority, which will be used by topics not in <code>Topic Priorities</code> (<code>mqueue_priorities</code>).",
+        "desc" : "Default topic priority, which will be used by topics not in `Topic Priorities` (`mqueue_priorities`).",
         "default" : {
           "oneliner" : true,
           "hocon" : "lowest"
@@ -4373,7 +4373,7 @@
         },
         "raw_default" : false,
         "name" : "use_username_as_clientid",
-        "desc" : "Whether to use Username as Client ID.\nThis setting takes effect later than <code>Use Peer Certificate as Username</code> and <code>Use peer certificate as Client ID</code>.",
+        "desc" : "Whether to use Username as Client ID.\nThis setting takes effect later than `Use Peer Certificate as Username` and `Use peer certificate as Client ID`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -4396,7 +4396,7 @@
         },
         "raw_default" : "disabled",
         "name" : "peer_cert_as_username",
-        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Username. Only works for the TLS connection.\nSupported configurations are the following:\n- <code>cn</code>: CN field of the certificate\n- <code>dn</code>: DN field of the certificate\n- <code>crt</code>: Content of the <code>DER</code> or <code>PEM</code> certificate\n- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Username\n- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate",
+        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Username. Only works for the TLS connection.\nSupported configurations are the following:\n- `cn`: CN field of the certificate\n- `dn`: DN field of the certificate\n- `crt`: Content of the `DER` or `PEM` certificate\n- `pem`: Convert `DER` certificate content to `PEM` format and use as Username\n- `md5`: MD5 value of the `DER` or `PEM` certificate",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4419,7 +4419,7 @@
         },
         "raw_default" : "disabled",
         "name" : "peer_cert_as_clientid",
-        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Client ID. Only works for the TLS connection.\nSupported configurations are the following:\n- <code>cn</code>: CN field of the certificate\n- <code>dn</code>: DN field of the certificate\n- <code>crt</code>: <code>DER</code> or <code>PEM</code> certificate\n- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Client ID\n- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate",
+        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Client ID. Only works for the TLS connection.\nSupported configurations are the following:\n- `cn`: CN field of the certificate\n- `dn`: DN field of the certificate\n- `crt`: `DER` or `PEM` certificate\n- `pem`: Convert `DER` certificate content to `PEM` format and use as Client ID\n- `md5`: MD5 value of the `DER` or `PEM` certificate",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -4429,7 +4429,7 @@
         ]
       }
     ],
-    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin <code>zone</code> configs"
+    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin `zone` configs"
   },
   {
     "tags" : [
@@ -4476,7 +4476,7 @@
           "TLS_CHACHA20_POLY1305_SHA256"
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code><br/>\n\nNOTE: QUIC listener supports only 'tlsv1.3' ciphers",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`<br/>\n\nNOTE: QUIC listener supports only 'tlsv1.3' ciphers",
         "default" : {
           "oneliner" : true,
           "hocon" : "[\"TLS_AES_256_GCM_SHA384\", \"TLS_AES_128_GCM_SHA256\", \"TLS_CHACHA20_POLY1305_SHA256\"]"
@@ -4633,7 +4633,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - <code>${clientid}</code>: clientid\n  - <code>${username}</code>: username",
+        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - `${clientid}`: clientid\n  - `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4680,7 +4680,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "Set <code>true</code> (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.\nWhen set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be\ndenied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off\nanonymous clients early.",
+        "desc" : "Set `true` (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to `false` to allow any clients with or without authentication information such as username or password to log in.\nWhen set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be\ndenied immediately without going through any authenticators if `username` is not provided. This is useful to fence off\nanonymous clients early.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -4790,7 +4790,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - <code>${clientid}</code>: clientid\n  - <code>${username}</code>: username",
+        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - `${clientid}`: clientid\n  - `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -4837,7 +4837,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "Set <code>true</code> (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.\nWhen set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be\ndenied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off\nanonymous clients early.",
+        "desc" : "Set `true` (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to `false` to allow any clients with or without authentication information such as username or password to log in.\nWhen set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be\ndenied immediately without going through any authenticators if `username` is not provided. This is useful to fence off\nanonymous clients early.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5020,7 +5020,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - <code>${clientid}</code>: clientid\n  - <code>${username}</code>: username",
+        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - `${clientid}`: clientid\n  - `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -5067,7 +5067,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "Set <code>true</code> (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.\nWhen set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be\ndenied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off\nanonymous clients early.",
+        "desc" : "Set `true` (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to `false` to allow any clients with or without authentication information such as username or password to log in.\nWhen set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be\ndenied immediately without going through any authenticators if `username` is not provided. This is useful to fence off\nanonymous clients early.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5240,7 +5240,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - <code>${clientid}</code>: clientid\n  - <code>${username}</code>: username",
+        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - `${clientid}`: clientid\n  - `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -5287,7 +5287,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "Set <code>true</code> (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.\nWhen set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be\ndenied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off\nanonymous clients early.",
+        "desc" : "Set `true` (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to `false` to allow any clients with or without authentication information such as username or password to log in.\nWhen set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be\ndenied immediately without going through any authenticators if `username` is not provided. This is useful to fence off\nanonymous clients early.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5470,7 +5470,7 @@
         },
         "raw_default" : "",
         "name" : "mountpoint",
-        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - <code>${clientid}</code>: clientid\n  - <code>${username}</code>: username",
+        "desc" : "When publishing or subscribing, prefix all topics with a mountpoint string.\nThe prefixed string will be removed from the topic name when the message\nis delivered to the subscriber. The mountpoint is a way that users can use\nto implement isolation of message routing between different listeners.\nFor example if a client A subscribes to `t` with `listeners.tcp.\\<name>.mountpoint`\nset to `some_tenant`, then the client actually subscribes to the topic\n`some_tenant/t`. Similarly, if another client B (connected to the same listener\nas the client A) sends a message to topic `t`, the message is routed\nto all the clients subscribed `some_tenant/t`, so client A will receive the\nmessage, with topic name `t`.<br/>\nSet to `\"\"` to disable the feature.<br/>\n\nVariables in mountpoint string:\n  - `${clientid}`: clientid\n  - `${username}`: username",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"\""
@@ -5517,7 +5517,7 @@
         },
         "raw_default" : true,
         "name" : "enable_authn",
-        "desc" : "Set <code>true</code> (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to <code>false</code> to allow any clients with or without authentication information such as username or password to log in.\nWhen set to <code>quick_deny_anonymous</code>, it behaves like when set to <code>true</code>, but clients will be\ndenied immediately without going through any authenticators if <code>username</code> is not provided. This is useful to fence off\nanonymous clients early.",
+        "desc" : "Set `true` (default) to enable client authentication on this listener, the authentication\nprocess goes through the configured authentication chain.\nWhen set to `false` to allow any clients with or without authentication information such as username or password to log in.\nWhen set to `quick_deny_anonymous`, it behaves like when set to `true`, but clients will be\ndenied immediately without going through any authenticators if `username` is not provided. This is useful to fence off\nanonymous clients early.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -5836,7 +5836,7 @@
           "tlsv1"
         ],
         "name" : "versions",
-        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n<code>['tlsv1.2', 'tlsv1.1']</code> here.",
+        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n`['tlsv1.2', 'tlsv1.1']` here.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -5857,7 +5857,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -6235,7 +6235,7 @@
         },
         "raw_default" : "disabled",
         "name" : "long_gc",
-        "desc" : "When an Erlang process spends long time to perform garbage collection, a warning level <code>long_gc</code> log is emitted,\nand an MQTT message is published to the system topic <code>$SYS/sysmon/long_gc</code>.",
+        "desc" : "When an Erlang process spends long time to perform garbage collection, a warning level `long_gc` log is emitted,\nand an MQTT message is published to the system topic `$SYS/sysmon/long_gc`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "disabled"
@@ -6260,7 +6260,7 @@
         },
         "raw_default" : "240ms",
         "name" : "long_schedule",
-        "desc" : "When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,\nand an MQTT message is published to the system topic <code>$SYS/sysmon/long_schedule</code>.",
+        "desc" : "When the Erlang VM detect a task scheduled for too long, a warning level 'long_schedule' log is emitted,\nand an MQTT message is published to the system topic `$SYS/sysmon/long_schedule`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"240ms\""
@@ -6285,7 +6285,7 @@
         },
         "raw_default" : "32MB",
         "name" : "large_heap",
-        "desc" : "When an Erlang process consumed a large amount of memory for its heap space,\nthe system will write a warning level <code>large_heap</code> log, and an MQTT message is published to\nthe system topic <code>$SYS/sysmon/large_heap</code>.",
+        "desc" : "When an Erlang process consumed a large amount of memory for its heap space,\nthe system will write a warning level `large_heap` log, and an MQTT message is published to\nthe system topic `$SYS/sysmon/large_heap`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"32MB\""
@@ -6301,7 +6301,7 @@
         },
         "raw_default" : true,
         "name" : "busy_dist_port",
-        "desc" : "When the RPC connection used to communicate with other nodes in the cluster is overloaded,\nthere will be a <code>busy_dist_port</code> warning log,\nand an MQTT message is published to system topic <code>$SYS/sysmon/busy_dist_port</code>.",
+        "desc" : "When the RPC connection used to communicate with other nodes in the cluster is overloaded,\nthere will be a `busy_dist_port` warning log,\nand an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6317,7 +6317,7 @@
         },
         "raw_default" : true,
         "name" : "busy_port",
-        "desc" : "When a port (e.g. TCP socket) is overloaded, there will be a <code>busy_port</code> warning log,\nand an MQTT message is published to the system topic <code>$SYS/sysmon/busy_port</code>.",
+        "desc" : "When a port (e.g. TCP socket) is overloaded, there will be a `busy_port` warning log,\nand an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6520,7 +6520,7 @@
         },
         "raw_default" : "/mqtt",
         "name" : "mqtt_path",
-        "desc" : "WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:\n<code>ws://{ip}:{port}/mqtt</code>",
+        "desc" : "WebSocket's MQTT protocol path. So the address of EMQX Broker's WebSocket is:\n`ws://{ip}:{port}/mqtt`",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"/mqtt\""
@@ -6555,7 +6555,7 @@
         },
         "raw_default" : false,
         "name" : "compress",
-        "desc" : "If <code>true</code>, compress WebSocket messages using <code>zlib</code>.<br/>\nThe configuration items under <code>deflate_opts</code> belong to the compression-related parameter configuration.",
+        "desc" : "If `true`, compress WebSocket messages using `zlib`.<br/>\nThe configuration items under `deflate_opts` belong to the compression-related parameter configuration.",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -6612,7 +6612,7 @@
         },
         "raw_default" : true,
         "name" : "fail_if_no_subprotocol",
-        "desc" : "If <code>true</code>, the server will return an error when\n the client does not carry the <code>Sec-WebSocket-Protocol</code> field.\n <br/>Note: WeChat applet needs to disable this verification.",
+        "desc" : "If `true`, the server will return an error when\n the client does not carry the `Sec-WebSocket-Protocol` field.\n <br/>Note: WeChat applet needs to disable this verification.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6644,7 +6644,7 @@
         },
         "raw_default" : false,
         "name" : "check_origin_enable",
-        "desc" : "If <code>true</code>, <code>origin</code> HTTP header will be\n validated against the list of allowed origins configured in <code>check_origins</code>\n parameter.",
+        "desc" : "If `true`, `origin` HTTP header will be\n validated against the list of allowed origins configured in `check_origins`\n parameter.",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -6660,7 +6660,7 @@
         },
         "raw_default" : true,
         "name" : "allow_origin_absence",
-        "desc" : "If <code>false</code> and <code>check_origin_enable</code> is\n <code>true</code>, the server will reject requests that don't have <code>origin</code>\n HTTP header.",
+        "desc" : "If `false` and `check_origin_enable` is\n `true`, the server will reject requests that don't have `origin`\n HTTP header.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -6676,7 +6676,7 @@
         },
         "raw_default" : "http://localhost:18083, http://127.0.0.1:18083",
         "name" : "check_origins",
-        "desc" : "List of allowed origins.<br/>See <code>check_origin_enable</code>.",
+        "desc" : "List of allowed origins.<br/>See `check_origin_enable`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"http://localhost:18083, http://127.0.0.1:18083\""
@@ -6770,7 +6770,7 @@
         ]
       }
     ],
-    "desc" : "A `Zone` defines a set of configuration items (such as the maximum number of connections) that can be shared between multiple listeners.\n\n`Listener` can refer to a `Zone` through the configuration item <code>listener.\\<Protocol>.\\<Listener Name>.zone</code>.\n\nThe configs defined in the zones will override the global configs with the same key.\n\nFor example, given the following config:\n```\na {\n    b: 1, c: 1\n}\nzone.my_zone {\n  a {\n    b:2\n  }\n}\n```\n\nThe global config `a` is overridden by the configs `a` inside the zone `my_zone`.\n\nIf there is a listener using the zone `my_zone`, the value of config `a` will be: `{b:2, c: 1}`.\nNote that although the default value of `a.c` is `0`, the global value is used, i.e. configs in the zone have no default values. To override `a.c` one must configure it explicitly in the zone.\n\nAll the global configs that can be overridden in zones are:\n - `stats.*`\n - `mqtt.*`\n - `authorization.*`\n - `flapping_detect.*`\n - `force_shutdown.*`\n - `conn_congestion.*`\n - `force_gc.*`\n\n"
+    "desc" : "A `Zone` defines a set of configuration items (such as the maximum number of connections) that can be shared between multiple listeners.\n\n`Listener` can refer to a `Zone` through the configuration item `listener.\\<Protocol>.\\<Listener Name>.zone`.\n\nThe configs defined in the zones will override the global configs with the same key.\n\nFor example, given the following config:\n```\na {\n    b: 1, c: 1\n}\nzone.my_zone {\n  a {\n    b:2\n  }\n}\n```\n\nThe global config `a` is overridden by the configs `a` inside the zone `my_zone`.\n\nIf there is a listener using the zone `my_zone`, the value of config `a` will be: `{b:2, c: 1}`.\nNote that although the default value of `a.c` is `0`, the global value is used, i.e. configs in the zone have no default values. To override `a.c` one must configure it explicitly in the zone.\n\nAll the global configs that can be overridden in zones are:\n - `stats.*`\n - `mqtt.*`\n - `authorization.*`\n - `flapping_detect.*`\n - `force_shutdown.*`\n - `conn_congestion.*`\n - `force_gc.*`\n\n"
   },
   {
     "tags" : [
@@ -7343,7 +7343,7 @@
           "tlsv1"
         ],
         "name" : "versions",
-        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n<code>['tlsv1.2', 'tlsv1.1']</code> here.",
+        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n`['tlsv1.2', 'tlsv1.1']` here.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -7364,7 +7364,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -7411,7 +7411,7 @@
           "kind" : "primitive"
         },
         "name" : "dhfile",
-        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The <code>dhfile</code> option is not supported by TLS 1.3.",
+        "desc" : "Path to a file containing PEM-encoded Diffie-Hellman parameters\nto be used by the server if a cipher suite using Diffie-Hellman\nkey exchange is negotiated. If not specified, default parameters\nare used.<br/>\nNOTE: The `dhfile` option is not supported by TLS 1.3.",
         "aliases" : [
           
         ]
@@ -7888,7 +7888,7 @@
           "tlsv1"
         ],
         "name" : "versions",
-        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n<code>['tlsv1.2', 'tlsv1.1']</code> here.",
+        "desc" : "All TLS/DTLS versions to be supported.<br/>\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/>\nIn case PSK cipher suites are intended, make sure to configure\n`['tlsv1.2', 'tlsv1.1']` here.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[tlsv1.3, tlsv1.2, tlsv1.1, tlsv1]"
@@ -7909,7 +7909,7 @@
           
         ],
         "name" : "ciphers",
-        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n<code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or\n<code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the <code>versions</code>,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/>\nPSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+        "desc" : "This config holds TLS cipher suite names separated by comma,\nor as an array of strings. e.g.\n`\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"` or\n`[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]`.\n<br/>\nCiphers (and their ordering) define the way in which the\nclient and server encrypts information over the network connection.\nSelecting a good cipher suite is critical for the\napplication's data security, confidentiality and performance.\n\nThe names should be in OpenSSL string format (not RFC format).\nAll default values and examples provided by EMQX config\ndocumentation are all in OpenSSL format.<br/>\n\nNOTE: Certain cipher suites are only compatible with\nspecific TLS `versions` ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')\nincompatible cipher suites will be silently dropped.\nFor instance, if only 'tlsv1.3' is given in the `versions`,\nconfiguring cipher suites for other versions will have no effect.\n<br/>\n\nNOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/>\nIf PSK cipher suites are intended, 'tlsv1.3' should be disabled from `versions`.<br/>\nPSK cipher suites: `\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,\nRSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,\nRSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,\nRSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"`",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -9008,7 +9008,7 @@
         "examples" : [
           "${pub_props.'User-Property'}"
         ],
-        "desc" : "From which variable should the MQTT message's User-Property pairs be taken from.\nThe value must be a map.\nYou may configure it to <code>${pub_props.'User-Property'}</code> or\nuse <code>SELECT *,pub_props.'User-Property' as user_properties</code>\nto forward the original user properties to the republished message.\nYou may also call <code>map_put</code> function like\n<code>map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties</code>\nto inject user properties.\nNOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.",
+        "desc" : "From which variable should the MQTT message's User-Property pairs be taken from.\nThe value must be a map.\nYou may configure it to `${pub_props.'User-Property'}` or\nuse `SELECT *,pub_props.'User-Property' as user_properties`\nto forward the original user properties to the republished message.\nYou may also call `map_put` function like\n`map_put('my-prop-name', 'my-prop-value', user_properties) as user_properties`\nto inject user properties.\nNOTE: MQTT spec allows duplicated user property names, but EMQX Rule-Engine does not.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${user_properties}\""
@@ -9018,7 +9018,7 @@
         ]
       }
     ],
-    "desc" : "The arguments of the built-in 'republish' action.One can use variables in the args.\nThe variables are selected by the rule. For example, if the rule SQL is defined as following:\n<code>\n    SELECT clientid, qos, payload FROM \"t/1\"\n</code>\nThen there are 3 variables available: <code>clientid</code>, <code>qos</code> and\n<code>payload</code>. And if we've set the args to:\n<code>\n    {\n        topic = \"t/${clientid}\"\n        qos = \"${qos}\"\n        payload = \"msg: ${payload}\"\n    }\n</code>\nWhen the rule is triggered by an MQTT message with payload = `hello`, qos = 1,\nclientid = `Steve`, the rule will republish a new MQTT message to topic `t/Steve`,\npayload = `msg: hello`, and `qos = 1`."
+    "desc" : "The arguments of the built-in 'republish' action.One can use variables in the args.\nThe variables are selected by the rule. For example, if the rule SQL is defined as following:\n`\n    SELECT clientid, qos, payload FROM \"t/1\"\n`\nThen there are 3 variables available: `clientid`, `qos` and\n`payload`. And if we've set the args to:\n`\n    {\n        topic = \"t/${clientid}\"\n        qos = \"${qos}\"\n        payload = \"msg: ${payload}\"\n    }\n`\nWhen the rule is triggered by an MQTT message with payload = `hello`, qos = 1,\nclientid = `Steve`, the rule will republish a new MQTT message to topic `t/Steve`,\npayload = `msg: hello`, and `qos = 1`."
   },
   {
     "tags" : [
@@ -9174,7 +9174,7 @@
             49
           ]
         ],
-        "desc" : "SQL query to transform the messages.\nExample: <code>SELECT * FROM \"test/topic\" WHERE payload.x = 1</code>",
+        "desc" : "SQL query to transform the messages.\nExample: `SELECT * FROM \"test/topic\" WHERE payload.x = 1`",
         "aliases" : [
           
         ]
@@ -9332,7 +9332,7 @@
             110
           ]
         ],
-        "desc" : "The user provided function. Should be in the format: '{module}:{function}'.\nWhere {module} is the Erlang callback module and {function} is the Erlang function.\n\nTo write your own function, checkout the function <code>console</code> and\n<code>republish</code> in the source file:\n<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> as an example.",
+        "desc" : "The user provided function. Should be in the format: '{module}:{function}'.\nWhere {module} is the Erlang callback module and {function} is the Erlang function.\n\nTo write your own function, checkout the function `console` and\n`republish` in the source file:\n`apps/emqx_rule_engine/src/emqx_rule_actions.erl` as an example.",
         "aliases" : [
           
         ]
@@ -9346,7 +9346,7 @@
           
         },
         "name" : "args",
-        "desc" : "The args will be passed as the 3rd argument to module:function/3,\ncheckout the function <code>console</code> and <code>republish</code> in the source file:\n<code>apps/emqx_rule_engine/src/emqx_rule_actions.erl</code> as an example.",
+        "desc" : "The args will be passed as the 3rd argument to module:function/3,\ncheckout the function `console` and `republish` in the source file:\n`apps/emqx_rule_engine/src/emqx_rule_actions.erl` as an example.",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -9374,7 +9374,7 @@
         },
         "raw_default" : "localhost",
         "name" : "name",
-        "desc" : "The domain name from which to discover peer EMQX nodes' IP addresses.\nApplicable when <code>cluster.discovery_strategy = dns</code>",
+        "desc" : "The domain name from which to discover peer EMQX nodes' IP addresses.\nApplicable when `cluster.discovery_strategy = dns`",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"localhost\""
@@ -9523,7 +9523,7 @@
         },
         "raw_default" : "ip",
         "name" : "address_type",
-        "desc" : "Address type used for connecting to the discovered nodes.\nSetting <code>cluster.k8s.address_type</code> to <code>ip</code> will\nmake EMQX to discover IP addresses of peer nodes from Kubernetes API.",
+        "desc" : "Address type used for connecting to the discovered nodes.\nSetting `cluster.k8s.address_type` to `ip` will\nmake EMQX to discover IP addresses of peer nodes from Kubernetes API.",
         "default" : {
           "oneliner" : true,
           "hocon" : "ip"
@@ -9555,7 +9555,7 @@
         },
         "raw_default" : "pod.local",
         "name" : "suffix",
-        "desc" : "Node name suffix.<br/>\nNote: this parameter is only relevant when <code>address_type</code> is <code>dns</code>\nor <code>hostname</code>.",
+        "desc" : "Node name suffix.<br/>\nNote: this parameter is only relevant when `address_type` is `dns`\nor `hostname`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"pod.local\""
@@ -9653,7 +9653,7 @@
         },
         "raw_default" : true,
         "name" : "loop",
-        "desc" : "If <code>true</code>, loop UDP datagrams back to the local socket.",
+        "desc" : "If `true`, loop UDP datagrams back to the local socket.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -9734,7 +9734,7 @@
           
         ],
         "name" : "seeds",
-        "desc" : "List EMQX node names in the static cluster. See <code>node.name</code>.",
+        "desc" : "List EMQX node names in the static cluster. See `node.name`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -9923,7 +9923,7 @@
         },
         "raw_default" : "manual",
         "name" : "discovery_strategy",
-        "desc" : "Service discovery method for the cluster nodes. Possible values are:\n- manual: Use <code>emqx ctl cluster</code> command to manage cluster.<br/>\n- static: Configure static nodes list by setting <code>seeds</code> in config file.<br/>\n- dns: Use DNS A record to discover peer nodes.<br/>\n- etcd: Use etcd to discover peer nodes.<br/>\n- k8s: Use Kubernetes API to discover peer pods.",
+        "desc" : "Service discovery method for the cluster nodes. Possible values are:\n- manual: Use `emqx ctl cluster` command to manage cluster.<br/>\n- static: Configure static nodes list by setting `seeds` in config file.<br/>\n- dns: Use DNS A record to discover peer nodes.<br/>\n- etcd: Use etcd to discover peer nodes.<br/>\n- k8s: Use Kubernetes API to discover peer pods.",
         "default" : {
           "oneliner" : true,
           "hocon" : "manual"
@@ -9941,7 +9941,7 @@
           
         ],
         "name" : "core_nodes",
-        "desc" : "List of core nodes that the replicant will connect to.<br/>\nNote: this parameter only takes effect when the <code>backend</code> is set\nto <code>rlog</code> and the <code>role</code> is set to <code>replicant</code>.<br/>\nThis value needs to be defined for manual or static cluster discovery mechanisms.<br/>\nIf an automatic cluster discovery mechanism is being used (such as <code>etcd</code>),\nthere is no need to set this value.",
+        "desc" : "List of core nodes that the replicant will connect to.<br/>\nNote: this parameter only takes effect when the `backend` is set\nto `rlog` and the `role` is set to `replicant`.<br/>\nThis value needs to be defined for manual or static cluster discovery mechanisms.<br/>\nIf an automatic cluster discovery mechanism is being used (such as `etcd`),\nthere is no need to set this value.",
         "default" : {
           "oneliner" : true,
           "hocon" : "[]"
@@ -9973,7 +9973,7 @@
         },
         "raw_default" : true,
         "name" : "autoheal",
-        "desc" : "If <code>true</code>, the node will try to heal network partitions automatically.",
+        "desc" : "If `true`, the node will try to heal network partitions automatically.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -9993,7 +9993,7 @@
         },
         "raw_default" : "inet_tcp",
         "name" : "proto_dist",
-        "desc" : "The Erlang distribution protocol for the cluster.<br/>\n- inet_tcp: IPv4 TCP <br/>\n- inet_tls: IPv4 TLS, works together with <code>etc/ssl_dist.conf</code>",
+        "desc" : "The Erlang distribution protocol for the cluster.<br/>\n- inet_tcp: IPv4 TCP <br/>\n- inet_tls: IPv4 TLS, works together with `etc/ssl_dist.conf`",
         "default" : {
           "oneliner" : true,
           "hocon" : "inet_tcp"
@@ -10106,7 +10106,7 @@
         "raw_default" : "system",
         "name" : "time_offset",
         "importance" : "low",
-        "desc" : "The time offset to be used when formatting the timestamp.\nCan be one of:\n  - <code>system</code>: the time offset used by the local system\n  - <code>utc</code>: the UTC time offset\n  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"\nDefaults to: <code>system</code>.",
+        "desc" : "The time offset to be used when formatting the timestamp.\nCan be one of:\n  - `system`: the time offset used by the local system\n  - `utc`: the UTC time offset\n  - `+-[hh]:[mm]`: user specified time offset, such as \"-02:00\" or \"+00:00\"\nDefaults to: `system`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"system\""
@@ -10152,7 +10152,7 @@
         "raw_default" : "text",
         "name" : "formatter",
         "importance" : "medium",
-        "desc" : "Choose log formatter. <code>text</code> for free text, and <code>json</code> for structured logging.",
+        "desc" : "Choose log formatter. `text` for free text, and `json` for structured logging.",
         "default" : {
           "oneliner" : true,
           "hocon" : "text"
@@ -10262,7 +10262,7 @@
         "raw_default" : "error",
         "name" : "supervisor_reports",
         "importance" : "low",
-        "desc" : "Type of supervisor reports that are logged. Defaults to <code>error</code><br/>\n  - <code>error</code>: only log errors in the Erlang processes<br/>.\n  - <code>progress</code>: log process startup.",
+        "desc" : "Type of supervisor reports that are logged. Defaults to `error`<br/>\n  - `error`: only log errors in the Erlang processes<br/>.\n  - `progress`: log process startup.",
         "default" : {
           "oneliner" : true,
           "hocon" : "error"
@@ -10397,7 +10397,7 @@
         },
         "raw_default" : "1s",
         "name" : "window_time",
-        "desc" : "See <code>max_count</code>.",
+        "desc" : "See `max_count`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"1s\""
@@ -10512,7 +10512,7 @@
         "raw_default" : "system",
         "name" : "time_offset",
         "importance" : "low",
-        "desc" : "The time offset to be used when formatting the timestamp.\nCan be one of:\n  - <code>system</code>: the time offset used by the local system\n  - <code>utc</code>: the UTC time offset\n  - <code>+-[hh]:[mm]</code>: user specified time offset, such as \"-02:00\" or \"+00:00\"\nDefaults to: <code>system</code>.",
+        "desc" : "The time offset to be used when formatting the timestamp.\nCan be one of:\n  - `system`: the time offset used by the local system\n  - `utc`: the UTC time offset\n  - `+-[hh]:[mm]`: user specified time offset, such as \"-02:00\" or \"+00:00\"\nDefaults to: `system`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"system\""
@@ -10558,7 +10558,7 @@
         "raw_default" : "text",
         "name" : "formatter",
         "importance" : "medium",
-        "desc" : "Choose log formatter. <code>text</code> for free text, and <code>json</code> for structured logging.",
+        "desc" : "Choose log formatter. `text` for free text, and `json` for structured logging.",
         "default" : {
           "oneliner" : true,
           "hocon" : "text"
@@ -10668,7 +10668,7 @@
         "raw_default" : "error",
         "name" : "supervisor_reports",
         "importance" : "low",
-        "desc" : "Type of supervisor reports that are logged. Defaults to <code>error</code><br/>\n  - <code>error</code>: only log errors in the Erlang processes<br/>.\n  - <code>progress</code>: log process startup.",
+        "desc" : "Type of supervisor reports that are logged. Defaults to `error`<br/>\n  - `error`: only log errors in the Erlang processes<br/>.\n  - `progress`: log process startup.",
         "default" : {
           "oneliner" : true,
           "hocon" : "error"
@@ -10853,7 +10853,7 @@
         "raw_default" : "emqx@127.0.0.1",
         "name" : "name",
         "importance" : "high",
-        "desc" : "Unique name of the EMQX node. It must follow <code>%name%@FQDN</code> or\n<code>%name%@IPv4</code> format.",
+        "desc" : "Unique name of the EMQX node. It must follow `%name%@FQDN` or\n`%name%@IPv4` format.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"emqx@127.0.0.1\""
@@ -10954,7 +10954,7 @@
         "raw_default" : "15m",
         "name" : "global_gc_interval",
         "importance" : "low",
-        "desc" : "Periodic garbage collection interval. Set to <code>disabled</code> to have it disabled.",
+        "desc" : "Periodic garbage collection interval. Set to `disabled` to have it disabled.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"15m\""
@@ -10974,7 +10974,7 @@
         "raw_default" : "core",
         "name" : "role",
         "importance" : "high",
-        "desc" : "Select a node role.<br/>\n<code>core</code> nodes provide durability of the data, and take care of writes.\nIt is recommended to place core nodes in different racks or different availability zones.<br/>\n<code>replicant</code> nodes are ephemeral worker nodes. Removing them from the cluster\ndoesn't affect database redundancy<br/>\nIt is recommended to have more replicant nodes than core nodes.<br/>\nNote: this parameter only takes effect when the <code>backend</code> is set\nto <code>rlog</code>.",
+        "desc" : "Select a node role.<br/>\n`core` nodes provide durability of the data, and take care of writes.\nIt is recommended to place core nodes in different racks or different availability zones.<br/>\n`replicant` nodes are ephemeral worker nodes. Removing them from the cluster\ndoesn't affect database redundancy<br/>\nIt is recommended to have more replicant nodes than core nodes.<br/>\nNote: this parameter only takes effect when the `backend` is set\nto `rlog`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "core"
@@ -11005,7 +11005,7 @@
         },
         "raw_default" : "async",
         "name" : "mode",
-        "desc" : "In <code>sync</code> mode the sending side waits for the ack from the receiving side.",
+        "desc" : "In `sync` mode the sending side waits for the ack from the receiving side.",
         "default" : {
           "oneliner" : true,
           "hocon" : "async"
@@ -11059,7 +11059,7 @@
         },
         "raw_default" : "stateless",
         "name" : "port_discovery",
-        "desc" : "<code>manual</code>: discover ports by <code>tcp_server_port</code>.<br/>\n<code>stateless</code>: discover ports in a stateless manner, using the following algorithm.\nIf node name is <code>emqxN@127.0.0.1</code>, where the N is an integer,\nthen the listening port will be 5370 + N.",
+        "desc" : "`manual`: discover ports by `tcp_server_port`.<br/>\n`stateless`: discover ports in a stateless manner, using the following algorithm.\nIf node name is `emqxN@127.0.0.1`, where the N is an integer,\nthen the listening port will be 5370 + N.",
         "default" : {
           "oneliner" : true,
           "hocon" : "stateless"
@@ -11091,7 +11091,7 @@
         },
         "raw_default" : 5369,
         "name" : "ssl_server_port",
-        "desc" : "Listening port used by RPC local service.<br/>\nNote that this config only takes effect when rpc.port_discovery is set to manual\nand <code>driver</code> is set to <code>ssl</code>.",
+        "desc" : "Listening port used by RPC local service.<br/>\nNote that this config only takes effect when rpc.port_discovery is set to manual\nand `driver` is set to `ssl`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "5369"
@@ -11138,7 +11138,7 @@
           "kind" : "primitive"
         },
         "name" : "certfile",
-        "desc" : "Path to TLS certificate file used to validate identity of the cluster nodes.\nNote that this config only takes effect when <code>rpc.driver</code> is set to <code>ssl</code>.",
+        "desc" : "Path to TLS certificate file used to validate identity of the cluster nodes.\nNote that this config only takes effect when `rpc.driver` is set to `ssl`.",
         "aliases" : [
           
         ]
@@ -11149,7 +11149,7 @@
           "kind" : "primitive"
         },
         "name" : "keyfile",
-        "desc" : "Path to the private key file for the <code>rpc.certfile</code>.<br/>\nNote: contents of this file are secret, so it's necessary to set permissions to 600.",
+        "desc" : "Path to the private key file for the `rpc.certfile`.<br/>\nNote: contents of this file are secret, so it's necessary to set permissions to 600.",
         "aliases" : [
           
         ]
@@ -11160,7 +11160,7 @@
           "kind" : "primitive"
         },
         "name" : "cacertfile",
-        "desc" : "Path to certification authority TLS certificate file used to validate <code>rpc.certfile</code>.<br/>\nNote: certificates of all nodes in the cluster must be signed by the same CA.",
+        "desc" : "Path to certification authority TLS certificate file used to validate `rpc.certfile`.<br/>\nNote: certificates of all nodes in the cluster must be signed by the same CA.",
         "aliases" : [
           
         ]
@@ -11326,7 +11326,7 @@
         ]
       }
     ],
-    "desc" : "EMQX uses a library called <code>gen_rpc</code> for inter-broker communication.<br/>\nMost of the time the default config should work,\nbut in case you need to do performance fine-tuning or experiment a bit,\nthis is where to look."
+    "desc" : "EMQX uses a library called `gen_rpc` for inter-broker communication.<br/>\nMost of the time the default config should work,\nbut in case you need to do performance fine-tuning or experiment a bit,\nthis is where to look."
   },
   {
     "tags" : [
@@ -11853,7 +11853,7 @@
           "kind" : "primitive"
         },
         "name" : "ignore_loop_deliver",
-        "desc" : "Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to <code>No Local</code> in MQTT 5.0.",
+        "desc" : "Whether the messages sent by the MQTT v3.1.1/v3.1.0 client will be looped back to the publisher itself, similar to `No Local` in MQTT 5.0.",
         "aliases" : [
           
         ]
@@ -11875,7 +11875,7 @@
           "kind" : "primitive"
         },
         "name" : "response_information",
-        "desc" : "UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.\nTo disable this feature, input <code>\"\"</code> in the text box below. Only applicable to MQTT 5.0 clients.",
+        "desc" : "UTF-8 string, for creating the response topic, for example, if set to `reqrsp/`, the publisher/subscriber will communicate using the topic prefix `reqrsp/`.\nTo disable this feature, input `\"\"` in the text box below. Only applicable to MQTT 5.0 clients.",
         "aliases" : [
           
         ]
@@ -12041,7 +12041,7 @@
           "kind" : "union"
         },
         "name" : "mqueue_priorities",
-        "desc" : "Topic priorities. Priority number [1-255]\nThere's no priority table by default, hence all messages are treated equal.\n\n**NOTE**: Comma and equal signs are not allowed for priority topic names.\n**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for <code>mqtt.mqueue_default_priority</code>.\n\n**Examples**:\nTo configure <code>\"topic/1\" > \"topic/2\"</code>:\n<code>mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}</code>",
+        "desc" : "Topic priorities. Priority number [1-255]\nThere's no priority table by default, hence all messages are treated equal.\n\n**NOTE**: Comma and equal signs are not allowed for priority topic names.\n**NOTE**: Messages for topics not in the priority table are treated as either highest or lowest priority depending on the configured value for `mqtt.mqueue_default_priority`.\n\n**Examples**:\nTo configure `\"topic/1\" > \"topic/2\"`:\n`mqueue_priorities: {\"topic/1\": 10, \"topic/2\": 8}`",
         "aliases" : [
           
         ]
@@ -12055,7 +12055,7 @@
           "kind" : "enum"
         },
         "name" : "mqueue_default_priority",
-        "desc" : "Default topic priority, which will be used by topics not in <code>Topic Priorities</code> (<code>mqueue_priorities</code>).",
+        "desc" : "Default topic priority, which will be used by topics not in `Topic Priorities` (`mqueue_priorities`).",
         "aliases" : [
           
         ]
@@ -12077,7 +12077,7 @@
           "kind" : "primitive"
         },
         "name" : "use_username_as_clientid",
-        "desc" : "Whether to use Username as Client ID.\nThis setting takes effect later than <code>Use Peer Certificate as Username</code> and <code>Use peer certificate as Client ID</code>.",
+        "desc" : "Whether to use Username as Client ID.\nThis setting takes effect later than `Use Peer Certificate as Username` and `Use peer certificate as Client ID`.",
         "aliases" : [
           
         ]
@@ -12095,7 +12095,7 @@
           "kind" : "enum"
         },
         "name" : "peer_cert_as_username",
-        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Username. Only works for the TLS connection.\nSupported configurations are the following:\n- <code>cn</code>: CN field of the certificate\n- <code>dn</code>: DN field of the certificate\n- <code>crt</code>: Content of the <code>DER</code> or <code>PEM</code> certificate\n- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Username\n- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate",
+        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Username. Only works for the TLS connection.\nSupported configurations are the following:\n- `cn`: CN field of the certificate\n- `dn`: DN field of the certificate\n- `crt`: Content of the `DER` or `PEM` certificate\n- `pem`: Convert `DER` certificate content to `PEM` format and use as Username\n- `md5`: MD5 value of the `DER` or `PEM` certificate",
         "aliases" : [
           
         ]
@@ -12113,13 +12113,13 @@
           "kind" : "enum"
         },
         "name" : "peer_cert_as_clientid",
-        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Client ID. Only works for the TLS connection.\nSupported configurations are the following:\n- <code>cn</code>: CN field of the certificate\n- <code>dn</code>: DN field of the certificate\n- <code>crt</code>: <code>DER</code> or <code>PEM</code> certificate\n- <code>pem</code>: Convert <code>DER</code> certificate content to <code>PEM</code> format and use as Client ID\n- <code>md5</code>: MD5 value of the <code>DER</code> or <code>PEM</code> certificate",
+        "desc" : "Use the CN, DN field in the peer certificate or the entire certificate content as Client ID. Only works for the TLS connection.\nSupported configurations are the following:\n- `cn`: CN field of the certificate\n- `dn`: DN field of the certificate\n- `crt`: `DER` or `PEM` certificate\n- `pem`: Convert `DER` certificate content to `PEM` format and use as Client ID\n- `md5`: MD5 value of the `DER` or `PEM` certificate",
         "aliases" : [
           
         ]
       }
     ],
-    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin <code>zone</code> configs"
+    "desc" : "Global MQTT configuration.<br/>The configs here work as default values which can be overridden\nin `zone` configs"
   },
   {
     "tags" : [
@@ -12210,7 +12210,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12433,7 +12433,7 @@
           "accept" : "application/json"
         },
         "name" : "headers",
-        "desc" : "List of HTTP headers (without <code>content-type</code>).",
+        "desc" : "List of HTTP headers (without `content-type`).",
         "default" : {
           "oneliner" : false,
           "hocon" : "{\n  accept = \"application/json\"\n  \"cache-control\" = \"no-cache\"\n  connection = \"keep-alive\"\n  \"keep-alive\" = \"timeout=30, max=1000\"\n}\n"
@@ -12509,7 +12509,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12729,7 +12729,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -12870,7 +12870,7 @@
           "kind" : "enum"
         },
         "name" : "algorithm",
-        "desc" : "JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).",
+        "desc" : "JWT signing algorithm, Supports HMAC (configured as `hmac-based`) and RSA, ECDSA (configured as `public-key`).",
         "aliases" : [
           
         ]
@@ -12938,7 +12938,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -12973,7 +12973,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13104,7 +13104,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -13139,7 +13139,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13181,7 +13181,7 @@
           "kind" : "enum"
         },
         "name" : "algorithm",
-        "desc" : "JWT signing algorithm, Supports HMAC (configured as <code>hmac-based</code>) and RSA, ECDSA (configured as <code>public-key</code>).",
+        "desc" : "JWT signing algorithm, Supports HMAC (configured as `hmac-based`) and RSA, ECDSA (configured as `public-key`).",
         "aliases" : [
           
         ]
@@ -13233,7 +13233,7 @@
           
         },
         "name" : "verify_claims",
-        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+        "desc" : "A list of custom claims to validate, which is a list of name/value pairs.\nValues can use the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting\nAuthentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in `verify_claims`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -13268,7 +13268,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13331,7 +13331,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -13427,7 +13427,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13670,7 +13670,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -13766,7 +13766,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -13979,7 +13979,7 @@
           
         },
         "name" : "filter",
-        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting\n- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting",
+        "desc" : "Conditional expression that defines the filter condition in the query.\nFilter supports the following placeholders:\n- `${username}`: Will be replaced at runtime with `Username` used by the client when connecting\n- `${clientid}`: Will be replaced at runtime with `Client ID` used by the client when connecting",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -14075,7 +14075,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14334,7 +14334,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14521,7 +14521,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14653,7 +14653,7 @@
           "kind" : "primitive"
         },
         "name" : "init_file",
-        "desc" : "If init_file is specified, EMQX will import PSKs from the file into the built-in database at startup for use by the runtime.\nThe file has to be structured line-by-line, each line must be in the format of <code>PSKIdentity:SharedSecret</code>.\nFor example: <code>mydevice1:c2VjcmV0</code>",
+        "desc" : "If init_file is specified, EMQX will import PSKs from the file into the built-in database at startup for use by the runtime.\nThe file has to be structured line-by-line, each line must be in the format of `PSKIdentity:SharedSecret`.\nFor example: `mydevice1:c2VjcmV0`",
         "aliases" : [
           
         ]
@@ -14665,7 +14665,7 @@
         },
         "raw_default" : ":",
         "name" : "separator",
-        "desc" : "The separator between <code>PSKIdentity</code> and <code>SharedSecret</code> in the PSK file",
+        "desc" : "The separator between `PSKIdentity` and `SharedSecret` in the PSK file",
         "default" : {
           "oneliner" : true,
           "hocon" : "\":\""
@@ -14691,7 +14691,7 @@
         ]
       }
     ],
-    "desc" : "PSK stands for 'Pre-Shared Keys'.\nThis config to enable TLS-PSK authentication.\n\nImportant! Make sure the SSL listener with only <code>tlsv1.2</code> enabled, and also PSK cipher suites\nconfigured, such as <code>RSA-PSK-AES256-GCM-SHA384</code>.\n\nSee listener SSL options config for more details.\n\nThe IDs and secrets can be provided from a file which is configurable by the <code>init_file</code> field."
+    "desc" : "PSK stands for 'Pre-Shared Keys'.\nThis config to enable TLS-PSK authentication.\n\nImportant! Make sure the SSL listener with only `tlsv1.2` enabled, and also PSK cipher suites\nconfigured, such as `RSA-PSK-AES256-GCM-SHA384`.\n\nSee listener SSL options config for more details.\n\nThe IDs and secrets can be provided from a file which is configurable by the `init_file` field."
   },
   {
     "tags" : [
@@ -14730,7 +14730,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.",
+        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.",
         "aliases" : [
           
         ]
@@ -14774,7 +14774,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -14906,7 +14906,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.",
+        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.",
         "aliases" : [
           
         ]
@@ -14950,7 +14950,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -15109,7 +15109,7 @@
           "kind" : "primitive"
         },
         "name" : "cmd",
-        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports <code>HGET</code> and <code>HMGET</code>.",
+        "desc" : "The Redis Command used to query data for authentication such as password hash, currently only supports `HGET` and `HMGET`.",
         "aliases" : [
           
         ]
@@ -15153,7 +15153,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -15337,7 +15337,7 @@
         },
         "raw_default" : true,
         "name" : "enable",
-        "desc" : "Set to <code>true</code> or <code>false</code> to disable this auth provider.",
+        "desc" : "Set to `true` or `false` to disable this auth provider.",
         "default" : {
           "oneliner" : true,
           "hocon" : "true"
@@ -17257,7 +17257,7 @@
           "kind" : "primitive"
         },
         "name" : "kerberos_principal",
-        "desc" : "SASL GSSAPI authentication Kerberos principal. For example <code>client_name@MY.KERBEROS.REALM.MYDOMAIN.COM</code>, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
+        "desc" : "SASL GSSAPI authentication Kerberos principal. For example `client_name@MY.KERBEROS.REALM.MYDOMAIN.COM`, NOTE: The realm in use has to be configured in /etc/krb5.conf in EMQX nodes.",
         "aliases" : [
           
         ]
@@ -17449,7 +17449,7 @@
         },
         "raw_default" : "${.}",
         "name" : "payload_template",
-        "desc" : "The template for transforming the incoming Kafka message.  By default, it will use JSON format to serialize inputs from the Kafka message.  Such fields are:\n<code>headers</code>: an object containing string key-value pairs.\n<code>key</code>: Kafka message key (uses the chosen key encoding).\n<code>offset</code>: offset for the message.\n<code>topic</code>: Kafka topic.\n<code>ts</code>: message timestamp.\n<code>ts_type</code>: message timestamp type, which is one of <code>create</code>, <code>append</code> or <code>undefined</code>.\n<code>value</code>: Kafka message value (uses the chosen value encoding).",
+        "desc" : "The template for transforming the incoming Kafka message.  By default, it will use JSON format to serialize inputs from the Kafka message.  Such fields are:\n`headers`: an object containing string key-value pairs.\n`key`: Kafka message key (uses the chosen key encoding).\n`offset`: offset for the message.\n`topic`: Kafka topic.\n`ts`: message timestamp.\n`ts_type`: message timestamp type, which is one of `create`, `append` or `undefined`.\n`value`: Kafka message value (uses the chosen value encoding).",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${.}\""
@@ -17492,7 +17492,7 @@
           "kind" : "primitive"
         },
         "name" : "bootstrap_hosts",
-        "desc" : "A comma separated list of Kafka <code>host[:port]</code> endpoints to bootstrap the client. Default port number is 9092.",
+        "desc" : "A comma separated list of Kafka `host[:port]` endpoints to bootstrap the client. Default port number is 9092.",
         "aliases" : [
           
         ]
@@ -17638,7 +17638,7 @@
         },
         "raw_default" : "none",
         "name" : "key_encoding_mode",
-        "desc" : "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.\n<code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.\n<code>base64</code> Uses base-64 encoding on the received key.",
+        "desc" : "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.\n`none` Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.\n`base64` Uses base-64 encoding on the received key.",
         "default" : {
           "oneliner" : true,
           "hocon" : "none"
@@ -17657,7 +17657,7 @@
         },
         "raw_default" : "none",
         "name" : "value_encoding_mode",
-        "desc" : "Defines how the value from the Kafka message is encoded before being forwarded via MQTT.\n<code>none</code> Uses the value from the Kafka message unchanged.  Note: in this case, the value must be a valid UTF-8 string.\n<code>base64</code> Uses base-64 encoding on the received value.",
+        "desc" : "Defines how the value from the Kafka message is encoded before being forwarded via MQTT.\n`none` Uses the value from the Kafka message unchanged.  Note: in this case, the value must be a valid UTF-8 string.\n`base64` Uses base-64 encoding on the received value.",
         "default" : {
           "oneliner" : true,
           "hocon" : "none"
@@ -17685,7 +17685,7 @@
         },
         "raw_default" : "${.clientid}",
         "name" : "key",
-        "desc" : "Template to render Kafka message key. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's <code>NULL</code> (but not empty string) is used.",
+        "desc" : "Template to render Kafka message key. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's `NULL` (but not empty string) is used.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${.clientid}\""
@@ -17701,7 +17701,7 @@
         },
         "raw_default" : "${.}",
         "name" : "value",
-        "desc" : "Template to render Kafka message value. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's <code>NULL</code> (but not empty string) is used.",
+        "desc" : "Template to render Kafka message value. If the template is rendered into a NULL value (i.e. there is no such data field in Rule Engine context) then Kafka's `NULL` (but not empty string) is used.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${.}\""
@@ -17717,7 +17717,7 @@
         },
         "raw_default" : "${.timestamp}",
         "name" : "timestamp",
-        "desc" : "Which timestamp to use. The timestamp is expected to be a millisecond precision Unix epoch which can be in string format, e.g. <code>1661326462115</code> or <code>'1661326462115'</code>. When the desired data field for this template is not found, or if the found data is not a valid integer, the current system timestamp will be used.",
+        "desc" : "Which timestamp to use. The timestamp is expected to be a millisecond precision Unix epoch which can be in string format, e.g. `1661326462115` or `'1661326462115'`. When the desired data field for this template is not found, or if the found data is not a valid integer, the current system timestamp will be used.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${.timestamp}\""
@@ -17760,7 +17760,7 @@
           "kind" : "primitive"
         },
         "name" : "bootstrap_hosts",
-        "desc" : "A comma separated list of Kafka <code>host[:port]</code> endpoints to bootstrap the client. Default port number is 9092.",
+        "desc" : "A comma separated list of Kafka `host[:port]` endpoints to bootstrap the client. Default port number is 9092.",
         "aliases" : [
           
         ]
@@ -17916,7 +17916,7 @@
         },
         "raw_default" : "memory",
         "name" : "mode",
-        "desc" : "Message buffer mode.\n\n<code>memory</code>: Buffer all messages in memory. The messages will be lost in case of EMQX node restart\n<code>disk</code>: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.\n<code>hybrid</code>: Buffer message in memory first, when up to certain limit (see <code>segment_bytes</code> config for more information), then start offloading messages to disk, Like <code>memory</code> mode, the messages will be lost in case of EMQX node restart.",
+        "desc" : "Message buffer mode.\n\n`memory`: Buffer all messages in memory. The messages will be lost in case of EMQX node restart\n`disk`: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.\n`hybrid`: Buffer message in memory first, when up to certain limit (see `segment_bytes` config for more information), then start offloading messages to disk, Like `memory` mode, the messages will be lost in case of EMQX node restart.",
         "default" : {
           "oneliner" : true,
           "hocon" : "memory"
@@ -17948,7 +17948,7 @@
         },
         "raw_default" : "100MB",
         "name" : "segment_bytes",
-        "desc" : "Applicable when buffer mode is set to <code>disk</code> or <code>hybrid</code>.\nThis value is to specify the size of each on-disk buffer file.",
+        "desc" : "Applicable when buffer mode is set to `disk` or `hybrid`.\nThis value is to specify the size of each on-disk buffer file.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"100MB\""
@@ -17964,7 +17964,7 @@
         },
         "raw_default" : false,
         "name" : "memory_overload_protection",
-        "desc" : "Applicable when buffer mode is set to <code>memory</code>\nEMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config <code>sysmon.os.sysmem_high_watermark</code>. NOTE: This config only works on Linux.",
+        "desc" : "Applicable when buffer mode is set to `memory`\nEMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config `sysmon.os.sysmem_high_watermark`. NOTE: This config only works on Linux.",
         "default" : {
           "oneliner" : true,
           "hocon" : "false"
@@ -18053,7 +18053,7 @@
         },
         "raw_default" : "random",
         "name" : "partition_strategy",
-        "desc" : "Partition strategy is to tell the producer how to dispatch messages to Kafka partitions.\n\n<code>random</code>: Randomly pick a partition for each message\n<code>key_dispatch</code>: Hash Kafka message key to a partition number",
+        "desc" : "Partition strategy is to tell the producer how to dispatch messages to Kafka partitions.\n\n`random`: Randomly pick a partition for each message\n`key_dispatch`: Hash Kafka message key to a partition number",
         "default" : {
           "oneliner" : true,
           "hocon" : "random"
@@ -18073,7 +18073,7 @@
         },
         "raw_default" : "all_isr",
         "name" : "required_acks",
-        "desc" : "Required acknowledgements for Kafka partition leader to wait for its followers before it sends back the acknowledgement to EMQX Kafka producer\n\n<code>all_isr</code>: Require all in-sync replicas to acknowledge.\n<code>leader_only</code>: Require only the partition-leader's acknowledgement.\n<code>none</code>: No need for Kafka to acknowledge at all.",
+        "desc" : "Required acknowledgements for Kafka partition leader to wait for its followers before it sends back the acknowledgement to EMQX Kafka producer\n\n`all_isr`: Require all in-sync replicas to acknowledge.\n`leader_only`: Require only the partition-leader's acknowledgement.\n`none`: No need for Kafka to acknowledge at all.",
         "default" : {
           "oneliner" : true,
           "hocon" : "all_isr"
@@ -18089,7 +18089,7 @@
         },
         "raw_default" : "60s",
         "name" : "partition_count_refresh_interval",
-        "desc" : "The time interval for Kafka producer to discover increased number of partitions.\nAfter the number of partitions is increased in Kafka, EMQX will start taking the \ndiscovered partitions into account when dispatching messages per <code>partition_strategy</code>.",
+        "desc" : "The time interval for Kafka producer to discover increased number of partitions.\nAfter the number of partitions is increased in Kafka, EMQX will start taking the \ndiscovered partitions into account when dispatching messages per `partition_strategy`.",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"60s\""
@@ -18924,7 +18924,7 @@
         },
         "raw_default" : "cluster_shareload",
         "name" : "mode",
-        "desc" : "The mode of the MQTT Bridge.<br/>\n- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/>\nIn 'cluster_shareload' mode, the incoming load from the remote broker is shared by\nusing shared subscription.<br/>\nNote that the 'clientid' is suffixed by the node name, this is to avoid\nclientid conflicts between different nodes. And we can only use shared subscription\ntopic filters for <code>remote.topic</code> of ingress connections.",
+        "desc" : "The mode of the MQTT Bridge.<br/>\n- cluster_shareload: create an MQTT connection on each node in the emqx cluster.<br/>\nIn 'cluster_shareload' mode, the incoming load from the remote broker is shared by\nusing shared subscription.<br/>\nNote that the 'clientid' is suffixed by the node name, this is to avoid\nclientid conflicts between different nodes. And we can only use shared subscription\ntopic filters for `remote.topic` of ingress connections.",
         "default" : {
           "oneliner" : true,
           "hocon" : "cluster_shareload"
@@ -21717,7 +21717,7 @@
           "kind" : "primitive"
         },
         "name" : "url",
-        "desc" : "The URL of the HTTP Bridge.<br/>\nTemplate with variables is allowed in the path, but variables cannot be used in the scheme, host,\nor port part.<br/>\nFor example, <code> http://localhost:9901/${topic} </code> is allowed, but\n<code> http://${host}:9901/message </code> or <code> http://localhost:${port}/message </code>\nis not allowed.",
+        "desc" : "The URL of the HTTP Bridge.<br/>\nTemplate with variables is allowed in the path, but variables cannot be used in the scheme, host,\nor port part.<br/>\nFor example, ` http://localhost:9901/${topic} ` is allowed, but\n` http://${host}:9901/message ` or ` http://localhost:${port}/message `\nis not allowed.",
         "aliases" : [
           
         ]
@@ -22436,7 +22436,7 @@
         },
         "raw_default" : "plugins",
         "name" : "install_dir",
-        "desc" : "The installation directory for the external plugins.\nThe plugin beam files and configuration files should reside in\nthe subdirectory named as <code>emqx_foo_bar-0.1.0</code>.\n<br/>\nNOTE: For security reasons, this directory should **NOT** be writable\nby anyone except <code>emqx</code> (or any user which runs EMQX).",
+        "desc" : "The installation directory for the external plugins.\nThe plugin beam files and configuration files should reside in\nthe subdirectory named as `emqx_foo_bar-0.1.0`.\n<br/>\nNOTE: For security reasons, this directory should **NOT** be writable\nby anyone except `emqx` (or any user which runs EMQX).",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"plugins\""
@@ -22462,7 +22462,7 @@
         ]
       }
     ],
-    "desc" : "Manage EMQX plugins.<br/>\nPlugins can be pre-built as a part of EMQX package,\nor installed as a standalone package in a location specified by\n<code>install_dir</code> config key<br/>\nThe standalone-installed plugins are referred to as 'external' plugins."
+    "desc" : "Manage EMQX plugins.<br/>\nPlugins can be pre-built as a part of EMQX package,\nor installed as a standalone package in a location specified by\n`install_dir` config key<br/>\nThe standalone-installed plugins are referred to as 'external' plugins."
   },
   {
     "tags" : [
@@ -22548,7 +22548,7 @@
           
         },
         "name" : "headers",
-        "desc" : "A list of HTTP Headers when pushing to Push Gateway.<br/>\nFor example, <code> { Authorization = \"some-authz-tokens\"}</code>",
+        "desc" : "A list of HTTP Headers when pushing to Push Gateway.<br/>\nFor example, ` { Authorization = \"some-authz-tokens\"}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "{}"
@@ -22564,7 +22564,7 @@
         },
         "raw_default" : "${name}/instance/${name}~${host}",
         "name" : "job_name",
-        "desc" : "Job Name that is pushed to the Push Gateway. Available variables:<br/>\n- ${name}: Name of EMQX node.<br/>\n- ${host}: Host name of EMQX node.<br/>\nFor example, when the EMQX node name is <code>emqx@127.0.0.1</code> then the <code>name</code> variable takes value <code>emqx</code> and the <code>host</code> variable takes value <code>127.0.0.1</code>.<br/>\nDefault value is: <code>${name}/instance/${name}~${host}</code>",
+        "desc" : "Job Name that is pushed to the Push Gateway. Available variables:<br/>\n- ${name}: Name of EMQX node.<br/>\n- ${host}: Host name of EMQX node.<br/>\nFor example, when the EMQX node name is `emqx@127.0.0.1` then the `name` variable takes value `emqx` and the `host` variable takes value `127.0.0.1`.<br/>\nDefault value is: `${name}/instance/${name}~${host}`",
         "default" : {
           "oneliner" : true,
           "hocon" : "\"${name}/instance/${name}~${host}\""
@@ -22986,7 +22986,7 @@
             ]
           ]
         ],
-        "desc" : "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.",
+        "desc" : "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have `[2, 4]` index to optimize `+/X/+/Y/...` topic wildcard subscriptions.",
         "default" : {
           "oneliner" : false,
           "hocon" : "[\n  [1, 2, 3],\n  [1, 3],\n  [2, 3],\n  [3]\n]\n"
