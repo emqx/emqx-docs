@@ -2260,8 +2260,8 @@ Settings for the alarms.
   警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.
 <code>log</code> 将告警写入日志 (控制台或者文件).
 <code>publish</code> 将告警作为 MQTT 消息发布到系统主题:
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
-<code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>
+<code>\$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and
+<code>\$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>
 
 
 **alarm.size_limit**
@@ -2389,7 +2389,7 @@ This part of the configuration is responsible for collecting
   *默认值*: `disabled`
 
   当系统检测到某个 Erlang 进程垃圾回收占用过长时间，会触发一条带有 <code>long_gc</code> 关键字的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/long_gc</code> 的 MQTT 系统消息。
+同时还会发布一条主题为 <code>\$SYS/sysmon/long_gc</code> 的 MQTT 系统消息。
 
 
 **sysmon.vm.long_schedule**
@@ -2399,7 +2399,7 @@ This part of the configuration is responsible for collecting
   *默认值*: `240ms`
 
   启用后，如果 Erlang VM 调度器出现某个任务占用时间过长时，会触发一条带有 'long_schedule' 关键字的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/long_schedule</code> 的 MQTT 系统消息。
+同时还会发布一条主题为 <code>\$SYS/sysmon/long_schedule</code> 的 MQTT 系统消息。
 
 
 **sysmon.vm.large_heap**
@@ -2409,7 +2409,7 @@ This part of the configuration is responsible for collecting
   *默认值*: `32MB`
 
   启用后，当一个 Erlang 进程申请了大量内存，系统会触发一条带有 <code>large_heap</code> 关键字的
-warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
+warning 级别日志。同时还会发布一条主题为 <code>\$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
 
 
 **sysmon.vm.busy_dist_port**
@@ -2419,7 +2419,7 @@ warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_
   *默认值*: `true`
 
   启用后，当用于集群接点之间 RPC 的连接过忙时，会触发一条带有 <code>busy_dist_port</code> 关键字的 warning 级别日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
+同时还会发布一条主题为 <code>\$SYS/sysmon/busy_dist_port</code> 的 MQTT 系统消息。
 
 
 **sysmon.vm.busy_port**
@@ -2429,7 +2429,7 @@ warning 级别日志。同时还会发布一条主题为 <code>$SYS/sysmon/busy_
   *默认值*: `true`
 
   当一个系统接口（例如 TCP socket）过忙，会触发一条带有 <code>busy_port</code> 关键字的 warning 级别的日志。
-同时还会发布一条主题为 <code>$SYS/sysmon/busy_port</code> 的 MQTT 系统消息。
+同时还会发布一条主题为 <code>\$SYS/sysmon/busy_port</code> 的 MQTT 系统消息。
 
 
 
