@@ -1,17 +1,19 @@
 # Create Rules
 
-This page mainly introduces how to create a rule for data processing and attach an action to the rule using the EMQX Dashboard. Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. Then click the **Create** button, which directs you to the **Rules** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages.
+This page provides guidance on how to create rules for data processing and attach an action to a rule using the EMQX Dashboard. It also introduces how to test rules and view rules after the rule creation.
 
 The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
 
 ## Define a Data Source
-On the **Rules** page, enter a name for your rule and add a note to facilitate future management.
+Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. 
 
-In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
+Click the **Create** button on the **Rule** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages. 
+
+Enter a name for your rule and add a note to facilitate future management. In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
 
 ::: tip
 
-This tutorial assumes the payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
+This tutorial assumes the message payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
 
 EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
@@ -19,7 +21,7 @@ EMQX has embedded rich SQL statement samples to help you get started, you can cl
 
 <img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:40%;" />
 
-## Test SQL Statement
+### Test SQL Statement
 
 You can use simulated data to execute SQL statements. Before adding actions and creating rules, you can verify whether the SQL execution results meet expectations. This is an optional step, but it is recommended if you are new to EMQX rules. If you want to test the execution of the entire rule, refer to [Test Rule](#test-rule).
 
@@ -72,7 +74,7 @@ Select **Republish** from the drop-down menu under **Action**, and configure the
 
 ![action-republish](./assets/action-republish.png)
 
-On the **Create Rules** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added to as a new entry in the **Rules** page. You can view the rule ID, Source, Enable status, and Action Count. You can also click **Settings** to modify the data source or add more action, or click the **More** button to duplicate or delete the rule.
+On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page. 
 
 ::: tip
 The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".
@@ -145,13 +147,34 @@ For more usage guides on testing rules, you can refer to the blog [Enhancing Dat
 
 ## View Rules
 
-EMQX 5.0 introduced the Flows editor to provide a visualized view of the rules you created. Click **Integration** -> **Flow Designer** to access it. The window shows that you have created two rules for all messages with topics following the "t/#" pattern: "rule_4xjx" publishes the messages and streams data into Kafka, and "rule_z97h" prints the messages to the console.
+The **Rule** page provides a comprehensive list of all the rules you have created.
 
-![Flows Editor](./assets/rules/flow-eidtor.png)
+Each entry in the list displays basic information, including the rule ID, associated source, enable status, and the number of actions. Hovering over the source reveals the corresponding SQL statement details. To modify a rule's configuration, click **Settings** in the **Actions** column. You can also use the **More** button to duplicate or delete a rule.
 
-You can click the rule ID on the **Flows** page or **Rules** page to view the execution and action statistics parsed by the rule.
+![view_rules](./assets/view_rules.png)
 
-Note: If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
+You can also view rules in the [Flow Designer](../flow-designer/introduction.md) by navigating to **Integration** -> **Flow Designer**. Rules created on the **Rules** page and those created through the Flow Designer are fully interoperable.
+
+To view the execution and action statistics for a rule, click the rule ID on **Rule** page or the rule name on the **Flows** page.
+
+![view_rules_flows](./assets/view_rules_flows.png)
+
+::: tip
+
+If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
+
+:::
 
 ![Rule Statistics](assets/rule_statistics.png)
 
+### View Actions (Sink) and Sources
+
+The **Actions (Sink)** and **Sources** tabs on the **Rule** page display all created actions (sinks) and sources. You can view essential details, such as names, connection statuses, associated rules, and enable statuses. Clicking the number of associated rules will take you to a list of rules containing that specific action (sink) or source, making it easier to manage your data integration settings.
+
+You can reconnect or modify the settings of an action (sink) or source through the **Action** column. By clicking **More**, you can delete the action (sink) or source, or create a new rule using it.
+
+### Search Rules
+
+When there are many rules in the list, you can use the filter to narrow down your search and display the rules you want to view. You can filter rules by rule ID, incoming message topic or wildcard, enable status, rule notes, and the actions or sources associated with the rule.
+
+![search_rules](./assets/search_rules.png)

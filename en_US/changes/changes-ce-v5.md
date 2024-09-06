@@ -1,4 +1,4 @@
-# Version 5
+# EMQX Open Source Version 5
 
 ## 5.8.0
 
