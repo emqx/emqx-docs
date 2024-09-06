@@ -54,7 +54,9 @@ After a connector is created, you can view its basic information on the Connecto
 
 If the connector is used by a Sink/Source, updating the connector configuration will cause the Sink/Source to reload, which may cause data processing interruptions. It is recommended to update during off-peak business hours.
 
-A connector that is in use cannot be deleted. To delete a connector, first delete the Sink/Source using the connector.
+A connector that is in use cannot be deleted. To delete a connector, first delete the Sink/Source using the connector. When you delete a connector, a warning dialog will pop up displaying the Sink/Source associated with the connector. Clicking the Sink/Source will bring you to the rule settings page where you can delete the Sink/Source.
+
+![delete_associated_sink](./assets/delete_associated_sink.png)
 
 ## Connector Status
 

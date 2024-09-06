@@ -50,7 +50,9 @@ EMQX 连接器是数据集成的关键概念，它作为 Sink/Source 的底层�
 
 如果连接器被 Sink/Source 使用，更新连接器配置会导致 Sink/Source 重新加载，可能会造成数据处理中断，建议在业务低峰期进行更新。
 
-无法删除正在使用的连接器，如果需要删除连接器，需要先删除使用该连接器的 Sink/Source。
+正在使用的连接器无法删除。要删除连接器，需先删除使用该连接器的 Sink/Source。当您删除连接器时，会弹出一个警告对话框，显示与该连接器关联的 Sink/Source。点击 Sink/Source 将带您进入规则设置页面，在那里您可以删除 Sink/Source。
+
+![delete_associated_sink](./assets/delete_associated_sink.png)
 
 ## 连接器状态
 
