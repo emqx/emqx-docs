@@ -19,6 +19,7 @@ The modules currently provided by the EMQX include:
   - [LDAP AUTH/ACL](./ldap_authentication.md)
   - [JWT AUTH](./jwt_authentication.md)
   - [GCP IoT Core Device](./GCP_device.md)
+  - [Username Quota](./username_quota.md)
 - Protocol Access
   - [LwM2M Gateway](./lwm2m_protocol.md)
   - [MQTT-SN Gateway](./mqtt_sn_protocol.md)
