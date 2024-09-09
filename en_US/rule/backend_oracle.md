@@ -22,9 +22,7 @@ SELECT * FROM "t/#"
 
 Related actions:
 
-In the "Response Action" interface, select "Add", and then select "Save Data to Oracle Database" in the "Action" drop-down box.
-
-![image](./assets/rule-engine/oracle_action_2.png)
+In the "Action" interface, click "Add action", and then select "Data persist" -> "Data to Oracle Database" in the "Action Type" drop-down box.
 
 Fill in the action parameters:
 
@@ -36,7 +34,16 @@ The "Save data to Oracle Database" action requires two parameters:
 INSERT INTO T_MQTT_MSG (MSGID, TOPIC, QOS, PAYLOAD) values ('${id}', '${topic}', '${qos}', '${payload}');
 ```
 
-2). The ID of the associated resource. Now that the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create an Oracle Database resource:
+Before data is inserted into the table, placeholders like \${id} will be replaced by the corresponding values. 
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+
+![oracle_action_2](./assets/rule-engine/oracle_action_2.png)
+
+2). The ID of the associated resource. Now that the resource drop-down box is empty, and you can click "Create" in the upper right corner to create an Oracle Database resource:
 
 Fill in the resource configuration:
 
@@ -44,17 +51,15 @@ Fill in the resource configuration:
 
 Note: for the connection to Oracle Real Applications Cluster (RAC) to work properly, the "Service Name" field must be filled correctly.  If left empty, it defaults to the Database SID.
 
-Click the "New" button.
+Click the "Test" button to make sure the connection can be created successfully, and then click the "Confirm" button.
 
-Return to the response action interface and click "OK".
-
-![image](./assets/rule-engine/oracle_action_4.png)
+Return to the Add Action dialogue and click "Confirm".
 
 Return to the rule creation interface and click "Create".
 
 ![image](./assets/rule-engine/oracle_action_5.png)
 
-In the rule list, click the "View" button or the rule ID connection to preview the rule just created:
+In the rule list, click the rule ID to preview the rule just created:
 
 ![image](./assets/rule-engine/oracle_action_6.png)
 

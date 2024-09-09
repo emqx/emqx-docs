@@ -98,15 +98,24 @@ SELECT * FROM "t/#"
 insert into t_mqtt_msg(msgid, topic, qos, payload) values ('${id}', '${topic}', ${qos}, '${payload}')
 ```
 
-关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 SQLServer 资源，在新弹出的**创建资源**页面，进行如下配置：
+插入数据之前，SQL 模板里的 ${id} 占位符会被替换为相应的值。
+
+如果占位符变量未定义，您可以使用**未定义值作为 NULL 插入**选项来规定规则引擎的行为：
+
+- `false` （默认）：规则引擎可能会插入 `undefined` 字符串到数据库中。
+- `true`：当变量未定义时，规则引擎使用 `NULL` 写入到数据库。
+
+![sqlserver3](./assets/rule-engine/sqlserver3.png)
+
+关联资源的 ID。现在资源下拉框为空，可以点击 “新建” 来创建一个 SQLServer 资源，在新弹出的**创建资源**页面，进行如下配置：
 
 数据库名填写 “mqtt”，用户名填写 “sa”，密码填写 “mqtt_public”
 
 ![image](./assets/rule-engine/sqlserver4.png)
 
-点击 “新建” 按钮。
+点击 “确定” 按钮。
 
-返回响应动作界面，点击 “确认”。
+返回响应动作界面，点击 “确定”。
 
 ![image](./assets/rule-engine/sqlserver5.png)
 

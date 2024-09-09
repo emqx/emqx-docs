@@ -65,41 +65,36 @@ Fill in the parameters required by the action:
 
 Two parameters is required by action "Data to MySQL":
 
-1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
-into mysql, so type in the following sql
-template:
+1). SQL template. SQL template is the sql command you'd like to runwhen the action is triggered. In this example we'll insert a message into mysql, so type in the following sql template:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, FROM_UNIXTIME(${timestamp}/1000))
 ```
 
-Before data is inserted into the table, placeholders like \${key} will
-be replaced by the corresponding values.
+Before data is inserted into the table, placeholders like \${id} will be replaced by the corresponding values.
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
 
 ![image](./assets/rule-engine/mysql_action_2.png)
 
-2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "MySQL":
+2). Bind a resource to the action. Since the dropdown list "Resource" is empty for now, we create a new resource by clicking on the "Create" to the top right, and then select "MySQL":
 
-![image](./assets/rule-engine/mysql_action_3.png)
+<img src="./assets/rule-engine/mysql_action_3.png" alt="image" style="zoom:67%;" />
 
 Configure the resource:
 
-Set "MySQL Database" to "test", "MySQL Username" to "root", "MySQL
-Password" to "public", and "Description" to "MySQL resource to
-127.0.0.1:3306 db=test", and click on the "Testing Connection" button
-to make sure the connection can be created successfully, and then
-click on the "Create" button.
+Set "MySQL Database" to "test", "MySQL Username" to "root", "MySQL Password" to "public", and "Description" to "MySQL resource to 127.0.0.1:3306 db=test".
 
-![image](./assets/rule-engine/mysql_resource_1.png)
+Click the "Test" button to make sure the connection can be created successfully, and then click the "Confirm" button.
+
+<img src="./assets/rule-engine/mysql_resource_1.png" alt="image" style="zoom:67%;" />
 
 Back to the "Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/mysql_action_4.png)
-
-Back to the creating rule page, then click on "Create" button. The rule we created will be show in the rule list:
+Back to the creating rule page, then click on "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/mysql_rule_overview_1.png)
 

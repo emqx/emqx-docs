@@ -95,33 +95,36 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/rule_sql.png)
 
-Related actions:
+Select an action:
 
-On the "Response Action" interface, select "Add", and then select "Save Data to DolphinDB" in the "Action" drop-down box.
-
-![image](./assets/rule-engine/dolphin_action_1.jpg)
+In the "Action" area, select "Add action", and then select "Data persist" -> "Data to DolphinDB" in the "Action Type" drop-down box.
 
 Fill in the action parameters:
 
-The "Save data to DolphinDB" action requires two parameters:
-
-1). SQL template. In this example, we insert a piece of data into the stream table `st_msg`, and the SQL template is:
-
-```sql
-insert into st_msg values(${clientid}, ${topic}, ${qos}, ${payload})
-```
-
-2). The ID of the associated resource. Now that the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a DolphinDB resource:
+1). The ID of the associated resource. Now that the resource drop-down box is empty, and you can click "New Resource" in the upper right corner to create a DolphinDB resource:
 
 Fill in the server address corresponding to the DolphinDB server deployed above. The user name is `admin` and the password is `123456`
 
 ![image](./assets/rule-engine/dolphin_res_1.jpg)
 
-Click the "OK" button.
+Click the "Confirm" button and return to the Add Action dialogue.
 
-Return to the response action interface and click "OK".
+2). SQL template. In this example, we insert a piece of data into the stream table `st_msg`, and the SQL template is:
+
+```sql
+insert into st_msg values(${clientid}, ${topic}, ${qos}, ${payload})
+```
+
+Before data is inserted into the table, placeholders like \${clientid} will be replaced by the corresponding values. 
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
 
 ![image](./assets/rule-engine/dolphin_action_2.jpg)
+
+Click "Confirm" and return to the Action area and click "OK".
 
 Return to the rule creation interface and click "Create".
 

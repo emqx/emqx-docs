@@ -83,7 +83,7 @@ SELECT * FROM "t/#"
 
 ![image](./assets/rule-engine/pgsql-resource-1@2x.png)
 
-返回响应动作界面，点击 “确认”。
+返回响应动作界面，点击 “确定”。
 
 2).SQL 模板。这个例子里我们向 PostgreSQL 插入一条数据，SQL
 ​    模板为:
@@ -92,7 +92,12 @@ SELECT * FROM "t/#"
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, to_timestamp(${timestamp}::double precision /1000))
 ```
 
-插入数据之前，SQL 模板里的 ${key} 占位符会被替换为相应的值。
+插入数据之前，SQL 模板里的 ${id} 占位符会被替换为相应的值。
+
+如果占位符变量未定义，您可以使用**未定义值作为 NULL 插入**选项来规定规则引擎的行为：
+
+- `false` （默认）：规则引擎可能会插入 `undefined` 字符串到数据库中。
+- `true`：当变量未定义时，规则引擎使用 `NULL` 写入到数据库。
 
 ![image](./assets/rule-engine/pgsql-action-2@2x.png)
 
