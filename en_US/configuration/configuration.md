@@ -995,7 +995,7 @@ log.error.file = error.log
 #### Description
 
 Max depth when printing large data blob to log.
-Exceeding parts will be logge as '...'.
+Exceeding parts will be logged as '...'.
 
 ### log.single_line
 
@@ -1058,7 +1058,133 @@ log.formatter.text.date.format = %Y-%m-%dT%H:%M:%S.%6N %:z
 log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 ```
 
-## authacl
+### log.sync_mode_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `100`  |
+
+#### Description
+
+The max allowed queue length before switching to sync mode.
+
+Log overload protection parameter. If the message queue grows larger than this value the handler switches from anync to sync mode.
+
+### log.drop_mode_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `3000`  |
+
+#### Description
+
+The max allowed queue length before switching to drop mode.
+
+Log overload protection parameter. When the message queue grows larger than this threshold, the handler switches to a mode in which it drops all new events that senders want to log.
+
+### log.flush_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `8000`  |
+
+#### Description
+
+The max allowed queue length before switching to flush mode.
+
+Log overload protection parameter. If the length of the message queue grows larger than this threshold, a flush (delete) operation takes place.
+To flush events, the handler discards the messages in the message queue by receiving them in a loop without logging.
+
+### log.overload_kill
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Kill the log handler when it gets overloaded.
+
+Log overload protection parameter. It is possible that a handler, even if it can successfully manage peaks of high load without crashing, can build up a large message queue, or use a large amount of memory.
+We could kill the log handler in these cases and restart it after a few seconds.
+
+### log.overload_kill_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `20000` |
+
+#### Description
+
+The max allowed queue length before killing the log handler.
+
+Log overload protection parameter. This is the maximum allowed queue length. If the message queue grows larger than this, the handler process is terminated.
+
+### log.overload_kill_mem_size
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `30MB`  |
+
+#### Description
+
+The max allowed memory size before killing the log handler.
+
+Log overload protection parameter. This is the maximum memory size that the handler process is allowed to use. If the handler grows larger than this, the process is terminated.
+
+### log.overload_kill_restart_after
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+Restart the log handler after some seconds.
+
+Log overload protection parameter. If the handler is terminated, it restarts automatically after a delay specified in seconds.
+The value "infinity" prevents restarts.
+
+### log.burst_limit
+
+| Type  | Format | Default |
+| ------| ------ | ------- |
+| string| MaxBurstCount,TimeWindow | `disabled` |
+
+#### Description
+
+Max burst count and time window for burst control.
+
+Log overload protection parameter. Large bursts of log events - many events received by the handler under a short period of time - can potentially cause problems. By specifying the maximum number of events to be handled within a certain time frame, the handler can avoid choking the log with massive amounts of printouts.
+
+This config controls the maximum number of events to handle within a time frame. After the limit is reached, successive events are dropped until the end of the time frame.
+
+Note that there would be no warning if any messages were dropped because of burst control.
+
+### log.throttling
+
+| Type | Format | Default |
+| ---- | ------ | ------- |
+| string | MaxCount,TimeWindow | `disabled` |
+
+#### Description
+
+Log throttling feature reduces the number of potentially flooding logged events by dropping all but the first N events within a configured time window. By default the feature is disabled for log levels greater than or equal to warning.
+
+We start one throttling handler for each Erlang scheduler, which means the total number of throttling handlers is equal to the number of CPU cores.
+For example, set "log.throttling = 3,60s" on a 4-core machine, we will allow roughly 3 * 4 = 12 same log messages (identified by module name + line number) per minute if processes are evenly distributed among schedulers.
+
+### log.throttling_level
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
+
+#### Description
+
+Log throttling level. Only log messages with severity level greater than or equal to this level will be throttled. For example, if we set "log.throttling_level = error", only error, critical, alert, and emergency log messages will be throttled.
+
+## Auth/ACL
 
 ### allow_anonymous
 
