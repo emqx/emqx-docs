@@ -1,15 +1,29 @@
 # Username Quota
 
-<!-- General introduction, the purpose and benefits for using this module...-->
+Starting from version 4.4.25, a new username quota module has been added to limit the maximum number of sessions for a single MQTT username.
 
-## Add Username Quota Module
+When a username exceeds the quota, new sessions will be refused connection, with a CONNACK return code of "0x97 Quota Exceeded" (MQTT 5.0) or "0x03 Service Unavailable" (MQTT 3.1.1).
 
-1. Click **Modules** from the left navigation menu on the Dashboard.
-2. Click the **Add Module** button on the page.
-3. Navigate to **Audit Log** under the **Authentication** tab on the module select page, and click **Select**.
-4. Configure the **Max Sessions per Username**: Specify the maximum number of MQTT sessions allowed  for client login using a specific username.
+## Creating the Module
 
-5. Create the **Username White List**. You can add username entries by clicking the **Add** button on the right.
-6. Click **Add** to complete the settings.
+1. Open the [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click on the "Modules" tab on the left, and select "Add Module".
 
-## How to User/Usage Example
+2. Select the "Username Quota" module, configure the relevant parameters, and then click "Add".
+
+   ![user-quota-create](./assets/user-quota-create-en.png)
+
+## Parameter Settings
+
+The username quota module supports the following parameters:
+
+- **Max Sessions Per Username**: Specifies the maximum number of MQTT sessions allowed for each username. Note that if the MQTT client logs in using a persistent session, the session will remain on the server even after the client disconnects, until the session expires and is cleared.
+
+- **Username White List**: You can add whitelisted usernames using the "Add" button on the right. Usernames in the whitelist are not subject to session limits. For example, if you need to allow MQTT bridge clients connecting to this cluster to bypass the quota limitation, you can add the usernames used by the MQTT bridge to the whitelist.
+
+## Usage Example
+
+1. Open the [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click on the "Modules" tab on the left, and click on the "Username Quota" module that we have already added.
+
+2. On the "Usage" page, you can see the current usernames in the EMQX cluster and the number of sessions for each username. Click the "View" button next to the session count to view the session list for the current username.
+
+   ![user-quota-usage](./assets/user-quota-usage-en.png)
