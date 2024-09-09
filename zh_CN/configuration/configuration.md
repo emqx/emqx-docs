@@ -7143,6 +7143,28 @@ HTTP 报文发送超时后，是否关闭该连接。
 
 <br />
 
+### management.listener.http.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`   |
+
+#### 说明
+
+HTTP 请求超时时间。当 HTTP 客户端与服务端建立连接后，如果在此时间内没有收到客户端的请求，服务端会主动断开连接。
+
+<br />
+
+### management.listener.http.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### 说明
+
+HTTP 连接空闲超时时间。当 HTTP 客户端与服务端建立连接并收到客户端请求后，如果在此时间内没有收到客户端的更多请求，服务端会主动断开连接。
+
 ### management.listener.https
 
 | Type    | Default | Example        |
@@ -7302,6 +7324,28 @@ HTTPS 报文发送超时后，是否关闭该连接。
 是否限制套接字仅使用 IPv6，禁止任何 IPv4 连接。仅适用于 IPv6 套接字，即仅在 `management.listener.https.inet6` 被设置为 `true` 时此配置项的值有实际意义。需要注意的是，在某些操作系统上，例如 Windows，此配置项唯一允许的值为 `true`。
 
 <br />
+
+### management.listener.https.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`   |
+
+#### 说明
+
+HTTP 请求超时时间。当 HTTP 客户端与服务端建立连接后，如果在此时间内没有收到客户端的请求，服务端会主动断开连接。
+
+<br />
+
+### management.listener.https.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### 说明
+
+HTTP 连接空闲超时时间。当 HTTP 客户端与服务端建立连接并收到客户端请求后，如果在此时间内没有收到客户端的更多请求，服务端会主动断开连接。
 
 ## 插件`emqx_retainer`
 

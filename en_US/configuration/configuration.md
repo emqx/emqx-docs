@@ -6645,8 +6645,6 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
-
-
 ### dashboard.listener.https
 
 | Type    | Default |
@@ -7223,7 +7221,25 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
+### management.listener.http.request_timeout
 
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+HTTP request timeout. After the HTTP client and server establish a connection, if the server does not receive a request from the client within this time, the server will actively disconnect the connection.
+
+### management.listener.http.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### Description
+
+HTTP connection idle timeout. After the HTTP client and server establish a connection and the server receives a request from the client, if the server does not receive more requests from the client within this time, the server will actively disconnect the connection.
 
 ### management.listener.https
 
@@ -7383,6 +7399,25 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
+### management.listener.https.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+HTTP request timeout. After the HTTP client and server establish a connection, if the server does not receive a request from the client within this time, the server will actively disconnect the connection.
+
+### management.listener.https.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### Description
+
+HTTP connection idle timeout. After the HTTP client and server establish a connection and the server receives a request from the client, if the server does not receive more requests from the client within this time, the server will actively disconnect the connection.
 
 ## Plugin `emqx_retainer`
 
