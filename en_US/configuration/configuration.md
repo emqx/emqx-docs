@@ -1066,9 +1066,9 @@ log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 
 #### Description
 
-The max allowed queue length before switching to sync mode.
+The maximum allowed queue length, after which the log handler switches to synchronous mode.
 
-Log overload protection parameter. If the message queue grows larger than this value the handler switches from anync to sync mode.
+This is a log overload protection parameter. If the message queue length exceeds this value, the handler will switch from asynchronous mode to synchronous mode.
 
 ### log.drop_mode_qlen
 
@@ -1078,9 +1078,9 @@ Log overload protection parameter. If the message queue grows larger than this v
 
 #### Description
 
-The max allowed queue length before switching to drop mode.
+The maximum allowed queue length, after which the log handler switches to drop mode.
 
-Log overload protection parameter. When the message queue grows larger than this threshold, the handler switches to a mode in which it drops all new events that senders want to log.
+This is a log overload protection parameter. When the message queue length exceeds this threshold, the handler will switch to drop mode, discarding all new events that the sender intends to log.
 
 ### log.flush_qlen
 
@@ -1090,10 +1090,9 @@ Log overload protection parameter. When the message queue grows larger than this
 
 #### Description
 
-The max allowed queue length before switching to flush mode.
+The maximum allowed queue length, after which the log handler switches to flush mode.
 
-Log overload protection parameter. If the length of the message queue grows larger than this threshold, a flush (delete) operation takes place.
-To flush events, the handler discards the messages in the message queue by receiving them in a loop without logging.
+This is a log overload protection parameter. If the message queue length exceeds this threshold, a flush (delete) operation will be triggered. To flush events, the handler discards them by continuously receiving messages from the queue without logging them.
 
 ### log.overload_kill
 
@@ -1103,10 +1102,9 @@ To flush events, the handler discards the messages in the message queue by recei
 
 #### Description
 
-Kill the log handler when it gets overloaded.
+Terminates the log handler during an overload.
 
-Log overload protection parameter. It is possible that a handler, even if it can successfully manage peaks of high load without crashing, can build up a large message queue, or use a large amount of memory.
-We could kill the log handler in these cases and restart it after a few seconds.
+This is a log overload protection parameter. Even if the handler manages to handle high load spikes without crashing, it may accumulate a large message queue or consume excessive memory. In such cases, we can terminate the log handler and restart it after a few seconds.
 
 ### log.overload_kill_qlen
 
@@ -1116,9 +1114,9 @@ We could kill the log handler in these cases and restart it after a few seconds.
 
 #### Description
 
-The max allowed queue length before killing the log handler.
+The maximum allowed queue length, upon reaching which the log handler will be terminated.
 
-Log overload protection parameter. This is the maximum allowed queue length. If the message queue grows larger than this, the handler process is terminated.
+This is a log overload protection parameter. If the message queue length exceeds this value, the handler process will be terminated.
 
 ### log.overload_kill_mem_size
 
@@ -1128,9 +1126,9 @@ Log overload protection parameter. This is the maximum allowed queue length. If 
 
 #### Description
 
-The max allowed memory size before killing the log handler.
+The maximum allowed memory usage, upon exceeding which the log handler will be terminated.
 
-Log overload protection parameter. This is the maximum memory size that the handler process is allowed to use. If the handler grows larger than this, the process is terminated.
+This is a log overload protection parameter. It defines the maximum memory size the handler process is allowed to use. If the memory usage exceeds this value, the process will be terminated.
 
 ### log.overload_kill_restart_after
 
@@ -1140,10 +1138,9 @@ Log overload protection parameter. This is the maximum memory size that the hand
 
 #### Description
 
-Restart the log handler after some seconds.
+Restart the log handler after a specified number of seconds.
 
-Log overload protection parameter. If the handler is terminated, it restarts automatically after a delay specified in seconds.
-The value "infinity" prevents restarts.
+This is a log overload protection parameter. If the handler is terminated, it will automatically restart after the specified delay. If the value is set to "infinity," the handler will not restart.
 
 ### log.burst_limit
 
@@ -1153,13 +1150,13 @@ The value "infinity" prevents restarts.
 
 #### Description
 
-Max burst count and time window for burst control.
+The maximum number of events and time window for burst control.
 
-Log overload protection parameter. Large bursts of log events - many events received by the handler under a short period of time - can potentially cause problems. By specifying the maximum number of events to be handled within a certain time frame, the handler can avoid choking the log with massive amounts of printouts.
+This is a log overload protection parameter. A large number of log events in a short burst—when the handler receives many events in a short time—can cause issues. By specifying the maximum number of events processed within a certain time frame, the handler can avoid being blocked by excessive output.
 
-This config controls the maximum number of events to handle within a time frame. After the limit is reached, successive events are dropped until the end of the time frame.
+This configuration controls the maximum number of events that can be processed within a specific time window. Once the limit is reached, any subsequent events will be discarded until the time window ends.
 
-Note that there would be no warning if any messages were dropped because of burst control.
+Please note that due to burst control, no warnings will be issued when events are discarded.
 
 ### log.throttling
 
@@ -1169,10 +1166,9 @@ Note that there would be no warning if any messages were dropped because of burs
 
 #### Description
 
-Log throttling feature reduces the number of potentially flooding logged events by dropping all but the first N events within a configured time window. By default the feature is disabled for log levels greater than or equal to warning.
+The log throttling feature reduces potential log flooding by retaining only the first N events within a configured time window. By default, this feature is disabled for logs at the warning level and above.
 
-We start one throttling handler for each Erlang scheduler, which means the total number of throttling handlers is equal to the number of CPU cores.
-For example, set "log.throttling = 3,60s" on a 4-core machine, we will allow roughly 3 * 4 = 12 same log messages (identified by module name + line number) per minute if processes are evenly distributed among schedulers.
+EMQX starts one throttling handler for each Erlang scheduler, meaning the total number of throttling handlers equals the number of CPU cores. For example, setting `log.throttling = 3,60s` on a 4-core machine would allow approximately 3 * 4 = 12 identical log messages per minute (identified by module name + line number), assuming an even distribution of processes across schedulers.
 
 ### log.throttling_level
 
@@ -1182,7 +1178,7 @@ For example, set "log.throttling = 3,60s" on a 4-core machine, we will allow rou
 
 #### Description
 
-Log throttling level. Only log messages with severity level greater than or equal to this level will be throttled. For example, if we set "log.throttling_level = error", only error, critical, alert, and emergency log messages will be throttled.
+The log throttling level. Only log messages with a severity level greater than or equal to this level will be throttled. For example, if set to `error`, only log messages at the `error`, `critical`, `alert`, and `emergency` levels will be throttled.
 
 ## Auth/ACL
 
@@ -3132,6 +3128,7 @@ Allowed values are
 - "ocspSigning"
 - raw OID, example: "OID:1.3.6.1.5.5.7.3.2" 
   
+
 Comma-separated string is also supported for validating the subset of key usages.
 
 example, "serverAuth,OID:1.3.6.1.5.5.7.3.2"
@@ -7355,7 +7352,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 #### Description
 
-HTTP request timeout. After the HTTP client and server establish a connection, if the server does not receive a request from the client within this time, the server will actively disconnect the connection.
+The HTTP request timeout. After an HTTP client establishes a connection with the server, if no request is received from the client within this time frame, the server will proactively close the connection.
 
 ### management.listener.http.idle_timeout
 
@@ -7365,7 +7362,7 @@ HTTP request timeout. After the HTTP client and server establish a connection, i
 
 #### Description
 
-HTTP connection idle timeout. After the HTTP client and server establish a connection and the server receives a request from the client, if the server does not receive more requests from the client within this time, the server will actively disconnect the connection.
+The HTTP connection idle timeout. After an HTTP client establishes a connection and the server receives a request, if no further requests are received from the client within this time frame, the server will proactively close the connection.
 
 ### management.listener.https
 
@@ -7533,7 +7530,7 @@ Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 
 
 #### Description
 
-HTTP request timeout. After the HTTP client and server establish a connection, if the server does not receive a request from the client within this time, the server will actively disconnect the connection.
+The HTTPS request timeout. After an HTTPS client establishes a connection with the server, if no request is received from the client within this time frame, the server will proactively close the connection.
 
 ### management.listener.https.idle_timeout
 
@@ -7543,7 +7540,7 @@ HTTP request timeout. After the HTTP client and server establish a connection, i
 
 #### Description
 
-HTTP connection idle timeout. After the HTTP client and server establish a connection and the server receives a request from the client, if the server does not receive more requests from the client within this time, the server will actively disconnect the connection.
+The HTTPS connection idle timeout. After an HTTPS client establishes a connection and the server receives a request, if no further requests are received from the client within this time frame, the server will proactively close the connection.
 
 ## Plugin `emqx_retainer`
 
