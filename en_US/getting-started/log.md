@@ -264,3 +264,26 @@ The id of the newly added log handler here is trace_clientid_my_client, and the 
 If the default primary log level (warning) is used, this log handler will never output the log messages below warning level.
 
 In addition, since we are enabling a new log handler, our log tracing is not constrained by the level of console logs and emqx.log.N file logs. Even if log.level = warning, we can still trace the debug level log of my_client.
+
+## Log Throttling
+
+Starting from Enterprise 4.4.25, EMQX supports a log throttling feature, which limits the repeated log prints within a specified time window. This reduces the risk of performance degradation and the loss of important logs caused by excessive log flushing.
+
+Logs with the same `module name` + `line number` are considered duplicate logs. For these duplicate logs, EMQX prints only the first N entries within the specified time window, and any additional duplicate logs are discarded. Throttling-related parameters can be configured in the `etc/logger.conf` file:
+
+```
+log.throttling = 50,60s
+log.throttling_level = warning
+```
+
+Log throttling is enabled by default, with a default time window of 60 seconds, a throttling threshold of 50 entries, and throttling only applies to logs at the warning level and above.
+
+To improve the efficiency of the throttling feature, EMQX starts N throttlers, where N is the number of CPU cores. This means that when `log.throttling = 50,60s` is set, each throttler will limit the number of duplicate logs to a maximum of 50 per minute. Assuming an 8-core CPU, depending on the scheduling of processes by the Erlang VM, a total of 50 to 400 logs may be printed per minute. If logs are discarded by the throttler, EMQX will print a log at the end of the time window, indicating the number of discarded logs:
+
+```erlang
+log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
+```
+
+This log indicates that in the last 60 seconds, the `emqx_channel` module at line 1400 printed many logs, and a total of 33 logs were discarded. Note that some important information may be lost in these logs, such as the client ID, username, and the reason for the login failure in the example above. This information can only be inferred from the duplicate logs printed before throttling occurred.
+
+You can disable log throttling by setting `log.throttling` to `disabled`.
