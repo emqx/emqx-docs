@@ -28,3 +28,76 @@ When a username exceeds its quota, new session connections will be rejected, and
 2. On the Details page, you can see the current usernames in the EMQX cluster and the number of sessions used for each username. Click the **View** button next to the session count to view the session list for the current username.
 
    ![user-quota-usage](./assets/user-quota-usage-en.png)
+
+## HTTP API
+
+In addition to viewing the username quota module on the Dashboard, you can also retrieve username usage details using the HTTP API.
+
+### GET /api/v4/quota/usernames
+
+Get the list of usernames in the cluster, sorted in descending order by the number of sessions for each username.
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 indicates success   |
+| data | Array   | List of username details   |
+| data[0].username | String   | Username |
+| data[0].used | Integer   | Number of sessions for the username |
+| data[0].clientids | Array | List of client IDs |
+
+**Examples**
+
+```shell
+curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
+
+{
+  "meta": {
+    "page": 1,
+    "limit": 10000,
+    "count": 1
+  },
+  "data": [
+    {
+      "username": "a",
+      "used": 1,
+      "clientids": [
+        "mqttjs_6916e2ae"
+      ]
+    }
+  ],
+  "code": 0
+}
+```
+
+### GET /api/v4/quota/usernames/:username
+
+Get the sessions for a specific username.
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 indicates success   |
+| data | Object  | User details   |
+| data.username | String   | Username |
+| data.used | Integer   | Number of sessions for the username |
+| data.clientids | Array | List of client IDs |
+
+**Examples**
+
+```shell
+curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
+
+{
+  "data": {
+    "username": "a",
+    "used": 1,
+    "clientids": [
+      "mqttjs_6916e2ae"
+    ]
+  },
+  "code": 0
+}
+```
