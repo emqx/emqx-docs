@@ -1,5 +1,135 @@
 # 版本发布
 
+## 4.4.25
+
+*发布日期: 2024-09-11*
+
+### 增强
+
+- 增加用户名配额限制模块，限制单个 MQTT 用户名允许登录的会话数。
+
+  此功能可以在 Dashboard 上，通过**模块** -> **用户名配额限制**进行配置。
+  在**参数设置**标签页，可以添加用户名白名单，白名单内的用户名将不受配额的限制。
+
+  注意若开启此功能，需要使用白名单来规避 MQTT 桥接的用户名配额限制。
+
+- 优化了使用 MQTT 3.1.1 协议时，CONNECT 报文携带了非法 Will QoS 值时的错误日志输出。
+
+- 改进了发送消息到 Redis 的性能。
+
+  改进之前，由于 `gen_tcp:send/2` 的实现限制，随着 Redis Client 进程发送队列中积压的消息增多，发送性能会逐渐下降。因此，在高消息流量的情况下，Redis Client 进程可能成为系统瓶颈。
+
+  此优化将同时提升 Redis 认证/ACL、Redis 插件以及 Redis 规则引擎资源的发送性能。对于 Redis 认证功能来说，将改善服务中断后设备大规模集中重连时的压力。
+
+- 改进了发送消息到 SysKeeper 的性能。
+
+  改进之前，由于 `gen_tcp:send/2` 的实现限制，随着 `emqx_bridge_sysk_forward` 进程发送队列中积压的消息增多，发送性能会逐渐下降。因此，在高消息流量的情况下，`emqx_bridge_sysk_forward` 进程可能成为系统瓶颈。
+
+- 将单个日志追踪的文件大小上限从 512MB 提升到 1GB。
+
+- 改进 “内置数据库 认证/访问控制” 模块的 ACL 功能。
+
+  - 现在可以设置单个客户端的内置 ACL 模块中 ACL 条目的上限了。
+
+    在发布或订阅主题时校验 ACL 需要遍历客户端的 ACL 条目，所以对于单个客户端来说，添加太多 ACL 条目会导致发布或订阅的性能下降。
+    现在可以通过 `auth.mnesia.max_acls_for_each_login` 配置项，或者 “内置数据库 认证/访问控制” 模块的 `最大 ACL 数量` 参数来限制为单个客户端添加的 ACL 条目数量。
+
+  - 改进了内置 ACL 模块的匹配性能。
+
+    通过优化 ACL 表的存储结构和主题匹配逻辑，提升了从内置 ACL 模块查找和匹配 ACL 条目的性能。单个客户端的 ACL 条目数量越多，性能提升越明显。
+
+  - 内置 ACL 模块中，添加/删除 ACL 条目之后将重置 ACL 缓存。
+
+- 规则引擎的批量发送进程支持过载保护。
+
+  在启用批量发送选项后，规则引擎将会为动作创建一组进程用于缓冲和批量发送消息。如果使用异步发送模式，当外部数据库响应过慢时，消息会积压在批量进程的消息队列里，导致内存超出系统限制的风险。现在，规则引擎的批量发送功能将会受到过载保护的限制，当消息队列的大小超过 `"最大批量数" * 10` (如果`“最大批量数”*10` 的值小于 1000，消息队列大小最小值则为 1000) 时，动作将会被 “卸载” 一段时间（默认 60s）。这段时间内发往动作的后续消息会被丢弃，同时会触发 `action_olp_blocked/<RuleID>/<ActionID>` 告警。
+
+  受过载保护限制的动作：
+  - 保存数据到 Cassandra
+  - 保存数据到 ClickHouse
+  - 保存数据到 DolphinDB
+  - 保存数据到 InfluxDB
+  - 保存数据到 IoTDB
+  - 保存数据到 Lindorm
+  - 保存数据到 MySQL
+  - 保存数据到 Oracle Database
+  - 保存数据到 PostgreSQL
+  - 保存数据到 SQLServer
+  - 保存数据到 Tablestore
+  - 保存数据到 TDengine
+  - 桥接数据到 GCP Pubsub
+
+- 支持将未定义值作为 `NULL` 写入到数据库。
+
+  规则引擎的多种数据库动作都支持使用 `${var}` 格式的占位符来构建插入语句。改进前，当占位符变量未定义时，规则引擎可能会插入 `undefined` 字符串到数据库中。现在，规则引擎的数据库相关动作新增了一个 `"未定义值作为 NULL 插入"` 选项，当变量未定义时，使用 `NULL` 写入到数据库。
+
+  支持此选项的动作：
+  - 保存数据到 Cassandra
+  - 保存数据到 ClickHouse
+  - 保存数据到 DolphinDB
+  - 保存数据到 MySQL
+  - 保存数据到 Oracle Database
+  - 保存数据到 PostgreSQL
+  - 保存数据到 SQLServer
+  - 保存数据到 TDengine
+
+- 支持日志限流功能。
+
+  当某些异常的情况发生时，可能会出现大量重复（内容类似）的日志打印的情况，一方面增加了系统的压力，另一方面也会冲刷掉其他有用的日志信息。
+  现在可通过 `etc/logger.conf` 文件中的 `log.throttling` 配置一个时间窗口以及时间窗口内日志打印的最高频率。
+
+  注意为了提高限流功能的执行效率，EMQX 会启动 N 个限流器，其中 N 为 CPU 核心数。这意味着当设置 `log.throttling = 50,60s` 时，每个限流器将会限制每分钟最多打印 50 条相同（按日志的代码模块名+行号判断）的日志，假设 CPU 核心数为 8，视 Erlang 虚拟机对进程的调度情况不同，总共每分钟最多打印 50 ~ 400 条日志。若有日志被限流器丢弃，EMQX 会打印一条日志提示被丢弃的日志条数：
+
+  ```erlang
+  log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
+  ```
+
+  该日志表示在最近 60 秒内，`emqx_channel` 模块的第 1400 行代码打印了许多日志，总共有 33 条日志被 EMQX 丢弃了。
+
+  此功能默认对 warning 及以上日志级别启用，默认值为 `50,60s`。
+
+- 支持配置 HTTP/HTTPs 管理接口的超时时间。
+
+  在 `etc/plugins/emqx_management.conf` 配置文件新增了两个超时相关的配置：
+  - `management.listener.<Proto>.request_timeout`：指定 TCP 连接建立后若没有收到任何 HTTP 请求，服务端将在指定时间后关闭连接，默认值为 5 秒。
+  - `management.listener.<Proto>.idle_timeout`：指定空闲超时时间。即该连接上曾经收到过至少一个 HTTP 请求后，如果没有更多请求，服务端将在指定时间后关闭连接，默认值为 60 秒。
+
+  其中，`<Proto>` 为 `http` 或 `https`。
+
+- 为 “消息重新发布” 动作增加对目标主题的合法性校验。
+
+  改进后，“消息重新发布” 动作会在发送消息前校验目标主题的合法性，若主题为非 UTF-8 编码的二进制，动作将会失败。
+
+- 优化了 Redis-Cluster 驱动的性能。
+
+  降低了访问 Cluster 模式的 Redis 时 EMQX 的内存占用，受益于此优化的功能包括：
+
+  - Redis 认证/ACL
+  - Redis 插件
+  - 规则引擎的 Redis 相关动作
+
+### 修复
+
+- 修复发送超过 Kafka 服务端最大报文限制的消息导致 Kafka Producer 被堵塞的问题。
+
+  当发送的单个消息大小超过 Kafka 服务端配置的 `message.max.bytes` 时，规则引擎的 Kafka Producer 发送队列会被堵塞，后续消息将被缓存直至 `Max Cache Bytes` 配置的最大缓存上限。现在，如果单条消息大小超过规则引擎 Kafka 资源中的 `Max Batch Bytes` 限制，Kafka Producer 会将消息丢弃，避免队列阻塞。
+
+- 修复了某些情况下 "resource down" 告警无法清除的问题。
+
+- 修复了由遗嘱消息触发的规则中，获取的 timestamp 字段的值不正确的问题。该字段值应该是规则触发的时间而不是客户端上线时间。
+
+- 修复当 Kafka 动作使用 `username` 作为 `Message Key` 发送数据失败的问题。
+
+  此前，当配置了 Kafka `Message Key` 为 `username` 但 MQTT 客户端在登录时没有携带用户名时，Kafka Producer 发送消息失败。
+  修复后对于未携带用户名的消息，Kafka Producer 会使用 `undefined` 字符串作为 Message Key。
+
+- 修复当进程异常终止时，规则引擎 `$events/client_disconnected` 事件无法触发的问题。
+
+- 修复了当设置 `clientid` 作为 `Hash Key` 时，DynamoDB 动作发送数据失败的问题。
+
+- 修复了节点重启导致共享订阅 sticky 派发策略可能退化成 random 的问题。
+
+
 ## 4.4.24
 
 *发布日期: 2024-04-16*
