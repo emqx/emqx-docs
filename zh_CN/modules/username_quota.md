@@ -17,13 +17,15 @@
 
 ![user-quota-create](./assets/user-quota-create-zh.png)
 
-## 使用示例
+## 管理用户名配额
 
-1. 在模块页面，找到您已添加的**用户名配额限制**模块。点击右侧的**管理**。
+在模块页面，找到您已添加的**用户名配额限制**模块。点击右侧的**管理**。
 
-2. 在详情页面，您可以看到 EMQX 集群中的当前用户名及其使用的会话数。点击会话数旁边的**查看**按钮，可以查看当前用户名的会话列表。
+在**使用详情**标签页，您可以看到 EMQX 集群中的当前用户名及其使用的会话数。点击会话数旁边的**查看**按钮，可以查看当前用户名的会话列表。
 
-   ![user-quota-usage](./assets/user-quota-usage-zh.png)
+点击**参数设置**标签页，您可以编辑用户名配额限制的设置。点击右上角的**删除**可以删除模块。
+
+![user-quota-usage](./assets/user-quota-usage-zh.png)
 
 ## HTTP API
 
@@ -33,9 +35,9 @@
 
 获取集群中的用户名列表，按照用户名的会话数降序排列。
 
-**Success Response Body (JSON):**
+**成功响应体 (JSON):**
 
-| Name | Type    | Description |
+| 名称 | 类型  | 描述 |
 | ---- | ------- | ----------- |
 | code | Integer | 0 表示成功   |
 | data | Array   | 用户名详情列表   |
@@ -43,7 +45,7 @@
 | data[0].used | Integer   | 该用户名的会话数 |
 | data[0].clientids | Array | 包含客户端 ID 的列表 |
 
-**Examples**
+**示例**
 
 ```shell
 curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
@@ -71,9 +73,9 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
 
 获取指定用户名的会话列表。
 
-**Success Response Body (JSON):**
+**成功响应体 (JSON):**
 
-| Name | Type    | Description |
+| 名称 | 类型  | 描述 |
 | ---- | ------- | ----------- |
 | code | Integer | 0 表示成功   |
 | data | Object  | 用户名详情   |

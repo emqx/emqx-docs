@@ -21,13 +21,15 @@ When a username exceeds its quota, new session connections will be rejected, and
 
    ![user-quota-create](./assets/user-quota-create-en.png)
 
-## Usage Example
+## Manage Username Quota
 
-1. On the Modules page, navigate to the **Username Quota** module you have added. Click **Manage** on the right.
+On the Modules page, navigate to the **Username Quota** module you have added. Click **Manage** on the right.
 
-2. On the Details page, you can see the current usernames in the EMQX cluster and the number of sessions used for each username. Click the **View** button next to the session count to view the session list for the current username.
+On the **Usage** tab, you can view the current usernames in the EMQX cluster and the number of sessions used for each username. By clicking the **View** button next to the session count, you can see the session list for the selected username.
 
-   ![user-quota-usage](./assets/user-quota-usage-en.png)
+On the **Configuration** tab, you can edit the configuration of the username quota limits. To delete the module, click **Delete** in the upper right corner.
+
+![user-quota-usage](./assets/user-quota-usage-en.png)
 
 ## HTTP API
 
