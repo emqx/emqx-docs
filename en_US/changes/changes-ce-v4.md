@@ -1,4 +1,4 @@
-# Version 4
+# EMQX Open Source Version 4
 
 ## 4.4.19
 

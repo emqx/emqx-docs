@@ -29,7 +29,7 @@ If you are running a version earlier than 4.4.x, you must first upgrade through 
 
 ### Incompatible Changes
 
-You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../changes/breaking-changes-5.1.0.md), and list of incompatible changes in later versions:
+You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../changes/breaking-changes-5.1.0.md), and the following incompatible changes documents in later versions:
 
 :::: tabs type:card
 
@@ -77,7 +77,7 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 
 - Make sure that you are running EMQX cluster release 4.4.x.
 - You have read the [release notes](../changes/all-changes-ee.md).
-- Your deployment environment is capable of running VMs with one of [operating systems supported by EMQX](install.md), or docker containers.
+- Your deployment environment is capable of running VMs with one of the [operating systems supported by EMQX](./install.md), or docker containers.
 - You have sufficient disk space and memory available for the upgrade.
 - You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../performance/tune.md).
 
@@ -89,7 +89,7 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 
 1. Download EMQX `@EE_VERSION@` packages.
    - **Use a Package Manager:** Check if your operating system's package manager offers the EMQX `@EE_VERSION@` binaries. If available, use the package manager to download and install the binaries.
-   - **Download Binaries Manually:** If the package manager does not provide the EMQX `@EE_VERSION@` binaries or network of the server is restricted, you can manually download them from the [official EMQX website.](https://www.emqx.com/en/downloads-and-install/enterprise)
+   - **Download Binaries Manually:** If the package manager does not provide the EMQX `@EE_VERSION@` binaries or the network of the server is restricted, you can manually download them from the [official EMQX website.](https://www.emqx.com/en/downloads-and-install/enterprise)
 
 2. Deploy a new EMQX Cluster using the binaries. For detailed installation steps, refer to [Installation](../deploy/install.md). This ensures a clean installation of the latest version.
 
@@ -101,7 +101,9 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 
    ::: tip
 
-   A migration tool is currently in development to migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@EE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition. 
+   A migration tool is currently in development to migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@EE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition.
+   
+   :::
 
 :::
 
@@ -121,7 +123,9 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 
    ::: tip
 
-   A migration tool is currently in development to migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@CE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition. 
+   A migration tool is currently in development to migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@CE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition.
+   
+   :::
 
 :::
 
