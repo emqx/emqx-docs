@@ -1,5 +1,133 @@
 # Releases
 
+## 4.4.25
+
+*Release Date: 2024-09-13*
+
+### Enhancements
+
+- Introduced a username quota limitation module to restrict the number of sessions that a single MQTT username can log in with.
+
+  This feature can be configured in the Dashboard under **Modules** -> **Username Quota**. In the **Configuration** tab, you can add a username white list, where usernames in the white list will not be subject to quota restrictions.
+
+  Note that if this feature is enabled, a whitelist must be used to bypass the username quota restrictions for MQTT bridging.
+
+- Improved error log when an illegal Will QoS value is carried in the CONNECT message when using the MQTT 3.1.1 protocol.
+
+- Enhanced performance for sending messages to Redis.
+
+  Previously, due to the limitations of the `gen_tcp:send/2` implementation, as more messages piled up in the Redis Client process’s send queue, the sending performance would gradually decrease. Thus, under high message traffic, the Redis Client process could become a system bottleneck.
+
+  This optimization improves the sending performance of Redis Authentication/ACL, Redis Plugin, and Redis Rule Engine resources. For Redis authentication functionality, it relieves the pressure during mass device reconnections after a service interruption.
+
+- Enhanced performance for sending messages to SysKeeper.
+
+  Previously, due to the limitations of the `gen_tcp:send/2` implementation, as more messages piled up in the `emqx_bridge_sysk_forward` process’s send queue, the sending performance would gradually decrease. Thus, under high message traffic, the `emqx_bridge_sysk_forward` process could become a system bottleneck.
+
+- Increased the file size limit for a single log trace from 512MB to 1GB.
+
+- Improved the ACL feature in the "Internal DB AUTH/ACL" module.
+
+  - You can now set a limit on the number of ACL entries for a single client in the built-in ACL module.
+
+    When publishing or subscribing to a topic, ACL validation requires traversing the client’s ACL entries. Therefore, adding too many ACL entries for a single client could degrade the performance of publishing or subscribing. You can now limit the number of ACL entries added for a single client using the `auth.mnesia.max_acls_for_each_login` configuration item or the `Max ACLs"`parameter in the module.
+
+  - Enhanced the matching performance of the built-in ACL module.
+
+    By optimizing the storage structure of the ACL table and the topic matching logic, the performance of searching and matching ACL entries in the built-in ACL module has been improved. The more ACL entries a single client has, the more significant the performance improvement.
+
+  - Added/removed ACL entries in the built-in ACL module will now reset the ACL cache.
+
+- The rule engine's batch sending process now supports overload protection.
+
+  When batch sending is enabled, the rule engine creates a group of processes to buffer and batch send messages for actions. If asynchronous sending mode is used, when the external database response is too slow, messages may pile up in the batch process’s message queue, posing a risk of exceeding system memory limits. Now, the batch sending function of the rule engine will be limited by overload protection. When the message queue size exceeds `"Maximum Batch Size" * 10` (if the value of `"Maximum Batch Size" * 10` is less than 1000, then the minimum message queue size is 1000), the action will be "unloaded" for a period of time (default 60 seconds). During this time, subsequent messages sent to the action will be discarded, and the `action_olp_blocked/<RuleID>/<ActionID>` alarm will be triggered.
+
+  Actions subject to overload protection:
+
+  - Data to Cassandra
+  - Data to ClickHouse
+  - Data to DolphinDB
+  - Data to InfluxDB
+  - Data to IoTDB
+  - Data to Lindorm
+  - Data to MySQL
+  - Data to Oracle Database
+  - Data to PostgreSQL
+  - Data to SQLServer
+  - Data to Tablestore
+  - Data to TDengine
+  - Data to GCP Pubsub
+
+- Added support for inserting undefined values as `NULL` into databases.
+
+  Various database actions in the rule engine support constructing insert statements using `${var}` placeholders. Previously, if a placeholder variable was undefined, the rule engine might insert the string `undefined` into the database. Now, a new option `Insert Undefined Values as NULL` has been added to the database-related actions, allowing `NULL` to be inserted into the database when a variable is undefined.
+
+  Actions supporting this option:
+
+  - Data to Cassandra
+  - Data to ClickHouse
+  - Data to DolphinDB
+  - Data to MySQL
+  - Data to Oracle Database
+  - Data to PostgreSQL
+  - Data to SQLServer
+  - Data to TDengine
+
+- Added support for log throttling.
+
+  When certain abnormal situations occur, a large number of repetitive (similar content) logs may be generated, increasing system load and potentially overshadowing other useful log information. Now, you can configure a time window and maximum log rate within that window using the `log.throttling` setting in the `etc/logger.conf` file.
+
+  Note that to improve the efficiency of the throttling function, EMQX will start N throttlers, where N is the number of CPU cores. This means that if `log.throttling = 50,60s` is set, each throttler will restrict the logging of the same message (determined by the log’s module name and line number) to a maximum of 50 times per minute. Assuming 8 CPU cores, the system could log between 50 and 400 messages per minute depending on Erlang VM process scheduling. If logs are dropped by the throttler, EMQX will log a message indicating the number of logs that were dropped:
+
+  ```
+  log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
+  ```
+
+  This log indicates that in the last 60 seconds, 33 logs from line 1400 of the `emqx_channel` module were dropped by EMQX.
+
+  This feature is enabled by default for warning and higher log levels, with a default setting of `50,60s`.
+
+- Added support for configuring HTTP/HTTPS management interface timeouts.
+
+  Two timeout-related configurations have been added to the `etc/plugins/emqx_management.conf` file:
+
+  - `management.listener.<Proto>.request_timeout`: Specifies the time after establishing a TCP connection within which the server will close the connection if no HTTP request is received. The default is 5 seconds.
+  - `management.listener.<Proto>.idle_timeout`: Specifies the idle timeout period. After receiving at least one HTTP request on the connection, if no further requests are received, the server will close the connection after the specified time. The default is 60 seconds.
+
+  Here, `<Proto>` can be `http` or `https`.
+
+- Added validation for the target topic in the "Republish" action.
+
+  After the improvement, when the "Republish" action sends a message, it will validate the legality of the target topic. If the topic is a non-UTF-8 encoded binary, the action will fail.
+
+- Optimized the performance of the Redis-Cluster driver.
+
+  This optimization reduces the memory footprint of EMQX when accessing Redis Cluster. The following features benefit from this optimization:
+
+  - Redis Authentication/ACL
+  - Redis Plugin
+  - Redis Actions in the Rule Engine
+
+### Bug Fixes
+
+- Fixed an issue where sending messages exceeding Kafka server's maximum message size limit would cause the Kafka Producer to become blocked.
+
+  Previously, when a single message exceeded the `message.max.bytes` configured on the Kafka server, the Kafka Producer's send queue in the rule engine would become blocked, and subsequent messages would be buffered until reaching the maximum cache limit set by `Max Cache Bytes`. Now, if a single message exceeds the `Max Batch Bytes` limit configured in the rule engine's Kafka resource, the Kafka Producer will discard the message to prevent queue blockage.
+
+- Fixed an issue where the "resource down" alarm could not be cleared in certain situations.
+
+- Fixed an issue where the `timestamp` field value was incorrect in rules triggered by Will messages. The field value should represent the time the rule was triggered, not the client's connection time.
+
+- Fixed an issue where the Kafka action failed to send data when `username` was used as the `Message Key`.
+
+  Previously, if the Kafka `Message Key` was set to `username` but the MQTT client did not provide a username at login, the Kafka Producer would fail to send the message. After the fix, for messages without a username, the Kafka Producer will use the string `undefined` as the Message Key.
+
+- Fixed an issue where the rule engine failed to trigger the `$events/client_disconnected` event when a process terminated unexpectedly.
+
+- Fixed an issue where the DynamoDB action failed to send data when `clientid` was set as the `Hash Key`.
+
+- Fixed an issue which may cause shared-subscription sticky strategy degrading into random after node restart.
+
 ## 4.4.24
 
 *Release Date: 2024-04-16*
