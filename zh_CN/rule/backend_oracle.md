@@ -36,7 +36,16 @@ SELECT * FROM "t/#"
 INSERT INTO T_MQTT_MSG (MSGID, TOPIC, QOS, PAYLOAD) values ('${id}', '${topic}', '${qos}', '${payload}');
 ```
 
-2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个 Oracle Database  资源:
+插入数据之前，SQL 模板里的 ${id} 占位符会被替换为相应的值。
+
+如果占位符变量未定义，您可以使用**未定义值作为 NULL 插入**选项来规定规则引擎的行为：
+
+- `false` （默认）：规则引擎可能会插入 `undefined` 字符串到数据库中。
+- `true`：当变量未定义时，规则引擎使用 `NULL` 写入到数据库。
+
+![image](./assets/rule-engine/oracle_action_4.png)
+
+2). 关联资源的 ID。现在"使用资源“下拉框为空，可以点击 “新建” 来创建一个 Oracle Database  资源:
 
 填写资源配置:
 
@@ -47,8 +56,6 @@ INSERT INTO T_MQTT_MSG (MSGID, TOPIC, QOS, PAYLOAD) values ('${id}', '${topic}',
 点击 “新建” 按钮。
 
 返回响应动作界面，点击 “确认”。
-
-![image](./assets/rule-engine/oracle_action_4.png)
 
 返回规则创建界面，点击 “创建”。
 

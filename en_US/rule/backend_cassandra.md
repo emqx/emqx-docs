@@ -77,7 +77,12 @@ Two parameters are required by action "Data to Cassandra":
 insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
 ```
 
-Before data is inserted into the table, placeholders like \${key} will be replaced by the corresponding values.
+Before data is inserted into the table, placeholders like \${key} will be replaced by the corresponding values. 
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
 
 ![image](./assets/rule-engine/cassandra/cassandra-rule-3.png)
 

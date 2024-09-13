@@ -58,11 +58,18 @@ Click "create" right to the resource Id text box, and then select "clickhouse" a
 
 Click the "Confirm" button.
 
-2). The SQL template. In this example we insert an message to clickhouse:
+2). The SQL template. In this example, we insert a message to ClickHouse:
 
 ```sql
 insert into test.t_mqtt_msg(msgid, clientid, topic, payload) values ('${id}', '${clientid}', '${topic}', '${payload}')
 ```
+
+Before data is inserted into the table, placeholders like \${id} will be replaced by the corresponding values. 
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
 
 ![image](./assets/rule-engine/clickhouse_5.png)
 

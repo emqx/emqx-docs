@@ -71,55 +71,38 @@ FROM
 
 Bind an action:
 
-Click on the "+ Add" button under "Action Handler", and then select
-"Data to PostgreSQL" in the pop-up dialog window.
-
-![image](./assets/rule-engine/pgsql_action_0.png)
+Click the "Add action" button under "Action", and then select "Data persist" -> "Data to PostgreSQL" from the "Action Type" drop-down list.
 
 Fill in the parameters required by the action:
 
-Two parameters is required by action "Data to PostgreSQL":
+Two parameters are required by action "Data to PostgreSQL":
 
-1). SQL template. SQL template is the sql command you'd like to run
-when the action is triggered. In this example we'll insert a message
-into pgsql, so type in the following sql
-template:
+1). SQL template. SQL template is the sql command you'd like to run when the action is triggered. In this example we'll insert a message into pgsql, so type in the following sql template:
 
 ```sql
 insert into t_mqtt_msg(msgid, topic, qos, retain, payload, arrived) values (${id}, ${topic}, ${qos}, ${retain}, ${payload}, to_timestamp(${timestamp}::double precision /1000)) returning id
 ```
 
-Before data is inserted into the table, placeholders like \${key} will
-be replaced by the corresponding values.
+Before data is inserted into the table, placeholders like \${id} will be replaced by the corresponding values.
+
+If a placeholder variable is undefined, you can use the **Insert undefined value as Null** option to define the rule engine behavior:
+
+- `false` (default): The rule engine can insert the string `undefined` into the database.
+- `true`: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
 
 ![image](./assets/rule-engine/pgsql_action_1.png)
 
-2). Bind a resource to the action. Since the dropdown list "Resource"
-is empty for now, we create a new resource by clicking on the "New
-Resource" to the top right, and then select "PostgreSQL":
+2). Bind a resource to the action. Since the drop-down list "Use of resources" is empty for now, we create a new resource by clicking on the "Create" button next to the drop-down box.
 
-![image](./assets/rule-engine/pgsql_resource_0.png)
+In the Create dialogue, configure the resource:
 
-Select "PostgreSQL Resource".
-
-Configure the resource:
-
-Set "PostgreSQL Database" to "mqtt", "PostgreSQL User" to "root", and
-keep all other configs as default, and click on the "Testing
-Connection" button to make sure the connection can be created
-successfully.
-
-Finally click on the "Create" button.
+Set "PostgreSQL Database" to "mqtt", "PostgreSQL User" to "root", and keep all other configs as default, and click on the "Test" button to make sure the connection can be created successfully. Finally, click the "Confirm" button.
 
 ![image](./assets/rule-engine/pgsql_resource_1.png)
 
-Back to the "Actions" dialog, and then click on the "Confirm"
-    button.
+Back to the "Add Actions" dialog, and then click on the "Confirm" button.
 
-![image](./assets/rule-engine/pgsql_action_2.png)
-
-Back to the creating rule page, then click on "Create" button. The
-    rule we created will be show in the rule list:
+Back to the creating rule page, then click on the "Create" button. The rule we created will be shown in the rule list:
 
 ![image](./assets/rule-engine/pgsql_rule_overview_1.png)
 

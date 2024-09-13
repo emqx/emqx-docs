@@ -101,7 +101,7 @@ SELECT * FROM "t/#"
 
 关联动作:
 
-在 “响应动作” 界面选择 “添加”，然后在 “动作” 下拉框里选择 “保存数据到 DolphinDB”。
+在 “响应动作” 界面选择 “添加动作”，然后在 “动作” 下拉框里选择 “保存数据到 DolphinDB”。
 
 ![image](./assets/rule-engine/dolphin_action_1.jpg)
 
@@ -115,6 +115,13 @@ SELECT * FROM "t/#"
 insert into st_msg values('${clientid}', '${topic}', ${qos}, '${payload}')
 ```
 
+插入数据之前，SQL 模板里的 ${clientid} 占位符会被替换为相应的值。
+
+如果占位符变量未定义，您可以使用**未定义值作为 NULL 插入**选项来规定规则引擎的行为：
+
+- `false` （默认）：规则引擎可能会插入 `undefined` 字符串到数据库中。
+- `true`：当变量未定义时，规则引擎使用 `NULL` 写入到数据库。
+
 2). 关联资源的 ID。现在资源下拉框为空，可以点击右上角的 “新建资源” 来创建一个DolphinDB 资源:
 
 填写资源配置:
@@ -127,7 +134,7 @@ insert into st_msg values('${clientid}', '${topic}', ${qos}, '${payload}')
 
 返回响应动作界面，点击 “确定”。
 
-![image](./assets/rule-engine/dolphin_action_2.jpg)
+![image](./assets/rule-engine/dolphin_action_2.png)
 
 返回规则创建界面，点击 “创建”。
 
