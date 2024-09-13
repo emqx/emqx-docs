@@ -995,7 +995,7 @@ log.error.file = error.log
 #### Description
 
 Max depth when printing large data blob to log.
-Exceeding parts will be logge as '...'.
+Exceeding parts will be logged as '...'.
 
 ### log.single_line
 
@@ -1058,7 +1058,129 @@ log.formatter.text.date.format = %Y-%m-%dT%H:%M:%S.%6N %:z
 log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 ```
 
-## authacl
+### log.sync_mode_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `100`  |
+
+#### Description
+
+The maximum allowed queue length, after which the log handler switches to synchronous mode.
+
+This is a log overload protection parameter. If the message queue length exceeds this value, the handler will switch from asynchronous mode to synchronous mode.
+
+### log.drop_mode_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `3000`  |
+
+#### Description
+
+The maximum allowed queue length, after which the log handler switches to drop mode.
+
+This is a log overload protection parameter. When the message queue length exceeds this threshold, the handler will switch to drop mode, discarding all new events that the sender intends to log.
+
+### log.flush_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `8000`  |
+
+#### Description
+
+The maximum allowed queue length, after which the log handler switches to flush mode.
+
+This is a log overload protection parameter. If the message queue length exceeds this threshold, a flush (delete) operation will be triggered. To flush events, the handler discards them by continuously receiving messages from the queue without logging them.
+
+### log.overload_kill
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+Terminates the log handler during an overload.
+
+This is a log overload protection parameter. Even if the handler manages to handle high load spikes without crashing, it may accumulate a large message queue or consume excessive memory. In such cases, we can terminate the log handler and restart it after a few seconds.
+
+### log.overload_kill_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `20000` |
+
+#### Description
+
+The maximum allowed queue length, upon reaching which the log handler will be terminated.
+
+This is a log overload protection parameter. If the message queue length exceeds this value, the handler process will be terminated.
+
+### log.overload_kill_mem_size
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `30MB`  |
+
+#### Description
+
+The maximum allowed memory usage, upon exceeding which the log handler will be terminated.
+
+This is a log overload protection parameter. It defines the maximum memory size the handler process is allowed to use. If the memory usage exceeds this value, the process will be terminated.
+
+### log.overload_kill_restart_after
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+Restart the log handler after a specified number of seconds.
+
+This is a log overload protection parameter. If the handler is terminated, it will automatically restart after the specified delay. If the value is set to "infinity," the handler will not restart.
+
+### log.burst_limit
+
+| Type  | Format | Default |
+| ------| ------ | ------- |
+| string| MaxBurstCount,TimeWindow | `disabled` |
+
+#### Description
+
+The maximum number of events and time window for burst control.
+
+This is a log overload protection parameter. A large number of log events in a short burst—when the handler receives many events in a short time—can cause issues. By specifying the maximum number of events processed within a certain time frame, the handler can avoid being blocked by excessive output.
+
+This configuration controls the maximum number of events that can be processed within a specific time window. Once the limit is reached, any subsequent events will be discarded until the time window ends.
+
+Please note that due to burst control, no warnings will be issued when events are discarded.
+
+### log.throttling
+
+| Type | Format | Default |
+| ---- | ------ | ------- |
+| string | MaxCount,TimeWindow | `disabled` |
+
+#### Description
+
+The log throttling feature reduces potential log flooding by retaining only the first N events within a configured time window. By default, this feature is disabled for logs at the warning level and above.
+
+EMQX starts one throttling handler for each Erlang scheduler, meaning the total number of throttling handlers equals the number of CPU cores. For example, setting `log.throttling = 3,60s` on a 4-core machine would allow approximately 3 * 4 = 12 identical log messages per minute (identified by module name + line number), assuming an even distribution of processes across schedulers.
+
+### log.throttling_level
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
+
+#### Description
+
+The log throttling level. Only log messages with a severity level greater than or equal to this level will be throttled. For example, if set to `error`, only log messages at the `error`, `critical`, `alert`, and `emergency` levels will be throttled.
+
+## Auth/ACL
 
 ### allow_anonymous
 
@@ -3006,6 +3128,7 @@ Allowed values are
 - "ocspSigning"
 - raw OID, example: "OID:1.3.6.1.5.5.7.3.2" 
   
+
 Comma-separated string is also supported for validating the subset of key usages.
 
 example, "serverAuth,OID:1.3.6.1.5.5.7.3.2"
@@ -6645,8 +6768,6 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
-
-
 ### dashboard.listener.https
 
 | Type    | Default |
@@ -7223,7 +7344,25 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
+### management.listener.http.request_timeout
 
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+The HTTP request timeout. After an HTTP client establishes a connection with the server, if no request is received from the client within this time frame, the server will proactively close the connection.
+
+### management.listener.http.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### Description
+
+The HTTP connection idle timeout. After an HTTP client establishes a connection and the server receives a request, if no further requests are received from the client within this time frame, the server will proactively close the connection.
 
 ### management.listener.https
 
@@ -7383,6 +7522,25 @@ Whether to set the socket to allow IPv6 connections.
 
 Whether to restrict the socket that only IPv6 can be ued, and prohibit any IPv4 connections. Only applicable to IPv6 sockets, that is, the value of this configuration item has practical significance only when `dashboard.listener.http.inet6` is set to `true`. It should be noted that on some operating systems, such as Windows, the only allowed value for this configuration item is `true`.
 
+### management.listener.https.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+The HTTPS request timeout. After an HTTPS client establishes a connection with the server, if no request is received from the client within this time frame, the server will proactively close the connection.
+
+### management.listener.https.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### Description
+
+The HTTPS connection idle timeout. After an HTTPS client establishes a connection and the server receives a request, if no further requests are received from the client within this time frame, the server will proactively close the connection.
 
 ## Plugin `emqx_retainer`
 

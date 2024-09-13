@@ -1018,11 +1018,131 @@ log.formatter.text.date.format = %Y-%m-%dT%H:%M:%S.%6N %:z
 ## 如下配置可以让时间戳跟 4.2.x 版本的一样 (2022-06-02 14:24:36.124):
 log.formatter.text.date.format = %Y-%m-%d %H:%M:%S.%3N
 ```
-
 <br />
 
+### log.sync_mode_qlen
 
-## authacl
+| Type    | Default |
+| ------- | ------- |
+| integer | `100`  |
+
+#### Description
+
+允许的最大队列长度，在达到该长度后切换为同步模式。
+
+日志过载保护参数。如果消息队列的长度超过此值，处理程序将从异步模式切换到同步模式。
+
+### log.drop_mode_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `3000`  |
+
+#### Description
+
+允许的最大队列长度，在达到该长度后切换为丢弃模式。
+
+日志过载保护参数。当消息队列的长度超过此阈值时，处理程序将切换到丢弃模式，放弃发送者想要记录的所有新事件。
+
+### log.flush_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `8000`  |
+
+#### Description
+
+允许的最大队列长度，在达到该长度后切换为刷新模式。
+
+日志过载保护参数。如果消息队列的长度超过此阈值，将执行刷新（删除）操作。为了刷新事件，处理程序通过循环接收消息队列中的消息而不进行日志记录，来丢弃它们。
+
+### log.overload_kill
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `on`, `off`    | `on`    |
+
+#### Description
+
+在日志处理程序过载时终止它。
+
+日志过载保护参数。即使处理程序能够成功应对高负载峰值而不崩溃，也可能会积累大量消息队列或占用大量内存。我们可以在这种情况下终止日志处理程序，并在几秒钟后重新启动它。
+
+### log.overload_kill_qlen
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `20000` |
+
+#### Description
+
+允许的最大队列长度，达到该长度时将终止日志处理程序。
+
+日志过载保护参数。如果消息队列的长度超过此值，处理程序进程将被终止。
+
+### log.overload_kill_mem_size
+
+| Type     | Default |
+| -------- | ------- |
+| bytesize | `30MB`  |
+
+#### Description
+
+允许的最大内存使用量，超过该内存大小时将终止日志处理程序。
+
+日志过载保护参数。这是处理程序进程允许使用的最大内存大小。如果处理程序使用的内存超过此值，进程将被终止。
+
+### log.overload_kill_restart_after
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`    |
+
+#### Description
+
+在若干秒后重启日志处理程序。
+
+日志过载保护参数。如果处理程序被终止，它将在指定的延迟后自动重启。值为 "infinity" 时，处理程序不会重启。
+
+### log.burst_limit
+
+| Type  | Format | Default |
+| ------| ------ | ------- |
+| string| MaxBurstCount,TimeWindow | `disabled` |
+
+#### Description
+
+突发控制的最大事件数和时间窗口。
+
+日志过载保护参数。大量的日志事件突发 —— 即处理程序在短时间内接收到许多事件 —— 可能会造成问题。通过指定在某个时间范围内处理的最大事件数，处理程序可以避免因大量输出而阻塞日志。
+
+该配置控制在某个时间范围内可处理的最大事件数。在达到限制后，后续事件将在时间窗口结束前被丢弃。
+
+请注意，由于突发控制的原因，任何消息被丢弃时不会发出警告。
+
+### log.throttling
+
+| Type | Format | Default |
+| ---- | ------ | ------- |
+| string | MaxCount,TimeWindow | `disabled` |
+
+#### Description
+
+日志节流功能通过在配置的时间窗口内仅保留前 N 个事件来减少潜在的日志泛滥事件。默认情况下，该功能对警告级别及以上的日志级别禁用。
+
+EMQX 为每个 Erlang 调度程序启动一个节流处理程序，这意味着节流处理程序的总数等于 CPU 核心数。例如，在4核机器上设置 "log.throttling = 3,60s"，将允许每分钟大约 3 * 4 = 12 条相同的日志消息（通过模块名 + 行号标识），前提是进程在调度程序之间均匀分布。
+
+### log.throttling_level
+
+| Type | Optional Value | Default |
+| ---- | -------------- | ------- |
+| enum | `debug`, `info`, `notice`, `warning`<br/>`error`, `critical`, `alert`, `emergency` | `warning` |
+
+#### Description
+
+日志节流级别。仅会对严重级别大于或等于该级别的日志消息进行节流。例如设置为 `error`，则只会对 `error`，`critical`，`alert` 和 `emergency` 级别的日志消息进行节流。
+
+## Auth/ACL
 
 ### allow_anonymous
 
@@ -7143,6 +7263,28 @@ HTTP 报文发送超时后，是否关闭该连接。
 
 <br />
 
+### management.listener.http.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`   |
+
+#### 说明
+
+HTTP 请求超时时间。当 HTTP 客户端与服务端建立连接后，如果在此时间内没有收到客户端的请求，服务端会主动断开连接。
+
+<br />
+
+### management.listener.http.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### 说明
+
+HTTP 连接空闲超时时间。当 HTTP 客户端与服务端建立连接并收到客户端请求后，如果在此时间内没有收到客户端的更多请求，服务端会主动断开连接。
+
 ### management.listener.https
 
 | Type    | Default | Example        |
@@ -7302,6 +7444,28 @@ HTTPS 报文发送超时后，是否关闭该连接。
 是否限制套接字仅使用 IPv6，禁止任何 IPv4 连接。仅适用于 IPv6 套接字，即仅在 `management.listener.https.inet6` 被设置为 `true` 时此配置项的值有实际意义。需要注意的是，在某些操作系统上，例如 Windows，此配置项唯一允许的值为 `true`。
 
 <br />
+
+### management.listener.https.request_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `5s`   |
+
+#### 说明
+
+HTTPS 请求超时时间。当 HTTPS 客户端与服务端建立连接后，如果在此时间内没有收到客户端的请求，服务端会主动断开连接。
+
+<br />
+
+### management.listener.https.idle_timeout
+
+| Type     | Default |
+| -------- | ------- |
+| duration | `60s`   |
+
+#### 说明
+
+HTTPS 连接空闲超时时间。当 HTTPS 客户端与服务端建立连接并收到客户端请求后，如果在此时间内没有收到客户端的更多请求，服务端会主动断开连接。
 
 ## 插件`emqx_retainer`
 
