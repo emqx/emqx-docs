@@ -2,7 +2,7 @@
 
 ## 4.4.25
 
-*Release Date: 2024-09-11*
+*Release Date: 2024-09-13*
 
 ### Enhancements
 
