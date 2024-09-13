@@ -2824,205 +2824,205 @@ EMQX 4.0.4 is now released, which mainly fixed some bugs.
 
       Github PR: [emqx/emqx-retainer#136](https://github.com/emqx/emqx-retainer/pull/136)
 
-    ## 4.0.3
+## 4.0.3
 
-    *Release Date: 2019-02-21*
+*Release Date: 2019-02-21*
 
-    EMQX 4.0.3 has been released. This version primarily includes bug fixes.
+EMQX 4.0.3 has been released. This version primarily includes bug fixes.
 
-    ### emqx
+### emqx
 
-    **Enhancements:**
+**Enhancements:**
 
-    - Added an option to allow clients to bypass the authentication plugin when logging in.
+- Added an option to allow clients to bypass the authentication plugin when logging in.
 
-      Github PR: [emqx/emqx#3253](https://github.com/emqx/emqx/pull/3253)
+  Github PR: [emqx/emqx#3253](https://github.com/emqx/emqx/pull/3253)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where unnecessary error logs were printed under certain race conditions.
+- Fixed an issue where unnecessary error logs were printed under certain race conditions.
 
-      Github PR: [emqx/emqx#3246](https://github.com/emqx/emqx/pull/3246)
+  Github PR: [emqx/emqx#3246](https://github.com/emqx/emqx/pull/3246)
 
-    ### emqx-management (plugin)
+### emqx-management (plugin)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Removed unused fields and functions, and fixed issues with abnormal field values.
+- Removed unused fields and functions, and fixed issues with abnormal field values.
 
-      Github PR: [emqx/emqx-management#176](https://github.com/emqx/emqx-management/pull/176)
+  Github PR: [emqx/emqx-management#176](https://github.com/emqx/emqx-management/pull/176)
 
-    - Fixed an issue where the client list could not be retrieved in a cluster environment.
+- Fixed an issue where the client list could not be retrieved in a cluster environment.
 
-      Github PR: [emqx/emqx-management#173](https://github.com/emqx/emqx-management/pull/173)
+  Github PR: [emqx/emqx-management#173](https://github.com/emqx/emqx-management/pull/173)
 
-    - Fixed issues with HTTPS listener options.
+- Fixed issues with HTTPS listener options.
 
-      Github PR: [emqx/emqx-management#172](https://github.com/emqx/emqx-management/pull/172)
+  Github PR: [emqx/emqx-management#172](https://github.com/emqx/emqx-management/pull/172)
 
-    - Corrected the return format of the application list.
+- Corrected the return format of the application list.
 
-      Github PR: [emqx/emqx-management#169](https://github.com/emqx/emqx-management/pull/169)
+  Github PR: [emqx/emqx-management#169](https://github.com/emqx/emqx-management/pull/169)
 
-    ## 4.0.2
+## 4.0.2
 
-    *Release Date: 2019-02-07*
+*Release Date: 2019-02-07*
 
-    EMQX 4.0.2 has been released. This version focuses on bug fixes and performance optimizations.
+EMQX 4.0.2 has been released. This version focuses on bug fixes and performance optimizations.
 
-    ### emqx
+### emqx
 
-    **Enhancements:**
+**Enhancements:**
 
-    - Improved JSON encoding and decoding performance.
+- Improved JSON encoding and decoding performance.
 
-      Github PRs: [emqx/emqx#3213](https://github.com/emqx/emqx/pull/3213), [emqx/emqx#3230](https://github.com/emqx/emqx/pull/3230), [emqx/emqx#3235](https://github.com/emqx/emqx/pull/3235)
+  Github PRs: [emqx/emqx#3213](https://github.com/emqx/emqx/pull/3213), [emqx/emqx#3230](https://github.com/emqx/emqx/pull/3230), [emqx/emqx#3235](https://github.com/emqx/emqx/pull/3235)
 
-    - Reduced the size of generated projects.
+- Reduced the size of generated projects.
 
-      Github PR: [emqx/emqx#3214](https://github.com/emqx/emqx/pull/3214)
+  Github PR: [emqx/emqx#3214](https://github.com/emqx/emqx/pull/3214)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where DISCONNECT packets were not sent in certain situations.
+- Fixed an issue where DISCONNECT packets were not sent in certain situations.
 
-      Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
+  Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
 
-    - Fixed an issue where receiving PUBLISH packets with the same PacketID would cause a disconnection.
+- Fixed an issue where receiving PUBLISH packets with the same PacketID would cause a disconnection.
 
-      Github PR: [emqx/emqx#3233](https://github.com/emqx/emqx/pull/3233)
+  Github PR: [emqx/emqx#3233](https://github.com/emqx/emqx/pull/3233)
 
-    ### emqx-stomp (plugin)
+### emqx-stomp (plugin)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where the max connection limit was not enforced.
+- Fixed an issue where the max connection limit was not enforced.
 
-      Github PR: [emqx/emqx-stomp#93](https://github.com/emqx/emqx-stomp/pull/93)
+  Github PR: [emqx/emqx-stomp#93](https://github.com/emqx/emqx-stomp/pull/93)
 
-    ### emqx-auth-redis (plugin)
+### emqx-auth-redis (plugin)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where internal modules failed to start.
+- Fixed an issue where internal modules failed to start.
 
-      Github PR: [emqx/emqx-auth-redis#151](https://github.com/emqx/emqx-auth-redis/pull/151)
+  Github PR: [emqx/emqx-auth-redis#151](https://github.com/emqx/emqx-auth-redis/pull/151)
 
-    ### cowboy (dependency)
+### cowboy (dependency)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where WebSocket connections did not send will messages in certain situations.
+- Fixed an issue where WebSocket connections did not send will messages in certain situations.
 
-      Github Commit: [emqx/cowboy#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
+  Github Commit: [emqx/cowboy#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
 
-    ## 4.0.1
+## 4.0.1
 
-    *Release Date: 2019-01-17*
+*Release Date: 2019-01-17*
 
-    EMQX 4.0.1 has been released. This version focuses on bug fixes and performance optimizations.
+EMQX 4.0.1 has been released. This version focuses on bug fixes and performance optimizations.
 
-    ### emqx
+### emqx
 
-    **Enhancements:**
+**Enhancements:**
 
-    - `force_shutdown_policy` is disabled by default.
+- `force_shutdown_policy` is disabled by default.
 
-      Github PR: [emqx/emqx#3184](https://github.com/emqx/emqx/pull/3184)
+  Github PR: [emqx/emqx#3184](https://github.com/emqx/emqx/pull/3184)
 
-    - Added support for scheduled global garbage collection (GC) with configuration options.
+- Added support for scheduled global garbage collection (GC) with configuration options.
 
-      Github PR: [emqx/emqx#3190](https://github.com/emqx/emqx/pull/3190)
+  Github PR: [emqx/emqx#3190](https://github.com/emqx/emqx/pull/3190)
 
-    - Optimized default configuration for `force_gc_policy`.
+- Optimized default configuration for `force_gc_policy`.
 
-      Github PRs: [emqx/emqx#3192](https://github.com/emqx/emqx/pull/3192), [emqx/emqx#3201](https://github.com/emqx/emqx/pull/3201)
+  Github PRs: [emqx/emqx#3192](https://github.com/emqx/emqx/pull/3192), [emqx/emqx#3201](https://github.com/emqx/emqx/pull/3201)
 
-    - Optimized Erlang VM parameter configurations.
+- Optimized Erlang VM parameter configurations.
 
-      Github PRs: [emqx/emqx#3195](https://github.com/emqx/emqx/pull/3195), [emqx/emqx#3197](https://github.com/emqx/emqx/pull/3197)
+  Github PRs: [emqx/emqx#3195](https://github.com/emqx/emqx/pull/3195), [emqx/emqx#3197](https://github.com/emqx/emqx/pull/3197)
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where using incorrect units caused the blacklist feature to malfunction.
+- Fixed an issue where using incorrect units caused the blacklist feature to malfunction.
 
-      Github PR: [emqx/emqx#3188](https://github.com/emqx/emqx/pull/3188)
+  Github PR: [emqx/emqx#3188](https://github.com/emqx/emqx/pull/3188)
 
-    - Fixed handling of the `Retain As Publish` flag and ensured the `Retain` flag value is preserved in bridge mode.
+- Fixed handling of the `Retain As Publish` flag and ensured the `Retain` flag value is preserved in bridge mode.
 
-      Github PR: [emqx/emqx#3189](https://github.com/emqx/emqx/pull/3189)
+  Github PR: [emqx/emqx#3189](https://github.com/emqx/emqx/pull/3189)
 
-    - Fixed an issue where multiple WebSocket listening ports could not be used.
+- Fixed an issue where multiple WebSocket listening ports could not be used.
 
-      Github PR: [emqx/emqx#3196](https://github.com/emqx/emqx/pull/3196)
+  Github PR: [emqx/emqx#3196](https://github.com/emqx/emqx/pull/3196)
 
-    - Fixed an issue where EMQX might not send DISCONNECT packets during session takeover.
+- Fixed an issue where EMQX might not send DISCONNECT packets during session takeover.
 
-      Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
+  Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
 
-    ### emqx-rule-engine
+### emqx-rule-engine
 
-    **Enhancements:**
+**Enhancements:**
 
-    - Added more SQL functions to operate on arrays.
+- Added more SQL functions to operate on arrays.
 
-      Github PR: [emqx/emqx-rule-engine#136](https://github.com/emqx/emqx-rule-engine/pull/136)
+  Github PR: [emqx/emqx-rule-engine#136](https://github.com/emqx/emqx-rule-engine/pull/136)
 
-    - Reduced performance impact when no rules are configured.
+- Reduced performance impact when no rules are configured.
 
-      Github PR: [emqx/emqx-rule-engine#138](https://github.com/emqx/emqx-rule-engine/pull/138)
+  Github PR: [emqx/emqx-rule-engine#138](https://github.com/emqx/emqx-rule-engine/pull/138)
 
-    ### emqx-web-hook
+### emqx-web-hook
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed a crash issue caused by parameter mismatches.
+- Fixed a crash issue caused by parameter mismatches.
 
-      Github PR: [emqx/emqx-web-hook#167](https://github.com/emqx/emqx-web-hook/pull/167)
+  Github PR: [emqx/emqx-web-hook#167](https://github.com/emqx/emqx-web-hook/pull/167)
 
-    ## 4.0.0
+## 4.0.0
 
-    *Release Date: 2019-01-10*
+*Release Date: 2019-01-10*
 
-    The official release of EMQX 4.0.0 is now available. In this version, we significantly improved throughput performance by refactoring the channel and session, enhanced extensibility by adding more hooks and metrics, redesigned the SQL for the rule engine, and optimized the performance of the Edge version.
+The official release of EMQX 4.0.0 is now available. In this version, we significantly improved throughput performance by refactoring the channel and session, enhanced extensibility by adding more hooks and metrics, redesigned the SQL for the rule engine, and optimized the performance of the Edge version.
 
-    ### General
+### General
 
-    **Enhancements:**
+**Enhancements:**
 
-    - Architecture optimization to greatly improve message throughput and reduce CPU and memory usage.
-    - Improved MQTT 5.0 message handling process.
-    - Introduced new SQL statements for the rule engine.
-    - Renamed metrics and added additional metrics.
-    - Updated hook parameters and added more hooks.
-    - Added publish and subscribe command-line interfaces for `emqtt`.
+- Architecture optimization to greatly improve message throughput and reduce CPU and memory usage.
+- Improved MQTT 5.0 message handling process.
+- Introduced new SQL statements for the rule engine.
+- Renamed metrics and added additional metrics.
+- Updated hook parameters and added more hooks.
+- Added publish and subscribe command-line interfaces for `emqtt`.
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where SSL handshake failures caused crashes.
-    - Fixed an issue where the `max_subscriptions` configuration was not effective.
-    - Fixed an issue with out-of-order message forwarding in cross-cluster communication.
-    - Fixed an issue where the CLI could not retrieve multiple routes for a single topic.
+- Fixed an issue where SSL handshake failures caused crashes.
+- Fixed an issue where the `max_subscriptions` configuration was not effective.
+- Fixed an issue with out-of-order message forwarding in cross-cluster communication.
+- Fixed an issue where the CLI could not retrieve multiple routes for a single topic.
 
-    #### REST API
+#### REST API
 
-    **Enhancements:**
+**Enhancements:**
 
-    - Added support for IPv6.
-    - Changed the default REST API listening port from 8080 to 8081 to avoid conflicts with other applications.
-    - Removed all session-related endpoints.
-    - Renamed "connections" to "clients" and incorporated previous session functionalities.
-    - Added support for returning the actual topic of shared subscriptions in the subscription query API.
-    - Added support for configuring default AppID and AppSecret.
-    - The REST API for publishing messages now supports payloads encoded in base64.
+- Added support for IPv6.
+- Changed the default REST API listening port from 8080 to 8081 to avoid conflicts with other applications.
+- Removed all session-related endpoints.
+- Renamed "connections" to "clients" and incorporated previous session functionalities.
+- Added support for returning the actual topic of shared subscriptions in the subscription query API.
+- Added support for configuring default AppID and AppSecret.
+- The REST API for publishing messages now supports payloads encoded in base64.
 
-    **Bugs fixed:**
+**Bugs fixed:**
 
-    - Fixed an issue where encoded URIs were not handled correctly.
+- Fixed an issue where encoded URIs were not handled correctly.
 
-    #### Authentication
+#### Authentication
 
-    **Enhancements:**
+**Enhancements:**
 
-    - The HTTP authentication plugin now supports user-defined HTTP request headers.
-    - The `clientid` and `username` authentication plugins once again support configuring default `clientid` and `username` via the configuration file.
+- The HTTP authentication plugin now supports user-defined HTTP request headers.
+- The `clientid` and `username` authentication plugins once again support configuring default `clientid` and `username` via the configuration file.
