@@ -295,3 +295,24 @@ LogHandler(id=trace_clientid_my_client, level=debug, destination=log/my_client.l
 如果使用默认的 primary log level (warning)，这个log handler 永远不会输出 warning 以下的日志消息。
 
 另外，由于我们是启用了一个新的 log handler，所以我们的日志追踪不受控制台日志和 emqx.log.N 文件日志的级别的约束。即使 log.level = warning，我们任然可以追踪到 my_client 的 debug 级别的日志。
+
+## 日志限流
+
+从企业版 4.4.25 版本开始，EMQX 支持了日志限流功能，限制指定时间窗口内重复的日志打印，以降低大量日志冲刷引起的性能下降和重要日志丢失的风险。
+
+`代码模块名` 和 `代码行号` 相同的日志被视作重复日志，对于重复的日志，EMQX 在指定的时间窗口仅打印指定的前 N 条，更多的重复日志将被丢弃。限流相关的参数可以在 `etc/logger.conf` 中配置：
+
+```
+log.throttling = 50,60s
+log.throttling_level = warning
+```
+
+日志限流功能是默认开启的，默认限流窗口为 60 秒，限流阈值为 50 条，并且只有 warning 及以上级别的日志会被限流。您可以通过将 `log.throttling` 设置为 `disabled` 来关闭日志限流功能。
+
+注意为了提高限流功能的执行效率，EMQX 会启动 N 个限流器，其中 N 为 CPU 核心数。这意味着当设置 `log.throttling = 50,60s` 时，每个限流器将会限制每分钟最多打印 50 条重复的日志。假设 CPU 核心数为 8，视 Erlang 虚拟机对进程的调度情况不同，总共每分钟最多打印 50 ~ 400 条日志。若有日志被限流器丢弃，EMQX 会在时间窗口结束时打印一条日志提示被丢弃的日志条数：
+
+```erlang
+log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
+```
+
+该日志表示在最近 60 秒内，`emqx_channel` 模块的第 1400 行代码打印了许多日志，并且共有 33 条日志被丢弃了。注意提示消息被丢弃的日志里可能会有一些重要的信息丢失，比如上面示例中的客户端 ID、用户名以及登录失败的原因，这些信息只能从日志被丢弃前打印出来的重复日志里查看和猜测。
