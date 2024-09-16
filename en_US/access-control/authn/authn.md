@@ -53,7 +53,7 @@ EMQX can also be configured to delegate authentication work to external services
 
 ## EMQX Authenticator
 
-EMQX supports 9 authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
+EMQX supports below authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
 
 | Mechanism      | Database          | Description                                                  |
 | -------------- | ----------------- | ------------------------------------------------------------ |
@@ -68,6 +68,7 @@ EMQX supports 9 authentication methods (referred to as authenticator hereafter) 
 | SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
 | SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_restapi.md) |
 | GSSAPI         | Kerberos          | [Authentication using GSSAPI with Kerberos](./kerberos.md)   |
+| Rule-Based     |                   | [Authentication using Client-info](./cinfo.md)                         |
 
 ## Authentication Chain
 

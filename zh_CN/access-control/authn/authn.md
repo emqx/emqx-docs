@@ -44,7 +44,7 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 
 ## EMQX 认证器
 
-按照认证方式和数据源来划分，EMQX 内置了以下 9 种认证器：
+按照认证方式和数据源来划分，EMQX 内置了以下认证器：
 
 | 认证方式 | 数据源      | 说明                                                |
 | -------- | ----------- | --------------------------------------------------- |
@@ -59,6 +59,7 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)       |
 | 增强认证 | HTTP 服务   | [基于 REST API 的 MQTT 5.0 增强认证 （SCRAM 认证）](./scram_restapi.md) |
 | 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos)          |
+| 规则认证 | --          | [Client-info 认证](./cinfo.md)                      |
 
 ## 认证链
 
