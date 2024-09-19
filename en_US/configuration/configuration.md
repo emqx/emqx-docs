@@ -447,11 +447,10 @@ configurations for EMQX to perform string operations dynamically.
 Variform expressions are only applicable to certain configuration items. Do not use them unless specifically stated.
 :::
 
-::: tip
-NULL value:
-In Variform expressions, a value-binding reference or sub-expression evaluation may yield an undefined value.
-An undefined value is presented as an empty string.
-Worth noting that if a JSON-decoded field is `null`, it is treated as undefined value (hence `''`), but not string value `"null"`.
+::: tip NULL value:
+In Variform expressions, a value-binding reference or sub-expression evaluation may result in an undefined value, which is represented as an empty string (`''`).
+
+It is important to note that if a JSON-decoded field is `null`, it is treated as undefined value (hence `''`), but not string value `"null"`.
 :::
 
 #### Syntax

@@ -445,10 +445,9 @@ Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操�
 Variform 表达式仅适用于部分配置项中，如无明确说明请不要使用。
 :::
 
-::: tip
-空值说明：
+::: tip 空值说明：
 在 Variform 表达式中，一个变量引用或者表达式求值可能得到一个空值。 这个空值以空字符串的方式返回。
-需要注意的是 JSON 解码得到的 `null` 被当作空值处理，而不是字符串 `"null"`
+需要注意的是 JSON 解码得到的 `null` 被当作空值处理，而不是字符串 `"null"`。
 :::
 
 #### 语法概览
@@ -530,7 +529,7 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
   - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
   - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
-- 比较函数：
+- **比较函数**：
   - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
   - `num_neq(A, B)`：如果两个数字不相同，则返回 'true'，否则返回 'false'。
   - `num_gt(A, B)`：如果 A 大于 B，则返回 'true'，否则返回 'false'。
@@ -552,9 +551,9 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 #### 条件
 
 到目前为止，Variform 表达式没有全面的控制流程。
-下列函数可以用于简单的根据条件来选择不同取值。
+下列函数可以用于简单的根据条件来选择不同取值：
 
-- `iif(Condition, ThenExpression, ElseExpression)`: 如果 `Conditions` 是 `true` 或者非空字符串，则返回 `ThenExpression`，否则 `ElseExpression`.
+- `iif(Condition, ThenExpression, ElseExpression)`: 如果 `Conditions` 是 `true` 或者非空字符串，则返回 `ThenExpression`，否则 `ElseExpression`。
 - `coalesce(Arg1, Arg2, ...)`: 取参数列表中第一个非空值。
 - `coalesce([Element1, Element2, ...])`: 取数组中的第一个非空值。
 
