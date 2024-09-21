@@ -271,6 +271,7 @@
         - access-control/authn/scram
         - access-control/authn/scram_restapi
         - access-control/authn/kerberos
+        - access-control/authn/cinfo
         - network/psk-authentication
         - access-control/authn/user_management
         - access-control/authn/acl
