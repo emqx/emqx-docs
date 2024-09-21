@@ -439,13 +439,18 @@ will be interpreted as `myarray = [74, 75]`, which is handy when trying to overr
 
 ### Variform Expressions
 
-Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation. It is not a full-fledged programming language but a specialized tool that can be embedded within
+Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation.
+It is not a full-fledged programming language but a specialized tool that can be embedded within
 configurations for EMQX to perform string operations dynamically.
 
 ::: tip
-
 Variform expressions are only applicable to certain configuration items. Do not use them unless specifically stated.
+:::
 
+::: tip NULL value:
+In Variform expressions, a value-binding reference or sub-expression evaluation may result in an undefined value, which is represented as an empty string (`''`).
+
+It is important to note that if a JSON-decoded field is `null`, it is treated as undefined value (hence `''`), but not string value `"null"`.
 :::
 
 #### Syntax
@@ -460,6 +465,7 @@ This expression combines or manipulates clientid and username to generate a new 
 
 Variform supports below literals:
 
+- Boolean: `true` or `false`.
 - Integer: For example, `42`.
 - Float: For example, `3.14`.
 - String: ASCII characters between single quotes `'` or double quotes `"`.
@@ -474,8 +480,6 @@ Variform does not support the following:
 - User-defined variables
 - User-defined functions
 - Exception handling and error recovery
-- Boolean literals. Booleans may be produced intermediately as return values from a built-in function such as `num_gt` (which stands for 'is number greater'),
-  but cannot be written as a literal. The condition functions (`iif` and `coalesce`) take an empty string for `false` or otherwise `true`.
 - Escape sequence in string literals. Call the `unescape` function to unescape special characters.
 
 Below is a configuration example with a Variform expression embedded.
@@ -529,15 +533,18 @@ Below are the functions that can be used in the expressions:
   - `map_to_rage(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
 - **Compare functions**:
   - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
+  - `num_neq(A, B)`: Return 'true' if two numbers are NOT the same, otherwise 'false'.
   - `num_gt(A, B)`: Return 'true' if A is greater than B, otherwise 'false'.
   - `num_gte(A, B)`: Return 'true' if A is not less than B, otherwise 'false'.
   - `num_lt(A, B)`: Return 'true' if A is less than B, otherwise 'false'.
   - `num_lte(A, B)`: Return 'true' if A is not greater than B, otherwise 'false'.
-  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false', otherwise 'false'.
+  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false'.
+  - `str_neq(A, B)`: Return 'true' if two strings are NOT the same, otherwise 'false'
   - `str_gt(A, B)`: Return 'true' if A is behind B in lexicographic order, otherwise 'false'.
   - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
   - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
   - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
+  - `is_empty(var)`: Check if a variable is empty. Empty in Variform means the value is not present (undefined), JSON's `null` (but not string `"null"`), or an empty string `""`.
 - **System functions**:
   - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
     - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
@@ -545,24 +552,12 @@ Below are the functions that can be used in the expressions:
 
 #### Conditions
 
-The variform expression so far has no comprehensive control flows. The `iif` function is a conditional expression used to evaluate a condition and return one of two values depending on the result of the condition. This function is inspired by similar constructs in other programming languages, adapted here for use in a programming expression that lacks loops and variable bindings.
+The variform expression so far has no comprehensive control flows.
+Below functions can help to preform basic control of which value to return from the expression.
 
-```js
-iif(Condition, ThenExpression, ElseExpression)
-```
-
-##### Parameters
-
-- **Condition** (Boolean or String): Specifies the condition to be evaluated.
-  - If a Boolean (`true` or `false`), it directly evaluates to `true` or `false`.
-  - If a String, it evaluates to `false` if the string is empty, and `true` otherwise.
-- **ThenExpression**: The expression or value that is returned if `Condition` evaluates to `true`.
-- **ElseExpression**: The expression or value that is returned if `Condition` evaluates to `false`.
-
-##### Returns
-
-- The result of `ThenExpression` if `Condition` is `true`.
-- The result of `ElseExpression` if `Condition` is `false`.
+- `iif(Condition, ThenExpression, ElseExpression)`: returns `ThenExpression` if `Condition` yields `true` or a non-empty string value, otherwise returns `ElseExpression`.
+- `coalesce(Arg1, Arg2, ...)`: returns the first non-empty argument.
+- `coalesce([Element1, Element2, ...])`: returns the first non-empty element.
 
 #### Error Handling
 

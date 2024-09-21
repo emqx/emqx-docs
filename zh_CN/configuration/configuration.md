@@ -442,9 +442,12 @@ myarray.2 = 75
 Variform 是一种轻量级、富有表现力的语言,旨在进行字符串操作和运行时求值。它不是一种全功能的编程语言，而是一种专门的工具，可以嵌入配置中，用来态执行字符串操作。
 
 ::: tip
-
 Variform 表达式仅适用于部分配置项中，如无明确说明请不要使用。
+:::
 
+::: tip 空值说明：
+在 Variform 表达式中，一个变量引用或者表达式求值可能得到一个空值。 这个空值以空字符串的方式返回。
+需要注意的是 JSON 解码得到的 `null` 被当作空值处理，而不是字符串 `"null"`。
 :::
 
 #### 语法概览
@@ -459,6 +462,7 @@ function_call(clientid, another_function_call(username))
 
 Variform 支持以下字面量：
 
+- 布尔值 ： `ture` 或者 `false`。
 - 整数：例如，`42`。
 - 浮点数：例如，`3.14`。
 - 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。
@@ -474,7 +478,6 @@ Variform 不支持以下功能：
 - 用户定义的变量
 - 用户定义的函数
 - 异常处理和错误恢复
-- 布尔字面量。布尔值可能作为内置函数（如 `num_gt`，意为“数字是否更大”）的返回值间接产生，但不能直接写作字面量。条件函数（`iif` 和 `coalesce`）将空字符串视为 `false`，其他情况视为 `true`。
 - 字符串字面量中的转义序列。调用 `unescape` 函数来对特殊字符进行反转义。
 
 以下是一个嵌入配置文件中的示例。
@@ -526,17 +529,20 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `hash(Algorithm, Data)`：其中算法可以是以下之一：md4 | md5, sha (或 sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
   - `hash_to_range(Input, Min, Max)`：使用 sha256 散列输入数据，并将散列映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max））。
   - `map_to_range(Input, Min, Max)`：将输入映射到最小值和最大值之间的整数（包括 Min 和 Max：Min =< X =< Max）。
-- 比较函数：
+- **比较函数**：
   - `num_eq(A, B)`：如果两个数字相同，则返回 'true'，否则返回 'false'。
+  - `num_neq(A, B)`：如果两个数字不相同，则返回 'true'，否则返回 'false'。
   - `num_gt(A, B)`：如果 A 大于 B，则返回 'true'，否则返回 'false'。
   - `num_gte(A, B)`：如果 A 不小于 B，则返回 'true'，否则返回 'false'。
   - `num_lt(A, B)`：如果 A 小于 B，则返回 'true'，否则返回 'false'。
   - `num_lte(A, B)`：如果 A不大于 B，则返回 'true'，否则返回 'false'。
   - `str_eq(A, B)`：如果两个字符串相同，则返回 'true'，否则返回 'false'。
+  - `str_neq(A, B)`：如果两个字符串不相同，则返回 'true'，否则返回 'false'。
   - `str_gt(A, B)`：如果 A 在字典顺序上位于 B 之后，则返回 'true'，否则返回 'false'。
   - `str_gte(A, B)`：如果 A 在字典顺序上不位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lt(A, B)`：如果 A 在字典顺序上位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lte(A, B)`：如果 A 在字典顺序上不位于 B 之后，则返回 'true'，否则返回 'false'。
+  - `is_empty(var)`: 检查一个变量是否是空值。空值包括：对一个未知变量的引用，JSON 的 `null` 字段，或者一个空字符串`''`。
 - **系统函数**:
   - `getenv(Name)`：返回环境变量 `Name` 的值，并遵循以下限制：
     - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。
@@ -544,24 +550,12 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
 
 #### 条件
 
-到目前为止，Variform 表达式没有全面的控制流程。`iif` 函数是一种条件表达式，用于评估条件并根据条件的结果返回两个值中的一个。这个函数的灵感来自于其他编程语言中的类似结构，在这里被适配用于缺乏循环和变量绑定的编程表达式中。
+到目前为止，Variform 表达式没有全面的控制流程。
+下列函数可以用于简单的根据条件来选择不同取值：
 
-```js
-iif(条件, 真值表达式, 假值表达式)
-```
-
-##### 参数
-
-- **条件（布尔或字符串）**：指定要评估的条件。
-  - 如果是布尔值（`true` 或 `false`），则直接评估为 `true` 或 `false`。
-  - 如果是字符串，如果字符串为空，则评估为 `false`，否则为 `true`。
-- **真值表达式**：如果条件评估为 `true`，返回的表达式或值。
-- **假值表达式**：如果条件评估为 `false`，返回的表达式或值。
-
-##### 返回
-
-- 如果条件为 `true`，则结果为 `真值表达式`。
-- 如果条件为 `false`，则结果为 `假值表达式`。
+- `iif(Condition, ThenExpression, ElseExpression)`: 如果 `Conditions` 是 `true` 或者非空字符串，则返回 `ThenExpression`，否则 `ElseExpression`。
+- `coalesce(Arg1, Arg2, ...)`: 取参数列表中第一个非空值。
+- `coalesce([Element1, Element2, ...])`: 取数组中的第一个非空值。
 
 #### 错误处理
 
