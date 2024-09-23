@@ -20,10 +20,6 @@
 
   This optimization improves the sending performance of Redis Authentication/ACL, Redis Plugin, and Redis Rule Engine resources. For Redis authentication functionality, it relieves the pressure during mass device reconnections after a service interruption.
 
-- Enhanced performance for sending messages to SysKeeper.
-
-  Previously, due to the limitations of the `gen_tcp:send/2` implementation, as more messages piled up in the `emqx_bridge_sysk_forward` process’s send queue, the sending performance would gradually decrease. Thus, under high message traffic, the `emqx_bridge_sysk_forward` process could become a system bottleneck.
-
 - Increased the file size limit for a single log trace from 512MB to 1GB.
 
 - Improved the ACL feature in the "Internal DB AUTH/ACL" module.
