@@ -79,8 +79,6 @@
   log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
   ```
 
-  
-
   该日志表示在最近 60 秒内，`emqx_channel` 模块的第 1400 行代码打印了许多日志，总共有 33 条日志被 EMQX 丢弃了。
 
   此功能默认对 warning 及以上日志级别启用，默认值为 `50,60s`。
