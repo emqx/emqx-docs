@@ -13,7 +13,7 @@ The reference examples listed on this page provide detailed step-by-step instruc
 - [How to Use MQTT in Python](https://www.emqx.com/en/blog/how-to-use-mqtt-in-python)
 - [Python Async MQTT Framework - HBMQTT](https://www.emqx.com/en/blog/python-async-mqtt-client-hbmqtt)
 - [How to Use MQTT in Dart](https://www.emqx.com/en/blog/how-to-use-mqtt-in-dart)
-- [Comparison of Python MQTT Clients](https://www.emqx.com/en/blog/comparison-of-python-mqtt-client)
+- [Comparison of Python MQTT Clients](https://www.emqx.com/en/blog/comparision-of-python-mqtt-client)
 - [How to Use MQTT in Rust](https://www.emqx.com/en/blog/how-to-use-mqtt-in-rust)
 
 **Front-end Development**
