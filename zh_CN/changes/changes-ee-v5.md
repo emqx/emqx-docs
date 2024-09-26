@@ -98,7 +98,7 @@
 
   此配置指定了一个名为 `mytransformation` 的转换，它：
 
-  - 使用指定的 schema 将消息负载从 Avro 格式**解码**。
+  - 使用指定的 schema 将消息 payload 从 Avro 格式**解码**。
   - 将 payload **编码**为 JSON 格式。
   - 将客户端属性中的 `tenant` 属性与原始主题**连接**，从而在进一步处理之前修改主题。
 

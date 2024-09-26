@@ -65,7 +65,31 @@ Once the transformation is created, it will appear in the list on the Message Tr
 
 ### Configure Message Transformation in Configuration File
 
-For configuration details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+Suppose you receive a message encoded in Avro format, and you want to decode it into JSON. After decoding, you want to prepend a `tenant` attribute (retrieved from the client attributes of the publishing client) to the topic before processing the message in the Rule Engine. You can achieve this transformation with the following configuration:
+
+```hocon
+message_transformation {
+  transformations = [
+    {
+      name = mytransformation
+      failure_action = drop
+      payload_decoder = {type = avro, schema = myschema}
+      payload_encoder = {type = json}
+      operations = [
+        {key = "topic", value = "concat([client_attrs.tenant, '/', topic])"}
+      ]
+    }
+  ]
+}
+```
+
+This configuration specifies a transformation named `mytransformation` that:
+
+- **Decodes** the message payload from Avro format using a specified schema.
+- **Encodes** the payload into JSON format.
+- **Concatenates** the `tenant` attribute from client attributes with the original topic, thereby modifying the topic before further processing.
+
+For more configuration details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ### REST API
 

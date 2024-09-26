@@ -30,7 +30,7 @@
 
    无论配置了何种操作，转换失败时都可以生成日志记录。用户可以配置日志的输出级别，默认级别为 `warning`。此外，转换失败还可以触发规则引擎事件（`$events/message_transformation_failed`），允许用户进行自定义处理，例如将错误的消息重新发布到其他主题或发送到 Kafka 进行进一步分析。
 
-## 用户指南
+## 配置和使用消息转换
 
 本节演示如何配置消息转换功能以及如何测试您的设置。
 
@@ -45,11 +45,11 @@
    - **消息来源主题**：设置需要转换消息的主题。可以设置多个主题或主题过滤器。
    - **备注**（可选）：输入任何备注信息。
    - **消息格式转换**：
-     - **源格式**：指定进入转换管道时应用的有效 payload 解码格式。可选项包括 `None`（不解码）、`JSON`、`Avro` 或 `Protobuf`。这些解码格式会将二进制输入 payload 转换为结构化映射。如果选择 `Avro` 或 `Protobuf`，则必须首先在 [Schema Registry ](./schema-registry.md)中定义其模式。在具有多个转换的管道中，无需在每一步都进行解码。例如，如果转换 `T1` 已经解码了 payloa，则后续的转换 `T2` 可以跳过解码，直接使用已正确格式化的 payload。
+     - **源格式**：指定进入转换管道时应用的有效 payload 解码格式。可选项包括 `None`（不解码）、`JSON`、`Avro` 或 `Protobuf`。这些解码格式会将二进制输入 payload 转换为结构化映射。如果选择 `Avro` 或 `Protobuf`，则必须首先在 [Schema Registry ](./schema-registry.md)中定义其模式。在具有多个转换的管道中，无需在每一步都进行解码。例如，如果转换 `T1` 已经解码了 payload，则后续的转换 `T2` 可以跳过解码，直接使用已正确格式化的 payload。
      - **目标格式**：指定当转换管道结束时，将最终的消息 payload 编码为二进制值的编码格式。编码格式选项与**源格式**相同：`None`、`JSON`、`Avro` 或 `Protobuf`。只有管道中的最后一个转换需要确保 payload 被编码为二进制值，中间的转换不需要处理二进制编码。
    - **消息属性转换**：
      - **属性**：指定转换后的值（由表达式生成）的写入目标位置。有效目标包括 `payload`、`topic`、`qos`、`retain`（设置相应的标志）以及 `user_property`（用于 `User-Property` MQTT 属性）。使用 `user_property` 时，必须指定一个具体的键（例如：`user_property.my_custom_prop`）。`payload` 可以按原样使用，覆盖整个消息 payload，或者指定一个嵌套键路径，将 payload 视为嵌套的 JSON 对象（例如：`payload.x.y`）。
-     - **目标值**：定义将写入配置的属性的值。此值可以从其他字段复制，如 `qos`、`retain`、`topic`、`payload` 和 `payload.x.y`，也可以通过[Variform表达式](../configuration/configuration.md#variform-表达式)生成。
+     - **目标值**：定义将写入配置的属性的值。此值可以从其他字段复制，如 `qos`、`retain`、`topic`、`payload` 和 `payload.x.y`，也可以通过 [Variform表达式](../configuration/configuration.md#variform-表达式)生成。
    - **转换失败后的操作**：
      - **失败操作**：选择在转换失败时执行的操作：
        - **丢弃消息**：终止发布过程并丢弃消息，通过 PUBACK 返回 QoS 1 和 QoS 2 消息的特定原因代码。
@@ -65,7 +65,31 @@
 
 ### 在配置文件中配置消息转换
 
-有关配置详情，请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+假设您收到一条 Avro 格式编码的消息，您希望将其解码为 JSON 格式。解码后，您想在将消息发送到规则引擎处理之前，将一个 `tenant` 属性（从发布客户端的客户端属性中检索）添加到主题前面。您可以使用以下配置来实现此转换：
+
+```
+message_transformation {
+  transformations = [
+    {
+      name = mytransformation
+      failure_action = drop
+      payload_decoder = {type = avro, schema = myschema}
+      payload_encoder = {type = json}
+      operations = [
+        {key = "topic", value = "concat([client_attrs.tenant, '/', topic])"}
+      ]
+    }
+  ]
+}
+```
+
+此配置指定了一个名为 `mytransformation` 的转换，它：
+
+- 使用指定的 schema 将消息 payload 从 Avro 格式**解码**。
+- 将 payload **编码**为 JSON 格式。
+- 将客户端属性中的 `tenant` 属性与原始主题**连接**，从而在进一步处理之前修改主题。
+
+更多关于消息转换的配置详情，请参见[配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 ### REST API
 
