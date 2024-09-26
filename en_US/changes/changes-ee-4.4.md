@@ -1,5 +1,23 @@
 # Releases
 
+## 4.4.26
+
+*Release Date: 2024-09-26*
+
+### Bug Fixes
+
+- Fixed an issue that prevented nodes from joining an older version cluster.
+
+  In version 4.4.25, this issue occurred due to the absence of the username quota table.
+
+- Fixed an issue where the username quota interface could not search for usernames containing special characters.
+
+  Before the fix, the API interface for querying username quota details did not perform URL decoding.
+
+- Fixed an issue that resulted in some usernames being absent from the username quota interface.
+
+  This issue arose when sessions existed in EMQX before enabling the username quota module, leading to incomplete username lists.
+
 ## 4.4.25
 
 *Release Date: 2024-09-13*
