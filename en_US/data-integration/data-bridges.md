@@ -123,6 +123,7 @@ The EMQX Open Source edition only supports two types of data integrations: [MQTT
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
 - [Azure Blob Storage](./azure-blob-storage.md)
+- [Snowflake](./snowflake.md)
 
 ## Features of Sink
 

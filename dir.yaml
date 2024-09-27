@@ -418,6 +418,9 @@
     - title_en: RocketMQ
       title_cn: RocketMQ
       path: data-integration/data-bridge-rocketmq
+    - title_en: Snowflake
+      title_cn: Snowflake
+      path: data-integration/snowflake
     - title_en: SysKeeper
       title_cn: SysKeeper
       path: data-integration/syskeeper
