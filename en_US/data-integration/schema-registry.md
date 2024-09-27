@@ -105,3 +105,93 @@ The SQL statement above will match an MQTT message with the content of the paylo
 
 **Note:** The `AS` clause is required to assign the decoded data to a key so that subsequent operations can be performed on it later.
 
+
+## External registries
+
+As of EMQX 5.8.1, support for configuring a Confluent Schema Registry as an external registry was added.
+
+This allows users to encode and decode messages by dynamically consulting schemas that live in external registries at processing time in Rule Engine.
+
+### Example configuration of an External Confluent Registry via file
+
+
+```hcl
+schema_registry {
+  external {
+    my_external_registry {
+      type = confluent
+      url = "https://confluent.registry.url:8081"
+      auth {
+        username = "myuser"
+        password = "secret"
+      }
+    }
+  }
+}
+```
+
+### Using Confluent external registry in Rule Engine
+
+The following functions utilize a configured Confluent Schema Registry (CSR) external registry:
+
+```sql
+avro_encode('my_external_registry', payload, my_schema_id)
+avro_decode('my_external_registry', payload, my_schema_id)
+schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, 'my_subject')
+schema_decode_tagged('my_external_registry', payload)
+```
+
+In all examples below, the following example values and variable names are used:
+
+- `'my_external_registry'` is the name that the user gave to an external registry configured in EMQX.
+- `my_schema_id` is the schema ID which is registered in CSR.  This is always an integer in CSR.
+- `'my_local_avro_schema'` is the name given to a local Avro schema that was configured by the user.
+- `'my_subect'` is a subject name that exists in CSR.
+
+`avro_encode` and `avro_decode` will respectively encode and decode a payload given its schema ID.  The schema itself will be fetched from the external registry at usage time and then cached for subsequent runs.  In the case of Confluent Schema Registry schema identifiers are integers.
+
+::: tip Note
+
+When encoding, the argument to `avro_encode` must be in Rule Engine's internal data format.  That is, a decoded map, hence the usage of `json_decode` in the examples below.
+
+:::
+
+Examples:
+
+```sql
+select
+  -- 123 is the schema ID that is registered in CSR
+  avro_encode('my_external_registry', json_decode(payload), 123) as encoded
+from 't'
+```
+
+```sql
+select
+  -- 123 is the schema ID that is registered in CSR
+  avro_decode('my_external_registry', payload, 123) as decoded
+from 't'
+```
+
+`schema_encode_and_tag` takes a locally registered Avro schema, an external CSR name and a CSR subject, and then encodes the payload (already in internal map format) and tags the result with the schema ID.  The schema ID comes from registering the local schema to CSR.
+
+```sql
+select
+  schema_encode_and_tag(
+    'my_local_avro_schema',
+    'my_external_registry',
+    json_decode(payload),
+    'my_subject'
+  ) as encoded
+from 't'
+```
+
+`schema_decode_tagged` takes a CSR name and a payload, and then decodes it assuming it is tagged with the schema ID to be fetched from CSR.
+
+```sql
+select
+  schema_decode_tagged(
+    'my_external_registry',
+    payload
+  ) as decoded
+from 't'
+```
