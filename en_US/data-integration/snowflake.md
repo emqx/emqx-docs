@@ -16,12 +16,12 @@ Snowflake data integration in EMQX is a ready-to-use feature that can be easily 
 
 ![azure-blob-storage-architecture](/Users/emqx/Documents/GitHub/emqx-docs/en_US/data-integration/assets/azure-blob-storage-architecture.png)
 
-EMQX utilizes rules engines and Sinks to forward device events and data to Snowflake. Applications can read data from Snowflake for further data applications. The specific workflow is as follows:
+EMQX utilizes rules engines and Sinks to forward device events and data to Snowflake. End users and applications can then access data in Snowflake tables. The specific workflow is as follows:
 
 1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
 2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
 3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Snowflake**: The rule triggers an action to write the message to Storage Container. Using the Snowflake Sink, users can extract the necessary data and store it in Snowflake in structured formats such as CSV files, ensuring the data is organized for efficient analysis.
+4. **Writing to Snowflake**: The rule triggers an action to write messages to Snowflake Stage, and load it into a Snowflake table.
 
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
@@ -196,8 +196,8 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 3. Select **Snowflake** as the connector type and click next.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
 5. Enter the connection information.
-   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Account>.snowflakecomputing.com`. You need to replace `<Your Snowflake Account>` with the subdomain specific to your Snowflake instance.
-   - **Account**: Enter your Snowflake account name, which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account>` with the subdomain specific to your Snowflake instance.
+   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
    - **Password**: Enter `Snowpipeuser99`, as defined during the previous setup process.
@@ -245,11 +245,11 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.
+   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.
 
 8. Select the **Upload Mode**: Currently, only `Aggregated Upload` is supported. This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
 
-9. Select **Aggregation Type**: Currently, only `csv` is supported. Data will be written to Snowflake in comma-separated CSV format.
+9. Select **Aggregation Type**: Currently, only `csv` is supported. Data will be staged to Snowflake in comma-separated CSV format.
 
    - **Column Order**: Select the order of the columns from the dropdown list based on your desired arrangement. The generated CSV file will be sorted first by the selected columns, with unselected columns sorted alphabetically afterward.
 
