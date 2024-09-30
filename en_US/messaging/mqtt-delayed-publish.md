@@ -1,5 +1,11 @@
 # Delayed Publish
 
+::: tip Note
+
+Delayed Publish is an EMQX Enterprise feature.
+
+:::
+
 Delayed Publish is an extended MQTT feature supported by EMQX. When a client publishes a message to EMQX with the topic prefix `$delayed/{DelayInteval}`, it triggers the delayed publish feature. The messages will be published after a period of time predefined by the user.
 
 The specific format of the delay-publish topic is as below:

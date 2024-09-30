@@ -2,7 +2,7 @@
 
 ::: tip Note
 
-LDAP integration for authentication is available in EMQX Enterprise.
+LDAP integration for authentication is available in the EMQX Enterprise edition.
 
 :::
 
