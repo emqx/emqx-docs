@@ -18,7 +18,7 @@ Client-info 认证（`cinfo` 类型）是一种轻量级的认证机制，它通
 
      - `peerhost`: 客户端 IP
 
-     - `cert_subject`: TLS 证书主体
+     - `cert_subject`: TLS 证书主题，即专有名称（DN）。
 
      - `cert_common_name`: TLS 证书通用名称。 
 
