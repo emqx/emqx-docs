@@ -231,6 +231,12 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
 
    :::
+   ::: tip
+   
+   For Snowflake integration, it's important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
+   
+   :::
+
 
 4. Add an action, select `Snowflake` from the **Action Type** dropdown list, keep the action dropdown as the default `create action` option, or choose a previously created Snowflake action from the action dropdown. Here, create a new Sink and add it to the rule.
 
