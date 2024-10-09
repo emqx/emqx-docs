@@ -141,9 +141,9 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 #### 使用 SQL 设置 Snowflake 资源
 
-在设置 ODBC 驱动并生成 RSA 密钥对后，可以通过 SQL 命令在 Snowflake 中创建所需的数据库、表、stage 和 pipe。
+在设置 ODBC 驱动并生成 RSA 密钥对后，可以通过 SQL 命令在 Snowflake 中创建所需的数据库、表、存储区和管道。
 
-1. 在 Snowflake 控制台中，打开 SQL 工作表并执行以下 SQL 命令来创建数据库、表、stage 和 pipe：
+1. 在 Snowflake 控制台中，打开 SQL 工作表并执行以下 SQL 命令来创建数据库、表、存储区和管道：
 
    ```sql
    USE ROLE accountadmin;
