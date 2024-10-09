@@ -275,7 +275,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology. Th
 
 ## Test the Rule
 
-This section shows how to test the rule configured with the direct upload method.
+This section shows how to test the configured rule.
 
 ### Publish a Test Message
 
