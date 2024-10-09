@@ -14,7 +14,7 @@ This page provides a detailed introduction to the data integration between EMQX 
 
 Snowflake data integration in EMQX is a ready-to-use feature that can be easily configured for complex business development. In a typical IoT application, EMQX acts as the IoT platform responsible for device connectivity and message transmission, while Snowflake serves as the data storage and processing platform, handling the ingestion, storage, and analysis of this message data.
 
-![azure-blob-storage-architecture](/Users/emqx/Documents/GitHub/emqx-docs/en_US/data-integration/assets/azure-blob-storage-architecture.png)
+![snowflake-architecture](./assets/snowflake-architecture.png)
 
 EMQX utilizes rules engines and Sinks to forward device events and data to Snowflake. End users and applications can then access data in Snowflake tables. The specific workflow is as follows:
 
@@ -26,8 +26,7 @@ EMQX utilizes rules engines and Sinks to forward device events and data to Snowf
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
 - **Data Archiving**: Safely store IoT data in Snowflake for long-term archival, ensuring compliance and historical data availability.
-
-  **Data Analytics**: Leverage Snowflake’s data warehousing and analytics capabilities to perform real-time or batch analysis, enabling predictive maintenance, operational insights, and device performance assessments.
+- **Data Analytics**: Leverage Snowflake’s data warehousing and analytics capabilities to perform real-time or batch analysis, enabling predictive maintenance, operational insights, and device performance assessments.
 
 ## Features and Advantages
 
@@ -53,6 +52,8 @@ This section introduces the preparations required before creating a Snowflake Si
 
 To enable EMQX to communicate with Snowflake and efficiently transfer data, it is necessary to install and configure the Snowflake Open Database Connectivity (ODBC) driver. It acts as the communication bridge, ensuring that data is properly formatted, authenticated, and transferred.
 
+For more information, refer to the official [ODBC Driver](https://docs.snowflake.com/en/developer-guide/odbc/odbc) page and the [license agreement](https://sfc-repo.snowflakecomputing.com/odbc/Snowflake_ODBC_Driver_License_Agreement.pdf).
+
 #### Linux
 
 Run the following script to install the Snowflake ODBC driver and configure the `odbc.ini` file:
@@ -60,6 +61,12 @@ Run the following script to install the Snowflake ODBC driver and configure the 
 ```
 scripts/install-snowflake-driver.sh
 ```
+
+::: tip Note
+
+This script is for testing only, not a recommendation on how to set up the ODBC driver in production environments. You can refer to the official [installation instructions for Linux](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux).
+
+:::
 
 #### macOS
 
@@ -130,6 +137,8 @@ openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_rsa_key.pr
 openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.public.pem
 ```
 
+For more information, refer to [Key-pair authentication and key-pair rotation](https://docs.snowflake.com/en/user-guide/key-pair-auth).
+
 #### Set Up Snowflake Resources Using SQL
 
 Once the ODBC driver is set up and the RSA key pair is generated, you can set up the Snowflake resources. This involves creating the necessary database, table, stage, and pipe in Snowflake using SQL commands.
@@ -173,6 +182,12 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
    ';
    ```
 
+   ::: tip
+
+   You need to remove the `-----BEGIN PUBLIC KEY-----` and `-----END PUBLIC KEY-----` lines from the PEM file, and include the remaining content-preserving line breaks.
+
+   :::
+
 3. Create and assign the required role to the user for managing the Snowflake resources:
 
    ```sql
@@ -196,11 +211,13 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 3. Select **Snowflake** as the connector type and click next.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
 5. Enter the connection information.
-   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
    - **Password**: Enter `Snowpipeuser99`, as defined during the previous setup process.
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+6. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
 7. Click the **Create** button at the bottom to complete the connector creation.
 
@@ -233,7 +250,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    :::
    ::: tip
    
-   For Snowflake integration, it's important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
+   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
    
    :::
 
@@ -251,7 +268,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.  Note that, if using a file path, the file path must be the same on all cluster nodes and must be readable by the EMQX application user.
+   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.  note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
 
 8. Select the **Upload Mode**: Currently, only `Aggregated Upload` is supported. This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
 
