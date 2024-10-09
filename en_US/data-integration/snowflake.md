@@ -251,7 +251,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.
+   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.  Note that, if using a file path, the file path must be the same on all cluster nodes and must be readable by the EMQX application user.
 
 8. Select the **Upload Mode**: Currently, only `Aggregated Upload` is supported. This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
 
