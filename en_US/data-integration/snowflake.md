@@ -196,7 +196,7 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 3. Select **Snowflake** as the connector type and click next.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
 5. Enter the connection information.
-   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account>` with the subdomain specific to your Snowflake instance.
+   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
