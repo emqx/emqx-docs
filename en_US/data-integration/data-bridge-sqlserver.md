@@ -55,11 +55,11 @@ This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS usi
 
 1. Install Microsoft SQL Server via Docker, and then start the docker image with the command below. Use `mqtt_public1` as the password. For the password policy of Microsoft SQL Server, see [Password Complexity](https://learn.microsoft.com/en-us/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity).
 
-   Note: By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [MICROSOFT SOFTWARE LICENSE TERMS MICROSOFT SQL SERVER 2019 STANDARD(EN_US)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+   Note: By starting a Docker container with the environment variable `ACCEPT_EULA=Y` you agree to the terms of Microsoft EULA, see also [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698).
 
    ```bash
    # To start the Microsoft SQL Server docker image and set the password as `mqtt_public1`
-   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
+   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2022-CU15-ubuntu-22.04
    ```
 
 2. Access the container.
@@ -71,38 +71,25 @@ This section describes how to start Microsoft SQL Server 2019 on Linux/MacOS usi
 3. Enter the preset password to connect to the server in the container. The characters are not echoed when entering the password. Click `Enter` directly after entering the password.
 
    ```bash
-   $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
-   $ Password:
+   $ /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P mqtt_public1 -N -C
    1>
    ```
 
    ::: tip
 
-   The `mssql-tools` have been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. Therefore, you need to specify the executable file path for `mssql-tools` before proceeding. As for the Docker deployment in this example, the file path should be `opt`.
+   The `mssql-tools18` package have been installed in the Microsoft SQL Server container provided by Microsoft, but the executable file is not in `$PATH`. Therefore, you need to specify the executable file path for `sqlcmd` before proceeding. As for the Docker deployment in this example, the file path should be `/opt`.
 
-   For more information on how to use `mssql-tools`, see [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16).
+   For more information on how to use `mssql-tools18`, see [sqlcmd-utility](https://learn.microsoft.com/en-us/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16).
 
    :::
 
-So far, the Microsoft SQL Server 2019 instance has been deployed and can be connected.
+So far, the Microsoft SQL Server 2022 instance has been deployed and can be connected.
 
 ### Create Database and Data Tables
 
-This section describes how to create a database and data table in Microsoft SQL Server.
+This section describes how to create data table in Microsoft SQL Server.
 
-1. Create a database `mqtt` in Microsoft SQL Server using the connection created from the previous section.
-
-   ```bash
-   ...
-   Password:
-   1> USE master
-   2> GO
-   Changed database context to 'master'.
-   1> IF NOT EXISTS(SELECT name FROM sys.databases WHERE name = 'mqtt') BEGIN CREATE DATABASE mqtt END
-   2> GO
-   ```
-
-2. Use the following SQL statements to create a data table.
+1. Use the connection created from the previous section and the following SQL statements to create a data table.
 
    - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message.
 
@@ -128,7 +115,7 @@ This section describes how to create a database and data table in Microsoft SQL 
 
 ### Install and Configure ODBC Driver
 
-You need to configure the ODBC driver to be able to access the Microsoft SQL Server database. You can use either FreeTDS or the msodbcsql17 driver provided by Microsoft as the ODBC driver (The connection properties for msodbcsql18 have not been adapted yet).
+You need to configure the ODBC driver to be able to access the Microsoft SQL Server database. You can use either FreeTDS or the msodbcsql18 driver provided by Microsoft as the ODBC driver.
 
 EMQX uses the DSN Name specified in the `odbcinst.ini` configuration to determine the path to the driver dynamic library. In the examples below, the DSN Name is `ms-sql`. For more information, refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
 
@@ -138,43 +125,42 @@ You can choose your own DSN name according to your preference, but it is recomme
 
 :::
 
-#### Install and Configure msodbcsql17 Driver as ODBC Driver
+#### Install and Configure msodbcsql18 Driver as ODBC Driver
 
 <!-- TODO: update tag version in command and dockerfile -->
 
-If you need to use msodbcsql17 driver as the ODBC driver, refer to the Microsoft instructions:
+If you need to use msodbcsql18 driver as the ODBC driver, refer to the Microsoft instructions:
 
 - [Install the Microsoft ODBC driver for SQL Server (Linux)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
 - [Install the Microsoft ODBC driver for SQL Server (macOS)](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
 
-Restricted by [Microsoft EULA terms](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm), the Docker image provided by EMQX does not include the msodbcsql17 driver. To use it in Docker or Kubernetes, you need to create a new image installed with ODBC driver based on the image provided by [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) to access the Microsoft SQL Server database. Using the new image means that you agree to the [Microsoft SQL Server EULA](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_English.htm).
+Restricted by [Microsoft EULA terms](https://go.microsoft.com/fwlink/?linkid=857698), the Docker image provided by EMQX does not include the msodbcsql18 driver. To use it in Docker or Kubernetes, you need to create a new image installed with ODBC driver based on the image provided by [EMQX Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) to access the Microsoft SQL Server database. Using the new image means that you agree to the [Microsoft SQL Server EULA](https://go.microsoft.com/fwlink/?linkid=857698).
 
 Follow the instructions below to build a new image:
 
-1. Get the corresponding EMQX [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc). You can save the file locally.
+1. Use the following Dockerfile to build a new image.
 
-   The image version in this example is `emqx/emqx-enterprise:5.0.3-alpha.2`. You can build the image based on the EMQX-Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest`.
+   The base image version in this example is `emqx/emqx-enterprise:5.8.1`. You can build the image based on the EMQX Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest`.
 
-   ```docker
-   # FROM emqx/emqx-enterprise:latest
-   FROM emqx/emqx-enterprise:5.0.3-alpha.2
+```docker
+FROM emqx/emqx-enterprise:5.8.1
 
-   USER root
+USER root
 
-   RUN apt-get update \
-       && apt-get install -y gnupg2 curl apt-utils \
-       && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-       && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-       && apt-get update \
-       && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
-       && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
-       && apt-get clean \
-       && rm -rf /var/lib/apt/lists/*
+RUN apt-get -qq update && apt-get install -yqq curl gpg && \
+    . /etc/os-release && \
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg && \
+    curl -fsSL "https://packages.microsoft.com/config/${ID}/${VERSION_ID}/prod.list" > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get -qq update && \
+    ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 unixodbc-dev && \
+    sed -i 's/ODBC Driver 18 for SQL Server/ms-sql/g' /etc/odbcinst.ini && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-   USER emqx
-   ```
+USER emqx
+```
 
-2. Build a new image using the command `docker build -f=Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .`
+2. Build a new image using the command `docker build -t emqx/emqx-enterprise:5.8.1-msodbc .`
 
 3. After building, you can use `docker image ls` to obtain a list of local images. You can also upload or save the image for later use.
 
@@ -238,7 +224,7 @@ The following steps assume that you run both EMQX and Microsoft SQL Server on th
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_sqlserver`.
    - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
-   - **Database Name**: Enter `mqtt`.
+   - **Database Name**: Enter `master`.
    - **Username**: Enter `sa`.
    - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
    - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`
@@ -332,10 +318,10 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 
 Check the running statistics of the Microsoft SQL Server Sink.
 
-- For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `mqtt.dbo.t_mqtt_msg` data table.
+- For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `t_mqtt_msg` data table.
 
 ```bash
-1> SELECT * from mqtt.dbo.t_mqtt_msg
+1> SELECT * from t_mqtt_msg
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
@@ -345,10 +331,10 @@ id          msgid                                                            top
 1>
 ```
 
-- For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `mqtt.dbo.t_mqtt_events` data table.
+- For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `t_mqtt_events` data table.
 
 ```bash
-1> SELECT * from mqtt.dbo.t_mqtt_events
+1> SELECT * from t_mqtt_events
 2> GO
 id          clientid                                                         event_type                                                                                                                                                                                                    event_time
 ----------- ---------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------------
