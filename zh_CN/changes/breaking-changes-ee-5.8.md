@@ -1,5 +1,25 @@
 # EMQX 5.8 中的不兼容变更
 
+## e5.8.1
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) `GET /banned` 端点现在支持使用查询字符串中的过滤器进行查询。 可用的过滤器包括：
+
+  - clientid
+
+  - username
+
+  - peerhost
+
+  - like_clientid
+
+  - like_username
+
+  - like_peerhost
+
+  - like_peerhost_net
+
+  对于未指定 `until` 值的被禁用项，默认的过期时间已从 1 年改为 `无限期`。
+
 ## e5.8.0
 
 - [#13080](https://github.com/emqx/emqx/pull/13080) 将 `mqtt.retry_interval` 配置的默认值从 30 秒更新为 `infinity`。
