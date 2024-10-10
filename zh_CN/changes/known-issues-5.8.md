@@ -37,3 +37,15 @@
 
 - **Node Crash Race Condition (since 5.0, fixed in 5.8.1)**
   If a node shutsdown while RPC channels are being established, it may cause the peer node to crash.
+
+- **Delete Action returns 500 error if there have same name in the Action and Source (since 5.7.2)**
+
+  Example of error keyword: `{name_clash_action_source, mqtt, <<"test">>}`, where the `mqtt` and `test` are the type and name of the resource with the same name.  
+
+  **Workaround:** You can execute the following command to delete the Action resource, for example:
+  ```shell
+  ./bin/emqx eval 'emqx_bridge_v2:remove(mqtt, <<"test">>)'
+  ```
+  Then, check the Rules and delete the corresponding reference.
+
+  <!-- https://emqx.atlassian.net/browse/EMQX-13250 -->
