@@ -757,6 +757,8 @@
                title_cn: 已知问题
                children:
                    - changes/known-issues-5.8
+                   - changes/known-issues-5.3
+                   - changes/known-issues-5.1
              - title_en: Incompatible Changes
                title_cn: 不兼容变更
                collapsed: true
