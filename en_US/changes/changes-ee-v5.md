@@ -4,6 +4,8 @@
 
 *Release Date: 2024-08-28*
 
+Please read [Known Issues of 5.8](./known-issues-5.8.md) before upgrade.
+
 ### Enhancements
 
 #### Cluster Linking
