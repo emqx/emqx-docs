@@ -753,6 +753,10 @@
          children:
              - changes/changes-ee-v5
              - changes/changes-ee-v4
+             - title_en: Known Issues
+               title_cn: 已知问题
+               children:
+                   - changes/known-issues-5.8
              - title_en: Incompatible Changes
                title_cn: 不兼容变更
                collapsed: true
