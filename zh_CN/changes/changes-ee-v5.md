@@ -8,7 +8,7 @@
 
 #### 核心 MQTT 功能
 
-- [#13525](https://github.com/emqx/emqx/pull/13525) 新增了配置项 `shared_subscription_initial_sticky_pick`，用于在 `shared_subscription_strategy` 设置为 `sticky` 时选择初始选取的策略。
+- [#13525](https://github.com/emqx/emqx/pull/13525) 新增了配置项 `shared_subscription_initial_sticky_pick`，用于在 `shared_subscription_strategy` 为 `sticky` 时第一次选取共享订阅客户端的策略。
 
 - [#13942](https://github.com/emqx/emqx/pull/13942) HTTP 客户端现在在最新请求超时后，如果 10 秒内未检测到任何活动，将自动重新连接。此前，客户端会无限期等待服务器响应，导致服务器丢弃请求时发生超时。
 
@@ -34,7 +34,7 @@
 
   Client-info（类型为 `cinfo`）认证是一种轻量级的认证机制，它通过检查客户端属性和自定义规则来进行认证。这些规则使用 Variform 表达式定义匹配条件以及匹配后的认证结果。例如，为了快速屏蔽没有用户名的客户端，可以设置匹配条件为 `str_eq(username, '')`，并关联检查结果 `deny`。
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) `GET /banned` 端点现在支持使用查询字符串中的过滤器进行查询。 可用的过滤器包括：
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
 
   - clientid
   - username
@@ -44,7 +44,7 @@
   - like_peerhost
   - like_peerhost_net
 
-  对于未指定 `until` 值的被禁用项，默认的过期时间已从 1 年改为 `无限期`。
+  在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
 
 #### 规则引擎
 
@@ -124,11 +124,11 @@
 
 #### 核心 MQTT 功能
 
-- [#13702](https://github.com/emqx/emqx/pull/13702) 修复节点宕机时清理对应的排它订阅。
+- [#13702](https://github.com/emqx/emqx/pull/13702) 修复节点宕机时清理该节点持有的排它订阅。
 
 - [#13708](https://github.com/emqx/emqx/pull/13708) 修复了可能导致共享订阅的 “sticky” 策略降级为 “random” 的问题。
 
-- [#13733](https://github.com/emqx/emqx/pull/13733) 在使用 `emqx ctl conf load` 命令配置 https 监听器时，`cacertfile` 参数现在为可选项。
+- [#13733](https://github.com/emqx/emqx/pull/13733) 在使用 `emqx ctl conf load` 命令配置 https 监听器时，允许 `cacertfile` 参数为可选项。
 
 - [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
 

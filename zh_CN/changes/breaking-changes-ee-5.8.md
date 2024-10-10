@@ -2,23 +2,21 @@
 
 ## e5.8.1
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) `GET /banned` 端点现在支持使用查询字符串中的过滤器进行查询。 可用的过滤器包括：
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
 
   - clientid
-
   - username
-
   - peerhost
-
   - like_clientid
-
   - like_username
-
   - like_peerhost
-
   - like_peerhost_net
 
-  对于未指定 `until` 值的被禁用项，默认的过期时间已从 1 年改为 `无限期`。
+  在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
+
+- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
+
+  该修复满足了 [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246) 的要求。
 
 ## e5.8.0
 
