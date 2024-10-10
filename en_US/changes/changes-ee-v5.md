@@ -8,7 +8,7 @@
 
 #### Core MQTT Functionalities
 
-- [#13525](https://github.com/emqx/emqx/pull/13525) Added new configuration item `shared_subscription_initial_sticky_pick` for choosing the strategy to use for the initial pick when `shared_subscription_strategy` is `sticky`.
+- [#13525](https://github.com/emqx/emqx/pull/13525) Added new configuration item `shared_subscription_initial_sticky_pick` to specify the strategy for making the initial pick when `shared_subscription_strategy` is set to `sticky`.
 
 - [#13942](https://github.com/emqx/emqx/pull/13942) The HTTP client now automatically reconnects if no activity is detected for 10 seconds after the latest request has expired.
   Previously, it would wait indefinitely for a server response, causing timeouts if the server dropped requests.
@@ -36,7 +36,7 @@
   Client-info (of type `cinfo`) authentication is a lightweight authentication mechanism that checks client properties and attributes against user-defined rules.
   The rules make use of the Variform expression to define match conditions, and the authentication result when match is found. For example, to quickly fence off clients without a username, the match condition can be `str_eq(username, '')` associated with a check result `deny`.
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) The `GET /banned` endpoint supports querying using filters in the query string.
+- [#13792](https://github.com/emqx/emqx/pull/13792) The banned clients API `GET /banned` supports querying using filters in the query string.
 
   The available filters are:
 
@@ -48,7 +48,7 @@
   - like_peerhost
   - like_peerhost_net
 
-  The default expiration time for a banned item that is created without an `until` value is now `infinity` up from 1 year.
+  When adding a new banned client entry, the default expiration time for entries without the `until` parameter specified has been changed from 1 year to `infinite`.
 
 #### Rule Engine
 
