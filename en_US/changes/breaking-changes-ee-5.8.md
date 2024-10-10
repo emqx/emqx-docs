@@ -1,5 +1,18 @@
 # Incompatible Changes in EMQX 5.8
 
+## e5.8.1
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) The `GET /banned` endpoint supports querying using filters in the query string.
+  The available filters are:
+  - clientid
+  - username
+  - peerhost
+  - like_clientid
+  - like_username
+  - like_peerhost
+  - like_peerhost_net
+  
+  The default expiration time for a banned item that is created without an `until` value is now `infinity` up from 1 year.
 
 ## e5.8.0
 
