@@ -1,51 +1,33 @@
-## Known issues
+# EMQX 5.8 已知问题
 
-### e5.8.1
+## e5.8.1
 
-- **Node Cannot Start if a New Node Joined Cluster while it was stopped (since 5.0)**
+- **如果一个新节点在原节点停止时加入集群，原节点无法启动 （始于5.0）**
 
-  In a cluster of 2 or more nodes, if a new node joins the cluster while some nodes are down, the down nodes will fail to restart and emit logs like below.
-  `2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (core dumped to file: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** Failed to merge schema: {aborted,function_clause}`
+  在包含两个或更多节点的集群中，如果在某些节点停止运行时有新节点加入集群，那么这些停止的节点将无法重新启动，并会产生如下日志： `2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (核心转储至文件: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** 合并 schema 失败: {aborted,function_clause}`
 
-  > **Workaround:**
-  > Delete the `data/mnesia` directory and restart the node.
+  > **解决方法：** 删除 `data/mnesia` 目录并重新启动节点。
 
   <!-- https://emqx.atlassian.net/browse/EMQX-12290 -->
 
-- **Kafka Disk Buffer Directory Name (since 5.8.0)**
+- **Kafka 磁盘缓冲区目录名称变化（始于5.8.0）**
 
-  The introduction of dynamic topic template for Kafka (Azure EventHubs, Confluent Platform) producer integration imposed an incompatible change for the
-  on-disk buffer directory name.
-  If `disk` mode buffer is used, please wait for 5.8.2 release to avoid buffered messages getting lost after upgrade from an older version.
-  If `hybrid` mode buffer is used, you will need to manually clean up the old directories after upgrade from an older version.
+  引入的用于 Kafka（Azure EventHubs，Confluent Platform）生产者集成的动态主题模板，导致了磁盘缓冲区目录名称的不兼容变化。 如果使用 `disk` 缓存模式，请等待5.8.2版本以避免升级到新版本后缓冲的消息丢失。 如果使用 `hybrid` 缓存模式，升级后需要手动清理旧目录。
 
   <!-- https://emqx.atlassian.net/browse/EMQX-13248 -->
 
-- **Kafka Disk Buffer Resume (since 5.8.0)**
+- **Kafka磁盘缓冲区恢复问题（始于5.8.0）**
 
-  If `disk` mode buffer is used, Kafka (Azure EventHubs, Confluent Platform) producers will not automatically start sending data from disk
-  to Kafka after node restart, the send will be triggered only after there is a new message to trigger the dynamic add of a topic producer.
-  This will be fixed in 5.8.2.
+  如果使用 `disk` 缓存模式，在节点重启后，Kafka（Azure EventHubs，Confluent Platform）生产者不会自动从磁盘开始向 Kafka 发送数据。只有在有新消息触发动态添加主题生产者时，才会开始发送数据。 该问题将在5.8.2版本中修复。
 
   <!-- https://emqx.atlassian.net/browse/EMQX-13242 -->
 
-- **Limitation in SAML-Based SSO (since 5.3)**
+- **基于 SAML 的单点登录限制（始于5.3）**
 
-  EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity.
+  EMQX Dashboard 支持基于安全断言标记语言（SAML）2.0标准的单点登录（SSO），并与 Okta 和OneLogin 作为身份提供商集成。然而，基于 SAML 的 SSO 目前不支持证书签名验证机制，并且由于其复杂性，无法与 Azure Entra ID 兼容。
 
-### e5.8.0
+## e5.8.0
 
-- **Node Crash Race Condition (since 5.0, fixed in 5.8.1)**
-  If a node shutsdown while RPC channels are being established, it may cause the peer node to crash.
+- **节点崩溃竞态条件（始于5.0，已在5.8.1中修复）**
 
-- **Delete Action returns 500 error if there have same name in the Action and Source (since 5.7.2)**
-
-  Example of error keyword: `{name_clash_action_source, mqtt, <<"test">>}`, where the `mqtt` and `test` are the type and name of the resource with the same name.  
-
-  **Workaround:** You can execute the following command to delete the Action resource, for example:
-  ```shell
-  ./bin/emqx eval 'emqx_bridge_v2:remove(mqtt, <<"test">>)'
-  ```
-  Then, check the Rules and delete the corresponding reference.
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-13250 -->
+  如果节点在 RPC 通道建立过程中关闭，可能导致对等节点崩溃。
