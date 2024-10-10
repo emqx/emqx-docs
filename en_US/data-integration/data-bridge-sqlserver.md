@@ -87,31 +87,29 @@ So far, the Microsoft SQL Server 2022 instance has been deployed and can be conn
 
 ### Create Database and Data Tables
 
-This section describes how to create data table in Microsoft SQL Server.
+Use the connection created from the previous section and the following SQL statements to create data tables.
 
-1. Use the connection created from the previous section and the following SQL statements to create a data table.
+- Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message.
 
-   - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message.
+  ```sql
+  CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                    msgid   VARCHAR(64) NULL,
+                                    topic   VARCHAR(100) NULL,
+                                    qos     tinyint NOT NULL DEFAULT 0,
+                                    payload VARCHAR(100) NULL,
+                                    arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  GO
+  ```
 
-     ```sql
-     CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                       msgid   VARCHAR(64) NULL,
-                                       topic   VARCHAR(100) NULL,
-                                       qos     tinyint NOT NULL DEFAULT 0,
-                                       payload VARCHAR(100) NULL,
-                                       arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
-     GO
-     ```
+- Create the following data table for recording the online/offline status of clients.
 
-   - Create the following data table for recording the online/offline status of clients.
-
-     ```sql
-     CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                          clientid VARCHAR(255) NULL,
-                                          event_type VARCHAR(255) NULL,
-                                          event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
-     GO
-     ```
+  ```sql
+  CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                       clientid VARCHAR(255) NULL,
+                                       event_type VARCHAR(255) NULL,
+                                       event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  GO
+  ```
 
 ### Install and Configure ODBC Driver
 
@@ -119,7 +117,7 @@ You need to configure the ODBC driver to be able to access the Microsoft SQL Ser
 
 EMQX uses the DSN Name specified in the `odbcinst.ini` configuration to determine the path to the driver dynamic library. In the examples below, the DSN Name is `ms-sql`. For more information, refer to [Connection Properties](https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties).
 
-::: tip Note:
+::: tip Note
 
 You can choose your own DSN name according to your preference, but it is recommended to use only English letters. Additionally, the DSN Name is case-sensitive.
 
@@ -142,7 +140,7 @@ Follow the instructions below to build a new image:
 
    The base image version in this example is `emqx/emqx-enterprise:5.8.1`. You can build the image based on the EMQX Enterprise version you need, or use the latest version image `emqx/emqx-enterprise:latest`.
 
-```docker
+```dockerfile
 FROM emqx/emqx-enterprise:5.8.1
 
 USER root
@@ -160,13 +158,13 @@ RUN apt-get -qq update && apt-get install -yqq curl gpg && \
 USER emqx
 ```
 
-2. Build a new image using the command `docker build -t emqx/emqx-enterprise:5.8.1-msodbc .`
+2. Build a new image using the command `docker build -t emqx/emqx-enterprise:5.8.1-msodbc`.
 
 3. After building, you can use `docker image ls` to obtain a list of local images. You can also upload or save the image for later use.
 
-::: tip
+::: tip Note
 
-Check that the DSN Name in `odbcinst.ini` should be `ms-sql` if you install the msodbcsql17 driver using this example. You can change the DSN Name according to your needs.
+Check that the DSN Name in `odbcinst.ini` should be `ms-sql` if you install the msodbcsql18 driver using this example. You can change the DSN Name according to your needs.
 
 :::
 
