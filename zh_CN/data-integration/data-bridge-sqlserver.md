@@ -94,22 +94,22 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
 - 如需用于 MQTT 消息存储，创建数据表 `t_mqtt_msg`。该表存储每条消息的 MsgID、主题、QoS、Payload 以及发布时间。
 
   ```sql
-  CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                    msgid   VARCHAR(64) NULL,
-                                    topic   VARCHAR(100) NULL,
-                                    qos     tinyint NOT NULL DEFAULT 0,
-                                    payload VARCHAR(100) NULL,
-                                    arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                               msgid   VARCHAR(64) NULL,
+                               topic   VARCHAR(100) NULL,
+                               qos     tinyint NOT NULL DEFAULT 0,
+                               payload VARCHAR(100) NULL,
+                               arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
   GO
   ```
 
 - 如需用于设备上下线状态记录，创建数据表 `t_mqtt_events`。
 
   ```sql
-  CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                       clientid VARCHAR(255) NULL,
-                                       event_type VARCHAR(255) NULL,
-                                       event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                  clientid VARCHAR(255) NULL,
+                                  event_type VARCHAR(255) NULL,
+                                  event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
   GO
   ```
 
@@ -233,7 +233,7 @@ FileUsage   = 1
 
 ## 创建消息存储 Sink 规则
 
-本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_msg` 中。
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Microsoft SQL Server 的数据表 `dbo.t_mqtt_msg` 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -283,7 +283,7 @@ FileUsage   = 1
 
 ## 创建事件记录 Sink 规则
 
-本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_events` 中。
+本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Microsoft SQL Server 的数据表 `dbo.t_mqtt_events` 中。
 
 注意：除规则 SQL 和 Sink 的 SQL 模板设置不同外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
 
@@ -317,7 +317,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello SQL Server" }'
 - 用于消息存储的 Sink ，命中、发送成功次数均 +1。查看数据是否已经写入 `t_mqtt_msg` 表中：
 
 ```bash
-1> SELECT * from t_mqtt_msg
+1> SELECT * from dbo.t_mqtt_msg
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
@@ -330,7 +330,7 @@ id          msgid                                                            top
 - 用于存储上下线事件的 Microsoft SQL Server Sink ，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入 `t_mqtt_events` 表中：
 
 ```bash
-1> SELECT * from t_mqtt_events
+1> SELECT * from dbo.t_mqtt_events
 2> GO
 id          clientid                                                         event_type                                                                                                                                                                                                    event_time
 ----------- ---------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------------

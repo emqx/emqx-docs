@@ -92,22 +92,22 @@ Use the connection created from the previous section and the following SQL state
 - Create the following data table for storing the MQTT message, including the message ID, topic, QoS, payload, and publish time of each message.
 
   ```sql
-  CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                    msgid   VARCHAR(64) NULL,
-                                    topic   VARCHAR(100) NULL,
-                                    qos     tinyint NOT NULL DEFAULT 0,
-                                    payload VARCHAR(100) NULL,
-                                    arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                               msgid   VARCHAR(64) NULL,
+                               topic   VARCHAR(100) NULL,
+                               qos     tinyint NOT NULL DEFAULT 0,
+                               payload VARCHAR(100) NULL,
+                               arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
   GO
   ```
 
 - Create the following data table for recording the online/offline status of clients.
 
   ```sql
-  CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                       clientid VARCHAR(255) NULL,
-                                       event_type VARCHAR(255) NULL,
-                                       event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  CREATE TABLE dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                  clientid VARCHAR(255) NULL,
+                                  event_type VARCHAR(255) NULL,
+                                  event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
   GO
   ```
 
@@ -319,7 +319,7 @@ Check the running statistics of the Microsoft SQL Server Sink.
 - For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `t_mqtt_msg` data table.
 
 ```bash
-1> SELECT * from t_mqtt_msg
+1> SELECT * from dbo.t_mqtt_msg
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
@@ -332,7 +332,7 @@ id          msgid                                                            top
 - For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `t_mqtt_events` data table.
 
 ```bash
-1> SELECT * from t_mqtt_events
+1> SELECT * from dbo.t_mqtt_events
 2> GO
 id          clientid                                                         event_type                                                                                                                                                                                                    event_time
 ----------- ---------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------------
