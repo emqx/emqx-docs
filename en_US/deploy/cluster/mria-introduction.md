@@ -17,6 +17,10 @@ By default, all nodes assume the Core node role, so the cluster behaves like tha
 To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster discovery strategy (`cluster.discovery_strategy`). 
 
 ::: tip
+
+Only the EMQX Enterprise supports the Core + Replicant mode. The EMQX Open Source only supports the Core node clustering.
+
+::: tip
 Replicant nodes cannot use `manual` discovery strategy to discover core nodes. 
 :::
 
