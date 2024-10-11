@@ -34,4 +34,17 @@
 ## e5.8.0
 
 - **Node Crash Race Condition (since 5.0, fixed in 5.8.1)**
-  If a node shutsdown while RPC channels are being established, it may cause the peer node to crash.
+  If a node shuts down while RPC channels are being established, it may cause the peer node to crash.
+  
+- **500 Error Occurs When Deleting an Action with the Same Name as Source (since 5.7.2)**
+  
+  In the Dashboard data integration, if the name of an Action item in the Action list matches the Name of a Source item in the Source list, deleting this Action item will return an error code 500.
+  
+  Example of error keyword: `{name_clash_action_source, mqtt, <<"test">>}`, where the `mqtt` and `test` are the type and name of the Source item with the same name.
+  
+  >**Workaround:** You can execute the following command to delete the Action item, for example:
+  >
+  >```
+  >./bin/emqx eval 'emqx_bridge_v2:remove(mqtt, <<"test">>)'
+  >```
+  >Then, you need to check the Rule list and delete any rules associated with this action.
