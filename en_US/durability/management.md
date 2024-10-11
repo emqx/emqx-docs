@@ -4,22 +4,26 @@ This document provides references and instructions for configuring, managing, an
 
 ## Configuration Parameters
 
-MQTT Durable Sessions configuration is divided into 2 main categories:
+MQTT Durable Sessions configuration is divided into two main categories:
 
 - `durable_sessions`: Contains settings related to MQTT clients' sessions, including how they consume data from durable storage and data retention parameters.
 - `durable_storage` Manages the settings of the durable storage system holding the MQTT message data.
 
 ### Durable Sessions Configuration
 
-| Parameter                                   | Description                                                  |
-| ------------------------------------------- | ------------------------------------------------------------ |
-| `durable_sessions.enable`                   | Enables session durability. Note: Restart of the EMQX node is required for changes to take effect. |
-| `durable_sessions.batch_size`               | Controls the maximum size of message batches consumed from the storage by durable sessions. |
-| `durable_sessions.idle_poll_interval`       | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
-| `durable_sessions.heartbeat_interval`       | Specifies the interval for saving session metadata.          |
-| `durable_sessions.renew_streams_interval`   | Defines how often sessions query the storage for new streams. |
-| `durable_sessions.session_gc_interval`      | Specifies the interval for sweeping through sessions and deleting expired ones. |
-| `durable_sessions.message_retention_period` | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
+You can configure the parameters for durable sessions in the Dashboard. Click **Management** -> **MQTT Settings** in the left menu of the Dashboard, and then select the **Durable Session** tab to configure the parameters.
+
+<img src="./assets/dashboard_session_config.png" alt="dashboard_session_config" style="zoom:67%;" />
+
+| Parameter                                   | Dashboard UI               | Description                                                  |
+| ------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
+| `durable_sessions.enable`                   | Enable Durable Sessions    | Enables session durability. This configuration item cannot be modified through hot configuration; you need to set it in the configuration file. Note: Restart of the EMQX node is required for changes to take effect. |
+| `durable_sessions.message_retention_period` | Message Retention Period   | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
+| `durable_sessions.batch_size`               | Message Query Batch Size   | Controls the maximum size of message batches consumed from the storage by durable sessions. |
+| `durable_sessions.idle_poll_interval`       | Idel Poll Interval         | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
+| `durable_sessions.heartbeat_interval`       | Session Heartbeat Interval | Specifies the interval for saving session metadata.          |
+| `durable_sessions.renew_streams_interval`   | -                          | Defines how often sessions query the storage for new streams. |
+| `durable_sessions.session_gc_interval`      | Session GC Interval        | Specifies the interval for sweeping through sessions and deleting expired ones. |
 
 
 The following parameters can be overridden per [zone](../configuration/configuration.md#zone-override):
