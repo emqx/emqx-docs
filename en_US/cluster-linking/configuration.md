@@ -148,3 +148,17 @@ In addition to configuration tasks, the API provides endpoints for monitoring th
     "node_metrics": [{}]
   }
   ```
+
+**Reset Metrics for a Given Cluster Link**
+
+- **Endpoint**: `PUT /cluster/links/link/:name/metrics/reset`
+
+- **Description**: Allows you to reset all the accumulated metrics for a specific cluster link. Once reset, the performance statistics tracked for the link will be cleared and start fresh. This is useful for monitoring performance after configuration changes or for troubleshooting purposes.
+
+- **Response sample**:
+
+  ```
+  
+  ```
+
+  
