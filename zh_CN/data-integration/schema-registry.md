@@ -103,7 +103,7 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 
 ## 外部 Schema Registry
 
-从 EMQX 版本 5.8.1 开始，支持配置外部 Confluent Schema Registry (CSR)。该功能允许用户在规则处理时动态获取外部 Schema Registry 中的 Schema，从而实现高效的消息编码和解码。
+从 EMQX 版本 5.8.1 开始，支持在 EMQX 中配置外部 Confluent Schema Registry (CSR)。该功能允许用户在规则处理时动态获取外部 Schema Registry 中的 Schema，从而实现高效的消息编码和解码。
 
 ### 在 Dashboard 中创建外部 Schema Registry
 
