@@ -32,7 +32,7 @@
 
   如果节点在 RPC 通道建立过程中关闭，可能导致对等节点崩溃。
 
-- **删除与 Source 名称相同的 Action 时出现 500 错误（始于 5.8.0）**
+- **删除与 Source 名称相同的 Action 时出现 500 错误（始于 5.5.0）**
 
   在 Dashboard 数据集成中，如果 Action 列表中的一个 Action 条目的名称与 Source 列表中的一个 Source 条目名称相同，删除该 Action 条目将返回错误代码 500。
 
