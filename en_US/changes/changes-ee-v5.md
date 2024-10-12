@@ -2,7 +2,7 @@
 
 ## 5.8.1
 
-*Release Date: 2024-10-11*
+*Release Date: 2024-10-14*
 
 ### Enhancements
 
@@ -18,12 +18,12 @@
   - HTTP authentication
   - HTTP authorization
   - Webhook (HTTP connector)
-  - GCP PubSub connector (Enterprise edition)
-  - S3 connector (Enterprise edition)
-  - InfluxDB connector (Enterprise edition)
-  - Couchbase connector (Enterprise edition)
-  - IoTDB connector (Enterprise edition)
-  - Snowflake connector (Enterprise edition)
+  - GCP PubSub connector
+  - S3 connector
+  - InfluxDB connector
+  - Couchbase connector
+  - IoTDB connector
+  - Snowflake connector
 
 #### Authentication and Authorization
 
@@ -70,6 +70,16 @@
 - [#13745](https://github.com/emqx/emqx/pull/13745) EMQX supports the data integration with Snowflake.
 
 - [#13783](https://github.com/emqx/emqx/pull/13783) Lowered Kafka producer buffer RAM usage when running in async mode.
+
+- [#13861](https://github.com/emqx/emqx/pull/13861) Added a new configuration item `undefined_vars_as_null`  to some of the data integration actions, to ensure that undefined variables in the SQL templates are treated as `NULL` when writing data into databases.
+
+  The following Sink actions are added with this configuration item:
+
+    - MySQL
+    - ClickHouse
+    - SQLServer
+    - TDengine
+    - DynamoDB
 
 #### MQTT over QUIC
 
@@ -159,6 +169,12 @@
 
 
 - [#13842](https://github.com/emqx/emqx/pull/13842) Fixed a UTF-8 string validation exception.
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a fix to prevent client socket initialization errors from escalating to the node level on the server side.
+
+#### Upgrade and Migration
+
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
 
 #### Authentication
 
@@ -199,7 +215,7 @@
 
   Before this fix, if an invalid prepared statement was used (e.g., referencing an unknown table column) when updating a MySQL integration action, it could cause the action to revert to using the oldest version of a previously prepared statement.
 
-- [#13906](https://github.com/emqx/emqx/pull/13906) Fixed an issue with prepared statements in Postgres integration.
+- [#13906](https://github.com/emqx/emqx/pull/13906) Fixed an issue with prepared statements in PostgreSQL integration.
 
   Before this fix, if an invalid prepared statement was used (e.g., referencing an unknown table column) when updating a Postgres integration action, it could cause the action to apply the oldest version of a previously prepared statement.
 
@@ -207,17 +223,23 @@
 
   Additionally, deprecated the `resource_opts.request_ttl` configuration for the Pulsar producer action, as it did not influence the request TTL as expected (this is handled by the `retention_period` setting). This change helps prevent potential confusion for users.
 
-#### Upgrade and Migration
+- [#13959](https://github.com/emqx/emqx/pull/13959) Upgraded the Pulsar client from `0.8.4` to `0.8.5` (see [pulsar#62](https://github.com/emqx/pulsar-client-erl/pull/62)). This update fixed an issue where, under certain race conditions, the producer could fail to communicate with the client process. As a result, the client process could stop unexpectedly and not restart automatically. The only solution before this fix was to manually restart the process.
+- [#13965](https://github.com/emqx/emqx/pull/13965) Fixed a function clause error that occurred when using the batch mode as the data writing method in IotDB Sink.
+- [#13971](https://github.com/emqx/emqx/pull/13971) Fixed a Kafka producer bug introduced in EMQX Enterprise 5.8.0, where the producer could crash if it failed to fetch metadata during the initialization stage.
 
+- [#13973](https://github.com/emqx/emqx/pull/13973) Fixed an issue in the Microsoft SQL Server integration where EMQX would log multiple errors and warnings each time the connection to the server was stopped.
 
-- [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
+#### Management and Operation
+
+- [#13963](https://github.com/emqx/emqx/pull/13963) Fixed the following issues with the Audit Log feature:
+  - The Audit Log feature was incompatible with the Single Sign-On (SSO) feature, causing exceptions for each SSO event.
+  - Illegal access attempts (e.g., `GET` requests to `POST`-only endpoints) were not being logged.
 
 #### Cluster Linking
 
 
 - [#13888](https://github.com/emqx/emqx/pull/13888) Fixed an issue that prevented updating a cluster link without clientid via its HTTP API.
 - [#13927](https://github.com/emqx/emqx/pull/13927) Fixed an issue where Cluster Link bootstrap process could have crashed if the local cluster had one or more very crowded topics.
-
 
 ## 5.8.0
 

@@ -1,5 +1,132 @@
 # EMQX 开源版 v5 版本
 
+## 5.8.1
+
+*发布日期：2024-10-14*
+
+### 增强
+
+#### 核心 MQTT 功能
+
+- [#13525](https://github.com/emqx/emqx/pull/13525) 新增了配置项 `shared_subscription_initial_sticky_pick`，用于在 `shared_subscription_strategy` 为 `sticky` 时第一次选取共享订阅客户端的策略。
+
+- [#13942](https://github.com/emqx/emqx/pull/13942) HTTP 客户端现在在最新请求超时后，如果 10 秒内未检测到任何活动，将自动重新连接。此前，客户端会无限期等待服务器响应，导致服务器丢弃请求时发生超时。
+
+  此更改影响以下组件：
+
+  - HTTP 认证
+  - HTTP 授权
+  - Webhook（HTTP 连接器）
+
+#### 认证与授权
+
+- [#13863](https://github.com/emqx/emqx/pull/13863) EMQX 现在支持在原始 ACL 规则的主题名称模板中使用 `${cert_common_name}` 占位符。
+
+- [#13810](https://github.com/emqx/emqx/pull/13810) 新增了 client-info 认证。
+
+  Client-info（类型为 `cinfo`）认证是一种轻量级的认证机制，它通过检查客户端属性和自定义规则来进行认证。这些规则使用 Variform 表达式定义匹配条件以及匹配后的认证结果。例如，为了快速屏蔽没有用户名的客户端，可以设置匹配条件为 `str_eq(username, '')`，并关联检查结果 `deny`。
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
+
+  - clientid
+  - username
+  - peerhost
+  - like_clientid
+  - like_username
+  - like_peerhost
+  - like_peerhost_net
+
+  在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
+
+#### 规则引擎
+
+- [#13773](https://github.com/emqx/emqx/pull/13773) 停用的规则动作现在不会触发 `out_of_service` 警告。
+
+  之前，如果某个动作被停用，会出现带有 `msg: out_of_service` 的警告日志，并且该规则的 `actions.failed` 计数器会增加。
+
+  经过此次优化后，停用的动作将记录 `debug` 级别日志，日志内容为 `msg: discarded`，并且新增的 `actions.discarded` 计数器将增加。
+
+- [#13804](https://github.com/emqx/emqx/pull/13804) 支持使用 Confluent Schema Registry 作为外部 Schema 提供者与 EMQX 的 Schema Registry 集成。
+
+#### MQTT over QUIC
+
+- [#13814](https://github.com/emqx/emqx/pull/13814) 基于 QUIC 多流的连接范围保活功能：
+
+  此更新引入了一项新功能，即使控制流处于空闲状态，但其他数据流仍活跃时，仍然可以保持基于 QUIC 多流的 MQTT 连接。
+
+  之前，客户端需要在空闲的控制流上发送 `MQTT.PINGREQ` 来保持连接活跃。现在，每个连接都会维护一个共享状态，监控所有流的活动情况。这个共享状态有助于判断连接是否仍然活跃，减少由于队头阻塞（HOL blocking）导致的保活超时风险，并提高整体连接的稳定性。
+
+#### MQTT 会话持久化
+
+- [#13634](https://github.com/emqx/emqx/pull/13634) 会话持久化功能的重大优化。
+
+  此次更新为会话持久化功能带来了多项重要改进：
+
+  - 空闲的持久订阅者不再消耗 CPU 资源。
+  - 持久会话的端到端延迟显著降低。
+  - 大幅减少了对持久存储的查询频率。
+  - 优化了集群背板网络的使用效率。
+
+  **配置更改**：
+
+  - `durable_sessions.idle_poll_interval` 参数已更新。现在，当新消息写入持久存储时，持久会话将立即被激活，因此该参数在正常操作中不再影响端到端延迟。
+  - 从 EMQX 5.8.1 开始，空闲轮询仅作为处理某些网络错误的备用机制。默认的 `idle_poll_interval` 值已增加。如果您在此前的版本中自定义了该参数，建议根据新的默认值进行调整。
+
+  **新增指标**：
+
+  - `emqx_ds_poll_requests`
+  - `emqx_ds_poll_requests_fulfilled`
+  - `emqx_ds_poll_requests_dropped`
+  - `emqx_ds_poll_requests_expired`
+  - `emqx_ds_poll_request_sharing`
+
+- [#13788](https://github.com/emqx/emqx/pull/13788) 当相应功能被禁用时，防止 DS 共享订阅应用程序执行完整的启动流程。这也避免了初始化内部数据库，进而防止占用大量磁盘空间。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#13702](https://github.com/emqx/emqx/pull/13702) 修复节点宕机时清理该节点持有的排它订阅。
+
+- [#13708](https://github.com/emqx/emqx/pull/13708) 修复了可能导致共享订阅的 “sticky” 策略降级为 “random” 的问题。
+
+- [#13733](https://github.com/emqx/emqx/pull/13733) 在使用 `emqx ctl conf load` 命令配置 https 监听器时，允许 `cacertfile` 参数为可选项。
+
+- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
+
+- [#13754](https://github.com/emqx/emqx/pull/13754) 修复了 websocket 连接会自行持续中断的问题。
+
+- [#13756](https://github.com/emqx/emqx/pull/13756) 增加了分配给客户端 ID 的随机性。
+
+- [#13790](https://github.com/emqx/emqx/pull/13790) 将 MQTT 连接器的默认心跳间隔从 300 秒减少到 160 秒。
+
+  此更改有助于通过防止因负载均衡器或防火墙的空闲限制导致的超时来维护底层 TCP 连接，云服务提供商通常将这些限制设定在 3 到 5 分钟之间。
+
+- [#13832](https://github.com/emqx/emqx/pull/13832) 修复了启用持久会话时，`Publish` 端点出现 500 错误的问题。
+
+- [#13842](https://github.com/emqx/emqx/pull/13842) 修复了 UTF-8 字符串验证异常问题。
+
+- [#13956](https://github.com/emqx/emqx/pull/13956) 将 `gen_rpc` 库更新至 3.4.1 版本，该版本包含一个修复，防止客户端 socket 初始化错误升级到服务端的节点级别。
+
+#### 升级与迁移
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) 解决了运行在 EMQX 5.4.0 的集群无法升级到 EMQX 5.8.0 的问题。此修复引入了一个迁移过程，将 5.4.0 版本中创建的特定内部数据库表更新为符合新架构。
+
+#### 认证
+
+- [#13726](https://github.com/emqx/emqx/pull/13726) 升级了 Kerberos 认证库，改为使用 MEMORY 类型缓存，替代之前的 FILE 类型缓存，解决了在并发初始化认证请求时可能导致的失败问题。
+
+#### 规则引擎
+
+- [#13735](https://github.com/emqx/emqx/pull/13735) 改进了在解码无效 payload 时的消息转换错误提示。
+- [#13769](https://github.com/emqx/emqx/pull/13769) 修复了使用带有 `extends` 属性的 JSON Schema 验证（draft 3）时，总是导致验证失败的问题。
+
+#### 管理和运维
+
+- [#13963](https://github.com/emqx/emqx/pull/13963) 修复了审计日志功能中的以下问题：
+  - 审计日志功能与单点登录（SSO）功能不兼容，导致每个 SSO 事件都会引发异常。
+  - 非法访问尝试（例如，对仅支持 `POST` 的端点发起 `GET` 请求）未被记录。
+
 ## 5.8.0
 
 *发布日期：2024-08-28*

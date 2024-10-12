@@ -1,5 +1,144 @@
 # EMQX Open Source Version 5
 
+## 5.8.1
+
+*Release Date: 2024-10-14*
+
+### Enhancements
+
+#### Core MQTT Functionalities
+
+- [#13525](https://github.com/emqx/emqx/pull/13525) Added new configuration item `shared_subscription_initial_sticky_pick` to specify the strategy for making the initial pick when `shared_subscription_strategy` is set to `sticky`.
+
+- [#13942](https://github.com/emqx/emqx/pull/13942) The HTTP client now automatically reconnects if no activity is detected for 10 seconds after the latest request has expired.
+  Previously, it would wait indefinitely for a server response, causing timeouts if the server dropped requests.
+
+  This change impacts below components.
+
+  - HTTP authentication
+  - HTTP authorization
+  - Webhook (HTTP connector)
+
+#### Authentication and Authorization
+
+- [#13863](https://github.com/emqx/emqx/pull/13863) EMQX now supports `${cert_common_name}` placeholder in topic name templates for raw ACL rules.
+
+- [#13810](https://github.com/emqx/emqx/pull/13810) Added client-info authentication.
+
+  Client-info (of type `cinfo`) authentication is a lightweight authentication mechanism that checks client properties and attributes against user-defined rules.
+  The rules make use of the Variform expression to define match conditions, and the authentication result when match is found. For example, to quickly fence off clients without a username, the match condition can be `str_eq(username, '')` associated with a check result `deny`.
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) The banned clients API `GET /banned` supports querying using filters in the query string.
+
+  The available filters are:
+
+  - clientid
+  - username
+  - peerhost
+  - like_clientid
+  - like_username
+  - like_peerhost
+  - like_peerhost_net
+
+  When adding a new banned client entry, the default expiration time for entries without the `until` parameter specified has been changed from 1 year to `infinite`.
+
+#### Rule Engine
+
+- [#13773](https://github.com/emqx/emqx/pull/13773) Disabled rule actions now do not trigger `out_of_service` warnings.
+
+  Previously, if an action is disabled, there would be a warning log with `msg: out_of_service`,
+  and the `actions.failed` counter was incremented for the rule.
+
+  After this enhancement, disabled action will result in a `debug` level log with `msg: discarded`,
+  and the newly introduced counter `actions.discarded` will be incremented.
+
+- [#13804](https://github.com/emqx/emqx/pull/13804) Added support for using Confluent Schema Registry as an external provider in our Schema Registry.
+
+#### MQTT over QUIC
+
+- [#13814](https://github.com/emqx/emqx/pull/13814) Connection Scope Keepalive for MQTT over QUIC Multi-Stream:
+
+  This update introduces a new feature to maintain MQTT connections over QUIC multi-streams, even when the control stream is idle but other data streams are active.
+
+  Previously, clients had to send `MQTT.PINGREQ` on idle control streams to keep the connection alive. Now, a shared state is maintained for each connection, monitoring activity across all streams. This shared state helps determine if the connection is still active, reducing the risk of keepalive timeouts caused by Head-of-Line (HOL) blocking and improving overall connection stability.
+
+#### Durable Storage
+
+- [#13634](https://github.com/emqx/emqx/pull/13634) Major optimization of the Durable Sessions feature.
+
+  This update introduces significant improvements to the Durable Sessions feature:
+
+  - Idle durable subscribers no longer consume CPU resources.
+  - End-to-end latency for durable sessions has been reduced.
+  - The frequency of queries to durable storage has been significantly minimized.
+  - Optimized usage of the cluster backplane network.
+
+  **Configuration Changes**:
+
+  - The `durable_sessions.idle_poll_interval` parameter has been updated. Now, durable sessions are immediately activated when new messages are written to durable storage. As a result, this parameter no longer impacts end-to-end latency during normal operation.
+  - From EMQX 5.8.1 onward, idle polling serves as a fallback mechanism for certain network errors. The default value of `idle_poll_interval` has been increased accordingly. If you have customized this parameter in earlier versions of EMQX, it is recommended to increase it in line with the new default.
+
+  **New Metrics**:
+
+  - `emqx_ds_poll_requests`
+  - `emqx_ds_poll_requests_fulfilled`
+  - `emqx_ds_poll_requests_dropped`
+  - `emqx_ds_poll_requests_expired`
+  - `emqx_ds_poll_request_sharing`
+
+- [#13788](https://github.com/emqx/emqx/pull/13788) Prevent DS Shared Subscriptions application from running full-fledged startup sequence if respective features are disabled. This includes preventing the initialization of the internal database that could have been created and occupied a lot of disk space otherwise.
+
+### Bug Fixes
+
+#### Core MQTT Functions
+
+- [#13702](https://github.com/emqx/emqx/pull/13702) Clean up the corresponding exclusive subscriptions when a node goes down.
+
+
+- [#13708](https://github.com/emqx/emqx/pull/13708) Fixed an issue which may cause shared subscription 'sticky' strategy to degrade to 'random'.
+
+- [#13733](https://github.com/emqx/emqx/pull/13733) Made `cacertfile` optional when configuring https listener from `emqx ctl conf load` command.
+
+- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed when subscribing with `+` as the first level, or `#` as a wildcard, retained messages with topics starting with `$` are incorrectly received.
+
+- [#13754](https://github.com/emqx/emqx/pull/13754) Fixed an issue when websocket connection would break consistently on its own.
+
+- [#13756](https://github.com/emqx/emqx/pull/13756) Introduced more randomness to broker assigned client IDs.
+
+- [#13790](https://github.com/emqx/emqx/pull/13790) The default heartbeat interval for the MQTT connector has been reduced from 300 seconds to 160 seconds.
+
+  This change helps maintain the underlying TCP connection by preventing timeouts due to the idle limits
+  imposed by load balancers or firewalls, which typically range from 3 to 5 minutes depending on the cloud provider.
+
+
+- [#13832](https://github.com/emqx/emqx/pull/13832) Fixed that the `Publish` endpoint would have a 500 error when persistent session were enabled.
+
+
+- [#13842](https://github.com/emqx/emqx/pull/13842) Fixed a UTF-8 string validation exception.
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a fix to prevent client socket initialization errors from escalating to the node level on the server side.
+
+#### Upgrade and Migration
+
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
+
+#### Authentication
+
+
+- [#13726](https://github.com/emqx/emqx/pull/13726) Upgraded Kerberos authentication library to use MEMORY type cache instead of FILE type which sometimes fails when authentication requests are initialized concurrently.
+
+#### Rule Engine
+
+
+- [#13735](https://github.com/emqx/emqx/pull/13735) Improved message transformation error messages when payload to be decoded is invalid.
+- [#13769](https://github.com/emqx/emqx/pull/13769) Fixed an issue where using JSON schema validation (draft 3) with the `extends` property would lead to validation always failing.
+
+#### Management and Operation
+
+- [#13963](https://github.com/emqx/emqx/pull/13963) Fixed the following issues with the Audit Log feature:
+  - The Audit Log feature was incompatible with the Single Sign-On (SSO) feature, causing exceptions for each SSO event.
+  - Illegal access attempts (e.g., `GET` requests to `POST`-only endpoints) were not being logged.
+
 ## 5.8.0
 
 *Release Date: 2024-08-28*

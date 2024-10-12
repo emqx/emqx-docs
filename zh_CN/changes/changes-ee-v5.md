@@ -2,7 +2,7 @@
 
 ## 5.8.1
 
-*发布日期：2024-10-11*
+*发布日期：2024-10-14*
 
 ### 增强
 
@@ -59,8 +59,20 @@
 #### 数据集成
 
 - [#13716](https://github.com/emqx/emqx/pull/13716) 引入了 IoTDB 连接器的 Thrift 驱动。
+
 - [#13745](https://github.com/emqx/emqx/pull/13745) EMQX 现已支持与 Snowflake 的数据集成。
+
 - [#13783](https://github.com/emqx/emqx/pull/13783) 在 Kafka 生产者处于异步模式下运行时，降低了缓冲区内存的使用量。
+
+- [#13861](https://github.com/emqx/emqx/pull/13861) 为部分数据集成动作添加了一个新的配置项 `undefined_vars_as_null`，用于确保当数据写入数据库时，SQL 模版中未定义的占位符变量将被替换为 `NULL`。
+
+  以下 Sink 动作添加了此配置项：
+
+    - MySQL
+    - ClickHouse
+    - SQLServer
+    - TDengine
+    - DynamoDB
 
 #### MQTT over QUIC
 
@@ -144,6 +156,12 @@
 
 - [#13842](https://github.com/emqx/emqx/pull/13842) 修复了 UTF-8 字符串验证异常问题。
 
+- [#13956](https://github.com/emqx/emqx/pull/13956) 将 `gen_rpc` 库更新至 3.4.1 版本，该版本包含一个修复，防止客户端 socket 初始化错误升级到服务端的节点级别。
+
+#### 升级与迁移
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) 解决了运行在 EMQX 5.4.0 的集群无法升级到 EMQX 5.8.0 的问题。此修复引入了一个迁移过程，将 5.4.0 版本中创建的特定内部数据库表更新为符合新架构。
+
 #### 认证
 
 - [#13726](https://github.com/emqx/emqx/pull/13726) 升级了 Kerberos 认证库，改为使用 MEMORY 类型缓存，替代之前的 FILE 类型缓存，解决了在并发初始化认证请求时可能导致的失败问题。
@@ -178,7 +196,7 @@
 
   在此修复之前，如果在更新 MySQL 集成动作时使用了无效的预处理语句（例如引用了未知的表列名），可能会导致动作恢复为使用最早版本的预处理语句。
 
-- [#13906](https://github.com/emqx/emqx/pull/13906) 修复了 Postgres 集成中预处理语句的问题。
+- [#13906](https://github.com/emqx/emqx/pull/13906) 修复了 PostgreSQL 集成中预处理语句的问题。
 
   在此修复之前，如果在更新 Postgres 集成动作时使用了无效的预处理语句（例如引用了未知的表列名），可能会导致动作恢复为使用最早版本的预处理语句。
 
@@ -186,9 +204,16 @@
 
   此外，弃用了 Pulsar 生产者动作中的 `resource_opts.request_ttl` 配置，因为该配置未能如预期那样影响请求 TTL（实际由 `retention_period` 控制）。这一更改有助于防止用户产生混淆。
 
-#### 升级与迁移
+- [#13959](https://github.com/emqx/emqx/pull/13959) 将 Pulsar 客户端从 `0.8.4` 升级到 `0.8.5`（参见 [pulsar#62](https://github.com/emqx/pulsar-client-erl/pull/62)）。此更新修复了一个问题，在某些竞争条件下，生产者可能无法与客户端进程通信，导致客户端进程意外停止且不会自动重启。之前唯一的解决方法是手动重启该进程。
+- [#13965](https://github.com/emqx/emqx/pull/13965) 修复了在 IoTDB Sink 中使用批量模式作为数据写入方式时出现的函数子句错误。
+- [#13971](https://github.com/emqx/emqx/pull/13971) 修复了 EMQX Enterprise 5.8.0 中引入的 Kafka 生产者错误，生产者在初始化阶段如果未能获取元数据，可能会崩溃。
+- [#13973](https://github.com/emqx/emqx/pull/13973) 修复了 Microsoft SQL Server 集成中的一个问题，EMQX 在每次与服务器的连接断开时会记录多条错误和警告日志。
 
-- [#13731](https://github.com/emqx/emqx/pull/13731) 解决了运行在 EMQX 5.4.0 的集群无法升级到 EMQX 5.8.0 的问题。此修复引入了一个迁移过程，将 5.4.0 版本中创建的特定内部数据库表更新为符合新架构。
+#### 管理和运维
+
+- [#13963](https://github.com/emqx/emqx/pull/13963) 修复了审计日志功能中的以下问题：
+  - 审计日志功能与单点登录（SSO）功能不兼容，导致每个 SSO 事件都会引发异常。
+  - 非法访问尝试（例如，对仅支持 `POST` 的端点发起 `GET` 请求）未被记录。
 
 #### 集群连接
 
