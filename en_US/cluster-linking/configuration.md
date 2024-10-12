@@ -155,10 +155,6 @@ In addition to configuration tasks, the API provides endpoints for monitoring th
 
 - **Description**: Allows you to reset all the accumulated metrics for a specific cluster link. Once reset, the performance statistics tracked for the link will be cleared and start fresh. This is useful for monitoring performance after configuration changes or for troubleshooting purposes.
 
-- **Response sample**:
-
-  ```
-  
-  ```
+- **Response sample**: The endpoint returns `204` without content.
 
   
