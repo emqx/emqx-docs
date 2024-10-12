@@ -36,7 +36,7 @@
 - **Node Crash Race Condition (since 5.0, fixed in 5.8.1)**
   If a node shuts down while RPC channels are being established, it may cause the peer node to crash.
   
-- **500 Error Occurs When Deleting an Action with the Same Name as Source (since 5.7.2)**
+- **500 Error Occurs When Deleting an Action with the Same Name as Source (since 5.5.0)**
   
   In the Dashboard data integration, if the name of an Action item in the Action list matches the Name of a Source item in the Source list, deleting this Action item will return an error code 500.
   
