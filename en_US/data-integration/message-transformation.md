@@ -72,6 +72,7 @@ message_transformation {
   transformations = [
     {
       name = mytransformation
+      topics = ["t"]
       failure_action = drop
       payload_decoder = {type = avro, schema = myschema}
       payload_encoder = {type = json}
