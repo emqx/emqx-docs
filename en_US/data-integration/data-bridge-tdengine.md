@@ -161,6 +161,11 @@ This section demonstrates how to create a rule in the Dashboard for processing m
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
    
+   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+   
+   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
+   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+   
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
 10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 

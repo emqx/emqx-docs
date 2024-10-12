@@ -139,6 +139,11 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
     Here, `${data}` and `${timestamp}` represent the message content and timestamp, respectively, which will be configured later in the rules for message forwarding. EMQX will replace them with the corresponding content before forwarding the message.
 
+    If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+
+    - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
+    - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+
 11. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
 
 12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.

@@ -284,6 +284,11 @@ FileUsage   = 1
    insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
    ```
    
+   如果在模板中使用未定义的占位符变量，您可以切换**未定义变量作为 NULL** 开关（位于 **SQL 模板** 上方）来定义规则引擎的行为：
+   
+   - **关闭**（默认）：规则引擎可以将字符串 `undefined` 插入数据库。
+   - **启用**：允许规则引擎在变量未定义时将 `NULL` 插入数据库。
+   
 10. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 11. 在点击**创建**按钮完成 Sink 创建之前，您可以使用**测试连接**来测试当前 Sink 到 Microsoft SQL Server 的连接是否成功。
