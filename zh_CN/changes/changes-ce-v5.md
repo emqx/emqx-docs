@@ -28,7 +28,7 @@
 
 - [#13863](https://github.com/emqx/emqx/pull/13863) EMQX 现在支持在原始 ACL 规则的主题名称模板中使用 `${cert_common_name}` 占位符。
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数对规则进行条件查找：
 
   - clientid
   - username

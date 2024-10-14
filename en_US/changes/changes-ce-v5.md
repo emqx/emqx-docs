@@ -30,7 +30,7 @@ Previously, if a node is force shutdown down while RPC channels are being establ
 
 - [#13863](https://github.com/emqx/emqx/pull/13863) EMQX now supports `${cert_common_name}` placeholder in topic name templates for raw ACL rules.
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) The banned clients API `GET /banned` supports querying using filters in the query string.
+- [#13792](https://github.com/emqx/emqx/pull/13792) The banned-clients API `GET /banned` supports querying the rules using filters in the query string.
 
   The available filters are:
 

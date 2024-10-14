@@ -40,7 +40,7 @@
 
   Client-info（类型为 `cinfo`）认证是一种轻量级的认证机制，它通过检查客户端属性和自定义规则来进行认证。这些规则使用 Variform 表达式定义匹配条件以及匹配后的认证结果。例如，为了快速屏蔽没有用户名的客户端，可以设置匹配条件为 `str_eq(username, '')`，并关联检查结果 `deny`。
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数对规则进行查找：
 
   - clientid
   - username

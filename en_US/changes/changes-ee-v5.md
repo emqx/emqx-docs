@@ -43,7 +43,7 @@ Previously, if a node is force shutdown down while RPC channels are being establ
   Client-info (of type `cinfo`) authentication is a lightweight authentication mechanism that checks client properties and attributes against user-defined rules.
   The rules make use of the Variform expression to define match conditions, and the authentication result when match is found. For example, to quickly fence off clients without a username, the match condition can be `str_eq(username, '')` associated with a check result `deny`.
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) The banned clients API `GET /banned` supports querying using filters in the query string.
+- [#13792](https://github.com/emqx/emqx/pull/13792) The banned-clients API `GET /banned` supports querying the rules using filters in the query string.
 
   The available filters are:
 
