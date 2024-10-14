@@ -94,15 +94,20 @@ You can find more information about running [IoTDB in Docker on Docker Hub](http
 
 To create the Apache IoTDB data integration, you need to create a Connector to connect the Apache IoTDB Sink to the Apache IoTDB server.
 
+EMQX supports communication with IoTDB through the REST API or Thrift protocol.
+
 1. Go to the EMQX Dashboard and click on **Integrations** -> **Connectors**.
 2. Click **Create** in the top right corner of the page.
 3. On the **Create Connector** page, select **Apache IoTDB** as the Connector type, and click **Next**.
 4. Enter the name and description of the Connector. The name can be a combination of uppercase/lowercase letters or numbers, for example, `my_iotdb`.
-5. Enter `http://localhost:18080` in the **IoTDB REST Service Base URL**.
-6. Enter the username and password for the Connector to access the Apache IoTDB server.
-7. Leave the other options as default. For the configuration of **Advanced Settings** (optional):  See [Advanced Configurations](#advanced-configurations).
-8. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Apache IoTDB.
-9. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be written into Apache IoTDB. For detailed steps, see [Create a Rule and Apache IoTDB Sink](#create-a-rule-and-apache-iotdb-sink).
+5. Select the driver from the **Driver** dropdown.
+   - If you select `REST API` as the driver, enter `http://localhost:18080` in the **IoTDB REST Service Base URL**.
+   - If you want to use the Thrift protocol for this connector, select `Thrift Protocol` and enter the IoTDB Thrift server address in the **Server Host** field.
+7. Enter the username and password for the Connector to access the Apache IoTDB server.
+7. Select the version of the IoTDB system you want to connect from the **IoTDB Version** dropdown.
+8. Leave the other options as default. For the configuration of **Advanced Settings** (optional):  See [Advanced Configurations](#advanced-configurations).
+9. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the Apache IoTDB.
+10. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be written into Apache IoTDB. For detailed steps, see [Create a Rule and Apache IoTDB Sink](#create-a-rule-and-apache-iotdb-sink).
 
 
 ## Create a Rule with Apache IoTDB Sink

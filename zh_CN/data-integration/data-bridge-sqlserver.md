@@ -46,7 +46,7 @@ Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX
 
 ### 前置准备
 
-- 了解 [规则](./rules.md)。
+- 了解[规则](./rules.md)。
 - 了解[数据集成](./data-bridges.md)。
 
 ### 安装并连接到 Microsoft SQL Server
@@ -56,11 +56,11 @@ Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX
 1. 通过 Docker 安装并启动 Microsoft SQL Server。
 
    Microsoft SQL Server 要求使用复杂密码，请参阅[使用复杂密码](https://learn.microsoft.com/zh-cn/sql/relational-databases/security/password-policy?view=sql-server-ver16#password-complexity)。
-   使用环境变量 `ACCEPT_EULA=Y` 启动 Docker 容器代表您同意 Microsoft 的 EULA 条款，详情请参阅 [MICROSOFT 软件许可条款 MICROSOFT SQL SERVER 2019 STANDARD(ZH_CN)](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)。
+   使用环境变量 `ACCEPT_EULA=Y` 启动 Docker 容器代表您同意 Microsoft 的 EULA 条款，另请参阅 [End-User Licensing Agreement](https://go.microsoft.com/fwlink/?linkid=857698)。
 
    ```bash
    # 启动一个 Microsoft SQL Server 容器并设置密码为 `mqtt_public1`
-   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2019-CU19-ubuntu-20.04
+   $ docker run --name sqlserver -p 1433:1433 -e ACCEPT_EULA=Y -e MSSQL_SA_PASSWORD=mqtt_public1 -d mcr.microsoft.com/mssql/server:2022-CU15-ubuntu-22.04
    ```
 
 2. 进入 Docker 容器。
@@ -72,116 +72,101 @@ Microsoft SQL Server 数据集成是 EMQX 的开箱即用功能，结合了 EMQX
 3. 在容器中连接到 Microsoft SQL Server 服务器，需要输入预设的密码。输入密码时字符不会回显。请输入密码后直接键入 `Enter`。
 
    ```bash
-   $ /opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa
-   $ Password:
+   $ /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P mqtt_public1 -N -C
    1>
    ```
+   
 
-   ::: tip
+::: tip
 
-   Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools`，但可执行文件并不在 `$PATH` 中，因此您需要指定可执行文件路径。在上述连接示例中，可执行文件路径为 `opt`。
+Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，但可执行文件并不在 `$PATH` 中。因此，在继续操作之前，您需要为 `sqlcmd` 指定可执行文件的路径。对于本例中的 Docker 部署，文件路径应为 `/opt`。
 
-   关于更多 `mssql-tools` 的使用，请阅读 [sqlcmd 实用工具](https://learn.microsoft.com/zh-cn/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)。
+关于更多 `mssql-tools18` 的使用，请阅读 [sqlcmd 实用工具](https://learn.microsoft.com/zh-cn/sql/tools/sqlcmd/sqlcmd-utility?view=sql-server-ver16)。
 
-   :::
+:::
 
-至此 Microsoft SQL Server 2019 实例已经完成部署并可以连接。
+至此 Microsoft SQL Server 2022 实例已经完成部署并可以连接。
 
-### 创建数据库和数据表
+### 创建数据表
 
-本节描述如何在 Microsoft SQL Server 中创建数据库与数据表。
+使用已创建的连接和下面的 SQL 语句在 Microsoft SQL Server 中创建数据表。
 
-1. 使用已创建的连接在 Microsoft SQL Server 中创建数据库 `mqtt`。
+- 如需用于 MQTT 消息存储，创建数据表 `t_mqtt_msg`。该表存储每条消息的 MsgID、主题、QoS、Payload 以及发布时间。
 
-   ```bash
-   ...
-   Password:
-   1> USE master
-   2> GO
-   Changed database context to 'master'.
-   1> IF NOT EXISTS(SELECT name FROM sys.databases WHERE name = 'mqtt') BEGIN CREATE DATABASE mqtt END
-   2> GO
-   ```
+  ```sql
+  CREATE TABLE dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                               msgid   VARCHAR(64) NULL,
+                               topic   VARCHAR(100) NULL,
+                               qos     tinyint NOT NULL DEFAULT 0,
+                               payload VARCHAR(100) NULL,
+                               arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  GO
+  ```
 
+- 如需用于设备上下线状态记录，创建数据表 `t_mqtt_events`。
 
-2. 使用 SQL 语句在此数据库中创建数据表。
-
-   - 如需用于 MQTT 消息存储，创建数据表 `t_mqtt_msg`。该表存储每条消息的 MsgID、主题、QoS、Payload 以及发布时间。
-
-     ```sql
-     CREATE TABLE mqtt.dbo.t_mqtt_msg (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                       msgid   VARCHAR(64) NULL,
-                                       topic   VARCHAR(100) NULL,
-                                       qos     tinyint NOT NULL DEFAULT 0,
-                                       payload VARCHAR(100) NULL,
-                                       arrived DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
-     GO
-     ```
-
-   - 如需用于设备上下线状态记录，创建数据表 `t_mqtt_events`。
-
-     ```sql
-     CREATE TABLE mqtt.dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
-                                          clientid VARCHAR(255) NULL,
-                                          event_type VARCHAR(255) NULL,
-                                          event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
-     GO
-     ```
+  ```sql
+  CREATE TABLE dbo.t_mqtt_events (id int PRIMARY KEY IDENTITY(1000000001,1) NOT NULL,
+                                  clientid VARCHAR(255) NULL,
+                                  event_type VARCHAR(255) NULL,
+                                  event_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+  GO
+  ```
 
 
 ### 安装并配置 ODBC 驱动程序
 
-为了能够访问 Microsoft SQL Server 数据库，您需要安装并配置 ODBC 驱动程序。您可以使用 Microsoft 发布的 msodbcsql17 (msodbcsql18 的连接属性仍未进行适配) 或者 FreeTDS 作为 ODBC 驱动程序。
+为了能够访问 Microsoft SQL Server 数据库，您需要安装并配置 ODBC 驱动程序。您可以使用 Microsoft 发布的 msodbcsql18 或者 FreeTDS 作为 ODBC 驱动程序。
 
 EMQX 使用 `odbcinst.ini` 配置中的 DSN Name 来确定驱动动态库的路径，有关的详细信息请参考[连接属性](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/connection-string-keywords-and-data-source-names-dsns?view=sql-server-ver16#connection-properties)。
 
-::: tip 注意：
+::: tip 注意
 
 您可以根据自己的喜好命名 DSN Name，但建议只使用英文字母。此外 DSN Name 大小写敏感。
 
 :::
 
-#### 安装配置 msodbcsql17 作为 ODBC 驱动程序
+#### 安装配置 msodbcsql18 作为 ODBC 驱动程序
 
 <!-- TODO: update tag version in command and dockerfile -->
 
-如需安装配置 msodbcsql17 作为 ODBC 驱动程序，您需要参考微软的安装指导：
+如需安装配置 msodbcsql18 作为 ODBC 驱动程序，您需要参考微软的安装指导：
 
 - [安装 Microsoft ODBC Driver for SQL Server (Linux)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-ver16&tabs=alpine18-install%2Calpine17-install%2Cdebian8-install%2Credhat7-13-install%2Crhel7-offline)
 - [安装 Microsoft ODBC Driver for SQL Server (macOS)](https://learn.microsoft.com/zh-cn/sql/connect/odbc/linux-mac/install-microsoft-odbc-driver-sql-server-macos?view=sql-server-ver16)
 
-受限于 [Microsoft EULA 条款](https://www.microsoft.com/en-us/Useterms/Retail/SQLServerStandard/2019/Useterms_Retail_SQLServerStandard_2019_ChineseSimplified.htm)，EMQX 提供的 Docker 镜像不带有 msodbcsql17 驱动程序，如需在 Docker 或 Kubernetes 中使用该驱动程序，您需要基于 [EMQX-Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) 提供的镜像构建带有 ODBC 驱动程序的新镜像以便在连接 Microsoft SQL Server 数据库时使用 msodbcsql17 驱动程序。使用构建的新镜像，代表您同意 Microsoft SQL Server EULA。
+受限于 [Microsoft EULA 条款](https://go.microsoft.com/fwlink/?linkid=857698)，EMQX 提供的 Docker 镜像不带有 msodbcsql18 驱动程序，如需在 Docker 或 Kubernetes 中使用该驱动程序，您需要基于 [EMQX Enterprise](https://hub.docker.com/r/emqx/emqx-enterprise) 提供的镜像构建带有 ODBC 驱动程序的新镜像以便在连接 Microsoft SQL Server 数据库时使用 msodbcsql18 驱动程序。使用构建的新镜像，代表您同意 [Microsoft SQL Server EULA 条款](https://go.microsoft.com/fwlink/?linkid=857698)。
 
-1. 在 EMQX 的仓库中找到对应的 [Dockerfile](https://github.com/emqx/emqx/blob/master/deploy/docker/Dockerfile.msodbc)。您可以将该文件保存至本地。
+按照以下说明构建新镜像：
 
-   下面的示例中 Dockerfile 中的镜像版本为 `emqx/emqx-enterprise:5.0.3-alpha.2`，对于 EMQX-Enterprise 5.0.3 以后的版本，可以根据您需要的 EMQX-Enterprise 版本构建镜像，也可以使用 EMQX-Enterprise 最新版本镜像 `emqx/emqx-enterprise:latest` 进行构建。
+1. 使用以下 Dockerfile 来构建新镜像。
+
+   本示例中的基础镜像版本为 `emqx/emqx-enterprise:5.8.1`。您可以根据所需的 EMQX Enterprise 版本来构建镜像，或者使用最新版本的镜像 `emqx/emqx-enterprise:latest`。
 
    ```dockerfile
-   # FROM emqx/emqx-enterprise:latest
-   FROM emqx/emqx-enterprise:5.0.3-alpha.2
-
+   FROM emqx/emqx-enterprise:5.8.1
+   
    USER root
-
-   RUN apt-get update \
-       && apt-get install -y gnupg2 curl apt-utils \
-       && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-       && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-       && apt-get update \
-       && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev \
-       && sed -i 's/ODBC Driver 17 for SQL Server/ms-sql/g' /etc/odbcinst.ini \
-       && apt-get clean \
-       && rm -rf /var/lib/apt/lists/*
-
+   
+   RUN apt-get -qq update && apt-get install -yqq curl gpg && \
+       . /etc/os-release && \
+       curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg && \
+       curl -fsSL "https://packages.microsoft.com/config/${ID}/${VERSION_ID}/prod.list" > /etc/apt/sources.list.d/mssql-release.list && \
+       apt-get -qq update && \
+       ACCEPT_EULA=Y apt-get install -yqq msodbcsql18 unixodbc-dev && \
+       sed -i 's/ODBC Driver 18 for SQL Server/ms-sql/g' /etc/odbcinst.ini && \
+       apt-get clean && \
+       rm -rf /var/lib/apt/lists/*
+   
    USER emqx
    ```
 
-2. 使用命令 `docker build -f=Dockerfile.msodbc -t emqx-enterprise-with-msodbc:5.0.3-alpha.2 .` 构建镜像。
-
+2. 使用命令 `docker build -t emqx/emqx-enterprise:5.8.1-msodbc ` 构建镜像。
 3. 构建完成后可以使用 `docker image ls` 来获取本地的 image 列表，您也可以将镜像上传或保存备用。
 
-::: tip 注意：
+::: tip 注意
 
-使用上文给出的示例安装 msodbcsql17 驱动后，请确认 `odbcinst.ini` 中的 DSN Name 为 `ms-sql` 。您也可以根据需要修改 DSN Name。
+使用上文给出的示例安装 msodbcsql18 驱动后，请确认 `odbcinst.ini` 中的 DSN Name 为 `ms-sql` 。您也可以根据需要修改 DSN Name。
 
 :::
 
@@ -237,7 +222,7 @@ FileUsage   = 1
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_sqlserver`。
    - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口
-   - **数据库名字**： `mqtt`
+   - **数据库名字**： `master`
    - **用户名**： `sa`
    - **密码**： `mqtt_public1`
    - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
@@ -248,7 +233,7 @@ FileUsage   = 1
 
 ## 创建消息存储 Sink 规则
 
-本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_msg` 中。
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Microsoft SQL Server 的数据表 `dbo.t_mqtt_msg` 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -270,6 +255,18 @@ FileUsage   = 1
 
    :::
 
+   如果在模板中使用未定义的占位符变量，您可以切换**未定义变量作为 NULL** 开关（位于 **SQL 模板** 上方）来定义规则引擎的行为：
+   
+   - **关闭**（默认）：规则引擎可以将字符串 `undefined` 插入数据库。
+   
+   - **启用**：允许规则引擎在变量未定义时将 `NULL` 插入数据库。
+   
+     ::: tip
+   
+     如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
+   
+     :::
+   
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 Microsoft SQL Server。
 
 5. 在**动作类型**下拉框中选择 `Microsoft SQL Server`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Microsoft SQL Server Sink。此示例将创建一个全新的 Sink 并添加到规则中。
@@ -298,7 +295,7 @@ FileUsage   = 1
 
 ## 创建事件记录 Sink 规则
 
-本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Microsoft SQL Server 的数据表 `mqtt.dbo.t_mqtt_events` 中。
+本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Microsoft SQL Server 的数据表 `dbo.t_mqtt_events` 中。
 
 注意：除规则 SQL 和 Sink 的 SQL 模板设置不同外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
 
@@ -329,10 +326,10 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello SQL Server" }'
 
 查看 Microsoft SQL Server Sink 运行统计。
 
-- 用于消息存储的 Sink ，命中、发送成功次数均 +1。查看数据是否已经写入 `mqtt.dbo.t_mqtt_msg` 表中：
+- 用于消息存储的 Sink ，命中、发送成功次数均 +1。查看数据是否已经写入 `t_mqtt_msg` 表中：
 
 ```bash
-1> SELECT * from mqtt.dbo.t_mqtt_msg
+1> SELECT * from dbo.t_mqtt_msg
 2> GO
 id          msgid                                                            topic                                                                                                qos payload                                                                                              arrived
 ----------- ---------------------------------------------------------------- ---------------------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------------------------------------- -----------------------
@@ -342,10 +339,10 @@ id          msgid                                                            top
 1>
 ```
 
-- 用于存储上下线事件的 Microsoft SQL Server Sink ，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入 `mqtt.dbo.t_mqtt_events` 表中：
+- 用于存储上下线事件的 Microsoft SQL Server Sink ，命中、发送次数均 +2，即一次上线和一次下线。查看设备状态是否已经写入 `t_mqtt_events` 表中：
 
 ```bash
-1> SELECT * from mqtt.dbo.t_mqtt_events
+1> SELECT * from dbo.t_mqtt_events
 2> GO
 id          clientid                                                         event_type                                                                                                                                                                                                    event_time
 ----------- ---------------------------------------------------------------- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -----------------------

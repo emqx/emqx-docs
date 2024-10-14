@@ -2,7 +2,7 @@
 
 ::: tip Note
 
-The Topic Metrics feature is only available in EMQX Enterprise.
+The Topic Metrics feature is only available in the EMQX Enterprise edition.
 
 :::
 

@@ -55,7 +55,7 @@ This section covers the preparations required before creating a Datalayers Sink 
 
    ```bash
    # Start a Datalayers container
-   docker run --name datalayers -p 8361:8361 datalayers/datalayers:nightly
+   docker run -d --name datalayers -p 8360:8360 -p 8361:8361 datalayers/datalayers:latest
    ```
 
 2. After the Datalayers service starts, use the default username and password `admin`/`public` to enter the Datalayers CLI. You can create a database in the Datalayers CLI by following these steps:

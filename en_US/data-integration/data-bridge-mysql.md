@@ -164,6 +164,18 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
    )
    ```
 
+   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+
+   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
+
+   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+
+     ::: tip
+
+     If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
+
+     :::
+
 9. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
 
 10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**

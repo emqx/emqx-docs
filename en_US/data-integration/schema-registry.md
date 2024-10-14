@@ -11,7 +11,7 @@ Because of the variety of IoT device terminals and the different coding formats 
 The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in
 various scenarios.
 
-EMQX Schema Registry currently supports codecs in below formats:
+EMQX Schema Registry currently supports codecs in the below formats:
 
 - [Avro](https://avro.apache.org)
 - [Protobuf](https://developers.google.com/protocol-buffers/)
@@ -19,7 +19,7 @@ EMQX Schema Registry currently supports codecs in below formats:
 
 Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
 
-JSON schema can be used to validate if input JSON object is following the schema definetions or if the JSON object output from the rule engine is valid before producing the data to downstream.
+JSON schema can be used to validate if the input JSON object is following the schema definitions or if the JSON object output from the rule engine is valid before producing the data to downstream.
 
 The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
@@ -104,4 +104,135 @@ The SQL statement above will match an MQTT message with the content of the paylo
 ```
 
 **Note:** The `AS` clause is required to assign the decoded data to a key so that subsequent operations can be performed on it later.
+
+
+## External Schema Registry
+
+Starting with version 5.8.1, EMQX supports configuring an external Confluent Schema Registry (CSR). This feature allows users to dynamically retrieve schemas from external registries during rule processing, enabling efficient message encoding and decoding.
+
+### Create External Schema Registry in Dashboard
+
+You can configure an external schema registry directly through the EMQX Dashboard, making it easy to manage your schema integration.
+
+Go to **Integration** -> **Schema** on EMQX Dashboard. Select the **External** tab on the Schema page.
+
+Click the **Create** button at the upper right corner. Configure the following fields:
+
+- **Name**: Enter an external schema registry name that will be used in the encoding and decoding functions.
+- **Type**: Select the type of external schema registry. Currently, only `Confluent` is supported.
+- **URL**: Enter the endpoint of your Confluent Schema Registry.
+- **Authentication**: If you select `Basic auth`, enter the authentication credentials (username and password) for accessing the external registry.
+
+Click **Create** after you complete the settings.
+
+### Configure External Schema Registry via Configuration File
+
+You can configure an external Confluent Schema Registry via the EMQX configuration file. Here’s an example of how to set it up:
+
+
+```hcl
+schema_registry {
+  external {
+    my_external_registry {
+      type = confluent
+      url = "https://confluent.registry.url:8081"
+      auth {
+        username = "myuser"
+        password = "secret"
+      }
+    }
+  }
+}
+```
+
+In this example:
+
+- `my_external_registry` is the name assigned to the external schema registry.
+- `type = confluent` specifies the type of external registry.
+- `url` is the endpoint of your Confluent Schema Registry.
+- `auth` contains the authentication credentials (username and password) for accessing the external registry.
+
+### Use External Schema Registry in Rule Engine
+
+Once an external registry is configured, you can use several functions in the EMQX rule engine to encode and decode payloads using the schemas stored in the external registry.
+
+The following functions utilize a configured external CSR:
+
+```sql
+avro_encode('my_external_registry', payload, my_schema_id)
+avro_decode('my_external_registry', payload, my_schema_id)
+schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, 'my_subject')
+schema_decode_tagged('my_external_registry', payload)
+```
+
+In all function usage examples below, the following example values and variable names are used:
+
+- `my_external_registry` is the name you assigned to the external registry in EMQX.
+- `my_schema_id` is the schema ID registered in the CSR (always an integer in CSR).
+- `my_local_avro_schema` is the name of a locally configured Avro schema in EMQX.
+- `my_subject` is the subject name defined in the CSR.
+
+#### Function Usage Examples
+
+##### `avro_encode`
+
+`avro_encode` encodes a payload using the schema ID from the external registry. The schema is retrieved dynamically at runtime and cached for subsequent runs. In Confluent Schema Registry, schema IDs are integers.
+
+::: tip Note
+
+When encoding, the payload must be in the internal data format of the rule engine, which is a decoded map. This is why `json_decode` is used in the example.
+
+:::
+
+Example:
+
+```sql
+select
+  -- 123 is the schema ID that is registered in CSR
+  avro_encode('my_external_registry', json_decode(payload), 123) as encoded
+from 't'
+```
+
+##### `avro_decode`
+
+This function decodes an Avro payload based on the specified schema ID from the external registry. The schema is dynamically fetched during runtime and cached for subsequent operations.
+
+Example:
+
+```sql
+select
+  -- 123 is the schema ID that is registered in CSR
+  avro_decode('my_external_registry', payload, 123) as decoded
+from 't'
+```
+
+##### `schema_encode_and_tag` 
+
+This function uses a locally registered Avro schema, an external CSR schema name, and a subject to encode a payload (already in internal map format), and to tag the resulting payload with a schema ID.  The schema ID comes from registering the local schema to CSR.
+
+Example:
+
+```sql
+select
+  schema_encode_and_tag(
+    'my_local_avro_schema',
+    'my_external_registry',
+    json_decode(payload),
+    'my_subject'
+  ) as encoded
+from 't'
+```
+
+##### `schema_decode_tagged` 
+
+This function uses a CSR name to decode a payload, assuming it is tagged with the schema ID retrieved from CSR.
+
+```sql
+select
+  schema_decode_tagged(
+    'my_external_registry',
+    payload
+  ) as decoded
+from 't'
+```
 

@@ -10,6 +10,12 @@ The Diagnose module provides some debugging tools to help users debug and locate
 
 ## Alarms
 
+::: tip Note
+
+The Alarms feature is only available in the EMQX Enterprise edition.
+
+:::
+
 Click on Alerts under the Diagnose menu on the left to go to the Alerts page. The alarms page allows you to view the server's current alarms and historical alarms (inactivated alarms). The alarm information includes the alarm name, the content of the alarm message, the node that triggered the alarm, the alarm level, the activation time of the alarm, and the duration of the alarm.
 
 On the current alarms page, you can click on the `Refresh` button in the top right corner to refresh the list and see if any new alarms have occurred. If the default value of the current alarm trigger threshold or alarm monitoring interval does not meet your actual needs, you can click the `Settings` button in the top right corner to jump to the [Monitoring](./configuration.md#monitoring) page for settings. On the Alarm History page, you can clear the alarm history by clicking on the `Clear History Alarms` button in the top right corner.
@@ -26,6 +32,12 @@ Click on **WebSocket Client** under the **Diagnose** menu on the left to go to t
 
 ## Topic Metrics
 
+::: tip Note
+
+The Topic Metrics feature is only available in the EMQX Enterprise edition.
+
+:::
+
 Click on **Topic Monitoring** under the **Diagnose** menu on the left to go to the Topic Metrics page. In Topic Monitoring, you can click the `Create` button in the top right corner of the page, enter the topic you want to monitor and click `Add` to create a new topic metric statistic. Once created successfully, you can view the number and rate of message incoming, outgoing and dropped for that topic by topic, as well as view the data for each QoS for the above metrics in the details. Click on the `Reset` button to reset the existing statistics for a topic. The monitoring list can be displayed by clicking on a statistical indicator in the header of the table to sort it in order or in reverse order, as required.
 
 <img src="./assets/topic-metrics.png" alt="image" style="zoom:67%;" />
@@ -33,6 +45,12 @@ Click on **Topic Monitoring** under the **Diagnose** menu on the left to go to t
 > For overall performance reasons, only topic names are currently supported for topic statistics, i.e. topic filters with + or # wildcards, e.g. a/+ etc. are not supported.
 
 ## Slow Subscriptions
+
+::: tip Note
+
+The Slow Subscriptions feature is only available in the EMQX Enterprise edition.
+
+:::
 
 Click on **Slow Subscriptions** under the **Diagnose** menu on the left to go to the Slow Subscriptions page. To use slow subscription statistics, you need to enable this feature after setting up the base settings for slow subscriptions. A description of the individual configuration items can be found in [slow subscriptions](../observability/slow-subscribers-statistics.md#configure-and-enable-slow-subscriptions). When enabled, messages whose time consumption for the full flow of message delivery exceeds the configured `time delay threshold` will participate in the statistics. By default, the statistics list shows the subscriber and subject information in descending order of latency. Clicking on the `Client ID` will redirect you to the subscriber's connection details page, where you can view the connection information to investigate the cause of the slow subscription.
 
