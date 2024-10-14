@@ -194,7 +194,7 @@ This section demonstrates how to create a rule for forwarding data from a remote
 
      :::
 
-     Here you can enter `$queue/f/#`, indicating a subscription to all messages matching the `f/#` topic.
+     Here you can enter `$share/1/f/#`, indicating a subscription to all messages matching the `f/#` topic.
 
    - **QoS**: The subscription QoS, select `0` or `1` from the dropdown.
 
