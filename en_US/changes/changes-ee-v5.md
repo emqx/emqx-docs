@@ -165,7 +165,7 @@
   imposed by load balancers or firewalls, which typically range from 3 to 5 minutes depending on the cloud provider.
 
 
-- [#13832](https://github.com/emqx/emqx/pull/13832) Fixed that the `Publish` endpoint would have a 500 error when persistent session were enabled.
+- [#13832](https://github.com/emqx/emqx/pull/13832) Fixed 500 error when using `/publish` REST API endpoint with persistent sessions enabled.
 
 
 - [#13842](https://github.com/emqx/emqx/pull/13842) Fixed a UTF-8 string validation exception.
@@ -206,8 +206,8 @@
 
 - [#13896](https://github.com/emqx/emqx/pull/13896) Upgraded pulsar client from `0.8.3` to `0.8.4` (see [pulsar#61](https://github.com/emqx/pulsar-client-erl/pull/61).
 
-  Piror this fix, if the producer client experiences a 'socket error' (but not a normal 'socket close'), it may continue sending data to a clsoed socket without any error handling.
-  From EMQX Dashboard, user may observe that the 'totoal' counter keep increasing, but not the other counters: 'success', 'failed' and 'dropped'.
+  Prior to this fix, if the producer client experiences a 'socket error' (but not a normal 'socket close'), it may continue sending data to a closed socket without any error handling.
+  From the EMQX Dashboard, user may observe that the 'total' counter keeps increasing, but the other counters 'success', 'failed' and 'dropped' are not.
 
 - [#13897](https://github.com/emqx/emqx/pull/13897) Microsoft SQL Server connector is now compatible with Microsoft ODBC 18.
 
