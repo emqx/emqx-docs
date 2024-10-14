@@ -2,7 +2,7 @@
 
 This page provides guidelines for configuring and managing the Cluster Linking feature through the EMQX Dashboard, configuration file, and REST API.
 
-## Configure Cluster Linking via Dashboard
+## Configure and Manage Cluster Linking via Dashboard
 
 Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from the left menu. On the **Cluster Linking** page, click **Create** at the upper right corner to start creating cluster linking.
 
@@ -12,16 +12,18 @@ On the pop-up dialog, fill in the following fields:
 
 - **Cluster Name**: Enter the name of the remote cluster.
 - **Server Address**: Provide the MQTT listener endpoint of the remote cluster.
-- **Client ID Prefix**: Specify a prefix for ClientIDs used by MQTT connections to the remote cluster.
+- **Client ID Prefix**: Define a prefix for ClientIDs used by MQTT connections to the remote cluster. For more information, see [Configure MQTT Connections](#configure-mqtt-connections).
 - **Username**: Username for authentication to the remote cluster, if required.
 - **Password**: Password for authentication to the remote cluster, if required.
-- **Topics**: List of MQTT topic filters that specify which messages the local cluster will receive from the remote cluster.
+- **Topics**: List of MQTT topic filters that specify which messages the local cluster will receive from the remote cluster. For more information, see [Configure Topics](#configure-topics).
 - **Enable TLS**: Enable this option if communication between clusters requires TLS encryption. Configure the settings such as SSL certificates.
 - **Advanced Settings**: Configure additional settings such as MQTT protocol parameters.
 
 Click **Create** after you complete the setting. 
 
-You can see an entry for the link to the remote cluster is created. From the **Actions** column, you can delete the linking or edit the settings.
+On the Cluster Linking page, the new entry will appear and be enabled by default. The cluster linking list displays the details, such as cluster name, server address, topics, and enable status. You can modify the settings or delete an entry by clicking the **Settings** or **Delete** buttons in the **Actions** column.
+
+Clicking the cluster name takes you to the **Overview** tab, where you can monitor message transmission statistics and the execution status of the cluster linking.  To permanently remove the cluster linking entry, click the delete icon at the upper right corner of the page. Alternatively, you can temporarily disable the cluster linking by toggling the switch, which will retain your configuration for future use.
 
 ## Configure Cluster Linking via Configuration File
 
@@ -146,3 +148,13 @@ In addition to configuration tasks, the API provides endpoints for monitoring th
     "node_metrics": [{}]
   }
   ```
+
+**Reset Metrics for a Given Cluster Link**
+
+- **Endpoint**: `PUT /cluster/links/link/:name/metrics/reset`
+
+- **Description**: Allows you to reset all the accumulated metrics for a specific cluster link. Once reset, the performance statistics tracked for the link will be cleared and start fresh. This is useful for monitoring performance after configuration changes or for troubleshooting purposes.
+
+- **Response sample**: The endpoint returns `204` without content.
+
+  

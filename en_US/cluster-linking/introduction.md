@@ -2,7 +2,7 @@
 
 ::: tip
 
-Cluster Linking is EMQX Enterprise feature.
+The Cluster Linking feature is only available in the EMQX Enterprise edition.
 
 :::
 
