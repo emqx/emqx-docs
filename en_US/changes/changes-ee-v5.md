@@ -153,7 +153,7 @@
 
 - [#13733](https://github.com/emqx/emqx/pull/13733) Made `cacertfile` optional when configuring https listener from `emqx ctl conf load` command.
 
-- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed when subscribing with `+` as the first level, or `#` as a wildcard, retained messages with topics starting with `$` are incorrectly received.
+- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for topic starting with `$` when it subscribed to topic `#` or `+`.
 
 - [#13754](https://github.com/emqx/emqx/pull/13754) Fixed an issue when websocket connection would break consistently on its own.
 
