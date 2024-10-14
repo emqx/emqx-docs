@@ -23,11 +23,6 @@
 
 - [#13863](https://github.com/emqx/emqx/pull/13863) EMQX now supports `${cert_common_name}` placeholder in topic name templates for raw ACL rules.
 
-- [#13810](https://github.com/emqx/emqx/pull/13810) Added client-info authentication.
-
-  Client-info (of type `cinfo`) authentication is a lightweight authentication mechanism that checks client properties and attributes against user-defined rules.
-  The rules make use of the Variform expression to define match conditions, and the authentication result when match is found. For example, to quickly fence off clients without a username, the match condition can be `str_eq(username, '')` associated with a check result `deny`.
-
 - [#13792](https://github.com/emqx/emqx/pull/13792) The banned clients API `GET /banned` supports querying using filters in the query string.
 
   The available filters are:
@@ -51,8 +46,6 @@
 
   After this enhancement, disabled action will result in a `debug` level log with `msg: discarded`,
   and the newly introduced counter `actions.discarded` will be incremented.
-
-- [#13804](https://github.com/emqx/emqx/pull/13804) Added support for using Confluent Schema Registry as an external provider in our Schema Registry.
 
 #### MQTT over QUIC
 
@@ -85,8 +78,6 @@
   - `emqx_ds_poll_requests_dropped`
   - `emqx_ds_poll_requests_expired`
   - `emqx_ds_poll_request_sharing`
-
-- [#13788](https://github.com/emqx/emqx/pull/13788) Prevent DS Shared Subscriptions application from running full-fledged startup sequence if respective features are disabled. This includes preventing the initialization of the internal database that could have been created and occupied a lot of disk space otherwise.
 
 ### Bug Fixes
 
@@ -121,23 +112,6 @@
 
 
 - [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
-
-#### Authentication
-
-
-- [#13726](https://github.com/emqx/emqx/pull/13726) Upgraded Kerberos authentication library to use MEMORY type cache instead of FILE type which sometimes fails when authentication requests are initialized concurrently.
-
-#### Rule Engine
-
-
-- [#13735](https://github.com/emqx/emqx/pull/13735) Improved message transformation error messages when payload to be decoded is invalid.
-- [#13769](https://github.com/emqx/emqx/pull/13769) Fixed an issue where using JSON schema validation (draft 3) with the `extends` property would lead to validation always failing.
-
-#### Management and Operation
-
-- [#13963](https://github.com/emqx/emqx/pull/13963) Fixed the following issues with the Audit Log feature:
-  - The Audit Log feature was incompatible with the Single Sign-On (SSO) feature, causing exceptions for each SSO event.
-  - Illegal access attempts (e.g., `GET` requests to `POST`-only endpoints) were not being logged.
 
 ## 5.8.0
 
