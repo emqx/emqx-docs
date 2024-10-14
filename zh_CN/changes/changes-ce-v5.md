@@ -22,10 +22,6 @@
 
 - [#13863](https://github.com/emqx/emqx/pull/13863) EMQX 现在支持在原始 ACL 规则的主题名称模板中使用 `${cert_common_name}` 占位符。
 
-- [#13810](https://github.com/emqx/emqx/pull/13810) 新增了 client-info 认证。
-
-  Client-info（类型为 `cinfo`）认证是一种轻量级的认证机制，它通过检查客户端属性和自定义规则来进行认证。这些规则使用 Variform 表达式定义匹配条件以及匹配后的认证结果。例如，为了快速屏蔽没有用户名的客户端，可以设置匹配条件为 `str_eq(username, '')`，并关联检查结果 `deny`。
-
 - [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
 
   - clientid
@@ -45,8 +41,6 @@
   之前，如果某个动作被停用，会出现带有 `msg: out_of_service` 的警告日志，并且该规则的 `actions.failed` 计数器会增加。
 
   经过此次优化后，停用的动作将记录 `debug` 级别日志，日志内容为 `msg: discarded`，并且新增的 `actions.discarded` 计数器将增加。
-
-- [#13804](https://github.com/emqx/emqx/pull/13804) 支持使用 Confluent Schema Registry 作为外部 Schema 提供者与 EMQX 的 Schema Registry 集成。
 
 #### MQTT over QUIC
 
@@ -80,8 +74,6 @@
   - `emqx_ds_poll_requests_expired`
   - `emqx_ds_poll_request_sharing`
 
-- [#13788](https://github.com/emqx/emqx/pull/13788) 当相应功能被禁用时，防止 DS 共享订阅应用程序执行完整的启动流程。这也避免了初始化内部数据库，进而防止占用大量磁盘空间。
-
 ### 修复
 
 #### 核心 MQTT 功能
@@ -111,21 +103,6 @@
 #### 升级与迁移
 
 - [#13731](https://github.com/emqx/emqx/pull/13731) 解决了运行在 EMQX 5.4.0 的集群无法升级到 EMQX 5.8.0 的问题。此修复引入了一个迁移过程，将 5.4.0 版本中创建的特定内部数据库表更新为符合新架构。
-
-#### 认证
-
-- [#13726](https://github.com/emqx/emqx/pull/13726) 升级了 Kerberos 认证库，改为使用 MEMORY 类型缓存，替代之前的 FILE 类型缓存，解决了在并发初始化认证请求时可能导致的失败问题。
-
-#### 规则引擎
-
-- [#13735](https://github.com/emqx/emqx/pull/13735) 改进了在解码无效 payload 时的消息转换错误提示。
-- [#13769](https://github.com/emqx/emqx/pull/13769) 修复了使用带有 `extends` 属性的 JSON Schema 验证（draft 3）时，总是导致验证失败的问题。
-
-#### 管理和运维
-
-- [#13963](https://github.com/emqx/emqx/pull/13963) 修复了审计日志功能中的以下问题：
-  - 审计日志功能与单点登录（SSO）功能不兼容，导致每个 SSO 事件都会引发异常。
-  - 非法访问尝试（例如，对仅支持 `POST` 的端点发起 `GET` 请求）未被记录。
 
 ## 5.8.0
 

@@ -142,7 +142,7 @@
 
 - [#13733](https://github.com/emqx/emqx/pull/13733) 在使用 `emqx ctl conf load` 命令配置 https 监听器时，允许 `cacertfile` 参数为可选项。
 
-- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
+- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了客户端在订阅主题 `#` 或 `+` 时，会收到以 `$` 开头的主题的保留消息的问题。
 
 - [#13754](https://github.com/emqx/emqx/pull/13754) 修复了 websocket 连接会自行持续中断的问题。
 

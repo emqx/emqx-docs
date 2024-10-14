@@ -2,19 +2,9 @@
 
 ## e5.8.1
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) The `GET /banned` endpoint supports querying using filters in the query string.
-  The available filters are:
-  - clientid
-  - username
-  - peerhost
-  - like_clientid
-  - like_username
-  - like_peerhost
-  - like_peerhost_net
+- [#13792](https://github.com/emqx/emqx/pull/13792) The default expiration time for a banned item that is created without an `until` value is now `infinity` up from 1 year.
   
-  The default expiration time for a banned item that is created without an `until` value is now `infinity` up from 1 year.
-
-- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for topic starting with `$` when it subscribed to topic `#` or `+`.
+- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for a topic starting with `$` when it subscribed to topic `#` or `+`.
 
   This fix satisfies the requirement of [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246).
 

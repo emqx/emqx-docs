@@ -1,5 +1,11 @@
 # Audit Log
 
+::: tip
+
+The Audit Log feature is only available in the EMQX Enterprise edition.
+
+:::
+
 The Audit Log feature allows you to track important operation changes in your EMQX cluster in real-time. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security auditing during their operations.
 
 EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. 

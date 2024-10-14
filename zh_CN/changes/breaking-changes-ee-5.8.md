@@ -2,19 +2,9 @@
 
 ## e5.8.1
 
-- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数进行条件查找：
+- [#13792](https://github.com/emqx/emqx/pull/13792) 在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
 
-  - clientid
-  - username
-  - peerhost
-  - like_clientid
-  - like_username
-  - like_peerhost
-  - like_peerhost_net
-
-  在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
-
-- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
+- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了客户端在订阅主题 `#` 或 `+` 时，会收到以 `$` 开头的主题的保留消息的问题。
 
   该修复满足了 [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246) 的要求。
 
