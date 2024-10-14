@@ -58,7 +58,7 @@ schema_check(SchemaName, Map | Bytes) -> Boolean
 
 ## 编解码 + 规则引擎
 
-EMQX 的消息处理层面可分为消息路由(Messaging)、规则引擎(Rule Engine)、数据格式转换(Data Conversion) 三个部分。
+EMQX 的消息处理层面可分为消息路由 (Messaging)、规则引擎 (Rule Engine)、数据格式转换 (Data Conversion) 三个部分。
 
 EMQX 的 PUB/SUB 系统将消息路由到指定的主题。规则引擎可以灵活地配置数据的业务规则，按规则匹配消息，然后指定相应动作。数据格式转换发生在规则匹配的过程之前，先将数据转换为可参与规则匹配的 Map 格式，然后进行匹配。
 
@@ -100,3 +100,132 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
 **注意:** `AS` 子句是必须的，将解码之后的数据赋值给某个Key，后面才能对其进行后续操作。
+
+## 外部 Schema Registry
+
+从 EMQX 版本 5.8.1 开始，支持在 EMQX 中配置外部 Confluent Schema Registry (CSR)。该功能允许用户在规则处理时动态获取外部 Schema Registry 中的 Schema，从而实现高效的消息编码和解码。
+
+### 在 Dashboard 中创建外部 Schema Registry
+
+您可以直接通过 EMQX Dashboard 配置外部 Schema Registry，方便地管理 Schema 集成。
+
+进入 EMQX Dashboard 的 **集成** -> **Schema** 页面。在 Schema 页面中选择 **外部 Schema** 选项卡。
+
+点击右上角的**创建**按钮，并配置以下字段：
+
+- **名称**：输入外部 Schema Registry 的名称，该名称将在编码和解码函数中使用。
+- **类型**：选择外部 Schema Registry 的类型。目前仅支持 `Confluent`。
+- **URL**：输入您的 Confluent Schema Registry 的端点地址。
+- **认证**：如果选择 `基础认证`，请输入访问外部 Schema Registry 所需的认证信息（用户名和密码）。
+
+完成设置后，点击**创建**按钮。
+
+### 通过配置文件配置外部 Schema Registry
+
+您也可以通过 EMQX 配置文件配置外部 Confluent Schema Registry。以下是配置示例：
+
+```hcl
+schema_registry {
+  external {
+    my_external_registry {
+      type = confluent
+      url = "https://confluent.registry.url:8081"
+      auth {
+        username = "myuser"
+        password = "secret"
+      }
+    }
+  }
+}
+```
+
+在此示例中：
+
+- `my_external_registry` 是分配给外部 Schema Registry 的名称。
+- `type = confluent` 指定外部 Schema Registry 的类型。
+- `url` 是 Confluent Schema Registry 的端点地址。
+- `auth` 包含访问外部 Schema Registry 所需的认证信息（用户名和密码）。
+
+### 在规则引擎中使用外部 Schema Registry
+
+配置外部 Schema Registry 后，您可以在 EMQX 规则引擎中使用多个函数，利用外部 Schema Registry 中存储的 Schema 对 payload 进行编码和解码。
+
+配置的外部 CSR 可以在以下函数中使用：
+
+```sql
+avro_encode('my_external_registry', payload, my_schema_id)
+avro_decode('my_external_registry', payload, my_schema_id)
+schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, 'my_subject')
+schema_decode_tagged('my_external_registry', payload)
+```
+
+在下面所有函数使用示例中，使用了以下示例值和变量名：
+
+- `my_external_registry` 是您在 EMQX 中为外部 Schema Registry 指定的名称。
+- `my_schema_id` 是注册在 CSR 中的 Schema ID（在 CSR 中始终是整数）。
+- `my_local_avro_schema` 是在 EMQX 中配置的本地 Avro Schema 名称。
+- `my_subject` 是在 CSR 中定义的主题名称。
+
+#### 函数使用示例
+
+##### `avro_encode`
+
+`avro_encode` 使用外部 Schema Registry 中的 Schema ID 对 payload 进行编码。Schema 会在运行时动态获取，并缓存以供后续使用。在 Confluent Schema Registry 中，Schema ID 是整数。
+
+::: tip 提示
+
+编码时，payload 必须是规则引擎的内部数据格式，即已解码的 Map。因此在示例中使用了 `json_decode`。
+
+:::
+
+示例：
+
+```sql
+select
+  -- 123 是在 CSR 中注册的 Schema ID
+  avro_encode('my_external_registry', json_decode(payload), 123) as encoded
+from 't'
+```
+
+##### `avro_decode`
+
+该函数根据外部 Schema Registry 中的 Schema ID 对 Avro payload 进行解码。Schema 会在运行时动态获取，并缓存以供后续操作。
+
+示例：
+
+```sql
+select
+  -- 123 是在 CSR 中注册的 Schema ID
+  avro_decode('my_external_registry', payload, 123) as decoded
+from 't'
+```
+
+##### `schema_encode_and_tag`
+
+此函数使用本地注册的 Avro Schema、外部 CSR 的 Schema 名称和主题对 payload 进行编码，并将编码后的 payload（已为内部 Map 格式）标记为带有 Schema ID。Schema ID 是通过将本地 Schema 注册到 CSR 获得的。
+
+示例：
+
+```sql
+select
+  schema_encode_and_tag(
+    'my_local_avro_schema',
+    'my_external_registry',
+    json_decode(payload),
+    'my_subject'
+  ) as encoded
+from 't'
+```
+
+##### `schema_decode_tagged`
+
+此函数使用 CSR 名称对 payload 进行解码，假设该 payload 带有从 CSR 获取的 Schema ID。
+
+```sql
+select
+  schema_decode_tagged(
+    'my_external_registry',
+    payload
+  ) as decoded
+from 't'
+```
