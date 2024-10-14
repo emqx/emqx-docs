@@ -44,11 +44,13 @@ Next, you can click the **Add Action** button on the right side of the **Create 
 
 On the **Create Rule** page, click the **Add Action** button on the right side to bring up the **Add Action** page. You can select either of the three types of actions from the **Action** drop-down list: Republish, Console Output, and Forwarding with Data Bridge.
 
+<img src="./assets/add_action.png" alt="add_action" style="zoom:67%;" />
+
 ### Add Republish Action
 
 This section demonstrates how to add an action to republish the original messages received from the topic `t/#` to another topic `a/1`. 
 
-Select **Republish** from the drop-down menu under **Action**, and configure the following settings before clicking the **Add** button to confirm:
+On the **Add Action** page, select **Republish** from the **Type of Action** drop-down menu, and configure the following settings before clicking the **Add** button to confirm:
 
 - **Topic**: Set the target topic, "a/1" in this example;
 
@@ -63,16 +65,12 @@ Select **Republish** from the drop-down menu under **Action**, and configure the
   <!-- - **User Properties**: You can add custom key-value pairs to configure the [user properties](https://www.emqx.com/en/blog/mqtt5-user-properties) of the republished message, which represent custom message metadata. -->
 
   - **Payload Format Indicator**: Enter a value to indicate whether the payload of the message is in a specific format. When the value is set to `false`, the message is considered as undetermined bytes. When set to `true`, it indicates that the payload within the message body is UTF-8 encoded character data. This will help MQTT clients or MQTT servers parse message content more efficiently without the need for explicit formatting or type identification for the message body.
-
   - **Message Expiry Interval**: Enter a value (in seconds) to specify a time interval after which the message should expire and be considered invalid if it hasn't been delivered to the intended recipient.
   - **Content Type**: Enter a value to specify the type or format of the payload content within the republished message (MIME type), for example, `text/plain` represents a text file, `audio/aac` represents an audio file, and `application/json` signifies an application message in JSON format.
-  
   - **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
-  
   - **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
-  
 
-![action-republish](./assets/action-republish.png)
+- **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule. 
 
 On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page. 
 
@@ -91,7 +89,7 @@ The console output action is used to view the output results of the rule. The re
 - When EMQX is launched in either `console` or `foreground` mode, with `foreground` being the default mode in Docker environments, its output is directed to the console.
 - If EMQX is started via systemd, the output is captured and stored by the journal system. This can be examined using the `journalctl` command.
 
-The output will be in the format below
+The output will be in the format below:
 
 ```bash
 [rule action] rule_id1
@@ -155,7 +153,7 @@ Each entry in the list displays basic information, including the rule ID, associ
 
 You can also view rules in the [Flow Designer](../flow-designer/introduction.md) by navigating to **Integration** -> **Flow Designer**. Rules created on the **Rules** page and those created through the Flow Designer are fully interoperable.
 
-To view the execution and action statistics for a rule, click the rule ID on **Rule** page or the rule name on the **Flows** page.
+To view the rule statistics and action execution information for a rule, click the rule ID on **Rule** page or the rule name on the **Flows** page.
 
 ![view_rules_flows](./assets/view_rules_flows.png)
 
@@ -172,6 +170,10 @@ If you update the rule action or redefine the data source, the statistics listed
 The **Actions (Sink)** and **Sources** tabs on the **Rule** page display all created actions (sinks) and sources. You can view essential details, such as names, connection statuses, associated rules, and enable statuses. Clicking the number of associated rules will take you to a list of rules containing that specific action (sink) or source, making it easier to manage your data integration settings.
 
 You can reconnect or modify the settings of an action (sink) or source through the **Action** column. By clicking **More**, you can delete the action (sink) or source, or create a new rule using it.
+
+To view the statistics and rate indicators for an action, click the name of the action.
+
+![action_statistics](./assets/action_statistics.png)
 
 ### Search Rules
 
