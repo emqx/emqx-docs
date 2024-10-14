@@ -14,7 +14,7 @@
   
   The default expiration time for a banned item that is created without an `until` value is now `infinity` up from 1 year.
 
-- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed when subscribing with `+` as the first level, or `#` as a wildcard, retained messages with topics starting with `$` are incorrectly received.
+- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for topic starting with `$` when it subscribed to topic `#` or `+`.
 
   This fix satisfies the requirement of [MQTT-4.7.2-1](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901246).
 
