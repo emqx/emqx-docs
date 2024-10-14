@@ -140,6 +140,18 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
    
+   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+   
+   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
+   
+   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+   
+     ::: tip
+   
+     If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
+   
+     :::
+   
 4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to TDengine.
 
 5. Select `TDengine` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a TDengine Sink if you have created one. This demonstration will create a new Sink.
@@ -160,11 +172,6 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
-   
-   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
-   
-   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
    
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
