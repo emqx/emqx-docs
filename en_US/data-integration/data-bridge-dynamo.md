@@ -45,68 +45,89 @@ This section describes the preparations you need to complete before you start to
 
 ### Install DynamoDB Local Server and Create Table
 
-1. Prepare a docker-compose file, `dynamo.yaml`, to set up the Dynamodb local server.
+1. Use the following command to run DynamoDB server locally:
 
-```json
-version: '3.8'
-services:
-  dynamo:
-    command: "-jar DynamoDBLocal.jar -sharedDb"
-    image: "amazon/dynamodb-local:latest"
-    container_name: dynamo
-    ports:
-      - "8000:8000"
-    environment:
-      AWS_ACCESS_KEY_ID: root 
-      AWS_SECRET_ACCESS_KEY: public
-      AWS_DEFAULT_REGION: us-west-2
-```
+   - Access Key ID: `root`
+   - Secret Access Key: `public`
+   - Region: `us-west-2`
 
-2. Start the server.
+   ```bash
+   docker run -d -p 8000:8000 --name dynamodb-local \
+     -e AWS_ACCESS_KEY_ID=root \
+     -e AWS_SECRET_ACCESS_KEY=public \
+     -e AWS_DEFAULT_REGION=us-west-2 \
+     amazon/dynamodb-local:2.4.0
+   ```
 
-```bash
-docker-compose -f dynamo.yaml up
-```
+2. Prepare a table definition file, place it in the current directory, and name it `mqtt_msg.json`. The table definition is as follows:
 
-3. Prepare a table definition and save it to your home directory as `mqtt_msg.json`.
+   - Define `device_id` as the hash key (partition key).
+   - Define `timestamp` as the range key (sort key).
+   - Define an attribute named `device_id` of type string (S).
+   - Define an attribute named `timestamp` of type number (N).
 
-```json
-{
-    "TableName": "mqtt_msg",
-    "KeySchema": [
-        { "AttributeName": "id", "KeyType": "HASH" }
-    ],
-    "AttributeDefinitions": [
-        { "AttributeName": "id", "AttributeType": "S" }
-    ],
-    "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
-    }
-}
+   ```json
+   {
+       "TableName": "mqtt_msg",
+       "AttributeDefinitions": [
+           {
+               "AttributeName": "device_id",
+               "AttributeType": "S"
+           },
+           {
+               "AttributeName": "timestamp",
+               "AttributeType": "N"
+           }
+       ],
+       "KeySchema": [
+           {
+               "AttributeName": "device_id",
+               "KeyType": "HASH"
+           },
+           {
+               "AttributeName": "timestamp",
+               "KeyType": "RANGE"
+           }
+       ],
+       "ProvisionedThroughput": {
+           "ReadCapacityUnits": 5,
+           "WriteCapacityUnits": 5
+       }
+   }
+   ```
 
-```
+3. Use Docker to run `aws-cli` command to create a new table using the file:
 
-4. Create a new table via this file.
+   ```bash
+   docker run --rm -v $PWD:/dynamo_data \
+       -e AWS_ACCESS_KEY_ID=root \
+       -e AWS_SECRET_ACCESS_KEY=public \
+       -e AWS_DEFAULT_REGION=us-west-2 \
+       amazon/aws-cli:2.15.57 dynamodb create-table \
+       --cli-input-json file:///dynamo_data/mqtt_msg.json \
+       --endpoint-url http://host.docker.internal:8000
+   ```
 
-```bash
-docker run --rm -v ${HOME}:/dynamo_data -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb create-table --cli-input-json file:///dynamo_data/mqtt_msg.json --endpoint-url http://host.docker.internal:8000
-```
+4. Use Docker to run `aws-cli` command to verify if the table creation was successful:
 
-5. Check if the table was created successfully.
+   ```bash
+   docker run --rm \
+       -e AWS_ACCESS_KEY_ID=root \
+       -e AWS_SECRET_ACCESS_KEY=public \
+       -e AWS_DEFAULT_REGION=us-west-2 \
+       amazon/aws-cli:2.15.57 dynamodb list-tables \
+       --endpoint-url http://host.docker.internal:8000
+   ```
 
-```bash
-docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb list-tables --endpoint-url http://host.docker.internal:8000
-```
+   The following JSON will be printed if the table was created successfully.
 
-The following JSON will be printed if the table was created successfully.
-```json
-{
-    "TableNames": [
-        "mqtt_msg"
-    ]
-}
-```
+   ```json
+   {
+       "TableNames": [
+           "mqtt_msg"
+       ]
+   }
+   ```
 
 ## Create a Connector
 
@@ -119,8 +140,8 @@ The following steps assume that you run both EMQX and DynamoDB on the local mach
 3. On the **Create Connector** page, select **DynamoDB** and then click **Next**.
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_dynamodb`.
-   - **Database Url**: Enter `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **Table Name**: Enter `mqtt_msg`.
+   - **DynamoDB Region**: Enter `us-west-2`.
+   - **DynamoDB Endpoint**: Enter `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
    - **AWS Access Key ID**: Enter `root`.
    - **AWS Secret Access Key**: Enter `public`.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
@@ -160,13 +181,21 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 7. Select the `my_dynamodb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Leave the **Template** empty by default.
+8. Confiture the following settings:
 
-   ::: tip
+   - **Table**: Enter `mqtt_msg`, the name of the table previously created.
 
-   When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+   - **Hash Key**: Enter `${clientid}` to use the client ID as the hash key.
 
-   :::
+   - **Range Key** (optional): Enter `${timestamp}` to use the message timestamp as the range key.
+
+   - **Message Template**: Leave the template empty by default.
+
+     ::: tip
+
+     When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+
+     :::
 
 9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
