@@ -4,6 +4,13 @@
 
 *Release Date: 2024-10-14*
 
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.8.1.
+
+### Important Changes
+
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a node crash issue.
+Previously, if a node is force shutdown down while RPC channels are being established, it may cause a cluster peer node to crash.
+
 ### Enhancements
 
 #### Core MQTT Functionalities

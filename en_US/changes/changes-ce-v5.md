@@ -4,6 +4,13 @@
 
 *Release Date: 2024-10-14*
 
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.8.1.
+
+### Important Changes
+
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a node crash issue.
+Previously, if a node is force shutdown down while RPC channels are being established, it may cause a cluster peer node to crash.
+
 ### Enhancements
 
 #### Core MQTT Functionalities
@@ -106,10 +113,8 @@
 
 
 - [#13842](https://github.com/emqx/emqx/pull/13842) Fixed a UTF-8 string validation exception.
-- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a fix to prevent client socket initialization errors from escalating to the node level on the server side.
 
 #### Upgrade and Migration
-
 
 - [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
 
@@ -126,7 +131,7 @@
 #### Authentication and Authorization
 
 - [#12418](https://github.com/emqx/emqx/pull/12418) Enhanced JWT authentication to support claims verification using a list of objects:
-  
+
   ```
   [
     {
@@ -136,11 +141,11 @@
     ...
   ]
   ```
-  
+
   Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
-  
+
   Improved the documentation for the `verify_claims` parameter.
-  
+
 - [#13229](https://github.com/emqx/emqx/pull/13229) Added support for `${cert_pem}` placeholder in authentication templates.
 
 - [#13534](https://github.com/emqx/emqx/pull/13534) Added trace logging to indicate when the superuser bypasses the authorization check.
