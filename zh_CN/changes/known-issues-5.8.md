@@ -4,7 +4,7 @@
 
 - **Linux 单调时钟回调导致 EMQX 节点重启 (始于 5.0)**
 
-  在某些虚拟Linux环境中，操作系统无法保持时钟的单调性，这可能会导致Erlang VM因为错误消息 `OS monotonic time stepped backwards!` 而退出。对于这类环境，可以在`etc/vm.args`中将`+c`标志设置为`false`。
+  在某些虚拟 Linux 环境中，操作系统无法保持时钟的单调性，这可能会导致 Erlang VM 因为错误消息 `OS monotonic time stepped backwards!` 而退出。对于这类环境，可以在 `etc/vm.args` 中将 `+c` 标志设置为 `false`。
 
 - **如果一个新节点在原节点停止时加入集群，原节点无法启动 （始于 5.0）**
 
