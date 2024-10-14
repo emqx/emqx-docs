@@ -1,5 +1,11 @@
 # Client-Info 认证
 
+::: tip 
+
+Client-info 认证是 EMQX 企业版功能。
+
+:::
+
 Client-info 认证（`cinfo` 类型）是一种轻量级的认证机制，它通过检查客户端的属性和特性，依据用户定义的规则进行验证。这些规则使用 Variform 表达式来定义匹配条件，并在找到匹配时决定认证结果。例如，要快速阻止没有用户名的客户端，可以使用条件 `str_eq(username, '')`，并将结果设置为 `deny`。
 
 ## 通过 Dashboard 配置 Client-Info 认证

@@ -74,7 +74,7 @@ This section explains how to perform data import and export operations on the Da
 
 :::tip
 
-- Backup and recovery through the Dashboard are available in EMQX Enterprise Edition v5.4.0 and later versions.
+- Backup and recovery through the Dashboard are available in EMQX Enterprise edition v5.4.0 and later versions.
 - Backup files exported via CLI can also be managed on the Backup and Recovery page of the Dashboard.
 
 :::

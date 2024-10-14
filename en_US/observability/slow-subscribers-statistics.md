@@ -2,7 +2,7 @@
 
 ::: tip Note
 
-The Slow Subscriptions feature is only available in EMQX Enterprise.
+The Slow Subscriptions feature is only available in the EMQX Enterprise edition.
 
 :::
 

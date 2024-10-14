@@ -1,5 +1,11 @@
 # Client-Info Authentication
 
+::: tip Note
+
+The client-info authentication is only available in the EMQX Enterprise edition.
+
+:::
+
 Client-Info authentication (`cinfo` type) is a lightweight authentication mechanism that verifies client properties and attributes against user-defined rules. These rules make use of the Variform expressions to define matching conditions and determine the authentication outcome when a match is found. For example, to quickly block clients without a username, you can use the condition `str_eq(username, '')` with a result of `deny`.
 
 ## Configure Client-Info Authentication via Dashboard

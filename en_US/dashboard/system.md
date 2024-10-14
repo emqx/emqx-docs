@@ -4,7 +4,7 @@ The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Key*
 
 ::: tip
 
-The License and SSO submenus only apply to the EMQX Enterprise edition.
+The License and SSO features are only available in the EMQX Enterprise edition.
 
 :::
 

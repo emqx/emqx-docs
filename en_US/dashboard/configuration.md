@@ -62,6 +62,12 @@ The system Topic menu is the system topic related configuration items of EMQX; E
 
 ### Advanced MQTT
 
+::: tip Note
+
+Advanced MQTT features are only available in the EMQX Enterprise edition.
+
+:::
+
 Besides, the EMQX Dashboard also offers advanced MQTT features like Topic Rewrite, Auto Subscribe, and Delayed Publish. You can click Management and browse to Advanced MQTT section for configurations we supported. 
 
 ## Limiter
@@ -91,6 +97,12 @@ Click the log under the configuration menu on the left to go to the log configur
 More about the log configuration, please refer to [Log Configuration](../configuration/configuration-manual.html#log).
 
 ## Monitoring
+
+::: tip Note
+
+The Monitoring feature is only available in the EMQX Enterprise edition.
+
+:::
 
 Clicking on Monitoring under the Configuration menu on the left will take you to the configuration page for monitoring integration. This menu page contains two tabs under.
 
