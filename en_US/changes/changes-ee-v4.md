@@ -1,4 +1,132 @@
-# Version 4
+# EMQX Enterprise Version 4
+
+## 4.4.25
+
+*Release Date: 2024-09-13*
+
+### Enhancements
+
+- Introduced a username quota limitation module to restrict the number of sessions that a single MQTT username can log in with.
+
+  This feature can be configured in the Dashboard under **Modules** -> **Username Quota**. In the **Configuration** tab, you can add a username white list, where usernames in the white list will not be subject to quota restrictions.
+
+  Note that if this feature is enabled, a whitelist must be used to bypass the username quota restrictions for MQTT bridging.
+
+- Improved error log when an illegal Will QoS value is carried in the CONNECT message when using the MQTT 3.1.1 protocol.
+
+- Enhanced performance for sending messages to Redis.
+
+  Previously, due to the limitations of the `gen_tcp:send/2` implementation, as more messages piled up in the Redis Client process’s send queue, the sending performance would gradually decrease. Thus, under high message traffic, the Redis Client process could become a system bottleneck.
+
+  This optimization improves the sending performance of Redis Authentication/ACL, Redis Plugin, and Redis Rule Engine resources. For Redis authentication functionality, it relieves the pressure during mass device reconnections after a service interruption.
+
+- Enhanced performance for sending messages to SysKeeper.
+
+  Previously, due to the limitations of the `gen_tcp:send/2` implementation, as more messages piled up in the `emqx_bridge_sysk_forward` process’s send queue, the sending performance would gradually decrease. Thus, under high message traffic, the `emqx_bridge_sysk_forward` process could become a system bottleneck.
+
+- Increased the file size limit for a single log trace from 512MB to 1GB.
+
+- Improved the ACL feature in the "Internal DB AUTH/ACL" module.
+
+  - You can now set a limit on the number of ACL entries for a single client in the built-in ACL module.
+
+    When publishing or subscribing to a topic, ACL validation requires traversing the client’s ACL entries. Therefore, adding too many ACL entries for a single client could degrade the performance of publishing or subscribing. You can now limit the number of ACL entries added for a single client using the `auth.mnesia.max_acls_for_each_login` configuration item or the `Max ACLs"`parameter in the module.
+
+  - Enhanced the matching performance of the built-in ACL module.
+
+    By optimizing the storage structure of the ACL table and the topic matching logic, the performance of searching and matching ACL entries in the built-in ACL module has been improved. The more ACL entries a single client has, the more significant the performance improvement.
+
+  - Added/removed ACL entries in the built-in ACL module will now reset the ACL cache.
+
+- The rule engine's batch sending process now supports overload protection.
+
+  When batch sending is enabled, the rule engine creates a group of processes to buffer and batch send messages for actions. If asynchronous sending mode is used, when the external database response is too slow, messages may pile up in the batch process’s message queue, posing a risk of exceeding system memory limits. Now, the batch sending function of the rule engine will be limited by overload protection. When the message queue size exceeds `"Maximum Batch Size" * 10` (if the value of `"Maximum Batch Size" * 10` is less than 1000, then the minimum message queue size is 1000), the action will be "unloaded" for a period of time (default 60 seconds). During this time, subsequent messages sent to the action will be discarded, and the `action_olp_blocked/<RuleID>/<ActionID>` alarm will be triggered.
+
+  Actions subject to overload protection:
+
+  - Data to Cassandra
+  - Data to ClickHouse
+  - Data to DolphinDB
+  - Data to InfluxDB
+  - Data to IoTDB
+  - Data to Lindorm
+  - Data to MySQL
+  - Data to Oracle Database
+  - Data to PostgreSQL
+  - Data to SQLServer
+  - Data to Tablestore
+  - Data to TDengine
+  - Data to GCP Pubsub
+
+- Added support for inserting undefined values as `NULL` into databases.
+
+  Various database actions in the rule engine support constructing insert statements using `${var}` placeholders. Previously, if a placeholder variable was undefined, the rule engine might insert the string `undefined` into the database. Now, a new option `Insert Undefined Values as NULL` has been added to the database-related actions, allowing `NULL` to be inserted into the database when a variable is undefined.
+
+  Actions supporting this option:
+
+  - Data to Cassandra
+  - Data to ClickHouse
+  - Data to DolphinDB
+  - Data to MySQL
+  - Data to Oracle Database
+  - Data to PostgreSQL
+  - Data to SQLServer
+  - Data to TDengine
+
+- Added support for log throttling.
+
+  When certain abnormal situations occur, a large number of repetitive (similar content) logs may be generated, increasing system load and potentially overshadowing other useful log information. Now, you can configure a time window and maximum log rate within that window using the `log.throttling` setting in the `etc/logger.conf` file.
+
+  Note that to improve the efficiency of the throttling function, EMQX will start N throttlers, where N is the number of CPU cores. This means that if `log.throttling = 50,60s` is set, each throttler will restrict the logging of the same message (determined by the log’s module name and line number) to a maximum of 50 times per minute. Assuming 8 CPU cores, the system could log between 50 and 400 messages per minute depending on Erlang VM process scheduling. If logs are dropped by the throttler, EMQX will log a message indicating the number of logs that were dropped:
+
+  ```
+  log throttled during last 60s, dropped_msg: #{{emqx_channel,1400} => #{msg => "Client ~s (Username: '~s') login failed for ~0p", count => 33}}
+  ```
+
+  This log indicates that in the last 60 seconds, 33 logs from line 1400 of the `emqx_channel` module were dropped by EMQX.
+
+  This feature is enabled by default for warning and higher log levels, with a default setting of `50,60s`.
+
+- Added support for configuring HTTP/HTTPS management interface timeouts.
+
+  Two timeout-related configurations have been added to the `etc/plugins/emqx_management.conf` file:
+
+  - `management.listener.<Proto>.request_timeout`: Specifies the time after establishing a TCP connection within which the server will close the connection if no HTTP request is received. The default is 5 seconds.
+  - `management.listener.<Proto>.idle_timeout`: Specifies the idle timeout period. After receiving at least one HTTP request on the connection, if no further requests are received, the server will close the connection after the specified time. The default is 60 seconds.
+
+  Here, `<Proto>` can be `http` or `https`.
+
+- Added validation for the target topic in the "Republish" action.
+
+  After the improvement, when the "Republish" action sends a message, it will validate the legality of the target topic. If the topic is a non-UTF-8 encoded binary, the action will fail.
+
+- Optimized the performance of the Redis-Cluster driver.
+
+  This optimization reduces the memory footprint of EMQX when accessing Redis Cluster. The following features benefit from this optimization:
+
+  - Redis Authentication/ACL
+  - Redis Plugin
+  - Redis Actions in the Rule Engine
+
+### Bug Fixes
+
+- Fixed an issue where sending messages exceeding Kafka server's maximum message size limit would cause the Kafka Producer to become blocked.
+
+  Previously, when a single message exceeded the `message.max.bytes` configured on the Kafka server, the Kafka Producer's send queue in the rule engine would become blocked, and subsequent messages would be buffered until reaching the maximum cache limit set by `Max Cache Bytes`. Now, if a single message exceeds the `Max Batch Bytes` limit configured in the rule engine's Kafka resource, the Kafka Producer will discard the message to prevent queue blockage.
+
+- Fixed an issue where the "resource down" alarm could not be cleared in certain situations.
+
+- Fixed an issue where the `timestamp` field value was incorrect in rules triggered by Will messages. The field value should represent the time the rule was triggered, not the client's connection time.
+
+- Fixed an issue where the Kafka action failed to send data when `username` was used as the `Message Key`.
+
+  Previously, if the Kafka `Message Key` was set to `username` but the MQTT client did not provide a username at login, the Kafka Producer would fail to send the message. After the fix, for messages without a username, the Kafka Producer will use the string `undefined` as the Message Key.
+
+- Fixed an issue where the rule engine failed to trigger the `$events/client_disconnected` event when a process terminated unexpectedly.
+
+- Fixed an issue where the DynamoDB action failed to send data when `clientid` was set as the `Hash Key`.
+
+- Fixed an issue which may cause shared-subscription sticky strategy degrading into random after node restart.
 
 ## 4.4.24
 
@@ -2688,233 +2816,213 @@ EMQX 4.0.4 is now released, which mainly fixed some bugs.
     Github PR:
     [emqx/emqx-dashboard\#206](https://github.com/emqx/emqx-dashboard/pull/206)
 
-### emqx-retainer (plugin)
+  - emqx-retainer (plugin)
 
-**Bugs fixed:**
+    **Bugs fixed:**
 
-  - 保留消息达到最大存储数量后的行为由无法存储任何保留消息更正为可以替换已存在主题的保留消息
-    
-    Github PR:
-    [emqx/emqx-retainer\#136](https://github.com/emqx/emqx-retainer/pull/136)
+    - Corrected the behavior when the retained message limit is reached, allowing replacement of existing retained messages instead of preventing storage of any new retained messages.
+
+      Github PR: [emqx/emqx-retainer#136](https://github.com/emqx/emqx-retainer/pull/136)
 
 ## 4.0.3
 
 *Release Date: 2019-02-21*
 
-EMQX 4.0.3 现已发布。此版本主要进行了错误修复。
+EMQX 4.0.3 has been released. This version primarily includes bug fixes.
 
 ### emqx
 
-**功能增强:**
+**Enhancements:**
 
-  - 添加允许客户端绕过认证插件登录的选项
-    
-    Github PR: [emqx/emqx\#3253](https://github.com/emqx/emqx/pull/3253)
+- Added an option to allow clients to bypass the authentication plugin when logging in.
+
+  Github PR: [emqx/emqx#3253](https://github.com/emqx/emqx/pull/3253)
 
 **Bugs fixed:**
 
-  - 修复某些竞争条件下会打印不必要的错误日志的问题
-    
-    Github PR: [emqx/emqx\#3246](https://github.com/emqx/emqx/pull/3253)
+- Fixed an issue where unnecessary error logs were printed under certain race conditions.
+
+  Github PR: [emqx/emqx#3246](https://github.com/emqx/emqx/pull/3246)
 
 ### emqx-management (plugin)
 
 **Bugs fixed:**
 
-  - 移除不再使用的字段和函数以及修复字段值异常的问题
-    
-    Github PR:
-    [emqx/emqx-management\#176](https://github.com/emqx/emqx-management/pull/176)
+- Removed unused fields and functions, and fixed issues with abnormal field values.
 
-  - 修复集群环境下无法获取客户端列表的问题
-    
-    Github PR:
-    [emqx/emqx-management\#173](https://github.com/emqx/emqx-management/pull/173)
+  Github PR: [emqx/emqx-management#176](https://github.com/emqx/emqx-management/pull/176)
 
-  - 修复 HTTPS 监听选项
-    
-    Github PR:
-    [emqx/emqx-management\#172](https://github.com/emqx/emqx-management/pull/172)
+- Fixed an issue where the client list could not be retrieved in a cluster environment.
 
-  - 修复应用列表的返回格式
-    
-    Github PR:
-    [emqx/emqx-management\#169](https://github.com/emqx/emqx-management/pull/169)
+  Github PR: [emqx/emqx-management#173](https://github.com/emqx/emqx-management/pull/173)
+
+- Fixed issues with HTTPS listener options.
+
+  Github PR: [emqx/emqx-management#172](https://github.com/emqx/emqx-management/pull/172)
+
+- Corrected the return format of the application list.
+
+  Github PR: [emqx/emqx-management#169](https://github.com/emqx/emqx-management/pull/169)
 
 ## 4.0.2
 
 *Release Date: 2019-02-07*
 
-EMQX 4.0.2 现已发布。此版本主要进行了错误修复和性能优化。
+EMQX 4.0.2 has been released. This version focuses on bug fixes and performance optimizations.
 
 ### emqx
 
-**功能增强:**
+**Enhancements:**
 
-  - 提升 Json 编解码性能
-    
-    Github PR:
-    [emqx/emqx\#3213](https://github.com/emqx/emqx/pull/3213),
-    [emqx/emqx\#3230](https://github.com/emqx/emqx/pull/3230),
-    [emqx/emqx\#3235](https://github.com/emqx/emqx/pull/3235)
+- Improved JSON encoding and decoding performance.
 
-  - 压缩生成的项目大小
-    
-    Github PR: [emqx/emqx\#3214](https://github.com/emqx/emqx/pull/3214)
+  Github PRs: [emqx/emqx#3213](https://github.com/emqx/emqx/pull/3213), [emqx/emqx#3230](https://github.com/emqx/emqx/pull/3230), [emqx/emqx#3235](https://github.com/emqx/emqx/pull/3235)
+
+- Reduced the size of generated projects.
+
+  Github PR: [emqx/emqx#3214](https://github.com/emqx/emqx/pull/3214)
 
 **Bugs fixed:**
 
-  - 修复某些情况下没有发送 DISCONNECT 报文的问题
-    
-    Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
+- Fixed an issue where DISCONNECT packets were not sent in certain situations.
 
-  - 修复收到相同 PacketID 的 PUBLISH 报文时会断开连接的问题
-    
-    Github PR: [emqx/emqx\#3233](https://github.com/emqx/emqx/pull/3233)
+  Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
+
+- Fixed an issue where receiving PUBLISH packets with the same PacketID would cause a disconnection.
+
+  Github PR: [emqx/emqx#3233](https://github.com/emqx/emqx/pull/3233)
 
 ### emqx-stomp (plugin)
 
 **Bugs fixed:**
 
-  - 修复最大连接数限制不生效的问题
-    
-    Github PR:
-    [emqx/emqx-stomp\#93](https://github.com/emqx/emqx-stomp/pull/93)
+- Fixed an issue where the max connection limit was not enforced.
+
+  Github PR: [emqx/emqx-stomp#93](https://github.com/emqx/emqx-stomp/pull/93)
 
 ### emqx-auth-redis (plugin)
 
 **Bugs fixed:**
 
-  - 修复内部模块启动失败的问题
-    
-    Github PR:
-    [emqx/emqx-auth-redis\#151](https://github.com/emqx/emqx-auth-redis/pull/151)
+- Fixed an issue where internal modules failed to start.
+
+  Github PR: [emqx/emqx-auth-redis#151](https://github.com/emqx/emqx-auth-redis/pull/151)
 
 ### cowboy (dependency)
 
 **Bugs fixed:**
 
-  - 修复 Websocket 连接某些情况下不会发送遗嘱消息的问题
-    
-    Github Commit:
-    [emqx/cowboy\#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
+- Fixed an issue where WebSocket connections did not send will messages in certain situations.
+
+  Github Commit: [emqx/cowboy#3b6bda](https://github.com/emqx/cowboy/commit/3b6bdaf4f2e3c5b793a0c3cada2c3b74c3d5e885)
 
 ## 4.0.1
 
 *Release Date: 2019-01-17*
 
-EMQX 4.0.1 现已发布。此版本主要进行了错误修复和性能优化。
+EMQX 4.0.1 has been released. This version focuses on bug fixes and performance optimizations.
 
 ### emqx
 
-**功能增强:**
+**Enhancements:**
 
-  - force\_shutdown\_policy 默认关闭
-    
-    Github PR: [emqx/emqx\#3184](https://github.com/emqx/emqx/pull/3184)
+- `force_shutdown_policy` is disabled by default.
 
-  - 支持定时全局 GC 并提供配置项
-    
-    Github PR: [emqx/emqx\#3190](https://github.com/emqx/emqx/pull/3190)
+  Github PR: [emqx/emqx#3184](https://github.com/emqx/emqx/pull/3184)
 
-  - 优化 `force_gc_policy` 的默认配置
-    
-    Github PR:
-    [emqx/emqx\#3192](https://github.com/emqx/emqx/pull/3192),
-    [emqx/emqx\#3201](https://github.com/emqx/emqx/pull/3201)
+- Added support for scheduled global garbage collection (GC) with configuration options.
 
-  - 优化 Erlang VM 参数配置
-    
-    Github PR:
-    [emqx/emqx\#3195](https://github.com/emqx/emqx/pull/3195),
-    [emqx/emqx\#3197](https://github.com/emqx/emqx/pull/3197)
+  Github PR: [emqx/emqx#3190](https://github.com/emqx/emqx/pull/3190)
+
+- Optimized default configuration for `force_gc_policy`.
+
+  Github PRs: [emqx/emqx#3192](https://github.com/emqx/emqx/pull/3192), [emqx/emqx#3201](https://github.com/emqx/emqx/pull/3201)
+
+- Optimized Erlang VM parameter configurations.
+
+  Github PRs: [emqx/emqx#3195](https://github.com/emqx/emqx/pull/3195), [emqx/emqx#3197](https://github.com/emqx/emqx/pull/3197)
 
 **Bugs fixed:**
 
-  - 修复使用错误的单位导致黑名单功能异常的问题
-    
-    Github PR: [emqx/emqx\#3188](https://github.com/emqx/emqx/pull/3188)
+- Fixed an issue where using incorrect units caused the blacklist feature to malfunction.
 
-  - 修复对 `Retain As Publish` 标志位的处理并且在桥接模式下保持 `Retain` 标识位的值
-    
-    Github PR: [emqx/emqx\#3189](https://github.com/emqx/emqx/pull/3189)
+  Github PR: [emqx/emqx#3188](https://github.com/emqx/emqx/pull/3188)
 
-  - 修复无法使用多个 Websocket 监听端口的问题
-    
-    Github PR: [emqx/emqx\#3196](https://github.com/emqx/emqx/pull/3196)
+- Fixed handling of the `Retain As Publish` flag and ensured the `Retain` flag value is preserved in bridge mode.
 
-  - 修复会话 takeover 时 EMQX 可能不发送 DISCONNECT 报文的问题
-    
-    Github PR: [emqx/emqx\#3208](https://github.com/emqx/emqx/pull/3208)
+  Github PR: [emqx/emqx#3189](https://github.com/emqx/emqx/pull/3189)
+
+- Fixed an issue where multiple WebSocket listening ports could not be used.
+
+  Github PR: [emqx/emqx#3196](https://github.com/emqx/emqx/pull/3196)
+
+- Fixed an issue where EMQX might not send DISCONNECT packets during session takeover.
+
+  Github PR: [emqx/emqx#3208](https://github.com/emqx/emqx/pull/3208)
 
 ### emqx-rule-engine
 
-**功能增强:**
+**Enhancements:**
 
-  - 提供更多操作数组的 SQL 函数
-    
-    Github PR:
-    [emqx/emqx-rule-engine\#136](https://github.com/emqx/emqx-rule-engine/pull/136)
+- Added more SQL functions to operate on arrays.
 
-  - 减少未配置任何规则时对性能的影响
-    
-    Github PR:
-    [emqx/emqx-rule-engine\#138](https://github.com/emqx/emqx-rule-engine/pull/138)
+  Github PR: [emqx/emqx-rule-engine#136](https://github.com/emqx/emqx-rule-engine/pull/136)
+
+- Reduced performance impact when no rules are configured.
+
+  Github PR: [emqx/emqx-rule-engine#138](https://github.com/emqx/emqx-rule-engine/pull/138)
 
 ### emqx-web-hook
 
 **Bugs fixed:**
 
-  - 修复参数不匹配导致的崩溃问题
-    
-    Github PR:
-    [emqx/emqx-web-hook\#167](https://github.com/emqx/emqx-web-hook/pull/167)
+- Fixed a crash issue caused by parameter mismatches.
+
+  Github PR: [emqx/emqx-web-hook#167](https://github.com/emqx/emqx-web-hook/pull/167)
 
 ## 4.0.0
 
 *Release Date: 2019-01-10*
 
-EMQX 4.0.0 正式版现已发布。在这个版本中，我们通过重构 channel 和 session
-显著地改进了吞吐性能，通过添加更多的钩子和统计指标增强了可扩展性，重新设计了规则引擎的
-SQL，并优化 Edge 版本的性能表现。
+The official release of EMQX 4.0.0 is now available. In this version, we significantly improved throughput performance by refactoring the channel and session, enhanced extensibility by adding more hooks and metrics, redesigned the SQL for the rule engine, and optimized the performance of the Edge version.
 
-### 常规
+### General
 
-**功能增强:**
+**Enhancements:**
 
-  - 架构优化，大幅提高消息吞吐性能，降低了 CPU 与内存占用
-  - 改进 MQTT 5.0 报文处理流程
-  - 规则引擎支持全新的 SQL 语句
-  - 调整 metrics 命名并增加更多的 metrics
-  - 调整钩子参数并增加更多的钩子
-  - emqtt 提供发布与订阅的命令行接口
+- Architecture optimization to greatly improve message throughput and reduce CPU and memory usage.
+- Improved MQTT 5.0 message handling process.
+- Introduced new SQL statements for the rule engine.
+- Renamed metrics and added additional metrics.
+- Updated hook parameters and added more hooks.
+- Added publish and subscribe command-line interfaces for `emqtt`.
 
 **Bugs fixed:**
 
-  - 修复了 SSL 握手失败导致崩溃的问题
-  - 修复 `max_subscriptions` 配置不生效的问题
-  - 修复跨集群转发消息失序的问题
-  - 修复命令行接口无法获取单个主题的多条路由信息的问题
+- Fixed an issue where SSL handshake failures caused crashes.
+- Fixed an issue where the `max_subscriptions` configuration was not effective.
+- Fixed an issue with out-of-order message forwarding in cross-cluster communication.
+- Fixed an issue where the CLI could not retrieve multiple routes for a single topic.
 
 #### REST API
 
-**功能增强:**
+**Enhancements:**
 
-  - 支持 IPv6
-  - REST API 默认监听端口由 8080 改为 8081，减少被其他应用占用的情况
-  - 移除所有 sessions 相关的接口
-  - connections 调整为 clients，并提供原先 sessions 的功能
-  - 支持订阅查询接口返回共享订阅的真实主题
-  - 支持配置默认的 AppID 与 AppSecret
-  - 发布消息的 REST API 支持使用 base64 编码的 payload
+- Added support for IPv6.
+- Changed the default REST API listening port from 8080 to 8081 to avoid conflicts with other applications.
+- Removed all session-related endpoints.
+- Renamed "connections" to "clients" and incorporated previous session functionalities.
+- Added support for returning the actual topic of shared subscriptions in the subscription query API.
+- Added support for configuring default AppID and AppSecret.
+- The REST API for publishing messages now supports payloads encoded in base64.
 
 **Bugs fixed:**
 
-  - 修复转码后的 URI 没有被正确处理的问题
+- Fixed an issue where encoded URIs were not handled correctly.
 
-#### 认证
+#### Authentication
 
-**功能增强:**
+**Enhancements:**
 
-  - HTTP 认证插件支持用户配置自定义的 HTTP 请求头部
-  - clientid 与 username 认证插件重新支持用户通过配置文件配置默认的 clientid 与 username
+- The HTTP authentication plugin now supports user-defined HTTP request headers.
+- The `clientid` and `username` authentication plugins once again support configuring default `clientid` and `username` via the configuration file.

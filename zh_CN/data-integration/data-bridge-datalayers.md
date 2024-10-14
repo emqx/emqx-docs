@@ -55,7 +55,7 @@ Datalayers 数据集成具有以下特性与优势：
 
    ```bash
    # 启动一个 Datalayers 容器
-   docker run --name datalayers -p 8361:8361 datalayers/datalayers:v2.1.7
+   docker run -d --name datalayers -p 8360:8360 -p 8361:8361 datalayers/datalayers:latest
    ```
 
 2. Datalayers 服务启动后，您可以通过以下步骤进入 Datalayers CLI 中创建数据库，默认的用户和密码为 `admin`/`public`：

@@ -86,3 +86,45 @@ $ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
+
+## Recover from Disasters
+
+When disasters occur, knowing how to efficiently recover is crucial to maintaining service continuity. This section provides guidance on recovering from common disaster scenarios.
+
+### Complete Loss of a Node
+
+One of the most common disaster scenarios is the complete loss of a node, which can occur due to unrecoverable hardware failure, disk corruption, or even human error.
+
+1. Restore availability by reallocating shards.
+   
+    If a node is completely lost, the cluster's availability is compromised to some extent. The first step is to restore availability by reallocating the lost node’s shards to other nodes in the cluster.
+    
+    You can use the standard `leave` command to achieve this. This command can still function even if the lost node is unreachable, although the transition may take longer to complete.
+    ```shell
+   $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+   ```
+   
+2. Monitor the cluster status and wait for all shard transitions to complete successfully. Ensure there are no more transitions before proceeding to the next step.
+
+    ```shell
+    $ emqx ctl ds info
+    <...>
+
+    SITES:
+    D8894F95DC86DFDB    'emqx@n1.local'        up
+    5C6028D6CE9459C7    'emqx@n2.local'        (x) down
+    <...>
+
+    REPLICA TRANSITIONS:
+    Shard                         Transitions
+    messages/0                    -5C6028D6CE9459C7 +D8894F95DC86DFDB
+    <...>
+    ```
+
+3. Once all shard transitions are complete, you need to inform the cluster that the lost node will not be returning.
+
+    ```shell
+    $ emqx ctl ds forget messages 5C6028D6CE9459C7
+    ```
+
+    This step is crucial if you plan to replace the lost node with a new one using the original node name. Failing to do so could result in the cluster recognizing the same node name under two different Site IDs, leading to significant confusion and potential issues.

@@ -54,17 +54,19 @@ EMQX can only support keytab files at the default location. You can configure th
 
 In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page. Click **Create** at the top right corner, then select **GSSAPI** as the **Mechanism**, and **Kerberos** as the **Backend**. Click **Next** to go to the **Configuration** step.
 
-Configure the following fields:
+1. Configure the following fields:
 
-- **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`. 
+   - **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`. 
 
-  Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
+     Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
 
-- **Keytab File**: Specify the path to the Kerberos keytab file.
 
-  Note: The keytab file must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+   - **Keytab File**: Specify the path to the Kerberos keytab file.
 
-Click **Create** to complete the configuration.
+     Note: The keytab file must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+
+
+2. Click **Create** to complete the configuration.
 
 ## Configure via Configuration Items
 
@@ -84,7 +86,19 @@ The `principal` is the server principal, which must be present in the system's d
 
 The following diagram shows how the authentication process works.
 
-![kerberos_workflow](./assets/kerberos_workflow.png)
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+
+    Client->>Server: CONNECT (Authentication Method="GSSAPI-KERBEROS", Authentication Data=ClientInitialToken)
+    Server-->>Client: AUTH (rc=0x18, Authentication Method="GSSAPI-KERBEROS", Authentication Data=ServerInitialToken)
+    loop SASL Challenge-Response
+        Client->>Server: AUTH (Authentication Method="GSSAPI-KERBEROS")
+        Server-->>Client: AUTH (Authentication Method="GSSAPI-KERBEROS")
+    end
+    Server-->>Client: CONNACK (rc=0, Authentication Method="GSSAPI-KERBEROS")
+```
 
 ## Common Issues and Troubleshooting
 
