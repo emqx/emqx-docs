@@ -62,30 +62,6 @@ Previously, if a node is force shutdown down while RPC channels are being establ
 
   Previously, clients had to send `MQTT.PINGREQ` on idle control streams to keep the connection alive. Now, a shared state is maintained for each connection, monitoring activity across all streams. This shared state helps determine if the connection is still active, reducing the risk of keepalive timeouts caused by Head-of-Line (HOL) blocking and improving overall connection stability.
 
-#### Durable Storage
-
-- [#13634](https://github.com/emqx/emqx/pull/13634) Major optimization of the Durable Sessions feature.
-
-  This update introduces significant improvements to the Durable Sessions feature:
-
-  - Idle durable subscribers no longer consume CPU resources.
-  - End-to-end latency for durable sessions has been reduced.
-  - The frequency of queries to durable storage has been significantly minimized.
-  - Optimized usage of the cluster backplane network.
-
-  **Configuration Changes**:
-
-  - The `durable_sessions.idle_poll_interval` parameter has been updated. Now, durable sessions are immediately activated when new messages are written to durable storage. As a result, this parameter no longer impacts end-to-end latency during normal operation.
-  - From EMQX 5.8.1 onward, idle polling serves as a fallback mechanism for certain network errors. The default value of `idle_poll_interval` has been increased accordingly. If you have customized this parameter in earlier versions of EMQX, it is recommended to increase it in line with the new default.
-
-  **New Metrics**:
-
-  - `emqx_ds_poll_requests`
-  - `emqx_ds_poll_requests_fulfilled`
-  - `emqx_ds_poll_requests_dropped`
-  - `emqx_ds_poll_requests_expired`
-  - `emqx_ds_poll_request_sharing`
-
 ### Bug Fixes
 
 #### Core MQTT Functions

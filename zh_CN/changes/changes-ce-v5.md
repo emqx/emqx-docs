@@ -56,30 +56,6 @@
 
   之前，客户端需要在空闲的控制流上发送 `MQTT.PINGREQ` 来保持连接活跃。现在，每个连接都会维护一个共享状态，监控所有流的活动情况。这个共享状态有助于判断连接是否仍然活跃，减少由于队头阻塞（HOL blocking）导致的保活超时风险，并提高整体连接的稳定性。
 
-#### MQTT 会话持久化
-
-- [#13634](https://github.com/emqx/emqx/pull/13634) 会话持久化功能的重大优化。
-
-  此次更新为会话持久化功能带来了多项重要改进：
-
-  - 空闲的持久订阅者不再消耗 CPU 资源。
-  - 持久会话的端到端延迟显著降低。
-  - 大幅减少了对持久存储的查询频率。
-  - 优化了集群背板网络的使用效率。
-
-  **配置更改**：
-
-  - `durable_sessions.idle_poll_interval` 参数已更新。现在，当新消息写入持久存储时，持久会话将立即被激活，因此该参数在正常操作中不再影响端到端延迟。
-  - 从 EMQX 5.8.1 开始，空闲轮询仅作为处理某些网络错误的备用机制。默认的 `idle_poll_interval` 值已增加。如果您在此前的版本中自定义了该参数，建议根据新的默认值进行调整。
-
-  **新增指标**：
-
-  - `emqx_ds_poll_requests`
-  - `emqx_ds_poll_requests_fulfilled`
-  - `emqx_ds_poll_requests_dropped`
-  - `emqx_ds_poll_requests_expired`
-  - `emqx_ds_poll_request_sharing`
-
 ### 修复
 
 #### 核心 MQTT 功能
