@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.8.0",
+    "version": "5.8.1",
     "title": "EMQX API"
   },
   "components": {
@@ -189,19 +189,9 @@
         "in": "query",
         "name": "cursor",
         "description": "Opaque value representing the current iteration state.",
+        "required": false,
         "schema": {
-          "default": "none",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string",
-              "enum": [
-                "none"
-              ]
-            }
-          ]
+          "type": "string"
         }
       },
       "public.limit": {
@@ -628,6 +618,17 @@
             ],
             "description": "共享订阅的分发策略。<br/> - random：随机选择一个订阅者进行分发；<br/> - round_robin：从单个发布者处的消息依次分发给订阅者；<br/> - round_robin_per_group：所有消息依次分发给订阅者；<br/> - local：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/> - sticky：持续将消息分发给最初选择的订阅者，直到他们的会话结束；<br/> - hash_clientid：哈希发布者的客户端 ID 以选择订阅者；<br/> - hash_topic：哈希发布主题以选择订阅者。"
           },
+          "shared_subscription_initial_sticky_pick": {
+            "default": "random",
+            "type": "string",
+            "enum": [
+              "random",
+              "local",
+              "hash_topic",
+              "hash_clientid"
+            ],
+            "description": "The strategy to use for the initial subscriber pick when shared_subscription_strategy is `sticky`.<br/> - `random`: Randomly select the subscriber;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber."
+          },
           "exclusive_subscription": {
             "default": false,
             "type": "boolean",
@@ -672,7 +673,7 @@
           "keepalive_check_interval": {
             "default": "30s",
             "type": "string",
-            "description": "The frequency of checking for incoming MQTT packets determines how often the server will check for new MQTT packets.<br/>If a certain amount of time passes without any packets being sent from the client, this time will be added up.<br/>Once the accumulated time exceeds `keepalive-interval * keepalive-multiplier`, the connection will be terminated.<br/>The default is set to 30 seconds, with a minimum value of 1 second and a maximum value of `keepalive-interval / 2`.",
+            "description": "检查传入 MQTT 数据包的频率，决定服务器检查新 MQTT 数据包的频率。<br/>如果在没有客户端发送任何数据包的情况下经过了一定时间，这段时间将累加起来。<br/>一旦累积时间超过 `keepalive-interval * keepalive-multiplier`，连接将被终止。<br/>默认设置为 30 秒，最小值为 1 秒，最大值为 `keepalive-interval / 2`。",
             "example": "12m"
           },
           "retry_interval": {
@@ -939,7 +940,7 @@
           "bind": {
             "default": 0,
             "type": "string",
-            "description": "监听地址和端口，热更新此配置时，会重启 Dashboard 服务。",
+            "description": "将监听器绑定到指定的地址和端口号，例如 127.0.0.1:18083。<br/>如果仅配置端口号（例如 18083），则相当于绑定到所有地址 0.0.0.0。<br/>如果 bind 设置为 0，则禁用监听器。",
             "example": "0.0.0.0:18083"
           },
           "num_acceptors": {
@@ -1328,7 +1329,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -1458,12 +1459,12 @@
                 "status": "finished",
                 "started_at": "2024-07-15T13:48:02.648559+08:00",
                 "result": "success",
-                "finished_at": "2024-07-16T11:00:01.875627+08:00",
                 "upgrade_opts": {
                   "deploy_inplace": false
                 },
                 "target_vsn": "5.8.1",
-                "from_vsn": "5.8.0"
+                "from_vsn": "5.8.0",
+                "finished_at": "2024-07-16T11:00:01.875627+08:00"
               }
             ]
           }
@@ -1981,7 +1982,7 @@
           "max_rules": {
             "default": 100,
             "type": "integer",
-            "description": "Maximum number of rules per client/user. Note that performance may decrease as number of rules increases.",
+            "description": "每个客户端/用户的最大规则数。请注意，随着规则数量的增加，性能可能会下降。",
             "minimum": 1
           }
         },
@@ -2038,7 +2039,7 @@
           "bootstrap_file": {
             "default": "${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv",
             "type": "string",
-            "description": "The bootstrap file imports users into the built-in database.<br/>It will not import a user ID that already exists in the database.<br/>The file content format is determined by `bootstrap_type`."
+            "description": "引导文件将用户导入内置数据库。<br/>对于数据库中已存在的用户 ID，不会重复导入。<br/>文件内容格式由 `bootstrap_type` 决定。"
           },
           "bootstrap_type": {
             "default": "plain",
@@ -2047,7 +2048,7 @@
               "hash",
               "plain"
             ],
-            "description": "Specify which type of content the bootstrap file has.<br/><br/>- **`plain`**:<br/>  - Expected data fields: `user_id`, `password`, `is_superuser`<br/>  - `user_id`: Can be Client ID or username, depending on built-in database authentication's `user_id_type` config.<br/>  - `password`: User's plaintext password.<br/>  - `is_superuser`: Boolean, user's administrative status.<br/><br/>- **`hash`**:<br/>  - Expected data fields: `user_id`,`password_hash`,`salt`,`is_superuser`<br/>  - Definitions similar to `plain` type, with `password_hash` and `salt` added for security.<br/><br/>The content can be either in CSV, or JSON format.<br/><br/>Here is a CSV example: `user_id,password_hash,salt,is_superuser\\nmy_user,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true`<br/><br/>And JSON content should be decoded into an array of objects, for example: `[{\"user_id\": \"my_user\",\"password\": \"s3cr3tp@ssw0rd\",\"is_superuser\": true}]`.<br/><br/>The hash string for `password_hash` depends on how `password_hash_algorithm` is configured for the built-in database authentication mechanism. For example, if it's configured as `password_hash_algorithm {name = sha256, salt_position = suffix}`, then the salt is appended to the password before hashed. Here is the equivalent Python expression: `hashlib.sha256(password + salt).hexdigest()`."
+            "description": "指定引导文件的内容类型。<br/><br/>- **`plain`**:<br/>  - 所需数据字段： `user_id`, `password`, `is_superuser`<br/>  - `user_id`: 可以是客户端 ID 或用户名，具体取决于内置数据库认证的 `user_id_type` 配置。<br/>  - `password`: 用户的明文密码。<br/>  - `is_superuser`: 布尔值，用户是否为管理员。<br/><br/>- **`hash`**:<br/>  - 所需数据字段 `user_id`,`password_hash`,`salt`,`is_superuser`<br/>  - 定义与 `plain` 类型相似，为提高安全性增加了 `password_hash` 和 `salt`。<br/><br/>内容可以是 CSV 或 JSON 格式。<br/><br/>这是一个 CSV 示例：`user_id,password_hash,salt,is_superuser\\nmy_user,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true`<br/><br/>JSON 内容应解码为对象数组，例如：`[{\"user_id\": \"my_user\",\"password\": \"s3cr3tp@ssw0rd\",\"is_superuser\": true}]`.<br/><br/>`password_hash` 的哈希字符串取决于内容数据库认证机制中 `password_hash_algorithm` 的配置。例如，如果配置为 `password_hash_algorithm {name = sha256, salt_position = suffix}`，则在哈希之前将 salt 添加到密码中。等效的 Python 表达式为： `hashlib.sha256(password + salt).hexdigest()`."
           },
           "enable": {
             "default": true,
@@ -2185,7 +2186,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "enable": {
@@ -2310,17 +2311,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -2381,14 +2382,14 @@
             "default": 1000,
             "maximum": 3000,
             "type": "integer",
-            "description": "要保留为历史记录的已停用报警的最大总数。当超过此限制时，将删除最旧的停用报警，以限制总数。",
+            "description": "最多可以存储的历史告警数量。<br/><br/>当达到最大数量时，将删除最旧的历史告警以存储新的历史告警。",
             "minimum": 1,
             "example": 1000
           },
           "validity_period": {
             "default": "24h",
             "type": "string",
-            "description": "停用报警的保留时间。报警在停用时不会立即删除，而是在保留时间之后删除。",
+            "description": "历史告警的有效期。从历史告警激活的时间开始计算，而不是取消的时间。<br/><br/>如果告警存在的时间超过了有效期，该告警将被删除。",
             "example": "24h"
           }
         },
@@ -2631,7 +2632,7 @@
           },
           "direct_dispatch": {
             "default": false,
-            "description": "Enable direct dispatch to subscribers without initiating a new message publish event.<br/>When set to `true`, this prevents the recursive processing of a message by the same action<br/>and is used when the output message does not require further processing.<br/><br/>However, enabling this feature has several limitations:<br/><br/>- The output message from this action is not retained.<br/>- It does not trigger other rules that operate based on the output topic of this action.<br/>- It does not activate rules that select from the `$events/message_publish`.<br/>- It does not trigger plugins that use the `'message.publish'` hook.<br/>- Topic metrics are not collected for the output message of this action.<br/>- Message schema validation is not applied (feature of EMQX Enterprise).<br/>- Message transformation processes are not applied (feature of EMQX Enterprise).",
+            "description": "启用直接分发到订阅者，而无需启动新的消息发布事件。<br/>当设置为 `true` 时，可以防止同一动作递归处理消息，适用于输出消息不需要进一步处理的情况。<br/><br/>然而，启用此功能有几个限制：<br/><br/>- 此动作的输出消息不会被保留。<br/>- 它不会触发基于此动作的输出主题运行的其他规则。<br/>- 它不会激活选择 `$events/message_publish` 的规则。<br/>- 它不会触发使用 `'message.publish'` 钩子的插件。<br/>- 不会收集此动作输出消息的主题指标。<br/>- 不会应用消息 schema 验证（EMQX Enterprise 的功能）。<br/>- 不会应用消息转换过程（EMQX Enterprise 的功能）。",
             "oneOf": [
               {
                 "type": "string"
@@ -2987,17 +2988,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -3741,7 +3742,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -3792,7 +3793,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -3901,7 +3902,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -3977,18 +3978,29 @@
             ]
           },
           "until": {
+            "default": "infinity",
             "description": "封禁的结束时间，格式为 rfc3339，默认值为发起操作的时间 + 1 年。",
             "example": "2021-10-25T21:53:47+08:00",
             "oneOf": [
               {
-                "type": "integer",
-                "description": "epoch-second",
-                "example": 1640995200
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "description": "epoch-second",
+                    "example": 1640995200
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-01-01T00:00:00.000Z"
+                  }
+                ]
               },
               {
                 "type": "string",
-                "format": "date-time",
-                "example": "2022-01-01T00:00:00.000Z"
+                "enum": [
+                  "infinity"
+                ]
               }
             ]
           }
@@ -4725,7 +4737,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "dhfile": {
@@ -5549,7 +5561,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "dhfile": {
@@ -5794,7 +5806,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -5845,7 +5857,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -5900,7 +5912,7 @@
           "bootstrap_file": {
             "default": "${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv",
             "type": "string",
-            "description": "The bootstrap file imports users into the built-in database.<br/>It will not import a user ID that already exists in the database.<br/>The file content format is determined by `bootstrap_type`."
+            "description": "引导文件将用户导入内置数据库。<br/>对于数据库中已存在的用户 ID，不会重复导入。<br/>文件内容格式由 `bootstrap_type` 决定。"
           },
           "bootstrap_type": {
             "default": "plain",
@@ -5909,7 +5921,7 @@
               "hash",
               "plain"
             ],
-            "description": "Specify which type of content the bootstrap file has.<br/><br/>- **`plain`**:<br/>  - Expected data fields: `user_id`, `password`, `is_superuser`<br/>  - `user_id`: Can be Client ID or username, depending on built-in database authentication's `user_id_type` config.<br/>  - `password`: User's plaintext password.<br/>  - `is_superuser`: Boolean, user's administrative status.<br/><br/>- **`hash`**:<br/>  - Expected data fields: `user_id`,`password_hash`,`salt`,`is_superuser`<br/>  - Definitions similar to `plain` type, with `password_hash` and `salt` added for security.<br/><br/>The content can be either in CSV, or JSON format.<br/><br/>Here is a CSV example: `user_id,password_hash,salt,is_superuser\\nmy_user,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true`<br/><br/>And JSON content should be decoded into an array of objects, for example: `[{\"user_id\": \"my_user\",\"password\": \"s3cr3tp@ssw0rd\",\"is_superuser\": true}]`.<br/><br/>The hash string for `password_hash` depends on how `password_hash_algorithm` is configured for the built-in database authentication mechanism. For example, if it's configured as `password_hash_algorithm {name = sha256, salt_position = suffix}`, then the salt is appended to the password before hashed. Here is the equivalent Python expression: `hashlib.sha256(password + salt).hexdigest()`."
+            "description": "指定引导文件的内容类型。<br/><br/>- **`plain`**:<br/>  - 所需数据字段： `user_id`, `password`, `is_superuser`<br/>  - `user_id`: 可以是客户端 ID 或用户名，具体取决于内置数据库认证的 `user_id_type` 配置。<br/>  - `password`: 用户的明文密码。<br/>  - `is_superuser`: 布尔值，用户是否为管理员。<br/><br/>- **`hash`**:<br/>  - 所需数据字段 `user_id`,`password_hash`,`salt`,`is_superuser`<br/>  - 定义与 `plain` 类型相似，为提高安全性增加了 `password_hash` 和 `salt`。<br/><br/>内容可以是 CSV 或 JSON 格式。<br/><br/>这是一个 CSV 示例：`user_id,password_hash,salt,is_superuser\\nmy_user,b6c743545a7817ae8c8f624371d5f5f0373234bb0ff36b8ffbf19bce0e06ab75,de1024f462fb83910fd13151bd4bd235,true`<br/><br/>JSON 内容应解码为对象数组，例如：`[{\"user_id\": \"my_user\",\"password\": \"s3cr3tp@ssw0rd\",\"is_superuser\": true}]`.<br/><br/>`password_hash` 的哈希字符串取决于内容数据库认证机制中 `password_hash_algorithm` 的配置。例如，如果配置为 `password_hash_algorithm {name = sha256, salt_position = suffix}`，则在哈希之前将 salt 添加到密码中。等效的 Python 表达式为： `hashlib.sha256(password + salt).hexdigest()`."
           },
           "enable": {
             "default": true,
@@ -6511,17 +6523,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           }
         },
@@ -6646,17 +6658,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -7010,17 +7022,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -7128,7 +7140,7 @@
           },
           "transformation": {
             "type": "string",
-            "description": "Transformation"
+            "description": "消息转换"
           },
           "clientid": {
             "type": "string",
@@ -7323,17 +7335,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -7447,7 +7459,7 @@
               "Accept": "application/json"
             },
             "type": "object",
-            "description": "List of HTTP headers to send with the JWKS request.",
+            "description": "JWKS 请求中需要发送的 HTTP 请求头列表。",
             "example": {}
           },
           "pool_size": {
@@ -7541,7 +7553,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -7592,7 +7604,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -8092,17 +8104,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -8199,6 +8211,11 @@
           "actions.failed.unknown": {
             "type": "integer",
             "description": "由于未知错误，规则调用输出失败的次数。",
+            "minimum": 0
+          },
+          "actions.discarded": {
+            "type": "integer",
+            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
             "minimum": 0
           }
         },
@@ -8465,17 +8482,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -8860,7 +8877,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "dhfile": {
@@ -9124,7 +9141,7 @@
           },
           "ignore": {
             "type": "integer",
-            "description": "Count of query ignored.  This counter is increased whenever the authorization source attempts to authorize a request, but either it's not applicable, or an error was encountered and the result is undecidable"
+            "description": "鉴权查询被忽略的次数。 每当授权源尝试授权请求但不适用，或遇到错误且结果无法确定时，此计数器会增加。"
           },
           "allow": {
             "type": "integer",
@@ -10225,17 +10242,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -10733,7 +10750,7 @@
           "max_payload_size": {
             "default": "1MB",
             "type": "string",
-            "description": "消息大小最大值",
+            "description": "允许存储的保留消息的最大大小。EMQX 将拒绝存储超过此大小的保留消息，并输出包含关键字 'retain_failed_for_payload_size_exceeded_limit' 的错误日志。<br/><br/>0 表示保留消息大小不受限制。",
             "example": "32MB"
           },
           "stop_publish_clear_msg": {
@@ -11099,17 +11116,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -11437,7 +11454,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "dhfile": {
@@ -12969,17 +12986,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -13309,17 +13326,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           }
         },
@@ -13480,7 +13497,7 @@
             "description": "监听器运行状态"
           },
           "health_check": {
-            "description": "Some Cloud platform use a `request-reply` mechanism to check whether a UDP port is healthy, here can configure this pair.",
+            "description": "一些云平台使用“请求-回复”机制来检查 UDP 端口是否健康，这里可以配置这对内容。",
             "$ref": "#/components/schemas/gateway.udp_health_check"
           },
           "udp_options": {
@@ -13529,7 +13546,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -14071,7 +14088,7 @@
             "description": "Acceptor 进程池大小。"
           },
           "health_check": {
-            "description": "Some Cloud platform use a `request-reply` mechanism to check whether a UDP port is healthy, here can configure this pair.",
+            "description": "一些云平台使用“请求-回复”机制来检查 UDP 端口是否健康，这里可以配置这对内容。",
             "$ref": "#/components/schemas/gateway.udp_health_check"
           },
           "udp_options": {
@@ -14120,7 +14137,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -14315,7 +14332,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -14437,7 +14454,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "enable": {
@@ -14545,11 +14562,11 @@
         "properties": {
           "request": {
             "type": "string",
-            "description": "The content of the request."
+            "description": "请求的内容。"
           },
           "reply": {
             "type": "string",
-            "description": "The content to reply."
+            "description": "回复的内容。"
           }
         },
         "type": "object"
@@ -14719,17 +14736,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -15450,7 +15467,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -15758,7 +15775,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "dhfile": {
@@ -16290,7 +16307,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -16403,7 +16420,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -16454,7 +16471,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -16627,17 +16644,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           }
         },
@@ -16852,7 +16869,7 @@
             "description": "在重新连接到入口动作时是否启动新会话"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -16947,6 +16964,11 @@
           "actions.failed.unknown": {
             "type": "integer",
             "description": "由于未知错误，规则调用输出失败的次数。",
+            "minimum": 0
+          },
+          "actions.discarded": {
+            "type": "integer",
+            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
             "minimum": 0
           }
         },
@@ -17437,7 +17459,7 @@
           "bind": {
             "default": 0,
             "type": "string",
-            "description": "监听地址和端口，热更新此配置时，会重启 Dashboard 服务。",
+            "description": "将监听器绑定到指定的地址和端口号，例如 127.0.0.1:18083。<br/>如果仅配置端口号（例如 18083），则相当于绑定到所有地址 0.0.0.0。<br/>如果 bind 设置为 0，则禁用监听器。",
             "example": "0.0.0.0:18084"
           },
           "ssl_options": {
@@ -17595,7 +17617,7 @@
           "idle_timeout": {
             "default": "7200s",
             "type": "string",
-            "description": "关闭未在此间隔内发送 MQTT CONNECT 消息的客户端的传输层连接。",
+            "description": "等待 WebSocket 升级请求的超时时间。超时后，连接将被关闭。",
             "example": "12m"
           },
           "max_frame_size": {
@@ -17807,7 +17829,7 @@
             "description": "Acceptor 进程池大小。"
           },
           "health_check": {
-            "description": "Some Cloud platform use a `request-reply` mechanism to check whether a UDP port is healthy, here can configure this pair.",
+            "description": "一些云平台使用“请求-回复”机制来检查 UDP 端口是否健康，这里可以配置这对内容。",
             "$ref": "#/components/schemas/gateway.udp_health_check"
           },
           "udp_options": {
@@ -17856,7 +17878,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -17957,7 +17979,7 @@
           "hibernate_after": {
             "default": "5s",
             "type": "string",
-            "description": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
             "example": "12m"
           },
           "enable": {
@@ -18434,7 +18456,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -18485,7 +18507,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -18514,7 +18536,7 @@
             "minimum": 1
           },
           "idle_poll_interval": {
-            "default": "100ms",
+            "default": "10s",
             "type": "string",
             "example": "12m"
           },
@@ -19060,7 +19082,7 @@
             "description": "监听器运行状态"
           },
           "health_check": {
-            "description": "Some Cloud platform use a `request-reply` mechanism to check whether a UDP port is healthy, here can configure this pair.",
+            "description": "一些云平台使用“请求-回复”机制来检查 UDP 端口是否健康，这里可以配置这对内容。",
             "$ref": "#/components/schemas/gateway.udp_health_check"
           },
           "udp_options": {
@@ -19109,7 +19131,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -19205,7 +19227,7 @@
           "proxy_protocol": {
             "default": false,
             "type": "boolean",
-            "description": "是否开启 Proxy Protocol V1/2。当 EMQX 集群部署在 HAProxy 或 Nginx 后需要获取客户端真实 IP 时常用到该选项。参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/"
+            "description": "如果为 EMQX 部署了反向代理，并且在代理上启用了 PROXY 协议以传递客户端的真实 IP，<br/>则需要开启此选项，以便 EMQX 能够从 PROXY 协议头中提取客户端的真实 IP。<br/>EMQX 将自动检测 PROXY 协议的版本，并支持 V1 和 V2。<br/><br/>有关 PROXY 协议的详细描述，请参考：https://www.haproxy.com/blog/haproxy/proxy-protocol/。"
           },
           "proxy_protocol_timeout": {
             "default": "3s",
@@ -19256,7 +19278,7 @@
           "access_rules": {
             "default": [],
             "type": "array",
-            "description": "配置监听器的访问控制规则。<br/>见：https://github.com/emqtt/esockd#allowdeny",
+            "description": "一个包含字符串规则的访问规则列表，用于限制或允许来自某些地址的访问。<br/>列表中较早出现的规则优先匹配。<br/>格式为 allow | deny <address> | <CIDR> | all。<br/><br/>例如：<br/><br/>[\"deny 192.168.1.1\", \"allow 192.168.1.0/24\", \"deny all\"]",
             "items": {
               "type": "string"
             }
@@ -19666,7 +19688,7 @@
           "default_password": {
             "default": "public",
             "type": "string",
-            "description": "Dashboard 的默认密码，仅在首次启动 EMQX 之前配置有效。为了安全，应该尽快修改密码。",
+            "description": "用于初始化 admin 用户数据库记录的密码。<br/>注意：在初始化（第一次启动）后更改默认密码将不起作用。<br/>一旦初始化完成，默认密码 public 必须尽快通过 Dashboard 或 CLI 更改。",
             "readOnly": true
           },
           "token_expired_time": {
@@ -19771,17 +19793,17 @@
           "max_conn_rate": {
             "default": "infinity",
             "type": "string",
-            "description": "最大连接速率。<br/><br/>这用于限制该节点的连接速率。<br/>一旦达到限制，新的连接将被推迟或拒绝。<br/><br/>例如：<br/><br/>- <code>1000/s</code>：每秒只接受1000个连接<br/><br/>- <code>1000/10s</code>：每10秒只接受1000个连接。",
+            "description": "用于限制当前监听器接受连接的速率。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中获取连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- 1000/s：每秒只接受 1000 个连接。<br/>- 1000/10s：每 10 秒只接受 1000 个连接。",
             "example": "1000/s"
           },
           "messages_rate": {
             "type": "string",
-            "description": "消息发布速率。<br/><br/>这用于限制该节点的入站消息数量。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>例如：<br/><br/>- <code>500/s</code>：每秒只发送前500条消息，其他消息被缓冲。<br/><br/>- <code>500/10s</code>：即使是10秒，也只发送前500条消息，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的消息数量。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>例如：<br/><br/>- 500/s：每秒只接收 500 条消息，剩余消息将被延迟。<br/>- 500/10s：每 10 秒只接收 500 条消息，剩余消息将被延迟。",
             "example": "1000/s"
           },
           "bytes_rate": {
             "type": "string",
-            "description": "数据发布速率。<br/><br/>这用于限制该节点的入站字节速率。<br/>一旦达到限制，受限制的客户端将减速甚至暂时挂起。<br/><br/>字节的单位可以是：KB MB GB。<br/><br/>例如：<br/><br/>- <code>500KB/s</code>：每秒只发送前500千字节，其他消息被缓冲。<br/><br/>- <code>500MB/10s</code>：即使是10秒，也只发送前500兆字节，其他消息被缓冲。",
+            "description": "用于限制单个客户端每秒钟可以向 EMQX 发送的字节数。<br/><br/>一旦达到限制，EMQX 将暂停从接收缓冲区读取数据，从而减慢甚至暂时挂起发送方。<br/><br/>字节的单位可以是：B、KB、MB、GB。<br/><br/>例如：<br/><br/>- 500KB/s：每秒钟只接收 500 千字节，剩余字节将被延迟。<br/>- 500MB/10s：每 10 秒只接收 500 兆字节，剩余字节将被延迟。",
             "example": "100MB/s"
           },
           "access_rules": {
@@ -20118,7 +20140,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get installed plugin's AVRO schema",
         "responses": {
           "200": {
             "description": "",
@@ -20154,6 +20175,7 @@
             }
           }
         },
+        "summary": "Get installed plugin's AVRO schema",
         "security": [
           {
             "basicAuth": []
@@ -20268,7 +20290,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Reset action metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -20296,6 +20317,7 @@
             }
           }
         },
+        "summary": "Reset action metrics",
         "security": [
           {
             "basicAuth": []
@@ -20784,7 +20806,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -20878,6 +20899,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge",
         "security": [
           {
             "basicAuth": []
@@ -21010,7 +21032,6 @@
             "example": true
           }
         ],
-        "summary": "Observe a Resource",
         "responses": {
           "204": {
             "description": "No Content"
@@ -21038,6 +21059,7 @@
             }
           }
         },
+        "summary": "Observe a Resource",
         "security": [
           {
             "basicAuth": []
@@ -21059,7 +21081,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get a plugin description",
         "responses": {
           "200": {
             "description": "",
@@ -21094,6 +21115,7 @@
             }
           }
         },
+        "summary": "Get a plugin description",
         "security": [
           {
             "basicAuth": []
@@ -21113,7 +21135,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Delete a plugin",
         "responses": {
           "204": {
             "description": "Uninstall successfully"
@@ -21163,6 +21184,7 @@
             }
           }
         },
+        "summary": "Delete a plugin",
         "security": [
           {
             "basicAuth": []
@@ -21191,7 +21213,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Reset bridge metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -21219,6 +21240,7 @@
             }
           }
         },
+        "summary": "Reset bridge metrics",
         "security": [
           {
             "basicAuth": []
@@ -22219,7 +22241,6 @@
             "example": ""
           }
         ],
-        "summary": "Get the listener's authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -22266,8 +22287,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22297,8 +22318,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22414,6 +22435,7 @@
             }
           }
         },
+        "summary": "Get the listener's authenticator",
         "security": [
           {
             "basicAuth": []
@@ -22457,7 +22479,6 @@
             "example": ""
           }
         ],
-        "summary": "Update config of authenticator for listener",
         "responses": {
           "200": {
             "description": "",
@@ -22504,8 +22525,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22535,8 +22556,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22649,6 +22670,7 @@
             }
           }
         },
+        "summary": "Update config of authenticator for listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -22693,8 +22715,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -22724,8 +22746,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -22835,7 +22857,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete the listener's authenticator",
         "responses": {
           "200": {
             "description": "Deleted"
@@ -22886,6 +22907,7 @@
             }
           }
         },
+        "summary": "Delete the listener's authenticator",
         "security": [
           {
             "basicAuth": []
@@ -22929,7 +22951,6 @@
             "example": ""
           }
         ],
-        "summary": "Create authenticator for listener",
         "responses": {
           "201": {
             "description": "",
@@ -22976,8 +22997,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -23007,8 +23028,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -23121,6 +23142,7 @@
             }
           }
         },
+        "summary": "Create authenticator for listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -23165,8 +23187,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -23196,8 +23218,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -23299,7 +23321,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "List all listeners",
         "responses": {
           "200": {
             "description": "",
@@ -23692,6 +23713,7 @@
             }
           }
         },
+        "summary": "List all listeners",
         "security": [
           {
             "basicAuth": []
@@ -23725,7 +23747,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Add listener",
         "responses": {
           "201": {
             "description": "",
@@ -24025,6 +24046,7 @@
             }
           }
         },
+        "summary": "Add listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24297,7 +24319,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get plugin config",
         "responses": {
           "200": {
             "description": "",
@@ -24354,6 +24375,7 @@
             }
           }
         },
+        "summary": "Get plugin config",
         "security": [
           {
             "basicAuth": []
@@ -24373,7 +24395,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Update plugin config",
         "responses": {
           "204": {
             "description": "Config updated successfully"
@@ -24424,6 +24445,7 @@
             }
           }
         },
+        "summary": "Update plugin config",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24450,7 +24472,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *sys_topics*",
         "responses": {
           "200": {
             "description": "系统主题配置。",
@@ -24485,6 +24506,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *sys_topics*",
         "security": [
           {
             "basicAuth": []
@@ -24500,7 +24522,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *sys_topics*",
         "responses": {
           "200": {
             "description": "系统主题配置。",
@@ -24558,6 +24579,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *sys_topics*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24612,7 +24634,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/connectors_probe": {
@@ -24622,7 +24647,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "Test creating connector",
         "responses": {
           "204": {
             "description": "Test connector OK"
@@ -24650,6 +24674,7 @@
             }
           }
         },
+        "summary": "Test creating connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24735,7 +24760,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -24829,6 +24853,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge on a given node",
         "security": [
           {
             "basicAuth": []
@@ -25659,7 +25684,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "List sources",
         "responses": {
           "200": {
             "description": "",
@@ -25702,6 +25726,7 @@
             }
           }
         },
+        "summary": "List sources",
         "security": [
           {
             "basicAuth": []
@@ -25717,7 +25742,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "Create source",
         "responses": {
           "201": {
             "description": "",
@@ -25782,6 +25806,7 @@
             }
           }
         },
+        "summary": "Create source",
         "requestBody": {
           "content": {
             "application/json": {
@@ -25852,7 +25877,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -25902,6 +25926,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -26191,7 +26216,6 @@
             }
           }
         ],
-        "summary": "Trigger action on an installed plugin",
         "responses": {
           "204": {
             "description": "Trigger action successfully"
@@ -26219,6 +26243,7 @@
             }
           }
         },
+        "summary": "Trigger action on an installed plugin",
         "security": [
           {
             "basicAuth": []
@@ -26247,7 +26272,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get source",
         "responses": {
           "200": {
             "description": "",
@@ -26312,6 +26336,7 @@
             }
           }
         },
+        "summary": "Get source",
         "security": [
           {
             "basicAuth": []
@@ -26338,7 +26363,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Update source",
         "responses": {
           "200": {
             "description": "",
@@ -26425,6 +26449,7 @@
             }
           }
         },
+        "summary": "Update source",
         "requestBody": {
           "content": {
             "application/json": {
@@ -26491,7 +26516,6 @@
             }
           }
         ],
-        "summary": "Delete source",
         "responses": {
           "204": {
             "description": "Source deleted"
@@ -26570,6 +26594,7 @@
             }
           }
         },
+        "summary": "Delete source",
         "security": [
           {
             "basicAuth": []
@@ -26623,7 +26648,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "List available source types",
         "responses": {
           "200": {
             "description": "",
@@ -26650,6 +26674,7 @@
             }
           }
         },
+        "summary": "List available source types",
         "security": [
           {
             "basicAuth": []
@@ -26693,7 +26718,6 @@
             }
           }
         ],
-        "summary": "Get client info",
         "responses": {
           "200": {
             "description": "",
@@ -26703,41 +26727,41 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "lifetime": 86400,
-                      "recv_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "endpoint_name": "urn:imei:154928475237123",
-                      "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_max": "infinity",
                       "mailbox_len": 0,
+                      "send_msg": 0,
+                      "keepalive": 0,
+                      "send_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "subscriptions_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "inflight_max": "infinity",
-                      "disconnected_at": null,
-                      "send_pkt": 1,
-                      "send_oct": 61,
-                      "proto_name": "LwM2M",
-                      "recv_msg": 0,
-                      "mqueue_len": 0,
-                      "heap_size": 4185,
                       "ip_address": "127.0.0.1",
-                      "subscriptions_max": "infinity",
-                      "mqueue_dropped": 0,
-                      "port": 50675,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "proto_ver": "1.0",
+                      "mqueue_dropped": 0,
                       "expiry_interval": 0,
+                      "lifetime": 86400,
+                      "send_oct": 61,
                       "username": "guest",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "heap_size": 4185,
+                      "proto_name": "LwM2M",
+                      "mqueue_len": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "inflight_max": "infinity",
+                      "is_bridge": false,
                       "clean_start": true,
-                      "mqueue_max": "infinity",
-                      "send_msg": 0,
-                      "connected": true,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "disconnected_at": null,
+                      "recv_msg": 0,
                       "awaiting_rel_cnt": 0,
+                      "subscriptions_cnt": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "connected": true,
                       "reductions": 72022,
+                      "recv_pkt": 1,
+                      "inflight_cnt": 0,
                       "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
@@ -26745,39 +26769,39 @@
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "inflight_cnt": 0,
-                      "is_bridge": false,
-                      "recv_pkt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "mqueue_max": "infinity",
                       "mailbox_len": 0,
+                      "send_msg": 0,
+                      "keepalive": 0,
+                      "send_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "subscriptions_cnt": 0,
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "inflight_max": "infinity",
-                      "disconnected_at": null,
-                      "send_pkt": 1,
-                      "send_oct": 61,
-                      "proto_name": "STOMP",
-                      "recv_msg": 0,
-                      "mqueue_len": 0,
-                      "heap_size": 4185,
                       "ip_address": "127.0.0.1",
-                      "subscriptions_max": "infinity",
-                      "mqueue_dropped": 0,
-                      "port": 50675,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
                       "proto_ver": "1.0",
+                      "mqueue_dropped": 0,
                       "expiry_interval": 0,
+                      "send_oct": 61,
                       "username": "guest",
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "heap_size": 4185,
+                      "proto_name": "STOMP",
+                      "mqueue_len": 0,
+                      "port": 50675,
+                      "awaiting_rel_max": "infinity",
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "inflight_max": "infinity",
+                      "is_bridge": false,
                       "clean_start": true,
-                      "mqueue_max": "infinity",
-                      "send_msg": 0,
-                      "connected": true,
+                      "disconnected_at": null,
+                      "recv_msg": 0,
                       "awaiting_rel_cnt": 0,
+                      "subscriptions_cnt": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "connected": true,
                       "reductions": 72022,
+                      "recv_pkt": 1,
+                      "inflight_cnt": 0,
                       "recv_cnt": 1
                     },
                     "summary": "General client info"
@@ -26851,6 +26875,7 @@
             }
           }
         },
+        "summary": "Get client info",
         "security": [
           {
             "basicAuth": []
@@ -26892,7 +26917,6 @@
             }
           }
         ],
-        "summary": "Kick out client",
         "responses": {
           "204": {
             "description": "Kicked"
@@ -26943,6 +26967,7 @@
             }
           }
         },
+        "summary": "Kick out client",
         "security": [
           {
             "basicAuth": []
@@ -26960,7 +26985,6 @@
           "Publish"
         ],
         "parameters": [],
-        "summary": "Publish a batch of messages",
         "responses": {
           "200": {
             "description": "",
@@ -27022,6 +27046,7 @@
             }
           }
         },
+        "summary": "Publish a batch of messages",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27041,7 +27066,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/nodes/{node}/bridges/{id}/{operation}": {
@@ -27087,7 +27115,6 @@
             "example": "start"
           }
         ],
-        "summary": "Stop/restart bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -27181,6 +27208,7 @@
             }
           }
         },
+        "summary": "Stop/restart bridge",
         "security": [
           {
             "basicAuth": []
@@ -27198,7 +27226,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "Test a rule",
         "responses": {
           "200": {
             "description": "Rule Test Pass"
@@ -27248,6 +27275,7 @@
             }
           }
         },
+        "summary": "Test a rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27542,7 +27570,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *sysmon*",
         "responses": {
           "200": {
             "description": "",
@@ -27577,6 +27604,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *sysmon*",
         "security": [
           {
             "basicAuth": []
@@ -27592,7 +27620,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *sysmon*",
         "responses": {
           "200": {
             "description": "",
@@ -27650,6 +27677,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *sysmon*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27687,7 +27715,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Get connector",
         "responses": {
           "200": {
             "description": "",
@@ -27754,6 +27781,7 @@
             }
           }
         },
+        "summary": "Get connector",
         "security": [
           {
             "basicAuth": []
@@ -27780,7 +27808,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Update connector",
         "responses": {
           "200": {
             "description": "",
@@ -27869,6 +27896,7 @@
             }
           }
         },
+        "summary": "Update connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27927,7 +27955,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Delete connector",
         "responses": {
           "204": {
             "description": "Connector deleted"
@@ -27999,6 +28026,7 @@
             }
           }
         },
+        "summary": "Delete connector",
         "security": [
           {
             "basicAuth": []
@@ -28260,7 +28288,6 @@
             "example": ""
           }
         ],
-        "summary": "Get listener config",
         "responses": {
           "200": {
             "description": "",
@@ -28560,6 +28587,7 @@
             }
           }
         },
+        "summary": "Get listener config",
         "security": [
           {
             "basicAuth": []
@@ -28603,7 +28631,6 @@
             "example": ""
           }
         ],
-        "summary": "Update listener config",
         "responses": {
           "200": {
             "description": "",
@@ -28903,6 +28930,7 @@
             }
           }
         },
+        "summary": "Update listener config",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29197,7 +29225,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete listener",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -29248,6 +29275,7 @@
             }
           }
         },
+        "summary": "Delete listener",
         "security": [
           {
             "basicAuth": []
@@ -29269,7 +29297,6 @@
             "$ref": "#/components/parameters/relup.node_name"
           }
         ],
-        "summary": "Upgrade a specified node",
         "responses": {
           "204": {
             "description": "Upgrade is started successfully"
@@ -29341,6 +29368,7 @@
             }
           }
         },
+        "summary": "Upgrade a specified node",
         "security": [
           {
             "basicAuth": []
@@ -29369,7 +29397,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Reset source metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -29397,6 +29424,7 @@
             }
           }
         },
+        "summary": "Reset source metrics",
         "security": [
           {
             "basicAuth": []
@@ -29424,7 +29452,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Apply a rule for testing",
         "responses": {
           "200": {
             "description": "Rule Applied"
@@ -29496,6 +29523,7 @@
             }
           }
         },
+        "summary": "Apply a rule for testing",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29522,7 +29550,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Upgrade all nodes",
         "responses": {
           "204": {
             "description": "Upgrade is started successfully"
@@ -29572,6 +29599,7 @@
             }
           }
         },
+        "summary": "Upgrade all nodes",
         "security": [
           {
             "basicAuth": []
@@ -29617,7 +29645,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable gateway",
         "responses": {
           "204": {
             "description": "Gateway configuration updated"
@@ -29646,6 +29673,7 @@
             }
           }
         },
+        "summary": "Enable or disable gateway",
         "security": [
           {
             "basicAuth": []
@@ -29663,7 +29691,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Upload a hot upgrade package",
         "responses": {
           "204": {
             "description": "Package is uploaded successfully"
@@ -29693,6 +29720,7 @@
             }
           }
         },
+        "summary": "Upload a hot upgrade package",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -29787,7 +29815,7 @@
           {
             "in": "query",
             "name": "action",
-            "description": "Filters rules that contain any of the given action id(s).  When used in conjunction with source id filtering, the rules must contain sources *and* actions that match some of the criteria.",
+            "description": "筛选包含任意给定动作 ID 的规则。当与 source ID 筛选一起使用时，规则必须包含匹配某些条件的 source 和动作。",
             "schema": {
               "type": "array",
               "items": {
@@ -29798,7 +29826,7 @@
           {
             "in": "query",
             "name": "source",
-            "description": "Filters rules that contain any of the given source id(s).  When used in conjunction with action id filtering, the rules must contain sources *and* actions that match some of the criteria.",
+            "description": "筛选包含任意给定 source ID 的规则。当与动作 ID 筛选一起使用时，规则必须包含匹配某些条件的 source 和动作。",
             "schema": {
               "type": "array",
               "items": {
@@ -29813,7 +29841,6 @@
             "$ref": "#/components/parameters/public.limit"
           }
         ],
-        "summary": "List rules",
         "responses": {
           "200": {
             "description": "",
@@ -29860,6 +29887,7 @@
             }
           }
         },
+        "summary": "List rules",
         "security": [
           {
             "basicAuth": []
@@ -29875,7 +29903,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "Create a rule",
         "responses": {
           "201": {
             "description": "",
@@ -29910,6 +29937,7 @@
             }
           }
         },
+        "summary": "Create a rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -30212,7 +30240,6 @@
             "example": "running"
           }
         ],
-        "summary": "List all gateways",
         "responses": {
           "200": {
             "description": "",
@@ -30239,7 +30266,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "lwm2m:udp:default",
@@ -30248,6 +30274,7 @@
                         "type": "udp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:26.171+08:00",
                     "current_connections": 0
                   },
@@ -30262,7 +30289,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "mqttsn:udp:default",
@@ -30271,9 +30297,10 @@
                         "type": "udp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
-                    "stopped_at": "2021-12-08T14:56:35.576+08:00",
-                    "current_connections": 0
+                    "current_connections": 0,
+                    "stopped_at": "2021-12-08T14:56:35.576+08:00"
                   },
                   {
                     "name": "stomp",
@@ -30287,7 +30314,6 @@
                         "current_connections": 0
                       }
                     ],
-                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "stomp:tcp:default",
@@ -30296,6 +30322,7 @@
                         "type": "tcp"
                       }
                     ],
+                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:42:15.272+08:00",
                     "current_connections": 0
                   }
@@ -30332,6 +30359,7 @@
             }
           }
         },
+        "summary": "List all gateways",
         "security": [
           {
             "basicAuth": []
@@ -30464,7 +30492,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -30492,6 +30519,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -30507,17 +30535,17 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "max_buffer_bytes": 104857600
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -30542,8 +30570,8 @@
                     "max_inflight": 100,
                     "resource_opts": {
                       "query_mode": "sync",
-                      "health_check_interval": "15s",
-                      "max_buffer_bytes": 104857600
+                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s"
                     },
                     "ingress": {
                       "local": {
@@ -30823,8 +30851,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -30854,8 +30882,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -31088,8 +31116,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -31119,8 +31147,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -31237,7 +31265,6 @@
           "Publish"
         ],
         "parameters": [],
-        "summary": "Publish a message",
         "responses": {
           "200": {
             "description": "",
@@ -31280,6 +31307,7 @@
             }
           }
         },
+        "summary": "Publish a message",
         "requestBody": {
           "content": {
             "application/json": {
@@ -31296,7 +31324,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/nodes/{node}/metrics": {
@@ -31542,7 +31573,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -31592,6 +31622,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -31746,7 +31777,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -31818,6 +31848,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -31846,7 +31877,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Get bridge metrics",
         "responses": {
           "200": {
             "description": "",
@@ -31894,6 +31924,7 @@
             }
           }
         },
+        "summary": "Get bridge metrics",
         "security": [
           {
             "basicAuth": []
@@ -32167,7 +32198,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -32195,6 +32225,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -32739,7 +32770,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get source metrics",
         "responses": {
           "200": {
             "description": "",
@@ -32787,6 +32817,7 @@
             }
           }
         },
+        "summary": "Get source metrics",
         "security": [
           {
             "basicAuth": []
@@ -32822,7 +32853,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Get authenticator configuration",
         "responses": {
           "200": {
             "description": "",
@@ -32869,8 +32899,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -32900,8 +32930,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33017,6 +33047,7 @@
             }
           }
         },
+        "summary": "Get authenticator configuration",
         "security": [
           {
             "basicAuth": []
@@ -33050,7 +33081,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Update authenticator configuration",
         "responses": {
           "200": {
             "description": "",
@@ -33097,8 +33127,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33128,8 +33158,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33242,6 +33272,7 @@
             }
           }
         },
+        "summary": "Update authenticator configuration",
         "requestBody": {
           "content": {
             "application/json": {
@@ -33286,8 +33317,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33317,8 +33348,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33418,7 +33449,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Delete gateway authenticator",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -33469,6 +33499,7 @@
             }
           }
         },
+        "summary": "Delete gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -33502,7 +33533,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Create authenticator for gateway",
         "responses": {
           "201": {
             "description": "",
@@ -33549,8 +33579,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33580,8 +33610,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33694,6 +33724,7 @@
             }
           }
         },
+        "summary": "Create authenticator for gateway",
         "requestBody": {
           "content": {
             "application/json": {
@@ -33738,8 +33769,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33769,8 +33800,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33909,7 +33940,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/clients/{clientid}/subscribe/bulk": {
@@ -33984,7 +34018,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/sources/{id}/{operation}": {
@@ -34018,7 +34055,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -34112,6 +34148,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge",
         "security": [
           {
             "basicAuth": []
@@ -34153,7 +34190,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a connector",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -34247,6 +34283,7 @@
             }
           }
         },
+        "summary": "Manually start a connector",
         "security": [
           {
             "basicAuth": []
@@ -34264,7 +34301,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *alarm*",
         "responses": {
           "200": {
             "description": "",
@@ -34299,6 +34335,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *alarm*",
         "security": [
           {
             "basicAuth": []
@@ -34314,7 +34351,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *alarm*",
         "responses": {
           "200": {
             "description": "",
@@ -34372,6 +34408,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *alarm*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -34398,7 +34435,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "List bridges",
         "responses": {
           "200": {
             "description": "",
@@ -34470,6 +34506,7 @@
             }
           }
         },
+        "summary": "List bridges",
         "security": [
           {
             "basicAuth": []
@@ -34485,7 +34522,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "Create bridge",
         "responses": {
           "201": {
             "description": "",
@@ -34582,6 +34618,7 @@
             }
           }
         },
+        "summary": "Create bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -34796,7 +34833,6 @@
             }
           }
         ],
-        "summary": "Send a Request to a Client",
         "responses": {
           "200": {
             "description": "",
@@ -34871,6 +34907,7 @@
             }
           }
         },
+        "summary": "Send a Request to a Client",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35215,7 +35252,6 @@
           "Plugins"
         ],
         "parameters": [],
-        "summary": "List all installed plugins",
         "responses": {
           "200": {
             "description": "",
@@ -35231,6 +35267,7 @@
             }
           }
         },
+        "summary": "List all installed plugins",
         "security": [
           {
             "basicAuth": []
@@ -35248,7 +35285,6 @@
           "Dashboard"
         ],
         "parameters": [],
-        "summary": "Dashboard authentication",
         "responses": {
           "200": {
             "description": "",
@@ -35308,6 +35344,7 @@
             }
           }
         },
+        "summary": "Dashboard authentication",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35352,7 +35389,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Get bridge",
         "responses": {
           "200": {
             "description": "",
@@ -35370,17 +35406,17 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "max_buffer_bytes": 104857600
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -35405,8 +35441,8 @@
                       "max_inflight": 100,
                       "resource_opts": {
                         "query_mode": "sync",
-                        "health_check_interval": "15s",
-                        "max_buffer_bytes": 104857600
+                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s"
                       },
                       "ingress": {
                         "local": {
@@ -35471,6 +35507,7 @@
             }
           }
         },
+        "summary": "Get bridge",
         "security": [
           {
             "basicAuth": []
@@ -35497,7 +35534,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Update bridge",
         "responses": {
           "200": {
             "description": "",
@@ -35515,17 +35551,17 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "max_buffer_bytes": 104857600
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -35550,8 +35586,8 @@
                       "max_inflight": 100,
                       "resource_opts": {
                         "query_mode": "sync",
-                        "health_check_interval": "15s",
-                        "max_buffer_bytes": 104857600
+                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s"
                       },
                       "ingress": {
                         "local": {
@@ -35638,6 +35674,7 @@
             }
           }
         },
+        "summary": "Update bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35651,17 +35688,17 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "max_buffer_bytes": 104857600
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -35684,8 +35721,8 @@
                     "max_inflight": 100,
                     "resource_opts": {
                       "query_mode": "sync",
-                      "health_check_interval": "15s",
-                      "max_buffer_bytes": 104857600
+                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s"
                     },
                     "ingress": {
                       "local": {
@@ -35753,7 +35790,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Delete bridge",
         "responses": {
           "204": {
             "description": "Bridge deleted"
@@ -35832,6 +35868,7 @@
             }
           }
         },
+        "summary": "Delete bridge",
         "security": [
           {
             "basicAuth": []
@@ -35849,7 +35886,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *dashboard*",
         "responses": {
           "200": {
             "description": "",
@@ -35884,6 +35920,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *dashboard*",
         "security": [
           {
             "basicAuth": []
@@ -35899,7 +35936,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *dashboard*",
         "responses": {
           "200": {
             "description": "",
@@ -35957,6 +35993,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *dashboard*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36009,7 +36046,6 @@
             }
           }
         ],
-        "summary": "List client's subscription",
         "responses": {
           "200": {
             "description": "",
@@ -36090,6 +36126,7 @@
             }
           }
         },
+        "summary": "List client's subscription",
         "security": [
           {
             "basicAuth": []
@@ -36131,7 +36168,6 @@
             }
           }
         ],
-        "summary": "Add subscription for client",
         "responses": {
           "201": {
             "description": "",
@@ -36153,11 +36189,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
-                      "rap": 0,
-                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      }
+                      },
+                      "rap": 0,
+                      "rh": 0
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -36214,6 +36250,7 @@
             }
           }
         },
+        "summary": "Add subscription for client",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36233,11 +36270,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
-                    "rap": 0,
-                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    }
+                    },
+                    "rap": 0,
+                    "rh": 0
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -36474,7 +36511,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Move plugin within plugin hierarchy",
         "responses": {
           "204": {
             "description": "Boot order changed successfully"
@@ -36502,6 +36538,7 @@
             }
           }
         },
+        "summary": "Move plugin within plugin hierarchy",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36554,7 +36591,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *broker*",
         "responses": {
           "200": {
             "description": "Broker 相关配置项。",
@@ -36589,6 +36625,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *broker*",
         "security": [
           {
             "basicAuth": []
@@ -36604,7 +36641,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *broker*",
         "responses": {
           "200": {
             "description": "Broker 相关配置项。",
@@ -36662,6 +36698,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *broker*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -37461,7 +37498,6 @@
             "example": ""
           }
         ],
-        "summary": "Get user info",
         "responses": {
           "200": {
             "description": "",
@@ -37534,6 +37570,7 @@
             }
           }
         },
+        "summary": "Get user info",
         "security": [
           {
             "basicAuth": []
@@ -37587,7 +37624,6 @@
             "example": ""
           }
         ],
-        "summary": "Update user info",
         "responses": {
           "200": {
             "description": "",
@@ -37660,6 +37696,7 @@
             }
           }
         },
+        "summary": "Update user info",
         "requestBody": {
           "content": {
             "application/json": {
@@ -37737,7 +37774,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete user",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -37788,6 +37824,7 @@
             }
           }
         },
+        "summary": "Delete user",
         "security": [
           {
             "basicAuth": []
@@ -37844,8 +37881,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -37869,8 +37906,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -38003,8 +38040,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38034,8 +38071,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -38194,8 +38231,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38225,8 +38262,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -38372,7 +38409,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/trace": {
@@ -38651,7 +38691,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a connector on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -38745,6 +38784,7 @@
             }
           }
         },
+        "summary": "Manually start a connector on a given node",
         "security": [
           {
             "basicAuth": []
@@ -38915,7 +38955,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -38943,6 +38982,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -39169,7 +39209,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Get the hot upgrade status of all nodes",
         "responses": {
           "200": {
             "description": "",
@@ -39185,6 +39224,7 @@
             }
           }
         },
+        "summary": "Get the hot upgrade status of all nodes",
         "security": [
           {
             "basicAuth": []
@@ -39684,7 +39724,6 @@
             "example": "start"
           }
         ],
-        "summary": "Stop or restart bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -39778,6 +39817,7 @@
             }
           }
         },
+        "summary": "Stop or restart bridge",
         "security": [
           {
             "basicAuth": []
@@ -39830,7 +39870,6 @@
             }
           }
         ],
-        "summary": "Delete client's subscription",
         "responses": {
           "204": {
             "description": "Unsubscribed"
@@ -39881,6 +39920,7 @@
             }
           }
         },
+        "summary": "Delete client's subscription",
         "security": [
           {
             "basicAuth": []
@@ -39898,7 +39938,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "List available action types",
         "responses": {
           "200": {
             "description": "",
@@ -39927,6 +39966,7 @@
             }
           }
         },
+        "summary": "List available action types",
         "security": [
           {
             "basicAuth": []
@@ -40335,7 +40375,6 @@
             "example": "discover"
           }
         ],
-        "summary": "List Client's Resources",
         "responses": {
           "200": {
             "description": "",
@@ -40394,6 +40433,7 @@
             }
           }
         },
+        "summary": "List Client's Resources",
         "security": [
           {
             "basicAuth": []
@@ -40421,7 +40461,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Get rule metrics",
         "responses": {
           "200": {
             "description": "",
@@ -40456,6 +40495,7 @@
             }
           }
         },
+        "summary": "Get rule metrics",
         "security": [
           {
             "basicAuth": []
@@ -40555,7 +40595,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Get gateway",
         "responses": {
           "200": {
             "description": "",
@@ -40578,8 +40617,8 @@
                       ],
                       "idle_timeout": "30s",
                       "mountpoint": "coap/",
-                      "enable_stats": true,
                       "connection_required": false,
+                      "enable_stats": true,
                       "notify_type": "qos",
                       "publish_qos": "coap",
                       "subscribe_qos": "coap"
@@ -40804,6 +40843,7 @@
             }
           }
         },
+        "summary": "Get gateway",
         "security": [
           {
             "basicAuth": []
@@ -40837,7 +40877,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Load or update the gateway confs",
         "responses": {
           "204": {
             "description": "Gateway configuration updated"
@@ -40888,6 +40927,7 @@
             }
           }
         },
+        "summary": "Load or update the gateway confs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -40898,8 +40938,8 @@
                     "heartbeat": "30s",
                     "idle_timeout": "30s",
                     "mountpoint": "coap2/",
-                    "enable_stats": true,
                     "connection_required": false,
+                    "enable_stats": true,
                     "notify_type": "qos",
                     "publish_qos": "coap",
                     "subscribe_qos": "coap"
@@ -41112,7 +41152,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get bridge",
         "responses": {
           "200": {
             "description": "",
@@ -41209,6 +41248,7 @@
             }
           }
         },
+        "summary": "Get bridge",
         "security": [
           {
             "basicAuth": []
@@ -41235,7 +41275,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Update bridge",
         "responses": {
           "200": {
             "description": "",
@@ -41354,6 +41393,7 @@
             }
           }
         },
+        "summary": "Update bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -41443,7 +41483,6 @@
             }
           }
         ],
-        "summary": "Delete bridge",
         "responses": {
           "204": {
             "description": "Bridge deleted"
@@ -41522,6 +41561,7 @@
             }
           }
         },
+        "summary": "Delete bridge",
         "security": [
           {
             "basicAuth": []
@@ -41841,7 +41881,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Import users",
         "responses": {
           "204": {
             "description": "Imported"
@@ -41892,6 +41931,7 @@
             }
           }
         },
+        "summary": "Import users",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -42172,6 +42212,72 @@
           },
           {
             "$ref": "#/components/parameters/public.limit"
+          },
+          {
+            "in": "query",
+            "name": "clientid",
+            "description": "Query the banned objects with an exact client ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "description": "Query the banned objects with an exact username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "peerhost",
+            "description": "Query the banned objects with an exact IP address.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "127.0.0.1"
+          },
+          {
+            "in": "query",
+            "name": "like_clientid",
+            "description": "Fuzzy query banned objects with a regular expression for client ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_username",
+            "description": "Fuzzy query banned objects with a regular expression for username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_peerhost",
+            "description": "Fuzzy query banned objects with a regular expression for IP address.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "127.0.0.1"
+          },
+          {
+            "in": "query",
+            "name": "like_peerhost_net",
+            "description": "Fuzzy query banned objects with a regular expression for CIDR.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "192.1.0.0/16"
           }
         ],
         "responses": {
@@ -42189,6 +42295,28 @@
                     },
                     "meta": {
                       "$ref": "#/components/schemas/public.meta"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "错误的请求，可能是参数错误或封禁对象已存在等原因。"
                     }
                   },
                   "type": "object"
@@ -42322,7 +42450,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable connector",
         "responses": {
           "204": {
             "description": "Success"
@@ -42372,6 +42499,7 @@
             }
           }
         },
+        "summary": "Enable or disable connector",
         "security": [
           {
             "basicAuth": []
@@ -42400,7 +42528,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get action metrics",
         "responses": {
           "200": {
             "description": "",
@@ -42448,6 +42575,7 @@
             }
           }
         },
+        "summary": "Get action metrics",
         "security": [
           {
             "basicAuth": []
@@ -42653,7 +42781,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "List connectors",
         "responses": {
           "200": {
             "description": "",
@@ -42698,6 +42825,7 @@
             }
           }
         },
+        "summary": "List connectors",
         "security": [
           {
             "basicAuth": []
@@ -42713,7 +42841,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "Create connector",
         "responses": {
           "201": {
             "description": "",
@@ -42780,6 +42907,7 @@
             }
           }
         },
+        "summary": "Create connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -42969,7 +43097,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -43063,6 +43190,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge on a given node",
         "security": [
           {
             "basicAuth": []
@@ -43485,7 +43613,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "List rule events",
         "responses": {
           "200": {
             "description": "",
@@ -43498,6 +43625,7 @@
             }
           }
         },
+        "summary": "List rule events",
         "security": [
           {
             "basicAuth": []
@@ -43567,7 +43695,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/plugins/install": {
@@ -43577,7 +43708,6 @@
           "Plugins"
         ],
         "parameters": [],
-        "summary": "Install a new plugin",
         "responses": {
           "204": {
             "description": "Install plugin successfully"
@@ -43607,6 +43737,7 @@
             }
           }
         },
+        "summary": "Install a new plugin",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -43663,7 +43794,6 @@
             "example": "/3/0/7"
           }
         ],
-        "summary": "Read Value from a Resource Path",
         "responses": {
           "204": {
             "description": "No Content"
@@ -43691,6 +43821,7 @@
             }
           }
         },
+        "summary": "Read Value from a Resource Path",
         "security": [
           {
             "basicAuth": []
@@ -45058,7 +45189,6 @@
             }
           }
         ],
-        "summary": "List users for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -45132,6 +45262,7 @@
             }
           }
         },
+        "summary": "List users for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -45165,7 +45296,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Add user for gateway authenticator",
         "responses": {
           "201": {
             "description": "",
@@ -45238,6 +45368,7 @@
             }
           }
         },
+        "summary": "Add user for gateway authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -45945,7 +46076,6 @@
             "example": 50
           }
         ],
-        "summary": "List gateway's clients",
         "responses": {
           "200": {
             "description": "",
@@ -46042,6 +46172,7 @@
             }
           }
         },
+        "summary": "List gateway's clients",
         "security": [
           {
             "basicAuth": []
@@ -46087,7 +46218,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Get user info for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -46160,6 +46290,7 @@
             }
           }
         },
+        "summary": "Get user info for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -46203,7 +46334,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Update user info for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -46276,6 +46406,7 @@
             }
           }
         },
+        "summary": "Update user info for gateway authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -46343,7 +46474,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Delete user for gateway authenticator",
         "responses": {
           "204": {
             "description": "User Deleted"
@@ -46394,6 +46524,7 @@
             }
           }
         },
+        "summary": "Delete user for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -46439,7 +46570,6 @@
             "example": "stomp:tcp:def"
           }
         ],
-        "summary": "Import users",
         "responses": {
           "204": {
             "description": "Imported"
@@ -46490,6 +46620,7 @@
             }
           }
         },
+        "summary": "Import users",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -46532,7 +46663,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Reset rule metrics",
         "responses": {
           "204": {
             "description": "Reset Success"
@@ -46560,6 +46690,7 @@
             }
           }
         },
+        "summary": "Reset rule metrics",
         "security": [
           {
             "basicAuth": []
@@ -46628,7 +46759,6 @@
             "example": 50
           }
         ],
-        "summary": "List authenticator's users",
         "responses": {
           "200": {
             "description": "",
@@ -46701,6 +46831,7 @@
             }
           }
         },
+        "summary": "List authenticator's users",
         "security": [
           {
             "basicAuth": []
@@ -46744,7 +46875,6 @@
             "example": ""
           }
         ],
-        "summary": "Add user for an authenticator",
         "responses": {
           "201": {
             "description": "",
@@ -46817,6 +46947,7 @@
             }
           }
         },
+        "summary": "Add user for an authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47111,7 +47242,6 @@
             "example": 123
           }
         ],
-        "summary": "Write a Value to Resource Path",
         "responses": {
           "204": {
             "description": "No Content"
@@ -47139,6 +47269,7 @@
             }
           }
         },
+        "summary": "Write a Value to Resource Path",
         "security": [
           {
             "basicAuth": []
@@ -47156,7 +47287,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *log*",
         "responses": {
           "200": {
             "description": "EMQX 支持两种主要的日志处理进程：file 和 console，另有一个专门设计用于始终将日志定向到文件的 audit 处理进程。<br/>系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 配置，它接受以下设置：<br/><br/>- file：将日志输出仅定向到文件。<br/>- console：将日志输出仅定向到控制台。<br/><br/>值得注意的是，当通过 systemd 的 emqx.service 文件启动 EMQX 时，EMQX_DEFAULT_LOG_HANDLER 被设置为 file。<br/>在 systemd 启动之外的场景中，console 作为默认的日志处理进程。",
@@ -47191,6 +47321,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *log*",
         "security": [
           {
             "basicAuth": []
@@ -47206,7 +47337,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *log*",
         "responses": {
           "200": {
             "description": "EMQX 支持两种主要的日志处理进程：file 和 console，另有一个专门设计用于始终将日志定向到文件的 audit 处理进程。<br/>系统的默认日志处理行为可以通过环境变量 `EMQX_DEFAULT_LOG_HANDLER` 配置，它接受以下设置：<br/><br/>- file：将日志输出仅定向到文件。<br/>- console：将日志输出仅定向到控制台。<br/><br/>值得注意的是，当通过 systemd 的 emqx.service 文件启动 EMQX 时，EMQX_DEFAULT_LOG_HANDLER 被设置为 file。<br/>在 systemd 启动之外的场景中，console 作为默认的日志处理进程。",
@@ -47264,6 +47394,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *log*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47300,7 +47431,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Get rule",
         "responses": {
           "200": {
             "description": "",
@@ -47335,6 +47465,7 @@
             }
           }
         },
+        "summary": "Get rule",
         "security": [
           {
             "basicAuth": []
@@ -47360,7 +47491,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Update rule",
         "responses": {
           "200": {
             "description": "",
@@ -47395,6 +47525,7 @@
             }
           }
         },
+        "summary": "Update rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47429,7 +47560,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Delete rule",
         "responses": {
           "204": {
             "description": "Delete rule successfully"
@@ -47457,6 +47587,7 @@
             }
           }
         },
+        "summary": "Delete rule",
         "security": [
           {
             "basicAuth": []
@@ -47539,7 +47670,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "List bridges",
         "responses": {
           "200": {
             "description": "",
@@ -47556,17 +47686,17 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "max_buffer_bytes": 104857600
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -47588,8 +47718,8 @@
                     "max_inflight": 100,
                     "resource_opts": {
                       "query_mode": "sync",
-                      "health_check_interval": "15s",
-                      "max_buffer_bytes": 104857600
+                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s"
                     },
                     "ingress": {
                       "local": {
@@ -47633,6 +47763,7 @@
             }
           }
         },
+        "summary": "List bridges",
         "security": [
           {
             "basicAuth": []
@@ -47648,7 +47779,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "Create bridge",
         "responses": {
           "201": {
             "description": "",
@@ -47666,17 +47796,17 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
                         "query_mode": "async",
-                        "health_check_interval": 15000,
+                        "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "max_buffer_bytes": 104857600
+                        "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
                       "local_topic": "emqx_http/#"
@@ -47701,8 +47831,8 @@
                       "max_inflight": 100,
                       "resource_opts": {
                         "query_mode": "sync",
-                        "health_check_interval": "15s",
-                        "max_buffer_bytes": 104857600
+                        "max_buffer_bytes": 104857600,
+                        "health_check_interval": "15s"
                       },
                       "ingress": {
                         "local": {
@@ -47767,6 +47897,7 @@
             }
           }
         },
+        "summary": "Create bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47782,17 +47913,17 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
                       "query_mode": "async",
-                      "health_check_interval": 15000,
+                      "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "max_buffer_bytes": 104857600
+                      "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
                     "local_topic": "emqx_http/#"
@@ -47817,8 +47948,8 @@
                     "max_inflight": 100,
                     "resource_opts": {
                       "query_mode": "sync",
-                      "health_check_interval": "15s",
-                      "max_buffer_bytes": 104857600
+                      "max_buffer_bytes": 104857600,
+                      "health_check_interval": "15s"
                     },
                     "ingress": {
                       "local": {
@@ -48037,7 +48168,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Get the installed hot upgrade package",
         "responses": {
           "200": {
             "description": "",
@@ -48072,6 +48202,7 @@
             }
           }
         },
+        "summary": "Get the installed hot upgrade package",
         "security": [
           {
             "basicAuth": []
@@ -48087,12 +48218,12 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Delete the installed hot upgrade package",
         "responses": {
           "204": {
             "description": "Packages are deleted successfully"
           }
         },
+        "summary": "Delete the installed hot upgrade package",
         "security": [
           {
             "basicAuth": []
@@ -48360,7 +48491,6 @@
             "$ref": "#/components/parameters/relup.node_name"
           }
         ],
-        "summary": "Get the hot upgrade status of a specified node",
         "responses": {
           "200": {
             "description": "",
@@ -48373,6 +48503,7 @@
             }
           }
         },
+        "summary": "Get the hot upgrade status of a specified node",
         "security": [
           {
             "basicAuth": []
