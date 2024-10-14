@@ -1,5 +1,11 @@
 # MQTT 5.0 增强认证 - Kerberos
 
+::: tip
+
+Kerberos 认证是 EMQX 企业版功能。
+
+:::
+
 Kerberos 是一种网络身份验证协议，它使用“票据”使节点能够在不安全的网络上安全地证明彼此的身份，通过密钥加密为客户端/服务器应用程序提供强身份验证。
 
 EMQX 中的 Kerberos 认证集成遵循 RFC 4422 的 SASL/GSSAPI 机制。通用安全服务应用程序编程接口（GSSAPI）提供了一个标准化的 API，简化了 Kerberos 协议的细节，使得 MQTT 客户端与服务器之间能够进行安全通信，而无需应用程序管理 Kerberos 认证过程的具体细节。

@@ -1,5 +1,89 @@
 # EMQX 开源版 v5 版本
 
+## 5.8.1
+
+*发布日期：2024-10-14*
+
+升级前请查看已知问题列表和不兼容变更列表。
+
+### 重要变更
+
+- [#13956](https://github.com/emqx/emqx/pull/13956) RPC 库 `gen_rpc` 升级到 3.4.1，修复一个竞争导致的节点崩溃问题。在此版本前，如果某个节点在 RPC 通道建立过程中关闭，可能会导集群中致对等节点崩溃。
+
+### 增强
+
+#### 核心 MQTT 功能
+
+- [#13525](https://github.com/emqx/emqx/pull/13525) 新增了配置项 `shared_subscription_initial_sticky_pick`，用于在 `shared_subscription_strategy` 为 `sticky` 时第一次选取共享订阅客户端的策略。
+
+- [#13942](https://github.com/emqx/emqx/pull/13942) HTTP 客户端现在在最新请求超时后，如果 10 秒内未检测到任何活动，将自动重新连接。此前，客户端会无限期等待服务器响应，导致服务器丢弃请求时发生超时。
+
+  此更改影响以下组件：
+
+  - HTTP 认证
+  - HTTP 授权
+  - Webhook（HTTP 连接器）
+
+#### 认证与授权
+
+- [#13863](https://github.com/emqx/emqx/pull/13863) EMQX 现在支持在原始 ACL 规则的主题名称模板中使用 `${cert_common_name}` 占位符。
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) 黑名单查询 API `GET /banned` 现支持使用以下参数对规则进行条件查找：
+
+  - clientid
+  - username
+  - peerhost
+  - like_clientid
+  - like_username
+  - like_peerhost
+  - like_peerhost_net
+
+  在新增黑名单记录时，对于未指定 `until`  参数的默认过期时间已从 1 年改为 `无限期`。
+
+#### 规则引擎
+
+- [#13773](https://github.com/emqx/emqx/pull/13773) 停用的规则动作现在不会触发 `out_of_service` 警告。
+
+  之前，如果某个动作被停用，会出现带有 `msg: out_of_service` 的警告日志，并且该规则的 `actions.failed` 计数器会增加。
+
+  经过此次优化后，停用的动作将记录 `debug` 级别日志，日志内容为 `msg: discarded`，并且新增的 `actions.discarded` 计数器将增加。
+
+#### MQTT over QUIC
+
+- [#13814](https://github.com/emqx/emqx/pull/13814) 基于 QUIC 多流的连接范围保活功能：
+
+  此更新引入了一项新功能，即使控制流处于空闲状态，但其他数据流仍活跃时，仍然可以保持基于 QUIC 多流的 MQTT 连接。
+
+  之前，客户端需要在空闲的控制流上发送 `MQTT.PINGREQ` 来保持连接活跃。现在，每个连接都会维护一个共享状态，监控所有流的活动情况。这个共享状态有助于判断连接是否仍然活跃，减少由于队头阻塞（HOL blocking）导致的保活超时风险，并提高整体连接的稳定性。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#13702](https://github.com/emqx/emqx/pull/13702) 修复节点宕机时清理该节点持有的排它订阅。
+
+- [#13708](https://github.com/emqx/emqx/pull/13708) 修复了可能导致共享订阅的 “sticky” 策略降级为 “random” 的问题。
+
+- [#13733](https://github.com/emqx/emqx/pull/13733) 在使用 `emqx ctl conf load` 命令配置 https 监听器时，允许 `cacertfile` 参数为可选项。
+
+- [#13742](https://github.com/emqx/emqx/pull/13742) 修复了当以 `+` 作为第一级，或使用 `#` 作为通配符进行订阅时，错误接收到以 `$` 开头主题的保留消息的问题。
+
+- [#13754](https://github.com/emqx/emqx/pull/13754) 修复了 websocket 连接会自行持续中断的问题。
+
+- [#13756](https://github.com/emqx/emqx/pull/13756) 增加了分配给客户端 ID 的随机性。
+
+- [#13790](https://github.com/emqx/emqx/pull/13790) 将 MQTT 连接器的默认心跳间隔从 300 秒减少到 160 秒。
+
+  此更改有助于通过防止因负载均衡器或防火墙的空闲限制导致的超时来维护底层 TCP 连接，云服务提供商通常将这些限制设定在 3 到 5 分钟之间。
+
+- [#13832](https://github.com/emqx/emqx/pull/13832) 修复了启用持久会话时，`Publish` 端点出现 500 错误的问题。
+
+- [#13842](https://github.com/emqx/emqx/pull/13842) 修复了 UTF-8 字符串验证异常问题。
+
+#### 升级与迁移
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) 解决了运行在 EMQX 5.4.0 的集群无法升级到 EMQX 5.8.0 的问题。此修复引入了一个迁移过程，将 5.4.0 版本中创建的特定内部数据库表更新为符合新架构。
+
 ## 5.8.0
 
 *发布日期：2024-08-28*

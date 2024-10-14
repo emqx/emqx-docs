@@ -1,5 +1,11 @@
 # MQTT 5.0 Enhanced Authentication - Kerberos
 
+::: tip
+
+The Kerberos Authentication is only available in the EMQX Enterprise edition.
+
+:::
+
 Kerberos is a network authentication protocol that uses "tickets" to allow nodes to securely prove their identity to one another over a non-secure network. It is designed to provide strong authentication for client/server applications through secret-key cryptography. 
 
 EMQX integrates Kerberos authentication following the SASL/GSSAPI mechanism from RFC 4422. The Generic Security Services Application Program Interface (GSSAPI) provides a standardized API that abstracts the details of the Kerberos protocol, allowing secure communication between the MQTT clients and the server without requiring the application to manage the specifics of the Kerberos authentication process.

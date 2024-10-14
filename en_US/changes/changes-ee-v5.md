@@ -1,5 +1,231 @@
 # EMQX Enterprise Version 5
 
+## 5.8.1
+
+*Release Date: 2024-10-14*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.8.1.
+
+### Important Changes
+
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a node crash issue.
+Previously, if a node is force shutdown down while RPC channels are being established, it may cause a cluster peer node to crash.
+
+### Enhancements
+
+#### Core MQTT Functionalities
+
+- [#13525](https://github.com/emqx/emqx/pull/13525) Added new configuration item `shared_subscription_initial_sticky_pick` to specify the strategy for making the initial pick when `shared_subscription_strategy` is set to `sticky`.
+
+- [#13942](https://github.com/emqx/emqx/pull/13942) The HTTP client now automatically reconnects if no activity is detected for 10 seconds after the latest request has expired.
+  Previously, it would wait indefinitely for a server response, causing timeouts if the server dropped requests.
+
+  This change impacts below components.
+
+  - HTTP authentication
+  - HTTP authorization
+  - Webhook (HTTP connector)
+  - GCP PubSub connector
+  - S3 connector
+  - InfluxDB connector
+  - Couchbase connector
+  - IoTDB connector
+  - Snowflake connector
+
+#### Authentication and Authorization
+
+- [#13863](https://github.com/emqx/emqx/pull/13863) EMQX now supports `${cert_common_name}` placeholder in topic name templates for raw ACL rules.
+
+- [#13864](https://github.com/emqx/emqx/pull/13864) Added support for using `memberOf` syntax in LDAP query filters.
+
+- [#13810](https://github.com/emqx/emqx/pull/13810) Added client-info authentication.
+
+  Client-info (of type `cinfo`) authentication is a lightweight authentication mechanism that checks client properties and attributes against user-defined rules.
+  The rules make use of the Variform expression to define match conditions, and the authentication result when match is found. For example, to quickly fence off clients without a username, the match condition can be `str_eq(username, '')` associated with a check result `deny`.
+
+- [#13792](https://github.com/emqx/emqx/pull/13792) The banned-clients API `GET /banned` supports querying the rules using filters in the query string.
+
+  The available filters are:
+
+  - clientid
+  - username
+  - peerhost
+  - like_clientid
+  - like_username
+  - like_peerhost
+  - like_peerhost_net
+
+  When adding a new banned client entry, the default expiration time for entries without the `until` parameter specified has been changed from 1 year to `infinite`.
+
+#### Rule Engine
+
+- [#13773](https://github.com/emqx/emqx/pull/13773) Disabled rule actions now do not trigger `out_of_service` warnings.
+
+  Previously, if an action is disabled, there would be a warning log with `msg: out_of_service`,
+  and the `actions.failed` counter was incremented for the rule.
+
+  After this enhancement, disabled action will result in a `debug` level log with `msg: discarded`,
+  and the newly introduced counter `actions.discarded` will be incremented.
+
+- [#13804](https://github.com/emqx/emqx/pull/13804) Added support for using Confluent Schema Registry as an external provider in our Schema Registry.
+
+#### Data Integrations
+
+- [#13716](https://github.com/emqx/emqx/pull/13716) Introduced a Thrift driver for the IoTDB connector.
+
+
+- [#13745](https://github.com/emqx/emqx/pull/13745) EMQX supports the data integration with Snowflake.
+
+- [#13783](https://github.com/emqx/emqx/pull/13783) Lowered Kafka producer buffer RAM usage when running in async mode.
+
+- [#13861](https://github.com/emqx/emqx/pull/13861) Added a new configuration item `undefined_vars_as_null`  to some of the data integration actions, to ensure that undefined variables in the SQL templates are treated as `NULL` when writing data into databases.
+
+  The following Sink actions are added with this configuration item:
+
+    - MySQL
+    - ClickHouse
+    - SQLServer
+    - TDengine
+    - DynamoDB
+
+#### MQTT over QUIC
+
+- [#13814](https://github.com/emqx/emqx/pull/13814) Connection Scope Keepalive for MQTT over QUIC Multi-Stream:
+
+  This update introduces a new feature to maintain MQTT connections over QUIC multi-streams, even when the control stream is idle but other data streams are active.
+
+  Previously, clients had to send `MQTT.PINGREQ` on idle control streams to keep the connection alive. Now, a shared state is maintained for each connection, monitoring activity across all streams. This shared state helps determine if the connection is still active, reducing the risk of keepalive timeouts caused by Head-of-Line (HOL) blocking and improving overall connection stability.
+
+#### Durable Storage
+
+- [#13788](https://github.com/emqx/emqx/pull/13788) Prevent DS Shared Subscriptions application from running full-fledged startup sequence if respective features are disabled. This includes preventing the initialization of the internal database that could have been created and occupied a lot of disk space otherwise.
+
+#### Cluster Linking
+
+
+- [#13835](https://github.com/emqx/emqx/pull/13835) Added a `PUT /cluster/links/link/:name/metrics/reset` HTTP API endpoint that resets metrics for a given cluster link.
+
+#### Dashboard
+
+
+- [#13873](https://github.com/emqx/emqx/pull/13873) Improved `/api/v5/monitor` endpoint performance.
+
+  This update enhances the performance of the Dashboard's monitor page, particularly in clusters with a large number of nodes, where timeouts were previously common.
+  
+  Key improvements include:
+  
+  - Implemented concurrent RPC calls to retrieve metrics from nodes across the cluster.
+  - Introduced data downsampling to reduce the density of data points based on the requested query time span:
+    - `10s` intervals for the last `1h`
+    - `1m` intervals for the last `1d`
+    - `5m` intervals for the last `3d`
+    - `10m` intervals for the last `7d`
+  - Added dummy data points for periods when EMQX was stopped, ensuring visibility of gaps in the timeline on the dashboard.
+
+#### Enterprise License
+
+
+- [#13910](https://github.com/emqx/emqx/pull/13910) Performance enhancement for Enterprise edition license check.
+
+### Bug Fixes
+
+#### Core MQTT Functions
+
+- [#13702](https://github.com/emqx/emqx/pull/13702) Clean up the corresponding exclusive subscriptions when a node goes down.
+
+
+- [#13708](https://github.com/emqx/emqx/pull/13708) Fixed an issue which may cause shared subscription 'sticky' strategy to degrade to 'random'.
+
+- [#13733](https://github.com/emqx/emqx/pull/13733) Made `cacertfile` optional when configuring https listener from `emqx ctl conf load` command.
+
+- [#13742](https://github.com/emqx/emqx/pull/13742) Fixed an issue when a client would receive retained messages for topic starting with `$` when it subscribed to topic `#` or `+`.
+
+- [#13754](https://github.com/emqx/emqx/pull/13754) Fixed an issue when websocket connection would break consistently on its own.
+
+- [#13756](https://github.com/emqx/emqx/pull/13756) Introduced more randomness to broker assigned client IDs.
+
+- [#13790](https://github.com/emqx/emqx/pull/13790) The default heartbeat interval for the MQTT connector has been reduced from 300 seconds to 160 seconds.
+
+  This change helps maintain the underlying TCP connection by preventing timeouts due to the idle limits
+  imposed by load balancers or firewalls, which typically range from 3 to 5 minutes depending on the cloud provider.
+
+
+- [#13832](https://github.com/emqx/emqx/pull/13832) Fixed 500 error when using `/publish` REST API endpoint with persistent sessions enabled.
+
+
+- [#13842](https://github.com/emqx/emqx/pull/13842) Fixed a UTF-8 string validation exception.
+- [#13956](https://github.com/emqx/emqx/pull/13956) Updated the `gen_rpc` library to version 3.4.1, which includes a fix to prevent client socket initialization errors from escalating to the node level on the server side.
+
+#### Upgrade and Migration
+
+
+- [#13731](https://github.com/emqx/emqx/pull/13731) Resolved an issue that prevented clusters running on EMQX 5.4.0 from upgrading to EMQX 5.8.0. This fix introduces a migration procedure to update specific internal database tables created in version 5.4.0 to align with the new schema.
+
+#### Authentication
+
+
+- [#13726](https://github.com/emqx/emqx/pull/13726) Upgraded Kerberos authentication library to use MEMORY type cache instead of FILE type which sometimes fails when authentication requests are initialized concurrently.
+
+#### Rule Engine
+
+
+- [#13735](https://github.com/emqx/emqx/pull/13735) Improved message transformation error messages when payload to be decoded is invalid.
+- [#13769](https://github.com/emqx/emqx/pull/13769) Fixed an issue where using JSON schema validation (draft 3) with the `extends` property would lead to validation always failing.
+
+#### Data Integrations
+
+
+- [#13851](https://github.com/emqx/emqx/pull/13851) Fixed an exception of `Test connectivity` with the IotDB Thrift driver.
+
+
+- [#13724](https://github.com/emqx/emqx/pull/13724) Azure Blob Storage and S3 actions in aggregated mode now trigger sending aggregated data sooner after the maximum number of records is reached.
+
+- [#13734](https://github.com/emqx/emqx/pull/13734) Made Azure Blob Storage connector configuration error messages more friendly.
+
+- [#13736](https://github.com/emqx/emqx/pull/13736) Upgraded Kafka producer to support client re-authentication. See [kafka_protocol#122](https://github.com/kafka4beam/kafka_protocol/pull/122).
+
+  Also fixed below minor issuses:
+
+  - `unexpected_info` error log in [PR#13727](https://github.com/emqx/emqx/pull/13727) and [wolff#74](https://github.com/kafka4beam/wolff/pull/74).
+  - `einval` crash report of Kafka connection due to a race condition [kafka_protocol#124](https://github.com/kafka4beam/kafka_protocol/pull/124).
+
+- [#13896](https://github.com/emqx/emqx/pull/13896) Upgraded pulsar client from `0.8.3` to `0.8.4` (see [pulsar#61](https://github.com/emqx/pulsar-client-erl/pull/61).
+
+  Prior to this fix, if the producer client experiences a 'socket error' (but not a normal 'socket close'), it may continue sending data to a closed socket without any error handling.
+  From the EMQX Dashboard, user may observe that the 'total' counter keeps increasing, but the other counters 'success', 'failed' and 'dropped' are not.
+
+- [#13897](https://github.com/emqx/emqx/pull/13897) Microsoft SQL Server connector is now compatible with Microsoft ODBC 18.
+
+- [#13902](https://github.com/emqx/emqx/pull/13902) Fixed an issue with prepared statements in MySQL integration.
+
+  Before this fix, if an invalid prepared statement was used (e.g., referencing an unknown table column) when updating a MySQL integration action, it could cause the action to revert to using the oldest version of a previously prepared statement.
+
+- [#13906](https://github.com/emqx/emqx/pull/13906) Fixed an issue with prepared statements in PostgreSQL integration.
+
+  Before this fix, if an invalid prepared statement was used (e.g., referencing an unknown table column) when updating a Postgres integration action, it could cause the action to apply the oldest version of a previously prepared statement.
+
+- [#13921](https://github.com/emqx/emqx/pull/13921) Fixed an issue where changing the `sync_timeout` parameter for the Pulsar producer action would not have the expected effect on request timeout.
+
+  Additionally, deprecated the `resource_opts.request_ttl` configuration for the Pulsar producer action, as it did not influence the request TTL as expected (this is handled by the `retention_period` setting). This change helps prevent potential confusion for users.
+
+- [#13959](https://github.com/emqx/emqx/pull/13959) Upgraded the Pulsar client from `0.8.4` to `0.8.5` (see [pulsar#62](https://github.com/emqx/pulsar-client-erl/pull/62)). This update fixed an issue where, under certain race conditions, the producer could fail to communicate with the client process. As a result, the client process could stop unexpectedly and not restart automatically. The only solution before this fix was to manually restart the process.
+- [#13965](https://github.com/emqx/emqx/pull/13965) Fixed a function clause error that occurred when using the batch mode as the data writing method in IotDB Sink.
+- [#13971](https://github.com/emqx/emqx/pull/13971) Fixed a Kafka producer bug introduced in EMQX Enterprise 5.8.0, where the producer could crash if it failed to fetch metadata during the initialization stage.
+
+- [#13973](https://github.com/emqx/emqx/pull/13973) Fixed an issue in the Microsoft SQL Server integration where EMQX would log multiple errors and warnings each time the connection to the server was stopped.
+
+#### Management and Operation
+
+- [#13963](https://github.com/emqx/emqx/pull/13963) Fixed the following issues with the Audit Log feature:
+  - The Audit Log feature was incompatible with the Single Sign-On (SSO) feature, causing exceptions for each SSO event.
+  - Illegal access attempts (e.g., `GET` requests to `POST`-only endpoints) were not being logged.
+
+#### Cluster Linking
+
+
+- [#13888](https://github.com/emqx/emqx/pull/13888) Fixed an issue that prevented updating a cluster link without clientid via its HTTP API.
+- [#13927](https://github.com/emqx/emqx/pull/13927) Fixed an issue where Cluster Link bootstrap process could have crashed if the local cluster had one or more very crowded topics.
+
 ## 5.8.0
 
 *Release Date: 2024-08-28*

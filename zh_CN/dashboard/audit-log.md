@@ -1,5 +1,11 @@
 # 审计日志
 
+::: tip
+
+审计日志是 EMQX 企业版功能。
+
+:::
+
 审计日志（Audit Log）功能让您实时跟踪 EMQX 集群的重要操作变更，是企业用户遵守合规要求、确保数据安全的关键工具。
 
 EMQX 审计日志支持记录来自 [Dashboard](../dashboard/introduction.md) 、[REST API](../admin/api.md) 以及 [CLI](../admin/cli.md) 和控制台的变更性操作，例如 Dashboard 用户登录，对客户端、访问控制以及数据集成等资源的修改。而指标获取、客户端列表查询等只读操作则不会被记录。

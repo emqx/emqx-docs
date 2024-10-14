@@ -2,6 +2,10 @@
 
 ## e5.8.1
 
+- **Linux 单调时钟回调导致 EMQX 节点重启 (始于 5.0)**
+
+  在某些虚拟 Linux 环境中，操作系统无法保持时钟的单调性，这可能会导致 Erlang VM 因为错误消息 `OS monotonic time stepped backwards!` 而退出。对于这类环境，可以在 `etc/vm.args` 中将 `+c` 标志设置为 `false`。
+
 - **如果一个新节点在原节点停止时加入集群，原节点无法启动 （始于 5.0）**
 
   在包含两个或更多节点的集群中，如果在某些节点停止运行时有新节点加入集群，那么这些停止的节点将无法重新启动，并会产生如下日志： `2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (核心转储至文件: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** 合并 schema 失败: {aborted,function_clause}`
