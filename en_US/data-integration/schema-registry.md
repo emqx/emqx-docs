@@ -208,7 +208,7 @@ from 't'
 
 ##### `schema_encode_and_tag` 
 
-This function uses a locally registered Avro schema and an external CSR schema name and subject to encode a payload (already in internal map format) and tags the resulting payload with a schema ID.  The schema ID comes from registering the local schema to CSR.
+This function uses a locally registered Avro schema, an external CSR schema name, and a subject to encode a payload (already in internal map format), and to tag the resulting payload with a schema ID.  The schema ID comes from registering the local schema to CSR.
 
 Example:
 
