@@ -4,7 +4,7 @@
 
 - **Node Cannot Start if a New Node Joined Cluster While It was Stopped (since 5.0)**
 
-  In a cluster of 2 or more nodes, if a new node joins the cluster while some nodes are down, the down nodes will fail to restart and emit logs like below.
+  In a cluster of 2 or more nodes, if a new node joins the cluster while some nodes are down, the nodes which were down will fail to restart and will emit logs like below.
   `2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (core dumped to file: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** Failed to merge schema: {aborted,function_clause}`
 
   > **Workaround:**
