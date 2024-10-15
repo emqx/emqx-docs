@@ -20,6 +20,12 @@ EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部
 
 即使设备数量不多、消息吞吐也不高，在生产环境下部署集群仍然是很有意义的。集群能提高系统的可用性，降低单点故障的可能性。即便有节点宕机，集群内其他健康节点也可以继续提供服务，保证业务不受影响。
 
+## 部署 EMQX 开源版 Core + Repl 集群失败
+
+目前仅 EMQX 企业版支持 Core + Replicant 节点集群，因此在使用 [EMQX Operator](https://github.com/emqx/emqx-operator) 部署 EMQX 开源版 Core + Repl 集群时，可能会遇到 EMQX 自定义资源一直处于 `replicantNodesProgressing` 状态，且 EMQX Repl Pod 反复崩溃（Crash）的情况。
+
+建议部署纯 Core 节点的开源版集群，或者部署 Core + Repl 的企业版集群。
+
 ## EMQX 启动失败时该如何排查？
 
 EMQX 启动失败时，可以查看 [日志目录](../deploy/install.md#文件与目录) 下的 `emqx.log.N` 或 `erlang.log.N` 获取详细的错误提示。或者执行 `emqx console` 从控制台启动 EMQX，这样错误日志将直接输出到控制台。然后根据提日志内容，在本页面中查找对应的解决办法，或在我们的 askemq 论坛发帖寻求支持。

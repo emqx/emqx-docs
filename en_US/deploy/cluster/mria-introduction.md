@@ -20,8 +20,12 @@ To enable the Core + Replicant mode, it is necessary to designate certain nodes 
 
 Only the EMQX Enterprise supports the Core + Replicant mode. The EMQX Open Source only supports the Core node clustering.
 
+:::
+
 ::: tip
+
 Replicant nodes cannot use `manual` discovery strategy to discover core nodes. 
+
 :::
 
 Configuration example:

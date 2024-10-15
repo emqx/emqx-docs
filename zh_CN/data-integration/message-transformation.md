@@ -72,6 +72,7 @@ message_transformation {
   transformations = [
     {
       name = mytransformation
+      topics = ["t"]
       failure_action = drop
       payload_decoder = {type = avro, schema = myschema}
       payload_encoder = {type = json}
@@ -83,7 +84,7 @@ message_transformation {
 }
 ```
 
-此配置指定了一个名为 `mytransformation` 的转换，它：
+此配置指定了一个名为 `mytransformation` 的转换，其中：
 
 - 使用指定的 schema 将消息 payload 从 Avro 格式**解码**。
 - 将 payload **编码**为 JSON 格式。

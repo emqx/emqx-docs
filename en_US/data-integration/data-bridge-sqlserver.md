@@ -232,7 +232,7 @@ The following steps assume that you run both EMQX and Microsoft SQL Server on th
 
 ## Create a Rule with Microsoft SQL Server Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Microsoft SQL Server table `mqtt.dbo.t_mqtt_msg` via the configured Sink.
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Microsoft SQL Server table `dbo.t_mqtt_msg` via the configured Sink.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
@@ -261,14 +261,14 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-7. From the **Connector** dropdown box, select the `my_sqlserver` created before . You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. From the **Connector** dropdown box, select the `my_sqlserver` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. Configure the **SQL Template** for message storage, use the following SQL statement:
+8. Configure the **SQL Template** for message storage, using the following SQL statement:
 
    Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
    ```sql
-   insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
+   insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )
    ```
    
    If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
@@ -297,7 +297,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 ## Create a Rule with Microsoft SQL Server for Events Recording
 
-This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the Microsoft SQL Server table `mqtt.dbo.t_mqtt_events` via a configured Sink.
+This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the Microsoft SQL Server table `dbo.t_mqtt_events` via a configured Sink.
 
 The steps are similar to those in [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) expect for the SQL template and SQL rules.
 
@@ -315,7 +315,7 @@ FROM
 The SQL template for events recording is as follows.
 
 ```sql
-insert into t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
+insert into dbo.t_mqtt_events(clientid, event_type, event_time) values ( ${clientid}, ${event}, DATEADD(MS, ${ms_shift}, DATEADD(S, ${s_shift}, '19700101 00:00:00:000') ) )
 ```
 
 ## Test the Rules
@@ -328,7 +328,7 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello SQL Server" }'
 
 Check the running statistics of the Microsoft SQL Server Sink.
 
-- For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `t_mqtt_msg` data table.
+- For the Sink used to store messages, there should be 1 new matching and 1 new outgoing message. Check whether the data is written into the `dbo.t_mqtt_msg` data table.
 
 ```bash
 1> SELECT * from dbo.t_mqtt_msg
@@ -341,7 +341,7 @@ id          msgid                                                            top
 1>
 ```
 
-- For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `t_mqtt_events` data table.
+- For the Sink used to record online/offline status, there should be 2 new events recorded: client connected and client disconnected. Check whether the status recording is written into the `dbo.t_mqtt_events` data table.
 
 ```bash
 1> SELECT * from dbo.t_mqtt_events
