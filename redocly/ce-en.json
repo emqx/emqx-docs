@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.8.0",
+    "version": "5.8.1",
     "title": "EMQX API"
   },
   "components": {
@@ -189,19 +189,9 @@
         "in": "query",
         "name": "cursor",
         "description": "Opaque value representing the current iteration state.",
+        "required": false,
         "schema": {
-          "default": "none",
-          "oneOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string",
-              "enum": [
-                "none"
-              ]
-            }
-          ]
+          "type": "string"
         }
       },
       "public.limit": {
@@ -626,7 +616,18 @@
               "hash_topic",
               "hash_clientid"
             ],
-            "description": "Dispatch strategy for shared subscription.<br/> - `random`: Randomly select a subscriber for dispatch;<br/> - `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/> - `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber."
+            "description": "Dispatch strategy for shared subscription.<br/> - `random`: Randomly select a subscriber for dispatch;<br/> - `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/> - `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber."
+          },
+          "shared_subscription_initial_sticky_pick": {
+            "default": "random",
+            "type": "string",
+            "enum": [
+              "random",
+              "local",
+              "hash_topic",
+              "hash_clientid"
+            ],
+            "description": "The strategy to use for the initial subscriber pick when shared_subscription_strategy is `sticky`.<br/> - `random`: Randomly select the subscriber;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber."
           },
           "exclusive_subscription": {
             "default": false,
@@ -1328,7 +1329,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -3901,7 +3902,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -3977,18 +3978,29 @@
             ]
           },
           "until": {
+            "default": "infinity",
             "description": "The end time of the ban, the format is rfc3339, the default is the time when the operation was initiated + 1 year.",
             "example": "2021-10-25T21:53:47+08:00",
             "oneOf": [
               {
-                "type": "integer",
-                "description": "epoch-second",
-                "example": 1640995200
+                "oneOf": [
+                  {
+                    "type": "integer",
+                    "description": "epoch-second",
+                    "example": 1640995200
+                  },
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2022-01-01T00:00:00.000Z"
+                  }
+                ]
               },
               {
                 "type": "string",
-                "format": "date-time",
-                "example": "2022-01-01T00:00:00.000Z"
+                "enum": [
+                  "infinity"
+                ]
               }
             ]
           }
@@ -8199,6 +8211,11 @@
           "actions.failed.unknown": {
             "type": "integer",
             "description": "The number of action failures that have occurred due to unanticipated reasons. For more information on these errors, please refer to the EMQX log file.",
+            "minimum": 0
+          },
+          "actions.discarded": {
+            "type": "integer",
+            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
             "minimum": 0
           }
         },
@@ -14315,7 +14332,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -15450,7 +15467,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -16290,7 +16307,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -16852,7 +16869,7 @@
             "description": "Whether to start a clean session when reconnecting a remote broker for ingress bridge"
           },
           "keepalive": {
-            "default": "300s",
+            "default": "160s",
             "type": "string",
             "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`"
           },
@@ -16947,6 +16964,11 @@
           "actions.failed.unknown": {
             "type": "integer",
             "description": "The number of action failures that have occurred due to unanticipated reasons. For more information on these errors, please refer to the EMQX log file.",
+            "minimum": 0
+          },
+          "actions.discarded": {
+            "type": "integer",
+            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
             "minimum": 0
           }
         },
@@ -18514,7 +18536,7 @@
             "minimum": 1
           },
           "idle_poll_interval": {
-            "default": "100ms",
+            "default": "10s",
             "type": "string",
             "example": "12m"
           },
@@ -20118,7 +20140,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get installed plugin's AVRO schema",
         "responses": {
           "200": {
             "description": "",
@@ -20154,6 +20175,7 @@
             }
           }
         },
+        "summary": "Get installed plugin's AVRO schema",
         "security": [
           {
             "basicAuth": []
@@ -20268,7 +20290,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Reset action metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -20296,6 +20317,7 @@
             }
           }
         },
+        "summary": "Reset action metrics",
         "security": [
           {
             "basicAuth": []
@@ -20784,7 +20806,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -20878,6 +20899,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge",
         "security": [
           {
             "basicAuth": []
@@ -21010,7 +21032,6 @@
             "example": true
           }
         ],
-        "summary": "Observe a Resource",
         "responses": {
           "204": {
             "description": "No Content"
@@ -21038,6 +21059,7 @@
             }
           }
         },
+        "summary": "Observe a Resource",
         "security": [
           {
             "basicAuth": []
@@ -21059,7 +21081,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get a plugin description",
         "responses": {
           "200": {
             "description": "",
@@ -21094,6 +21115,7 @@
             }
           }
         },
+        "summary": "Get a plugin description",
         "security": [
           {
             "basicAuth": []
@@ -21113,7 +21135,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Delete a plugin",
         "responses": {
           "204": {
             "description": "Uninstall successfully"
@@ -21163,6 +21184,7 @@
             }
           }
         },
+        "summary": "Delete a plugin",
         "security": [
           {
             "basicAuth": []
@@ -21191,7 +21213,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Reset bridge metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -21219,6 +21240,7 @@
             }
           }
         },
+        "summary": "Reset bridge metrics",
         "security": [
           {
             "basicAuth": []
@@ -22219,7 +22241,6 @@
             "example": ""
           }
         ],
-        "summary": "Get the listener's authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -22266,8 +22287,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22297,8 +22318,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22414,6 +22435,7 @@
             }
           }
         },
+        "summary": "Get the listener's authenticator",
         "security": [
           {
             "basicAuth": []
@@ -22457,7 +22479,6 @@
             "example": ""
           }
         ],
-        "summary": "Update config of authenticator for listener",
         "responses": {
           "200": {
             "description": "",
@@ -22504,8 +22525,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22535,8 +22556,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22649,6 +22670,7 @@
             }
           }
         },
+        "summary": "Update config of authenticator for listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -22693,8 +22715,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -22724,8 +22746,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -22835,7 +22857,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete the listener's authenticator",
         "responses": {
           "200": {
             "description": "Deleted"
@@ -22886,6 +22907,7 @@
             }
           }
         },
+        "summary": "Delete the listener's authenticator",
         "security": [
           {
             "basicAuth": []
@@ -22929,7 +22951,6 @@
             "example": ""
           }
         ],
-        "summary": "Create authenticator for listener",
         "responses": {
           "201": {
             "description": "",
@@ -22976,8 +22997,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -23007,8 +23028,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -23121,6 +23142,7 @@
             }
           }
         },
+        "summary": "Create authenticator for listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -23165,8 +23187,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -23196,8 +23218,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -23299,7 +23321,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "List all listeners",
         "responses": {
           "200": {
             "description": "",
@@ -23692,6 +23713,7 @@
             }
           }
         },
+        "summary": "List all listeners",
         "security": [
           {
             "basicAuth": []
@@ -23725,7 +23747,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Add listener",
         "responses": {
           "201": {
             "description": "",
@@ -24025,6 +24046,7 @@
             }
           }
         },
+        "summary": "Add listener",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24297,7 +24319,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Get plugin config",
         "responses": {
           "200": {
             "description": "",
@@ -24354,6 +24375,7 @@
             }
           }
         },
+        "summary": "Get plugin config",
         "security": [
           {
             "basicAuth": []
@@ -24373,7 +24395,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Update plugin config",
         "responses": {
           "204": {
             "description": "Config updated successfully"
@@ -24424,6 +24445,7 @@
             }
           }
         },
+        "summary": "Update plugin config",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24450,7 +24472,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *sys_topics*",
         "responses": {
           "200": {
             "description": "System topics configuration.",
@@ -24485,6 +24506,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *sys_topics*",
         "security": [
           {
             "basicAuth": []
@@ -24500,7 +24522,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *sys_topics*",
         "responses": {
           "200": {
             "description": "System topics configuration.",
@@ -24558,6 +24579,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *sys_topics*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24612,7 +24634,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/connectors_probe": {
@@ -24622,7 +24647,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "Test creating connector",
         "responses": {
           "204": {
             "description": "Test connector OK"
@@ -24650,6 +24674,7 @@
             }
           }
         },
+        "summary": "Test creating connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -24735,7 +24760,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -24829,6 +24853,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge on a given node",
         "security": [
           {
             "basicAuth": []
@@ -25659,7 +25684,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "List sources",
         "responses": {
           "200": {
             "description": "",
@@ -25702,6 +25726,7 @@
             }
           }
         },
+        "summary": "List sources",
         "security": [
           {
             "basicAuth": []
@@ -25717,7 +25742,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "Create source",
         "responses": {
           "201": {
             "description": "",
@@ -25782,6 +25806,7 @@
             }
           }
         },
+        "summary": "Create source",
         "requestBody": {
           "content": {
             "application/json": {
@@ -25852,7 +25877,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -25902,6 +25926,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -26191,7 +26216,6 @@
             }
           }
         ],
-        "summary": "Trigger action on an installed plugin",
         "responses": {
           "204": {
             "description": "Trigger action successfully"
@@ -26219,6 +26243,7 @@
             }
           }
         },
+        "summary": "Trigger action on an installed plugin",
         "security": [
           {
             "basicAuth": []
@@ -26247,7 +26272,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get source",
         "responses": {
           "200": {
             "description": "",
@@ -26312,6 +26336,7 @@
             }
           }
         },
+        "summary": "Get source",
         "security": [
           {
             "basicAuth": []
@@ -26338,7 +26363,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Update source",
         "responses": {
           "200": {
             "description": "",
@@ -26425,6 +26449,7 @@
             }
           }
         },
+        "summary": "Update source",
         "requestBody": {
           "content": {
             "application/json": {
@@ -26491,7 +26516,6 @@
             }
           }
         ],
-        "summary": "Delete source",
         "responses": {
           "204": {
             "description": "Source deleted"
@@ -26570,6 +26594,7 @@
             }
           }
         },
+        "summary": "Delete source",
         "security": [
           {
             "basicAuth": []
@@ -26623,7 +26648,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "List available source types",
         "responses": {
           "200": {
             "description": "",
@@ -26650,6 +26674,7 @@
             }
           }
         },
+        "summary": "List available source types",
         "security": [
           {
             "basicAuth": []
@@ -26693,7 +26718,6 @@
             }
           }
         ],
-        "summary": "Get client info",
         "responses": {
           "200": {
             "description": "",
@@ -26703,82 +26727,82 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "mqueue_max": "infinity",
-                      "awaiting_rel_cnt": 0,
+                      "inflight_max": "infinity",
+                      "is_bridge": false,
                       "endpoint_name": "urn:imei:154928475237123",
+                      "recv_pkt": 1,
+                      "disconnected_at": null,
                       "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "awaiting_rel_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "send_msg": 0,
-                      "mqueue_dropped": 0,
-                      "inflight_cnt": 0,
                       "subscriptions_cnt": 0,
-                      "send_pkt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_oct": 61,
-                      "expiry_interval": 0,
-                      "clean_start": true,
-                      "heap_size": 4185,
-                      "proto_ver": "1.0",
-                      "subscriptions_max": "infinity",
-                      "recv_msg": 0,
-                      "port": 50675,
-                      "proto_name": "LwM2M",
-                      "mailbox_len": 0,
-                      "is_bridge": false,
-                      "lifetime": 86400,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
+                      "mqueue_max": "infinity",
+                      "inflight_cnt": 0,
+                      "send_msg": 0,
+                      "send_pkt": 1,
+                      "send_oct": 61,
                       "username": "guest",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mailbox_len": 0,
+                      "heap_size": 4185,
+                      "proto_name": "LwM2M",
+                      "expiry_interval": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "port": 50675,
+                      "mqueue_len": 0,
+                      "proto_ver": "1.0",
+                      "lifetime": 86400,
+                      "ip_address": "127.0.0.1",
+                      "recv_msg": 0,
                       "connected": true,
                       "reductions": 72022,
-                      "mqueue_len": 0,
                       "recv_cnt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "ip_address": "127.0.0.1"
+                      "awaiting_rel_cnt": 0,
+                      "clean_start": true
                     },
                     "summary": "LwM2M client info"
                   },
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "mqueue_max": "infinity",
-                      "awaiting_rel_cnt": 0,
+                      "inflight_max": "infinity",
+                      "is_bridge": false,
+                      "recv_pkt": 1,
+                      "disconnected_at": null,
                       "keepalive": 0,
+                      "subscriptions_max": "infinity",
+                      "awaiting_rel_max": "infinity",
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "send_msg": 0,
-                      "mqueue_dropped": 0,
-                      "inflight_cnt": 0,
                       "subscriptions_cnt": 0,
-                      "send_pkt": 1,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
-                      "send_oct": 61,
-                      "expiry_interval": 0,
-                      "clean_start": true,
-                      "heap_size": 4185,
-                      "proto_ver": "1.0",
-                      "subscriptions_max": "infinity",
-                      "recv_msg": 0,
-                      "port": 50675,
-                      "proto_name": "STOMP",
-                      "mailbox_len": 0,
-                      "is_bridge": false,
                       "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "recv_pkt": 1,
-                      "inflight_max": "infinity",
-                      "disconnected_at": null,
+                      "mqueue_dropped": 0,
+                      "mqueue_max": "infinity",
+                      "inflight_cnt": 0,
+                      "send_msg": 0,
+                      "send_pkt": 1,
+                      "send_oct": 61,
                       "username": "guest",
                       "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "mailbox_len": 0,
+                      "heap_size": 4185,
+                      "proto_name": "STOMP",
+                      "expiry_interval": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "port": 50675,
+                      "mqueue_len": 0,
+                      "proto_ver": "1.0",
+                      "ip_address": "127.0.0.1",
+                      "recv_msg": 0,
                       "connected": true,
                       "reductions": 72022,
-                      "mqueue_len": 0,
                       "recv_cnt": 1,
-                      "awaiting_rel_max": "infinity",
-                      "ip_address": "127.0.0.1"
+                      "awaiting_rel_cnt": 0,
+                      "clean_start": true
                     },
                     "summary": "General client info"
                   }
@@ -26851,6 +26875,7 @@
             }
           }
         },
+        "summary": "Get client info",
         "security": [
           {
             "basicAuth": []
@@ -26892,7 +26917,6 @@
             }
           }
         ],
-        "summary": "Kick out client",
         "responses": {
           "204": {
             "description": "Kicked"
@@ -26943,6 +26967,7 @@
             }
           }
         },
+        "summary": "Kick out client",
         "security": [
           {
             "basicAuth": []
@@ -26960,7 +26985,6 @@
           "Publish"
         ],
         "parameters": [],
-        "summary": "Publish a batch of messages",
         "responses": {
           "200": {
             "description": "",
@@ -27022,6 +27046,7 @@
             }
           }
         },
+        "summary": "Publish a batch of messages",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27041,7 +27066,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/nodes/{node}/bridges/{id}/{operation}": {
@@ -27087,7 +27115,6 @@
             "example": "start"
           }
         ],
-        "summary": "Stop/restart bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -27181,6 +27208,7 @@
             }
           }
         },
+        "summary": "Stop/restart bridge",
         "security": [
           {
             "basicAuth": []
@@ -27198,7 +27226,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "Test a rule",
         "responses": {
           "200": {
             "description": "Rule Test Pass"
@@ -27248,6 +27275,7 @@
             }
           }
         },
+        "summary": "Test a rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27542,7 +27570,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *sysmon*",
         "responses": {
           "200": {
             "description": "",
@@ -27577,6 +27604,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *sysmon*",
         "security": [
           {
             "basicAuth": []
@@ -27592,7 +27620,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *sysmon*",
         "responses": {
           "200": {
             "description": "",
@@ -27650,6 +27677,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *sysmon*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27687,7 +27715,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Get connector",
         "responses": {
           "200": {
             "description": "",
@@ -27754,6 +27781,7 @@
             }
           }
         },
+        "summary": "Get connector",
         "security": [
           {
             "basicAuth": []
@@ -27780,7 +27808,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Update connector",
         "responses": {
           "200": {
             "description": "",
@@ -27869,6 +27896,7 @@
             }
           }
         },
+        "summary": "Update connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -27927,7 +27955,6 @@
             "example": "http:my_http_connector"
           }
         ],
-        "summary": "Delete connector",
         "responses": {
           "204": {
             "description": "Connector deleted"
@@ -27999,6 +28026,7 @@
             }
           }
         },
+        "summary": "Delete connector",
         "security": [
           {
             "basicAuth": []
@@ -28260,7 +28288,6 @@
             "example": ""
           }
         ],
-        "summary": "Get listener config",
         "responses": {
           "200": {
             "description": "",
@@ -28560,6 +28587,7 @@
             }
           }
         },
+        "summary": "Get listener config",
         "security": [
           {
             "basicAuth": []
@@ -28603,7 +28631,6 @@
             "example": ""
           }
         ],
-        "summary": "Update listener config",
         "responses": {
           "200": {
             "description": "",
@@ -28903,6 +28930,7 @@
             }
           }
         },
+        "summary": "Update listener config",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29197,7 +29225,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete listener",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -29248,6 +29275,7 @@
             }
           }
         },
+        "summary": "Delete listener",
         "security": [
           {
             "basicAuth": []
@@ -29269,7 +29297,6 @@
             "$ref": "#/components/parameters/relup.node_name"
           }
         ],
-        "summary": "Upgrade a specified node",
         "responses": {
           "204": {
             "description": "Upgrade is started successfully"
@@ -29341,6 +29368,7 @@
             }
           }
         },
+        "summary": "Upgrade a specified node",
         "security": [
           {
             "basicAuth": []
@@ -29369,7 +29397,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Reset source metrics",
         "responses": {
           "204": {
             "description": "Reset success"
@@ -29397,6 +29424,7 @@
             }
           }
         },
+        "summary": "Reset source metrics",
         "security": [
           {
             "basicAuth": []
@@ -29424,7 +29452,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Apply a rule for testing",
         "responses": {
           "200": {
             "description": "Rule Applied"
@@ -29496,6 +29523,7 @@
             }
           }
         },
+        "summary": "Apply a rule for testing",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29522,7 +29550,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Upgrade all nodes",
         "responses": {
           "204": {
             "description": "Upgrade is started successfully"
@@ -29572,6 +29599,7 @@
             }
           }
         },
+        "summary": "Upgrade all nodes",
         "security": [
           {
             "basicAuth": []
@@ -29617,7 +29645,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable gateway",
         "responses": {
           "204": {
             "description": "Gateway configuration updated"
@@ -29646,6 +29673,7 @@
             }
           }
         },
+        "summary": "Enable or disable gateway",
         "security": [
           {
             "basicAuth": []
@@ -29663,7 +29691,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Upload a hot upgrade package",
         "responses": {
           "204": {
             "description": "Package is uploaded successfully"
@@ -29693,6 +29720,7 @@
             }
           }
         },
+        "summary": "Upload a hot upgrade package",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -29813,7 +29841,6 @@
             "$ref": "#/components/parameters/public.limit"
           }
         ],
-        "summary": "List rules",
         "responses": {
           "200": {
             "description": "",
@@ -29860,6 +29887,7 @@
             }
           }
         },
+        "summary": "List rules",
         "security": [
           {
             "basicAuth": []
@@ -29875,7 +29903,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "Create a rule",
         "responses": {
           "201": {
             "description": "",
@@ -29910,6 +29937,7 @@
             }
           }
         },
+        "summary": "Create a rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29971,8 +29999,8 @@
                         "rate_max": 0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0,
                         "rate_last5m": 0,
@@ -29997,8 +30025,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0,
                             "rate_last5m": 0,
@@ -30212,7 +30240,6 @@
             "example": "running"
           }
         ],
-        "summary": "List all gateways",
         "responses": {
           "200": {
             "description": "",
@@ -30332,6 +30359,7 @@
             }
           }
         },
+        "summary": "List all gateways",
         "security": [
           {
             "basicAuth": []
@@ -30464,7 +30492,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -30492,6 +30519,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -30507,16 +30535,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -30541,8 +30569,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -30823,8 +30851,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -30854,8 +30882,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -31088,8 +31116,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -31119,8 +31147,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -31237,7 +31265,6 @@
           "Publish"
         ],
         "parameters": [],
-        "summary": "Publish a message",
         "responses": {
           "200": {
             "description": "",
@@ -31280,6 +31307,7 @@
             }
           }
         },
+        "summary": "Publish a message",
         "requestBody": {
           "content": {
             "application/json": {
@@ -31296,7 +31324,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/nodes/{node}/metrics": {
@@ -31542,7 +31573,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -31592,6 +31622,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -31746,7 +31777,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable bridge",
         "responses": {
           "204": {
             "description": "Success"
@@ -31818,6 +31848,7 @@
             }
           }
         },
+        "summary": "Enable or disable bridge",
         "security": [
           {
             "basicAuth": []
@@ -31846,7 +31877,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Get bridge metrics",
         "responses": {
           "200": {
             "description": "",
@@ -31894,6 +31924,7 @@
             }
           }
         },
+        "summary": "Get bridge metrics",
         "security": [
           {
             "basicAuth": []
@@ -32061,8 +32092,8 @@
                         "rate_max": 0
                       },
                       "resource_metrics": {
-                        "success": 0,
                         "matched": 0,
+                        "success": 0,
                         "failed": 0,
                         "rate": 0,
                         "rate_last5m": 0,
@@ -32086,8 +32117,8 @@
                         {
                           "node": "emqx@127.0.0.1",
                           "metrics": {
-                            "success": 0,
                             "matched": 0,
+                            "success": 0,
                             "failed": 0,
                             "rate": 0,
                             "rate_last5m": 0,
@@ -32167,7 +32198,6 @@
           "Sources"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -32195,6 +32225,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -32739,7 +32770,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get source metrics",
         "responses": {
           "200": {
             "description": "",
@@ -32787,6 +32817,7 @@
             }
           }
         },
+        "summary": "Get source metrics",
         "security": [
           {
             "basicAuth": []
@@ -32822,7 +32853,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Get authenticator configuration",
         "responses": {
           "200": {
             "description": "",
@@ -32869,8 +32899,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -32900,8 +32930,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33017,6 +33047,7 @@
             }
           }
         },
+        "summary": "Get authenticator configuration",
         "security": [
           {
             "basicAuth": []
@@ -33050,7 +33081,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Update authenticator configuration",
         "responses": {
           "200": {
             "description": "",
@@ -33097,8 +33127,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33128,8 +33158,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33242,6 +33272,7 @@
             }
           }
         },
+        "summary": "Update authenticator configuration",
         "requestBody": {
           "content": {
             "application/json": {
@@ -33286,8 +33317,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33317,8 +33348,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33418,7 +33449,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Delete gateway authenticator",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -33469,6 +33499,7 @@
             }
           }
         },
+        "summary": "Delete gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -33502,7 +33533,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Create authenticator for gateway",
         "responses": {
           "201": {
             "description": "",
@@ -33549,8 +33579,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33580,8 +33610,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33694,6 +33724,7 @@
             }
           }
         },
+        "summary": "Create authenticator for gateway",
         "requestBody": {
           "content": {
             "application/json": {
@@ -33738,8 +33769,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33769,8 +33800,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33909,7 +33940,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/clients/{clientid}/subscribe/bulk": {
@@ -33984,7 +34018,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/sources/{id}/{operation}": {
@@ -34018,7 +34055,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -34112,6 +34148,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge",
         "security": [
           {
             "basicAuth": []
@@ -34153,7 +34190,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a connector",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -34247,6 +34283,7 @@
             }
           }
         },
+        "summary": "Manually start a connector",
         "security": [
           {
             "basicAuth": []
@@ -34264,7 +34301,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *alarm*",
         "responses": {
           "200": {
             "description": "",
@@ -34299,6 +34335,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *alarm*",
         "security": [
           {
             "basicAuth": []
@@ -34314,7 +34351,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *alarm*",
         "responses": {
           "200": {
             "description": "",
@@ -34372,6 +34408,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *alarm*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -34398,7 +34435,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "List bridges",
         "responses": {
           "200": {
             "description": "",
@@ -34470,6 +34506,7 @@
             }
           }
         },
+        "summary": "List bridges",
         "security": [
           {
             "basicAuth": []
@@ -34485,7 +34522,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "Create bridge",
         "responses": {
           "201": {
             "description": "",
@@ -34582,6 +34618,7 @@
             }
           }
         },
+        "summary": "Create bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -34796,7 +34833,6 @@
             }
           }
         ],
-        "summary": "Send a Request to a Client",
         "responses": {
           "200": {
             "description": "",
@@ -34871,6 +34907,7 @@
             }
           }
         },
+        "summary": "Send a Request to a Client",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35215,7 +35252,6 @@
           "Plugins"
         ],
         "parameters": [],
-        "summary": "List all installed plugins",
         "responses": {
           "200": {
             "description": "",
@@ -35231,6 +35267,7 @@
             }
           }
         },
+        "summary": "List all installed plugins",
         "security": [
           {
             "basicAuth": []
@@ -35248,7 +35285,6 @@
           "Dashboard"
         ],
         "parameters": [],
-        "summary": "Dashboard authentication",
         "responses": {
           "200": {
             "description": "",
@@ -35308,6 +35344,7 @@
             }
           }
         },
+        "summary": "Dashboard authentication",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35352,7 +35389,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Get bridge",
         "responses": {
           "200": {
             "description": "",
@@ -35370,16 +35406,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35404,8 +35440,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35471,6 +35507,7 @@
             }
           }
         },
+        "summary": "Get bridge",
         "security": [
           {
             "basicAuth": []
@@ -35497,7 +35534,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Update bridge",
         "responses": {
           "200": {
             "description": "",
@@ -35515,16 +35551,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35549,8 +35585,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35638,6 +35674,7 @@
             }
           }
         },
+        "summary": "Update bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35651,16 +35688,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -35683,8 +35720,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -35753,7 +35790,6 @@
             "example": "http:http_example"
           }
         ],
-        "summary": "Delete bridge",
         "responses": {
           "204": {
             "description": "Bridge deleted"
@@ -35832,6 +35868,7 @@
             }
           }
         },
+        "summary": "Delete bridge",
         "security": [
           {
             "basicAuth": []
@@ -35849,7 +35886,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *dashboard*",
         "responses": {
           "200": {
             "description": "",
@@ -35884,6 +35920,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *dashboard*",
         "security": [
           {
             "basicAuth": []
@@ -35899,7 +35936,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *dashboard*",
         "responses": {
           "200": {
             "description": "",
@@ -35957,6 +35993,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *dashboard*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36009,7 +36046,6 @@
             }
           }
         ],
-        "summary": "List client's subscription",
         "responses": {
           "200": {
             "description": "",
@@ -36090,6 +36126,7 @@
             }
           }
         },
+        "summary": "List client's subscription",
         "security": [
           {
             "basicAuth": []
@@ -36131,7 +36168,6 @@
             }
           }
         ],
-        "summary": "Add subscription for client",
         "responses": {
           "201": {
             "description": "",
@@ -36153,11 +36189,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rap": 0,
-                      "rh": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -36214,6 +36250,7 @@
             }
           }
         },
+        "summary": "Add subscription for client",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36233,11 +36270,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rap": 0,
-                    "rh": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -36474,7 +36511,6 @@
             "$ref": "#/components/parameters/plugins.name"
           }
         ],
-        "summary": "Move plugin within plugin hierarchy",
         "responses": {
           "204": {
             "description": "Boot order changed successfully"
@@ -36502,6 +36538,7 @@
             }
           }
         },
+        "summary": "Move plugin within plugin hierarchy",
         "requestBody": {
           "content": {
             "application/json": {
@@ -36554,7 +36591,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *broker*",
         "responses": {
           "200": {
             "description": "Message broker options.",
@@ -36589,6 +36625,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *broker*",
         "security": [
           {
             "basicAuth": []
@@ -36604,7 +36641,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *broker*",
         "responses": {
           "200": {
             "description": "Message broker options.",
@@ -36662,6 +36698,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *broker*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -37461,7 +37498,6 @@
             "example": ""
           }
         ],
-        "summary": "Get user info",
         "responses": {
           "200": {
             "description": "",
@@ -37534,6 +37570,7 @@
             }
           }
         },
+        "summary": "Get user info",
         "security": [
           {
             "basicAuth": []
@@ -37587,7 +37624,6 @@
             "example": ""
           }
         ],
-        "summary": "Update user info",
         "responses": {
           "200": {
             "description": "",
@@ -37660,6 +37696,7 @@
             }
           }
         },
+        "summary": "Update user info",
         "requestBody": {
           "content": {
             "application/json": {
@@ -37737,7 +37774,6 @@
             "example": ""
           }
         ],
-        "summary": "Delete user",
         "responses": {
           "204": {
             "description": "Deleted"
@@ -37788,6 +37824,7 @@
             }
           }
         },
+        "summary": "Delete user",
         "security": [
           {
             "basicAuth": []
@@ -37844,8 +37881,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -37869,8 +37906,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -38003,8 +38040,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "method": "post",
                       "url": "http://127.0.0.1:18083",
+                      "method": "post",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38034,8 +38071,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "cmd": "HMGET ${username} password_hash salt",
                       "server": "127.0.0.1:6379",
+                      "cmd": "HMGET ${username} password_hash salt",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -38194,8 +38231,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "method": "post",
                     "url": "http://127.0.0.1:18083",
+                    "method": "post",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38225,8 +38262,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "cmd": "HMGET ${username} password_hash salt",
                     "server": "127.0.0.1:6379",
+                    "cmd": "HMGET ${username} password_hash salt",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -38372,7 +38409,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/trace": {
@@ -38651,7 +38691,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a connector on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -38745,6 +38784,7 @@
             }
           }
         },
+        "summary": "Manually start a connector on a given node",
         "security": [
           {
             "basicAuth": []
@@ -38915,7 +38955,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "Test creating bridge",
         "responses": {
           "204": {
             "description": "Test bridge OK"
@@ -38943,6 +38982,7 @@
             }
           }
         },
+        "summary": "Test creating bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -39169,7 +39209,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Get the hot upgrade status of all nodes",
         "responses": {
           "200": {
             "description": "",
@@ -39185,6 +39224,7 @@
             }
           }
         },
+        "summary": "Get the hot upgrade status of all nodes",
         "security": [
           {
             "basicAuth": []
@@ -39684,7 +39724,6 @@
             "example": "start"
           }
         ],
-        "summary": "Stop or restart bridge",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -39778,6 +39817,7 @@
             }
           }
         },
+        "summary": "Stop or restart bridge",
         "security": [
           {
             "basicAuth": []
@@ -39830,7 +39870,6 @@
             }
           }
         ],
-        "summary": "Delete client's subscription",
         "responses": {
           "204": {
             "description": "Unsubscribed"
@@ -39881,6 +39920,7 @@
             }
           }
         },
+        "summary": "Delete client's subscription",
         "security": [
           {
             "basicAuth": []
@@ -39898,7 +39938,6 @@
           "Actions"
         ],
         "parameters": [],
-        "summary": "List available action types",
         "responses": {
           "200": {
             "description": "",
@@ -39927,6 +39966,7 @@
             }
           }
         },
+        "summary": "List available action types",
         "security": [
           {
             "basicAuth": []
@@ -40335,7 +40375,6 @@
             "example": "discover"
           }
         ],
-        "summary": "List Client's Resources",
         "responses": {
           "200": {
             "description": "",
@@ -40394,6 +40433,7 @@
             }
           }
         },
+        "summary": "List Client's Resources",
         "security": [
           {
             "basicAuth": []
@@ -40421,7 +40461,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Get rule metrics",
         "responses": {
           "200": {
             "description": "",
@@ -40456,6 +40495,7 @@
             }
           }
         },
+        "summary": "Get rule metrics",
         "security": [
           {
             "basicAuth": []
@@ -40555,7 +40595,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Get gateway",
         "responses": {
           "200": {
             "description": "",
@@ -40804,6 +40843,7 @@
             }
           }
         },
+        "summary": "Get gateway",
         "security": [
           {
             "basicAuth": []
@@ -40837,7 +40877,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Load or update the gateway confs",
         "responses": {
           "204": {
             "description": "Gateway configuration updated"
@@ -40888,6 +40927,7 @@
             }
           }
         },
+        "summary": "Load or update the gateway confs",
         "requestBody": {
           "content": {
             "application/json": {
@@ -41112,7 +41152,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get bridge",
         "responses": {
           "200": {
             "description": "",
@@ -41209,6 +41248,7 @@
             }
           }
         },
+        "summary": "Get bridge",
         "security": [
           {
             "basicAuth": []
@@ -41235,7 +41275,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Update bridge",
         "responses": {
           "200": {
             "description": "",
@@ -41354,6 +41393,7 @@
             }
           }
         },
+        "summary": "Update bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -41443,7 +41483,6 @@
             }
           }
         ],
-        "summary": "Delete bridge",
         "responses": {
           "204": {
             "description": "Bridge deleted"
@@ -41522,6 +41561,7 @@
             }
           }
         },
+        "summary": "Delete bridge",
         "security": [
           {
             "basicAuth": []
@@ -41841,7 +41881,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Import users",
         "responses": {
           "204": {
             "description": "Imported"
@@ -41892,6 +41931,7 @@
             }
           }
         },
+        "summary": "Import users",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -42162,7 +42202,7 @@
     },
     "/banned": {
       "get": {
-        "description": "List all currently banned client IDs, usernames and IP addresses.",
+        "description": "List all currently banned client IDs, usernames and IP addresses.<br/>Filters are supported. Since filters are mutually exclusive, only one filter is allowed in a query.",
         "tags": [
           "Banned"
         ],
@@ -42172,6 +42212,72 @@
           },
           {
             "$ref": "#/components/parameters/public.limit"
+          },
+          {
+            "in": "query",
+            "name": "clientid",
+            "description": "Query the banned objects with an exact client ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "username",
+            "description": "Query the banned objects with an exact username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "peerhost",
+            "description": "Query the banned objects with an exact IP address.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "127.0.0.1"
+          },
+          {
+            "in": "query",
+            "name": "like_clientid",
+            "description": "Fuzzy query banned objects with a regular expression for client ID.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_username",
+            "description": "Fuzzy query banned objects with a regular expression for username.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "like_peerhost",
+            "description": "Fuzzy query banned objects with a regular expression for IP address.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "127.0.0.1"
+          },
+          {
+            "in": "query",
+            "name": "like_peerhost_net",
+            "description": "Fuzzy query banned objects with a regular expression for CIDR.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "192.1.0.0/16"
           }
         ],
         "responses": {
@@ -42189,6 +42295,28 @@
                     },
                     "meta": {
                       "$ref": "#/components/schemas/public.meta"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Bad request, possibly due to wrong parameters or the existence of a banned object."
                     }
                   },
                   "type": "object"
@@ -42322,7 +42450,6 @@
             "example": true
           }
         ],
-        "summary": "Enable or disable connector",
         "responses": {
           "204": {
             "description": "Success"
@@ -42372,6 +42499,7 @@
             }
           }
         },
+        "summary": "Enable or disable connector",
         "security": [
           {
             "basicAuth": []
@@ -42400,7 +42528,6 @@
             "example": "http:my_http_action"
           }
         ],
-        "summary": "Get action metrics",
         "responses": {
           "200": {
             "description": "",
@@ -42448,6 +42575,7 @@
             }
           }
         },
+        "summary": "Get action metrics",
         "security": [
           {
             "basicAuth": []
@@ -42653,7 +42781,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "List connectors",
         "responses": {
           "200": {
             "description": "",
@@ -42698,6 +42825,7 @@
             }
           }
         },
+        "summary": "List connectors",
         "security": [
           {
             "basicAuth": []
@@ -42713,7 +42841,6 @@
           "Connectors"
         ],
         "parameters": [],
-        "summary": "Create connector",
         "responses": {
           "201": {
             "description": "",
@@ -42780,6 +42907,7 @@
             }
           }
         },
+        "summary": "Create connector",
         "requestBody": {
           "content": {
             "application/json": {
@@ -42969,7 +43097,6 @@
             "example": "start"
           }
         ],
-        "summary": "Manually start a bridge on a given node",
         "responses": {
           "204": {
             "description": "Operation success"
@@ -43063,6 +43190,7 @@
             }
           }
         },
+        "summary": "Manually start a bridge on a given node",
         "security": [
           {
             "basicAuth": []
@@ -43485,7 +43613,6 @@
           "Rules"
         ],
         "parameters": [],
-        "summary": "List rule events",
         "responses": {
           "200": {
             "description": "",
@@ -43498,6 +43625,7 @@
             }
           }
         },
+        "summary": "List rule events",
         "security": [
           {
             "basicAuth": []
@@ -43567,7 +43695,10 @@
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "log_meta": {
+          "importance": "low"
+        }
       }
     },
     "/plugins/install": {
@@ -43577,7 +43708,6 @@
           "Plugins"
         ],
         "parameters": [],
-        "summary": "Install a new plugin",
         "responses": {
           "204": {
             "description": "Install plugin successfully"
@@ -43607,6 +43737,7 @@
             }
           }
         },
+        "summary": "Install a new plugin",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -43663,7 +43794,6 @@
             "example": "/3/0/7"
           }
         ],
-        "summary": "Read Value from a Resource Path",
         "responses": {
           "204": {
             "description": "No Content"
@@ -43691,6 +43821,7 @@
             }
           }
         },
+        "summary": "Read Value from a Resource Path",
         "security": [
           {
             "basicAuth": []
@@ -45058,7 +45189,6 @@
             }
           }
         ],
-        "summary": "List users for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -45132,6 +45262,7 @@
             }
           }
         },
+        "summary": "List users for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -45165,7 +45296,6 @@
             "example": "stomp"
           }
         ],
-        "summary": "Add user for gateway authenticator",
         "responses": {
           "201": {
             "description": "",
@@ -45238,6 +45368,7 @@
             }
           }
         },
+        "summary": "Add user for gateway authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -45945,7 +46076,6 @@
             "example": 50
           }
         ],
-        "summary": "List gateway's clients",
         "responses": {
           "200": {
             "description": "",
@@ -46042,6 +46172,7 @@
             }
           }
         },
+        "summary": "List gateway's clients",
         "security": [
           {
             "basicAuth": []
@@ -46087,7 +46218,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Get user info for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -46160,6 +46290,7 @@
             }
           }
         },
+        "summary": "Get user info for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -46203,7 +46334,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Update user info for gateway authenticator",
         "responses": {
           "200": {
             "description": "",
@@ -46276,6 +46406,7 @@
             }
           }
         },
+        "summary": "Update user info for gateway authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -46343,7 +46474,6 @@
             "example": "test_username"
           }
         ],
-        "summary": "Delete user for gateway authenticator",
         "responses": {
           "204": {
             "description": "User Deleted"
@@ -46394,6 +46524,7 @@
             }
           }
         },
+        "summary": "Delete user for gateway authenticator",
         "security": [
           {
             "basicAuth": []
@@ -46439,7 +46570,6 @@
             "example": "stomp:tcp:def"
           }
         ],
-        "summary": "Import users",
         "responses": {
           "204": {
             "description": "Imported"
@@ -46490,6 +46620,7 @@
             }
           }
         },
+        "summary": "Import users",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -46532,7 +46663,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Reset rule metrics",
         "responses": {
           "204": {
             "description": "Reset Success"
@@ -46560,6 +46690,7 @@
             }
           }
         },
+        "summary": "Reset rule metrics",
         "security": [
           {
             "basicAuth": []
@@ -46628,7 +46759,6 @@
             "example": 50
           }
         ],
-        "summary": "List authenticator's users",
         "responses": {
           "200": {
             "description": "",
@@ -46701,6 +46831,7 @@
             }
           }
         },
+        "summary": "List authenticator's users",
         "security": [
           {
             "basicAuth": []
@@ -46744,7 +46875,6 @@
             "example": ""
           }
         ],
-        "summary": "Add user for an authenticator",
         "responses": {
           "201": {
             "description": "",
@@ -46817,6 +46947,7 @@
             }
           }
         },
+        "summary": "Add user for an authenticator",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47111,7 +47242,6 @@
             "example": 123
           }
         ],
-        "summary": "Write a Value to Resource Path",
         "responses": {
           "204": {
             "description": "No Content"
@@ -47139,6 +47269,7 @@
             }
           }
         },
+        "summary": "Write a Value to Resource Path",
         "security": [
           {
             "basicAuth": []
@@ -47156,7 +47287,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Get the sub-configurations under *log*",
         "responses": {
           "200": {
             "description": "EMQX provides support for two primary log handlers: `file` and `console`, with an additional `audit` handler specifically designed to always direct logs to files.<br/>The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:<br/><br/>- `file`: Directs log output exclusively to files.<br/>- `console`: Channels log output solely to the console.<br/><br/>It's noteworthy that `EMQX_DEFAULT_LOG_HANDLER` is set to `file` when EMQX is initiated via systemd's `emqx.service` file.<br/>In scenarios outside systemd initiation, `console` serves as the default log handler.",
@@ -47191,6 +47321,7 @@
             }
           }
         },
+        "summary": "Get the sub-configurations under *log*",
         "security": [
           {
             "basicAuth": []
@@ -47206,7 +47337,6 @@
           "Configs"
         ],
         "parameters": [],
-        "summary": "Update the sub-configurations under *log*",
         "responses": {
           "200": {
             "description": "EMQX provides support for two primary log handlers: `file` and `console`, with an additional `audit` handler specifically designed to always direct logs to files.<br/>The system's default log handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:<br/><br/>- `file`: Directs log output exclusively to files.<br/>- `console`: Channels log output solely to the console.<br/><br/>It's noteworthy that `EMQX_DEFAULT_LOG_HANDLER` is set to `file` when EMQX is initiated via systemd's `emqx.service` file.<br/>In scenarios outside systemd initiation, `console` serves as the default log handler.",
@@ -47264,6 +47394,7 @@
             }
           }
         },
+        "summary": "Update the sub-configurations under *log*",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47300,7 +47431,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Get rule",
         "responses": {
           "200": {
             "description": "",
@@ -47335,6 +47465,7 @@
             }
           }
         },
+        "summary": "Get rule",
         "security": [
           {
             "basicAuth": []
@@ -47360,7 +47491,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Update rule",
         "responses": {
           "200": {
             "description": "",
@@ -47395,6 +47525,7 @@
             }
           }
         },
+        "summary": "Update rule",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47429,7 +47560,6 @@
             "example": "my_rule_id"
           }
         ],
-        "summary": "Delete rule",
         "responses": {
           "204": {
             "description": "Delete rule successfully"
@@ -47457,6 +47587,7 @@
             }
           }
         },
+        "summary": "Delete rule",
         "security": [
           {
             "basicAuth": []
@@ -47539,7 +47670,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "List bridges",
         "responses": {
           "200": {
             "description": "",
@@ -47556,16 +47686,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47587,8 +47717,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -47633,6 +47763,7 @@
             }
           }
         },
+        "summary": "List bridges",
         "security": [
           {
             "basicAuth": []
@@ -47648,7 +47779,6 @@
           "Bridges"
         ],
         "parameters": [],
-        "summary": "Create bridge",
         "responses": {
           "201": {
             "description": "",
@@ -47666,16 +47796,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "method": "post",
                       "url": "http://localhost:9901/messages/${topic}",
+                      "method": "post",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
+                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
-                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -47700,8 +47830,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "max_buffer_bytes": 104857600,
                         "query_mode": "sync",
+                        "max_buffer_bytes": 104857600,
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -47767,6 +47897,7 @@
             }
           }
         },
+        "summary": "Create bridge",
         "requestBody": {
           "content": {
             "application/json": {
@@ -47782,16 +47913,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "method": "post",
                     "url": "http://localhost:9901/messages/${topic}",
+                    "method": "post",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
+                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
-                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47816,8 +47947,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "max_buffer_bytes": 104857600,
                       "query_mode": "sync",
+                      "max_buffer_bytes": 104857600,
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -48037,7 +48168,6 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Get the installed hot upgrade package",
         "responses": {
           "200": {
             "description": "",
@@ -48072,6 +48202,7 @@
             }
           }
         },
+        "summary": "Get the installed hot upgrade package",
         "security": [
           {
             "basicAuth": []
@@ -48087,12 +48218,12 @@
           "Relup"
         ],
         "parameters": [],
-        "summary": "Delete the installed hot upgrade package",
         "responses": {
           "204": {
             "description": "Packages are deleted successfully"
           }
         },
+        "summary": "Delete the installed hot upgrade package",
         "security": [
           {
             "basicAuth": []
@@ -48360,7 +48491,6 @@
             "$ref": "#/components/parameters/relup.node_name"
           }
         ],
-        "summary": "Get the hot upgrade status of a specified node",
         "responses": {
           "200": {
             "description": "",
@@ -48373,6 +48503,7 @@
             }
           }
         },
+        "summary": "Get the hot upgrade status of a specified node",
         "security": [
           {
             "basicAuth": []
