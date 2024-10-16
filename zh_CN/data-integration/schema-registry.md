@@ -159,14 +159,14 @@ schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, '
 schema_decode_tagged('my_external_registry', payload)
 ```
 
+#### 函数使用示例
+
 在下面所有函数使用示例中，使用了以下示例值和变量名：
 
 - `my_external_registry` 是您在 EMQX 中为外部 Schema Registry 指定的名称。
 - `my_schema_id` 是注册在 CSR 中的 Schema ID（在 CSR 中始终是整数）。
 - `my_local_avro_schema` 是在 EMQX 中配置的本地 Avro Schema 名称。
 - `my_subject` 是在 CSR 中定义的主题名称。
-
-#### 函数使用示例
 
 ##### `avro_encode`
 

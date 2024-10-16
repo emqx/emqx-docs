@@ -18,6 +18,12 @@ Even with a small number of devices and low message throughput, it still makes s
 
 Clustering improves system availability and reduces the likelihood of a single point of failure. Even if a node goes down, other healthy nodes within the cluster can continue to provide services, ensuring that business is not affected.
 
+## Deployment of EMQX Open Source Core + Repl Cluster Fails
+
+Currently, only the EMQX Enterprise edition supports clusters with Core + Replicant nodes. Therefore, when using the [EMQX Operator](https://github.com/emqx/emqx-operator) to deploy an EMQX open-source Core + Repl cluster, you may encounter the issue where the EMQX custom resource remains in the `replicantNodesProgressing` state, and the EMQX Repl Pod repeatedly crashes.
+
+It is recommended to either deploy an open-source cluster with only Core nodes or deploy a Core + Repl cluster using the Enterprise Edition.
+
 ## How to troubleshoot when EMQX fails to start?
 
 When EMQX fails to start, you can check `emqx.log.N` or `erlang.log.N` under [Log Directory](../deploy/install.md#files-and-directories) to get detailed error prompts. 

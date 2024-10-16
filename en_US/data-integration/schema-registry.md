@@ -165,14 +165,14 @@ schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, '
 schema_decode_tagged('my_external_registry', payload)
 ```
 
+#### Function Usage Examples
+
 In all function usage examples below, the following example values and variable names are used:
 
 - `my_external_registry` is the name you assigned to the external registry in EMQX.
 - `my_schema_id` is the schema ID registered in the CSR (always an integer in CSR).
 - `my_local_avro_schema` is the name of a locally configured Avro schema in EMQX.
 - `my_subject` is the subject name defined in the CSR.
-
-#### Function Usage Examples
 
 ##### `avro_encode`
 

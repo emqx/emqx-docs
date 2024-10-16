@@ -136,6 +136,25 @@ CREATE TABLE emqx_client_events (
 
    :::
 
+4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 MySQL。
+
+5. 在**动作类型**下拉框中选择 MySQL，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 MySQL Sink。此处我们创建一个全新的 Sink 并添加到规则中。
+
+6. 输入 Sink名称，要求是大小写英文字母或数字组合。
+
+7. 从**连接器**下拉框中选择刚刚创建的 `my_mysql`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+
+8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
+
+   ```sql
+   INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
+     ${clientid},
+     ${topic},
+     ${payload},
+     FROM_UNIXTIME(${timestamp}/1000)
+   )
+   ```
+
    如果在模板中使用未定义的占位符变量，您可以切换**未定义变量作为 NULL** 开关（位于 **SQL 模板** 上方）来定义规则引擎的行为：
 
    - **关闭**（默认）：规则引擎可以将字符串 `undefined` 插入数据库。
@@ -147,25 +166,6 @@ CREATE TABLE emqx_client_events (
      如果您初次使用 SQL，可以点击 **SQL 示例**和**启用调试**来学习和测试规则 SQL 的结果。
 
      :::
-
-4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 MySQL。
-
-5. 在**动作类型**下拉框中选择 MySQL，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 MySQL Sink。此处我们创建一个全新的 Sink 并添加到规则中。
-
-6. 输入 Sink名称，要求是大小写英文字母或数字组合。
-
-7. 从**连接器**下拉框中选择刚刚创建的 `my_mysql`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
-
-8. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
-
-   ```sql
-   INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
-     ${clientid},
-     ${topic},
-     ${payload},
-     FROM_UNIXTIME(${timestamp}/1000)
-   )
-   ```
 
 9. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
 
