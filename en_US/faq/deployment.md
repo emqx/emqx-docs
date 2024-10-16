@@ -20,7 +20,7 @@ Clustering improves system availability and reduces the likelihood of a single p
 
 ## Deployment of EMQX Open Source Core + Repl Cluster Fails
 
-Currently, only the EMQX Enterprise edition supports clusters with Core + Replicant nodes. Therefore, when using the [EMQX Operator](https://github.com/emqx/emqx-operator) to deploy an EMQX open-source Core + Repl cluster, you may encounter the issue where the EMQX custom resource remains in the `replicantNodesProgressing` state, and the EMQX Repl Pod repeatedly crashes.
+Starting from EMQX v5.8, only the EMQX Enterprise edition supports clusters with Core + Replicant nodes. Therefore, when using the [EMQX Operator](https://github.com/emqx/emqx-operator) to deploy an EMQX open-source Core + Repl cluster, you may encounter the issue where the EMQX custom resource remains in the `replicantNodesProgressing` state, and the EMQX Repl Pod repeatedly crashes.
 
 It is recommended to either deploy an open-source cluster with only Core nodes or deploy a Core + Repl cluster using the Enterprise Edition.
 

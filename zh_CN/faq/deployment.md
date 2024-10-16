@@ -22,7 +22,7 @@ EMQX 支持在多种操作系统和硬件平台上运行，考虑到企业级部
 
 ## 部署 EMQX 开源版 Core + Repl 集群失败
 
-目前仅 EMQX 企业版支持 Core + Replicant 节点集群，因此在使用 [EMQX Operator](https://github.com/emqx/emqx-operator) 部署 EMQX 开源版 Core + Repl 集群时，可能会遇到 EMQX 自定义资源一直处于 `replicantNodesProgressing` 状态，且 EMQX Repl Pod 反复崩溃（Crash）的情况。
+从 EMQX v5.8 开始，仅 EMQX 企业版支持 Core + Replicant 节点集群，因此在使用 [EMQX Operator](https://github.com/emqx/emqx-operator) 部署 EMQX 开源版 Core + Repl 集群时，可能会遇到 EMQX 自定义资源一直处于 `replicantNodesProgressing` 状态，且 EMQX Repl Pod 反复崩溃（Crash）的情况。
 
 建议部署纯 Core 节点的开源版集群，或者部署 Core + Repl 的企业版集群。
 
