@@ -40,6 +40,10 @@
 - **Performance degradation viewing Audit events (since 5.4.0)**
 
   When Audit log is enabled and specific Audit events are recently logged, in rare cases an attempt to view Audit events in the dashboard may cause a severe performance degradation, or even a crash of the EMQX node in exceptional situations, e.g. when the node is memory-constrained. Events that are known to cause this issue are Backup and Restore API requests, and commands evaluated in the EMQX remote console manipulating particularly large data structures. Nodes may also take longer to start and become responsive in these situations.
+  This will be fixed in 5.8.2.
+
+  > **Workaround:**
+  > Change the _Max Dashboard Record Size_ setting either through the Dashboard or by setting the `log.audit.max_filter_size` to a particularly low number, eventually the offending events should be cleared from the Audit log once enough new events are logged.
 
 ## e5.8.0
 
