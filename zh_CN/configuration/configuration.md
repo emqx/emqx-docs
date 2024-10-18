@@ -542,7 +542,9 @@ EMQX 包含一系列丰富的字符串、数组、随机和散列函数，类似
   - `str_gte(A, B)`：如果 A 在字典顺序上不位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lt(A, B)`：如果 A 在字典顺序上位于 B 之前，则返回 'true'，否则返回 'false'。
   - `str_lte(A, B)`：如果 A 在字典顺序上不位于 B 之后，则返回 'true'，否则返回 'false'。
-  - `is_empty(var)`: 检查一个变量是否是空值。空值包括：对一个未知变量的引用，JSON 的 `null` 字段，或者一个空字符串`''`。
+  - `is_empty_var(V)`: 检查一个变量是否是空值。空值包括：对一个未知变量的引用 (`undefined`)，JSON 的 `null` 字段，或者一个空字符串`''`。
+  - `not(Bool)`: 取反操作，如果 `Bool` 是 `true`，则返回 `false`，如果 `Bool` 是 `false`，则返回 `true`。 该函数亦支持字符串参数，如果输入是字符串，返回值也是字符串。
+
 - **系统函数**:
   - `getenv(Name)`：返回环境变量 `Name` 的值，并遵循以下限制：
     - 在读取操作系统环境变量之前，会自动添加前缀 `EMQXVAR_`。例如，调用 `getenv('FOO_BAR')` 将读取 `EMQXVAR_FOO_BAR`。

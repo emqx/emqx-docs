@@ -544,7 +544,9 @@ Below are the functions that can be used in the expressions:
   - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
   - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
   - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
-  - `is_empty(var)`: Check if a variable is empty. Empty in Variform means the value is not present (undefined), JSON's `null` (but not string `"null"`), or an empty string `""`.
+  - `is_empty_var(V)`: Check if a variable is empty. Empty in Variform means the value is not present (`undefined`), JSON's `null` (but not string `"null"`), or an empty string `""`.
+  - `not(Bool)`: Return `true` if `Bool` is `false`, and return `false` if the condition is `true`. It also accepts string parameters. If the input is a string, the output is also a string.
+
 - **System functions**:
   - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
     - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
