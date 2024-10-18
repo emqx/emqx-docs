@@ -29,7 +29,7 @@
 - **Kafka Disk Buffer Resume (since 5.8.0)**
 
   If `disk` mode buffer is used, Kafka (Azure EventHubs, Confluent Platform) producers will not automatically start sending data from disk to Kafka after node restart. The sending will be triggered only after there is a new message to trigger the dynamic add of a topic producer.
-  This will be fixed in 5.8.2.
+  This issue will be fixed in 5.8.2.
 
   <!-- https://emqx.atlassian.net/browse/EMQX-13242 -->
 
@@ -37,13 +37,13 @@
 
   EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity.
 
-- **Performance degradation viewing Audit events (since 5.4.0)**
+- **Performance Degradation When Viewing Audit Events (since 5.4.0)**
 
-  When Audit log is enabled and specific Audit events are recently logged, in rare cases an attempt to view Audit events in the dashboard may cause a severe performance degradation, or even a crash of the EMQX node in exceptional situations, e.g. when the node is memory-constrained. Events that are known to cause this issue are Backup and Restore API requests, and commands evaluated in the EMQX remote console manipulating particularly large data structures. Nodes may also take longer to start and become responsive in these situations.
-  This will be fixed in 5.8.2.
+  Enabling the audit log and viewing specific events in the Dashboard can, in rare cases, cause significant performance degradation or even crash the EMQX node in exceptional situations, particularly on memory-constrained nodes. Events known to cause this issue include Backup and Restore API requests and commands executed in the EMQX remote console that manipulate large data structures. Nodes may also take longer to start and become responsive in these situations.
+  This issue will be fixed in 5.8.2.
 
   > **Workaround:**
-  > Change the _Max Dashboard Record Size_ setting either through the Dashboard or by setting the `log.audit.max_filter_size` to a particularly low number, eventually the offending events should be cleared from the Audit log once enough new events are logged.
+  > Adjust the **Max Dashboard Record Size** through the Dashboard, or lower the `log.audit.max_filter_size` setting. Over time, problematic events will be cleared from the Audit log as new events are recorded.
 
 ## e5.8.0
 
