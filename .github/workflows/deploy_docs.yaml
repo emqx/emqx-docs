@@ -155,25 +155,23 @@ jobs:
       if: ${{ matrix.version != 'latest' }}
       run: |
         cd frontend
-        yarn global add redoc-cli
+        npm i -g @redocly/cli@latest
         LANGS=(zh en)
         for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ce-${lang}.json -t redoc/template-emqx.hbs \
-            --output docs/.vitepress/dist/${lang}/emqx/${VERSION}/admin/api-docs.html \
-            --options.theme.colors.primary.main=#5e4eff \
-            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
-            --options.hide-hostname --templateOptions.title "EMQX ${VERSION} API Documentation" \
+          redocly build-docs redoc/ce-${lang}.json -t redoc/template-emqx.hbs -o docs/.vitepress/dist/${lang}/emqx/${VERSION}/admin/api-docs.html \
+            --config=redoc/redocly.yaml \
+            --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
+            --templateOptions.headerTitle 'EMQX ${VERSION} Docs' \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
 
-          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
-            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
-            --options.theme.colors.primary.main=#5e4eff \
-            --options.theme.typography.headings.fontFamily='Roboto, sans-serif' \
-            --options.hide-hostname --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+          redocly build-docs redoc/ee-${lang}.json -t template-emqx-enterprise.hbs -o docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+            --config=redoc/redocly.yaml \
+            --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
+            --templateOptions.headerTitle 'EMQX Enterprise ${VERSION} Docs' \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
         done
 
