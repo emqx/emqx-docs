@@ -163,7 +163,7 @@ jobs:
             --templateOptions.title "EMQX ${VERSION} API Documentation" \
             --templateOptions.description "EMQX ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle 'EMQX ${VERSION} Docs' \
+            --templateOptions.headerTitle "EMQX ${VERSION} Docs" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
 
           redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs -o docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
@@ -171,7 +171,7 @@ jobs:
             --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle 'EMQX Enterprise ${VERSION} Docs' \
+            --templateOptions.headerTitle "EMQX Enterprise ${VERSION} Docs" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
         done
 
