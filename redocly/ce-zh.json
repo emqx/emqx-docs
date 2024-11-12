@@ -1,6 +1,6 @@
 {
   "info": {
-    "version": "5.8.1",
+    "version": "5.8.2-rc.1",
     "title": "EMQX API"
   },
   "components": {
@@ -627,7 +627,7 @@
               "hash_topic",
               "hash_clientid"
             ],
-            "description": "The strategy to use for the initial subscriber pick when shared_subscription_strategy is `sticky`.<br/> - `random`: Randomly select the subscriber;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber."
+            "description": "当 shared_subscription_strategy 为 `sticky` 时，初始订阅者选择的策略。<br/> - `random`: 随机选择订阅者；<br/> - `local`: 随机选择当前节点上的订阅者，如果当前节点上没有订阅者，则在集群中随机选择；<br/> - `hash_clientid`: 根据发布者的客户端 ID 进行哈希，选择订阅者；<br/> - `hash_topic`: 根据发布的主题进行哈希，选择订阅者。"
           },
           "exclusive_subscription": {
             "default": false,
@@ -5009,6 +5009,12 @@
             "format": "password",
             "description": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
             "example": ""
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "type": "string",
+            "description": "指定 SSL 进程在空闲后休眠的时间，从而减少其内存占用。<br/><br/>当有新消息到达时，休眠的进程将被唤醒。<br/>过于频繁地休眠和唤醒可能会导致 CPU 使用率增加，因为这两个操作都会对进程进行垃圾回收。",
+            "example": "12m"
           }
         },
         "type": "object"
@@ -8215,7 +8221,7 @@
           },
           "actions.discarded": {
             "type": "integer",
-            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
+            "description": "由于动作被停用或在动作被删除时发生竞态条件而导致丢弃的动作次数。",
             "minimum": 0
           }
         },
@@ -10741,6 +10747,27 @@
             "description": "消息保留时间。0 代表永久保留",
             "example": "32s"
           },
+          "msg_expiry_interval_override": {
+            "default": "disabled",
+            "description": "If set, this value will take precedence over any `Message-Expiry-Interval` property specified in retained MQTT messages, allowing messages to expire earlier if necessary.  This override only applies to the garbage collection process: it does not affect the expiry time of messages being written nor that of already written messages while iterating over them.  Therefore, messages that are candidate for garbage collection when overridden may still be visible when subscribing to retained topics.",
+            "oneOf": [
+              {
+                "type": "string",
+                "example": "32s"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "disabled"
+                ]
+              }
+            ]
+          },
+          "allow_never_expire": {
+            "default": true,
+            "type": "boolean",
+            "description": "If true, retained messages set to never expire (i.e., whose `Message-Expiry-Interval = 0`) are not affected by the expiry time override.  This configuration only takes effect when `msg_expiry_interval_override` is set."
+          },
           "msg_clear_interval": {
             "default": "0s",
             "type": "string",
@@ -12737,6 +12764,25 @@
             "default": true,
             "type": "boolean",
             "description": "设为 <code>true</code> 或 <code>false</code> 以禁用此认证数据源。"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_data_backup.export_request_body": {
+        "properties": {
+          "table_sets": {
+            "type": "array",
+            "description": "Sets of tables to export. Exports all if omitted. Valid values:<br/><br/>- api_keys<br/>- banned<br/>- builtin_authn<br/>- builtin_authz<br/>- builtin_retainer<br/>- dashboard_users<br/>- psk<br/>",
+            "items": {
+              "type": "string"
+            }
+          },
+          "root_keys": {
+            "type": "array",
+            "description": "Sets of root configuration keys to export. Exports all if omitted.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "type": "object"
@@ -16968,7 +17014,7 @@
           },
           "actions.discarded": {
             "type": "integer",
-            "description": "The number of discarded actions due to action being disabled or race condition while action is being deleted.",
+            "description": "由于动作被停用或在动作被删除时发生竞态条件而导致丢弃的动作次数。",
             "minimum": 0
           }
         },
@@ -18538,11 +18584,13 @@
           "idle_poll_interval": {
             "default": "10s",
             "type": "string",
+            "description": "Expiry interval for poll requests sent by durable sessions to the storage.",
             "example": "12m"
           },
           "heartbeat_interval": {
             "default": "5000ms",
             "type": "string",
+            "description": "Durable sessions back up their state on disc every heartbeat interval.<br/><br/>Heartbeat interval is also taken into account during garbage collection of expired sessions.<br/>It is added to the session expiry time as a safety margin when precise time of session termination is not precisely known.",
             "example": "12m"
           },
           "session_gc_interval": {
@@ -18560,6 +18608,7 @@
           "message_retention_period": {
             "default": "1d",
             "type": "string",
+            "description": "Broker keeps messages sent to the durable sessions for this period of time.",
             "example": "12m"
           }
         },
@@ -20338,10 +20387,19 @@
           {
             "in": "query",
             "name": "aggregate",
-            "description": "Whether to aggregate all nodes Metrics",
+            "description": "Whether to aggregate all nodes Metrics. Default value is 'true'.",
             "required": false,
             "schema": {
               "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "node",
+            "description": "Specify which specific node to fetch data from. If not provided, return values for all nodes. This parameter only works when 'aggregate' is 'false'.",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -20684,8 +20742,36 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Users imported"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of users contained in the file."
+                    },
+                    "success": {
+                      "type": "integer"
+                    },
+                    "override": {
+                      "type": "integer",
+                      "description": "Total number of users successfully imported as overrides."
+                    },
+                    "skipped": {
+                      "type": "integer",
+                      "description": "Total number of users skipped because imported users are identical to existing users."
+                    },
+                    "failed": {
+                      "type": "integer",
+                      "description": "Total number of users whose import failed."
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           },
           "400": {
             "description": "",
@@ -22287,8 +22373,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22318,8 +22404,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22525,8 +22611,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -22556,8 +22642,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -22715,8 +22801,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -22746,8 +22832,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -22997,8 +23083,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -23028,8 +23114,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -23187,8 +23273,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -23218,8 +23304,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -26447,6 +26533,28 @@
                 }
               }
             }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "summary": "Update source",
@@ -26629,6 +26737,74 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid table sets: bar, foo"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "BAD_REQUEST"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Error processing export: ..."
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "root_keys": [
+                  "connectors",
+                  "actions",
+                  "sources",
+                  "rule_engine",
+                  "schema_registry"
+                ],
+                "table_sets": [
+                  "banned",
+                  "builtin_authn",
+                  "builtin_authn_scram",
+                  "builtin_authz"
+                ]
+              },
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_data_backup.export_request_body"
+              }
+            }
           }
         },
         "security": [
@@ -26727,41 +26903,41 @@
                   "lwm2m_client": {
                     "value": {
                       "recv_oct": 56,
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "send_msg": 0,
+                      "endpoint_name": "urn:imei:154928475237123",
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "is_bridge": false,
+                      "inflight_max": "infinity",
+                      "recv_msg": 0,
                       "keepalive": 0,
-                      "send_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
+                      "mqueue_len": 0,
+                      "lifetime": 86400,
                       "mqueue_dropped": 0,
                       "expiry_interval": 0,
-                      "lifetime": 86400,
+                      "send_pkt": 1,
                       "send_oct": 61,
-                      "username": "guest",
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "heap_size": 4185,
                       "proto_name": "LwM2M",
-                      "mqueue_len": 0,
-                      "port": 50675,
-                      "awaiting_rel_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_max": "infinity",
-                      "is_bridge": false,
                       "clean_start": true,
-                      "endpoint_name": "urn:imei:154928475237123",
+                      "inflight_cnt": 0,
+                      "ip_address": "127.0.0.1",
+                      "heap_size": 4185,
                       "disconnected_at": null,
-                      "recv_msg": 0,
-                      "awaiting_rel_cnt": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0",
+                      "subscriptions_max": "infinity",
+                      "recv_pkt": 1,
+                      "port": 50675,
                       "subscriptions_cnt": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "mailbox_len": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "awaiting_rel_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "send_msg": 0,
                       "connected": true,
                       "reductions": 72022,
-                      "recv_pkt": 1,
-                      "inflight_cnt": 0,
+                      "username": "guest",
                       "recv_cnt": 1
                     },
                     "summary": "LwM2M client info"
@@ -26769,39 +26945,39 @@
                   "general_client": {
                     "value": {
                       "recv_oct": 56,
-                      "subscriptions_max": "infinity",
-                      "mqueue_max": "infinity",
-                      "mailbox_len": 0,
-                      "send_msg": 0,
+                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "is_bridge": false,
+                      "inflight_max": "infinity",
+                      "recv_msg": 0,
                       "keepalive": 0,
-                      "send_pkt": 1,
                       "node": "emqx@127.0.0.1",
                       "send_cnt": 1,
-                      "ip_address": "127.0.0.1",
-                      "proto_ver": "1.0",
+                      "mqueue_len": 0,
                       "mqueue_dropped": 0,
                       "expiry_interval": 0,
+                      "send_pkt": 1,
                       "send_oct": 61,
-                      "username": "guest",
-                      "created_at": "2021-12-07T10:44:02.721+08:00",
-                      "heap_size": 4185,
                       "proto_name": "STOMP",
-                      "mqueue_len": 0,
-                      "port": 50675,
-                      "awaiting_rel_max": "infinity",
-                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
-                      "inflight_max": "infinity",
-                      "is_bridge": false,
                       "clean_start": true,
+                      "inflight_cnt": 0,
+                      "ip_address": "127.0.0.1",
+                      "heap_size": 4185,
                       "disconnected_at": null,
-                      "recv_msg": 0,
-                      "awaiting_rel_cnt": 0,
+                      "created_at": "2021-12-07T10:44:02.721+08:00",
+                      "proto_ver": "1.0",
+                      "subscriptions_max": "infinity",
+                      "recv_pkt": 1,
+                      "port": 50675,
                       "subscriptions_cnt": 0,
-                      "connected_at": "2021-12-07T10:44:02.721+08:00",
+                      "awaiting_rel_max": "infinity",
+                      "mailbox_len": 0,
+                      "clientid": "MzAyMzEzNTUwNzk1NDA1MzYyMzIwNzUxNjQwMTY1NzQ0NjE",
+                      "awaiting_rel_cnt": 0,
+                      "mqueue_max": "infinity",
+                      "send_msg": 0,
                       "connected": true,
                       "reductions": 72022,
-                      "recv_pkt": 1,
-                      "inflight_cnt": 0,
+                      "username": "guest",
                       "recv_cnt": 1
                     },
                     "summary": "General client info"
@@ -30266,6 +30442,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "lwm2m:udp:default",
@@ -30274,7 +30451,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:26.171+08:00",
                     "current_connections": 0
                   },
@@ -30289,6 +30465,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "mqttsn:udp:default",
@@ -30297,7 +30474,6 @@
                         "type": "udp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:41:45.071+08:00",
                     "current_connections": 0,
                     "stopped_at": "2021-12-08T14:56:35.576+08:00"
@@ -30314,6 +30490,7 @@
                         "current_connections": 0
                       }
                     ],
+                    "max_connections": 1024000,
                     "listeners": [
                       {
                         "id": "stomp:tcp:default",
@@ -30322,7 +30499,6 @@
                         "type": "tcp"
                       }
                     ],
-                    "max_connections": 1024000,
                     "created_at": "2021-12-08T14:42:15.272+08:00",
                     "current_connections": 0
                   }
@@ -30535,16 +30711,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -30569,8 +30745,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -30851,8 +31027,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -30882,8 +31058,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -31116,8 +31292,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -31147,8 +31323,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -32899,8 +33075,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -32930,8 +33106,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33127,8 +33303,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33158,8 +33334,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33317,8 +33493,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33348,8 +33524,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -33579,8 +33755,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -33610,8 +33786,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -33769,8 +33945,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -33800,8 +33976,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -35406,16 +35582,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35440,8 +35616,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35551,16 +35727,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -35585,8 +35761,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -35688,16 +35864,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -35720,8 +35896,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -36189,11 +36365,11 @@
                       "nl": 0,
                       "topic": "stomp/topic",
                       "qos": 1,
+                      "rap": 0,
+                      "rh": 0,
                       "sub_props": {
                         "subid": "10"
-                      },
-                      "rap": 0,
-                      "rh": 0
+                      }
                     },
                     "summary": "A STOMP subscription"
                   }
@@ -36270,11 +36446,11 @@
                     "nl": 0,
                     "topic": "stomp/topic",
                     "qos": 1,
+                    "rap": 0,
+                    "rh": 0,
                     "sub_props": {
                       "subid": "10"
-                    },
-                    "rap": 0,
-                    "rh": 0
+                    }
                   },
                   "summary": "A STOMP subscription"
                 }
@@ -37361,17 +37537,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "front example"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "rear example"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "front example"
                 },
                 "relative_after": {
                   "value": {
@@ -37881,8 +38057,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -37906,8 +38082,8 @@
                   },
                   {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -38040,8 +38216,8 @@
                       "headers": {
                         "content-type": "application/json"
                       },
-                      "url": "http://127.0.0.1:18083",
                       "method": "post",
+                      "url": "http://127.0.0.1:18083",
                       "backend": "http",
                       "request_timeout": "5s",
                       "enable_pipelining": 100
@@ -38071,8 +38247,8 @@
                   "password_based:redis": {
                     "value": {
                       "mechanism": "password_based",
-                      "server": "127.0.0.1:6379",
                       "cmd": "HMGET ${username} password_hash salt",
+                      "server": "127.0.0.1:6379",
                       "database": 0,
                       "backend": "redis",
                       "password_hash_algorithm": {
@@ -38231,8 +38407,8 @@
                     "headers": {
                       "content-type": "application/json"
                     },
-                    "url": "http://127.0.0.1:18083",
                     "method": "post",
+                    "url": "http://127.0.0.1:18083",
                     "backend": "http",
                     "request_timeout": "5s",
                     "enable_pipelining": 100
@@ -38262,8 +38438,8 @@
                 "password_based:redis": {
                   "value": {
                     "mechanism": "password_based",
-                    "server": "127.0.0.1:6379",
                     "cmd": "HMGET ${username} password_hash salt",
+                    "server": "127.0.0.1:6379",
                     "database": 0,
                     "backend": "redis",
                     "password_hash_algorithm": {
@@ -39306,17 +39482,17 @@
           "content": {
             "application/json": {
               "examples": {
-                "front": {
-                  "value": {
-                    "position": "front"
-                  },
-                  "summary": "absolute position 'front'"
-                },
                 "rear": {
                   "value": {
                     "position": "rear"
                   },
                   "summary": "absolute position 'rear'"
+                },
+                "front": {
+                  "value": {
+                    "position": "front"
+                  },
+                  "summary": "absolute position 'front'"
                 },
                 "related_after": {
                   "value": {
@@ -40617,8 +40793,8 @@
                       ],
                       "idle_timeout": "30s",
                       "mountpoint": "coap/",
-                      "connection_required": false,
                       "enable_stats": true,
+                      "connection_required": false,
                       "notify_type": "qos",
                       "publish_qos": "coap",
                       "subscribe_qos": "coap"
@@ -40709,7 +40885,7 @@
                         }
                       },
                       "update_msg_publish_condition": "always",
-                      "xml_dir": "/etc/emqx/lwm2m_xml"
+                      "xml_dir": "etc/lwm2m_xml"
                     },
                     "summary": "A simple LwM2M gateway config"
                   },
@@ -40938,8 +41114,8 @@
                     "heartbeat": "30s",
                     "idle_timeout": "30s",
                     "mountpoint": "coap2/",
-                    "connection_required": false,
                     "enable_stats": true,
+                    "connection_required": false,
                     "notify_type": "qos",
                     "publish_qos": "coap",
                     "subscribe_qos": "coap"
@@ -41385,6 +41561,28 @@
                     "message": {
                       "type": "string",
                       "description": "Bridge not found"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "SERVICE_UNAVAILABLE"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Service unavailable"
                     }
                   },
                   "type": "object"
@@ -41882,8 +42080,36 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Imported"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of users contained in the file."
+                    },
+                    "success": {
+                      "type": "integer"
+                    },
+                    "override": {
+                      "type": "integer",
+                      "description": "Total number of users successfully imported as overrides."
+                    },
+                    "skipped": {
+                      "type": "integer",
+                      "description": "Total number of users skipped because imported users are identical to existing users."
+                    },
+                    "failed": {
+                      "type": "integer",
+                      "description": "Total number of users whose import failed."
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           },
           "400": {
             "description": "",
@@ -42216,7 +42442,7 @@
           {
             "in": "query",
             "name": "clientid",
-            "description": "Query the banned objects with an exact client ID.",
+            "description": "使用精确的客户端 ID 查询封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42225,7 +42451,7 @@
           {
             "in": "query",
             "name": "username",
-            "description": "Query the banned objects with an exact username.",
+            "description": "使用精确的用户名查询封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42234,7 +42460,7 @@
           {
             "in": "query",
             "name": "peerhost",
-            "description": "Query the banned objects with an exact IP address.",
+            "description": "使用精确的 IP 地址查询封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42244,7 +42470,7 @@
           {
             "in": "query",
             "name": "like_clientid",
-            "description": "Fuzzy query banned objects with a regular expression for client ID.",
+            "description": "使用客户端 ID 正则表达式来匹配查询封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42253,7 +42479,7 @@
           {
             "in": "query",
             "name": "like_username",
-            "description": "Fuzzy query banned objects with a regular expression for username.",
+            "description": "使用用户名正则表达式来匹配查询被封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42262,7 +42488,7 @@
           {
             "in": "query",
             "name": "like_peerhost",
-            "description": "Fuzzy query banned objects with a regular expression for IP address.",
+            "description": "使用 IP 地址正则表达式来匹配查询被封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -42272,7 +42498,7 @@
           {
             "in": "query",
             "name": "like_peerhost_net",
-            "description": "Fuzzy query banned objects with a regular expression for CIDR.",
+            "description": "使用 CIDR 正则表达式来匹配查询被封禁规则。",
             "required": false,
             "schema": {
               "type": "string"
@@ -46571,8 +46797,36 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Imported"
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "total": {
+                      "type": "integer",
+                      "description": "Total number of users contained in the file."
+                    },
+                    "success": {
+                      "type": "integer"
+                    },
+                    "override": {
+                      "type": "integer",
+                      "description": "Total number of users successfully imported as overrides."
+                    },
+                    "skipped": {
+                      "type": "integer",
+                      "description": "Total number of users skipped because imported users are identical to existing users."
+                    },
+                    "failed": {
+                      "type": "integer",
+                      "description": "Total number of users whose import failed."
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            }
           },
           "400": {
             "description": "",
@@ -47686,16 +47940,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47717,8 +47971,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "ingress": {
@@ -47796,16 +48050,16 @@
                       "pool_size": 4,
                       "enable": true,
                       "body": "${payload}",
-                      "url": "http://localhost:9901/messages/${topic}",
                       "method": "post",
+                      "url": "http://localhost:9901/messages/${topic}",
                       "max_retries": 3,
                       "request_timeout": "15s",
                       "pool_type": "random",
                       "resource_opts": {
                         "worker_pool_size": 1,
-                        "query_mode": "async",
                         "max_buffer_bytes": 104857600,
                         "inflight_window": 100,
+                        "query_mode": "async",
                         "health_check_interval": 15000
                       },
                       "enable_pipelining": 100,
@@ -47830,8 +48084,8 @@
                       "retry_interval": "15s",
                       "max_inflight": 100,
                       "resource_opts": {
-                        "query_mode": "sync",
                         "max_buffer_bytes": 104857600,
+                        "query_mode": "sync",
                         "health_check_interval": "15s"
                       },
                       "ingress": {
@@ -47913,16 +48167,16 @@
                     "pool_size": 4,
                     "enable": true,
                     "body": "${payload}",
-                    "url": "http://localhost:9901/messages/${topic}",
                     "method": "post",
+                    "url": "http://localhost:9901/messages/${topic}",
                     "max_retries": 3,
                     "request_timeout": "15s",
                     "pool_type": "random",
                     "resource_opts": {
                       "worker_pool_size": 1,
-                      "query_mode": "async",
                       "max_buffer_bytes": 104857600,
                       "inflight_window": 100,
+                      "query_mode": "async",
                       "health_check_interval": 15000
                     },
                     "enable_pipelining": 100,
@@ -47947,8 +48201,8 @@
                     "retry_interval": "15s",
                     "max_inflight": 100,
                     "resource_opts": {
-                      "query_mode": "sync",
                       "max_buffer_bytes": 104857600,
+                      "query_mode": "sync",
                       "health_check_interval": "15s"
                     },
                     "ingress": {
