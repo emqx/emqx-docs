@@ -1,8 +1,8 @@
 # Integrate OpenTelemetry to View Metrics
 
-EMQX has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization. 
+EMQX has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization.
 
-This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md). 
+This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md).
 
 ## Prerequisites
 
@@ -21,12 +21,12 @@ receivers:
 exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
-      
+
 processors:
   batch:
-  
-service:  
-  pipelines:    
+
+service:
+  pipelines:
     metrics:
       receivers: [otlp]
       processors: [batch]

@@ -2,7 +2,7 @@
 
 [OpenTelemetry tracing](https://opentelemetry.io/docs/concepts/signals/traces/) is a specification for tracing the flow of requests in a distributed system, allowing you to trace how requests flow through a distributed system and providing the ability to visualize and analyze the performance and behavior of requests. In the MQTT scenario, this concept can be used to trace requests across different participants in MQTT message transmission (Publisher - MQTT server - Subscriber).
 
-"Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the system. 
+"Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the system.
 
 EMQX's inherent ability to propagate trace context enables it to seamlessly participate in distributed tracing systems. This propagation is achieved simply by forwarding the `traceparent` and `tracestate` user properties from the message publisher to the subscriber. When EMQX forwards an application message to a client, it ensures the integrity of the trace context is maintained and transmitted unchanged. This method is fully compliant with [MQTT specification 3.3.2.3.7](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901116), ensuring consistency and reliability in trace data transmission.
 
@@ -29,19 +29,19 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
      otlp:
        protocols:
          grpc:
-   
+
    exporters:
      otlp:
        endpoint: jaeger:4317
        tls:
          insecure: true
-   
+
    processors:
      batch:
-   
+
    extensions:
      health_check:
-   
+
    service:
      extensions: [health_check]
      pipelines:
@@ -61,7 +61,7 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
        restart: always
        ports:
          - "16686:16686"
-   
+
      otel-collector:
        image: otel/opentelemetry-collector:0.90.0
        restart: always
@@ -80,7 +80,7 @@ Before integrating EMQX with OpenTelemetry traces, you need to deploy and config
    ```bash
    docker compose -f docker-compose-otel-trace.yaml up
    ```
-   
+
 4. After starting, the OpenTelemetry Collector listens on the default gRPC port (4317) on the host machine and Jaeger WEB UI can be accessed at http://localhost:16686.
 
 

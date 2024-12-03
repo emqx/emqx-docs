@@ -29,19 +29,19 @@ EMQX 传播追踪上下文的固有能力使其能够无缝地参与分布式追
      otlp:
        protocols:
          grpc:
-   
+
    exporters:
      otlp:
        endpoint: jaeger:4317
        tls:
          insecure: true
-   
+
    processors:
      batch:
-   
+
    extensions:
      health_check:
-   
+
    service:
      extensions: [health_check]
      pipelines:
@@ -61,7 +61,7 @@ EMQX 传播追踪上下文的固有能力使其能够无缝地参与分布式追
        restart: always
        ports:
          - "16686:16686"
-   
+
      otel-collector:
        image: otel/opentelemetry-collector:0.90.0
        restart: always

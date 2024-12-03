@@ -15,17 +15,17 @@
      otlp:
        protocols:
          grpc:
-   
+
    exporters:
      logging:
        verbosity: detailed
-   
+
    processors:
      batch:
-   
+
    extensions:
      health_check:
-   
+
    service:
      extensions: [health_check]
      pipelines:
@@ -39,7 +39,7 @@
 
    ```yaml
    version: '3.9'
-   
+
    services:
      # Collector
      otel-collector:

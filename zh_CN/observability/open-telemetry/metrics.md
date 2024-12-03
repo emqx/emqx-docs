@@ -21,12 +21,12 @@ receivers:
 exporters:
   prometheus:
     endpoint: "0.0.0.0:8889"
-      
+
 processors:
   batch:
-  
-service:  
-  pipelines:    
+
+service:
+  pipelines:
     metrics:
       receivers: [otlp]
       processors: [batch]

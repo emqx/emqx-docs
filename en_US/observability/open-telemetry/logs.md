@@ -15,17 +15,17 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
      otlp:
        protocols:
          grpc:
-   
+
    exporters:
      logging:
        verbosity: detailed
-   
+
    processors:
      batch:
-   
+
    extensions:
      health_check:
-   
+
    service:
      extensions: [health_check]
      pipelines:
@@ -39,7 +39,7 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
 
    ```yaml
    version: '3.9'
-   
+
    services:
      # Collector
      otel-collector:
@@ -77,7 +77,7 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
 
    ::: tip Note
 
-   The `opentelemetry.logs.level` setting is overridden by the default log level configured in [EMQX log handler(s)](../../observability/log.md). For instance, if OpenTelemetry log level is `info` but EMQX console log level is `error`, only `error` level events or higher will be exported. 
+   The `opentelemetry.logs.level` setting is overridden by the default log level configured in [EMQX log handler(s)](../../observability/log.md). For instance, if OpenTelemetry log level is `info` but EMQX console log level is `error`, only `error` level events or higher will be exported.
 
    :::
 
@@ -94,7 +94,7 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
 ## Manage Log Overload
 
 EMQX accumulates log events and exports them periodically in batches.
-The frequency of this export is controlled by the `opentelemetry.logs.scheduled_delay` parameter, defaulting to 1 second. 
+The frequency of this export is controlled by the `opentelemetry.logs.scheduled_delay` parameter, defaulting to 1 second.
 The batching log handler incorporates an overload protection mechanism, allowing accumulating events only up to a specific limit, which defaults to 2048. You can configure this limit using the following configuration:
 
 ```bash
