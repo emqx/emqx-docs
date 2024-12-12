@@ -48,7 +48,7 @@ scrape_configs:
 
 ## 在 EMQX 中启用 OpenTelemetry 指标
 
-本节指导您如何在 EMQX 中启用 OpenTelemetry 指标。你也可以在 Dashboard **管理** -> **监控** 页面下的 **监控集成** 选项卡中配置 OpenTelemetry 指标集成。
+本节指导您如何在 EMQX 中启用 OpenTelemetry 指标。你也可以在 Dashboard **管理** -> **监控**页面下的**监控集成**选项卡中配置 OpenTelemetry 指标集成。
 
 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 

@@ -1,6 +1,6 @@
 # 集成 OpenTelemetry 追踪
 
-[OpenTelemetry 追踪](https://opentelemetry.io/docs/concepts/signals/traces/)是一个用于追踪请求在分布式系统中的流动的规范，用于追踪请求在分布式系统中的流动情况，并提供可视化分析请求的性能和行为的能力。在 MQTT 场景下，这一概念可以实现跨越 MQTT 消息传输中的不同参与者（发布者-MQTT 服务器-订阅者）的请求追踪。
+[OpenTelemetry 追踪](https://opentelemetry.io/docs/concepts/signals/traces/)是一种用于追踪分布式系统中请求流动的规范，使您能够跟踪请求在分布式系统中的流向，并提供可视化和分析请求性能及行为的能力。在 MQTT 场景下，这一概念可以实现跨越 MQTT 消息传输中的不同参与者（发布者-MQTT 服务器-订阅者）的请求追踪。
 
 "Trace context"（追踪上下文）是一种分布式追踪的机制，它用于跟踪和识别跨越多个系统和服务的请求或事务。EMQX 遵循 W3C 的 [Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) 规范实现了端到端的分布式追踪功能。这样，系统管理员或开发人员可以通过追踪信息来观测消息在整个系统中的流转情况。
 
@@ -87,7 +87,7 @@ EMQX 传播追踪上下文的固有能力使其能够无缝地参与分布式追
 
 本节指导您如何在 EMQX 中启用 OpenTelemetry 追踪，展示多节点设置中的分布式追踪能力。
 
-你也可以在 Dashboard **管理** -> **监控** 页面下的 **监控集成** 选项卡中配置 OpenTelemetry 追踪集成。
+你也可以在 Dashboard **管理** -> **监控**页面下的**监控集成**选项卡中配置 OpenTelemetry 追踪集成。
 
 1. 将以下配置添加到 EMQX `cluster.hocon` 文件中（假设 EMQX 在本地机器上运行）：
 
@@ -127,7 +127,7 @@ EMQX 传播追踪上下文的固有能力使其能够无缝地参与分布式追
 
 5. 大约 5 秒后（EMQX 导出追踪数据的默认间隔），导航到 [http://localhost:16686](http://localhost:16686/) 的 Jaeger WEB UI 观察追踪数据：
 
-   - 选择 `emqx` 服务并点击 **查找追踪**。如果 `emqx` 服务没有立即出现，请稍等片刻后刷新页面。您应该看到消息追踪：
+   - 选择 `emqx` 服务并点击**查找追踪**。如果 `emqx` 服务没有立即出现，请稍等片刻后刷新页面。您应该看到消息追踪：
 
      ![Jaeger-WEB-UI-find-traces](./assets/jaeger-find-traces-en.png)
 
