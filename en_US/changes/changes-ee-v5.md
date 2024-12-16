@@ -1,5 +1,11 @@
 # EMQX Enterprise Version 5
 
+# 5.8.4
+
+## Enhancements
+
+## Bug Fixes
+
 ## 5.8.3
 
 *Release Date: 2024-12-05*
