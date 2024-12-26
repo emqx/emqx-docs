@@ -2,6 +2,8 @@
 
 ## v5.8.4
 
+## v5.8.4
+
 - [#14360](https://github.com/emqx/emqx/pull/14360) When requesting Prometheus metrics in JSON format, the `client` top-level key will now always be an array of JSON objects, rather than a single JSON object. This change may affect how your monitoring tools process the data.
 
 ## v5.8.3
