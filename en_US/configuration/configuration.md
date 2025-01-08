@@ -4792,6 +4792,32 @@ When the current process number as a percentage of the maximum process number ex
 When the percentage of the current number of processes in the maximum number of processes falls below `vm_mon.process_low_watermark`, an alarm will be triggered. The maximum number of processes is determined by the `node.process_limit` configuration item.
 
 
+
+### vm_mon.process_long_msgq
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `80`    |
+
+#### Description
+
+An alert will be triggered when the message queue length of a process in EMQX exceeds this value.
+
+
+
+### vm_mon.process_alarm_top_n
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `5`     |
+
+#### Description
+
+When an alert is triggered, the alert message will include the top `N` processes with the longest message queue lengths.
+
+
+
+
 ## Plugin `emqx_auth_http`
 
 ### auth.http.auth_req.url
