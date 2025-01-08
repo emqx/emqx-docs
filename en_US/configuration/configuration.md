@@ -4801,7 +4801,7 @@ When the percentage of the current number of processes in the maximum number of 
 
 #### Description
 
-An alert will be triggered when the message queue length of a process in EMQX exceeds this value.
+An alert will be triggered when the message queue length of a process in EMQX exceeds this value. Setting it to `0` will disable the alert for the message queue length.
 
 
 
