@@ -50,9 +50,6 @@
     - title_en: Technical Support
       title_cn: 技术支持
       path: support/technical-support
-    - title_en: Product Roadmap
-      title_cn: 产品路线图
-      path: getting-started/roadmap
 
 - title_en: Installation and Deployment
   title_cn: 安装部署
