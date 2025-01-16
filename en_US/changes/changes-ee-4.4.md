@@ -1,5 +1,82 @@
 # Releases
 
+## e4.4.28
+
+*Release Date: 2025-01-17*
+
+### Enhancements
+
+- Improved the self-healing capability of the EMQX cluster.
+
+  Previously, EMQX could only self-heal simple split-brain scenarios, but not others:
+
+  - When one node can maintain contact with all other nodes, it is used as the base node, and other nodes are restarted to restore the cluster.
+  - When the split-brain forms two sub-clusters, the sub-cluster with fewer nodes is restarted to restore the cluster.
+
+  After the improvement, even if the split-brain becomes multiple complex and asymmetric clusters, EMQX can still self-heal.
+
+- Optimized the performance of handling wildcard subscriptions and un-subscriptions in EMQX.
+
+  This improvement changes the prefix tree table from a `mnesia` table that needs to be replicated between nodes to an `ETS` table, eliminating the time spent synchronizing prefix tree information between nodes. After the improvement, EMQX's subscription handling is **asynchronous**:
+
+  1. First, EMQX updates the prefix tree and routing records locally and replies with SUBACK.
+  2. The routing information is asynchronously updated to other nodes, which then update their own prefix trees.
+
+  This optimization will significantly improve the performance of handling subscriptions and un-subscriptions in EMQX, especially when there are many nodes and high network latency between nodes.
+
+  Note that if there are older versions of EMQX nodes in the cluster, wildcard subscriptions added on the older nodes can be correctly established on the new version nodes, but not vice versa. This means that during a rolling upgrade, wildcard subscriptions made on newly upgraded nodes may not receive messages from older nodes. This issue is automatically resolved once all nodes are upgraded. After a node is upgraded, the prefix tree will be rebuilt through the routing table, so routing information will not be lost during the rolling upgrade.
+
+- Optimized the matching performance of the rule engine.
+
+  This optimization improves the matching performance of the rule engine by caching the topic prefix tree and removing excessive topic splitting operations. This optimization is more significant in scenarios with many rules.
+
+- Added a "Buffer Max Linger Time" option to the Kafka action.
+
+  This option controls the maximum wait time for the producer to collect messages for each partition before writing them to the buffer in batches. The default value of `0ms` means no waiting. For non-memory buffering modes, it is recommended to set at least `5ms` to reduce IOPS.
+
+- Changed the handling of alarms to asynchronous mode.
+
+  Previously, alarms were handled synchronously, and a large number of `conn_congestion` alarms could affect the MQTT connection process. Now, alarms are handled asynchronously, and overload protection has been added. When the alarm system is overloaded, alarms will enter a "silent period" of one minute, during which any alarms will be discarded.
+
+- Added monitoring and alarming for process message queue length.
+
+  Two new configuration items `vm_mon.process_long_msgq` and `vm_mon.process_alarm_top_n` have been added to control the monitoring and alarming of process message queue length.
+
+  - `vm_mon.process_long_msgq`: Triggers an alarm when the mailbox of a process in EMQX exceeds this length, with a default value of `80`.
+  - `vm_mon.process_alarm_top_n`: When an alarm is triggered, include the information of the top N processes with the longest non-zero message queues in the alarm. The default value is `5`.
+
+- Optimized the logging of CONNECT packet parsing failures.
+
+  After the improvement, if an MQTT connection is disconnected due to a failure in parsing the CONNECT variable header, `esockd` will no longer log such errors, and the disconnection reason will be marked as: `malformed_connect_variable_header`:
+
+  ```
+  [error] supervisor: 'esockd_connection_sup - <0.5949.0>', errorContext: connection_shutdown, reason: {badmatch,<<>>}, offender: [{pid,<0.13949.4720>}, ...]
+  ```
+
+- Changed the log to "Always Asynchronous" mode.
+
+  Previously, the default value of the `log.sync_mode_qlen` configuration was 100, meaning that when the log queue length exceeded 100, the log would switch to synchronous mode. This has been changed to 3000, consistent with the default value of `log.drop_mode_qlen`, so that the log handler always works in asynchronous mode and starts discarding logs when the queue length exceeds 3000.
+
+- Optimized the performance of slow subscriptions.
+
+  This optimization slightly reduces the performance overhead of the slow subscription feature by avoiding calling `ets:info(emqx_slow_subs_topk, size)`.
+
+- Reduced the time spent updating listeners through hot configuration.
+
+  Previously, when updating listener configurations through hot configuration, EMQX would sequentially update and restart listeners on each node, which could take a long time when there were many connections. Now, by using `erpc:multicall/4`, EMQX will update listeners on each node in parallel, reducing the time spent.
+
+- Avoid blocking `ecpool_sup` by slow-starting `ecpool_worker`.
+
+### Bug Fixes
+
+- Fixed an issue where the username of a persistent session would disappear from the username quota page.
+
+  Before the fix, the username of a persistent session's MQTT client would disappear from the username quota page after reconnecting.
+
+- Fixed a performance degradation issue caused by log throttling.
+
+  Before the fix, due to issues in the log throttling feature, enabling log tracing would significantly increase EMQX's resource consumption.
+
 ## e4.4.27
 
 *Release Date: 2024-11-28*
@@ -48,7 +125,7 @@
 
   If set to `false_quick_deny`, EMQX will quickly deny anonymous (no username) clients, thereby skipping the authentication backend check.
 
-### Fixes
+### Bug Fixes
 
 - Fixed an issue where Kafka actions failed due to corrupted cache files after a server power outage.
 
