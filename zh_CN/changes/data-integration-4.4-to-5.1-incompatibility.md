@@ -20,7 +20,7 @@
 
 - 在 EMQX 4.4 中的[获取订阅关系](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)功能已被移除。
 
-- Tablestore，DolphinDB，Lindorm 和 SAP Event Mesh 的数据桥接不再支持，但 SAP Event Mesh 在[产品路线图](../getting-started/roadmap.md)中。
+- Tablestore，DolphinDB，Lindorm 和 SAP Event Mesh 的数据桥接不再支持，但 SAP Event Mesh 在产品路线图中。
 
 - 作为资源类型的 `EMQX Bridge` 不再受支持。
 

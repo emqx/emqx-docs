@@ -18,7 +18,7 @@ The whole concept of Data Integration was upgraded in EMQX 5.1.
 
 - [Get Subscriptions](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) features in EMQX 4.4 are removed.
 
-- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the [product roadmap](../getting-started/roadmap.md).
+- Tablestore, DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the product roadmap.
 
 - `EMQX Bridge` as a resource type is no longer supported.
 
