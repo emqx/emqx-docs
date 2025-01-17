@@ -4813,7 +4813,7 @@ An alert will be triggered when the message queue length of a process in EMQX ex
 
 #### Description
 
-When an alert is triggered, the alert message will include the top `N` processes with the longest message queue lengths.
+When an alert is triggered, the alert message includes the top `N` processes with the longest message queue lengths, excluding those with a length of zero.
 
 
 
