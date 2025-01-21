@@ -84,15 +84,19 @@ Follow the instructions below on how to configure the authentication:
 
 **Authentication configuration**: Configure settings related to authentication:
 
-- **Password Hash**: Select the hash function for storing passwords in the database, such as `plain`, `md5`, `sha`, `bcrypt`, or `pbkdf2`. Additional configuration depends on your selected function:
-  - For `plain`, `md5`, `sha`, `sha256`, or `sha512`:
-    - **Salt Position**: Determines how salt (random data) is added to the password. Options are `suffix`, `prefix`, or `disable`. Retain the default setting unless migrating credentials from external storage to the EMQX built-in database. Note: Set to `disable` if `plain` is chosen.
+- **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configuration depends on selected algorithm:
+  - For `md5`, `sha`, `sha256` or `sha512`:
+    - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`.  You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
+    - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
+  - For `plain`:
+    - **Salt Position**: should be `disable`.
   - For `bcrypt`:
-    - **Salt Rounds**: Set the number of times the hash function executes, denoted as 2^Salt Rounds, also known as the "cost factor". The default is `10`, with a range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
+    - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
   - For `pbkdf2`:
-    - **Pseudorandom Function**: Specify the Hash functions to generate the key, such as `sha256`. 
-    - **Iteration Count**: Specify the iteration times; Default: `4096`.
-    - **Derived Key Length** (optional): Specify the length of the generated password. You can leave this field blank, then the key length will be determined by the pseudorandom function you selected. 
+    - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
+    - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
+    - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
+    - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
 - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
 
 After you finish the settings, click **Create**.
