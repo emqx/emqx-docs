@@ -4703,6 +4703,30 @@ EMQX 为单个进程分配的内存占系统内存的百分比超过 `os_mon.pro
 
 <br />
 
+### vm_mon.process_long_msgq
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `80`    |
+
+#### 说明
+
+当 EMQX 中有进程的邮箱超过此长度时将触发告警。设置为 `0` 则关闭邮箱过长告警功能。
+
+<br />
+
+### vm_mon.process_alarm_top_n
+
+| Type    | Default |
+| ------- | ------- |
+| integer | `5`     |
+
+#### 说明
+
+当触发告警时，在告警信息中包含前 `N` 个消息队列长度最长、且不为零的进程。
+
+<br />
+
 ## 插件 `emqx-auth-http`
 
 ### auth.http.auth_req.url
