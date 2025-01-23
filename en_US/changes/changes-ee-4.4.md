@@ -2,7 +2,7 @@
 
 ## e4.4.28
 
-*Release Date: 2025-01-17*
+*Release Date: 2025-01-23*
 
 ### Enhancements
 
