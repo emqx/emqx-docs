@@ -1,5 +1,96 @@
 # EMQX Open Source Version 5
 
+## 5.8.5
+
+### Enhancements
+
+- [#14583](https://github.com/emqx/emqx/pull/14583) QUIC listener now supports dumping TLS secrets to SSLKEYLOGFILE for traffic decryption.
+
+  The SSLKEYLOGFILE could be used by wireshark to decrypt live or captured QUIC traffic
+  so that the MQTT packets could be decoded.
+
+  example:
+
+  `EMQX_LISTENERS__QUIC__DEFAULT__SSLKEYLOGFILE=/tmp/EMQX_SSLKEYLOGFILE`
+
+  NOTE: This is hidden configuration for troubleshooting only. 
+
+- [#14570](https://github.com/emqx/emqx/pull/14570) Support placeholders in HTTP Headers for HTTP Authentication and Authorization.
+
+- [#14507](https://github.com/emqx/emqx/pull/14507) Added two new HTTP APIs: `GET /actions_summary` and `GET /sources_summary`.  These are similar to the existing `GET /actions` and `GET /sources`, respectively, but with more lightweight contents: basically, they do not return the configurations for all entities.
+
+- [#14496](https://github.com/emqx/emqx/pull/14496) Added extra validation to the `root_keys` parameters of `POST /data/export`.  Now, invalid root keys will result in an error instead of being silently ignored.
+
+- [#14494](https://github.com/emqx/emqx/pull/14494) Support complex queries for MongoDB authorization.
+  * Support top-level `$orderby` operator in selector filter.
+  * Add `skip` and `limit` options of authorization configuration.
+
+- [#14456](https://github.com/emqx/emqx/pull/14456) Add a simple firewall script `bin/emqx_fw` to protect EMQX listener from SYN flooding.
+
+  This is Linux only.
+
+
+- [#14454](https://github.com/emqx/emqx/pull/14454) Introduced `max_publish_rate` option for the retainer. The option controls the maximum allowed rate of publishing retained messages in each node. The messages that are published over the limit are delivered but not stored as retained.
+
+  This option is useful to limit the load on the configured retained message storage.
+
+- [#14450](https://github.com/emqx/emqx/pull/14450) Added support for setting no-local flag to MQTT Source.
+
+- [#14437](https://github.com/emqx/emqx/pull/14437) Added two new gauges to Prometheus output: `emqx_vm_mnesia_tm_mailbox_size` and `emqx_vm_broker_pool_max_mailbox_size`.  These track the mailbox sizes of internal EMQX processes that can indicate system overload.  Additionally, alarms will be raised when those mailbox sizes surpass certain high watermarks.
+
+- [#14404](https://github.com/emqx/emqx/pull/14404) Added support for specifying static clientids for MQTT Connector.
+
+### Bug Fixes
+
+- [#14588](https://github.com/emqx/emqx/pull/14588) Improve Memory Usage Reporting in EKS
+
+  When EMQX runs in a containerized environment, the accuracy of memory usage readings can vary depending on 
+  factors like the host kernel version, cgroup version, and the method used by the container management service to mount cgroupfs. 
+  This update enhances the accuracy of memory usage readings specifically in AWS EKS.
+
+- [#14555](https://github.com/emqx/emqx/pull/14555) Fixed an issue with MQTT Source where shared topics would not be unsubscribed from when removing or updating a source.
+
+- [#14550](https://github.com/emqx/emqx/pull/14550) Fixed an issue where, if only a few of the MQTT clients in the connection pool of an MQTT Connector would get disconnected, they wouldn't reconnect automatically until all clients in a node disconnected.
+
+- [#14548](https://github.com/emqx/emqx/pull/14548) Fix datbase schema merge crash issue.
+
+  `** FATAL ** Failed to merge schema: {aborted,function_clause}`
+
+  Fixed an issue where a node was down would crash upon reboot if a new node joined the cluster while it's down.
+  Now, nodes can restart smoothly without needing to rejoin the cluster.
+
+- [#14545](https://github.com/emqx/emqx/pull/14545) Fix the issue with the inability to remove RabbitMQ action in case of RabbitMQ unresponsiveness.
+
+- [#14544](https://github.com/emqx/emqx/pull/14544) Fixed an issue where disabling a TCP or TLS listener caused the Prometheus metrics gathering process to crash.
+
+- [#14543](https://github.com/emqx/emqx/pull/14543) Fixed an internal compatibility issue that caused some of ExHooks to crash when clients were connected through WS, WSS or Gateway listeners.
+
+- [#14536](https://github.com/emqx/emqx/pull/14536) Fix rare race condition causing some of cluster management operations to hang thus rendering cluster changes impossible until node restart, by making global lock guarding cluster joins stricter.
+
+- [#14518](https://github.com/emqx/emqx/pull/14518) Now, when loading Connectors from configuration (either via CLI or HTTP API), they are started asynchronously.  Previously, if a connector hanged while trying to start, it could time out the configuration import process.
+
+  When (re)starting a node, connectors are now also started asynchronously, to speed up boot up time.
+
+  Fixed a potential issue where a Source could be added to the configuration before its underlying Connector when importing a configuration.
+
+- [#14511](https://github.com/emqx/emqx/pull/14511) Eliminate unnecessary log printing by the Stomp gateway when client authentication fails
+
+- [#14508](https://github.com/emqx/emqx/pull/14508) Performance improvement when large number of clients reconnect.
+
+- [#14503](https://github.com/emqx/emqx/pull/14503) Returns an empty list instead of a 404 error if no listener exists at the gateway
+
+- [#14501](https://github.com/emqx/emqx/pull/14501) Fix the error where the gateway client query HTTP API always returns a keepalive value of 0.
+
+- [#14489](https://github.com/emqx/emqx/pull/14489) Avoid the 500 error returned by accessing `api/v5/gateways` if Gateway is not enabled on a node in the cluster.
+
+- [#14484](https://github.com/emqx/emqx/pull/14484) Fixed an issue where the Exproto gateway did not support using hostname in the server endpoint.
+
+
+- [#14405](https://github.com/emqx/emqx/pull/14405) Convert `256MB` to `268435455` bytes for `mqtt.max_packet_size`.
+
+  EMQX previously allowed setting `256MB` for `mqtt.max_packet_size` config, which is in fact one byte more than what the protocol spec allows.
+  For backward compatibility, `mqtt.max_packet_size=256MB` is still allowed from configurations, but will be silently converted to `268435455`.
+
 ## 5.8.4
 
 *Release Date: 2024-12-26*
