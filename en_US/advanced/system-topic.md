@@ -34,10 +34,15 @@ By default, only MQTT clients on localhost is allowed to subscribe to the $SYS t
 :::
 
 ::: tip
-Most of the data of the $SYS topic in EMQX Broker can be obtained through other method with lower Couplings. The device online and offline status can be obtained through [Rule Engine](../rule/rule-create.md)), and the node and cluster status can be obtained through  [HTTP API - Statistics Metrics](./http-api.md#metrics).
 
-The rule engine supports "client online and offline" events in the form of event topics, but does not provide corresponding event topic support for other types of system topics.
-To use the rule engine to process all types of system topics, you can modify the [rule-engine.ignore_sys_message](../configuration/configuration.md#rule-engine-ignore-sys-message) of the rule engine plugin.
+In EMQX, most data from the `$SYS` topics can be obtained through lower-coupling methods, avoiding direct subscription to `$SYS` topics:
+
+- Device online/offline status can be obtained via the [Rule Engine](../rule/rule-engine.md).
+- Node and cluster status can be retrieved through the [HTTP API - Statistics](./http-api.md#metrics).
+
+The Rule Engine supports processing "client online/offline" event messages directly in the form of event topics. However, it does not provide corresponding event topic support for other types of system topics.
+
+If you want the Rule Engine to process all types of system topic messages, you can modify the [rule-engine.ignore_sys_message](../configuration/configuration.md#rule-engine-ignore-sys-message) setting in the Rule Engine plugin.
 :::
 
 ## Cluster status information
