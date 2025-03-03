@@ -17,7 +17,7 @@ ref:
 
 EMQX 周期性发布自身运行状态、消息统计、客户端上下线事件到以 `$SYS/` 开头系统主题。
 
-$SYS 主题路径以 `$SYS/brokers/{node}/` 开头。`{node}` 是指产生该 `事件 / 消息` 所在的节点名称，例如:
+`$SYS` 主题路径以 `$SYS/brokers/{node}/` 开头。`{node}` 是指产生该 `事件/消息` 所在的节点名称，例如:
 
 ```bash
 $SYS/brokers/emqx@127.0.0.1/version
@@ -25,20 +25,33 @@ $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
 
-$SYS 系统消息发布周期配置项：
+`$SYS` 系统消息发布周期配置项：
 
 ```bash
 broker.sys_interval = 1m
 ```
 
+::: tip
+
 {% emqxce %}
 
-::: tip
-EMQX 默认**只允许**本机的 MQTT 客户端订阅 $SYS 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
+EMQX 默认**只允许**本机的 MQTT 客户端订阅 `$SYS` 主题，请参照 [内置 ACL](./acl-file.md) 修改发布订阅 ACL 规则。
 
 {% endemqxce %}
 
-EMQX 中 $SYS 主题中绝大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [规则引擎](../rule/rule-engine.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#endpoint-metrics) 获取。
+{% emqxee %}
+
+默认情况下，仅允许本地主机上的 MQTT 客户端订阅 `$SYS` 主题。请参阅内置 ACL 以修改发布和订阅的 ACL 规则。
+
+{% endemqxee %}
+
+:::
+
+::: tip
+EMQX 中 $SYS 主题中大部分数据都可以通过其他更耦合性更低的方式获取，设备上下线状态可通过 [规则引擎](../rule/rule-engine.md) 获取，节点与集群状态可通过 [HTTP API - 统计指标](./http-api.md#统计指标) 获取。
+
+规则引擎以事件主题的形式支持 “客户端上下线” 事件，但对于其他类型系统主题，未提供相应的事件主题支持。
+若要使用规则引擎处理所有类型的系统主题，可以修改规则引擎插件的 [rule-engine.ignore_sys_message 配置项](../configuration/configuration.md#rule-engine-ignore-sys-message)。
 :::
 
 

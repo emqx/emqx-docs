@@ -28,7 +28,7 @@ THIS_DIR="$(cd "$(dirname "$(readlink "$0" || echo "$0")")"; pwd -P)"
 docker rm "$CONTAINER_NAME" > /dev/null 2>&1 || true
 
 if [ "$PRODUCT" = "ce" ]; then
-    docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
+    docker run -p ${HOST_PORT}:8080 --privileged -it --name "$CONTAINER_NAME" \
         -v "$THIS_DIR"/directory.json:/app/docs/.vitepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/emqx/latest \
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/emqx/latest \
@@ -37,7 +37,7 @@ if [ "$PRODUCT" = "ce" ]; then
         -e VERSION=latest \
     ghcr.io/emqx/docs-emqx-com-next:latest
 else
-    docker run -p ${HOST_PORT}:8080 -it --name "$CONTAINER_NAME" \
+    docker run -p ${HOST_PORT}:8080 --privileged -it --name "$CONTAINER_NAME" \
         -v "$THIS_DIR"/directory_ee.json:/app/docs/.vitepress/config/directory.json \
         -v "$THIS_DIR"/en_US:/app/docs/en/enterprise/latest \
         -v "$THIS_DIR"/zh_CN:/app/docs/zh/enterprise/latest \
