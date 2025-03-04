@@ -1,5 +1,63 @@
 # Releases
 
+## e4.4.29
+
+*Release Date: 2025-03-07*
+
+### Enhancements
+
+- Optimized License check performance.
+
+  This optimization reduces the performance overhead of checking the total number of connections against the License when clients establish connections by minimizing inter-node RPC calls.
+
+- Improved connection management during mass client reconnections to prevent connection rejections due to License limits.
+
+  After this optimization, even if the current connection count exceeds the License limit, EMQX will still allow clients with an already established ClientID to reconnect.
+
+- Enhanced Wolff to support Kafka topics being rebuilt with fewer partitions.
+
+  Previously, Wolff (EMQX’s Kafka driver) only supported increasing the number of partitions in a Kafka topic (scaling up) but did not support reducing partitions (scaling down).
+
+  Since Kafka does not allow direct partition reduction, users typically need to create a new topic and migrate data, or delete the old topic and create a new one with the same name if data loss is acceptable. Before this improvement, Wolff could not handle such cases correctly, potentially causing some producers to fail to reconnect.
+
+- Unified default values for the `acceptors` and `max_connections` settings across all listeners.
+
+  After the improvement, the default value for the `acceptors` setting is unified to 16 across all listener types, and the default value for `max_connections` is 1,024,000.
+
+- Expanded configuration options for the Trace module.
+
+  The Trace module now supports three new options:
+
+  - **Maximum line length:** Controls the maximum number of characters per line in the log file (default: `2048`).
+  - **Maximum file size:** Sets the maximum size of a log file (default: `1GB`).
+  - **Maximum heap memory for client processes:** The default value is `512MB`, which helps prevent client connection processes from being terminated due to low default memory limits (64MB on 64-bit systems) when log tracing is enabled.
+
+- Added a Warning log when a client process is terminated.
+
+  Previously, when a client process was terminated due to memory constraints, the only available log was an Erlang/OTP error message, which did not specify which client was affected:
+
+  ```
+  [error] Process: <0.3540.0> on node 'emqx@127.0.0.1', Context: maximum heap size reached, Max Heap Size:      167772160, Total Heap Size: 200934817, Kill: true, ...
+  ```
+
+  Now, EMQX adds a Warning log alongside this message to help users identify the affected client:
+
+  ```
+  [warning] [CM] Clean down, clientid: abcd_bench_pub_1, pid: <0.3540.0>, reason: killed
+  ```
+
+### Bug Fixes
+
+- Fixed an issue where EMQX deployed in containers could not update the `acceptors` and `max_connections` settings using the hot configuration feature.
+
+- Fixed an issue where EMQX might fail to reconnect to Redis after a master-slave switch in Redis Cluster mode.
+
+  Previously, if EMQX could not connect to the new Redis master node after a failover due to network issues, `eredis_cluster` (EMQX’s Redis Cluster driver) would enter an abnormal state, preventing it from reconnecting to Redis properly.
+
+- Fixed an occasional unresponsiveness issue when downloading log tracing files from the Dashboard.
+
+- Fixed a packet parsing issue in the Pulsar driver.
+
 ## e4.4.28
 
 *Release Date: 2025-01-23*
