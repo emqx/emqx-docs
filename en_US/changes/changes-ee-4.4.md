@@ -28,9 +28,9 @@
 
   The Trace module now supports three new options:
 
-  - **Maximum line length:** Controls the maximum number of characters per line in the log file (default: `2048`).
-  - **Maximum file size:** Sets the maximum size of a log file (default: `1GB`).
-  - **Maximum heap memory for client processes:** The default value is `512MB`, which helps prevent client connection processes from being terminated due to low default memory limits (64MB on 64-bit systems) when log tracing is enabled.
+  - **Line Max Size:** Controls the maximum number of characters per line in the log file (default: `2048`).
+  - **File Max Size:** Sets the maximum size of a log file (default: `1GB`).
+  - **Client Process Max Heap Size:** The default value is `512MB`, which helps prevent client connection processes from being terminated due to low default memory limits (64MB on 64-bit systems) when log tracing is enabled.
 
 - Added a Warning log when a client process is terminated.
 
