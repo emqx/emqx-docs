@@ -8,7 +8,7 @@ Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab
 
 ![image-202112140001](./assets/trace_module.png)
 
-Select the trace module, no need to configure parameters, directly open
+Select the trace module, no need to configure parameters, directly open.
 
 ## Trace ClientID
 
@@ -52,3 +52,13 @@ The log contains all the information about the current IP interaction with the E
 3. You can choose to stop logging manually, or wait until the end time to stop automatically.
 4. The size of the log file viewed in the list is the sum of the uncompressed file sizes.
 5. The EMQX cluster will continue the outstanding trace after restart.
+
+## Configure Trace Settings
+
+To configure the parameters of the log tracing function, you can click the **Configuration** tab in the Trace module and configure the following settings:
+
+![trace_config](./assets/trace_config.png)
+
+- **Line Max Size**: Specifies the maximum number of characters per line in the log tracing file. If non-zero, the minimum value is `40`. A value of `0` means there is no limit.
+- **File Max Size**: Defines the maximum size of the log file. A value of `0` means there is no limit.
+- **Client Process Max Heap Size**: If the log tracing type is **ClientID**, this setting determines the maximum heap memory size for the client process after log tracing is enabled. If the process heap exceeds this value, EMQX will terminate the process, causing the client connection to be disconnected. If non-zero, the minimum value is `1MB`. A value of `0` means there is no limit.
