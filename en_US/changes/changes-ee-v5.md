@@ -8,6 +8,39 @@
 
 ### Bug Fixes
 
+- [#14863](https://github.com/emqx/emqx/pull/14863) Fix a problem with `cluster/:node/invite_async` REST API.
+  Previously, this API could attempt using a down node as the coordinator.
+
+- [#14847](https://github.com/emqx/emqx/pull/14847) Fixed an issue with JWKS authentication where HTTPS endpoints which used wildcard hostnames would fail to connect while retrieving keys.
+
+- [#14834](https://github.com/emqx/emqx/pull/14834) Fixed the `Content-Type` header when downloading data backup files.
+
+- [#14824](https://github.com/emqx/emqx/pull/14824) Fixed an issue where, depending on the provided values of the `details` key of an `alarm_activated` or `alarm_deactivated` event to the SQL Rule Tester, a 500 error could be returned.
+
+- [#14815](https://github.com/emqx/emqx/pull/14815) Fix release of packet ids for QoS 2 message. Previously, if client did not send PUBREL for the maximum configured number of pending QoS 2 messages and disconnected, the packet ids were not released even after the configured Max Awaiting PUBREL Timeout.
+
+- [#14802](https://github.com/emqx/emqx/pull/14802) Added new `emqx ctl plugins allow NAME-VSN` CLI command for plugins.
+
+  Now, it is required to run this command in the CLI before attempting to install a package via the HTTP API, to harden security.
+
+- [#14800](https://github.com/emqx/emqx/pull/14800) Throttle warning level log `dropped_qos0_msg`.
+
+- [#14797](https://github.com/emqx/emqx/pull/14797) Fix macOS release package dynamic linking openssl (backport #14624)
+
+  EMQX zip package may fail to start on macOS because quicer application dynamic links to sys installed openssl which is not signed by 
+  EMQX build process.
+
+  Now we change to disabled dynamic linking as the OTP we shipped on macOS also disabled dynamic linking of openssl.
+
+
+- [#14793](https://github.com/emqx/emqx/pull/14793) Add trace log for `protocol_error`.
+
+  Previously if a client sends invalid or unexpected MQTT packets to cause a `protocol_error` in EMQX, the detailed reason is not traced.
+  For example, if a client send two `CONNECT` packets, for the second one, EMQX may log `socket_force_closed` with `protocol_error`, but hard to tell why.
+  Now EMQX will log `unexpected_connect_packet` with `conn_state=connected` before `socket_force_closed`.
+
+- [#14786](https://github.com/emqx/emqx/pull/14786) Fix settings update for JWT authentication. Previously, some fields may be not updated correctly for a configuration with external JWKS endpoint.
+
 - [#14813](https://github.com/emqx/emqx/pull/14813) Fixed the issue that the outgoing messages to the websocket clients were not traced in end-to-end tracing.
 
 - [#14796](https://github.com/emqx/emqx/pull/14796) Fix Pulsar producer inflight state leak.
