@@ -1,5 +1,24 @@
 # EMQX Enterprise Version 5
 
+## 5.8.6
+
+### Enhancements
+
+- [#14855](https://github.com/emqx/emqx/pull/14855) Add a new configuration item **ignore_unsupported_frames** to the JT/T 808 gateway to prevent devices from being disconnected due to reporting messages that the gateway cannot parse.
+
+### Bug Fixes
+
+- [#14813](https://github.com/emqx/emqx/pull/14813) Fixed the issue that the outgoing messages to the websocket clients were not traced in end-to-end tracing.
+
+- [#14796](https://github.com/emqx/emqx/pull/14796) Fix Pulsar producer inflight state leak.
+
+  Prior to this fix, Pulsar client's inflight state may sometimes leak, cause the connector's inflight counter never go back to zero.
+  This fix also included a performance improvement for Pulsar and Kafka producers on x86.
+
+  Also, implemented actual support for the `buffer.memory_overload_protection` for Pulsar Action.  Before this fix, this configuration didn't actually have any effect.
+
+- [#14756](https://github.com/emqx/emqx/pull/14756) Improve the JT/T 808 gateway so that when anonymous authentication is enabled, the registration response will carry the default authentication code `anonymous`. This is used to avoid the issue where some clients are unable to parse an empty authentication code.
+
 ## 5.8.5
 
 *Release Date: 2025-02-25*
