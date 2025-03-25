@@ -14,6 +14,14 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Bug Fixes
 
+- [#14906](https://github.com/emqx/emqx/pull/14906) Update Mria to 0.8.12.1 to eliminate occasional warnings caused by unexpected exit signals.
+  ```
+  2025-01-10T20:00:00+00:00 [warning] clientid: C1, msg: emqx_session_mem_unknown_message, message: {'EXIT',<0.123456.0>,normal}
+  ```
+
+- [#14863](https://github.com/emqx/emqx/pull/14863) Fix a problem with `cluster/:node/invite_async` REST API.
+  Previously, this API could attempt using a down node as the coordinator.
+
 #### Core MQTT Functionalities
 
 - [#14815](https://github.com/emqx/emqx/pull/14815) Fixed packet ID release for QoS 2 messages. Previously, if a client failed to send a PUBREL for the maximum configured number of pending QoS 2 messages and then disconnected, the packet IDs remained occupied even after exceeding the configured Max Awaiting PUBREL Timeout.
