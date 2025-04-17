@@ -22,14 +22,12 @@ When using RPM or DEB packages, you can upgrade EMQX by simply installing the ne
 
 When using Docker, you can upgrade EMQX by simply pulling the newer version image and restarting the container.
 
-## Upgrade from Open Source to Enterprise Edition
+## Upgrade from Open Source (<5.9) to Enterprise Edition version 5.9+
 
-If you are running an Open Source version of EMQX and would like to upgrade to the Enterprise Edition,
-the process is the same as upgrading to a newer version of the Open Source Edition.
+Starting from version 5.9.0, EMQX Enterprise is released under the Business Source License (BSL) 1.1, replacing the previous separate Open Source and Enterprise editions.
 
-There is no difference in installation and upgrade between the Open Source and Enterprise Editions of EMQX. The only notice is that you need to manually [configure your License](./license.md) in `emqx.conf` for the Enterprise edition nodes after each upgrade. You cannot apply the License key to the whole cluster before all nodes are upgraded.
+While the technical steps for upgrading EMQX (like replacing binaries) are similar to previous version upgrades, the licensing model introduced in 5.9.0 is different and requires attention, particularly if you are running a cluster:
 
-For example, add the following line to `base.hocon`:
-```
-license.key = "your license"
-```
+1. **New Licensing Model**: EMQX 5.9.0+ includes a default BSL 1.1 license grant (sometimes referred to as a single-node Community License). This default license enables all features but restricts deployment to a single node only.
+1. **Clustering Requirement**: The previous Open Source edition allowed clustering. Because the default 5.9.0+ license does not permit clustering, if you are upgrading a clustered Open Source deployment and wish to maintain clustering capabilities, you must [obtain a Commercial License](./license.md#apply-for-a-license).
+1. **Upgrade Process**: It is crucial that this Commercial License is [configured on each node](./license.md#update-and-configure-license-settings) before you start that node with the 5.9.0+ version during the upgrade process. Failing to do so will prevent the node from operating correctly within the cluster.
