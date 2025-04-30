@@ -277,7 +277,7 @@ $ emqx ctl cluster status --json
 
 ### cluster core rebalance
 
-Cluster core rebalance feature allows to balance load in a core/replicant cluster.
+Cluster core rebalance feature allows balancing load in a core/replicant cluster.
 
 It provides a semi-automatic way to evenly distribute ownership over replicants among the core nodes, which may be necessary after bringing a new core node into the cluster or restart of a core node.
 
@@ -329,7 +329,7 @@ This command puts the planned rebalance into action by executing the scheduled c
 
 #### cluster core rebalance abort
 
-This commands aborts the ongoing rebalance.
+This command aborts the ongoing rebalance.
 
 ## clients
 
