@@ -1,4 +1,4 @@
-# SQL 语法与示列
+# SQL 语法与示例
 
 ## SQL 语法
 ### FROM、SELECT 和 WHERE 子句
