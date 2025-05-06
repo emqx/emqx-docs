@@ -74,7 +74,7 @@ jobs:
     - name: use python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: '3.10'
 
     - name: use node.js
       uses: actions/setup-node@v3

@@ -29,6 +29,19 @@ if __name__ == '__main__':
         for file_name in file_list:
             if not file_name.endswith('.md'):
                 continue
+            with open(os.path.join(file_path, file_name), 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                for line in lines:
+                    if line.strip().startswith('<!--@include:'):
+                        include_file = line.split('<!--@include: ')[1].split('-->')[0]
+                        include_file_path = os.path.join(file_path, include_file)
+                        include_file_path = os.path.normpath(include_file_path)
+                        markdown_files.append(include_file_path)
+
+    for file_path, dir_list, file_list in os.walk(docs_path):
+        for file_name in file_list:
+            if not file_name.endswith('.md'):
+                continue
             if os.path.join(file_path, file_name) not in markdown_files:
                 print(f'Remove {os.path.join(file_path, file_name)}')
                 os.remove(os.path.join(file_path, file_name))
