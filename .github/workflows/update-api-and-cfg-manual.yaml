@@ -65,7 +65,7 @@ jobs:
           BASE_BRANCH="$(echo release-$(echo $EMQX_VERSION | cut -d '.' -f 1-2))"
           NEW_BRANCH="update-api-cfg-${EMQX_VERSION}"
           git fetch origin ${BASE_BRANCH}
-          git checkout -b ${NEW_BRANCH} --track origin/${BASE_BRANCH}
+          git checkout -b ${NEW_BRANCH} ##--track origin/${BASE_BRANCH}
 
           VERSION=$(echo "${EMQX_VERSION}" | cut -d '-' -f 1)
           MINOR_VERSION=$(echo "${EMQX_VERSION}" | cut -d '.' -f 1-2)
