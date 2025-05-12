@@ -18,10 +18,6 @@ on:
         type: string
         required: true
         description: 'The run id of the workflow that generates the schema dump'
-      docker_pull:
-        type: boolean
-        default: true
-        description: 'Pull official docker images'
 
 permissions:
   contents: read
@@ -39,21 +35,21 @@ jobs:
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        with:
+          app-id: ${{ vars.AUTH_APP_ID }}
+          private-key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           pattern: "emqx*-schema-dump"
           repository: "emqx/emqx"
           run-id: ${{ env.RUN_ID }}
-          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+          github-token: ${{ steps.app-token.outputs.token }}
           merge-multiple: true
-
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        if: github.event.inputs.docker_pull == false
-        with:
-          name: "emqx-enterprise-docker"
-          repository: "emqx/emqx"
-          run-id: ${{ env.RUN_ID }}
-          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
 
       - name: Create PR to update api docs and config manual
         env:
@@ -80,12 +76,7 @@ jobs:
           git add "hocon/hocon-ee-v${VERSION}-en.json"
           git add "hocon/hocon-ee-v${VERSION}-zh.json"
 
-          if [ "${DOCKER_PULL}" = true ]; then
-            DOCKER_IMAGE="emqx/emqx-enterprise:${EMQX_VERSION}"
-          else
-            DOCKER_IMAGE=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
-          fi
-
+          DOCKER_IMAGE="emqx/emqx-enterprise:${EMQX_VERSION}"
           ./update-api-docs.sh "${VERSION}" "${DOCKER_IMAGE}"
 
           git add "redocly/ee-en.json"
