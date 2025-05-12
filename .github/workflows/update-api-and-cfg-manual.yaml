@@ -14,12 +14,6 @@ on:
         type: string
         required: true
         description: 'EMQX version without v/e prefix'
-      repository:
-        type: choice
-        required: true
-        options:
-        - emqx/emqx
-        - emqx/emqx-platform
       run_id:
         type: string
         required: true
@@ -37,7 +31,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EMQX_VERSION: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.event.inputs.version }}
-      REPOSITORY: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.repository || github.event.inputs.repository }}
       RUN_ID: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.run-id || github.event.inputs.run_id }}
     permissions:
       contents: write
@@ -49,7 +42,7 @@ jobs:
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
           pattern: "emqx*-schema-dump"
-          repository: ${{ env.REPOSITORY }}
+          repository: "emqx/emqx"
           run-id: ${{ env.RUN_ID }}
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
           merge-multiple: true
@@ -57,16 +50,8 @@ jobs:
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         if: github.event.inputs.docker_pull == false
         with:
-          name: "emqx-docker"
-          repository: ${{ env.REPOSITORY }}
-          run-id: ${{ env.RUN_ID }}
-          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
-
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        if: github.event.inputs.docker_pull == false
-        with:
           name: "emqx-enterprise-docker"
-          repository: ${{ env.REPOSITORY }}
+          repository: "emqx/emqx"
           run-id: ${{ env.RUN_ID }}
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
 
@@ -79,7 +64,7 @@ jobs:
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
-          # BASE_BRANCH="$(echo release-$(echo $EMQX_VERSION | cut -d '.' -f 1-2))"
+          BASE_BRANCH="$(echo release-$(echo $EMQX_VERSION | cut -d '.' -f 1-2))"
           NEW_BRANCH="update-api-cfg-${EMQX_VERSION}"
           # git fetch origin ${BASE_BRANCH}
           git checkout -b ${NEW_BRANCH} # --track origin/${BASE_BRANCH}
