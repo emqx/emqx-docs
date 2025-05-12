@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-- [EMQ Documentation Writing Guide](#emq-documentation-writing-guide)
+- [EMQX Documentation Writing Guide](#emq-documentation-writing-guide)
   - [Table of Contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Left menu configuration](#left-menu-configuration)
@@ -16,14 +16,13 @@
     - [Escape special characters](#escape-special-characters)
     - [Resource reference](#resource-reference)
     - [Special grammars](#special-grammars)
-    - [Differentiated compilation](#differentiated-compilation)
-    - [EMQX API doc](#emqx-api-doc)
-    - [Configuration](#configuration)
-      - [Commands to copy generated markdown](#commands-to-copy-generated-markdown)
+    - [Update EMQX API documentation](#update-emqx-api-documentation)
+    - [Update configuration manual](#update-configuration-manual)
+l)
 
 ## Introduction
 
-EMQ documents are written in Markdown format and use [Vuepress](https://vuepress.vuejs.org/) compiling the Markdown file to HTML file.
+EMQX documentation is written in Markdown format and use [Vuepress](https://vuepress.vuejs.org/) compiling the Markdown file to HTML file.
 
 The final presentation of the documentation can be divided into three parts:
 
@@ -178,84 +177,84 @@ The output is as follows.
 
 ![block](./assets/block.jpg)
 
-### Differentiated compilation
+### Update EMQX API documentation
 
-Broker and Enterprise share the same document repository and the differentiated compilation can be implemented by using the following syntax.
+EMQX automatically generates a JSON formatted description file (Swagger) that conforms to the OpenAPI 3.0 specification. It is then rendered and displayed using [Redocly](https://github.com/Redocly/redoc).
 
-```markdown
-# Broker Docs
-{% emqxce %}
-  contents
-{% endemqxce %}
+The swagger file is saved in the`./redocly` directory configuration. After each official EMQX release, the API documentation need to be updated by following the steps below:
 
-# Enterprise Docs
-{% emqxee %}
-  contents
-{% endemqxee %}
+- Clone emqx/emqx, and checkout current release branch
+
+```bash
+git clone git@github.com:emqx/emqx.git
+cd emqx
+git checkout release-XY
 ```
 
-Correct
+- Build docker image
 
-```markdown
-{% emqxee %}
-  contents
-{% endemqxee %}
+  ```bash
+make emqx-enterprise-docker
+    ```
 
-or
+- Go back to `emqx-docs` repo and run `update-api-docs.sh` script. Use docker image tag produced by the step above, and set `SCHEMA_BASE_DIR` to the path of the generated configuration documentation.
 
-{% emqxee %} contents {% endemqxee %}
+```bash
+# For example, if EMQX version is 5.10.0, the docker image is emqx/emqx-enterprise:5.10.0,
+# then run the following command:
+./update-api-docs.sh "5.10.0" "emqx/emqx-enterprise:5.10.0"
 ```
 
-Incorrect
+- Check out new branch, add changes to git, commit and push
 
-```markdown
-{% emqxee %} contents
-{% endemqxee %}
-
-or
-
-{% emqxee %}
-contents {% endemqxee %}
+```bash
+git checkout -b update-api-docs
+git add "redocly/ee-en.json"
+git add "redocly/ee-zh.json"
+git commit -m "update api docs for EMQX 5.10.0"
+git push -u origin update-api-docs
 ```
 
-### EMQX API doc
-
-EMQX first automatically generates a JSON formatted description file (swagger.json) that conforms to the OpenAPI 3.0 specification. It is then rendered and displayed using [Redocly](https://github.com/Redocly/redoc).
-
-The swagger.json file is saved in the `./redocly` directory. After each official release of the EMQX version, the API documentation needs to be updated by following the steps below:
-
-- Start the latest EMQX v5 node
-  - Need to distinguish between the open source version and enterprise version
-  - Need to configure swagger.json output language by `dashboard.i18n_lang = en | zh`
-- Execute the `./rewrite-swagger.sh <ce | ee> [en | zh]` script in the current repository according to the version and language
-- Commit the changed swagger.json file to this git repo
 - Send a pull request
 
 You can also upload swagger.json to <https://redocly.github.io/redoc/> to preview the API doc rendering results.
 
-### Configuration
+### Update configuration manual
 
 The configuration docs are generated from source code.
 Steps to  update:
 
-1. Re-build EMQX (opensource and enterprise edition)
-1. Copy the gnerated `md` files to this repo (see commands below)
-1. Rename the heading-1 of each file
-    - Configuration Files (for en_US/admin/cfg-*.md)
-    - 配置文件 (in zh_CN/admin/cfg-*.md)
+- Clone emqx/emqx, and checkout current release branch
 
-#### Commands to copy generated markdown
-
-For opensource edition
-
-```shell
-cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ce.md
-cp /path/to/emqx/project/_build/emqx/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ce.md
+```bash
+git clone git@github.com:emqx/emqx.git
+cd emqx
+git checkout release-XY
 ```
 
-For enterprise edition
+- Build release
 
-```shell
-cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-zh.md ./zh_CN/admin/cfg-ee.md
-cp /path/to/emqx/project/_build/emqx-enterprise/lib/emqx_dashboard/priv/www/static/config-en.md ./en_US/admin/cfg-ee.md
+```bash
+make emqx-enterprise-rel
 ```
+
+- Go back to `emqx-docs` repo and copy generated configuration schema files.
+
+```bash
+# For example, if EMQX version is 5.10.0, and emqx is in /home/me/emqx,
+# then run the following command:
+cp /home/me/emqx/schema-v2-en.json hocon/hocon-ee-v5.10.0-en.json
+cp /home/me/emqx/schema-v2-zh.json hocon/hocon-ee-v5.10.0-zh.json
+```
+
+- Check out new branch, add changes to git, commit and push
+
+```bash
+git checkout -b update-config-manual
+git add hocon/hocon-ee-v5.10.0-en.json
+git add hocon/hocon-ee-v5.10.0-zh.json
+git commit -m "update configuration manual for EMQX 5.10.0"
+git push -u origin update-config-manual
+```
+
+- Send a pull request
