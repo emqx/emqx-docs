@@ -86,6 +86,31 @@ See the table below for the supported event topic list.
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
 
+::: tip
+
+In EMQX 5.10.0, rule event topics got namespaces.  Old event topics are still valid for backwards compatibility.  The new event topics are preferred.
+
+See the table below for the mapping between old and new (namespaced) topics.
+
+| Previous event topic                    | New event topic                         |
+|:----------------------------------------|:----------------------------------------|
+| `$events/client_connected`              | `$events/client/connected`              |
+| `$events/client_disconnected`           | `$events/client/disconnected`           |
+| `$events/client_connack`                | `$events/client/connack`                |
+| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+| `$events/session_subscribed`            | `$events/session/subscribed`            |
+| `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+| `$events/message_delivered`             | `$events/message/delivered`             |
+| `$events/message_acked`                 | `$events/message/acked`                 |
+| `$events/message_dropped`               | `$events/message/dropped`               |
+| `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+| `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+| `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+:::
+
+
 ### Message Delivery Event ("$events/message/delivered")
 
 This event topic can be used to trigger a rule when a message is delivered to a client.
