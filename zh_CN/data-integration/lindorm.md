@@ -8,9 +8,7 @@ EMQX 虽未提供专用的 Lindorm Sink，但 Lindorm 提供了兼容 MySQL 协�
 
 Lindorm 的后端支持多种数据引擎，其中 TSDB 节点为时序数据设计，具备高压缩、高并发、高查询效率的特点。EMQX 作为设备接入平台，结合其规则引擎和数据集成功能，无需复杂编码便可将 MQTT 消息高效写入 Lindorm 后端（通常为 TSDB 节点），实现对设备遥测数据的结构化采集、处理与存储。
 
-<!-- illustration will be updated-->
-
-![EMQX MySQL 数据集成](./assets/emqx-integraion-mysql.jpg)
+![lindorm_architecture](./assets/lindorm_architecture.png)
 
 其具体的工作流程如下：
 
