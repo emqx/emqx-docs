@@ -37,7 +37,7 @@ Although not encouraged, the content of the configuration files can overlap. In 
 
 ## Config Examples
 
-While the [Schema](#schema) section provides a detailed reference, configuration examples can be helpful for understanding and applying settings in EMQX. You can find several example configurations in the `etc/examples` directory.
+While the [Schema](#schema) section provides a detailed reference, configuration examples can be helpful for understanding and applying settings in EMQX. You can find several example configurations in the `etc/emqx/examples` directory.
 
 ## Base Configuration File
 
