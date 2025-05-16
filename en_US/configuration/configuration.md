@@ -37,7 +37,10 @@ Although not encouraged, the content of the configuration files can overlap. In 
 
 ## Config Examples
 
-While the [Schema](#schema) section provides a detailed reference, configuration examples can be helpful for understanding and applying settings in EMQX. You can find several example configurations in the `etc/emqx/examples` directory.
+While the [Schema](#schema) section provides a detailed reference, configuration examples can be helpful for understanding and applying settings in EMQX.
+
+- If you installed EMQX using RPM or DEB packages, you can find configuration examples in the `etc/emqx/examples` directory.
+- If you are running EMQX in a Docker container, you can find configuration examples in the `opt/emqx/etc/examples` directory.
 
 ## Base Configuration File
 
