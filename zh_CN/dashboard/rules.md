@@ -40,19 +40,19 @@ SQL 语句默认为 `SELECT * FROM "t/#"`，其含义为当客户端向 `t/#` �
 调试时的数据来源与真实使用场景下的一致，包含有一些 MQTT 事件，对于消息部分，我们可以选择不同的消息来源来模拟数据，包括：
 
 - 消息发布（mqtt topic）
-- 消息投递（$events/message_delivered）
-- 消息确认（$events/message_acked）
-- 消息丢弃（$events/message_dropped）
+- 消息投递（$events/message/delivered）
+- 消息确认（$events/message/acked）
+- 消息丢弃（$events/message/dropped）
 
 对于其它事件，我们可以选择不同的客户端和会话事件来模拟数据，包括：
 
-- 连接完成（$events/client_connected）
-- 连接断开（$events/client_disconnected）
-- 连接确认（$events/client_connack）
-- 鉴权完成（$events/client_check_authz_complete）
-- 认证完成（$events/client_check_authn_complete）
-- 订阅（$events/session_subscribed）
-- 取消订阅（$events/session_unsubscribed）
+- 连接完成（$events/client/connected）
+- 连接断开（$events/client/disconnected）
+- 连接确认（$events/client/connack）
+- 鉴权完成（$events/auth/check_authz_complete）
+- 认证完成（$events/auth/check_authn_complete）
+- 订阅（$events/session/subscribed）
+- 取消订阅（$events/session/unsubscribed）
 
 对应的数据源需要与编辑器中的 SQL 语句保持一致，当需要使用上述中的一些消息事件或 Source 来获取数据时，需要将对应的事件主题（括号中的内容）填写到 SQL 语句中， `FROM` 关键词的后面，规则支持使用多个事件。更多详细的数据源与事件解释，请参考 [SQL 数据源和字段](../data-integration/rule-sql-events-and-fields.md)。
 
