@@ -88,9 +88,9 @@ See the table below for the supported event topic list.
 
 ::: tip
 
-In EMQX 5.10.0, rule event topics got namespaces.  Old event topics are still valid for backwards compatibility.  The new event topics are preferred.
+Starting from EMQX 5.10.0, namespaces have been introduced for event topics, reorganizing them into a logical, hierarchical structure. This enhancement improves the clarity, filtering, and management of event topics.
 
-See the table below for the mapping between old and new (namespaced) topics.
+For backward compatibility, the old event topics are still supported. However, it is recommended to use the new namespaced topics for all new configurations. See the table below for the mapping between old and new (namespaced) topics.
 
 | Previous event topic                    | New event topic                         |
 |:----------------------------------------|:----------------------------------------|

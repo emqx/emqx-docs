@@ -101,6 +101,30 @@ FROM
 | [系统告警激活事件](#告警激活事件-events-sys-alarm-activated) | $events/sys/alarm_activated         | 系统告警激活             |
 | [系统告警解除事件](#告警解除事件-events-sys-alarm-deactivated) | $events/sys/alarm_deactivated       | 系统告警解除             |
 
+::: tip
+
+从 EMQX 5.10.0 开始，客户端事件主题采用了命名空间结构，将事件主题重新组织为逻辑清晰的分层结构。这一调整使事件主题的分类更加直观，便于后续的筛选、管理与扩展。
+
+为保证向后兼容，旧版事件主题仍然可用。但推荐在新配置中优先使用新的命名空间事件主题。下表展示了旧事件主题与新（命名空间）事件主题之间的对应关系：
+
+| 旧事件主题                              | 新事件主题                              |
+| :-------------------------------------- | :-------------------------------------- |
+| `$events/client_connected`              | `$events/client/connected`              |
+| `$events/client_disconnected`           | `$events/client/disconnected`           |
+| `$events/client_connack`                | `$events/client/connack`                |
+| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+| `$events/session_subscribed`            | `$events/session/subscribed`            |
+| `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+| `$events/message_delivered`             | `$events/message/delivered`             |
+| `$events/message_acked`                 | `$events/message/acked`                 |
+| `$events/message_dropped`               | `$events/message/dropped`               |
+| `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+| `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+| `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+:::
+
 ### 消息投递事件 ("$events/message/delivered")
 
 当消息被放入底层socket时触发规则。
