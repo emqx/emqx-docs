@@ -2,7 +2,7 @@
 
 [阿里云 Lindorm](https://cn.aliyun.com/product/apsaradb/lindorm?from_alibabacloud=) 是一款云原生多模数据库，具备高吞吐、高压缩、高可扩展能力，支持时序（TSDB）、宽表、向量等数据模型，广泛应用于物联网遥测、工业监控、车联网等场景。
 
-EMQX 虽未提供专用的 Lindorm Sink，但 Lindorm 提供了兼容 MySQL 协议的访问方式，用户可直接使用数据集成中的 MySQL Sink 组件将设备数据写入 Lindorm。本指南将介绍如何通过 EMQX 规则引擎实现 MQTT 数据的提取、转换和写入，构建稳定、高效的物联网数据通道。
+EMQX 虽未提供专用的 Lindorm Sink，但 Lindorm 提供了兼容 MySQL 协议的访问方式，用户可直接使用数据集成中的 MySQL Sink 组件将设备数据写入 Lindorm。本页将介绍如何通过 EMQX 与 Lindorm 的数据集成实现 MQTT 数据的提取、转换和写入，构建稳定、高效的物联网数据通道。
 
 ## 工作原理
 
@@ -67,9 +67,10 @@ Lindorm 的后端支持多种数据引擎，其中 TSDB 节点为时序数据设
 CREATE DATABASE emqx_data;
 
 CREATE TABLE demo_sensor (
-  device_id VARCHAR TAG,
+  device_id VARCHAR(255) COMMENT 'TAG',
   time BIGINT,
-  msg VARCHAR
+  msg VARCHAR(255),
+  PRIMARY KEY (device_id, time)
 );
 ```
 
@@ -108,7 +109,7 @@ CREATE TABLE demo_sensor (
 
 ## 创建 Lindorm Sink 规则
 
-本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Lindorm 的数据表 `demo_sensor` 中。
+本节演示了如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `#` 的消息，并通过配置的 Sink 将处理后的结果写入到 Lindorm 的数据表 `demo_sensor` 中。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -179,7 +180,7 @@ CREATE TABLE demo_sensor (
 mqttx pub -i emqx_test -t sensor/1 -m '{ "msg": "hello lindorm" }'
 ```
 
-分别查看两个 Sink 运行统计，命中、发送成功次数均 +1。
+分别查看 Sink 运行统计，命中、发送成功次数均 +1。
 
 通过 API 查询数据是否成功写入：
 

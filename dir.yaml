@@ -387,6 +387,9 @@
     - title_en: InfluxDB
       title_cn: InfluxDB
       path: data-integration/data-bridge-influxdb
+    - title_en: Lindorm
+      title_cn: Lindorm
+      path: data-integration/lindorm
     - title_en: Microsoft SQL Server
       title_cn: Microsoft SQL Server
       path: data-integration/data-bridge-sqlserver
