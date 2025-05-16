@@ -1,5 +1,101 @@
 # EMQX Enterprise Version 5
 
+## 5.10.1
+
+### Enhancements
+
+- [#15218](https://github.com/emqx/emqx/pull/15218) Added support for MSK IAM authentication for all Kafka Connectors (Kafka Producer, Kafka Consumer, Confluent, Azure Event Hub).
+
+- [#15201](https://github.com/emqx/emqx/pull/15201) 
+  Add `base_url` option to AI completion provider configuration.
+
+- [#15188](https://github.com/emqx/emqx/pull/15188) Rule event topics now have namespaces.
+
+  | Previous event topic                    | New event topic                         |
+  |:----------------------------------------|:----------------------------------------|
+  | `$events/client_connected`              | `$events/client/connected`              |
+  | `$events/client_disconnected`           | `$events/client/disconnected`           |
+  | `$events/client_connack`                | `$events/client/connack`                |
+  | `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+  | `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+  | `$events/session_subscribed`            | `$events/session/subscribed`            |
+  | `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+  | `$events/message_delivered`             | `$events/message/delivered`             |
+  | `$events/message_acked`                 | `$events/message/acked`                 |
+  | `$events/message_dropped`               | `$events/message/dropped`               |
+  | `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+  | `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+  | `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+  Previous event topics are kept for backwards compatibility.
+
+- [#15175](https://github.com/emqx/emqx/pull/15175) Added support for matching event topics in Rule Engine using wildcards.  Now, it's possible to use `$events/#`, `$events/sys/+` and similar for matching multiple events at once.
+
+- [#15174](https://github.com/emqx/emqx/pull/15174) Added support to upload Protobuf source file bundles for Schema Registry.
+
+  For example, assuming that the Protobuf source file bundle is at `/tmp/bundle.tar.gz` and has the following file structure, with `a.proto` being the root Protobuf schema file:
+
+  ```
+  .
+  ├── a.proto
+  ├── c.proto
+  └── nested
+      └── b.proto
+  ```
+
+  Then, to create a new schema using that bundle via the HTTP API:
+
+  ```sh
+  curl -v http://127.0.0.1:18083/api/v5/schema_registry_protobuf/bundle \
+    -XPOST \
+    -H "Authorization: Bearer xxxx" \
+    -F bundle=@/tmp/bundle.tar.gz \
+    -F name=my_cool_schema \
+    -F root_proto_file=a.proto
+  ```
+
+- [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Added support for specifying private key file path for Snowflake Connector instead of using password.
+
+  Users should either use password, private key, or neither (set parameters in `/etc/odbc.ini`).
+
+- [#14983](https://github.com/emqx/emqx/pull/14983) Added new Connector and Action that appends data to S3Tables.
+
+  ### Current limitations
+
+  - Only [S3Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) catalogs are supported (hence table data and metadata must live in S3).
+  - Only [Iceberg table format version 2](https://iceberg.apache.org/spec/#version-2-row-level-deletes) is supported.
+  - Only the following partition transform functions are supported:
+    - `identity`
+    - `void`
+    - `bucket[N]`
+  - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
+
+- [#15001](https://github.com/emqx/emqx/pull/15001) Add `ai_completion` function to the Rule Engine SQL that allows to use AI services to process the data.
+
+- [#14791](https://github.com/emqx/emqx/pull/14791) Add additionalAnnotations functionality for StatefulSet in Helm charts
+
+### Bug Fixes
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) Now, after a CRL Distribution Point URL fails to be refreshed after a number of consecutive attempts (60 s by default), it'll be evicted and stop being refreshed, instead of flooding logs.
+
+- [#15154](https://github.com/emqx/emqx/pull/15154) Fixed a rare race condition in Actions that run in aggregated mode (S3, Azure Blob Storage, Snowflake) that could result in crash logs similar to the following:
+
+  ```
+  ** Reason for termination ==
+  ** {function_clause,[{emqx_connector_aggregator,handle_close_buffer,[...], ...
+  ```
+
+- [#15147](https://github.com/emqx/emqx/pull/15147) When running Rule tests with simulated input data, some Actions would not emit trace events after rendering requests.  This has been fixed.
+
+  Affected Actions:
+  - Couchbase
+  - Snowflake
+  - IoTDB (Thrift driver)
+
 ## 5.9.0
 
 *Release Date: 2025-05-02*
