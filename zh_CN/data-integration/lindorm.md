@@ -180,7 +180,7 @@ CREATE TABLE demo_sensor (
 mqttx pub -i emqx_test -t sensor/1 -m '{ "msg": "hello lindorm" }'
 ```
 
-分别查看 Sink 运行统计，命中、发送成功次数均 +1。
+查看 Sink 运行统计，命中、发送成功次数均 +1。
 
 通过 API 查询数据是否成功写入：
 
