@@ -46,7 +46,32 @@ This section introduces the preparations required before creating an Amazon S3 T
 
 ### Prepare an S3 Tables Bucket
 
+You must set up a S3 Tables bucket, namespace and table before using this connector.
 
+1. Log into your AWS console.
+1. Go to the S3 section, Table Buckets, click "Create Table Bucket".  Give it a name and click "Create Table Bucket".
+1. Once the bucket is created, click on it to go the the Tables list.  Click "Create Table with Athena"
+1. A pop-up should appear asking for the namespace.  Select "Create Namespace", give it a name, click "Create Namespace", and click "Create Table with Athena".
+1. In Athena Editor, select your Bucket on the **Catalog** selector (should be something like `s3tablescatalog/mybucket` if your bucket is named `mybucket`) and the namespace you've just created on the **Database** selector.  Specify the DDL for your table and ensure you set the table type to `ICEBERG`.  For example:
+
+```sql
+CREATE TABLE testtable (
+  c_str string,
+  c_long int )
+TBLPROPERTIES ('table_type' = 'ICEBERG');
+```
+
+1. Once created, you can select data from your table to see it has been created successfully and is empty.
+
+```sql
+select * from testtable
+```
+
+:::: tip
+
+Ensure that the correct Catalog and Database are selected before executing queries.
+
+::::
 
 ## Create a Connector
 
@@ -57,11 +82,9 @@ Before adding the S3 Tables Sink, you need to create the corresponding connector
 3. Select **S3 Tables** as the connector type and click next.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-s3-tables`.
 5. Enter the connection information.
-   - **Table ARN**:
-   - **Access Key ID**:
-   - **Secret Access Key**:
-   - **Access Method**:
-   - **Request Timeout**:
+   - **Table Bucket ARN**: The ARN for your bucket.  This can be found and copied from the Table Bucket list in AWS console, in the S3 section.
+   - **Access Key ID** and **Secret Access Key**: Enter the access keys created in AWS.
+   - **Request Timeout**: the timeout for API requests to the S3 Tables Iceberg API.
 6. Use the default values for the remaining settings.
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the S3 Tables service.
 8. Click the **Create** button at the bottom to complete the connector creation.
@@ -80,7 +103,8 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ```sql
    SELECT
-     *
+     payload.str as c_str,
+     payload.int as c_long
    FROM
        "t/#"
    ```
@@ -88,6 +112,12 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    ::: tip
 
    If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
+
+   :::
+
+   ::: tip
+
+   Ensure that the rule outputs the expected column names.  Otherwise, if a column is required and missing from output, the data may fail to be appended.
 
    :::
 
@@ -99,18 +129,10 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. Configure the Sink settings:
 
-   - **Namespace**:
-   - **Table**:
-
+   - **Namespace**: the namespace in which your table lives in.  If it contain multiple segments, input it with dots joining the segments (e.g., `my.name.space`).
+   - **Table**: the table you want to append to.
    - **Max Records**: When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
-
    - **Time Interval**: When the time interval is reached, even if the maximum number of records has not been reached, the aggregation of a single file will be completed and uploaded, resetting the maximum number of records.
-
-   - **Min Part Size**:
-
-   - **Max Part Size**:
-
-8. Set the **Object Content**. By default, it is a JSON text format containing all fields. It supports `${var}` format placeholders. Here, enter `${payload}` to indicate using the message body as the object content. In this case, the object's storage format depends on the message body's format, supporting compressed packages, images, or other binary formats.
 
 9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
@@ -131,7 +153,7 @@ This section shows how to test the rule configured with the direct upload method
 Use MQTTX to publish a message to the topic `t/1`:
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello S3 Tables" }'
+mqttx pub -i emqx_c -t t/1 -m '{ "str": "hello S3 Tables", "int": 123 }'
 ```
 
 
