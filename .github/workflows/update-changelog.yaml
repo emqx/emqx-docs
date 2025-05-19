@@ -11,12 +11,6 @@ on:
         type: string
         required: true
         description: 'EMQX version (with v/e prefix)'
-      repository:
-        type: choice
-        required: true
-        options:
-        - emqx/emqx
-        - emqx/emqx-platform
       run_id:
         type: string
         required: true
@@ -30,7 +24,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EMQX_VERSION: ${{ github.event.inputs.version }}
-      REPOSITORY: ${{ github.event.inputs.repository }}
       RUN_ID: ${{ github.event.inputs.run_id }}
     permissions:
       contents: write
@@ -50,7 +43,7 @@ jobs:
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: changes
-          repository: ${{ env.REPOSITORY }}
+          repository: emqx/emqx
           run-id: ${{ env.RUN_ID }}
           github-token: ${{ steps.app-token.outputs.token }}
 
