@@ -68,7 +68,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
    - **Redis Mode**: Select how Redis is deployed, including **Single**, **Sentinel** and **Cluster**.
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: Redis database name.
-   - **Password** (optional): Specify user password. 
+   - **Password**: Specify user password. 
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 

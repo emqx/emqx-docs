@@ -66,8 +66,8 @@ Follow the instructions below on how to configure the authentication:
 - **Replica Set Name**: Specify the Replica Set name to use; type: strings; only needed if you set **MongoDB Mode** to `Replica Set`.
 - **Database**: MongoDB database name; Data type: strings.
 - **Collection**: Name of MongoDB collection where authentication rules are stored; Data type: strings.
-- **Username** (optional): Specify MongoDB user name. 
-- **Password** (optional): Specify MongoDB user password. 
+- **Username**: Specify MongoDB user name. 
+- **Password**: Specify MongoDB user password. 
 - **Read Mode** (optional): Only needed if you set **MongoDB Mode** to `Replica Set`; Default: `master`; Options: `master`, `slave_ok`. 
   - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master, the first read will fail, and subsequent operations will be aborted.
   - **slave_ok**: Allows queries to read stale data from a secondary/slave server or fresh data from a master.
