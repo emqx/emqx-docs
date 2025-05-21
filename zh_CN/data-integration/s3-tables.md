@@ -16,7 +16,7 @@ EMQX 与 Amazon S3 表类数据存储服务集成，支持将实时的 MQTT 数�
 - **Amazon S3 表类数据存储服务**用作 MQTT 消息的结构化存储终端，具备持久性和可查询性。
 - **Amazon Athena** 用于定义 Iceberg 格式的表并对存储的数据执行 SQL 查询。
 
-![EMQX Amazon S3 数据集成](/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/data-integration/assets/emqx-integration-s3.jpg)
+![emqx-integration-s3-tables](./assets/emqx-integration-s3-tables.png)
 
 工作流程如下：
 

@@ -16,7 +16,7 @@ In a typical IoT scenario:
 - **Amazon S3 Tables** serves as the destination for durable, queryable storage of MQTT message data in tabular form.
 - **Amazon Athena** is used to define Iceberg tables and run SQL queries against the stored data.
 
-![emqx-integration-s3](/Users/emqx/Documents/GitHub/emqx-docs/en_US/data-integration/assets/emqx-integration-s3.jpg)
+![emqx-integration-s3-tables](./assets/emqx-integration-s3-tables.png)
 
 The workflow proceeds as follows:
 
