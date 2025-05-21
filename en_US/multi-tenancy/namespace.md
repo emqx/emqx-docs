@@ -1,6 +1,6 @@
 # Namespace
 
-Starting from EMQX 5.9.0, the Namespace feature allows users to logically isolate MQTT clients, topics, authentication rules, and traffic limits within a single EMQX cluster. This feature enables scalable deployments where multiple client groups (such as business units, applications, or customers) share the same infrastructure while remaining logically separated.
+Starting from EMQX 5.9.0, the Namespace feature allows users to logically group MQTT clients and apply traffic limits within a single EMQX cluster. This feature enables scalable deployments where multiple client groups (such as business units, applications, or customers) share the same infrastructure while remaining logically separated.
 
 ::: tip Note
 
@@ -12,12 +12,13 @@ This feature is referred to as Namespace in EMQX 5.9, even though it follows mul
 
 A Namespace is a logical boundary in EMQX used to group MQTT clients and apply isolation policies. It is identified by the special client attribute `tns` (tenant namespace), which can be extracted from connection metadata such as the username or Server Name Indication (SNI).
 
-Namespaces can be used to control:
+Below features are automatically available for namespaces:
 
-- Topic isolation using automatic topic prefixing (mountpoint)
 - Per-namespace client count limits and connection tracking
 - Logging metadata enrichment with namespace information
 - Rate limiting per namespace
+
+Please note, you do not automatically get isolations such as client ID override and topic prefixing (mountpoint) by enabling namespace. This is because not all use cases require these isolations. Please refer to [Isolations](#isolations) for more details.
 
 ## Enable Namespace
 
@@ -30,6 +31,18 @@ For example, to use the client's username as the namespace identifier, you can u
 ```hcl
 mqtt.client_attrs_init = [{expression = username, set_as_attr = tns}]
 ```
+
+## Isolations
+
+EMQX is highly flexible and provides multiple ways to achieve different isolations even before the namespace feature.
+
+- **Client ID override:**
+  To allow clients to connect EMQX with the same client ID in different namespaces, you can set an override rule for client ID. For example, `mqtt.clientid_override="concat([client_attrs.tns, '-', clientid])"` will add the namespace to the client ID as a prefix.
+
+- **Topic isolation using mountpoint:**
+  To allow clients to subscribe and publish the same topic name in different namespaces, you can set `listener.{TYPE}.{NAME}.mountpoint="${client_attrs.tns}/"` to prefix the topic name.
+
+As of 5.9, namespace only applies to MQTT clients, the Dashboard and REST API are not isolated by namespace. It is however in our roadmap to unify administration namespace with MQTT namespace in future releases. See [Multi-tenancy Roadmap](#multi-tenancy-roadmap) for more details.
 
 ### Methods for Creating a Namespace
 
@@ -254,3 +267,12 @@ To remove a namespace and its associated configuration, you can use the `DELETE 
 Before deleting a namespace, ensure that all active clients associated with the namespace are properly disconnected. EMQX provides an API to bulk kick all sessions under a namespace, and this process should be triggered automatically when deleting a managed namespace.
 
 :::
+
+## Multi-tenancy Roadmap
+
+- Unify administration namespace with MQTT namespace.
+- Isolation for Rules, Actions/Sources, and Connectors.
+- Isolation for builtin DB authentication.
+- Isolation for builtin DB authorization.
+- Isolation for retained messages quota.
+- Isolation for Prometheus metrics.
