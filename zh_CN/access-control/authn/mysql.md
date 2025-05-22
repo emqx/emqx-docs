@@ -65,8 +65,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 - **服务**：填入 MySQL 服务器地址 (`host:port`) 。
 - **数据库**：填入 MySQL 的数据库名称。
-- **用户名**（可选）：填入用户名称。
-- **密码**（可选）：填入用户密码。
+- **用户名**：填入用户名称。
+- **密码**：填入用户密码。
 
 **TLS 配置**：配置是否启用 TLS。
 

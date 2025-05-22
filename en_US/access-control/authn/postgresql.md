@@ -70,8 +70,8 @@ Follow the instructions below on how to configure the authentication:
 
 - **Server**: Specify the server address that EMQX is to connect (`host:port`).
 - **Database**: PostgreSQL database name.
-- **Username** (optional): Specify user name. 
-- **Password** (optional): Specify user password. 
+- **Username**: Specify user name. 
+- **Password**: Specify user password. 
 - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
 - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 

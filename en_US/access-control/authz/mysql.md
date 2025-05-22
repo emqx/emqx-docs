@@ -71,8 +71,8 @@ You can use EMQX Dashboard to configure how to use MySQL for user authorization.
 
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: MySQL database name.
-   - **Username** (optional): Specify user name. 
-   - **Password** (optional): Specify user password. 
+   - **Username**: Specify user name. 
+   - **Password**: Specify user password. 
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 

@@ -57,7 +57,7 @@ Follow the instructions below on how to configure the authentication:
 - **Server(s)**: Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to `Sentinel` or `Cluster`, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
 - **Sentinel Name**: Specify the name to use; type: strings; only needed if you set **Redis Mode** to `Sentinel`.
 - **Database**: Redis database name; Data type: strings.
-- **Password** (optional): Specify Redis user password. 
+- **Password**: Specify Redis user password. 
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
