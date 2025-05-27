@@ -253,7 +253,7 @@ Use this endpoint to set rate limits, session limits, and other namespace-specif
 
 This example configures a namespace using the [REST API](../admin/api.md). Suppose you want to configure some specific rate limits for clients in the `ns1` namespace. You also want to limit the maximum number of concurrent sessions allowed in this namespace.
 
-###### Create the Namespace
+##### Create the Namespace
 
 Before applying any configuration, ensure the namespace is explicitly created:
 
@@ -268,7 +268,7 @@ If clients connect to a namespace before it is explicitly created, they will not
 
 :::
 
-###### Configure Rate Limits and Session Limits
+##### Configure Rate Limits and Session Limits
 
 Once the namespace is created, apply the configuration using:
 
@@ -310,7 +310,7 @@ PUT /mt/ns/ns1/config
 
 This configuration applies both client-specific and shared tenant-wide rate limits and sets a maximum of 100 sessions for the namespace.
 
-###### Disable Namespace Rate Limiters
+##### Disable Namespace Rate Limiters
 
 If you want to remove rate limiting entirely, you can update the configuration again and set the limiter types to `"disabled"`:
 
