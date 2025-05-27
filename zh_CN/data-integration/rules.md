@@ -27,7 +27,7 @@ SELECT
 FROM
     "t/#"
 WHERE
-    clientid = "foo"
+    clientid = 'foo'
 ```
 
 在上述 SQL 语句里：
