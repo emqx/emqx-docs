@@ -388,7 +388,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
 2. Use MQTTX to create two MQTT client connections to simulate two tenants: `tenantA` and `tenantB`.
 
-   ##### Client A (Tenant: tenantA):
+   **Client A (Tenant: tenantA)**:
 
    | Parameter | Value           |
    | --------- | --------------- |
@@ -396,7 +396,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
    | Username  | `tenantA-user1` |
    | Subscribe | `test/topic`    |
 
-   ##### Client B (Tenant: tenantB):
+   **Client B (Tenant: tenantB)**:
 
    | Parameter | Value           |
    | --------- | --------------- |
