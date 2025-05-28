@@ -56,14 +56,15 @@ GreptimeDB 数据集成是 EMQX 开箱即用的功能，它结合了 EMQX 的实
 
 ```bash
 # 启动一个 GreptimeDB 容器
-docker run -p 4000-4004:4000-4004 \
--p 4242:4242 -v "$(pwd)/greptimedb:/tmp/greptimedb" \
---name greptime --rm \
-greptime/greptimedb standalone start \
---http-addr 0.0.0.0:4000 \
---rpc-addr 0.0.0.0:4001 \
---mysql-addr 0.0.0.0:4002 \
---user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
+docker run -p 127.0.0.1:4000-4003:4000-4003 \
+  -v "$(pwd)/greptimedb_data:/greptimedb_data" \
+  --name greptime --rm \
+  greptime/greptimedb:latest standalone start \
+  --http-addr 0.0.0.0:4000 \
+  --rpc-bind-addr 0.0.0.0:4001 \
+  --mysql-addr 0.0.0.0:4002 \
+  --postgres-addr 0.0.0.0:4003 \
+  --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
 ```
 
 2. `user-provider` 参数指定了 GreptimeDB 的用户鉴权账户，你还可以通过文件的方式指定，参考[鉴权](https://docs.greptime.cn/user-guide/deployments/authentication/static)文档。
