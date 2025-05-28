@@ -24,6 +24,22 @@ If a License configuration is added to `emqx.conf`, any runtime changes made fro
 
 :::
 
+## Upgrades to EMQX 5.10 or Later
+
+EMQX 5.10.0 no longer supports legacy _v1_ routing storage schema. Only _v2_ storage schema is supported, which became the default in EMQX 5.4.0. Clusters running older EMQX versions—or those went through incremental rolling upgrades from earlier releases—may still use the _v1_ storage schema. In such cases, upgrading to EMQX 5.10.0+ requires a full cluster restart; rolling upgrades are not supported.
+
+To check the current routing storage schema, run:
+```
+$ emqx eval 'emqx_router:get_schema_vsn()'
+```
+
+If the output is `v2`, regular rolling upgrade is possible.
+
+If the output is `v1`, rolling upgrade is not possible. Follow these steps:
+1. Upgrade all nodes to 5.10.0 or newer.
+2. Remove `broker.routing.storage_schema` option from applicable configuration files, if present.
+3. Stop **all** cluster nodes, then restart them one by one.
+
 ## How to Perform a Rolling Upgrade
 
 To upgrade each node in the cluster without downtime, follow these steps:
