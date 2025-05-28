@@ -53,14 +53,15 @@ This section describes the preparations you need to complete before you start to
 
    ```bash
    # TO start the GreptimeDB docker image
-   docker run -p 4000-4004:4000-4004 \
-   -p 4242:4242 -v "$(pwd)/greptimedb:/tmp/greptimedb" \
-   --name greptime --rm \
-   greptime/greptimedb standalone start \
-   --http-addr 0.0.0.0:4000 \
-   --rpc-addr 0.0.0.0:4001 \
-   --mysql-addr 0.0.0.0:4002 \
-   --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
+   docker run -p 127.0.0.1:4000-4003:4000-4003 \
+     -v "$(pwd)/greptimedb_data:/greptimedb_data" \
+     --name greptime --rm \
+     greptime/greptimedb:latest standalone start \
+     --http-addr 0.0.0.0:4000 \
+     --rpc-bind-addr 0.0.0.0:4001 \
+     --mysql-addr 0.0.0.0:4002 \
+     --postgres-addr 0.0.0.0:4003 \
+     --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
    ```
 
 2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/deployments/authentication/static).
