@@ -4,7 +4,7 @@ This page provides guidance on how to create rules for data processing and attac
 
 The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
 
-## Define a Data Source
+## Define Rule SQL
 Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. 
 
 Click the **Create** button on the **Rules** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages. 
@@ -15,11 +15,81 @@ Enter a name for your rule and add a note to facilitate future management. In th
 
 This tutorial assumes the message payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
 
-EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Example** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
+EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Examples** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
 :::
 
 <img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:40%;" />
+
+### SQL Generator
+
+Starting from **EMQX 5.10.0**, the **SQL Editor** supports generating rule SQL using natural language through an AI-powered **SQL Generator**. This feature allows users to describe their intent in natural language and have SQL statements automatically created to match.
+
+To use this feature:
+
+1. On the **Create Rule** page, scroll to the **SQL Editor** section.
+
+2. Click the **SQL Generator** button located below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
+
+   - **Task Description** (required): Describe in natural language what you want the SQL to do.
+      Example: `Extract temperature values greater than 30 from the topic sensors/temperature.`
+
+   - **Related Topics** (optional): Specify topic filters such as `sensors/temperature`.
+
+   - **Input Example (JSON)** (optional but recommended): Provide a sample MQTT message payload to help the AI understand your data structure.
+     Example:
+
+     ```json
+     {
+       "device_id": "sensor001",
+       "temperature": 32.5,
+       "unit": "C"
+     }
+     ```
+
+   - **Output Example (JSON)** (optional): Specify the expected result format.
+     Example:
+
+     ```json
+     {
+       "device_id": "sensor001",
+       "temperature": 32.5
+     }
+     ```
+
+     ::: tip 
+
+     Including input/output examples improves the accuracy of the generated SQL.
+
+     :::
+
+3. Click **Save** to generate the SQL. The SQL will automatically appear in the **SQL Editor**, where you can review and edit it.
+
+#### Example Result
+
+If you use the demo above, the generated SQL might look like:
+
+```sql
+SELECT
+  payload.device_id,
+  payload.temperature
+FROM
+  "sensors/temperature"
+WHERE
+  payload.temperature > 30
+```
+
+This statement selects temperature readings greater than 30 from the `sensors/temperature` topic.
+
+#### Use Cases
+
+The SQL Generator is especially useful when:
+
+- You are unfamiliar with EMQX SQL syntax.
+- You want to quickly prototype a rule.
+- You're working with structured JSON payloads.
+
+For more customization and syntax options, see the [Rule SQL Syntax](./rule-sql-syntax.md) documentation.
 
 ### Test SQL Statement
 
