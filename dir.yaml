@@ -553,7 +553,12 @@
       path: rate-limit/rate-limit
     - title_en: Namespace
       title_cn: 命名空间
-      path: multi-tenancy/namespace
+      path: multi-tenancy/namespace-overview
+      collapsed: true
+      children:
+        - multi-tenancy/create-namespace
+        - multi-tenancy/configure-manage-namespace
+        - multi-tenancy/namespace-quick-start
     - title_en: Logs and Observability
       title_cn: 日志及可观测性
       path: observability/overview

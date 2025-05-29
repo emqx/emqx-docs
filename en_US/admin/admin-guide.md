@@ -11,7 +11,7 @@ This Administration Guide is designed to assist administrators and operators in 
 - [Multi-Factor Authentication (MFA)](../multi-factor-authn/multi-factor-authentication.md) explains how to set up and use MFA for the Dashboard login to enhance security.
 - [Audit Log](../dashboard/audit-log.md) introduces how to enable and configure the audit log to track important operation changes in your EMQX cluster in real-time.
 - [Rate Limit](../rate-limit/rate-limit.md) explains how to avoid system overload by configuring rate limiters for connection and messaging speed, ensuring system stability.
-- [Namespace](../multi-tenancy/namespace.md) introduces the Namespace functions and how to configure isolated tenant-specific settings within a single EMQX cluster, such as rate limiters.
+- [Namespace](../multi-tenancy/namespace-overview.md) introduces the Namespace functions and how to configure isolated tenant-specific settings within a single EMQX cluster, such as rate limiters.
 - [Log and Observability](../observability/overview.md) introduces metric observation and monitoring features in EMQX, facilitating system monitoring and debugging.
 - [Backup and Restore](../operations/backup-restore.md) guides you on how to back up and restore EMQX data.
 - [Plugins and Extensions](../extensions/introduction.md) help you extend the functionality of EMQX by developing plugins.
