@@ -43,7 +43,7 @@ The operating limitations can be classified into:
 | Topic length                          | Unlimited                 |
 | Number of topic aliases               | 65535                     |
 | **MQTT Retained Message**             |                           |
-| Single Message Size                   | Default 1204KB, Max 256MB |
+| Single Message Size                   | Default 1024KB, Max 256MB |
 | Number of messages                    | Unlimited                 |
 | Total messages size                   | Unlimited                 |
 | **MQTT 5.0**                          |                           |
