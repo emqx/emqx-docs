@@ -71,8 +71,8 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for password authe
 
      - **Server**: Specify the server address that EMQX is to connect (`host:port`).
      - **Database**: PostgreSQL database name.
-     - **Username** (optional): Specify user name. 
-     - **Password** (optional): Specify user password. 
+     - **Username**: Specify user name. 
+     - **Password**: Specify user password. 
    - Configure settings related to authentication:
      - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
        - For `md5`, `sha`, `sha256` or `sha512`:

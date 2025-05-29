@@ -65,8 +65,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
    - MySQL 数据库的连接设置：
      - **服务**：填入 MySQL 服务器地址 (`host:port`) 。
      - **数据库**：填入 MySQL 的数据库名称。
-     - **用户名**（可选）：填入用户名称。
-     - **密码**（可选）：填入用户密码。
+     - **用户名**：填入用户名称。
+     - **密码**：填入用户密码。
    - 认证加密算法相关的配置：
      - **密码加密方式**：选择应用于明文密码的哈希算法，用于在将结果存储到数据库之前对密码进行加密。可用选项包括 `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt` 和 `pbkdf2`。具体配置取决于所选择的算法：
        - 选择  `md5`、`sha`、`sha256` 或 `sha512`算法，需配置：

@@ -65,8 +65,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
      - **服务**：填入 PostgreSQL 服务器地址 (`host:port`) 。
      - **数据库**：填入 PostgreSQL 的数据库名称。
-     - **用户名**（可选）：填入用户名称。
-     - **密码**（可选）：填入用户密码。
+     - **用户名**：填入用户名称。
+     - **密码**：填入用户密码。
    
    - 配置认证相关设置：
      - **密码加密方式**：选择应用于明文密码的哈希算法，用于在将结果存储到数据库之前对密码进行加密。可选算法包括 `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt` 和 `pbkdf2`。具体配置取决于所选择的算法：

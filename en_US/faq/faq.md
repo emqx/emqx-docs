@@ -1,15 +1,15 @@
 # Usage FAQs
 
-## What happens when my license expires?
+## What happens when my License expires?
 
-If you are an EMQX Enterprise user, when your license reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
+If you are an EMQX Enterprise user, when your License reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
 
-- **For licenses issued for "small" customers or trial licenses:** No new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the license.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
-- **For licenses not issued for "small" customers or trial licenses**: New MQTT connections are still permitted, as long as the total count remains below the maximum limit.
+- **For Licenses issued for "small" customers or trial Licenses:** No new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the License.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
+- **For Licenses not issued for "small" customers or trial Licenses**: New MQTT connections are still permitted, as long as the total count remains below the maximum limit.
 
-If you are unsure which type of license you have, please confirm with your account manager.
+If you are unsure which type of License you have, please confirm with your account manager.
 
-## How do I update my license?
+## How do I update my License?
 
 You can use the following command to update your EMQX Enterprise License:
 
@@ -20,7 +20,7 @@ You can use the following command to update your EMQX Enterprise License:
     license update <License> # Update license given as a string
 ```
 
-You can also update your license through the Dashboard. For how to apply for a license and update it through the Dashboard, see [Work with EMQX Enterprise License](../deploy/license.md).
+You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](../deploy/license.md).
 
 ## Why can't I receive retained messages when using shared subscriptions?
 
@@ -124,6 +124,6 @@ CENSYS is an internet scanning and reconnaissance tool that performs regular sca
 
 The default username and password of the Dashboard are admin and public respectively. For security reasons, the Dashboard will force you to change your password when you log in for the first time. If you forget the password you set previously, you can use the following command to set a new password without providing the old password:
 
-```
-emqx ctl admin <Username> <New Password>
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
 ```

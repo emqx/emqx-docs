@@ -59,7 +59,7 @@ You can use EMQX Dashboard to configure how to use Redis for password authentica
      - **Server(s)**: Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to `Sentinel` or `Cluster`, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
      - **Sentinel Name**: Specify the name to use; type: strings; only needed if you set **Redis Mode** to `Sentinel`.
      - **Database**: Redis database name; Data type: strings.
-     - **Password** (optional): Specify Redis user password. 
+     - **Password**: Specify Redis user password. 
    - Configure settings related to authentication:
 
      - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
