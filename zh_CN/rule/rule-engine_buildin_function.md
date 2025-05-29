@@ -72,10 +72,10 @@ log2(1024) = 10
 
 |函数名|函数作用|参数|返回值|
 |--- |--- |--- |--- |
-|is_null|判断变量是否为空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_null_var` 替代|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false|
-|is_not_null|判断变量是否为非空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_null_var` 替代|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true|
-|is_null_var|判断变量是否为空值|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false|
-|is_not_null_var|判断变量是否为非空值|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true|
+|is_null|判断变量是否为空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_null_var` 替代。|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false|
+|is_not_null|判断变量是否为非空值。注意：此函数无法判断 JSON 的 `null` 类型，请使用 `is_null_var` 替代。|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true|
+|is_null_var|判断变量是否为空值<br />注意：EMQX 开源版中不包含该函数。|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 true，否则返回 false|
+|is_not_null_var|判断变量是否为非空值<br />注意：EMQX 开源版中不包含该函数。|Data|Boolean 类型的数据。如果为空值(undefined) 则返回 false，否则返回 true|
 |is_str|判断变量是否为 String 类型|Data|Boolean 类型的数据。|
 |is_bool|判断变量是否为 Boolean 类型|Data|Boolean 类型的数据。|
 |is_int|判断变量是否为 Integer 类型|Data|Boolean 类型的数据。|
