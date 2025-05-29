@@ -46,7 +46,7 @@ This section will introduce how to use the Docker image to install the latest ve
    
 2. In Docker environments, `localhost` or `127.0.0.1` refers to the container's own internal network interface, not that of the host machine. To access services running on the host machine, use the host's IP address or use [host networking settings](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
-3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a hostname or Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
+3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
 
 ## Use Docker Compose to Build an EMQX Cluster
 
