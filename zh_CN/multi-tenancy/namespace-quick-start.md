@@ -14,7 +14,7 @@
 
     或者，您也可以在 Dashboard 中进行设置：
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/multi-tenancy/assets/enable_namespace.png" alt="enable_namespace" style="zoom:67%;" />
+   <img src="./assets/enable_namespace.png" alt="enable_namespace" style="zoom:67%;" />
 
 2. 创建一个 MQTT 客户端连接，模拟租户 `tenantA`，将用户名设置为 `tenantA-user1`，连接到 EMQX。
 
@@ -22,7 +22,7 @@
 
    点击**操作**列的**客户端**，可以看到连接到该命名空间的客户端。
 
-   ![namespace_client](/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/multi-tenancy/assets/namespace_client.png)
+   ![namespace_client](./assets/namespace_client.png)
 
 ## 配置并验证命名空间隔离效果
 
@@ -40,9 +40,9 @@
 
    或者，您也可以在 Dashboard 中进行设置：
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/multi-tenancy/assets/clientid_override.png" alt="clientid_override" style="zoom:67%;" />
+   <img src="./assets/clientid_override.png" alt="clientid_override" style="zoom:67%;" />
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/zh_CN/multi-tenancy/assets/listener_mountpoint.png" alt="listener_mountpoint" style="zoom:67%;" />
+   <img src="./assets/listener_mountpoint.png" alt="listener_mountpoint" style="zoom:67%;" />
 
 2. 使用 MQTTX 分别创建两个 MQTT 客户端连接，模拟两个租户：`tenantA` 和 `tenantB`。 
 

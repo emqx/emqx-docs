@@ -64,7 +64,7 @@ EMQX also supports creating and managing clusters using Command Line Interface (
 
 ## Namespace
 
-The Namespace feature in EMQX provides logical isolation for different client groups within a single cluster. You can manage namespaces on the **Namespace** page. For more detailed guidance on how to manage and configure namespaces, refer to the [Namespace](../multi-tenancy/namespace.md).
+The Namespace feature in EMQX provides logical isolation for different client groups within a single cluster. You can manage namespaces on the **Namespace** page. For more detailed guidance on how to manage and configure namespaces, refer to the [Namespace](../multi-tenancy/namespace-overview.md).
 
 ## Listeners
 

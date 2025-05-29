@@ -14,7 +14,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
    Alternatively, you can configure this in the Dashboard:
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/multi-tenancy/assets/enable_namespace.png" alt="enable_namespace" style="zoom:67%;" />
+   <img src="./assets/enable_namespace.png" alt="enable_namespace" style="zoom:67%;" />
 
 2. Create an MQTT client connection using MQTTX, simulating tenant `tenantA`, and set the username to `tenantA-user1`. Connect the client to EMQX.
 
@@ -22,7 +22,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
    Click **Clients** in the **Actions** column to view the client connected to this namespace.
 
-   ![namespace_client](/Users/emqx/Documents/GitHub/emqx-docs/en_US/multi-tenancy/assets/namespace_client.png)
+   ![namespace_client](./assets/namespace_client.png)
 
 ## Configure and Verify Namespace Isolation
 
@@ -40,8 +40,9 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
    You can also set this up in the Dashboard:
 
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/multi-tenancy/assets/clientid_override.png" alt="clientid_override" style="zoom:67%;" />
-   <img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/multi-tenancy/assets/listener_mountpoint.png" alt="listener_mountpoint" style="zoom:67%;" />
+   <img src="./assets/clientid_override.png" alt="clientid_override" style="zoom:67%;" />
+   
+   <img src="./assets/listener_mountpoint.png" alt="listener_mountpoint" style="zoom:67%;" />
 
 2. Use MQTTX to create two MQTT client connections to simulate two tenants: `tenantA` and `tenantB`.
 
