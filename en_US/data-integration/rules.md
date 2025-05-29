@@ -40,7 +40,7 @@ SELECT
 FROM
     "t/#"
 WHERE
-    clientid = "foo"
+    clientid = 'foo'
 ```
 
 In the above SQL statement:

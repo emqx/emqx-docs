@@ -51,7 +51,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
      - **服务**（**列表**）：填入 Redis 服务器地址 (`host:port`) ；当部署模式选为 Sentinel 或 Cluster，您需在此提供所有相关 Redis 服务器的地址，不同地址之间以 `,` 分隔，格式为 `host1:port1,host2:port2,...`
      - **Sentinel 名字**：指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)，仅需在**部署模式**设置为 **Sentinel** 时设置。
      - **数据库**：整数，用于指定 Redis 数据库的 Index。
-     - **密码**（可选）：填入认证密码。
+     - **密码**：填入认证密码。
 
    - 认证加密算法相关的配置：
 

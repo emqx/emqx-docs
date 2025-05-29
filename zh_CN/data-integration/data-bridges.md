@@ -96,6 +96,7 @@ D1 -->|发布消息| E[客户端]
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
+- [Lindorm](./lindorm)
 
 **NoSQL**
 

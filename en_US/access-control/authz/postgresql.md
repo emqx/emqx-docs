@@ -62,8 +62,8 @@ You can use EMQX Dashboard to configure how to use PostgreSQL for user authoriza
 
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: PostgreSQL database name.
-   - **Username** (optional): Specify user name. 
-   - **Password** (optional): Specify user password. 
+   - **Username**: Specify user name. 
+   - **Password**: Specify user password. 
    - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. 
    
    - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 

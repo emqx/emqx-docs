@@ -68,8 +68,8 @@ You can use EMQX Dashboard to configure how to use MongoDB for user authorizatio
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
    - **Database**: MongoDB database name.
    - **Collection**: Name of MongoDB collection where authorization rules are stored; Data type: strings.
-   - **Username** (optional): Specify MongoDB user name. 
-   - **Password** (optional): Specify MongDB user password. 
+   - **Username**: Specify MongoDB user name. 
+   - **Password**: Specify MongDB user password. 
 
    **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
 

@@ -34,10 +34,10 @@ CREATE TABLE mqtt_user (
 
 在此表中使用 `username` 作为查找条件。
 
-例如我们希望添加一位名为 `emqx_u`、密码为 `public`、盐值为 `salt_foo123`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户，SQL 如下：
+例如我们希望添加一位名为 `user123`、密码为 `secret`、盐值为 `salt`、散列方式为 `sha256` 且超级用户标志为 `true` 的用户，SQL 如下：
 
 ```sql
-INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', '44edc2d57cde8d79c98145003e105b90a14f1460b79186ea9cfe83942fc5abb5', 'slat_foo123', true);
+INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'f84fa2149dbb62ed4e0cf1f550d2949b33a6513d3a7707e08502511c79ccb0ee', 'salt', true);
 INSERT 0 1
 ```
 
@@ -65,8 +65,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
      - **服务**：填入 PostgreSQL 服务器地址 (`host:port`) 。
      - **数据库**：填入 PostgreSQL 的数据库名称。
-     - **用户名**（可选）：填入用户名称。
-     - **密码**（可选）：填入用户密码。
+     - **用户名**：填入用户名称。
+     - **密码**：填入用户密码。
    
    - 配置认证相关设置：
      - **密码加密方式**：选择应用于明文密码的哈希算法，用于在将结果存储到数据库之前对密码进行加密。可选算法包括 `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt` 和 `pbkdf2`。具体配置取决于所选择的算法：

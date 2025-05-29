@@ -126,7 +126,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
    docker run -d \
        --name emqx1 \
        -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
-       --network emqx-bridge \
+       --network emqx-net \
        --network-alias node1.emqx.com \
        -p 1883:1883 \
        -p 8083:8083 \
@@ -142,7 +142,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
    docker run -d \
        --name emqx2 \
        -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
-       --network emqx-bridge \
+       --network emqx-net \
        --network-alias node2.emqx.com \
        emqx/emqx-enterprise:@EE_VERSION@
    ```
@@ -178,7 +178,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
        -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
        -e "EMQX_CLUSTER__DISCOVERY_STRATEGY=static" \
        -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
-       --network emqx-bridge \
+       --network emqx-net \
        --network-alias node1.emqx.com \
        -p 1883:1883 \
        -p 8083:8083 \
@@ -196,7 +196,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
       -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
       -e "EMQX_CLUSTER__DISCOVERY_STRATEGY=static" \
       -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
-      --network emqx-bridge \
+      --network emqx-net \
       --network-alias node2.emqx.com \
       emqx/emqx-enterprise:@EE_VERSION@
    ```

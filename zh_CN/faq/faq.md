@@ -2,16 +2,18 @@
 
 ## License 到期没有及时续费会发生什么？
 
-如果您是 EMQX 企业版用户，当您的 license 到期时，每次启动节点时都会出现警告以提醒您 license 的到期情况。根据您的 license 类型，可能会有不同的限制：
+如果您是 EMQX 企业版用户，当您的 License 到期时，每次启动节点时都会出现警告以提醒您 License 的到期情况。根据您的 
 
-- **对于面向"小型"客户或试用的 license：** 即使连接总数低于 License 中指定的限制，也将不允许创建新的 MQTT 连接。现有连接不会被断开，但如果它们断开连接，将无法重新连接。
-- **对于非"小型"客户或非试用的 license：** 只要总数保持在最大限制以下，仍然允许创建新的 MQTT 连接。
+License 类型，可能会有不同的限制：
 
-如果您不确定自己的 license 类型，请与您的客户经理确认。
+- **对于面向"小型"客户或试用的 License：** 即使连接总数低于 License 中指定的限制，也将不允许创建新的 MQTT 连接。现有连接不会被断开，但如果它们断开连接，将无法重新连接。
+- **对于非"小型"客户或非试用的 License：** 只要总数保持在最大限制以下，仍然允许创建新的 MQTT 连接。
 
-## 如何更新 license？
+如果您不确定自己的 License 类型，请与您的客户经理确认。
 
-您可以使用以下命令来更新您的 EMQX 企业版 license：
+## 如何更新 License？
+
+您可以使用以下命令来更新您的 EMQX 企业版 License：
 
 ```bash
 ./bin/emqx ctl 
@@ -20,7 +22,7 @@
     license update <License> # 更新 license，<License> 为 license 字符串
 ```
 
-您还可以通过 Dashboard 来更新 license。有关如何申请 licnese 以及通过 Dashboard 更新许可证，请参见[使用 EMQX 企业版 License](../deploy/license.md)。
+您还可以通过 Dashboard 来更新 License。有关如何申请 Licnese 以及通过 Dashboard 更新 License，请参见[使用 EMQX 企业版 License](../deploy/license.md)。
 
 ## 为什么共享订阅时收不到保留消息？
 
@@ -124,6 +126,6 @@ CENSYS 是一款互联网探测扫描工具，它会周期性扫描 IPv4 地址�
 
 Dashboard 的默认用户名和密码分别是 admin 和 public，出于安全考虑，在您首次登录时，Dashboard 会强制要求你修改密码。如果你忘记了之前设置的密码，你可以使用以下命令来设置新密码，并无需提供旧密码：
 
-```
-emqx ctl admin <Username> <New Password>
+```bash
+./bin/emqx ctl admins passwd <Username> <Password>
 ```

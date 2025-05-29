@@ -39,7 +39,10 @@ EMQX 支持通过修改配置文件或使用环境变量来设置 EMQX。本章�
 
 ## 配置示例
 
-虽然 [Schema](#schema) 部分提供了详细的参考信息，但配置示例有助于理解和应用 EMQX 的设置。你可以在 `etc/examples` 目录中找到多个配置示例。
+虽然 [Schema](#schema) 部分提供了详细的参考信息，但配置示例有助于理解和应用 EMQX 的设置。
+
+- 如果您使用 RPM 或 DEB 包安装 EMQX，您可以在 `etc/emqx/examples` 目录中找到配置示例。
+- 如果您在 Docker 容器中运行 EMQX，您可以在 `opt/emqx/etc/examples` 目录中找到配置示例。
 
 ## 基础配置文件
 
