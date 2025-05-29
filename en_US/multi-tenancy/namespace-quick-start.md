@@ -4,7 +4,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
 ## Enable the `tns` Attribute for Namespace Identification
 
-1. First, configure a client attribute in `emqx.conf` to extract the namespace (tenant identifier) from the username:
+1. First, configure a client attribute in `base.hocon` to extract the namespace (tenant identifier) from the username:
 
    ```
    mqtt.client_attrs_init = [{expression = "nth(1, tokens(username, '-'))", set_as_attr = tns}]
@@ -26,7 +26,7 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
 
 ## Configure and Verify Namespace Isolation
 
-1. To isolate client IDs and topics between namespaces, add the following configuration to `emqx.conf`:
+1. To isolate client IDs and topics between namespaces, add the following configuration to `base.hocon`:
 
    ```
    mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"

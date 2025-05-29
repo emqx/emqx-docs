@@ -4,7 +4,7 @@
 
 ## 启用 `tns` 属性作为命名空间识别字段
 
-1. 首先，在 EMQX `emqx.conf` 中配置客户端属性，从用户名中提取命名空间标识用户识别租户：
+1. 首先，在 EMQX 的 `base.hocon` 中配置客户端属性，从用户名中提取命名空间标识用户识别租户：
 
    ```
    mqtt.client_attrs_init = [{expression = "nth(1, tokens(username, '-'))", set_as_attr = tns}]
@@ -26,7 +26,7 @@
 
 ## 配置并验证命名空间隔离效果
 
-1. 为了实现不同命名空间之间的主题和客户端 ID 隔离，在 `emqx.conf` 中添加以下配置：
+1. 为了实现不同命名空间之间的主题和客户端 ID 隔离，在 `base.hocon` 中添加以下配置：
 
    ```
    mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
