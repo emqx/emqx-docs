@@ -36,9 +36,11 @@ $ emqx eval 'emqx_router:get_schema_vsn()'
 If the output is `v2`, regular rolling upgrade is possible.
 
 If the output is `v1`, rolling upgrade is not possible. Follow these steps:
-1. Upgrade all nodes to 5.10.0 or newer.
+1. Stop **all** nodes.
 2. Remove `broker.routing.storage_schema` option from applicable configuration files, if present.
-3. Stop **all** cluster nodes, then restart them one by one.
+3. Upgrade all nodes to 5.10.0 or newer.
+4. Start core nodes.
+5. Start replicant nodes.
 
 ## How to Perform a Rolling Upgrade
 
