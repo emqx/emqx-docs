@@ -60,8 +60,8 @@ log2(1024) = 10
 |--- |--- |--- |--- |
 | is_null   | Checks if a variable is null. Note: This function cannot determine the JSON `null` type; use `is_null_var` instead. | Data  | Returns true if the variable is null (undefined); otherwise, returns false. |
 | is_not_null | Checks if a variable is not null. Note: This function cannot determine the JSON `null` type; use `is_null_var` instead. | Data  | Returns false if the variable is null (undefined); otherwise, returns true. |
-| is_null_var | Checks if a variable is null. | Data  | Returns true if the variable is null (undefined); otherwise, returns false. |
-| is_not_null_var | Checks if a variable is not null. | Data  | Returns false if the variable is null (undefined); otherwise, returns true. |
+| is_null_var | Checks if a variable is null.<br />Note: This function is only available in the EMQX Enterprise version. | Data  | Returns true if the variable is null (undefined); otherwise, returns false. |
+| is_not_null_var | Checks if a variable is not null.<br />Note: This function is only available in the EMQX Enterprise version. | Data  | Returns false if the variable is null (undefined); otherwise, returns true. |
 |is_str|Judge whether the variable is String type|Data|Boolean data.|
 |is_bool|Judge if the variable is Boolean type|Data|Boolean data.|
 |is_int|Judge whether the variable is Integer type|Data|Boolean data.|
