@@ -46,11 +46,40 @@ This section describes the preparations you need to complete before you start to
 
 ### Install Apache Doris Server
 
-<!--Need inputs-->
+Follow the [official guide](https://doris.apache.org/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment) to run Doris locally using Docker Compose.
 
 ### Create Data Tables
 
-<!--Need inputs-->
+You can use a MySQL client to connect to a Doris Frontend and issue commands.  See the [official documentation](https://doris.apache.org/docs/dev/gettingStarted/quick-start#run-queries).
+
+For example:
+
+```sh
+mysql -uroot -P9030 -h127.0.0.1
+```
+
+```sql
+create database mqtt;
+use mqtt;
+
+create table if not exists
+  emqx_messages(
+    clientid varchar,
+    topic string,
+    payload string,
+    created_at datetime
+  )
+  properties (replication_num = 1);
+
+create table if not exists
+  emqx_client_events(
+    clientid varchar,
+    event varchar,
+    created_at datetime)
+  properties (replication_num = 1);
+```
+
+
 
 ## Create a Connector
 
@@ -63,8 +92,8 @@ The following steps assume that you run both EMQX and Apache Doris on the local 
 3. On the **Create Connector** page, select **Doris** and then click **Next**.
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_doris`.
-   - **Server Host**: Enter `127.0.0.1:3306`, or the actual hostname if the Apache Doris server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
+   - **Server Host**: Enter `127.0.0.1:9030`, or the actual hostname if the Apache Doris server is running remotely.
+   - **Database Name**: Enter `mqtt`.
    - **Username**: Enter `root`.
    - **Password**: Enter `public`.
 5. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
@@ -73,7 +102,7 @@ The following steps assume that you run both EMQX and Apache Doris on the local 
 
 ## Create a Rule with Apache Doris Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Apache Doris data table `emqx_messages` via configured Sink. 
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Apache Doris data table `emqx_messages` via configured Sink.
 
 This demonstration assumes that you run both EMQX and Apache Doris on the local machine. If you have Apache Doris and EMQX running remotely, adjust the settings accordingly.
 
@@ -94,11 +123,11 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Apache Doris. 
+4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Apache Doris.
 
 5. Select `Apache Doris` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
 
@@ -114,7 +143,7 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
      ${clientid},
      ${topic},
-     ${payload},
+      ${payload},
      FROM_UNIXTIME(${timestamp}/1000)
    )
    ```
@@ -137,11 +166,11 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
 
 11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Apache Doris Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to Apache Doris. 
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to Apache Doris.
 
 ## Create a Rule with Apache Doris Sink for Events Recording
 
@@ -182,11 +211,11 @@ Check whether the data is written into the `emqx_messages` data table.
 
 ```bash
 mysql> select * from emqx_messages;
-+----+----------+-------+--------------------------+---------------------+
-| id | clientid | topic | payload                  | created_at          |
-+----+----------+-------+--------------------------+---------------------+
-|  1 | emqx_c   | t/1   | { "msg": "hello Apache Doris" } | 2022-12-09 08:44:07 |
-+----+----------+-------+--------------------------+---------------------+
++----------+-------+--------------------------+---------------------+
+| clientid | topic | payload                  | created_at          |
++----------+-------+--------------------------+---------------------+
+| emqx_c   | t/1   | { "msg": "hello Apache Doris" } | 2022-12-09 08:44:07 |
++----------+-------+--------------------------+---------------------+
 1 row in set (0.01 sec)
 ```
 
@@ -194,12 +223,12 @@ Check whether the data is written into the `emqx_client_events` table.
 
 ```bash
 mysql> select * from emqx_client_events;
-+----+----------+---------------------+---------------------+
-| id | clientid | event               | created_at          |
-+----+----------+---------------------+---------------------+
-|  1 | emqx_c   | client.connected    | 2022-12-09 08:44:07 |
-|  2 | emqx_c   | client.disconnected | 2022-12-09 08:44:07 |
-+----+----------+---------------------+---------------------+
++----------+---------------------+---------------------+
+| clientid | event               | created_at          |
++----------+---------------------+---------------------+
+| emqx_c   | client.connected    | 2022-12-09 08:44:07 |
+| emqx_c   | client.disconnected | 2022-12-09 08:44:07 |
++----------+---------------------+---------------------+
 2 rows in set (0.00 sec)
 ```
 
