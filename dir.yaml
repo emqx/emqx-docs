@@ -668,7 +668,7 @@
         - title_en: GB/T 32960 Gateway
           title_cn: GB/T 32960 协议网关
           path: gateway/gbt32960
-        #- gateway/tcp
+        - gateway/nats
     - client-attributes/client-attributes
 
 - title_en: Tutorials
