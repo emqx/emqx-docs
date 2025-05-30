@@ -13,13 +13,13 @@ EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消
 
 ## 快速开始
 
-EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关，也可以通过 HTTP API 或 `emqx.conf` 来启用。
+EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关，也可以通过 REST API 或 `emqx.conf` 来启用。
 
-### 通过 HTTP API 或配置文件配置
+### 通过 REST API 或配置文件配置
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
@@ -92,7 +92,7 @@ gateway.lwm2m {
 
 
 ::: tip
-通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 REST API 管理则会在整个集群中生效。
 :::
 
 LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
@@ -102,11 +102,11 @@ LwM2M 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数�
 由于 LwM2M 协议仅提供了客户端的 Endpoint Name，而没有提供用户名和密码。因此，
 LwM2M 网关仅支持 [HTTP Server 认证](../access-control/authn/http.md)。
 
-例如，通过 HTTP API 或 `emqx.conf` 为 LwM2M 网关创建 HTTP 认证：
+例如，通过 REST API 或 `emqx.conf` 为 LwM2M 网关创建 HTTP 认证：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
@@ -778,7 +778,7 @@ Observe 命令的消息体格式应该为：
 
 - 详细配置说明参考：[网关配置 - LwM2M 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
-- 详细 HTTP API 接口参考：[HTTP API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 

@@ -8,13 +8,13 @@ This page introduces how to configure and use the OCPP gateway in EMQX.
 
 ## Enable OCPP Gateway
 
-The OCPP gateway in EMQX can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
+The OCPP gateway in EMQX can be configured and enabled through the Dashboard, REST API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps.
 
 On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **OCPP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize OCPP** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or REST API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../configuration/configuration.md).
 
 :::
 
@@ -28,7 +28,7 @@ Upon completing the gateway activation process, you can return to the **Gateways
 
 <img src="./assets/ocpp-enabled.png" alt="OCPP gateway enabled" style="zoom:50%;" />
 
-The above configuration can also be configured with HTTP API:
+The above configuration can also be configured with REST API:
 
 **Example Code:**
 
@@ -229,7 +229,7 @@ OCPP gateway uses the information in the Basic Authentication of the Websocket h
 - Username: Value of the Username in the Basic Authentication.
 - Password: Value of the Password in the Basic Authentication.
 
-You can also use HTTP API to create a built-in database authentication for a OCPP gateway:
+You can also use REST API to create a built-in database authentication for a OCPP gateway:
 
 **Example Code:**
 

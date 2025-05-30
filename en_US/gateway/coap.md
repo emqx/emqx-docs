@@ -18,13 +18,13 @@ Below is the feature list supported in connection mode and connectionless mode.
 
 ## Enable the CoAP Gateway
 
-In EMQX 5, CoAP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5, CoAP gateway can be configured and enabled through the Dashboard, REST API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
 On EMQX Dashboard, click **Extensions** -> **Gateways** on the left navigation menu. On the **Gateway** page, all supported gateways are listed. Locate **CoAP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize CoAP** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or REST API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../configuration/configuration.md).
 
 :::
 
@@ -43,7 +43,7 @@ Upon completing the gateway activation process, you can return to the **Gateways
 
 <img src="./assets/coap-enabled.png" alt="CoAP gateway enabled" style="zoom:50%;" />
 
-The above configuration can also be configured with HTTP API:
+The above configuration can also be configured with REST API:
 
 **Example Code:**
 
@@ -67,7 +67,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/coap' \
   ]
 }'
 ```
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md).
+For a detailed REST API description, see [REST API - Gateway](../admin/api.md).
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your CoAP Gateway section](#customize-your-coap-gateway).
 
@@ -174,7 +174,7 @@ Click **Create Authentication**, choose **Password-Based** or **JWT** as the **M
 
 For a detailed explanation of how to configure the authenticators, you may refer to the pages listed at the beginning of this section. 
 
-Besides the Dashboard, you can also use HTTP API to configure the authenticator. For example, to create a built-in database authentication for CoAP gateway, you can use the code below:
+Besides the Dashboard, you can also use REST API to configure the authenticator. For example, to create a built-in database authentication for CoAP gateway, you can use the code below:
 
 ```bash
 curl -X 'POST' \
@@ -239,7 +239,7 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
 ```
 
 :::tip
-After the connection is successfully created, you can use Dashboard, HTTP API or CLI to check the client list in the CoAP gateway.
+After the connection is successfully created, you can use Dashboard, REST API or CLI to check the client list in the CoAP gateway.
 :::
 
 

@@ -6,11 +6,11 @@ Stomp 网关基于 [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 Stomp 网关。
 
-也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 emqx.conf 来启用，例如：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/stomp' \
@@ -54,7 +54,7 @@ gateway.stomp {
 ::::
 
 ::: tip
-通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 REST API 管理则会在整个集群中生效。
 :::
 
 Stomp 网关支持 TCP、SSL 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
@@ -78,11 +78,11 @@ Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成
 - Username：为 CONNECT 或 STOMP 报文 Headers 中的 `login` 字段的值。
 - Password：为 CONNECT 或 STOMP 报文 Headers 中的 `passcode` 字段的值。
 
-例如，通过 HTTP API 或 emqx.conf 为 Stomp 网关创建一个内置数据库认证：
+例如，通过 REST API 或 emqx.conf 为 Stomp 网关创建一个内置数据库认证：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' \
@@ -140,7 +140,7 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 ## 用户层接口
 
 - 详细配置说明参考：[网关配置 - Stomp 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
-- 详细 HTTP API 接口参考：[HTTP API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 

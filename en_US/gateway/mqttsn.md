@@ -14,13 +14,13 @@ The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/co
 
 ## Enable the MQTT-SN Gateway
 
-In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, REST API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
 On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or REST API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../configuration/configuration.md).
 
 :::
 
@@ -34,7 +34,7 @@ Upon completing the gateway activation process, you can return to the **Gateways
 
 <img src="./assets/mqttsn-enabled.png" alt="Enabled MQTT-SN gateway" style="zoom:50%;" />
 
-The above configuration can also be configured with HTTP API:
+The above configuration can also be configured with REST API:
 
 **Example Code:**
 
@@ -59,7 +59,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-For a detailed HTTP API description, see [HTTP API - Gateway](../admin/api.md)
+For a detailed REST API description, see [REST API - Gateway](../admin/api.md)
 
 If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your MQTT-SN Gateway section](#customize-your-mqtt-sn-gateway).
 
@@ -169,7 +169,7 @@ Click **Create Authentication**, choose **Password-Based** as the **Mechanism**,
 
 For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
 
-The above configuration can also be performed via HTTP API.
+The above configuration can also be performed via REST API.
 
 **Example Code**
 

@@ -1,23 +1,87 @@
 # NATS Protocol Gateway
 
-EMQX 5.10 introduces the NATS gateway, which is implemented based on the [NATS Protocol](https://docs.nats.io/reference/reference-protocols/nats-protocol). It supports accepting connections from NATS clients and enables interoperability with MQTT publish/subscribe. Currently supported features include:
+Starting from EMQX 5.10.0, EMQX introduces the NATS protocol gateway based on the [NATS Protocol](https://docs.nats.io/reference/reference-protocols/nats-protocol). It enables EMQX to accept connections from NATS clients and perform message interoperability with MQTT. This document describes its capabilities and guides you through the process of enabling and configuring the NATS gateway.
 
-- Complete protocol message support, such as INFO, CONNECT, PUB/HPUB, SUB/UNSUB, MSG/HMsg, PING/PONG, +OK/-ERR.
-- Support for CONNECT messages carrying `verbose=true` to enable message acknowledgment.
-- Support for TCP, TLS, WebSocket, and WebSocket over TLS listeners.
-- Support for NATS client publish/subscribe and wildcard subscriptions with MQTT publish/subscribe interoperability.
-- Support for Queue Group shared subscriptions.
-- Support for Request/Reply pattern, including fast failure response to requesting clients when there are no subscribers for the requested topic.
+## Feature Overview
 
-## Quick Start
+The NATS protocol gateway currently supports the following core features:
 
-In EMQX 5.0, you can configure and quickly enable the NATS gateway through the Dashboard.
+### Protocol Support
 
-You can also enable it through HTTP API or emqx.conf, for example:
+- **Full support for NATS protocol message types**:
+  - Connection and session management: `INFO`, `CONNECT`
+  - Message publish/subscribe: `PUB`, `HPUB`, `SUB`, `UNSUB`
+  - Message delivery and response: `MSG`, `HMSG`
+  - Heartbeats and status: `PING`, `PONG`, `+OK`, `-ERR`
+- **Verbose mode support**: Enables response acknowledgment when clients connect with `CONNECT verbose=true`.
 
-:::: tabs type:card
+### Interoperability with MQTT
 
-::: tab HTTP API
+- **Bidirectional message interoperability with MQTT**:
+  - Messages published by NATS clients are translated into MQTT publishes.
+  - MQTT messages are forwarded to NATS clients subscribed to the corresponding topics.
+- **Support for NATS wildcard subscriptions**, automatically converted to MQTT-compatible topic formats.
+- **Support for Queue Group shared subscriptions**: NATS Queue Group subscriptions are converted to the MQTT shared subscription format.
+- **Support for Request/Reply mode**, including:
+  - Requests from NATS clients are translated into MQTT requests.
+  - If no MQTT subscriber is found for the target topic, EMQX returns an error response quickly.
+
+### Networking and Connectivity
+
+- **Multiple transport protocols supported**: TCP, TLS, WebSocket (WS), and WebSocket over TLS (WSS).
+
+## Cross-Protocol Messaging Between NATS and MQTT
+
+The NATS protocol is fully compatible with the publish/subscribe messaging model and interoperates with MQTT messaging through the NATS gateway. The conversion rules are as follows:
+
+- **PUB and HPUB messages are treated as publish operations**:
+  - The topic is derived from the `subject` field in the PUB message. For example, `t.a` will be converted to MQTT topic `t/a`.
+  - The message payload is taken directly from the PUB message body.
+  - If the client connects with `CONNECT verbose=1`, the translated MQTT message uses QoS 1; otherwise, QoS is set to 0.
+- **SUB messages are treated as subscription requests**:
+  - The topic is derived from the `subject` field in the SUB message. For example, `t.a` will be converted to MQTT topic `t/a`.
+  - QoS follows the same rule: `verbose=1` results in QoS 1; otherwise, QoS 0.
+  - Wildcards are supported. For example, `*.b.>` is converted to `+/b/#`.
+  - Queue Groups are supported. The Queue Group value in the SUB message is converted into the group name for MQTT shared subscriptions.
+- **UNSUB messages are treated as unsubscription requests**, and the subscription ID (sid) is used to identify the subscription to be removed.
+
+::: tip
+
+The NATS gateway does not implement its own access control for publish/subscribe operations. Topic permissions must be managed using the unified [authorization configuration](../access-control/authz/authz.md).
+
+:::
+
+## Enable the NATS Gateway
+
+Starting from EMQX 5.10.0, the NATS gateway can be enabled in three ways:
+
+- Through the Dashboard
+- Using the REST API
+- By editing the `emqx.conf` configuration file
+
+::: tip
+
+In cluster mode, configurations made via the Dashboard or REST API are automatically applied across all nodes. To apply settings to a specific node only, use the `emqx.conf` configuration file on that node.
+
+:::
+
+### Enable via Dashboard
+
+To quickly enable the NATS gateway from the EMQX Dashboard:
+
+1. Navigate to **Management** -> **Gateways** in the left-hand menu.
+2. On the **Gateways** page, locate **NATS** and click the **Setup** button in the **Actions** column to enter the **Initialize NATS** setup wizard.
+3. Follow the steps in the wizard:
+   - On the **Basic Configuration** step, accept the default values and click **Next**.
+   - On the **Listeners** step, either configure a listener or skip and click **Next**.
+      (For detailed listener configuration, see [Add a Listener](#add-a-listener).)
+   - Click **Enable** to activate the NATS gateway.
+
+Once activation is complete, you will be redirected to the **Gateways** page, where the status of the NATS gateway will show as **Enabled**.
+
+### Enable via REST API
+
+You can use the following example to enable the NATS gateway via the REST API:
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
@@ -39,9 +103,9 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
 }'
 
 ```
-:::
+### Enable via Configuration File
 
-::: tab Configuration
+You can use the following configuration example to enable the NATS gateway via `emqx.conf`:
 
 ```properties
 gateway.nats {
@@ -56,19 +120,82 @@ gateway.nats {
   }
 }
 ```
-:::
+The NATS gateway supports TCP, SSL, WS, and WSS type listeners. For the complete list of configurable parameters, refer to the gateway configuration - listeners section in the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-::::
+## Customize Your NATS Gateway
 
-::: tip
-Configuring the gateway through configuration files requires configuration on each node; managing through Dashboard or HTTP API will take effect across the entire cluster.
-:::
+In addition to the default settings, EMQX provides various configuration options to better suit your specific business needs. This section provides a detailed overview of the available options on the **Gateways** page.
 
-The NATS gateway supports TCP/SSL/WS/WSS type listeners. For the complete list of configurable parameters, refer to the gateway configuration - listeners section in the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+### Basic Settings
 
-## Authentication
+1. On the **Gateways** page, locate **NATS** and click the **Settings** button in the **Actions** column.
 
-The NATS protocol supports multiple authentication methods, including username/password and token authentication. The NATS gateway supports the following authenticator types:
+2. In the **Settings** tab, you can configure the gateway's connection parameters, mountpoint prefix, and client identity overrides.
+
+   - **Server Name**: A unique identifier for the gateway, used for internal reference. Default: `emq_nats_gateway`.
+
+   - **Mountpoint**: A string prefix automatically added to all topics passing through the gateway. This helps isolate topics between protocols. For example, using `nats/` enables cross-protocol routing without requiring clients to manually include the prefix.
+
+   - **Default Heartbeat Interval**: The interval at which the server sends `PING` packets to check if the client is still alive. Default: `60` seconds.
+
+   - **Heartbeat Timeout Threshold**: If the client fails to respond within this time frame, it is considered disconnected.
+
+   - **Maximum Payload Size**: The maximum size (in bytes) of a single `PUB` or `HPUB` message payload. Default: `1048576` bytes.
+
+   - **Idle Timeout**: The period (in seconds) after which an inactive client connection is considered stale and will be closed. Default: `30` seconds.
+
+   - **Enable Statistics**: Whether to enable statistics collection and reporting for this gateway. Default: enabled.
+
+   - **Client Info Override**: Defines how to extract authentication information from the `CONNECT` packet.
+
+     ::: tip
+
+     When authentication is enabled, make sure to map the correct fields for `username` and `password` to ensure proper credential processing.
+
+     :::
+
+     - **Username**: Maps to the `user` field in the `CONNECT` packet.
+     - **Password**: Maps to the `pass` field in the `CONNECT` packet.
+     - **Client ID**: Can be set to `${generated}` for auto-generation, or customized using specific logic.
+
+3. Click **Update** to apply your changes.
+
+### Add a Listener
+
+You can further customize your gateway by editing, deleting, or adding new listeners in the **Listeners** tab.
+
+1. In the **Listeners** tab, click **+ Add Listener**.
+
+2. In the **Add Listener** dialog, configure the following options:
+
+   **Basic Settings**
+
+   - **Name**: A unique name to identify the listener.
+   - **Type**: Select the listener type. Supported options for NATS are `tcp`, `ssl`, `ws`, and `wss`.
+   - **Bind**: The port on which the listener will accept incoming connections.
+
+   **Listener Settings**
+
+   - **Max Connections**: The maximum number of concurrent connections allowed. Default: `1024000`.
+   - **Max Connection Rate (Listener)**: Maximum number of new connections accepted per second. Default: `1000`.
+   - **Proxy Protocol**: Whether to enable Proxy Protocol v1/v2. Default: `false`.
+   - **Proxy Protocol Timeout**: Timeout for receiving the Proxy Protocol header. If no header is received within the specified time, the connection is closed. Default: `3` seconds.
+
+   **Very Peer Settings** (only applicable for SSL and WSS listeners)
+
+   Mutual TLS is enabled by default. You must configure the TLS certificate, private key, and CA certificate. These can be uploaded or directly pasted into the form fields. For more information, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
+
+   - **TLS Cert**: The TLS certificate file path or its contents.
+   - **TLS Key**: The TLS private key file path or its contents.
+   - **CA Cert**: The CA certificate file path or its contents.
+   - **Force Verify Peer Certificate**: Whether to require client certificate verification. Default: `true`.
+
+3. Click **Add** to complete listener creation.
+
+### Configure Authentication
+
+The NATS protocol supports various authentication methods, including username/password and token-based authentication. The NATS gateway supports the following authentication backends:
+
 - [Built-in Database Authentication](../access-control/authn/mnesia.md)
 - [MySQL Authentication](../access-control/authn/mysql.md)
 - [MongoDB Authentication](../access-control/authn/mongodb.md)
@@ -78,19 +205,28 @@ The NATS protocol supports multiple authentication methods, including username/p
 - [JWT Authentication](../access-control/authn/jwt.md)
 - [LDAP Authentication](../access-control/authn/ldap.md)
 
-The NATS gateway uses information from the CONNECT message of the NATS protocol to generate client authentication information. By default:
+Unlike the MQTT protocol, the gateway supports only a single authenticator, not a list (or chain) of authenticators. If no authenticator is enabled, all NATS clients are allowed to connect without authentication.
 
-- Client ID: A randomly generated string.
-- Username: The value of the `user` field in the CONNECT message.
-- Password: The value of the `pass` field in the CONNECT message.
+The NATS gateway extracts authentication credentials from the `CONNECT` packet:
 
-For example, create a built-in database authenticator for the NATS gateway through HTTP API or emqx.conf:
+- **Client ID**: Auto-generated by default.
+- **Username**: Value of the `user` field.
+- **Password**: Value of the `pass` field.
 
-:::: tabs type:card
+#### Configure via Dashboard
 
-::: tab HTTP API
+The example below demonstrates configuring password-based authentication using an HTTP server:
 
-```bash
+1. In the NATS gateway settings, go to the **Authentication** tab.
+2. Click **+ Create Authentication**, select **Password-Based** as the mechanism, and choose **HTTP Server** as the data source. Click **Next**.
+3. Fill in the configuration parameters. Refer to [HTTP Password Authentication](../access-control/authn/http.md) for details on each option.
+4. Click **Create**, then review and confirm the settings by clicking **Update**.
+
+#### Configure via REST API
+
+The following example show how to configure built-in database authentication by using REST API:
+
+```
 curl -X 'POST' \
   'http://127.0.0.1:18083/api/v5/gateway/nats/authentication' \
   -u <your-application-key>:<your-security-key> \
@@ -106,11 +242,12 @@ curl -X 'POST' \
   "user_id_type": "username"
 }'
 ```
-:::
 
-::: tab Configuration
+#### Configure via Configuration File
 
-```properties
+The following examples show how to configure built-in database authentication in the configuration file:
+
+```
 gateway.nats {
 
   authentication {
@@ -124,39 +261,10 @@ gateway.nats {
   }
 }
 ```
-:::
 
-::::
+For other authentication types, refer to the documentation on [EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticators).
 
-Unlike the MQTT protocol, **the gateway only supports creating one authenticator, not a list of authenticators (or authentication chain)**. When no authenticator is enabled, it means all NATS clients are allowed to connect.
+### Configure User-Level Interfaces
 
-For configuration formats of other types of authenticators, refer to: [Security - Authenticators](../access-control/authn/authn.md).
-
-## Publish/Subscribe
-
-The NATS protocol is fully compatible with the publish/subscribe messaging pattern and interacts with MQTT publish/subscribe. The NATS gateway conversion rules are:
-
-- NATS protocol PUB and HPUB messages are used for message publishing.
-  * The topic is the `subject` field in the PUB message. For example, a Subject of `t.a` will be converted by the NATS gateway to the MQTT topic `t/a` for publishing.
-  * The message content is the message body content of the PUB message.
-  * When the client connection CONNECT message has `verbose=1`, the converted message QoS is fixed at 1; otherwise, it's 0.
-- NATS protocol SUB messages are used as subscription requests.
-  * The topic is the `subject` field in the SUB message. For example, a Subject of `t.a` will be converted by the NATS gateway to the MQTT topic `t/a` for subscription.
-  * When the client connection CONNECT message has `verbose=1`, the converted subscription QoS is fixed at 1; otherwise, it's 0.
-  * Wildcards are supported, for example, `*.b.>` will be converted to `+/b/#`.
-  * Shared subscriptions are supported. The Queue Group in the SUB message will be converted to the group name of MQTT shared subscriptions.
-- NATS protocol UNSUB messages are used as unsubscription requests. The topic is the subscription ID corresponding to the UNSUB message.
-
-The gateway has no independent publish/subscribe permission control. Topic permission control needs to be managed uniformly in [Authorization](../access-control/authz/authz.md).
-
-## User Interface
-
-- For detailed configuration instructions, refer to: [Gateway Configuration - NATS Gateway](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
-- For detailed HTTP API interface reference: [HTTP API - Gateway](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
-
-## Limitations
-
-Currently, in EMQX 5.10, there are the following implementation limitations:
-
-- Since the current gateway listener does not support upgrading from TCP to TLS connections, clients connecting with `tls_handshake_first=false` are not currently supported.
-- When no authenticator is configured, NATS clients that do not send CONNECT messages are supported for publish/subscribe, but managing anonymous clients is not currently supported. 
+- For complete configuration reference, see: [NATS Gateway Configuration](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
+- For REST API details, see: [Gateway REST API Documentation](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)

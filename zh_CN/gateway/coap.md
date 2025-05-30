@@ -6,11 +6,11 @@ CoAP 网关以 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.
 
 EMQX 5.0 可以通过 Dashboard 配置并启用 CoAP 网关。
 
-也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 emqx.conf 来启用，例如：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/coap' \
@@ -57,7 +57,7 @@ gateway.coap {
 ::::
 
 ::: tip
-通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 HTTP API 管理则会自动同步至整个集群。
+通过配置文件来配置网关，需要在每个节点上手动同步配置文件；而通过 Dashboard 或者 REST API 管理则会自动同步至整个集群。
 :::
 
 CoAP 网关支持 UDP、DTLS 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
@@ -106,11 +106,11 @@ gateway.coap {
 - [JWT 认证](../access-control/authn/jwt.md)
 - [LDAP 认证](../access-control/authn/ldap.md)
 
-例如，通过 HTTP API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
+例如，通过 REST API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' \
@@ -172,7 +172,7 @@ CoAP 网关基于 [Publish-Subscribe Broker for the CoAP](https://datatracker.ie
 
 - 详细配置说明参考：[网关配置 - CoAP 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
-- 详细 HTTP API 接口参考：[HTTP API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 
@@ -218,7 +218,7 @@ coap-client -m post -e "" "coap://127.0.0.1/mqtt/connection?clientid=123&usernam
 ```
 
 ::: tip
-连接创建成功后，可以使用 Dashboard，HTTP API 或 CLI 检查 CoAP 网关的客户端列表中是否已存在该客户端。
+连接创建成功后，可以使用 Dashboard，REST API 或 CLI 检查 CoAP 网关的客户端列表中是否已存在该客户端。
 :::
 
 

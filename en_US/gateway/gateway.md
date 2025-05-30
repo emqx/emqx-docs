@@ -6,7 +6,7 @@ Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol p
 
 Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
 
-The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
+The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the REST API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
@@ -49,6 +49,7 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | OCPP       |      |      |      |      | ✔︎         | ✔︎                  |
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
+| NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
 ### Message Format
 
 To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
@@ -76,6 +77,7 @@ Different gateways may support different types of authenticators, but all gatewa
 | OCPP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 | GB/T 32960 | ✔︎           |                   |       |         |            |       |      |      |
 | JT/T 808   | N/A         | N/A               | N/A   | N/A     | N/A        | N/A   | N/A  |      |
+| NATS       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 
 Note: Any client can log in if no authenticator is configured. 
 
