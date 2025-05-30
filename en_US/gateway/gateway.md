@@ -17,6 +17,7 @@ The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2
 - [OCPP](./ocpp.md)
 - [GB/T 32960](./gbt32960.md)
 - [JT/T 808](./jt808.md)
+- [NATS](./nats.md)
 
 ## How the Multi-Protocol Gateway Works
 
