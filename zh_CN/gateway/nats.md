@@ -28,7 +28,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
   "enable": true,
   "mountpoint": "nats/",
   "listeners": [
-    {h
+    {
       "type": "tcp",
       "name": "default",
       "bind": "4222",
