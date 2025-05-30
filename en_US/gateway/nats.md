@@ -181,7 +181,7 @@ You can further customize your gateway by editing, deleting, or adding new liste
    - **Proxy Protocol**: Whether to enable Proxy Protocol v1/v2. Default: `false`.
    - **Proxy Protocol Timeout**: Timeout for receiving the Proxy Protocol header. If no header is received within the specified time, the connection is closed. Default: `3` seconds.
 
-   **Very Peer Settings** (only applicable for SSL and WSS listeners)
+   **Verify Peer Settings** (only applicable for SSL and WSS listeners)
 
    Mutual TLS is enabled by default. You must configure the TLS certificate, private key, and CA certificate. These can be uploaded or directly pasted into the form fields. For more information, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
 
@@ -224,7 +224,7 @@ The example below demonstrates configuring password-based authentication using a
 
 #### Configure via REST API
 
-The following example show how to configure built-in database authentication by using REST API:
+The following example shows how to configure built-in database authentication by using REST API:
 
 ```
 curl -X 'POST' \
@@ -245,7 +245,7 @@ curl -X 'POST' \
 
 #### Configure via Configuration File
 
-The following examples show how to configure built-in database authentication in the configuration file:
+The following example shows how to configure built-in database authentication in the configuration file:
 
 ```
 gateway.nats {
