@@ -56,11 +56,11 @@ NATS 协议完全兼容发布订阅的消息模式，并和 MQTT 的发布订阅
 
 ## 启用 NATS 网关
 
-在 EMQX 5.10.0 中可以通过 Dashboard 配置并快速启用 NATS 网关，也可以通过 REST API 或配置文件 `emqx.conf` 来启用。
+在 EMQX 5.10.0 中可以通过 Dashboard 配置并快速启用 NATS 网关，也可以通过 REST API 或配置文件 `base.hocon` 来启用。
 
 ::: tip
 
-在集群模式下，使用 Dashboard 或 REST API 进行的网关配置将在所有节点上生效。若希望仅在特定节点上配置网关，可通过修改各节点的 `emqx.conf` 配置文件实现。
+在集群模式下，使用 Dashboard 或 REST API 进行的网关配置将在所有节点上生效。若希望仅在特定节点上配置网关，可通过修改各节点的 `base.hocon` 配置文件实现。
 
 :::
 
@@ -208,7 +208,7 @@ NATS 网关使用 NATS 协议的 CONNECT 报文中的信息来生成客户端的
 - Username：为 CONNECT 报文中的 `user` 字段的值。
 - Password：为 CONNECT 报文中的 `pass` 字段的值。
 
-#### 通过 Dashboard 配置接入认证
+#### 通过 Dashboard 配置
 
 本节以使用 HTTP 服务进行密码认证为例，说明如何对 NATS 网关进行接入认证的配置。
 
@@ -217,13 +217,9 @@ NATS 网关使用 NATS 协议的 CONNECT 报文中的信息来生成客户端的
 3. 完成配置后，点击**创建**。在**接入认证**中将出现**HTTP 服务**设置页面。
 4. 确认您的设置，点击**更新**。
 
-#### 通过 REST API 或配置文件配置接入认证
+#### 通过 REST API 配置
 
-以下为通过 REST API 或 `emqx.conf` 为 NATS 网关创建一个内置数据库认证呃示例：
-
-:::: tabs type:card
-
-::: tab REST API
+以下为通过 REST API 或 `base.hocon` 为 NATS 网关创建一个内置数据库认证的示例：
 
 ```bash
 curl -X 'POST' \
@@ -241,9 +237,9 @@ curl -X 'POST' \
   "user_id_type": "username"
 }'
 ```
-:::
+#### 通过配置文件配置
 
-::: tab 配置文件
+以下为通过 `base.hocon` 为 NATS 网关创建一个内置数据库认证的示例：
 
 ```properties
 gateway.nats {

@@ -57,11 +57,11 @@ Starting from EMQX 5.10.0, the NATS gateway can be enabled in three ways:
 
 - Through the Dashboard
 - Using the REST API
-- By editing the `emqx.conf` configuration file
+- By editing the `base.hocon` configuration file
 
 ::: tip
 
-In cluster mode, configurations made via the Dashboard or REST API are automatically applied across all nodes. To apply settings to a specific node only, use the `emqx.conf` configuration file on that node.
+In cluster mode, configurations made via the Dashboard or REST API are automatically applied across all nodes. To apply settings to a specific node only, use the `base.hocon` configuration file on that node.
 
 :::
 
@@ -105,7 +105,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
 ```
 ### Enable via Configuration File
 
-You can use the following configuration example to enable the NATS gateway via `emqx.conf`:
+You can use the following configuration example to enable the NATS gateway via `base.hocon`:
 
 ```properties
 gateway.nats {

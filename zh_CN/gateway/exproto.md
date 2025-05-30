@@ -70,13 +70,13 @@ message SocketCreatedRequest {
 
 ## 启用 ExProto 网关
 
-从 EMQX 5.0 开始，您可以通过 Dashboard，REST API 或配置文件 `emqx.conf` 启用和配置 ExProto 网关。本节演示了如何通过 Dashboard 启用 ExProto 网关。
+从 EMQX 5.0 开始，您可以通过 Dashboard，REST API 或配置文件 `base.hocon` 启用和配置 ExProto 网关。本节演示了如何通过 Dashboard 启用 ExProto 网关。
 
 在 EMQX Dashboard 左侧导航目录中点击**管理** -> **网关**。**网关**页面上列出了所有支持的网关。找到 **ExProto** 并点击**操作**列中的**配置**按钮，您将进入**初始化 ExProto** 页面。
 
 ::: tip
 
-如果 EMQX 在集群中运行，通过 Dashboard 或 RESP API 的配置将在整个集群中生效。如果您只希望针对单个节点进行设置，可以使用配置文件 `emqx.conf` 配置网关。
+如果 EMQX 在集群中运行，通过 Dashboard 或 RESP API 的配置将在整个集群中生效。如果您只希望针对单个节点进行设置，可以使用配置文件 `base.hocon` 配置网关。
 
 :::
 

@@ -6,7 +6,7 @@ Stomp 网关基于 [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 Stomp 网关。
 
-也可以通过 REST API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 base.hocon 来启用，例如：
 
 :::: tabs type:card
 
@@ -78,7 +78,7 @@ Stomp 网关使用 STOMP 协议的 CONNECT 或 STOMP 报文中的信息来生成
 - Username：为 CONNECT 或 STOMP 报文 Headers 中的 `login` 字段的值。
 - Password：为 CONNECT 或 STOMP 报文 Headers 中的 `passcode` 字段的值。
 
-例如，通过 REST API 或 emqx.conf 为 Stomp 网关创建一个内置数据库认证：
+例如，通过 REST API 或 base.hocon 为 Stomp 网关创建一个内置数据库认证：
 
 :::: tabs type:card
 

@@ -6,7 +6,7 @@ CoAP 网关以 [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.
 
 EMQX 5.0 可以通过 Dashboard 配置并启用 CoAP 网关。
 
-也可以通过 REST API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 base.hocon 来启用，例如：
 
 :::: tabs type:card
 
@@ -79,7 +79,7 @@ CoAP 网关支持 2 种工作模式：
 是否开启 `连接模式` 由 `connection_required` 参数决定，例如
 
 ```properties
-# emqx.conf
+# base.hocon
 gateway.coap {
 
   ## true: 开启连接模式
@@ -106,7 +106,7 @@ gateway.coap {
 - [JWT 认证](../access-control/authn/jwt.md)
 - [LDAP 认证](../access-control/authn/ldap.md)
 
-例如，通过 REST API 或 emqx.conf 为 CoAP 网关创建一个内置数据库认证：
+例如，通过 REST API 或 base.hocon 为 CoAP 网关创建一个内置数据库认证：
 
 :::: tabs type:card
 

@@ -6,7 +6,7 @@ MQTT-SN 网关基于 [MQTT-SN v1.2](https://www.oasis-open.org/committees/downlo
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 MQTT-SN 网关。
 
-也可以通过 REST API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 base.hocon 来启用，例如：
 
 :::: tabs type:card
 
@@ -73,7 +73,7 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 - Username：默认为空
 - Password：默认为空
 
-例如，通过 REST API 或 emqx.conf 为 MQTT-SN 网关创建一个 HTTP 认证：
+例如，通过 REST API 或 base.hocon 为 MQTT-SN 网关创建一个 HTTP 认证：
 
 :::: tabs type:card
 

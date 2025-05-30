@@ -72,7 +72,7 @@
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
 
-也使用 REST API 或 emqx.conf 进行管理，例如：
+也使用 REST API 或 base.hocon 进行管理，例如：
 
 :::: tabs type:card
 
