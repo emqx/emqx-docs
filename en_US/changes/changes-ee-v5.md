@@ -2,21 +2,39 @@
 
 ## 5.10.0
 
+*Release Date: 2025-06-0*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.0.
+
 ### Enhancements
 
-- [#15253](https://github.com/emqx/emqx/pull/15253) Added two new multi-tenancy APIs: `GET /mt/ns_list_details` and `GET /mt/ns_list_managed_details`.  Both work similarly to their existing counterpars, but returns extra metadata associated with the namespace besides its name.
+#### Core MQTT Functionalities
 
-- [#15248](https://github.com/emqx/emqx/pull/15248) Added new Connector and Action for [Doris](https://doris.apache.org/) using SQL statements.
+- [#15118](https://github.com/emqx/emqx/pull/15118) Provided a new configuration option `mqtt.subscription_max_qos_rules` to control the maximum QoS level allowed per client subscription. This allows administrators to limit the QoS requested in SUBSCRIBE packets based on matching rules for specific topics. Currently, only a limited set of matching rules (predicates) is supported, based on the topic in the SUBSCRIBE packet.
 
-- [#15218](https://github.com/emqx/emqx/pull/15218) Added support for MSK IAM authentication for all Kafka Connectors (Kafka Producer, Kafka Consumer, Confluent, Azure Event Hub).
+#### Deployment
 
-- [#15201](https://github.com/emqx/emqx/pull/15201) 
-  Add `base_url` option to AI completion provider configuration.
+- [#14791](https://github.com/emqx/emqx/pull/14791) Added support for custom annotations on the EMQX StatefulSet in the Helm chart, enabling automated pod restarts on ConfigMap or Secret changes. This improves automation and reliability when managing EMQX on Kubernetes.
+
+#### Access Control
+
+- [#15250](https://github.com/emqx/emqx/pull/15250) Improved LDAP bind authentication to correctly extract the `is_superuser` flag from LDAP entry attributes.
+  Previously, the `is_superuser` value was always set to `false`, even when the LDAP entry included a valid `isSuperuser` attribute.
+- [#15249](https://github.com/emqx/emqx/pull/15249) Improved the LDAP authentication and authorization.
+
+  * Validation for the LDAP `filter`/`base_dn` settings was added.
+  * Fixed various variable interpolation issues.
+
+#### Rule Engine
+
+- [#15001](https://github.com/emqx/emqx/pull/15001) Add `ai_completion` function to the Rule Engine SQL that allows to use AI services to process the data.
+
+- [#15201](https://github.com/emqx/emqx/pull/15201) Add `base_url` option to AI completion provider configuration.
 
 - [#15188](https://github.com/emqx/emqx/pull/15188) Rule event topics now have namespaces.
 
   | Previous event topic                    | New event topic                         |
-  |:----------------------------------------|:----------------------------------------|
+  | :-------------------------------------- | :-------------------------------------- |
   | `$events/client_connected`              | `$events/client/connected`              |
   | `$events/client_disconnected`           | `$events/client/disconnected`           |
   | `$events/client_connack`                | `$events/client/connack`                |
@@ -34,6 +52,8 @@
   Previous event topics are kept for backwards compatibility.
 
 - [#15175](https://github.com/emqx/emqx/pull/15175) Added support for matching event topics in Rule Engine using wildcards.  Now, it's possible to use `$events/#`, `$events/sys/+` and similar for matching multiple events at once.
+
+#### Smart Data Hub
 
 - [#15174](https://github.com/emqx/emqx/pull/15174) Added support to upload Protobuf source file bundles for Schema Registry.
 
@@ -58,31 +78,19 @@
     -F root_proto_file=a.proto
   ```
 
-- [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
+#### Data Integration
 
-- [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
+- [#15248](https://github.com/emqx/emqx/pull/15248) EMQX supports data integration with [Doris](https://doris.apache.org/), supporting data writing using SQL statements.
+
+- [#15218](https://github.com/emqx/emqx/pull/15218) Added support for MSK IAM authentication for all Kafka Connectors (Kafka Producer, Kafka Consumer, Confluent, Azure Event Hub).
 
 - [#15157](https://github.com/emqx/emqx/pull/15157) Added support for specifying private key file path for Snowflake Connector instead of using password.
 
   Users should either use password, private key, or neither (set parameters in `/etc/odbc.ini`).
 
-- [#15138](https://github.com/emqx/emqx/pull/15138) Introduced NATS Gateway for accepting NATS client connections over TCP/TLS, WS/WSS transport protocols.
+- [#14983](https://github.com/emqx/emqx/pull/14983) EMQX supports data integration with S3Tables.
 
-  For example, the NATS gateway will transform the following NATS message:
-  ```
-  PUB sub.t 5  
-  hello
-  ```
-
-  into an MQTT message with the topic `sub/t` and payload `hello`, while supporting
-  seamless integration with existing EMQX features such as the rule engine, data bridging,
-  and more.
-
-- [#15043](https://github.com/emqx/emqx/pull/15043) Instrument the DS Raft backend with basic metrics to provide insights into cluster status, database overview, shard replication and replica transitions.
-
-- [#14983](https://github.com/emqx/emqx/pull/14983) Added new Connector and Action that appends data to S3Tables.
-
-  ### Current limitations
+  **Current limitations**:
 
   - Only [S3Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) catalogs are supported (hence table data and metadata must live in S3).
   - Only [Iceberg table format version 2](https://iceberg.apache.org/spec/#version-2-row-level-deletes) is supported.
@@ -92,54 +100,67 @@
     - `bucket[N]`
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
 
-- [#15250](https://github.com/emqx/emqx/pull/15250) For LDAP bind authentication, provided the ability to fetch the `is_superuser` flag from entry attributes.
+### Multi-Tenancy
 
-- [#15249](https://github.com/emqx/emqx/pull/15249) Improved the LDAP authentication and authorization.
+- [#15253](https://github.com/emqx/emqx/pull/15253) Added two new multi-tenancy APIs: `GET /mt/ns_list_details` and `GET /mt/ns_list_managed_details`.  Both work similarly to their existing counterpars, but returns extra metadata associated with the namespace besides its name.
+- [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
 
-  * Validation for the LDAP `filter`/`base_dn` settings was added.
-  * Fixed various variable interpolation issues.
+### CLI
 
-- [#15118](https://github.com/emqx/emqx/pull/15118) Provide configuration option `mqtt.subscription_max_qos_rules` to allow tuning allowed QoS levels on a per-subscription basis.
+- [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
 
-- [#15001](https://github.com/emqx/emqx/pull/15001) Add `ai_completion` function to the Rule Engine SQL that allows to use AI services to process the data.
+### Gateway
 
-- [#14791](https://github.com/emqx/emqx/pull/14791) Add additionalAnnotations functionality for StatefulSet in Helm charts
+- [#15138](https://github.com/emqx/emqx/pull/15138) Introduced NATS Gateway for accepting NATS client connections over TCP/TLS, WS/WSS transport protocols.
+
+  For example, the NATS gateway will transform the following NATS message into an MQTT message with the topic `sub/t` and payload `hello`, while supporting seamless integration with existing EMQX features such as the rule engine, data integration, and more:
+  ```
+  PUB sub.t 5  
+  hello
+  ```
+
+
+#### Durable Storage
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) Instrument the DS Raft backend with basic metrics to provide insights into cluster status, database overview, shard replication, and replica transitions.
 
 ### Bug Fixes
+
+#### Access Control
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed incorrect error message format when blacklist creation fails.
+
+#### Clustering
 
 - [#15304](https://github.com/emqx/emqx/pull/15304) Fixed the problem related to core node discovery by replicant nodes when using `static` discovery strategy.
 
   Previously, the replicants could ignore core nodes not explicitly listed in the `static_seeds` list.
   This could lead to an inconsistent cluster view and load imbalance.
 
-- [#15285](https://github.com/emqx/emqx/pull/15285) Added `content-type` header to External HTTP Schema requests.
+- [#15180](https://github.com/emqx/emqx/pull/15180)Fixed an issue in `ekka_locker` where RPC (`badrpc`) errors were not handled correctly, causing false-positive lock successes. This could lead to inconsistent lock states and deadlocks in clustered deployments.
 
-- [#15274](https://github.com/emqx/emqx/pull/15274) Now, any health check failure for Postgres, Matrix and TimescaleDB Connectors will trigger a full reconnection.  Prior to this change, there were situations where the connection would become unusable and attempts to use it would hang, potentially leading to out of memory issues.
-
-- [#15247](https://github.com/emqx/emqx/pull/15247) Fixed an issue where `function_clause` error logs would be printed when attempting to call `emqx ctl conf remove dashboard.sso.<BACKEND_NAME>`.
-
-- [#15242](https://github.com/emqx/emqx/pull/15242) Fixed an issue where, upon node restart after configuring limiters for multi-tenancy, logs like the following would be logged while initializing limiters:
-
-  ```
-  2025-05-15T16:45:13.276895+08:00 [error] clientid: ns3mqttx_620053b2_100, msg: hook_callback_exception, peername: 127.0.0.1:39364, username: ns3, reason: {limiter_group_not_found,{mt_tenant,<<"ns3">>}}, stacktrace: [{emqx_limiter,connect,1,[{file,"emqx_limiter.erl"},{line,134}]}
-  ```
-
-- [#15234](https://github.com/emqx/emqx/pull/15234) Added trace events for rule testing when either the Action is not installed yet, and for Republish Fallback actions.  These will now appear in the frontend while testing Rules with simulated input data.
-
-- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the dashboard would inadvertently change the password to `******`.
-
-- [#15219](https://github.com/emqx/emqx/pull/15219) Reduced the amount of logs generated by Clickhouse Connector when a health check timeout occurs.  Also, when a health check timeout occurs for this Connector, we now mark it as `connecting` instead of `disconnected`, meaning that a full reconnect attempt will no longer be triggered by such timeouts.
-
-- [#15216](https://github.com/emqx/emqx/pull/15216) Fix a crash of `emqx_telemetry` process when there are plugins activated.
-
-- [#15190](https://github.com/emqx/emqx/pull/15190) Support setting hard-coded QoS and topic in message transformation.
-
-- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed incorrect error message format when blacklist creation fails.
-
-- [#15180](https://github.com/emqx/emqx/pull/15180) Reduced the risk of channel registration deadlocks.
+#### Security
 
 
 - [#15159](https://github.com/emqx/emqx/pull/15159) Now, after a CRL Distribution Point URL fails to be refreshed after a number of consecutive attempts (60 s by default), it'll be evicted and stop being refreshed, instead of flooding logs.
+
+#### Rule Engine
+
+- [#15247](https://github.com/emqx/emqx/pull/15247) Fixed an issue where `function_clause` error logs would be printed when attempting to call `emqx ctl conf remove dashboard.sso.<BACKEND_NAME>`.
+
+#### Smart Data Hub
+
+- [#15285](https://github.com/emqx/emqx/pull/15285) Added `content-type` header to External HTTP Schema requests.
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the dashboard would inadvertently change the password to `******`.
+- [#15190](https://github.com/emqx/emqx/pull/15190) Support setting hard-coded QoS and topic in message transformation.
+
+#### Data Integration
+
+- [#15274](https://github.com/emqx/emqx/pull/15274) Now, any health check failure for Postgres, Matrix and TimescaleDB Connectors will trigger a full reconnection.  Prior to this change, there were situations where the connection would become unusable and attempts to use it would hang, potentially leading to out of memory issues.
+
+- [#15234](https://github.com/emqx/emqx/pull/15234) Added trace events for rule testing when either the Action is not installed yet, and for Republish Fallback actions.  These will now appear in the frontend while testing Rules with simulated input data.
+
+- [#15219](https://github.com/emqx/emqx/pull/15219) Reduced the amount of logs generated by Clickhouse Connector when a health check timeout occurs.  Also, when a health check timeout occurs for this Connector, we now mark it as `connecting` instead of `disconnected`, meaning that a full reconnect attempt will no longer be triggered by such timeouts.
 
 - [#15154](https://github.com/emqx/emqx/pull/15154) Fixed a rare race condition in Actions that run in aggregated mode (S3, Azure Blob Storage, Snowflake) that could result in crash logs similar to the following:
 
@@ -151,9 +172,22 @@
 - [#15147](https://github.com/emqx/emqx/pull/15147) When running Rule tests with simulated input data, some Actions would not emit trace events after rendering requests.  This has been fixed.
 
   Affected Actions:
+
   - Couchbase
   - Snowflake
   - IoTDB (Thrift driver)
+
+#### Multi-Tenancy
+
+- [#15242](https://github.com/emqx/emqx/pull/15242) Fixed an issue where, upon node restart after configuring limiters for multi-tenancy, logs like the following would be logged while initializing limiters:
+
+  ```
+  2025-05-15T16:45:13.276895+08:00 [error] clientid: ns3mqttx_620053b2_100, msg: hook_callback_exception, peername: 127.0.0.1:39364, username: ns3, reason: {limiter_group_not_found,{mt_tenant,<<"ns3">>}}, stacktrace: [{emqx_limiter,connect,1,[{file,"emqx_limiter.erl"},{line,134}]}
+  ```
+
+#### Telemetry
+
+- [#15216](https://github.com/emqx/emqx/pull/15216) Fixed a crash of `emqx_telemetry` process when there are plugins activated.
 
 ## 5.9.0
 
@@ -273,7 +307,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#14892](https://github.com/emqx/emqx/pull/14892) Enhanced cluster load rebalancing:
   
      - Fixed load imbalance in core/replicant cluster. Previously, under certain conditions, all transactions from the replicants could be sent to a single core node.
-      
+     
   - Add CLI commands for rebalancing replicant nodes in relation to core nodes:
     - `emqx_ctl cluster core rebalance plan`
   
