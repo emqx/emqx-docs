@@ -8,7 +8,7 @@
 
 Apache Doris 数据集成是 EMQX 中开箱即用的功能，通过简单的配置即可实现复杂的业务开发。在一个典型的物联网应用中，EMQX 作为物联网平台，负责接入设备，进行消息传输，Apache Doris 作为数据存储平台，负责设备状态与元数据的存储，以及消息数据存储和数据分析等。
 
-![EMQX Apache Doris 数据集成](./assets/emqx-integraion-mysql.jpg)
+<img src="./assets/doris-integration.png" alt="doris-integration" style="zoom:67%;" />
 
 EMQX 通过规则引擎与 Sink 将设备事件和数据转发至 Apache Doris，应用读取 Apache Doris 中数据即可感知设备状态，获取设备上下线记录，以及分析设备数据。其具体的工作流程如下：
 

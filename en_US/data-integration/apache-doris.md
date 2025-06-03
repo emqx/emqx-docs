@@ -8,7 +8,7 @@ This guide provides practical instructions on how to configure and validate the 
 
 Apache Doris data integration is an out-of-the-box feature in EMQX, which enables complex business development through simple configuration. In a typical IoT application, EMQX, as the IoT platform, is responsible for device connection and transmitting messages. Apache Doris, as the data storage platform, is responsible for storing device status and metadata, as well as message data storage and data analysis.
 
-<img src="./assets/emqx-integraion-mysql.jpg" alt="EMQX Apache Doris 数据集成" style="zoom:67%;" />
+<img src="./assets/doris-integration.png" alt="doris-integration" style="zoom:67%;" />
 
 EMQX forwards device events and data to Apache Doris through the rule engine and Sink. Applications can read the data in Apache Doris to sense the device status, obtain device online and offline records, and analyze device data. The specific workflow is as follows:
 
