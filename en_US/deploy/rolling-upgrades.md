@@ -2,7 +2,7 @@
 
 In a clustered deployment, EMQX nodes can be upgraded one at a time without incurring any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../deploy/cluster/rebalancing.md).
 
-## Important Notice for Upgrades to EMQX 5.9 or Later
+## Important Licensing Notice for Upgrades to EMQX 5.9 or Later
 
 Starting from version 5.9.0, EMQX Enterprise is released under the Business Source License (BSL) 1.1, replacing the previous model that separated Open Source and Enterprise editions.
 
@@ -24,25 +24,38 @@ If a License configuration is added to `emqx.conf`, any runtime changes made fro
 
 :::
 
-## Upgrades to EMQX 5.10 or Later
+## Rolling Upgrade Considerations for EMQX 5.10 or Later
 
-EMQX 5.10.0 no longer supports legacy _v1_ routing storage schema. Only _v2_ storage schema is supported, which became the default in EMQX 5.4.0. Clusters running older EMQX versions—or those went through incremental rolling upgrades from earlier releases—may still use the _v1_ storage schema. In such cases, upgrading to EMQX 5.10.0+ requires a full cluster restart; rolling upgrades are not supported.
+Starting from EMQX 5.10.0, only the _v2_ routing storage schema is supported. The legacy _v1_ schema, which was the default in versions before 5.4.0, is no longer compatible. As a result, clusters still using the *v1* schema, particularly those that have been incrementally upgraded from earlier versions, cannot perform rolling upgrades to 5.10.0 or later.
 
-To check the current routing storage schema, run:
+::: tip Important
+
+If your cluster is still using the *v1* routing schema, a full cluster restart is required to complete the upgrade.
+
+:::
+
+### Determine the Current Routing Schema
+
+Before proceeding, check which routing schema your EMQX cluster uses by running the following command:
 ```
 $ emqx eval 'emqx_router:get_schema_vsn()'
 ```
 
-If the output is `v2`, regular rolling upgrade is possible.
+If the output is `v2`, you can proceed with a regular rolling upgrade.
 
-If the output is `v1`, rolling upgrade is not possible. Follow these steps:
-1. Stop **all** nodes.
-2. Remove `broker.routing.storage_schema` option from applicable configuration files, if present.
-3. Upgrade all nodes to 5.10.0 or newer.
-4. Start core nodes.
+If the output is `v1`, you must perform a full cluster restart following the steps below.
+
+### Upgrade Procedure for _v1_ Routing Schema
+
+If your cluster uses the *v1* schema, follow these steps to upgrade to EMQX 5.10.0 or later:
+
+1. Stop **all** nodes in the cluster.
+2. Remove the `broker.routing.storage_schema` option from any configuration file where it is defined.
+3. Upgrade all nodes to version 5.10.0 or newer.
+4. Start core nodes first.
 5. Start replicant nodes.
 
-## How to Perform a Rolling Upgrade
+## General Procedure for Performing a Rolling Upgrade
 
 To upgrade each node in the cluster without downtime, follow these steps:
 
@@ -56,18 +69,17 @@ To upgrade each node in the cluster without downtime, follow these steps:
 Do not perform cluster-wide config changes during a rolling upgrade. Configuration changes made from the Dashboard, HTTP API, or CLI are applied to all nodes in the cluster. Making configuration changes during a rolling upgrade may cause nodes to become out of sync.
 :::
 
-## Upgrade with RPM and DEB Packages
+## Rolling Upgrade Using RPM and DEB Packages
 
 When using RPM or DEB packages, you can upgrade EMQX by simply installing the newer version package.
 
-## Upgrade with Docker
+## Rolling Upgrade Using Docker
 
 When using Docker, you can upgrade EMQX by simply pulling the newer version image and restarting the container.
 
-## Upgrade from Open Source to Enterprise Edition
+## Rolling Upgrade from Open Source to Enterprise Edition
 
-If you are running an Open Source version of EMQX and would like to upgrade to the Enterprise Edition,
-the process is the same as upgrading to a newer version of the Open Source Edition.
+If you are running an open-source version of EMQX and would like to upgrade to the Enterprise Edition, the process is the same as upgrading to a newer version of the Open Source Edition.
 
 There is no difference in installation and upgrade between the Open Source and Enterprise Editions of EMQX.
 The only thing special is that you need to manually [configure your License](./license.md) for the Enterprise edition nodes after each upgrade.
