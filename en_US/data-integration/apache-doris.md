@@ -1,6 +1,6 @@
 # Ingest MQTT Data into Apache Doris
 
-[Apache Doris](https://doris.apache.org/) is a modern MPP (Massively Parallel Processing) analytical database system known for high concurrency, high performance, and ease of use. It is particularly well-suited for scenarios involving real-time analytics and data warehousing. With EMQX 5.10.0, you can integrate MQTT data with Apache Doris, enabling efficient storage, real-time analysis, and powerful data visualization.
+[Apache Doris](https://doris.apache.org/) is a modern Massively Parallel Processing (MPP) analytical database system known for high concurrency, high performance, and ease of use. It is particularly well-suited for scenarios involving real-time analytics and data warehousing. With EMQX 5.10.0, you can integrate MQTT data with Apache Doris, enabling efficient storage, real-time analysis, and powerful data visualization.
 
 This guide provides practical instructions on how to configure and validate the data integration between EMQX and Apache Doris.
 
@@ -8,7 +8,7 @@ This guide provides practical instructions on how to configure and validate the 
 
 Apache Doris data integration is an out-of-the-box feature in EMQX, which enables complex business development through simple configuration. In a typical IoT application, EMQX, as the IoT platform, is responsible for device connection and transmitting messages. Apache Doris, as the data storage platform, is responsible for storing device status and metadata, as well as message data storage and data analysis.
 
-<img src="/Users/emqx/Documents/GitHub/emqx-docs/en_US/data-integration/assets/emqx-integraion-mysql.jpg" alt="EMQX Apache Doris 数据集成" style="zoom:67%;" />
+<img src="./assets/emqx-integraion-mysql.jpg" alt="EMQX Apache Doris 数据集成" style="zoom:67%;" />
 
 EMQX forwards device events and data to Apache Doris through the rule engine and Sink. Applications can read the data in Apache Doris to sense the device status, obtain device online and offline records, and analyze device data. The specific workflow is as follows:
 
@@ -58,6 +58,11 @@ For example:
 mysql -uroot -P9030 -h127.0.0.1
 ```
 
+You need to create a database and two tables in Apache Doris:
+
+- The data table `emqx_messages` is for storing the client ID, topic, payload, and creation time of every message.
+- The data table `emqx_client_events` is for storing the client ID, event type, and creation time of every event.
+
 ```sql
 create database mqtt;
 use mqtt;
@@ -78,8 +83,6 @@ create table if not exists
     created_at datetime)
   properties (replication_num = 1);
 ```
-
-
 
 ## Create a Connector
 
@@ -102,13 +105,13 @@ The following steps assume that you run both EMQX and Apache Doris on the local 
 
 ## Create a Rule with Apache Doris Sink for Message Storage
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Apache Doris data table `emqx_messages` via configured Sink.
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Apache Doris data table `emqx_messages` via the configured Sink.
 
 This demonstration assumes that you run both EMQX and Apache Doris on the local machine. If you have Apache Doris and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
 
-2. Click **Create** on the top right corner of the page.
+2. Click **Create** in the top right corner of the page.
 
 3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** with the following statement, which means the MQTT messages under topic `t/#`  will be saved to Apache Doris.
 
@@ -143,7 +146,7 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
      ${clientid},
      ${topic},
-      ${payload},
+     ${payload},
      FROM_UNIXTIME(${timestamp}/1000)
    )
    ```

@@ -103,6 +103,7 @@ EMQX supports data integrations with the following types of data systems:
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
 - [Lindorm](./lindorm)
+- [Doris](./apache-doris)
 
 **NoSQL**
 
