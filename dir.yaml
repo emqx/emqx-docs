@@ -327,6 +327,9 @@
     - title_en: Webhook
       title_cn: Webhook
       path: data-integration/webhook
+    - title_en: Apache Doris
+      title_cn: Apache Doris
+      path: data-integration/apache-doris
     - title_en: Apache Kafka
       title_cn: Apache Kafka
       path: data-integration/data-bridge-kafka
