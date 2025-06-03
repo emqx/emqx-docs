@@ -119,8 +119,9 @@ Before adding the S3 Tables Sink, you need to create the corresponding connector
 3. Select **S3 Tables** as the connector type and click next.
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-s3-tables`.
 5. Provide the required connection details:
-   - **Table Bucket ARN**: Enter the Amazon Resource Name (ARN) of your S3 Table Bucket. You can find this in the Table buckets section in the AWS Console.
+   - **S3Tables ARN**: Enter the Amazon Resource Name (ARN) of your S3 Table Bucket. You can find this in the Table buckets section in the AWS Console.
    - **Access Key ID** and **Secret Access Key**: Enter the AWS access credentials associated with an IAM user or role that has permission to access S3 Tables and Athena.
+   - **Enable TLS**: TLS is enabled by default when connecting to S3 Tables. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
    - **Request Timeout**: Specify the timeout duration for API requests sent to the S3 Tables Iceberg service.
 7. Use the default values for the remaining settings.
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the S3 Tables service.
