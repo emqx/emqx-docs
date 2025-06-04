@@ -28,8 +28,12 @@ The data integration with Apache Doris can bring the following features and adva
 
 - **Flexible Event Handling**: Through the EMQX rules engine, Apache Doris can handle device lifecycle events, greatly facilitating the development of various management and monitoring tasks required for implementing IoT applications. By analyzing event data, you can promptly detect device failures, abnormal behavior, or trend changes to take appropriate measures.
 - **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to Apache Doris, making storage and usage more convenient.
-- **Flexible Data Operations**: With SQL templates provided by Apache Doris Sink, it's easy to write or update data from specific fields to the corresponding tables and columns in the Apache Doris database, enabling flexible data storage and management.
-- **Integration of Business Processes**: The data integration allows you to integrate device data with Apache Doris's rich ecosystem applications, facilitating integration with systems like ERP, CRM, or other custom business systems to achieve advanced business processes and automation.
+- **Real-Time Data Ingestion**
+   Apache Doris supports real-time data ingestion via HTTP and JDBC interfaces. When integrated with EMQX, MQTT data can be written directly into Doris tables with low latency, making it ideal for scenarios that require immediate query and analytics capabilities.
+- **Streaming Synchronization**
+   Apache Doris also supports ingesting real-time data streams from sources like Flink, Kafka, and transactional databases. This makes it ideal for building unified pipelines that combine MQTT data from EMQX with other streaming data sources for comprehensive real-time analysis.
+- **Standard SQL and Ecosystem Compatibility**
+   Doris is fully compatible with MySQL syntax and supports standard SQL, allowing users to perform powerful analytical queries without learning new languages. It integrates easily with business intelligence (BI) tools and client applications for dashboards, reports, and automation workflows.
 - **Runtime Metrics**: Support for viewing runtime metrics of each Sink, such as total message count, success/failure counts, current rates, and more.
 
 Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
