@@ -294,3 +294,90 @@ These counters are specific to the "wildcard optimized" storage layout. They mea
 
 Increasing the `durable_storage.messages.layout.epoch_bits` parameter can help improve this ratio.
 
+### `emqx_ds_raft_db_shards_num`
+
+Number of shards DB is split into.
+
+### `emqx_ds_raft_db_sites_num`
+
+This gauge tracks number of current and assigned sites a DS DB is replicated across.
+
+Most of the time number of current sites is equal to number of assigned sites. If current stays different from assigned for a long time, something is likely wrong with the replica transfers.
+
+### `emqx_ds_raft_shard_replication_factor`
+
+Tracks number of replicas in the replica set of a DS DB shard.
+
+If this number falls below the configured and expected replication factor, durability is at risk. Consider rebalancing replicas across more sites.
+
+### `emqx_ds_raft_db_shards_online_num`
+
+Tracks number of DS DB shards actively mananged on this node.
+
+This number should be equal to the number of shards currently assigned to this node. If this is not the case, availability might be compromised. Check the logs for details.
+
+### `emqx_ds_raft_shard_transition_queue_len`
+
+Tracks number of pending replica set transitions for a DS DB shard.
+
+If this number stays non-zero for a long time, something is wrong with the replica transfers.
+
+### `emqx_ds_raft_shard_transitions`
+
+Counts number of started / completed / skipped / crashed replica set transitions of a DB shard.
+
+Crashed transitions should always be zero. If this is not the case, consider checking the logs for errors.
+
+### `emqx_ds_raft_shard_transition_errors`
+
+Counts number of transient errors occured during orchestration of replica set transitions of a DB shard.
+
+If this counter grows, something is wrong with the replica transfers. Consider checking the logs for errors.
+
+### `emqx_ds_raft_snapshot_reads`
+
+Counts number of started / completed snapshot reads for a DS DB shard, when a shard was the source of snapshot replication.
+
+### `emqx_ds_raft_snapshot_read_errors`
+
+Counts number of errors occured during reading snapshot on source DS DB shard, which caused snapshot replication to be aborted.
+
+Errors are not expected to happen. Look for possible reasons in the logs.
+
+### `emqx_ds_raft_snapshot_read_chunks`
+
+Counts number of individual chunks read on DS DB shard acting as source of snapshot transfer, and later transferred to the recepient.
+
+### `emqx_ds_raft_snapshot_read_chunk_bytes`
+
+Counts number of bytes read as chunks on source DS DB shard.
+
+### `emqx_ds_raft_snapshot_writes`
+
+Counts number of started / completed snapshot writes for a DS DB shard, when a shard was the recepient of snapshot replication.
+
+### `emqx_ds_raft_snapshot_write_errors`
+
+Counts number of errors occured during writing snapshot to recepient DS DB shard, which caused snapshot replication to be aborted.
+
+This is also not expected to grow. Consider checking the logs for details.
+
+### `emqx_ds_raft_snapshot_write_chunks`
+
+Counts number of individual chunks received from source DS DB shard, and written on the recepient.
+
+### `emqx_ds_raft_snapshot_write_chunk_bytes`
+
+Counts number of bytes written as chunks on recepient DS DB shard.
+
+### `emqx_ds_raft_current_timestamp_us`
+
+Tracks latest operation timestamp currently replicated by a shard server (in microseconds).
+
+Normally each replica should always have the same timestamp. If this is not the case, something is wrong with the replication.
+
+### `emqx_ds_raft_rasrv_state_changes`
+
+Counts number of times Raft server turned into canidate / follower / leader.
+
+Frequent state changes is a sign of instability. Consider checking the logs for details.
