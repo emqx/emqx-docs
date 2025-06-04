@@ -404,6 +404,30 @@ This section describes some advanced configuration options that can optimize the
 | Max Linger Bytes                          | Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer. | `10` MB            |
 | Health Check Interval                     | The time interval for checking the running status of the connector. | `15` second        |
 
+### Authentication
+
+The Kafka Connector supports the following authentication mechanisms:
+
+- **None**: no authentication.
+
+- **MSK IAM**: _for EMQX nodes deployed on EC2 instances connecting to MSK clusters_, this uses the EC2 metadata API to generate a token based on the policies attributed to the EC2 instance to connect to the MSK cluster.
+
+::: warning
+
+MSK IAM authentication **only** applies for EMQX nodes deployed on EC2 instances connecting to MSK clusters, since it relies on the AWS Metadata API.
+
+:::
+
+- **Basic auth**: uses just simple username and password to authenticate.
+
+- **Kerberos**: uses Kerberos GSSAPI to authenticate.  Requires specifying a Kerberos Principal and a Kerberos Keytab file path.
+
+::: warning
+
+The Kerberos Keytab file path has to be placed in the same path in all EMQX nodes, and the EMQX service runner user requires read permission.
+
+:::
+
 ## More Information
 
 EMQX provides bunches of learning resources on the data integration with Apache Kafka. Check out the following links to learn more:
