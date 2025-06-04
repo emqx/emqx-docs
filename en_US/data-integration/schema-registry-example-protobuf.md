@@ -10,27 +10,36 @@ For example, you to republish a message with the `name` field equal to "Shawn" t
 
 ### Create Schema
 
-1. Go to the Dashboard, select **Integration** -> **Schema** from the left navigation menu.
+To enable the rule engine to correctly decode or encode Protobuf messages, you must first register a schema that defines the structure of the Protobuf message using the Schema Registry.
 
-2. Create a Protobuf schema using the following parameters:
+1. Go to the Dashboard, select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
+2. Under the **Internal Schema** tab, click **Create**.
+3. Enter the **Name** of the schema, for example: `protobuf_person`. This name will be used in encoding and decoding functions.
+4. Select the schema **Type**: choose `Protobuf`.
 
-   - **Name**: `protobuf_person`
+3. Select a **Creation Method**. There are two options:
 
-   - **Type**: `Protobuf`
+   - **Input** mode (for simple schema):
 
-   - **Schema**:
+     - Select **Input** as the creation method.
 
-     ```protobuf
-     message Person {
-       required string name = 1;
-       required int32 id = 2;
-       optional string email = 3;
-     }
-     ```
+     - Paste the Protobuf definition directly into the **Schema** field, for example:
 
-3. Click **Create**.
+       ```protobuf
+       message Person {
+         required string name = 1;
+         required int32 id = 2;
+         optional string email = 3;
+       }
+       ```
 
-![](./assets/schema_registry/protobuf_create1.png)
+   - **Upload Protobuf Bundle** (for complex or multi-file schemas):
+
+     - Select **Upload Protobuf Bundle** as the creation method.
+     - Click **Select file** to upload a `.zip` bundle containing your `.proto` files.
+     - In **Root Proto File**, specify the entry point file name (e.g., `person.proto`).
+
+4. Click **Create** to register the schema.
 
 ### Create Rule
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.

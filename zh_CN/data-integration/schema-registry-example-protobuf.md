@@ -10,27 +10,39 @@
 
 ### 创建 Schema
 
-1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **Schema**。
+为了使规则引擎能够正确地解码或编码 Protobuf 消息，您需要先在 Schema Registry 中注册一个用于定义 Protobuf 消息结构的 Schema。
 
-2. 使用下面的参数创建一个 Protobuf Schema:
+1. 在 Dashboard 左侧导航栏中选择**数据智能中心** -> **Schema Registry**。
 
-   - **名称**：protobuf_person
+2. 在**内部 Schema** 页签下点击**创建**。
 
-   - **类型**：protobuf
+3. 输入 Schema 的**名称**，例如：`protobuf_person`。名称将用于编解码函数中。
 
-   - **Schema**：下面的 protobuf schema 定义了一个 Person 消息。
+4. 选择 Schema **类型**：选择 `Protobuf`。
 
-     ```protobuf
-     message Person {
-       required string name = 1;
-       required int32 id = 2;
-       optional string email = 3;
-     }
-     ```
+5. 选择一种**创建方式**。支持以下两种模式：
 
-3. 点击**创建**。
+   - **输入**模式（适用于简单的 schema）：
 
-<img src="./assets/protobuf_create1.png" alt="protobuf_create1" style="zoom:50%;" />
+     - 选择**输入**作为创建方式。
+
+     - 直接在 **Schema** 输入框中粘贴 Protobuf 定义，例如：
+
+       ```protobuf
+       message Person {
+         required string name = 1;
+         required int32 id = 2;
+         optional string email = 3;
+       }
+       ```
+
+   - **上传 Protobuf 包**（适用于复杂或多文件 schema）：
+
+     - 选择**上传 Protobuf 包**作为创建方式。
+     - 点击**选择文件**上传包含多个 `.proto` 文件的 `.zip` 压缩包。
+     - 在**主入口文件**字段中填写主入口的 `.proto` 文件名称（例如：`person.proto`）。
+
+4. 点击**创建**。
 
 ### 创建规则
 
