@@ -23,7 +23,7 @@ EMQX has embedded rich SQL statement samples to help you get started, you can cl
 
 ### SQL Generator
 
-Starting from **EMQX 5.10.0**, the **SQL Editor** supports generating rule SQL using natural language through an AI-powered **SQL Generator**. This feature allows users to describe their intent in natural language and have SQL statements automatically created to match.
+Starting from **EMQX 5.10.0**, the **SQL Editor** supports generating rule SQL using natural language through an AI-powered **SQL Generator**. This feature allows you to describe their intent in natural language, and the system will automatically generate the appropriate SQL statement for your rule.
 
 To use this feature:
 
@@ -32,8 +32,10 @@ To use this feature:
 2. Click the **SQL Generator** button located below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
 
    - **Task Description** (required): Describe in natural language what you want the SQL to do.
-      Example: `Extract temperature values greater than 30 from the topic sensors/temperature.`
-
+      
+      Example:
+       *"Extract `clientid` from the MQTT message metadata, and extract `device_id` and `temperature` from the payload. Only apply to messages from topic `sensors/temperature` where the temperature is greater than 30."*
+      
    - **Related Topics** (optional): Specify topic filters such as `sensors/temperature`.
 
    - **Input Example (JSON)** (optional but recommended): Provide a sample MQTT message payload to help the AI understand your data structure.
@@ -52,36 +54,46 @@ To use this feature:
 
      ```json
      {
+       "clientid": "client_a1b2c3",
        "device_id": "sensor001",
        "temperature": 32.5
      }
      ```
-
+     
      ::: tip 
-
+     
      Including input/output examples improves the accuracy of the generated SQL.
-
+     
      :::
 
-3. Click **Save** to generate the SQL. The SQL will automatically appear in the **SQL Editor**, where you can review and edit it.
+3. Click **Generate** to preview the generated SQL.
 
-#### Example Result
+4. In the preview dialog, you can:
 
-If you use the demo above, the generated SQL might look like:
+   - Review and manually edit the generated SQL.
+   - Click **Apply SQL** to insert it into the SQL Editor.
+   - Or click **Back to Form** to revise your input and regenerate the SQL.
+
+5. If you insert it into the SQL Editor, the SQL will automatically appear in the **SQL Editor**, where you can review and edit it.
+
+#### Example Output
+
+Using the sample task and input above, the generated SQL might be:
 
 ```sql
 SELECT
-  payload.device_id,
-  payload.temperature
+  clientid,
+  payload.device_id AS device_id,
+  payload.temperature AS temperature
 FROM
   "sensors/temperature"
 WHERE
   payload.temperature > 30
 ```
 
-This statement selects temperature readings greater than 30 from the `sensors/temperature` topic.
+This rule extracts the `clientid`, `device_id`, and `temperature` fields from messages on the `sensors/temperature` topic where the temperature is greater than 30.
 
-#### Use Cases
+#### When to Use the SQL Generator
 
 The SQL Generator is especially useful when:
 
