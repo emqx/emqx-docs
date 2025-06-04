@@ -105,24 +105,45 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'    (x) down
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : (x) down :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7
-messages/1                        5C6028D6CE9459C7
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7
-messages/2                        5C6028D6CE9459C7
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7
-messages/5                        5C6028D6CE9459C7
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7
-messages/8                        5C6028D6CE9459C7
-messages/9                        5C6028D6CE9459C7
+.-------------.------------------.-------------.
+: DB/Shard    : Replicas         : Transitions :
+:-------------:------------------:-------------:
+:-messages/0--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/1--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/10-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/11-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/12-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/2--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/3--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/4--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/5--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/6--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/7--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/8--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/9--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+`-------------`------------------`-------------`
 ```
 
 This command output includes:
@@ -131,7 +152,7 @@ This command output includes:
 - `SITES`: List of all known sites, including EMQX node names and their statuses.
 - `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
 
-### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
+### `emqx_ctl ds set-replicas <DS> <Site1> <Site2> ...`
 
 This command allows to set the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
@@ -143,7 +164,7 @@ Updating the list of durable storage replicas can be costly as it may involve co
 Example:
 
 ```bash
-$ emqx_ctl ds set_replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
+$ emqx_ctl ds set-replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
 
@@ -156,39 +177,55 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'        up
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : up       :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/1                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/2                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/5                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/8                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/9                        5C6028D6CE9459C7
-
-REPLICA TRANSITIONS:
-Shard                         Transitions
-messages/0                    +F4E92DEA197C8EBC
-messages/1                    +F4E92DEA197C8EBC
-messages/10                   +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/11                   +F4E92DEA197C8EBC
-messages/2                    +F4E92DEA197C8EBC
-messages/3                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/4                    +F4E92DEA197C8EBC
-messages/5                    +F4E92DEA197C8EBC
-messages/6                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/7                    +F4E92DEA197C8EBC
-messages/8                    +F4E92DEA197C8EBC
-messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+.-------------.------------------.--------------------.
+: DB/Shard    : Replicas         : Transitions        :
+:-------------:------------------:--------------------:
+:-messages/0--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/1--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/10-:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/11-:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/2--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/3--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/4--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/5--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/6--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/7--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/8--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/9--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+`-------------`------------------`--------------------`
 ```
 
 The new section `REPLICA TRANSITIONS` lists pending operations. Once all operations are complete, this list will be empty.
@@ -200,7 +237,7 @@ These commands add or remove a site from the list of replicas of the durable sto
 Example:
 
 ```bash
-$ bin/emqx_ctl ds join messages B2A7DBB2413CD6EE
+$ emqx_ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 

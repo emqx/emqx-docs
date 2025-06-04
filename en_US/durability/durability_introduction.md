@@ -69,7 +69,7 @@ However, there are some drawbacks:
 
 Introduced in EMQX v5.7.0, the durable session implementation stores session state and messages routed to the durable sessions on disk. This feature is disabled by default and can be enabled by setting the `durable_sessions.enable` configuration parameter to be `true`.
 
-When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable." This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`. 
+When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable". This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`. 
 
 It is important to note that message dispatch protocol depends on the durability of the subscriber's session rather than the publisher's.
 
