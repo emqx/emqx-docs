@@ -55,8 +55,8 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
 
      :::
 
-     - **Data Publish Rate**: Limits the bytes the current tenant can send to EMQX per second.
-     - **Data Publish Burst**: Allows additional bytes to be sent during bursts.
+     - **Packet Publish Rate**: Limits the bytes the current tenant can send to EMQX per second.
+     - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
      - **Messages Publish Rate**: Limits the maximum number of messages a tenant can send per second.
      - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
 
@@ -68,8 +68,8 @@ You can configure a namespace when creating it, or edit it later. To edit an exi
 
      :::
 
-     - **Data Publish Rate**: Limits the bytes a client can send to EMQX per second.
-     - **Data Publish Burst**: Allows additional bytes to be sent during bursts.
+     - **Packet Publish Rate**: Limits the bytes a client can send to EMQX per second.
+     - **Packet Publish Burst**: Allows additional bytes to be sent during bursts.
      - **Messages Publish Rate**: Limits the maximum number of messages a client can send per second.
      - **Messages Publish Burst**: Allows additional messages to be sent during bursts.
 
