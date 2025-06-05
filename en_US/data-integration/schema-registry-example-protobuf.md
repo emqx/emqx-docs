@@ -37,7 +37,7 @@ To enable the rule engine to correctly decode or encode Protobuf messages, you m
 
      - Select **Upload Protobuf Bundle** as the creation method.
      - Click **Select file** to upload a `.tar.gz` bundle containing your `.proto` files.
-     - In **Root Proto File**, specify the entry point file name (e.g., `person.proto`).
+     - In **Root Proto File**, specify the entry point file name (e.g., `person.proto`).  This file **must** reside at the root of the bundle file.
 
 4. Click **Create** to register the schema.
 
