@@ -15,11 +15,11 @@ Enter a name for your rule and add a note to facilitate future management. In th
 
 This tutorial assumes the message payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
 
-EMQX has embedded rich SQL statement samples to help you get started, you can click the **SQL Examples** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
+EMQX has embedded rich SQL statement samples to help you get started. You can click the **SQL Examples** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
 
 :::
 
-<img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:40%;" />
+<img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:50%;" />
 
 ### SQL Generator
 
@@ -27,12 +27,12 @@ Starting from **EMQX 5.10.0**, the **SQL Editor** supports generating rule SQL u
 
 To use this feature:
 
-1. On the **Create Rule** page, scroll to the **SQL Editor** section.
+1. On the **Create Rule** page, navigate to the **SQL Editor** section.
 
-2. Click the **SQL Generator** button located below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
+2. Click the **SQL Generator** button below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
 
    - **Task Description** (required): Describe in natural language what you want the SQL to do.
-      
+     
       Example:
        *"Extract `clientid` from the MQTT message metadata, and extract `device_id` and `temperature` from the payload. Only apply to messages from topic `sensors/temperature` where the temperature is greater than 30."*
       

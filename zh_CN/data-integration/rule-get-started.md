@@ -18,7 +18,87 @@ EMQX 内置了丰富的 SQL 语句示例，以帮助您入门。您可以在 **S
 
 :::
 
-<img src="./assets/create-rules.png" alt="create-rules" style="zoom:40%;" />
+<img src="./assets/create-rules.png" alt="create-rules" style="zoom:50%;" />
+
+### SQL 生成器
+
+从 **EMQX 5.10.0** 开始，**SQL 编辑器**支持通过 AI 驱动的 **SQL 生成器**，使用自然语言生成规则 SQL。该功能允许您用自然语言描述预期行为，系统将自动生成相应的 SQL 语句用于规则引擎。
+
+要使用该功能，请按照以下步骤操作：
+
+1. 进入**创建规则**页面，找到 **SQL 编辑器**区域。
+
+2. 点击编辑器下方的 **SQL 生成器**按钮，打开 **使用 AI 生成 SQL** 对话框。根据以下提示填写字段：
+
+   - **任务描述**（必填）：使用自然语言描述您希望 SQL 实现的逻辑。
+
+     示例：
+      *“从 MQTT 消息的元数据中提取 `clientid`，并从 payload 中提取 `device_id` 和 `temperature`。仅匹配来自主题 `sensors/temperature` 且温度大于 30 的消息。”*
+
+   - **相关主题**（可选）：指定要匹配的主题过滤器，如 `sensors/temperature`。
+
+   - **输入示例（JSON）**（可选但推荐）：提供一条 MQTT 消息的 payload 示例，帮助 AI 更好地理解数据结构。
+      示例：
+
+     ```json
+     {
+       "device_id": "sensor001",
+       "temperature": 32.5,
+       "unit": "C"
+     }
+     ```
+
+   - **输出示例（JSON）**（可选）：指定期望的输出格式。
+      示例：
+
+     ```json
+     {
+       "clientid": "client_a1b2c3",
+       "device_id": "sensor001",
+       "temperature": 32.5
+     }
+     ```
+
+     ::: tip
+     提供输入和输出示例可以显著提升 SQL 生成的准确性。
+     :::
+
+3. 点击**生成**以预览生成的 SQL。
+
+4. 在预览对话框中，您可以：
+
+   - 查看并手动编辑生成的 SQL；
+   - 点击**应用 SQL**，将其插入到 SQL 编辑器中；
+   - 或点击**返回表单**，修改任务描述或示例后重新生成。
+
+5. 如果点击**应用 SQL**，生成的 SQL 将自动出现在 **SQL 编辑器**中，您可继续查看和修改。
+
+#### 示例结果
+
+根据上面的任务描述和示例，生成的 SQL 可能如下所示：
+
+```sql
+SELECT
+  clientid,
+  payload.device_id AS device_id,
+  payload.temperature AS temperature
+FROM
+  "sensors/temperature"
+WHERE
+  payload.temperature > 30
+```
+
+该规则从主题 `sensors/temperature` 中提取 `clientid`、`device_id` 和 `temperature` 字段，并只处理温度大于 30 的消息。
+
+#### 使用 SQL 生成器的场景
+
+SQL 生成器特别适用于以下情况：
+
+- 您不熟悉 EMQX SQL 语法；
+- 您希望快速原型设计一个规则；
+- 您正在处理结构化的 JSON 消息 payload。
+
+如需更多自定义功能和语法说明，请参阅 [SQL 语法与示例](./rule-sql-syntax.md)文档。
 
 ### 测试 SQL 语句
 
