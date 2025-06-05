@@ -1,6 +1,6 @@
 # Schema Registry Example - Protobuf
 
-This page demonstrates how the schema registry and rule engine support message encoding and decoding in Protobuf format.
+This page demonstrates how the schema registry and rule engine support message encoding and decoding in the Protobuf format.
 
 ## Decoding Scenario
 
@@ -10,16 +10,25 @@ For example, you to republish a message with the `name` field equal to "Shawn" t
 
 ### Create Schema
 
-To enable the rule engine to correctly decode or encode Protobuf messages, you must first register a schema that defines the structure of the Protobuf message using the Schema Registry.
+To enable the rule engine to decode or encode Protobuf messages correctly, you must first register a schema that defines the structure of the Protobuf message using the Schema Registry.
 
 1. Go to the Dashboard, select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
+
 2. Under the **Internal Schema** tab, click **Create**.
+
 3. Enter the **Name** of the schema, for example: `protobuf_person`. This name will be used in encoding and decoding functions.
+
 4. Select the schema **Type**: choose `Protobuf`.
 
-3. Select a **Creation Method**. There are two options:
+5. Select a **Creation Method**. There are two options:
 
-   - **Input** mode (for simple schema):
+   ::: tip
+
+   The example demonstrated on this page uses the **Input** method.
+
+   :::
+
+   - **Input** (for simple schema):
 
      - Select **Input** as the creation method.
 
@@ -39,7 +48,7 @@ To enable the rule engine to correctly decode or encode Protobuf messages, you m
      - Click **Select file** to upload a `.tar.gz` bundle containing your `.proto` files.
      - In **Root Proto File**, specify the entry point file name (e.g., `person.proto`).  This file **must** reside at the root of the bundle file.
 
-4. Click **Create** to register the schema.
+6. Click **Create** to register the schema.
 
 ### Create Rule
 1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
