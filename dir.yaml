@@ -318,6 +318,14 @@
 - title_en: Flow Designer
   title_cn: Flow 设计器
   path: flow-designer/introduction
+  collapsed: true
+  children:
+    - title_en: LLM-Based MQTT Data Processing
+      title_cn: 基于 LLM 的 MQTT 数据处理
+      path: flow-designer/llm-based-data-processing
+      collapsed: true
+      children:
+        - flow-designer/openai-node-quick-start
 - title_en: Data Integration
   title_cn: 数据集成
   path: data-integration/data-bridges

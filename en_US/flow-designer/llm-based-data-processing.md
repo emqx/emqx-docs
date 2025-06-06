@@ -1,159 +1,125 @@
 # LLM-Based MQTT Data Processing
 
-Introduction of this page...
+Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT and Anthropic Claude. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
 
 ## Feature Overview
 
-What is the feature?
+LLM-Based Processing Nodes in Flow Designer are AI-powered components that connect to external LLM APIs to process message content. These nodes allow users to send MQTT data to models like `gpt-4o` or `claude-3-sonnet`, receive the response, and pass it along downstream in the flow.
 
-### How It Works?
+### Key Concepts
 
-Working principles
+- **LLM Provider**: A named configuration for an AI service (OpenAI / Anthropic).
+- **Completion Profile**: A reusable bundle of LLM model parameters (model ID, system prompt, token limits, etc.).
+- **AI Completion Node**: A flow component that sends input to the LLM and stores its result as a user-defined alias.
+- `ai_completion`: A Rule SQL function that sends text/binary data to an LLM and returns its response.
 
-### What Can It Do?
+### How It Works
 
-Use cases. What can users achieve using this procedding node
+```mermaid
+graph LR
+  A[MQTT Message] --> B[Flow Designer Node]
+  B --> C[Rule SQL (ai_completion)]
+  C --> D[LLM API]
+  D --> E[LLM Response]
+  E --> F[Downstream Node]
+```
 
-## How to Configure LLM-Based Processing Nodes
+When an MQTT message is received in Flow Designer, the AI Completion Node internally calls the built-in SQL function `ai_completion/2,3` to send data to the configured LLM.
 
-### OpenAI
+1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
+2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.
+3. The **OpenAI** or **Anthropic** node uses the `ai_completion` function behind the scenes to:
+  - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
+  - Send the selected input (e.g., `payload`) to the LLM.
+  - Receive a response from the LLM API (e.g., a summary or classification result).
+4. The response is stored under the **Output Result Alias**, making it available to any downstream node, such as:
+  - **Republish** (publish to another topic)
+  - **Database** (insert the result into PostgreSQL, MongoDB, etc.)
+  - **Bridge** (forward to remote brokers or cloud services)
 
-Instructions for configure the node:
+### Supported LLM Providers
 
-- **Input**：
-- **System Message**：
-- **Model**：
-- **API Key**：
-- **Base URL**：
-- **Output Result Alias**：
+EMQX 5.10.0 supports the following providers:
 
-### Anthropic
+- **OpenAI**: GPT-3.5, GPT-4, GPT-4o, etc.
+- **Anthropic**: Claude 3 models
 
-Instructions for configure the node:
+## Configure LLM-Based Processing Nodes
 
-- **Input**：
-- **System Message**：
-- **Model**：
-- **Max Tokens**:
-- **Anthropic Version**:
-- **API Key**：
-- **Base URL**：
-- **Output Result Alias**：
+To use LLMs in Flow Designer, you must configure a dedicated processing node for your chosen provider, either an OpenAI or an Anthropic node. Each node allows you to define how MQTT message data is sent to the LLM, including which input fields to use, how the model should behave via system prompts, and where to store the AI-generated result for further processing. Once configured, these nodes seamlessly invoke the `ai_completion` function behind the scenes to process data using the selected LLM.
+
+### Configure an OpenAI Node
+
+To use an OpenAI node:
+
+1. Drag the **OpenAI** node from the **Processing** panel.
+
+2. Connect it to a source or preprocessing node.
+
+3. Configure the following fields:
+
+   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+
+   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+
+   - **Model**: Select the LLM provider, e.g., `gpt-4o`, `gpt-3.5-turbo`.
+
+   - **API Key**: Enter your OpenAI API key.
+
+   - **Base URL**: Enter an optional custom endpoint. Leave empty to use OpenAI’s default endpoint.
+
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+
+     ::: tip
+
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+
+     :::
+
+
+4. Click **Save** to apply your configuration.
+
+### Configure an Anthropic Node
+
+To use an Anthropic node:
+
+1. Drag the **Anthropic** node from the **Processing** panel.
+
+2. Connect it to the message input or a Data Processing node.
+
+3. Fill out the configuration:
+
+   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+
+   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+
+   - **Model**: Select the LLM provider, e.g., `claude-3-sonnet-20240620`.
+
+   - **Max Tokens**: Controls response length (default: `100`).
+
+   - **Anthropic Version**: Select the version of Anthropic (default: `2023-06-01`).
+
+   - **API Key**: Enter your Anthropic API key.
+
+   - **Base URL**: Enter an optional custom endpoint. Leave empty to use Anthropic’s default endpoint.
+
+   - **Output Result Alias**: 
+
+   - Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+
+     ::: tip
+
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+
+     :::
+
+
+4. Click **Save** to apply your configuration.
 
 ## Quick Start
 
-Provide two different simple demos.
+The following two examples demonstrate how to quickly build and test Flows using LLM-based processing nodes in EMQX:
 
-### Use Case1: Create a Flow Using OpenAI Node
+- [Get Started with the OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
+- [Get Started with the Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to classify issues and provide automated recommendations.
 
-This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case.
-
-This demonstration shows you how to build a workflow that receives sensor data from MQTT topics and uses an LLM (e.g., OpenAI GPT) to interpret the data and summarize its meaning in natural language. The resulting summary is republished to a new topic, `ai/summary`, for downstream consumption.
-
-### Scenario Description
-
-Assume a device reports temperature and humidity readings to the MQTT topic `sensors/temp_humid`. Each message includes raw sensor data in JSON format. The EMQX Flow will perform the following steps:
-
-- **Data Processing**: Extract the device ID and sensor values.
-- **LLM-Based Processing**: Use an OpenAI model to summarize the sensor reading.
-- **Message Republish**: Publish the AI-generated summary to a new topic, `ai/summary`.
-
-**Sample message:**
-
-```json
-{
-  "device_id": "device123",
-  "temperature": 38.2,
-  "humidity": 75,
-  "timestamp": 1717568000000
-}
-```
-
-**Expected output (AI-generated):**
-
-```css
-Device device123 reported a temperature of 38.2°C and 75% humidity.
-```
-
-### Create the Flow
-
-1. **Create a New Flow**
-
-   Click the **Create Flow** button on the **Flows** page.
-
-2. **Add a Messages Node**
-
-   - Drag a **Messages** node from the Source panel.
-   - Set the topic to `sensors/temp_humid`.
-   - Click **Save**.
-
-3. **Add a Data Processing Node**
-
-   - Drag a **Data Processing** node from the **Processing** section.
-   - Add the following mappings:
-     - `payload.device_id` → alias `device_id`
-     - `payload.temperature` → alias `temperature`
-     - `payload.humidity` → alias `humidity`
-   - Click **Save**.
-
-4. **Add an OpenAI Node**
-
-   - Drag an **OpenAI** node from the Processing section and connect it to the Data Processing node.
-   - Configure the node:
-     - **System Message**:
-        *"Generate a short summary of the device’s sensor readings in human-readable format."*
-     - **Model**: `gpt-4o`
-     - **API Key**: Your OpenAI API key
-     - **Input**: Use the entire `payload` or combine fields like `${device_id}, ${temperature}, ${humidity}`
-     - **Output Result Alias**: `summary`
-   - Click **Save**.
-
-5. **Add a Republish Node**
-
-   - Drag a **Republish** node from the Sink section and connect it to the OpenAI node.
-   - Set the topic to `ai/summary`.
-   - Set the payload to `${summary}`.
-   - Click **Save**.
-
-6. **Save the Flow**
-
-   - Click **Save** in the upper-right corner to save and activate the Flow.
-
-### Test the Flow
-
-1. **Start Testing**
-
-   - In the Flow Designer, click any node to open the configuration panel.
-   - Click **Edit Flow**, then click **Start Test** to open the test panel at the bottom.
-
-2. **Send Test Messages**
-
-   Use a real MQTT client such as **MQTTX Web** or **MQTTX CLI**:
-
-   - Connect to your EMQX server.
-   - Subscribe to the topic `ai/summary`.
-
-   **Example 1**: Publish this message to topic `sensors/temp_humid`:
-
-   ```json
-   {
-     "device_id": "device123",
-     "temperature": 38.2,
-     "humidity": 75
-   }
-   ```
-
-   You should receive an AI-generated summary like:
-
-   > “Device device123 reported a temperature of 38.2°C and 75% humidity.”
-
-   **Example 2**: Try with different sensor values to see variations in the LLM response.
-
-3. **Review Results**
-
-   - Return to the Flow Designer test panel to view live test logs.
-   - If the flow fails, check the OpenAI node for errors such as incorrect API key or timeout.
-
-### Use Case1: Create a Flow Using Anthropic Node
-
-Refer to the [Quick Start](./introduction#quick-start) part in the introduction.md.
