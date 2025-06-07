@@ -2,7 +2,7 @@
 
 ## 5.10.0
 
-*Release Date: 2025-06-0*
+*Release Date: 2025-06-09*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.0.
 
@@ -11,6 +11,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Core MQTT Functionalities
 
 - [#15118](https://github.com/emqx/emqx/pull/15118) Provided a new configuration option `mqtt.subscription_max_qos_rules` to control the maximum QoS level allowed per client subscription. This allows administrators to limit the QoS requested in SUBSCRIBE packets based on matching rules for specific topics. Currently, only a limited set of matching rules (predicates) is supported, based on the topic in the SUBSCRIBE packet.
+- [#15246](https://github.com/emqx/emqx/pull/15246) Improved WebSocket connections performance and resource consumption.
+    * Reduced CPU usage by approximately 20% and slightly lowered memory consumption, according to synthetic benchmarks measuring 1-on-1 MQTT messaging performance.
+    * Improved connection setup efficiency when the listener-wide connection limit is enabled, especially on nodes managing a large number of connections.
 
 #### Deployment
 
@@ -100,16 +103,16 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     - `bucket[N]`
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
 
-### Multi-Tenancy
+#### Multi-Tenancy
 
 - [#15253](https://github.com/emqx/emqx/pull/15253) Added two new multi-tenancy APIs: `GET /mt/ns_list_details` and `GET /mt/ns_list_managed_details`.  Both work similarly to their existing counterpars, but returns extra metadata associated with the namespace besides its name.
 - [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
 
-### CLI
+#### CLI
 
 - [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
 
-### Gateway
+#### Gateway
 
 - [#15138](https://github.com/emqx/emqx/pull/15138) Introduced NATS Gateway for accepting NATS client connections over TCP/TLS, WS/WSS transport protocols.
 
@@ -177,6 +180,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Snowflake
   - IoTDB (Thrift driver)
 
+- [#15306](https://github.com/emqx/emqx/pull/15306) Fixed an issue where a Connector's health check response would always trigger health checks for all dependent Actions and Sources, regardless of their actual state.
+
 #### Multi-Tenancy
 
 - [#15242](https://github.com/emqx/emqx/pull/15242) Fixed an issue where, upon node restart after configuring limiters for multi-tenancy, logs like the following would be logged while initializing limiters:
@@ -184,6 +189,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   ```
   2025-05-15T16:45:13.276895+08:00 [error] clientid: ns3mqttx_620053b2_100, msg: hook_callback_exception, peername: 127.0.0.1:39364, username: ns3, reason: {limiter_group_not_found,{mt_tenant,<<"ns3">>}}, stacktrace: [{emqx_limiter,connect,1,[{file,"emqx_limiter.erl"},{line,134}]}
   ```
+
+#### Observability
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error when exporting OpenTelemetry metrics.
 
 #### Telemetry
 

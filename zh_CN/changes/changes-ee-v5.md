@@ -2,7 +2,7 @@
 
 ## 5.10.0
 
-*发布日期：2025-06-05*
+*发布日期：2025-06-09*
 
 升级前请查看已知问题列表和不兼容变更列表。
 
@@ -11,6 +11,9 @@
 #### 核心 MQTT 功能
 
 - [#15118](https://github.com/emqx/emqx/pull/15118) 新增配置项 `mqtt.subscription_max_qos_rules`，用于控制每个客户端订阅所允许的最大 QoS 等级。管理员可以基于特定主题的匹配规则，限制客户端在 SUBSCRIBE 报文中请求的 QoS 等级。目前仅支持基于 SUBSCRIBE 报文中主题的少量匹配规则。
+- [#15246](https://github.com/emqx/emqx/pull/15246) 提升了 WebSocket 连接的性能与资源效率：
+  - 在模拟一对一 MQTT 消息交互的基准测试中，WebSocket 连接的 CPU 使用率降低约 20%，内存占用也有小幅优化。
+  - 启用监听器级连接数限制时，WebSocket 连接的建立效率显著提升，尤其适用于管理大量连接的节点。
 
 #### 安装部署
 
@@ -99,17 +102,17 @@
     - `bucket[N]`；
   - 数据文件仅支持写入为 [Avro 格式](https://avro.apache.org/docs/1.12.0/specification/)。
 
-### 多租户
+#### 多租户
 
 - [#15253](https://github.com/emqx/emqx/pull/15253) 新增两个多租户相关的 API：`GET /mt/ns_list_details` 和 `GET /mt/ns_list_managed_details`。
    这两个接口与已有的对应接口功能类似，但会额外返回与命名空间相关的元数据信息，而不仅仅是名称。
 - [#15160](https://github.com/emqx/emqx/pull/15160) 新增多租户管理接口 `DELETE /mt/bulk_delete_ns`，支持批量删除命名空间。
 
-### CLI
+#### CLI
 
 - [#15158](https://github.com/emqx/emqx/pull/15158) 新增命令 `emqx ctl conf remove x.y.z`，用于从现有配置中移除 `x.y.z` 这一配置路径。
 
-### 网关
+#### 网关
 
 - [#15138](https://github.com/emqx/emqx/pull/15138) 新增 **NATS 网关**，支持通过 TCP/TLS 和 WS/WSS 协议接收 NATS 客户端连接。
 
@@ -178,6 +181,8 @@
   - Snowflake
   - IoTDB（Thrift 驱动）
 
+- [#15306](https://github.com/emqx/emqx/pull/15306) 修复了一个问题：连接器的健康检查返回后，无论依赖的 Action 和 Source 当前状态如何，都会无条件触发它们的健康检查。
+
 #### 多租户
 
 - [#15242](https://github.com/emqx/emqx/pull/15242) 修复在为多租户配置限流器后，节点重启时初始化限流器过程中日志中出现如下错误信息的问题：
@@ -185,6 +190,10 @@
   ```
   2025-05-15T16:45:13.276895+08:00 [error] clientid: ns3mqttx_620053b2_100, msg: hook_callback_exception, peername: 127.0.0.1:39364, username: ns3, reason: {limiter_group_not_found,{mt_tenant,<<"ns3">>}}, stacktrace: [{emqx_limiter,connect,1,[{file,"emqx_limiter.erl"},{line,134}]}
   ```
+
+#### 可观测性
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) 修复导出 OpenTelemetry 指标时出现的 `badarg` 错误。
 
 #### 遥测
 
