@@ -342,6 +342,9 @@
     - title_en: AWS S3
       title_cn: AWS S3
       path: data-integration/s3
+    - title_en: AWS S3 Tables
+      title_cn: AWS S3 Tables
+      path: data-integration/s3-tables
     - title_en: Azure Blob Storage
       title_cn: Azure Blob Storage
       path: data-integration/azure-blob-storage

@@ -127,6 +127,7 @@ EMQX supports data integrations with the following types of data systems:
 
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
+- [Amazon S3 Tables](./s3-tables.md)
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)
