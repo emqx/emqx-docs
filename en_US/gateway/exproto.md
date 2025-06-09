@@ -70,13 +70,13 @@ The `ConnectionAdapter` service is implemented by the ExProto Gateway to provide
 
 ## Enable ExProto Gateway
 
-The ExProto gateway in EMQX can be configured and enabled through the Dashboard, HTTP API, or configuration file `base.hocon`. This section demonstrates how to enable ExProto gateway via the Dashboard.
+The ExProto gateway in EMQX can be configured and enabled through the Dashboard, REST API, or configuration file `base.hocon`. This section demonstrates how to enable ExProto gateway via the Dashboard.
 
 On the EMQX Dashboard, click **Management** -> **Gateways** from the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **ExProto** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize ExProto** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure the gateway in [`base.hocon`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or REST API will affect the whole cluster. If you only want to change the settings with one node, configure the gateway in [`base.hocon`](../configuration/configuration.md).
 
 :::
 
@@ -90,7 +90,7 @@ Upon completing the gateway activation process, you can return to the **Gateways
 
 <img src="./assets/exproto-enabled.png" alt="Enabled ExProto gateway" style="zoom:50%;" />
 
-The above configuration can also be configured with HTTP API:
+The above configuration can also be configured with REST API:
 
 **Example Code:**
 
@@ -217,7 +217,7 @@ Click **+ Create Authentication**, select `Password-Based` as the **Mechanism**,
 
 <img src="./assets/exproto-authn-config.png" alt="mqttsn authentication" style="zoom:43%;" />
 
-The above configuration can also be performed via HTTP API.
+The above configuration can also be performed via REST API.
 
 **Example Code**
 

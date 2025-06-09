@@ -15,11 +15,11 @@ In the current implementation, it has the following limitations:
 
 In EMQX 5.0, LwM2M gateways can be configured and enabled through the Dashboard.
 
-It can also be enabled via the HTTP API, or configuration file:
+It can also be enabled via the REST API, or configuration file:
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
@@ -92,7 +92,7 @@ gateway.lwm2m {
 
 
 ::: tip
-Configuring the gateway in `base.hocon` requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
+Configuring the gateway in `base.hocon` requires changes on a per-node basis, but configuring it via Dashboard or the REST API will take effect across the cluster.
 :::
 
 The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
@@ -103,11 +103,11 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
 Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
 
-For example, to create an HTTP authentication for LwM2M gateway via HTTP API or configuration file:
+For example, to create an HTTP authentication for LwM2M gateway via REST API or configuration file:
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
@@ -817,7 +817,7 @@ Variables:
 ## User Interfaces
 
 - Detailed configuration options: [Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-- Detailed HTTP APIs Description: [HTTP API - Gateway](../admin/api.md)
+- Detailed HTTP APIs Description: [REST API - Gateway](../admin/api.md)
 
 ## Client libraries
 
