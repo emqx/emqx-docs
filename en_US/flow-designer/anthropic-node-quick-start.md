@@ -88,7 +88,7 @@ Make sure you have a valid **Anthropic API Key** and set the correct API version
 
 1. Connect an MQTT client to EMQX.
 
-   To quickly test the flow. You can use the **Diagnostic Tools** -> **Websocket Client** on the Dashboard to simulate an MQTT client. Or, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
+   To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
 
    - Connect to your EMQX server.
    - Subscribe to the topic `devices/power_total`.
@@ -114,11 +114,11 @@ Make sure you have a valid **Anthropic API Key** and set the correct API version
 
 3. Review results and node processing metrics.
 
-   - You can see the successful excecution result of the flow.
+   - You can see the successful execution result of the flow.
 
      ![anthropic_node_test_result](./assets/anthropic_node_test_result.png)
 
-   - Return to the **WebSocket Client** page and you You should receive an AI-generated summary like:
+   - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
    
      > 322.4
      

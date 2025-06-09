@@ -85,7 +85,7 @@ Make sure you have a valid OpenAI API Key.
 
 1. Connect an MQTT client to EMQX.
 
-   To quickly test the flow. You can use the **Diagnostic Tools** -> **Websocket Client** on the Dashboard to simulate an MQTT client. Or, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
+   To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
 
    - Connect to your EMQX server.
    - Subscribe to the topic `ai/summary`.
@@ -108,11 +108,11 @@ Make sure you have a valid OpenAI API Key.
 
 3. Review results.
 
-   - You can see the successful excecution result of the flow.
+   - You can see the successful execution result of the flow.
 
      ![openai_node_test_result](./assets/openai_node_test_result.png)
 
-   - Return to the **WebSocket Client** page and you You should receive an AI-generated summary like:
+   - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
 
      > “The sensor readings from device "device123" indicate that the current temperature is 38.2°C and the humidity level is 75%.”
 
