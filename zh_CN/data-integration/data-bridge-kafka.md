@@ -90,12 +90,12 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 4. 配置连接到 Kafka 所需的参数：
    - **主机列表**：输入 `127.0.0.1:9092`。注意：此演示假设您在本地机器上运行 EMQX 和 Kafka。如果您在远程运行 Kafka 和 EMQX，请相应调整设置。
    - **认证**：选择 Kafka 集群所需的认证机制。EMQX 支持以下几种方式：
-   
+
      - `无`：无需认证。
-     - `authentication_msk_iam`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
+     - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
      - `基础认证`：需要选择一个**认证方法**（`plain`、`scram_sha_256` 或 `scram_sha_512`），并填写**用户名**和**密码**。
      - `Kerberos`：需要指定 **Kerberos Principal** 和 **Kerberos Keytab 文件**路径。
-   
+
      有关每种认证方式的详细说明，请参见[认证方式](#认证方式)。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
    - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
@@ -113,7 +113,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
   此方法使用 AWS EC2 实例的元数据服务，根据绑定到实例的 IAM 策略生成认证令牌。
 
-  ::: warning 重要说明
+  ::: tip 重要说明
 
   MSK IAM 认证仅适用于运行在 EC2 实例上的 EMQX 节点连接到 MSK 集群，因为该方式依赖于 AWS Metadata API。
 
@@ -133,7 +133,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
   - **Kerberos Principal**：用于认证的 Kerberos 身份标识。
   - **Kerberos Keytab 文件**：用于无交互认证的 Keytab 文件路径。
 
-  ::: warning 重要说明
+  ::: tip 重要说明
 
   Kerberos Keytab 文件必须在所有 EMQX 节点上的路径保持一致，并且运行 EMQX 服务的用户需要具备该文件的读取权限。
 
@@ -216,7 +216,7 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
 
 ::: tip 注意
 
-为了防⽌系统其他的环境变量泄露，环境变量的名称必须有⼀个固定前缀 `EMQXVAR_ `。例如， `getenv` 读取的函数变量名为 `KAFKA_TOPIC` ，那么设置的环境变量名称必须是 `EMQXVAR_KAFKA_TOPIC` 。 
+为了防⽌系统其他的环境变量泄露，环境变量的名称必须有⼀个固定前缀 `EMQXVAR_ `。例如， `getenv` 读取的函数变量名为 `KAFKA_TOPIC` ，那么设置的环境变量名称必须是 `EMQXVAR_KAFKA_TOPIC` 。
 
 :::
 
@@ -266,7 +266,7 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
      --topic testtopic-in
-   
+
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
