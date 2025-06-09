@@ -15,28 +15,35 @@ The LDAP authorizer checks the client authorization against the authorization da
 ```sql
 
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.1 NAME ( 'mqttPublishTopic' 'mpt' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.2 NAME ( 'mqttSubscriptionTopic' 'mst' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.3 NAME ( 'mqttPubSubTopic' 'mpst' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	USAGE userApplications )
+attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.4 NAME ( 'mqttAclRule' 'mar' )
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
     SUP top
 	STRUCTURAL
-	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic  ) )
+	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic $ mqttAclRule ) )
 
 ```
-The LDAP authorizer uses an allowed-list strategy. Users need to define a list of topics (wildcard supported) for each action. An action is only allowed if its topic can match, otherwise, the LDAP authorizer will ignore it.
+
+The LDAP authorizer supports simple topic whitelist (wildcard supported) for each action (`mqttPublishTopic`, `mqttSubscriptionTopic`, `mqttPubSubTopic` attributes) as well as more complex ACL rules (`mqttAclRule` attribute).
+See [Access Control List (ACL)](../authn/acl.md#new-format) for more information about complex ACL rules.
 
 Below is an example of LDAP authorization data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
 
@@ -72,6 +79,9 @@ mqttSubscriptionTopic: mqttuser0001/sub/#
 mqttPubSubTopic: mqttuser0001/pubsub/1
 mqttPubSubTopic: mqttuser0001/pubsub/+
 mqttPubSubTopic: mqttuser0001/pubsub/#
+mqttAclRule: [{"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/1"}]
+mqttAclRule: {"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/#"}
+
 
 dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -167,6 +177,7 @@ Sample configuration:
   publish_attribute = "mqttPublishTopic"
   subscribe_attribute = "mqttSubscriptionTopic"
   all_attribute = "mqttPubSubTopic"
+  acl_rule_attribute = "mqttAclRule"
   query_timeout = "5s"
   username = "root"
   password = "root password"
