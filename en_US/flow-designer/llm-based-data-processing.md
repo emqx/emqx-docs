@@ -126,6 +126,6 @@ To use an Anthropic node:
 
 The following two examples demonstrate how to quickly build and test Flows using LLM-based processing nodes in EMQX:
 
-- [Get Started with the OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
-- [Get Started with the Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to classify issues and provide automated recommendations.
+- [Create a Flow Using OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
+- [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
 

@@ -39,7 +39,7 @@ graph LR
    - 将选定的输入字段（如 `payload`）发送给 LLM。
    - 接收来自 LLM API 的响应结果（如摘要或分类信息）。
 4. 响应结果存储在配置的**输出结果别名**中，供下游节点使用，例如：
-   - **消息冲发布**：将结果发布到新的 MQTT 主题
+   - **消息重发布**：将结果发布到新的 MQTT 主题
    - **数据库**：将结果写入数据库（如 PostgreSQL、MongoDB）
    - **桥接**：转发至远程 MQTT Broker 或云服务
 
@@ -116,11 +116,12 @@ EMQX 5.10.0 当前支持以下 LLM 服务：
 
      :::
 
-4. 点击 **Save** 保存配置。
+4. 点击**保存**以保存配置。
 
 ## 快速开始
 
 以下两个示例演示如何快速创建并测试基于 LLM 的处理流程：
 
-- [OpenAI 节点入门](./openai-node-quick-start.md)：使用 GPT 模型处理或摘要 MQTT 消息
-- [Anthropic 节点入门](./anthropic-node-quick-start.md)：使用 Claude 模型进行故障分类和建议生成
+- [使用OpenAI 节点创建 Flow](./openai-node-quick-start.md)：使用 GPT 模型处理或摘要 MQTT 消息。
+- [使用 Anthropic 节点创建 Flow](./anthropic-node-quick-start.md)：使用 Claude 模型处理 MQTT 消息中的数值字段。
+

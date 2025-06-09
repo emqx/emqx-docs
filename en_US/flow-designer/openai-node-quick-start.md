@@ -58,8 +58,8 @@ Make sure you have a valid OpenAI API Key.
 
    - Drag an **OpenAI** node from the Processing section and connect it to the Data Processing node.
    - Configure the node:
-     - **Input**: Use the entire `payload` or combine fields like `${device_id}, ${temperature}, ${humidity}`.
-     - **System Message**: Enter *"Generate a short summary of the device’s sensor readings in human-readable format."*
+     - **Input**: Enter `payload`.
+     - **System Message**: Enter `Generate a short summary of the device’s sensor readings in human-readable format`.
      - **Model**: Select `gpt-4o`.
      - **API Key**: Enter your OpenAI API key.
      - **Base URL**: Leave empty.

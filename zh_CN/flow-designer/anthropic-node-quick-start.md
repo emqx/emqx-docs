@@ -62,14 +62,14 @@
      - **系统消息**：输入如下提示词：
 
        ```
-       You are a power consumption calculator. Given an input JSON object with various keys, sum all numeric values (e.g., circuit readings) and return only the total.
+       你是一个电力消耗计算器。给定一个包含多个键的输入 JSON 对象，请对其中所有数值型字段（如各回路读数）进行求和，并仅返回总和。
        ```
        
      - **模型**：选择 `claude-3-sonnet-20240620`。
      
-     - **Max Tokens**：输入 `50`。
+     - **最大令牌数**：输入 `50`。
 
-     - **Anthropic Version**：输入 `2023-06-01`。
+     - **Anthropic 版本**：输入 `2023-06-01`。
 
      - **API 密钥**：输入你的 Anthropic API 密钥。
 

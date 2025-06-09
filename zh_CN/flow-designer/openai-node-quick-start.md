@@ -58,15 +58,14 @@
 
    - 从 **Processing** 区域拖拽一个 **OpenAI** 节点并连接至 Data Processing 节点。
    - 配置节点参数如下：
-     - **输入**：可使用整个 `payload`，或组合字段 `${device_id}, ${temperature}, ${humidity}`。
-     - **系统消息**：填写
-        `"Generate a short summary of the device’s sensor readings in human-readable format."`。
+     - **输入**：填写 `payload`。
+     - **系统消息**：填写`生成一段简洁、便于阅读的设备传感器读数摘要。`。
      - **模型**：选择 `gpt-4o`。
      - **API 密钥**：填写你的 OpenAI API Key。
      - **基础 URL**：留空即可使用默认。
      - **输出结果别名**：填写 `summary`。
    - 点击**保存**。
-
+   
 5. 添加一个**消息重发布**节点：
 
    - 从 **Sink** 区域拖拽一个**消息重发布**节点并连接至 OpenAI 节点。
