@@ -103,6 +103,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     - `bucket[N]`
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
 
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in `WriteSyntax` was left blank and there was no timestamp field in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+
 #### Multi-Tenancy
 
 - [#15253](https://github.com/emqx/emqx/pull/15253) Added two new multi-tenancy APIs: `GET /mt/ns_list_details` and `GET /mt/ns_list_managed_details`.  Both work similarly to their existing counterpars, but returns extra metadata associated with the namespace besides its name.
