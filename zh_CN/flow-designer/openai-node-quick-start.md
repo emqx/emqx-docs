@@ -41,13 +41,13 @@
 
 2. 添加一个**消息**节点：
 
-   - 从左侧面板的 **Source** 区域拖拽一个**消息**节点；
-   - 设置订阅主题为 `sensors/temp_humid`；
+   - 从左侧面板的 **Source** 区域拖拽一个**消息**节点。
+   - 设置订阅主题为 `sensors/temp_humid`。
    - 点击**保存**。
 
 3. 添加一个 **Processing** 节点：
 
-   - 从 **Processing** 区域拖拽一个**数据处理**节点；
+   - 从 **Processing** 区域拖拽一个**数据处理**节点。
    - 添加以下字段映射：
      - `payload.device_id` → `device_id`
      - `payload.temperature` → `temperature`
@@ -56,22 +56,22 @@
 
 4. 添加一个 **OpenAI** 节点：
 
-   - 从 **Processing** 区域拖拽一个 **OpenAI** 节点并连接至 Data Processing 节点；
+   - 从 **Processing** 区域拖拽一个 **OpenAI** 节点并连接至 Data Processing 节点。
    - 配置节点参数如下：
-     - **输入**：可使用整个 `payload`，或组合字段 `${device_id}, ${temperature}, ${humidity}`；
+     - **输入**：可使用整个 `payload`，或组合字段 `${device_id}, ${temperature}, ${humidity}`。
      - **系统消息**：填写
-        `"Generate a short summary of the device’s sensor readings in human-readable format."`
-     - **模型**：选择 `gpt-4o`；
-     - **API 密钥**：填写你的 OpenAI API Key；
-     - **基础 URL**：留空即可使用默认；
+        `"Generate a short summary of the device’s sensor readings in human-readable format."`。
+     - **模型**：选择 `gpt-4o`。
+     - **API 密钥**：填写你的 OpenAI API Key。
+     - **基础 URL**：留空即可使用默认。
      - **输出结果别名**：填写 `summary`。
    - 点击**保存**。
 
 5. 添加一个**消息重发布**节点：
 
-   - 从 **Sink** 区域拖拽一个**消息重发布**节点并连接至 OpenAI 节点；
-   - 设置**主题**为 `ai/summary`；
-   - 设置消息 **payload** 内容为 `${summary}`；
+   - 从 **Sink** 区域拖拽一个**消息重发布**节点并连接至 OpenAI 节点。
+   - 设置**主题**为 `ai/summary`。
+   - 设置消息 **payload** 内容为 `${summary}`。
    - 点击**保存**。
 
 6. 将所有节点连接，然后点击页面右上角**保存**，完成 Flow 创建。
@@ -93,9 +93,9 @@
 
 2. 启动测试：
 
-   - 在 Flow Designer 中双击任意节点打开编辑面板；
+   - 在 Flow Designer 中点击任意节点打开编辑面板。
 
-   - 点击**编辑**，再点击**启动测试**，底部将出现测试窗口；
+   - 点击**编辑**，再点击**开始测试**，底部将出现测试窗口。
 
    - 点击**输入模拟数据**，并发布如下消息至主题 `sensors/temp_humid`：
 
@@ -118,3 +118,7 @@
      > "设备 ID 为 device123 的当前状态：温度为 38.2°C，湿度为 75%。"
 
    - 若测试失败，系统会提示错误原因。
+   
+   - 若需查看该 **OpenAI** 节点的运行统计，在 Flows 页面中点击节点，在弹出的编辑面板中点击**概览**选项卡。
+   
+     ![openai_node_statistics](./assets/openai_node_statistics.png)

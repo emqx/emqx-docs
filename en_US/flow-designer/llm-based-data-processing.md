@@ -6,6 +6,12 @@ Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Mod
 
 LLM-Based Processing Nodes in Flow Designer are AI-powered components that connect to external LLM APIs to process message content. These nodes allow users to send MQTT data to models like `gpt-4o` or `claude-3-sonnet`, receive the response, and pass it along downstream in the flow.
 
+::: tip Note
+
+Invoking an LLM and processing data takes time. The entire process may take several seconds to over ten seconds, depending on the response speed of the model. Therefore, LLM processing nodes are not suitable for scenarios with high message throughput (TPS).
+
+:::
+
 ### Key Concepts
 
 - **LLM Provider**: A named configuration for an AI service (OpenAI / Anthropic).

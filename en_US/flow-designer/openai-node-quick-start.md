@@ -92,7 +92,7 @@ Make sure you have a valid OpenAI API Key.
 
 2. Start Testing.
 
-   - In the Flow Designer, double-click any node to open the Edit panel.
+   - In the Flow Designer, click any node to open the Edit panel.
 
    - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
 
@@ -117,3 +117,10 @@ Make sure you have a valid OpenAI API Key.
      > “The sensor readings from device "device123" indicate that the current temperature is 38.2°C and the humidity level is 75%.”
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
+   
+   - To view the running statistics and metrics of the **OpenAI** node, click the node to open the Edit panel and click the **Overview** tab.
+   
+     ![openai_node_statistics](./assets/openai_node_statistics.png)
+
+
+
