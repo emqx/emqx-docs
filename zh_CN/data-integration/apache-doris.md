@@ -26,7 +26,7 @@ EMQX 通过规则引擎与 Sink 将设备事件和数据转发至 Apache Doris�
 
 在 EMQX 中使用 Apache Doris 数据集成能够为您的业务带来以下特性与优势：
 
-- **灵活的事件处理**：通过 EMQX 规则引擎，Apache Doris 可以处理设备全生命周期事件，极大的方便开发实现物联网应用所需的各类管理与监控业务。您可以通过通过分析事件数据，及时发现设备故障、异常行为或趋势变化，以便采取适当的措施。
+- **灵活的事件处理**：通过 EMQX 规则引擎，Apache Doris 可以处理设备全生命周期事件，极大的方便开发实现物联网应用所需的各类管理与监控业务。您可以通过分析事件数据，及时发现设备故障、异常行为或趋势变化，以便采取适当的措施。
 - **消息转换**：消息可以写入 Apache Doris 之前，通过 EMQX 规则中进行丰富的处理和转换，方便后续的存储和使用。
 - **实时数据写入**：Apache Doris 支持通过 HTTP 和 JDBC 接口进行实时数据写入。结合 EMQX 使用时，MQTT 数据可以低延迟地直接写入 Doris 表，非常适合对实时查询和分析有高要求的场景。
 - **流式同步**：Apache Doris 还支持从 Flink、Kafka 以及各类事务型数据库等数据源接入实时数据流。这使得用户可以构建统一的数据处理流水线，将 EMQX 中的 MQTT 数据与其他流式数据源结合，实现全面的实时分析能力。
@@ -64,25 +64,24 @@ mysql -uroot -P9030 -h127.0.0.1
 - 数据表 `emqx_client_events` 存储上下线的客户端 ID、事件类型以及事件发生时间。
 
   ```sql
-create database mqtt;
-use mqtt;
-
-create table if not exists
-  emqx_messages(
-    clientid varchar,
-    topic string,
-    payload string,
-    created_at datetime
-  )
-  properties (replication_num = 1);
-
-create table if not exists
-  emqx_client_events(
-    clientid varchar,
-    event varchar,
-    created_at datetime)
-  properties (replication_num = 1);
-  ```
+  create database mqtt;
+  use mqtt;
+  
+  create table if not exists
+    emqx_messages(
+      clientid varchar,
+      topic string,
+      payload string,
+      created_at datetime
+    )
+    properties (replication_num = 1);
+  
+  create table if not exists
+    emqx_client_events(
+      clientid varchar,
+      event varchar,
+      created_at datetime)
+    properties (replication_num = 1);
 
 ## 创建连接器
 
@@ -92,7 +91,7 @@ create table if not exists
 2. 在连接器类型中选择 **Doris**，点击**下一步**。
 3. 在 **配置** 步骤，配置以下信息：
 
-   - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_mysql`。
+   - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_doris`。
    - **服务器地址**：填写 `127.0.0.1:3306`。
    - **数据库名字**：填写 `mqtt`。
    - **用户名**：填写 `root`。
@@ -116,7 +115,7 @@ create table if not exists
      *
    FROM
      "t/#"
-  ```
+   ```
 
    ::: tip
 
@@ -128,11 +127,11 @@ create table if not exists
 
 5. 在**动作类型**下拉框中选择 Apache Doris，保持**动作**下拉框为默认的“创建动作”选项，您也可以选择一个之前已经创建好的 Apache Doris Sink。此处我们创建一个全新的 Sink 并添加到规则中。
 
-6. 输入 Sink名称，要求是大小写英文字母或数字组合。
+6. 输入 Sink 名称，要求是大小写英文字母或数字组合。
 
-7. 从**连接器**下拉框中选择刚刚创建的 `my_mysql`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+7. 从**连接器**下拉框中选择刚刚创建的 `my_doris`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`:
+8. 配置 **SQL 模板**，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 （`;`）:
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -155,7 +154,7 @@ create table if not exists
 
      :::
 
-9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，将触发这些备选动作。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
 10. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
 
@@ -167,7 +166,7 @@ create table if not exists
 
 ## 创建事件记录 Sink 规则
 
-本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入到 Apache Doris 的数据表 `emqx_client_events` 中。除 SQL 模板与规则外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
+本节展示如何创建用于记录客户端上/下线状态的规则，并通过配置的 Sink 将记录写入 Apache Doris 的数据表 `emqx_client_events` 中。除 SQL 模板与规则外，其他操作步骤与[创建消息存储 Sink 规则](#创建消息存储-sink-规则)章节完全相同。
 
 您可以使用以下规则 SQL 创建规则：
 
@@ -178,7 +177,7 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-您可以使用以下 SQL 模版创建实现设备上下线记录的 Sink，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
+您可以使用以下 SQL 模板创建实现设备上下线记录的 Sink，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -196,7 +195,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Apache Doris" }'
 ```
 
-分别查看两个 Sink 运行统计，命中、发送成功次数均 +1，上下线记录 Sink 命中和成功次数 +2。
+分别查看两个 Sink 运行统计，命中数和发送成功次数应各增加 1 次，上下线记录 Sink 命中和成功次数应增加 2 次。
 
 查看数据是否已经写入表中，`emqx_messages` 表：
 
@@ -236,6 +235,6 @@ mysql> select * from emqx_client_events;
 | **健康检查间隔**     | 指定 Sink 对与 Apache Doris 的连接执行自动健康检查的时间间隔（以秒为单位）。 | `15` 秒  |
 | **缓存队列最大长度** | 指定可以由 Apache Doris Sink 中的每个缓冲器工作进程缓冲的最大字节数。缓冲器工作进程在将数据发送到 Apache Doris 之前会临时存储数据，充当处理数据流的中介以更高效地处理数据流。根据系统性能和数据传输要求调整该值。 | `256` MB |
 | **最大批量请求大小** | 指定可以在单个传输操作中从 EMQX 发送到 Apache Doris 的数据批处理的最大大小。通过调整此大小，您可以微调 EMQX 与 Apache Doris 之间数据传输的效率和性能。<br />如果将“最大批处理大小”设置为“1”，则数据记录将单独发送，而不会分组成批处理。 | `1`      |
-| **请求模式**         | 允许您选择`同步`或`异步`请求模式，以根据不同要求优化消息传输。在异步模式下，写入到 Apache Doris 不会阻塞 MQTT 消息发布过程。但是，这可能导致客户在它们到达 Apache Doris 之前就收到了消息。 | `异步`   |
+| **请求模式**         | 允许您选择`同步`或`异步`请求模式，以根据不同要求优化消息传输。在异步模式下，写入 Apache Doris 不会阻塞 MQTT 消息发布过程。但是，这可能导致客户在它们到达 Apache Doris 之前就收到了消息。 | `异步`   |
 | **请求飞行队列窗口** | “飞行队列请求”是指已启动但尚未收到响应或确认的请求。此设置控制 Sink 与 Apache Doris 通信时可以同时存在的最大飞行队列请求数。<br/>当 **请求模式** 设置为 `异步` 时，“请求飞行队列窗口”参数变得特别重要。如果对于来自同一 MQTT 客户端的消息严格按顺序处理很重要，则应将此值设置为 `1`。 | `100`    |
 

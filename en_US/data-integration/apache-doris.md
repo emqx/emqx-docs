@@ -28,12 +28,9 @@ The data integration with Apache Doris can bring the following features and adva
 
 - **Flexible Event Handling**: Through the EMQX rules engine, Apache Doris can handle device lifecycle events, greatly facilitating the development of various management and monitoring tasks required for implementing IoT applications. By analyzing event data, you can promptly detect device failures, abnormal behavior, or trend changes to take appropriate measures.
 - **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to Apache Doris, making storage and usage more convenient.
-- **Real-Time Data Ingestion**
-   Apache Doris supports real-time data ingestion via HTTP and JDBC interfaces. When integrated with EMQX, MQTT data can be written directly into Doris tables with low latency, making it ideal for scenarios that require immediate query and analytics capabilities.
-- **Streaming Synchronization**
-   Apache Doris also supports ingesting real-time data streams from sources like Flink, Kafka, and transactional databases. This makes it ideal for building unified pipelines that combine MQTT data from EMQX with other streaming data sources for comprehensive real-time analysis.
-- **Standard SQL and Ecosystem Compatibility**
-   Doris is fully compatible with MySQL syntax and supports standard SQL, allowing users to perform powerful analytical queries without learning new languages. It integrates easily with business intelligence (BI) tools and client applications for dashboards, reports, and automation workflows.
+- **Real-Time Data Ingestion**: Apache Doris supports real-time data ingestion via HTTP and JDBC interfaces. When integrated with EMQX, MQTT data can be written directly into Doris tables with low latency, making it ideal for scenarios that require immediate query and analytics capabilities.
+- **Streaming Synchronization**: Apache Doris also supports ingesting real-time data streams from sources like Flink, Kafka, and transactional databases. This makes it ideal for building unified pipelines that combine MQTT data from EMQX with other streaming data sources for comprehensive real-time analysis.
+- **Standard SQL and Ecosystem Compatibility**: Doris is fully compatible with MySQL syntax and supports standard SQL, allowing users to perform powerful analytical queries without learning new languages. It integrates easily with business intelligence (BI) tools and client applications for dashboards, reports, and automation workflows.
 - **Runtime Metrics**: Support for viewing runtime metrics of each Sink, such as total message count, success/failure counts, current rates, and more.
 
 Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
@@ -105,7 +102,7 @@ The following steps assume that you run both EMQX and Apache Doris on the local 
    - **Password**: Enter `public`.
 5. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Apache Doris server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to Apache Doris and record client events. For detailed steps, see [Create a Rule with Apache Doris Sink for Message Storage](#create-a-rule-with-mysql-sink-for-message-storage) and [Create a Rule with Apache Doris Sink for Events Recording](#create-a-rule-with-mysql-sink-for-events-recording).
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to Apache Doris and record client events. For detailed steps, see [Create a Rule with Apache Doris Sink for Message Storage](#create-a-rule-with-apache-doris-sink-for-message-storage) and [Create a Rule with Apache Doris Sink for Events Recording](#create-a-rule-with-apache-doris-sink-for-events-recording).
 
 ## Create a Rule with Apache Doris Sink for Message Storage
 
@@ -183,7 +180,7 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Apache Doris table `emqx_client_events` via a configured Sink.
 
-The rule creation steps are similar to those in [Creating a rule with Apache Doris Sink for Message Storage](#create-a-rules-with-mysql-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+The rule creation steps are similar to those in [Creating a rule with Apache Doris Sink for Message Storage](#create-a-rules-with-apache-doris-sink-for-message-storage) except for the SQL rule syntax and SQL template.
 
 To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
 
@@ -206,7 +203,7 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 
 ## Test the Rules
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
+Use MQTTX to send a message to topic  `t/1`  to trigger an online/offline event.
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Apache Doris" }'
