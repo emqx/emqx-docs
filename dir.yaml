@@ -795,6 +795,8 @@
       title_cn: 不兼容变更
       collapsed: true
       children:
+        - changes/breaking-changes-5.10
+        - changes/breaking-changes-ee-5.9
         - changes/breaking-changes-ee-5.8
         - changes/breaking-changes-ee-5.7
         - changes/breaking-changes-ee-5.6

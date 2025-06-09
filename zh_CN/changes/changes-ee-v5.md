@@ -1,5 +1,204 @@
 # EMQX 企业版 v5 版本
 
+## 5.10.0
+
+*发布日期：2025-06-09*
+
+升级前请查看已知问题列表和不兼容变更列表。
+
+### 增强
+
+#### 核心 MQTT 功能
+
+- [#15118](https://github.com/emqx/emqx/pull/15118) 新增配置项 `mqtt.subscription_max_qos_rules`，用于控制每个客户端订阅所允许的最大 QoS 等级。管理员可以基于特定主题的匹配规则，限制客户端在 SUBSCRIBE 报文中请求的 QoS 等级。目前仅支持基于 SUBSCRIBE 报文中主题的少量匹配规则。
+- [#15246](https://github.com/emqx/emqx/pull/15246) 提升了 WebSocket 连接的性能与资源效率：
+  - 在模拟一对一 MQTT 消息交互的基准测试中，WebSocket 连接的 CPU 使用率降低约 20%，内存占用也有小幅优化。
+  - 启用监听器级连接数限制时，WebSocket 连接的建立效率显著提升，尤其适用于管理大量连接的节点。
+
+#### 安装部署
+
+- [#14791](https://github.com/emqx/emqx/pull/14791) 在 EMQX 的 Helm Chart 中新增对 StatefulSet 自定义注解的支持，可用于在 ConfigMap 或 Secret 发生变更时自动重启 Pod。该功能提升了在 Kubernetes 上管理 EMQX 的自动化程度和可靠性。
+
+#### 访问控制
+
+- [#15250](https://github.com/emqx/emqx/pull/15250) 改进了 LDAP 绑定认证中的逻辑，支持正确从 LDAP 条目的属性中提取 `is_superuser` 标志。
+   此前无论条目中是否包含 `isSuperuser` 属性，该值始终被错误地设置为 `false`。
+- [#15249](https://github.com/emqx/emqx/pull/15249) 改进了 LDAP 认证与权限功能。
+  - 新增对 LDAP `filter` 和 `base_dn` 配置项的校验。
+  - 修复了多个变量插值相关的问题。
+
+#### 规则引擎
+
+- [#15001](https://github.com/emqx/emqx/pull/15001) 在规则引擎的 SQL 中新增 `ai_completion` 函数，可用于调用 AI 服务处理数据。
+
+- [#15201](https://github.com/emqx/emqx/pull/15201) 在 AI 补全提供器配置中新增 `base_url` 选项。
+
+- [#15188](https://github.com/emqx/emqx/pull/15188) 规则引擎的事件主题现在引入了命名空间。
+
+  | 旧的时间主题                            | 新的事件主题                            |
+  | :-------------------------------------- | :-------------------------------------- |
+  | `$events/client_connected`              | `$events/client/connected`              |
+  | `$events/client_disconnected`           | `$events/client/disconnected`           |
+  | `$events/client_connack`                | `$events/client/connack`                |
+  | `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+  | `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+  | `$events/session_subscribed`            | `$events/session/subscribed`            |
+  | `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+  | `$events/message_delivered`             | `$events/message/delivered`             |
+  | `$events/message_acked`                 | `$events/message/acked`                 |
+  | `$events/message_dropped`               | `$events/message/dropped`               |
+  | `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+  | `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+  | `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+  旧的事件主题仍保留，以保持兼容性。
+
+- [#15175](https://github.com/emqx/emqx/pull/15175) 规则引擎现在支持使用通配符匹配事件主题。例如可使用 `$events/#`、`$events/sys/+` 等模式一次匹配多个事件。
+
+#### 数据智能中心
+
+- [#15174](https://github.com/emqx/emqx/pull/15174) 支持通过上传 Protobuf 源文件包的方式注册 Schema。
+
+  例如，假设 Protobuf 源文件包位于 `/tmp/bundle.tar.gz`，其目录结构如下，其中 `a.proto` 是根 schema 文件：
+
+  ```
+  .
+  ├── a.proto
+  ├── c.proto
+  └── nested
+      └── b.proto
+  ```
+
+  可通过 HTTP API 使用该文件包创建一个新 schema，示例如下：
+
+  ```sh
+  curl -v http://127.0.0.1:18083/api/v5/schema_registry_protobuf/bundle \
+    -XPOST \
+    -H "Authorization: Bearer xxxx" \
+    -F bundle=@/tmp/bundle.tar.gz \
+    -F name=my_cool_schema \
+    -F root_proto_file=a.proto
+  ```
+
+#### 数据集成
+
+- [#15248](https://github.com/emqx/emqx/pull/15248) EMQX 新增与 [Doris](https://doris.apache.org/) 的集成，支持通过 SQL 语句进行数据写入 。
+
+- [#15218](https://github.com/emqx/emqx/pull/15218) 在 Kafka 生产者和消费者连接器中支持使用 IAM 认证连接 Amazon MSK（托管版 Apache Kafka）。当 EMQX 部署在 AWS EC2 上时，可通过 AWS SDK 为 Kafka 客户端生成 OAuth Bearer 令牌。
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Snowflake 连接器支持通过指定私钥文件路径进行身份验证，作为使用密码的替代方案。
+
+  用户可选择使用密码、私钥，或在 `/etc/odbc.ini` 中配置其他身份验证参数。
+
+- [#14983](https://github.com/emqx/emqx/pull/14983) EMQX 新增与 S3Tables 的数据集成。
+
+  **当前限制：**
+
+  - 仅支持 [S3Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) 目录（表数据和元数据需存储在 S3 中）；
+  - 仅支持 [Iceberg 表格式 v2](https://iceberg.apache.org/spec/#version-2-row-level-deletes)；
+  - 仅支持以下分区转换函数：
+    - `identity`
+    - `void`
+    - `bucket[N]`；
+  - 数据文件仅支持写入为 [Avro 格式](https://avro.apache.org/docs/1.12.0/specification/)。
+
+#### 多租户
+
+- [#15253](https://github.com/emqx/emqx/pull/15253) 新增两个多租户相关的 API：`GET /mt/ns_list_details` 和 `GET /mt/ns_list_managed_details`。
+   这两个接口与已有的对应接口功能类似，但会额外返回与命名空间相关的元数据信息，而不仅仅是名称。
+- [#15160](https://github.com/emqx/emqx/pull/15160) 新增多租户管理接口 `DELETE /mt/bulk_delete_ns`，支持批量删除命名空间。
+
+#### CLI
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) 新增命令 `emqx ctl conf remove x.y.z`，用于从现有配置中移除 `x.y.z` 这一配置路径。
+
+#### 网关
+
+- [#15138](https://github.com/emqx/emqx/pull/15138) 新增 **NATS 网关**，支持通过 TCP/TLS 和 WS/WSS 协议接收 NATS 客户端连接。
+
+  例如，NATS 网关会将以下 NATS 消息转换为主题为 `sub/t`、payload 为 `hello` 的 MQTT 消息，并可无缝集成到 EMQX 的规则引擎、数据集成等功能中：
+
+  ```
+  PUB sub.t 5  
+  hello
+  ```
+
+
+#### MQTT 会话持久化
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) 为 DS Raft 后端添加基础监控指标，用于观测集群状态、数据库概况、分片复制情况以及副本切换等信息。
+
+### 修复
+
+#### 访问控制
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) 修复了在创建新的黑名单列表记录失败时，错误信息格式不正确的问题。
+
+#### 集群
+
+- [#15304](https://github.com/emqx/emqx/pull/15304) 修复在使用 `static` 发现策略时，复制节点发现核心节点的问题。
+
+  之前，复制节点可能会忽略未在 `static_seeds` 列表中显式列出的核心节点，这可能导致集群视图不一致和负载不均衡的问题。
+
+- [#15180](https://github.com/emqx/emqx/pull/15180) 修复 `ekka_locker` 中未正确处理 RPC（`badrpc`）错误的问题。该问题会导致锁操作被错误地认为成功，进而引发集群中锁状态不一致和死锁风险。
+
+#### 安全
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) 优化了 CRL 分发点（CDP）的处理机制：当某个 CRL 分发点 URL 连续刷新失败达到一定次数（默认 60 秒）后，该 URL 将被移除并停止刷新，以避免日志大量堆积。
+
+#### 规则引擎
+
+- [#15247](https://github.com/emqx/emqx/pull/15247) 修复使用命令 `emqx ctl conf remove dashboard.sso.<BACKEND_NAME>` 时出现 `function_clause` 错误日志的问题。
+
+#### 数据智能中心
+
+- [#15285](https://github.com/emqx/emqx/pull/15285) 为 External HTTP Schema 请求添加了 `content-type` 请求头。
+- [#15224](https://github.com/emqx/emqx/pull/15224) 修复通过 Dashboard 更新 External Schema Registry 时，密码字段意外被修改为 `******` 的问题。
+- [#15190](https://github.com/emqx/emqx/pull/15190) 支持在消息转换中设置固定的 QoS 和主题。
+
+#### 数据集成
+
+- [#15274](https://github.com/emqx/emqx/pull/15274) 现在，Postgres、Matrix 和 TimescaleDB 连接器在健康检查失败时会触发完整的重连。
+   在此之前，部分情况下连接会变得不可用，但系统仍尝试继续使用它，可能导致请求阻塞，甚至引发内存溢出问题。
+
+- [#15234](https://github.com/emqx/emqx/pull/15234) 为规则测试新增了追踪事件，当动作尚未安装或使用了 Republish Fallback 动作时，这些事件将显示在前端模拟测试中。
+
+- [#15219](https://github.com/emqx/emqx/pull/15219) 减少 ClickHouse 连接器在健康检查超时时的日志输出量。
+   同时，当出现超时时，连接器状态将标记为“连接中”（connecting）而非“已断开”，这意味着不会再因此触发完整重连。
+
+- [#15154](https://github.com/emqx/emqx/pull/15154) 修复聚合模式下运行的动作（如 S3、Azure Blob Storage、Snowflake）中的一个罕见竞争条件，避免类似如下的崩溃日志：
+
+  ```
+  ** Reason for termination ==
+  ** {function_clause,[{emqx_connector_aggregator,handle_close_buffer,[...], ...
+  ```
+
+- [#15147](https://github.com/emqx/emqx/pull/15147) 修复使用模拟输入数据进行规则测试时，某些动作未在渲染请求后发送追踪事件的问题。
+
+  受影响的动作包括：
+
+  - Couchbase
+  - Snowflake
+  - IoTDB（Thrift 驱动）
+
+- [#15306](https://github.com/emqx/emqx/pull/15306) 修复了一个问题：连接器的健康检查返回后，无论依赖的 Action 和 Source 当前状态如何，都会无条件触发它们的健康检查。
+
+#### 多租户
+
+- [#15242](https://github.com/emqx/emqx/pull/15242) 修复在为多租户配置限流器后，节点重启时初始化限流器过程中日志中出现如下错误信息的问题：
+
+  ```
+  2025-05-15T16:45:13.276895+08:00 [error] clientid: ns3mqttx_620053b2_100, msg: hook_callback_exception, peername: 127.0.0.1:39364, username: ns3, reason: {limiter_group_not_found,{mt_tenant,<<"ns3">>}}, stacktrace: [{emqx_limiter,connect,1,[{file,"emqx_limiter.erl"},{line,134}]}
+  ```
+
+#### 可观测性
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) 修复导出 OpenTelemetry 指标时出现的 `badarg` 错误。
+
+#### 遥测
+
+- [#15216](https://github.com/emqx/emqx/pull/15216) 修复当插件被启用时，`emqx_telemetry` 进程崩溃的问题。
+
 ## 5.9.0
 
 *发布日期：2025-05-02*
