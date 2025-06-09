@@ -188,7 +188,7 @@ To create a rule for online/offline status recording, you can enter the followin
 SELECT
   *
 FROM
-  "$events/client_connected", "$events/client_disconnected"
+  "$events/client/connected", "$events/client/disconnected"
 ```
 
 To insert the client events data to the data table, you can use the following SQL template:

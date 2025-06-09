@@ -174,7 +174,7 @@ mysql -uroot -P9030 -h127.0.0.1
 SELECT
   *
 FROM 
-  "$events/client_connected", "$events/client_disconnected"
+  "$events/client/connected", "$events/client/disconnected"
 ```
 
 您可以使用以下 SQL 模板创建实现设备上下线记录的 Sink，请注意字段不应当包含引号，SQL 末尾不要带分号 `;`:
