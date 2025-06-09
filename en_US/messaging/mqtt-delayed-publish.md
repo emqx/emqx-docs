@@ -9,14 +9,14 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`: Messages prefixed with `$delay` will be treated as messages that need to be delayed. The delay interval is determined by the content of the next topic level.
-- `{DelayTime}`: Specify the time interval or timestamp for delaying the publishing of this MQTT message with the unit of second. If it's an interval the maximum allowed interval is 42949670 seconds (about 497 days). If it's a timestmap, it cannot be earlier or later than 42949670 seconds from the current system time. Message is discarded if failed to parse `{DelayTime}` as an integer or if it's not in the valid range.
+- `{DelayTime}`: Specify the time interval or timestamp for delaying the publishing of this MQTT message with the unit of seconds. If it's an interval, the maximum allowed interval is 42949669 seconds (about 497 days). If it's a timestamp, it cannot be earlier or later than 42949669 seconds from the current system time. The message is discarded if it fails to parse `{DelayTime}` as an integer or if it's not in the valid range.
 - `{TopicName}`: The topic name of the MQTT message.
 
 Example:
 
 - `$delayed/15/x/y`: Publish MQTT message to the topic `x/y` after 15 seconds
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
-- `$delayed/1743490800/chat/id`：Publish message to the topic `chat/id` on April 1st 2025 at 9:00 (Stockholm timezone).
+- `$delayed/1743490800/chat/id`: Publish message to the topic `chat/id` on April 1st, 2025 at 9:00 (Stockholm timezone).
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
 ## Configure Delayed Publish via Dashboard
