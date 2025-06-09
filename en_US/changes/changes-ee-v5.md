@@ -140,12 +140,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, the replicants could ignore core nodes not explicitly listed in the `static_seeds` list.
   This could lead to an inconsistent cluster view and load imbalance.
 
-- [#15180](https://github.com/emqx/emqx/pull/15180)Fixed an issue in `ekka_locker` where RPC (`badrpc`) errors were not handled correctly, causing false-positive lock successes. This could lead to inconsistent lock states and deadlocks in clustered deployments.
+- [#15180](https://github.com/emqx/emqx/pull/15180) Fixed an issue in `ekka_locker` where RPC (`badrpc`) errors were not handled correctly, causing false-positive lock successes. This could lead to inconsistent lock states and deadlocks in clustered deployments.
 
 #### Security
 
 
-- [#15159](https://github.com/emqx/emqx/pull/15159) Now, after a CRL Distribution Point URL fails to be refreshed after a number of consecutive attempts (60 s by default), it'll be evicted and stop being refreshed, instead of flooding logs.
+- [#15159](https://github.com/emqx/emqx/pull/15159) Improved CRL Distribution Point (CDP) handling: If a CDP URL fails to refresh continuously (default timeout: 60 seconds), it will now be evicted and excluded from further refresh attempts to prevent repeated error logs.
 
 #### Rule Engine
 

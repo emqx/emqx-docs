@@ -144,7 +144,7 @@
 
 #### 安全
 
-- [#15159](https://github.com/emqx/emqx/pull/15159) 当某个 CRL 分发点（CRL Distribution Point）URL 连续刷新失败达到一定次数（默认 60 秒）后，该 URL 将被移除并停止刷新，以避免日志大量堆积。
+- [#15159](https://github.com/emqx/emqx/pull/15159) 优化了 CRL 分发点（CDP）的处理机制：当某个 CRL 分发点 URL 连续刷新失败达到一定次数（默认 60 秒）后，该 URL 将被移除并停止刷新，以避免日志大量堆积。
 
 #### 规则引擎
 
