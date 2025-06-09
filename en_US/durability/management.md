@@ -105,24 +105,45 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'    (x) down
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : (x) down :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7
-messages/1                        5C6028D6CE9459C7
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7
-messages/2                        5C6028D6CE9459C7
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7
-messages/5                        5C6028D6CE9459C7
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7
-messages/8                        5C6028D6CE9459C7
-messages/9                        5C6028D6CE9459C7
+.-------------.------------------.-------------.
+: DB/Shard    : Replicas         : Transitions :
+:-------------:------------------:-------------:
+:-messages/0--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/1--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/10-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/11-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/12-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/2--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/3--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/4--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/5--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/6--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/7--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/8--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/9--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+`-------------`------------------`-------------`
 ```
 
 This command output includes:
@@ -131,7 +152,7 @@ This command output includes:
 - `SITES`: List of all known sites, including EMQX node names and their statuses.
 - `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
 
-### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
+### `emqx_ctl ds set-replicas <DS> <Site1> <Site2> ...`
 
 This command allows to set the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
@@ -143,7 +164,7 @@ Updating the list of durable storage replicas can be costly as it may involve co
 Example:
 
 ```bash
-$ emqx_ctl ds set_replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
+$ emqx_ctl ds set-replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
 
@@ -156,39 +177,55 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'        up
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : up       :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/1                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/2                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/5                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/8                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/9                        5C6028D6CE9459C7
-
-REPLICA TRANSITIONS:
-Shard                         Transitions
-messages/0                    +F4E92DEA197C8EBC
-messages/1                    +F4E92DEA197C8EBC
-messages/10                   +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/11                   +F4E92DEA197C8EBC
-messages/2                    +F4E92DEA197C8EBC
-messages/3                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/4                    +F4E92DEA197C8EBC
-messages/5                    +F4E92DEA197C8EBC
-messages/6                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/7                    +F4E92DEA197C8EBC
-messages/8                    +F4E92DEA197C8EBC
-messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+.-------------.------------------.--------------------.
+: DB/Shard    : Replicas         : Transitions        :
+:-------------:------------------:--------------------:
+:-messages/0--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/1--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/10-:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/11-:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/2--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/3--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/4--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/5--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/6--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/7--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/8--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/9--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+`-------------`------------------`--------------------`
 ```
 
 The new section `REPLICA TRANSITIONS` lists pending operations. Once all operations are complete, this list will be empty.
@@ -200,7 +237,7 @@ These commands add or remove a site from the list of replicas of the durable sto
 Example:
 
 ```bash
-$ bin/emqx_ctl ds join messages B2A7DBB2413CD6EE
+$ emqx_ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 
@@ -257,3 +294,90 @@ These counters are specific to the "wildcard optimized" storage layout. They mea
 
 Increasing the `durable_storage.messages.layout.epoch_bits` parameter can help improve this ratio.
 
+### `emqx_ds_raft_db_shards_num`
+
+The number of shards the DB is split into.
+
+### `emqx_ds_raft_db_sites_num`
+
+This gauge tracks the number of current and assigned sites a DS DB is replicated across.
+
+Most of the time, the number of current sites is equal to the number of assigned sites. If the current stays different from the assigned for a long time, something is likely wrong with the replica transfers.
+
+### `emqx_ds_raft_shard_replication_factor`
+
+Tracks the number of replicas in the replica set of a DS DB shard.
+
+If this number falls below the configured and expected replication factor, durability is at risk. Consider rebalancing replicas across more sites.
+
+### `emqx_ds_raft_db_shards_online_num`
+
+Tracks the number of DS DB shards actively managed on this node.
+
+This number should be equal to the number of shards currently assigned to this node. If this is not the case, availability might be compromised. Check the logs for details.
+
+### `emqx_ds_raft_shard_transition_queue_len`
+
+Tracks the number of pending replica set transitions for a DS DB shard.
+
+If this number stays non-zero for a long time, something is wrong with the replica transfers.
+
+### `emqx_ds_raft_shard_transitions`
+
+Counts the number of started / completed / skipped / crashed replica set transitions of a DB shard.
+
+Crashed transitions should always be zero. If this is not the case, consider checking the logs for errors.
+
+### `emqx_ds_raft_shard_transition_errors`
+
+Counts the number of transient errors that occurred during the orchestration of replica set transitions of a DB shard.
+
+If this counter grows, something is wrong with the replica transfers. Consider checking the logs for errors.
+
+### `emqx_ds_raft_snapshot_reads`
+
+Counts the number of started / completed snapshot reads for a DS DB shard, when a shard was the source of snapshot replication.
+
+### `emqx_ds_raft_snapshot_read_errors`
+
+Counts the number of errors that occurred during reading the snapshot on the source DS DB shard, which caused snapshot replication to be aborted.
+
+Errors are not expected to happen. Look for possible reasons in the logs.
+
+### `emqx_ds_raft_snapshot_read_chunks`
+
+Counts the number of individual chunks read on the DS DB shard acting as a source of snapshot transfer, and later transferred to the recipient.
+
+### `emqx_ds_raft_snapshot_read_chunk_bytes`
+
+Counts the number of bytes read as chunks on the source DS DB shard.
+
+### `emqx_ds_raft_snapshot_writes`
+
+Counts the number of started / completed snapshot writes for a DS DB shard when a shard was the recipient of snapshot replication.
+
+### `emqx_ds_raft_snapshot_write_errors`
+
+Counts the number of errors that occurred during writing the snapshot to the recipient DS DB shard, which caused snapshot replication to be aborted.
+
+This is also not expected to grow. Consider checking the logs for details.
+
+### `emqx_ds_raft_snapshot_write_chunks`
+
+Counts the number of individual chunks received from the source DS DB shard and written to the recipient.
+
+### `emqx_ds_raft_snapshot_write_chunk_bytes`
+
+Counts the number of bytes written as chunks on the recipient DS DB shard.
+
+### `emqx_ds_raft_current_timestamp_us`
+
+Tracks the latest operation timestamp currently replicated by a shard server (in microseconds).
+
+Normally, each replica should always have the same timestamp. If this is not the case, something is wrong with the replication.
+
+### `emqx_ds_raft_rasrv_state_changes`
+
+Counts the number of times the Raft server turned into a candidate / follower / leader.
+
+Frequent state changes are a sign of instability. Consider checking the logs for details.

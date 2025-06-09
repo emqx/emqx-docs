@@ -76,7 +76,7 @@ Removing a site can cause the effective replication factor to drop below the con
 A series of changes to the set of sites holding durable storage replicas can be performed in a single operation.
 
 ```shell
-$ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
