@@ -85,7 +85,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15248](https://github.com/emqx/emqx/pull/15248) EMQX supports data integration with [Doris](https://doris.apache.org/), supporting data writing using SQL statements.
 
-- [#15218](https://github.com/emqx/emqx/pull/15218) Added support for MSK IAM authentication for all Kafka Connectors (Kafka Producer, Kafka Consumer, Confluent, Azure Event Hub).
+- [#15218](https://github.com/emqx/emqx/pull/15218) Added support for IAM authentication in Kafka Producer and Consumer Connectors when connecting to Amazon MSK (Managed Streaming for Apache Kafka). When EMQX runs on AWS EC2, it uses the AWS SDK to generate OAuth Bearer tokens for Kafka clients.
 
 - [#15157](https://github.com/emqx/emqx/pull/15157) Added support for specifying private key file path for Snowflake Connector instead of using password.
 
@@ -131,7 +131,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Access Control
 
-- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed incorrect error message format when blacklist creation fails.
+- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed an issue where the error message format was incorrect when creating a new banned list record failed.
 
 #### Clustering
 

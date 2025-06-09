@@ -84,7 +84,7 @@
 
 - [#15248](https://github.com/emqx/emqx/pull/15248) EMQX 新增与 [Doris](https://doris.apache.org/) 的集成，支持通过 SQL 语句进行数据写入 。
 
-- [#15218](https://github.com/emqx/emqx/pull/15218) Kafka 系列连接器（包括 Kafka Producer、Kafka Consumer、Confluent、Azure Event Hub）新增对 MSK IAM 认证的支持。
+- [#15218](https://github.com/emqx/emqx/pull/15218) 在 Kafka 生产者和消费者连接器中支持使用 IAM 认证连接 Amazon MSK（托管版 Apache Kafka）。当 EMQX 部署在 AWS EC2 上时，可通过 AWS SDK 为 Kafka 客户端生成 OAuth Bearer 令牌。
 
 - [#15157](https://github.com/emqx/emqx/pull/15157) Snowflake 连接器支持通过指定私钥文件路径进行身份验证，作为使用密码的替代方案。
 
@@ -132,7 +132,7 @@
 
 #### 访问控制
 
-- [#15184](https://github.com/emqx/emqx/pull/15184) 修复黑名单创建失败时错误信息格式不正确的问题。
+- [#15184](https://github.com/emqx/emqx/pull/15184) 修复了在创建新的黑名单列表记录失败时，错误信息格式不正确的问题。
 
 #### 集群
 
