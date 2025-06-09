@@ -86,16 +86,66 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 Before adding a Kafka Sink action, you need to create a Kafka producer connector to establish a connection between EMQX and Kafka.
 
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
+
 2. Click **Create** in the top right corner of the page, select **Kafka Producer** on the connector selection page, and click **Next**.
+
 3. Enter a name and description, such as `my-kafka`. The name is used to associate the Kafka Sink with the connector and must be unique within the cluster.
+
 4. Configure the parameters required to connect to Kafka:
-   - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+
+   - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
+
+     - `None`: No authentication.
+     - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
+     - `Basic Auth`: Requires selecting a **mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **username** and **password**.
+     - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab file**.
+
+     See [Authentication Method](#authentication-method) for details on each method.
+
    - Leave other options as default or configure them according to your business needs.
+
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
+
 5. Click the **Create** button to complete the creation of the connector.
 
 Once created, the connector will automatically connect to Kafka. Next, you need to create a rule based on this connector to forward data to the Kafka cluster configured in the connector.
+
+### Authentication Method
+
+When creating a Kafka connector in EMQX, you can choose from several authentication methods depending on your Kafka cluster’s security setup:
+
+- **None**: No authentication is required.
+
+- **MSK IAM**: For connecting to Amazon MSK clusters when EMQX is deployed on Amazon EC2 instances.
+
+  This method uses the AWS EC2 instance metadata service to generate authentication tokens based on the IAM policies attached to the instance.
+
+  ::: tip Important Notice
+
+  MSK IAM authentication is supported only when EMQX is running on EC2 instances connecting to MSK clusters, as it relies on the AWS Metadata API.
+
+  :::
+
+- **Basic Auth**: Uses a username and password for authentication.
+
+  When this method is selected, you must provide:
+  - **Mechanism**: Choose from `plain`, `scram_sha_256`, or `scram_sha_512`.
+  - **Username** and **Password**: Credentials to authenticate with the Kafka cluster.
+
+- **Kerberos**: Uses Kerberos GSSAPI for authentication.
+
+  This method requires:
+  - **Kerberos Principal**: The Kerberos identity used for authentication.
+  - **Kerberos Keytab File**: The file path to the keytab used for non-interactive authentication.
+
+  ::: tip Important Notice
+
+  The Kerberos keytab file must be located at the same path on all EMQX nodes, and the EMQX service user must have read permissions for the file.
+
+  :::
 
 ## Create a Rule with Kafka Sink
 
@@ -278,9 +328,17 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
 3. In the **Create Connector** page, click to select **Kafka Consumer**, and then click **Next**.
 4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers, for example, `my-kafka-source`.
 5. Enter the connection information for the source.
-   - Enter `127.0.0.1:9092` for the **Bootstrap Hosts**. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
+
+     - `None`: No authentication.
+     - `authentication_msk_iam`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
+     - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
+     - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.
+
+     See the [Authentication Method](#authentication-method) for details on each method.
    - Leave other options as default or configure according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see **TLS for External Resource Access**.
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
 6. Advanced settings (optional): See **Advanced Configurations.**
 7. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 11. Click **Create**. You will be offered the option of creating an associated rule. See [Create a Rule with Kafka Consumer Source](#create-a-rule-with-kafka-consumer-source).
