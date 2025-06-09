@@ -266,5 +266,5 @@ For other authentication types, refer to the documentation on [EMQX Authenticato
 
 ### Configure User-Level Interfaces
 
-- For complete configuration reference, see: [NATS Gateway Configuration](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
-- For REST API details, see: [Gateway REST API Documentation](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- For complete configuration reference, see: [NATS Gateway Configuration](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
+- For REST API details, see: [Gateway REST API Documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)

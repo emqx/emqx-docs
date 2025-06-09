@@ -35,11 +35,11 @@ NATS 协议网关当前支持以下主要功能：
 NATS 协议完全兼容发布订阅的消息模式，并和 MQTT 的发布订阅进行消息互通。NATS 网关的转换规则：
 
 - NATS 协议的 PUB 和 HPUB 报文作为消息发布。
-  * 其主题为 PUB 报文中的 `subject` 字段。 例如 Subject 为 `t.a` 会被 NATS 网关转换成功 MQTT 主题 `t/a` 进行发布。
+  * 其主题为 PUB 报文中的 `subject` 字段。 例如 Subject 为 `t.a` 会被 NATS 网关转换成为 MQTT 主题 `t/a` 进行发布。
   * 消息内容为 PUB 报文的消息体内容。
   * 当客户端连接 CONNECT 报文中的 `verbose=1` 时，转换消息的 QoS 固定 1；否则为 0。
 - NATS 协议的 SUB 报文作为订阅请求。
-  * 其主题为 SUB 报文中的 `subject` 字段。例如 Subject 为 `t.a` 会被 NATS 网关转化为 MQTT 主题 `t/a` 进行订阅。
+  * 其主题为 SUB 报文中的 `subject` 字段。例如 Subject 为 `t.a` 会被 NATS 网关转换为 MQTT 主题 `t/a` 进行订阅。
   * 当客户端连接 CONNECT 报文中的 `verbose=1` 时，转换订阅的 QoS 固定 1；否则为 0。
   * 支持通配符，例如 `*.b.>` 会转换为 `+/b/#`。
   * 支持共享订阅。SUB 报文的 Queue Group 会被转换为 MQTT 共享订阅的组名。
@@ -51,7 +51,7 @@ NATS 协议完全兼容发布订阅的消息模式，并和 MQTT 的发布订阅
 
 当前，在 EMQX 5.10.0 中，存在以下实现限制：
 
-- 由于当前网关监听器不支持从 TCP 升级为 TLS 连接，所以暂不支持客户端以 `tls_handshake_first=false` 进行连接。
+- 由于当前网关监听器不支持从 TCP 协议升级为 TLS 协议连接，所以暂不支持客户端以 `tls_handshake_first=false` 进行连接。
 - 在未配置认证器时，支持未发起 CONNECT 报文的 NATS 客户端进行发布订阅，但目前暂不支持管理匿名客户端。
 
 ## 启用 NATS 网关
@@ -68,7 +68,7 @@ NATS 协议完全兼容发布订阅的消息模式，并和 MQTT 的发布订阅
 
 在 EMQX Dashboard 左侧导航目录中点击**管理** -> **网关**。**网关**页面上列出了所有支持的网关。找到 **NATS** 并点击**操作**列中的**配置**按钮，您将进入**初始化 NATS** 页面。
 
-为了简化配置过程，EMQX 为**网关**页面上所有必填的字段提供了默认值。如果不需要自定义配置，您只需以下 3 步就可启用 NATS 网关:
+为了简化配置过程，EMQX 为**网关**页面上所有必填的字段提供了默认值。如果不需要自定义配置，您只需以下 3 步即可启用 NATS 网关:
 
 1. 接受**基础参数**步骤页面上所有的默认设置，点击**下一步**。
 2. 在**监听器**步骤页面中，您可以添加监听器，也可以稍后配置并点击**下一步**。有关监听器的具体配置说明，参考[添加监听器](#添加监听器)。
@@ -138,7 +138,7 @@ NATS 网关支持 TCP/SSL/WS/WSS 类型的监听器，其完整可配置的参�
    
    - **最大消息负载大小**：单条 PUB/HPUB 消息的 Payload 最大字节数。默认值：`1048576` 字节。
    
-   - **空闲超时时间**: 设置连接客户端在无活动状态下被视为断开连接的持续时间（以秒为单位）。默认值：`30秒`。
+   - **空闲超时时间**: 设置连接客户端在无活动状态下被视为断开连接的持续时间（以秒为单位）。默认值：`30` 秒。
    
    - **启用统计**: 设置是否允许网关收集和报告统计信息。默认为开启。
    
@@ -260,4 +260,4 @@ gateway.nats {
 ### 配置用户层接口
 
 - 详细配置说明参考：[网关配置 - NATS 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
-- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
