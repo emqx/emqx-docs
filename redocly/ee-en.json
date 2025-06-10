@@ -135,7 +135,7 @@
         }
       },
       "emqx_mgmt_api_stats.aggregate": {
-        "description": "Calculation aggregate for all nodes",
+        "description": "Set to 'true' to aggregate data from cluster nodes.",
         "example": false,
         "in": "query",
         "name": "aggregate",
@@ -2463,7 +2463,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -2518,7 +2518,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -4223,6 +4223,11 @@
             ],
             "type": "string"
           },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
             "enum": [
@@ -5150,7 +5155,7 @@
       "authn_hash.simple": {
         "properties": {
           "name": {
-            "description": "Simple password hashing algorithm.",
+            "description": "Settings for simple algorithms like PLAIN, SHA, SHA256 and SHA512.",
             "enum": [
               "plain",
               "md5",
@@ -5162,7 +5167,7 @@
           },
           "salt_position": {
             "default": "prefix",
-            "description": "Salt position for PLAIN, MD5, SHA, SHA256 and SHA512 algorithms.",
+            "description": "Salt position for PLAIN, SHA, SHA256 and SHA512 algorithms.",
             "enum": [
               "disable",
               "prefix",
@@ -5825,7 +5830,7 @@
             "type": "string"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_doris.ssl",
             "default": {
               "enable": false
             },
@@ -10674,6 +10679,11 @@
               "all"
             ],
             "type": "string"
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
           },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
@@ -16792,7 +16802,7 @@
             "type": "string"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_doris.ssl",
             "default": {
               "enable": false
             },
@@ -19377,7 +19387,7 @@
       "authn_hash.bcrypt": {
         "properties": {
           "name": {
-            "description": "BCRYPT password hashing.",
+            "description": "For BCRYPT password hashing, must set name to 'bcrypt'",
             "enum": [
               "bcrypt"
             ],
@@ -19843,7 +19853,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -19888,7 +19898,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -21780,17 +21790,17 @@
       "authn_hash.pbkdf2": {
         "properties": {
           "dk_length": {
-            "description": "Derived key length for PBKDF2 hashing algorithm, in bytes. If not specified, calculated automatically based on `mac_fun`.",
+            "description": "Length of the derived key in bytes for PBKDF2 algorithm.",
             "minimum": 1,
             "type": "integer"
           },
           "iterations": {
-            "description": "Number of iterations of PBKDF2 algorithm.",
+            "description": "Number of iterations for PBKDF2 algorithm. Higher values provide better security but require more computation.",
             "minimum": 1,
             "type": "integer"
           },
           "mac_fun": {
-            "description": "Specifies which HMAC function to use in PBKDF2 algorithm. Note that `md4`, `md5`, `ripemd160` are no longer supported since 5.8.3.",
+            "description": "Specifies which HMAC function to use in PBKDF2 algorithm. Note that md4, md5, ripemd160 are no longer supported since 5.8.3.",
             "enum": [
               "md4",
               "md5",
@@ -21804,7 +21814,7 @@
             "type": "string"
           },
           "name": {
-            "description": "PBKDF2 password hashing. Hashes are computed according to the PKCS #5 standard, and represented as hexadecimal strings.",
+            "description": "For PBKDF2 password hashing, must set name to 'pbkdf2'",
             "enum": [
               "pbkdf2"
             ],
@@ -24489,7 +24499,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "MQTT Message retry interval. Delay for the link to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -26246,6 +26256,11 @@
             ],
             "type": "string"
           },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
             "enum": [
@@ -27284,7 +27299,7 @@
       "authn_hash.bcrypt_rw_api": {
         "properties": {
           "name": {
-            "description": "BCRYPT password hashing.",
+            "description": "For BCRYPT password hashing, must set name to 'bcrypt'",
             "enum": [
               "bcrypt"
             ],
@@ -30516,43 +30531,7 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
                 ],
                 "type": "string"
               },
@@ -30564,13 +30543,49 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -30588,7 +30603,7 @@
               },
               {
                 "enum": [
-                  "matrix"
+                  "dynamo"
                 ],
                 "type": "string"
               },
@@ -30600,37 +30615,7 @@
               },
               {
                 "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
                 ],
                 "type": "string"
               },
@@ -30642,7 +30627,7 @@
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -30654,67 +30639,19 @@
               },
               {
                 "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -30726,7 +30663,85 @@
               },
               {
                 "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -33444,7 +33459,7 @@
             "type": "integer"
           },
           "node": {
-            "description": "Node name",
+            "description": "EMQX node name. For example, emqx@172.18.0.2",
             "example": "emqx@127.0.0.1",
             "type": "string"
           },
@@ -36393,6 +36408,11 @@
             ],
             "type": "string"
           },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
             "enum": [
@@ -39245,7 +39265,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "A3B324B3292B03ED",
+            "example": "37ED468BBA8A3CCB",
             "type": "string"
           },
           "status": {
@@ -40127,6 +40147,141 @@
           "parameters",
           "type"
         ],
+        "type": "object"
+      },
+      "connector_doris.ssl": {
+        "properties": {
+          "cacertfile": {
+            "description": "Trusted PEM format CA certificates bundle file.<br/><br/>The certificates in this file are used to verify the TLS peer's certificates.<br/>Append new certificates to the file if new CAs are to be trusted.<br/>There is no need to restart EMQX to have the updated file loaded, because<br/>the system regularly checks if file has been updated (and reload).<br/><br/>NOTE: invalidating (deleting) a certificate from the file will not affect<br/>already established connections.",
+            "type": "string"
+          },
+          "cacerts": {
+            "default": false,
+            "deprecated": true,
+            "type": "boolean"
+          },
+          "certfile": {
+            "description": "PEM format certificates chain file.<br/><br/>The certificates in this file should be in reversed order of the certificate<br/>issue chain. That is, the host's certificate should be placed in the beginning<br/>of the file, followed by the immediate issuer certificate and so on.<br/>Although the root CA certificate is optional, it should be placed at the end of<br/>the file if it is to be added.",
+            "type": "string"
+          },
+          "ciphers": {
+            "default": [],
+            "description": "This config holds TLS cipher suite names separated by comma,<br/>or as an array of strings. e.g.<br/><code>\"TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256\"</code> or<br/><code>[\"TLS_AES_256_GCM_SHA384\",\"TLS_AES_128_GCM_SHA256\"]</code>.<br/><br/><br/>Ciphers (and their ordering) define the way in which the<br/>client and server encrypts information over the network connection.<br/>Selecting a good cipher suite is critical for the<br/>application's data security, confidentiality and performance.<br/><br/>The names should be in OpenSSL string format (not RFC format).<br/>All default values and examples provided by EMQX config<br/>documentation are all in OpenSSL format.<br/><br/><br/>NOTE: Certain cipher suites are only compatible with<br/>specific TLS <code>versions</code> ('tlsv1.1', 'tlsv1.2' or 'tlsv1.3')<br/>incompatible cipher suites will be silently dropped.<br/>For instance, if only 'tlsv1.3' is given in the <code>versions</code>,<br/>configuring cipher suites for other versions will have no effect.<br/><br/><br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config<br/><br/>If PSK cipher suites are intended, 'tlsv1.3' should be disabled from <code>versions</code>.<br/><br/>PSK cipher suites: <code>\"RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,<br/>RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,<br/>RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA,<br/>RSA-PSK-DES-CBC3-SHA,RSA-PSK-RC4-SHA\"</code>",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "depth": {
+            "default": 10,
+            "description": "Maximum number of non-self-issued intermediate certificates that can follow the peer certificate in a valid certification path.<br/>So, if depth is 0 the PEER must be signed by the trusted ROOT-CA directly;<br/><br/>if 1 the path can be PEER, Intermediate-CA, ROOT-CA;<br/><br/>if 2 the path can be PEER, Intermediate-CA1, Intermediate-CA2, ROOT-CA.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "enable": {
+            "default": false,
+            "description": "Enable TLS.",
+            "type": "boolean"
+          },
+          "hibernate_after": {
+            "default": "5s",
+            "description": "Specifies the amount of time that an SSL process will hibernate after being idle, thus reducing its memory footprint.<br/><br/>The hibernating process will be woken up when a new message arrives.<br/>Hibernating and waking up too often can cause CPU utilization to increase, as they both perform garbage collection on the process.",
+            "example": "12m",
+            "type": "string"
+          },
+          "keyfile": {
+            "description": "PEM format private key file.",
+            "type": "string"
+          },
+          "log_level": {
+            "default": "notice",
+            "description": "The minimum level of logging allowed for SSL output.<br/><br/>The default is `notice`, set to a lower `debug` level for more detailed logging that can be used to investigate SSL handshake issues.",
+            "enum": [
+              "emergency",
+              "alert",
+              "critical",
+              "error",
+              "warning",
+              "notice",
+              "info",
+              "debug",
+              "none",
+              "all"
+            ],
+            "type": "string"
+          },
+          "middlebox_comp_mode": {
+            "default": false,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
+          },
+          "partial_chain": {
+            "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
+            "enum": [
+              true,
+              false,
+              "two_cacerts_from_cacertfile",
+              "cacert_from_cacertfile"
+            ],
+            "type": "string"
+          },
+          "password": {
+            "description": "String containing the user's password. Only used if the private key file is password-protected.",
+            "example": "",
+            "format": "password",
+            "type": "string"
+          },
+          "reuse_sessions": {
+            "default": true,
+            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "type": "boolean"
+          },
+          "secure_renegotiate": {
+            "default": true,
+            "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
+            "type": "boolean"
+          },
+          "server_name_indication": {
+            "description": "Specify the host name to be used in TLS Server Name Indication extension.<br/><br/>For instance, when connecting to \"server.example.net\", the genuine server<br/>which accepts the connection and performs TLS handshake may differ from the<br/>host the TLS client initially connects to, e.g. when connecting to an IP address<br/>or when the host has multiple resolvable DNS records <br/><br/>If not specified, it will default to the host name string which is used<br/>to establish the connection, unless it is IP address used.<br/><br/>The host name is then also used in the host name verification of the peer<br/>certificate.<br/> The special value 'disable' prevents the Server Name<br/>Indication extension from being sent and disables the hostname<br/>verification check.",
+            "example": "disable",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disable"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "verify": {
+            "default": "verify_none",
+            "description": "Enable or disable peer verification.",
+            "enum": [
+              "verify_peer",
+              "verify_none"
+            ],
+            "type": "string"
+          },
+          "verify_peer_ext_key_usage": {
+            "description": "Verify extended key usage in peer's certificate<br/>For additional peer certificate validation, the value defined here must present in the<br/>'Extended Key Usage' of peer certificate defined in<br/>[rfc5280](https://www.rfc-editor.org/rfc/rfc5280#section-4.2.1.12).<br/><br/>Allowed values are<br/>- `clientAuth`<br/>- `serverAuth`<br/>- `codeSigning`<br/>- `emailProtection`<br/>- `timeStamping`<br/>- `ocspSigning`<br/>- raw OID, for example: \"OID:1.3.6.1.5.5.7.3.2\" means `id-pk 2` which is equivalent to `clientAuth`<br/><br/>Comma-separated string is also supported for validating more than one key usages.<br/><br/>For example, `\"serverAuth,OID:1.3.6.1.5.5.7.3.2\"`",
+            "example": "",
+            "type": "string"
+          },
+          "versions": {
+            "default": [
+              "tlsv1.3",
+              "tlsv1.2"
+            ],
+            "description": "All TLS/DTLS versions to be supported.<br/><br/>NOTE: PSK ciphers are suppressed by 'tlsv1.3' version config.<br/><br/>In case PSK cipher suites are intended, make sure to configure<br/><code>['tlsv1.2', 'tlsv1.1']</code> here.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "confluent.auth_username_password": {
@@ -41061,6 +41216,11 @@
               "all"
             ],
             "type": "string"
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
           },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
@@ -42999,7 +43159,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -43061,7 +43221,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -44435,6 +44595,11 @@
               "all"
             ],
             "type": "string"
+          },
+          "middlebox_comp_mode": {
+            "default": true,
+            "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
+            "type": "boolean"
           },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
@@ -47174,7 +47339,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -47225,7 +47390,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -52552,7 +52717,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -52601,7 +52766,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -53746,7 +53911,7 @@
           },
           "keepalive": {
             "default": "160s",
-            "description": "MQTT Keepalive. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Time interval is a string that contains a number followed by time unit:<br/>  - `ms` for milliseconds<br/>  - `s` for seconds<br/>  - `m` for minutes<br/>  - `h` for hours<br/>or combination of whereof: `1h5m0s`",
             "type": "string"
           },
           "max_inflight": {
@@ -53798,7 +53963,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "Message retry interval. Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -54252,7 +54417,7 @@
             "type": "string"
           },
           "password_hash_algorithm": {
-            "description": "Options for password hash creation and verification through API.",
+            "description": "Options for password hash creation and verification.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/authn_hash.simple"
@@ -56463,7 +56628,7 @@
           },
           "retry_interval": {
             "default": "15s",
-            "description": "MQTT Message retry interval. Delay for the link to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+            "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
             "type": "string"
           },
           "server": {
@@ -59258,7 +59423,7 @@
       "authn_hash.bcrypt_rw": {
         "properties": {
           "name": {
-            "description": "BCRYPT password hashing.",
+            "description": "For BCRYPT password hashing, must set name to 'bcrypt'",
             "enum": [
               "bcrypt"
             ],
@@ -60374,7 +60539,7 @@
             "type": "string"
           },
           "ssl": {
-            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "$ref": "#/components/schemas/connector_doris.ssl",
             "default": {
               "enable": false
             },
@@ -62048,7 +62213,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.0-rc.1"
+    "version": "5.10.0-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -74679,40 +74844,40 @@
                     "summary": "Action types",
                     "value": [
                       "http",
-                      "cassandra",
                       "rabbitmq",
+                      "cassandra",
                       "rocketmq",
-                      "syskeeper_forwarder",
                       "mongodb",
-                      "iotdb",
-                      "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "hstreamdb",
                       "sqlserver",
+                      "iotdb",
+                      "syskeeper_forwarder",
+                      "greptimedb",
+                      "hstreamdb",
+                      "confluent_producer",
+                      "azure_event_hub_producer",
                       "kafka_producer",
-                      "pulsar",
                       "gcp_pubsub_producer",
+                      "pulsar",
                       "influxdb",
-                      "doris",
-                      "opents",
-                      "kinesis",
-                      "s3",
-                      "s3tables",
                       "redis",
                       "datalayers",
+                      "opents",
+                      "s3",
+                      "s3tables",
+                      "doris",
+                      "kinesis",
                       "mqtt",
                       "tdengine",
-                      "tablestore",
-                      "oracle",
+                      "snowflake",
                       "timescale",
                       "couchbase",
                       "clickhouse",
-                      "snowflake",
                       "azure_blob_storage",
+                      "oracle",
+                      "tablestore",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "pgsql",
                       "mysql",
                       "dynamo"
@@ -74723,40 +74888,40 @@
                   "items": {
                     "enum": [
                       "http",
-                      "cassandra",
                       "rabbitmq",
+                      "cassandra",
                       "rocketmq",
-                      "syskeeper_forwarder",
                       "mongodb",
-                      "iotdb",
-                      "azure_event_hub_producer",
-                      "greptimedb",
-                      "confluent_producer",
-                      "hstreamdb",
                       "sqlserver",
+                      "iotdb",
+                      "syskeeper_forwarder",
+                      "greptimedb",
+                      "hstreamdb",
+                      "confluent_producer",
+                      "azure_event_hub_producer",
                       "kafka_producer",
-                      "pulsar",
                       "gcp_pubsub_producer",
+                      "pulsar",
                       "influxdb",
-                      "doris",
-                      "opents",
-                      "kinesis",
-                      "s3",
-                      "s3tables",
                       "redis",
                       "datalayers",
+                      "opents",
+                      "s3",
+                      "s3tables",
+                      "doris",
+                      "kinesis",
                       "mqtt",
                       "tdengine",
-                      "tablestore",
-                      "oracle",
+                      "snowflake",
                       "timescale",
                       "couchbase",
                       "clickhouse",
-                      "snowflake",
                       "azure_blob_storage",
+                      "oracle",
+                      "tablestore",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "pgsql",
                       "mysql",
                       "dynamo"
@@ -84979,7 +85144,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "A3B324B3292B03ED",
+            "example": "37ED468BBA8A3CCB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85587,73 +85752,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -85754,6 +85852,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -93187,7 +93352,7 @@
           },
           {
             "description": "Site ID",
-            "example": "A3B324B3292B03ED",
+            "example": "37ED468BBA8A3CCB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93272,7 +93437,7 @@
           },
           {
             "description": "Site ID",
-            "example": "A3B324B3292B03ED",
+            "example": "37ED468BBA8A3CCB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -99885,7 +100050,7 @@
                   },
                   "retry_interval": {
                     "default": "15s",
-                    "description": "MQTT Message retry interval. Delay for the link to retry sending the QoS1/QoS2 messages in case of ACK not received. Time interval is a string that contains a number followed by time unit:<br/>- `ms` for milliseconds,<br/>- `s` for seconds,<br/>- `m` for minutes,<br/>- `h` for hours;<br/><br/>or combination of whereof: `1h5m0s`",
+                    "description": "Delay for the MQTT bridge to retry sending the QoS1/QoS2 messages in case of ACK not received.",
                     "type": "string"
                   },
                   "server": {
@@ -101067,7 +101232,7 @@
                 }
               }
             },
-            "description": "List stats ok"
+            "description": "OK"
           }
         },
         "security": [
