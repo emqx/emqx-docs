@@ -8,11 +8,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
-- [#15348](https://github.com/emqx/emqx/pull/15348) Make `middlebox_comp_mode` configurable for SSL clients
-
-  The `middlebox_comp_mode` option, which was previously always enabled (`true`) for all TLS 1.3 connections, is now configurable. By default, it remains `true` to maintain compatibility with most network environments.
-  In rare cases where TLS fails with an error such as: "unexpected_message, TLS client: In state hello_retry_middlebox_assert ...", try set `middlebox_comp_mode` to `false`.
-
 #### Core MQTT Functionalities
 
 - [#15118](https://github.com/emqx/emqx/pull/15118) Provided a new configuration option `mqtt.subscription_max_qos_rules` to control the maximum QoS level allowed per client subscription. This allows administrators to limit the QoS requested in SUBSCRIBE packets based on matching rules for specific topics. Currently, only a limited set of matching rules (predicates) is supported, based on the topic in the SUBSCRIBE packet.
@@ -108,6 +103,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
 
 - [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in `WriteSyntax` was left blank and there was no timestamp field in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+
+- [#15348](https://github.com/emqx/emqx/pull/15348) Make `middlebox_comp_mode` configurable for SSL clients. The `middlebox_comp_mode` option, which was previously always enabled (`true`) for all TLS 1.3 connections, is now configurable. By default, it remains `true` to maintain compatibility with most network environments.
+  
+  In rare cases where TLS fails with an error such as: `unexpected_message, TLS client: In state hello_retry_middlebox_assert ...`, try setting `middlebox_comp_mode` to `false`.
+
 
 #### Multi-Tenancy
 
