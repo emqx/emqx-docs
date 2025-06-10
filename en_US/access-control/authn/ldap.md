@@ -11,15 +11,31 @@ Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 ## Password Authentication Methods
 
 EMQX's LDAP integration includes two distinct authentication methods:
-- **Local Password Comparison**
-
-   EMQX queries LDAP to retrieve the client's password and then compares the retrieved password with the password information stored locally in EMQX. This method allows EMQX to have greater flexibility and capability when performing LDAP user authentication, supporting more complex validation logic and security strategies. However, this approach requires users to have the necessary permissions to configure schemas and data on the LDAP server.
-
 - **LDAP Bind Authentication**
 
-  EMQX directly uses LDAP binding to authenticate usernames and passwords. This method provides basic authentication solely through the LDAP `BIND` operation, involving only the use of existing usernames and passwords, without engaging in complex queries or data processing. Therefore, this approach is suitable for situations where users already have account data on the LDAP server or lack the permissions to add or modify data.
+  EMQX directly uses LDAP binding to authenticate usernames and passwords. When a client connects, EMQX receives the provided username and password, then constructs a Distinguished Name (DN) using the configured `base_dn` and `filter`. It then attempts to bind (log in) to the LDAP server as the client using these credentials. If the bind operation succeeds, the authentication is accepted; otherwise, the connection is rejected.
 
-In both strategies, EMQX can retrieve the user's `isSuperuser` flag as well as additional ACL rules from the LDAP entry addressed by the `base_dn` and `filter` configuration options.
+  This method relies solely on the existing LDAP user entries and does not require EMQX to retrieve or process any sensitive data like password hashes. It is simple to set up and does not require modifying the LDAP schema.
+
+  This approach is suitable for situations where:
+
+  - User accounts already exist in the LDAP server.
+  - The LDAP schema cannot be changed or extended.
+  - You prefer minimal setup, and the LDAP server handles authentication directly.
+
+- **Local Password Comparison**
+
+  EMQX connects to the LDAP server using the bind account specified by the `username` and `password` configuration options (i.e., the bind DN). It then locates the client’s LDAP entry and retrieves the stored password (usually in a hashed format) from a specific attribute. The provided client password is then compared with the retrieved hash locally within EMQX.
+
+  This method provides greater flexibility and control over the authentication process. It supports various password hash algorithms, allows retrieval of additional user attributes, and can be integrated with custom authentication logic or security policies.
+
+  This approach is suitable for situations where:
+
+  - You need to store or process custom authentication attributes (e.g., `isSuperuser`, ACL rules).
+  - You have permission to configure schemas and data on the LDAP server.
+  - More advanced security or validation logic is required beyond simple LDAP binding.
+
+In both methods, EMQX can retrieve additional attributes such as the `isSuperuser` flag or ACL rules from the LDAP entry, using the `base_dn` and `filter` configuration. These attributes can be used to determine administrative permissions or enforce fine-grained access control. For detailed information, see [Retrieve ACL Rules from LDAP](#retrieve-acl-rules-from-ldap).
 
 ## LDAP Data Schema and Query
 
@@ -144,9 +160,9 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
 
    - Enter the information needed to connect to the LDAP server.
 
-     - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-     - **Username**: Specify the LDAP root user name.
-     - **Password**: Specify the LDAP root user password.
+     - **Server**: Specify the server address that EMQX connects to (`host:port`).
+     - **Username**: Specifies the account name EMQX uses to bind to the LDAP server (i.e., the bind DN), for example: `cn=root,dc=emqx,dc=io`. This account must have permission to read user entries and is typically the same as the `rootdn` defined in the LDAP configuration file (e.g., `slapd.conf`).
+     - **Password**: The plaintext password corresponding to the above username, used to complete the bind operation. This value should match the actual password of the `rootpw` defined in the LDAP configuration.
 
    - **Authentication configuration**: Fill in the authentication-related settings.
 
@@ -154,7 +170,7 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
 
      - **Bind Password**: Specifies the password that EMQX uses to authenticate itself to the LDAP server before it can perform any operations or queries. It is referenced through a placeholder `${password}` that will be resolved at runtime with the actual password defined in the configuration option **Password**.
 
-     - **Base DN**: The name of the base object entry (or possibly the root) relative to which the search is to be performed. For more information, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1), the placeholders are supported.
+     - **Base DN**: Specifies the starting point (i.e., base DN) for LDAP search operations. EMQX begins searching for user entries that match the configured filter from this DN. Placeholders such as `${username}` are supported for dynamically constructing the client identity. For more information, see, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1).
 
        ::: tip
 
@@ -165,16 +181,20 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
      - **Password Hash Attribute**: Specifies the attribute representing the user's password, applicable when `Local Password Comparison` is selected as the authentication method. The value of this attribute should follow [RFC 3112](#https://datatracker.ietf.org/doc/html/rfc3112), the supported algorithm is `md5` `sha` `sha256` `sha384` `sha512` and `ssha`.
 
      - **Is Superuser Attribute**: Identifies the attribute that indicates whether a user is a superuser, applicable when `Local Password Comparison` is selected as the authentication method.  The value of this attribute should be in boolean, if absent is equal to `false`.
+   
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this LDAP authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+   
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+   
+   - **Filter**: Defines the criteria for the LDAP query. The filter sets conditions that an entry must meet to be considered a match.
+     The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
+   
+   - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
+     - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
+     - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Units supported include milliseconds, second, minute, and hour.
+   
 
-- **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this LDAP authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-- **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-- **Filter**: Defines the criteria for the LDAP query. The filter sets conditions that an entry must meet to be considered a match.
-  The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
-- **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-  - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
-  - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Units supported include milliseconds, second, minute, and hour.
-
-After you finish the settings, click **Create**.
+5. After you finish the settings, click **Create**.
 
 ## Configure LDAP Authentication via Configuration Items
 
@@ -223,22 +243,29 @@ Below is a sample configuration for the **LDAP Bind Authentication** method:
 }
 ```
 
-## Configure ACL Rules
+## Retrieve ACL Rules from LDAP
 
-EMQX can retrieve the user's ACL rules from the LDAP entry addressed by the `base_dn` and `filter` configuration options during the authentication process. These ACL rules are cached in the client's session and may be used to perform authorization checks without additional LDAP queries.
+In addition to authenticating clients, EMQX can also retrieve per-user ACL (Access Control List) rules from the same LDAP entry used during authentication. This allows both authentication and authorization to be managed centrally via LDAP.
 
-To fetch ACL rules from LDAP, you need to define any the following attributes in the LDAP schema:
+During the authentication process, EMQX uses the configured `base_dn` and `filter` to locate the user’s LDAP entry. If ACL-related attributes are found, EMQX retrieves them and caches the result in the client’s session. These rules are then used to perform authorization checks (such as publish/subscribe permissions) without requiring repeated LDAP queries.
 
-- Attribute for puplish topic whitelist: (`mqttPublishTopic` below).
-- Attribute for subscribe topic whitelist: (`mqttSubscriptionTopic`).
-- Attribute for pubsub topic whitelist: (`mqttPubSubTopic`).
-- Attribute for ACL rules: (`mqttAclRule`).
-- Attribute for ACL TTL: (`mqttAclTtl`).
+### Supported ACL Attributes
 
-The names of these attributes may be arbitrary and may be configured in the LDAP authenticator configuration. The meaning of the attributes is the same as in [LDAP authorizer](../authz/ldap.md), except for the `mqttAclTtl` attribute. This attribute is used to specify the TTL of the ACL rules and is supported only in the LDAP authenticator.
-Its value is the number of seconds for which the ACL rules are valid. After the TTL expires, the client will be treated according EMQX authorization settings.
+To enable the feature of retrieving ACL rules from LDAP, you need to define any the following attributes in the LDAP schema:
 
-The `mqttAclRule` supports time units common for EMQX configuration, e.g. `1s`, `15m`, `1h`, `1d`.
+- **`mqttPublishTopic`**: Whitelist of topics the client is allowed to publish to.
+- **`mqttSubscriptionTopic`**: Whitelist of topics the client is allowed to subscribe to.
+- **`mqttPubSubTopic`**: Topics the client is allowed to both publish and subscribe to.
+- **`mqttAclRule`**: Fine-grained ACL rules defined in JSON format, allowing detailed control over actions (e.g., publish or subscribe), permissions (allow or deny), and topic filters.
+- **`mqttAclTtl`**: Optional attribute specifying how long the ACL rules remain valid (time-to-live) in the client session.
+
+The attribute names shown above are just examples. You can customize them in the LDAP authenticator configuration using the appropriate fields.
+
+The behavior and meaning of these attributes are the same as those defined in the [LDAP authorizer](../authz/ldap.md), except for `mqttAclTtl`, which is unique to the LDAP authenticator. This attribute allows you to control how long the fetched ACL rules are cached in the client's session. Its value can be a numeric string in seconds (e.g., `60`) or a duration with supported time units like `1s`, `15m`, `1h`, or `1d`.
+
+After the specified TTL expires, EMQX will no longer use the cached rules and will fall back to default authorization settings, unless new rules are retrieved in a subsequent authentication or session.
+
+### Example LDAP Schema
 
 The example schema below defines the attributes for ACL rules:
 
@@ -279,6 +306,8 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 	MAY ( isSuperuser $ mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic $ mqttAclRule $ mqttAclTtl )
   MUST ( uid $ userPassword ))
 ```
+
+### Example LDIF Entry with ACL Attributes
 
 Below is an example of LDAP authentication data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
 
@@ -323,7 +352,9 @@ mqttAclTtl: 1s
 userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 ```
 
-To enable ACL rule caching, you need to **explicitly** configure the attribute names in the LDAP authenticator configuration:
+### LDAP Authenticator Configuration Example
+
+To enable ACL rule retrieval and caching, you need to **explicitly** configure the attribute names in the LDAP authenticator configuration:
 
 ```bash
 {

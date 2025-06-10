@@ -4,7 +4,7 @@
 
 ::: tip 前置准备
 
-- 熟悉 [EMQX 认证基本概念](../authn/authn.md)。
+- 熟悉 [EMQX 授权基本概念](./authz.md)
 
 :::
 
@@ -15,34 +15,48 @@ LDAP 授权器根据存储在 LDAP 目录中的授权数据检查客户端授权
 ```sql
 
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.1 NAME ( 'mqttPublishTopic' 'mpt' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.2 NAME ( 'mqttSubscriptionTopic' 'mst' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.3 NAME ( 'mqttPubSubTopic' 'mpst' )
-	EQUALITY caseIgnoreMatch
-	SUBSTR caseIgnoreSubstringsMatch
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	USAGE userApplications )
+attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.4 NAME ( 'mqttAclRule' 'mar' )
+	EQUALITY caseExactMatch
+	SUBSTR caseExactSubstringsMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	USAGE userApplications )
 
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
     SUP top
 	STRUCTURAL
-	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic  ) )
+	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic $ mqttAclRule ) )
 
 ```
-LDAP 授权器采用允许列表策略。用户需要为每个操作定义一个主题列表（支持通配符）。只有当操作的主题匹配时，操作才会被允许，否则 LDAP 授权器将忽略它。
+该数据结构引入了多值属性，用于定义针对不同 MQTT 操作的授权规则：
 
-以下是基于 OpenLDAP 数据格式示例、使用 [LDAP 数据交换格式（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/) 定义的 LDAP 授权数据示例：
+- `mqttPublishTopic`：允许客户端发布的主题。
+- `mqttSubscriptionTopic`：允许客户端订阅的主题。
+- `mqttPubSubTopic`：允许客户端发布和订阅的主题。
+- `mqttAclRule`：用于定义更复杂授权规则的 JSON 格式 ACL 规则。
+
+EMQX 同时支持通过前三个属性配置的简单主题白名单（支持通配符），以及通过 `mqttAclRule` 配置的更精细控制规则。ACL 规则格式详见[权限列表](../authn/acl.md#新版格式)。
+
+### LDAP 授权数据示例
+
+以下是基于 OpenLDAP 数据结构示例、使用 [LDAP 数据交换格式（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/) 定义的 LDAP 授权数据示例：
 
 ```sql
 
-## create organization: emqx.io
+## 创建组织：emqx.io
 dn:dc=emqx,dc=io
 objectclass: top
 objectclass: dcobject
@@ -50,7 +64,7 @@ objectclass: organization
 dc:emqx
 o:emqx,Inc.
 
-## create organization unit: testdevice.emqx.io
+## 创建组织单元：testdevice.emqx.io
 dn:ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectclass:organizationalUnit
@@ -60,18 +74,21 @@ dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectClass: mqttUser
 uid: mqttuser0001
-## allows publishing to these 3 topics
+## 允许发布这三个主题
 mqttPublishTopic: mqttuser0001/pub/1
 mqttPublishTopic: mqttuser0001/pub/+
 mqttPublishTopic: mqttuser0001/pub/#
-## allows subscribe to these 3 topics
+## 允许订阅这三个主题
 mqttSubscriptionTopic: mqttuser0001/sub/1
 mqttSubscriptionTopic: mqttuser0001/sub/+
 mqttSubscriptionTopic: mqttuser0001/sub/#
-## the underneath topics allow both publish or subscribe
+## 允许同时发布和订阅以下主题
 mqttPubSubTopic: mqttuser0001/pubsub/1
 mqttPubSubTopic: mqttuser0001/pubsub/+
 mqttPubSubTopic: mqttuser0001/pubsub/#
+mqttAclRule: [{"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/1"}]
+mqttAclRule: {"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/#"}
+
 
 dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -84,6 +101,8 @@ mqttPubSubTopic: mqttuser0002/pubsub/#
 ```
 
 所提供的示例为每个操作定义了一个多值属性。每个属性可以根据允许的主题数量重复零次或多次。
+
+### LDAP 服务端配置示例
 
 编辑 LDAP 配置文件 `slapd.conf`，使其包含数据结构和 LDIF 文件。在启动 LDAP 服务器时将引用数据结构。下面是一个示例`slapd.conf` 文件：
 
@@ -164,6 +183,7 @@ LDAP 授权通过 `type = ldap` 进行标识。
   publish_attribute = "mqttPublishTopic"
   subscribe_attribute = "mqttSubscriptionTopic"
   all_attribute = "mqttPubSubTopic"
+  acl_rule_attribute = "mqttAclRule"
   query_timeout = "5s"
   username = "root"
   password = "root password"

@@ -42,8 +42,16 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 
 ```
 
-The LDAP authorizer supports simple topic whitelist (wildcard supported) for each action (`mqttPublishTopic`, `mqttSubscriptionTopic`, `mqttPubSubTopic` attributes) as well as more complex ACL rules (`mqttAclRule` attribute).
-See [Access Control List (ACL)](../authn/acl.md#new-format) for more information about complex ACL rules.
+This schema introduces multi-valued attributes that specify authorization rules for different MQTT operations:
+
+- `mqttPublishTopic`: Topics the client is allowed to publish to.
+- `mqttSubscriptionTopic`: Topics the client is allowed to subscribe to.
+- `mqttPubSubTopic`: Topics the client is allowed to both publish to and subscribe to.
+- `mqttAclRule`: Fine-grained ACL rules in JSON format for advanced access control.
+
+EMQX supports both simple topic whitelists (with wildcards) using the first three attributes, and more expressive rules through `mqttAclRule`. See [Access Control List (ACL)](../authn/acl.md#new-format) for the ACL rule format.
+
+### Example LDIF Entries
 
 Below is an example of LDAP authorization data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
 
@@ -93,13 +101,15 @@ mqttPubSubTopic: mqttuser0002/pubsub/#
 
 ```
 
-The given example defines a multi-valued attribute for each action. Each attribute can repeat zero or more times depending on how many topics are allowed for this action.
+The given example defines a multi-valued attribute for each action. Each attribute can repeat zero or more times, depending on how many topics are allowed for this action.
 
-Edit the LDAP configuration file `slapd.conf` to include the schema and LDIF file so that they will be loaded when the LDAP server is started. Below is an example `slapd.conf` file:
+### Example LDAP Server Configuration
+
+To ensure your LDAP server loads the schema and data correctly, you need to include the schema file and LDIF entries in your server configuration. Below is an example `slapd.conf` file:
 
 ::: tip
 
-You can determine how to store LDAP authorization data and access them based on your business needs.
+You can determine how and where LDAP authorization data is stored based on your business needs.
 
 :::
 
