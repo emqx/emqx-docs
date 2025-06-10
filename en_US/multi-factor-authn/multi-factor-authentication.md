@@ -21,6 +21,12 @@ When MFA is enabled on the EMQX Dashboard, it enhances the login process by addi
 
 The goal of MFA is to ensure that even if someone obtains your password, they cannot log in to your account without also having access to the code from your authenticator app.
 
+::: tip
+To help protect your account, it’s important to complete the TOTP setup promptly.
+After enabling TOTP for your own account or on behalf of another user, please ensure that the QR code is scanned or the secret key is entered into your authenticator app as soon as possible.
+Delays in completing this step may increase the risk of unauthorized enrollment, especially if login credentials are compromised.
+:::
+
 ## Enable and Configure MFA
 
 MFA is disabled by default. To enable MFA for users, the administrator must configure the system to support MFA and set it up for individual users. Only users with [administrator privileges](../dashboard/system.md#users) can enable or disable MFA for other users.

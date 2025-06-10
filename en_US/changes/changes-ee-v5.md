@@ -94,7 +94,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#14983](https://github.com/emqx/emqx/pull/14983) EMQX supports data integration with S3Tables.
 
   **Current limitations**:
-
   - Only [S3Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) catalogs are supported (hence table data and metadata must live in S3).
   - Only [Iceberg table format version 2](https://iceberg.apache.org/spec/#version-2-row-level-deletes) is supported.
   - Only the following partition transform functions are supported:
@@ -102,6 +101,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     - `void`
     - `bucket[N]`
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
+
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in `WriteSyntax` was left blank and there was no timestamp field in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
 
 #### Multi-Tenancy
 
@@ -121,7 +122,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   PUB sub.t 5  
   hello
   ```
-
 
 #### Durable Storage
 
@@ -175,7 +175,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15147](https://github.com/emqx/emqx/pull/15147) When running Rule tests with simulated input data, some Actions would not emit trace events after rendering requests.  This has been fixed.
 
   Affected Actions:
-
   - Couchbase
   - Snowflake
   - IoTDB (Thrift driver)

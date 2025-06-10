@@ -102,6 +102,8 @@
     - `bucket[N]`；
   - 数据文件仅支持写入为 [Avro 格式](https://avro.apache.org/docs/1.12.0/specification/)。
 
+- [#15331](https://github.com/emqx/emqx/pull/15331) 修复了 InfluxDB 操作中的一个问题：当 `WriteSyntax` 中的 `timestamp` 留空且规则中也没有时间戳字段时，行协议转换会失败。现在改为使用系统当前的毫秒值作为时间戳，并强制使用毫秒级精度。
+
 #### 多租户
 
 - [#15253](https://github.com/emqx/emqx/pull/15253) 新增两个多租户相关的 API：`GET /mt/ns_list_details` 和 `GET /mt/ns_list_managed_details`。
