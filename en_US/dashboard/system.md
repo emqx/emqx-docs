@@ -1,6 +1,6 @@
 # System
 
-The EMQX Dashboard's **System** menu includes submenus for **Users**, **API Key**, **License**, and **SSO**. Each of these submenus allows you to efficiently manage and configure user accounts, API keys, license settings, and single sign-on (SSO) configurations on their respective pages.
+The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, and general settings.
 
 ## Users
 
@@ -23,11 +23,17 @@ Currently, either of the following two predefined roles can be set for a user. Y
 
 + Viewer
 
-    Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the rights to create, modify, or delete any data.
+    Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
 
-## API Key
+## Audit Logs
 
-On the API Keys page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
+The **Audit Logs** page allows administrators to configure audit logging for monitoring critical operational changes within the EMQX cluster in real time.
+
+For a detailed overview of the Audit Log feature, see [Audit Log](../dashboard/audit-log.md).
+
+## API Keys
+
+On the **API Keys** page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
 
 1. Click the **+ Create** button in the top right corner of the page to bring up the Create API Key pop-up dialog. 
 
@@ -58,13 +64,24 @@ Click on **License** under the **System** menu on the left to access the License
 
 Click **Update License** to upload your License Key. In the **License Settings** section, you can set the high and low watermark limits for the license connection quota usage. For more information about the license, see [Work with EMQX Enterprise License](../deploy/license.md).
 
-## Settings
-
-The Settings can be accessed by clicking the settings icon in the top right corner of the page. You can change the language and theme color of the Dashboard. The theme color can be selected if you want to synchronize the OS theme. If this is enabled, the Dashboard theme will be automatically synchronized with the user's OS theme and cannot be selected manually. 
-
-<img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
-
 ## SSO
 
-The SSO page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+The **SSO** page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+
+## Backup & Restore
+
+The **Backup & Restore** page provides settings for backing up your operating data and configuration files. You can perform data import and export operations on this page. For details of the Backup and Restore function, see [Backup and Restore](../operations/backup-restore.md).
+
+## Settings
+
+To access the settings, click the gear icon in the upper-right corner of the Dashboard.
+
+In the **Settings** menu, you can customize the Dashboard's language and theme:
+
+- **Language**: Choose your preferred display language.
+- **Theme**: Select between light and dark themes, or enable automatic synchronization with your operating system's theme. When sync is enabled, the theme will follow your OS settings, and manual selection will be disabled.
+
+Additionally, the Settings menu includes a toggle to enable or disable the [AI SQL Generator](../data-integration/rule-get-started.md#sql-generator) feature on the **Rules** page.
+
+<img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
 
