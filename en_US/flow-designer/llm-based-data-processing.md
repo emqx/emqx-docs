@@ -35,13 +35,17 @@ When an MQTT message is received in Flow Designer, the AI Completion Node intern
 1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
 2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.
 3. The **OpenAI** or **Anthropic** node uses the `ai_completion` function behind the scenes to:
-  - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
-  - Send the selected input (e.g., `payload`) to the LLM.
-  - Receive a response from the LLM API (e.g., a summary or classification result).
+
+     - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
+     - Send the selected input (e.g., `payload`) to the LLM.
+     - Receive a response from the LLM API (e.g., a summary or classification result).
 4. The response is stored under the **Output Result Alias**, making it available to any downstream node, such as:
-  - **Republish** (publish to another topic)
-  - **Database** (insert the result into PostgreSQL, MongoDB, etc.)
-  - **Bridge** (forward to remote brokers or cloud services)
+
+     - **Republish** (publish to another topic)
+
+     - **Database** (insert the result into PostgreSQL, MongoDB, etc.)
+
+     - **Bridge** (forward to remote brokers or cloud services)
 
 ### Supported LLM Providers
 
