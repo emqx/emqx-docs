@@ -23,12 +23,6 @@ EMQX has embedded rich SQL statement samples to help you get started. You can cl
 
 ### SQL Generator
 
-::: tip Note
-
-The SQL Generator feature is available only in EMQX editions covered by a Commercial License.
-
-:::
-
 Starting from EMQX 5.10.0, the SQL Editor supports generating rule SQL using natural language through an AI-powered SQL Generator. This feature allows you to describe their intent in natural language, and the system will automatically generate the appropriate SQL statement for your rule.
 
 The SQL Generator is enabled by default. You can disable it using the toggle switch from the **Settings** menu in the upper right corner of the Dashboard.
