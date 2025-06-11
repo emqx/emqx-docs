@@ -104,6 +104,11 @@
 
 - [#15331](https://github.com/emqx/emqx/pull/15331) 修复了 InfluxDB 操作中的一个问题：当 `WriteSyntax` 中的 `timestamp` 留空且规则中也没有时间戳字段时，行协议转换会失败。现在改为使用系统当前的毫秒值作为时间戳，并强制使用毫秒级精度。
 
+- [#15348](https://github.com/emqx/emqx/pull/15348) 允许为 SSL 客户端配置 `middlebox_comp_mode` 选项。此前，`middlebox_comp_mode` 在所有 TLS 1.3 连接中始终默认启用（`true`）。现在，该选项已支持用户自定义配置。为了保证在大多数网络环境中的兼容性，默认值仍为 `true`。
+
+  在某些罕见情况下，如果 TLS 握手失败并出现如下错误：`unexpected_message, TLS client: In state hello_retry_middlebox_assert ...`，你可以尝试将 `middlebox_comp_mode` 设置为 `false` 以解决问题。
+
+
 #### 多租户
 
 - [#15253](https://github.com/emqx/emqx/pull/15253) 新增两个多租户相关的 API：`GET /mt/ns_list_details` 和 `GET /mt/ns_list_managed_details`。

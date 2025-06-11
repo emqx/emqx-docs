@@ -2,7 +2,7 @@
 
 ## 5.10.0
 
-*Release Date: 2025-06-09*
+*Release Date: 2025-06-10*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.0.
 
@@ -103,6 +103,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Data files are written only in [Avro](https://avro.apache.org/docs/1.12.0/specification/).
 
 - [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in `WriteSyntax` was left blank and there was no timestamp field in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+
+- [#15348](https://github.com/emqx/emqx/pull/15348) Make `middlebox_comp_mode` configurable for SSL clients. The `middlebox_comp_mode` option, which was previously always enabled (`true`) for all TLS 1.3 connections, is now configurable. By default, it remains `true` to maintain compatibility with most network environments.
+  
+  In rare cases where TLS fails with an error such as: `unexpected_message, TLS client: In state hello_retry_middlebox_assert ...`, try setting `middlebox_comp_mode` to `false`.
+
 
 #### Multi-Tenancy
 

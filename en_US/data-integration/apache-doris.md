@@ -4,6 +4,12 @@
 
 This guide provides practical instructions on how to configure and validate the data integration between EMQX and Apache Doris.
 
+::: tip Note
+
+Apache Doris data integration in EMQX supports Apache Doris version 2.1.7 and later.
+
+:::
+
 ## How It Works
 
 Apache Doris data integration is an out-of-the-box feature in EMQX, which enables complex business development through simple configuration. In a typical IoT application, EMQX, as the IoT platform, is responsible for device connection and transmitting messages. Apache Doris, as the data storage platform, is responsible for storing device status and metadata, as well as message data storage and data analysis.
