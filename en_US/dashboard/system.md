@@ -1,6 +1,6 @@
 # System
 
-The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, and general settings.
+The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, hot upgrade and general settings.
 
 ## Users
 
@@ -71,6 +71,10 @@ The **SSO** page provides settings for the administrators to configure the SSO f
 ## Backup & Restore
 
 The **Backup & Restore** page provides settings for backing up your operating data and configuration files. You can perform data import and export operations on this page. For details of the Backup and Restore function, see [Backup and Restore](../operations/backup-restore.md).
+
+## Hot Upgrade
+
+The **Hot Upgrade** page allows you to upgrade EMQX without service interruption by uploading a hot upgrade package. To obtain an upgrade package, please contact the [EMQX team](https://www.emqx.com/en/contact).
 
 ## Settings
 
