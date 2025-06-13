@@ -178,7 +178,7 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
 
        :::
 
-     - **Password Hash Attribute**: Specifies the attribute representing the user's password, applicable when `Local Password Comparison` is selected as the authentication method. The value of this attribute should follow [RFC 3112](#https://datatracker.ietf.org/doc/html/rfc3112), the supported algorithm is `md5` `sha` `sha256` `sha384` `sha512` and `ssha`.
+     - **Password Hash Attribute**: Specifies the attribute representing the user's password, applicable when `Local Password Comparison` is selected as the authentication method. The value of this attribute should follow [RFC 3112](#https://datatracker.ietf.org/doc/html/rfc3112), the supported algorithms are `md5`,  `sha`, `sha256`, `sha384`, `sha512`, and `ssha`.
 
      - **Is Superuser Attribute**: Identifies the attribute that indicates whether a user is a superuser, applicable when `Local Password Comparison` is selected as the authentication method.  The value of this attribute should be in boolean, if absent is equal to `false`.
    
@@ -191,9 +191,8 @@ You can configure how to use LDAP for password authentication in the EMQX Dashbo
    
    - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
      - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
-     - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Units supported include milliseconds, second, minute, and hour.
+     - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Default: `5` seconds.
    
-
 5. After you finish the settings, click **Create**.
 
 ## Configure LDAP Authentication via Configuration Items

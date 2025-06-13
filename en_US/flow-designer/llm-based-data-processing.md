@@ -21,16 +21,16 @@ Invoking an LLM and processing data takes time. The entire process may take seve
 
 ### How It Works
 
+When an MQTT message is received in Flow Designer, the AI Completion Node internally calls the built-in SQL function `ai_completion/2,3` to send data to the configured LLM.
+
 ```mermaid
 graph LR
   A[MQTT Message] --> B[Flow Designer Node]
-  B --> C[Rule SQL (ai_completion)]
+  B --> C["Rule SQL (ai_completion)"]
   C --> D[LLM API]
   D --> E[LLM Response]
   E --> F[Downstream Node]
 ```
-
-When an MQTT message is received in Flow Designer, the AI Completion Node internally calls the built-in SQL function `ai_completion/2,3` to send data to the configured LLM.
 
 1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
 2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.

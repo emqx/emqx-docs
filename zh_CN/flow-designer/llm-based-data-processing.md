@@ -21,16 +21,16 @@ Flow 设计器中的 LLM 处理节点是一类由 AI 驱动的组件，用于将
 
 ### 工作原理
 
+当 Flow Designer 接收到一条 MQTT 消息时，AI 补全节点会在内部调用内置 SQL 函数 `ai_completion/2,3`，将数据发送到配置好的 LLM。
+
 ```mermaid
 graph LR
   A[MQTT 消息] --> B[Flow Designer 节点]
-  B --> C[Rule SQL (ai_completion)]
+  B --> C["Rule SQL (ai_completion)"]
   C --> D[LLM API]
   D --> E[LLM 响应]
   E --> F[下游节点]
 ```
-
-当 Flow Designer 接收到一条 MQTT 消息时，AI 补全节点会在内部调用内置 SQL 函数 `ai_completion/2,3`，将数据发送到配置好的 LLM。
 
 1. 消息首先通过**消息**节点（订阅指定主题）进入流程。
 2. 可选的 **Processing** 节点可用于提取或转换字段，如 `device_id`、`payload` 或 `timestamp`。
