@@ -1443,7 +1443,7 @@ Parses the datetime string `DateTimeString` according to the format string `Form
 The placeholders that can be used in `FormatString` are as follows:
 
 | Placeholder | Meaning | Value range |
-| ------ | ---------------------------------- | ----- ---------------- |
+| ----------- | ------- | ------------|
 | `%Y` | Four-digit year | 0000 - 9999 |
 | `%m` | Two-digit month | 01 - 12 |
 | `%d` | Two-digit day of the month | 01 - 31 |
