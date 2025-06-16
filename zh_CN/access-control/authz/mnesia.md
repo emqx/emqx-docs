@@ -57,19 +57,20 @@ EMQX 支持针对单个客户端或用户配置多条授权检查规则，您可
 您可通过 API 创建以及管理授权规则：
 
 - 指定适用此条规则的客户端：
-  - `/api/v5/authorization/sources/built_in_database/clientid`
+  - `/api/v5/authorization/sources/built_in_database/rules/clients`
 - 指定适用此条规则的用户名：
-  - `/api/v5/authorization/sources/built_in_database/username`
+  - `/api/v5/authorization/sources/built_in_database/rules/users`
 - 指定适用此条规则的主题：
-  - `/api/v5/authorization/sources/built_in_database/all`
+  - `/api/v5/authorization/sources/built_in_database/rules/all`
 
 
 比如我们可通过如下代码针对 `client1` 客户端创建授权规则：
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+  'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/clients' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
   -H 'Content-Type: application/json' \
   -d '[
   {
@@ -96,6 +97,65 @@ curl -X 'POST' \
 ```
 
 每条规则应包括如下信息：
+
+4. Create rules for clients with `user1` username
+```
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '[
+  {
+    "username": "user1",
+    "rules": [
+      {
+        "action": "publish",
+        "permission": "allow",
+        "topic": "test/topic/1"
+      },
+      {
+        "action": "subscribe",
+        "permission": "allow",
+        "topic": "test/topic/2"
+      },
+      {
+        "action": "all",
+        "permission": "deny",
+        "topic": "eq test/#"
+       }
+     ]
+  }
+]'
+```
+
+5. Create rules for all clients.
+```
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+  -H "authorization: bearer $EMQX_TOKEN" \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "rules": [
+    {
+      "action": "publish",
+      "permission": "allow",
+      "topic": "test/topic/1"
+    },
+    {
+      "action": "subscribe",
+      "permission": "allow",
+      "topic": "test/topic/2"
+    },
+    {
+      "action": "all",
+      "permission": "deny",
+      "topic": "eq test/#"
+    }
+  ]
+}'
+```
 
 - `permission`：是否允许当前客户端/用户的某类操作请求；可选值：`allow`、`deny`。
 - `action`：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`。
