@@ -21,13 +21,22 @@ Unlike the old format, the new format continues to other authorization checks if
 
 The ACL includes the following fields:
 
-| Field      | Required | Description                                                  |
-| ---------- | -------- | ------------------------------------------------------------ |
-| permission | Yes      | Specifies whether the current client's operation request is allowed or denied; options: `allow`, `deny` |
-| action     | Yes      | The operation associated with the rule; options: `publish`, `subscribe`, `all` |
-| topic      | Yes      | The topic associated with the rule, supports [topic placeholders](../authz/authz.md#topic-placeholders) |
-| qos        | No       | An array specifying the QoS levels applicable to the rule, e.g., `[0, 1]`, `[1, 2]`, default is all QoS levels |
-| retain     | No       | Boolean, used only for publish operations, specifies if the current rule supports retained messages, options are `true`, `false`, default allows retained messages. |
+| Field                 | Required | Description                                                  |
+| --------------------- | -------- | ------------------------------------------------------------ |
+| permission            | Yes      | Specifies whether the current client's operation request is allowed or denied; options: `allow`, `deny` |
+| action                | Yes      | The operation associated with the rule; options: `publish`, `subscribe`, `all` |
+| topic                 | Yes      | The topic associated with the rule, supports [topic placeholders](../authz/authz.md#topic-placeholders) |
+| qos                   | No       | An array specifying the QoS levels applicable to the rule, e.g., `[0, 1]`, `[1, 2]`, default is all QoS levels |
+| retain                | No       | Boolean, used only for publish operations, specifies if the current rule applies to retained messages, options are `true`, `false`, default applies to retained messages. |
+| clientid_re (e5.9.0+) | No       | Regular expression to match client IDs, e.g., `^client-[0-9]+$` |
+| username_re (e5.9.0+) | No       | Regular expression to match usernames, e.g., `^user-[0-9]+$` |
+| ipaddr (e5.9.0+)      | No       | IP address or subnet, e.g., `192.168.5.0/24`                 |
+| zone (e5.9.0+)        | No       | Zone name, e.g., `zone1`                                     |
+| zone_re (e5.9.0+)     | No       | Regular expression for zone names, e.g., `^zone-[0-9]+$`     |
+| listener (e5.9.0+)    | No       | Listener name, e.g., `tcp:default`                           |
+| listener_re (e5.9.0+) | No       | Regular expression for listener names, e.g., `^tcp:.*$`      |
+
+All specified fields in a rule must match for the rule to be applied.
 
 Example:
 
