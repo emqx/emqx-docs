@@ -105,10 +105,10 @@ jobs:
       run: |
         cd docs-files
         source current-version.env
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_MINOR_VERSION@/'"$CE_MINOR_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_MINOR_VERSION@/'"$EE_MINOR_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@CE_MINOR_VERSION@/'"$CE_MINOR_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@EE_MINOR_VERSION@/'"$EE_MINOR_VERSION"'/g' {} +
 
     - name: move files
       run: |
@@ -119,10 +119,12 @@ jobs:
         rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/ja/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/public/api/
         mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/ja_JP/* frontend/docs/ja/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/ || true
         cp docs-files/directory.json frontend/docs/.vitepress/config/directory.json
 
@@ -171,24 +173,20 @@ jobs:
       run: |
         cd frontend
         npm i -g @redocly/cli@latest
-        LANGS=(zh en)
-        for lang in "${LANGS[@]}"; do
-          redocly build-docs redoc/ce-${lang}.json -t redoc/template-emqx.hbs -o docs/.vitepress/dist/${lang}/emqx/${VERSION}/admin/api-docs.html \
-            --config=redoc/redocly.yaml \
-            --templateOptions.title "EMQX ${VERSION} API Documentation" \
-            --templateOptions.description "EMQX ${VERSION} API Documentation" \
-            --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle "EMQX ${VERSION} Docs" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        LANGS=(zh en ja)
+        if [ ! -f "redoc/ee-ja.json" ]; then
+            cp redoc/ee-en.json redoc/ee-ja.json
+        fi
 
+        for lang in "${LANGS[@]}"; do
           redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs -o docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --config=redoc/redocly.yaml \
             --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle "EMQX Enterprise ${VERSION} Docs" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
-        done
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi) \
+            $(if [ "${lang}" == "ja" ]; then echo "--templateOptions.langJA \"ja\""; fi)
+          done
 
     - name: set aws credentials
       if: github.event_name == 'push'
