@@ -24,6 +24,7 @@ if __name__ == '__main__':
     directory_config = json.load(r)
     markdown_files = get_markdown_file(directory_config['cn'], f'{docs_path}/zh_CN')
     markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
+    markdown_files += get_markdown_file(directory_config['ja'], f'{docs_path}/ja_JP')
 
     for file_path, dir_list, file_list in os.walk(docs_path):
         for file_name in file_list:
