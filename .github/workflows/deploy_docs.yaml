@@ -114,6 +114,7 @@ jobs:
       run: |
         rm frontend/docs/en/index.md || true
         rm frontend/docs/zh/index.md || true
+        rm frontend/docs/ja/index.md || true
         rm frontend/docs/*.md || true
         rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/

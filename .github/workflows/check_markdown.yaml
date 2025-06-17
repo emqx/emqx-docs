@@ -12,7 +12,9 @@ jobs:
     - name: check markdown
       run: |
         sudo npm install -g markdownlint-cli
-        markdownlint -c .github/workflows/markdown_config.json ./
+        markdownlint -c .github/workflows/markdown_config.json ./en_US
+        markdownlint -c .github/workflows/markdown_config.json ./zh_CN
+        markdownlint -c .github/workflows/markdown_config.json ./ja_JP
 
   directory_check:
     runs-on: ubuntu-latest
@@ -22,5 +24,5 @@ jobs:
 
     - name: check directory config
       run: |
-        python3 ./gen.py ee | tee directory.json
+        python3 ./gen.py ce | tee directory.json
         python3 .github/scripts/directory_check.py directory.json $(pwd)
