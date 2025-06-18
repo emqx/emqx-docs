@@ -139,6 +139,15 @@ jobs:
       run: |
         echo "HOCON=true" >> $GITHUB_ENV
         cp -r docs-files/hocon/*.json frontend/docs/public/api/
+        for file in frontend/docs/public/api/hocon-ce-*-en.json; do
+          version=$(echo $file | sed -E 's_.*/hocon-ce-(.*)-en.json_\1_g')
+          cp $file frontend/docs/public/api/hocon-ce-${version}-ja.json
+        done
+        for file in frontend/docs/public/api/hocon-ee-*-en.json; do
+          version=$(echo $file | sed -E 's_.*/hocon-ee-(.*)-en.json_\1_g')
+          cp $file frontend/docs/public/api/hocon-ee-${version}-ja.json
+        done
+
         hocon_products=(enterprise)
         for hocon_product in "${hocon_products[@]}"; do
           online_versions=$(curl -s https://docs.emqx.com/api/${hocon_product}_hocon_versions.json)
@@ -164,7 +173,7 @@ jobs:
     - name: build docs
       run: |
         cd frontend
-        export NODE_OPTIONS=--max_old_space_size=4096
+        export NODE_OPTIONS=--max_old_space_size=8192
         pnpm install
         pnpm build
 
@@ -172,21 +181,23 @@ jobs:
       if: matrix.version != 'latest'
       run: |
         cd frontend
-        npm i -g @redocly/cli@latest
+        corepack enable
+        pnpm add -g redoc-cli
         LANGS=(zh en ja)
         if [ ! -f "redoc/ee-ja.json" ]; then
-            cp redoc/ee-en.json redoc/ee-ja.json
+          cp redoc/ee-en.json redoc/ee-ja.json
         fi
 
         for lang in "${LANGS[@]}"; do
-          redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs -o docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
+            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --config=redoc/redocly.yaml \
             --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi) \
             $(if [ "${lang}" == "ja" ]; then echo "--templateOptions.langJA \"ja\""; fi)
-          done
+        done
 
     - name: set aws credentials
       if: github.event_name == 'push'

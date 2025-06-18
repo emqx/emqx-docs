@@ -6,13 +6,13 @@
 # - A doc node may have edition: ee for enterprise only content
 #
 # Grouping node
-# - Must have a 'title_en' (English), 'title_cn' (Chinese) is optional wehn no need to translate. e.g. FAQ
+# - Must have a 'title_en' (English), 'title_cn' (Chinese), 'title_ja' (Japanese) is optional wehn no need to translate. e.g. FAQ
 # - Parent nodes must NOT have a 'path'
 #
 # Content node can be one of:
 # - Just the path to the markdown file (the first line of which is extracted as its title)
 #   the path is relative inside the per-language sub-dir i.e. en_US and zh_CN
-# - A node with 'title_en' 'title_cn' and 'path'
+# - A node with 'title_en' 'title_cn' 'title_ja' and 'path'
 
 - title_en: EMQX Overview
   title_cn: EMQX 概览
@@ -34,7 +34,7 @@
       path: getting-started/getting-started
     - title_en: Operating Limitations
       title_cn: 使用限制
-      title_ja: 使用制限
+      title_ja: 運用制限
       path: getting-started/restrictions
     - title_en: FAQ
       title_cn: 常见问题解答
@@ -42,19 +42,19 @@
       children:
         - title_en: Concept FAQs
           title_cn: 概念问题
-          title_ja: 概念問題
+          title_ja: 概念FAQ
           path: faq/concept
         - title_en: Deployment FAQs
           title_cn: 部署问题
-          title_ja: デプロイ問題
+          title_ja: デプロイFAQ
           path: faq/deployment
         - title_en: Feature FAQs
           title_cn: 功能问题
-          title_ja: 機能問題
+          title_ja: 機能FAQ
           path: faq/feature
         - title_en: Usage FAQs
           title_cn: 使用问题
-          title_ja: 使用問題
+          title_ja: 利用FAQ
           path: faq/faq
     - title_en: Technical Support
       title_cn: 技术支持
@@ -101,12 +101,17 @@
         - title_en: Kubernetes
           title_cn: Kubernetes
           title_ja: Kubernetes
+          lang: ja
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          title_ja: Kubernetes
           lang: cn
           path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
           # - deploy/install-marketplace
         - title_en: Work with License
           title_cn: 配置 License
-          title_ja: License の設定
+          title_ja: ライセンスの設定
           path: deploy/license
     # - title_en: Install EMQX Open Source
     #  title_cn: 安装 EMQX 开源版
@@ -151,12 +156,17 @@
         - deploy/upgrade-cluster
         - title_en: Upgrade EMQX on Kubernetes
           title_cn: Upgrade EMQX on Kubernetes
-          title_ja: Kubernetes での EMQX のアップグレード
+          title_ja: Kubernetes での EMQX アップグレード
           lang: en
+          path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
+        - title_en: Upgrade EMQX on Kubernetes
+          title_cn: Upgrade EMQX on Kubernetes
+          title_ja: Kubernetes での EMQX アップグレード
+          lang: ja
           path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
         - title_en: 在 Kubernetes 中升级 EMQX
           title_cn: 在 Kubernetes 中升级 EMQX
-          title_ja: Kubernetes での EMQX のアップグレード
+          title_ja: Kubernetes での EMQX アップグレード
           lang: cn
           path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
       # - deploy/hot-upgrades
@@ -212,13 +222,20 @@
       collapsed: true
       children:
         - title_en: EMQX Enterprise API Docs
-          title_cn: EMQX Enterprise API Docs
+          title_cn: EMQX 企业版 API 文档
+          title_ja: EMQX エンタープライズ API ドキュメント
           lang: en
           path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
-        - title_en: EMQX 企业版 API 文档
+        - title_en: EMQX Enterprise API Docs
+          title_cn: EMQX Enterprise API Docs
+          title_ja: EMQX エンタープライズ API ドキュメント
+          lang: ja
+          path: https://docs.emqx.com/ja/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
+        - title_en: EMQX Enterprise API Docs
           title_cn: EMQX 企业版 API 文档
+          title_ja: EMQX エンタープライズ API ドキュメント
           lang: cn
-          path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
+          path: https://docs.emqx.com/zh/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
        # - title_en: EMQX Open Source API Docs
        #   title_cn: EMQX Open Source API Docs
        #   lang: en
@@ -230,7 +247,7 @@
 
 - title_en: EMQX Clustering
   title_cn: 构建集群
-  title_ja: クラスターの構築
+  title_ja: クラスター構築
   path: deploy/cluster/introduction
   collapsed: true
   children:
@@ -239,14 +256,14 @@
     - deploy/cluster/security
     - title_en: Configure Load Balancer
       title_cn: 集群负载均衡
-      title_ja: クラスター負荷分散
+      title_ja: クラスターのロードバランサー設定
       path: deploy/cluster/lb
       children:
         - deploy/cluster/lb-nginx
         - deploy/cluster/lb-haproxy
     - title_en: Node Evacuation and Cluster Load Rebalancing
       title_cn: 节点疏散与集群负载重平衡
-      title_ja: ノードの疏散とクラスター負荷再平衡
+      title_ja: ノードの退避とクラスター負荷再分散
       path: deploy/cluster/rebalancing
     - title_en: Performance and Tuning
       title_cn: 性能与调优
@@ -339,13 +356,13 @@
     # - data-integration/rule-sql-user-defined-function
     - title_en: Smart Data Hub
       title_cn: 数据智能中心
-      title_ja: データインテリジェンスセンター
+      title_ja: スマートデータハブ
       path: data-integration/smart-data-hub
       collapsed: true
       children:
         - title_en: Schema Registry
           title_cn: Schema Registry
-          title_ja: Schema Registry
+          title_ja: スキーマレジストリ
           path: data-integration/schema-registry
           collapsed: true
           children:
@@ -445,7 +462,7 @@
       path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
-      title_ja: HTTP Server
+      title_ja: HTTP サーバー
       path: data-integration/data-bridge-webhook
     - title_en: InfluxDB
       title_cn: InfluxDB
@@ -564,11 +581,11 @@
           path: configuration/prometheus
         - title_en: Dashboard
           title_cn: Dashboard
-          title_ja: Dashboard
+          title_ja: ダッシュボード
           path: configuration/dashboard
         - title_en: License
           title_cn: License
-          title_ja: License
+          title_ja: ライセンス
           path: configuration/license
     - title_en: EMQX Enterprise Configuration Manual
       title_cn: EMQX 企业版配置手册
@@ -580,6 +597,11 @@
       title_ja: EMQX エンタープライズ設定マニュアル
       lang: en
       path: https://docs.emqx.com/en/enterprise/v${EE_VERSION}/hocon/
+    - title_en: EMQX Enterprise Configuration Manual
+      title_cn: EMQX 企业版配置手册
+      title_ja: EMQX エンタープライズ設定マニュアル
+      lang: ja
+      path: https://docs.emqx.com/ja/enterprise/v${EE_VERSION}/hocon/
     #- title_en: EMQX Open Source Configuration Manual
     #  title_cn: EMQX 开源版配置手册
     #  lang: cn
@@ -659,7 +681,7 @@
       path: rate-limit/rate-limit
     - title_en: Namespace
       title_cn: 命名空间
-      title_ja: 名前空間
+      title_ja: ネームスペース
       path: multi-tenancy/namespace-overview
       collapsed: true
       children:
@@ -744,13 +766,13 @@
       children:
         - title_en: Features and Benefits
           title_cn: 优势与特性
-          title_ja: 利点と特徴
+          title_ja: 特長と利点
           path: mqtt-over-quic/features-mqtt-over-quic
         - mqtt-over-quic/getting-started
       # - mqtt-over-quic/client
     - title_en: Cluster Linking
       title_cn: 集群连接
-      title_ja: クラスター接続
+      title_ja: クラスターリンク
       path: cluster-linking/introduction
       collapsed: true
       children:
@@ -852,6 +874,11 @@
       title_ja: MQTT ガイド
       lang: en
       path: https://www.emqx.com/en/mqtt-guide
+    - title_en: MQTT Guide
+      title_cn: MQTT Guide
+      title_ja: MQTT ガイド
+      lang: ja
+      path: https://www.emqx.com/en/mqtt-guide
     - title_en: MQTT 教程
       title_cn: MQTT 教程
       title_ja: MQTT チュートリアル
@@ -901,10 +928,15 @@
       title_ja: MQTT 5.0 機能
       lang: en
       path: https://www.emqx.com/en/blog/introduction-to-mqtt-5
+    - title_en: MQTT 5.0 Features
+      title_cn: MQTT 5.0 Features
+      title_ja: MQTT 5.0 機能
+      lang: ja
+      path: https://www.emqx.com/ja/blog/introduction-to-mqtt-5
     - title_en: MQTT 5.0 特性
       title_cn: MQTT 5.0 特性
-      lang: cn
       title_ja: MQTT 5.0 機能
+      lang: cn
       path: https://www.emqx.com/zh/blog/introduction-to-mqtt-5
     - title_en: MQTT Reason Code
       title_cn: MQTT 原因码
@@ -929,7 +961,7 @@
         - changes/known-issues-5.1
     - title_en: Incompatible Changes
       title_cn: 不兼容变更
-      title_ja: 互換性のない変更
+      title_ja: 非互換の変更
       collapsed: true
       children:
         - changes/breaking-changes-ee-5.8
@@ -939,7 +971,7 @@
         - changes/breaking-changes-ee-5.4
     - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-      title_ja: EMQX 4.4 から EMQX 5.1 への互換性のない変更
+      title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更
       path: changes/breaking-changes-5.1.0
       collapsed: true
       children:
@@ -948,5 +980,5 @@
         - changes/gateway-4.4-to-5.1-incompatibility
     - title_en: End of Life Dates
       title_cn: 产品生命周期结束日期
-      title_ja: 製品のライフサイクル終了日
+      title_ja: 製品ライフサイクル終了日
       path: changes/eol-ee
