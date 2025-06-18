@@ -89,6 +89,9 @@ jobs:
       with:
         node-version-file: 'frontend/.nvmrc'
 
+    - name: enable corepack
+      run: corepack enable
+
     - name: use pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -181,18 +184,17 @@ jobs:
       if: matrix.version != 'latest'
       run: |
         cd frontend
-        corepack enable
-        pnpm add -g redoc-cli
         LANGS=(zh en ja)
         if [ ! -f "redoc/ee-ja.json" ]; then
           cp redoc/ee-en.json redoc/ee-ja.json
         fi
 
         for lang in "${LANGS[@]}"; do
-          redoc-cli bundle redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
+          pnpm redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
             --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --config=redoc/redocly.yaml \
             --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.headerTitle "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
             $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi) \
