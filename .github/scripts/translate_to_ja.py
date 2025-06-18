@@ -30,29 +30,34 @@ Translate EMQX documentation from **English → Japanese** for an audience of Ja
 | Image `alt` text                 | **Translate**                                                           |
 
 # 4. Glossary — **Use Exactly as Written**
-| English                | Japanese (mandatory)        |
-|------------------------|-----------------------------|
-| EMQ X / EMQX           | EMQX                        |
-| MQTT                   | MQTT                        |
-| Broker                 | ブローカー                   |
-| Client                 | クライアント                 |
-| Topic                  | トピック                     |
-| Publish                | パブリッシュ／パブリッシュする |
-| Subscribe              | サブスクライブ／サブスクライブする |
-| Publisher              | パブリッシャー               |
-| Subscriber             | サブスクライバー             |
-| Message                | メッセージ                   |
-| Payload                | ペイロード                   |
-| QoS (Quality of Service)| QoS（サービス品質）          |
-| Session                | セッション                   |
-| Cluster / Clustering   | クラスター／クラスタリング    |
-| Rule Engine            | ルールエンジン               |
-| Dashboard              | ダッシュボード               |
-| Authentication         | 認証                         |
-| Authorization          | 認可                         |
-| Bridge                 | ブリッジ                     |
-| Connector              | コネクター                   |
-| Plugin                 | プラグイン                   |
+| English                  | Japanese (mandatory)          |
+|--------------------------|-------------------------------|
+| EMQ X / EMQX             | EMQX                          |
+| MQTT                     | MQTT                          |
+| Broker                   | ブローカー                      |
+| Client                   | クライアント                    |
+| Topic                    | トピック                       |
+| Publish                  | パブリッシュ／パブリッシュする     |
+| Subscribe                | サブスクライブ／サブスクライブする  |
+| Publisher                | パブリッシャー                  |
+| Subscriber               | サブスクライバー                |
+| Message                  | メッセージ                     |
+| Payload                  | ペイロード                     |
+| QoS (Quality of Service) | QoS（サービス品質）             |
+| Session                  | セッション                     |
+| Cluster / Clustering     | クラスター／クラスタリング        |
+| Rule Engine              | ルールエンジン                  |
+| Dashboard                | ダッシュボード                  |
+| Authentication           | 認証                          |
+| Authorization            | 認可                          |
+| Bridge                   | ブリッジ                       |
+| Connector                | コネクター                     |
+| Plugin                   | プラグイン                     |
+| Schema Registry          | スキーマレジストリ              |
+| Schema Registry Example  | スキーマレジストリの例           |
+| Flow Designer            | Flow デザイナー                |
+| Data Integration         | データ統合                     |
+| Reference                | リファレンス                   |
 
 # 5. Ambiguous / High-Risk Terms — **Mandatory Japanese Forms**
 | English Term            | Japanese Form | Note |
@@ -117,6 +122,9 @@ if __name__ == '__main__':
             f.write(markdown_text.strip() + '\n')
         print(f'Changes file copied without translation: {output_file_path}')
         exit(0)
+
+    if 'dir.yaml' in input_file_path:
+        markdown_text = '''The following file is a yaml. Please translate the title_ja field according to the title_en at the same level, overwrite the existing title_ja value, be careful to keep the comments untranslated, and keep the original format unchanged.\n\n''' + markdown_text
 
     translate_messages = [
         {'role': 'system', 'content': SYSTEM_PROMPT},
