@@ -213,6 +213,7 @@
         - connect-emqx/javascript
         - title_en: MQTT Wechat miniprogram example
           title_cn: MQTT 微信小程序示例
+          title_ja: MQTT Wechat ミニプログラムの例
           lang: cn
           path: connect-emqx/wechat-miniprogram
     - title_en: REST API
@@ -908,6 +909,7 @@
 
 - title_en: Reference
   title_cn: 参考指南
+  title_ja: リファレンス
   path: introduction/reference
   collapsed: true
   children:
