@@ -162,9 +162,9 @@ jobs:
           fi
 
           if [[ $hocon_product == "emqx" ]]; then
-            local_versions=$(ls frontend/docs/public/api/hocon-ce-*-*on | sed -E 's_.*/hocon-ce-(.*)-(en|zh).json_\1_g' | uniq)
+            local_versions=$(ls frontend/docs/public/api/hocon-ce-*-*on | sed -E 's_.*/hocon-ce-(.*)-(en|zh|ja).json_\1_g' | uniq)
           else
-            local_versions=$(ls frontend/docs/public/api/hocon-ee-*-*on | sed -E 's_.*/hocon-ee-(.*)-(en|zh).json_\1_g' | uniq)
+            local_versions=$(ls frontend/docs/public/api/hocon-ee-*-*on | sed -E 's_.*/hocon-ee-(.*)-(en|zh|ja).json_\1_g' | uniq)
           fi
 
           all_versions=$(echo -e "$online_versions\n$local_versions" | sort -u | awk NF | uniq)
