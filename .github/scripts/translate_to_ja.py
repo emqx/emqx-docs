@@ -119,9 +119,12 @@ Provide the translated Markdown, strictly following all rules, glossary entries,
 
 if __name__ == '__main__':
     input_file_path = sys.argv[1]
-    if not input_file_path.endswith('.md') or 'en_US' not in input_file_path:
-        print(f'Invalid input file path: {input_file_path}')
-        exit(-1)
+    if input_file_path.endswith('dir.yaml'):
+        pass
+    else:
+        if not input_file_path.endswith('.md') or 'en_US' not in input_file_path:
+            print(f'Invalid input file path: {input_file_path}')
+            exit(-1)
 
     output_file_path = input_file_path.replace('en_US', 'ja_JP')
     if not os.path.exists(os.path.dirname(output_file_path)):
@@ -137,7 +140,7 @@ if __name__ == '__main__':
         print(f'Changes file copied without translation: {output_file_path}')
         exit(0)
 
-    if 'dir.yaml' in input_file_path:
+    if input_file_path.endswith('dir.yaml'):
         markdown_text = '''The following file is a yaml. Please translate the title_ja field according to the title_en at the same level, overwrite the existing title_ja value, be careful to keep the comments untranslated, and keep the original format unchanged.\n\n''' + markdown_text
 
     translate_messages = [
