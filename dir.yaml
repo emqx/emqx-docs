@@ -38,6 +38,7 @@
       path: getting-started/restrictions
     - title_en: FAQ
       title_cn: 常见问题解答
+      title_ja: FAQ
       collapsed: true
       children:
         - title_en: Concept FAQs
