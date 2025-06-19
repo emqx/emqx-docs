@@ -130,7 +130,7 @@ jobs:
         cp -r docs-files/ja_JP/* frontend/docs/ja/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/ || true
         cp docs-files/directory.json frontend/docs/.vitepress/config/directory.json
-        cp docs-files/directory.json frontend/docs/public/api/${DOCS_TYPE}_directory.json
+        cp docs-files/directory.json frontend/docs/public/api/${DOCS_TYPE}_${VERSION}_directory.json
 
     - name: generate version config
       run: |
