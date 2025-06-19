@@ -14,10 +14,10 @@ if sys.argv[1] != r'ce' and sys.argv[1] != r'ee':
     exit(2)
 
 ## check if the 'lang' field matches expected input
-## when no 'lang' is defined, it matches both 'en' and 'cn'
-def is_lang_match(i, en_or_cn):
+## when no 'lang' is defined, it matches both 'en', 'cn' and 'ja'
+def is_lang_match(i, lang):
     if 'lang' in i:
-        return i['lang'] == en_or_cn
+        return i['lang'] == lang
     else:
         return True
 
@@ -45,8 +45,10 @@ def is_edition_match(i, ce_or_ee):
 def read_title_from_md(lang, path):
     if lang == 'en':
         dir = 'en_US'
-    else:
+    elif lang == 'cn':
         dir = 'zh_CN'
+    elif lang == 'ja':
+        dir = 'ja_JP'
     path = dir + '/' + path + '.md'
     with open(path) as f:
         for line in f:
@@ -70,6 +72,8 @@ def parse(children, lang, edition):
             title = child['title_en']
             if lang == 'cn' and 'title_cn' in child:
                 title = child['title_cn']
+            elif lang == 'ja' and 'title_ja' in child:
+                title = child['title_ja']
         else:
             title = read_title_from_md(lang, child)
         _child = {'title': title}
@@ -93,8 +97,15 @@ def parse(children, lang, edition):
 def move_manual(lang, edition):
     if lang == 'cn':
         lang = 'zh'
-    baseDir = 'en_US' if lang == 'en' else 'zh_CN'
+        baseDir = 'zh_CN'
+    elif lang == 'ja':
+        baseDir = 'ja_JP'
+    else:
+        baseDir = 'en_US'
     source_path = f'cfg-manual-docgen/configuration-manual-{edition}-{lang}.md'
+    if lang == 'ja':
+        source_path = f'cfg-manual-docgen/configuration-manual-{edition}-en.md'
+
     target_path = f'{baseDir}/configuration/configuration-manual.md'
     shutil.copyfile(source_path, target_path)
 
@@ -111,7 +122,9 @@ with open(r'dir.yaml', encoding='utf-8') as file:
 
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
+    move_manual('ja', EDITION)
     en = parse(all, 'en', EDITION)
     cn = parse(all, 'cn', EDITION)
-    res ={'en': en, 'cn': cn}
+    ja = parse(all, 'ja', EDITION)
+    res ={'en': en, 'cn': cn, 'ja': ja}
     json.dump(res, sys.stdout, indent=2, ensure_ascii=False)
