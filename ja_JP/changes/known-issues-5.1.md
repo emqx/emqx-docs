@@ -1,76 +1,76 @@
-# Known Issues in EMQX 5.1
+# EMQX 5.1 の既知の問題
 
 ## e5.1.1
 
-- **Inaccurate Error Message Displayed After Successful Rolling Upgrade**
+- **正常にローリングアップグレードが完了した後に誤ったエラーメッセージが表示される**
 
-  Following a rolling upgrade, the `emqx.log` might present an error message. Nonetheless, this error message is harmless, and the upgrade has indeed succeeded.
+  ローリングアップグレード後に `emqx.log` にエラーメッセージが表示されることがありますが、このエラーメッセージは無害であり、アップグレードは正常に完了しています。
 
-  When performing a rolling upgrade on a core+replicant cluster, you may observe the error message `** ERROR ** Mnesia post_commit hook failed: error:badarg` in the logs. However, it is important to recognize that these errors do not affect the success of the upgrade process, and the cluster can be upgraded without any issues.
+  コア＋レプリカントクラスターでローリングアップグレードを実施すると、ログに `** ERROR ** Mnesia post_commit hook failed: error:badarg` というエラーメッセージが表示されることがあります。しかし、これらのエラーはアップグレードの成功に影響を与えず、クラスターは問題なくアップグレード可能です。
 
 ## e5.1.0
 
-- **Duplicate "Connection Pool Size" Setting in MongoDB Bridge UI**
+- **MongoDB ブリッジ UI に「Connection Pool Size」設定が重複して表示される**
 
-  The MongoDB Bridge UI displays duplicated entries for the "Connection Pool Size" parameter. The second instance is utilized for configuring MongoDB connection options, leading to confusion and potential configuration errors.
+  MongoDB ブリッジの UI に「Connection Pool Size」パラメータが重複して表示されます。2つ目の項目は MongoDB 接続オプションの設定に使用されるため、混乱や設定ミスの原因となります。
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **TimescaleDB Bridge Status Remains Disconnected after Successful Creation**
+- **TimescaleDB ブリッジがパスワードなしログインで作成後も切断状態のままになる**
 
-  When establishing a password-free login for TimescaleDB, the data bridge is created successfully but remains disconnected. Inputting the username during bridge creation resolves this issue.
+  TimescaleDB のパスワードなしログインでデータブリッジを作成すると、作成は成功しますが切断状態のままになります。ブリッジ作成時にユーザー名を入力すると問題が解決します。
 
-  > **Workaround:**
-  > Configure usernames and passwords for TimescaleDB, then create a data bridge using the correct credentials.
+  > **回避策:**  
+  > TimescaleDB のユーザー名とパスワードを設定し、正しい認証情報でデータブリッジを作成してください。
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **Listener Status Not Updated on Dashboard After Command Line Start/Stop**
+- **コマンドラインでリスナーを開始／停止してもダッシュボードのリスナー状態が更新されない**
 
-  Starting or stopping a listener through the following commands does not update the listener's status on the Dashboard, causing confusion about its actual state.
+  以下のコマンドでリスナーを開始または停止しても、ダッシュボード上のリスナー状態が更新されず、実際の状態が分かりにくくなります。
 
   ```
   ./bin/emqx ctl listeners stop tcp:we
   ./bin/emqx ctl listeners start tcp:we
   ```
 
-- **Plugin Start/Stop Command Only Affects Executing Node, Not Cluster-Wide**
+- **プラグインの開始／停止コマンドは実行ノードのみが対象でクラスター全体には反映されない**
 
-  Executing the start/stop commands for a plugin as shown below affects only the executing node, not other nodes within the cluster.
+  以下のコマンドでプラグインを開始／停止しても、実行したノードのみが対象であり、クラスター内の他のノードには影響しません。
 
   ```
   ./bin/emqx ctl plugins stop emqx_plugin_template-5.0.0
   ./bin/emqx ctl plugins start emqx_plugin_template-5.0.0
   ```
 
-  > **Workaround:**
-  > Execute the start/stop command on all nodes in the cluster or use the Dashboard to manage the plugin.
+  > **回避策:**  
+  > クラスター内のすべてのノードで同様のコマンドを実行するか、ダッシュボードからプラグインを管理してください。
 
-- **Authentication Required for Coap Gateway Connection Mode**
+- **CoAP ゲートウェイ接続モードで認証が必須**
 
-  The CoAP gateway only allows connection creation with authentication enabled. Enabling any authentication method resolves the issue.
+  CoAP ゲートウェイは認証が有効な状態でのみ接続作成を許可します。いずれかの認証方式を有効にすることで問題が解決します。
 
-  > **Workaround:**
-  > Enable any authentication method and create a connection with the correct authentication information.
+  > **回避策:**  
+  > いずれかの認証方式を有効にし、正しい認証情報で接続を作成してください。
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **Dashboard Error When Using "crt" for "Use Peer Certificate field as ClientId" Option**
+- **ダッシュボードの「Use Peer Certificate field as ClientId」オプションで `crt` を選択するとエラー発生**
 
-  Selecting `crt` as the option for **Use Peer Certificate as Client ID** on the **General** tab of the **MQTT Settings** page on the Dashboard causes the client ID to display garbled code on the Dashboard and leads to an error when viewing details.
+  ダッシュボードの **MQTT Settings** ページの **General** タブで「Use Peer Certificate as Client ID」オプションに `crt` を選択すると、クライアントIDが文字化けして表示され、詳細表示時にエラーが発生します。
 
-- **Unable to View and Download Files on Replica Nodes in Cluster with File Transfer Feature**
+- **クラスターのレプリカノードでファイル転送機能のファイルが閲覧・ダウンロードできない**
 
-  When using the file transfer function to upload files within a cluster, files uploaded to one of the replica nodes can only be accessed with files list API from the node to which they are uploaded.
+  クラスター内でファイル転送機能を使ってファイルをアップロードした場合、アップロード先のレプリカノード以外からはファイル一覧APIでアクセスできません。
 
-  > **Workaround:**
-  > Only view and download files from the node to which the file is uploaded.
+  > **回避策:**  
+  > ファイルはアップロードしたノードからのみ閲覧・ダウンロードしてください。
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **Dashboard Fails to Reflect Modified Listener Port**
+- **ダッシュボードにリスナーポートの変更が反映されない**
 
-  Adjusting the listener port in the `emqx.conf` configuration file as shown below does not update the port displayed on the Dashboard, leading to a mismatch between the displayed and actual port.
+  `emqx.conf` のリスナーポートを以下のように変更しても、ダッシュボード上のポート表示は更新されず、実際のポートと不一致になります。
 
   ```
   listeners.tcp.default {
@@ -78,38 +78,38 @@
   }
   ```
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **"Max Connections" Parameter Ineffective for "quic" or "ws" Listeners**
+- **「quic」または「ws」タイプのリスナーで「Max Connections」パラメータが無効**
 
-  Configuring "Max Connections" for "quic" or "ws" type listeners through the Dashboard or configuration file does not take effect.
+  ダッシュボードや設定ファイルで「quic」または「ws」タイプのリスナーに対して「Max Connections」を設定しても効果がありません。
 
-- **Inaccurate `client.disconnected` Events Statistics in Rules**
+- **ルールの `client.disconnected` イベント統計が不正確**
 
-  Channels with `clean_session = false` generate two `client.disconnected` events, leading to inaccurate event statistics.
+  `clean_session = false` のチャネルでは `client.disconnected` イベントが2回発生し、イベント統計が不正確になります。
 
-- **Parsing Issue with UTF-8 Characters in Rule Action "republish" Payload**
+- **ルールアクション「republish」のペイロードで UTF-8 文字の解析問題**
 
-  When creating a rule with the "republish" action and using `${payload.'msg'}` in the payload, clients subscribed to the republish topic receive `${payload.'msg'}` instead of the actual `${payload.msg}` value.
+  ルールの「republish」アクションでペイロードに `${payload.'msg'}` を使用すると、サブスクライブしているクライアントは `${payload.'msg'}` のまま受信し、実際の `${payload.msg}` の値が送信されません。
 
-  > **Fixed Version:** 5.2.0
+  > **修正バージョン:** 5.2.0
 
-- **Default Value of "Connection Pool Size" for Oracle Database is Unchangeable**
+- **Oracle データベースの「Connection Pool Size」のデフォルト値が変更不可**
 
-  Irrespective of the specified value, the "Connection Pool Size" parameter remains fixed at the default value of 8.
+  指定した値に関わらず、「Connection Pool Size」パラメータはデフォルトの 8 に固定されます。
 
-  > **Fixed Version:** 5.1.1
+  > **修正バージョン:** 5.1.1
 
-- **Fail to Update for Subscribed Topic's QoS on Dashboard**
+- **サブスクライブしたトピックの QoS 更新がダッシュボードに反映されない**
 
-  When a CoAP client subscribes to a topic with QoS 0 and changes the QoS to 1, the Dashboard still displays the original QoS value and the actual QoS remains at 0.
+  CoAP クライアントが QoS 0 でトピックをサブスクライブ後、QoS を 1 に変更しても、ダッシュボードは元の QoS を表示し続け、実際の QoS は 0 のままです。
 
-- **Log Files Deleted on EMQX Restart with Rotation Number > 10**
+- **ログローテーション番号が 10 を超えると EMQX 再起動時にログファイルが削除される**
 
-  When the log rotation_number is set to a value greater than 10, the log files with numbers higher than 10 (e.g., emqx.log.11, emqx.log.12, etc.) are still getting deleted upon restarting EMQX.
+  ログの `rotation_number` を 10 より大きい値に設定すると、`emqx.log.11` や `emqx.log.12` など 10 番以上の番号が付いたログファイルが EMQX 再起動時に削除されます。
 
-- **EMQX Cluster Split-Brain Issue when Node Disconnected for >2 Minutes**
+- **ノードが 2 分以上切断されると EMQX クラスターでスプリットブレインが発生する**
 
-  EMQX 5.x upgrade to OTP25 has encountered a challenge due to the implementation of a more aggressive network fragmentation approach in Erlang OTP 25. Unlike the previous OTP 24 version, even minor network disturbances can now inaccurately trigger split-brain detection in the global component of EMQX.
+  EMQX 5.x の OTP25 へのアップグレードにより、Erlang OTP 25 でより積極的なネットワーク断片化検出が導入されました。これにより、以前の OTP 24 と異なり、軽微なネットワーク障害でも EMQX のグローバルコンポーネントで誤ったスプリットブレイン検出が発生します。
 
-  > **Fixed Version:** 5.2.1
+  > **修正バージョン:** 5.2.1

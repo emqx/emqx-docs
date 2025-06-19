@@ -1,93 +1,93 @@
 # Feature FAQs
 
-## Is there a limit on the number of ACLs for a single client?
+## 単一クライアントのACL数に制限はありますか？
 
-Theoretically, there is no limit. However, to improve the performance of message subscription and publishing, it is advisable to avoid having too many ACL rules. It is recommended that a single client have no more than 10 ACLs. Using wildcard rules can help reduce the number of ACL entries.
+理論上、制限はありません。しかし、メッセージのサブスクライブおよびパブリッシュのパフォーマンス向上のため、ACLルールを多く持ちすぎないことが望ましいです。単一クライアントあたり10個以内のACLを推奨します。ワイルドカードルールを使用することでACLエントリ数を減らすことが可能です。
 
-## Can EMQX store messages to database?
+## EMQXはメッセージをデータベースに保存できますか？
 
-The EMQX Enterprise supports data persistence. Please refer to [Data Integration](../data-integration/data-bridges.md).
+EMQX Enterpriseはデータのパーシステンスをサポートしています。詳細は[Data Integration](../data-integration/data-bridges.md)をご参照ください。
 
-## Does EMQX support saving MQTT messages to a database?
+## EMQXはMQTTメッセージをデータベースに保存できますか？
 
-Yes. You can use the [Data Integration](../data-integration/data-bridges.md) of **EMQX Enterprise** to achieve message persistence. EMQX supports a variety of SQL, NoSQL, and time-series databases, and you can choose as needed.
+はい。**EMQX Enterprise**の[Data Integration](../data-integration/data-bridges.md)を利用してメッセージのパーシステンスを実現できます。EMQXは各種SQL、NoSQL、時系列データベースをサポートしており、用途に応じて選択可能です。
 
-## Does EMQX support forwarding MQTT messages to message queues such as Kafka?
+## EMQXはMQTTメッセージをKafkaなどのメッセージキューに転送できますか？
 
-Yes. You can forward messages to message queues such as Kafka and RabbitMQ through the [Data Integration](../data-integration/data-bridges.md) of **EMQX Enterprise**.
+はい。**EMQX Enterprise**の[Data Integration](../data-integration/data-bridges.md)を通じて、KafkaやRabbitMQなどのメッセージキューにメッセージを転送できます。
 
-## Does EMQX support forwarding MQTT messages to other MQTT services?
+## EMQXはMQTTメッセージを他のMQTTサービスに転送できますか？
 
-Yes. You can use EMQX's [MQTT bridge](../data-integration/data-bridge-mqtt.md) to forward messages to other MQTT services, including IoT Hub deployed on public clouds such as AWS and Azure, as well as standard MQTT brokers such as EMQX and Mosquitto.
+はい。EMQXの[MQTTブリッジ](../data-integration/data-bridge-mqtt.md)を利用することで、AWSやAzureなどのパブリッククラウド上に展開されたIoT Hubや、EMQXやMosquittoなどの標準MQTTブローカーを含む他のMQTTサービスへメッセージを転送できます。
 
-## What is shared subscription?
+## 共有サブスクリプションとは何ですか？
 
-Shared subscription is a new feature introduced in MQTT 5.0 that allows clients to consume messages in a load balanced manner. We can divide clients into multiple subscription groups. Messages will still be forwarded to all subscription groups, but clients within a subscription group will receive messages alternately with a random, round robin, etc. strategy.
+共有サブスクリプションはMQTT 5.0で導入された新機能で、クライアントが負荷分散された形でメッセージを消費できるようにします。クライアントを複数のサブスクリプショングループに分け、メッセージはすべてのグループに転送されますが、各グループ内のクライアントはランダムやラウンドロビンなどの戦略で交互にメッセージを受け取ります。
 
-Clients of MQTT 3.1.1 can use shared subscriptions in the same way, since all the processing logic for shared subscriptions is done on the server, and the client only needs to subscribe to `$share/group/{topic filter}`.
+MQTT 3.1.1のクライアントもサーバー側で共有サブスクリプションの処理が行われるため、`$share/group/{topic filter}`にサブスクライブするだけで同様に利用可能です。
 
-Shared subscriptions are useful in data collection scenarios where there are many more message producers than consumers. For more information, see [Shared Subscription](../messaging/mqtt-shared-subscription.md).
+共有サブスクリプションは、メッセージのパブリッシャーが多数でサブスクライバーが少数のデータ収集シナリオに有効です。詳細は[Shared Subscription](../messaging/mqtt-shared-subscription.md)をご参照ください。
 
-## What is the system topic?
+## システムトピックとは何ですか？
 
-EMQX periodically publishes its operational status, MQTT message counts, and client online/offline events to system topics starting with `$SYS/`. Clients can subscribe to the system topic to obtain relevant information.
+EMQXは自身の稼働状況、MQTTメッセージ数、クライアントのオンライン／オフラインイベントを`$SYS/`で始まるシステムトピックに定期的にパブリッシュします。クライアントはシステムトピックをサブスクライブして関連情報を取得できます。
 
-For a complete introduction to the system topic, please refer to [here](../observability/mqtt-system-topics.md).
+システムトピックの詳細な説明は[こちら](../observability/mqtt-system-topics.md)をご覧ください。
 
-## Does EMQX support clients subscribing to system topics via a shared subscription?
+## EMQXはクライアントが共有サブスクリプション経由でシステムトピックをサブスクライブすることをサポートしていますか？
 
-Yes. Some system messages may be published frequently, such as client online and offline events, so it is very useful for clients to use shared subscriptions. Subscription example: `$share/group1/$SYS/brokers/+/clients/+/connected`.
+はい。クライアントのオンライン・オフラインイベントなど頻繁にパブリッシュされるシステムメッセージに対して、共有サブスクリプションは非常に有効です。サブスクリプション例：`$share/group1/$SYS/brokers/+/clients/+/connected`
 
-## Does EMQX support access to customized protocols?
+## EMQXはカスタマイズされたプロトコルへのアクセスをサポートしていますか？
 
-EMQX provides an ExProto gateway that supports users to develop gRPC services using their familiar programming languages ​​(such as Java, Python, Go, etc.) to parse customized protocols used by devices and facilitate functions such as device connection, authentication, and message transmission.
+EMQXはExProtoゲートウェイを提供しており、Java、Python、Goなどの慣れ親しんだプログラミング言語でgRPCサービスを開発し、デバイスが使用するカスタマイズプロトコルの解析や、デバイス接続、認証、メッセージ送信などの機能を実現できます。
 
-For details, please refer to [ExProto Protocol Gateway](../gateway/exproto.md).
+詳細は[ExProto Protocol Gateway](../gateway/exproto.md)をご参照ください。
 
-## Does EMQX support limiting the topics that clients can publish or subscribe to?
+## EMQXはクライアントがパブリッシュまたはサブスクライブできるトピックの制限をサポートしていますか？
 
-Yes. The authorization management mechanism in EMQX can achieve fine-grained management of client permissions. 
+はい。EMQXの認可管理機構により、クライアント権限の細粒度管理が可能です。
 
-EMQX queries ACL rules from the `acl.conf` file by default. Users can also configure a database as the data source for ACL rules, such as EMQX's built-in database, MySQL, Redis, etc.
+EMQXはデフォルトで`acl.conf`ファイルからACLルールを参照します。ユーザーはEMQX組み込みデータベース、MySQL、RedisなどのデータベースをACLルールのデータソースとして設定することもできます。
 
-We usually recommend adding rules that are effective for multiple clients in `acl.conf`, such as only allowing clients in the same network segment to subscribe to system topics; and adding rules that are effective for a single client in the database, such as allowing client `client1` to subscribe to the topic `example`.
+通常、複数クライアントに有効なルールは`acl.conf`に記述し、例えば同一ネットワークセグメントのクライアントのみがシステムトピックをサブスクライブ可能にします。一方、単一クライアントに有効なルールはデータベースに記述し、例えばクライアント`client1`がトピック`example`をサブスクライブ可能にします。
 
-For a complete introduction to authorization, please refer to [here](../access-control/authz/authz.md).
+認可の詳細は[こちら](../access-control/authz/authz.md)をご覧ください。
 
-## Does EMQX support rate limit?
+## EMQXはレート制限をサポートしていますか？
 
-Yes. EMQX supports connection rate and message inflow rate control to avoid system overload at the inlet. For a complete introduction, please refer to [here](../rate-limit/rate-limit.md).
+はい。EMQXは接続レートおよびメッセージ流入レートの制御をサポートし、入口でのシステム過負荷を防止します。詳細は[こちら](../rate-limit/rate-limit.md)をご参照ください。
 
-## Is there a limit to the message receive rate for EMQX clients?
+## EMQXクライアントのメッセージ受信レートに制限はありますか？
 
-The EMQX or MQTT protocols do not directly limit the rate at which each client can receive messages. However, when too many messages are received and cannot be processed by the client in time, the messages may get heaped up and eventually discarded. To ensure system stability and message reliability, it is recommended that each client subscribe to receive messages at a rate of no more than 1500 messages/second (1KB per message).
+EMQXやMQTTプロトコル自体はクライアントごとのメッセージ受信レートを直接制限しません。しかし、多数のメッセージを受信してクライアントが処理しきれない場合、メッセージが積み重なり最終的に破棄される可能性があります。システムの安定性とメッセージ信頼性を確保するため、クライアントごとのメッセージ受信レートは1秒あたり1500メッセージ（1KB/メッセージ）以内を推奨します。
 
-If the message receive rate exceeds this recommendation, you can use [Shared Subscription](../messaging/mqtt-shared-subscription.md) to add multiple subscribers to spread the load and reduce the rate of messages received by a single subscriber.
+受信レートが推奨値を超える場合は、[Shared Subscription](../messaging/mqtt-shared-subscription.md)を利用して複数のサブスクライバーを追加し、単一サブスクライバーの受信レートを分散してください。
 
-## Does EMQX support cluster autodiscovery? What are the implementation methods?
+## EMQXはクラスターの自動検出をサポートしていますか？実装方法は？
 
-In addition to creating clusters manually, EMQX also supports DNS, etcd and other node discovery strategies to achieve automatic clustering, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md).
+手動でクラスターを作成するほか、EMQXはDNSやetcdなどのノード検出戦略をサポートし、自動クラスタリングを実現できます。詳細は[Create and Manage Cluster](../deploy/cluster/create-cluster.md)をご参照ください。
 
-## Does EMQX support users to actively disconnect MQTT connections on the server side?
+## EMQXはサーバー側でMQTT接続をユーザーが能動的に切断することをサポートしていますか？
 
-Yes. EMQX provides the [Command Line Interface](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
+はい。EMQXは[CLI](../admin/cli.md#clients)の`emqx ctl clients kick <Client ID>`コマンドおよび[REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)の`DELETE /clients/{clientid}`を提供し、ユーザーがMQTT接続を手動で切断できます。Dashboardのクライアントページからも操作可能です。
 
-For detailed instructions on the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+REST APIの詳細は[EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)をご覧ください。
 
-## I want to monitor the online and offline events of the device, how can I do it?
+## デバイスのオンライン・オフラインイベントを監視したいのですが、どうすればよいですか？
 
-EMQX provides three ways to monitor the online and offline events of the device:
+EMQXはデバイスのオンライン・オフラインイベントを監視する方法を3つ提供しています：
 
-- Use the [WebHook](../data-integration/data-bridge-webhook.md) to forward the online and offline event messages to the external HTTP service.
-- Use the MQTT client to subscribe to the [System Topic](../observability/mqtt-system-topics.md) to obtain the online and offline event notifications.
-- Use the [Rule Engine](../data-integration/rules.md) to monitor the `client.connected` and `client.disconnected` events, and cooperate with the [Data Integration](../data-integration/data-bridges.md) to write the event messages to the specified database. (EMQX Enterprise only)
+- [WebHook](../data-integration/data-bridge-webhook.md)を使い、オンライン・オフラインイベントメッセージを外部HTTPサービスに転送する。
+- MQTTクライアントで[システムトピック](../observability/mqtt-system-topics.md)をサブスクライブし、オンライン・オフライン通知を取得する。
+- [ルールエンジン](../data-integration/rules.md)で`client.connected`および`client.disconnected`イベントを監視し、[Data Integration](../data-integration/data-bridges.md)と連携してイベントメッセージを指定データベースに書き込む（EMQX Enterpriseのみ）。
 
-## How can data throughput and reliability be improved when integrating server with EMQX using MQTT?
+## MQTTを使ってサーバーとEMQXを連携する際、データのスループットと信頼性を向上させるには？
 
-When application services integrate with EMQX using the MQTT protocol, each client typically handles a high load. To fully leverage client performance and ensure system availability, here are some best practice recommendations:
+アプリケーションサービスがMQTTプロトコルでEMQXと連携する場合、各クライアントは高負荷を処理します。クライアント性能を最大限に活用し、システムの可用性を確保するため、以下のベストプラクティスを推奨します：
 
-1. **Separate Message Subscription and Publishing**: Avoid having a single client act as both publisher and subscriber.
-2. **Use Shared Subscriptions**: Prioritize using shared subscriptions to receive messages, and set the number of subscriber clients based on the business scenario and message volume.
-3. **Use Multiple Clients for Publishing Messages**: Configure the number of clients for publishing messages according to business needs and message volume, and implement a load-balancing strategy.
+1. **メッセージのサブスクライブとパブリッシュを分離する**：単一クライアントがパブリッシャーとサブスクライバーの両方を兼ねることを避ける。
+2. **共有サブスクリプションを利用する**：メッセージ受信には共有サブスクリプションを優先し、業務シナリオやメッセージ量に応じてサブスクライバー数を設定する。
+3. **複数クライアントでメッセージをパブリッシュする**：業務ニーズやメッセージ量に応じてパブリッシュ用クライアント数を設定し、ロードバランス戦略を実装する。
 
-The core principle is to reduce the message load on a single client. By using multiple channels for MQTT interaction, overall message throughput performance can be enhanced, and system high availability can be increased.
+基本原則は単一クライアントのメッセージ負荷を軽減することです。複数チャネルでMQTTと連携することで、全体のメッセージスループット性能を向上させ、システムの高可用性を実現できます。

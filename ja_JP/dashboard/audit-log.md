@@ -1,34 +1,34 @@
 # Audit Log
 
-The Audit Log feature allows you to track important operational changes in your EMQX cluster in real-time. Through the Audit Log, enterprise users can easily see who performed which critical operations, how they did it, and when they did it. It is a critical tool for enterprise users to comply with regulatory requirements and ensure data security auditing during their operations.
+Audit Log機能は、EMQXクラスターにおける重要な運用変更をリアルタイムで追跡することを可能にします。Audit Logを通じて、エンタープライズユーザーは誰がどの重要な操作を、どのように、いつ実行したかを簡単に把握できます。これは、エンタープライズユーザーが規制要件を遵守し、運用中のデータセキュリティ監査を確実に行うための重要なツールです。
 
-EMQX Audit Log supports recording change-related operations from the [Dashboard](../dashboard/introduction.md), [REST API,](../admin/api.md) and [CLI](../admin/cli.md), such as Dashboard user logins and modifications to clients, access controls, and data integrations. However, read-only operations such as metrics retrieval and client list queries are not recorded. 
+EMQX Audit Logは、[ダッシュボード](../dashboard/introduction.md)、[REST API](../admin/api.md)、および[CLI](../admin/cli.md)からの変更関連操作を記録することをサポートしています。例えば、ダッシュボードのユーザーログインやクライアント、アクセス制御、データ統合の変更などです。ただし、メトリクス取得やクライアントリストの照会などの読み取り専用操作は記録されません。
 
-EMQX offers a Dashboard view and integration with log systems to help enterprises manage audit logs. Through these methods, EMQX provides flexible and comprehensive support for Audit Logs, allowing enterprise users to choose the most suitable way to manage and view audit logs according to their needs.
+EMQXは、ダッシュボードビューとログシステムとの統合を提供し、エンタープライズがAudit Logを管理しやすくしています。これらの方法を通じて、EMQXは柔軟かつ包括的なAudit Logのサポートを提供し、エンタープライズユーザーがニーズに応じて最適な管理・閲覧方法を選択できるようにしています。
 
-## Enable Audit Log
+## Audit Logの有効化
 
-You can enable the Audit Log feature and adjust the configuration parameters through both the Dashboard and the configuration file.
+Audit Log機能は、ダッシュボードおよび設定ファイルの両方から有効化および設定パラメータの調整が可能です。
 
-### Enable Audit Log via Dashboard
+### ダッシュボードからAudit Logを有効化する
 
-To enable the audit log and modify the configuration parameters in the Dashboard, go to **Management** -> **Logging** -> **Audit Log**, or go to **System** -> **Audit Log**.
+ダッシュボードでAudit Logを有効化し、設定パラメータを変更するには、**Management** -> **Logging** -> **Audit Log**、または**System** -> **Audit Log**に移動してください。
 
-<img src="./assets/audit_log_config.png" alt="Audit Log Configuration" style="zoom:50%;" />
+<img src="./assets/audit_log_config.png" alt="Audit Logの設定" style="zoom:50%;" />
 
-You can configure the following options for Audit Log:
+Audit Logには以下のオプションを設定できます：
 
-- **Enable Log Handler**: Enable or disable the audit log processing process. It is enabled by default.
-- **Audit Log File Name**: Specify the path and name of the audit log file. The default value is `${EMQX_LOG_DIR}/audit.log`, where `${EMQX_LOG_DIR}` is a variable and defaults to `./log`, meaning it is ultimately be saved in `./log/audit.log.1`.
-- **Maximum Log Files Number**: The maximum number of rotated log files. The default value is `10`.
-- **Rotation Size**: Set the size of log files, and when the specified size is reached, log files will be rotated. If disabled, log files will grow indefinitely. You can enter the desired value in the text box and select the unit from the drop-down list, with options such as `MB`, `GB`, and `KB`. The default value is `50MB`.
-- **Max Dashboard Record Size**: This setting determines the maximum number of records stored in the database, which can be accessed and retrieved through the Dashboard and the `/audit` API. The default value is `5000`.
-- **Ignore High Frequency Request**: This option controls whether to ignore high-frequency requests to prevent flooding the audit log with entries, such as requests related to publish/subscribe and kicking out clients. It is enabled by default.
-- **Time Offset**: Define the format of timestamps in the log. such as "-02:00" or "+00:00". By default, it is set to `system`.
+- **Enable Log Handler**：Audit Log処理プロセスの有効化・無効化。デフォルトで有効です。
+- **Audit Log File Name**：Audit Logファイルのパスと名前を指定します。デフォルト値は`${EMQX_LOG_DIR}/audit.log`で、`${EMQX_LOG_DIR}`は変数であり、デフォルトは`./log`です。つまり最終的には`./log/audit.log.1`に保存されます。
+- **Maximum Log Files Number**：ローテーションされるログファイルの最大数。デフォルトは`10`です。
+- **Rotation Size**：ログファイルのサイズを設定し、指定サイズに達するとログファイルがローテーションされます。無効にするとログファイルは無制限に増加します。テキストボックスに値を入力し、ドロップダウンリストから`MB`、`GB`、`KB`などの単位を選択できます。デフォルトは`50MB`です。
+- **Max Dashboard Record Size**：データベースに保存される最大レコード数を決定し、ダッシュボードおよび`/audit` APIからアクセス・取得可能です。デフォルトは`5000`です。
+- **Ignore High Frequency Request**：高頻度リクエストを無視するかどうかを制御し、パブリッシュ／サブスクライブやクライアントキックアウトに関連するリクエストでAudit Logの洪水を防ぎます。デフォルトで有効です。
+- **Time Offset**：ログのタイムスタンプのフォーマットを定義します。例として"-02:00"や"+00:00"など。デフォルトは`system`です。
 
-### Enable Audit Log via Configuration File
+### 設定ファイルからAudit Logを有効化する
 
-You can also enable the audit log and modify the configuration options under `log.audit` in the `base.hocon` file, as shown in the example below.
+`base.hocon`ファイルの`log.audit`セクションでAudit Logを有効化し、設定オプションを変更することも可能です。以下は例です。
 
 ```bash
 log.audit {
@@ -41,92 +41,92 @@ log.audit {
 }
 ```
 
-## View Audit Log on Dashboard
+## ダッシュボードでAudit Logを閲覧する
 
-Once the Audit Log is enabled, you can view the content of the audit logs on the Dashboard under **System** -> **Audit Log**.
+Audit Logを有効化すると、ダッシュボードの**System** -> **Audit Log**でAudit Logの内容を閲覧できます。
 
 ![image-20231214143911786](./assets/image-20231214143911786.png)
 
-### Search Filter
+### 検索フィルター
 
-You can filter and search through log operations, with supported search keywords including:
+ログ操作をフィルターおよび検索できます。サポートされる検索キーワードは以下の通りです：
 
-- **Start Time** - **End Time**: The time range when the operation occurred.
-- **Source Type**: The method used to perform the operation, with options including `Dashboard`, `REST API`, `CLI`, and `Erlang Console`. Here, the `Erlang Console` refers to the Erlang Shell console, typically used during on-site technical support provided by EMQ.
-- **Operator**: The Dashboard username or the key name used for calling the REST API. This is only valid when the operation method is Dashboard or REST API.
-- **IP**: The source IP of the Dashboard user or the client that called the REST API. This is only displayed when the operation method is Dashboard or REST API.
-- **Operation Name**: Choose from the dropdown list of operation names supported by the audit logs.
-- **Operation Result**: Choose from the dropdown list between `Success` or `Failure`.
+- **開始時間** - **終了時間**：操作が発生した時間範囲。
+- **ソースタイプ**：操作が実行された方法。`Dashboard`、`REST API`、`CLI`、`Erlang Console`が選択肢です。ここで`Erlang Console`はEMQによる現地技術サポート時に使用されるErlang Shellコンソールを指します。
+- **オペレーター**：ダッシュボードのユーザー名またはREST API呼び出しに使用されたキー名。操作方法がDashboardまたはREST APIの場合のみ有効です。
+- **IP**：ダッシュボードユーザーまたはREST APIを呼び出したクライアントのソースIP。操作方法がDashboardまたはREST APIの場合のみ表示されます。
+- **操作名**：Audit Logでサポートされる操作名のドロップダウンリストから選択します。
+- **操作結果**：`Success`または`Failure`から選択します。
 
-### List Explanation
+### リストの説明
 
-Below is an explanation for each column in the displayed audit log list:
+表示されるAudit Logリストの各列の説明は以下の通りです：
 
-- **Operation Time**: The time when the operation took place.
-- **Info**:
-  - For Dashboard or REST API, this column shows the operation name.
-  - For CLI and Console, this column records the executed command.
-- **Operator**: Includes the operation method and the corresponding operator. For CLI and Console operations, the operator is the name of the EMQX node where the command was executed.
-- **IP**: The source IP of the Dashboard user or the client that called the REST API. This is only displayed when the operation method is Dashboard or REST API.
-- **Operation Result**: `Success` or `Failure`. Failure includes scenarios such as form validation failure or inability to delete resources. This is only displayed for Dashboard or REST API methods; CLI and Console cannot record the operation result.
+- **操作時間**：操作が行われた時間。
+- **情報**：
+  - DashboardまたはREST APIの場合、この列は操作名を表示します。
+  - CLIおよびConsoleの場合、この列は実行されたコマンドを記録します。
+- **オペレーター**：操作方法と対応するオペレーターを含みます。CLIおよびConsole操作の場合、オペレーターはコマンドが実行されたEMQXノードの名前です。
+- **IP**：ダッシュボードユーザーまたはREST APIを呼び出したクライアントのソースIP。操作方法がDashboardまたはREST APIの場合のみ表示されます。
+- **操作結果**：`Success`または`Failure`。Failureにはフォーム検証失敗やリソース削除不可などのシナリオが含まれます。DashboardまたはREST APIの場合のみ表示され、CLIおよびConsoleは操作結果を記録できません。
 
-## View Audit Log via Log File
+## ログファイルでAudit Logを閲覧する
 
-When the Audit Log is enabled in EMQX, change-related operations are saved in log format in the `./log/audit.log.1` file. It is easy for enterprise users to perform an in-depth analysis of audit records and integrate the results into existing log management systems, meeting compliance and data security requirements.
+EMQXでAudit Logを有効化すると、変更関連の操作は`./log/audit.log.1`ファイルにログ形式で保存されます。エンタープライズユーザーはAudit Logの詳細分析を容易に行え、既存のログ管理システムに統合してコンプライアンスやデータセキュリティ要件を満たすことが可能です。
 
-::: warning Notice
+::: warning 注意
 
-Audit logs for command-line operations may contain sensitive information, so take caution when sending them to a log collector. It is advisable to filter log content or use encrypted transmission methods to prevent unauthorized information leakage.
+コマンドライン操作のAudit Logには機密情報が含まれる場合があるため、ログコレクターに送信する際は注意してください。ログ内容のフィルタリングや暗号化通信の利用など、不正な情報漏洩を防止する対策を推奨します。
 
 :::
 
-The fields included in the Audit Log vary depending on the source of the operation records.
+Audit Logに含まれるフィールドは、操作記録のソースによって異なります。
 
-### Operation Records from Dashboard or REST API
+### ダッシュボードまたはREST APIからの操作記録
 
-Audit logs that record Dashboard or REST API operations include information about the operating user, the operated object, and the operation result. The log message format example is as follows:
+ダッシュボードまたはREST APIの操作を記録するAudit Logには、操作ユーザー、操作対象、操作結果の情報が含まれます。ログメッセージのフォーマット例は以下の通りです。
 
 ```bash
 {"time":1702604675872987,"level":"info","source_ip":"127.0.0.1","operation_type":"mqtt","operation_result":"success","http_status_code":204,"http_method":"delete","operation_id":"/mqtt/retainer/message/:topic","duration_ms":4,"auth_type":"jwt_token","query_string":{},"from":"dashboard","source":"admin","node":"emqx@127.0.0.1","http_request":{"method":"delete","headers":{"user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36","sec-fetch-site":"same-origin","sec-fetch-mode":"cors","sec-fetch-dest":"empty","sec-ch-ua-platform":"\"macOS\"","sec-ch-ua-mobile":"?0","sec-ch-ua":"\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"","referer":"http://localhost:18083/","origin":"http://localhost:18083","host":"localhost:18083","connection":"keep-alive","authorization":"******","accept-language":"zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7","accept-encoding":"gzip, deflate, br","accept":"*/*"},"body":{},"bindings":{"topic":"$SYS/brokers/emqx@127.0.0.1/version"}}}
 ```
 
-The following table shows the fields contained in the above log message samples.
+以下の表は上記ログメッセージサンプルに含まれるフィールドを示しています。
 
-| Field Name       | Type    | Description                                                  |
-| ---------------- | ------- | ------------------------------------------------------------ |
-| time             | Integer | Timestamp representing the time of the log record, in microseconds. |
-| level            | String  | Log level.                                                   |
-| source_ip        | String  | Source IP address of the operation.                          |
-| operation_type   | String  | The functional module of the operation, corresponding to the Tag in the REST API. |
-| operation_result | String  | Operation result, "success", "failure" indicate success or failure of the operation respectively. |
-| http_status_code | String  | HTTP response status code.                                   |
-| http_method      | String  | HTTP request method.                                         |
-| duration_ms      | Integer | Operation execution time, in milliseconds.                   |
-| auth_type        | String  | Authentication type, indicating the method or mechanism used for authentication, fixed as `jwt_token` (Dashboard) or `api_key` (REST API). |
-| query_string     | Object  | URL query parameters in the HTTP request.                    |
-| from             | String  | Request source, `dashboard`, `rest_api` indicating from Dashboard, REST API respectively. When the value is `cli`, `erlang_console`, it indicates operations from the CLI or Erlang Shell, and this log structure is not applicable. |
-| source           | String  | The Dashboard username or API key name that performed the operation. |
-| node             | String  | Node name, indicating the node or server where the operation was executed. |
-| method           | String  | HTTP request method, `post`, `put`, `delete` correspond to create, update, and delete operations. |
-| operate_id       | String  | The REST API path of the request, please refer to [REST API](../admin/api.md). |
+| フィールド名          | 型       | 説明                                                         |
+| --------------------- | -------- | ------------------------------------------------------------ |
+| time                  | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                   |
+| level                 | String   | ログレベル                                                   |
+| source_ip             | String   | 操作のソースIPアドレス                                       |
+| operation_type        | String   | 操作の機能モジュール。REST APIのタグに対応                   |
+| operation_result      | String   | 操作結果。`success`は成功、`failure`は失敗を示す             |
+| http_status_code      | String   | HTTPレスポンスステータスコード                               |
+| http_method           | String   | HTTPリクエストメソッド                                       |
+| duration_ms           | Integer  | 操作実行時間（ミリ秒単位）                                   |
+| auth_type             | String   | 認証タイプ。認証に使用された方法や仕組みを示し、`jwt_token`（Dashboard）または`api_key`（REST API）で固定 |
+| query_string          | Object   | HTTPリクエストのURLクエリパラメータ                          |
+| from                  | String   | リクエストの発生元。`dashboard`、`rest_api`はそれぞれダッシュボード、REST APIを示す。`cli`、`erlang_console`の場合はCLIまたはErlang Shellからの操作であり、このログ構造は適用されない。 |
+| source                | String   | 操作を行ったダッシュボードのユーザー名またはAPIキー名       |
+| node                  | String   | 操作が実行されたノード名（ノードまたはサーバー）             |
+| method                | String   | HTTPリクエストメソッド。`post`、`put`、`delete`はそれぞれ作成、更新、削除操作に対応 |
+| operate_id            | String   | リクエストのREST APIパス。詳細は[REST API](../admin/api.md)を参照 |
 
-### Operation Records from CLI or Erlang Console
+### CLIまたはErlang Consoleからの操作記録
 
-Audit logs that record operations from CLI or Erlang Console operations include the executed command, called parameters, and other information. The log message format examples are as follows:
+CLIまたはErlang Consoleの操作を記録するAudit Logには、実行されたコマンド、呼び出しパラメータなどの情報が含まれます。ログメッセージのフォーマット例は以下の通りです。
 
 ```bash
 {"time":1695866030977555,"level":"info","msg":"from_cli","from": "cli","node":"emqx@127.0.0.1","duration_ms":0,"cmd":"retainer","args":["clean", "t/1"]}
 ```
 
-The following table shows the fields contained in the above log message samples.
+以下の表は上記ログメッセージサンプルに含まれるフィールドを示しています。
 
-| Field Name  | Type    | Description                                                  |
-| ----------- | ------- | ------------------------------------------------------------ |
-| time        | Integer | Timestamp indicating the time of the log record in microseconds. |
-| level       | String  | Log level.                                                   |
-| msg         | String  | Operation description.                                       |
-| from        | String  | Request source, `cli`, `erlang_console` indicating from CLI, Erlang Shell respectively. When the value is `dashboard `, `rest_api`, it indicates operations from Dashboard or REST API, and this log structure is not applicable. |
-| node        | String  | Node name indicating the node or server where the operation was executed. |
-| duration_ms | Integer | Execution time of the operation in milliseconds.             |
-| cmd         | String  | Specific command operation executed, for supported commands, please refer to the [CLI](../admin/cli.md). |
-| args        | Array   | Additional parameters attached to the command, multiple parameters are separated by arrays. |
+| フィールド名  | 型       | 説明                                                         |
+| ------------ | -------- | ------------------------------------------------------------ |
+| time         | Integer  | ログ記録のタイムスタンプ（マイクロ秒単位）                   |
+| level        | String   | ログレベル                                                   |
+| msg          | String   | 操作の説明                                                   |
+| from         | String   | リクエストの発生元。`cli`、`erlang_console`はそれぞれCLI、Erlang Shellを示す。`dashboard`、`rest_api`の場合はダッシュボードまたはREST APIからの操作であり、このログ構造は適用されない。 |
+| node         | String   | 操作が実行されたノード名（ノードまたはサーバー）             |
+| duration_ms  | Integer  | 操作の実行時間（ミリ秒単位）                                 |
+| cmd          | String   | 実行された具体的なコマンド操作。対応コマンドは[CLI](../admin/cli.md)を参照 |
+| args         | Array    | コマンドに付随する追加パラメータ。複数パラメータは配列で区切られる |

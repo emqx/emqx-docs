@@ -1,22 +1,22 @@
-# MQTT Configuration
+# MQTT 設定
 
-[MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
+[MQTT](https://mqtt.org/) は、モノのインターネット（IoT）向けの標準的なメッセージングプロトコルです。非常に軽量なパブリッシュ／サブスクライブ型のメッセージトランスポートとして設計されており、リモートデバイスを小さなコードフットプリントと最小限のネットワーク帯域で接続するのに最適です。
 
-EMQX is 100% MQTT 5.0 and 3.x compliant. This section introduces the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+EMQX は MQTT 5.0 および 3.x に 100% 準拠しています。本セクションでは、基本的な MQTT 設定項目について紹介します。基本的な MQTT 設定、サブスクリプション設定、セッション設定、強制シャットダウン設定、および強制ガベージコレクション設定などのトピックを扱います。
 
-## Basic MQTT Configurations
+## 基本的な MQTT 設定
 
-This section will introduce the configuration settings that determine how the MQTT protocol will behave in terms of packet size, client ID length, topic levels, quality of service (QoS), topic alias, and retention. 
+このセクションでは、パケットサイズ、クライアントID長、トピック階層数、QoS（サービス品質）、トピックエイリアス、保持設定など、MQTT プロトコルの動作を決定する設定項目を紹介します。
 
 :::tip
 
-You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
-If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
-This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
+対応する設定項目は EMQX ダッシュボードの **Management** -> **MQTT Settings** -> **General** でも確認できます。ダッシュボードで設定を行うと、設定ファイルの同じ項目より優先されます。  
+設定ファイルから MQTT を設定する場合は、`emqx.conf` ではなく `base.hocon` を使用することを推奨します。  
+`emqx.conf` に設定した場合、ダッシュボードからの変更は一時的なものとなり、EMQX の再起動時に失われるためです。
 
 :::
 
-**Example Code:**
+**設定例:**
 
 ```bash
 mqtt {
@@ -29,32 +29,32 @@ mqtt {
 }  
 ```
 
-Where, 
+各項目の説明は以下の通りです。
 
-| **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optional Values** |
-| ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------- |
-| `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                     |
-| `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`      |
-| `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` - `35`          |
-| `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |
-| `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` - `65535`       |
-| `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`     |
+| **設定項目**             | ダッシュボードUI           | **説明**                                                                 | **デフォルト値** | **設定可能値**        |
+|-------------------------|----------------------------|-------------------------------------------------------------------------|------------------|-----------------------|
+| `max_packet_size`       | Max Packet Size            | MQTT クライアントと EMQX 間でメッセージ送信に使われる MQTT パケットの最大サイズを設定します。 | `1MB`            |                       |
+| `max_clientid_len`      | Max Client ID Length       | MQTT クライアントIDの最大長を設定します。過度に長いクライアントIDの使用を防止できます。 | `65535`          | `23` - `65535`        |
+| `max_topic_levels`      | Max Topic Levels           | MQTT トピックの階層数の最大値を設定します。トピックはメッセージの分類に使われます。 | `128`            | `1` - `35`            |
+| `max_qos_allowed`       | Max QoS                    | MQTT メッセージに許可される最大の QoS（サービス品質）レベルを設定します。               |                  |                       |
+| `max_topic_alias`       | Max Topic Alias            | トピックエイリアスは、トピック名の代わりに短いエイリアスを使うことで MQTT パケットサイズを削減します。セッションで使用可能な最大エイリアス数を設定します。 | `65535`          | `1` - `65535`         |
+| `retain_available`      | Retain Available           | 保持メッセージ機能を有効にするかどうかを設定します。保持メッセージは、トピックに最後にパブリッシュされたメッセージを保存し、新規サブスクライバーが最新メッセージを受け取れるようにします。 | `true`           | `true`, `false`       |
 
-## Subscription Settings
+## サブスクリプション設定
 
-In EMQX, subscription refers to the process of a client subscribing to a topic on EMQX. When a client subscribes to a topic, it indicates that it wants to receive messages published to that topic.
+EMQX におけるサブスクリプションとは、クライアントが EMQX のトピックにサブスクライブするプロセスを指します。クライアントがトピックをサブスクライブすると、そのトピックにパブリッシュされたメッセージを受信したいことを示します。
 
-This section introduces how to configure shared, wildcard, and exclusive subscriptions. 
+このセクションでは、共有サブスクリプション、ワイルドカードサブスクリプション、および排他サブスクリプションの設定方法を紹介します。
 
 :::tip
 
-You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
-If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
-This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
+対応する設定項目は EMQX ダッシュボードの **Management** -> **MQTT Settings** -> **General** でも確認できます。ダッシュボードで設定を行うと、設定ファイルの同じ項目より優先されます。  
+設定ファイルから MQTT を設定する場合は、`emqx.conf` ではなく `base.hocon` を使用することを推奨します。  
+`emqx.conf` に設定した場合、ダッシュボードからの変更は一時的なものとなり、EMQX の再起動時に失われるためです。
 
 :::
 
-**Example code:** <!--code to be reviewed-->
+**設定例:**
 
 ```bash
 mqtt {
@@ -65,22 +65,22 @@ mqtt {
 }
 ```
 
-Where, 
+各項目の説明は以下の通りです。
 
-| **Configuration Items**        | Dashboard UI                    | **Description**                                              | **Default value** | Optional Values                                              |
-| ------------------------------ | ------------------------------- | ------------------------------------------------------------ | ----------------- | ------------------------------------------------------------ |
-| `wildcard_subscription`        | Wildcard Subscription Available | Wildcard subscriptions allow MQTT clients to subscribe to multiple topics using a single subscription, using wildcards such as `+` and `#`. <br /><br />This sets whether to enable wildcard subscription. | `true`            | `true`, `false`                                              |
-| `exclusive_subscription`       | Exclusive Subscription          | Exclusive subscriptions allow only one MQTT client to subscribe to a topic at a time.<br /><br />This sets whether to enable exclusive subscriptions. | `true`            | `true`, `false`                                              |
-| `shared_subscription`          | Shared Subscription Available   | Shared subscriptions allow multiple MQTT clients to share a subscription to a topic. <br /><br />This sets whether to enable shared subscriptions in MQTT. | `true`            | `true`, `false`                                              |
-| `shared_subscription_strategy` |                                 | This setting defines the strategy for distributing messages among MQTT clients that share a subscription.<br /><br />Needed only `shared_subscription` is set to `true`. | `round_robin`     | - `random` (Dispatch the message to a random selected subscriber) <br /><br />- `round_robin` (Select the subscribers in a round-robin manner) <br /><br />-  `sticky` (Always use the last selected subscriber to dispatch, until the subscriber disconnects.)<br /><br />- `hash` (Select the subscribers by the hash of `clientIds`)<br /> |
+| **設定項目**                 | ダッシュボードUI               | **説明**                                                                                         | **デフォルト値** | **設定可能値**                                                                                                   |
+|-----------------------------|-------------------------------|-------------------------------------------------------------------------------------------------|------------------|-----------------------------------------------------------------------------------------------------------------|
+| `wildcard_subscription`     | Wildcard Subscription Available | ワイルドカードサブスクリプションは、`+` や `#` などのワイルドカードを使い、複数トピックを一括でサブスクライブ可能にします。 | `true`           | `true`, `false`                                                                                                |
+| `exclusive_subscription`    | Exclusive Subscription         | 排他サブスクリプションは、特定トピックに対して同時に1つのクライアントのみがサブスクライブ可能にします。 | `true`           | `true`, `false`                                                                                                |
+| `shared_subscription`       | Shared Subscription Available  | 共有サブスクリプションは、複数のクライアントが同じトピックのサブスクリプションを共有できます。               | `true`           | `true`, `false`                                                                                                |
+| `shared_subscription_strategy` |                             | 共有サブスクリプションでメッセージを複数クライアントに配信する際の分配戦略を設定します。<br />`shared_subscription` が `true` の場合にのみ必要です。 | `round_robin`    | - `random`（ランダムにサブスクライバーへ配信）<br /><br />- `round_robin`（ラウンドロビン方式で順番に配信）<br /><br />- `sticky`（最後に選択されたサブスクライバーへ継続配信、切断時まで）<br /><br />- `hash`（`clientIds` のハッシュでサブスクライバーを選択） |
 
-## Delayed Publish Settings
+## 遅延パブリッシュ設定
 
-The Delayed Publish feature allows clients to delay the publishing of a message to a topic for a specified amount of time. This feature is useful for scenarios where messages need to be published at specific times or when a certain condition is met.
+遅延パブリッシュ機能は、クライアントがメッセージを指定した時間だけ遅延してトピックにパブリッシュできる機能です。特定の時間にメッセージをパブリッシュしたい場合や、条件が整ったときにパブリッシュしたい場合に有用です。
 
-This section introduces how to enable delayed publishing and how to set the maximum number of delayed messages allowed:
+このセクションでは、遅延パブリッシュの有効化方法と遅延メッセージの最大数設定を紹介します。
 
-**Example code:**
+**設定例:**
 
 ```bash
 delay {
@@ -89,33 +89,34 @@ delay {
 }
 ```
 
-Where, 
+各項目の説明は以下の通りです。
 
-- `delayed_publish_enabled` sets whether to enable the Delayed Publish feature in EMQX; default value: `true`, optional values: `true`, `false`.
-- `max_delayed_messages` sets the maximum number of delayed messages allowed; default value: `0`.
+- `delayed_publish_enabled` は遅延パブリッシュ機能を有効にするかどうかを設定します。デフォルト値は `true`、設定可能値は `true`、`false` です。  
+- `max_delayed_messages` は許容される遅延メッセージの最大数を設定します。デフォルト値は `0` です。
 
-## Keep Alive Settings
+## キープアライブ設定
 
-The Keep Alive is a two-byte integer, a time interval measured in seconds. It is a mechanism to ensure that an MQTT client and EMQX connection remain active even if no data is transmitted. When an MQTT client establishes a connection with EMQX, setting a non-zero value in the Keep Alive variable header field of the CONNECT packet can enable the Keep Alive mechanism between both parties. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive).
+キープアライブは 2 バイトの整数で、秒単位の時間間隔を表します。MQTT クライアントと EMQX の接続がデータ送信がなくても維持されていることを保証する仕組みです。MQTT クライアントが EMQX に接続する際、CONNECT パケットのヘッダーに非ゼロのキープアライブ値を設定すると、双方でキープアライブ機構が有効になります。キープアライブの動作詳細は [MQTT のキープアライブパラメータとは？](https://www.emqx.com/en/blog/mqtt-keep-alive) を参照してください。
 
-According to the MQTT 5.0 protocol, for clients with Keep Alive enabled, if the server does not receive an MQTT Control Packet from the client within 1.5 times the Keep Alive duration, it must close the network connection with the client. Therefore, EMQX introduces a configuration option `keepalive_multiplier` to periodically check clients' Keep Alive timeout status. The default value for `keepalive_multiplier` is `1.5`:
+MQTT 5.0 プロトコルに従い、キープアライブが有効なクライアントに対して、サーバーはキープアライブ時間の1.5倍以内にクライアントから MQTT コントロールパケットを受信しない場合、ネットワーク接続を切断しなければなりません。  
+そのため、EMQX ではクライアントのキープアライブタイムアウト状態を定期的にチェックするための設定 `keepalive_multiplier` を導入しています。デフォルト値は `1.5` です。
 
 ```bash
 keepalive_multiplier = 1.5
 ```
 
-The timeout calculation formula is as follows:
+タイムアウトの計算式は以下の通りです。  
 $$
 \text{Keep Alive} \times \text{keepalive\_multiplier}
 $$
 
-## Session Settings
+## セッション設定
 
-In MQTT, a session refers to the connection between a client and a broker. As in EMQX, when a client connects to EMQX, it establishes a session that allows it to subscribe to topics and receive messages, as well as publish messages to EMQX.
+MQTT におけるセッションとは、クライアントとブローカー間の接続を指します。EMQX では、クライアントが接続するとセッションが確立され、トピックのサブスクライブやメッセージの受信、EMQX へのメッセージパブリッシュが可能になります。
 
-This section introduces how to configure sessions.
+このセクションではセッションの設定方法を紹介します。
 
-**Example code:**
+**設定例:**
 
 ```bash
 mqtt {
@@ -141,38 +142,38 @@ mqtt {
   }
 ```
 
-Where, 
+各項目の説明は以下の通りです。
 
-| **Configuration Item**            | Dashboard UI                | **Description**                                              | **Default Value**                                            | **Optional Values**                 |
-| --------------------------------- | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------------------------- |
-| `max_subscriptions`               | Max Subscriptions           | This sets the maximum number of subscriptions that the client is allowed to have | `infinity`                                                   | `1` - `infinity`                    |
-| `upgrade_qos`                     | Upgrade QoS                 | This sets whether the client is allowed to upgrade the QoS (Quality of Service) level of a message after it has been published. | `false` (disabled)                                           | `true`, `false`                     |
-| `max_inflight`                    | Max Inflight                | This sets the maximum number of QoS 1 and QoS 2 messages that can be in flight (i.e., sent but not yet acknowledged) at any given time | `32`                                                         | `1` - `65535`                       |
-| `retry_interval`                  | Retry Interval              | This sets the interval at which the client should retry sending a QoS 1 or QoS 2 message. | `30s`<br />unit: s                                           | --                                  |
-| `max_awaiting_rel`                | Max Awaiting PUBREL         | This sets the pending QoS 2 messages in each session until either `PUBREL` is received or timed out. After reaching this limit, new QoS 2 `PUBLISH` requests will be rejected with error code `147(0x93)`.<br />In MQTT, `PUBREL` is a control packet used in the message flow for QoS  2, which provides guaranteed message delivery. | `100`                                                        | `1` - `infinity`                    |
-| `await_rel_timeout`               | Max Awaiting PUBREL TIMEOUT | This sets the amount of time to wait for a release of a QoS 2 message before receiving `PUBREL`.  After reaching this limit, EMQX will release the packet ID and also generate a warning level log. <br />Note:  ﻿EMQX will forwarding of the received QoS 2 message whether it has received the `PUBREL`﻿ or not. | `300s`<br />unit: s                                          | --                                  |
-| `session_expiry_interval`         | Session Expiry Interval     | This sets the amount of time that a session can be idle before it is automatically closed. Note: For non-MQTT 5.0 clients only. | `2h`                                                         |                                     |
-| `max_mqueue_len`                  | Max Message Queue Length    | This sets the maximum allowed queue length when persistent clients are disconnected or inflight window is full. | `1000`                                                       | `0` - `infinity`                    |
-| `mqueue_priorities`               | Topic Priorities            | This sets the topic priorities, the configuration here will override that defined in `mqueue_default_priority`. | `disabled` <br />The session uses the priority set by `mqueue_default_priority`. | `disabled`<br />or<br />`1` - `255` |
-| `mqueue_default_priority`         | Default Topic Priorities    | This sets the default topic priority.                        | `lowest`                                                     | `highest`， `lowest`                |
-| `mqueue_store_qos0`               | Store QoS 0 Message         | This sets whether to store QoS 0 message in the message queue when the connection is down but the session remains. | `true`                                                       | `true`, `false`                     |
-| `force_shutdown`                  | Enable Force Shutdown       | This sets whether to enable the force shutdown feature. The client connection process will be forcibly shut down if the mailbox queue length (`max_mailbox_size`) or heap size (`max_heap_size`) reaches the specified value. | `true`                                                       | `true`, `false`                     |
-| `force_shutdown.max_mailbox_size` | Max Mailbox Size            | This sets the maximum mailbox queue length to trigger a forced shutdown. | `1000`                                                       | `1` - `infinity`                    |
-| `force_shutdown.max_heap_size`    | Max Heap Size               | This sets the maximum heap size to trigger a forced shutdown. | `32MB`                                                       | --                                  |
-| `force_gc`                        | --                          | This sets whether to enable forced garbage collection if the specified message number (`count`) or byte received (`bytes`)  is reached: | `true`                                                       | `true`, `false`                     |
-| `force_gc.count`                  | --                          | This sets the received message number that will trigger the forced garbage collection. | `16000`                                                      | `0` - `infinity`                    |
-| `force_gc.bytes`                  | --                          | This sets the received byte number that will trigger the forced garbage collection. | `16MB`<br />Unit: `MB`                                       | --                                  |
+| **設定項目**                      | ダッシュボードUI             | **説明**                                                                                                                         | **デフォルト値**                                               | **設定可能値**                     |
+|----------------------------------|------------------------------|---------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|-----------------------------------|
+| `max_subscriptions`              | Max Subscriptions            | クライアントが持てる最大サブスクリプション数を設定します。                                                                       | `infinity`                                                    | `1` - `infinity`                  |
+| `upgrade_qos`                    | Upgrade QoS                  | メッセージパブリッシュ後にクライアントが QoS（サービス品質）レベルをアップグレードできるかどうかを設定します。                   | `false`（無効）                                               | `true`, `false`                   |
+| `max_inflight`                   | Max Inflight                 | QoS 1 および QoS 2 メッセージの送信済みだが未アック状態の最大数を設定します。                                                     | `32`                                                          | `1` - `65535`                     |
+| `retry_interval`                 | Retry Interval               | QoS 1 または QoS 2 メッセージの再送間隔を設定します。単位は秒です。                                                               | `30s`                                                         | --                                |
+| `max_awaiting_rel`               | Max Awaiting PUBREL          | セッションごとに PUBREL を受信するまで保留される QoS 2 メッセージの最大数を設定します。制限超過時は新規 QoS 2 PUBLISH リクエストをエラーコード `147(0x93)` で拒否します。<br />MQTT の PUBREL は QoS 2 メッセージフローの制御パケットで、メッセージ配信の保証に使われます。 | `100`                                                         | `1` - `infinity`                  |
+| `await_rel_timeout`              | Max Awaiting PUBREL TIMEOUT  | QoS 2 メッセージの PUBREL 受信待機時間を設定します。タイムアウト時に EMQX はパケットIDを解放し、警告ログを出力します。<br />注：PUBREL の受信有無に関わらず、EMQX は受信した QoS 2 メッセージを転送します。 | `300s`                                                        | --                                |
+| `session_expiry_interval`        | Session Expiry Interval      | セッションがアイドル状態のまま自動的にクローズされるまでの時間を設定します。MQTT 5.0 非対応クライアント向けです。               | `2h`                                                          |                                   |
+| `max_mqueue_len`                 | Max Message Queue Length     | 永続化クライアントが切断された場合やインフライトウィンドウが満杯の場合のメッセージキューの最大長を設定します。                   | `1000`                                                        | `0` - `infinity`                  |
+| `mqueue_priorities`              | Topic Priorities             | トピック優先度を設定します。ここでの設定は `mqueue_default_priority` の設定を上書きします。                                       | `disabled` <br />セッションは `mqueue_default_priority` の優先度を使用します。 | `disabled`<br />または<br />`1` - `255` |
+| `mqueue_default_priority`        | Default Topic Priorities     | デフォルトのトピック優先度を設定します。                                                                                         | `lowest`                                                      | `highest`， `lowest`              |
+| `mqueue_store_qos0`              | Store QoS 0 Message          | 接続が切断されセッションが維持されている場合に QoS 0 メッセージをメッセージキューに保存するかどうかを設定します。                 | `true`                                                        | `true`, `false`                   |
+| `force_shutdown`                 | Enable Force Shutdown        | 強制シャットダウン機能を有効にするかどうかを設定します。メールボックスキュー長（`max_mailbox_size`）またはヒープサイズ（`max_heap_size`）が指定値に達するとクライアント接続処理が強制終了されます。 | `true`                                                        | `true`, `false`                   |
+| `force_shutdown.max_mailbox_size` | Max Mailbox Size             | 強制シャットダウンをトリガーする最大メールボックスキュー長を設定します。                                                         | `1000`                                                        | `1` - `infinity`                  |
+| `force_shutdown.max_heap_size`   | Max Heap Size                | 強制シャットダウンをトリガーする最大ヒープサイズを設定します。                                                                     | `32MB`                                                        | --                                |
+| `force_gc`                     | --                           | 指定されたメッセージ数（`count`）または受信バイト数（`bytes`）に達した場合に強制ガベージコレクションを有効にするかどうかを設定します。 | `true`                                                        | `true`, `false`                   |
+| `force_gc.count`               | --                           | 強制ガベージコレクションをトリガーする受信メッセージ数を設定します。                                                               | `16000`                                                       | `0` - `infinity`                  |
+| `force_gc.bytes`               | --                           | 強制ガベージコレクションをトリガーする受信バイト数を設定します。単位は MB です。                                                   | `16MB`                                                        | --                                |
 
 :::tip
 
-To configure MQTT settings via Dashboard,  click **Management** -> **MQTT Settings** on the left navigation menu of the Dashboard. Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
-If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
-This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
+ダッシュボードで MQTT 設定を行うには、左メニューの **Management** -> **MQTT Settings** をクリックしてください。ダッシュボードで設定した内容は設定ファイルの同じ項目より優先されます。  
+設定ファイルから MQTT を設定する場合は、`emqx.conf` ではなく `base.hocon` を使用することを推奨します。  
+`emqx.conf` に設定した場合、ダッシュボードからの変更は一時的なものとなり、EMQX の再起動時に失われるためです。
 
 :::
 
-::: tip
+:::tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX はより詳細なカスタマイズに対応する多くの設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご参照ください。
 
 :::

@@ -1,37 +1,37 @@
-# Plugins
+# プラグイン
 
-EMQX plugins allow users to extend core functionality or integrate custom logic into the broker using Erlang. This system is ideal for implementing features such as custom authentication, authorization, logging, metrics, or protocol translation.
+EMQXのプラグインは、ユーザーがErlangを用いてブローカーのコア機能を拡張したり、カスタムロジックを統合したりするための仕組みです。このシステムは、カスタム認証、認可、ログ記録、メトリクス取得、プロトコル変換などの機能を実装するのに最適です。
 
-This section introduces what plugins are and how they are developed, customized, and managed.
+本節では、プラグインとは何か、どのように開発・カスタマイズ・管理するかを紹介します。
 
-## What is a Plugin?
+## プラグインとは？
 
-A plugin in EMQX is an Erlang/OTP application that runs inside EMQX nodes. Plugins interact with the EMQX core through hookpoints, which are predefined events such as client connection, message publish, authentication, and more.
+EMQXにおけるプラグインは、EMQXノード内で動作するErlang/OTPアプリケーションです。プラグインは、クライアント接続、メッセージパブリッシュ、認証などの事前定義されたイベントであるフックポイントを通じてEMQXコアと連携します。
 
-To be used in EMQX, a plugin must be:
+EMQXで使用するためには、プラグインは以下の条件を満たす必要があります。
 
-1. **Built as a release** – a `.tar.gz` package containing the compiled plugin and metadata.
-2. **Installed** via the Dashboard, REST API, or CLI.
-3. **Managed** through configuration and lifecycle operations (start, stop, uninstall).
+1. **リリースとしてビルドされていること** – コンパイル済みプラグインとメタデータを含む `.tar.gz` パッケージ。
+2. **Dashboard、REST API、またはCLIを通じてインストールされること**。
+3. **設定やライフサイクル操作（起動、停止、アンインストール）で管理されること**。
 
-Upon startup, a plugin typically registers some of its functions as EMQX *callbacks* to modify or extend the behavior of EMQX. Plugins operate in isolation from EMQX core and from other plugins, ensuring they don’t interfere with each other. They are also lifecycle-aware, meaning they follow a defined process for installation, startup, shutdown, and removal. This makes them safer and easier to manage in production environments.
+起動時に、プラグインは通常、自身の関数の一部をEMQXの*コールバック*として登録し、EMQXの動作を変更または拡張します。プラグインはEMQXコアや他のプラグインから独立して動作し、互いに干渉しないよう設計されています。また、インストール、起動、停止、削除の明確なプロセスに従うため、運用環境での安全かつ容易な管理が可能です。
 
-## Key Concepts
+## 主要な概念
 
-- **Hookpoints**: Extension points in EMQX’s workflow where plugins can inject custom logic.
-- **Callbacks**: Functions in the plugin module that are registered to hookpoints.
-- **Configuration schema**: An optional [Avro-based schema](https://avro.apache.org/) used to validate plugin configurations and render UI forms dynamically in the EMQX Dashboard.
+- **フックポイント**：EMQXのワークフローにおける拡張ポイントで、プラグインがカスタムロジックを挿入できる場所。
+- **コールバック**：プラグインモジュール内の関数で、フックポイントに登録されるもの。
+- **設定スキーマ**：プラグイン設定の検証やEMQXダッシュボードでのUIフォームの動的生成に用いる、オプションの[Avroベースのスキーマ](https://avro.apache.org/)。
 
-## Plugin Workflow Overview
+## プラグインのワークフロー概要
 
-1. Develop the plugin using the official [plugin template](https://github.com/emqx/emqx-plugin-template).
-2. Customize its logic to suit your use case (e.g., implement authentication).
-3. Build and package the plugin into a `.tar.gz` file using `make rel`.
-4. Install and start the plugin in EMQX using Dashboard, CLI, or API.
-5. Update configuration or stop/uninstall as needed.
+1. 公式の[プラグインテンプレート](https://github.com/emqx/emqx-plugin-template)を使ってプラグインを開発する。
+2. 認証など、用途に合わせてロジックをカスタマイズする。
+3. `make rel` コマンドでプラグインをビルドし、`.tar.gz`ファイルにパッケージングする。
+4. Dashboard、CLI、またはAPIを使ってEMQXにプラグインをインストール・起動する。
+5. 必要に応じて設定を更新したり、停止・アンインストールを行う。
 
-## Learn More
+## 詳細情報
 
-- [**Develop EMQX Plugins**](./plugin-development): Learn how to build a plugin from scratch using the official template.
-- [**Customize Plugin Logic**](./plugin-example.md): Explore examples of how to implement hook callbacks for authentication, authorization, and more.
-- [**Manage Plugins**](./plugin-management): Understand how to install, configure, start/stop, and uninstall plugins across EMQX nodes and clusters.
+- [**EMQXプラグインの開発**](./plugin-development)：公式テンプレートを使ったプラグインのゼロからの構築方法を学べます。
+- [**プラグインロジックのカスタマイズ**](./plugin-example.md)：認証、認可などのフックコールバック実装例を紹介します。
+- [**プラグインの管理**](./plugin-management)：EMQXノードやクラスター上でのプラグインのインストール、設定、起動・停止、アンインストール方法を解説します。

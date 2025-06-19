@@ -1,24 +1,24 @@
-# Integrate with MySQL
+# MySQLとの統合
 
-EMQX supports integrating with MySQL for password authentication. 
+EMQXはパスワード認証のためにMySQLとの統合をサポートしています。
 
 ::: tip
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)についての知識
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-MySQL authenticator supports almost all MySQL storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
+MySQL認証機能はほぼすべてのMySQLストレージスキーマに対応しています。ビジネス要件に応じて、認証情報の保存方法やアクセス方法を決定できます。例えば、1つまたは複数のテーブルやビューを使用することが可能です。
 
-Users need to provide a query statement template and ensure the following fields are included:
+ユーザーはクエリ文のテンプレートを提供し、以下のフィールドが含まれていることを確認する必要があります：
 
-- `password_hash`: required; password (in plain text or hashed) stored in the database; 
-- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
-- `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `password_hash`：必須。データベースに保存されているパスワード（平文またはハッシュ化されたもの）  
+- `salt`：任意。`salt = ""` またはこのフィールドを削除すると、ソルト値が追加されないことを示します  
+- `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかを示すフラグ。デフォルトは `false`  
 
-Example table structure for storing credentials:
+認証情報を保存するためのテーブル構造の例：
 
 ```sql
 CREATE TABLE `mqtt_user` (
@@ -34,20 +34,20 @@ CREATE TABLE `mqtt_user` (
 ```
 
 ::: tip
-The above example has created an implicit `UNIQUE` index field (username) that is helpful for the queries.
-When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+上記の例では、クエリに役立つ暗黙の`UNIQUE`インデックスフィールド（username）が作成されています。  
+システム内のユーザー数が多い場合は、クエリの応答時間を短縮しEMQXの負荷を軽減するために、事前にテーブルの最適化とインデックス設定を行ってください。  
 :::
 
-In this table, MQTT users are identified by `username`.
+このテーブルでは、MQTTユーザーは`username`で識別されます。
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `emqx_u`, password `public`, suffixed salt `slat_foo123`, and password hash `sha256`, the query statement should be:
+例えば、スーパーユーザー（`is_superuser`: `true`）で、ユーザー名が`emqx_u`、パスワードが`public`、ソルトが`slat_foo123`（接尾辞）、パスワードハッシュが`sha256`の場合、クエリ文は以下のようになります：
 
 ```bash
 mysql> INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('emqx_u', SHA2(concat('public', 'slat_foo123'), 256), 'slat_foo123', 1);
 Query OK, 1 row affected (0,01 sec)
 ```
 
-The corresponding configuration parameters are:
+対応する設定パラメータは以下の通りです：
 
 ```sql
 password_hash_algorithm {
@@ -58,69 +58,68 @@ password_hash_algorithm {
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use MySQL for password authentication. 
+EMQXダッシュボードを使って、MySQLをパスワード認証に利用する設定が可能です。
 
-1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner. 
-3. Click to select **Password-Based** as **Mechanism**, and **MySQL** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。  
+2. **認証** ページの右上にある **作成** をクリックします。  
+3. **メカニズム**で **パスワードベース** を選択し、**バックエンド**で **MySQL** を選択すると、以下のように **設定** タブが表示されます。
 
-<img src="./assets/authn-mysql.png" alt="Authentication with MySQL" style="zoom:67%;" />
+<img src="./assets/authn-mysql.png" alt="MySQLによる認証" style="zoom:67%;" />
 
-4. Follow the instructions below to configure the authentication backend:
+4. 以下の手順に従い認証バックエンドを設定します：
 
-   - **Connect**: Enter the information for connecting to MySQL.
+   - **接続**：MySQLへの接続情報を入力します。
 
-     - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+     - **サーバー**：EMQXが接続するサーバーのアドレス（`host:port`）を指定します。
 
-     - **Database**: MySQL database name.
+     - **データベース**：MySQLのデータベース名。
 
-     - **Username**: Specify user name. 
+     - **ユーザー名**：ユーザー名を指定します。
 
-     - **Password**: Specify user password. 
+     - **パスワード**：ユーザーパスワードを指定します。
    
    
-      - **Authentication configuration**: Configure settings related to authentication:
-        - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
-          - For `md5`, `sha`, `sha256` or `sha512`:
-            - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`.  You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
-            - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-          - For `plain`:
-            - **Salt Position**: should be `disable`.
-          - For `bcrypt`:
-            - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
-          - For `pbkdf2`:
-            - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
-            - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
-            - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
-            - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
+      - **認証設定**：認証に関する設定を行います：
+        - **パスワードハッシュ**：平文パスワードに適用され、データベースに保存される前のハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります：
+          - `md5`、`sha`、`sha256`、`sha512` の場合：
+            - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`（接尾辞）、`prefix`（接頭辞）、`disable`（無効）のいずれかです。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
+            - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに保存された認証情報と比較されます。
+          - `plain` の場合：
+            - **ソルト位置**は `disable` に設定してください。
+          - `bcrypt` の場合：
+            - **ソルトラウンド数**：ハッシュ関数の適用回数を定義します。値は _2のソルトラウンド数乗_ で表され、「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにはより高い値を推奨します。注：コストファクターを1増やすと認証にかかる時間が2倍になります。
+          - `pbkdf2` の場合：
+            - **疑似乱数関数**：キー生成に用いるハッシュ関数を選択します（例：`sha256`）。
+            - **反復回数**：ハッシュ関数の実行回数を設定します。デフォルトは `4096` です。
+            - **派生キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数のデフォルト長になります。
+            - ハッシュ結果は16進数文字列として表現され、大文字小文字を区別せずに保存された認証情報と比較されます。
    
    
-   
-      - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MySQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   
-   
-      - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+      - **前提条件**：[Variform式](../../configuration/configuration.md#variform-expressions)で記述し、このMySQL認証器をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列の `"true"` の場合のみ認証器が呼び出されます。それ以外の場合はスキップされます。前提条件の詳細は[認証の前提条件](./authn.md#authentication-preconditions)を参照してください。
    
    
-      - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
+      - **TLSを有効化**：TLSを有効にする場合はスイッチをオンにします。TLS有効化の詳細は[ネットワークとTLS](../../network/overview.md)を参照してください。
    
    
-      - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-        - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`. 
-          - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. Default: `5` second.
+      - **SQL**：データスキーマに従ってクエリ文を入力します。詳細は[SQLデータスキーマとクエリ文](#データスキーマとクエリ文)を参照してください。
+   
+   
+      - **詳細設定**：同時接続数や接続タイムアウトまでの待機時間を設定します。
+        - **コネクションプールサイズ**（任意）：EMQXノードからMySQLへの同時接続数を整数で指定します。デフォルトは `8` です。
+        - **クエリタイムアウト**（任意）：EMQXが接続のタイムアウトとみなすまでの待機時間を指定します。単位はミリ秒、秒、分、時間が利用可能です。デフォルトは `5` 秒です。
    
 
-5. After you finish the settings, click **Create**.
+5. 設定が完了したら、**作成** をクリックします。
 
-## Configure with Configuration Items
+## 設定ファイルによる構成
 
-You can configure the EMQX MySQL authenticator with EMQX configuration items.<!--插入超链接-->
+EMQXの設定項目を使ってMySQL認証器を構成することも可能です。<!--挿入超リンク-->
 
-MySQL authentication is identified with `mechanism = password_based` and `backend = mysql`.
+MySQL認証は `mechanism = password_based` および `backend = mysql` で識別されます。
 
-Sample configuration:
+設定例：
 
 ```bash
 {

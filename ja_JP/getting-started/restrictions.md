@@ -1,66 +1,66 @@
 ---
-title: EMQX Operating Limitations
-description: Without limits on connections or data transmission, MQTT broker performance can reduce. Therefore, EMQX has set usage limits on major features.
+title: EMQXの運用制限
+description: 接続数やデータ送信に制限がないと、MQTTブローカーのパフォーマンスが低下する可能性があります。そのため、EMQXでは主要機能に使用制限を設けています。
 ---
 
-# EMQX Operating Limitations
+# EMQXの運用制限
 
-## Background
+## 背景
 
-If there are no limitations on connection numbers or data transmission, users may experience reduced MQTT broker performance, such as a slow network connection or operation response, prolonged message latency, message accumulation, or even message discards, and other issues. On the other hand, the protocol limitation also specify the usage limits.  
+接続数やデータ送信に制限がない場合、ネットワーク接続の遅延や操作応答の遅さ、メッセージのレイテンシの増加、メッセージの蓄積、さらにはメッセージの破棄など、MQTTブローカーのパフォーマンス低下が発生することがあります。一方で、プロトコルの制限も使用制限を規定しています。
 
-EMQX has therefore specified the following quotas and usage limits for some of the major features.
+そのため、EMQXでは主要な機能に対して以下のクォータおよび使用制限を定めています。
 
-## Reference List
+## 参照リスト
 
-The operating limitations can be classified into:
+運用制限は以下のように分類できます。
 
-- Broker resource limitation: Theoretically, there is no maximum limit. The actual limit varies with the server specification.
-- Hard coding or protocol limitation: EMQX has set these limitations to comply with the protocols or to ensure stable performance. In some projects, EMQX has modified the default setting (as specified in the protocol) to a more reasonable value. You can change the setting with our configuration file.
+- ブローカーのリソース制限：理論上は最大制限はありません。実際の制限はサーバーの仕様によって異なります。
+- ハードコーディングまたはプロトコル制限：EMQXはプロトコル準拠や安定したパフォーマンスを確保するためにこれらの制限を設定しています。プロジェクトによっては、EMQXがプロトコルで指定されたデフォルト設定をより合理的な値に変更している場合があります。設定ファイルで変更可能です。
 
-| **Description**                       | **Quota**                 |
-| ------------------------------------- | ------------------------- |
-| **Client Connection**                 |                           |
-| Maximum concurrent connection devices | Unlimited                 |
-| Maximum device connection rate        | Unlimited                 |
-| Maximum MQTT client ID length         | 65535                     |
-| **Subscription**                      |                           |
-| Maximum subscriptions                 | Unlimited                 |
-| Maximum subscription rate             | Unlimited                 |
-| Per device subscriptions              | Unlimited                 |
-| Per device subscription rate          | Unlimited                 |
-| **Bandwidth**                         |                           |
-| Maximum bandwidth                     | Unlimited                 |
-| Per device bandwidth                  | Unlimited                 |
-| **MQTT Message**                      |                           |
-| Message Bytes                         | Default 1024KB, Max 256MB |
-| Maximum QoS                           | 2                         |
-| **MQTT Keepalive**                    |                           |
-| Maximun Keepalive                     | 65535 seconds             |
-| **MQTT Topic**                        |                           |
-| Number of topics                      | Unlimited                 |
-| Topic level                           | 65535                     |
-| Topic length                          | Unlimited                 |
-| Number of topic aliases               | 65535                     |
-| **MQTT Retained Message**             |                           |
-| Single Message Size                   | Default 1024KB, Max 256MB |
-| Number of messages                    | Unlimited                 |
-| Total messages size                   | Unlimited                 |
-| **MQTT 5.0**                          |                           |
-| Number of User Properity              | 65535                     |
-| **MQTT Add-ons**                      |                           |
-| Number of topic rewrite rules         | 30                        |
-| Number of auto subscription rules     | 30                        |
-| Number of delayed publish             | Unlimited                 |
-| Delayed maximum duration              | 42949670 seconds          |
-| **Rules**                             |                           |
-| Number of rules                       | Unlimited                 |
-| Rule execution timeout                | Unlimited                 |
-| Number of single rule outputs         | Unlimited                 |
-| **Sink/Source**                       |                           |
-| Number of Sink/Source                | Unlimited                 |
-| **REST API**                          |                           |
-| Max page size                         | 10000                     |
-| Number of API Keys                    | 100                       |
-| **Dashboard**                         |                           |
-| Dashboard users                       | Unlimited                 |
+| **説明**                             | **クォータ**               |
+| ----------------------------------- | -------------------------- |
+| **クライアント接続**                 |                            |
+| 最大同時接続デバイス数               | 無制限                     |
+| 最大デバイス接続レート               | 無制限                     |
+| 最大MQTTクライアントID長            | 65535                      |
+| **サブスクリプション**               |                            |
+| 最大サブスクリプション数             | 無制限                     |
+| 最大サブスクリプションレート         | 無制限                     |
+| 1デバイスあたりのサブスクリプション数 | 無制限                     |
+| 1デバイスあたりのサブスクリプションレート | 無制限                     |
+| **帯域幅**                         |                            |
+| 最大帯域幅                         | 無制限                     |
+| 1デバイスあたりの帯域幅             | 無制限                     |
+| **MQTTメッセージ**                   |                            |
+| メッセージバイト数                   | デフォルト1024KB、最大256MB |
+| 最大QoS                           | 2                          |
+| **MQTTキープアライブ**               |                            |
+| 最大キープアライブ時間               | 65535秒                    |
+| **MQTTトピック**                    |                            |
+| トピック数                         | 無制限                     |
+| トピックレベル                     | 65535                      |
+| トピック長                       | 無制限                     |
+| トピックエイリアス数                 | 65535                      |
+| **MQTT保持メッセージ**               |                            |
+| 単一メッセージサイズ                 | デフォルト1024KB、最大256MB |
+| メッセージ数                       | 無制限                     |
+| 総メッセージサイズ                   | 無制限                     |
+| **MQTT 5.0**                        |                            |
+| ユーザープロパティ数                 | 65535                      |
+| **MQTTアドオン**                    |                            |
+| トピック書き換えルール数             | 30                         |
+| 自動サブスクリプションルール数       | 30                         |
+| 遅延パブリッシュ数                   | 無制限                     |
+| 遅延最大期間                       | 42949670秒                 |
+| **ルール**                         |                            |
+| ルール数                           | 無制限                     |
+| ルール実行タイムアウト               | 無制限                     |
+| 単一ルールの出力数                   | 無制限                     |
+| **シンク／ソース**                   |                            |
+| シンク／ソース数                   | 無制限                     |
+| **REST API**                      |                            |
+| 最大ページサイズ                   | 10000                      |
+| APIキー数                         | 100                        |
+| **ダッシュボード**                   |                            |
+| ダッシュボードユーザー数             | 無制限                     |

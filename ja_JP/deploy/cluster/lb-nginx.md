@@ -1,45 +1,45 @@
-# Load Balance EMQX Cluster with NGINX
+# NGINXによるEMQXクラスターのロードバランス
 
-NGINX is a high-performance, multifunctional server software that can serve as a web server and reverse proxy server. Additionally, NGINX can function as a load balancer, distributing client requests to multiple backend servers to ensure load balancing and performance optimization. NGINX is particularly well-suited for IoT applications, where handling a large number of concurrent requests is crucial. In IoT, there are typically a large number of devices, which requires a server that is capable of handling a high request load. EMQX natively supports a distributed cluster architecture consisting of multiple MQTT servers. Therefore, deploying NGINX for load balancing and an EMQX cluster ensures high availability and scalability.
+NGINXは高性能で多機能なサーバーソフトウェアであり、ウェブサーバーやリバースプロキシサーバーとして利用できます。さらに、NGINXはロードバランサーとしても機能し、クライアントからのリクエストを複数のバックエンドサーバーに分散させることで、負荷分散とパフォーマンスの最適化を実現します。NGINXは特に多数の同時リクエストを処理する必要があるIoTアプリケーションに適しています。IoTでは多数のデバイスが存在するため、高負荷のリクエストを処理可能なサーバーが求められます。EMQXは複数のMQTTサーバーからなる分散クラスターアーキテクチャをネイティブにサポートしています。したがって、NGINXをロードバランサーとして、EMQXクラスターと組み合わせて展開することで、高可用性とスケーラビリティを確保できます。
 
-This page introduces how to install NGINX and configure NGINX for reverse proxy and load balancing purposes to set up MQTT servers for an EMQX cluster. It also introduces how to use NGINX Plus to optimize EMQX deployment.
+本ページでは、NGINXのインストール方法と、リバースプロキシおよびロードバランスのためのNGINX設定方法を紹介し、EMQXクラスターのMQTTサーバーを構築する手順を説明します。また、NGINX Plusを利用したEMQX展開の最適化方法も紹介します。
 
-## Features and Benefits
+## 特長とメリット
 
-Using NGINX to load balance an EMQX cluster offers several features and advantages:
+NGINXを用いてEMQXクラスターのロードバランスを行うことで、以下のような特長とメリットがあります。
 
-- As a reverse proxy server, NGINX sits on the MQTT server side, representing MQTT clients to initiate MQTT connection requests to the EMQX cluster and handling requests on behalf of the EMQX cluster. It then returns the EMQX cluster's response to the MQTT clients. This configuration hides multiple clusters and exposes a single access point to MQTT clients. MQTT clients only need to communicate with NGINX and do not need to know about the number and layout of the clusters behind it. This approach enhances system maintainability and scalability.
-- NGINX can be used to terminate SSL-encrypted MQTT connections between MQTT clients and the EMQX cluster, reducing the encryption and decryption load on the EMQX cluster. This offers several advantages, such as improved performance, simplified certificate management, and enhanced security.
-- NGINX provides flexible load balancing strategies to determine which EMQX node in the cluster should receive requests, helping distribute traffic and requests, thereby improving performance and reliability. For example, sticky load balancing can route requests to the same backend server, enhancing performance and session persistence.
+- リバースプロキシサーバーとして、NGINXはMQTTサーバー側に位置し、MQTTクライアントの代理としてEMQXクラスターへのMQTT接続要求を開始し、クラスターの応答をMQTTクライアントに返します。この構成により複数のクラスターを隠蔽し、MQTTクライアントには単一のアクセスポイントを提供します。MQTTクライアントはNGINXとだけ通信すればよく、背後のクラスターの数や構成を意識する必要がありません。この方法はシステムの保守性とスケーラビリティを向上させます。
+- NGINXはMQTTクライアントとEMQXクラスター間のSSL暗号化接続を終端でき、EMQXクラスターの暗号化・復号負荷を軽減します。これにより、パフォーマンス向上、証明書管理の簡素化、セキュリティ強化などの利点があります。
+- NGINXは柔軟なロードバランス戦略を提供し、クラスター内のどのEMQXノードにリクエストを送るかを制御できます。これによりトラフィックやリクエストの分散が可能となり、パフォーマンスと信頼性が向上します。例えば、スティッキーなロードバランスは同一のバックエンドサーバーへリクエストをルーティングし、パフォーマンスとセッションの持続性を高めます。
 
 ![EMQX LB NGINX](./assets/emqx-lb-nginx.png)
 
-## Quick Start
+## クイックスタート
 
-This section provides a Docker Compose configuration with actual examples to allow you to easily verify and test the NGINX function. You can follow these steps to proceed:
+このセクションでは、Docker Compose構成の実例を用いてNGINXの機能を簡単に検証・テストできる手順を示します。以下の手順に従って進めてください。
 
-1. Clone the example repository and enter the `mqtt-lb-nginx` directory:
+1. サンプルリポジトリをクローンし、`mqtt-lb-nginx`ディレクトリに移動します。
 
 ```bash
 git clone https://github.com/emqx/emqx-usage-example
 cd emqx-usage-example/mqtt-lb-nginx
 ```
 
-2. Start the example via Docker Compose:
+2. Docker Composeでサンプルを起動します。
 
 ```bash
 docker compose up -d
 ```
 
-3. Use the [MQTTX](https://mqttx.app) CLI to establish 10 TCP connections, simulating MQTT client connections:
+3. [MQTTX](https://mqttx.app) CLIを使って10個のTCP接続を確立し、MQTTクライアント接続をシミュレートします。
 
 ```bash
 mqttx bench conn -c 10
 ```
 
-4. You can view the NGINX connection monitoring and the distribution of EMQX client connections:
+4. NGINXの接続状況とEMQXクライアント接続の分布を確認できます。
 
-   - View NGINX connection monitoring with the following command:
+   - 以下のコマンドでNGINXの接続状況を確認します。
 
      ```bash
      $ curl http://localhost:8888/status                                
@@ -49,9 +49,9 @@ mqttx bench conn -c 10
      Reading: 0 Writing: 1 Waiting: 0
      ```
 
-     This displays the current active connections and server request handling statistics, including reading, writing, and waiting states.
+     これは現在のアクティブ接続数やサーバーのリクエスト処理状況（読み取り、書き込み、待機状態）を表示します。
 
-   - Use the following commands to view the client connection situation of each EMQX node, respectively:
+   - 以下のコマンドで各EMQXノードのクライアント接続状況をそれぞれ確認します。
 
      ```bash
      docker exec -it emqx1 emqx ctl broker stats | grep connections.count
@@ -59,7 +59,7 @@ mqttx bench conn -c 10
      docker exec -it emqx3 emqx ctl broker stats | grep connections.count
      ```
 
-     This shows the number of connections for each node and the number of active connections, with the 10 connections evenly distributed across the cluster nodes:
+     これにより各ノードの接続数とアクティブ接続数が表示され、10接続がクラスター内のノードに均等に分散されていることがわかります。
 
      ```bash
      connections.count             : 3
@@ -70,140 +70,140 @@ mqttx bench conn -c 10
      live_connections.count        : 3
      ```
 
-Through these steps, you can verify the NGINX load-balancing functionality in the example and the distribution of client connections in the EMQX cluster. You can also modify the `emqx-usage-example/mqtt-lb-nginx/nginx.conf` file for custom configuration verification.
+以上の手順で、NGINXのロードバランス機能とEMQXクラスター内のクライアント接続分布を検証できます。`emqx-usage-example/mqtt-lb-nginx/nginx.conf`ファイルを編集してカスタム設定の検証も可能です。
 
-## Install and Use NGINX
+## NGINXのインストールと使用方法
 
-This section introduces how to install and use NGINX in detail.
+このセクションでは、NGINXのインストールと使用方法を詳しく紹介します。
 
-### Prerequisites
+### 前提条件
 
-Before getting started, ensure that you have created a cluster consisting of the following 3 EMQX nodes. To learn how to create an EMQX cluster, see [Create a Cluster](./create-cluster.md) for details.
+開始前に、以下の3つのEMQXノードからなるクラスターを作成していることを確認してください。EMQXクラスターの作成方法は[Create a Cluster](./create-cluster.md)を参照してください。
 
-| Node Address          | MQTT TCP Port | MQTT WebSocket Port |
-| --------------------- | ------------- | ------------------- |
-| emqx1-cluster.emqx.io | 1883          | 8083                |
-| emqx2-cluster.emqx.io | 1883          | 8083                |
-| emqx3-cluster.emqx.io | 1883          | 8083                |
+| ノードアドレス           | MQTT TCPポート | MQTT WebSocketポート |
+| ----------------------- | -------------- | -------------------- |
+| emqx1-cluster.emqx.io   | 1883           | 8083                 |
+| emqx2-cluster.emqx.io   | 1883           | 8083                 |
+| emqx3-cluster.emqx.io   | 1883           | 8083                 |
 
-The examples in this page will use a single NGINX server configured as a load balancer to forward requests to the cluster composed of these 3 EMQX nodes.
+本ページの例では、単一のNGINXサーバーをロードバランサーとして設定し、これら3つのEMQXノードからなるクラスターにリクエストを転送します。
 
-### Install NGINX
+### NGINXのインストール
 
-The demonstration installs NGINX on an Ubuntu 22.04 LTS system using source code compilation. You can also install NGINX using Docker or binary packages.
+本デモではUbuntu 22.04 LTS上でソースコードをコンパイルしてNGINXをインストールします。Dockerやバイナリパッケージを使ったインストールも可能です。
 
-#### Required Dependencies 
+#### 必要な依存パッケージ
 
-Before compiling and installing NGINX, ensure that the following dependencies are installed on your system:
+NGINXをコンパイル・インストールする前に、以下の依存パッケージがシステムにインストールされていることを確認してください。
 
-- GNU C and C++ compilers
-- PCRE (Perl Compatible Regular Expressions) library
-- zlib compression library
-- OpenSSL library
+- GNU CおよびC++コンパイラ
+- PCRE（Perl Compatible Regular Expressions）ライブラリ
+- zlib圧縮ライブラリ
+- OpenSSLライブラリ
 
-You can install these dependencies on an Ubuntu system with the following commands:
+Ubuntuの場合、以下のコマンドでインストールできます。
 
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential libpcre3-dev zlib1g-dev libssl-dev
 ```
 
-#### Download Source Code
+#### ソースコードのダウンロード
 
-You can download the latest stable version of NGINX from the [NGINX official website](https://nginx.org/en/download.html). For example:
+最新の安定版NGINXは[NGINX公式サイト](https://nginx.org/en/download.html)からダウンロードできます。例：
 
 ```bash
 wget https://nginx.org/download/nginx-1.24.0.tar.gz
 ```
 
-#### Compile Configuration Naming
+#### コンパイル設定
 
-After downloading, extract the source code and navigate to the source code directory:
+ダウンロード後、ソースコードを展開し、ディレクトリに移動します。
 
 ```bash
 tar -zxvf nginx-1.24.0.tar.gz
 cd nginx-1.24.0
 ```
 
-Configure the compilation options with the following command:
+以下のコマンドでコンパイルオプションを設定します。
 
 ```bash
 ./configure \
  --with-threads \
  --with-http_stub_status_module \
-  --with-http_ssl_module \
-  --with-http_realip_module \
-  --with-stream \
-  --with-stream_ssl_module
+ --with-http_ssl_module \
+ --with-http_realip_module \
+ --with-stream \
+ --with-stream_ssl_module
 ```
 
-In the above command, the `--with-http_ssl_module` parameter is used to add SSL support, while the `--with-stream` and `--with-stream_ssl_module` parameters are used to add TCP reverse proxy support.
+上記の`--with-http_ssl_module`はSSL対応、`--with-stream`および`--with-stream_ssl_module`はTCPリバースプロキシ対応のためのオプションです。
 
-#### Start to Compile
+#### コンパイル開始
 
-Start the compilation with the following command:
+以下のコマンドでコンパイルを開始します。
 
 ```bash
 make
 ```
 
-#### Install
+#### インストール
 
-After compilation, you can install NGINX with the following command:
+コンパイル完了後、以下のコマンドでNGINXをインストールします。
 
 ```bash
 sudo make install
 ```
 
-Create a symbolic link to the NGINX executable in a directory in your system's PATH:
+システムのPATH内のディレクトリにNGINX実行ファイルへのシンボリックリンクを作成します。
 
 ```bash
 sudo ln -s /usr/local/nginx/sbin/nginx /usr/local/bin/nginx
 ```
 
-### Get Started
+### はじめに
 
-NGINX's configuration file is located by default at `/usr/local/nginx/conf/nginx.conf`. Simply add the configuration examples from this page to the end of the file. The basic NGINX operation commands are as follows:
+NGINXの設定ファイルはデフォルトで`/usr/local/nginx/conf/nginx.conf`にあります。本ページの設定例をファイル末尾に追加してください。基本的なNGINX操作コマンドは以下の通りです。
 
-Check the configuration file:
+設定ファイルの検証：
 
 ```bash
 sudo nginx -t
 ```
 
-If the NGINX configuration file is validated successfully, you can start NGINX:
+設定ファイルが正常ならNGINXを起動：
 
 ```bash
 sudo nginx
 ```
 
-To reload a running NGINX and apply new configurations, it's recommended to check the configuration for errors before you perform the operation:
+稼働中のNGINXに新設定を反映するには、エラー確認後にリロードします。
 
 ```bash
 sudo nginx -s reload
 ```
 
-To stop NGINX:
+NGINXを停止する場合：
 
 ```bash
 sudo nginx stop
 ```
 
-## Configure NGINX for Reverse Proxy and Load Balancing
+## NGINXのリバースプロキシおよびロードバランス設定
 
-This section explains how to configure NGINX to meet various load-balancing requirements.
+ここでは、さまざまなロードバランス要件に対応するNGINX設定方法を説明します。
 
-### Configure Reverse for Proxy MQTT
+### MQTTのリバースプロキシ設定
 
-You can use the following configuration in NGINX's configuration file to reverse proxy MQTT connection requests from clients and forward them to the backend MQTT servers:
+以下の設定をNGINXの設定ファイルに記述することで、クライアントからのMQTT接続要求をリバースプロキシし、バックエンドMQTTサーバーに転送できます。
 
 ```bash
 stream {
   upstream mqtt_servers {
-    # down: indicates the current server temporarily does not participate in the load balancing
-    # max_fails: the number of allowed failed requests; defaults to 1
-    # fail_timeout: the timeout for failed requests, defaults to 10s when max_fails is reached
-    # backup: when all non-backup servers are down or busy, requests go to backup servers
+    # down: 現在サーバーが一時的にロードバランスに参加しないことを示す
+    # max_fails: 許容される失敗リクエスト数（デフォルトは1）
+    # fail_timeout: max_failsに達した際の失敗リクエストのタイムアウト（デフォルト10秒）
+    # backup: 非バックアップサーバーが全てダウンまたはビジー時にリクエストを送るバックアップサーバー
 
     server emqx1-cluster.emqx.io:1883 max_fails=2 fail_timeout=10s;
     server emqx2-cluster.emqx.io:1883 down;
@@ -214,10 +214,10 @@ stream {
     listen 1883;
     proxy_pass mqtt_servers;
 
-    # When enabling this option, the corresponding backend listener also needs to enable proxy_protocol
+    # このオプションを有効にする場合、対応するバックエンドリスナーもproxy_protocolを有効にする必要あり
     proxy_protocol on;
     proxy_connect_timeout 10s;
-    # Default keep-alive time is 10 minutes
+    # デフォルトのキープアライブ時間は10分
     proxy_timeout 1800s;
     proxy_buffer_size 3M;
     tcp_nodelay on;
@@ -225,9 +225,9 @@ stream {
 }
 ```
 
-### Configure Reverse Proxy for MQTT SSL
+### MQTT SSLのリバースプロキシ設定
 
-You can configure NGINX to reverse proxy MQTT and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. You only need to add SSL-related parameters on top of the TCP-based configuration:
+NGINXでMQTTのTLS接続を終端し、暗号化されたMQTTリクエストをバックエンドMQTTサーバーに転送して通信の安全性を確保できます。TCPベースの設定にSSL関連パラメータを追加するだけです。
 
 ```bash
 stream {
@@ -247,17 +247,17 @@ stream {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
-    # To enable mutual authentication, add the CA certificate and client certificate verification
+    # 相互認証を有効にする場合はCA証明書とクライアント証明書検証を追加
     # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
     # ssl_verify_client on;
     # ssl_verify_depth 1;
 
     proxy_pass mqtt_servers;
 
-    # When enabling this option, the corresponding backend listener also needs to enable proxy_protocol
+    # このオプションを有効にする場合、対応するバックエンドリスナーもproxy_protocolを有効にする必要あり
     proxy_protocol on;
     proxy_connect_timeout 10s;
-    # Default keep-alive time is 10 minutes
+    # デフォルトのキープアライブ時間は10分
     proxy_timeout 1800s;
     proxy_buffer_size 3M;
     tcp_nodelay on;
@@ -265,9 +265,9 @@ stream {
 }
 ```
 
-### Configure Reverse Proxy for MQTT WebSocket
+### MQTT WebSocketのリバースプロキシ設定
 
-You can use the following configuration to reverse proxy MQTT WebSocket connections in NGINX, forwarding client requests to the backend MQTT servers. You need to specify an HTTP domain name or IP address using `server_name`:
+以下の設定で、NGINXがMQTT WebSocket接続をリバースプロキシし、クライアントのリクエストをバックエンドMQTTサーバーに転送します。`server_name`でHTTPドメイン名またはIPアドレスを指定してください。
 
 ```bash
 http {
@@ -287,16 +287,16 @@ http {
       proxy_set_header Upgrade $http_upgrade;
       proxy_set_header Connection "Upgrade";
 
-      # Disable caching
+      # キャッシュを無効化
       proxy_buffering off;
 
       proxy_connect_timeout 10s;
-      # WebSocket connection timeout
-      # If there's no data exchange within this time, the WebSocket connection will automatically disconnect; default is 60s
+      # WebSocket接続のタイムアウト
+      # この時間内にデータ交換がなければWebSocket接続は自動切断（デフォルト60秒）
       proxy_send_timeout 3600s;
       proxy_read_timeout 3600s;
 
-      # Reverse proxy real IP
+      # リバースプロキシの実IP設定
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header REMOTE-HOST $remote_addr;
@@ -306,9 +306,9 @@ http {
 }
 ```
 
-### Configure Reverse Proxy for MQTT WebSocket SSL
+### MQTT WebSocket SSLのリバースプロキシ設定
 
-You can configure NGINX to reverse proxy MQTT WebSocket and decrypt TLS connections, forwarding encrypted MQTT requests from clients to the backend MQTT servers to ensure communication security. Specify an HTTP domain name or IP address using `server_name`. To achieve this, you only need to add SSL and certificate-related parameters on top of the WebSocket-based configuration:
+NGINXでMQTT WebSocketのTLS接続を終端し、暗号化されたMQTTリクエストをバックエンドMQTTサーバーに転送して通信の安全性を確保できます。`server_name`でHTTPドメイン名またはIPアドレスを指定し、WebSocketベースの設定にSSLおよび証明書関連パラメータを追加します。
 
 ```bash
 http {
@@ -328,7 +328,7 @@ http {
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers HIGH:!aNULL:!MD5;
 
-    # To enable mutual authentication, add the CA certificate and client certificate verification
+    # 相互認証を有効にする場合はCA証明書とクライアント証明書検証を追加
     # ssl_client_certificate /usr/local/nginx/certs/ca.pem;
     # ssl_verify_client on;
 
@@ -338,26 +338,26 @@ http {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
 
-        # Reverse proxy real IP
+        # リバースプロキシの実IP設定
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-        # Disable caching
+        # キャッシュを無効化
         proxy_buffering off;
     }
   }
 }
 ```
 
-### Configure Load-Balancing Strategies
+### ロードバランス戦略の設定
 
-NGINX provides several load-balancing strategies for controlling how connections are distributed. In real-world usage, it's essential to choose the appropriate load-balancing strategy based on your server performance, traffic requirements, and other factors. Here are some common NGINX load-balancing strategies that you can configure in the `upstream` block:
+NGINXは接続の分散方法を制御する複数のロードバランス戦略を提供しています。実際の運用ではサーバー性能やトラフィック要件に応じて適切な戦略を選択することが重要です。以下は`upstream`ブロックで設定可能な代表的なNGINXロードバランス戦略です。
 
-#### Round Robin
+#### ラウンドロビン（Round Robin）
 
-This is the default load-balancing strategy. It evenly distributes requests to each backend server in a circular manner. This is suitable when backend servers have similar performance.
+デフォルトのロードバランス戦略で、リクエストを順番に各バックエンドサーバーに均等に分配します。バックエンドサーバーの性能がほぼ同等の場合に適しています。
 
 ```bash
 upstream backend_servers {
@@ -367,9 +367,9 @@ upstream backend_servers {
 }
 ```
 
-#### Weighted Round Robin
+#### 重み付きラウンドロビン（Weighted Round Robin）
 
-Building on Round Robin, you can assign different weights to each EMQX node. This affects the distribution ratio of requests. Servers with higher weights receive more requests.
+ラウンドロビンに加え、各EMQXノードに異なる重みを割り当ててリクエストの分配比率を調整します。重みが高いサーバーほど多くのリクエストを受け取ります。
 
 ```bash
 upstream backend_servers {
@@ -379,9 +379,9 @@ upstream backend_servers {
 }
 ```
 
-#### IP Hash
+#### IPハッシュ（IP Hash）
 
-This strategy calculates a hash based on the client's IP address and then assigns the request to a specific backend server. This ensures that requests from the same client are always routed to the same server.
+クライアントのIPアドレスを元にハッシュを計算し、同一クライアントからのリクエストを常に同じバックエンドサーバーに割り当てます。
 
 ```bash
 upstream backend_servers {
@@ -392,9 +392,9 @@ upstream backend_servers {
 }
 ```
 
-#### Least Connections
+#### 最小接続数（Least Connections）
 
-Requests are distributed to the server with the fewest current connections, ensuring that the load on each server is as balanced as possible. This is suitable when there are significant differences in server performance.
+現在の接続数が最も少ないサーバーにリクエストを割り当て、各サーバーの負荷をできるだけ均等にします。サーバー性能に差がある場合に適しています。
 
 ```bash
 upstream backend_servers {
@@ -405,17 +405,17 @@ upstream backend_servers {
 }
 ```
 
-## Use NGINX Plus to Optimize EMQX Deployment
+## NGINX Plusを使ったEMQX展開の最適化
 
-This section introduces how to configure the NGINX Plus specific features to optimize the EMQX deployment. Since the configuration examples for features in this section are only available in the NGINX Plus version, the NGINX version compiled and installed on this page cannot refer to these configurations. For information on optimizing MQTT connections using NGINX Plus, refer to this [document](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/).
+このセクションでは、NGINX Plus固有の機能を利用してEMQX展開を最適化する方法を紹介します。本ページでコンパイル・インストールしたNGINX（オープンソース版）では利用できない機能の設定例を含みます。NGINX Plusを使ったMQTT接続の最適化については、[こちらのドキュメント](https://www.nginx.com/blog/optimizing-mqtt-deployments-in-enterprise-environments-nginx-plus/)を参照してください。
 
-### Configure MQTT Sticky Session Load Balancing
+### MQTTスティッキーセッションロードバランスの設定
 
-"Sticky" refers to the load balancer's ability to route clients back to the same server when they reconnect, preventing session takeover. This is particularly useful for clients that frequently reconnect or problematic clients that disconnect and reconnect, improving efficiency.
+「スティッキー」とは、ロードバランサーがクライアントを再接続時に同じサーバーにルーティングし、セッションの乗っ取りを防ぐ機能です。再接続が多いクライアントや切断・再接続を繰り返す問題クライアントの効率化に有効です。
 
-To implement stickiness, the server needs to identify the client identifier (usually the client ID) in the connection request. This requires the load balancer to inspect MQTT packets. Once the client identifier is obtained, for static clusters, the server can hash it to a server ID, or the load balancer can maintain a mapping table of client identifiers to destination node IDs for more flexible routing.
+スティッキー機能を実装するには、サーバーが接続要求内のクライアント識別子（通常はクライアントID）を特定する必要があり、ロードバランサーがMQTTパケットを解析します。クライアント識別子を取得後、静的クラスターではハッシュでサーバーIDに変換したり、ロードバランサーがクライアント識別子と宛先ノードIDのマッピングテーブルを保持して柔軟にルーティングできます。
 
-Here is a configuration example for this feature:
+以下はこの機能の設定例です。
 
 ```bash
 mqtt_preread on;
@@ -428,13 +428,13 @@ upstream backend_servers {
 }
 ```
 
-Please note that the example above may need adjustments according to your specific setup. The modules used in the configuration (such as `ip_hash` and `least_conn`) are built-in NGINX modules and do not require additional module dependencies.
+上記例は環境に応じて調整が必要な場合があります。設定で使用されるモジュール（`ip_hash`や`least_conn`など）はNGINX標準モジュールであり、追加のモジュール依存はありません。
 
-### Configure Client ID Replacement Feature
+### クライアントID置換機能の設定
 
-Security is crucial in MQTT communication. Devices often use sensitive data such as serial numbers as their Client IDs, and storing them in the MQTT server's database may pose security risks. NGINX Plus offers a client ID replacement feature, allowing the client ID to be replaced with another value set in the NGINX Plus configuration.
+MQTT通信におけるセキュリティは重要です。デバイスはシリアル番号などの機密情報をクライアントIDに使うことが多く、MQTTサーバーのデータベースに保存することはセキュリティリスクとなる場合があります。NGINX PlusはクライアントID置換機能を提供し、クライアントIDをNGINX Plus設定で指定した別の値に置き換えられます。
 
-Here is a configuration example for this feature:
+以下はこの機能の設定例です。
 
 ```bash
 stream {
@@ -455,16 +455,16 @@ stream {
 }
 ```
 
-In this example, we enabled mutual authentication for the client and extracted the certificate serial number from the client's SSL certificate as a unique identifier to replace the original client ID. You can also use other values like `$ssl_client_s_dn` to extract the certificate DN.
+この例ではクライアントの相互認証を有効化し、クライアントのSSL証明書からシリアル番号を抽出して元のクライアントIDの代わりに使用しています。`$ssl_client_s_dn`など他の値を使って証明書のDNを抽出することも可能です。
 
-## Optimize NGINX Performance and Enable Monitoring
+## NGINXのパフォーマンス最適化とモニタリング有効化
 
-This section explains how to optimize the performance of NGINX through configuration and enable the status monitoring feature.
+このセクションでは、NGINXのパフォーマンスを設定で最適化し、ステータスモニタリング機能を有効にする方法を説明します。
 
-### NGINX Basic Configuration Adjustments
+### NGINX基本設定の調整
 
-- `worker_processes`: The number of worker processes. Set it close to the number of CPU cores on your server, but avoid setting too many processes to prevent resource contention.
-- `worker_connections`: The maximum number of simultaneous connections that a single worker process can handle. Ensure it does not exceed the maximum file descriptor limit allowed by the operating system.
+- `worker_processes`: ワーカープロセス数。サーバーのCPUコア数に近い値に設定します。ただし多すぎるとリソース競合が発生するため注意してください。
+- `worker_connections`: 1つのワーカープロセスが同時に処理可能な最大接続数。OSのファイルディスクリプタ上限を超えないように設定します。
 
 ```bash
 worker_processes auto;
@@ -474,11 +474,11 @@ events {
 }
 ```
 
-### NGINX Multi-NIC Support for Handling Massive Connections in Reverse Proxy
+### NGINXのマルチNIC対応による大量接続処理
 
-In reverse proxy scenarios, NGINX establishes connections to backend EMQX nodes as a client. In such cases, a single IP address can create approximately 60,000 long-lived connections at most. To support more connections, you can choose to deploy multiple NGINX servers or configure multiple IP addresses.
+リバースプロキシでは、NGINXがクライアントとしてバックエンドEMQXノードに接続します。この場合、単一IPアドレスで最大約6万の長時間接続を作成可能です。より多くの接続をサポートするには、複数のNGINXサーバーを展開するか、複数のIPアドレスを設定します。
 
-Here's an example of configuring multiple IPs using NGINX's built-in `split_clients` module to define a variable `$multi_ip`. It distributes requests based on the client's IP address and port number. Ensure that the IP addresses you use are available locally.
+以下はNGINX標準の`split_clients`モジュールを使い、クライアントのIPアドレスとポート番号に基づいて変数`$multi_ip`を定義し、複数IPに分散する例です。使用するIPアドレスはローカルに存在する必要があります。
 
 ```bash
 stream {
@@ -504,9 +504,9 @@ stream {
 }
 ```
 
-### NGINX Status Monitoring
+### NGINXステータスモニタリング
 
-To enable NGINX status monitoring, ensure that the monitoring module `http_stub_status_module` is installed. If it's installed, you can enable status monitoring for NGINX:
+NGINXのステータスモニタリングを有効にするには、`http_stub_status_module`モジュールがインストールされている必要があります。インストール済みであれば、以下のようにNGINXのステータスモニタリングを有効化できます。
 
 ```bash
 http {
@@ -521,7 +521,7 @@ http {
 }
 ```
 
-You can access the status data by opening http://localhost:8888/status:
+http://localhost:8888/status にアクセスするとステータス情報が得られます。
 
 ```bash
 $ curl http://localhost:8888/status
@@ -531,34 +531,34 @@ server accepts handled requests
 Reading: 0 Writing: 1 Waiting: 1
 ```
 
-## Appendix: Explanation of Main Parameters
+## 付録：主なパラメータの説明
 
-Here are explanations of the main parameters used in the example configurations. These parameters ensure stable connections to the backend MQTT servers or ensure that MQTT communication is encrypted and protected via NGINX while following best security practices to safeguard communication privacy and integrity for IoT applications.
+以下は例示設定で使用される主なパラメータの説明です。これらはバックエンドMQTTサーバーへの安定した接続を保証し、NGINX経由でMQTT通信を暗号化・保護し、IoTアプリケーションの通信プライバシーと整合性を守るためのベストプラクティスに基づいています。
 
-| Parameter Name         | Explanation                                                  |
+| パラメータ名           | 説明                                                         |
 | ---------------------- | ------------------------------------------------------------ |
-| proxy_protocol         | Enables the PROXY protocol, allowing NGINX to attach additional proxy information at the beginning of the connection when forwarding requests. This ensures that EMQX can obtain the real client IP. |
-| proxy_pass             | Defines the address of the backend MQTT servers, indicating that all requests from clients will be forwarded to this address. |
-| proxy_connect_timeout  | Timeout for establishing a connection to the backend MQTT servers. If the connection is not established within this time, NGINX will abort the connection attempt. |
-| proxy_timeout          | Timeout for the backend MQTT server. If no response is received from the backend within this time, NGINX will close the connection. |
-| proxy_buffer_size      | Size of the buffer used to store data received from the backend MQTT server. Ensures a sufficient buffer size to handle large data streams. |
-| tcp_nodelay            | Enables the TCP_NODELAY option and disables the Nagle algorithm. This can reduce packet transmission latency, benefiting real-time MQTT communication. |
-| ssl_session_cache      | Configures a shared SSL session cache. This stores the state of SSL sessions to speed up the handshake process when clients reconnect. `shared:SSL:10m` specifies the cache name and size, which is 10MB here. |
-| ssl_session_timeout    | Sets the timeout for SSL sessions to 10 minutes. Sessions not reused within this time will be cleared. |
-| ssl_certificate        | Specifies the path to the SSL certificate file. This certificate is used to prove the server's identity. |
-| ssl_certificate_key    | Specifies the path to the private key file corresponding to the SSL certificate. |
-| ssl_protocols          | Specifies the allowed SSL/TLS protocol versions.             |
-| ssl_ciphers            | Configures allowed encryption algorithms (cipher suites). `HIGH:!aNULL:!MD5` specifies the use of strong cipher suites while excluding some insecure options, such as empty cipher suites and the MD5 hashing algorithm. |
-| ssl_client_certificate | Specifies the path to the Certificate Authority (CA) certificate file used to verify the authenticity of client certificates. |
-| ssl_verify_client      | Enables client certificate verification. When set to `on`, NGINX requires clients to provide valid SSL certificates. |
-| ssl_verify_depth       | Sets the maximum depth for verifying client certificates. Here, it's set to `1`, indicating that only one level of verification beyond the client certificate and CA certificate is performed. |
+| proxy_protocol         | PROXYプロトコルを有効化し、NGINXが接続開始時に追加のプロキシ情報を付加して転送。これによりEMQXは実際のクライアントIPを取得可能。 |
+| proxy_pass             | バックエンドMQTTサーバーのアドレスを定義し、クライアントからの全リクエストをここに転送。 |
+| proxy_connect_timeout  | バックエンドMQTTサーバーへの接続確立のタイムアウト。指定時間内に接続できなければNGINXは接続試行を中止。 |
+| proxy_timeout          | バックエンドMQTTサーバーのタイムアウト。指定時間内に応答がなければNGINXは接続を切断。 |
+| proxy_buffer_size      | バックエンドMQTTサーバーから受信したデータを格納するバッファサイズ。大容量のデータストリームを処理可能に。 |
+| tcp_nodelay            | TCP_NODELAYオプションを有効化し、Nagleアルゴリズムを無効化。パケット送信のレイテンシを削減し、リアルタイムMQTT通信に有利。 |
+| ssl_session_cache      | 共有SSLセッションキャッシュを設定。SSLセッションの状態を保存し、クライアント再接続時のハンドシェイク高速化。`shared:SSL:10m`はキャッシュ名とサイズ（10MB）を指定。 |
+| ssl_session_timeout    | SSLセッションのタイムアウトを10分に設定。再利用されないセッションは期限切れで削除。 |
+| ssl_certificate        | SSL証明書ファイルのパス。サーバーの身元証明に使用。 |
+| ssl_certificate_key    | SSL証明書に対応する秘密鍵ファイルのパス。 |
+| ssl_protocols          | 許可するSSL/TLSプロトコルのバージョンを指定。             |
+| ssl_ciphers            | 許可する暗号化アルゴリズム（暗号スイート）を設定。`HIGH:!aNULL:!MD5`は強力な暗号スイートを使用し、空の暗号スイートやMD5ハッシュアルゴリズムを除外。 |
+| ssl_client_certificate | クライアント証明書の信頼性を検証するための認証局（CA）証明書ファイルのパス。 |
+| ssl_verify_client      | クライアント証明書の検証を有効化。`on`に設定するとNGINXはクライアントに有効なSSL証明書の提示を要求。 |
+| ssl_verify_depth       | クライアント証明書検証の最大深度を設定。ここでは`1`で、クライアント証明書とCA証明書の1段階のみ検証。 |
 
-## More Information
+## 参考情報
 
-EMQX provides a wealth of resources for learning about NGINX. Check out the following links for more information:
+EMQXはNGINXに関する豊富なリソースを提供しています。以下のリンクから詳細をご覧ください。
 
-**Blogs:**
+**ブログ:**
 
-- [Harnessing Sticky Sessions in EMQX with NGINX Plus: Using 'Client ID' as the Magic Key](https://www.emqx.com/en/blog/harnessing-sticky-sessions-for-mqtt-load-balancing-with-nginx-plus)
-- [Securing Your MQTT-Based Applications with NGINX Plus's Client ID Substitution and EMQX Enterprise](https://www.emqx.com/en/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
-- [Elevating MQTT security with Client Certificate Authentication in EMQX and NGINX Plus](https://www.emqx.com/en/blog/elevating-mqtt-security-with-client-certificate-authentication)
+- [NGINX PlusでのEMQXスティッキーセッション活用：「Client ID」を魔法の鍵として](https://www.emqx.com/en/blog/harnessing-sticky-sessions-for-mqtt-load-balancing-with-nginx-plus)
+- [NGINX PlusのクライアントID置換とEMQX EnterpriseによるMQTTアプリケーションのセキュリティ強化](https://www.emqx.com/en/blog/securing-your-mqtt-based-applications-with-nginx-plus-client-id-substitution-and-emqx-enterprise)
+- [EMQXとNGINX Plusによるクライアント証明書認証でMQTTセキュリティを向上](https://www.emqx.com/en/blog/elevating-mqtt-security-with-client-certificate-authentication)

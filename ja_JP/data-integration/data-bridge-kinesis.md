@@ -1,109 +1,115 @@
-# Stream MQTT Data into Amazon Kinesis
+# Amazon Kinesis への MQTT データストリーム
 
-[AWS Kinesis](https://aws.amazon.com/cn/kinesis/) is a fully managed real-time streaming data processing service on AWS that facilitates easy collection, processing, and analysis of streaming data. It can economically and efficiently handle streaming data of any scale in real-time and offers high flexibility, capable of low-latency processing of any amount of streaming data from hundreds of thousands of sources.
+[AWS Kinesis](https://aws.amazon.com/cn/kinesis/) は、AWS 上のフルマネージドリアルタイムストリーミングデータ処理サービスであり、ストリーミングデータの収集、処理、分析を簡単に行えます。あらゆる規模のストリーミングデータをリアルタイムかつ経済的に効率よく処理でき、高い柔軟性を持ち、数十万のソースからの大量データを低レイテンシで処理可能です。
 
-EMQX supports seamless integration with [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/), enabling the connection of massive IoT devices for real-time message collection and transmission. Through the data integration, it connects to Amazon Kinesis Data Streams for real-time data analysis and complex stream processing.
+EMQX は [Amazon Kinesis Data Streams](https://aws.amazon.com/kinesis/data-streams/) とシームレスに統合でき、大規模な IoT デバイスのリアルタイムメッセージ収集と送信を実現します。このデータ連携により、Amazon Kinesis Data Streams と接続してリアルタイムデータ分析や複雑なストリーム処理が可能になります。
 
-This page provides a comprehensive introduction to the data integration between EMQX and Amazon Kinesis with practical instructions on creating and validating the data integration.
+本ページでは、EMQX と Amazon Kinesis 間のデータ連携について包括的に紹介し、データ連携の作成および検証方法を実践的に説明します。
 
-## How It Works
+## 動作概要
 
-Amazon Kinesis data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Amazon Kinesis and leverage its rich services and capabilities for IoT application development.
+Amazon Kinesis とのデータ連携は EMQX の標準機能であり、MQTT データストリームを Amazon Kinesis とシームレスに統合し、豊富なサービスや機能を活用して IoT アプリケーション開発を支援します。
 
 ![emqx-integration-aws](./assets/emqx-integration-aws.jpg)
 
-EMQX forwards MQTT data to Amazon Kinesis through the rule engine and Sink. The complete process is as follows:
+EMQX はルールエンジンと Sink を介して MQTT データを Amazon Kinesis に転送します。全体の流れは以下の通りです。
 
-1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
-2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
-3. **Bridging to Amazon Kinesis**: The action triggered by rules to forward messages to Amazon Kinesis allows for custom configuration of partition keys, the data stream to write to, and message format, enabling flexible data integration.
+1. **IoT デバイスがメッセージをパブリッシュ**：デバイスは特定のトピックを通じてテレメトリやステータスデータをパブリッシュし、ルールエンジンをトリガーします。
+2. **ルールエンジンがメッセージを処理**：組み込みのルールエンジンが特定のソースからの MQTT メッセージをトピックマッチングに基づいて処理します。ルールにマッチしたメッセージは、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などが行われます。
+3. **Amazon Kinesis への転送**：ルールによってトリガーされたアクションでメッセージを Amazon Kinesis に転送します。パーティションキーや書き込み先のデータストリーム、メッセージフォーマットのカスタム設定が可能で、柔軟なデータ連携を実現します。
 
-After MQTT message data is written to Amazon Kinesis, you can perform flexible application development, such as:
+MQTT メッセージデータが Amazon Kinesis に書き込まれた後は、以下のような柔軟なアプリケーション開発が可能です。
 
-- Real-time Data Processing and Analysis: Utilize powerful Amazon Kinesis data processing and analysis tools and its own streaming capabilities to perform real-time processing and analysis of message data, obtaining valuable insights and decision support.
-- Event-Driven Functionality: Trigger Amazon event handling to achieve dynamic and flexible function triggering and processing.
-- Data Storage and Sharing: Transmit message data to Amazon Kinesis storage services for secure storage and management of large volumes of data. This allows you to share and analyze this data with other Amazon services to meet various business needs.
+- リアルタイムデータ処理と分析：Amazon Kinesis の強力なデータ処理・分析ツールとストリーミング機能を活用し、メッセージデータをリアルタイムに処理・分析して価値ある洞察や意思決定支援を得られます。
+- イベント駆動機能：Amazon のイベント処理をトリガーし、動的かつ柔軟な機能トリガーや処理を実現します。
+- データ保存と共有：メッセージデータを Amazon Kinesis のストレージサービスに送信し、大量データを安全に保存・管理します。他の Amazon サービスと連携してデータ共有や分析も可能です。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration between EMQX and AWS Kinesis Data Streams can bring the following functionalities and advantages to your business:
+EMQX と AWS Kinesis Data Streams のデータ連携は、以下の機能や利点をビジネスにもたらします。
 
-- **Reliable Data Transmission and Sequence Guarantee**: Both EMQX and AWS Kinesis Data Streams provide reliable data transmission mechanisms. EMQX ensures the reliable transmission of messages through the MQTT protocol, while AWS Kinesis Data Streams uses partitions and sequence numbers to guarantee message ordering. Together, they ensure that messages sent from devices accurately reach their destination and are processed in the correct order.
-- **Real-time Data Processing**: High-frequency data from devices can undergo preliminary real-time processing through EMQX's rule SQL, effortlessly filtering, extracting, enriching, and transforming MQTT messages. After sending data to AWS Kinesis Data Streams, further real-time analysis can be implemented by combining AWS Lambda and AWS-managed Apache Flink.
-- **Elastic Scalability Support**: EMQX can easily connect millions of IoT devices and offers elastic scalability. AWS Kinesis Data Streams, on the other hand, employs on-demand automatic resource allocation and expansion. Applications built with both can scale with connection and data sizes, continuously meeting the growing needs of the business.
-- **Persistent Data Storage**: AWS Kinesis Data Streams provides persistent data storage capabilities, reliably saving millions of incoming device data streams per second. It allows for the retrieval of historical data when needed and facilitates offline analysis and processing.
+- **信頼性の高いデータ送信と順序保証**：EMQX と AWS Kinesis Data Streams は共に信頼性の高いデータ送信機構を提供します。EMQX は MQTT プロトコルでメッセージの確実な送信を保証し、AWS Kinesis Data Streams はパーティションとシーケンス番号でメッセージ順序を保証します。これにより、デバイスから送信されたメッセージが正確に届き、正しい順序で処理されます。
+- **リアルタイムデータ処理**：デバイスからの高頻度データは EMQX のルール SQL でリアルタイムに一次処理でき、MQTT メッセージのフィルタリング、抽出、付加、変換が容易です。AWS Kinesis Data Streams へ送信後は、AWS Lambda や AWS 管理の Apache Flink と組み合わせてさらにリアルタイム分析が可能です。
+- **弾力的なスケーラビリティ対応**：EMQX は数百万台の IoT デバイス接続と弾力的なスケーラビリティを提供し、AWS Kinesis Data Streams はオンデマンドの自動リソース割り当てと拡張を行います。両者を組み合わせたアプリケーションは接続数やデータ量に応じてスケールし、ビジネスの成長に継続的に対応可能です。
+- **永続的なデータ保存**：AWS Kinesis Data Streams は永続的なデータ保存機能を備え、毎秒数百万のデバイスデータストリームを確実に保存します。必要に応じて過去データの取得やオフライン分析・処理が行えます。
 
-Utilizing AWS Kinesis Data Streams to build a streaming data pipeline significantly reduces the difficulty of integrating EMQX with the AWS platform, providing users with richer and more flexible data processing solutions. This can help EMQX users to build functionally complete and high-performance data-driven applications on AWS.
+AWS Kinesis Data Streams を利用したストリーミングデータパイプラインの構築は、EMQX と AWS プラットフォームの統合の難易度を大幅に下げ、より豊富で柔軟なデータ処理ソリューションをユーザーに提供します。これにより、EMQX ユーザーは AWS 上で機能的に充実した高性能なデータ駆動型アプリケーションを構築できます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create an Amazon Kinesis data integration, including how to set up the Kinesis service and emulate data streams service.
+本節では、Amazon Kinesis データ連携の作成に先立ち、Kinesis サービスのセットアップやデータストリームサービスのエミュレートなど、準備すべき事項を説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQX データ連携の [ルール](./rules.md) に関する知識
+- [データ連携](./data-bridges.md) に関する知識
 
-### Create Stream in Amazon Kinesis Data Streams
+### Amazon Kinesis Data Streams でストリームを作成する
 
-Follow the steps below to create a Stream via the AWS Management Console (see [this tutorial](https://docs.aws.amazon.com/streams/latest/dev/how-do-i-create-a-stream.html) for more details).
+以下の手順で AWS マネジメントコンソールからストリームを作成します（詳細は [こちらのチュートリアル](https://docs.aws.amazon.com/streams/latest/dev/how-do-i-create-a-stream.html) を参照）。
 
-1. Sign in to the AWS Management Console and open the [Kinesis console](https://console.aws.amazon.com/kinesis).
+1. AWS マネジメントコンソールにサインインし、[Kinesis コンソール](https://console.aws.amazon.com/kinesis) を開きます。
 
-2. In the navigation bar, expand the Region selector and choose a Region.
+2. ナビゲーションバーでリージョンセレクターを展開し、リージョンを選択します。
 
-3. Choose **Create data stream**.
+3. **Create data stream** を選択します。
 
-4. On the **Create Kinesis stream** page, enter a name for your data stream and then choose the **On-demand** capacity mode.
+4. **Create Kinesis stream** ページでデータストリーム名を入力し、**On-demand** キャパシティモードを選択します。
 
-### Emulate Amazon Kinesis Data Streams locally
+### Amazon Kinesis Data Streams をローカルでエミュレートする
 
-To facilitate the development and test, you can emulate the Amazon Kinesis Data Streams service locally via [LocalStack](https://localstack.cloud/). With LocalStack, you can run your AWS applications entirely on your local machine without connecting to a remote cloud provider.
+開発やテストを容易にするため、[LocalStack](https://localstack.cloud/) を使って Amazon Kinesis Data Streams サービスをローカルでエミュレートできます。LocalStack により、リモートクラウドに接続せずにローカルマシン上で AWS アプリケーションを完全に実行可能です。
 
-1. Install and run it using a Docker Image:
+1. Docker イメージを使ってインストール・起動します。
 
    ```bash
-   # To start the LocalStack docker image locally
+   # LocalStack の Docker イメージをローカルで起動
    docker run --name localstack -p '4566:4566' -e 'KINESIS_LATENCY=0' -d localstack/localstack:2.1
    
-   # Access the container
+   # コンテナにアクセス
    docker exec -it localstack bash
    ```
 
-2. Create a stream named `my_stream` with only one shard:
+2. シャード数 1 のストリーム `my_stream` を作成します。
 
    ```bash
    awslocal kinesis create-stream --stream-name "my_stream" --shard-count 1
    ```
 
-## Create a Connector
+## コネクターを作成する
 
-This section demonstrates how to create a Connector to connect the Sink to the Amazon Kinesis Data Streams service.
+本節では、Sink を Amazon Kinesis Data Streams サービスに接続するコネクターの作成方法を説明します。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Amazon Kinesis** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_kinesis`.
-   - **Amazon Kinesis Endpoint**: Enter the [Endpoint](https://docs.aws.amazon.com/general/latest/gr/ak.html) for the Kinesis service. If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), input `http://localhost:4566`.
-   - **AWS Access Key ID**: Enter the [Access key ID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-   - **AWS Secret Access Key**: Enter the [secret access key](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html). If using [LocalStack](#emulate-amazon-kinesis-data-streams-locally), enter any value.
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Amazon Kinesis Data Streams service.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Amazon Kinesis. For detailed steps, see [Create a Rule with Amazon Kinesis Sink](#create-a-rule-with-amazon-kinesis-sink).
+1. EMQX ダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
 
-## Create a Rule with Amazon Kinesis Sink
+2. 画面右上の **Create** をクリックします。
 
-This section demonstrates how to create a rule for processing messages from the source MQTT topic `t/#`  and streaming the processed results to the Amazon data stream `my_stream` through an action with configured Sink. 
+3. **Create Connector** ページで **Amazon Kinesis** を選択し、**Next** をクリックします。
 
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+4. **Configuration** ステップで以下を設定します。
 
-2. Click **Create** on the top right corner of the page.
+   - コネクター名を入力します。英数字の大文字・小文字の組み合わせとしてください。例：`my_kinesis`。
+   - **Amazon Kinesis Endpoint**：Kinesis サービスの [エンドポイント](https://docs.aws.amazon.com/general/latest/gr/ak.html) を入力します。[LocalStack](#amazon-kinesis-data-streams-をローカルでエミュレートする) を使う場合は `http://localhost:4566` と入力します。
+   - **AWS Access Key ID**：[アクセスキーID](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html) を入力します。[LocalStack](#amazon-kinesis-data-streams-をローカルでエミュレートする) 利用時は任意の値で構いません。
+   - **AWS Secret Access Key**：[シークレットアクセスキー](https://docs.aws.amazon.com/powershell/latest/userguide/pstools-appendix-sign-up.html) を入力します。[LocalStack](#amazon-kinesis-data-streams-をローカルでエミュレートする) 利用時は任意の値で構いません。
 
-3. Enter `my_rule` as the rule ID.
+5. **Create** をクリックする前に、**Test Connectivity** を押してコネクターが Amazon Kinesis Data Streams サービスに接続できるかテストできます。
 
-4. Set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#` to Amazon Kinesis Data Streams, you can use the SQL syntax below.
+6. 画面下部の **Create** ボタンを押してコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、続けてルールと Sink を作成して Amazon Kinesis へ転送するデータを指定できます。詳細は [Amazon Kinesis Sink を使ったルール作成](#create-a-rule-with-amazon-kinesis-sink) を参照してください。
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
+## Amazon Kinesis Sink を使ったルール作成
+
+本節では、ソース MQTT トピック `t/#` からのメッセージを処理し、処理結果を Amazon データストリーム `my_stream` にストリーミングするルールの作成方法を説明します。
+
+1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+
+2. 画面右上の **Create** をクリックします。
+
+3. ルール ID に `my_rule` を入力します。
+
+4. **SQL Editor** にルールを設定します。トピック `t/#` の MQTT メッセージを Amazon Kinesis Data Streams に保存したい場合、以下の SQL 文を使用できます。
+
+   注意：独自の SQL 文を指定する場合は、Sink のペイロードテンプレートで必要なフィールドを `SELECT` 部分に含めてください。
 
    ```sql
    SELECT
@@ -114,75 +120,75 @@ This section demonstrates how to create a rule for processing messages from the 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は **SQL Examples** をクリックし、**Enable Test** で SQL ルールを学習・テストできます。
 
    :::
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Kinesis.
+5. + **Add Action** ボタンを押して、ルールによりトリガーされるアクションを定義します。このアクションで EMQX はルール処理済みデータを Kinesis に送信します。
 
-6. Select `Amazon Kinesis` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+6. **Type of Action** ドロップダウンから `Amazon Kinesis` を選択します。**Action** はデフォルトの `Create Action` のままにします。既に作成済みの Sink があれば選択可能ですが、ここでは新規 Sink を作成します。
 
-7. Enter a name and description for the Sink. The name should be a combination of upper/lower case letters and numbers.
+7. Sink の名前と説明を入力します。名前は英数字の大文字・小文字の組み合わせにしてください。
 
-8. From the **Connector** dropdown box, select `my_kinesis` you created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector** ドロップダウンから先ほど作成した `my_kinesis` を選択します。新規コネクターはドロップダウン横のボタンから作成可能です。設定パラメータは [コネクター作成](#create-a-connector) を参照してください。
 
-9. Enter the following information:
+9. 以下の情報を入力します。
 
-   - **Amazon Kinesis Stream**: Enter the stream name you created in [Create Stream in Amazon Kinesis Data Streams](#create-stream-in-amazon-kinesis-data-streams).
-   - **Partition Key**: Enter the Partition Key that shall be associated with records that are sent to this stream. Placeholders of the form `${variable_name}` are allowed (see next step for example on placeholders).
+   - **Amazon Kinesis Stream**：[Amazon Kinesis Data Streams でストリームを作成する](#create-stream-in-amazon-kinesis-data-streams) で作成したストリーム名を入力します。
+   - **Partition Key**：このストリームに送信されるレコードに関連付けるパーティションキーを入力します。`${variable_name}` 形式のプレースホルダーも利用可能です（次のステップで例を示します）。
 
-10. In the **Payload Template** field, leave it blank or define a template.
+10. **Payload Template** フィールドは空欄のままにするかテンプレートを定義します。
 
-    - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
-    - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context. For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
+    - 空欄の場合、MQTT メッセージのクライアントID、トピック、ペイロードなどの可視フィールドを JSON 形式でエンコードします。
+    - 定義したテンプレートを使う場合、`${variable_name}` 形式のプレースホルダーは MQTT コンテキストの対応する値に置き換えられます。例：`${topic}` は MQTT メッセージのトピックが `my/topic` なら `my/topic` に置換されます。
 
+11. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。プライマリ Sink がメッセージ処理に失敗した場合にトリガーされます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+12. **詳細設定（任意）**：バッファキューやバッチモードの使用有無を選択します。詳細は [Sink の機能](./data-bridges.md#features-of-sink) を参照してください。
 
-12. **Advanced settings (optional)**: Choose whether to use buffer queue and batch mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+13. **Create** をクリックする前に、**Test Connectivity** を押して Sink が Amazon Kinesis Data Streams サービスに接続できるかテスト可能です。
 
-13. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis Data Streams service.
+14. **Create** ボタンを押して Sink 設定を完了します。新しい Sink が **Action Outputs** に追加されます。
 
-14. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+15. **Create Rule** ページに戻り、設定内容を確認して **Create** ボタンを押しルールを生成します。
 
-15. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+これで Amazon Kinesis Sink を介してデータを転送するルールが正常に作成されました。**Integration** -> **Rules** ページで新規ルールを確認できます。**Actions(Sink)** タブをクリックすると、新しい Amazon Kinesis Sink が表示されます。
 
-You have now successfully created the rule for forwarding data through the Amazon Kinesis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Amazon Kinesis Sink.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/#` のメッセージがルール `my_rule` によって解析され Amazon Kinesis Data Streams に送信・保存されている様子を確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Amazon Kinesis Data Streams after parsing by rule `my_rule`.
+## ルールのテスト
 
-## Test the Rule
-
-1. Use MQTTX to send messages on the topic `t/my_topic`.
+1. MQTTX を使い、トピック `t/my_topic` にメッセージを送信します。
 
    ```bash
    mqttx pub -i emqx_c -t t/my_topic -m '{ "msg": "hello Amazon Kinesis" }'
    ```
 
-2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+2. Sink の稼働状況を確認すると、新規の受信メッセージと送信メッセージがそれぞれ 1 件ずつあるはずです。
 
-3. Go to [Amazon Kinesis Data Viewer](https://docs.aws.amazon.com/streams/latest/dev/data-viewer.html). You should see the message when getting records.
+3. [Amazon Kinesis Data Viewer](https://docs.aws.amazon.com/streams/latest/dev/data-viewer.html) にアクセスし、レコード取得時にメッセージが確認できます。
 
-### Use LocalStack to Check
+### LocalStack を使った確認
 
-If you use LocalStack, follow the steps below to check the received data.
+LocalStack を利用している場合、以下の手順で受信データを確認します。
 
-1. Use the following command to get the *ShardIterator* before sending the message to the EMQX.
-   
+1. EMQX にメッセージを送信する前に、*ShardIterator* を取得します。
+
    ```bash
    awslocal kinesis get-shard-iterator --stream-name my_stream --shard-id shardId-000000000000 --shard-iterator-type LATEST
    {
    "ShardIterator": "AAAAAAAAAAG3YjBK9sp0uSIFGTPIYBI17bJ1RsqX4uJmRllBAZmFRnjq1kPLrgcyn7RVigmH+WsGciWpImxjXYLJhmqI2QO/DrlLfp6d1IyJFixg1s+MhtKoM6IOH0Tb2CPW9NwPYoT809x03n1zL8HbkXg7hpZjWXPmsEvkXjn4UCBf5dBerq7NLKS3RtAmOiXVN6skPpk="
    }
    ```
-   
-2. Use MQTTX to send messages on the topic `t/my_topic`.
+
+2. MQTTX でトピック `t/my_topic` にメッセージを送信します。
 
    ```bash
    mqttx pub -i emqx_c -t t/my_topic -m '{ "msg": "hello Amazon Kinesis" }'
    ```
 
-3. Read the records and decode the received data.
+3. レコードを読み込み、受信データをデコードします。
+
    ```bash
    awslocal kinesis get-records --shard-iterator="AAAAAAAAAAG3YjBK9sp0uSIFGTPIYBI17bJ1RsqX4uJmRllBAZmFRnjq1kPLrgcyn7RVigmH+WsGciWpImxjXYLJhmqI2QO/DrlLfp6d1IyJFixg1s+MhtKoM6IOH0Tb2CPW9NwPYoT809x03n1zL8HbkXg7hpZjWXPmsEvkXjn4UCBf5dBerq7NLKS3RtAmOiXVN6skPpk="
    {

@@ -1,97 +1,94 @@
-# Ingest MQTT Data into InfluxDB
+# InfluxDBへのMQTTデータ取り込み
 
-[InfluxDB](https://www.influxdata.com/) is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
+[InfluxDB](https://www.influxdata.com/)は時系列データの保存と分析に特化したデータベースです。高いデータスループット性能と安定した動作により、IoT分野での活用に非常に適しています。EMQXは現在、InfluxDB Cloud、InfluxDB OSS、InfluxDB Enterpriseの主要バージョンとの接続をサポートしています。
 
-This page provides a comprehensive introduction to the data integration between EMQX and InfluxDB with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとInfluxDB間のデータ連携について、作成方法や検証手順を含めて包括的に解説します。
 
-## How It Works
+## 動作の仕組み
 
-InfluxDB data integration is an out-of-the-box feature in EMQX that combines EMQX's real-time data capturing and transmission capabilities with InfluxDB's data storage and analysis functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to InfluxDB for storage and analysis, eliminating the need for complex coding. EMQX forwards device data to InfluxDB for storage and analysis through the rule engine and Sink. After analyzing the data, InfluxDB generates reports, charts, and other data analysis results, and then presents them to users through InfluxDB's visualization tools. 
+InfluxDBデータ連携はEMQXに標準搭載された機能であり、EMQXのリアルタイムデータ取得・転送機能とInfluxDBのデータ保存・分析機能を組み合わせています。内蔵の[ルールエンジン](./rules.md)コンポーネントにより、EMQXからInfluxDBへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。EMQXはルールエンジンとSinkを通じてデバイスデータをInfluxDBに転送し保存・分析を行います。InfluxDBは分析結果をレポートやグラフとして生成し、InfluxDBの可視化ツールでユーザーに提供します。
 
-The diagram below illustrates the typical data integration architecture between EMQX and InfluxDB in an energy storage scenario.
+以下の図は、エネルギー貯蔵シナリオにおけるEMQXとInfluxDBの典型的なデータ連携アーキテクチャを示しています。
 
 ![MQTT to InfluxDB](./assets/mqtt-to-influxdb.jpg)
 
-EMQX and InfluxDB provide an extensible IoT platform for efficiently collecting and analyzing energy consumption data in real-time. In this architecture, EMQX serves as the IoT platform, handling device access, message transmission, and data routing, while InfluxDB serves as the data storage and analysis platform, responsible for data storage and analysis functions. The workflow is as follows:
+EMQXとInfluxDBは、エネルギー消費データをリアルタイムで効率的に収集・分析するための拡張可能なIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがデバイス接続、メッセージ転送、データルーティングを担当するIoTプラットフォームとして機能し、InfluxDBがデータ保存・分析プラットフォームとして役割を担います。ワークフローは以下の通りです：
 
-1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
-3. **Data ingestion into InfluxDB**: Rules defined in the rule engine trigger the operation of writing messages to InfluxDB. The InfluxDB Sink provides Line Protocol templates that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding measurement and field in InfluxDB.
+1. **メッセージのパブリッシュと受信**：エネルギー貯蔵機器や産業用IoT機器はMQTTプロトコルを用いてEMQXに接続し、電力消費量、入出力電力などのデータを定期的にパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **メッセージデータの処理**：内蔵のルールエンジンを使い、特定のトピックに基づいてメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールにマッチしてデータ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
+3. **InfluxDBへのデータ取り込み**：ルールエンジンで定義されたルールにより、InfluxDBへの書き込み操作がトリガーされます。InfluxDB SinkはLine Protocolテンプレートを提供し、メッセージの特定フィールドをInfluxDBの対応するmeasurementやfieldに柔軟にマッピングできます。
 
-After energy consumption data is written to InfluxDB, you can use Line Protocol flexibly to analyze the data, for example:
+エネルギー消費データがInfluxDBに書き込まれた後は、Line Protocolを活用して以下のような分析が可能です：
 
-- Connect to visualization tools like Grafana to generate charts based on the data, displaying energy storage data.
-- Connect to business systems for monitoring and alerting on the status of energy storage devices.
+- Grafanaなどの可視化ツールに接続し、エネルギー貯蔵データを基にグラフを生成する。
+- 業務システムと連携してエネルギー貯蔵機器の状態監視やアラートを実施する。
 
-## Features and Benefits
+## 特長とメリット
 
-The InfluxDB data integration offers the following features and advantages:
+InfluxDBデータ連携は以下の特長と利点を提供します：
 
-- **Efficient Data Processing**: EMQX can handle a massive number of IoT device connections and message throughput, while InfluxDB excels in data writing, storage, and querying, providing outstanding performance to meet the data processing needs of IoT scenarios without overburdening the system.
-- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written into InfluxDB.
-- **Scalability**: Both EMQX and InfluxDB are capable of cluster scaling, allowing flexible horizontal expansion of clusters as business needs grow.
-- **Rich Query Capabilities**: InfluxDB offers optimized functions, operators, and indexing techniques, enabling efficient querying and analysis of timestamped data, and accurately extracting valuable insights from IoT time-series data.
-- **Efficient Storage**: InfluxDB uses encoding methods with high compression ratios, significantly reducing storage costs. It also allows customization of storage durations for different data types to avoid unnecessary data occupying storage space.
+- **効率的なデータ処理**：EMQXは大量のIoTデバイス接続とメッセージスループットを処理可能であり、InfluxDBはデータ書き込み・保存・クエリに優れた性能を発揮し、IoTシナリオのデータ処理要件をシステムに過負荷をかけずに満たします。
+- **メッセージ変換**：EMQXのルールを通じてメッセージを多様に処理・変換してからInfluxDBに書き込めます。
+- **スケーラビリティ**：EMQXとInfluxDBはどちらもクラスター拡張に対応し、ビジネスの成長に応じて柔軟に水平拡張可能です。
+- **豊富なクエリ機能**：InfluxDBは最適化された関数、演算子、インデックス技術を備え、時系列データの効率的なクエリと分析を実現し、IoTデータから価値ある洞察を正確に抽出します。
+- **効率的なストレージ**：InfluxDBは高圧縮率のエンコード方式を採用し、ストレージコストを大幅に削減します。また、データタイプごとに保存期間をカスタマイズでき、不要なデータによるストレージ占有を防止します。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the InfluxDB data integration, including installing and setting up InfluxDB.
+このセクションでは、InfluxDBデータ連携を作成する前に必要な準備、特にInfluxDBのインストールとセットアップについて説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/), as EMQX will follow this protocol when writing data into InfluxDB
+- EMQXがInfluxDBにデータを書き込む際に従う[InfluxDB Line Protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)の知識
+- EMQXデータ連携の[ルール](./rules.md)の知識
+- [データ連携](./data-bridges.md)の知識
 
-- Knowledge about EMQX data integration [rules](./rules.md)
+### InfluxDBのインストールとセットアップ
 
-- Knowledge about [data integration](./data-bridges.md)
-
-
-### Install and Set Up InfluxDB
-
-1. [Install InfluxDB](https://docs.influxdata.com/influxdb/v2.5/install/) via Docker, and then run the docker image.
+1. Dockerで[InfluxDBをインストール](https://docs.influxdata.com/influxdb/v2.5/install/)し、Dockerイメージを起動します。
 
 ```bash
-# TO start the InfluxDB docker image
+# InfluxDBのDockerイメージを起動
 docker run --name influxdb -p 8086:8086 influxdb:2.5.1
 ```
 
-2. With InfluxDB running, visit [http://localhost:8086](http://localhost:8086). Set the **Username**, **Password**, **Organization Name**, and **Bucket Name**.
-3. In the InfluxDB UI, click **Load Data** -> **API Token** and then follow the instructions to [create all-access tokens](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens).
+2. InfluxDBが起動したら、ブラウザで [http://localhost:8086](http://localhost:8086) にアクセスし、**Username**、**Password**、**Organization Name**、**Bucket Name**を設定します。
+3. InfluxDBのUIで、**Load Data** -> **API Token** をクリックし、指示に従って[全権限トークンを作成](https://docs.influxdata.com/influxdb/v2.5/install/#create-all-access-tokens)します。
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the InfluxDB server.
+このセクションでは、SinkをInfluxDBサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and InfluxDB on the local machine. If you have InfluxDB and EMQX running remotely, adjust the settings accordingly.
+以下の手順はEMQXとInfluxDBをローカルマシンで実行している場合を想定しています。リモート環境の場合は設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **InfluxDB** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_influxdb`.
-   - Select the **Version of InfluxDB** as needed, with the default being `V2`.
-   - Enter the InfluxDB server connection information:
-     - For the **Server Host**, enter `127.0.0.1:8086`. If using InfluxDB Cloud, specify port 443, i.e., enter `{url}:443` and click **Enable TLS** to activate TSL connection.
-     - Complete the **Token**, **Organization**, and **Bucket** settings according to the setup in [Install and Set Up InfluxDB](#install-and-set-up-influxdb). Note: If choosing InfluxDB v1, please complete the settings for **Database**, **Username**, and **Password**.
-   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the InfluxDB server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to InfluxDB. For detailed steps, see [Create a Rule with InfluxDB Sink](#create-a-rule-with-influxdb-sink).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**InfluxDB**を選択し、**Next**をクリックします。
+4. **Configuration**ステップで以下を設定します：
+   - コネクター名を入力します。英数字の組み合わせで、例：`my_influxdb`
+   - **Version of InfluxDB**を必要に応じて選択（デフォルトは`V2`）
+   - InfluxDBサーバー接続情報を入力：
+     - **Server Host**に`127.0.0.1:8086`を入力。InfluxDB Cloudを使う場合はポート443を指定し、`{url}:443`と入力して**Enable TLS**を有効にします。
+     - [InfluxDBのインストールとセットアップ](#install-and-set-up-influxdb)に従い、**Token**、**Organization**、**Bucket**を設定。InfluxDB v1を選択した場合は、**Database**、**Username**、**Password**を設定してください。
+   - TLSを有効にするかどうかを決定します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+5. **Create**をクリックする前に、**Test Connectivity**でInfluxDBサーバーへの接続テストが可能です。
+6. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択可能です。続けてルールとSinkを作成し、InfluxDBに転送するデータを指定できます。詳細は[InfluxDB Sink付きルールの作成](#create-a-rule-with-influxdb-sink)を参照してください。
 
-## Create a Rule with InfluxDB Sink
+## InfluxDB Sink付きルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to InfluxDB. 
+このセクションでは、EMQXでMQTTトピック `t/#` のメッセージを処理し、設定済みのSinkを通じてInfluxDBに送信するルールの作成方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
+1. EMQXダッシュボードにアクセスし、左メニューの**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. On the Create Rule page, enter `my_rule` as the rule ID.
+3. ルール作成ページで、ルールIDに`my_rule`を入力します。
 
-4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to InfluxDB, you can use the SQL syntax below. 
+4. **SQL Editor**にルールを設定します。例えば、トピック `t/#` のMQTTメッセージをInfluxDBに保存したい場合、以下のSQL文を使用します。
 
    ::: tip
 
-   If you want to specify your own SQL syntax, make sure that the fields selected (in the `SELECT` part) include all variables in the data format specified in the later configured Sink.
+   独自のSQL文を指定する場合は、後で設定するSinkのデータ形式に含まれるすべての変数が`SELECT`句に含まれていることを確認してください。
 
    :::
 
@@ -102,104 +99,105 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   注：初心者の方は**SQL Examples**と**Enable Test**を使ってSQLルールの学習とテストが可能です。
 
-5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to InfluxDB. 
+5. + **Add Action**ボタンをクリックし、ルールがトリガーするアクションを定義します。このアクションにより、EMQXはルールで処理したデータをInfluxDBに送信します。
 
-6. Select `InfluxDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+6. **Type of Action**のドロップダウンから`InfluxDB`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、ここでは新規Sinkを作成します。
 
-7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+7. Sink名を入力します。英数字の組み合わせで指定してください。
 
-8. From the **Connector** dropdown box, select the `my_influxdb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector**のドロップダウンから先に作成した`my_influxdb`を選択します。新規作成も可能です。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-9. Specify the **Time Precision**: Select `millisecond` by default. 
+9. **Time Precision**を指定します。デフォルトは`millisecond`です。
 
-10. Select **Data Format** as `JSON` or `Line Protocol` for how data should be parsed and written into InfluxDB.
+10. **Data Format**を`JSON`または`Line Protocol`から選択し、InfluxDBへのデータ解析・書き込み方法を指定します。
 
-    - For JSON format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. The **Fields** field supports batch setting via a CSV file; for details, refer to [Batch Setting](#batch-setting).
-    - For Line Protocol format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+    - JSON形式の場合、**Measurement**、**Timestamp**、**Fields**、**Tags**の解析方法を定義します。すべてのキーは変数やプレースホルダーを利用可能で、[InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/)に準拠して設定できます。**Fields**はCSVファイルによる一括設定も可能です。詳細は[一括設定](#batch-setting)を参照してください。
+    - Line Protocol形式の場合、テキストベースでmeasurement、tag set、field set、timestampを指定し、[InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)の構文に従ったプレースホルダーを利用できます。
 
     ::: tip
 
-    - To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
-    - To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+    - InfluxDB 1.xまたは2.xに符号付き整数型の値を書き込む場合は、プレースホルダーの後に`i`を付けます。例：`${payload.int}i`。詳細は[InfluxDB 1.8で整数値を書き込む](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb)を参照してください。
+    - 符号なし整数型の値を書き込む場合は、プレースホルダーの後に`u`を付けます。例：`${payload.int}u`。詳細は同上リンクを参照してください。
 
     :::
 
-11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+11. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。プライマリSinkがメッセージ処理に失敗した場合にこれらがトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-12. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
+12. **詳細設定（任意）**：[詳細設定](#advanced-configurations)を参照してください。
 
-13. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the InfluxDB server.
+13. **Create**をクリックする前に、**Test Connectivity**でSinkがInfluxDBサーバーに接続可能かテストできます。
 
-14. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+14. **Create**をクリックしてSink作成を完了します。ルール作成ページの**Action Outputs**タブに新規Sinkが表示されます。
 
-15. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+15. ルール作成ページで設定内容を確認し、**Create**をクリックしてルールを生成します。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new InfluxDB Sink.
+これでルールが作成され、**Rule**ページに新規ルールが表示されます。**Actions(Sink)**タブをクリックすると、新規InfluxDB Sinkが確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to InfluxDB after parsing by the rule  `my_rule`.
+また、**Integration** -> **Flow Designer**でトポロジーを確認できます。トピック `t/#` のメッセージがルール`my_rule`で解析され、InfluxDBに送信・保存されていることがわかります。
 
-### Batch Setting
+### 一括設定
 
-In InfluxDB, a data entry typically includes hundreds of fields, making the setup of data formats a challenging task. To address this, EMQX offers a feature for batch setting of fields.
+InfluxDBでは1つのデータエントリに数百のフィールドが含まれることが多く、データ形式の設定が複雑になりがちです。これに対応するため、EMQXはフィールドの一括設定機能を提供しています。
 
-When setting data formats via JSON, you can use the batch setting feature to import key-value pairs of fields from a CSV file.
+JSON形式でデータ形式を設定する際、CSVファイルからフィールドのキー・バリューを一括インポートできます。
 
-1. Click the **Batch Setting** button in the **Fields** table to open the **Import Batch Setting** popup.
+1. **Fields**テーブルの**Batch Setting**ボタンをクリックし、**Import Batch Setting**ポップアップを開きます。
 
-2. Follow the instructions to first download the batch setting template file, then fill in the key-value pairs of Fields in the template file. The default template file content is as follows:
+2. 指示に従い、一括設定テンプレートファイルをダウンロードし、テンプレートにフィールドのキー・バリューを記入します。デフォルトのテンプレート内容は以下の通りです：
 
-   | Field  | Value              | Remarks (Optional)                                           |
-   | ------ | ------------------ | ------------------------------------------------------------ |
-   | temp   | ${payload.temp}    |                                                              |
-   | hum    | ${payload.hum}     |                                                              |
-   | precip | ${payload.precip}i | Append an i to the field value to tell InfluxDB to store the number as an integer. |
+   | Field  | Value              | 備考（任意）                                               |
+   | ------ | ------------------ | ---------------------------------------------------------- |
+   | temp   | ${payload.temp}    |                                                            |
+   | hum    | ${payload.hum}     |                                                            |
+   | precip | ${payload.precip}i | フィールド値に`i`を付けてInfluxDBに整数として保存する指示 |
 
-   - **Field**: Field key, supports constants or ${var} format placeholders.
-   - **Value**: Field value, supports constants or placeholders, can append type identifiers according to the line protocol.
-   - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
+   - **Field**：フィールドキー。定数または`${var}`形式のプレースホルダーをサポート。
+   - **Value**：フィールド値。定数またはプレースホルダーをサポートし、line protocolに従い型識別子を付加可能。
+   - **備考**：CSV内のメモ用で、EMQXへのインポートには含まれません。
 
-   Note that the data in the CSV file for batch setting should not exceed 2048 rows.
+   CSVファイルの行数は2048行を超えないようにしてください。
 
-3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
-4. After importing, you can further adjust the key-value pairs of fields in the **Fields** setting table.
+3. 記入したテンプレートファイルを保存し、**Import Batch Setting**ポップアップにアップロードして**Import**をクリックし、一括設定を完了します。
 
-## Test the Rule
+4. インポート後、**Fields**設定テーブルでキー・バリューをさらに調整可能です。
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
+## ルールのテスト
+
+MQTTクライアントMQTTXを使い、トピック `t/1` にメッセージを送信してオンライン/オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello InfluxDB" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+Sinkの稼働状況を確認すると、新規の受信メッセージと送信メッセージが1件ずつあるはずです。
 
-In the InfluxDB UI, you can confirm whether the message is written into the InfluxDB via the **Data Explorer** window.
+InfluxDBのUIの**Data Explorer**ウィンドウで、メッセージがInfluxDBに書き込まれていることを確認できます。
 
-## Advanced Configurations
+## 詳細設定
 
-This section delves deeper into the advanced configuration options available for the InfluxDB Connector and Sink. When configuring the Connector and Sink in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+このセクションでは、InfluxDBコネクターおよびSinkの詳細設定オプションについて説明します。ダッシュボードでコネクターやSinkを設定する際、**Advanced Settings**に進み、以下のパラメータをニーズに合わせて調整できます。
 
-| **Fields**            | **Descriptions**                                             | **Recommended Value** |
-| --------------------- | ------------------------------------------------------------ | --------------------- |
-| Start Timeout         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in InfluxDB—is fully operational and ready to handle data transactions. | `5`                   |
-| Buffer Pool Size      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and InfluxDB. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For Sinks that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `4`                   |
-| Request TTL           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from InfluxDB, the request is deemed to have expired. | `45`                  |
-| Health Check Interval | Specifies the time interval, in seconds, at which the Sink will perform automated health checks on the connection to InfluxDB. | `15`                  |
-| Max Buffer Queue Size | Specifies the maximum number of bytes that can be buffered by each buffer worker in the InfluxDB Sink. Buffer workers temporarily store data before it is sent to InfluxDB, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `1`                   |
-| Max Batch Size        | Specifies the maximum size of data batches that can be transmitted from EMQX to InfluxDB in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and InfluxDB.<br />If the "Max Batch Size" is set to `1`, data records are sent individually, without being grouped into batches. | `100`                 |
-| Query Mode            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in InfluxDB. | `Async`               |
-| Inflight Window       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the Sink is communicating with InfluxDB.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **項目**               | **説明**                                                                                                                         | **推奨値** |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Start Timeout          | コネクターが自動起動したリソース（例：InfluxDBのデータベースインスタンス）が正常状態になるまで待機する最大秒数です。リソースが準備完了するまで処理を進めないようにするための設定です。 | `5`        |
+| Buffer Pool Size       | EMQXとInfluxDB間の送信型ブリッジでデータフローを管理するバッファワーカープロセス数を指定します。これらのプロセスはデータを一時的に保持し、送信前に処理します。IngressのみのSinkでは`0`に設定可能です。 | `4`        |
+| Request TTL            | バッファに入ったリクエストが有効とみなされる最大時間（秒）です。TTLを超えたリクエストやInfluxDBからの応答・アックが遅延したリクエストは期限切れとみなされます。 | `45`       |
+| Health Check Interval  | SinkがInfluxDB接続のヘルスチェックを自動的に行う間隔（秒）です。                                                                   | `15`       |
+| Max Buffer Queue Size  | 各バッファワーカーがInfluxDB Sinkでバッファリング可能な最大バイト数です。データフローの効率化に関わるため、システム性能や転送要件に応じて調整してください。 | `1`        |
+| Max Batch Size         | EMQXからInfluxDBに一度に送信するデータバッチの最大サイズです。サイズ調整によりデータ転送効率を最適化できます。`1`に設定すると個別に送信されます。 | `100`      |
+| Query Mode             | メッセージ送信の最適化のため、`asynchronous`（非同期）または`synchronous`（同期）を選択可能です。非同期モードではInfluxDBへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがInfluxDB到達前にメッセージを受け取る可能性があります。 | `Async`    |
+| Inflight Window        | 送信済みだが応答・アックをまだ受け取っていない「インフライトクエリ」の最大数を制御します。**Query Mode**が`async`の場合、同一MQTTクライアントのメッセージを厳密に順序処理したい場合は`1`に設定してください。 | `100`      |
 
-## More Information
+## 参考情報
 
-Check out the following links to learn more:
+以下のリンクからさらに詳しく学べます：
 
-**Blogs**:
+**ブログ**：
 
-[Build EMQX + InfluxDB + Grafana IoT data visualization solution in one hour](https://www.emqx.com/en/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour)
+[1時間で構築するEMQX + InfluxDB + Grafana IoTデータ可視化ソリューション](https://www.emqx.com/en/blog/build-emqx-influxdb-grafana-iot-data-visualization-solution-in-one-hour)
 
-[Integrating MQTT Data into InfluxDB for a Time-Series IoT Application](https://www.emqx.com/en/blog/building-an-iot-time-series-data-application-with-mqtt-and-influxdb)
+[時系列IoTアプリケーション向けMQTTデータのInfluxDB統合](https://www.emqx.com/en/blog/building-an-iot-time-series-data-application-with-mqtt-and-influxdb)
 
-[MQTT Performance Benchmark Testing: EMQX-InfluxDB Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-influxdb-integration)
+[MQTTパフォーマンスベンチマークテスト：EMQX-InfluxDB統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-influxdb-integration)

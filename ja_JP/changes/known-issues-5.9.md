@@ -1,8 +1,8 @@
-# Known Issues in EMQX 5.9
+# EMQX 5.9 の既知の問題
 
 ## e5.9.0
 
-| Since version | Issue                                                        | Workaround                                                   | Status                    |
-| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------- |
-| 5.0.0         | **Node Crash if Linux monotonic clock steps backward**<br />In certain virtual Linux environments, the operating system is unable to keep the clocks monotonic, which may cause Erlang VM to exit with the message `OS monotonic time stepped backwards!`. | For such environments, you may set the `+c` flag to `false` in `etc/vm.args`. |                           |
-| 5.3.0         | **Limitation in SAML-Based SSO**<br />EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity. | -                                                            |                           |
+| バージョン | 問題                                                         | 回避策                                                       | 状態                      |
+| ----------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------- |
+| 5.0.0       | **Linuxの単調クロックが逆戻りするとノードがクラッシュする**<br />特定の仮想Linux環境では、OSがクロックの単調性を維持できず、Erlang VMが `OS monotonic time stepped backwards!` というメッセージとともに終了する場合があります。 | そのような環境では、`etc/vm.args` 内の `+c` フラグを `false` に設定してください。 |                           |
+| 5.3.0       | **SAMLベースのSSOの制限**<br />EMQXダッシュボードは、Security Assertion Markup Language（SAML）2.0標準に基づくシングルサインオンをサポートし、OktaやOneLoginをIDプロバイダーとして統合しています。しかし、SAMLベースのSSOは現在、証明書署名検証機構をサポートしておらず、その複雑さからAzure Entra IDとは互換性がありません。 | -                                                            |                           |

@@ -1,21 +1,21 @@
-# Develop EMQX Plugins
+# EMQXプラグインの開発
 
-This page walks you through the process of developing custom EMQX plugins using the EMQX plugin template.
+このページでは、EMQXプラグインテンプレートを使ってカスタムEMQXプラグインを開発する手順を説明します。
 
-## Prerequisites
+## 前提条件
 
-Before you begin, make sure you have the following:
+開始する前に、以下を準備してください。
 
-- Knowledge of EMQX [hooks](./hooks.md).
-- A working build environment (e.g., `build_essential`), including `make`.
-- [rebar3](https://www.rebar3.org/).
-- Erlang/OTP of the same major version as the EMQX release you wish to target. For more information, see the `org.opencontainers.image.otp.version` attribute in the Docker or refer to the `.tool-versions` file for the used version (e.g., https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions). It's recommended to use [ASDF](https://asdf-vm.com/) to manage Erlang/OTP versions. Alternatively, you can pull the emqx-builder images by running [this command](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh).
+- EMQXの[フック](./hooks.md)の知識
+- `make`を含む動作するビルド環境（例：`build_essential`）
+- [rebar3](https://www.rebar3.org/)
+- 対象とするEMQXリリースと同じメジャーバージョンのErlang/OTP。詳細はDockerの`org.opencontainers.image.otp.version`属性や、使用バージョンを示す`.tool-versions`ファイル（例：https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions）を参照してください。Erlang/OTPのバージョン管理には[ASDF](https://asdf-vm.com/)の利用を推奨します。あるいは、[こちらのコマンド](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)を実行してemqx-builderイメージを取得する方法もあります。
 
-## Install the Plugin Template
+## プラグインテンプレートのインストール
 
-EMQX provides an [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template) to simplify the creation of custom EMQX plugins. To create a new plugin, you should install `emqx-plugin-template` as a `rebar3` template.
+EMQXはカスタムプラグイン作成を簡素化するために[emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)を提供しています。新しいプラグインを作成するには、`rebar3`のテンプレートとして`emqx-plugin-template`をインストールしてください。
 
-For a Linux system, use the following commands to download the `emqx-plugin-template`:
+Linux環境の場合、以下のコマンドで`emqx-plugin-template`をダウンロードします。
 
 ```shell
 $ mkdir -p ~/.config/rebar3/templates
@@ -26,23 +26,23 @@ $ popd
 
 ::: tip
 
-If the `REBAR_CACHE_DIR` environment variable is set, the directory for templates should be `$REBAR_CACHE_DIR/.config/rebar3/templates`. [Here](https://github.com/erlang/rebar3/issues/2762) is a related issue.
+`REBAR_CACHE_DIR`環境変数が設定されている場合、テンプレートのディレクトリは`$REBAR_CACHE_DIR/.config/rebar3/templates`となります。関連Issueは[こちら](https://github.com/erlang/rebar3/issues/2762)です。
 
 :::
 
-## Generate the Plugin Skeleton
+## プラグインスケルトンの生成
 
-Generate a new plugin project using the installed template:
+インストールしたテンプレートを使って新しいプラグインプロジェクトを生成します。
 
 ```shell
 $ rebar3 new emqx-plugin my_emqx_plugin
 ```
 
-This command creates a working skeleton for your plugin in the `my_emqx_plugin` directory.
+このコマンドにより、`my_emqx_plugin`ディレクトリにプラグインの動作可能なスケルトンが作成されます。
 
-### Directory Structure
+### ディレクトリ構成
 
-The `rebar3 new emqx-plugin` command creates a standard Erlang application with `emqx` included as a dependency, structured as follows:
+`rebar3 new emqx-plugin`コマンドは、`emqx`を依存関係に含む標準的なErlangアプリケーションを以下の構成で作成します。
 
 ```shell
 my_emqx_plugin
@@ -65,41 +65,40 @@ my_emqx_plugin
     ├── my_emqx_plugin_cli.erl
     ├── my_emqx_plugin.erl
     └── my_emqx_plugin_sup.erl
-    
 ```
 
-- `src`: Contains the code for the plugin’s OTP application.
-- `priv`: Holds the plugin’s configuration files and schema (with example files).
-- `rebar.config`: The `rebar3` configuration file used to build the application and package it into a release.
-- `Makefile`: The entry point for building the plugin.
-- `scripts`: Helper scripts for the `Makefile`. **Note:** As the template depends on `emqx`, it requires a custom version of `rebar3`, which you can install using the included `./scripts/ensure-rebar3.sh` script.
-- `README.md`: Documentation placeholder.
-- `LICENSE`: Sample license file for the plugin.
+- `src`: プラグインのOTPアプリケーションのコードを含みます。
+- `priv`: プラグインの設定ファイルやスキーマ（サンプルファイル含む）を格納します。
+- `rebar.config`: アプリケーションのビルドおよびリリースパッケージ化に使用する`rebar3`の設定ファイルです。
+- `Makefile`: プラグインのビルドのエントリポイントです。
+- `scripts`: `Makefile`の補助スクリプト。**注意:** テンプレートは`emqx`に依存しており、カスタム版の`rebar3`が必要です。付属の`./scripts/ensure-rebar3.sh`スクリプトでインストールできます。
+- `README.md`: ドキュメントのプレースホルダーです。
+- `LICENSE`: プラグインのサンプルライセンスファイルです。
 
-#### Understand the Configuration File: `rebar.config`
+#### 設定ファイル `rebar.config` の理解
 
-The `rebar.config` file is used to build the plugin and pack it into a release. Review the `rebar.config` file and adjust it as necessary for your plugin's requirements.
+`rebar.config`はプラグインのビルドとリリースパッケージ化に使われます。内容を確認し、必要に応じてプラグインの要件に合わせて調整してください。
 
-The most important sections are:
+主なセクションは以下の通りです。
 
-- Dependencies (`deps`) section;
-- Release section (`relx`);
-- Plugin description (`emqx_plugin`) section.
+- 依存関係（`deps`）セクション
+- リリース（`relx`）セクション
+- プラグイン説明（`emqx_plugin`）セクション
 
-In the `deps` section, you can add dependencies to other OTP applications that your plugin depends on.
+`deps`セクションでは、プラグインが依存する他のOTPアプリケーションを追加できます。
 
 ```
 {deps,
     [
         ...
-        %% this is my plugin's dependency
+        %% これはプラグインの依存関係です
         {map_sets, "1.1.0"}
     ]}.
 ```
 
-The template adds a single dependency to the plugin: `map_sets`. You can remove this if it's not required. For more details on dependencies, refer to the [`rebar3` dependency documentation](https://www.rebar3.org/docs/configuration/dependencies/).
+テンプレートでは`map_sets`のみを依存関係として追加しています。不要であれば削除可能です。依存関係の詳細は[`rebar3`の依存関係ドキュメント](https://www.rebar3.org/docs/configuration/dependencies/)を参照してください。
 
-In the `relx` section, you specify the release name and version, and the list of applications to be included in the release.
+`relx`セクションでは、リリース名とバージョン、リリースに含めるアプリケーションのリストを指定します。
 
 ```
 {relx, [ {release, {my_emqx_plugin, "1.0.0"},
@@ -110,11 +109,11 @@ In the `relx` section, you specify the release name and version, and the list of
        ]}.
 ```
 
-Normally, you would like to add the applications of the runtime dependencies from the `deps` section to the release.
+通常、`deps`セクションのランタイム依存アプリケーションをリリースに追加します。
 
-The release name and version are important because they are used to identify the plugin when it is installed into EMQX. They form a single identifier for the plugin (`my_emqx_plugin-1.0.0`) by which it is addressed in the API or CLI.
+リリース名とバージョンは、プラグインがEMQXにインストールされる際の識別子として重要です。APIやCLIでプラグインを指定する際の単一識別子（例：`my_emqx_plugin-1.0.0`）となります。
 
-In the plugin description section, you specify additional information about the plugin.
+プラグイン説明セクションでは、プラグインに関する追加情報を指定します。
 
 ```
 {emqx_plugrel,
@@ -134,65 +133,65 @@ In the plugin description section, you specify additional information about the 
 }
 ```
 
-#### Overview of the `src` Directory
+#### `src`ディレクトリの概要
 
-The `src` directory contains the code of the plugin's OTP application.
+`src`ディレクトリにはプラグインのOTPアプリケーションのコードが含まれます。
 
 ##### `my_emqx_plugin.app.src`
 
-This is a standard Erlang application description file, which is compiled into `my_emqx_plugin.app` in the release.
+標準的なErlangアプリケーション記述ファイルで、リリース時に`my_emqx_plugin.app`にコンパイルされます。
 
-- The version of the application does not have to match the release version and can follow a different versioning scheme.
-- Pay special attention to the `applications` section. Since the plugin is built as an OTP application, starting, stopping, or restarting the plugin is the same as performing that action on the plugin's OTP application. If your plugin depends on other applications, make sure to list them in the `applications` section of the plugin's configuration file.
+- アプリケーションのバージョンはリリースバージョンと一致させる必要はなく、別のバージョニング方式でも構いません。
+- 特に`applications`セクションに注意してください。プラグインはOTPアプリケーションとしてビルドされるため、プラグインの起動・停止・再起動はこのOTPアプリケーションの操作と同じです。プラグインが他のアプリケーションに依存する場合は、必ず`applications`セクションにそれらを列挙してください。
 
 ##### `my_emqx_plugin_app.erl`
 
-This is the main module implementing the [`application` behaviour](https://www.erlang.org/doc/man/application.html) ( `start/2` and `stop/1` functions) to start and stop the plugin's application and its supervision tree.
+プラグインのアプリケーションの起動と停止を担当する[`application`ビヘイビア](https://www.erlang.org/doc/man/application.html)（`start/2`と`stop/1`関数）を実装するメインモジュールです。
 
-Common activities in the `start/2` function include:
+`start/2`関数で一般的に行う処理は以下の通りです。
 
-- Hook into EMQX hookpoints.
-- Register CLI commands.
-- Start the supervision tree.
+- EMQXのフックポイントへの登録
+- CLIコマンドの登録
+- 監督ツリーの起動
 
-Optionally, the `_app.erl` module can implement the `on_config_changed/2` and `on_health_check/1` callback functions.
+オプションで、`_app.erl`モジュールは`on_config_changed/2`と`on_health_check/1`のコールバック関数を実装できます。
 
-- `on_config_changed/2` is called when the plugin's configuration is changed via the Dashboard, API or CLI.
-- `on_health_check/1` is called when the plugin's status is requested. A plugin can report its status from this function.
+- `on_config_changed/2`は、ダッシュボード、API、CLIからプラグインの設定が変更された際に呼ばれます。
+- `on_health_check/1`はプラグインの状態が要求された際に呼ばれ、プラグインはこの関数から自身の状態を報告できます。
 
-#### Other Files
+#### その他のファイル
 
-The `my_emqx_plugin_cli.erl` module implements the CLI commands of the plugin. When registered, CLI commands are called via `emqx ctl` command.
+`my_emqx_plugin_cli.erl`モジュールはプラグインのCLIコマンドを実装します。登録されると、`emqx ctl`コマンド経由で呼び出されます。
 
-`my_emqx_plugin_sup.erl` implements a typical supervisor for the plugin.
+`my_emqx_plugin_sup.erl`はプラグインの典型的なスーパーバイザーを実装します。
 
-`my_emqx_plugin.erl` is the main module of the plugin, implementing the plugin's logic. In the skeleton, it implements several demonstrational hooks with simple logging. Any other modules may be added to the plugin.
+`my_emqx_plugin.erl`はプラグインのメインモジュールで、プラグインのロジックを実装します。スケルトンでは、簡単なログ出力を行うデモ用フックをいくつか実装しています。その他のモジュールもプラグインに追加可能です。
 
-::: tip Note
+::: tip 注意
 
-The application modules and files may be arbitrarily named with the only requirements:
+アプリケーションモジュールやファイル名は任意ですが、以下の条件を満たす必要があります。
 
-- The application name must be the same as the plugin name.
-- The application module (`_app`) must be named as `{plugin_name}_app`.
-  :::
+- アプリケーション名はプラグイン名と同じであること
+- アプリケーションモジュール（`_app`）は`{plugin_name}_app`という名前であること
+:::
 
-#### Overview of the `priv` Directory
+#### `priv`ディレクトリの概要
 
-The `priv` directory holds the plugin's configuration files and schema.
+`priv`ディレクトリにはプラグインの設定ファイルやスキーマが格納されます。
 
 ##### `config.hocon`
 
-This file contains the plugin's initial configuration in [HOCON format](https://github.com/lightbend/config/blob/master/HOCON.md). You can use `config.hocon.example` for quick reference.
+プラグインの初期設定を[HOCON形式](https://github.com/lightbend/config/blob/master/HOCON.md)で記述したファイルです。`config.hocon.example`を参照すると便利です。
 
 ##### `config_schema.avsc`
 
-This file defines the schema for the plugin's configuration in [Avro format](https://avro.apache.org/docs/1.11.1/specification/). When present, EMQX will validate the plugin's configuration against this schema whenever it's updated. The release build will fail if `config.hocon` does not conform to the schema.
+プラグインの設定スキーマを[Avro形式](https://avro.apache.org/docs/1.11.1/specification/)で定義したファイルです。存在する場合、EMQXは設定更新時にこのスキーマに基づき検証を行います。`config.hocon`がスキーマに準拠しない場合、リリースビルドは失敗します。
 
-Additionally, this file can include UI hints, enabling interactive configuration through the EMQX Dashboard. For reference, see `config_schema.avsc.enterprise.example`.
+さらに、このファイルにはUIヒントを含めることができ、EMQXダッシュボードからの対話的な設定が可能になります。参考例は`config_schema.avsc.enterprise.example`を参照してください。
 
 ##### `config_i18n.json`
 
-This file contains translations for the plugin's configuration UI in JSON format. For example:
+プラグイン設定UIの翻訳をJSON形式で記述したファイルです。例：
 
 ```
 {
@@ -204,31 +203,31 @@ This file contains translations for the plugin's configuration UI in JSON format
 }
 ```
 
-The translations are referenced in the `config_schema.avsc` in UI hints. See `config_i18n.json.example` and `config_schema.avsc.enterprise.example` for more information.
+翻訳は`config_schema.avsc`のUIヒントで参照されます。詳細は`config_i18n.json.example`および`config_schema.avsc.enterprise.example`を参照してください。
 
-## Implement the Plugin
+## プラグインの実装
 
-Once the skeleton is ready, begin implementing your plugin's logic. To implement a plugin, the following logic is typically required:
+スケルトンが準備できたら、プラグインのロジック実装を開始します。通常、以下のロジックが必要です。
 
-- Implementing hooks and CLI commands.
-- Handling configuration updates.
-- Handling health checks.
+- フックとCLIコマンドの実装
+- 設定更新の処理
+- ヘルスチェックの処理
 
-### Implement Hooks and CLI Commands
+### フックとCLIコマンドの実装
 
-EMQX defines hookpoints for various events. Any application (including a plugin) can register callbacks for these hookpoints to react to events or modify default behavior.
+EMQXは様々なイベントに対するフックポイントを定義しています。任意のアプリケーション（プラグインを含む）はこれらのフックポイントにコールバックを登録し、イベントに応答したり既定の動作を変更したりできます。
 
-The most commonly used hookpoints are available in the skeleton file. A complete list of hookpoints, their arguments, and expected return values is also provided in the [EMQX code](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl).
+よく使われるフックポイントはスケルトンファイルに含まれています。フックポイントの一覧、引数、期待される戻り値は[EMQXコード](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl)にも記載されています。
 
-To register a callback for a hookpoint, use the `emqx_hooks:add/3` function. You need to provide the following parameters:
+フックポイントにコールバックを登録するには、`emqx_hooks:add/3`関数を使います。以下のパラメータが必要です。
 
-- The hookpoint name
-- The callback module and function, potentially with additional arguments that EMQX will pass
-- The callback’s priority (usually `?HP_HIGHEST` to ensure it is called first)
+- フックポイント名
+- コールバックのモジュールと関数、およびEMQXが渡す追加引数（任意）
+- コールバックの優先度（通常は`?HP_HIGHEST`で最優先に呼ばれます）
 
-To unregister a callback, use the `emqx_hooks:del/2` function with the hookpoint name and callback module/function.
+コールバックを解除するには、`emqx_hooks:del/2`関数にフックポイント名とコールバックのモジュール/関数を渡します。
 
-For example, to register/unregister callbacks for `client.authenticate` and `client.authorize` hookpoints:
+例として、`client.authenticate`と`client.authorize`フックポイントのコールバック登録/解除は以下のようになります。
 
 ```
 -module(my_emqx_plugin).
@@ -242,7 +241,7 @@ unhook() ->
   emqx_hooks:del('client.authorize', {?MODULE, on_client_authorize}).
 ```
 
-Typically, hooks should be enabled and disabled together with the plugin, so you can call `hook/unhook` in the `start/2` and `stop/1` functions of the plugin's application:
+通常、フックはプラグインの起動・停止に合わせて有効化・無効化するため、プラグインのアプリケーションの`start/2`と`stop/1`関数で`hook/unhook`を呼び出します。
 
 ```
 start(_StartType, _StartArgs) ->
@@ -255,7 +254,7 @@ stop(_State) ->
     my_emqx_plugin:unhook().
 ```
 
-The signature of the callback functions is available in the [hookpoint specification](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl). For example:
+コールバック関数のシグネチャは[フックポイント仕様](https://github.com/emqx/emqx/blob/master/apps/emqx/src/emqx_hookpoints.erl)で確認できます。例：
 
 ```
 -callback 'client.authorize'(
@@ -275,16 +274,16 @@ The signature of the callback functions is available in the [hookpoint specifica
     ).
 ```
 
-Here is an example of callback function implementations:
+以下はコールバック関数の実装例です。
 
 ```erlang
-%% Only allow connections with client IDs that match any of the characters: A-Z, a-z, 0-9, and underscore.
+%% クライアントIDがA-Z、a-z、0-9、アンダースコアのみで構成されている接続のみ許可
 on_client_authenticate(_ClientInfo = #{clientid := ClientId}, Result) ->
   case re:run(ClientId, "^[A-Za-z0-9_]+$", [{capture, none}]) of
     match -> {ok, Result};
     nomatch -> {stop, {error, banned}}
   end.
-%% Clients can only subscribe to topics formatted as /room/{clientid}, but can send messages to any topics.
+%% クライアントは /room/{clientid} 形式のトピックのみサブスクライブ可能、パブリッシュは任意のトピックに可能
 on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Result) ->
   case emqx_topic:match(Topic, <<"/room/", ClientId/binary>>) of
     true -> {ok, Result};
@@ -293,59 +292,59 @@ on_client_authorize(_ClientInfo = #{clientid := ClientId}, subscribe, Topic, Res
 on_client_authorize(_ClientInfo, _Pub, _Topic, Result) -> {ok, Result}.
 ```
 
-In the skeleton app, hooks are registered via `my_emqx_plugin:load/1` and unregistered via `my_emqx_plugin:unload/0`.
+スケルトンアプリでは、フックは`my_emqx_plugin:load/1`で登録され、`my_emqx_plugin:unload/0`で解除されます。
 
-### Handle Configuration Updates
+### 設定更新の処理
 
-When a user updates the plugin's configuration, the `on_config_changed/2` callback function of the plugin's application is invoked.
+ユーザーがプラグインの設定を更新すると、プラグインのアプリケーションの`on_config_changed/2`コールバックが呼ばれます。
 
-In this callback, you typically need to:
+このコールバックでは通常、以下を行います。
 
-- Validate the new configuration.
-- React to the changes if the plugin is running.
+- 新しい設定の検証
+- プラグインが稼働中であれば変更に対応
 
-While validating the configuration, keep in mind that the application may not yet be started. Therefore, use stateless checks and avoid environment-dependent checks that could cause inconsistencies across nodes.
+設定検証時は、アプリケーションがまだ起動していない可能性があるため、状態を持たないチェックやノード間で不整合を起こさない環境依存のチェックを避けてください。
 
-If the plugin is running, you can apply the configuration changes. The usual pattern is as follows:
+プラグインが稼働中の場合、設定変更を適用します。一般的なパターンは以下の通りです。
 
-- On application start, a `gen_server` is initiated to handle the configuration.
-- This server, e.g., `my_emqx_plugin_config_server`, reads the current configuration and initializes its state.
-- The `on_config_changed/2` callback validates the configuration and sends the new configuration to the `my_emqx_plugin_config_server`.
-- If the server is running, it updates its state with the new configuration; if not, no action is taken.
+- アプリケーション起動時に設定を扱う`gen_server`（例：`my_emqx_plugin_config_server`）を起動
+- このサーバーが現在の設定を読み込み状態を初期化
+- `on_config_changed/2`で設定を検証し、新設定を`my_emqx_plugin_config_server`に送信
+- サーバーが稼働中なら状態を更新し、稼働していなければ何もしない
 
-### Handle Health Checks
+### ヘルスチェックの処理
 
-The `on_health_check/1` callback is called when EMQX requests the plugin's status. The plugin can report its health as follows:
+`on_health_check/1`コールバックはEMQXがプラグインの状態を要求した際に呼ばれます。プラグインは以下のように状態を報告できます。
 
-- Return `ok` if the plugin is healthy.
-- Return `{error, Reason}` with a binary reason to indicate an issue with the plugin.
+- プラグインが正常なら`ok`を返す
+- 問題がある場合はバイナリの理由を含む`{error, Reason}`を返す
 
-This callback is essential for plugins that rely on external resources that may become unavailable.
+このコールバックは、外部リソースに依存し利用不可になる可能性があるプラグインにとって重要です。
 
-For more details, see `my_emqx_plugin_app:on_health_check/1` in the skeleton app.
+詳細はスケルトンアプリの`my_emqx_plugin_app:on_health_check/1`を参照してください。
 
 ::: tip
 
-Although this function is invoked for running plugins, it may also be called during plugin startup or shutdown due to concurrency.
+この関数はプラグイン稼働中に呼ばれますが、起動や停止中の並行処理の影響で呼ばれることもあります。
 
 :::
 
-You can find more implementation examples in [Implement Customized Plugin Logic](./plugin-example.md).
+実装例は[カスタムプラグインロジックの実装](./plugin-example.md)にも多数あります。
 
-## Build the Plugin Package
+## プラグインパッケージのビルド
 
-Execute the following command to make a release of the plugin:
+以下のコマンドでプラグインのリリースを作成します。
 
 ```shell
 $ cd my_emqx_plugin
 $ make rel
 ```
 
-This will create the plugin release: `_build/default/emqx_plugin/my_emqx_plugin-1.0.0.tar.gz`. This package can be used to provision/install the plugin.
+これにより、プラグインリリース`_build/default/emqx_plugin/my_emqx_plugin-1.0.0.tar.gz`が作成されます。このパッケージはプラグインのプロビジョニングやインストールに使用できます。
 
-### Package Structure
+### パッケージ構成
 
-When a plugin is built into a release, the package structure is as follows:
+プラグインをリリースにビルドすると、パッケージ構成は以下のようになります。
 
 ```
 └── my_emqx_plugin-1.1.0.tar.gz
@@ -355,7 +354,7 @@ When a plugin is built into a release, the package structure is as follows:
     └── release.json
 ```
 
-The tarball includes the compiled applications (as specified in the `relx` section of `rebar.config`), the `README.md` file, and `release.json`, which contains metadata about the plugin.
+tarballにはコンパイル済みアプリケーション（`rebar.config`の`relx`セクションで指定したもの）、`README.md`、およびプラグインのメタデータを含む`release.json`が含まれます。
 
 ```json
 {

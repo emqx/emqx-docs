@@ -1,206 +1,205 @@
-# Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4
+# EMQX 5.1 と EMQX 4.4 間のデータ統合非互換性
 
-The whole concept of Data Integration was upgraded in EMQX 5.1.
+EMQX 5.1 ではデータ統合の概念が全面的にアップグレードされました。
 
-- The previous **Rule** -> **Action** -> **Resources** process is changed to **Rules** -> **Data Bridge**. 
+- 以前の **Rule** -> **Action** -> **Resources** のプロセスは **Rules** -> **Data Bridge** に変更されました。
 
-   In EMQX 4.4, there was a configuration entity for Action. But in EMQX 5.1, when adding an action for a certain rule, you must first create a data bridge and modify the bridge's SQL template to adapt the rule output.
+   EMQX 4.4 では Action のための設定エンティティがありましたが、EMQX 5.1 では特定のルールにアクションを追加する際、まずデータブリッジを作成し、そのブリッジの SQL テンプレートを修正してルールの出力に適合させる必要があります。
 
-   <img src="./assets/config-action-for-rule.png" alt="config-action-for-rule" style="zoom:67%;" />
+   <img src="./assets/config-action-for-rule.png" alt="ルールのアクション設定" style="zoom:67%;" />
 
-- The **Modules** -> **Message Publish** is moved into the **Data Bridge**.
+- **Modules** -> **Message Publish** は **Data Bridge** に移動しました。
 
-   The Message Publish Module in EMQX 4.4:
+   EMQX 4.4 の Message Publish モジュール：
 
-   <img src="./assets/message-publish-modules.png" alt="message-publish-modules" style="zoom:67%;" />
+   <img src="./assets/message-publish-modules.png" alt="メッセージパブリッシュモジュール" style="zoom:67%;" />
 
-- [Save Offline Message](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) features in EMQX 4.4 are removed.
+- EMQX 4.4 の [オフラインメッセージ保存](https://docs.emqx.com/en/enterprise/v4.4/rule/offline_msg_to_redis.html) 機能は削除されました。
 
-- [Get Subscriptions](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) features in EMQX 4.4 are removed.
+- EMQX 4.4 の [サブスクリプション取得](https://docs.emqx.com/en/enterprise/v4.4/rule/get_subs_from_redis.html) 機能は削除されました。
 
-- DolphinDB, Lindorm, and SAP Event Mesh data bridges are not supported, but SAP Event Mesh is in the product roadmap.
+- DolphinDB、Lindorm、SAP Event Mesh のデータブリッジはサポートされていませんが、SAP Event Mesh は製品ロードマップに含まれています。
 
-- `EMQX Bridge` as a resource type is no longer supported.
+- リソースタイプとしての `EMQX Bridge` はサポートされなくなりました。
 
-  <img src="./assets/emqx-bridge-resource.png" alt="emqx-bridge-resource" style="zoom:50%;" />
+  <img src="./assets/emqx-bridge-resource.png" alt="EMQXブリッジリソース" style="zoom:50%;" />
 
-## Common Incompatibility Changes
+## 共通の非互換変更点
 
-- All SSL-related configuration options (`ssl`, `cafile`, `keyfile`, `certfile`, `verify`) are changed to a unified structure and name. For example, `ssl.cacertfile`, `ssl.certfile`, `ssl.keyfile`, `ssl.verify`, and etc.
-- There is no equivalent functionality as the feature of saving offline messages to an external database and retrieving them when a client subscribes to topics (through the `$events/session_subscribed` event and bridge rule action).
+- SSL 関連の設定オプション（`ssl`、`cafile`、`keyfile`、`certfile`、`verify`）は統一された構造と名称に変更されました。例：`ssl.cacertfile`、`ssl.certfile`、`ssl.keyfile`、`ssl.verify` など。
+- クライアントがトピックをサブスクライブした際に外部データベースに保存されたオフラインメッセージを取得する機能（`$events/session_subscribed` イベントとブリッジルールアクションを通じて）は EMQX 5.1 には存在しません。
 
-## Incompatibility in Functionality and Configuration Items
+## 機能および設定項目の非互換性
 
-This section lists the functionality and configuration items changes for each data bridge.
+以下は各データブリッジごとの機能および設定項目の変更点です。
 
 ### Cassandra
 
-The configuration name `nodes` is changed to `servers`.
+設定名 `nodes` は `servers` に変更されました。
 
 ### Kafka Producer
 
-- Changed configuration items: 
-  - `servers` to `bootstrap_hosts`
-  - `authentication_mechanism` to `authentication`
-  - `sync_timeout` to `sync_query_timeout`
-  - `send_buffer` to `socket_opts.sndbuf`
-  - `tcp_keepalive` to `socket.tcp_keepalive`
-  - `strategy` to `partition_strategy`
-  - `cache_mode` to `kafka.buffer.mode`
-  - Buffer mode enum `memory+disk` to `hybrid`
-  - `highmem_drop` to `kafka.buffer.memory_overload_protection`
-- No equivalent in EMQX 5.1:
+- 変更された設定項目：
+  - `servers` → `bootstrap_hosts`
+  - `authentication_mechanism` → `authentication`
+  - `sync_timeout` → `sync_query_timeout`
+  - `send_buffer` → `socket_opts.sndbuf`
+  - `tcp_keepalive` → `socket.tcp_keepalive`
+  - `strategy` → `partition_strategy`
+  - `cache_mode` → `kafka.buffer.mode`
+  - バッファモードの列挙値 `memory+disk` → `hybrid`
+  - `highmem_drop` → `kafka.buffer.memory_overload_protection`
+- EMQX 5.1 に相当機能なし：
   - `query_api_versions`
   - `kafka_ext_headers`
-- Nested `replayq` related options (e.g.: `max_batch_bytes`) under `kafka` key 
-- Now, message key is templatable, whereas before it could be only a few option.
+- `kafka` キーの下にネストされた `replayq` 関連オプション（例：`max_batch_bytes`）
+- メッセージキーはテンプレート化可能になり、以前のように限定された選択肢ではなくなりました。
 
 ### Kafka Consumer
 
-- Changed configuration items:
-  - `servers` to `bootstrap_hosts`
-  - `max_bytes` to `kafka.max_batch_bytes`
-  - `offset_reset_policy `enum: `{reset_to_latest, reset_by_subscriber}` to `{latest, earliest}`
-- There’s no `pool_size` in EMQX 5.1: the number of workers is set automatically by the lib depending on the number of partitions in the topic(s).
-- In EMQX 4.4, only plain SASL was supported for authentication.  In EMQX 5.1, the same mechanisms as Kafka Producer is supported.
+- 変更された設定項目：
+  - `servers` → `bootstrap_hosts`
+  - `max_bytes` → `kafka.max_batch_bytes`
+  - `offset_reset_policy` 列挙値：`{reset_to_latest, reset_by_subscriber}` → `{latest, earliest}`
+- EMQX 5.1 には `pool_size` はなく、トピックのパーティション数に応じてライブラリが自動的にワーカー数を設定します。
+- EMQX 4.4 では認証にプレーン SASL のみ対応していましたが、EMQX 5.1 では Kafka Producer と同じ認証機構がサポートされています。
 
 ### Pulsar Consumer
 
-There is no Pulsar Consumer in EMQX 5.1.0.
+EMQX 5.1.0 には Pulsar Consumer は存在しません。
 
 ### Pulsar Producer
 
-- In EMQX 5.1, the bridge only produces messages using the driver’s async API, without an option for sync API.
-- Now, there is a template for the message key. Before, there are only a few options.
-- Changed configuration items:
-  - Buffer mode enum `memory+disk` to `hybrid`
-  - `max_total_bytes` to `buffer.per_partition_limit`
-  - `segment_bytes` to `buffer.segment_bytes`
+- EMQX 5.1 ではブリッジはドライバーの非同期 API のみを使用してメッセージを生成し、同期 API のオプションはありません。
+- メッセージキーにテンプレートが使用可能になりました。以前は限定的な選択肢のみでした。
+- 変更された設定項目：
+  - バッファモード列挙値 `memory+disk` → `hybrid`
+  - `max_total_bytes` → `buffer.per_partition_limit`
+  - `segment_bytes` → `buffer.segment_bytes`
 
 ### Redis
 
-The configuration item `cmd` is changed to `command_template` (common to all 3 Redis Modes).
+設定項目 `cmd` は `command_template` に変更されました（3つの Redis モードすべて共通）。
 
-Changes for "Cluster" mode:
+「Cluster」モードの変更点：
 
-- There is no `database` field in EMQX 5.1.
-- There is no equivalent for `ttl `(offline messages from EMQX 4.4) in EMQX 5.1.
+- EMQX 5.1 には `database` フィールドがありません。
+- EMQX 5.1 には EMQX 4.4 のオフラインメッセージ用の `ttl` に相当するものはありません。
 
 ### Postgres
 
-- No differences in connector.
-- The batching configuration has moved to `resource_opts.*` in the Action configuration.
-  - `enable_batch = true` (EMQX 4.4) to `resource_opts.batch_size > 1` (EMQX 5.1)
-  - `batch_time` is hidden and defaults to `0` in EMQX 5.1.
-  - `sql ` to `prepare_statement`.
+- コネクターに差異はありません。
+- バッチ設定はアクション設定の `resource_opts.*` に移動しました。
+  - `enable_batch = true`（EMQX 4.4） → `resource_opts.batch_size > 1`（EMQX 5.1）
+  - `batch_time` は非表示でデフォルトは `0`（EMQX 5.1）
+  - `sql` → `prepare_statement`
 
 ### MySQL
 
-- `user` is changed to `username`.
-- The batching configuration has moved to `resource_opts.*` in the Action configuration.
-  - `enable_batch = true` (EMQX 4.4) to `resource_opts.batch_size > 1` (EMQX 5.1)
-  - `batch_time` is hidden and defaults to `0` in EMQX 5.1.
-  - `sql ` to `prepare_statement`.
+- `user` は `username` に変更されました。
+- バッチ設定はアクション設定の `resource_opts.*` に移動しました。
+  - `enable_batch = true`（EMQX 4.4） → `resource_opts.batch_size > 1`（EMQX 5.1）
+  - `batch_time` は非表示でデフォルトは `0`（EMQX 5.1）
+  - `sql` → `prepare_statement`
 
 ### MQTT
 
-- Changed configuration items:
-  - `address` to `server`
-  - `pool_size` to `{egress,ingress}.pool_size`
-  - `reconnect_interval` to `resource_opts.health_check_interval`
-- No equivalent in EMQX 5.1:
+- 変更された設定項目：
+  - `address` → `server`
+  - `pool_size` → `{egress,ingress}.pool_size`
+  - `reconnect_interval` → `resource_opts.health_check_interval`
+- EMQX 5.1 に相当機能なし：
   - `append`
   - `mountpoint`
-- `disk_cache = on` (in EMQX 4.4) can be considered somewhat equivalent to setting `resource_opts.buffer_mode =  volatile_offload`, but the latter is a hidden configuration option that defaults to `memory_only`.
-- There is no RPC MQTT bridge equivalent in EMQX 5.1.
-- Changed configuration items in Actions:
-  - `forward_topic` to `egress.remote.topic`
-  - `payload_tmpl` to `payload`
+- EMQX 4.4 の `disk_cache = on` は、EMQX 5.1 の隠し設定オプションである `resource_opts.buffer_mode = volatile_offload` にやや相当しますが、デフォルトは `memory_only` です。
+- EMQX 5.1 には RPC MQTT ブリッジの相当機能はありません。
+- アクションの設定項目変更：
+  - `forward_topic` → `egress.remote.topic`
+  - `payload_tmpl` → `payload`
 
 ### InfluxDB
 
-The following changes are common to both API v1 and API v2.
+API v1 と API v2 の両方に共通する変更点：
 
-- Changed bridge configuration items:
-  - `host` and `port` are changed to `server`.
-  - `https_enabled` and ssl options like `tls_version` are changed to `ssl`.
+- ブリッジ設定項目の変更：
+  - `host` と `port` → `server`
+  - `https_enabled` や `tls_version` などの SSL オプション → `ssl`
+- アクション設定の変更：
+  - EMQX 5.1 には `int_suffix` の相当はなく、型は直接 `write_syntax` で指定します。
+  - `measurement`、`timestamp`、`fields`、`tags` → `write_syntax`
 
-- Changed configurations in Actions:
-  - There is no equivalent for `int_suffix` in EMQX 5.1; the type is directly specified in `write_syntax`.
-  - `measurement`, `timestamp`, `fields`, `tags` are changed to `write_syntax`.
+### DolphinDB、Lindorm、SAP Event Mesh
 
-### DolphinDB, Lindorm, SAP Event Mesh
-
-There are no equivalent data bridges in EMQX 5.1.
+EMQX 5.1 には相当するデータブリッジはありません。
 
 ### Clickhouse
 
-Changed configuration items:
-- `server` to `url`
-- `user` to `username`
-- `key` to `password`
+変更された設定項目：
+- `server` → `url`
+- `user` → `username`
+- `key` → `password`
 
 ### Dynamo
 
-- No equivalent for `region` in EMQX 5.1.
-- Now there is `payload_template`.
+- EMQX 5.1 には `region` の相当はありません。
+- `payload_template` が新たに追加されました。
 
 ### HStreamDB
 
-- The configuration item `server` is changed to `url`.
-- The following items have no equivalents in EMQX 5.1:
+- 設定項目 `server` は `url` に変更されました。
+- EMQX 5.1 に相当するものがない項目：
   - `grpc_timeout`
   - `partition_key`
   - `grpc_flush_timeout`
 
 ### IoTDB
 
-Changed configuration items:
-- `host`, `rest_port` to `base_url`
-- `request_timeout` to `resource_opts.request_ttl`
+変更された設定項目：
+- `host`、`rest_port` → `base_url`
+- `request_timeout` → `resource_opts.request_ttl`
 
 ### MongoDB
 
-Changed configuration items:
-- `login` to `username`
-- `connectTimeoutMS` to `connect_timeout_ms`
-- `rs_set_name` to `replica_set_name`
-- `payload_tmpl` to `payload_template`
+変更された設定項目：
+- `login` → `username`
+- `connectTimeoutMS` → `connect_timeout_ms`
+- `rs_set_name` → `replica_set_name`
+- `payload_tmpl` → `payload_template`
 
 ### OpenTSDB
 
-`sync` is changed to `resource_opts.query_mode = sync`.
+`sync` は `resource_opts.query_mode = sync` に変更されました。
 
 ### Oracle
 
-`user` is changed to `username`.
+`user` は `username` に変更されました。
 
 ### TDengine
 
-Changed configuration items:
-- `host`, `port` to `server`
-- `dbname` to `database`
+変更された設定項目：
+- `host`、`port` → `server`
+- `dbname` → `database`
 
 ### GCP PubSub Producer
 
-Deprecated configuration items:
+非推奨となった設定項目：
 - `flush_mode`
 - `flush_period_ms`
 
 ### RabbitMQ Producer
 
-- Changed configuration items:
-  - `server` to `host` and `port`
-  - `payload_tmpl` to `payload_template`
-  - `durable`  to `delivery_mode`
-- `exchange_type` has no equivalent in EMQX 5.1.
+- 変更された設定項目：
+  - `server` → `host` と `port`
+  - `payload_tmpl` → `payload_template`
+  - `durable` → `delivery_mode`
+- `exchange_type` は EMQX 5.1 に相当するものがありません。
 
 ### RocketMQ
 
-- The following configuration items have no equivalents in EMQX 5.1:
+- EMQX 5.1 に相当するものがない設定項目：
   - `namespace`
   - `strategy`
   - `key`
-- Changed configuration items:
-  - `type` to `resource_opts.query_mode`
-  - `payload_tmpl` to `payload_template`
+- 変更された設定項目：
+  - `type` → `resource_opts.query_mode`
+  - `payload_tmpl` → `payload_template`

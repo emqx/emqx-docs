@@ -1,19 +1,17 @@
-# Administration Guide
+# 管理ガイド
 
-This Administration Guide is designed to assist administrators and operators in effectively managing and maintaining EMQX. In this chapter, you can explore various administrative tasks and learn comprehensive instructions and best practices to ensure the smooth and efficient operation of your EMQX deployments. The main contents in this chapter include:
+本管理ガイドは、管理者および運用担当者がEMQXを効果的に管理・運用するための支援を目的としています。本章では、さまざまな管理タスクを紹介し、EMQXのスムーズかつ効率的な運用を実現するための包括的な手順やベストプラクティスを学べます。本章の主な内容は以下の通りです。
 
-- 
-  The [configuration file](../configuration/configuration.md) and configuration manual provide you with basic information about the configuration file, configuration options, and references for detailed configurations.
-- [Command Line Interface](./cli.md) introduces various startup and management commands supported by EMQX.
-- [MQTT Durable Sessions](../durability/management.md) guides you to configure the Durable Sessions feature and set parameters for data replicas for high availability.
-- [EMQX Dashboard](../dashboard/introduction.md) provides a comprehensive introduction to the built-in management console in EMQX. You will learn how to manage and monitor EMQX clusters, configure various features, and utilize the required functionalities.
-- [Single Sign-On (SSO)](../dashboard/sso.md) introduces the mainstream identity services that EMQX integrates with and guides how to configure the SSO based on these services.
-- [Multi-Factor Authentication (MFA)](../multi-factor-authn/multi-factor-authentication.md) explains how to set up and use MFA for the Dashboard login to enhance security.
-- [Audit Log](../dashboard/audit-log.md) introduces how to enable and configure the audit log to track important operation changes in your EMQX cluster in real-time.
-- [Rate Limit](../rate-limit/rate-limit.md) explains how to avoid system overload by configuring rate limiters for connection and messaging speed, ensuring system stability.
-- [Namespace](../multi-tenancy/namespace-overview.md) introduces the Namespace functions and how to configure isolated tenant-specific settings within a single EMQX cluster, such as rate limiters.
-- [Log and Observability](../observability/overview.md) introduces metric observation and monitoring features in EMQX, facilitating system monitoring and debugging.
-- [Backup and Restore](../operations/backup-restore.md) guides you on how to back up and restore EMQX data.
-- [Plugins and Extensions](../extensions/introduction.md) help you extend the functionality of EMQX by developing plugins.
-- [Telemetry](../telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product.
-
+- [設定ファイル](../configuration/configuration.md)と設定マニュアルでは、設定ファイルの基本情報、設定オプション、および詳細設定のリファレンスを提供します。
+- [コマンドラインインターフェース](./cli.md)では、EMQXがサポートする各種起動および管理コマンドを紹介します。
+- [MQTT Durable Sessions](../durability/management.md)では、Durable Sessions機能の設定方法と高可用性のためのデータレプリカパラメータの設定手順を案内します。
+- [EMQXダッシュボード](../dashboard/introduction.md)では、EMQXに組み込まれた管理コンソールの包括的な紹介を行います。クラスターの管理・監視、各種機能の設定、および必要な機能の活用方法を学べます。
+- [シングルサインオン（SSO）](../dashboard/sso.md)では、EMQXが統合する主流のIDサービスを紹介し、これらのサービスに基づくSSOの設定方法を案内します。
+- [多要素認証（MFA）](../multi-factor-authn/multi-factor-authentication.md)では、ダッシュボードログインのセキュリティ強化のためのMFAの設定と利用方法を説明します。
+- [監査ログ](../dashboard/audit-log.md)では、EMQXクラスターの重要な操作変更をリアルタイムで追跡するための監査ログの有効化および設定方法を紹介します。
+- [レートリミット](../rate-limit/rate-limit.md)では、接続およびメッセージ送信速度のレートリミッターを設定してシステム過負荷を防ぎ、システムの安定性を確保する方法を説明します。
+- [ネームスペース](../multi-tenancy/namespace-overview.md)では、単一のEMQXクラスター内でテナントごとに分離された設定（例：レートリミッター）を構成するネームスペース機能を紹介します。
+- [ログと可観測性](../observability/overview.md)では、EMQXのメトリクス観測および監視機能を紹介し、システム監視やデバッグを支援します。
+- [バックアップとリストア](../operations/backup-restore.md)では、EMQXデータのバックアップおよびリストア方法を案内します。
+- [プラグインと拡張機能](../extensions/introduction.md)では、プラグイン開発によるEMQX機能拡張の方法を紹介します。
+- [テレメトリ](../telemetry/telemetry.md)では、製品改善のために利用情報を共有するテレメトリの有効化方法を説明します。

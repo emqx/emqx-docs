@@ -1,15 +1,15 @@
-# JT/T 808 Gateway Data Exchange Format
+# JT/T 808 ゲートウェイデータ交換フォーマット
 
-This page defines the format of data exchange between **emqx_jt808** and **EMQX**.
+このページでは、**emqx_jt808** と **EMQX** 間のデータ交換フォーマットを定義します。
 
-Convention:
+規約:
 
-- Payload is assembled in JSON format.
-- JSON Key names are in lowercase.
+- ペイロードは JSON 形式で組み立てられます。
+- JSON のキー名はすべて小文字です。
 
-## JSON Structure Example
+## JSON 構造例
 
-### Terminal to Server
+### 端末からサーバーへ
 
 ```json
 {
@@ -28,7 +28,7 @@ Convention:
 }
 ```
 
-### Server to Terminal
+### サーバーから端末へ
 
 ```json
 {
@@ -46,283 +46,283 @@ Convention:
 }
 ```
 
-## Data Type Correspondence Table
+## データ型対応表
 
-| JT808 Defined Type | In JSON Type |  Comment   |
-| :----------------: | :----------: | :--------: |
-|        BYTE        |   integer    | in decimal |
-|        WORD        |   integer    | in decimal |
-|       DWORD        |   integer    | in decimal |
-|      BYTE(n)       |    string    |            |
-|       BCD(n)       |    string    |            |
-|       STRING       |    string    |            |
+| JT808 定義型 | JSON 型 | コメント |
+| :----------: | :-----: | :-------: |
+|     BYTE     | integer | 10進数   |
+|     WORD     | integer | 10進数   |
+|    DWORD     | integer | 10進数   |
+|    BYTE(n)   | string  |          |
+|    BCD(n)    | string  |          |
+|    STRING    | string  |          |
 
-## Field Correspondence Table
+## フィールド対応表
 
-### Message Header Fields
+### メッセージヘッダーのフィールド
 
-|         Field         | JSON Key name | Value Type | Value Type in JSON |
-| :-------------------: | :-----------: | :--------: | :----------------: |
-|      Message ID       |    msg_id     |    word    |      integer       |
-|   Encryption Method   |    encrypt    |    word    |      integer       |
-| Terminal Phone Number |     phone     |   bcd(6)   |       string       |
-| Message Serial Number |    msg_sn     |    word    |      integer       |
+|       フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+|      メッセージID       |   msg_id    |  word  |  integer    |
+|    暗号化方式           |   encrypt   |  word  |  integer    |
+| 端末電話番号 (BCD6桁)   |   phone    |  bcd(6) |   string    |
+| メッセージシリアル番号  |   msg_sn    |  word  |  integer    |
 
-|        Optional Field         | JSON Key name | Value Type | Value Type in JSON |
-| :---------------------------: | :-----------: | :--------: | :----------------: |
-|   Total Number of Messages    |  frag_total   |    word    |      integer       |
-| Message Package Serial Number |    frag_sn    |    word    |      integer       |
+|     オプションフィールド     | JSON キー名 | 値の型 | JSON 内の型 |
+| :--------------------------: | :---------: | :----: | :---------: |
+| メッセージ総数（分割時）     | frag_total  |  word  |  integer    |
+| メッセージ分割シリアル番号   |  frag_sn    |  word  |  integer    |
 
-- When `frag_total` and `frag_sn` exist, it indicates that the message body is long and is split into multiple packages.
+- `frag_total` と `frag_sn` が存在する場合、メッセージ本文が長く複数パッケージに分割されていることを示します。
 
-### Message Body Fields
+### メッセージ本文のフィールド
 
-#### General Response from Terminal `"msg_id": 1` 0x0001
+#### 端末からの一般応答 `"msg_id": 1` 0x0001
 
-|         Field          | JSON Key name | Value Type | Value Type in JSON |
-| :--------------------: | :-----------: | :--------: | :----------------: |
-| Response Serial Number |      seq      |    word    |      integer       |
-|      Response ID       |      id       |    word    |      integer       |
-|         Result         |    result     |    byte    |      integer       |
+|        フィールド         | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------------: | :---------: | :----: | :---------: |
+| 応答シリアル番号          |     seq     |  word  |  integer    |
+| 応答ID                    |     id      |  word  |  integer    |
+| 結果                      |   result    |  byte  |  integer    |
 
-#### General Response from Platform `"msg_id": 32769` 0x8001
+#### プラットフォームからの一般応答 `"msg_id": 32769` 0x8001
 
-|         Field          | JSON Key name | Value Type | Value Type in JSON |
-| :--------------------: | :-----------: | :--------: | :----------------: |
-| Response Serial Number |      seq      |    word    |      integer       |
-|      Response ID       |      id       |    word    |      integer       |
-|         Result         |    result     |    byte    |      integer       |
+|        フィールド         | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------------: | :---------: | :----: | :---------: |
+| 応答シリアル番号          |     seq     |  word  |  integer    |
+| 応答ID                    |     id      |  word  |  integer    |
+| 結果                      |   result    |  byte  |  integer    |
 
-#### Terminal Heartbeat `"msg_id": 2` 0x0002
+#### 端末ハートビート `"msg_id": 2` 0x0002
 
-Empty JSON
+空の JSON
 
-#### Re-transmission Request for Sub-package `"msg_id": 32771` 0x8003
+#### サブパッケージ再送要求 `"msg_id": 32771` 0x8003
 
-|                  Field                   | JSON Key name |   Value Type   | Value Type in JSON |
-| :--------------------------------------: | :-----------: | :------------: | :----------------: |
-|      Original Message Serial Number      |      seq      |      word      |      integer       |
-| Total Number of Re-transmission Packages |    length     |      byte      |      integer       |
-|     Re-transmission Package ID List      |      ids      | byte(2*length) |  list of integer   |
+|               フィールド                | JSON キー名 |    値の型     | JSON 内の型     |
+| :-----------------------------------: | :---------: | :-----------: | :-------------: |
+| 元のメッセージシリアル番号             |     seq     |     word      |    integer      |
+| 再送パッケージ総数                     |    length   |     byte      |    integer      |
+| 再送パッケージIDリスト                 |     ids     | byte(2*length) | 整数のリスト    |
 
-#### Terminal Registration `"msg_id": 256` 0x0100
+#### 端末登録 `"msg_id": 256` 0x0100
 
-|         Field          | JSON Key name  | Value Type | Value Type in JSON |
-| :--------------------: | :------------: | :--------: | :----------------: |
-|      Province ID       |    province    |    word    |      integer       |
-|        City ID         |      city      |    word    |      integer       |
-|    Manufacturer ID     |  manufacturer  |  byte(5)   |       string       |
-|     Terminal Model     |     model      |  byte(20)  |       string       |
-|      Terminal ID       |     dev_id     |  byte(7)   |       string       |
-|     Vehicle Color      |     color      |    byte    |      integer       |
-| Vehicle Identification | license_number |   string   |       string       |
+|         フィールド         | JSON キー名 | 値の型  | JSON 内の型 |
+| :-----------------------: | :---------: | :-----: | :---------: |
+| 省ID                      |  province   |  word   |  integer    |
+| 市ID                      |    city     |  word   |  integer    |
+| 製造商ID                  | manufacturer | byte(5) |  string     |
+| 端末モデル                |    model    | byte(20) |  string     |
+| 端末ID                    |   dev_id    | byte(7) |  string     |
+| 車両色                    |    color    |  byte   |  integer    |
+| 車両識別番号              | license_number | string |  string     |
 
-#### Terminal Registration Response `"msg_id": 33024` 0x8100
+#### 端末登録応答 `"msg_id": 33024` 0x8100
 
-|         Field          | JSON Key name | Value Type | Value Type in JSON |
-| :--------------------: | :-----------: | :--------: | :----------------: |
-| Response Serial Number |      seq      |    word    |      integer       |
-|         Result         |    result     |    byte    |      integer       |
+|         フィールド         | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------------: | :---------: | :----: | :---------: |
+| 応答シリアル番号          |     seq     |  word  |  integer    |
+| 結果                      |   result   |  byte  |  integer    |
 
-This field is only present after a successful registration
+- 登録成功後のみ存在するフィールド
 
-|   Optional Field    | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------: | ------------- | ---------- | ------------------ |
-| Authentication Code | auth_code     | string     | string             |
+|    オプションフィールド    | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------------: | :---------: | :----: | :---------: |
+| 認証コード                |  auth_code  | string |  string     |
 
-#### Terminal Logout `"msg_id": 3` 0x0003
+#### 端末ログアウト `"msg_id": 3` 0x0003
 
-Empty JSON
+空の JSON
 
-#### Terminal Authentication `"msg_id": 258”` 0x0102
+#### 端末認証 `"msg_id": 258` 0x0102
 
-|        Field        | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------: | :-----------: | :--------: | :----------------: |
-| Authentication Code |     code      |   string   |       string       |
+|        フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+| 認証コード              |    code     | string |  string     |
 
-#### Set Terminal Parameters `"msg_id": 33027”` 0x8103
+#### 端末パラメータ設定 `"msg_id": 33027` 0x8103
 
-|           Field            | JSON Key name | Value Type |                   Value Type in JSON                   |
-| :------------------------: | :-----------: | :--------: | :----------------------------------------------------: |
-| Total Number of Parameters |    length     |    byte    |                        integer                         |
-|    Parameter Item List     |    params     |    list    | list of id and value. `[{"id":ID, "value": VAL}, ...]` |
-|       Parameter Item       |      id       |   dword    |                        integer                         |
-|      Parameter Value       |     value     |    byte    |                        integer                         |
-
-Explanation of parameter IDs as per protocol.
-
-#### Query Terminal Parameters `"msg_id": 33028”` 0x8104
-
-Empty JSON
-
-#### Query Specific Terminal Parameters `"msg_id": 33030”` 0x8106
-
-|           Field            | JSON Key name |   Value Type   |       Value Type in JSON        |
-| :------------------------: | :-----------: | :------------: | :-----------------------------: |
-| Total Number of Parameters |    length     |      byte      |             integer             |
-|     Parameter ID List      |      ids      | byte(2*length) | list of id. `[1, 2, 3, 4, ...]` |
-
-Elements in the parameter ID list are integers
-
-#### Query Terminal Response Parameters `"msg_id": 260”` 0x0104
-
-|             Field             | JSON Key name | Value Type |                   Value Type in JSON                   |
-| :---------------------------: | :-----------: | :--------: | :----------------------------------------------------: |
-|    Response Serial Number     |      seq      |    word    |                        integer                         |
-| Number of Response Parameters |    length     |    byte    |                        integer                         |
-|      Parameter Item List      |    params     |    list    | list of id and value. `[{"id":ID, "value": VAL}, ...]` |
-|        Parameter Item         |      id       |   dword    |                        integer                         |
-|        Parameter Value        |     value     |    byte    |                        integer                         |
-
-Explanation of parameter IDs as per protocol.
-
-#### Terminal Control `"msg_id": 33029” 0x8105
-
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-|   Command Word    |    command    |    byte    |      integer       |
-| Command Parameter |     param     |   string   |       string       |
-
-#### Query Terminal Properties `"msg_id": 33031”` 0x8107
-
-Empty JSON
-
-#### Query Terminal Property Response `"msg_id": 263”` 0x0107
-
-|              Field               |  JSON Key name   | Value Type | Value Type in JSON |
-| :------------------------------: | :--------------: | :--------: | :----------------: |
-|          Terminal Type           |       type       |    word    |      integer       |
-|         Manufacturer ID          |   manufacturer   |  byte(5)   |       string       |
-|          Terminal Model          |      model       |  byte(20)  |       string       |
-|           Terminal ID            |        id        |  byte(7)   |       string       |
-|     Terminal SIM Card ICCID      |      iccid       |  byte(10)  |       string       |
-| Terminal Hardware Version Number | hardware_version |   string   |       string       |
-|     Terminal Firmware Number     | firmware_version |   string   |       string       |
-|      GNSS Module Properties      |    gnss_prop     |    byte    |      integer       |
-| Communication Module Properties  |    comm_prop     |    byte    |      integer       |
-
-- The length of the terminal hardware version number and terminal firmware number will be used for binary message parsing and are not exposed.
-
-#### Terminal Upgrade Package Command `"msg_id": 33032` 0x8108
-
-|         Field          | JSON Key name | Value Type |   Value Type in JSON   |
-| :--------------------: | :-----------: | :--------: | :--------------------: |
-|      Upgrade Type      |     type      |    byte    |        integer         |
-|    Manufacturer ID     | manufacturer  |  byte(5)   |         string         |
-| Version Number Length  |    ver_len    |    byte    |        integer         |
-|     Version Number     |    version    |   string   |         string         |
-| Upgrade Package Length |    fw_len     |   dword    |        integer         |
-|    Upgrade Package     |   firmware    |   binary   | string(base64 encoded) |
-
-#### Terminal Upgrade Result Notification `"msg_id": 264` 0x0108
-
-|     Field      | JSON Key name | Value Type | Value Type in JSON |
-| :------------: | :-----------: | :--------: | :----------------: |
-|  Upgrade Type  |     type      |    byte    |      integer       |
-| Upgrade Result |    result     |    byte    |      integer       |
-
-#### Location Information Report `"msg_id": 512` 0x0200
-
-|   Field    | JSON Key name | Value Type | Value Type in JSON |
-| :--------: | :-----------: | :--------: | :----------------: |
-| Alarm Flag |     alarm     |   dword    |      integer       |
-|   Status   |    status     |   dword    |      integer       |
-|  Latitude  |   latitude    |   dword    |      integer       |
-| Longitude  |   longitude   |   dword    |      integer       |
-|  Altitude  |   altitude    |    word    |      integer       |
-|   Speed    |     speed     |    word    |      integer       |
-| Direction  |   direction   |    word    |      integer       |
-|    Time    |     time      |   bcd(6)   |       string       |
-
-|            Optional Field             | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------------------------: | :-----------: | :--------: | :----------------: |
-| Additional Location Information Items |     extra     |     -      |        map         |
-
-- Additional location information items, in `extra`
-
-|          Field (Additional Information Description)          |    JSON Key name     | Value Type |   Value Type in JSON   |
-| :----------------------------------------------------------: | :------------------: | :--------: | :--------------------: |
-|                           Mileage                            |       mileage        |   dword    |        integer         |
-|                          Fuel Meter                          |      fuel_meter      |    word    |        integer         |
-|              Speed from Driving Record Function              |        speed         |    word    |        integer         |
-|        ID of Alarm Events Needing Manual Confirmation        |       alarm_id       |    word    |        integer         |
-|    Overspeed Alarm Additional Information (Length 1 or 5)    |   overspeed_alarm    |     -      |          map           |
-|      Entry/Exit Area/Route Alarm Additional Information      |     in_out_alarm     |     -      |          map           |
-| Route Travel Time Too Short/Too Long Alarm Additional Information |   path_time_alarm    |     -      |          map           |
-|             Extended Vehicle Signal Status Bits              | See Status Bit Table |     -      |           -            |
-|                        IO Status Bits                        |      io_status       |     -      |          map           |
-|                            Analog                            |        analog        |     -      |          map           |
-|        Wireless Communication Network Signal Strength        |         rssi         |    byte    |        integer         |
-|                     GNSS Satellite Count                     |     gnss_sat_num     |    byte    |        integer         |
-|           Length of Subsequent Custom Information            |       custome        |     -      | string(base64 encoded) |
-
-- Overspeed alarm additional information (length 1 or 5), in map `overspeed_alarm`
-
-|     Field     | JSON Key name | Value Type | Value Type in JSON |
-| :-----------: | :-----------: | :--------: | :----------------: |
-| Location Type |     type      |    byte    |      integer       |
-
-|   Optional Field   | JSON Key name | Value Type | Value Type in JSON |
-| :----------------: | :-----------: | :--------: | :----------------: |
-| Area or Segment ID |      id       |   dword    |      integer       |
-
-- Entry/Exit Area/Route Alarm Additional Information, in map `in_out_alarm`
-
-|       Field        | JSON Key name | Value Type | Value Type in JSON |
-| :----------------: | :-----------: | :--------: | :----------------: |
-|   Location Type    |     type      |    byte    |      integer       |
-| Area or Segment ID |      id       |   dword    |      integer       |
-|     Direction      |   direction   |    byte    |      integer       |
-
-- Route Travel Time Too Short/Too Long Alarm Additional Information, in map `path_time_alarm`
-
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-|    Segment ID     |      id       |   dword    |      integer       |
-| Route Travel Time |     time      |    word    |      integer       |
-|      Result       |    result     |    byte    |      integer       |
-
-- IO Status Bits, in map `io_status`
-
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-| Deep Sleep Status |  deep_sleep   |   1 bit    |      integer       |
-|   Sleep Status    |     sleep     |   1 bit    |      integer       |
-
-- Analog, in map `analog`
-
-|  Field   | JSON Key name | Value Type | Value Type in JSON |
-| :------: | :-----------: | :--------: | :----------------: |
-| Analog 0 |      ad0      |  16 bits   |      integer       |
-| Analog 1 |      ad1      |  16 bits   |      integer       |
-
-- Extended Vehicle Signal Status Bits, in map `extra`
-
-|         Field          |  JSON Key name  | Value Type |             Value Type in JSON             |
-| :--------------------: | :-------------: | :--------: | :----------------------------------------: |
-|         Signal         |     signal      |  - 2 bits  | map, `{"low_beam": VAL, "high_beam": VAL}` |
-|   Right Turn Signal    |   right_turn    |   1 bit    |                  integer                   |
-|    Left Turn Signal    |    left_turn    |   1 bit    |                  integer                   |
-|      Brake Signal      |      brake      |   1 bit    |                  integer                   |
-|     Reverse Signal     |     reverse     |   1 bit    |                  integer                   |
-|    Fog Light Signal    |       fog       |   1 bit    |                  integer                   |
-|      Side Marker       |   side_marker   |   1 bit    |                  integer                   |
-|      Horn Status       |      horn       |   1 bit    |                  integer                   |
-| Air Conditioner Status | air_conditioner |   1 bit    |                  integer                   |
-|     Neutral Signal     |     neutral     |   1 bit    |                  integer                   |
-|    Retarder Working    |    retarder     |   1 bit    |                  integer                   |
-|      ABS Working       |       abs       |   1 bit    |                  integer                   |
-|     Heater Working     |     heater      |   1 bit    |                  integer                   |
-|     Clutch Status      |      cluth      |   1 bit    |                  integer                   |
-
-- Signal Status, in map `signal`
-
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-| Low Beam Signal  |   low_beam    |   1 bit    |      integer       |
-| High Beam Signal |   high_beam   |   1 bit    |      integer       |
-
-Example:
+|           フィールド           | JSON キー名 | 値の型 |              JSON 内の型               |
+| :----------------------------: | :---------: | :----: | :-----------------------------------: |
+| パラメータ総数                |   length    |  byte  |              integer                  |
+| パラメータ項目リスト          |   params    |  list  | id と値のリスト `[{"id":ID, "value": VAL}, ...]` |
+| パラメータ項目                |     id      | dword  |              integer                  |
+| パラメータ値                  |    value    |  byte  |              integer                  |
+
+- プロトコルに基づくパラメータIDの説明あり
+
+#### 端末パラメータ照会 `"msg_id": 33028` 0x8104
+
+空の JSON
+
+#### 特定端末パラメータ照会 `"msg_id": 33030` 0x8106
+
+|           フィールド           | JSON キー名 |     値の型     |           JSON 内の型            |
+| :----------------------------: | :---------: | :------------: | :-----------------------------: |
+| パラメータ総数                |   length    |      byte      |            integer              |
+| パラメータIDリスト            |     ids     | byte(2*length) | 整数のリスト `[1, 2, 3, 4, ...]` |
+
+- パラメータIDリストの要素は整数
+
+#### 端末応答パラメータ `"msg_id": 260` 0x0104
+
+|             フィールド             | JSON キー名 | 値の型 |              JSON 内の型               |
+| :-------------------------------: | :---------: | :----: | :-----------------------------------: |
+| 応答シリアル番号                  |    seq      |  word  |              integer                  |
+| 応答パラメータ数                  |   length    |  byte  |              integer                  |
+| パラメータ項目リスト              |   params    |  list  | id と値のリスト `[{"id":ID, "value": VAL}, ...]` |
+| パラメータ項目                    |     id      | dword  |              integer                  |
+| パラメータ値                      |    value    |  byte  |              integer                  |
+
+- プロトコルに基づくパラメータIDの説明あり
+
+#### 端末制御 `"msg_id": 33029` 0x8105
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| コマンドワード        |  command    |  byte  |  integer    |
+| コマンドパラメータ    |   param     | string |  string     |
+
+#### 端末プロパティ照会 `"msg_id": 33031` 0x8107
+
+空の JSON
+
+#### 端末プロパティ応答 `"msg_id": 263` 0x0107
+
+|              フィールド              | JSON キー名 | 値の型  | JSON 内の型 |
+| :---------------------------------: | :---------: | :-----: | :---------: |
+| 端末タイプ                        |    type     |  word   |  integer    |
+| 製造商ID                         | manufacturer | byte(5) |  string     |
+| 端末モデル                       |    model    | byte(20) |  string     |
+| 端末ID                           |     id      | byte(7) |  string     |
+| 端末SIMカードICCID               |   iccid     | byte(10) |  string     |
+| 端末ハードウェアバージョン番号   | hardware_version | string |  string     |
+| 端末ファームウェアバージョン番号 | firmware_version | string |  string     |
+| GNSSモジュールプロパティ         |  gnss_prop  |  byte   |  integer    |
+| 通信モジュールプロパティ         |  comm_prop  |  byte   |  integer    |
+
+- 端末ハードウェアバージョン番号とファームウェア番号の長さはバイナリメッセージ解析に使用され、外部には公開されません。
+
+#### 端末アップグレードパッケージコマンド `"msg_id": 33032` 0x8108
+
+|         フィールド         | JSON キー名 | 値の型  |         JSON 内の型          |
+| :-----------------------: | :---------: | :-----: | :--------------------------: |
+| アップグレードタイプ       |    type     |  byte   |          integer             |
+| 製造商ID                 | manufacturer | byte(5) |          string              |
+| バージョン番号長さ       |   ver_len   |  byte   |          integer             |
+| バージョン番号           |   version   | string  |          string              |
+| アップグレードパッケージ長さ |   fw_len    | dword   |          integer             |
+| アップグレードパッケージ   |  firmware  | binary  | string(base64 encoded)       |
+
+#### 端末アップグレード結果通知 `"msg_id": 264` 0x0108
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| アップグレードタイプ   |    type     |  byte  |  integer    |
+| アップグレード結果     |   result    |  byte  |  integer    |
+
+#### 位置情報報告 `"msg_id": 512` 0x0200
+
+|     フィールド     | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------: | :---------: | :----: | :---------: |
+| 警報フラグ          |   alarm     | dword  |  integer    |
+| 状態                |   status    | dword  |  integer    |
+| 緯度                |  latitude  | dword  |  integer    |
+| 経度                |  longitude | dword  |  integer    |
+| 高度                |  altitude  |  word  |  integer    |
+| 速度                |   speed    |  word  |  integer    |
+| 方向                | direction  |  word  |  integer    |
+| 時刻                |    time    | bcd(6) |  string     |
+
+|       オプションフィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :------------------------------: | :---------: | :----: | :---------: |
+| 追加位置情報項目                |    extra    |   -    |    map      |
+
+- 追加位置情報項目は `extra` に格納
+
+|        フィールド（追加情報説明）        | JSON キー名 | 値の型 |        JSON 内の型         |
+| :-------------------------------------: | :---------: | :----: | :-----------------------: |
+| 走行距離                               |  mileage   | dword  |        integer            |
+| 燃料計                                | fuel_meter |  word  |        integer            |
+| 運転記録による速度                    |   speed   |  word  |        integer            |
+| 手動確認が必要な警報イベントID       | alarm_id  |  word  |        integer            |
+| 超速警報追加情報（長さ1または5）      | overspeed_alarm |   -    |          map              |
+| 進入/退出エリア・ルート警報追加情報   | in_out_alarm |   -    |          map              |
+| ルート走行時間短すぎ/長すぎ警報追加情報 | path_time_alarm |   -    |          map              |
+| 拡張車両信号状態ビット                 | 状態ビット表参照 |   -    |           -               |
+| IO状態ビット                         | io_status  |   -    |          map              |
+| アナログ                             |  analog   |   -    |          map              |
+| 無線通信ネットワーク信号強度          |   rssi    |  byte  |        integer            |
+| GNSS衛星数                          | gnss_sat_num |  byte  |        integer            |
+| 以降のカスタム情報の長さ             |  custome  |   -    | string(base64 encoded)    |
+
+- 超速警報追加情報（長さ1または5）は `overspeed_alarm` マップ内
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 位置情報タイプ         |    type     |  byte  |  integer    |
+
+|     オプションフィールド     | JSON キー名 | 値の型 | JSON 内の型 |
+| :------------------------: | :---------: | :----: | :---------: |
+| エリアまたは区間ID        |     id      | dword  |  integer    |
+
+- 進入/退出エリア・ルート警報追加情報は `in_out_alarm` マップ内
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 位置情報タイプ         |    type     |  byte  |  integer    |
+| エリアまたは区間ID     |     id      | dword  |  integer    |
+| 方向                   | direction  |  byte  |  integer    |
+
+- ルート走行時間短すぎ/長すぎ警報追加情報は `path_time_alarm` マップ内
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 区間ID                 |     id      | dword  |  integer    |
+| ルート走行時間         |    time     |  word  |  integer    |
+| 結果                   |   result   |  byte  |  integer    |
+
+- IO状態ビットは `io_status` マップ内
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| ディープスリープ状態   | deep_sleep | 1 bit  |  integer    |
+| スリープ状態           |   sleep   | 1 bit  |  integer    |
+
+- アナログは `analog` マップ内
+
+|    フィールド    | JSON キー名 | 値の型 | JSON 内の型 |
+| :--------------: | :---------: | :----: | :---------: |
+| アナログ0        |    ad0      | 16 bit |  integer    |
+| アナログ1        |    ad1      | 16 bit |  integer    |
+
+- 拡張車両信号状態ビットは `extra` マップ内
+
+|         フィールド         | JSON キー名 | 値の型  |           JSON 内の型            |
+| :-----------------------: | :---------: | :-----: | :-----------------------------: |
+| 信号（2ビット）            |   signal   | - 2 bits | map, `{"low_beam": VAL, "high_beam": VAL}` |
+| 右ウインカー信号           | right_turn | 1 bit   |           integer               |
+| 左ウインカー信号           | left_turn  | 1 bit   |           integer               |
+| ブレーキ信号               |   brake   | 1 bit   |           integer               |
+| バック信号                 |  reverse  | 1 bit   |           integer               |
+| フォグライト信号           |    fog    | 1 bit   |           integer               |
+| サイドマーカー             | side_marker | 1 bit  |           integer               |
+| ホーン状態                 |   horn    | 1 bit   |           integer               |
+| エアコン状態               | air_conditioner | 1 bit |         integer               |
+| ニュートラル信号           |  neutral  | 1 bit   |           integer               |
+| リターダ作動              |  retarder | 1 bit   |           integer               |
+| ABS作動                   |    abs    | 1 bit   |           integer               |
+| ヒーター作動              |  heater   | 1 bit   |           integer               |
+| クラッチ状態              |   cluth   | 1 bit   |           integer               |
+
+- 信号状態は `signal` マップ内
+
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| ロービーム信号         |  low_beam  | 1 bit  |  integer    |
+| ハイビーム信号         | high_beam  | 1 bit  |  integer    |
+
+例:
 
 ```json
 {
@@ -391,469 +391,468 @@ Example:
 }
 ```
 
-#### Position Information Query `"msg_id": 33281` 0x8201
+#### 位置情報照会 `"msg_id": 33281` 0x8201
 
-Empty JSON
+空の JSON
 
-#### Position Information Query Response `"msg_id": 513` 0x0201
+#### 位置情報照会応答 `"msg_id": 513` 0x0201
 
-|      Field      | JSON Key name | Value Type | Value Type in JSON |
-| :-------------: | :-----------: | :--------: | :----------------: |
-|  Response Seq   |      seq      |    word    |      integer       |
-| Position Report |    params     |     -      |        map         |
+|      フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 応答シーケンス         |    seq      |  word  |  integer    |
+| 位置報告               |   params    |   -    |    map      |
 
-#### Temporary Location Tracking Control `"msg_id": 33282` 0x8202
+#### 一時位置追跡制御 `"msg_id": 33282` 0x8202
 
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-|     Interval      |    period     |    word    |      integer       |
-| Tracking Duration |    expiry     |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 間隔（秒）             |   period    |  word  |  integer    |
+| 追跡期間               |   expiry   | dword  |  integer    |
 
-#### Manual Alarm Confirmation Message `"msg_id": 33283` 0x8203
+#### 手動警報確認メッセージ `"msg_id": 33283` 0x8203
 
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-| Alarm Message Seq |      seq      |    word    |      integer       |
-| Manual Alarm Type |     type      |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| 警報メッセージシーケンス |    seq      |  word  |  integer    |
+| 手動警報タイプ         |    type     | dword  |  integer    |
 
-#### Text Message Dispatch `"msg_id": 33536` 0x8300
+#### テキストメッセージ送信 `"msg_id": 33536` 0x8300
 
-|   Field   | JSON Key name | Value Type | Value Type in JSON |
-| :-------: | :-----------: | :--------: | :----------------: |
-|   Flag    |     flag      |    byte    |      integer       |
-| Text Info |     text      |   string   |       string       |
+|    フィールド    | JSON キー名 | 値の型 | JSON 内の型 |
+| :--------------: | :---------: | :----: | :---------: |
+| フラグ            |    flag     |  byte  |  integer    |
+| テキスト情報      |    text     | string |  string     |
 
-#### Event Setting `"msg_id": 33537` 0x8301
+#### イベント設定 `"msg_id": 33537` 0x8301
 
-|     Field     | JSON Key name | Value Type |                      Value Type in JSON                      |
-| :-----------: | :-----------: | :--------: | :----------------------------------------------------------: |
-|   Set Type    |     type      |    byte    |                           integer                            |
-| Total Events  |    length     |    byte    |                           integer                            |
-|  Event List   |    events     |    list    | list of event. `[{"id": ID, "length": LEN, "content": CON}, ...]` |
-|   Event ID    |      id       |    byte    |                           integer                            |
-| Event Length  |    length     |    byte    |                           integer                            |
-| Event Content |    content    |   string   |                            string                            |
+|      フィールド      | JSON キー名 | 値の型 |                JSON 内の型                 |
+| :------------------: | :---------: | :----: | :---------------------------------------: |
+| 設定タイプ           |    type     |  byte  |                integer                    |
+| イベント総数         |   length    |  byte  |                integer                    |
+| イベントリスト       |   events    |  list  | イベントのリスト `[{"id": ID, "length": LEN, "content": CON}, ...]` |
+| イベントID           |     id      |  byte  |                integer                    |
+| イベント長さ         |   length    |  byte  |                integer                    |
+| イベント内容         |   content   | string |                string                     |
 
-#### Event Report `"msg_id": 769` 0x0301
+#### イベント報告 `"msg_id": 769` 0x0301
 
-|  Field   | JSON Key name | Value Type | Value Type in JSON |
-| :------: | :-----------: | :--------: | :----------------: |
-| Event ID |      id       |    byte    |      integer       |
+|   フィールド   | JSON キー名 | 値の型 | JSON 内の型 |
+| :------------: | :---------: | :----: | :---------: |
+| イベントID     |     id      |  byte  |  integer    |
 
-#### Question Dispatch `"msg_id": 33538` 0x8302
+#### 質問送信 `"msg_id": 33538` 0x8302
 
-|         Field         | JSON Key name | Value Type |                      Value Type in JSON                      |
-| :-------------------: | :-----------: | :--------: | :----------------------------------------------------------: |
-|         Flag          |     flag      |    byte    |                           integer                            |
-|    Question Length    |    length     |    byte    |                           integer                            |
-|       Question        |   question    |   string   |                            string                            |
-| Answer Candidate List |    answers    |    list    | list of answer. `[{"id": ID, "len": LEN, "answer": ANS}, ...]` |
-|       Answer ID       |      id       |    byte    |                           integer                            |
-| Answer Content Length |      len      |    byte    |                           integer                            |
-|    Answer Content     |    answer     |   string   |                            string                            |
+|          フィールド          | JSON キー名 | 値の型 |                JSON 内の型                 |
+| :-------------------------: | :---------: | :----: | :---------------------------------------: |
+| フラグ                      |    flag     |  byte  |                integer                    |
+| 質問長さ                    |   length    |  byte  |                integer                    |
+| 質問内容                    |  question   | string |                string                     |
+| 回答候補リスト              |   answers   |  list  | 回答のリスト `[{"id": ID, "len": LEN, "answer": ANS}, ...]` |
+| 回答ID                      |     id      |  byte  |                integer                    |
+| 回答内容長さ                |    len      |  byte  |                integer                    |
+| 回答内容                    |   answer    | string |                string                     |
 
-#### Question Response `"msg_id": 770` 0x0302
+#### 質問応答 `"msg_id": 770` 0x0302
 
-|    Field     | JSON Key name | Value Type | Value Type in JSON |
-| :----------: | :-----------: | :--------: | :----------------: |
-| Response Seq |      seq      |    word    |      integer       |
-|  Answer ID   |      id       |    byte    |      integer       |
+|     フィールド     | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------: | :---------: | :----: | :---------: |
+| 応答シーケンス      |    seq      |  word  |  integer    |
+| 回答ID             |     id      |  byte  |  integer    |
 
-#### Information Service Menu Setting `"msg_id": 33539` 0x8303
+#### 情報サービスメニュー設定 `"msg_id": 33539` 0x8303
 
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-|     Set Type     |     type      |    byte    |      integer       |
-| Total Info Items |    length     |    byte    |      integer       |
-|  Info Item List  |     menus     |    list    |    list of menu    |
-|    Info Type     |     type      |    byte    |      integer       |
-| Info Name Length |    length     |    word    |      integer       |
-|    Info Name     |     info      |   string   |       string       |
+|        フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+| 設定タイプ              |    type     |  byte  |  integer    |
+| 情報項目総数            |   length    |  byte  |  integer    |
+| 情報項目リスト          |    menus    |  list  | メニューのリスト |
+| 情報タイプ              |    type     |  byte  |  integer    |
+| 情報名長さ              |   length    |  word  |  integer    |
+| 情報名                  |    info     | string |  string     |
 
-#### Information Service/Cancel `"msg_id": 771` 0x0303
+#### 情報サービス／キャンセル `"msg_id": 771` 0x0303
 
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-|    Info Type     |      id       |    byte    |      integer       |
-| Dial/Cancel Flag |     flag      |    byte    |      integer       |
+|       フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :--------------------: | :---------: | :----: | :---------: |
+| 情報タイプ              |     id      |  byte  |  integer    |
+| 発信／キャンセルフラグ  |    flag     |  byte  |  integer    |
 
-#### Information Service `"msg_id": 33540` 0x8304
+#### 情報サービス `"msg_id": 33540` 0x8304
 
-|    Field     | JSON Key name | Value Type | Value Type in JSON |
-| :----------: | :-----------: | :--------: | :----------------: |
-|  Info Type   |     type      |    byte    |      integer       |
-| Info Length  |    length     |    word    |      integer       |
-| Info Content |     info      |   string   |       string       |
+|      フィールド      | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------: | :---------: | :----: | :---------: |
+| 情報タイプ          |    type     |  byte  |  integer    |
+| 情報長さ            |   length    |  word  |  integer    |
+| 情報内容            |    info     | string |  string     |
 
-#### Callback Phone `"msg_id": 33792` 0x8400
+#### コールバック電話 `"msg_id": 33792` 0x8400
 
-|    Field     | JSON Key name | Value Type | Value Type in JSON |
-| :----------: | :-----------: | :--------: | :----------------: |
-|     Flag     |     type      |    byte    |      integer       |
-| Phone Number |     phone     |   string   |       string       |
+|      フィールド      | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------: | :---------: | :----: | :---------: |
+| フラグ              |    type     |  byte  |  integer    |
+| 電話番号            |    phone    | string |  string     |
 
-#### Phonebook Setting `"msg_id": 33793` 0x8401
+#### 電話帳設定 `"msg_id": 33793` 0x8401
 
-|        Field        | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------: | :-----------: | :--------: | :----------------: |
-|      Set Type       |     type      |    byte    |      integer       |
-|   Total Contacts    |    length     |    byte    |      integer       |
-|    Contact Item     |   contacts    |    list    |  list of contact.  |
-|        Flag         |     type      |    byte    |      integer       |
-| Phone Number Length |   phone_len   |    byte    |      integer       |
-|    Phone Number     |     phone     |   string   |       string       |
-|   Contact Length    |   name_len    |    byte    |      integer       |
-|       Contact       |     name      |   string   |       string       |
+|        フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+| 設定タイプ              |    type     |  byte  |  integer    |
+| 連絡先総数              |   length    |  byte  |  integer    |
+| 連絡先項目              |  contacts   |  list  | 連絡先のリスト |
+| フラグ                  |    type     |  byte  |  integer    |
+| 電話番号長さ            |  phone_len  |  byte  |  integer    |
+| 電話番号                |    phone    | string |  string     |
+| 連絡先名長さ            |  name_len   |  byte  |  integer    |
+| 連絡先名                |    name     | string |  string     |
 
-Contact Item Example
+連絡先項目例
 
 ```json
-[{"type": TYPE, "phone_len", PH_LEN, "phone": PHONE, "name_len": NAME_LEN, "name": NAME}, ...]
+[{"type": TYPE, "phone_len": PH_LEN, "phone": PHONE, "name_len": NAME_LEN, "name": NAME}, ...]
 ```
 
-#### Vehicle Control `"msg_id": 34048` 0x8500
+#### 車両制御 `"msg_id": 34048` 0x8500
 
-|    Field     | JSON Key name | Value Type | Value Type in JSON |
-| :----------: | :-----------: | :--------: | :----------------: |
-| Control Flag |     flag      |    byte    |      integer       |
+|      フィールド      | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------: | :---------: | :----: | :---------: |
+| 制御フラグ          |    flag     |  byte  |  integer    |
 
-#### Vehicle Control Response `"msg_id": 1280` 0x0500
+#### 車両制御応答 `"msg_id": 1280` 0x0500
 
-|        Field         | JSON Key name | Value Type | Value Type in JSON |
-| :------------------: | :-----------: | :--------: | :----------------: |
-|   Response Serial    |      seq      |    word    |      integer       |
-| Location Report Body |   location    |    map     |  map of location   |
+|          フィールド          | JSON キー名 | 値の型 |        JSON 内の型         |
+| :-------------------------: | :---------: | :----: | :-----------------------: |
+| 応答シリアル                |    seq      |  word  |        integer            |
+| 位置報告本文                |  location   |  map   |  位置情報のマップ         |
 
-#### Setting Circular Area `"msg_id": 34304` 0x8600
+#### 円形エリア設定 `"msg_id": 34304` 0x8600
 
-|         Field         |   JSON Key name    | Value Type | Value Type in JSON |
-| :-------------------: | :----------------: | :--------: | :----------------: |
-|   Setting Attribute   |        type        |    byte    |      integer       |
-| Total Number of Areas |       length       |    byte    |      integer       |
-|       Area Item       |       areas        |    list    |   list of area.    |
-|        Area ID        |         id         |   dword    |      integer       |
-|     Area Property     |        flag        |   dword    |      integer       |
-|    Center Latitude    |  center_latitude   |   dword    |      integer       |
-|   Center Longitude    |  center_longitude  |   dword    |      integer       |
-|        Radius         |       radius       |   dword    |      integer       |
-|      Start Time       |     start_time     |   string   |       string       |
-|       End Time        |      end_time      |   string   |       string       |
-|     Maximum Speed     |     max_speed      |    word    |      integer       |
-|  Overspeed Duration   | overspeed_duration |    byte    |      integer       |
+|         フィールド         | JSON キー名 | 値の型 | JSON 内の型 |
+| :-----------------------: | :---------: | :----: | :---------: |
+| 設定属性                  |    type     |  byte  |  integer    |
+| エリア総数                |   length    |  byte  |  integer    |
+| エリア項目                |   areas    |  list  | エリアのリスト |
+| エリアID                  |     id      | dword  |  integer    |
+| エリアプロパティ          |    flag     | dword  |  integer    |
+| 中心緯度                  | center_latitude | dword |  integer    |
+| 中心経度                  | center_longitude | dword |  integer    |
+| 半径                      |   radius   | dword  |  integer    |
+| 開始時刻                  | start_time | string |  string     |
+| 終了時刻                  |  end_time  | string |  string     |
+| 最大速度                  | max_speed  |  word  |  integer    |
+| 超速継続時間              | overspeed_duration | byte |  integer    |
 
-Area List Example
+エリアリスト例
 
-```
-jsonCopy code
+```json
 [{"id": ID,
-   "flag": FLAG,
-   "center_latitude": CEN_LAT,
-   "center_longitude": CEN_LON,
-   "radius": RADIUS,
-   "start_time": START_TIME,
-   "end_time": END_TIME,
-   "max_speed": MAX_SPEED,
-   "overspeed_duration": OVERSPEED_DURATION
-   },
-  ...
- ]
+  "flag": FLAG,
+  "center_latitude": CEN_LAT,
+  "center_longitude": CEN_LON,
+  "radius": RADIUS,
+  "start_time": START_TIME,
+  "end_time": END_TIME,
+  "max_speed": MAX_SPEED,
+  "overspeed_duration": OVERSPEED_DURATION
+  },
+ ...
+]
 ```
 
-#### Deleting Circular Area `"msg_id": 34305` 0x8601
+#### 円形エリア削除 `"msg_id": 34305` 0x8601
 
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-| Number of Areas  |    length     |    byte    |      integer       |
-| List of Area IDs |      ids      |    list    |    list of id.     |
-|   Area ID 1~n    |       -       |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| エリア数              |   length    |  byte  |  integer    |
+| エリアIDリスト        |     ids     |  list  | IDのリスト  |
+| エリアID 1～n         |      -      | dword  |  integer    |
 
-```
+```json
 [ID1, ID2, ...]
 ```
 
-#### Setting Rectangular Area `"msg_id": 34306` 0x8602
+#### 矩形エリア設定 `"msg_id": 34306` 0x8602
 
-|         Field         |   JSON Key name    | Value Type |   Value Type in JSON    |
-| :-------------------: | :----------------: | :--------: | :---------------------: |
-|   Setting Attribute   |        type        |    byte    |         integer         |
-| Total Number of Areas |       length       |    byte    |         integer         |
-|       Area Item       |       areas        |    list    | list of rectangle area. |
-|        Area ID        |         id         |   dword    |         integer         |
-|     Area Property     |        flag        |   dword    |         integer         |
-|  Upper Left Latitude  |       lt_lat       |   dword    |         integer         |
-| Upper Left Longitude  |       lt_lng       |   dword    |         integer         |
-| Lower Right Latitude  |       rb_lat       |   dword    |         integer         |
-| Lower Right Longitude |       rb_lng       |   dword    |         integer         |
-|      Start Time       |     start_time     |   string   |         string          |
-|       End Time        |      end_time      |   string   |         string          |
-|     Maximum Speed     |     max_speed      |    word    |         integer         |
-|  Overspeed Duration   | overspeed_duration |    byte    |         integer         |
+|         フィールド         | JSON キー名 | 値の型 |        JSON 内の型         |
+| :-----------------------: | :---------: | :----: | :-----------------------: |
+| 設定属性                  |    type     |  byte  |        integer            |
+| エリア総数                |   length    |  byte  |        integer            |
+| エリア項目                |   areas    |  list  | 矩形エリアのリスト        |
+| エリアID                  |     id      | dword  |        integer            |
+| エリアプロパティ          |    flag     | dword  |        integer            |
+| 左上緯度                  |   lt_lat    | dword  |        integer            |
+| 左上経度                  |   lt_lng    | dword  |        integer            |
+| 右下緯度                  |   rb_lat    | dword  |        integer            |
+| 右下経度                  |   rb_lng    | dword  |        integer            |
+| 開始時刻                  | start_time  | string |        string             |
+| 終了時刻                  |  end_time   | string |        string             |
+| 最大速度                  | max_speed   |  word  |        integer            |
+| 超速継続時間              | overspeed_duration | byte |    integer            |
 
-#### Deleting Rectangular Area `"msg_id": 34307` 0x8603
+#### 矩形エリア削除 `"msg_id": 34307` 0x8603
 
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-| Number of Areas  |    length     |    byte    |      integer       |
-| List of Area IDs |      ids      |    list    |    list of id.     |
-|   Area ID 1~n    |       -       |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| エリア数              |   length    |  byte  |  integer    |
+| エリアIDリスト        |     ids     |  list  | IDのリスト  |
+| エリアID 1～n         |      -      | dword  |  integer    |
 
-#### Setting Polygonal Area `"msg_id": 34308` 0x8604
+#### 多角形エリア設定 `"msg_id": 34308` 0x8604
 
-|          Field           |   JSON Key name    | Value Type | Value Type in JSON |
-| :----------------------: | :----------------: | :--------: | :----------------: |
-|         Area ID          |         id         |   dword    |      integer       |
-|      Area Property       |        flag        |   dword    |      integer       |
-|        Start Time        |     start_time     |   string   |       string       |
-|         End Time         |      end_time      |   string   |       string       |
-|      Maximum Speed       |     max_speed      |    word    |      integer       |
-|    Overspeed Duration    | overspeed_duration |    byte    |      integer       |
-| Total Number of Vertices |       length       |    word    |      integer       |
-|   List of Vertex Items   |       points       |    list    |   list of point.   |
-|     Vertex Latitude      |        lat         |   dword    |      integer       |
-|     Vertex Longitude     |        lng         |   dword    |      integer       |
+|           フィールド           | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------------------: | :---------: | :----: | :---------: |
+| エリアID                      |     id      | dword  |  integer    |
+| エリアプロパティ              |    flag     | dword  |  integer    |
+| 開始時刻                      | start_time  | string |  string     |
+| 終了時刻                      |  end_time   | string |  string     |
+| 最大速度                      | max_speed   |  word  |  integer    |
+| 超速継続時間                  | overspeed_duration | byte | integer    |
+| 頂点総数                      |   length    |  word  |  integer    |
+| 頂点リスト                    |   points    |  list  | 頂点のリスト |
+| 頂点緯度                      |    lat      | dword  |  integer    |
+| 頂点経度                      |    lng      | dword  |  integer    |
 
-#### Deleting Polygonal Area `"msg_id": 34309` 0x8605
+#### 多角形エリア削除 `"msg_id": 34309` 0x8605
 
-|      Field       | JSON Key name | Value Type | Value Type in JSON |
-| :--------------: | :-----------: | :--------: | :----------------: |
-| Number of Areas  |    length     |    byte    |      integer       |
-| List of Area IDs |      ids      |    list    |    list of id.     |
-|   Area ID 1~n    |       -       |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| エリア数              |   length    |  byte  |  integer    |
+| エリアIDリスト        |     ids     |  list  | IDのリスト  |
+| エリアID 1～n         |      -      | dword  |  integer    |
 
-#### Setting Route `"msg_id": 34310` 0x8606
+#### ルート設定 `"msg_id": 34310` 0x8606
 
-|                   Field                    |   JSON Key name    | Value Type | Value Type in JSON |
-| :----------------------------------------: | :----------------: | :--------: | :----------------: |
-|                  Route ID                  |         id         |   dword    |      integer       |
-|               Route Property               |        flag        |    word    |      integer       |
-|                 Start Time                 |     start_time     |   string   |       string       |
-|                  End Time                  |      end_time      |   string   |       string       |
-|       Total Number of Turning Points       |       length       |    word    |      integer       |
-|             Turning Point Item             |       points       |    list    |   list of point.   |
-|              Turning Point ID              |      point_id      |   dword    |      integer       |
-|                 Segment ID                 |      path_id       |   dword    |      integer       |
-|           Turning Point Latitude           |     point_lat      |   dword    |      integer       |
-|          Turning Point Longitude           |     point_lng      |   dword    |      integer       |
-|               Segment Width                |       width        |    byte    |      integer       |
-|              Segment Property              |       attrib       |    byte    |      integer       |
-|   Overlong Threshold for Segment Driving   |       passed       |    word    |      integer       |
-| Insufficient Threshold for Segment Driving |     uncovered      |    word    |      integer       |
-|          Maximum Speed of Segment          |     max_speed      |    word    |      integer       |
-|       Overspeed Duration for Segment       | overspeed_duration |    byte    |      integer       |
+|             フィールド             | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------------------: | :---------: | :----: | :---------: |
+| ルートID                         |     id      | dword  |  integer    |
+| ルートプロパティ                 |    flag     |  word  |  integer    |
+| 開始時刻                        | start_time  | string |  string     |
+| 終了時刻                        |  end_time   | string |  string     |
+| 曲がり角総数                    |   length    |  word  |  integer    |
+| 曲がり角項目                    |   points    |  list  | 頂点のリスト |
+| 曲がり角ID                     |  point_id   | dword  |  integer    |
+| 区間ID                         |  path_id    | dword  |  integer    |
+| 曲がり角緯度                   | point_lat   | dword  |  integer    |
+| 曲がり角経度                   | point_lng   | dword  |  integer    |
+| 区間幅                         |    width   |  byte  |  integer    |
+| 区間属性                       |   attrib   |  byte  |  integer    |
+| 区間走行超過閾値               |   passed   |  word  |  integer    |
+| 区間走行不足閾値               |  uncovered |  word  |  integer    |
+| 区間最大速度                   | max_speed  |  word  |  integer    |
+| 区間超速継続時間               | overspeed_duration | byte | integer    |
 
-#### Deleting Route `"msg_id": 34311` 0x8607
+#### ルート削除 `"msg_id": 34311` 0x8607
 
-|       Field       | JSON Key name | Value Type | Value Type in JSON |
-| :---------------: | :-----------: | :--------: | :----------------: |
-| Number of Routes  |    length     |    byte    |      integer       |
-| List of Route IDs |      ids      |    list    |     list of id     |
-|     Route ID      |       -       |   dword    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| ルート数              |   length    |  byte  |  integer    |
+| ルートIDリスト        |     ids     |  list  | IDのリスト  |
+| ルートID              |      -      | dword  |  integer    |
 
-#### Driving Record Data Collection Command `"msg_id": 34560` 0x8700
+#### 運転記録データ収集コマンド `"msg_id": 34560` 0x8700
 
-|   Field    | JSON Key name |       Value Type       | Value Type in JSON |
-| :--------: | :-----------: | :--------------------: | :----------------: |
-|  Command   |    command    |          byte          |      integer       |
-| Data Block |     param     | string(base64 encoded) |       string       |
+|      フィールド      | JSON キー名 |        値の型         | JSON 内の型 |
+| :------------------: | :---------: | :-------------------: | :---------: |
+| コマンド             |  command    |         byte          |  integer    |
+| データブロック       |   param     | string(base64 encoded) |  string     |
 
-#### Driving Record Data Upload `"msg_id": 1792` 0x0700
+#### 運転記録データアップロード `"msg_id": 1792` 0x0700
 
-|         Field          | JSON Key name |       Value Type       | Value Type in JSON |
-| :--------------------: | :-----------: | :--------------------: | :----------------: |
-| Response Serial Number |      seq      |          word          |      integer       |
-|        Command         |    command    |          byte          |      integer       |
-|       Data Block       |     data      | string(base64 encoded) |       string       |
+|           フィールド           | JSON キー名 |        値の型         | JSON 内の型 |
+| :----------------------------: | :---------: | :-------------------: | :---------: |
+| 応答シリアル番号              |    seq      |         word          |  integer    |
+| コマンド                     |  command    |         byte          |  integer    |
+| データブロック               |    data     | string(base64 encoded) |  string     |
 
-#### Driving Record Parameter Downward Command `"msg_id": 34561` 0x8701
+#### 運転記録パラメータ下行コマンド `"msg_id": 34561` 0x8701
 
-|   Field    | JSON Key name |       Value Type       | Value Type in JSON |
-| :--------: | :-----------: | :--------------------: | :----------------: |
-|  Command   |    command    |          byte          |      integer       |
-| Data Block |     param     | string(base64 encoded) |       string       |
+|      フィールド      | JSON キー名 |        値の型         | JSON 内の型 |
+| :------------------: | :---------: | :-------------------: | :---------: |
+| コマンド             |  command    |         byte          |  integer    |
+| データブロック       |   param     | string(base64 encoded) |  string     |
 
-#### Electronic Waybill Report `"msg_id": 1793` 0x0701
+#### 電子運送状報告 `"msg_id": 1793` 0x0701
 
-|           Field            | JSON Key name |       Value Type       | Value Type in JSON |
-| :------------------------: | :-----------: | :--------------------: | :----------------: |
-| Electronic Waybill Length  |    length     |         dword          |      integer       |
-| Electronic Waybill Content |     data      | string(base64 encoded) |       string       |
+|           フィールド           | JSON キー名 |        値の型         | JSON 内の型 |
+| :----------------------------: | :---------: | :-------------------: | :---------: |
+| 電子運送状長さ               |   length    |        dword          |  integer    |
+| 電子運送状内容               |    data     | string(base64 encoded) |  string     |
 
-#### Request for Uploading Driver Identity Information `"msg_id": 34562` 0x8702
+#### 運転者身分情報アップロード要求 `"msg_id": 34562` 0x8702
 
-Empty JSON
+空の JSON
 
-#### Driver Identity Information Collection Report `"msg_id": 1794` 0x0702
+#### 運転者身分情報収集報告 `"msg_id": 1794` 0x0702
 
-|                    Field                    | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------------------------------: | :-----------: | :--------: | :----------------: |
-|                   Status                    |    status     |    byte    |      integer       |
-|                    Time                     |     time      |   string   |       string       |
-|             IC Card Read Result             |   ic_result   |    byte    |      integer       |
-|                 Driver Name                 |  driver_name  |   string   |       string       |
-| Professional Qualification Certificate Code |  certificate  |   string   |       string       |
-|           Issuing Authority Name            | organization  |   string   |       string       |
-|            Certificate Validity             |  cert_expiry  |   string   |       string       |
+|           フィールド           | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------------------: | :---------: | :----: | :---------: |
+| 状態                          |   status    |  byte  |  integer    |
+| 時刻                          |    time    | string |  string     |
+| ICカード読み取り結果          |  ic_result  |  byte  |  integer    |
+| 運転者名                      | driver_name | string |  string     |
+| 職業資格証明書コード          | certificate | string |  string     |
+| 発行機関名                    | organization | string |  string     |
+| 証明書有効期限                | cert_expiry | string |  string     |
 
-#### Bulk Upload of Location Data `"msg_id": 1796` 0x0704
+#### 位置データ一括アップロード `"msg_id": 1796` 0x0704
 
-|             Field             | JSON Key name | Value Type | Value Type in JSON |
-| :---------------------------: | :-----------: | :--------: | :----------------: |
-|      Location Data Type       |     type      |    byte    |      integer       |
-|     Number of Data Items      |    length     |    word    |      integer       |
-| Location Reporting Data Items |   location    |    list    |  list of location  |
+|           フィールド           | JSON キー名 | 値の型 | JSON 内の型 |
+| :----------------------------: | :---------: | :----: | :---------: |
+| 位置データタイプ              |    type     |  byte  |  integer    |
+| データ項目数                  |   length    |  word  |  integer    |
+| 位置報告データ項目            |  location   |  list  | 位置情報のリスト |
 
-#### CAN Bus Data Upload `"msg_id": 1797` 0x0705
+#### CANバスデータアップロード `"msg_id": 1797` 0x0705
 
-|            Field            | JSON Key name | Value Type |   Value Type in JSON   |
-| :-------------------------: | :-----------: | :--------: | :--------------------: |
-|    Number of Data Items     |    length     |    word    |        integer         |
-| CAN Bus Data Reception Time |     time      |   bcd(5)   |        integer         |
-|     CAN Bus Data Items      |   can_data    |    list    |   list of can data.    |
-|   CAN Bus Channel Number    |    channel    |   1 bit    |        integer         |
-|         Frame Type          |  frame_type   |   1 bit    |        integer         |
-|   Data Collection Method    |  data_method  |   1 bit    |        integer         |
-|         CAN Bus ID          |      id       |  29 bits   |        integer         |
-|          CAN Data           |     data      |   binary   | string(base64 encoded) |
+|           フィールド           | JSON キー名 | 値の型 |          JSON 内の型           |
+| :----------------------------: | :---------: | :----: | :----------------------------: |
+| データ項目数                  |   length    |  word  |          integer               |
+| CANバスデータ受信時刻         |    time     |  bcd(5) |          integer               |
+| CANバスデータ項目             |  can_data   |  list  | CANデータのリスト              |
+| CANバスチャネル番号           |   channel   | 1 bit  |          integer               |
+| フレームタイプ                | frame_type  | 1 bit  |          integer               |
+| データ収集方法                | data_method | 1 bit  |          integer               |
+| CANバスID                    |     id     | 29 bits |          integer               |
+| CANデータ                    |    data    | binary | string(base64 encoded)         |
 
-#### Multimedia Event Information Upload `"msg_id": 2048` 0x0800
+#### マルチメディアイベント情報アップロード `"msg_id": 2048` 0x0800
 
-|           Field            | JSON Key name | Value Type | Value Type in JSON |
-| :------------------------: | :-----------: | :--------: | :----------------: |
-|     Multimedia Data ID     |      id       |   dword    |      integer       |
-|      Multimedia Type       |     type      |    byte    |      integer       |
-| Multimedia Encoding Format |    format     |    byte    |      integer       |
-|      Event Item Code       |     event     |    byte    |      integer       |
-|         Channel ID         |    channel    |    byte    |      integer       |
+|          フィールド          | JSON キー名 | 値の型 | JSON 内の型 |
+| :--------------------------: | :---------: | :----: | :---------: |
+| マルチメディアデータID      |     id      | dword  |  integer    |
+| マルチメディアタイプ        |    type     |  byte  |  integer    |
+| マルチメディアエンコード形式 |   format    |  byte  |  integer    |
+| イベント項目コード          |   event     |  byte  |  integer    |
+| チャンネルID                |  channel    |  byte  |  integer    |
 
-#### Multimedia Data Upload `"msg_id": 2049` 0x0801
+#### マルチメディアデータアップロード `"msg_id": 2049` 0x0801
 
-|           Field            | JSON Key name | Value Type |   Value Type in JSON   |
-| :------------------------: | :-----------: | :--------: | :--------------------: |
-|       Multimedia ID        |      id       |   dword    |        integer         |
-|      Multimedia Type       |     type      |    byte    |        integer         |
-| Multimedia Encoding Format |    format     |    byte    |        integer         |
-|      Event Item Code       |     event     |    byte    |        integer         |
-|         Channel ID         |    channel    |    byte    |        integer         |
-|     Location Reporting     |   location    |  byte(28)  |          map           |
-|  Multimedia Data Package   |  multimedia   |   binary   | string(base64 encoded) |
+|          フィールド          | JSON キー名 | 値の型 |           JSON 内の型            |
+| :--------------------------: | :---------: | :----: | :-----------------------------: |
+| マルチメディアID            |     id      | dword  |           integer               |
+| マルチメディアタイプ        |    type     |  byte  |           integer               |
+| マルチメディアエンコード形式 |   format    |  byte  |           integer               |
+| イベント項目コード          |   event     |  byte  |           integer               |
+| チャンネルID                |  channel    |  byte  |           integer               |
+| 位置報告                    |  location   | byte(28) |           map                  |
+| マルチメディアデータパッケージ | multimedia | binary | string(base64 encoded)          |
 
-#### Response to Multimedia Data Upload `"msg_id": 34816` 0x8800
+#### マルチメディアデータアップロード応答 `"msg_id": 34816` 0x8800
 
-|                  Field                  | JSON Key name | Value Type | Value Type in JSON |
-| :-------------------------------------: | :-----------: | :--------: | :----------------: |
-|              Multimedia ID              |     mm_id     |   dword    |      integer       |
-| Total Number of Retransmission Packages |    length     |    byte    |      integer       |
-|   List of Retransmission Package IDs    |   retx_ids    |    list    | list of retry IDs  |
+|              フィールド              | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------------------: | :---------: | :----: | :---------: |
+| マルチメディアID                  |    mm_id    | dword  |  integer    |
+| 再送パッケージ総数                |   length    |  byte  |  integer    |
+| 再送パッケージIDリスト            |  retx_ids   |  list  | 再送IDのリスト |
 
-#### Immediate Camera Capture Command `"msg_id": 34817` 0x8801
+#### 即時カメラ撮影コマンド `"msg_id": 34817` 0x8801
 
-|          Field          | JSON Key name | Value Type | Value Type in JSON |
-| :---------------------: | :-----------: | :--------: | :----------------: |
-|       Channel ID        |  channel_id   |    byte    |      integer       |
-|     Capture Command     |    command    |    word    |      integer       |
-| Interval/Recording Time |    period     |    word    |      integer       |
-|        Save Flag        |     save      |    byte    |      integer       |
-|       Resolution        |  resolution   |    byte    |      integer       |
-|   Image/Video Quality   |    quality    |    byte    |      integer       |
-|       Brightness        |    bright     |    byte    |      integer       |
-|        Contrast         |   contrast    |    byte    |      integer       |
-|       Saturation        |   saturate    |    byte    |      integer       |
-|      Chromaticity       | chromaticity  |    byte    |      integer       |
+|          フィールド          | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------------: | :---------: | :----: | :---------: |
+| チャンネルID               | channel_id  |  byte  |  integer    |
+| 撮影コマンド               |  command   |  word  |  integer    |
+| 間隔／録画時間             |  period    |  word  |  integer    |
+| 保存フラグ                 |   save    |  byte  |  integer    |
+| 解像度                     | resolution |  byte  |  integer    |
+| 画像／動画品質             | quality   |  byte  |  integer    |
+| 明るさ                     |  bright   |  byte  |  integer    |
+| コントラスト               | contrast  |  byte  |  integer    |
+| 彩度                       | saturate  |  byte  |  integer    |
+| 色相                       | chromaticity | byte |  integer    |
 
-#### Immediate Camera Capture Response `"msg_id": 2053` 0x0805
+#### 即時カメラ撮影応答 `"msg_id": 2053` 0x0805
 
-|          Field           | JSON Key name |   Value Type   | Value Type in JSON |
-| :----------------------: | :-----------: | :------------: | :----------------: |
-|  Response Serial Number  |      seq      |      word      |      integer       |
-|          Result          |    result     |      byte      |      integer       |
-| Number of Multimedia IDs |    length     |      word      |      integer       |
-|  List of Multimedia IDs  |      ids      | byte(4*length) |      integer       |
+|           フィールド           | JSON キー名 |     値の型     | JSON 内の型 |
+| :----------------------------: | :---------: | :------------: | :---------: |
+| 応答シリアル番号              |    seq      |      word      |  integer    |
+| 結果                          |   result    |      byte      |  integer    |
+| マルチメディアID数            |   length    |      word      |  integer    |
+| マルチメディアIDリスト        |    ids      | byte(4*length) |  integer    |
 
-#### Storage Multimedia Data Retrieval `"msg_id": 34818` 0x8802
+#### 保存マルチメディアデータ取得 `"msg_id": 34818` 0x8802
 
-|      Field      | JSON Key name | Value Type | Value Type in JSON |
-| :-------------: | :-----------: | :--------: | :----------------: |
-| Multimedia Type |               |    byte    |                    |
-|   Channel ID    |               |    byte    |                    |
-| Event Item Code |               |    byte    |                    |
-|   Start Time    |               |   string   |                    |
-|    End Time     |               |   string   |                    |
+|        フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+| マルチメディアタイプ    |             |  byte  |             |
+| チャンネルID           |             |  byte  |             |
+| イベント項目コード     |             |  byte  |             |
+| 開始時刻               |             | string |             |
+| 終了時刻               |             | string |             |
 
-#### Response to Storage Multimedia Data Retrieval `"msg_id": 2050` 0x0802
+#### 保存マルチメディアデータ取得応答 `"msg_id": 2050` 0x0802
 
-|                 Field                 | JSON Key name | Value Type |  Value Type in JSON   |
-| :-----------------------------------: | :-----------: | :--------: | :-------------------: |
-|        Response Serial Number         |      seq      |    word    |        integer        |
-| Total Number of Multimedia Data Items |    length     |    word    |        integer        |
-|             Search Items              |    result     |    list    | list of search result |
-|             Multimedia ID             |      id       |   dword    |        integer        |
-|            Multimedia Type            |     type      |    byte    |        integer        |
-|              Channel ID               |    channel    |    byte    |        integer        |
-|            Event Item Code            |     event     |    byte    |        integer        |
-|          Location Reporting           |   location    |  byte(28)  |          map          |
+|              フィールド              | JSON キー名 | 値の型 |           JSON 内の型            |
+| :---------------------------------: | :---------: | :----: | :-----------------------------: |
+| 応答シリアル番号                    |    seq      |  word  |           integer               |
+| マルチメディアデータ総数            |   length    |  word  |           integer               |
+| 検索結果項目                      |   result    |  list  | 検索結果のリスト                |
+| マルチメディアID                  |     id      | dword  |           integer               |
+| マルチメディアタイプ              |    type     |  byte  |           integer               |
+| チャンネルID                     |  channel    |  byte  |           integer               |
+| イベント項目コード               |   event     |  byte  |           integer               |
+| 位置報告                       |  location   | byte(28) |           map                  |
 
-#### Command for Uploading Stored Multimedia Data `"msg_id": 34819` 0x8803
+#### 保存マルチメディアデータアップロードコマンド `"msg_id": 34819` 0x8803
 
-|      Field      | JSON Key name | Value Type | Value Type in JSON |
-| :-------------: | :-----------: | :--------: | :----------------: |
-| Multimedia Type |     type      |    byte    |      integer       |
-|   Channel ID    |    channel    |    byte    |      integer       |
-| Event Item Code |     event     |    byte    |      integer       |
-|   Start Time    |  start_time   |   string   |       string       |
-|    End Time     |   end_time    |   string   |       string       |
-|   Delete Flag   |    delete     |    byte    |      integer       |
+|        フィールド        | JSON キー名 | 値の型 | JSON 内の型 |
+| :---------------------: | :---------: | :----: | :---------: |
+| マルチメディアタイプ    |    type     |  byte  |  integer    |
+| チャンネルID           |  channel    |  byte  |  integer    |
+| イベント項目コード     |   event     |  byte  |  integer    |
+| 開始時刻               | start_time  | string |  string     |
+| 終了時刻               |  end_time   | string |  string     |
+| 削除フラグ             |   delete    |  byte  |  integer    |
 
-#### Audio Recording Start Command `"msg_id": 34820` 0x8804
+#### 音声録音開始コマンド `"msg_id": 34820` 0x8804
 
-|        Field        | JSON Key name | Value Type | Value Type in JSON |
-| :-----------------: | :-----------: | :--------: | :----------------: |
-|  Recording Command  |    command    |    byte    |      integer       |
-|   Recording Time    |     time      |    word    |      integer       |
-|      Save Flag      |     save      |    byte    |      integer       |
-| Audio Sampling Rate |     rate      |    byte    |      integer       |
+|          フィールド          | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------------: | :---------: | :----: | :---------: |
+| 録音コマンド               |  command   |  byte  |  integer    |
+| 録音時間                   |    time    |  word  |  integer    |
+| 保存フラグ                 |    save    |  byte  |  integer    |
+| 音声サンプリングレート     |    rate    |  byte  |  integer    |
 
-#### Command for Single Stored Multimedia Item Retrieval Upload `"msg_id": 34821` 0x8805
+#### 単一保存マルチメディア項目取得アップロードコマンド `"msg_id": 34821` 0x8805
 
-|     Field     | JSON Key name | Value Type | Value Type in JSON |
-| :-----------: | :-----------: | :--------: | :----------------: |
-| Multimedia ID |      id       |   dword    |      integer       |
-|  Delete Flag  |     flag      |    byte    |      integer       |
+|       フィールド       | JSON キー名 | 値の型 | JSON 内の型 |
+| :-------------------: | :---------: | :----: | :---------: |
+| マルチメディアID      |     id      | dword  |  integer    |
+| 削除フラグ           |    flag     |  byte  |  integer    |
 
-#### Downward Data Transmission `"msg_id": 35072` 0x8900
+#### 下行データ送信 `"msg_id": 35072` 0x8900
 
-|            Field            | JSON Key name | Value Type |   Value Type in JSON   |
-| :-------------------------: | :-----------: | :--------: | :--------------------: |
-|  Transmitted Message Type   |     type      |    byte    |        integer         |
-| Transmitted Message Content |     data      |   binary   | string(base64 encoded) |
+|            フィールド             | JSON キー名 | 値の型 |           JSON 内の型            |
+| :------------------------------: | :---------: | :----: | :-----------------------------: |
+| 送信メッセージタイプ             |    type     |  byte  |           integer               |
+| 送信メッセージ内容               |    data     | binary | string(base64 encoded)          |
 
-#### Upward Data Transmission `"msg_id": 2304` 0x0900
+#### 上行データ送信 `"msg_id": 2304` 0x0900
 
-|            Field            | JSON Key name | Value Type |   Value Type in JSON   |
-| :-------------------------: | :-----------: | :--------: | :--------------------: |
-|  Transmitted Message Type   |     type      |    byte    |        integer         |
-| Transmitted Message Content |     data      |   binary   | string(base64 encoded) |
+|            フィールド             | JSON キー名 | 値の型 |           JSON 内の型            |
+| :------------------------------: | :---------: | :----: | :-----------------------------: |
+| 送信メッセージタイプ             |    type     |  byte  |           integer               |
+| 送信メッセージ内容               |    data     | binary | string(base64 encoded)          |
 
-#### Data Compression Report `"msg_id": 2305` 0x0901
+#### データ圧縮報告 `"msg_id": 2305` 0x0901
 
-|           Field           | JSON Key name | Value Type |   Value Type in JSON   |
-| :-----------------------: | :-----------: | :--------: | :--------------------: |
-| Compressed Message Length |    length     |   dword    |        integer         |
-|  Compressed Message Body  |     data      |   binary   | string(base64 encoded) |
+|           フィールド           | JSON キー名 | 値の型 |           JSON 内の型            |
+| :----------------------------: | :---------: | :----: | :-----------------------------: |
+| 圧縮メッセージ長さ            |   length    | dword  |           integer               |
+| 圧縮メッセージ本文            |    data     | binary | string(base64 encoded)          |
 
-#### Platform RSA Public Key `"msg_id": 35328` 0x8A00
+#### プラットフォームRSA公開鍵 `"msg_id": 35328` 0x8A00
 
-| Field | JSON Key name | Value Type |   Value Type in JSON   |
-| :---: | :-----------: | :--------: | :--------------------: |
-|   e   |       e       |   dword    |        integer         |
-|   n   |       n       | byte(128)  | string(base64 encoded) |
+| フィールド | JSON キー名 | 値の型  |           JSON 内の型            |
+| :--------: | :---------: | :-----: | :-----------------------------: |
+|     e      |     e       | dword   |           integer               |
+|     n      |     n       | byte(128) | string(base64 encoded)          |
 
-#### Terminal RSA Public Key `"msg_id": 2560` 0x0A00
+#### 端末RSA公開鍵 `"msg_id": 2560` 0x0A00
 
-| Field | JSON Key name | Value Type |   Value Type in JSON   |
-| :---: | :-----------: | :--------: | :--------------------: |
-|   e   |       e       |   dword    |        integer         |
-|   n   |       n       | byte(128)  | string(base64 encoded) |
+| フィールド | JSON キー名 | 値の型  |           JSON 内の型            |
+| :--------: | :---------: | :-----: | :-----------------------------: |
+|     e      |     e       | dword   |           integer               |
+|     n      |     n       | byte(128) | string(base64 encoded)          |
 
-#### Reserved 0x8F00 ~ 0x8FFF
+#### 予約済み 0x8F00 ～ 0x8FFF
 
-#### Reserved 0x0F00 ~ 0x0FFF
+#### 予約済み 0x0F00 ～ 0x0FFF

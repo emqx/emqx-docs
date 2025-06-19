@@ -2,25 +2,25 @@
 
 ## Summary
 
-EMQX Enterprise Edition follows an 18-month maintenance cycle for each major release, starting from its release date. We also maintain the latest minor release of the last two major release branches.
+EMQX Enterprise Editionは、各メジャーリリースのリリース日から18ヶ月間のメンテナンスサイクルに従っています。また、最新の2つのメジャーリリースブランチの最新マイナーリリースも維持しています。
 
 ## Versions
 
-- Major releases, such as 3.0.0, 4.0.0, 5.0.0, and 6.0.0, introduce new features that may not be backward compatible.
-- Minor releases, such as 5.1.0 and 5.2.0, add new features while maintaining backward compatibility.
-- Maintenance versions, such as 5.7.1 and 5.7.2, focus on fixing issues. Maintenance activities occur on all releases but are primarily used to determine how long maintenance is provided for a particular branch of code through a tributary release of a minor release (for example, 5.7.x). Active maintenance on minor releases means that we fix some bugs and migrate some fixes back to the code branch.
+- 3.0.0、4.0.0、5.0.0、6.0.0などのメジャーリリースは、後方互換性のない新機能を導入します。
+- 5.1.0、5.2.0などのマイナーリリースは、後方互換性を保ちながら新機能を追加します。
+- 5.7.1、5.7.2などのメンテナンスバージョンは、問題の修正に重点を置いています。メンテナンスはすべてのリリースで行われますが、主にマイナーリリースのトリビュートリリース（例：5.7.x）を通じて特定のコードブランチのメンテナンス期間を決定するために使用されます。マイナーリリースのアクティブなメンテナンスとは、一部のバグを修正し、その修正をコードブランチにマイグレーションすることを意味します。
 
 ## Maintenance Policies
 
-Our goal is to maintain the latest minor version of the current major release, as well as the latest minor version of the previous major release. We have observed that some users frequently upgrade to keep up with our version tributaries. These users can always use the latest minor tributary release and get fixes through the maintenance release they choose to deploy. For example, these users can keep up with our EMQX releases: 5.7.0, 5.7.1, 5.7.2, etc.
+当社の方針は、現在のメジャーリリースの最新マイナーリリースと、前のメジャーリリースの最新マイナーリリースを維持することです。ユーザーの中には、当社のバージョントリビュートリリースに追随するために頻繁にアップグレードする方もいます。これらのユーザーは、常に最新のマイナートリビュートリリースを使用し、選択したメンテナンスリリースを通じて修正を受け取ることができます。例えば、これらのユーザーはEMQXのリリース：5.7.0、5.7.1、5.7.2などに追随できます。
 
-We understand that not all users will upgrade immediately after a release a new release. For the convenience of these users, we continue to maintain the latest minor release of the last major release. In the case of EMQX 4.x, we maintain the 4.x.x series, allowing users to make only a few minor changes to the software they are currently running to apply fixes. Our maintenance of the most recent minor release will continue until the next major release. For example, our maintenance of EMQX 4.x.x will continue until the official release of EMQ X 6.0.0. After the release of EMQX 6.0.0, we will maintain the recently released 5.x series and begin to maintain the 6.0. X minor series, followed by the 6.1.x minor series, and the 6.2.x minor series.
+すべてのユーザーが新しいリリース直後にすぐアップグレードするわけではないことを理解しています。そのため、これらのユーザーの便宜を図り、前のメジャーリリースの最新マイナーリリースのメンテナンスを継続しています。EMQX 4.xの場合、4.x.xシリーズを維持しており、ユーザーは現在使用しているソフトウェアにわずかなマイナー変更を加えるだけで修正を適用できます。最新のマイナーリリースのメンテナンスは次のメジャーリリースまで継続します。例えば、EMQX 4.x.xのメンテナンスはEMQX 6.0.0の正式リリースまで続きます。EMQX 6.0.0のリリース後は、最近リリースされた5.xシリーズのメンテナンスを継続し、6.0.x、6.1.x、6.2.xのマイナーシリーズのメンテナンスを開始します。
 
-Occasionally, we may backport fixes to other tributary versions of minor releases. For example, if multiple branches are susceptible to a severe security vulnerability, we make a prudent decision to move backward, although we aim to minimize such occurrences..
+場合によっては、マイナーリリースの他のトリビュートバージョンに修正をバックポートすることがあります。例えば、複数のブランチが深刻なセキュリティ脆弱性にさらされている場合、慎重に判断して過去のバージョンに修正を適用しますが、そのようなケースは最小限に抑えることを目指しています。
 
 ## Maintenance Table
 
-The following table reflects our maintenance policy. Occasionally, if we release a new minor release after a new major release,  we will update the table below accordingly.
+以下の表は当社のメンテナンスポリシーを反映しています。新しいメジャーリリース後に新しいマイナーリリースをリリースした場合は、表を随時更新します。
 
 | **Version** | **Release Date** | **EOL Date** | **Maintenance Ends with** |
 | :---------- | :--------------- | :----------- | :------------------------ |

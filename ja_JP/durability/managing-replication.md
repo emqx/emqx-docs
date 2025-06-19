@@ -1,43 +1,42 @@
-# Manage Data Replicas
+# データレプリカの管理
 
-For an EMQX cluster, durable storage achieves high availability through multiple data replicas. If a node crashes, clients can immediately connect to a new node and recover data from the replicas on other nodes. This guide provides instructions on configuring data replication and ensuring high availability for durable storage. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable storage and upgrading an existing cluster to enable durable storage.
+EMQXクラスターにおいて、耐久ストレージは複数のデータレプリカによって高可用性を実現します。ノードがクラッシュした場合でも、クライアントはすぐに新しいノードに接続し、他のノード上のレプリカからデータを復旧できます。本ガイドでは、データレプリケーションの設定方法と耐久ストレージの高可用性を確保する手順を説明します。内容は、新規EMQXクラスターに耐久ストレージを設定する場合と、既存クラスターをアップグレードして耐久ストレージを有効化する場合の2つのシナリオに分かれています。
 
-## Initial Cluster Setup
+## 初期クラスター設定
 
-During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed at runtime, and modifying them will not take any effect once the durable storage is initialized.
+クラスターの初期設定時に、耐久ストレージの構築方法やデータレプリケーションの開始に影響を与える複数の設定パラメータがあります。これらのパラメータはランタイムで変更できず、一度耐久ストレージが初期化されると変更は反映されません。
 
-### Replication Factor
+### レプリケーションファクター
 
-The replication factor, controlled with `durable_storage.messages.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
+`durable_storage.messages.replication_factor` 設定パラメータで制御されるレプリケーションファクターは、クラスター全体で各シャードが持つレプリカの数を決定します。デフォルト値は `3` です。
 
-Setting the replication factor to an odd number is advisable as it influences the quorum size required for successful write operations. A higher replication factor results in more copies of data distributed across the cluster, thereby enhancing high availability. However, it also increases storage and network overhead due to additional communication needed to achieve consensus.
+レプリケーションファクターは奇数に設定することが推奨されます。これは書き込み操作の成功に必要なクォーラムサイズに影響を与えるためです。レプリケーションファクターが高いほど、クラスター内にデータのコピーが多く分散されるため高可用性が向上します。ただし、合意形成に必要な通信が増えるため、ストレージおよびネットワークのオーバーヘッドも増加します。
 
 ::: tip
 
-In smaller clusters, the replication factor is not strictly enforced. For instance, in a two-node cluster, the effective replication factor is `2`, as each shard is replicated on both nodes, eliminating the need for further replication. EMQX allocates replicas of each shard to different nodes in the cluster to ensure redundancy.
+小規模クラスターではレプリケーションファクターが厳密に適用されない場合があります。例えば、2ノードクラスターでは各シャードが両ノードにレプリケートされるため、実質的なレプリケーションファクターは `2` となり、追加のレプリケーションは不要です。EMQXは各シャードのレプリカを異なるノードに割り当てて冗長性を確保します。
 
 :::
 
-### Number of Shards
+### シャード数
 
-The built-in durable storages are split into shards, which are replicated independently from each other.
-A higher number of shards allows for more parallel publishing and consuming of MQTT messages. However, each shard consumes system resources, such as file descriptors, and increases the volume of metadata stored per session.
+組み込みの耐久ストレージはシャードに分割され、それぞれ独立してレプリケーションされます。シャード数が多いほど、MQTTメッセージのパブリッシュおよびコンシュームの並列処理が向上します。ただし、各シャードはファイルディスクリプタなどのシステムリソースを消費し、セッションごとに保存されるメタデータの量も増加します。
 
-The `durable_storage.messages.n_shards` parameter controls the number of shards, which remains fixed once the durable storage is initialized.
+`durable_storage.messages.n_shards` パラメータでシャード数を制御し、耐久ストレージの初期化後は固定されます。
 
-### Number of Sites
+### サイト数
 
-The `durable_storage.messages.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storage begins allocating shards to the available sites in a balanced manner.
+`durable_storage.messages.n_sites` 設定パラメータは、耐久ストレージの初期化および書き込み開始に必要な最低オンラインサイト数を決定します。この最低数が満たされると、耐久ストレージは利用可能なサイトにシャードをバランスよく割り当て始めます。
 
-The default value is `1`, meaning each node may initially consider itself the sole site responsible for data storage. This setup is optimized for single-node EMQX clusters. When the cluster forms, one node's view will eventually dominate, causing other nodes to abandon their stored data.
+デフォルト値は `1` で、各ノードは初期状態で自分自身を唯一のデータ保存サイトと見なします。この設定は単一ノードのEMQXクラスターに最適化されています。クラスターが形成されると、いずれかのノードの見解が優勢となり、他のノードは保持していたデータを破棄します。
 
-In multi-node clusters, it is recommended to set the number of sites to the initial cluster size to prevent such conflicts. Note that once the durable storage is initialized, this parameter cannot be changed.
+複数ノードのクラスターでは、サイト数を初期クラスターサイズに設定することを推奨します。これにより競合を防止できます。なお、耐久ストレージが初期化された後はこのパラメータを変更できません。
 
-## Change Existing Cluster
+## 既存クラスターの変更
 
-Existing clusters may require reconfiguration due to changes in capacity, durability, client traffic, or the need to decommission old nodes and replace them with new ones. This can be achieved by adding new sites to the set of sites with durable storage replications or removing sites no longer required.
+既存クラスターは、容量や耐久性、クライアントトラフィックの変化、古いノードの廃止と新ノードへの置き換えなどにより再設定が必要になる場合があります。これは、耐久ストレージのレプリケーションを持つサイトのセットに新しいサイトを追加したり、不要になったサイトを削除したりすることで実現できます。
 
-You can use the `emqx ctl` CLI with the `ds` subcommand to view the current shard allocation:
+現在のシャード割り当て状況は、`emqx ctl` CLIの `ds` サブコマンドで確認できます。
 
 ```shell
 $ emqx ctl ds info
@@ -47,67 +46,69 @@ SHARDS:
 ...
 ```
 
-### Add Sites
+### サイトの追加
 
-When a new node joins the cluster, it is assigned a *Site ID* and can be included in the durable storage. Some shard replica responsibilities will be transferred to the new site, which will then start replicating the data.
+新しいノードがクラスターに参加すると、*Site ID* が割り当てられ、耐久ストレージに含めることが可能になります。いくつかのシャードレプリカの責任が新サイトに移譲され、データのレプリケーションが開始されます。
 
 ```shell
 $ emqx ctl ds join messages <Site ID>
 ok
 ```
 
-Depending on the cluster's data volume, joining a new site may take some time. While this process does not compromise the availability of durable storage, it may temporarily affect cluster performance due to the background data transfer between sites.
+クラスターのデータ量に応じて、新サイトの参加には時間がかかる場合があります。この処理中も耐久ストレージの可用性は損なわれませんが、サイト間のバックグラウンドデータ転送により一時的にクラスターのパフォーマンスが低下することがあります。
 
-Changes to the replica set are durably stored, ensuring that node restarts or network partitions do not affect the outcome. The cluster will eventually achieve the desired state consistently.
+レプリカセットの変更は耐久的に保存されるため、ノードの再起動やネットワーク分断があっても結果に影響しません。クラスターは最終的に望ましい状態に一貫して到達します。
 
-### Remove Sites
+### サイトの削除
 
-Removing a site involves transferring shard replica responsibilities away from the site being removed. Similar to adding a site, this process can take time and resources.
+サイトの削除は、削除対象サイトからシャードレプリカの責任を他サイトに移す作業を伴います。追加時と同様に時間とリソースを要します。
 
 ```shell
 $ emqx ctl ds leave messages <Site ID>
 ok
 ```
 
-Removing a site can cause the effective replication factor to drop below the configured value. For example, if the replication factor is `3` and one site in a 3-node cluster is removed, the replication factor will effectively drop to `2`. To avoid this risk when permanently replacing a site, it is recommended to add a new site before decommissioning the old one or perform both operations simultaneously.
+サイトを削除すると、実効レプリケーションファクターが設定値を下回る場合があります。例えば、レプリケーションファクターが `3` の3ノードクラスターで1サイトを削除すると、実効レプリケーションファクターは `2` に低下します。サイトを恒久的に置き換える場合は、古いサイトを廃止する前に新しいサイトを追加するか、両操作を同時に行うことを推奨します。
 
-### Assign Sites
+### サイトの割り当て
 
-A series of changes to the set of sites holding durable storage replicas can be performed in a single operation.
+耐久ストレージレプリカを保持するサイトのセットに対する一連の変更は、一括操作で実行可能です。
 
 ```shell
 $ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
-This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
+この方法はサイト間のデータ転送量を最小限に抑えつつ、可能な限りレプリケーションファクターを維持します。
 
-## Recover from Disasters
+## 災害からの復旧
 
-When disasters occur, knowing how to efficiently recover is crucial to maintaining service continuity. This section provides guidance on recovering from common disaster scenarios.
+災害発生時に効率的に復旧する方法を知ることは、サービス継続性の維持に不可欠です。本節では一般的な災害シナリオからの復旧手順を説明します。
 
-### Complete Loss of a Node
+### ノードの完全喪失
 
-One of the most common disaster scenarios is the complete loss of a node, which can occur due to unrecoverable hardware failure, disk corruption, or even human error.
+最も一般的な災害シナリオの一つは、ハードウェアの復旧不能な故障やディスク破損、人為的ミスなどによりノードが完全に失われることです。
 
-If a node is completely lost, the cluster's availability is compromised to some extent. It can be restored by _reallocating_ shard replicas to other healthy sites in the cluster.
+ノードが完全に失われると、クラスターの可用性は一定程度損なわれます。これを回復するには、失われたノードのシャードレプリカをクラスター内の他の正常なサイトに再割り当てします。
 
-1. Acknowledge node loss.
+1. ノード喪失をクラスターに通知する。
 
-    First, make sure to notify the cluster that the node is no longer part of it. Otherwise, the reallocation process will treat it as temporarily offline, potentially causing some transitions to stall indefinitely.
+    まず、ノードがクラスターの一部でなくなったことを通知してください。通知しないと、再割り当て処理が一時的なオフラインとみなし、一部の遷移が無期限に停止する恐れがあります。
+
     ```shell
     $ emqx ctl cluster force-leave emqx@n2.local
     ```
 
-2. Initiate shard transitions.
+2. シャード遷移を開始する。
 
-    The next step is to restore availability by reallocating the lost node’s shards to other nodes in the cluster. You can use the standard `leave` command to achieve this. This command can still function even if the node is lost or unreachable, although the transition may take longer to complete.
+    次に、失われたノードのシャードを他ノードに再割り当てし、可用性を回復します。`leave` コマンドを使用して実行可能です。このコマンドはノードが失われているか到達不能でも機能しますが、遷移完了までに時間がかかる場合があります。
+
     ```shell
-    $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+    $ emqx ctl ds leave messages 5C6028D6CE9459C7 # ここで5C6028D6CE9459C7は失われたノードのSite ID
     ```
 
-3. Monitor the cluster status.
+3. クラスターの状態を監視する。
 
-    Wait for all shard transitions to complete successfully. You can check which transitions are still in progress with `info` command.
+    すべてのシャード遷移が正常に完了するまで待ちます。進行中の遷移は `info` コマンドで確認可能です。
 
     ```shell
     $ emqx ctl ds info
@@ -131,14 +132,14 @@ If a node is completely lost, the cluster's availability is compromised to some 
     : <...>
     ```
 
-    Ensure there are no more transitions before proceeding to the next step.
+    次のステップに進む前に遷移がすべて完了していることを確認してください。
 
-4. Finish up.
+4. 後処理を行う。
 
-    Once all shard transitions are complete, you need to inform the cluster that the lost site will never come back.
+    すべてのシャード遷移が完了したら、失われたサイトが今後復帰しないことをクラスターに通知します。
 
     ```shell
     $ emqx ctl ds forget messages 5C6028D6CE9459C7
     ```
 
-    This step is crucial if you plan to replace the lost node with a new one using the original node name. Failing to do so could result in the cluster recognizing the same node name under two different Site IDs, leading to significant confusion and potential issues.
+    この手順は、失われたノードを元のノード名で新しいノードに置き換える場合に特に重要です。これを行わないと、クラスターが同じノード名を異なるSite IDで認識し、重大な混乱や問題を引き起こす可能性があります。

@@ -1,66 +1,66 @@
-# Ingest MQTT Data into TDengine
+# TDengineへのMQTTデータ取り込み
 
-[TDengine](https://tdengine.com/) is a big data platform, designed and optimized specifically for the Internet of Things (IoT) and Industrial Internet of Things (IIoT) scenarios. At its heart lies a high-performance time-series database, characterized by its cluster-oriented architecture, cloud-native design, and minimalistic approach. EMQX supports integration with TDengine, enabling massive data transmission, storage, analysis, and distribution from a large number of devices and data collectors. It provides real-time monitoring and early warning of business operation states, offering real-time business insights.
+[TDengine](https://tdengine.com/)は、IoT（モノのインターネット）および産業用IoT（IIoT）シナリオに特化して設計・最適化されたビッグデータプラットフォームです。中核には高性能な時系列データベースがあり、クラスター指向のアーキテクチャ、クラウドネイティブ設計、ミニマリスティックなアプローチが特徴です。EMQXはTDengineとの統合をサポートしており、多数のデバイスやデータコレクターからの大量データの送信、保存、分析、配信を可能にします。これにより、ビジネス運用状態のリアルタイム監視や早期警告が実現し、リアルタイムのビジネスインサイトを提供します。
 
-This page provides a comprehensive introduction to the data integration between EMQX and TDengine with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとTDengine間のデータ統合について包括的に紹介し、実際の作成および検証手順を解説します。
 
-## How It Works
+## 動作概要
 
-TDengine data integration is a built-in feature in EMQX. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to TDengine, eliminating the need for complex coding. EMQX forwards device data to TDengine through the rule engine and Sink. Through the TDengine data integration, MQTT messages and client events can be stored in TDengine. Additionally, data updates or deletions in TDengine can be triggered by events, thereby enabling the recording of information such as device online status and historical online/offline events.
+TDengineデータ統合はEMQXに組み込まれた機能です。組み込みの[ルールエンジン](./rules.md)コンポーネントを利用することで、EMQXからTDengineへのデータ取り込みが簡素化され、複雑なコーディングを不要にします。EMQXはルールエンジンとSinkを通じてデバイスデータをTDengineに転送します。TDengineデータ統合により、MQTTメッセージやクライアントイベントをTDengineに保存可能です。さらに、TDengine内のデータ更新や削除をイベントでトリガーでき、デバイスのオンライン状態や過去のオンライン／オフラインイベントの記録が可能になります。
 
-The diagram below illustrates the typical architecture of EMQX and TDengine data integration in the industrial IoT:
+以下の図は、産業用IoTにおけるEMQXとTDengineの典型的なデータ統合アーキテクチャを示しています。
 
 ![EMQX Integration TDengine](./assets/emqx-integration-tdengine.png)
 
-Taking the industrial energy consumption management scenario as an example, the workflow is as follows:
+産業用エネルギー消費管理シナリオを例に、ワークフローは以下の通りです：
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
-3. **Data ingestion into TDengine**: Rules defined in the rule engine trigger operations to write messages to TDengine. The TDengine Sink provides SQL templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in TDengine.
+1. **メッセージのパブリッシュと受信**：産業用デバイスはMQTTプロトコルでEMQXに正常に接続し、定期的にエネルギー消費データをパブリッシュします。このデータには生産ライン識別子やエネルギー消費値が含まれます。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づき特定のソースからのメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールとマッチングしてメッセージデータを処理します。これにはデータ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などが含まれます。
+3. **TDengineへのデータ取り込み**：ルールエンジンで定義されたルールがメッセージをTDengineに書き込む操作をトリガーします。TDengine SinkはSQLテンプレートを提供し、特定のメッセージフィールドをTDengineの対応テーブルおよびカラムに柔軟に書き込むデータ形式を定義可能です。
 
-After energy consumption data is written to TDengine, you can analyze your data in real-time using standard SQL and powerful time-series extensions, seamlessly integrating with numerous third-party batch analyses, real-time analysis, reporting tools, AI/ML tools, and visualization tools. For example:
+エネルギー消費データがTDengineに書き込まれた後は、標準SQLと強力な時系列拡張機能を用いてリアルタイムにデータ分析が可能となり、多数のサードパーティのバッチ分析、リアルタイム分析、レポートツール、AI/MLツール、可視化ツールとシームレスに連携できます。例えば：
 
-- Connect to visualization tools such as Grafana to generate charts and display energy consumption data.
-- Connect to application systems such as ERP or Power BI for production analysis and production plan adjustments.
-- Connect to business systems to perform real-time energy usage analysis, facilitating data-driven energy management.
+- Grafanaなどの可視化ツールに接続し、エネルギー消費データのチャート表示を行う。
+- ERPやPower BIなどのアプリケーションシステムに接続し、生産分析や生産計画の調整を行う。
+- ビジネスシステムに接続し、リアルタイムのエネルギー使用分析を実施してデータ駆動のエネルギー管理を促進する。
 
-## Features and Benefits
+## 特長と利点
 
-The TDengine data integration brings the following features and advantages to your business:
+TDengineデータ統合は以下の特長と利点をビジネスにもたらします：
 
-- **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. TDengine excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
-- **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to TDengine.
-- **Cluster and Scalability**: EMQX and TDengine support clustering capabilities and are built on cloud-native architecture, enabling full utilization of the cloud platform's elastic storage, computing, and network resources, allowing for flexible horizontal scaling as your business grows to meet expanding demands. 
-- **Advanced Querying Capabilities**: TDengine provides optimized functions, operators, and indexing techniques for efficient querying and analysis of timestamp data, enabling precise insights to be extracted from IoT time-series data.
+- **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを効率的に処理可能です。TDengineはデータ書き込み、保存、クエリに優れ、IoTシナリオのデータ処理ニーズをシステム負荷を抑えつつ満たします。
+- **メッセージ変換**：メッセージはEMQXルール内で豊富な処理や変換を経てからTDengineに書き込まれます。
+- **クラスターおよびスケーラビリティ**：EMQXとTDengineはクラスター機能をサポートし、クラウドネイティブアーキテクチャ上に構築されています。クラウドプラットフォームの弾力的なストレージ、コンピューティング、ネットワーク資源をフル活用し、ビジネスの成長に合わせた柔軟な水平スケーリングが可能です。
+- **高度なクエリ機能**：TDengineはタイムスタンプデータの効率的なクエリおよび分析のために最適化された関数、演算子、インデックス技術を提供し、IoT時系列データから正確なインサイトを抽出できます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you must complete before you start creating the TDengine data integration, including how to set up the TDengine server and create data tables.
+本節では、TDengineデータ統合の作成を始める前に必要な準備、TDengineサーバーのセットアップやデータテーブルの作成方法について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQXデータ統合の[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-### Start TDengine and Create a Database
+### TDengineの起動およびデータベース作成
 
-You can use the following two methods to start the TDengine or connect to a TDengine service and create a database.
+TDengineを起動またはTDengineサービスに接続し、データベースを作成するには以下の2つの方法があります。
 
 :::: tabs
 
 ::: tab Docker
 
 ```bash
-# To start the TDengine docker image 
+# TDengineのDockerイメージを起動する
 docker run --name TDengine -p 6041:6041 tdengine/tdengine
 
-# Access the container
+# コンテナにアクセスする
 docker exec -it TDengine bash
 
-# Locate the TDengine server in the container
+# コンテナ内でTDengineサーバーを起動
 taos
 
-# Create and then select the database
+# データベースを作成し選択する
 CREATE DATABASE mqtt;
 
 use mqtt;
@@ -70,10 +70,10 @@ use mqtt;
 
 ::: tab TDengine Cloud
 
-If you are using [TDengine Cloud](https://cloud.tdengine.com/), simply login to the console, select your Instance, and click **Explorer** on the left to enter the SQL execution page. Then, execute the following statement to create a database:
+[TDengine Cloud](https://cloud.tdengine.com/)を利用している場合は、コンソールにログインし、インスタンスを選択して左側の**Explorer**をクリックしSQL実行ページに入ります。以下のステートメントを実行してデータベースを作成してください。
 
 ```bash
-# Create and select database
+# データベース作成と選択
 
 CREATE DATABASE mqtt;
 
@@ -86,11 +86,11 @@ use mqtt;
 
 ::::
 
-### Create Data Tables in TDengine
+### TDengineでデータテーブルを作成
 
-You need to create two data tables in TDengine database for message storage and status recording. 
+メッセージ保存と状態記録のために、TDengineデータベース内に2つのデータテーブルを作成します。
 
-1. Use the following SQL statements to create data table `t_mqtt_msg` in TDengine database. The data table stores the client ID, topic, payload, and creation time of every message. 
+1. 以下のSQL文で、クライアントID、トピック、ペイロード、作成時間を保存するデータテーブル `t_mqtt_msg` を作成します。
 
 ```sql
    CREATE TABLE t_mqtt_msg (
@@ -103,7 +103,7 @@ You need to create two data tables in TDengine database for message storage and 
      );
 ```
 
-2. Use the following SQL statements to create data table `emqx_client_events` in TDengine database. This data table stores the client ID, event type, and creation time of every event. 
+2. 以下のSQL文で、クライアントID、イベントタイプ、作成時間を保存するデータテーブル `emqx_client_events` を作成します。
 
 ```sql
      CREATE TABLE emqx_client_events (
@@ -113,71 +113,71 @@ You need to create two data tables in TDengine database for message storage and 
        );
 ```
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the TDengine server.
+本節では、SinkをTDengineサーバーに接続するためのコネクター作成方法を示します。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
 
-2. Click **Create** in the top right corner of the page.
+2. 画面右上の**Create**をクリックします。
 
-3. On the **Create Connector** page, select **TDengine** and then click **Next**.
+3. **Create Connector**ページで**TDengine**を選択し、**Next**をクリックします。
 
-4. In the **Configuration** step, configure the following information based on what you connect to:
+4. **Configuration**ステップで、接続先に応じて以下の情報を設定します。
 
    :::: tabs
 
-   ::: tab Connect to TDengine
+   ::: tab TDengineに接続
 
-   The following configuration assume that you run both EMQX and TDengine on the local machine. If you have TDengine and EMQX running remotely, adjust the settings accordingly.
+   以下の設定はEMQXとTDengineをローカルマシンで動作させている場合の例です。リモート環境の場合は適宜調整してください。
 
-   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_tdengine`.
-   - **Server Host**: Enter `http://127.0.0.1:6041`, or the actual URL if the TDengine server is running remotely.
-   - **Database Name**: Enter `mqtt`.
-   - **Username**: Enter `root`.
-   - **Password**: Enter `taosdata`.
-   - **Token**: Left empty. The connector will attempt to authenticate using the **Username** and **Password** credentials.
+   - **Connector name**：コネクター名を入力します。英数字の組み合わせで、例：`my_tdengine`。
+   - **Server Host**：`http://127.0.0.1:6041` またはリモートのTDengineサーバーURL。
+   - **Database Name**：`mqtt` を入力。
+   - **Username**：`root` を入力。
+   - **Password**：`taosdata` を入力。
+   - **Token**：空欄のまま。コネクターは**Username**と**Password**で認証を試みます。
 
    :::
 
-   ::: tab Connect to TDengine Cloud
+   ::: tab TDengine Cloudに接続
 
-   1. Select the correct **Instance** on the TDengine Cloud console page.
+   1. TDengine Cloudコンソールページで正しい**Instance**を選択します。
 
-   2. Navigate to **Programming** on the left, then select the **REST API** connection method. As shown in the image below, you will obtain the corresponding connection URL and Token:
+   2. 左メニューの**Programming**に移動し、**REST API**接続方法を選択します。以下の画像のように接続用URLとTokenが取得できます。
 
       ![url and token](./assets/tdengine_cloud_url_and_token.png)
 
-   3. Enter the following connector configuration information:
+   3. 以下のコネクター設定情報を入力します：
 
-      - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_tdengine`.
-      - **Server Host**: Enter the value of `TDENGINE_CLOUD_URL` provided by the TDengine Cloud. In this demonstration, it is `https://gw.***.cloud.tdengine.com`.
-      - **Database Name**: Enter `mqtt`.
-      - **Username**: Left empty
-      - **Password**: Left empty
-      - **Token**: Enter the value of `TDENGINE_CLOUD_TOKEN` provided by the TDengine Cloud. In this demonstration, it is `a2ba69cc6****f0c18cd`.
-   
+      - **Connector name**：英数字の組み合わせで名前を入力（例：`my_tdengine`）。
+      - **Server Host**：TDengine Cloudが提供する`TDENGINE_CLOUD_URL`の値を入力。例：`https://gw.***.cloud.tdengine.com`。
+      - **Database Name**：`mqtt`。
+      - **Username**：空欄。
+      - **Password**：空欄。
+      - **Token**：TDengine Cloudが提供する`TDENGINE_CLOUD_TOKEN`の値を入力。例：`a2ba69cc6****f0c18cd`。
+
       :::
-   
+
       ::::
 
-5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+5. 詳細設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the TDengine server.
+6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがTDengineサーバーに接続可能かテストできます。
 
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to TDengine and to record client events. For detailed steps, see [Create a Rule with TDengine Sink for Message Storage](#create-a-rule-with-tdengine-sink-for-message-storage) and [Create a Rule with TDengine Sink for Events Recording](#create-a-rule-with-tdengine-sink-for-events-recording).
+7. 画面下の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてSinkを使ったルール作成に進めます。詳細は[メッセージ保存用のTDengine Sinkを使ったルール作成](#create-a-rule-with-tdengine-sink-for-message-storage)および[イベント記録用のTDengine Sinkを使ったルール作成](#create-a-rule-with-tdengine-sink-for-events-recording)を参照してください。
 
-## Create a Rule with TDengine Sink for Message Storage
+## メッセージ保存用のTDengine Sinkを使ったルール作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the TDengine data table `t_mqtt_msg` via configured Sink. 
+本節では、ダッシュボードでMQTTトピック `t/#` からのメッセージを処理し、処理済みデータを設定済みSink経由でTDengineのデータテーブル `t_mqtt_msg` に保存するルールの作成方法を示します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードに入り、**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. 画面右上の**Create**をクリックします。
 
-3. Enter `my_rule` as the rule ID, and create a rule for message storage in the **SQL Editor**. For example, entering the following statement means the MQTT messages under topic `t/#`  will be saved to TDengine.
+3. ルールIDに `my_rule` と入力し、**SQL Editor**でメッセージ保存用のルールを作成します。例えば以下のステートメントはトピック `t/#` 配下のMQTTメッセージをTDengineに保存します。
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
 
    ```sql
      SELECT
@@ -189,23 +189,23 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   初心者の方は**SQL Examples**や**Enable Test**をクリックしてSQLルールの学習やテストを行うことを推奨します。
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to TDengine.
+4. + **Add Action**ボタンをクリックして、ルール発動時にトリガーされるアクションを定義します。このアクションによりEMQXはルールで処理したデータをTDengineに送信します。
 
-5. Select `TDengine` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a TDengine Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**ドロップダウンリストから`TDengine`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのTDengine Sinkを選択することも可能ですが、本デモでは新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+6. Sinkの名前を入力します。英数字の組み合わせで指定してください。
 
-7. Select the `my_tdengine` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**ドロップダウンから先ほど作成した`my_tdengine`を選択します。隣のボタンから新規コネクター作成も可能です。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-8. Configure the **SQL Template** for the Sink. You can use the following SQL to complete data insertion. It also supports batch setting via CSV file. For details, refer to [Batch Setting](#batch-setting).
+8. Sinkの**SQL Template**を設定します。以下のSQLを使ってデータ挿入を完了できます。CSVファイルによるバッチ設定もサポートしています。詳細は[バッチ設定](#batch-setting)を参照してください。
 
    ::: tip
 
-   There is a breaking change in EMQX 5.1.1. Earlier than this version, string-type values were automatically quoted. However, starting from EMQX 5.1.1, users are required to manually quote these values.
+   EMQX 5.1.1で破壊的変更があります。それ以前のバージョンでは文字列型の値は自動的に引用符で囲まれていましたが、5.1.1以降はユーザーが手動で引用符を付ける必要があります。
 
    :::
 
@@ -214,70 +214,69 @@ This section demonstrates how to create a rule in the Dashboard for processing m
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
 
-   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+   SQLテンプレート内でプレースホルダー変数が未定義の場合、**SQL template**上部の**Undefined Vars as Null**スイッチでルールエンジンの挙動を切り替えられます：
 
-   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-
-   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+   - **Disabled**（デフォルト）：ルールエンジンは文字列`undefined`をデータベースに挿入します。
+   - **Enabled**：変数が未定義の場合、ルールエンジンは`NULL`を挿入します。
 
      ::: tip
 
-     If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
+     可能な限りこのオプションは有効にしてください。無効化は後方互換性確保のためのみ推奨されます。
 
      :::
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. **詳細設定（任意）**：必要に応じて**sync**または**async**クエリモードを選択します。詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 
+11. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがTDengineに接続可能かテストできます。
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. **Create**ボタンをクリックしてSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. **Create Rule**ページに戻り、設定内容を確認して**Create**をクリックしルールを生成します。
 
-You have now successfully created the rule for the TDengine Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new TDengine Sink.
+これでTDengine Sink用のルールが正常に作成されました。**Integration** -> **Rules**ページで新規ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいTDengine Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to TDengine after parsing by rule `my_rule`.
+また、**Integration** -> **Flow Designer**をクリックしてトポロジーを確認すると、トピック `t/#` 配下のメッセージがルール`my_rule`で解析され、TDengineに送信・保存されていることがわかります。
 
-### Batch Setting
+### バッチ設定
 
-In TDengine, a single data entry may contain hundreds of data points, making the task of writing SQL statements challenging. To address this issue, EMQX offers a feature for batch setting SQL.
+TDengineでは1つのデータエントリーに数百のデータポイントを含むことがあり、SQL文の記述が複雑になる場合があります。この課題を解決するため、EMQXはSQLのバッチ設定機能を提供しています。
 
-When editing the SQL template, you can use the batch setting feature to import fields for insertion operations from a CSV file.
+SQLテンプレート編集時に、バッチ設定機能を使ってCSVファイルから挿入操作用のフィールドをインポート可能です。
 
-1. Click the **Batch Setting** button below the **SQL Template** to open the **Import Batch Setting** popup.
+1. **SQL Template**下の**Batch Setting**ボタンをクリックし、**Import Batch Setting**ポップアップを開きます。
 
-2. Follow the instructions to download the batch setting template file, then fill in the key-value pairs of Fields in the template file. The default template file content is as follows:
+2. 指示に従いバッチ設定テンプレートファイルをダウンロードし、テンプレート内のフィールドのキーと値のペアを入力します。テンプレートファイルのデフォルト内容は以下の通りです：
 
-   | Field      | Value             | Char Value | Remarks (Optional) |
-   | ---------- | ----------------- | ---------- | ------------------ |
-   | ts         | now               | FALSE      | Example Remark     |
-   | msgid      | ${id}             | TRUE       |                    |
-   | mqtt_topic | ${topic}          | TRUE       |                    |
-   | qos        | ${qos}            | FALSE      |                    |
-   | temp       | ${payload.temp}   | FALSE      |                    |
-   | hum        | ${payload.hum}    | FALSE      |                    |
-   | status     | ${payload.status} | FALSE      |                    |
+   | Field      | Value             | Char Value | 備考（任意）          |
+   | ---------- | ----------------- | ---------- | --------------------- |
+   | ts         | now               | FALSE      | 例                     |
+   | msgid      | ${id}             | TRUE       |                       |
+   | mqtt_topic | ${topic}          | TRUE       |                       |
+   | qos        | ${qos}            | FALSE      |                       |
+   | temp       | ${payload.temp}   | FALSE      |                       |
+   | hum        | ${payload.hum}    | FALSE      |                       |
+   | status     | ${payload.status} | FALSE      |                       |
 
-   - **Field**: Field key, supports constants or ${var} format placeholders.
-   - **Value**: Field value, supports constants or ${var} format placeholders. Although SQL requires character types to be wrapped in quotes, quotes are not needed in the template file, but whether the field is a character type is specified in the `Char Value` column.
-   - **Char Value**: Used to specify whether the field is a character type, to add quotes to the field when generating SQL upon import. If the field is a character type, fill in `TRUE` or `1`; otherwise, fill in `FALSE` or `0`.
-   - **Remarks**: Used only for notes within the CSV file, cannot be imported into EMQX.
+   - **Field**：フィールドキー。定数または`${var}`形式のプレースホルダーをサポート。
+   - **Value**：フィールド値。定数または`${var}`形式のプレースホルダーをサポート。SQLでは文字列型は引用符で囲む必要がありますが、テンプレートファイルでは不要です。文字列型かどうかは`Char Value`列で指定します。
+   - **Char Value**：フィールドが文字列型かどうかを指定し、インポート時にSQL生成時に引用符を付加します。文字列型なら`TRUE`または`1`、そうでなければ`FALSE`または`0`を記入します。
+   - **備考**：CSVファイル内のメモ用で、EMQXへのインポート対象ではありません。
 
-   Note that the data in the CSV file for batch setting should not exceed 2048 rows.
+   CSVファイルのデータ行数は2048行を超えないようにしてください。
 
-3. Save the filled template file and upload it to the **Import Batch Setting** popup, then click **Import** to complete the batch setting.
+3. 入力済みテンプレートファイルを保存し、**Import Batch Setting**ポップアップにアップロードして**Import**をクリックしバッチ設定を完了します。
 
-4. After importing, you can further adjust the SQL in the **SQL Template**, such as setting table names, formatting SQL code, etc.
+4. インポート後、**SQL Template**内でテーブル名設定やSQLコードのフォーマットなどをさらに調整可能です。
 
-## Create a Rule with TDengine Sink for Events Recording
+## イベント記録用のTDengine Sinkを使ったルール作成
 
-This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the TDengine table `emqx_client_events` via a configured Sink.
+本節では、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みSink経由でTDengineテーブル `emqx_client_events` に保存するルール作成方法を示します。
 
-The rule creation steps are similar to those in [Creating a rule with TDengine Sink for Message Storage](#create-a-rules-with-tdengine-sink-for-message-storage) except for the SQL rule syntax and SQL template.
+ルール作成手順は[メッセージ保存用のTDengine Sinkを使ったルール作成](#メッセージ保存用のtdengine-sinkを使ったルール作成)とほぼ同様ですが、SQLルール文とSQLテンプレートが異なります。
 
-The SQL rule syntax for online/offline status recording is as follows:
+オンライン／オフライン状態記録用のSQLルール文は以下の通りです：
 
 ```sql
 SELECT
@@ -287,9 +286,9 @@ SELECT
       "$events/client_connected", "$events/client_disconnected"
 ```
 
-The SQL template for the Sink is as follows:
+Sink用のSQLテンプレートは以下の通りです：
 
-Note: The fields should not include quotation marks, and do not end SQL statements with a semicolon (`;`).
+注意：フィールドは引用符で囲まず、SQL文の末尾にセミコロン（`;`）を付けないでください。
 
 ```sql
 INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
@@ -299,17 +298,17 @@ INSERT INTO emqx_client_events(ts, clientid, event) VALUES (
     )
 ```
 
-## Test the Rules
+## ルールのテスト
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event. 
+MQTTXを使ってトピック `t/1` にメッセージを送信し、オンライン／オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello TDengine" }'
 ```
 
-Check the running status of the two Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
+2つのSinkの稼働状況を確認すると、新規の受信メッセージ1件、送信メッセージ1件、イベントレコード2件があるはずです。
 
-Check whether the data is written into the `t_mqtt_msg` data table. 
+`t_mqtt_msg`データテーブルにデータが書き込まれているか確認します。
 
 ```bash
 taos> select * from t_mqtt_msg;
@@ -319,7 +318,7 @@ taos> select * from t_mqtt_msg;
 Query OK, 1 row(s) in set (0.002968s)
 ```
 
-`emqx_client_events`  table:
+`emqx_client_events`テーブル：
 
 ```bash
 taos> select * from emqx_client_events;

@@ -1,202 +1,202 @@
-# Statistics and Metrics
+# 統計情報とメトリクス
 
-EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions.
+EMQXはメトリクス監視機能を提供しており、これにより運用・保守担当者は現在のサービス状況を監視し、システムの潜在的な不具合をトラブルシュートできます。
 
-EMQX divides monitoring status into Statistics and Metrics.
+EMQXは監視状態を統計情報（Statistics）とメトリクス（Metrics）に分類しています。
 
-- Statistics are integer-type gauges used to return a single value at the point of time the metric was requested.
-- Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of bytes and messages sent or received.
+- 統計情報は整数型のゲージで、メトリクスが要求された時点の単一の値を返します。
+- メトリクスは整数型のカウンターで、送受信されたバイト数やメッセージ数などの単純な増減を測定します。
 
-EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-monitoring-status-via-rest-api) and [system topic](#get-monitoring-status-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md).
+EMQXはユーザーに複数の方法で統計情報とメトリクスを閲覧する手段を提供しています。最も直接的にはEMQXダッシュボード上でこれらのデータを確認できます。ダッシュボードへのアクセスが困難な場合は、[REST API](#request-monitoring-status-via-rest-api)や[システムトピック](#get-monitoring-status-via-system-topics)のメッセージを通じてデータを取得可能です。さらに、監視機能を独自の監視システムと簡単に統合する方法については、[Prometheusとの統合](./prometheus.md)をご覧ください。
 
-## View Statistics on Dashboard
+## ダッシュボードで統計情報を確認する
 
-On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Nodes** tab. Click the name of the node to see the statistics details on the right.
+EMQXダッシュボードの左ナビゲーションメニューから **Monitoring** -> **Cluster Overview** をクリックします。**Cluster Overview** ページで **Nodes** タブをクリックし、ノード名をクリックすると右側に統計情報の詳細が表示されます。
 
-<img src="./assets/node-statistics-ee.png" alt="node-statistics-ee" style="zoom:45%;" />
+<img src="./assets/node-statistics-ee.png" alt="ノード統計情報" style="zoom:45%;" />
 
-Statistics include two values: current values and historical maximums, for example, the current number of subscriptions and the historical maximum number of subscriptions. Here is the EMQX statistics list:
+統計情報は現在値と過去の最大値の2つの値を含みます。例えば、現在のサブスクリプション数と過去の最大サブスクリプション数です。以下はEMQXの統計情報一覧です。
 
 
-| Statistics                 | Description                                                  |
+| 統計情報                   | 説明                                                         |
 | -------------------------- | ------------------------------------------------------------ |
-| connections.count          | The number of current connections                            |
-| connections.max            | The historical maximum number of connections                 |
-| live_connections.count     | The number of currently live connections                     |
-| live_connections.max       | The historical maximum number of live connections            |
-| channels.count             | The same as `sessions.count`                                 |
-| channels.max               | The same as `sessions.max`                                   |
-| sessions.count             | The number of current sessions                               |
-| sessions.max               | The historical maximum number of sessions                    |
-| topics.count               | The number of current topics                                 |
-| topics.max                 | The historical maximum number of topics                      |
-| suboptions.count           | The same as `subscriptions.count`                            |
-| suboptions.max             | The same as `subscriptions.max`                              |
-| subscribers.count          | The number of current subscribers                            |
-| subscribers.max            | The historical maximum number of subscribers                 |
-| subscriptions.count        | The number of current subscriptions, including shared subscriptions |
-| subscriptions.max          | The historical maximum number of subscriptions               |
-| subscriptions.shared.count | The number of current shared subscriptions                   |
-| subscriptions.shared.max   | The historical maximum number of shared subscriptions        |
-| retained.count             | The number of currently retained messages                    |
-| retained.max               | The historical maximum number of retained messages           |
-| delayed.count              | The number of currently delayed messages                     |
-| delayed.max                | The historical maximum number of delayed  messages           |
+| connections.count          | 現在の接続数                                                 |
+| connections.max            | 過去の最大接続数                                             |
+| live_connections.count     | 現在アクティブな接続数                                       |
+| live_connections.max       | 過去の最大アクティブ接続数                                   |
+| channels.count             | `sessions.count` と同じ                                     |
+| channels.max               | `sessions.max` と同じ                                       |
+| sessions.count             | 現在のセッション数                                           |
+| sessions.max               | 過去の最大セッション数                                       |
+| topics.count               | 現在のトピック数                                            |
+| topics.max                 | 過去の最大トピック数                                        |
+| suboptions.count           | `subscriptions.count` と同じ                                |
+| suboptions.max             | `subscriptions.max` と同じ                                  |
+| subscribers.count          | 現在のサブスクライバー数                                    |
+| subscribers.max            | 過去の最大サブスクライバー数                                |
+| subscriptions.count        | 現在のサブスクリプション数（共有サブスクリプションを含む） |
+| subscriptions.max          | 過去の最大サブスクリプション数                              |
+| subscriptions.shared.count | 現在の共有サブスクリプション数                              |
+| subscriptions.shared.max   | 過去の最大共有サブスクリプション数                          |
+| retained.count             | 現在保持されているメッセージ数                              |
+| retained.max               | 過去の最大保持メッセージ数                                  |
+| delayed.count              | 現在遅延中のメッセージ数                                    |
+| delayed.max                | 過去の最大遅延メッセージ数                                  |
 
-## View Metrics on Dashboard
+## ダッシュボードでメトリクスを確認する
 
-On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, you can see metrics by clicking the **Metrics** tab. EMQX Metrics currently covers four dimensions: bytes, packets, messages, and events.
+EMQXダッシュボードの左ナビゲーションメニューから **Monitoring** -> **Cluster Overview** をクリックします。**Cluster Overview** ページで **Metrics** タブをクリックするとメトリクスを確認できます。EMQXのメトリクスは現在、バイト数、パケット数、メッセージ数、イベントの4つの次元をカバーしています。
 
-### Connection and Session Metrics
+### 接続とセッションのメトリクス
 
-You can see the event-related metrics for the cluster or node, such as [client connection](#connections), [connection sessions](#sessions), and [client access](#access).
+クラスターまたはノードのイベント関連メトリクスを確認できます。例えば、[クライアント接続](#connections)、[接続セッション](#sessions)、[クライアントアクセス](#access)などです。
 
-<img src="./assets/dashboard-event-metrics-ee.png" alt="dashboard-event-metrics-ee" style="zoom:50%;" />
+<img src="./assets/dashboard-event-metrics-ee.png" alt="ダッシュボードイベントメトリクス" style="zoom:50%;" />
 
-#### Connections
+#### Connections（接続）
 
-| Metrics             | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| client.connack      | The number of connection acknowledgment (`CONNACK`) messages received by clients |
-| client.connect      | The number of connection requests from the client, including both successful and failed connection requests |
-| client.connected    | The number of client connections that have succeeded         |
-| client.disconnected | The number of client disconnections, including active and abnormal disconnections |
-| client.subscribe    | The number of successful subscriptions                       |
-| client.unsubscribe  | The number of successful unsubscriptions                     |
+| メトリクス           | 説明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| client.connack       | クライアントが受信した接続確認（`CONNACK`）メッセージの数    |
+| client.connect       | クライアントからの接続要求数（成功・失敗を含む）              |
+| client.connected     | 成功したクライアント接続数                                   |
+| client.disconnected  | クライアントの切断数（正常切断・異常切断を含む）              |
+| client.subscribe     | 成功したサブスクリプション数                                 |
+| client.unsubscribe   | 成功したサブスクリプション解除数                             |
 
-#### Sessions
+#### Sessions（セッション）
 
-| Metrics            | Description                                      |
-| ------------------ | ------------------------------------------------ |
-| session.created    | The number of sessions that have been created    |
-| session.discarded  | The number of sessions that have been discarded  |
-| session.resumed    | The number of sessions that have been resumed    |
-| session.takenover  | The number of sessions that have been taken over |
-| session.terminated | The number of sessions that have been terminated |
+| メトリクス           | 説明                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| session.created      | 作成されたセッション数                                       |
+| session.discarded    | 廃棄されたセッション数                                       |
+| session.resumed      | 再開されたセッション数                                       |
+| session.takenover    | 引き継がれたセッション数                                     |
+| session.terminated   | 終了されたセッション数                                       |
 
-#### Access
+#### Access（アクセス）
 
-| Metrics                     | Description                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| authorization.allow         | The total number of client authorization passes, that is, the sum of cache hits (retrieved authorization results) and matched authorization requests (those corresponding to the policy rules). |
-| authorization.deny          | The total number of client authorization fails, that is, the sum of cache hits (retrieved authorization results) and unmatched authorization requests (those not corresponding to any policy rules). |
-| authorization.matched.allow | The number of client authorization passes as per the rules   |
-| authorization.matched.deny  | The number of client authorization fails as rejected by the rules |
-| authorization.nomatch       | The number of client authorization requests not matching any rules |
-| authorization.cache_hit     | The number of clients getting authorization results (allow or deny) by cache |
-| authorization.superuser     | The number of clients being authorized as superuser          |
-| client.auth.anonymous       | The number of clients that log in anonymously                |
-| client.authenticate         | The number of triggered authentication                       |
-| client.authorize            | The number of triggered authorization                        |
+| メトリクス                      | 説明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| authorization.allow            | クライアント認可成功の総数（キャッシュヒットとポリシールールに一致した認可要求の合計） |
+| authorization.deny             | クライアント認可失敗の総数（キャッシュヒットとポリシールールに一致しなかった認可要求の合計） |
+| authorization.matched.allow    | ルールにより許可されたクライアント認可数                     |
+| authorization.matched.deny     | ルールにより拒否されたクライアント認可数                     |
+| authorization.nomatch          | どのルールにも一致しなかったクライアント認可要求数           |
+| authorization.cache_hit        | キャッシュで認可結果（許可または拒否）を取得したクライアント数 |
+| authorization.superuser        | スーパーユーザーとして認可されたクライアント数               |
+| client.auth.anonymous          | 匿名でログインしたクライアント数                             |
+| client.authenticate            | 認証がトリガーされた回数                                     |
+| client.authorize               | 認可がトリガーされた回数                                     |
 
-### Messaging
+### メッセージング
 
-Scroll down the **Metrics** page, and you can see message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery).
+**Metrics** ページをスクロールすると、メッセージ関連のメトリクスが表示されます。バイト数([bytes](#bytes))、パケット数([packets](#packets))、メッセージ([message-publish-packet](#message-publish-packet))、配信([delivery](#delivery))が含まれます。
 
-<img src="./assets/dashboard-messaging-metrics-ee.png" alt="dashboard-messaging-metrics-ee" style="zoom:50%;" />
+<img src="./assets/dashboard-messaging-metrics-ee.png" alt="ダッシュボードメッセージングメトリクス" style="zoom:50%;" />
 
-#### Bytes
+#### Bytes（バイト数）
 
-| Metrics    | Description              |
-| -------------- | ------------------------ |
-| bytes.received | The number of bytes received |
-| bytes.sent     | The number of bytes sent |
+| メトリクス         | 説明                         |
+| ------------------ | ---------------------------- |
+| bytes.received     | 受信したバイト数             |
+| bytes.sent         | 送信したバイト数             |
 
-#### Packets
+#### Packets（パケット数）
 
-| Metrics                      | Description                                                  |
-| ---------------------------- | ------------------------------------------------------------ |
-| packets.received             | The number of received packets                               |
-| packets.sent                 | The number of sent packets                                   |
-| packets.connect.received     | The number of received CONNECT packets                       |
-| packets.connack.auth_error   | The number of sent CONNACK messages with reason codes 0x86 and 0x87 |
-| packets.connack.error        | The number of sent CONNACK packets with reason codes apart from 0x00. The value of this indicator is greater than or equal to the value of `packets.connack.auth_error` |
-| packets.connack.sent         | The number of sent CONNACK packets                           |
-| packets.publish.received     | The number of received PUBLISH packets                       |
-| packets.publish.sent         | The number of sent PUBLISH packets                           |
-| packets.publish.inuse        | The number of received PUBLISH packets with occupied packet identifiers |
-| packets.publish.auth_error   | The number of received PUBLISH packets that failed the ACL check |
-| packets.publish.error        | The number of received PUBLISH packets that cannot be published |
-| packets.puback.received      | The number of received PUBACK packets                        |
-| packets.puback.sent          | The number of sent PUBACK packets                            |
-| packets.puback.inuse         | The number of received PUBACK messages with occupied identifiers |
-| packets.puback.missed        | The number of received PUBACK packets with unknown identifiers |
-| packets.pubrec.received      | The number of received PUBREC packets                        |
-| packets.pubrec.sent          | The number of sent PUBREC packets                            |
-| packets.pubrec.inuse         | The number of received PUBREC messages with occupied identifiers |
-| packets.pubrec.missed        | The number of received PUBREC packets with unknown identifiers |
-| packets.pubrel.received      | The number of received PUBREL packets                        |
-| packets.pubrel.sent          | The number of sent PUBREL packets                            |
-| packets.pubrel.missed        | The number of received PUBREL packets with unknown identifiers |
-| packets.pubcomp.received     | The number of received PUBCOMP packets                       |
-| packets.pubcomp.sent         | The number of sent PUBCOMP packets                           |
-| packets.pubcomp.inuse        | The number of received PUBCOMP messages with occupied identifiers |
-| packets.pubcomp.missed       | The number of missed PUBCOMP packets                         |
-| packets.subscribe.received   | The number of received SUBSCRIBE packets                     |
-| packets.subscribe.error      | The number of received SUBSCRIBE packets with failed subscriptions |
-| packets.subscribe.auth_error | The number of received SUBACK packets that failed the ACL check |
-| packets.suback.sent          | The number of sent SUBACK packets                            |
-| packets.unsubscribe.received | The number of received UNSUBSCRIBE packets                   |
-| packets.unsubscribe.error    | The number of received UNSUBSCRIBE packets with failed unsubscriptions |
-| packets.unsuback.sent        | The number of sent UNSUBACK packets                          |
-| packets.pingreq.received     | The number of received PINGREQ packets                       |
-| packets.pingresp.sent        | The number of sent PUBRESP packets                           |
-| packets.disconnect.received  | The number of received DISCONNECT packets                    |
-| packets.disconnect.sent      | The number of sent DISCONNECT packets                        |
-| packets.auth.received        | The number of received AUTH packets                          |
-| packets.auth.sent            | The number of sent AUTH packets                              |
+| メトリクス                      | 説明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| packets.received               | 受信したパケット数                                           |
+| packets.sent                   | 送信したパケット数                                           |
+| packets.connect.received       | 受信したCONNECTパケット数                                    |
+| packets.connack.auth_error     | 送信した認証エラー（理由コード0x86および0x87）のCONNACKメッセージ数 |
+| packets.connack.error          | 送信した理由コードが0x00以外のCONNACKパケット数（`packets.connack.auth_error`以上の値） |
+| packets.connack.sent           | 送信したCONNACKパケット数                                   |
+| packets.publish.received       | 受信したPUBLISHパケット数                                   |
+| packets.publish.sent           | 送信したPUBLISHパケット数                                   |
+| packets.publish.inuse          | パケット識別子が使用中の受信PUBLISHパケット数               |
+| packets.publish.auth_error     | ACLチェックに失敗した受信PUBLISHパケット数                   |
+| packets.publish.error          | パブリッシュできなかった受信PUBLISHパケット数               |
+| packets.puback.received        | 受信したPUBACKパケット数                                    |
+| packets.puback.sent            | 送信したPUBACKパケット数                                    |
+| packets.puback.inuse           | パケット識別子が使用中の受信PUBACKメッセージ数               |
+| packets.puback.missed          | 不明な識別子の受信PUBACKパケット数                           |
+| packets.pubrec.received        | 受信したPUBRECパケット数                                    |
+| packets.pubrec.sent            | 送信したPUBRECパケット数                                    |
+| packets.pubrec.inuse           | パケット識別子が使用中の受信PUBRECメッセージ数               |
+| packets.pubrec.missed          | 不明な識別子の受信PUBRECパケット数                           |
+| packets.pubrel.received        | 受信したPUBRELパケット数                                    |
+| packets.pubrel.sent            | 送信したPUBRELパケット数                                    |
+| packets.pubrel.missed          | 不明な識別子の受信PUBRELパケット数                           |
+| packets.pubcomp.received       | 受信したPUBCOMPパケット数                                   |
+| packets.pubcomp.sent           | 送信したPUBCOMPパケット数                                   |
+| packets.pubcomp.inuse          | パケット識別子が使用中の受信PUBCOMPメッセージ数              |
+| packets.pubcomp.missed         | 失われたPUBCOMPパケット数                                   |
+| packets.subscribe.received     | 受信したSUBSCRIBEパケット数                                 |
+| packets.subscribe.error        | 失敗したサブスクリプションを含む受信SUBSCRIBEパケット数     |
+| packets.subscribe.auth_error   | ACLチェックに失敗した受信SUBACKパケット数                    |
+| packets.suback.sent            | 送信したSUBACKパケット数                                    |
+| packets.unsubscribe.received   | 受信したUNSUBSCRIBEパケット数                               |
+| packets.unsubscribe.error      | 失敗したサブスクリプション解除を含む受信UNSUBSCRIBEパケット数 |
+| packets.unsuback.sent          | 送信したUNSUBACKパケット数                                  |
+| packets.pingreq.received       | 受信したPINGREQパケット数                                   |
+| packets.pingresp.sent          | 送信したPINGRESPパケット数                                  |
+| packets.disconnect.received    | 受信したDISCONNECTパケット数                                |
+| packets.disconnect.sent        | 送信したDISCONNECTパケット数                                |
+| packets.auth.received          | 受信したAUTHパケット数                                      |
+| packets.auth.sent              | 送信したAUTHパケット数                                      |
 
-#### Message (PUBLISH packet)
+#### Message (PUBLISHパケット)
 
-| Metrics                   | Description                                                  |
-| ------------------------------- | ------------------------------------------------------------ |
-| messages.acked | The number of acknowledged messages |
-| messages.delayed                | The number of messages for delayed publish that are stored by EMQX |
-| messages.delivered              | The number of messages forwarded to the subscription process internally by EMQX |
-| messages.dropped                | The total number of messages dropped by EMQX before forwarding to the subscription process |
-| messages.dropped.no_subscribers | The number of messages dropped due to no subscribers  |
-| messages.dropped.await_pubrel_timeout | The number of messages dropped due to await PUBREL timeout |
-| messages.dropped.quota_exceeded | The number of messages dropped due to quota being exceeded (typically number of connections) |
-| messages.dropped.receive_maximum | The number of messages dropped due to Receive Maximum being reached |
-| messages.forward                | The number of messages forwarded to other nodes       |
-| messages.publish                | The number of messages published in addition to system messages |
-| messages.qos0.received          | The number of QoS 0 messages received from clients    |
-| messages.qos1.received          | The number of QoS 2 messages received from clients    |
-| messages.qos2.received          | The number of QoS 1 messages received from clients    |
-| messages.qos0.sent              | The number of QoS 0 messages sent to clients          |
-| messages.qos1.sent              | The number of QoS 1 messages sent to clients          |
-| messages.qos2.sent              | The number of QoS 2 messages sent to clients          |
-| messages.received               | The number of messages received from the client, which is equal to the sum of `messages.qos0.received`, ` messages.qos1.received`, and `messages.qos2.received` |
-| messages.sent                   | The number of messages sent to the client, which is equal to the sum of `messages.qos0.sent`, ` messages.qos1.sent`, and `messages.qos2.sent` |
+| メトリクス                     | 説明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| messages.acked                 | アックされたメッセージ数                                     |
+| messages.delayed               | EMQXにより遅延パブリッシュのため保管されているメッセージ数   |
+| messages.delivered             | EMQX内部でサブスクリプション処理に転送されたメッセージ数     |
+| messages.dropped               | サブスクリプション処理に転送される前にEMQXが破棄したメッセージ数 |
+| messages.dropped.no_subscribers | サブスクライバー不在により破棄されたメッセージ数             |
+| messages.dropped.await_pubrel_timeout | PUBREL待機タイムアウトにより破棄されたメッセージ数         |
+| messages.dropped.quota_exceeded | クォータ超過（通常は接続数）により破棄されたメッセージ数     |
+| messages.dropped.receive_maximum | Receive Maximum到達により破棄されたメッセージ数              |
+| messages.forward               | 他ノードに転送されたメッセージ数                             |
+| messages.publish               | システムメッセージを除くパブリッシュされたメッセージ数       |
+| messages.qos0.received         | クライアントから受信したQoS 0メッセージ数                    |
+| messages.qos1.received         | クライアントから受信したQoS 1メッセージ数                    |
+| messages.qos2.received         | クライアントから受信したQoS 2メッセージ数                    |
+| messages.qos0.sent             | クライアントに送信したQoS 0メッセージ数                      |
+| messages.qos1.sent             | クライアントに送信したQoS 1メッセージ数                      |
+| messages.qos2.sent             | クライアントに送信したQoS 2メッセージ数                      |
+| messages.received              | クライアントから受信したメッセージ数（`messages.qos0.received`、`messages.qos1.received`、`messages.qos2.received`の合計） |
+| messages.sent                  | クライアントに送信したメッセージ数（`messages.qos0.sent`、`messages.qos1.sent`、`messages.qos2.sent`の合計） |
 
-#### Delivery
+#### Delivery（配信）
 
-| Metrics                     | Description                                                  |
-| --------------------------- | ------------------------------------------------------------ |
-| delivery.dropped            | The total number of dropped messages during transmission     |
-| delivery.dropped.expired    | The number of dropped messages during transmission because the message is expired |
-| delivery.dropped.no_local   | The number of dropped messages during transmission due to the `No Local` subscription option |
-| delivery.dropped.qos0_msg   | The number of dropped QoS 0 messages during transmission due to a full message queue |
-| delivery.dropped.queue_full | The number of dropped non-zero QoS level messages during transmission due to a full message queue |
-| delivery.dropped.too_large  | The number of dropped messages during transmission due to exceeding length limits |
+| メトリクス                     | 説明                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| delivery.dropped              | 配信中に破棄されたメッセージの総数                           |
+| delivery.dropped.expired      | メッセージの有効期限切れにより破棄されたメッセージ数         |
+| delivery.dropped.no_local     | `No Local`サブスクリプションオプションにより破棄されたメッセージ数 |
+| delivery.dropped.qos0_msg     | メッセージキューが満杯のため破棄されたQoS 0メッセージ数      |
+| delivery.dropped.queue_full   | メッセージキューが満杯のため破棄されたQoS 0以外のメッセージ数 |
+| delivery.dropped.too_large    | 長さ制限超過により破棄されたメッセージ数                     |
 
-## Request Monitoring Status via REST API
+## REST APIによる監視状態の取得
 
-You can also get the metrics and statistics through the API. Click **Metrics** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
+APIを通じてメトリクスや統計情報を取得することも可能です。UIの左ナビゲーションメニューで **Metrics** をクリックするとこのAPIリクエストを実行できます。EMQX APIの利用方法については[REST API](../admin/api.md)をご覧ください。
 
-<img src="./assets/metrics-api-doc.png" alt="metrics-api-doc" style="zoom:35%;" />
+<img src="./assets/metrics-api-doc.png" alt="メトリクスAPIドキュメント" style="zoom:35%;" />
 
-## Get Monitoring Status via System Topics
+## システムトピックによる監視状態の取得
 
-EMQX periodically publishes messages about the running status, message statistics, and client online and offline events through system topics. Clients can subscribe to system topics by adding the prefix `$SYS/` before the topic name. For more information on different types of system topics, see [System Topic](./mqtt-system-topics.md).
+EMQXは稼働状況、メッセージ統計、クライアントのオンライン・オフラインイベントに関するメッセージをシステムトピックを通じて定期的にパブリッシュします。クライアントはトピック名の前に `$SYS/` プレフィックスを付けてシステムトピックをサブスクライブできます。システムトピックの種類については[システムトピック](./mqtt-system-topics.md)をご覧ください。
 
-You can configure system topic settings on Dashboard. Click **Management** -> **MQTT Settings** from the left navigation menu. Select **System Topic** tab.
+システムトピックの設定はダッシュボードで行えます。左ナビゲーションメニューから **Management** -> **MQTT Settings** をクリックし、**System Topic** タブを選択してください。
 
-<img src="./assets/system-topic-setting.png" alt="system-topic-setting" style="zoom:40%;" />
+<img src="./assets/system-topic-setting.png" alt="システムトピック設定" style="zoom:40%;" />
 
-- **Messages publish interval**: Set the time interval for sending `$sys` topic.
-- **Heartbeat interval**: Set the time interval for sending heartbeat messages.
-- **Client connected notification**: Enabled by default and event messages about client being connected will be published.
-- **Client disconnected notification**: Enabled by default and event messages about client being disconnected will be published.
-- **Client subscribed notification**: Disabled by default; When enabled, event messages about a client subscribing to a topic will be published.
-- **Client unsubscribed notification**: Disabled by default; When enabled, event messages about a client unsubscribing to a topic will be published.
+- **Messages publish interval**：`$SYS` トピック送信の時間間隔を設定します。
+- **Heartbeat interval**：ハートビートメッセージ送信の時間間隔を設定します。
+- **Client connected notification**：デフォルトで有効。クライアント接続イベントメッセージがパブリッシュされます。
+- **Client disconnected notification**：デフォルトで有効。クライアント切断イベントメッセージがパブリッシュされます。
+- **Client subscribed notification**：デフォルトで無効。有効にするとクライアントのトピックサブスクライブイベントメッセージがパブリッシュされます。
+- **Client unsubscribed notification**：デフォルトで無効。有効にするとクライアントのトピックサブスクリプション解除イベントメッセージがパブリッシュされます。

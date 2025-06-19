@@ -1,33 +1,33 @@
-# Quick Start with Cluster Linking
+# クラスターリンクのクイックスタート
 
-This page provides a quick start guide to setting up cluster linking between two distant EMQX clusters.
+このページでは、離れた2つのEMQXクラスター間でクラスターリンクを設定するためのクイックスタートガイドを提供します。
 
-## Prerequisites
+## 前提条件
 
-Ensure you have compute resources in two different regions, each hosting an EMQX cluster. For this example, you can use `us-east` and `eu-west` regions, naming the clusters `cluster-us-east` and `cluster-eu-west`, respectively.
+2つの異なるリージョンにそれぞれEMQXクラスターをホストするコンピュートリソースがあることを確認してください。例として、`us-east` と `eu-west` のリージョンを使用し、それぞれのクラスター名を `cluster-us-east` と `cluster-eu-west` とします。
 
-### Requirements
+### 要件
 
-- EMQX version 5.8.0 or later
-- Unique cluster names
-- Network communication between clusters
+- EMQX バージョン 5.8.0 以降
+- 一意のクラスター名
+- クラスター間のネットワーク通信
 
-Cluster Linking requires the MQTT listener of each cluster to be reachable from the other cluster's network. It is recommended that these MQTT listeners be placed behind a load balancer for even traffic distribution. For security, if using the public internet, ensure communication between clusters is secured using [TLS](./configuration.md) and strict [TLS or MQTT client authentication](../access-control/authn/authn.md).
+クラスターリンクでは、各クラスターのMQTTリスナーが他方のクラスターのネットワークから到達可能である必要があります。トラフィックを均等に分散するために、これらのMQTTリスナーはロードバランサーの背後に配置することを推奨します。セキュリティのため、パブリックインターネットを使用する場合は、[TLS](./configuration.md)および厳格な[TLSまたはMQTTクライアント認証](../access-control/authn/authn.md)によってクラスター間通信を保護してください。
 
-## Set Up the First Cluster (cluster-us-east)
+## 1つ目のクラスター（cluster-us-east）の設定
 
-Set up the first cluster `cluster-us-east` using the following configuration snippet in the cluster's configuration file:
+1つ目のクラスター `cluster-us-east` は、以下の設定スニペットをクラスターの設定ファイルに追加してセットアップします。
 
 ```bash
-# Cluster Linking configuration
+# クラスターリンク設定
 cluster {
-  # This cluster's name
+  # このクラスターの名前
   name = "cluster-us-east"
   links = [
     {
-      # Name of the second cluster
+      # 2つ目のクラスター名
       name = "cluster-eu-west"
-      # Endpoint of the second cluster's MQTT listener
+      # 2つ目のクラスターのMQTTリスナーのエンドポイント
       server = "emqx.us-east.myinfra.net:11883"
       clientid = "clink-us-east"
       topics = ["#"]
@@ -35,7 +35,7 @@ cluster {
   ]
 }
 
-# Dedicated listener for Cluster Linking connections
+# クラスターリンク接続用の専用リスナー
 listeners {
   tcp.clink {
     bind = 11883
@@ -43,18 +43,19 @@ listeners {
 }
 ```
 
-This configuration specifies the following:
-- The remote cluster is named `cluster-eu-west`.
-- The cluster can be accessed at `emqx.us-east.myinfra.net:11883`.
-- The Client ID prefix for Cluster Linking MQTT connections is `clink-us-east`.
-- All messages (matching the `#` wildcard topic) will be forwarded to the local cluster.
-- A dedicated listener for Cluster Linking connections is enabled on port `11883`.
+この設定は以下を指定しています：
+- リモートクラスター名は `cluster-eu-west`
+- クラスターは `emqx.us-east.myinfra.net:11883` でアクセス可能
+- クラスターリンクMQTT接続のClient IDプレフィックスは `clink-us-east`
+- `#` ワイルドカードトピックにマッチするすべてのメッセージをローカルクラスターに転送
+- ポート `11883` でクラスターリンク接続用の専用リスナーを有効化
 
-## Set Up the Second Cluster (cluster-eu-west)
+## 2つ目のクラスター（cluster-eu-west）の設定
 
-Set up the second cluster `cluster-eu-west` using the following configuration snippet in the cluster's configuration file:
+2つ目のクラスター `cluster-eu-west` は、以下の設定スニペットをクラスターの設定ファイルに追加してセットアップします。
+
 ```bash
-# Cluster Linking configuration
+# クラスターリンク設定
 cluster {
   name = "cluster-eu-west"
   links = [
@@ -67,7 +68,7 @@ cluster {
   ]
 }
 
-# Dedicated listener for Cluster Linking connections
+# クラスターリンク接続用の専用リスナー
 listeners {
   tcp.clink {
     bind = 11883
@@ -75,13 +76,13 @@ listeners {
 }
 ```
 
-This configuration is symmetrical to that of the first cluster. With both configurations in place, a symmetrical, bidirectional Cluster Link will be established between the two clusters once they are up and running. It is also possible to create _asymmetrical_ links, which will be covered later.
+この設定は1つ目のクラスターの設定と対称的です。両方の設定が完了し、クラスターが稼働すると、2つのクラスター間で対称的な双方向クラスターリンクが確立されます。非対称リンクの作成も可能で、後述します。
 
-## Verify Cluster Linking
+## クラスターリンクの確認
 
-To confirm that clients connected to different clusters can now communicate using standard MQTT mechanisms, you can use the [MQTTX CLI](https://mqttx.app/cli) tool to publish messages from one cluster and subscribe to them from the other.
+異なるクラスターに接続されたクライアント同士が標準のMQTTメカニズムで通信できることを確認するために、[MQTTX CLI](https://mqttx.app/cli) ツールを使って一方のクラスターからメッセージをパブリッシュし、もう一方でサブスクライブしてみます。
 
-1. Start a subscriber on `cluster-us-east`:
+1. `cluster-us-east` でサブスクライバーを起動：
 
    ```bash
    mqttx sub -h emqx.us-east.myinfra.net --topic linked/# --qos 1 --verbose
@@ -91,7 +92,7 @@ To confirm that clients connected to different clusters can now communicate usin
    [6/4/2024] [3:53:32 PM] › ✔  Subscribed to linked/#
    ```
 
-2. Publish a message from `cluster-eu-west`:
+2. `cluster-eu-west` からメッセージをパブリッシュ：
 
    ```bash
    mqttx pub -h emqx.eu-west.myinfra.net --topic linked/42 --message "Hello from the other side!"
@@ -101,16 +102,16 @@ To confirm that clients connected to different clusters can now communicate usin
    [6/4/2024] [3:53:35 PM] › ✔  Message published
    ```
 
-3. Observe that the message is received by the subscriber:
+3. サブスクライバーでメッセージを受信：
 
    ```bash
    [6/4/2024] [3:53:35 PM] › topic: linked/42
    payload: Hello from the other side!
    ```
 
-4. Repeat the process in the opposite direction:
+4. 逆方向でも同様に実施：
 
-   - Start a subscriber on `cluster-eu-west`:
+   - `cluster-eu-west` でサブスクライバーを起動：
 
      ```bash
      mqttx sub -h emqx.eu-west.myinfra.net --topic linked/# --qos 1 --verbose
@@ -120,7 +121,7 @@ To confirm that clients connected to different clusters can now communicate usin
      [6/4/2024] [3:54:12 PM] › ✔  Subscribed to linked/#
      ```
 
-   - Publish a message from `cluster-us-east`:
+   - `cluster-us-east` からメッセージをパブリッシュ：
 
      ```bash
      mqttx pub -h emqx.us-east.myinfra.net --topic linked/1 --message "Hello from US!"
@@ -130,24 +131,24 @@ To confirm that clients connected to different clusters can now communicate usin
      [6/4/2024] [3:54:15 PM] › ✔  Message published
      ```
 
-   - Observe that the message is received by the subscriber:
+   - サブスクライバーでメッセージを受信：
 
      ```bash
      [6/4/2024] [3:54:15 PM] › topic: linked/1
      payload: Hello from US!
      ```
 
-Perfect! The Cluster Linking is working.
+完璧です！クラスターリンクは正常に動作しています。
 
 ::: tip
 
-Cluster Linking involves the propagation of subscription information between clusters, which is an asynchronous process. This typically takes only a few milliseconds, but it may cause a slight delay in message delivery if you publish a message immediately after subscribing.
+クラスターリンクはクラスター間でサブスクリプション情報を伝播する非同期プロセスを含みます。通常は数ミリ秒で完了しますが、サブスクライブ直後にメッセージをパブリッシュすると、メッセージ配信にわずかな遅延が発生する場合があります。
 
 :::
 
-## Set Up Asymmetrical Links
+## 非対称リンクの設定
 
-To create an asymmetrical link, you need to slightly modify the `cluster-eu-west` configuration:
+非対称リンクを作成するには、`cluster-eu-west` の設定を以下のように少し変更します。
 
 ```bash
 cluster {
@@ -163,6 +164,6 @@ cluster {
 }
 ```
 
-As you can see, the configuration is almost identical to the previous one, except that the `topics` field is empty. This means that `cluster-eu-west` is now not interested in _any_ messages from `cluster-us-east`. This makes the Cluster Link _asymmetrical_, which is useful for one-way message forwarding between clusters.
+ご覧の通り、前回の設定とほぼ同じですが、`topics` フィールドが空になっています。これは `cluster-eu-west` が `cluster-us-east` からのメッセージを一切受け取らないことを意味します。これによりクラスターリンクは非対称となり、クラスター間の一方向メッセージ転送に適しています。
 
-If you repeat the message publishing and subscribing steps outlined above, you will notice that the message published from `cluster-us-east` is not received by the subscriber on `cluster-eu-west`.
+上記のメッセージパブリッシュとサブスクライブの手順を繰り返すと、`cluster-us-east` からパブリッシュされたメッセージが `cluster-eu-west` のサブスクライバーに届かないことが確認できます。

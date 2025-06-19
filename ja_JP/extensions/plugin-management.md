@@ -1,222 +1,220 @@
-# Manage Plugins
+# プラグイン管理
 
-This page covers the plugin lifecycle in EMQX and explains how to install, configure, start, stop, uninstall, and upgrade plugins using the Dashboard, CLI, or REST API.
+このページでは、EMQXにおけるプラグインのライフサイクルについて説明し、Dashboard、CLI、REST APIを使用してプラグインのインストール、設定、起動、停止、アンインストール、アップグレードを行う方法を解説します。
 
-## Plugin Lifecycle
+## プラグインのライフサイクル
 
-An EMQX plugin goes through three main lifecycle states:
+EMQXのプラグインは、主に以下の3つのライフサイクル状態を経ます。
 
-- **Installed**: The plugin's code and configuration are loaded, but the application is not yet started.
-- **Started**: The plugin is running and actively interacting with EMQX.
-- **Uninstalled**: The plugin is completely removed from the system.
+- **インストール済み**：プラグインのコードと設定が読み込まれているが、アプリケーションはまだ起動していない状態。
+- **起動済み**：プラグインが実行中で、EMQXと積極的に連携している状態。
+- **アンインストール済み**：プラグインがシステムから完全に削除された状態。
 
-### Installation Process
+### インストール手順
 
-The installation process is as follows:
+インストールの流れは以下の通りです。
 
-1. The plugin package (the tarball created by the `make rel` command) is uploaded via the Dashboard, API, or CLI. For detailed installation steps, see [Install and Manage Plugins](#install-and-manage-plugins).
-2. The plugin package is transferred to each node of the EMQX cluster.
-3. On each node:
-   - The tarball is saved in the `plugins` subdirectory in the EMQX root directory (this may be overridden by the `plugins.install_dir` option): `$EMQX_ROOT/plugins/my_emqx_plugin-1.0.0.tar.gz`.
-   - It is unpacked into the same directory: `$EMQX_ROOT/plugins/my_emqx_plugin-1.0.0/`.
-   - The initial configuration (`config.hocon` from the main plugin's app) is copied into the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file.
-   - The Avro schema is loaded (if present) for validation.
-   - The plugin code is loaded into the node, but the application is not started.
-   - The plugin is registered as `disabled` in the EMQX config (`plugins.states`).
-
-::: tip
-
-For plugins, only the plugin state (`true` or `false` for the `enable` flag) is stored in the EMQX config. Full plugin configurations reside in the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file on the nodes.
-
-:::
-
-### Configuration
-
-After installation, plugin configuration can be updated through the Dashboard or API:
-
-- The new configuration is validated against the Avro schema (if present).
-- Updates are distributed to all cluster nodes.
-- The plugin's `on_config_changed/2` callback function is called. If the plugin accepts the new configuration, it is persisted in the `$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon` file.
+1. プラグインパッケージ（`make rel` コマンドで作成されたtarball）をDashboard、API、またはCLI経由でアップロードします。詳細なインストール手順は[プラグインのインストールと管理](#install-and-manage-plugins)を参照してください。
+2. プラグインパッケージはEMQXクラスターの各ノードに転送されます。
+3. 各ノード上で以下の処理が行われます：
+   - tarballがEMQXルートディレクトリの`plugins`サブディレクトリに保存されます（`plugins.install_dir`オプションで上書き可能）：`$EMQX_ROOT/plugins/my_emqx_plugin-1.0.0.tar.gz`
+   - 同じディレクトリに展開されます：`$EMQX_ROOT/plugins/my_emqx_plugin-1.0.0/`
+   - 初期設定（メインプラグインのappからの`config.hocon`）が`$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon`にコピーされます。
+   - Avroスキーマが存在する場合は検証のためにロードされます。
+   - プラグインコードがノードにロードされますが、アプリケーションは起動されません。
+   - プラグインはEMQX設定の`plugins.states`に`disabled`として登録されます。
 
 ::: tip
 
-`on_config_changed/2` callback function is called even if the application is not started.
+プラグインの状態はEMQX設定内の`enable`フラグ（`true`または`false`）のみが保存されます。プラグインの完全な設定は各ノードの`$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon`ファイルに保持されています。
+
+:::
+
+### 設定
+
+インストール後、プラグインの設定はDashboardやAPIを通じて更新できます。
+
+- 新しい設定はAvroスキーマ（存在する場合）に基づいて検証されます。
+- 更新内容はクラスター内の全ノードに配布されます。
+- プラグインの`on_config_changed/2`コールバック関数が呼び出されます。プラグインが新しい設定を受け入れた場合、`$EMQX_DATA_DIR/plugins/my_emqx_plugin/config.hocon`に永続化されます。
+
+::: tip
+
+`on_config_changed/2`コールバック関数はアプリケーションが起動していなくても呼び出されます。
 
 :::
 
 ::: tip
 
-`on_config_changed/2` callback function is called on each node of the EMQX cluster. Avoid implementing configuration validation that depends on local system state (e.g., checking network availability), as this can lead to inconsistent results across nodes. Use `on_health_check/1` for runtime checks instead and report an unhealthy status if some resource is not available.
+`on_config_changed/2`コールバック関数はEMQXクラスターの各ノードで呼び出されます。ローカルシステムの状態（例：ネットワークの可用性チェック）に依存した設定検証は避けてください。ノード間で結果が不整合になる可能性があります。代わりに`on_health_check/1`を使用してランタイムチェックを行い、リソースが利用できない場合は不健康状態を報告してください。
 
 :::
 
-### Starting
+### 起動
 
-The plugin is started manually via the Dashboard, API, or CLI. Upon starting:
+プラグインはDashboard、API、CLIから手動で起動します。起動時には：
 
-- The plugin's application is started.
-- The plugin is registered as `enabled` in the EMQX config (`plugins.states`).
+- プラグインのアプリケーションが起動されます。
+- プラグインはEMQX設定の`plugins.states`に`enabled`として登録されます。
 
-When the plugin is started and its information is requested, the `on_health_check/1` callback function is called to retrieve the plugin's status.
+プラグインが起動している状態で情報が要求されると、`on_health_check/1`コールバック関数が呼び出され、プラグインの状態が取得されます。
 
-### Stopping
+### 停止
 
-When the plugin is stopped:
+プラグインを停止すると：
 
-- The plugin's applications are stopped.
-- The plugin is registered as `disabled` in the EMQX config (`plugins.states`).
+- プラグインのアプリケーションが停止されます。
+- プラグインはEMQX設定の`plugins.states`に`disabled`として登録されます。
 
-Although the plugin’s application is stopped, its code remains loaded on the node, as a stopped plugin can still be configured.
+プラグインのアプリケーションは停止されますが、コードはノード上に残ります。停止中のプラグインも設定は可能です。
 
-### Uninstallation Process
+### アンインストール手順
 
-The uninstallation process is as follows:
+アンインストールの流れは以下の通りです。
 
-1. The plugin is stopped (if it is running).
-2. The plugin's code is unloaded from the node.
-3. Its package files are removed from the nodes (the config file is preserved). 
-4. The plugin is unregistered in the EMQX config (`plugins.states`).
+1. プラグインを停止します（起動中の場合）。
+2. プラグインのコードをノードからアンロードします。
+3. パッケージファイルをノードから削除します（設定ファイルは保持されます）。
+4. プラグインはEMQX設定の`plugins.states`から登録解除されます。
 
-You can uninstall a plugin package via the Dashboard or CLI. For details, see [Install and Manage Plugins](#install-and-manage-plugins).
+プラグインのアンインストールはDashboardまたはCLIから行えます。詳細は[プラグインのインストールと管理](#install-and-manage-plugins)を参照してください。
 
-### Cluster Join Behavior
+### クラスター参加時の挙動
 
-When an EMQX node joins the cluster, it may not have the actual plugins installed and configured since the plugins and their configs reside in the local file systems of the nodes.
+EMQXノードがクラスターに参加する際、プラグインや設定は各ノードのローカルファイルシステムに存在するため、実際にはインストール・設定されていない場合があります。
 
-The new node does the following:
+新規ノードは以下の処理を行います：
 
-- When a node joins the cluster, it obtains the global EMQX config (as a part of the cluster join process).
-- From the EMQX config, it knows plugin statuses (which plugins are installed and which are enabled).
-- The new node requests the plugins and their actual configs from other nodes.
-- The new node installs plugins and starts the enabled ones.
+- クラスター参加プロセスの一環としてグローバルなEMQX設定を取得します。
+- EMQX設定からプラグインの状態（どのプラグインがインストールされ、どれが有効か）を把握します。
+- 他のノードからプラグインとその実際の設定を要求します。
+- プラグインをインストールし、有効なものは起動します。
 
-## Install and Manage Plugins
+## プラグインのインストールと管理
 
-EMQX supports plugin package installation, uninstallation, and management via the Dashboard, CLI, and API.
+EMQXはDashboard、CLI、APIを通じてプラグインパッケージのインストール、アンインストール、管理をサポートしています。
 
-### Install Packages via Dashboard
+### Dashboardからのパッケージインストール
 
-Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.gz` is available. To install a compiled plugin package directly via the Dashboard, follow the steps below:
+プラグインがすでにビルドされ、`my_emqx_plugin-1.0.0.tar.gz`のtarballが用意されているとします。Dashboardから直接コンパイル済みプラグインパッケージをインストールする手順は以下の通りです。
 
-::: tip Important Security Update
+::: tip 重要なセキュリティアップデート
 
-For security reasons, EMQX now requires explicit authorization before plugin installation via the Dashboard.
+セキュリティ上の理由から、EMQXはDashboard経由でのプラグインインストールに対して明示的な許可を要求するようになりました。
 
-- Installation permission must be granted before initiating the process.
+- インストール開始前に許可を与える必要があります。
+- 許可状態は一時的で、インストール完了後に自動的に取り消されます。
+- クラスター環境では、インストール前に全ノードで許可を与える必要があります。
 
-- The allowed state is temporary and is automatically revoked after installation completes.
+:::
 
-- If running in a clustered environment, permission must be granted on all nodes before installation.
-
-  :::
-
-1. Run the following command in the CLI to explicitly allow the plugin installation:
+1. CLIで以下のコマンドを実行し、プラグインインストールを明示的に許可します。
 
    ```bash
    emqx ctl plugins allow $NAME-$VSN
    ```
 
-   - `{NAME}`: The name of your plugin (e.g., `my_emqx_plugin`).
-   - `{VSN}`: The version of the plugin (e.g., `1.0.0`).
+   - `{NAME}`：プラグイン名（例：`my_emqx_plugin`）
+   - `{VSN}`：プラグインのバージョン（例：`1.0.0`）
 
-   Once this command is executed, you can proceed with the installation through the Dashboard.
+   このコマンド実行後、Dashboardからインストールを進められます。
 
-2. Navigate to **Management** -> **Plugins** in the EMQX Dashboard. 
+2. EMQX Dashboardの **Management** -> **Plugins** に移動します。
 
-3. Click the **+ Install plugin** button to open the Install plugin page.
+3. **+ Install plugin** ボタンをクリックしてインストールページを開きます。
 
-4. Select or drag the plugin package to upload it to the Dashboard.
+4. プラグインパッケージを選択またはドラッグしてDashboardにアップロードします。
 
    ![plugin-list-empty](./assets/plugin-install.png)
 
-5. Click the **Install** button to complete the installation. You will see the list of plugins with the new plugin installed.
+5. **Install** ボタンをクリックしてインストールを完了します。プラグイン一覧に新しいプラグインが表示されます。
 
    ![plugin-list-installed](./assets/plugin-list-installed.png)
 
-Now you can start/stop the plugin and configure it.To uninstall a plugin package via Dashboard, click the **Uninstall** button under the **More** menu in the **Actions** column on the plugin list page.
+これでプラグインの起動・停止や設定が可能になります。Dashboardからプラグインをアンインストールするには、プラグイン一覧ページの**Actions**列の**More**メニューから**Uninstall**ボタンをクリックしてください。
 
-To revoke permission for a previously allowed plugin, either:
+以前に許可したプラグインの許可を取り消すには、以下のいずれかを行います。
 
-1. Uninstall the plugin (if already installed).
-2. Or explicitly disallow it using the following command:
+1. プラグインをアンインストールする（すでにインストール済みの場合）。
+2. 以下のコマンドで明示的に許可を取り消す。
 
 ```bash
 emqx ctl plugins disallow $NAME-$VSN
 ```
 
-### Install Packages via CLI
+### CLIからのパッケージインストール
 
-Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.gz` is available. To install a compiled plugin package directly via the CLI, follow the steps below:
+プラグインがすでにビルドされ、`my_emqx_plugin-1.0.0.tar.gz`のtarballが用意されているとします。CLIから直接コンパイル済みプラグインパッケージをインストールする手順は以下の通りです。
 
-1. On an EMQX node, copy the tarball to the EMQX plugins directory:
+1. EMQXノード上でtarballをEMQXプラグインディレクトリにコピーします。
 
    ```
    $ cp my_emqx_plugin-1.0.0.tar.gz $EMQX_HOME/plugins
    ```
 
-2.  Install the plugin:
+2. プラグインをインストールします。
 
    ```
    $ emqx ctl plugins install my_emqx_plugin-1.0.0
    ```
 
-3. Check plugin list:
+3. プラグイン一覧を確認します。
 
    ```
    $ emqx ctl plugins list
    ```
 
-4. Start/stop the plugin:
+4. プラグインを起動・停止します。
 
    ```
    $ emqx ctl plugins start my_emqx_plugin-1.0.0
    $ emqx ctl plugins stop my_emqx_plugin-1.0.0
    ```
 
-5. Uninstall the plugin:
+5. プラグインをアンインストールします。
 
    ```
    $ emqx ctl plugins uninstall my_emqx_plugin-1.0.0
    ```
 
-### Install Packages via API
+### APIからのパッケージインストール
 
-Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.gz` is available. To install a plugin using the API, follow these steps:
+プラグインがすでにビルドされ、`my_emqx_plugin-1.0.0.tar.gz`のtarballが用意されているとします。APIを使ってプラグインをインストールする手順は以下の通りです。
 
-1. Allow the installation. To enable the installation of the plugin, run the following command:
+1. インストールを許可します。以下のコマンドを実行してプラグインのインストールを有効にします。
 
    ```
    emqx ctl plugins allow my_emqx_plugin-1.0.0
    ```
 
-2. Install the plugin. Use `curl` to install the plugin by sending a POST request to the API:
+2. `curl`を使ってPOSTリクエストを送り、プラグインをインストールします。
 
    ```
    $ curl -u $KEY:$SECRET -X POST http://$EMQX_HOST:18083/api/v5/plugins/install -H "Content-Type: multipart/form-data" -F "plugin=@my_emqx_plugin-1.0.0.tar.gz"
    ```
 
-3. Check the plugin list. To verify if the plugin has been installed successfully, run:
+3. プラグイン一覧を確認して、インストールが成功したかを検証します。
 
    ```
    $ curl -u $KEY:$SECRET http://$EMQX_HOST:18083/api/v5/plugins | jq
    ```
 
-4. Start/stop the plugin. To start or stop the plugin, use the following commands:
+4. プラグインを起動・停止します。
 
    ```
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/start"
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
 
-## Upgrade Plugins
+## プラグインのアップグレード
 
-EMQX does not allow multiple versions of the same plugin to be installed simultaneously.
+EMQXでは同一プラグインの複数バージョンを同時にインストールすることはできません。
 
-To install a new version of the plugin:
+新しいバージョンをインストールするには：
 
-- The old version must first be uninstalled.
-- The new version is then installed.
+- まず古いバージョンをアンインストールします。
+- その後、新しいバージョンをインストールします。
 
-The plugin configuration is preserved across installations.
+プラグインの設定はインストール間で保持されます。
 
-<!-- **Note**: (EMQX enterprise) Plugins need to be reinstalled after hot upgrades. -->
+<!-- **注意**：（EMQXエンタープライズ）プラグインはホットアップグレード後に再インストールが必要です。 -->

@@ -1,48 +1,47 @@
 # Banned Clients
 
-EMQX enables users to restrict access from particular clients through its banning feature. Clients can be added to the ban list using their client ID, username, or source IP address.
+EMQXでは、特定のクライアントからのアクセスを制限するために、バン機能を提供しています。クライアントはクライアントID、ユーザー名、または送信元IPアドレスでバンリストに追加できます。
 
-Banning can also be applied through rules that include:
+バンは以下のルールを使って適用することも可能です。
 
-- Regular patterns to match client identifiers and usernames.
+- クライアント識別子やユーザー名にマッチする正規表現パターン。
 
   ::: tip
 
-  Banning through regular expressions does not apply to clients that are already connected.
+  正規表現によるバンは、すでに接続されているクライアントには適用されません。
 
   :::
 
-- CIDR ranges to match source IP addresses.
+- 送信元IPアドレスにマッチするCIDRレンジ。
 
 ::: tip
-Be aware that a high volume of matching rules can adversely affect performance. This is because the system checks all rules for each client attempting to connect, in contrast to direct bans.
+大量のマッチングルールを設定するとパフォーマンスに悪影響を及ぼす可能性があります。これは、直接的なバンと異なり、接続を試みるクライアントごとにすべてのルールをチェックするためです。
 :::
 
-This page focuses on managing banned clients via the EMQX Dashboard. The banning functionality can also be accessed through the [REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned).
+本ページではEMQXダッシュボードを使ったバンされたクライアントの管理に焦点を当てています。バン機能は[REST API](https://docs.emqx.com/en/enterprise/v5.2/admin/api-docs.html#tag/Banned)からも利用可能です。
 
-| API                      | Function                                                     |
+| API                      | 機能                                                         |
 | ------------------------ | ------------------------------------------------------------ |
-| DEL /banned              | Clear all banned data.                                       |
-| GET /banned              | List all currently banned client IDs, usernames and IP addresses. |
-| POST /banned             | Add a client ID, username or IP address to the blacklist.    |
-| DEL /banned/ {as} /{who} | Remove a client ID, username or IP address from the blacklist. |
+| DEL /banned              | すべてのバンデータをクリアします。                           |
+| GET /banned              | 現在バンされているクライアントID、ユーザー名、IPアドレスの一覧を取得します。 |
+| POST /banned             | クライアントID、ユーザー名、またはIPアドレスをブラックリストに追加します。 |
+| DEL /banned/{as}/{who}   | クライアントID、ユーザー名、またはIPアドレスをブラックリストから削除します。 |
 
 ::: tip
-The banned list is only applicable to a small number of client bans. If there are a large number of clients requiring authentication management, use the [authentication](./authn/authn.md) function.
+バンリストは少数のクライアントのバンにのみ適しています。多数のクライアントの認証管理が必要な場合は、[認証](./authn/authn.md)機能を利用してください。
 :::
 
-## Create Banned Clients
+## バンされたクライアントの作成
 
-1. Go to EMQX Dashboard, and click **Access Control** -> **Banned Clients** on the left navigation menu to enter the **Banned Clients** page.
-2. Click **Create** at the top right corner. In the **Create** dialog, specify a client to be banned.
-   - **Banned Object**: Choose how to enact a ban on a client by specifying either the **Client ID**, **Username**, **IP Address**, **Client ID Pattern**, **Username Pattern,** or **IP Address Range** from the dropdown list, and then provide the associated value.
-   - **Expire At** (optional): Click the clock icon to select the expiration time and date for this banning action.
-   - **Reason** (optional): Fill in why you want to ban this client in this text box.
-2. Click **Create** to finish the setting.
+1. EMQXダッシュボードにアクセスし、左側のナビゲーションメニューから **Access Control** -> **Banned Clients** をクリックして **Banned Clients** ページに入ります。
+2. 右上の **Create** をクリックします。**Create** ダイアログでバン対象のクライアントを指定します。
+   - **Banned Object**: ドロップダウンリストから **Client ID**、**Username**、**IP Address**、**Client ID Pattern**、**Username Pattern**、または **IP Address Range** のいずれかを選択し、該当する値を入力します。
+   - **Expire At**（任意）: 時計アイコンをクリックして、このバンの有効期限日時を選択します。
+   - **Reason**（任意）: なぜこのクライアントをバンするのか理由を入力します。
+3. **Create** をクリックして設定を完了します。
 
-<img src="./assets/blacklist_create_ee.png" alt="blacklist_create_ee" style="zoom:67%;" />
+<img src="./assets/blacklist_create_ee.png" alt="バン作成画面" style="zoom:67%;" />
 
-## Clear Banned Clients
+## バンされたクライアントのクリア
 
-You can remove a single banned client record by clicking the **Delete** button in the **Actions** column. If you want to clear the records on the page all at once, click the **Clear All** button.
-
+**Actions** 列の **Delete** ボタンをクリックすると、単一のバンレコードを削除できます。ページ内のすべてのレコードを一括でクリアしたい場合は、**Clear All** ボタンをクリックしてください。

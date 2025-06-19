@@ -1,103 +1,103 @@
-# Ingest MQTT Data into Redis
+# RedisへのMQTTデータ取り込み
 
-[Redis](https://redis.io/) is an open-source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker. EMQX supports integration with Redis so you can save MQTT messages and client events to Redis. With Redis data integration, you can use Redis for message caching and statistics of client events.
+[Redis](https://redis.io/)は、オープンソースのインメモリデータストアであり、データベース、キャッシュ、ストリーミングエンジン、メッセージブローカーとして数百万の開発者に利用されています。EMQXはRedisとの連携をサポートしており、MQTTメッセージやクライアントイベントをRedisに保存できます。Redisとのデータ連携により、メッセージのキャッシュやクライアントイベントの統計にRedisを活用できます。
 
-This page provides a detailed overview of the data integration between EMQX and Redis with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとRedis間のデータ連携の詳細な概要と、実際の連携作成および検証手順を解説します。
 
-## How It Works
+## 動作概要
 
-Redis data integration is an out-of-the-box feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with Redis's rich data structures and powerful Key-Value read and write performance capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Redis for data caching and operations., eliminating the need for complex coding.
+Redisデータ連携はEMQXの標準機能であり、EMQXのリアルタイムデータ取得・転送能力とRedisの豊富なデータ構造および高性能なKey-Value読み書き性能を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、複雑なコーディングなしでEMQXからRedisへのデータ取り込みを簡素化しています。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and Redis:
+以下の図は、EMQXとRedis間の典型的なデータ連携アーキテクチャを示しています。
 
 ![EMQX Integration Redis](./assets/emqx-integration-redis.png)
 
-Ingesting MQTT data into Redis works as follows:
+MQTTデータのRedis取り込みは以下のように動作します：
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Redis. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into Redis**: Once the rules engine has processed the data, it triggers actions to execute preset Redis commands for caching, counting, and other operations on the data.
-4. **Data storage and utilization**: By reading data stored in Redis, enterprises can leverage its rich data operation capabilities to implement various use cases. For example, in the logistics field, it's possible to obtain the latest status of devices, as well as carry out GPS geographical location analysis based on data and perform operations like real-time data analysis and sorting. This facilitates functionalities like real-time tracking, route recommendations, and more.
+1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを通じてEMQXに接続し、機械、センサー、製品ラインの稼働状態や計測値、トリガーイベントに基づくリアルタイムMQTTデータをEMQXにパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **メッセージデータ処理**：メッセージが到着するとルールエンジンを通過し、EMQXで定義されたルールによって処理されます。ルールは事前定義された条件に基づき、Redisにルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式の変換や特定情報のフィルタリング、追加コンテキストの付加などの変換処理が適用されます。
+3. **Redisへのデータ取り込み**：ルールエンジンがデータを処理後、プリセットされたRedisコマンドを実行してデータのキャッシュやカウントなどの操作を行います。
+4. **データの保存と活用**：Redisに保存されたデータを読み取ることで、企業はRedisの豊富なデータ操作機能を活用し、様々なユースケースを実現できます。例えば物流分野では、デバイスの最新状態取得やGPS地理位置解析、リアルタイムデータ分析やソートなどの操作が可能で、リアルタイム追跡やルート推薦などの機能を支援します。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with Redis offers a range of features and benefits tailored to ensure efficient data transmission, processing, and utilization:
+Redisとのデータ連携は、効率的なデータ伝送、処理、活用を実現するための多彩な特長とメリットを提供します：
 
-- **High Performance and Scalability**: Supported by EMQX's distributed architecture and Redis's cluster mode, applications can seamlessly scale with increasing data volumes. Even for large datasets, consistent performance and responsiveness are ensured.
-- **Real-time Data Streams**: EMQX is built specifically for handling real-time data streams, ensuring efficient and reliable data transmission from devices to Redis. Redis is capable of quickly executing data operations, meeting the needs for real-time data caching and making it an ideal data storage component for EMQX.
-- **Real-time Data Analysis**: Redis can be used for real-time data analysis, capable of computing real-time metrics like device connections, message publishing, and specific business indicators. EMQX, on the other hand, can handle real-time message transmission and processing, providing real-time data inputs for data analysis.
-- **Geographic Location Analysis**: Redis offers geospatial data structures and commands for storing and querying geographic location information. Combined with EMQX's powerful device connection capabilities, it can be widely applied in various IoT applications like logistics, connected vehicles, smart cities, and more.
+- **高性能かつスケーラブル**：EMQXの分散アーキテクチャとRedisのクラスターモードにより、データ量の増加に応じてアプリケーションをシームレスにスケールできます。大規模データセットでも一貫した性能と応答性を維持します。
+- **リアルタイムデータストリーム**：EMQXはリアルタイムデータストリーム処理に特化しており、デバイスからRedisへの効率的かつ信頼性の高いデータ伝送を保証します。Redisは高速なデータ操作を実行でき、リアルタイムデータキャッシュのニーズに応え、EMQXの理想的なデータ保存コンポーネントとなります。
+- **リアルタイムデータ分析**：Redisはリアルタイムのデバイス接続数、メッセージパブリッシュ数、特定の業務指標などのメトリクス計算に利用できます。EMQXはリアルタイムメッセージ伝送と処理を担い、データ分析のためのリアルタイムデータ入力を提供します。
+- **地理位置解析**：Redisは地理空間データ構造とコマンドを備え、地理位置情報の保存と検索が可能です。EMQXの強力なデバイス接続機能と組み合わせることで、物流、コネクテッドカー、スマートシティなど多様なIoTアプリケーションに広く応用できます。
 
-## Before You Start
+## 事前準備
 
-This section describes the preparations you need to complete before you start to create the Redis data integration, including how to set up the Redis server.
+このセクションでは、Redisデータ連携を作成する前に必要な準備とRedisサーバーのセットアップ方法を説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQXデータ連携の[ルール](./rules.md)の知識
+- [データ連携](./data-bridges.md)の知識
 
-### Install Redis Server
+### Redisサーバーのインストール
 
-Install and run Redis via Docker:
+Dockerを使ってRedisをインストールし、起動します：
 
 ```bash
-# Start a Redis container and set the password to public
+# Redisコンテナを起動し、パスワードをpublicに設定
 docker run --name redis -p 6379:6379 -d redis --requirepass "public"
 
-# Access the container
+# コンテナにアクセス
 docker exec -it redis bash
 
-# Access the Redis server, use the AUTH command for authentication
+# Redisサーバーにアクセスし、AUTHコマンドで認証
 redis-cli
 127.0.0.1:6379> AUTH public
 OK
 
-# Verify the installation
+# インストールの確認
 127.0.0.1:6379> set emqx "Hello World"
 OK
 127.0.0.1:6379> get emqx
 "Hello World"
 ```
 
-Now you have successfully installed Redis and verified the installation with the `SET` and `GET` commands. For more Redis commands, see [Redis Commands](https://redis.io/commands/).
+これでRedisのインストールが完了し、`SET`および`GET`コマンドで動作確認ができました。Redisのコマンドについては[Redis Commands](https://redis.io/commands/)をご参照ください。
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Redis Sink to the Redis Server.
+このセクションでは、Redis SinkをRedisサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and Redis on the local machine. If your Redis is deployed elsewhere, adjust the settings accordingly.
+以下の手順は、EMQXとRedisをローカルマシンで実行していることを前提としています。Redisが別の場所にデプロイされている場合は設定を適宜調整してください。
 
-1. Enter the Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Redis** and then click **Next**.
-4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_redis`.
-5. Set **Redis Mode** as the business needs, for example, `single`.
-6. Enter the connection information. 
-   - **Server Host**: Enter `127.0.0.1:6379`.
-   - **Username**: Enter `admin`.
-   - **Password**: Enter `public`.
-   - **Database ID**: Enter `0`.
-   - Configure the other options according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the Redis server.
-9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Redis. For detailed steps, see [Create a Rule and Redis Sink](#create-a-rule-and-redis-sink).
+1. ダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**Redis**を選択し、**Next**をクリックします。
+4. コネクター名を入力します。名前は英数字の組み合わせとしてください。例：`my_redis`
+5. ビジネスニーズに応じて**Redis Mode**を設定します。例：`single`
+6. 接続情報を入力します。  
+   - **Server Host**：`127.0.0.1:6379`を入力  
+   - **Username**：`admin`を入力  
+   - **Password**：`public`を入力  
+   - **Database ID**：`0`を入力  
+   - その他のオプションはビジネスニーズに応じて設定してください。  
+   - 暗号化接続を行う場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+8. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがRedisサーバーに接続できるかテストできます。
+9. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成を続けられます。詳細は[Create a Rule and Redis Sink](#create-a-rule-and-redis-sink)を参照してください。
 
-## Create a Rule with Redis Sink
+## Redis Sink付きルールの作成
 
-This section demonstrates how to create rules for caching the last message of every client and collecting the message discard statistics. 
+このセクションでは、各クライアントの最新メッセージをキャッシュし、メッセージ破棄の統計を収集するルールの作成方法を説明します。
 
-You need to create 2 separate Redis Sinks for the messaging caching and statistics features. Follow the specific **Redis Command Template** configuration instructions based on what type of Sinks you need to create.
+メッセージキャッシュと統計機能には、それぞれ別のRedis Sinkを作成する必要があります。作成するSinkの種類に応じて、以下の**Redis Command Template**設定手順に従ってください。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードで、**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. Enter `cache_to_redis` as the rule ID, and set the rules in the **SQL Editor** based on the feature to use:
+3. ルールIDに`cache_to_redis`を入力し、使用する機能に応じて**SQL Editor**にルールを設定します：
 
-   - To create a rule for message caching, input the following statement, which means the MQTT messages under topic `t/#`  will be saved to Redis.
+   - メッセージキャッシュ用ルールを作成する場合、以下の文を入力します。これはトピック`t/#`配下のMQTTメッセージをRedisに保存することを意味します。
 
-     Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+     注意：独自のSQL構文を指定する場合は、Sinkで必要なすべてのフィールドを`SELECT`部分に含めてください。
 
      ```bash
      SELECT
@@ -106,7 +106,7 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
        "t/#"
      ```
 
-   - To create a rule for message discard statistics, enter the following statement.
+   - メッセージ破棄統計用ルールを作成する場合、以下の文を入力します。
 
      ```bash
      SELECT
@@ -115,72 +115,72 @@ You need to create 2 separate Redis Sinks for the messaging caching and statisti
        "$events/message_dropped", "$events/delivery_dropped"
      ```
 
-     EMQX rules define 2 message discarding events, through which the rules can be triggered and recorded in Redis:
+     EMQXルールは2種類のメッセージ破棄イベントを定義しており、これらのイベントでルールをトリガーしRedisに記録できます：
 
-     | Event                                    | Topic                    | Parameter                                                    |
+     | イベント                                   | トピック                   | パラメーター                                                  |
      | ---------------------------------------- | ------------------------ | ------------------------------------------------------------ |
-     | Messages are discarded during forwarding | $events/message_dropped  | [$events/message_dropped](./rule-sql-events-and-fields.md#events-message-dropped) |
-     | Messages are discarded during delivery   | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#events-delivery-dropped) |
+     | 転送中にメッセージが破棄される           | $events/message_dropped  | [$events/message_dropped](./rule-sql-events-and-fields.md#events-message-dropped) |
+     | 配信中にメッセージが破棄される           | $events/delivery_dropped | [$events/delivery_dropped](./rule-sql-events-and-fields.md#events-delivery-dropped) |
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   初心者の方は、**SQL Examples**をクリックし、**Enable Test**をオンにしてSQLルールの学習とテストを行うことを推奨します。
 
    :::
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Redis.
+4. + **Add Action**ボタンをクリックして、ルールによりトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをRedisに送信します。
 
-5. Select `Redis` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**のドロップダウンリストから`Redis`を選択します。**Action**はデフォルトの`Create Action`のままにします。すでにSinkを作成済みの場合はそれを選択することも可能です。本デモでは新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+6. Sinkの名前を入力します。名前は英数字の組み合わせとしてください。
 
-7. Select the Connector `my_redis` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**のドロップダウンから`my_redis`を選択します。隣のボタンから新規コネクターを作成することも可能です。設定パラメーターの詳細は[Create a Connector](#create-a-connector)を参照してください。
 
-8. Configure **Redis Command Template** based on the feature to use:
+8. 使用する機能に応じて**Redis Command Template**を設定します：
 
-   - To create a Sink for message caching, use the Redis [HSET](https://redis.io/commands/hset/) command and hash data structure to store messages, the data format uses `clientid` as the key, and stores fields such as `username`, `payload`, and `timestamp`. To distinguish it from other keys in Redis, add an `emqx_messages` prefix to the message and separate it with `:`
+   - メッセージキャッシュ用Sinkを作成する場合、Redisの[HSET](https://redis.io/commands/hset/)コマンドとハッシュデータ構造を使い、`clientid`をキーとして`username`、`payload`、`timestamp`などのフィールドを保存します。Redis内の他のキーと区別するため、`emqx_messages`プレフィックスを付け、コロンで区切ります。
 
      ```bash
      # HSET key filed value [field value...]
      HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
      ```
 
-   - To create a Sink for message discard statistics, use [HINCRBY](https://redis.io/commands/hincrby/) command below to collect the discarded messages under every topic.
+   - メッセージ破棄統計用Sinkを作成する場合、以下の[HINCRBY](https://redis.io/commands/hincrby/)コマンドを使い、各トピックで破棄されたメッセージ数を集計します。
 
      ```bash
      # HINCRBY key field increment
      HINCRBY emqx_message_dropped_count ${topic} 1
      ```
 
-     Each time the command is executed, the corresponding counter is incremented by 1.
+     このコマンドが実行されるたびに、対応するカウンターが1ずつ増加します。
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. **詳細設定（任意）**：必要に応じて**sync**または**async**クエリモードを選択します。詳細は[Features of Sink](./data-bridges.md#features-of-sink)を参照してください。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Redis server.
+11. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがRedisサーバーに接続できるかテストできます。
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. **Create**ボタンをクリックしてSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. **Create Rule**ページに戻り、設定内容を確認します。**Create**ボタンをクリックしてルールを生成します。
 
-You have now successfully created a rule for the Redis Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Redis Sink.
+これでRedis Sink付きルールの作成が完了しました。**Integration** -> **Rules**ページで新規作成したルールを確認できます。**Actions(Sink)**タブをクリックすると新しいRedis Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to Redis after parsing by rule `my_rule`.
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認でき、トピック`t/#`配下のメッセージがルール`my_rule`で解析された後にRedisへ送信・保存されていることがわかります。
 
 <!-- TODO 5.5 少了一个规则 -->
 
-## Test the Rule
+## ルールのテスト
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger a message caching event. If topic  `t/1`  does not have any subscribers, the message will be discarded and trigger the message discard rule.
+MQTTXを使ってトピック`t/1`にメッセージを送信し、メッセージキャッシュイベントをトリガーします。もしトピック`t/1`にサブスクライバーがいなければ、メッセージは破棄され、メッセージ破棄ルールがトリガーされます。
 
 ```bash
 mqttx pub -i emqx_c -u emqx_u -t t/1 -m '{ "msg": "hello Redis" }'
 ```
 
-Check the running status of the two Sinks, there should be one new Matched and one Sent Successfully message.
+2つのSinkの稼働状況を確認すると、新たに1件のMatchedと1件のSent Successfullyメッセージがあるはずです。
 
-Check whether the message is cached.
+メッセージがキャッシュされているか確認します。
 
 ```bash
 127.0.0.1:6379> HGETALL emqx_messages:emqx_c
@@ -192,9 +192,9 @@ Check whether the message is cached.
 6) "1675263885119"
 ```
 
-Rerun the test, the `timestamp` field should be updated.
+テストを再度実行すると、`timestamp`フィールドが更新されているはずです。
 
-Check whether the discarded messages are collected:
+破棄されたメッセージが集計されているか確認します：
 
 ```bash
 127.0.0.1:6379> HGETALL emqx_message_dropped_count
@@ -202,4 +202,4 @@ Check whether the discarded messages are collected:
 2) "1"
 ```
 
-Repeat the test, the number on the counter corresponding to `t/1` should also increase.
+テストを繰り返すと、`t/1`に対応するカウンターの数値も増加します。

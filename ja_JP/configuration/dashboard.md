@@ -1,8 +1,8 @@
 # Dashboard Configuration
 
-The EMQX Dashboard is a web-based graphical interface that enables real-time management and monitoring of EMQX and its connected devices. 
+EMQX Dashboardは、EMQXおよび接続されたデバイスのリアルタイム管理と監視を可能にするウェブベースのグラフィカルインターフェースです。
 
-EMQX Dashboard configuration includes many configuration items. For example, you can enable the Swagger UI through the `swagger_support` configuration and configure a listener for the EMQX Dashboard to accept all incoming connections. In addition, the following common configuration items are also available:
+EMQX Dashboardの設定には多くの設定項目があります。例えば、`swagger_support`設定を通じてSwagger UIを有効にしたり、EMQX Dashboardのリスナーを設定してすべての着信接続を受け入れることができます。さらに、以下の一般的な設定項目も利用可能です：
 
 - `listeners`
 - `token_expired_time`
@@ -15,18 +15,18 @@ EMQX Dashboard configuration includes many configuration items. For example, you
 - `unsuccessful_login_interval`
 - `sso`
 
-Below is a sample Dashboard configuration:
+以下はDashboard設定のサンプルです：
 
 ```json
 dashboard {
   listeners {
     http {
-      # set 'bind = 0' will disable this listener
+      # 'bind = 0' に設定するとこのリスナーは無効になります
       bind = "0.0.0.0:18083"
       max_connections = 512
     }
     https {
-      # set 'bind = 0' will disable this listener
+      # 'bind = 0' に設定するとこのリスナーは無効になります
       bind = "0.0.0.0:18084"
       ssl_options {
         certfile = "${EMQX_ETC_DIR}/certs/cert.pem"
@@ -43,7 +43,7 @@ dashboard {
   unsuccessful_login_lock_duration = 10m
   unsuccessful_login_interval = 5m
   sso = {
-    # Normally, only one of `ldap`, `oidc`, or `smal` can be active at a time. Below is for the demonstration purposes.
+    # 通常、`ldap`、`oidc`、`saml`のうち一つだけが有効になります。以下はデモ用の設定です。
     ldap = {
       enable = true
       backend = "ldap"
@@ -92,67 +92,66 @@ dashboard {
 }
 ```
 
-Where,
+各設定の説明は以下の通りです。
 
 - `bind = "0.0.0.0:18083"`
 
-  The IP address and port number that the listener binds to. In this example, the listener will bind to all available network interfaces (`0.0.0.0`) on port `18083`. set to port number `0` will disable this listener.
+  リスナーがバインドするIPアドレスとポート番号です。この例では、リスナーはすべての利用可能なネットワークインターフェース（`0.0.0.0`）のポート`18083`にバインドします。ポート番号を`0`に設定するとリスナーは無効になります。
 
 - `max_connections = 512`
 
-  The maximum number of concurrent connections that the listener will accept. In this example, the maximum number of connections is set to `512`.
+  リスナーが受け入れる最大同時接続数です。この例では最大接続数が`512`に設定されています。
 
 - `ssl_options.certfile`
 
-  Path to the PEM format certificates chain file. Server certificate as the first one, followed by its immediate issuer certificate then the issuer's issuer certificate, and so on. Root CA certificate is optional. The path prefix (only prefix) can be an environment variable.
+  PEM形式の証明書チェーンファイルへのパスです。サーバー証明書を最初に、その直上の発行者証明書、さらにその上の発行者証明書と続きます。ルートCA証明書は任意です。パスのプレフィックス（先頭部分）のみ環境変数を利用可能です。
 
 - `ssl_options.keyfile`
 
-  Path to the PEM format private key file.
+  PEM形式の秘密鍵ファイルへのパスです。
 
 - `token_expired_time`
 
-  JWT token expiration time. It is equivalent to "browser session expiration time". When a user logs in, EMQX generates a JWT token along with a refresh token. The session is automatically renewed before expiration. The default value is `60m`.
+  JWTトークンの有効期限時間です。ブラウザセッションの有効期限に相当します。ユーザーがログインすると、EMQXはJWTトークンとリフレッシュトークンを生成します。セッションは有効期限前に自動的に更新されます。デフォルトは`60m`です。
 
 - `hwmark_expire_time`
 
-  The time window for the highest watermark to expire. The default value is `7d`. After expiration, the dashboard will find the new highest watermark since the expiration time up to the current time.
+  ハイウォーターマーク（最高水準値）が期限切れになるまでの時間ウィンドウです。デフォルトは`7d`です。期限切れ後、ダッシュボードは期限切れ時刻から現在までの新しい最高水準値を検索します。
 
 - `password_expired_time`
 
-  Set the expiration time for the user's password used to log in to the Dashboard, such as `1h`. After this time, the user must change their password when logging into the Dashboard. The default value `0` means the password never expires.
+  Dashboardログインに使用するユーザーのパスワードの有効期限を設定します（例：`1h`）。この時間を過ぎると、ユーザーはDashboardログイン時にパスワード変更が必要になります。デフォルトの`0`はパスワードが期限切れにならないことを意味します。
 
 - `cors`
 
-  Support Cross-Origin Resource Sharing (CORS). If you want to allow dashboard APIs to be accessed from other domains (e.g., a custom frontend), you can set this to `true`.
+  クロスオリジンリソースシェアリング（CORS）をサポートします。Dashboard APIを他ドメイン（例：カスタムフロントエンド）からアクセス可能にしたい場合は`true`に設定します。
 
 - `swagger_support = true`
 
-  Enable Swagger (OpenAPI) UI available at the endpoint `/api-docs`. Set to `false` to disable.
+  エンドポイント`/api-docs`で利用可能なSwagger（OpenAPI）UIを有効にします。`false`に設定すると無効になります。
 
 - `default_password`
 
-  The password used to initialize the database record for `admin` user. NOTE: Changing this config after EMQX has booted for the first time has no effect. Once initialized, the default password `public` (which comes with the installation) must be changed from the Dashboard or CLI.
-
+  `admin`ユーザーのデータベースレコード初期化に使用されるパスワードです。注意：EMQXが初回起動後にこの設定を変更しても反映されません。初期化後は、インストール時に付属するデフォルトパスワード`public`をDashboardまたはCLIから変更する必要があります。
 
 - `unsuccessful_login_max_attempts`
 
-  Specifies the maximum number of failed login attempts allowed within a specific period. If the user exceeds this limit, their account will be temporarily locked. The default value is `5`.
+  一定期間内に許容される最大のログイン失敗回数を指定します。この制限を超えるとアカウントが一時的にロックされます。デフォルトは`5`です。
 
 - `unsuccessful_login_duration`
 
-  Sets the duration (in minutes) for which the account will be locked after reaching the maximum number of unsuccessful login attempts. The default value is `10` minutes.
+  ログイン失敗回数の最大値に達した後、アカウントがロックされる期間（分単位）を設定します。デフォルトは`10`分です。
 
 - `unsuccessful_login_interval`
 
-  Defines the time window during which failed login attempts are counted towards the limit. For example, if set to `5`, the system will track the number of failed login attempts within a 5-minute period. The default value is `5` minutes.
+  ログイン失敗回数をカウントする時間ウィンドウを定義します。例えば`5`に設定すると、5分間の間に失敗したログイン回数を追跡します。デフォルトは`5`分です。
 
 - `sso`
 
-  Configure the [Single Sign-On (SSO)](../dashboard/sso.md) options. Only one of `ldap`, `oidc`, or `smal` can be active at a time. For detailed configuration descriptions, see the SSO section in the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso).
+  [シングルサインオン（SSO）](../dashboard/sso.md)の設定を行います。`ldap`、`oidc`、`saml`のうち一つだけが同時に有効になります。詳細な設定説明は[設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso)のSSOセクションをご参照ください。
 
 ::: tip
 
-EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはよりカスタマイズされたニーズに対応するため、多くの設定項目を提供しています。詳細は[EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご覧ください。
 
 :::

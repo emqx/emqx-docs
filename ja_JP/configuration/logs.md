@@ -1,31 +1,31 @@
-# Logs Configuration
+# ログ設定
 
-This page introduces how to configure logging behavior for EMQX via the configuration file. You can also configure EMQX logs with Dashboard. To configure with EMQX Dashboard, you can click **Management** -> **Logging** on the left navigation menu to configure. For more detailed descriptions of logs and Dashboard configurations, see [Logs and Observability - Logs](../observability/log.md).
+このページでは、設定ファイルを通じてEMQXのログ動作を設定する方法を紹介します。EMQXのログはダッシュボードからも設定可能です。ダッシュボードで設定する場合は、左のナビゲーションメニューから **Management** -> **Logging** をクリックしてください。ログおよびダッシュボードの設定に関する詳細は、[Logs and Observability - Logs](../observability/log.md) を参照してください。
 
 ::: tip
 
-This page also introduces the Dashboard UI fields corresponding to the configuration items.
-If you want to configure logs from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
-This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
+このページでは、設定項目に対応するダッシュボードUIのフィールドも紹介しています。  
+設定ファイルからログを設定する場合は、`emqx.conf` ではなく `base.hocon` を使うことを推奨します。  
+これは、`emqx.conf` に設定するとダッシュボードでの変更が一時的なものとなり、EMQX再起動時に失われるためです。
 
 :::
 
-EMQX provides support for two primary log handlers: Console Log and File Log, with an additional [Audit Log](../dashboard/audit-log.md) handler specifically designed to always direct logs to files.
+EMQXは主に2種類のログハンドラーをサポートしています。コンソールログとファイルログです。さらに、ログを常にファイルに出力するための専用ハンドラーとして[監査ログ（Audit Log）](../dashboard/audit-log.md)も用意されています。
 
-The system's default log-handling behavior can be configured via the environment variable `EMQX_DEFAULT_LOG_HANDLER`, which accepts the following settings:
+システムのデフォルトログハンドラーは環境変数 `EMQX_DEFAULT_LOG_HANDLER` により設定可能で、以下の値を受け付けます。
 
-- `file`: Directs log output to files.
-- `console`: Channels log output to the console.
+- `file`：ログ出力をファイルに向ける
+- `console`：ログ出力をコンソールに向ける
 
-Environment variable `EMQX_DEFAULT_LOG_HANDLER` defaults `console`, but explicitly set to `file` when EMQX is initiated via systemd's `emqx.service` file.
+環境変数 `EMQX_DEFAULT_LOG_HANDLER` のデフォルトは `console` ですが、systemdの `emqx.service` ファイル経由で起動した場合は明示的に `file` に設定されます。
 
-## Output Logs as a File
+## ファイルとしてログを出力する
 
-EMQX's log output directory is determined by the environment variable `EMQX_LOG_DIR` which is set to `/var/log/emqx` if installed via RPM or DEB packages. Otherwise, the log directory is `log` in the EMQX installation directory.
+EMQXのログ出力ディレクトリは環境変数 `EMQX_LOG_DIR` で決まります。RPMやDEBパッケージでインストールした場合は `/var/log/emqx` に設定されます。そうでなければ、EMQXインストールディレクトリ内の `log` ディレクトリがログディレクトリとなります。
 
-For EMQX docker container, the installation directory is `/opt/emqx`, hence the log directory is `/opt/emqx/log`.
+EMQXのDockerコンテナの場合、インストールディレクトリは `/opt/emqx` なので、ログディレクトリは `/opt/emqx/log` です。
 
-To output logs as a file, you may either configure the log handler in the Dashboard or modify the `base.hocon` file directly as below:
+ログをファイルとして出力するには、ダッシュボードでログハンドラーを設定するか、以下のように `base.hocon` ファイルを直接編集します。
 
 ```bash
 log {
@@ -41,22 +41,22 @@ log {
   }
 ```
 
- Where,
+ここで、
 
-| Configuration Item    | Dashboard UI         | Description                                                  | Default Value | Optional Values                                              |
-| --------------------- | -------------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `formatter`           | Log Formatter        | This sets the log format.                                    | `text`        | `text` is for free text.<br /> `json` is for structured logging. |
-| `level`               | Log Level            | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `path`                | Log File Name        | This sets the path and name of the log file. <br />By default, EMQX writes the log file to the `emqx.log` file in the `log` directory of the EMQX installation directory. | `emqx.log`    | --                                                           |
-| `rotation_count`      | Max Log Files Number | This sets the max number of log files that can be saved.     | `10`          | `1` - `2,048`                                                |
-| `rotation_size`       | Rotation Size        | This sets the maximum size of a single log file before it is rotated. The old log file will be renamed and moved to an archive directory once it reached the specified value unless it is set to `infinity`, indicating the log file will not be rotated. | `50MB`        | `1` - `infinity`                                             |
-| `time_offset`         | Time Offset          | The time offset relative to UTC in the log.                  | `system`      | --                                                           |
-| `timestamp_format` | Timestamp Format     | The format of the timestamp in the log.                      | `auto`        | `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.<br />`epoch`: Microseconds precision Unix epoch format.<br />`rfc3339`: RFC3339 compliant format for date-time strings. |
+| 設定項目               | ダッシュボードUI       | 説明                                                         | デフォルト値   | 選択可能な値                                               |
+| ---------------------- | ---------------------- | ------------------------------------------------------------ | ------------- | ---------------------------------------------------------- |
+| `formatter`            | Log Formatter          | ログのフォーマットを設定します。                             | `text`        | `text` は自由テキスト形式。<br />`json` は構造化ログ形式。 |
+| `level`                | Log Level              | 現在のログハンドラーのログレベル、つまり記録したい最小ログレベルを設定します。 | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `path`                 | Log File Name          | ログファイルのパスとファイル名を設定します。<br />デフォルトでは、EMQXインストールディレクトリの `log` フォルダ内の `emqx.log` にログを書き込みます。 | `emqx.log`    | --                                                         |
+| `rotation_count`       | Max Log Files Number   | 保存可能なログファイルの最大数を設定します。                 | `10`          | `1` - `2,048`                                              |
+| `rotation_size`        | Rotation Size          | ログファイルがローテーションされる最大サイズを設定します。指定サイズに達すると古いログファイルはリネームされアーカイブディレクトリに移動されます。`infinity` に設定するとローテーションされません。 | `50MB`        | `1` - `infinity`                                           |
+| `time_offset`          | Time Offset            | ログのタイムスタンプのUTCからの時差を設定します。             | `system`      | --                                                         |
+| `timestamp_format`     | Timestamp Format       | ログのタイムスタンプのフォーマットを設定します。             | `auto`        | `auto`: 使用中のログフォーマッターに応じて自動判別。テキストは `rfc3339`、JSONは `epoch` を使用。<br />`epoch`: マイクロ秒精度のUnixエポック形式。<br />`rfc3339`: RFC3339準拠の日付時刻文字列形式。 |
 
-## Output logs with Console
+## コンソールにログを出力する
 
-When EMQX is started in a docker container, the default log handler is `console`.
-You can configure the log level and log format with the following configuration items.
+EMQXをDockerコンテナで起動すると、デフォルトのログハンドラーは `console` になります。  
+ログレベルやログフォーマットは以下の設定項目で変更可能です。
 
 ```bash
 log {
@@ -69,17 +69,17 @@ log {
 }
 ```
 
-Where, 
+ここで、
 
-| Configuration Item    | Dashboard UI     | Description                                                  | Default Value | Optional Values                                              |
-| --------------------- | ---------------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| `formatter`           | Log Formatter    | This sets the log format.                                    | `text`        | `text` for free text.<br /> `json` for structured logging.   |
-| `level`               | Log Level        | This sets the log level of the current log handler, that is, the minimum log level you want to record. | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
-| `time_offset`         | Time Offset      | The time offset relative to UTC in the log.                  | `system`      | --                                                           |
-| `timestamp_format` | Timestamp Format | The format of the timestamp in the log.                      | `auto`        | `auto`: Automatically determines the timestamp format based on the log formatter being used. Utilizes `rfc3339` format for text formatters, and `epoch` format for JSON formatters.<br />`epoch`: Microseconds precision Unix epoch format.<br />`rfc3339`: RFC3339 compliant format for date-time strings. |
+| 設定項目               | ダッシュボードUI       | 説明                                                         | デフォルト値   | 選択可能な値                                               |
+| ---------------------- | ---------------------- | ------------------------------------------------------------ | ------------- | ---------------------------------------------------------- |
+| `formatter`            | Log Formatter          | ログのフォーマットを設定します。                             | `text`        | `text` は自由テキスト形式。<br />`json` は構造化ログ形式。 |
+| `level`                | Log Level              | 現在のログハンドラーのログレベル、つまり記録したい最小ログレベルを設定します。 | `warning`     | `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency` |
+| `time_offset`          | Time Offset            | ログのタイムスタンプのUTCからの時差を設定します。             | `system`      | --                                                         |
+| `timestamp_format`     | Timestamp Format       | ログのタイムスタンプのフォーマットを設定します。             | `auto`        | `auto`: 使用中のログフォーマッターに応じて自動判別。テキストは `rfc3339`、JSONは `epoch` を使用。<br />`epoch`: マイクロ秒精度のUnixエポック形式。<br />`rfc3339`: RFC3339準拠の日付時刻文字列形式。 |
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはより詳細なカスタマイズに対応する設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご参照ください。
 
 :::

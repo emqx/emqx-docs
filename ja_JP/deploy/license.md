@@ -1,112 +1,111 @@
 ---
-title: Work with EMQX Enterprise License
-description: EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a commercial license. 
+title: EMQX Enterprise ライセンスの利用
+description: EMQX Enterprise には、限定的な商用利用権を持つシングルノードの Community ライセンスが含まれています。ただし、EMQX Enterprise を商用利用やクラスター展開で使用する場合は、商用ライセンスの取得が必要です。
 ---
 
+# EMQX Enterprise ライセンスの利用
 
-# Work with EMQX Enterprise License
-
-Starting from EMQX 5.9, EMQX is released under the Business Source License (BSL) 1.1, a source-available license that allows open development while protecting EMQX’s commercial use.
+EMQX 5.9 以降、EMQX は Business Source License (BSL) 1.1 のもとでリリースされており、オープンな開発を可能にしつつ、EMQX の商用利用を保護しています。
 
 ::: tip
 
-For detailed information about the licensing changes, see the [EMQX Licensing FAQ](https://www.emqx.com/en/content/license-faq).
+ライセンス変更の詳細については、[EMQX ライセンス FAQ](https://www.emqx.com/en/content/license-faq) をご覧ください。
 
 :::
 
-As part of the installation package, EMQX Enterprise already includes a single-node Community License with limited commercial use permission. However,  if you use EMQX Enterprise for full commercial usage and cluster deployment, you must obtain a Commercial License. 
+インストールパッケージには、限定的な商用利用権を持つシングルノード Community ライセンスが含まれています。しかし、EMQX Enterprise を完全な商用利用やクラスター展開で使用する場合は、商用ライセンスの取得が必要です。
 
-This page guides you through the process of obtaining a Commercial License and importing it into EMQX.
+本ページでは、商用ライセンスの取得方法と EMQX へのインポート手順をご案内します。
 
-## Apply for a License
+## ライセンスの申請
 
-To apply for a Commercial License with a valid License Key, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a commercial license. Our sales representative will contact you as soon as possible. 
+有効なライセンスキーを伴う商用ライセンスを申請するには、EMQ の営業担当者にご連絡いただくか、[お問い合わせ](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) ページの連絡先情報を入力して商用ライセンスを申請してください。営業担当者より折り返しご連絡いたします。
 
-Suppose you prefer to try EMQX Enterprise before purchasing. In that case, you can apply for a Trial License on our [Trial License application page,](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
+購入前に EMQX Enterprise を試用したい場合は、[トライアルライセンス申請ページ](https://www.emqx.com/en/apply-licenses/emqx) からトライアルライセンスを申請できます。申請後、ライセンスファイルがすぐにメールで送付されます。
 
-- The Trial License is valid for 15 days.
-- The Trial License supports 10,000 concurrent sessions.
+- トライアルライセンスの有効期限は15日間です。
+- トライアルライセンスは最大10,000の同時セッションをサポートします。
 
-::: tip Note
+::: tip 注意
 
-All the EMQX Enterprise features are available during the trial period. However, the Clustering feature will be disabled after the trial period expires. You will need to purchase a Commercial License to continue using the Clustering feature.
+トライアル期間中は EMQX Enterprise の全機能が利用可能です。ただし、トライアル期間終了後はクラスター機能が無効になります。クラスター機能を継続して利用するには商用ライセンスの購入が必要です。
 
-EMQX Enterprise under a Trial License is not permitted for use in production environments.
-
-:::
-
-If you want to extend the trial period, contact our sales department.
-
-## Update and Configure License Settings
-
-You can update your license file and configure the settings for the license connection quota usage through the EMQX Dashboard, command line interface (CLI), or the configuration file.
-
-### Dashboard
-
-1. On the EMQX Dashboard, click **System** -> **License** from the left navigation menu. In the **Basic Info** section on the License page, you can check information such as License connection quota usage, EMQX version, and issue information. 
-
-2. Click the **Update License** button. Paste your License Key in the pop-up dialog box, and click **Save**. The license information on the page automatically refreshes following your submission.
-
-   Verify the information to confirm that the new license file has taken effect.
-
-3. In the **License Settings** section, you can configure the watermark limits for the license connection quota usage.
-
-   - **Usage High Watermark**: Specify the percentage value to set the threshold above which alarms for license connection quota usage will be triggered.
-   - **Usage Low Watermark**: Specify the percentage value to set the threshold below which alarms for license connection quota usage will be deactivated.
-
-4. Click **Save Changes** to save your License settings.
-
-   <img src="./assets/license.png" alt="license" style="zoom: 50%;" />
-
-#### Revert to Community License
-
-The EMQX Dashboard allows users to revert to the default single-node Community License. You can click the **Remove License** button on the **License** page and confirm in the pop-up dialog to remove the current License.
-
-::: tip Note
-
-In cluster mode, the License cannot be removed. If you are using EMQX in cluster mode, you must first dissolve the cluster.
+トライアルライセンスの EMQX Enterprise は本番環境での利用は許可されていません。
 
 :::
 
-After reverting to the Community License:
+トライアル期間の延長を希望される場合は、営業部門までご連絡ください。
 
-- The current License will be cleared and replaced with the Community License.
-- Existing client connections will remain active.
+## ライセンス設定の更新と構成
 
-::: tip Note
+ライセンスファイルの更新やライセンス接続クォータ使用量の設定は、EMQX ダッシュボード、コマンドラインインターフェース（CLI）、または設定ファイルから行えます。
 
-The Community License does not allow full commercial use and supports only single-node deployments. Removing the License will disable clustered deployment.
+### ダッシュボード
+
+1. EMQX ダッシュボードの左側ナビゲーションメニューから **System** -> **License** をクリックします。License ページの **Basic Info** セクションで、ライセンス接続クォータ使用量、EMQX バージョン、発行情報などを確認できます。
+
+2. **Update License** ボタンをクリックします。ポップアップダイアログにライセンスキーを貼り付けて **Save** をクリックします。送信後、ページのライセンス情報が自動的に更新されます。
+
+   新しいライセンスファイルが有効になったことを確認してください。
+
+3. **License Settings** セクションで、ライセンス接続クォータ使用量のウォーターマーク制限を設定できます。
+
+   - **Usage High Watermark**：ライセンス接続クォータ使用量のアラームが発動する閾値のパーセンテージを指定します。
+   - **Usage Low Watermark**：ライセンス接続クォータ使用量のアラームが解除される閾値のパーセンテージを指定します。
+
+4. **Save Changes** をクリックしてライセンス設定を保存します。
+
+   <img src="./assets/license.png" alt="ライセンス" style="zoom: 50%;" />
+
+#### Community ライセンスへの戻し方
+
+EMQX ダッシュボードでは、デフォルトのシングルノード Community ライセンスに戻すことが可能です。**License** ページの **Remove License** ボタンをクリックし、ポップアップで確認すると現在のライセンスが削除されます。
+
+::: tip 注意
+
+クラスター運用中はライセンスを削除できません。クラスター運用中の場合は、まずクラスターを解散してください。
+
+:::
+
+Community ライセンスに戻した場合：
+
+- 現在のライセンスはクリアされ、Community ライセンスに置き換えられます。
+- 既存のクライアント接続は維持されます。
+
+::: tip 注意
+
+Community ライセンスは完全な商用利用を許可しておらず、シングルノード展開のみをサポートします。ライセンスを削除するとクラスター展開は無効になります。
 
 :::
 
 ### CLI
 
-You can also use the following command to update your EMQX Enterprise License:
+以下のコマンドでも EMQX Enterprise ライセンスの更新が可能です。
 
 ```bash
 ./bin/emqx ctl 
 
-    license info             # Show license info 
-    license update <License> # Update license given as a string
-    license update default   # Revert to default Community License
+    license info             # ライセンス情報を表示
+    license update <License> # 文字列としてライセンスを更新
+    license update default   # デフォルトの Community ライセンスに戻す
 ```
 
-### Configuration File
+### 設定ファイル
 
-You can also configure the license file with the configuration file. After the configuration, you can run `emqx ctl license reload` in [EMQX command line tool](../admin/cli.md) to reload the license. 
+設定ファイルでライセンスファイルを指定することもできます。設定後、[EMQX コマンドラインツール](../admin/cli.md)で `emqx ctl license reload` を実行してライセンスをリロードしてください。
 
 ```bash
 license {
-    ## License Key
+    ## ライセンスキー
     key = "MjIwMTExCjAKMTAKRXZhbHVhdGlvbgpjb250YWN0QGVtcXguaW8KZGVmYXVsdAoyMDIzMDEwOQoxODI1CjEwMAo=.MEUCIG62t8W15g05f1cKx3tA3YgJoR0dmyHOPCdbUxBGxgKKAiEAhHKh8dUwhU+OxNEaOn8mgRDtiT3R8RZooqy6dEsOmDI="
-    ## Low watermark limit below which license connection quota usage alarms are deactivated
+    ## ライセンス接続クォータ使用量アラームが解除される低ウォーターマーク閾値
     connection_low_watermark = "75%"
 
-    ## High watermark limit above which license connection quota usage alarms are activated
+    ## ライセンス接続クォータ使用量アラームが発動する高ウォーターマーク閾値
     connection_high_watermark = "80%"
 }
 ```
 
-After execution, you can run `emqx ctl license info` to confirm that the new license file has taken effect.
+実行後、`emqx ctl license info` を実行して新しいライセンスファイルが有効になっていることを確認できます。
 
-<!-- 您也可以通过环境变量 `EMQX_LICENSE__KEY` 变量名设置您的 License。TODO 确认是否可以 reload -->
+<!-- 環境変数 `EMQX_LICENSE__KEY` でもライセンスを設定可能です。TODO: リロード可能か確認 -->

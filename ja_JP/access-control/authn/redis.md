@@ -1,22 +1,22 @@
-# Integrate with Redis
+# Redisとの統合
 
-EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to running in three different modes, which are Single, [Redis Sentinel](https://redis.io/docs/manual/sentinel/) and [Redis Cluster](https://redis.io/docs/manual/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
+EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は、現在シングルモード、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、および[Redis Cluster](https://redis.io/docs/manual/scaling/)の3つの異なるモードで稼働しているRedisへの接続をサポートしています。本章では、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
 
-::: tip Prerequisite:
+::: tip 前提条件：
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)の知識
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-Redis authentication works with credentials stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) with predefined field names: 
+Redis認証は、あらかじめ定義されたフィールド名を持つ[Redisハッシュ](https://redis.io/docs/manual/data-types/#hashes)として保存された認証情報を使用します。
 
-- `password_hash`: required; password (in plain text or hashed) stored in the database; 
-- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
--  `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `password_hash`: 必須；データベースに保存されるパスワード（プレーンテキストまたはハッシュ化済み）  
+- `salt`: 任意；`salt = ""` またはこのフィールドを削除するとソルト値なしを示す  
+- `is_superuser`: 任意；現在のクライアントがスーパーユーザーかどうかのフラグ；デフォルトは `false`
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, prefixed salt `salt`, and password hash `sha256`, the query statement should be:
+例えば、ユーザー名 `user123` のスーパーユーザー（`is_superuser`: `true`）を追加し、パスワードを `secret`、プレフィックスのソルトを `salt`、パスワードハッシュを `sha256` で保存する場合、クエリ文は以下のようになります。
 
 ```bash
 >redis-cli
@@ -24,7 +24,7 @@ For example, if we want to add a document for a superuser (`is_superuser`: `true
 (integer) 3
 ```
 
-The corresponding config params are:
+対応する設定パラメータは以下の通りです。
 
 ```
 password_hash_algorithm {
@@ -36,64 +36,64 @@ cmd = "HMGET mqtt:${username} password_hash salt is_superuser"
 ```
 
 ::: tip
-The name `password_hash` conveys our preference for storing hashed passwords. But given that Redis doesn't have a MySQL-like `as` syntax, EMQX 5.0 has kept the `password` field (in EMQX 4.x) compatible.
+`password_hash` という名前はハッシュ化されたパスワードを保存することを意図しています。しかし、RedisにはMySQLのような `as` 構文がないため、EMQX 5.0ではEMQX 4.xで使われていた `password` フィールドとの互換性を保っています。
 
-So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_superuser`.
+そのため、`cmd` を `HMGET mqtt:${username} password salt is_superuser` と設定することも可能です。
 :::
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use Redis for password authentication. 
+EMQXダッシュボードを使って、Redisをパスワード認証に利用する設定ができます。
 
-1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner.
-3. Click to select **Password-Based** as **Mechanism**, and **Redis** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. EMQXダッシュボードの左側ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。  
+2. **認証** ページの右上にある **作成** をクリックします。  
+3. **メカニズム** に **パスワードベース** を選択し、**バックエンド** に **Redis** を選択すると、以下のように **設定** タブが表示されます。
 
-<img src="./assets/authn-redis.png" alt="Authentication with redis" style="zoom:67%;" />
+<img src="./assets/authn-redis.png" alt="Redisによる認証" style="zoom:67%;" />
 
-4. Follow the instructions below to configure the authentication backend:
+4. 以下の手順に従って認証バックエンドを設定します。
 
-   - Enter the information for connecting to Redis.
+   - Redisへの接続情報を入力します。
 
-     - **Redis Mode**: Select how Redis is deployed, including `Single`, `Sentinel` and `Cluster`. 
-     - **Server(s)**: Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to `Sentinel` or `Cluster`, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
-     - **Sentinel Name**: Specify the name to use; type: strings; only needed if you set **Redis Mode** to `Sentinel`.
-     - **Database**: Redis database name; Data type: strings.
-     - **Password**: Specify Redis user password. 
-   - Configure settings related to authentication:
+     - **Redisモード**：Redisの展開形態を選択します。`Single`、`Sentinel`、`Cluster` のいずれかです。  
+     - **サーバー**：EMQXが接続するRedisサーバーのアドレスを指定します。**Redisモード**が `Sentinel` または `Cluster` の場合は、接続するすべてのRedisサーバーをカンマ区切りで入力してください。  
+     - **Sentinel名**：使用する名前を指定します。文字列型で、**Redisモード**が `Sentinel` の場合のみ必要です。  
+     - **データベース**：Redisのデータベース名。文字列型です。  
+     - **パスワード**：Redisユーザーのパスワードを指定します。  
+   - 認証に関する設定を行います。
 
-     - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
-       - For `md5`, `sha`, `sha256` or `sha512`:
-         - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`.  You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-       - For `plain`:
-         - **Salt Position**: should be `disable`.
-       - For `bcrypt`:
-         - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
-       - For `pbkdf2`:
-         - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
-         - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
-         - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Redis authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-   - **CMD**: Redis query command. 
-   - **Advanced Settings**: 
-     - **Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a Redis server. Default: `8`. 
+     - **パスワードハッシュ**：プレーンテキストのパスワードに適用し、結果をデータベースに保存する前に使うハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。  
+       - `md5`、`sha`、`sha256`、`sha512` の場合：  
+         - **ソルト位置**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`（後置）、`prefix`（前置）、`disable`（無効）のいずれかです。外部ストレージからユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。  
+         - ハッシュ結果は16進数文字列で表され、大文字小文字を区別せずに保存された認証情報と比較されます。  
+       - `plain` の場合：  
+         - **ソルト位置** は `disable` に設定してください。  
+       - `bcrypt` の場合：  
+         - **ソルトラウンド**：ハッシュ関数を適用する回数を定義します。2のべき乗で表される「コストファクター」とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためには高い値が推奨されます。注：コストファクターを1増やすごとに認証にかかる時間が倍増します。  
+       - `pbkdf2` の場合：  
+         - **疑似乱数関数**：キー生成に使うハッシュ関数を選択します（例：`sha256`）。  
+         - **反復回数**：ハッシュ関数を実行する回数を設定します。デフォルトは `4096` です。  
+         - **派生キー長**（任意）：生成されるキーのバイト長を指定します。空欄の場合は疑似乱数関数により決定される長さになります。  
+         - ハッシュ結果は16進数文字列で表され、大文字小文字を区別せずに保存された認証情報と比較されます。  
+   - **前提条件**：[Variform式](../../configuration/configuration.md#variform-expressions)を使って、このRedis認証をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証処理が実行されます。詳細は[認証の前提条件](./authn.md#authentication-preconditions)を参照してください。  
+   - **TLSを有効化**：TLSを有効にしたい場合はスイッチをオンにします。TLSの有効化については[ネットワークとTLS](../../network/overview.md)を参照してください。  
+   - **CMD**：Redisのクエリコマンドを指定します。  
+   - **詳細設定**：  
+     - **プールサイズ**（任意）：EMQXノードからRedisサーバーへの同時接続数を指定します。デフォルトは `8` です。  
 
-5. After you finish the settings, click **Create**.
+5. 設定が完了したら、**作成** をクリックしてください。
 
-## Configure with Configuration Items
+## 設定ファイルでの設定
 
-You can configure the EMQX Redis authenticator with EMQX configuration items. <!--For detailed operation steps, see  [authn-redis:standalone](../../configuration/configuration-manual.html#authn-redis:standalone), [authn-redis:sentinel](../../configuration/configuration-manual.html#authn-redis:sentinel), and  [authn-redis:cluster](../../configuration/configuration-manual.html#authn-redis:cluster).-->
+EMQXの設定項目を使ってRedis認証を設定することも可能です。  
 
-Redis authentication is identified with `mechanism = password_based` and `backend = redis`.
+Redis認証は `mechanism = password_based` と `backend = redis` で識別されます。
 
-EMQX supports working with three kinds of Redis installation.
+EMQXは3種類のRedis展開形態に対応しています。
 
 :::: tabs type:card
 
-::: tab Standalone Redis.
+::: tab シングルRedis
 
 ```bash
 {
@@ -117,7 +117,7 @@ EMQX supports working with three kinds of Redis installation.
 
 :::
 
-::: tab Redis Sentinel 
+::: tab Redis Sentinel
 
 ```bash
 {
@@ -142,7 +142,7 @@ EMQX supports working with three kinds of Redis installation.
 
 :::
 
-::: tab Redis Cluster 
+::: tab Redis Cluster
 
 ```bash
 {

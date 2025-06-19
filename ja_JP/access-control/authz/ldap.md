@@ -1,19 +1,18 @@
-# Integrate with LDAP
+# LDAPとの統合
 
-[Lightweight Directory Access Protocol (LDAP)](https://ldap.com/) is a protocol used to access and manage directory information. EMQX supports integrating with an LDAP server for authorization checks. The LDAP authorizer implements authorization checks by matching publish/subscription requests against lists of attributes stored in the LDAP server.
+[Lightweight Directory Access Protocol (LDAP)](https://ldap.com/) は、ディレクトリ情報にアクセスし管理するためのプロトコルです。EMQXは認可チェックのためにLDAPサーバーとの統合をサポートしています。LDAPオーソライザーは、パブリッシュ／サブスクリプション要求をLDAPサーバーに格納された属性リストと照合することで認可チェックを実装します。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+- [EMQX認可の基本概念](./authz.md)の知識
 
 :::
 
-## LDAP Data Schema and Query
+## LDAPデータスキーマとクエリ
 
-The LDAP authorizer checks the client authorization against the authorization data stored within the LDAP directory. An LDAP schema defines the structure and rules for organizing and storing the authorization data. The LDAP authorizer supports almost any storage schema. Here is a schema example for OpenLDAP:
+LDAPオーソライザーは、LDAPディレクトリ内に保存された認可データに基づいてクライアントの認可をチェックします。LDAPスキーマは認可データの構造と保存ルールを定義します。LDAPオーソライザーはほぼすべてのストレージスキーマをサポートします。以下はOpenLDAPのスキーマ例です。
 
 ```sql
-
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4.1 NAME ( 'mqttPublishTopic' 'mpt' )
 	EQUALITY caseExactMatch
 	SUBSTR caseExactSubstringsMatch
@@ -39,25 +38,23 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
     SUP top
 	STRUCTURAL
 	MAY ( mqttPublishTopic $ mqttSubscriptionTopic $ mqttPubSubTopic $ mqttAclRule ) )
-
 ```
 
-This schema introduces multi-valued attributes that specify authorization rules for different MQTT operations:
+このスキーマは、異なるMQTT操作に対する認可ルールを指定するマルチバリュー属性を導入しています。
 
-- `mqttPublishTopic`: Topics the client is allowed to publish to.
-- `mqttSubscriptionTopic`: Topics the client is allowed to subscribe to.
-- `mqttPubSubTopic`: Topics the client is allowed to both publish to and subscribe to.
-- `mqttAclRule`: Fine-grained ACL rules in JSON format for advanced access control.
+- `mqttPublishTopic`: クライアントがパブリッシュを許可されているトピック
+- `mqttSubscriptionTopic`: クライアントがサブスクライブを許可されているトピック
+- `mqttPubSubTopic`: クライアントがパブリッシュおよびサブスクライブの両方を許可されているトピック
+- `mqttAclRule`: 高度なアクセス制御のためのJSON形式の詳細なACLルール
 
-EMQX supports both simple topic whitelists (with wildcards) using the first three attributes, and more expressive rules through `mqttAclRule`. See [Access Control List (ACL)](../authn/acl.md#new-format) for the ACL rule format.
+EMQXは、最初の3つの属性を使ったワイルドカード対応のシンプルなトピックホワイトリストと、`mqttAclRule`によるより表現力豊かなルールの両方をサポートします。ACLルールの形式については[アクセスコントロールリスト（ACL）](../authn/acl.md#new-format)を参照してください。
 
-### Example LDIF Entries
+### LDIFエントリーの例
 
-Below is an example of LDAP authorization data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
+以下は、OpenLDAP用のスキーマに基づいたLDAP認可データを[LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/)で指定した例です。
 
 ```sql
-
-## create organization: emqx.io
+## 組織を作成: emqx.io
 dn:dc=emqx,dc=io
 objectclass: top
 objectclass: dcobject
@@ -65,7 +62,7 @@ objectclass: organization
 dc:emqx
 o:emqx,Inc.
 
-## create organization unit: testdevice.emqx.io
+## 組織単位を作成: testdevice.emqx.io
 dn:ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectclass:organizationalUnit
@@ -75,21 +72,20 @@ dn:uid=mqttuser0001,ou=testdevice,dc=emqx,dc=io
 objectClass: top
 objectClass: mqttUser
 uid: mqttuser0001
-## allows publishing to these 3 topics
+## 以下の3つのトピックへのパブリッシュを許可
 mqttPublishTopic: mqttuser0001/pub/1
 mqttPublishTopic: mqttuser0001/pub/+
 mqttPublishTopic: mqttuser0001/pub/#
-## allows subscribe to these 3 topics
+## 以下の3つのトピックへのサブスクライブを許可
 mqttSubscriptionTopic: mqttuser0001/sub/1
 mqttSubscriptionTopic: mqttuser0001/sub/+
 mqttSubscriptionTopic: mqttuser0001/sub/#
-## the underneath topics allow both publish or subscribe
+## 以下のトピックはパブリッシュおよびサブスクライブの両方を許可
 mqttPubSubTopic: mqttuser0001/pubsub/1
 mqttPubSubTopic: mqttuser0001/pubsub/+
 mqttPubSubTopic: mqttuser0001/pubsub/#
 mqttAclRule: [{"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/1"}]
 mqttAclRule: {"permission": "allow", "action": "pub", "topic": "mqttuser0001/complexrule/#"}
-
 
 dn:uid=mqttuser0002,ou=testdevice,dc=emqx,dc=io
 objectClass: top
@@ -98,18 +94,17 @@ uid: mqttuser0002
 mqttPublishTopic: mqttuser0002/pub/#
 mqttSubscriptionTopic: mqttuser0002/sub/1
 mqttPubSubTopic: mqttuser0002/pubsub/#
-
 ```
 
-The given example defines a multi-valued attribute for each action. Each attribute can repeat zero or more times, depending on how many topics are allowed for this action.
+この例では、各アクションに対してマルチバリュー属性を定義しています。各属性は、そのアクションで許可されているトピック数に応じて0回以上繰り返すことが可能です。
 
-### Example LDAP Server Configuration
+### LDAPサーバー設定の例
 
-To ensure your LDAP server loads the schema and data correctly, you need to include the schema file and LDIF entries in your server configuration. Below is an example `slapd.conf` file:
+LDAPサーバーがスキーマとデータを正しく読み込むように、スキーマファイルとLDIFエントリーをサーバー設定に含める必要があります。以下は`slapd.conf`ファイルの例です。
 
 ::: tip
 
-You can determine how and where LDAP authorization data is stored based on your business needs.
+LDAP認可データの保存方法や場所は、ビジネスニーズに応じて決定してください。
 
 :::
 
@@ -131,53 +126,52 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
-## Configure LDAP Authorizer via Dashboard
+## ダッシュボードからLDAPオーソライザーを設定する
 
-You can use EMQX Dashboard to configure how to use LDAP for user authorization.
+EMQXダッシュボードを使ってLDAPをユーザー認可に利用する設定が可能です。
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation menu to enter the **Authorization** page.
+1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左ナビゲーションメニューから **アクセスコントロール** -> **認可** をクリックし、**認可**ページに入ります。
 
-2. Click **Create** at the top right corner, then click to select **LDAP** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
+2. 右上の **作成** をクリックし、**バックエンド**として **LDAP** を選択してから **次へ** をクリックします。以下のような **設定** タブが表示されます。
 
    <img src="./assets/authz-ldap.png" alt="authz-ldap"  />
 
-3. Follow the instructions below to do the configuration.
+3. 以下の指示に従って設定を行います。
 
-   **Connect**: Fill in the information needed to connect to LDAP.
+   **接続**: LDAPに接続するための情報を入力します。
 
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Username** Specify the LDAP root user name.
-   - **Password** Specify the LDAP root user password.
+   - **サーバー**: EMQXが接続するLDAPサーバーのアドレスを指定します（`host:port`形式）。
+   - **ユーザー名**: LDAPのルートユーザー名を指定します。
+   - **パスワード**: LDAPのルートユーザーパスワードを指定します。
 
-   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS.
+   **TLS設定**: TLSを有効にする場合はトグルスイッチをオンにします。
 
-   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
+   **接続設定**: 同時接続数と接続タイムアウトまでの待機時間を設定します。
 
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
-   - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Units supported include milliseconds, second, minute, and hour.
+   - **プールサイズ**（任意）: EMQXノードからLDAPへの同時接続数を整数で指定します。デフォルトは`8`です。
+   - **クエリタイムアウト**（任意）: EMQXがクエリのタイムアウトとみなすまでの待機時間を指定します。単位はミリ秒、秒、分、時間がサポートされています。
 
-   **Authorization configuration**: Fill in the authorization-related settings:
+   **認可設定**: 認可に関する設定を入力します。
 
-   - **Base DN**: The name of the base object entry (or possibly the root) relative to which the search is to be performed. For more information, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1), the placeholders are supported.
+   - **Base DN**: 検索を行う基準となるベースオブジェクトエントリー（またはルート）の名前です。詳細は[RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)を参照してください。プレースホルダーもサポートしています。
 
      ::: tip
 
-     DN refers to Distinguished Name. This is a unique identifier of each object entry and it also describes the location of the entry within the information tree.
+     DNはDistinguished Nameの略で、各オブジェクトエントリーの一意の識別子であり、情報ツリー内のエントリーの位置を示します。
 
      :::
 
-   - **Filter**: The `filter` that defines the conditions that must be fulfilled in order for the `Search` to match a given entry.
-     The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
+   - **フィルター**: `Search`が特定のエントリーにマッチするために満たすべき条件を定義する`filter`です。構文は[RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515)に準拠し、プレースホルダーもサポートしています。
 
-4. Click **Create** to finish the settings.
+4. **作成**をクリックして設定を完了します。
 
-## Configure LDAP Authorizer via Configuration Items
+## 設定項目によるLDAPオーソライザーの設定
 
-You can configure the EMQX LDAP authorizer with EMQX configuration items.
+EMQXの設定項目を使ってLDAPオーソライザーを設定することも可能です。
 
-The LDAP authorizer is identified by type `ldap`.
+LDAPオーソライザーはタイプ`ldap`で識別されます。
 
-Sample configuration:
+設定例:
 
 ```bash
 {

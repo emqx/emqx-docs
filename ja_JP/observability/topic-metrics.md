@@ -1,29 +1,29 @@
-# Topic Metrics
+# トピックメトリクス
 
-The Topic Metrics feature in EMQX provides detailed statistics for a given topic, including the number of messages sent and received, message rate, and other relevant metrics. To access this feature, navigate to **Diagnose** -> **Topic Metrics** on the EMQX Dashboard. Alternatively, you can retrieve topic metrics through the REST API.
+EMQXのトピックメトリクス機能は、指定したトピックに関する詳細な統計情報を提供します。これには、送受信されたメッセージ数、メッセージレート、その他関連するメトリクスが含まれます。この機能にアクセスするには、EMQXダッシュボードの **Diagnose** -> **Topic Metrics** に移動してください。あるいは、REST APIを通じてトピックメトリクスを取得することも可能です。
 
-## View Topic Metrics on Dashboard
+## ダッシュボードでトピックメトリクスを表示する
 
-After enabling the Topic Metrics feature, you can add new topic monitoring rules by clicking the **Add Topic** button in the top right corner of the page. Note that topic filters with wildcards, such as `+` or `#`, are not supported at this time. You must use specific topic names.
+トピックメトリクス機能を有効化した後、ページ右上の **Add Topic** ボタンをクリックして新しいトピック監視ルールを追加できます。なお、`+` や `#` といったワイルドカードを含むトピックフィルターは現時点でサポートされていません。特定のトピック名を指定してください。
 
-<img src="./assets/topic-metrics-ee.png" alt="topic-metrics-ee" style="zoom: 40%;" />
+<img src="./assets/topic-metrics-ee.png" alt="トピックメトリクス" style="zoom: 40%;" />
 
-Click the **View** button in the **Actions** column to see detailed information about the number of messages received, sent, and dropped per second for the specified topic. You can also filter this information by different QoS levels.
+**Actions** 列の **View** ボタンをクリックすると、指定したトピックにおける1秒あたりの受信、送信、ドロップされたメッセージ数の詳細情報を確認できます。また、異なるQoSレベルごとにフィルタリングすることも可能です。
 
-The topic metrics list includes the following fields:
+トピックメトリクス一覧には以下のフィールドが含まれます：
 
-- **Topic**: The name of the topic that you want to monitor.
-- **Incoming messages**:  The total number of incoming messages on the current topic and the number of incoming messages per second.
-- **Outgoing Messages**: The total number of outgoing messages on the current topic and the number of outgoing messages per second.
-- **Dropped Messages**: The total number of messages dropped on the current topic and the number of dropped messages per second.
-- **Start at**: The time you created this topic monitoring record.
-- **Actions**: Operations you can do on this topic monitoring record.
-  - **View**: View detailed metrics of the topic by different QoS levels.
-  - **Reset**: Restart the monitoring by clicking this button.
-  - **Delete**: Remove the record.
+- **Topic**: 監視対象のトピック名
+- **Incoming messages**: 現在のトピックにおける受信メッセージの合計数および1秒あたりの受信メッセージ数
+- **Outgoing Messages**: 現在のトピックにおける送信メッセージの合計数および1秒あたりの送信メッセージ数
+- **Dropped Messages**: 現在のトピックでドロップされたメッセージの合計数および1秒あたりのドロップ数
+- **Start at**: このトピック監視レコードを作成した日時
+- **Actions**: このトピック監視レコードに対して実行できる操作
+  - **View**: 異なるQoSレベルごとのトピック詳細メトリクスを表示
+  - **Reset**: 監視を再起動
+  - **Delete**: レコードを削除
 
-## Get Topic Metrics via REST API
+## REST APIでトピックメトリクスを取得する
 
-You can also retrieve the topic metrics through the API. On how to work with EMQX APIs, see [REST API](../admin/api.md).
+APIを通じてトピックメトリクスを取得することも可能です。EMQXのAPIの使い方については、[REST API](../admin/api.md)をご参照ください。
 
-<img src="./assets/topic-metrics-api-ee.png" alt="topic-metrics-api-ee" style="zoom:45%;" />
+<img src="./assets/topic-metrics-api-ee.png" alt="トピックメトリクスAPI" style="zoom:45%;" />

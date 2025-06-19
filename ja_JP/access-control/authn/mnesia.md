@@ -1,49 +1,49 @@
-# Use Built-in Database
+# 組み込みデータベースの使用
 
-You can use the built-in database of EMQX as a low-cost and out-of-the-box option for password authentication. After enabling, EMQX will save the client credentials in its built-in database (based on Mnesia) and manage data via REST API and Dashboard. This page introduces how to use the EMQX Dashboard and configuration items to configure the authentication using the built-in database.
+EMQXの組み込みデータベースは、低コストかつすぐに使えるパスワード認証のオプションとして利用できます。有効化すると、EMQXはクライアント認証情報を組み込みデータベース（Mnesiaベース）に保存し、REST APIやダッシュボードを通じてデータを管理します。本ページでは、EMQXダッシュボードと設定項目を使った組み込みデータベースによる認証設定方法を紹介します。
 
 ::: tip
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)についての知識
 
 :::
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to set the built-in database for password authentication.
+EMQXダッシュボードを使って、パスワード認証に組み込みデータベースを設定できます。
 
-1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner. 
-3. Click to select **Password-Based** as **Mechanism**, and **Built-in Database** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. EMQXダッシュボードの左ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
+2. **認証** ページの右上にある **作成** をクリックします。
+3. **メカニズム** に **Password-Based** を、**バックエンド** に **Built-in Database** を選択し、以下のように **設定** タブに移動します。
 
-<img src="./assets/authn-built-in-database.png" alt="Built-in-database" style="zoom:67%;" />
+<img src="./assets/authn-built-in-database.png" alt="組み込みデータベース" style="zoom:67%;" />
 
-4. Follow the instructions below to configure the authentication backend:
+4. 以下の指示に従い認証バックエンドを設定します：
 
-   - **UserID Type**: Specify the fields for client ID authentication; Options:  `username`, `clientid`（corresponding to the `Username` or `Client Identifier` fields in the `CONNECT` message sent by the MQTT client).
-   - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
-     - For `md5`, `sha`, `sha256` or `sha512`:
-       - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`.  You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
-       - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-     - For `plain`:
-       - **Salt Position**: should be `disable`.
-     - For `bcrypt`:
-       - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
-     - For `pbkdf2`:
-       - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
-       - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
-       - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
-       - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
+   - **UserID Type**：クライアントID認証に使用するフィールドを指定します。選択肢は `username`、`clientid`（MQTTクライアントが送信する `CONNECT` メッセージの `Username` または `Client Identifier` フィールドに対応）。
+   - **Password Hash**：平文パスワードに適用され、結果がデータベースに保存されるハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります：
+     - `md5`、`sha`、`sha256`、`sha512` の場合：
+       - **Salt Position**：パスワードとソルト（ランダムデータ）の結合方法を指定します。`suffix`（後置）、`prefix`（前置）、`disable`（無効）のいずれかです。外部ストレージからEMQX組み込みデータベースへユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。
+       - ハッシュ結果は16進数文字列で表され、大文字小文字を区別せずに保存済み認証情報と比較されます。
+     - `plain` の場合：
+       - **Salt Position** は `disable` に設定します。
+     - `bcrypt` の場合：
+       - **Salt Rounds**：ハッシュ関数の適用回数を、2のべき乗（2^Salt Rounds）で表す「コストファクター」です。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ向上のため値を大きくすることが推奨されます。注：コストファクターを1増やすごとに認証にかかる時間は倍増します。
+     - `pbkdf2` の場合：
+       - **Pseudorandom Function**：鍵生成に使うハッシュ関数を選択します（例：`sha256`）。
+       - **Iteration Count**：ハッシュ関数の繰り返し回数を設定します。デフォルトは `4096`。
+       - **Derived Key Length**（任意）：生成される鍵のバイト長を指定します。未指定の場合は選択した擬似乱数関数により決定されます。
+       - ハッシュ結果は16進数文字列で表され、大文字小文字を区別せずに保存済み認証情報と比較されます。
 
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Built-in Database authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+   - **Precondition**：この組み込みデータベース認証器をクライアント接続に適用するか制御するための[Variform式](../../configuration/configuration.md#variform-expressions)です。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証器が呼び出されます。それ以外はスキップされます。詳細は[認証の事前条件](./authn.md#authentication-preconditions)を参照してください。
 
-5. After you finish the settings, click **Create**.
+5. 設定が完了したら **作成** をクリックします。
 
-## Configure with Configuration Items
+## 設定項目による設定
 
-You can also configure the authentication through configuration items. <!--For detailed steps, see [authn-builtin_db:authentication](../../configuration/configuration-manual.html#authn-builtin_db:authentication).-->
+設定項目を使って認証を設定することも可能です。 <!--詳細な手順は[authn-builtin_db:authentication](../../configuration/configuration-manual.html#authn-builtin_db:authentication)を参照してください。-->
 
-Example:
+例：
 
 ```hcl
 {
@@ -57,6 +57,6 @@ Example:
 }
 ```
 
-## Migrate from External Storage to EMQX Built-in Database
+## 外部ストレージからEMQX組み込みデータベースへの移行
 
-To migrate user credentials from external storage to the EMQX built-in database, you can use .csv or .json files for batch import. For operating details, see [Import User](./user_management.md#importing-users).
+外部ストレージからEMQX組み込みデータベースへユーザー認証情報を移行するには、.csvや.jsonファイルを使った一括インポートが可能です。操作の詳細は[ユーザーのインポート](./user_management.md#importing-users)を参照してください。

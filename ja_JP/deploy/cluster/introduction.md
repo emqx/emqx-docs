@@ -1,28 +1,28 @@
-# Cluster
+# クラスター
 
-Besides working with a single EMQX node, EMQX natively supports a distributed cluster architecture, which can handle a large number of clients and messages while ensuring high availability, fault tolerance, and scalability. With the EMQX cluster, you can enjoy the benefits of fault tolerance and high availability by allowing the cluster to continue operating even if one or more nodes fail.
+単一のEMQXノードで動作させる以外に、EMQXはネイティブに分散クラスターアーキテクチャをサポートしており、多数のクライアントとメッセージを処理しながら、高可用性、フォールトトレランス、スケーラビリティを確保できます。EMQXクラスターを利用することで、1つ以上のノードが障害を起こしてもクラスター全体が継続して稼働できるため、フォールトトレランスと高可用性のメリットを享受できます。
 
 ::: tip Note
 
-Clustering is available during the trial period, but once the trial period ends, you will need to purchase a Commercial License to continue using it. Without a valid Commercial License, the clustering feature will be disabled after the trial period expires.
+クラスタリング機能はトライアル期間中に利用可能ですが、トライアル期間終了後は商用ライセンスの購入が必要です。有効な商用ライセンスがない場合、トライアル期間終了後にクラスタリング機能は無効化されます。
 
 :::
 
-This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](./create-cluster.md), how to [implement load balancing](./lb.md), and how to ensure [communication security](./security.md) within a cluster.
+本章では、[クラスタリングのメリット](#reasons-for-clustering)、新しい[MriaおよびRLOG](./mria-introduction.md)アーキテクチャ、[クラスタの手動・自動作成方法](./create-cluster.md)、[ロードバランシングの実装方法](./lb.md)、およびクラスタ内の[通信セキュリティ確保](./security.md)について紹介します。
 
-## Reasons for Clustering
+## クラスタリングのメリット
 
-EMQX cluster is recommended for larger or mission-critical applications and can bring the users the following benefits.
+EMQXクラスターは大規模またはミッションクリティカルなアプリケーションに推奨され、以下の利点をもたらします。
 
-- **Scalability**: EMQX can be easily scaled horizontally by adding more nodes to the cluster, allowing it to handle an increasing number of MQTT messages and clients.
-- **High Availability**: Running in a cluster provides high availability, as the cluster can continue to function even if one or more nodes fail. EMQX uses a distributed architecture that ensures no single point of failure.
-- **Load Balancing**: EMQX nodes in the cluster can be configured to distribute the load of handling MQTT messages, which helps to avoid overload of a single node and allows for better use of available resources.
-- **Centralized Management**: EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages.
-- **Data Consistency and Security**: The cluster replicates data across all nodes in the cluster, which helps to ensure data consistency and security.
+- **スケーラビリティ**：EMQXはクラスターにノードを追加することで水平スケールが容易になり、増加するMQTTメッセージやクライアント数に対応可能です。
+- **高可用性**：クラスターで稼働することで、1つ以上のノードが障害を起こしてもクラスター全体は機能し続けます。EMQXは単一障害点を排除する分散アーキテクチャを採用しています。
+- **ロードバランシング**：クラスター内のEMQXノードはMQTTメッセージ処理の負荷を分散でき、単一ノードの過負荷を防ぎ、リソースの有効活用を促進します。
+- **集中管理**：クラスター内のすべてのノードは単一の管理コンソールから監視・制御でき、大規模なデバイスやメッセージの管理が容易になります。
+- **データの一貫性とセキュリティ**：クラスターはすべてのノード間でデータを複製し、データの一貫性とセキュリティを確保します。
 
-## How Clustering in EMQX Works
+## EMQXのクラスタリングの仕組み
 
-The basic function of a distributed EMQX cluster is to forward and publish messages to different subscribers. In previous versions, EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370.
+分散EMQXクラスターの基本機能は、異なるサブスクライバーにメッセージを転送およびパブリッシュすることです。以前のバージョンでは、EMQXはErlang/OTP組み込みのデータベースであるMnesiaを使用してMQTTセッション状態を保存していました。データベースのレプリケーションチャネルは「Erlang distribution」プロトコルにより実現されており、各ノードはクライアント兼サーバーとして機能します。このプロトコルのデフォルトのリスニングポート番号は4370です。
 
 
 
@@ -30,9 +30,9 @@ The basic function of a distributed EMQX cluster is to forward and publish messa
 
 
 
-However, the full mesh topology imposes a practical limit on the cluster size. For EMQX versions prior to 5, it is recommended to keep the cluster size under 5 nodes. Beyond this, vertical scaling, which involves using more powerful machines, is a preferable option to maintain the cluster's performance and stability. In our benchmark environment, we managed to reach [ten million concurrent connections with EMQX Enterprise 4.3](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report).
+しかし、フルメッシュトポロジーはクラスターサイズに実用的な制限を課します。EMQX 5未満のバージョンでは、クラスターサイズを5ノード未満に保つことが推奨されます。これを超える場合は、より高性能なマシンを使う垂直スケーリングがクラスターの性能と安定性を維持するために望ましい選択肢です。当社のベンチマーク環境では、[EMQX Enterprise 4.3で1000万同時接続を達成](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)しています。
 
-To provide our customers with a better cluster salability performance, EMQX 5.0 adopts a new [Mria cluster architecture](./mria-introduction.md). With this Mria architecture, one EMQX cluster can support up to 100 million concurrent MQTT connections.
+より優れたクラスターのスケーラビリティ性能を提供するため、EMQX 5.0では新しい[Mriaクラスターアーキテクチャ](./mria-introduction.md)を採用しています。このMriaアーキテクチャにより、1つのEMQXクラスターで最大1億の同時MQTT接続をサポート可能です。
 
 
 
@@ -40,65 +40,65 @@ To provide our customers with a better cluster salability performance, EMQX 5.0 
 
 
 
-To better understand how clustering in EMQX works, you can continue to read the [EMQX clustering](../../design/clustering.md).
+EMQXのクラスタリングの仕組みをより深く理解するには、[EMQXクラスタリング](../../design/clustering.md)を参照してください。
 
 ::: tip Note
 
-While there is no strict upper limit, it is advisable to limit the cluster size to three nodes in the open-source edition of EMQX. Using only core-type nodes, a smaller cluster size typically ensures greater stability.
+厳密な上限はありませんが、EMQXオープンソース版ではクラスターサイズを3ノードに制限することを推奨します。コアタイプノードのみを使用する場合、小規模なクラスターの方が安定性が高い傾向にあります。
 
 :::
 
-## Key Features
+## 主な機能
 
-EMQX adds an abstraction layer with the [Ekka](https://github.com/emqx/ekka) library on top of distributed Erlang, enabling features like auto discovery of EMQX nodes, auto cluster, network partition, autoheal, and autoclean.
+EMQXは分散Erlangの上に[Ekka](https://github.com/emqx/ekka)ライブラリによる抽象化レイヤーを追加し、EMQXノードの自動検出、自動クラスタリング、ネットワークパーティションの自動復旧（autoheal）、自動クリーンアップ（autoclean）などの機能を実現しています。
 
-### Node Discovery and Auto Clustering
+### ノード検出と自動クラスタリング
 
-EMQX supports several node discovery strategies:
+EMQXは複数のノード検出戦略をサポートしています。
 
-| Strategy | Description                             |
-| -------- | --------------------------------------- |
-| `manual` | Manually create a cluster with commands |
-| `static` | Autocluster through static node list    |
-| `DNS`    | Autocluster through DNS A and SRV records        |
-| `etcd`   | Autocluster through etcd                |
-| `k8s`    | Autocluster provided by Kubernetes      |
+| 戦略       | 説明                                   |
+| ---------- | ------------------------------------- |
+| `manual`   | コマンドで手動でクラスターを作成する |
+| `static`   | 静的ノードリストによる自動クラスタリング |
+| `DNS`      | DNSのAおよびSRVレコードによる自動クラスタリング |
+| `etcd`     | etcdによる自動クラスタリング         |
+| `k8s`      | Kubernetesによる自動クラスタリング   |
 
-### Network Partition Autoheal
+### ネットワークパーティションの自動復旧
 
-Network partition autoheal is a feature of EMQX that allows the broker to recover automatically from network partitions without requiring any manual intervention, suitable for mission-critical applications where downtime is not acceptable.
+ネットワークパーティションの自動復旧は、EMQXがネットワークパーティションから手動介入なしに自動的に回復する機能であり、ダウンタイムが許容できないミッションクリティカルな用途に適しています。
 
-The network partition autoheal (`cluster.autoheal`) feature is enabled by default. With this feature, EMQX will continuously monitor the connectivity between nodes in the cluster.
+ネットワークパーティション自動復旧機能（`cluster.autoheal`）はデフォルトで有効です。この機能により、EMQXはクラスター内のノード間の接続状態を継続的に監視します。
 
 ```bash
 cluster.autoheal = true
 ```
 
-If a network partition is detected, EMQX will isolate the affected nodes and continue to operate with the remaining nodes. Once the network partition is resolved, the broker will automatically re-integrate the isolated nodes into the cluster.
+ネットワークパーティションが検出されると、EMQXは影響を受けたノードを隔離し、残りのノードで稼働を続けます。ネットワークパーティションが解消されると、隔離されたノードは自動的にクラスターに再統合されます。
 
-### Cluster Node Autoclean
+### クラスター内ノードの自動クリーンアップ
 
-Cluster node autoclean feature will automatically remove the disconnected nodes from the cluster after the configured time interval. This feature helps to ensure that the cluster is running efficiently and prevent performance degradation over time.
+クラスター内ノードの自動クリーンアップ機能は、切断されたノードを設定された時間経過後に自動的にクラスターから削除します。この機能によりクラスターの効率的な稼働が維持され、時間経過による性能劣化を防ぎます。
 
-This feature is enabled by default, you can customize the waiting period before removing the disconnected nodes. Default: `24h`
+この機能はデフォルトで有効であり、切断ノード削除までの待機時間をカスタマイズ可能です。デフォルトは`24h`です。
 
 ```bash
 cluster.autoclean = 24h
 ```
 
-### Session Across Nodes
+### ノード間セッション共有
 
-The session across nodes feature ensures that the client sessions will not be lost even during the client's disconnection. 
+ノード間セッション共有機能は、クライアントの切断時にもセッションが失われないことを保証します。
 
-To use this feature:
+この機能を利用するには：
 
-- for MQTT 3.x clients, set `clean_start` to `false`
-- for MQTT 5.0 clients, set `clean_start` to `false` and set `session_expiry_interval` to be greater than 0. 
+- MQTT 3.xクライアントの場合、`clean_start`を`false`に設定します。
+- MQTT 5.0クライアントの場合、`clean_start`を`false`にし、`session_expiry_interval`を0より大きい値に設定します。
 
-Then EMQX will keep the previous session data associated with the Client ID when the client disconnects. If this client reconnects, EMQX will resume the previous sessions, deliver any messages that were queued during the client's disconnection, and maintain the client's subscriptions.
+これにより、クライアントが切断した際にクライアントIDに紐づく以前のセッションデータが保持されます。クライアントが再接続すると、EMQXは前回のセッションを再開し、切断中にキューイングされたメッセージを配信し、クライアントのサブスクリプションを維持します。
 
-## Network Requirements
+## ネットワーク要件
 
-To ensure optimal performance, the network latency for operating EMQX clusters should be less than 10 milliseconds. The cluster will not be available if the latency is higher than 100 ms.
+EMQXクラスターを最適に運用するためには、ネットワークレイテンシが10ミリ秒未満であることが望ましいです。レイテンシが100ミリ秒を超える場合、クラスターは利用できません。
 
-The core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
+コアノードは同一のプライベートネットワーク内に配置する必要があります。Mria+RLOGモードでは、レプリカントノードも同一プライベートネットワーク内に配置することが推奨されます。

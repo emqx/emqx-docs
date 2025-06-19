@@ -1,55 +1,49 @@
-# Message Retransmission
+# メッセージ再送信
 
-Message retransmission is part of the MQTT protocol specification.
+メッセージ再送信はMQTTプロトコル仕様の一部です。
 
-The protocol stipulates that the PUBLISH packets sent to the peer by the **server** and **client** as communication parties must meet their **Quality of Service levels** requirements , such as:
+このプロトコルでは、通信当事者である**サーバー**および**クライアント**が送信するPUBLISHパケットは、それぞれの**QoS（サービス品質）レベル**の要件を満たす必要があります。具体的には以下の通りです：
 
-- QoS 1: it means that **the message is delivered at least once;
-  ** that is, the sender will always resend the message unless it receives
-  confirmation from the peer. This means that the same QoS 1 message may
-  be received multiple times in the upper layer(the application layer of
-  the service) of the MQTT protocol.
-- QoS 2: it means **the message is delivered exactly once;** that is,
-  the message will only be received once at the upper layer.
+- QoS 1: **メッセージが少なくとも1回は配信されることを意味します。** つまり、送信者はピアからの確認を受け取らない限り、常にメッセージを再送信します。これにより、同じQoS 1メッセージがMQTTプロトコルの上位層（サービスのアプリケーション層）で複数回受信される可能性があります。
+- QoS 2: **メッセージが正確に1回だけ配信されることを意味します。** つまり、上位層ではメッセージが1回だけ受信されます。
 
-Although PUBLISH packets of QoS 1 and QoS 2 will be resent at the MQTT protocol
-stack layer, you must remember:
+QoS 1およびQoS 2のPUBLISHパケットはMQTTプロトコルスタック層で再送信されますが、以下の点に注意してください：
 
-- After the retransmission of QoS 1 messages happens, these retransmitted PUBLISH
-  packets will also be received at the upper layer of the MQTT protocol stack.
-- No matter how QoS 2 message is retransmitted, only one PUBLISH packet will be
-  received in the upper layer of the MQTT protocol stack,
+- QoS 1メッセージの再送信が発生した場合、再送信されたPUBLISHパケットもMQTTプロトコルスタックの上位層で受信されます。
+- QoS 2メッセージは何度再送信されても、MQTTプロトコルスタックの上位層では1つのPUBLISHパケットのみ受信されます。
 
-## Basic Configuration
+## 基本設定
 
-There are two scenarios that will cause the message to be resent:
+メッセージが再送信されるシナリオは主に2つあります：
 
-1. After the PUBLISH packet is sent to the peer, and no response is received within the specified time, the packet is resent.
-2. While maintaining the session, after the client reconnects, EMQX will automatically resend the *unanswered message* to ensure the correct QoS process.
+1. PUBLISHパケットをピアに送信した後、指定された時間内に応答がない場合、パケットを再送信する。
+2. セッションを維持している間にクライアントが再接続した場合、EMQXは未応答のメッセージを自動的に再送信し、正しいQoS処理を保証する。
 
-It can be configured in config file:
+設定ファイルで以下のように設定可能です：
 
-| Configuration Item | Type   | Optional Value | Default Value | Description |
-| -------------- | --------- | ------ | ------- | -------------- |
-| retry_interval | duration  | -      | 30s     | Wait for a timeout interval and retransmit the message if no response is received |
+| 設定項目         | 型       | オプション値 | デフォルト値 | 説明                                   |
+| -------------- | -------- | -------- | -------- | ------------------------------------ |
+| retry_interval | duration | -        | 30s      | タイムアウト間隔を待ち、応答がなければメッセージを再送信する間隔 |
 
-Generally speaking, you only need to care about the above content.
+一般的には上記内容を理解していれば十分です。
 
-For more details on how EMQX handles the retransmission of the MQTT protocol, see the following of this article.
+EMQXがMQTTプロトコルの再送信をどのように処理するかの詳細は、本記事の後半をご参照ください。
 
-## Protocol Specification and Design
+## プロトコル仕様と設計
 
-### Retransmitted Objects
+### 再送信対象
 
-First, before understanding the retransmission mechanism design of EMQX, we need to ensure that you have understood the transmission process of QoS 1 and QoS 2 in the protocol, otherwise please refer to[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) and [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
+まず、EMQXの再送信メカニズム設計を理解する前に、QoS 1およびQoS 2の送信プロセスを理解している必要があります。未確認の場合は以下をご参照ください。  
+[MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101)  
+[MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)
 
-Only a brief review is made to illustrate what are the retransmitted objects under different QoS.
+ここでは簡単に異なるQoSにおける再送信対象を説明します。
 
 #### QoS 1
 
-QoS 1 requires the message to be delivered at least once; therefore, the message may be continuously retransmitted in the MQTT protocol layer until the sender receives the confirmation message of the message.
+QoS 1はメッセージが少なくとも1回配信されることを要求するため、送信者が確認メッセージを受け取るまで、MQTTプロトコル層でメッセージが継続的に再送信される可能性があります。
 
-The schematic diagram of the process is as follows:
+処理の概略は以下の通りです：
 
 ```
                PUBLISH
@@ -58,14 +52,14 @@ The schematic diagram of the process is as follows:
 #2 Sender  <---------------  Receiver
 ```
 
-- Two packets are involved; there are two sending actions totally, one at the sender and one at the receiver; both packets hold the same PacketId.
-- If the end of the line is marked with an *, it means that the sender may initiate a retransmission if the waiting for the confirmation message is time out.
+- 2つのパケットが関与し、送信者と受信者でそれぞれ1回ずつ送信動作が行われます。両パケットは同じPacketIdを持ちます。
+- 行末に*が付いている場合、送信者は確認メッセージの待機がタイムアウトした際に再送信を開始する可能性があります。
 
-It can be seen that **QoS 1 messages only need to retransmit PUBLISH messages**
+つまり、**QoS 1メッセージはPUBLISHメッセージのみ再送信されます。**
 
 #### QoS 2
 
-QoS 2 requires the message to be delivered only once; so when it is implemented, a more complicated process is required. The schematic diagram of the process is as follows:
+QoS 2はメッセージが正確に1回だけ配信されることを要求するため、より複雑な処理が必要です。処理の概略は以下の通りです：
 
 ```
                PUBLISH
@@ -78,39 +72,37 @@ QoS 2 requires the message to be delivered only once; so when it is implemented,
 #4 Sender  <---------------  Receiver
 ```
 
-- 4 packets are involved; there are 4 sending actions totally, 2 times for each of the sender and receiver; these 4 packets all hold the same PacketId.
-- If the end of the line is marked with an *, it means that the sender may initiate a retransmission if the waiting for the confirmation message is time out.
+- 4つのパケットが関与し、送信者と受信者でそれぞれ2回ずつ送信動作が行われます。これら4つのパケットはすべて同じPacketIdを持ちます。
+- 行末に*が付いている場合、送信者は確認メッセージの待機がタイムアウトした際に再送信を開始する可能性があります。
 
-It can be seen that **QoS 2 messages only need to retransmit PUBLISH packet and PUBREL packet**
+つまり、**QoS 2メッセージはPUBLISHパケットとPUBRELパケットのみ再送信されます。**
 
-In summary:
+まとめると：
 
-- **Retransmission action** is triggered under the condition that the expected return is not received within **specified time** after sending the message, and not receiving.
-- **Retransmission object** only contains the following three types:
-    * QoS 1 PUBLISH packet
-    * QoS 2 PUBLISH packet
-    * QoS 2 PUBREL packet
+- **再送信動作**は、メッセージ送信後に**指定時間内に期待する応答が受信できなかった場合**にトリガーされます。
+- **再送信対象**は以下の3種類のみです：
+    * QoS 1のPUBLISHパケット
+    * QoS 2のPUBLISHパケット
+    * QoS 2のPUBRELパケット
 
-When EMQX acts as the receiver of PUBLISH messages, it does not require the retransmission operation.
+EMQXがPUBLISHメッセージの受信者として動作する場合、再送信操作は不要です。
 
+### インフライトウィンドウと最大受信値
 
-### Inflight Window and Maximum Receiving Value
+この概念の定義と説明については、[Inflight Window and Message Queue](./inflight-window-and-message-queue.md)をご参照ください。
 
-For the definition and explanation of this concept, please refer to [Inflight Window and Message Queue](./inflight-window-and-message-queue.md)
+これらの概念を導入する目的は以下の理解のためです：
 
-The purpose of introducing these two concepts is to understand:
+1. EMQXが送信者として動作する場合、再送信されるメッセージはインフライトウィンドウに格納されているメッセージである必要がある。
+2. EMQXが受信者として動作し、送信者がメッセージを再送信した場合：
+    - QoS 1では、EMQXは直接PUBACKで応答する。
+    - QoS 2では、EMQXは*最大受信メッセージ*キューに格納されたPUBLISHまたはPUBRELパケットを解放する。
 
-1. When EMQX is used as the sender, the retransmitted message must be the message stored in the inflight window.
-2. When EMQX is used as the receiver, and the sender retransmits the message:
-    - For QoS 1, EMQX directly reply PUBACK as response;
-    - For QoS 2, EMQX will release the stored PUBLISH or PUBREL packet in the *maximum received message* queue.
+### メッセージの順序
 
+上記の概念は理解しておくべきですが、最も注意すべきは**メッセージが再送信された後のメッセージ順序の変化、特にQoS 1メッセージの場合**です。例を示します：
 
-### Message Sequence
-
-Of course, the above concepts only need to be understood. What you need to care about most is the change in message order after **messages are retransmitted, especially for QoS type 1 messages**. E.g:
-
-Suppose that when the current inflight window is set to 2, EMQX plans to deliver 4 QoS 1 messages to a certain topic on the client. Assume that the client program or the network has experienced problems in the middle of the process, then the entire sending process will become:
+現在のインフライトウィンドウサイズが2に設定されているとし、EMQXがクライアントに対して4つのQoS 1メッセージを配信しようとします。途中でクライアントプログラムやネットワークに問題が発生した場合、送信プロセスは以下のようになります：
 
 ```
 #1  [4,3,2,1 || ]   ----->   []
@@ -121,32 +113,32 @@ Suppose that when the current inflight window is set to 2, EMQX plans to deliver
 #6  [ || ]          ----->   [1, 2, 3, 2, 3, 4]
 ```
 
-There are 6 steps in the process; the left indicates the message queue and inflight window of EMQX,  which is separated by `||`; the right indicates the sequence of messages received by the client, where each step indicates:
+このプロセスは6ステップあり、左側はEMQXのメッセージキューとインフライトウィンドウを`||`で区切って示しています。右側はクライアントが受信したメッセージの順序を示しています。各ステップの意味は以下の通りです：
 
-1. Broker puts 4 messages into the message queue.
-2. Broker sequentially sends `1` `2` and puts it in the **inflight window**; the client only responds to the message `1`; and at this time due to a problem with the client's sending stream, subsequent responses cannot be sen.
-3. Broker receives the reply of the message `1`; removes the message` 1` from the inflight window; and sends out `3`; continues to wait for the reply of ` 2` `3`;
-4. When the waiting for the response is time out, broker retransmitted the message  `2` `3`; the client received the retransmitted message `2` `3` and responded normally.
-5. Broker removed the message  `2` `3` from the inflight window and sent the message `4`; the client received the message 4 and responded with a reply.
-6. At this point, all message processing is complete. The sequence of messages received by the client is `[1, 2, 3, 2, 3, 4]`, and it is reported to the upper layer of the MQTT protocol stack in turn.
+1. ブローカーは4つのメッセージをメッセージキューに格納する。
+2. ブローカーは順に`1`、`2`を送信し、インフライトウィンドウに格納する。クライアントはメッセージ`1`にのみ応答し、送信ストリームに問題が発生して以降の応答は送信されない。
+3. ブローカーはメッセージ`1`の応答を受け取り、インフライトウィンドウから`1`を削除し、`3`を送信する。引き続き`2`と`3`の応答を待つ。
+4. 応答待ちがタイムアウトし、ブローカーはメッセージ`2`と`3`を再送信する。クライアントは再送信されたメッセージ`2`と`3`を受信し正常に応答する。
+5. ブローカーはインフライトウィンドウから`2`と`3`を削除し、メッセージ`4`を送信する。クライアントはメッセージ`4`を受信し応答する。
+6. これで全メッセージ処理が完了する。クライアントが受信したメッセージの順序は`[1, 2, 3, 2, 3, 4]`であり、順にMQTTプロトコルスタックの上位層に通知される。
 
-Although there are duplicate messages, this is in full compliance with the specifications of the protocol. The first appearance of each message is in order, and the message  `2` `3` repeatedly received will carry an identification bit, indicating that it is a retransmission message.
+重複したメッセージが存在しますが、これはプロトコル仕様に完全に準拠しています。各メッセージの最初の出現は順序通りであり、繰り返し受信されるメッセージ`2`と`3`には再送信であることを示す識別ビットが付与されます。
 
-The MQTT protocol and EMQX regard this topic as an `Ordered Topic`. See: [MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105).
+MQTTプロトコルとEMQXはこのトピックを`Ordered Topic`として扱います。詳細は以下を参照してください：  
+[MQTTv3.1.1 - Message ordering](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718105)
 
-It ensures that under the same topic and QoS, messages are delivered and answered in order.
+これにより、同じトピックかつQoSレベルでメッセージが順序通りに配信および応答されることが保証されます。
 
-In addition, if the user expects that QoS 1 and QoS 2 messages under all topics are strictly ordered, the maximum length of the flight window needs to be set to 1, but it will reduce the client's throughput.
+なお、すべてのトピックのQoS 1およびQoS 2メッセージを厳密に順序付けたい場合は、インフライトウィンドウの最大長を1に設定する必要がありますが、クライアントのスループットは低下します。
 
+### 関連設定
 
-### Related Configuration
+以下は上記メカニズムで使用されるすべての設定項目です。すべて設定ファイルに含まれています：
 
-This section lists all the configurations used in the above mechanism. They are all included in config files:
-
-| Configuration | Type  | Optional Value | Default Value | Description                                          |
-| ----------------- | -------- | --------------- | ------ | ------------------------------------------------------- |
-| mqueue_store_qos0 | bool     | `true`, `false` | true   | Whether to store QoS 0 messages in the message queue |
-| max_mqueue_len    | integer  | >= 0            | 1000   | Message queue length                        |
-| max_inflight      | integer  | >= 0            | 0      | Inflight window size; default `0` means no limit |
-| max_awaiting_rel  | integer  | >= 0            | 0      | Maximum reception; default `0` means no limit |
-| await_rel_timeout | duration | >  0            | 300s   | The maximum value of timeout in `Max Receive` to wait for release; if they are exceeded, the messages are discarded directly |
+| 設定項目           | 型       | オプション値      | デフォルト値 | 説明                                         |
+| ----------------- | -------- | --------------- | -------- | ------------------------------------------ |
+| mqueue_store_qos0 | bool     | `true`, `false` | true     | QoS 0メッセージをメッセージキューに保存するかどうか |
+| max_mqueue_len    | integer  | >= 0            | 1000     | メッセージキューの長さ                         |
+| max_inflight      | integer  | >= 0            | 0        | インフライトウィンドウのサイズ。デフォルト0は無制限を意味する |
+| max_awaiting_rel  | integer  | >= 0            | 0        | 最大受信数。デフォルト0は無制限を意味する           |
+| await_rel_timeout | duration | > 0             | 300s     | `Max Receive`での解放待ちの最大タイムアウト値。超過するとメッセージは破棄される |

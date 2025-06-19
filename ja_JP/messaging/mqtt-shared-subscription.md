@@ -1,119 +1,119 @@
-# MQTT Shared Subscription
+# MQTT 共有サブスクリプション
 
-EMQX implements the shared subscription feature of MQTT. A shared subscription is a subscription mode to implement load balancing among multiple subscribers. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time. You can add a prefix to the original topic to enable a shared subscription for multiple subscribers. EMQX supports shared subscription prefixes in two formats: shared subscription for groups (prefixed with `$share/<group-name>/`) and shared subscription not for groups (prefixed with `$queue/`).
+EMQX は MQTT の共有サブスクリプション機能を実装しています。共有サブスクリプションは複数のサブスクライバー間で負荷分散を実現するためのサブスクリプションモードです。クライアントは複数のサブスクリプショングループに分けられ、メッセージはすべてのサブスクリプショングループに転送されますが、各グループ内のクライアントのうち1つだけがメッセージを受信します。元のトピックにプレフィックスを付けることで、複数のサブスクライバー向けの共有サブスクリプションを有効にできます。EMQX は共有サブスクリプションのプレフィックスとして、グループ用（`$share/<group-name>/` で始まる）とグループ用でないもの（`$queue/` で始まる）の2種類の形式をサポートしています。
 
-Examples of two shared subscription prefixes formats are as follows.
+共有サブスクリプションの2種類のプレフィックス形式の例は以下の通りです。
 
-| Prefixes format                  | Example        | Prefix      | Real topic name |
-| --------------------------------- | -------------- | ----------- | --------------- |
-| Shared subscription for groups    | $share/abc/t/1 | $share/abc/ |t/1|
-| Shared subscription not for group | $queue/t/1     | $queue/     |t/1|
+| プレフィックス形式               | 例             | プレフィックス | 実際のトピック名 |
+| -------------------------------- | -------------- | -------------- | ---------------- |
+| グループ用共有サブスクリプション | $share/abc/t/1 | $share/abc/    | t/1              |
+| グループ用でない共有サブスクリプション | $queue/t/1     | $queue/        | t/1              |
 
-You can use client tools to connect to EMQX and try this messaging service. This section introduces how shared subscription works and provides a demonstration of how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and try the shared subscription feature.
+クライアントツールを使って EMQX に接続し、このメッセージングサービスを試すことができます。本節では共有サブスクリプションの仕組みを紹介し、[MQTTX Desktop](https://mqttx.app/) と [MQTTX CLI](https://mqttx.app/cli) を使ってクライアントをシミュレートし、共有サブスクリプション機能を試す方法を説明します。
 
-## Shared Subscription for Groups
+## グループ用共有サブスクリプション
 
-You can enable a shared subscription for groups of subscribers by adding the prefixed `$share/<group-name>` to the original topic. The group name can be any string. EMQX forwards messages to different groups at the same time and subscribers belonging to the same group receive messages with load balancing.
+元のトピックに `$share/<group-name>` のプレフィックスを付けることで、グループ単位の共有サブスクリプションを有効にできます。グループ名は任意の文字列です。EMQX は異なるグループに同時にメッセージを転送し、同じグループに属するサブスクライバーは負荷分散しながらメッセージを受信します。
 
-For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`, subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to the original topic `t1`. The shared subscription topics must be `$share/g1/t1` and `$share/g2/t1`. When EMQX publishes a message `msg1` to the original topic `t1`:
+例えば、サブスクライバー `s1`、`s2`、`s3` がグループ `g1` のメンバーで、`s4` と `s5` がグループ `g2` のメンバーであり、全員が元のトピック `t1` をサブスクライブしているとします。共有サブスクリプショントピックは `$share/g1/t1` と `$share/g2/t1` になります。EMQX が元のトピック `t1` にメッセージ `msg1` をパブリッシュすると：
 
-- EMQX sends `msg1` to both groups `g1` and `g2`.
-- Only one of `s1`, `s2`, `s3` will receive `msg1`.
-- Only one of `s4` and `s5` will receive `msg1`.
+- EMQX は `msg1` をグループ `g1` と `g2` の両方に送信します。
+- `s1`、`s2`、`s3` のうちの1つだけが `msg1` を受信します。
+- `s4` と `s5` のうちの1つだけが `msg1` を受信します。
 
-<img src="./assets/shared_subscription_group.png" alt="shared_subscription_group" style="zoom:50%;" />
+<img src="./assets/shared_subscription_group.png" alt="共有サブスクリプション（グループ用）" style="zoom:50%;" />
 
-## Shared Subscription Not for Groups
+## グループ用でない共有サブスクリプション
 
-Shared subscription topics prefixed with `$queue/` are for subscribers not in groups. It is a special case of a shared subscription topic with a `$share` prefix. You can understand it as all subscribers in a subscription group such as `$share/$queue`.
+`$queue/` プレフィックスの共有サブスクリプショントピックは、グループに属さないサブスクライバー向けのものです。これは `$share` プレフィックスを使った共有サブスクリプションの特殊なケースと考えられます。すべてのサブスクライバーが `$share/$queue` のようなサブスクリプショングループに属していると理解できます。
 
-<img src="./assets/shared_subscription_queue.jpg" alt="shared_subscription_queue" style="zoom:50%;" />
+<img src="./assets/shared_subscription_queue.jpg" alt="共有サブスクリプション（グループ用でない）" style="zoom:50%;" />
 
-## Shared Subscription and Session
+## 共有サブスクリプションとセッション
 
-When a client has a persistent session and subscribes to shared subscriptions, the session continues to receive messages published to the shared subscription topics while the client disconnects. If the client stays disconnected for a long time and the message publishing rate is high, the internal message queue in the session state may overflow. To avoid this problem, it is recommended to use a clean session ( `clean_session=true` ) for shared subscriptions. A clean session expires immediately after the client disconnects.
+クライアントがパーシステントセッションを持ち、共有サブスクリプションをサブスクライブしている場合、クライアントが切断している間もセッションは共有サブスクリプショントピックにパブリッシュされたメッセージを受信し続けます。クライアントが長時間切断状態にあり、メッセージのパブリッシュ頻度が高いと、セッション状態内の内部メッセージキューがオーバーフローする可能性があります。この問題を避けるために、共有サブスクリプションにはクリーンセッション（`clean_session=true`）を使用することを推奨します。クリーンセッションはクライアント切断後すぐに期限切れになります。
 
-When clients use MQTT v5, it is a good practice to set a short session expiry interval (if not 0). This allows the client to temporarily disconnect and reconnect to receive messages published during the disconnection period. When a session expires, the QoS1 and QoS2 messages in the send queue or the QoS1 messages in the infight queue will be re-dispatched to other sessions in the same group. When the last session expires, all pending messages will be discarded.
+MQTT v5 を使用する場合は、セッション有効期限を短く設定する（0以外の場合）ことが推奨されます。これにより、クライアントは一時的に切断しても、切断期間中にパブリッシュされたメッセージを再接続後に受信できます。セッションが期限切れになると、送信キュー内の QoS1 および QoS2 メッセージ、またはインフライトキュー内の QoS1 メッセージは同じグループの他のセッションに再配信されます。最後のセッションが期限切れになると、すべての保留中メッセージは破棄されます。
 
-For more information on the persistent session, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
+パーシステントセッションの詳細は、[MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session) を参照してください。
 
-## Try Shared Subscription with MQTTX Desktop
+## MQTTX Desktop で共有サブスクリプションを試す
 
-:::tip Prerequisites
+:::tip 前提条件
 
-- Knowledge about MQTT [Shared Subscription](./mqtt-concepts.md#shared-subscription)
-- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
+- MQTT の [共有サブスクリプション](./mqtt-concepts.md#shared-subscription) に関する知識
+- [MQTTX](./publish-and-subscribe.md) を使った基本的なパブリッシュとサブスクライブ操作の理解
 
 :::
 
-The following procedure demonstrates how to add a `$share` prefix to the original topic so that subscribers in different groups can share the subscription to the same topic and receive the messages from the shared subscription.
+以下の手順では、元のトピックに `$share` プレフィックスを付けて、異なるグループのサブスクライバーが同じトピックの共有サブスクリプションを行い、共有サブスクリプションからメッセージを受信する方法を示します。
 
-In this demonstration, you can create one client connection `demo` as a publisher to publish messages to the topic `t/1`. Then, you can create 4 client connections as subscribers, such as `Subscriber1`, `Subscriber2`, `Subscriber3`, and `Subscriber4`.  The subscribers can be divided into groups `a` and `b`, and both groups subscribe to the topic `t/1`.
+このデモでは、1つのクライアント接続 `demo` をパブリッシャーとして作成し、トピック `t/1` にメッセージをパブリッシュします。さらに、`Subscriber1`、`Subscriber2`、`Subscriber3`、`Subscriber4` の4つのクライアント接続をサブスクライバーとして作成します。サブスクライバーはグループ `a` と `b` に分けられ、両グループがトピック `t/1` をサブスクライブします。
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQX と MQTTX Desktop を起動し、**New Connection** をクリックしてパブリッシャー用のクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name** に `Demo` を入力します。
+   - **Host** にローカルホストの `127.0.0.1` を入力します（本デモの例として）。
+   - 他の設定はデフォルトのままにして **Connect** をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT 接続の作成方法の詳細は [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を参照してください。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新規接続の一般設定" style="zoom:35%;" />
 
-2. Click the **New Connection** to create 4 new connections as subscribers. Set **Name** set to `Subscriber1`, `Subscriber2,` `Subscriber3`, and `Subscriber4` respectively.
+2. **New Connection** をクリックして、4つのサブスクライバー用の接続を作成します。**Name** はそれぞれ `Subscriber1`、`Subscriber2`、`Subscriber3`、`Subscriber4` に設定します。
 
-3. Select the `Subscriber` connections one at a time in the **Connections** pane and click **New Subscription** to create a shared subscription for each subscriber. Enter the correct topic in the **Topic** text box by referring to the rules below.
+3. **Connections** ペインでサブスクライバー接続を1つずつ選択し、**New Subscription** をクリックして共有サブスクリプションを作成します。以下のルールに従って、**Topic** テキストボックスに正しいトピックを入力します。
 
-   To form a group for multiple subscribers, you need to add group name `{group}` before the subscribed topic `t/1`. To make them all subscribe to the same topic, you need to add the prefix `$share` before the group name.
+   複数のサブスクライバーをグループ化するには、サブスクライブするトピック `t/1` の前にグループ名 `{group}` を追加します。さらに、すべてのグループ名の前に `$share` プレフィックスを付けます。
 
-   In the **New Subscription** window:
+   **New Subscription** ウィンドウで：
 
-   - Set the **Topic** to `$share/a/t/1` for `Subscribe1` and `Subscriber2`.
-   - Set the **Topic** to `$share/b/t/1` for `Subscriber3` and `Subscriber4`.
+   - `Subscriber1` と `Subscriber2` の **Topic** を `$share/a/t/1` に設定します。
+   - `Subscriber3` と `Subscriber4` の **Topic** を `$share/b/t/1` に設定します。
 
-   In these example topics:
+   これらの例のトピックでは：
 
-   - The prefix `$share` indicates this is a shared subscription.
-   - `{group}` is `a` and `b`, but it can be any customized name.
-   - `t/1` indicates the original topic name.
+   - プレフィックス `$share` は共有サブスクリプションであることを示します。
+   - `{group}` は `a` と `b` で、任意の名前に変更可能です。
+   - `t/1` は元のトピック名を示します。
 
-   Leave other settings as default. Click the **Confirm** button.
+   他の設定はデフォルトのままにして、**Confirm** ボタンをクリックします。
 
-   <img src="./assets/New-shared-subscription.png" alt="New-shared-subscription" style="zoom:35%;" />
+   <img src="./assets/New-shared-subscription.png" alt="新規共有サブスクリプション" style="zoom:35%;" />
 
-5. Click the connection `Demo` you created before.
+5. 先ほど作成した `Demo` 接続をクリックします。
 
-   - Send a message with the topic `t/1`. The client `Subscriber1` in group `a` and `Subscriber4` in gourd `b` should receive the message.
+   - トピック `t/1` でメッセージを送信します。グループ `a` のクライアント `Subscriber1` とグループ `b` のクライアント `Subscriber4` がメッセージを受信するはずです。
 
-     <img src="./assets/Receive-message-shared-subscription1.png" alt="Receive-message-shared-subscription1" style="zoom:35%;" />
+     <img src="./assets/Receive-message-shared-subscription1.png" alt="共有サブスクリプションのメッセージ受信1" style="zoom:35%;" />
 
-   - Send the same message again. The client `Subscriber2` in group `a` and `Subscriber3` in group `b` should receive the message.
+   - 同じメッセージを再度送信します。グループ `a` の `Subscriber2` とグループ `b` の `Subscriber3` がメッセージを受信します。
 
-     <img src="./assets/Receive-message-shared-subscription2.png" alt="Receive-message-shared-subscription2" style="zoom:35%;" />
+     <img src="./assets/Receive-message-shared-subscription2.png" alt="共有サブスクリプションのメッセージ受信2" style="zoom:35%;" />
 
 :::tip
 
-When the message of the shared subscription is published, the EMQX forwards the message to different groups at the same time, but only one of the subscribers in the same group receives the message at a time.
+共有サブスクリプションのメッセージがパブリッシュされると、EMQX は異なるグループに同時にメッセージを転送しますが、同じグループ内のサブスクライバーのうち1つだけがメッセージを受信します。
 
 :::
 
-## Try Shared Subscription with MQTTX CLI
+## MQTTX CLI で共有サブスクリプションを試す
 
-1. Four subscribers are divided into 2 groups and subscribe to topic  `t/1`:
+1. 4つのサブスクライバーを2つのグループに分けて、トピック `t/1` をサブスクライブします：
 
    ```bash
-   # Client A and B subscribe to topic `$share/my_group1/t/1`
+   # クライアント A と B がトピック `$share/my_group1/t/1` をサブスクライブ
    mqttx sub -t '$share/my_group1/t/1' -h 'localhost' -p 1883
 
-   ## Client C and D subscribe to topic  `$share/my_group2/t/1`
+   ## クライアント C と D がトピック `$share/my_group2/t/1` をサブスクライブ
    mqttx sub -t '$share/my_group2/t/1' -h 'localhost' -p 1883
    ```
 
-2. Use a new client to publish 4 messages with payloads `1`, `2`, `3`, and `4` to the original topic `t/1`:
+2. 新しいクライアントを使って、元のトピック `t/1` にペイロード `1`、`2`、`3`、`4` の4つのメッセージをパブリッシュします：
 
    ```bash
    mqttx pub -t 't/1' -m '1' -h 'localhost' -p 1883
@@ -122,7 +122,7 @@ When the message of the shared subscription is published, the EMQX forwards the 
    mqttx pub -t 't/1' -m '4' -h 'localhost' -p 1883
    ```
 
-3. Check the message received by the clients within each subscription group:
+3. 各サブスクリプショングループ内のクライアントが受信したメッセージを確認します：
 
-   - Subscription group 1 (A and B) and subscription group 2 (C and D) simultaneously receive the messages.
-   - Only one of the subscribers in the same group receives the message at a time.
+   - サブスクリプショングループ1（A と B）およびサブスクリプショングループ2（C と D）は同時にメッセージを受信します。
+   - 同じグループ内のサブスクライバーのうち1つだけがメッセージを受信します。

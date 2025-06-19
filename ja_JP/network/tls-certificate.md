@@ -1,49 +1,49 @@
-# Obtain SSL/TLS Certificates
+# SSL/TLS証明書の取得
 
-You can obtain the SSL/TLS certificate in the following two ways:
+SSL/TLS証明書は、以下の2つの方法で取得できます。
 
-1. Self-signed certificate: It means using a certificate that is issued by yourself. However, self-signed certificates have many security risks and are only recommended for testing and verification environments.
-2. Apply or purchase a certificate: You can apply for a free certificate from [Let's Encrypt](https://letsencrypt.org) or cloud vendors such as Huawei Cloud and Tencent Cloud, or purchase a paid certificate from organizations such as [DigiCert](https://www.digicert.com/). For enterprise users, it is generally recommended to apply for paid OV or above certificates to obtain a higher level of security protection.
+1. 自己署名証明書：自身で発行する証明書を使用する方法です。ただし、自己署名証明書は多くのセキュリティリスクがあるため、テストや検証環境での利用のみ推奨されます。  
+2. 証明書の申請または購入：[Let's Encrypt](https://letsencrypt.org)やHuawei Cloud、Tencent Cloudなどのクラウドベンダーから無料証明書を申請するか、[DigiCert](https://www.digicert.com/)などの組織から有料証明書を購入できます。企業ユーザーの場合は、より高いセキュリティ保護を得るために、一般的に有料のOV以上の証明書を申請することが推奨されます。
 
-This page introduces how to create self-signed Certificate Authority (CA) certificates to issue server and client certificates.
+本ページでは、自己署名の認証局（CA）証明書を作成し、サーバー証明書およびクライアント証明書を発行する方法を紹介します。
 
-## Create Self-Signed CA Certificates
+## 自己署名CA証明書の作成
 
-::: tip Prerequisite
+::: tip 前提条件
 
-[OpenSSL](https://www.openssl.org/) is installed.
+[OpenSSL](https://www.openssl.org/)がインストールされていること。
 
 :::
 
-1. Run the following command to generate a key pair. The command will prompt you to enter a password to protect the key, which will be required for generating, issuing, and verifying the certificate. Keep the key and password secure.
+1. 以下のコマンドを実行して鍵ペアを生成します。コマンド実行時に鍵を保護するためのパスワード入力を求められます。このパスワードは証明書の生成、発行、検証時に必要となるため、安全に保管してください。
 
    ```bash
    openssl genrsa -des3 -out rootCA.key 2048
    ```
 
-2. Run the following command to generate a CA certificate using the private key from the key pair. The command will prompt you to set the certificate's Distinguished Name (DN).
+2. 次に、鍵ペアの秘密鍵を使ってCA証明書を生成します。コマンド実行時に証明書の識別名（Distinguished Name, DN）の設定を求められます。
 
    ```bash
    openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
    ```
 
-## Issue Server Certificates
+## サーバー証明書の発行
 
-Use the CA certificate you just generated to issue a server certificate, which is used to verify the identity of the server owner. The server certificate is usually issued to the hostname, server name, or domain name (such as [www.emqx.com](https://www.emqx.com/en)). We need to use the CA key (rootCA.key), CA certificate (rootCA.crt), and server Certificate Signing Request (CSR) (server.csr) to generate the server certificate.
+先ほど作成したCA証明書を用いて、サーバー証明書を発行します。サーバー証明書はサーバー所有者の身元を検証するために使用され、通常はホスト名、サーバー名、またはドメイン名（例：[www.emqx.com](https://www.emqx.com/en)）に発行されます。サーバー証明書の生成には、CAの秘密鍵（rootCA.key）、CA証明書（rootCA.crt）、およびサーバーの証明書署名要求（CSR）（server.csr）が必要です。
 
-1. Run the following command to generate a key pair for the server certificate:
+1. サーバー証明書用の鍵ペアを生成するため、以下のコマンドを実行します。
 
    ```bash
    openssl genrsa -out server.key 2048
    ```
 
-2. Run the following command to create a CSR using the server key pair. After the CSR is signed by the CA root certificate private key, a certificate public key file can be generated and issued to the user. This command will also prompt you to set the Distinguished Name (DN) for the certificate.
+2. サーバーの鍵ペアを使ってCSRを作成します。CSRはCAの秘密鍵で署名されることで証明書の公開鍵ファイルが生成され、ユーザーに発行されます。このコマンド実行時にも識別名（DN）の設定を求められます。
 
    ```bash
    openssl req -new -key server.key -out server.csr
    ```
 
-   The system will prompt the following information, with corresponding meanings explained as below:
+   実行時に以下のような情報入力を求められます。各項目の意味は以下の通りです。
 
    ```bash
    You are about to be asked to enter information that will be incorporated
@@ -53,22 +53,22 @@ Use the CA certificate you just generated to issue a server certificate, which i
    For some fields there will be a default value,
    If you enter '.', the field will be left blank.
    -----
-   Country Name (2 letter code) [AU]: # country/region
-   State or Province Name (full name) [Some-State]: # state/province
-   Locality Name (eg, city) []: # The city or locality
-   Organization Name (eg, company) [Internet Widgits Pty Ltd]: # The full name of the organization (or company name), e.g. EMQ
-   Organizational Unit Name (eg, section) []: # The name of the department or division within the organization，e.g. EMQX
-   Common Name (e.g. server FQDN or YOUR name) []: # The fully-qualified domain name (FQDN) of the server that will use the certificate, e.g. mqtt.emqx.com
+   Country Name (2 letter code) [AU]: # 国・地域
+   State or Province Name (full name) [Some-State]: # 州・県名
+   Locality Name (eg, city) []: # 市区町村名
+   Organization Name (eg, company) [Internet Widgits Pty Ltd]: # 組織名（会社名）、例：EMQ
+   Organizational Unit Name (eg, section) []: # 組織内の部門名、例：EMQX
+   Common Name (e.g. server FQDN or YOUR name) []: # サーバーの完全修飾ドメイン名（FQDN）、例：mqtt.emqx.com
    ...
    ```
 
-3. Use the server CSR to generate the server certificate and specify the validity period of the certificate, which is set to 365 days in this case:
+3. サーバーCSRを使ってサーバー証明書を生成し、有効期限を365日に設定します。
 
    ```bash
    openssl x509 -req -in server.csr -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out server.crt -days 365
    ```
 
-   You now have a set of certificates.
+   これで以下の証明書ファイル群が作成されます。
 
    ```bash
    .
@@ -80,15 +80,15 @@ Use the CA certificate you just generated to issue a server certificate, which i
    └── server.key
    ```
 
-## Issue Client Certificates
+## クライアント証明書の発行
 
-The steps for issuing client certificates are similar to those for issuing server certificates. The only difference is that when creating the CSR, the Common Name should be set to a unique identifier for the client, such as a username, client ID, etc.
+クライアント証明書の発行手順はサーバー証明書の発行とほぼ同じです。違いはCSR作成時に、Common Nameにクライアントのユーザー名やクライアントIDなどの一意の識別子を設定する点です。
 
-The client certificate is signed using the same CA certificate as the server certificate. Therefore, the client certificate can also be signed with the aforementioned CA certificate.
+クライアント証明書もサーバー証明書と同じCA証明書で署名されます。そのため、上記のCA証明書を用いてクライアント証明書を発行できます。
 
-## Next Step
+## 次のステップ
 
-Once you obtain the SSL/TLS certificates, you can enable the client's SSL/TLS connections. You can also update the certificates when they are expired.
+SSL/TLS証明書を取得したら、クライアントのSSL/TLS接続を有効化できます。また、証明書の有効期限が切れた際には更新も可能です。
 
-- [Enable SSL/TLS Connection](./emqx-mqtt-tls.md)
-- [Update Certificates](./emqx-mqtt-tls.md#update-ssl-tls-certificates)
+- [SSL/TLS接続の有効化](./emqx-mqtt-tls.md)  
+- [証明書の更新](./emqx-mqtt-tls.md#update-ssl-tls-certificates)

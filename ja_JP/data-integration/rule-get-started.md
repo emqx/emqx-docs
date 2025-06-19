@@ -1,47 +1,48 @@
-# Create Rules
+# ルールの作成
 
-This page provides guidance on how to create rules for data processing and attach an action to a rule using the EMQX Dashboard. It also introduces how to test rules and view rules after the rule creation.
+このページでは、EMQX ダッシュボードを使用してデータ処理のルールを作成し、ルールにアクションを追加する方法について説明します。また、ルールのテスト方法や作成後のルールの確認方法も紹介します。
 
-The demonstration on this page takes the republish action as an example, describing how to create a rule that processes messages received on the topic `t/#` and republishes the message to the topic `a/1`. However, the actions "printing the result to the Console" and "forwarding with Sinks" are also mentioned in [Add Action](#add-action).
+本ページのデモでは、リパブリッシュアクションを例に取り、トピック `t/#` で受信したメッセージを処理し、トピック `a/1` にリパブリッシュするルールの作成方法を説明します。ただし、「結果をコンソールに出力する」や「Sinks を使った転送」についても [アクションの追加](#add-actions) で触れています。
 
-## Define Rule SQL
-Log in to the EMQX Dashboard and click **Integration** -> **Rules** in the left navigation menu. 
+## ルール SQL の定義
 
-Click the **Create** button on the **Rules** page and you will be directed to the **Create Rule** page. Here, you can define the data source for your rule and determine the subsequent actions for the filtered messages. 
+EMQX ダッシュボードにログインし、左側のナビゲーションメニューから **Integration** -> **Rules** をクリックします。
 
-Enter a name for your rule and add a note to facilitate future management. In the **SQL Editor**, you can customize the statements to add a data source that suits your business needs. For this tutorial, keep the default setting, which selects and returns all messages under topics that follow the `"t/#"` pattern (e.g., `t/a`, `t/a/b`, `t/a/b/c`, etc.).
+**Rules** ページで **Create** ボタンをクリックすると、**Create Rule** ページに遷移します。ここで、ルールのデータソースを定義し、フィルターされたメッセージに対して実行するアクションを決定します。
+
+ルール名を入力し、将来の管理を容易にするためにメモを追加してください。**SQL Editor** では、ビジネスニーズに合わせてデータソースを追加するためのステートメントをカスタマイズできます。このチュートリアルでは、デフォルト設定のままにし、`"t/#"` パターンにマッチするトピック（例：`t/a`、`t/a/b`、`t/a/b/c` など）にあるすべてのメッセージを選択して返す設定とします。
 
 ::: tip
 
-This tutorial assumes the message payload is JSON. If the payload is formatted in some other way, you can convert the data type, for example, with the [Schema Registry](./schema-registry.md).
+このチュートリアルでは、メッセージのペイロードが JSON 形式であることを前提としています。もしペイロードが他の形式の場合は、[スキーマレジストリ](./schema-registry.md) を使ってデータ型を変換できます。
 
-EMQX has embedded rich SQL statement samples to help you get started. You can click the **SQL Examples** button under the **SQL Editor** to explore. For more details about the SQL syntax and usages, see [SQL Syntax](./rule-sql-syntax.md).
+EMQX には豊富な SQL ステートメントのサンプルが組み込まれており、**SQL Editor** 下の **SQL Examples** ボタンから参照可能です。SQL の構文や使い方の詳細は [SQL Syntax](./rule-sql-syntax.md) をご覧ください。
 
 :::
 
-<img src="./assets/rules/create-rules.png" alt="image-20230417211146211" style="zoom:50%;" />
+<img src="./assets/rules/create-rules.png" alt="ルール作成画面" style="zoom:50%;" />
 
-### SQL Generator
+### SQL ジェネレーター
 
-Starting from EMQX 5.10.0, the SQL Editor supports generating rule SQL using natural language through an AI-powered SQL Generator. This feature allows you to describe their intent in natural language, and the system will automatically generate the appropriate SQL statement for your rule.
+EMQX 5.10.0 以降、SQL Editor は AI を活用した自然言語による SQL ジェネレーターをサポートしています。この機能により、自然言語で意図を記述すると、システムが自動的に適切な SQL ステートメントを生成します。
 
-The SQL Generator is enabled by default. You can disable it using the toggle switch from the **Settings** menu in the upper right corner of the Dashboard.
+SQL ジェネレーターはデフォルトで有効になっています。ダッシュボード右上の **Settings** メニューからトグルスイッチで無効化可能です。
 
-To use this feature:
+利用方法は以下の通りです：
 
-1. On the **Create Rule** page, navigate to the **SQL Editor** section.
+1. **Create Rule** ページの **SQL Editor** セクションに移動します。
 
-2. Click the **SQL Generator** button below the editor to open the **Generate SQL with AI** dialog. Specify the following fields in the dialog:
+2. エディタ下の **SQL Generator** ボタンをクリックし、**Generate SQL with AI** ダイアログを開きます。ダイアログ内で以下の項目を指定します：
 
-   - **Task Description** (required): Describe in natural language what you want the SQL to do.
+   - **Task Description**（必須）：SQL に何をさせたいかを自然言語で記述します。
      
-      Example:
-       *"Extract `clientid` from the MQTT message metadata, and extract `device_id` and `temperature` from the payload. Only apply to messages from topic `sensors/temperature` where the temperature is greater than 30."*
+     例：
+     *「MQTT メッセージのメタデータから `clientid` を抽出し、ペイロードから `device_id` と `temperature` を抽出する。トピック `sensors/temperature` のメッセージで温度が30度を超える場合のみ適用する。」*
       
-   - **Related Topics** (optional): Specify topic filters such as `sensors/temperature`.
+   - **Related Topics**（任意）：`sensors/temperature` のようなトピックフィルターを指定します。
 
-   - **Input Example (JSON)** (optional but recommended): Provide a sample MQTT message payload to help the AI understand your data structure.
-     Example:
+   - **Input Example (JSON)**（任意だが推奨）：AI がデータ構造を理解しやすいように、MQTT メッセージのペイロードのサンプルを提供します。
+     例：
 
      ```json
      {
@@ -51,8 +52,8 @@ To use this feature:
      }
      ```
 
-   - **Output Example (JSON)** (optional): Specify the expected result format.
-     Example:
+   - **Output Example (JSON)**（任意）：期待する結果のフォーマットを指定します。
+     例：
 
      ```json
      {
@@ -64,23 +65,23 @@ To use this feature:
      
      ::: tip 
      
-     Including input/output examples improves the accuracy of the generated SQL.
+     入力／出力の例を含めることで、生成される SQL の精度が向上します。
      
      :::
 
-3. Click **Generate** to preview the generated SQL.
+3. **Generate** をクリックして生成された SQL のプレビューを表示します。
 
-4. In the preview dialog, you can:
+4. プレビュー画面では、
 
-   - Review and manually edit the generated SQL.
-   - Click **Apply SQL** to insert it into the SQL Editor.
-   - Or click **Back to Form** to revise your input and regenerate the SQL.
+   - 生成された SQL を確認・手動編集可能です。
+   - **Apply SQL** をクリックすると SQL Editor に挿入されます。
+   - **Back to Form** をクリックすると入力内容を修正して再生成できます。
 
-5. If you insert it into the SQL Editor, the SQL will automatically appear in the **SQL Editor**, where you can review and edit it.
+5. SQL Editor に挿入すると、SQL が自動的に表示され、確認・編集が可能です。
 
-#### Example Output
+#### 生成例
 
-Using the sample task and input above, the generated SQL might be:
+上記のタスクと入力例を使うと、生成される SQL は以下のようになります：
 
 ```sql
 SELECT
@@ -93,87 +94,87 @@ WHERE
   payload.temperature > 30
 ```
 
-This rule extracts the `clientid`, `device_id`, and `temperature` fields from messages on the `sensors/temperature` topic where the temperature is greater than 30.
+このルールは、`sensors/temperature` トピックのメッセージから `clientid`、`device_id`、`temperature` を抽出し、温度が30度を超える場合にのみ適用されます。
 
-#### When to Use the SQL Generator
+#### SQL ジェネレーターを使うべき場合
 
-The SQL Generator is especially useful when:
+- EMQX の SQL 構文に不慣れな場合
+- ルールのプロトタイプを素早く作成したい場合
+- 構造化された JSON ペイロードを扱う場合
 
-- You are unfamiliar with EMQX SQL syntax.
-- You want to quickly prototype a rule.
-- You're working with structured JSON payloads.
+より詳細なカスタマイズや構文については、[Rule SQL Syntax](./rule-sql-syntax.md) を参照してください。
 
-For more customization and syntax options, see the [Rule SQL Syntax](./rule-sql-syntax.md) documentation.
+### SQL ステートメントのテスト
 
-### Test SQL Statement
+SQL ステートメントはシミュレーションデータを使って実行できます。アクションを追加してルールを作成する前に、SQL の実行結果が期待通りかどうかを検証可能です。これは任意のステップですが、EMQX ルールに慣れていない場合は推奨されます。ルール全体の実行をテストしたい場合は、[ルールのテスト](#test-rules) を参照してください。
 
-You can use simulated data to execute SQL statements. Before adding actions and creating rules, you can verify whether the SQL execution results meet expectations. This is an optional step, but it is recommended if you are new to EMQX rules. If you want to test the execution of the entire rule, refer to [Test Rule](#test-rule).
+SQL テストの手順は以下の通りです：
 
-Follow the instructions below to test the SQL statement:
-
-1. Turn on the **Try It Out** toggle switch on the **Create Rule** page to enable the SQL statement testing.
-2. Select the **Data Source** that matches the SQL and ensure it is consistent with the specified source in the rule (FROM clause).
-3. Enter test data. Once you select the data source, EMQX provides default values for all simulated data fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them to appropriate values as needed.
-4. Click the **Run Test** button to submit the test. If everything is normal, a **Test Passed** prompt will be displayed.
+1. **Create Rule** ページで **Try It Out** のトグルスイッチをオンにして、SQL ステートメントのテストを有効化します。
+2. SQL に合致する **Data Source** を選択し、ルールの指定ソース（FROM 句）と一致していることを確認します。
+3. テストデータを入力します。データソースを選択すると、EMQX は **Client ID**、**Username**、**Topic**、**QoS**、**Payload** などのシミュレーション用デフォルト値を提供します。必要に応じて適切な値に変更してください。
+4. **Run Test** ボタンをクリックしてテストを実行します。正常に動作すれば **Test Passed** のメッセージが表示されます。
 
 ![test-sql](./assets/test-sql.png)
 
-The processing result of SQL will be presented in the **Output Result** section in JSON format. All the fields in SQL processing results can be referenced in the form of `${key}` by the subsequent actions (built-in actions or Sink). For a detailed explanation of the fields, see [SQL Data Sources and Fields](./rule-sql-events-and-fields.md).
+SQL の処理結果は **Output Result** セクションに JSON 形式で表示されます。SQL 処理結果のすべてのフィールドは、後続のアクション（組み込みアクションや Sink）で `${key}` の形式で参照可能です。フィールドの詳細は [SQL Data Sources and Fields](./rule-sql-events-and-fields.md) をご覧ください。
 
-This demonstration assumes that the Payload is in JSON format. In actual use, you can also use [Schema Registry](./schema-registry.md) to handle messages in other formats.
+このデモではペイロードが JSON 形式であることを前提としていますが、実際には [スキーマレジストリ](./schema-registry.md) を使って他の形式のメッセージも扱えます。
 
-Next, you can click the **Add Action** button on the right side of the **Create Rule** page to add different types of actions to the rule.
+次に、**Create Rule** ページ右側の **Add Action** ボタンをクリックして、ルールにさまざまなタイプのアクションを追加できます。
 
-## Add Actions
+## アクションの追加
 
-On the **Create Rule** page, click the **Add Action** button on the right side to bring up the **Add Action** page. You can select either of the three types of actions from the **Action** drop-down list: Republish, Console Output, and Forwarding with Data Bridge.
+**Create Rule** ページで右側の **Add Action** ボタンをクリックすると、**Add Action** ページが表示されます。**Action** ドロップダウンリストから、リパブリッシュ、コンソール出力、データブリッジを使った転送の3種類のアクションを選択できます。
 
-<img src="./assets/add_action.png" alt="add_action" style="zoom:67%;" />
+<img src="./assets/add_action.png" alt="アクション追加画面" style="zoom:67%;" />
 
-### Add Republish Action
+### リパブリッシュアクションの追加
 
-This section demonstrates how to add an action to republish the original messages received from the topic `t/#` to another topic `a/1`. 
+このセクションでは、トピック `t/#` で受信した元のメッセージを別のトピック `a/1` にリパブリッシュするアクションの追加方法を説明します。
 
-On the **Add Action** page, select **Republish** from the **Type of Action** drop-down menu, and configure the following settings before clicking the **Add** button to confirm:
+**Add Action** ページで、**Type of Action** ドロップダウンメニューから **Republish** を選択し、以下の設定を行ってから **Add** ボタンをクリックして確定します：
 
-- **Topic**: Set the target topic, "a/1" in this example;
+- **Topic**：転送先のトピックを設定します。ここでは例として `"a/1"` を指定します。
 
-- **QoS**: Set the QoS of the republished message, "0" in this example;
+- **QoS**：リパブリッシュするメッセージの QoS を設定します。例では `"0"`。
 
-- **Retain**: Set whether to forward this message as a retained message; for this tutorial, keep the default setting, **false**;
+- **Retain**：このメッセージをリテインメッセージとして転送するかどうかを設定します。このチュートリアルではデフォルトの **false** のままにします。
 
-- **Payload**: Enter "${payload}", indicating the republished message will have the same payload as the original message, without any modifications.
+- **Payload**：`${payload}` と入力し、リパブリッシュするメッセージのペイロードは元のメッセージと同じで変更しないことを示します。
 
-- **MQTT 5.0 Message Properties**: Click the toggle switch to configure the user properties and MQTT properties as necessary. The properties options allow you to add rich message metadata descriptions for the republished message.
+- **MQTT 5.0 メッセージプロパティ**：トグルスイッチをクリックしてユーザープロパティや MQTT プロパティを必要に応じて設定します。これにより、リパブリッシュメッセージに対して豊富なメタデータを付加できます。
 
-  <!-- - **User Properties**: You can add custom key-value pairs to configure the [user properties](https://www.emqx.com/en/blog/mqtt5-user-properties) of the republished message, which represent custom message metadata. -->
+  - **Payload Format Indicator**：メッセージのペイロードが特定の形式であるかを示す値を入力します。`false` の場合は未定義のバイト列とみなされ、`true` の場合は UTF-8 エンコードされた文字データであることを示します。これにより MQTT クライアントやサーバーがメッセージ内容を効率的に解析できます。
 
-  - **Payload Format Indicator**: Enter a value to indicate whether the payload of the message is in a specific format. When the value is set to `false`, the message is considered as undetermined bytes. When set to `true`, it indicates that the payload within the message body is UTF-8 encoded character data. This will help MQTT clients or MQTT servers parse message content more efficiently without the need for explicit formatting or type identification for the message body.
-  - **Message Expiry Interval**: Enter a value (in seconds) to specify a time interval after which the message should expire and be considered invalid if it hasn't been delivered to the intended recipient.
-  - **Content Type**: Enter a value to specify the type or format of the payload content within the republished message (MIME type), for example, `text/plain` represents a text file, `audio/aac` represents an audio file, and `application/json` signifies an application message in JSON format.
-  - **Response Topic**: Enter the specific MQTT topic to which you want the response message to be published. For example, if you want responses to be sent to a topic named "response/my_device," you would enter: `response/my_device`.
-  - **Correlation Data**: Enter a unique identifier or data to correlate a response message with the original request message. For example, you could enter a unique request identifier, a transaction ID, or any other information that is meaningful in your application context.
+  - **Message Expiry Interval**：メッセージが配信されなかった場合に無効とみなすまでの有効期限（秒）を指定します。
 
-- **Direct Dispatch**: Toggle the switch to enable or disable direct dispatch. When enabled, the message will be directly dispatched to subscribers to prevent unintended behavior, such as triggering additional rules or causing recursive activation of the same rule. 
+  - **Content Type**：リパブリッシュメッセージのペイロードのタイプやフォーマット（MIME タイプ）を指定します。例：`text/plain`（テキストファイル）、`audio/aac`（音声ファイル）、`application/json`（JSON 形式のアプリケーションメッセージ）。
 
-On the **Create Rule** page, click the **Create** button at the bottom to complete the rule creation. This rule will be added as a new entry on the **Rule** page. 
+  - **Response Topic**：応答メッセージをパブリッシュする特定の MQTT トピックを指定します。例：`response/my_device`。
 
-::: tip
-The republishing action does not prevent the delivery of the original message. For example, according to the rule, messages under topic "t/1" will be republished under topic "a/1", in the meantime "t/1" message will still be delivered to the clients subscribed to topic  "t/1".
-:::
+  - **Correlation Data**：応答メッセージと元のリクエストメッセージを関連付けるための一意の識別子やデータを入力します。例：リクエストIDやトランザクションIDなど。
 
-### Add Console Output Action
+- **Direct Dispatch**：トグルスイッチでダイレクトディスパッチの有効・無効を切り替えます。有効にすると、メッセージが直接サブスクライバーに配信され、追加のルール発動や同一ルールの再帰的な起動を防止します。
+
+**Create Rule** ページ下部の **Create** ボタンをクリックしてルール作成を完了します。このルールは **Rule** ページに新しいエントリとして追加されます。
 
 ::: tip
-The console output action should only be used for debugging. If it is used in the production environment, it may cause performance problems.
+リパブリッシュアクションは元のメッセージの配信を妨げません。例えば、トピック `"t/1"` のメッセージはルールにより `"a/1"` にリパブリッシュされますが、同時に `"t/1"` にサブスクライブしているクライアントにも元のメッセージが配信されます。
 :::
 
-The console output action is used to view the output results of the rule. The result messages will be printed to the console or log file.
+### コンソール出力アクションの追加
 
-- When EMQX is launched in either `console` or `foreground` mode, with `foreground` being the default mode in Docker environments, its output is directed to the console.
-- If EMQX is started via systemd, the output is captured and stored by the journal system. This can be examined using the `journalctl` command.
+::: tip
+コンソール出力アクションはデバッグ目的でのみ使用してください。本番環境で使用するとパフォーマンス問題を引き起こす可能性があります。
+:::
 
-The output will be in the format below:
+コンソール出力アクションはルールの出力結果を確認するために使います。結果メッセージはコンソールまたはログファイルに出力されます。
+
+- EMQX が `console` または `foreground` モードで起動された場合（Docker 環境ではデフォルトで `foreground`）、出力はコンソールに送られます。
+- systemd 経由で起動された場合は、出力はジャーナルシステムに保存され、`journalctl` コマンドで確認できます。
+
+出力は以下の形式です：
 
 ```bash
 [rule action] rule_id1
@@ -181,93 +182,92 @@ The output will be in the format below:
     Envs: #{key1 => val1, key2 => val2}
 ```
 
-Where
+ここで、
 
--  `[rule action]` is the rule ID where the republish action is triggered.
--  `Action Data` is the output result of the rule, indicating the data or parameter that should be passed to the action when it is executed, that is, the payload part when you set up the republish action.
--  `Envs` is the environment variable that should be set when republishing, which could be the data source and other internal information related to the execution of this action.
+- `[rule action]` はリパブリッシュアクションが発動したルールの ID です。
+- `Action Data` はルールの出力結果で、アクション実行時に渡されるデータやパラメータ（リパブリッシュアクション設定時のペイロード部分）を示します。
+- `Envs` はリパブリッシュ時に設定される環境変数で、データソースやアクション実行に関連する内部情報を含みます。
 
-### Add Forwarding with Sinks Action
+### Sinks を使った転送アクションの追加
 
-You can also add actions to forward the processed results using sinks. All you need is to select the target Sink from the Type of Action drop-down list in the Dashboard. For details on each sink in EMQX, see [Data Integration](./data-bridges.md).
+処理結果を Sinks を使って転送するアクションも追加可能です。ダッシュボードの **Type of Action** ドロップダウンリストから対象の Sink を選択するだけです。EMQX の各 Sink の詳細は [データ統合](./data-bridges.md) を参照してください。
 
-## Test Rules
+## ルールのテスト
 
-The rule engine provides a rule testing feature, which allows you to trigger rules using simulated data or real client data, execute rule SQL, and perform all actions added to the rule, obtaining the execution results for each step.
+ルールエンジンはルールのテスト機能を提供しており、シミュレーションデータや実際のクライアントデータを使ってルールをトリガーし、ルール SQL を実行し、追加したすべてのアクションを実行して各ステップの結果を取得できます。
 
-By testing rules, you can verify whether the rules work as expected, and quickly identify and solve any issues. This not only speeds up the development process but also ensures that the rules can run as expected in real environments, avoiding failures in production.
+ルールをテストすることで、ルールが期待通りに動作するか検証でき、問題の早期発見と解決が可能です。これにより開発効率が向上し、本番環境での失敗を防止できます。
 
-### Testing Steps
+### テスト手順
 
-1. Toggle the **Try It Out** switch and select **Rule** as the test target. Note that before starting the test, you need to save the rule.
-2. Click the **Start Test** button to begin the test. The browser will wait for the current rule to be triggered to generate the test results.
-3. Trigger the rule for testing. The following 2 methods are supported:
-   - **Use simulated data**: Click the **Input Simulated Data** button, select the **Data Source** that matches the SQL in the pop-up window, and ensure it matches the specified source in the rule (FROM clause). EMQX provides default values for all fields, such as **Client ID**, **Username**, **Topic**, **QoS**, **Payload**, etc. Modify them as needed, and click the **Submit Test** button to trigger the rule for testing once.
-   - **Use real device data**: Keep the current page open, connect to EMQX using a real client or MQTT client tool, trigger the corresponding events, and perform testing.
-4. View the test results: When the rule is triggered, the execution results will be output to the Dashboard, displaying detailed execution results for each step.
+1. **Try It Out** スイッチをオンにし、テスト対象として **Rule** を選択します。テスト開始前にルールを保存しておく必要があります。
+2. **Start Test** ボタンをクリックしてテストを開始します。ブラウザは現在のルールがトリガーされるのを待ち、テスト結果を受け取ります。
+3. ルールをトリガーしてテストします。以下の2つの方法が利用可能です：
+   - **シミュレーションデータを使う**：**Input Simulated Data** ボタンをクリックし、ポップアップで SQL に合致する **Data Source** を選択し、ルールの指定ソース（FROM 句）と一致していることを確認します。EMQX は **Client ID**、**Username**、**Topic**、**QoS**、**Payload** などのデフォルト値を提供します。必要に応じて変更し、**Submit Test** ボタンを押して一度だけルールをトリガーします。
+   - **実際のデバイスデータを使う**：現在のページを開いたままにし、実際のクライアントや MQTT クライアントツールで EMQX に接続し、対応するイベントを発生させてテストします。
+4. テスト結果を確認します。ルールがトリガーされると、ダッシュボードに実行結果が出力され、各ステップの詳細な実行結果が表示されます。
 
-### Testing Example
+### テスト例
 
-You can use [MQTTX](https://mqttx.app/) to test the rule with the republish action. Create one client, and use this client to subscribe to the `a/1` topic and send a `t/1` message. You will see in the dialog box that this message is republished to the topic `a/1`.
+[MQTTX](https://mqttx.app/) を使ってリパブリッシュアクションのルールをテストできます。クライアントを1つ作成し、そのクライアントで `a/1` トピックをサブスクライブし、`t/1` メッセージを送信します。ダイアログボックスに、このメッセージが `a/1` トピックにリパブリッシュされたことが表示されます。
 
-For details on how to build the connection between the MQTTX client tool and EMQX, see [MQTTX - Get Started](https://mqttx.app/docs/get-started).
+MQTTX クライアントツールと EMQX の接続方法の詳細は [MQTTX - はじめに](https://mqttx.app/docs/get-started) を参照してください。
 
-<img src="./assets/rules/en_rule_overview_mqttx.png" alt="image" style="zoom: 50%;" />
+<img src="./assets/rules/en_rule_overview_mqttx.png" alt="MQTTX テスト画面" style="zoom: 50%;" />
 
-Correspondingly, on the Dashboard test interface, the execution results of the entire rule will be displayed, with the following contents:
+対応して、ダッシュボードのテストインターフェースにはルール全体の実行結果が表示され、以下の内容が含まれます：
 
-- On the left are the rule execution records. Each time the rule is triggered, a record is generated. Clicking on it can switch to the corresponding message or event details.
-- On the right is the list of actions recorded by the selected rule. Clicking on it can expand to view the action execution results and logs.
+- 左側にはルールの実行記録が表示されます。ルールがトリガーされるたびに記録が生成され、クリックすると対応するメッセージやイベントの詳細に切り替わります。
+- 右側には選択したルールのアクション一覧が表示され、クリックでアクションの実行結果やログを展開して確認できます。
 
-When the execution of the rule SQL or any action fails, the entire rule record will be marked as failed. You can select the record to view the corresponding action's error information for troubleshooting.
+ルール SQL やアクションの実行に失敗した場合は、そのルール記録全体が失敗としてマークされます。記録を選択すると、対応するアクションのエラー情報を確認でき、トラブルシューティングに役立ちます。
 
-<img src="./assets/rule-test-result.png" alt="test-rules" style="zoom:50%;" />
+<img src="./assets/rule-test-result.png" alt="ルールテスト結果" style="zoom:50%;" />
 
-From the above example, it can be seen that the rule was triggered 4 times, with 3 times the rule execution being completely successful. The 4th time failed due to the **HTTP Server** action execution failure, with the error reason being a response with a 302 status code.
+上記の例では、ルールは4回トリガーされ、そのうち3回は完全に成功しました。4回目は **HTTP Server** アクションの実行失敗により失敗し、エラー原因はステータスコード 302 のレスポンスでした。
 
-For more usage guides on testing rules, you can refer to the blog [Enhancing Data Integration Stability: A Guide on EMQX Platform E2E Rule Testing](https://www.emqx.com/en/blog/emqx-platform-e2e-rule-testing-guide).
+ルールテストのさらなる活用方法はブログ [データ統合の安定性向上：EMQX プラットフォーム E2E ルールテストガイド](https://www.emqx.com/en/blog/emqx-platform-e2e-rule-testing-guide) をご覧ください。
 
-## View Rules
+## ルールの確認
 
-The **Rules** page provides a comprehensive list of all the rules you have created.
+**Rules** ページには、作成したすべてのルールが一覧表示されます。
 
-Each entry in the list displays basic information, including the rule ID, associated source, enable status, and the number of actions. Hovering over the source reveals the corresponding SQL statement details. To modify a rule's configuration, click **Settings** in the **Actions** column. You can also use the **More** button to duplicate or delete a rule.
+一覧の各エントリには、ルール ID、関連するソース、有効状態、アクション数などの基本情報が表示されます。ソースにマウスオーバーすると対応する SQL ステートメントの詳細が表示されます。ルールの設定を変更するには、**Actions** 列の **Settings** をクリックします。**More** ボタンからはルールの複製や削除も可能です。
 
 ![view_rules](./assets/view_rules.png)
 
-You can also view rules in the [Flow Designer](../flow-designer/introduction.md) by navigating to **Integration** -> **Flow Designer**. Rules created on the **Rules** page and those created through the Flow Designer are fully interoperable.
+また、[Flowデザイナー](../flow-designer/introduction.md) から **Integration** -> **Flow Designer** に移動してルールを確認することもできます。**Rules** ページで作成したルールと Flowデザイナーで作成したルールは完全に相互運用可能です。
 
-To view the rule statistics and action execution information for a rule, click the rule ID on **Rules** page or the rule name on the **Flows** page.
+ルールの統計情報やアクション実行情報を確認するには、**Rules** ページのルール ID または **Flows** ページのルール名をクリックします。
 
 ![view_rules_flows](./assets/view_rules_flows.png)
 
 ::: tip
 
-If you update the rule action or redefine the data source, the statistics listed on the page below will reset and start fresh.
+ルールアクションを更新したりデータソースを再定義した場合、以下のページに表示される統計情報はリセットされ、新たに集計が開始されます。
 
 :::
 
 ![Rule Statistics](assets/rule_statistics.png)
 
-### Search Rules
+### ルールの検索
 
-When there are many rules in the list, you can use the filter to narrow down your search and display the rules you want to view. You can filter rules by rule ID, incoming message topic or wildcard, enable status, rule notes, and the actions or sources associated with the rule.
+ルールが多数ある場合は、フィルター機能を使って目的のルールを絞り込み表示できます。ルール ID、受信メッセージのトピックやワイルドカード、有効状態、ルールメモ、ルールに関連付けられたアクションやソースでフィルター可能です。
 
 ![search_rules](./assets/search_rules.png)
 
-### View Actions (Sink) and Sources
+### アクション（Sink）とソースの表示
 
-The **Actions (Sink)** and **Sources** tabs on the **Rule** page display all created actions (sinks) and sources. These tabs provide essential details, such as names, connection statuses, associated rules, enable statuses, created time, and last modified time. You can sort the entries by clicking the arrows beside column names.
+**Rule** ページの **Actions (Sink)** タブと **Sources** タブには、作成済みのすべてのアクション（Sink）とソースが表示されます。名前、接続状態、関連ルール、有効状態、作成日時、最終更新日時などの重要な情報が確認でき、列名横の矢印をクリックして並び替えも可能です。
 
-Clicking the toggle switch in the **Enable** column allows you to enable or disable a sink or source. Clicking **View Rules** in the **Associated Rules** column opens a list of rules containing that specific sink or source, making it easier to manage your data integration settings.
+**Enable** 列のトグルスイッチをクリックすると、Sink やソースの有効・無効を切り替えられます。**Associated Rules** 列の **View Rules** をクリックすると、その Sink やソースが含まれるルール一覧が表示され、データ統合設定の管理が容易になります。
 
-You can reconnect or modify the settings of a sink or source through the **Action** column. By clicking **More**, you can delete the sink or source or create a new rule using it.
+**Action** 列からは Sink やソースの再接続や設定変更が可能です。**More** からは Sink やソースの削除や、それを使った新規ルール作成も行えます。
 
-When there are many sink or source entries in the list, you can use the filter to narrow down your search and display the entries you want to view. You can filter sinks or sources by name, status, or enable status.
+多数の Sink やソースがある場合は、フィルター機能で名前、状態、有効状態などで絞り込み表示できます。
 
 ![view_sink_source](./assets/view_sink_source.png)
 
-To view the statistics and rate indicators for a sink or source, click the name of the sink or source.
+Sink やソースの統計情報やレート指標を確認するには、名前をクリックしてください。
 
 ![action_statistics](./assets/action_statistics.png)
-

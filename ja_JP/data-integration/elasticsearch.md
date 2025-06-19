@@ -1,54 +1,54 @@
-# Ingest MQTT Data into Elasticsearch
+# ElasticsearchへのMQTTデータ取り込み
 
-[Elasticsearch](https://www.elastic.co/elasticsearch/) is a distributed search and data analysis engine that offers full-text search, structured search, and analysis capabilities for diverse data types. By integrating with Elasticsearch, EMQX enables seamless incorporation of MQTT data into Elasticsearch for storage. This integration leverages the powerful scalability and analysis capabilities of Elasticsearch, providing efficient and scalable data storage and analysis solutions for IoT applications.
+[Elasticsearch](https://www.elastic.co/elasticsearch/)は、分散型の検索およびデータ分析エンジンであり、多様なデータタイプに対して全文検索、構造化検索、分析機能を提供します。EMQXはElasticsearchと連携することで、MQTTデータをシームレスにElasticsearchに取り込み、保存することを可能にします。この連携により、Elasticsearchの強力なスケーラビリティと分析機能を活用し、IoTアプリケーション向けに効率的かつスケーラブルなデータ保存・分析ソリューションを提供します。
 
-This page details the data integration between EMQX and Elasticsearch and provides practical guidance on rule and Sink creation.
+本ページでは、EMQXとElasticsearch間のデータ連携について詳述し、ルールおよびSinkの作成方法を実践的に解説します。
 
-## How It Works
+## 動作概要
 
-Data integration with Elasticsearch is an out-of-the-box feature in EMQX, combining EMQX's device access and message transmission capabilities with Elasticsearch’s data storage and analysis capabilities. Seamless integration of MQTT data can be achieved through simple configuration.
+Elasticsearchとのデータ連携はEMQXの標準機能であり、EMQXのデバイスアクセスおよびメッセージ転送機能とElasticsearchのデータ保存・分析機能を組み合わせています。簡単な設定でMQTTデータのシームレスな統合が実現可能です。
 
 ![MQTT to Elasticsearch](./assets/mqtt-to-Elasticsearch.jpg)
 
-EMQX and Elasticsearch provide a scalable IoT platform for efficiently collecting and analyzing real-time device data. In this architecture, EMQX acts as the IoT platform, responsible for device access, message transmission, and data routing, while Elasticsearch serves as the data storage and analysis platform, handling data storage, data search, and analysis.
+EMQXとElasticsearchは、リアルタイムのデバイスデータを効率的に収集・分析するためのスケーラブルなIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがデバイスアクセス、メッセージ転送、データルーティングを担当するIoTプラットフォームとして機能し、Elasticsearchがデータ保存・検索・分析プラットフォームとして機能します。
 
-EMQX forwards device data to Elasticsearch through its rule engine and Sink, where Elasticsearch utilizes its powerful search and analysis capabilities to generate reports, charts, and other data analysis results, displayed to users through Kibana’s visualization tools. The workflow is as follows:
+EMQXはルールエンジンとSinkを介してデバイスデータをElasticsearchに転送し、Elasticsearchは強力な検索・分析機能を用いてレポートやチャートなどのデータ分析結果を生成し、Kibanaの可視化ツールを通じてユーザーに表示します。ワークフローは以下の通りです：
 
-1. **Device Message Publishing and Receiving**: IoT devices connect via the MQTT protocol and publish telemetry and status data to specific topics, which EMQX receives and compares in the rule engine.
-2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources can be processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as transforming data formats, filtering out specific information, or enriching messages with context information.
-3. **Writing to Elasticsearch**: Rules defined in the rule engine trigger the operation of writing messages to Elasticsearch. Elasticsearch Sink provides flexible operation methods and document templates to construct documents in the desired format, writing specific fields from messages into corresponding indices in Elasticsearch.
+1. **デバイスメッセージのパブリッシュと受信**：IoTデバイスはMQTTプロトコルで接続し、特定のトピックにテレメトリやステータスデータをパブリッシュします。EMQXはこれを受信し、ルールエンジンで比較します。
+2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンを用いて、特定のトピックからのMQTTメッセージをトピックマッチングに基づき処理します。ルールエンジンは該当するルールをマッチングし、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などのメッセージ処理を行います。
+3. **Elasticsearchへの書き込み**：ルールエンジンで定義されたルールがトリガーとなり、メッセージをElasticsearchに書き込みます。Elasticsearch Sinkは柔軟な操作方法とドキュメントテンプレートを提供し、メッセージの特定フィールドを対応するElasticsearchのインデックスに目的の形式で書き込みます。
 
-Once device data is written to Elasticsearch, you can flexibly use Elasticsearch's search and analysis capabilities to process data, such as:
+デバイスデータがElasticsearchに書き込まれた後は、Elasticsearchの検索・分析機能を柔軟に活用して以下のような処理が可能です：
 
-1. **Log Monitoring**: IoT devices generate a large amount of log data, which can be sent to Elasticsearch for storage and analysis. By connecting to visualization tools, such as Kibana, charts can be generated based on these log data, displaying real-time information on device status, operation records, and error messages. This helps developers or operators quickly locate and resolve potential issues.
-2. **Geographical Data (Maps)**: IoT devices often generate geographic location data, which can be stored in Elasticsearch. Using Kibana’s Maps feature, device location information can be visualized on a map for tracking and analysis.
-3. **Endpoint Security**: Security log data from IoT devices can be sent to Elasticsearch. By connecting to Elastic Security, security reports can be generated, monitoring the security status of devices in real time, detecting potential security threats, and responding accordingly.
+1. **ログ監視**：IoTデバイスは大量のログデータを生成し、これをElasticsearchに送信して保存・分析します。Kibanaなどの可視化ツールと連携することで、デバイスの状態、稼働記録、エラーメッセージなどのリアルタイム情報をチャート化し、開発者や運用者が潜在的な問題を迅速に特定・解決できます。
+2. **地理情報（マップ）**：IoTデバイスは位置情報データを生成することが多く、これをElasticsearchに保存します。KibanaのMaps機能を利用して、デバイスの位置情報を地図上に可視化し、追跡や分析が可能です。
+3. **エンドポイントセキュリティ**：IoTデバイスのセキュリティログデータをElasticsearchに送信し、Elastic Securityと連携してセキュリティレポートを生成します。これにより、デバイスのセキュリティ状況をリアルタイムで監視し、潜在的な脅威を検知・対応できます。
 
-## Features and Advantages
+## 特長とメリット
 
-The Elasticsearch data integration offers the following features and advantages to your business:
+Elasticsearchデータ連携は以下の特長とメリットをビジネスにもたらします：
 
-- **Efficient Data Indexing and Search**: Elasticsearch can easily handle large-scale real-time message data from EMQX. Its powerful full-text search and indexing capabilities enable IoT message data to be quickly and efficiently retrieved and queried.
-- **Data Visualization**: Through integration with Kibana (part of the Elastic Stack), powerful data visualization of IoT data is possible, aiding in understanding and analyzing the data.
-- **Flexible Data Manipulation**: EMQX's Elasticsearch integration supports dynamic setting of indices, document IDs, and document templates, allowing for the creation, update, and deletion of documents, suitable for a wider range of IoT data integration scenarios.
-- **Scalability**: Both Elasticsearch and EMQX support clustering and can easily expand their processing capabilities by adding more nodes, facilitating uninterrupted business expansion.
+- **効率的なデータインデックスと検索**：ElasticsearchはEMQXからの大規模なリアルタイムメッセージデータを容易に処理可能です。強力な全文検索およびインデックス機能により、IoTメッセージデータを迅速かつ効率的に取得・検索できます。
+- **データの可視化**：Elastic Stackの一部であるKibanaと連携することで、IoTデータの強力な可視化が可能となり、データの理解と分析を支援します。
+- **柔軟なデータ操作**：EMQXのElasticsearch連携は、インデックス名、ドキュメントID、ドキュメントテンプレートの動的設定をサポートし、ドキュメントの作成、更新、削除が可能で、より幅広いIoTデータ連携シナリオに対応します。
+- **スケーラビリティ**：ElasticsearchとEMQXは共にクラスタリングをサポートし、ノード追加による処理能力の拡張が容易で、ビジネスの継続的な拡大を支援します。
 
-## Before you Start
+## はじめる前に
 
-This section introduces the preparatory work needed before creating Elasticsearch data integration in EMQX, including installing Elasticsearch and creating indices.
+本節では、EMQXでElasticsearchデータ連携を作成する前に必要な準備作業として、Elasticsearchのインストールおよびインデックス作成について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Understand [rules](./rules.md).
-- Understand [data integration](./data-bridges.md).
+- [ルール](./rules.md)の理解
+- [データ連携](./data-bridges.md)の理解
 
-### Install Elasticsearch and Create Indices
+### Elasticsearchのインストールとインデックス作成
 
-EMQX supports integration with privately deployed Elasticsearch or with Elastic in the cloud. You can use Elastic Cloud or Docker to deploy an Elasticsearch instance.
+EMQXはプライベートに展開されたElasticsearchまたはクラウド上のElasticと連携可能です。Elastic CloudやDockerを用いてElasticsearchインスタンスを展開できます。
 
-1. If you don't have a Docker environment, [install Docker](https://docs.docker.com/install/).
+1. Docker環境がない場合は、[Dockerをインストール](https://docs.docker.com/install/)してください。
 
-2. Start an Elasticsearch container with X-Pack security authentication enabled. Set the default username `elastic` with the password `public`.
+2. X-Packセキュリティ認証を有効にしたElasticsearchコンテナを起動します。デフォルトのユーザー名は`elastic`、パスワードは`public`に設定します。
 
    ```bash
    docker run -d --name elasticsearch \
@@ -60,7 +60,7 @@ EMQX supports integration with privately deployed Elasticsearch or with Elastic 
        docker.elastic.co/elasticsearch/elasticsearch:7.10.1
    ```
 
-3. Create the `device_data` index for storing messages published by devices. Make sure to replace Elasticsearch username and password.
+3. デバイスがパブリッシュするメッセージを保存するための`device_data`インデックスを作成します。Elasticsearchのユーザー名とパスワードは適宜置き換えてください。
 
    ```bash
    curl -u elastic:public -X PUT "localhost:9200/device_data?pretty" -H 'Content-Type: application/json' -d'
@@ -78,33 +78,33 @@ EMQX supports integration with privately deployed Elasticsearch or with Elastic 
    }'
    ```
 
-## Create a Connector
+## コネクターの作成
 
-Before adding the Elasticsearch Sink, you need to create an Elasticsearch connector.
+Elasticsearch Sinkを追加する前に、Elasticsearchコネクターを作成する必要があります。
 
-The following steps assume you are running EMQX and Elasticsearch on the same local machine. If you have EMQX and Elasticsearch running remotely, adjust the settings accordingly.
+以下の手順はEMQXとElasticsearchが同じローカルマシン上で動作していることを想定しています。リモート環境で動作している場合は設定を適宜調整してください。
 
-1. Go to the Dashboard **Integration** -> **Connectors** page.
-2. Click **Create** in the upper right corner of the page.
-3. Select **Elasticsearch** as the connector type and click next.
-4. Enter the connector name, for example, `my-elasticsearch`. The name must combine uppercase and lowercase letters and numbers.
-5. Enter Elasticsearch connection information according to your deployment method.
-   - **URL**: Enter the REST interface URL of the Elasticsearch service as `http://localhost:9200`.
-   - **Username**: Specify the Elasticsearch service username as `elastic`.
-   - **Password**: Provide the Elasticsearch service password as `public`.
-6. Click the **Create** button at the bottom to complete the connector creation.
+1. ダッシュボードの **Integration** -> **Connectors** ページに移動します。
+2. ページ右上の **Create** をクリックします。
+3. コネクタータイプとして **Elasticsearch** を選択し、次へ進みます。
+4. コネクター名を入力します。例：`my-elasticsearch`。名前は大文字・小文字・数字の組み合わせである必要があります。
+5. デプロイ方法に応じてElasticsearch接続情報を入力します。
+   - **URL**：ElasticsearchサービスのRESTインターフェースURLを`http://localhost:9200`の形式で入力します。
+   - **Username**：Elasticsearchサービスのユーザー名を`elastic`と指定します。
+   - **Password**：Elasticsearchサービスのパスワードを`public`と指定します。
+6. ページ下部の **Create** ボタンをクリックし、コネクター作成を完了します。
 
-Now you have created the Connector. Next, you need to create a rule to specify the data that needs to be written into Elasticsearch.
+これでコネクターが作成されました。次に、Elasticsearchに書き込むデータを指定するルールを作成します。
 
-## Create a Rule with Elasticsearch Sink 
+## Elasticsearch Sink付きルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the `device_data` index in Elasticsearch through the configured Sink.
+本節では、EMQXでソースMQTTトピック`t/#`からのメッセージを処理し、処理結果を設定済みのSinkを通じてElasticsearchの`device_data`インデックスに書き込むルールの作成方法を示します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
-2. Click **Create** in the upper right corner.
+2. 右上の **Create** をクリックします。
 
-3. Enter rule ID `my_rule`, and in the SQL editor, enter the rule to store MQTT messages from the `t/#` topic in Elasticsearch. The rule SQL is as follows:
+3. ルールIDに`my_rule`を入力し、SQLエディターに`t/#`トピックからのMQTTメッセージをElasticsearchに保存するルールSQLを入力します。ルールSQLは以下の通りです：
 
    ```sql
    SELECT
@@ -117,70 +117,63 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debugging** to learn and test the rule SQL results.
+   SQLに不慣れな場合は、**SQL Examples**や**Enable Debugging**をクリックしてルールSQLの学習や結果のテストが可能です。
 
    :::
 
-4. Click **Add Action**. Select `Elasticsearch` from the **Action Type** dropdown list. Keep the **Action** dropdown box as the default `Create Action` option. Or, you can select a previously created Elasticsearch action from the action dropdown box. This demonstration will create a new Sink and add it to the rule.
+4. **Add Action** をクリックし、**Action Type**のドロップダウンリストから`Elasticsearch`を選択します。**Action**のドロップダウンはデフォルトの`Create Action`のままにします。既存のElasticsearchアクションを選択することも可能ですが、本例では新規Sinkを作成しルールに追加します。
 
-5. Enter the name and description of the Sink.
+5. Sinkの名前と説明を入力します。
 
-6. Select the `my-elasticsearch` connector you just created from the connector dropdown box. You can also click the button next to the dropdown box to create a new connector on the pop-up page. The required configuration parameters can be referred to [Create a Connector](#create-a-connector).
+6. コネクターのドロップダウンから先ほど作成した`my-elasticsearch`を選択します。ドロップダウン横のボタンをクリックするとポップアップで新規コネクター作成も可能です。設定パラメータは[コネクター作成](#コネクターの作成)を参照してください。
 
-7. Configure the document template for inserting JSON-formatted data as follows:
+7. JSON形式のデータ挿入用ドキュメントテンプレートを以下のように設定します：
 
-   - **Action**: Optional actions `Create`, `Update`, and `Delete`.
+   - **Action**：`Create`、`Update`、`Delete`のいずれかを選択可能（任意）。
+   - **Index Name**：操作対象のインデックス名またはインデックスエイリアス。`${var}`形式のプレースホルダーをサポート。
+   - **Document ID**：`Create`では任意、その他の操作では必須。インデックス内のドキュメント識別子。`${var}`形式のプレースホルダーをサポート。指定しない場合はElasticsearchが自動生成。
+   - **Routing**：ドキュメントを格納するインデックスのシャード指定。空欄の場合はElasticsearchが自動決定。
+   - **Document Template**：カスタムドキュメントテンプレート。JSONオブジェクトに変換可能で`${var}`形式のプレースホルダーをサポート。例：`{ "field": "${payload.field}"}`や`${payload}`。
+   - **Max Retries**：書き込み失敗時の最大再試行回数。デフォルトは3回。
+   - **Overwrite Document**（`Create`アクション特有）：既存ドキュメントがある場合に上書きするか。`No`の場合は書き込み失敗。
+   - **Enable Upsert**（`Update`アクション特有）：更新対象ドキュメントが存在しない場合、挿入操作として扱い新規ドキュメントを挿入。
 
-   - **Index Name**: The name of the index or index alias on which to perform the action. Placeholders in `${var}` format are supported.
+   本例では、インデックス名を`device_data`に設定し、クライアントIDとタイムスタンプの組み合わせ`${clientid}_${ts}`をドキュメントIDとしています。ドキュメントにはクライアントID、現在のタイムスタンプ、メッセージ本文全体を格納します。ドキュメントテンプレートは以下の通りです：
 
-   - **Document ID**: Optional for `Create` action, required for other actions. The unique identifier of a document within the index. Placeholders in `${var}` format are supported. If an ID is not specified, Elasticsearch will generate one automatically.
+   ```json
+   {
+     "clientid": "${clientid}",
+     "ts": ${ts},
+     "payload": ${payload}
+   }
+   ```
 
-   - **Routing**: Specifies which shard of the index the document should be stored in. If left blank, Elasticsearch will decide.
+8. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。プライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
+9. その他のパラメータはデフォルトのままにします。
+10. **Create** ボタンをクリックし、Sinkの作成を完了します。新しいSinkが**Action Outputs**に追加されます。
+11. ルール作成ページに戻り、**Create** ボタンをクリックしてルール作成を完了します。
 
-   - **Document Template**: Custom document template, must be convertible into a JSON object and supports `${var}` format placeholders, e.g., `{ "field": "${payload.field}"}` or `${payload}`.
+これでルールの作成が完了しました。**Rules**ページで新規作成したルールを確認でき、**Actions (Sink)**タブで新しいElasticsearch Sinkを確認できます。
 
-   - **Max Retries**: The maximum number of times to retry when writing fails. The default is 3 attempts.
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーが表示されます。トポロジーは`t/#`トピックからのメッセージがルール`my_rule`で解析され、Elasticsearchに書き込まれる流れを視覚的に示します。
 
-   - **Overwrite Document** (Specific to `Create` action): Whether to overwrite the document if it already exists. If “No”, the document write will fail.
+## ルールのテスト
 
-   - **Enable Upsert** (Specific to `Update` action): Treat the update operation as an insert operation when the document to be updated does not exist, and insert the provided document as a new document.
-
-     In this example, the index name is set to `device_data`, using a combination of client ID and timestamp `${clientid}_${ts}` as the document ID. The document stores the client ID, current timestamp, and the entire message body. The document template is as follows:
-
-     ```json
-     {
-       "clientid": "${clientid}",
-       "ts": ${ts},
-       "payload": ${payload}
-     }
-     ```
-
-8. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-9. Keep the rest of the parameters at their default values. 
-10. Click the **Create** button to complete the creation of the Sink. The new Sink will be added to the **Action Outputs**.
-11. Back on the Create Rule page, click the **Create** button to complete the entire rule creation.
-
-Now you have successfully created the rule. You can see the newly created rule on the **Rules** page and the new Elasticsearch Sink under the **Actions (Sink)** tab.
-
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows that messages from the `t/#` topic are written to Elasticsearch after being parsed by the rule `my_rule`.
-
-## Test the Rule
-
-Use MQTTX to publish messages to the `t/1` topic:
+MQTTXを使って`t/1`トピックにメッセージをパブリッシュします：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{"temp":24,"humidity":30}'
 ```
 
-Check the Sink operation statistics, both hit and successful send counts +1.
+Sinkの動作統計を確認すると、ヒット数および送信成功数がそれぞれ+1されます。
 
-Use the `_search` API to view the document content in the index and check whether the data has been written to the `device_data` index:
+`_search` APIを使ってインデックス内のドキュメント内容を確認し、`device_data`インデックスにデータが書き込まれているかチェックします：
 
 ```bash
 curl -X GET "localhost:9200/device_data/_search?pretty"
 ```
 
-The correct responding results are as follows:
+正しい応答結果は以下の通りです：
 
 ```json
   "took" : 1098,

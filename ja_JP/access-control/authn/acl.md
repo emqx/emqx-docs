@@ -1,44 +1,35 @@
-# Access Control List
+# アクセスコントロールリスト
 
-This page introduces Access Control Lists (ACL) rules embedded in JWT and HTTP authentication responses. Currently, JWT authentication and HTTP authentication support permission presets, using ACL as an optional extension of the authentication result. For example, this can be a private claim `acl` defined in JWT, or an `acl` JSON property returned as part of the HTTP authentication response. After a client connects, its publish and subscribe actions are restricted by these ACL rules.
+このページでは、JWTおよびHTTP認証レスポンスに埋め込まれたアクセスコントロールリスト（ACL）ルールについて紹介します。現在、JWT認証およびHTTP認証は権限プリセットをサポートしており、ACLは認証結果のオプション拡張として利用可能です。例えば、JWT内に定義されたプライベートクレーム `acl` や、HTTP認証レスポンスの一部として返される `acl` JSONプロパティが該当します。クライアントが接続した後、そのパブリッシュおよびサブスクライブの操作はこれらのACLルールによって制限されます。
 
-General ACL rules are stored in `acl.conf`. For details, see [acl.conf](../authz/file.md). For more comprehensive authorization methods, refer to [Authorization](../authz/authz.md).
+一般的なACLルールは `acl.conf` に保存されています。詳細は [acl.conf](../authz/file.md) を参照してください。より包括的な認可方法については [Authorization](../authz/authz.md) をご覧ください。
 
 ::: tip
 
-ACL rules returned by authentication are checked before all Authorizers. For details, see [Authorization Check Priority](../authz/authz.md#authorization-check-priority).
+認証によって返されるACLルールは、すべてのAuthorizerよりも先にチェックされます。詳細は [Authorization Check Priority](../authz/authz.md#authorization-check-priority) を参照してください。
 :::
 
-## ACL Format
+## ACLフォーマット
 
-This section introduces 2 ACL formats supported in EMQX.
+このセクションでは、EMQXでサポートされている2つのACLフォーマットを紹介します。
 
-### New Format
+### 新フォーマット
 
-The new format, supported starting from v5.5.0, utilizes an ACL to specify multiple permissions, closely resembling the semantics of ACL rules and offering greater flexibility.
+v5.5.0以降でサポートされている新フォーマットは、ACLを用いて複数の権限を指定でき、ACLルールの意味論に近く、より柔軟な設定が可能です。
 
-Unlike the old format, the new format continues to other authorization checks if a client operation does not match any rule. While the old format remains compatible, the new format is recommended for use.
+旧フォーマットと異なり、新フォーマットではクライアントの操作がいずれのルールにもマッチしない場合、他の認可チェックに処理が継続されます。旧フォーマットは互換性のため残っていますが、新フォーマットの使用が推奨されます。
 
-The ACL includes the following fields:
+ACLは以下のフィールドを含みます：
 
-| Field                 | Required | Description                                                  |
-| --------------------- | -------- | ------------------------------------------------------------ |
-| permission            | Yes      | Specifies whether the current client's operation request is allowed or denied; options: `allow`, `deny` |
-| action                | Yes      | The operation associated with the rule; options: `publish`, `subscribe`, `all` |
-| topic                 | Yes      | The topic associated with the rule, supports [topic placeholders](../authz/authz.md#topic-placeholders) |
-| qos                   | No       | An array specifying the QoS levels applicable to the rule, e.g., `[0, 1]`, `[1, 2]`, default is all QoS levels |
-| retain                | No       | Boolean, used only for publish operations, specifies if the current rule applies to retained messages, options are `true`, `false`, default applies to retained messages. |
-| clientid_re (e5.9.0+) | No       | Regular expression to match client IDs, e.g., `^client-[0-9]+$` |
-| username_re (e5.9.0+) | No       | Regular expression to match usernames, e.g., `^user-[0-9]+$` |
-| ipaddr (e5.9.0+)      | No       | IP address or subnet, e.g., `192.168.5.0/24`                 |
-| zone (e5.9.0+)        | No       | Zone name, e.g., `zone1`                                     |
-| zone_re (e5.9.0+)     | No       | Regular expression for zone names, e.g., `^zone-[0-9]+$`     |
-| listener (e5.9.0+)    | No       | Listener name, e.g., `tcp:default`                           |
-| listener_re (e5.9.0+) | No       | Regular expression for listener names, e.g., `^tcp:.*$`      |
+| フィールド     | 必須    | 説明                                                                                   |
+| -------------- | ------- | -------------------------------------------------------------------------------------- |
+| permission     | はい    | 現在のクライアントの操作リクエストを許可するか拒否するかを指定。`allow` または `deny`  |
+| action         | はい    | ルールに関連する操作。`publish`、`subscribe`、`all` のいずれか                         |
+| topic          | はい    | ルールに関連するトピック。 [トピックプレースホルダー](../authz/authz.md#topic-placeholders)をサポート |
+| qos            | いいえ  | ルールに適用されるQoSレベルの配列。例：`[0, 1]`、`[1, 2]`。指定しない場合はすべてのQoSレベルが対象 |
+| retain         | いいえ  | ブール値。パブリッシュ操作のみ使用。現在のルールがリテインメッセージを許可するかどうか。`true` または `false`。指定しない場合はリテインメッセージを許可 |
 
-All specified fields in a rule must match for the rule to be applied.
-
-Example:
+例：
 
 ```json
 {
@@ -46,7 +37,7 @@ Example:
   "username": "emqx_u",
   "acl": [
     {
-      // Allows the client to publish messages to the topic t/${clientid}, e.g., t/emqx_c
+      // クライアントがトピック t/${clientid}（例：t/emqx_c）にメッセージをパブリッシュすることを許可
       "permission": "allow",
       "action": "publish",
       "topic": "t/${clientid}"
@@ -54,20 +45,20 @@ Example:
     {
       "permission": "allow",
       "action": "subscribe",
-      // The 'eq' prefix means the rule matches 't/1/#', but not 't/1/x' or 't/1/y'
+      // 'eq' プレフィックスはルールが 't/1/#' にマッチするが、't/1/x' や 't/1/y' にはマッチしないことを意味
       "topic": "eq t/1/#",
-      // Matches QoS 1, but not QoS 0 or 2
+      // QoS 1 にマッチし、QoS 0 または 2 にはマッチしない
       "qos": [1]
     },
     {
-      // Denies the client from publishing retained messages to the topic t/2, non-retained messages are allowed
+      // クライアントがトピック t/2 にリテインメッセージをパブリッシュすることを拒否。非リテインメッセージは許可
       "permission": "deny",
       "action": "publish",
       "topic": "t/2",
       "retain": true
     },
     {
-      // Denies the client from publishing or subscribing to the topic t/3, including all QoS levels and retained messages
+      // クライアントがトピック t/3 に対してパブリッシュおよびサブスクライブすることを拒否。すべてのQoSレベルおよびリテインメッセージを含む
       "permission": "deny",
       "action": "all",
       "topic": "t/3"
@@ -76,9 +67,9 @@ Example:
 }
 ```
 
-### Old Format
+### 旧フォーマット
 
-In the following JWT ACL example, the permission list defines `pub`, `sub`, and `all` as three optional fields, specifying the whitelist of topics for publishing, subscribing, or both. Topics may include topic wildcards and placeholders (currently supports `${clientid}` and `${username}`). To address potential conflicts between topic content and placeholder syntax, the `eq` syntax is provided to bypass placeholder interpolation.
+以下のJWT ACL例では、権限リストは `pub`、`sub`、`all` の3つのオプションフィールドを定義し、それぞれパブリッシュ、サブスクライブ、または両方の許可されたトピックのホワイトリストを指定します。トピックにはワイルドカードやプレースホルダー（現在は `${clientid}` と `${username}` をサポート）を含めることができます。トピックの内容とプレースホルダー構文の衝突を回避するために、`eq` 構文が用意されており、プレースホルダーの展開をスキップします。
 
 ```json
 {
@@ -103,4 +94,4 @@ In the following JWT ACL example, the permission list defines `pub`, `sub`, and 
 }
 ```
 
-In this example, `testpub1/${username}` is replaced at runtime with `testpub1/emqx_u`, whereas `eq testpub2/${username}` is processed as `testpub2/${username}` at runtime.
+この例では、`testpub1/${username}` は実行時に `testpub1/emqx_u` に置き換えられますが、`eq testpub2/${username}` は実行時に `testpub2/${username}` として処理されます。

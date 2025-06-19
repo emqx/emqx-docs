@@ -1,84 +1,84 @@
-# Flow Designer
+# Flowデザイナー
 
-The Flow Designer is a powerful visual tool that extends the capabilities of the earlier visual tool, Flows, by adding the ability to create and edit data processing workflows (Flows). This enhancement simplifies and streamlines the configuration of data processing and integration. Starting from EMQX v5.8.0, you can also test the data processing workflows you create.
+Flowデザイナーは、従来のビジュアルツールであるFlowsの機能を拡張し、データ処理ワークフロー（Flows）の作成および編集機能を追加した強力なビジュアルツールです。この拡張により、データ処理および統合の設定がより簡単かつ効率的になります。EMQX v5.8.0以降では、作成したデータ処理ワークフローのテストも可能です。
 
-Rules created in the Data Integration and Flow Designer are interoperable. This means you can create a rule in Flow Designer and view its SQL and related configurations in the Data Integration, or create the rule in the SQL Editor in the Data Integration and then view the rule’s data flow processing configurations in the Flow Designer.
+Data IntegrationとFlowデザイナーで作成したルールは相互運用可能です。つまり、Flowデザイナーでルールを作成すると、そのSQLや関連設定をData Integrationで確認でき、逆にData IntegrationのSQLエディターでルールを作成すると、そのデータフロー処理設定をFlowデザイナーで確認できます。
 
 ![flow-designer](./assets/flow-designer.png)
 
-## Main Features
+## 主な機能
 
-To access the Flows page in the EMQX Dashboard, click **Integrations** -> **Flow Designer** on the left menu.  If you have already created rules or data integrations, you will see a directed acyclic graph composed of multiple nodes. Each node represents a data processing step, such as reading data from a topic, event, or [Source](../data-integration/data-bridges.md#source), transforming data through rules, and forwarding data using actions or [Sinks](../data-integration/data-bridges.md#source).
+EMQXダッシュボードの左メニューから **Integrations** -> **Flow Designer** をクリックするとFlowsページにアクセスできます。すでにルールやデータ統合を作成している場合、複数のノードで構成された有向非巡回グラフが表示されます。各ノードは、トピックやイベント、[Source](../data-integration/data-bridges.md#source)からのデータ読み取り、ルールによるデータ変換、アクションや[Sinks](../data-integration/data-bridges.md#source)を使ったデータ転送などのデータ処理ステップを表しています。
 
-The Flows page displays all data processing workflows created using the Rules, Webhook, and Flow Designer. Through Flows, you can visualize how data flows—from devices or clients through rule processing to external data systems, or vice versa, from external data systems through rule processing back to devices. Refreshing the page updates it with the latest changes in rules and data integrations.
+Flowsページでは、Rules、Webhook、Flowデザイナーで作成されたすべてのデータ処理ワークフローを表示します。Flowsを通じて、デバイスやクライアントからルール処理を経て外部データシステムへ、またはその逆に外部データシステムからルール処理を経てデバイスへとデータがどのように流れているかを可視化できます。ページを更新すると、ルールやデータ統合の最新の変更が反映されます。
 
-Clicking the **Create Flow** button allows you to enter the Flow creation page for visual configuration. You can drag and drop to select the nodes needed for each step and connect them to implement the workflow.
+**Create Flow** ボタンをクリックすると、Flow作成ページに入り、ビジュアル設定が可能です。各ステップに必要なノードをドラッグ＆ドロップで選択し、接続してワークフローを実装します。
 
 ![drag_node](./assets/drag_node.png)
 
 ### Source
 
-The data input supports messages, events, or messages flowing from external data systems. A Flow must contain at least one Source node, and multiple data input nodes can be supported simultaneously. Currently supported Sources include:
+データ入力はメッセージ、イベント、または外部データシステムからのメッセージをサポートします。Flowには少なくとも1つのSourceノードが必要で、複数のデータ入力ノードを同時にサポートできます。現在サポートされているSourceは以下の通りです：
 
-- **Messages:** Specified through topics and topic wildcards for client-published messages.
-- **Event:** Supports all client events within EMQX; refer to [Client Events](../data-integration/rule-sql-events-and-fields.md#mqtt-events).
-- **External Data Systems**:
-  - [MQTT Service](../data-integration/data-bridge-mqtt.md)
-  - [Kafka Consumer](../data-integration/data-bridge-kafka.md)
-  - [GCP PubSub Consumer](../data-integration/data-bridge-gcp-pubsub.md)
+- **Messages:** クライアントがパブリッシュしたメッセージのトピックおよびトピックワイルドカードで指定。
+- **Event:** EMQX内のすべてのクライアントイベントをサポート。詳細は[Client Events](../data-integration/rule-sql-events-and-fields.md#mqtt-events)を参照。
+- **外部データシステム**:
+  - [MQTTサービス](../data-integration/data-bridge-mqtt.md)
+  - [Kafkaコンシューマー](../data-integration/data-bridge-kafka.md)
+  - [GCP PubSubコンシューマー](../data-integration/data-bridge-gcp-pubsub.md)
   - [RabbitMQ](../data-integration/data-bridge-rabbitmq.md)
 
 ### Processing
 
-Use function and filter nodes for data processing and filtering. This step is optional, and a Flow can support at most one function and one filter node:
+関数ノードとフィルターノードを使ってデータ処理およびフィルタリングを行います。このステップは任意で、Flowは最大で1つの関数ノードと1つのフィルターノードをサポートします：
 
-- **Data Processing:** Supports all [SQL built-in functions](../data-integration/rule-sql-builtin-functions.md) of the rule engine.
-- **Filter:** Supports comparison filtering for data fields coming from the Source; supported comparison operations include `>, <, <=, >=, <>, !=, =, =~`
+- **データ処理:** ルールエンジンのすべての[SQL組み込み関数](../data-integration/rule-sql-builtin-functions.md)をサポート。
+- **フィルター:** Sourceからのデータフィールドに対する比較フィルタリングをサポート。サポートされる比較演算子は `>, <, <=, >=, <>, !=, =, =~` です。
 
-In addition to visual form editing, Processing nodes also support switching to expression mode to edit using Rule SQL syntax. Filter nodes can only be connected after functions, meaning data must first be processed and then filtered.
+ビジュアルフォーム編集に加え、ProcessingノードはRule SQL構文で編集可能な式モードへの切り替えもサポートします。フィルターノードは関数ノードの後にのみ接続可能で、データはまず処理されてからフィルタリングされます。
 
 ### Sink
 
-Outputs the data sources and processing results to specific nodes and external data systems. A Flow must contain at least one Sink node, and supported Sink nodes include:
+データソースおよび処理結果を特定のノードや外部データシステムに出力します。Flowには少なくとも1つのSinkノードが必要で、サポートされているSinkノードは以下の通りです：
 
-- **Republish:** Publishes messages to locally specified MQTT topics.
-- **Console Output:** Prints messages to logs for debugging.
-- **External Data Systems:** Supports over 40 types of data systems, such as MySQL and Kafka; refer to [Data Integration](../data-integration/data-bridges.md).
+- **Republish:** ローカルで指定したMQTTトピックにメッセージをパブリッシュ。
+- **Console Output:** デバッグ用にメッセージをログに出力。
+- **外部データシステム:** MySQLやKafkaなど40種類以上のデータシステムをサポート。詳細は[Data Integration](../data-integration/data-bridges.md)を参照。
 
-### Flow Editing and Testing
+### Flowの編集とテスト
 
-When a Flow is created, the system will randomly generate an ID for it. Click the edit icon next to the ID to modify the Flow's name and description.
+Flow作成時にシステムがランダムなIDを生成します。IDの横にある編集アイコンをクリックすると、Flowの名前や説明を変更できます。
 
-To delete a node in the Flow, hover over the node and click the delete icon in the upper right corner of the node. Click on a node to enter editing mode, you can modify its configuration details and save the changes, then click **Save** to save the entire Flow. Click the **Start Test** button to input simulated data or test the Flow with a real client to verify if it executes correctly.
+Flow内のノードを削除するには、ノードにカーソルを合わせて右上の削除アイコンをクリックします。ノードをクリックすると編集モードに入り、設定内容を変更して保存できます。全体のFlowは **Save** をクリックして保存します。**Start Test** ボタンをクリックすると、シミュレートデータの入力や実際のクライアントを使ったFlowの動作確認が可能です。
 
-## Advantages
+## 利点
 
-Flow Designer is a feature-rich and user-friendly tool that helps users process and integrate data more efficiently, drive business innovation, and improve the visibility and control of data management. Its main features and advantages include:
+Flowデザイナーは機能豊富で使いやすいツールであり、ユーザーがより効率的にデータ処理と統合を行い、ビジネスのイノベーションを促進し、データ管理の可視性と制御性を向上させます。主な特徴と利点は以下の通りです：
 
-- **Intuitive Visual Interface:** Users can easily create, adjust, and customize data processing workflows using a straightforward drag-and-drop interface, making complex data integration logic accessible even to those without programming experience.
-- **Fast Real-time Processing:** Flow Designer enables users to establish real-time processing workflows for messages and events within minutes. This helps businesses respond more quickly to emerging data and events, supporting real-time business needs.
-- **Extensive Integration Capabilities:** Seamlessly integrates with over 40 data systems, offering flexible data connection and exchange options.
-- **Unified Management and Monitoring:** Users can clearly manage the entire data integration process through a unified view, understanding the status and performance of each processing node. This helps in real-time monitoring and tracking of data flows, ensuring high reliability and integrity of data.
-- **EMQX Data Processing Capabilities:** Leverages the rule SQL and Sink/Source capabilities of EMQX, inheriting its robust data processing and performance advantages. Users can switch between the UI and SQL editor, combining the flexibility of SQL editing with a simpler and faster user experience, facilitating business innovation and data-driven decision-making without needing in-depth knowledge of EMQX rule SQL syntax.
+- **直感的なビジュアルインターフェース:** ユーザーはドラッグ＆ドロップの簡単な操作でデータ処理ワークフローを作成・調整・カスタマイズでき、プログラミング経験がなくても複雑なデータ統合ロジックを扱えます。
+- **高速なリアルタイム処理:** Flowデザイナーにより、メッセージやイベントのリアルタイム処理ワークフローを数分で構築可能。これにより、ビジネスは新たなデータやイベントに迅速に対応でき、リアルタイムのビジネスニーズを支援します。
+- **豊富な統合機能:** 40種類以上のデータシステムとシームレスに統合し、柔軟なデータ接続と交換オプションを提供します。
+- **統合管理と監視:** ユーザーは統一されたビューでデータ統合全体を明確に管理でき、各処理ノードの状態やパフォーマンスを把握可能。これによりリアルタイムでの監視とデータフローの追跡が可能となり、高い信頼性とデータの完全性を確保します。
+- **EMQXのデータ処理能力:** EMQXのルールSQLおよびSink/Source機能を活用し、その強力なデータ処理性能とパフォーマンスを継承。UIとSQLエディターを切り替え可能で、SQL編集の柔軟性とよりシンプルかつ高速なユーザー体験を両立し、EMQXルールSQL構文の深い知識なしにビジネスのイノベーションとデータ駆動型意思決定を促進します。
 
-## Quick Start
+## クイックスタート
 
-This section demonstrates how to quickly create and test a Flow in the Flow Designer through a sample use case.
+このセクションでは、サンプルユースケースを通じてFlowデザイナーでのFlowの迅速な作成とテスト方法を示します。
 
-This demonstration shows you how to create a data processing workflow to handle high-temperature alerts. The workflow will receive data from temperature and humidity sensors via MQTT topics, set up data filtering and transformation rules, and republish alert messages to a new topic, `alert`, if the temperature exceeds 40°C.  It also demonstrates how to validate the effectiveness of the rules and the results of data processing through testing.
+このデモでは、高温アラートを処理するデータ処理ワークフローの作成方法を紹介します。ワークフローは、温度・湿度センサーからMQTTトピック経由でデータを受信し、データのフィルタリングと変換ルールを設定し、温度が40°Cを超えた場合にアラートメッセージを新しいトピック `alert` にパブリッシュします。また、テストによってルールの有効性とデータ処理結果の検証方法も示します。
 
-### Scenario Description
+### シナリオ説明
 
-Assume a device contains a temperature and humidity sensor that sends data to the MQTT topic `sensor/temperature` every 5 seconds. The EMQX rule engine will process this data, involving the following steps:
+デバイスに温度・湿度センサーが搭載されており、5秒ごとにMQTTトピック `sensor/temperature` にデータを送信すると仮定します。EMQXルールエンジンはこのデータを処理し、以下のステップを含みます：
 
-1. **Data Filtering:** Only process data where the temperature is greater than 40°C.
-2. **Data Transformation**:
-   - Extract the device ID.
-   - Extract the temperature information.
-   - Use a built-in function to convert the timestamp in the payload to a readable date format.
-3. **Message Republish:** Format the processed data into an alert message and publish it to a new topic, `alert`.
+1. **データフィルタリング:** 温度が40°Cを超えるデータのみ処理。
+2. **データ変換**:
+   - デバイスIDを抽出。
+   - 温度情報を抽出。
+   - ペイロード内のタイムスタンプを組み込み関数で読みやすい日時形式に変換。
+3. **メッセージの再パブリッシュ:** 処理済みデータをアラートメッセージ形式に整形し、新しいトピック `alert` にパブリッシュ。
 
-Sample data to be republished:
+再パブリッシュされるサンプルデータ：
 
 ```json
 {
@@ -88,85 +88,83 @@ Sample data to be republished:
 }
 ```
 
-### Create the Flow
+### Flowの作成
 
-1. Click the **Create Flow** button on the Flows page.
+1. Flowsページで **Create Flow** ボタンをクリック。
 
-2. Drag a **Messages** node from the **Source** section onto the canvas and configure a message source topic, such as `sensor/temperature`. Click **Save**. This step specifies the source of the messages published by the client.
+2. **Source** セクションから **Messages** ノードをキャンバスにドラッグし、メッセージソースのトピック（例：`sensor/temperature`）を設定して **Save** をクリック。これはクライアントがパブリッシュするメッセージのソースを指定します。
 
    ![messages_node](./assets/messages_node.png)
 
-3. Drag a **Data Processing** node from the **Processing** section onto the canvas and configure data processing rules to extract the following fields from the message:
+3. **Processing** セクションから **Data Processing** ノードをドラッグし、メッセージから以下のフィールドを抽出するデータ処理ルールを設定：
 
-   - `payload.device_id`: Alias it as `device_id`.
-   - `payload.temperature`: Alias it as `temperature`.
-   - `timestamp`: Use the `format_date` function to convert the message timestamp to a readable date and time format. Alias it as `date`.
-     - `Time Unit`: Select `millisecond`.
-     - `Time Offset`: Enter `+08:00`.
-     - `Data Format`: Enter `%Y-%m-%d %H:%M:%S.%6N%z`. Refer to [Date and Time Conversion Functions](../data-integration/rule-sql-builtin-functions.md#format-date-unit-string-offset-string-integer-formatstring-string-time-integer-string).
-     - `Timestamp`: Enter `timestamp`.
+   - `payload.device_id`: エイリアスを `device_id` に設定。
+   - `payload.temperature`: エイリアスを `temperature` に設定。
+   - `timestamp`: `format_date` 関数を使い、メッセージのタイムスタンプを読みやすい日時形式に変換。エイリアスは `date` に設定。
+     - `Time Unit`: `millisecond` を選択。
+     - `Time Offset`: `+08:00` を入力。
+     - `Data Format`: `%Y-%m-%d %H:%M:%S.%6N%z` を入力。詳細は[日時変換関数](../data-integration/rule-sql-builtin-functions.md#format-date-unit-string-offset-string-integer-formatstring-string-time-integer-string)を参照。
+     - `Timestamp`: `timestamp` を入力。
 
-   Click **Save** when done.
+   設定完了後、**Save** をクリック。
 
    ![data_processing_node](./assets/data_processing_node.png)
 
-4. Drag a **Filter** node from **Processing** and configure a filter condition to implement a data filtering rule. Add a filter item, enter `payload.temperature`, select the operator `>=`, enter `40`, and click **Save**.
+4. **Processing** から **Filter** ノードをドラッグし、データフィルタリングルールを設定。フィルター項目を追加し、`payload.temperature` を入力、演算子に `>=` を選択、値に `40` を入力して **Save** をクリック。
 
    ![filter_rule](./assets/filter_rule.png)
 
-5. Select a **Republish** node from **Sink** and configure the topic for forwarding messages, setting it to `alert`. Format the processed and transformed data into an alert message with the following payload:
+5. **Sink** から **Republish** ノードを選択し、メッセージ転送先のトピックを `alert` に設定。処理・変換済みデータを以下のペイロード形式でアラートメッセージとして整形：
 
    ```bash
    ${device_id} device reported a high temperature of ${temperature}°C at ${date}.
    ```
 
-   Click **Save**.
+   **Save** をクリック。
 
    ![republish_node](./assets/republish_node.png)
 
-6. You will see the newly created Flow on the page. Click **Save** in the upper right corner to save the Flow.
+6. 新しく作成したFlowがページに表示されます。右上の **Save** をクリックしてFlowを保存します。
 
    ![flow_created](./assets/flow_created.png)
    
-   Flows and form rules are interoperable. You can also view the SQL and related configurations of the rules created earlier on the Rule page.
+   Flowとフォームルールは相互運用可能です。先に作成したルールのSQLや関連設定はルールページで確認できます。
    
    ![rule_in_sql_editor](./assets/rule_in_sql_editor.png)
 
-### Test the Flow
+### Flowのテスト
 
-1. In the Flow Designer, click any node of the Flow to open an editting panel. Click the **Edit Flow** button at the end of the panel.
+1. Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。パネル下部の **Edit Flow** ボタンをクリック。
 
-2. Click **Start Test** next to the **Save** button to open a bottom pop-up. 
+2. **Save** ボタン横の **Start Test** をクリックすると、下部にポップアップが表示されます。
 
-   You can click **Input Simulated Data** to enter simulated data in the pop-up panel or use a real client to publish messages to see the results. This demonstration will use [MQTTX](https://mqttx.app) to publish real data. 
+   ポップアップで **Input Simulated Data** をクリックしてシミュレートデータを入力するか、実際のクライアントからメッセージをパブリッシュして結果を確認できます。このデモでは[MQTTX](https://mqttx.app)を使って実データをパブリッシュします。
 
    ![start_test](./assets/start_test.png)
 
-3. Open the [MQTTX Web](https://mqttx.app/web-client#/recent_connections). Click the **New Connection** to create a client connection as a publisher. Configure the following fields:
+3. [MQTTX Web](https://mqttx.app/web-client#/recent_connections)を開き、**New Connection** をクリックしてパブリッシャークライアント接続を作成。以下の項目を設定：
 
-   - **Name**: Enter `device1`.
-   - **Host**: Enter the connection address your EMQX server.
-   - **Port**: Enter `8084`.
-   - **Username** and **Password**: Enter the authentication information configured in the **Access Control** -> **Authentication** page.
+   - **Name**: `device1` と入力。
+   - **Host**: EMQXサーバーの接続アドレスを入力。
+   - **Port**: `8084` を入力。
+   - **Username** と **Password**: **Access Control** -> **Authentication** ページで設定した認証情報を入力。
 
-   Leave other settings as default and click **Connect**.
+   他の設定はデフォルトのままにして **Connect** をクリック。
 
-4. Create a new subscription. Set the topic as `alert`.
+4. 新規サブスクリプションを作成し、トピックを `alert` に設定。
 
-5. Publish a message with a temperature below 40°C. You will see that the message does not meet the condition and the rule SQL does not execute.
+5. 温度が40°C未満のメッセージをパブリッシュすると、条件を満たさずルールSQLは実行されません。
 
    ![message_publish_1](./assets/message_publish_1.png)
 
-6. Publish a message with a temperature above 40°C. You will see the `alert` topic receiving the alert message.
+6. 温度が40°C以上のメッセージをパブリッシュすると、`alert` トピックでアラートメッセージを受信できます。
 
    ![message_publish_2](./assets/message_publish_2.png)
 
-7. Return to the testing page to view the successful test results. 
+7. テストページに戻り、成功したテスト結果を確認します。
 
    ![test_success](./assets/test_success.png)
 
-   If the test results are unsuccessful, error messages will be displayed accordingly.
+   テストが失敗した場合は、エラーメッセージが表示されます。
 
    ![test_fail](./assets/test_fail.png)
-
-   

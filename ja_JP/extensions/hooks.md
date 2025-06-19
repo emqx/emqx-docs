@@ -1,184 +1,180 @@
 # Hooks
 
-[Hooks](https://reactjs.org/docs/getting-started.html) is an extension mechanism that lets you use state and other React features without writing a class.
+[Hooks](https://reactjs.org/docs/getting-started.html) は、クラスを書かずに状態管理やその他の React 機能を利用できる拡張機構です。
 
-EMQX also supports using Hooks to modify or extend system functions by intercepting function calls, message passing, and event passing between modules.
+EMQX も Hooks をサポートしており、関数呼び出しやメッセージの受け渡し、モジュール間のイベント伝達をインターセプトすることで、システム機能の修正や拡張が可能です。
 
-## How It Works
+## 仕組み
 
-For a system without adopting the **Hooks** mechanism in their system, the entire event processing flow (from the input of the event to the handler and the result) is invisible and cannot be modified.
+システムに **Hooks** 機構が導入されていない場合、イベントの入力からハンドラー、結果に至るまでの一連の処理フローは見えず、変更もできません。
 
-However, if we add a HookPoint to mount functions during the process, external plugins can mount multiple callback functions to form a call chain. Then, the internal event processing can be extended and modified.
+しかし、処理の途中に関数をマウントする HookPoint を設けることで、外部プラグインが複数のコールバック関数をマウントし呼び出しチェーンを形成できます。これにより、内部のイベント処理を拡張・修正できます。
 
-<img src="./assets/hooks_in_system.png" alt="Hooks-In-System" style="zoom:50%;" />
+<img src="./assets/hooks_in_system.png" alt="システム内のHooks" style="zoom:50%;" />
 
-Several EMQX functions are implemented using the hook feature:
+EMQX のいくつかの機能はこのフック機能を使って実装されています：
 
-1. Use the hook system to perform multi-step streaming processing (encoding/decoding, etc.) of messages
-2. Caching messages at message publishing time as per the configuration
-3. Use the hook-blocking mechanism to postpone message publishing 
+1. フックシステムを用いたメッセージの多段階ストリーミング処理（エンコード／デコードなど）
+2. 設定に応じたメッセージパブリッシュ時のキャッシュ処理
+3. フックのブロッキング機構を使ったメッセージパブリッシュの遅延
 
-The authentication/authorization commonly used in the system is implemented according to this logic. Take the [Multilingual extension ](./exhook.md) as an example:
+システムで一般的に使われる認証／認可もこのロジックに基づいて実装されています。例として[多言語拡張](./exhook.md)を挙げます：
 
-When only the `Built-in Database` authentication is enabled, according to the processing logic of the event (see figure above), the logic of the authentication module at this time is:
+`Built-in Database` 認証のみが有効な場合、上図のイベント処理ロジックに従い、認証モジュールの処理は以下の通りです：
 
-1. EMQX receives the user's authentication request (Authenticate);
-2. EMQX executes the hook of the authentication event with `ClientInfo` and the default `AccIn`.
+1. EMQX はユーザーの認証リクエスト（Authenticate）を受け取る
+2. EMQX は `ClientInfo` とデフォルトの `AccIn` を引数に認証イベントのフックを実行する
 ```erlang
-%% Default AccIn
+%% デフォルトの AccIn
 {ok, #{is_superuser => false}}
 ```
-3. Call back to the `emqx_exhook` module, assume this authentication is valid, and get **allow, is_superuser** result.
+3. `emqx_exhook` モジュールにコールバックし、この認証が有効と判断し、**allow, is_superuser** の結果を得る
 ```erlang
 %% AuthNResult
 {ok, #{is_superuser => true}}
 ```
-4. Return **Authentication succeeded**, and the client will successfully access the system as a superuser. 
+4. **認証成功** を返し、クライアントはスーパーユーザーとして正常にシステムにアクセスできる
 
-<img src="./assets/hooks_and_internal_model.png" alt="hooks_and_internal_model" style="zoom:50%;" />
+<img src="./assets/hooks_and_internal_model.png" alt="hooksと内部モデル" style="zoom:50%;" />
 
-Therefore, **Hooks** can greatly enhance the flexibility of EMQX. If we want to customize EMQX behaviors, we no longer need to modify the core code and only need to hook a function on **HookPoint** that EMQX provided on the specific location.
+このように、**Hooks** は EMQX の柔軟性を大幅に高めます。EMQX の挙動をカスタマイズしたい場合、コアコードを修正する必要はなく、EMQX が特定箇所に用意した **HookPoint** に関数をフックするだけで済みます。
 
-During this whole process, you only need to pay attention to:
+この一連の流れで注意すべきポイントは以下の3つです：
 
-1. Location of **HookPoint**: Including its role, timing of execution, and how to mount and cancel mount.
-2. Implementation of **callback function**: including the number of input parameters, role, data structure of the callback function, and the meaning of the returned value.
-3. Mechanism of callback function execution on the **chain**: including the order in which callback functions are executed, and how to terminate the execution of the chain in advance.
+1. **HookPoint** の場所：役割、実行タイミング、マウントとアンマウントの方法
+2. **コールバック関数** の実装：入力パラメータ数、役割、データ構造、返り値の意味
+3. **チェーン上のコールバック関数の実行機構**：実行順序、チェーンの途中での実行停止方法
 
-If you used hooks in the development of the extension plugin, you should be able to fully understand these three above points, **and try not to use blocking functions inside the hooks, which will affect system throughput.**
+拡張プラグイン開発で Hooks を使う場合は、これら3点を十分理解し、**システムのスループットに影響を与えるため、フック内でのブロッキング関数の使用は極力避けてください。**
 
+## コールバック関数チェーン
 
-## Callback Functions Chain
+単一の **HookPoint** に複数のプラグインがイベントを監視し対応処理を行う場合があるため、各 **HookPoint** には複数のコールバック関数が存在します。
 
-There may be multiple plugins on a single **HookPoint** that need to care about the event and perform the corresponding operation, so there may be multiple callback functions on each **HookPoint**.
+これら複数のコールバック関数が順次実行される連鎖を **コールバック関数チェーン** と呼びます。
 
-We call this chain composed of multiple callback functions executed sequentially **Callback Functions Chain**.
+**コールバック関数チェーン** は現在 [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern) パターンに基づいて実装されています。フックの機能性と柔軟性を満たすため、以下の特徴を持ちます：
 
- **Callback Functions Chain** is Currently implemented according to the concept of [Chain-of-Responsibility](https://en.wikipedia.org/wiki/Chain-of-responsibility_pattern). In order to satisfy the functionality and flexibility of the hook, it has the following attributes:
+- **順序性**：チェーン上のコールバック関数は特定の順序で実行される必要があります。
+- **入力パラメータ**：初期化パラメータが1つ以上あり、オプションでチェーン内で修正される累積値があります。
+- **出力結果**：チェーン内の各関数は出力を持ち、実行結果を気にしないコールバック関数は `ok` を返します。例えば通知系イベントでは「クライアントが正常にログインした」などの戻り値は不要です。
+- **伝達性**：チェーン内のコールバック関数の結果は伝達されます。フックの柔軟性のため、返り値の扱いには以下の**2つのモード**があります。
+  - **結果伝達モード**<br />
+    チェーン内の各関数はチェーンの入力と前関数の返り値（累積値）を引数に受け取り、最後の関数の返り値がチェーン全体の返り値となります。初回の累積値はチェーン呼び出し時に指定します。
+  - **結果透過モード**<br />
+    各関数はチェーンの入力のみを気にし、前の関数の返り値は無視します。チェーンの返り値は常に `ok` です。<br />
+    これは結果伝達モードの特例で、初期累積値が `ok` で、チェーン内の各関数が `ok | {ok, ok} | stop | {stop, ok}` を返す場合に相当します。通知系イベントの多くはこのロジックに従います。<br />このため、一般的な **コールバック関数チェーン** 実行モジュールを提供しています。
+- **チェーンの途中終了と無視** の許容
+  - **途中終了**：ある関数の実行完了後、チェーンの実行を即座に終了し、それ以降の関数は無視されます。<br />例えば、ある認証プラグインがログインを許可した場合、他の認証プラグインのチェックは不要なので途中終了します。
+  - **無視**：チェーンの処理結果を変更せず、そのまま次の関数に渡します。<br />例えば複数の認証プラグインがある場合、あるプラグインが対象外のクライアントと判断し結果を変更しない場合は無視し、前関数の返り値をそのまま次関数に渡します。
 
-- **Ordered**: The callback functions on the **Callback Functions Chain** must be executed in a certain order.
-- **In Parameter**: There must be one/some initialization parameters and, optionally, a cumulative value for modification by the **Callback Functions Chain**.
-- **Output Result**: Each function in the chain must have an output, and `ok` should be used as the function return value for callback functions that do not care about the result of execution. For example, in a notification class event, "A client has successfully logged in" does not require a return value.
-- **Transitive**: The result of callback functions in the chain is transitive. And to allow more flexibility in the use of hooks, we have designed **two modes** of handling the return values of callback functions in the chain.
-  - **Result Transitive**<br />
-    It means that each callback function in the chain accepts the entry of the chain, and the return of the previous callback function (which can be interpreted as a cumulative value) as arguments. Until the last function, the return value of the last function is then the return value of the whole chain. Specially, the chain is called with an initial value for the cumulative value to be used by the first callback function in the chain.
-  - **Result Transparent**<br />
-    Each function in the chain only cares about the chain's entry, and will ignore the return value of the previous callback function. And the chain will have a fixed return value of `ok`.<br />
-    This is actually a special case of the first type of **Result Transitive**. That is, the initial accumulation value is `ok`, and each callback function in the chain only cares about the incoming parameters of the chain and keeps the accumulation value as `ok` unchanged.<br />Most of notification event follows this logic. So that we provide the general **Callback Functions Chain** execution module.
-- **Callback Functions Chain** needs to allow the functions with it to *terminate the chain in advance* and *ignore this operation.*
-  - **Termination in advance:** After the execution of this function is completed, the execution of the chain is directly terminated. All subsequent callback functions on the chain are ignored.<br />For example, an authentication believes that such clients do not need to check other authentication plugins after they are allowed to log in, so they need to be terminated in advance.
-  - **Ignore this operation:** Do not modify the processing result on the chain, and pass it directly to the next callback function.<br />
-    For example, when there are multiple authentication plugins, an authentication plugin believes that such clients do not belong to its authentication scope, and it does not need to modify the authentication results. This operation should be ignored and the returned value of the previous function should be passed directly to the next function on the chain.
+以上より、チェーン上のコールバック関数の返り値の扱いによって、2種類の処理フロー図が得られます。
 
-Therefore, we can obtain two program flow diagrams for the execution chain based on the two ways of handling the return value of the callback function on the chain.
-
-### Result Transitive
+### 結果伝達モード
 <img src="./assets/hooks_return_value.png" alt="hooks_return_value" style="zoom:50%;" />
 
-The meaning of the figure is:
-1. A total of three callback functions are registered on the chain in the figure,`Fun1` `Fun2` `Fun3` , which are executed in the order indicated
-2. The callback function execution order is determined by the priority, and the same priority is executed in the order of mounting
-3. The input parameters of the chain are read-only `Args` and the parameter `InitAcc` for function modification on the chain.
-4. Regardless of how the execution of the chain is terminated, the chain always returns a value, which depends on the return form.
-   - The callback function returns with:
-     - `ok`: ignore this operation, continue the chain execution with read-only `Args` and `Acc` returned by the previous function
-     - `{ok, NewAcc}`: perform some operations, modify Acc content, continue chain execution with read-only `Args` and new ` NewAcc`
-   - The callback function also returns with:
-     - `stop`: Stop the transfer of the chain and immediately return the result of ` Acc` from the previous function
-     - `{stop, NewAcc}`: it means to stop the transfer of the chain and immediately return the result of `NewAcc` from this modification
+図の意味は以下の通りです：
+1. チェーンに3つのコールバック関数 `Fun1` `Fun2` `Fun3` が登録され、図示の順に実行される
+2. 実行順序は優先度で決まり、同じ優先度の場合はマウント順に実行される
+3. チェーンの入力パラメータは読み取り専用の `Args` と、関数による修正用の `InitAcc`
+4. チェーンの実行がどのように終了しても、返り値は必ず存在し、返り値の形式によって以下の動作になる
+   - コールバック関数の返り値：
+     - `ok`：この操作を無視し、読み取り専用の `Args` と前関数の `Acc` でチェーンを継続
+     - `{ok, NewAcc}`：何らかの処理を行い、`Acc` の内容を修正し、新しい `NewAcc` でチェーンを継続
+   - また、返り値として：
+     - `stop`：チェーンの伝達を停止し、前関数の `Acc` を即座に返す
+     - `{stop, NewAcc}`：チェーンの伝達を停止し、この修正済みの `NewAcc` を即座に返す
 
-### Result Transparent
+### 結果透過モード
 <img src="./assets/hooks_multiple_value.png" alt="hooks_multiple_value" style="zoom:50%;" />
 
-Comparing this with the first execution mode, you can see that the execution mode that ignores the return value in the chain is actually a special case of the pass return value mode.
-This is equivalent to the case where the `InitAcc` value is `ok` and every callback function mounted on the chain returns `ok | {ok, ok} | stop | {stop, ok}`.
+このモードは前述の結果伝達モードの特例であり、`InitAcc` が `ok` で、チェーン上の各コールバック関数が `ok | {ok, ok} | stop | {stop, ok}` を返す場合に相当します。
 
-The above is the main design concept of the callback function chain, which regulates the execution logic of the callback function on the hook.
+以上がコールバック関数チェーンの主な設計思想であり、フック上のコールバック関数の実行ロジックを規定しています。
 
-In the following two sections of [HookPoint](#hookpoint) and [callback function](#callback), all operations on hooks depend on  Erlang code-level API provided by [emqx](https://github.com/emqx/emqx). They are the basis for the entire hook logic implementation.
-- For hooks and other language applications, Refer to: [Extension Hook](./exhook.md)
+以下の [HookPoint](#hookpoint) と [コールバック関数](#callback) の節では、フック操作はすべて [emqx](https://github.com/emqx/emqx) が提供する Erlang コードレベルの API に依存しており、これがフックロジック全体の基盤です。
+- 他言語でのフック利用については、[Extension Hook](./exhook.md) を参照してください。
 
-## HookPoint List
+## HookPoint 一覧
 
-EMQX is based on a client's key activities during its life cycle and presets a large number of **HookPoints**. The preset mount points in the system are:
+EMQX はクライアントのライフサイクルにおける主要なアクティビティを基に、多数の **HookPoint** をあらかじめ用意しています。システムにプリセットされたマウントポイントは以下の通りです：
 
-| Name                 | Description                 | Execution Timing                                                                            |
-|----------------------|-----------------------------|---------------------------------------------------------------------------------------------|
-| client.connect       | Process connection packet   | When the server receives the connection packet from the client                              |
-| client.connack       | Issue connection response   | When the server is ready to issue a connection response message                             |
-| client.connected     | Connection succeed          | After client authentication is completed and successfully connected to the system           |
-| client.disconnected  | Disconnect                  | Connection layer of client is ready to close                                                |
-| client.authenticate  | Connection authentication   | After `client.connect` is executed                                                          |
-| client.authorize     | Pub/Sub authorization       | Before `publish/subscribe` operation is executed                                            |
-| client.subscribe     | Subscribe to topic          | After receiving the subscription message, and before executing `client.authorize`           |
-| client.unsubscribe   | Unsubscribe                 | After receiving the unsubscribe packet                                                      |
-| session.created      | Session creation            | When a `client.connected` is completed and a new session is created                         |
-| session.subscribed   | Session subscription topics | After the subscription operation is completed                                               |
-| session.unsubscribed | Session unsubscription      | After the unsubscription operation is completed                                             |
-| session.resumed      | Session resume              | when `client.connected` is executed and the old session information is successfully resumed |
-| session.discarded    | Session discarded           | After the session was terminated due to **discarded**                                       |
-| session.takenover    | Session takenover           | After the session was terminated due to **takenover**                                       |
-| session.terminated   | Session terminated          | After the session was terminated due to other reason                                        |
-| message.publish      | Message published           | Before the server publishes (routes) the message                                            |
-| message.delivered    | Message delivered           | Before the message is ready to be delivered to the client                                   |
-| message.acked        | Message acked               | After the message ACK is received from the client                                           |
-| message.dropped      | Message dropped             | After the published messages are discarded                                                  |
-
+| 名前                  | 説明                          | 実行タイミング                                                                                  |
+|-----------------------|-------------------------------|------------------------------------------------------------------------------------------------|
+| client.connect        | 接続パケットの処理             | サーバーがクライアントから接続パケットを受信したとき                                         |
+| client.connack        | 接続応答の発行                 | サーバーが接続応答メッセージを発行する準備ができたとき                                       |
+| client.connected      | 接続成功                     | クライアント認証が完了し、システムへの接続が成功した後                                       |
+| client.disconnected   | 切断                         | クライアントの接続層が閉じる準備ができたとき                                                 |
+| client.authenticate   | 接続認証                     | `client.connect` 実行後                                                                       |
+| client.authorize      | Pub/Sub 認可                 | `publish/subscribe` 操作実行前                                                                |
+| client.subscribe      | トピックのサブスクライブ       | サブスクライブメッセージ受信後、`client.authorize` 実行前                                    |
+| client.unsubscribe    | サブスクライブ解除             | サブスクライブ解除パケット受信後                                                               |
+| session.created       | セッション作成               | `client.connected` 完了後、新しいセッションが作成されたとき                                  |
+| session.subscribed    | セッションのトピックサブスクライブ | サブスクライブ操作完了後                                                                       |
+| session.unsubscribed  | セッションのサブスクライブ解除 | サブスクライブ解除操作完了後                                                                   |
+| session.resumed       | セッション再開               | `client.connected` 実行時、古いセッション情報が正常に再開されたとき                           |
+| session.discarded     | セッション破棄               | **discarded** によりセッションが終了した後                                                    |
+| session.takenover     | セッション乗っ取り           | **takenover** によりセッションが終了した後                                                    |
+| session.terminated    | セッション終了               | その他の理由でセッションが終了した後                                                          |
+| message.publish       | メッセージパブリッシュ       | サーバーがメッセージをパブリッシュ（ルーティング）する前                                      |
+| message.delivered     | メッセージ配信               | メッセージがクライアントに配信される直前                                                      |
+| message.acked         | メッセージアック受信         | クライアントからメッセージの ACK を受信した後                                                 |
+| message.dropped       | メッセージ破棄               | パブリッシュされたメッセージが破棄された後                                                    |
 
 ::: tip
-- **The session is discarded:** When the client logs in with the method of  `clean session`, if the client's session already exists on the server, the old session will be discarded.
-- **The Session is taken over:** When the client logs in with the method of `Reserved Session`, if the client's session already exists on the server, the old session will be taken over by the new connection
+- **セッション破棄（discarded）**：クライアントが `clean session` 方式でログインした際、サーバーに既にクライアントのセッションが存在する場合、古いセッションは破棄されます。
+- **セッション乗っ取り（takenover）**：クライアントが `Reserved Session` 方式でログインした際、サーバーに既にクライアントのセッションが存在する場合、古いセッションは新しい接続に乗っ取られます。
 :::
 
-### Hook and Unhook
+### フックとアンフック
 
-EMQX provides an API for the operation of hooking and unhooking.
+EMQX はフックの登録と解除のための API を提供しています。
 
-**Hook:**
+**フック登録（Hook）：**
 
 ```erlang
-%% Name: name of hook(hook point), such as 'client.authenticate'
-%% {Module, Function, Args}: Modules, methods, and additional parameters for callback functions
-%% Priority：integar, 0 by default
+%% Name: フック名（フックポイント）、例：'client.authenticate'
+%% {Module, Function, Args}: コールバック関数のモジュール、関数、追加引数
+%% Priority：整数、デフォルトは0
 emqx:hook(Name, {Module, Function, Args}, Priority).
 ```
 
-After the hook is completed, the callback functions will be executed in the order of priority, or the order of hook for the same priority. All official plugin mount hooks have a priority of `0`.
+フック登録後、コールバック関数は優先度順、同じ優先度の場合は登録順に実行されます。公式プラグインのフック登録はすべて優先度 `0` です。
 
-**Unhook**：
+**フック解除（Unhook）：**
 
 ```erlang
-%% Name:name of hook(hook point), such as'client.authenticate'
-%% {Module, Function}: Modules and methods for callback functions
+%% Name: フック名（フックポイント）、例：'client.authenticate'
+%% {Module, Function}: コールバック関数のモジュールと関数
 emqx:unhook(Name, {Module, Function}).
 ```
 
+## コールバック関数
 
-## Callback Function
-The input parameters and returned value of the callback function are shown in the following table:
+コールバック関数の入力パラメータと返り値は以下の表の通りです。
 
-For parameter data structure, see [emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl).
+パラメータのデータ構造は [emqx_types.erl](https://github.com/emqx/emqx/tree/master/apps/emqx/src/emqx_types.erl) を参照してください。
 
-| Name                 | Input Parameter                                              | Returned Value     |
-| -------------------- | ------------------------------------------------------------ | ------------------ |
-| client.connect       | `ConnInfo`: Client connection layer parameters<br />`Props`: Properties of MQTT v5.0 connection packets | New `Props`        |
-| client.connack       | `ConnInfo`: Client connection layer parameters <br />`Rc`: returned code<br />`Props`: Properties of MQTT v5.0 connection response packets | New `Props`        |
-| client.connected     | `ClientInfo`: Client information parameters<br />`ConnInfo`: Client connection layer parameters | -                  |
-| client.disconnected  | `ClientInfo`: Client information parameters<br />`ConnInfo`: Client connection layer parameters<br />`ReasonCode`: Reason code | -                  |
-| client.authenticate  | `ClientInfo`: Client information parameters<br />`AuthNResult`: Authentication results | New `AuthNResult`  |
-| client.authorize     | `ClientInfo`: Client information parameters<br />`Topic`: Publish/subscribe topic<br />`PubSub`: Publish/subscribe<br />`AuthZResult`: Authentication result | New `AuthZResult`  |
-| client.subscribe     | `ClientInfo`: Client information parameters<br />`Props`: Properties parameters of MQTT v5.0 subscription messages<br />`TopicFilters`: List of topics of subscription | New `TopicFilters` |
-| client.unsubscribe   | `ClientInfo`: Client information parameters<br />`Props`: Properties parameters of MQTT v5.0 unsubscription messages<br />`TopicFilters`: List of topics of unsubscription | New `TopicFilters` |
-| session.created      | `ClientInfo`: Client information parameters<br />`SessInfo`: Session information | -                  |
-| session.subscribed   | `ClientInfo`: Client information parameters<br />`Topic`: subscribed topic<br />`SubOpts`: Configuration options for subscribe operations | -                  |
-| session.unsubscribed | `ClientInfo`: Client information parameters<br />`Topic`: unsubscribed topic<br />`SubOpts`: Configuration options for unsubscribe operations | -                  |
-| session.resumed      | `ClientInfo`: Client information parameters<br />`SessInfo`: Session information | -                  |
-| session.discarded    | `ClientInfo`: Client information parameters<br />`SessInfo`: Session information | -                  |
-| session.takenover    | `ClientInfo`: Client information parameters<br />`SessInfo`: Session information |                    |
-| session.terminated   | `ClientInfo`: Client information parameters<br />`Reason`: Termination reason <br />`SessInfo`: Session information | -                  |
-| message.publish      | `Message`: Message object                                    | New `Message`      |
-| message.delivered    | `ClientInfo`: Client information parameters<br />`Message`: Message object | New `Message`      |
-| message.acked        | `ClientInfo`: Client information parameters<br />`Message`: Message object | -                  |
-| message.dropped      | `Message`: Message object<br />`By`: Dropped by<br />`Reason`: Drop reason | -                  |
+| 名前                  | 入力パラメータ                                                                                   | 返り値              |
+|-----------------------|------------------------------------------------------------------------------------------------|---------------------|
+| client.connect        | `ConnInfo`：クライアント接続層パラメータ<br />`Props`：MQTT v5.0 接続パケットのプロパティ         | 新しい `Props`       |
+| client.connack        | `ConnInfo`：クライアント接続層パラメータ<br />`Rc`：戻りコード<br />`Props`：MQTT v5.0 接続応答パケットのプロパティ | 新しい `Props`       |
+| client.connected      | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ            | -                   |
+| client.disconnected   | `ClientInfo`：クライアント情報パラメータ<br />`ConnInfo`：クライアント接続層パラメータ<br />`ReasonCode`：理由コード | -                   |
+| client.authenticate   | `ClientInfo`：クライアント情報パラメータ<br />`AuthNResult`：認証結果                             | 新しい `AuthNResult` |
+| client.authorize      | `ClientInfo`：クライアント情報パラメータ<br />`Topic`：パブリッシュ／サブスクライブトピック<br />`PubSub`：パブリッシュ／サブスクライブ区分<br />`AuthZResult`：認可結果 | 新しい `AuthZResult` |
+| client.subscribe      | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブメッセージのプロパティ<br />`TopicFilters`：サブスクライブトピックのリスト | 新しい `TopicFilters` |
+| client.unsubscribe    | `ClientInfo`：クライアント情報パラメータ<br />`Props`：MQTT v5.0 サブスクライブ解除メッセージのプロパティ<br />`TopicFilters`：サブスクライブ解除トピックのリスト | 新しい `TopicFilters` |
+| session.created       | `ClientInfo`：クライアント情報パラメータ<br />`SessInfo`：セッション情報                          | -                   |
+| session.subscribed    | `ClientInfo`：クライアント情報パラメータ<br />`Topic`：サブスクライブトピック<br />`SubOpts`：サブスクライブ操作の設定オプション | -                   |
+| session.unsubscribed  | `ClientInfo`：クライアント情報パラメータ<br />`Topic`：サブスクライブ解除トピック<br />`SubOpts`：サブスクライブ解除操作の設定オプション | -                   |
+| session.resumed       | `ClientInfo`：クライアント情報パラメータ<br />`SessInfo`：セッション情報                          | -                   |
+| session.discarded     | `ClientInfo`：クライアント情報パラメータ<br />`SessInfo`：セッション情報                          | -                   |
+| session.takenover     | `ClientInfo`：クライアント情報パラメータ<br />`SessInfo`：セッション情報                          |                     |
+| session.terminated    | `ClientInfo`：クライアント情報パラメータ<br />`Reason`：終了理由<br />`SessInfo`：セッション情報  | -                   |
+| message.publish       | `Message`：メッセージオブジェクト                                                               | 新しい `Message`     |
+| message.delivered     | `ClientInfo`：クライアント情報パラメータ<br />`Message`：メッセージオブジェクト                   | 新しい `Message`     |
+| message.acked         | `ClientInfo`：クライアント情報パラメータ<br />`Message`：メッセージオブジェクト                   | -                   |
+| message.dropped       | `Message`：メッセージオブジェクト<br />`By`：破棄者<br />`Reason`：破棄理由                       | -                   |
 
-For the application of these hooks, see [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template)
+これらのフックの利用例は [emqx_plugin_template](https://github.com/emqx/emqx-plugin-template) を参照してください。

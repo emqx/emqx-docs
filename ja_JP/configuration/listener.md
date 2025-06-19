@@ -1,33 +1,34 @@
 # Listener Configuration
 
-In EMQX, listener is configured to receive requests from MQTT clients. EMQX supports the following message transfer protocols, including:
+EMQXでは、リスナーはMQTTクライアントからのリクエストを受け取るために設定されます。EMQXは以下のメッセージ転送プロトコルをサポートしています。
 
-- TCP: port  `1883`
-- SSL: port `8883`
-- Websocket listener: `8083`
-- Secure websocket listener: `8084`
+- TCP: ポート `1883`
+- SSL: ポート `8883`
+- Websocketリスナー: `8083`
+- セキュアWebsocketリスナー: `8084`
 
 ::: tip
 
-You can also configure listeners via Dashboard by clicking **Management** -> **Listeners** on the left navigation menu of the Dashboard.
-If you want to configure listeners from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
-This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost upon EMQX restart.
+リスナーはダッシュボードの左側ナビゲーションメニューから **Management** -> **Listeners** をクリックして設定することも可能です。  
+設定ファイルからリスナーを設定する場合は、`emqx.conf`ではなく`base.hocon`を使用することを推奨します。  
+これは、`emqx.conf`に設定を記述すると、ダッシュボード経由での変更が一時的なものとなり、EMQX再起動時に失われるためです。
 
 :::
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはカスタマイズニーズに応じた詳細な設定項目も提供しています。詳細は[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご参照ください。
 
 :::
 
-## Configure TCP Listener
+## TCPリスナーの設定
 
-TCP listener is a network service that listens for incoming TCP connections on a specific network port. It plays an essential role in establishing and managing connections between clients and EMQX over TCP/IP networks. 
+TCPリスナーは特定のネットワークポートで着信TCP接続を待ち受けるネットワークサービスです。  
+クライアントとEMQX間のTCP/IPネットワーク上の接続確立および管理において重要な役割を果たします。
 
-To configure the TCP listener in EMQX, you can add the `listeners.tcp` configuration items in the `base.hocon` file within the `etc` folder of the EMQX installation directory.
+EMQXでTCPリスナーを設定するには、EMQXインストールディレクトリの`etc`フォルダ内にある`base.hocon`ファイルに`listeners.tcp`の設定項目を追加します。
 
-For example, to enable the TCP listener on port `1883`, with a maximum 1,024,000 of concurrent connections allowed by the listener, you can work the code below:
+例えば、ポート`1883`でTCPリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
 
 ```bash
 listeners.tcp.default {
@@ -36,20 +37,20 @@ listeners.tcp.default {
 }
 ```
 
-where, 
+ここで、
 
-- `listeners.tcp.default` is to enable the listener, and here `default` is the name of the listener, you can change it to your own listener name. 
+- `listeners.tcp.default` はリスナーを有効化する設定で、`default`はリスナー名です。任意の名前に変更可能です。  
+- `bind` はリスナーのIPアドレスとポートを設定します。ここでは任意のIPアドレスからのポート`1883`への全ての着信を待ち受けます。  
+- `max_connections` はリスナーが許可する最大同時接続数を設定します。デフォルト値は`infinity`です。
 
-- `bind` is to set the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `1883`. 
-- `max_connection` is to set the maximum number of concurrent connections allowed by the listener; default value: `infinity`.
+## SSLリスナーの設定
 
-## Configure SSL Listener
+SSLリスナーはSSL（Secure Sockets Layer）接続の着信を待ち受けるネットワークサービスです。  
+EMQXではクライアントとEMQX間のネットワークトラフィックを暗号化し、通信の安全性を確保するために使用されます。
 
-SSL listener is a network service that listens for incoming SSL (Secure Sockets Layer) connections. In EMQX, it is used to secure network traffic between a client and EMQX by encrypting the data that is transmitted between them.
+EMQXでSSLリスナーを設定するには、`etc`フォルダ内の`base.hocon`ファイルに`listeners.ssl`の設定項目を追加します。
 
-To configure the SSL listener in EMQX, you can add the `listeners.ssl` configuration items in the `base.hocon` file within the `etc` folder of the EMQX installation directory.
-
-For example, to enable the SSL listener on port `8883`, with a maximum 1,024,000 of concurrent connections allowed by the listener:
+例えば、ポート`8883`でSSLリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
 
 ```bash
 listeners.ssl.default {
@@ -65,26 +66,26 @@ listeners.ssl.default {
 }
 ```
 
-where:
+ここで、
 
-- `listeners.ssl.default` is to enable the listener. 
+- `listeners.ssl.default` はリスナーを有効化する設定です。  
+- `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート`8883`への全ての着信を待ち受けます。  
+- `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは`infinity`です。  
+- `ssl_options` はリスナーのSSL/TLS設定で、以下のプロパティがあります。  
+  - `cacertfile`: クライアント証明書の正当性を検証するためにリスナーが使用する信頼済みCA（認証局）証明書を含むPEMファイル。  
+  - `certfile`: リスナー用のSSL/TLS証明書チェーンを含むPEMファイル。証明書がルートCAから直接発行されていない場合は、中間CA証明書をリスナー証明書の後に連結してチェーンを形成します。  
+  - `keyfile`: SSL/TLS証明書に対応する秘密鍵を含むPEMファイル。  
+  - `verify`: クライアント証明書の正当性を検証する場合は`verify_peer`、検証しない場合は`verify_none`を設定します。  
+  - `fail_if_no_peer_cert`: `true`の場合、クライアントが証明書を送信しない（空の証明書を送る）と接続を失敗させます。`false`の場合は、無効な証明書を送信した場合のみ失敗し、空の証明書は有効とみなします。
 
-- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8883`. 
-- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-  - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-  - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-  - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
-  - `verify`:  Set 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
-  - `fail_if_no_peer_cert`: If set to `true`, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the client sends an invalid certificate (an empty certificate is considered valid).
+## WebSocketリスナーの設定
 
-## Configure WebSocket Listener
+WebSocketリスナーはWebSocket経由でメッセージを受信・処理するネットワークサービスです。  
+EMQXのWebSocketサポートにより、クライアントはWebSocketプロトコルを使ってEMQXに接続し、リアルタイムでデータを交換できます。
 
-WebSocket listener is a network service that receives and processes messages over WebSocket. WebSocket support in EMQX allows clients to use the WebSocket protocol to connect to EMQX and exchange data in real-time.
+EMQXでWebSocketリスナーを設定するには、`etc`フォルダ内の`base.hocon`ファイルに`listeners.ws`の設定項目を追加します。
 
-To configure the WebSocket listener in EMQX, you can add the `listeners.ws` configuration items in the `base.hocon` file within the `etc` folder of the EMQX installation directory.
-
-For example, to enable the WebSocket listener on port `8083`, with a maximum 1,024,000 of concurrent connections allowed by the listener:
+例えば、ポート`8083`でWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
 
 ```bash
 listeners.ws.default {
@@ -94,21 +95,21 @@ listeners.ws.default {
 }
 ```
 
-where:
+ここで、
 
-- `listeners.ws.default` is to enable the listener. 
+- `listeners.ws.default` はリスナーを有効化する設定です。  
+- `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート`8083`への全ての着信を待ち受けます。  
+- `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは`infinity`です。  
+- `websocket.mqtt_path` はWebSocketのMQTTプロトコル用パスを設定し、デフォルトは`/mqtt`です。
 
-- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8083`. 
-- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-- `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
+## セキュアWebSocketリスナーの設定
 
-## Configure Secure WebSocket Listener
+セキュアWebSocketリスナーは、SSLまたはTLSプロトコルを使用してWebSocketクライアントとブローカー間のデータを暗号化するWebSocketリスナーです。  
+EMQXにおけるセキュアWebSocketリスナーは、WebSocketクライアントとEMQX間で交換される機密データを保護する重要なセキュリティ対策です。
 
-A secure WebSocket listener is a WebSocket listener that uses the Secure Sockets Layer (SSL) or Transport Layer Security (TLS) protocol to encrypt the data exchanged between a WebSocket client and the broker. In EMQX, the secure WebSocket listener is an important security measure to protect sensitive data exchanged between WebSocket clients and EMQX> 
+EMQXでセキュアWebSocketリスナーを設定するには、`etc`フォルダ内の`base.hocon`ファイルに`listeners.wss`の設定項目を追加します。
 
-To configure the secure WebSocket listener in EMQX, you can add the `listeners.wss` configuration items in the `base.hocon` file within the `etc` folder of the EMQX installation directory.
-
-For example, to enable the Secure WebSocket listener on port `8084`, with a maximum 1,024,000 of concurrent connections allowed by the listener:
+例えば、ポート`8084`でセキュアWebSocketリスナーを有効化し、最大1,024,000の同時接続を許可する設定は以下の通りです。
 
 ```bash
 listeners.wss.default {
@@ -123,27 +124,25 @@ listeners.wss.default {
 }
 ```
 
-where:
+ここで、
 
-- `listeners.wss.default` is to enable the listener. 
-
-- `bind` is the IP address and port of the listener, here it will listen to all incoming traffic from any IP address on port `8084`. 
-- `max_connection` is the maximum number of concurrent connections allowed by the listener, default value: `infinity`.
-- `websocket.mqtt_path` is to set the path to the WebSocket’s MQTT protocol, which is `/mqtt` by default. 
-- `ssl_options` is the SSL/TLS configuration option for the listener, it has three properties:
-  - `cacertfile`: PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-  - `certfile`: PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-  - `keyfile`: PEM file containing the private key corresponding to the SSL/TLS certificate.
+- `listeners.wss.default` はリスナーを有効化する設定です。  
+- `bind` はリスナーのIPアドレスとポートで、任意のIPアドレスからのポート`8084`への全ての着信を待ち受けます。  
+- `max_connections` はリスナーが許可する最大同時接続数で、デフォルトは`infinity`です。  
+- `websocket.mqtt_path` はWebSocketのMQTTプロトコル用パスを設定し、デフォルトは`/mqtt`です。  
+- `ssl_options` はリスナーのSSL/TLS設定で、以下のプロパティがあります。  
+  - `cacertfile`: クライアント証明書の正当性を検証するためにリスナーが使用する信頼済みCA（認証局）証明書を含むPEMファイル。  
+  - `certfile`: リスナー用のSSL/TLS証明書チェーンを含むPEMファイル。証明書がルートCAから直接発行されていない場合は、中間CA証明書をリスナー証明書の後に連結してチェーンを形成します。  
+  - `keyfile`: SSL/TLS証明書に対応する秘密鍵を含むPEMファイル。
 
 <!--To add QUIC-->
 
 <!--To add code sample for adding multiple listeners.-->
 
-## Link Listener to a Configuration Zone
+## リスナーと設定ゾーンの紐付け
 
-Each listener in EMQX is associated with a zone, which by default is set to a logical zone named `default`.
+EMQXの各リスナーはゾーンに紐付けられており、デフォルトでは`default`という論理ゾーンに設定されています。
 
-When a listener is linked to a specific zone, MQTT clients connected to that listener inherit the settings from that zone.
+リスナーが特定のゾーンに紐付けられると、そのリスナーに接続するMQTTクライアントはそのゾーンの設定を継承します。
 
-For more information, see the [Zone Override](./configuration.md#zone-override) section in the configuration documentation.
-
+詳細は設定ドキュメントの[Zone Override](./configuration.md#zone-override)セクションをご参照ください。

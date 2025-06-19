@@ -1,38 +1,38 @@
-# Node Evacuation and Cluster Load Rebalancing
+# ノードの退避とクラスターの負荷再分散
 
-MQTT is a stateful long-lived connection access protocol, meaning connections will not be easily disconnected once established. Therefore, upgrading, maintaining, and scaling cluster nodes will become more challenging. EMQX provides node evacuation and cluster load rebalancing functions to facilitate users' cluster operation and maintenance.
+MQTTはステートフルな長時間接続アクセスプロトコルであり、一度確立された接続は簡単には切断されません。そのため、クラスターのノードのアップグレード、メンテナンス、スケーリングはより困難になります。EMQXは、ユーザーのクラスター運用と保守を支援するために、ノード退避およびクラスター負荷再分散機能を提供しています。
 
-## Node Evacuation
+## ノード退避
 
-When you need to maintain or upgrade a node in the cluster, directly shutting down the node can result in lost connections and sessions, causing data loss. In addition, this type of operation can cause a large number of devices to go offline and reconnect for a period of time, increasing server load and potentially affecting overall business.
+クラスター内のノードをメンテナンスやアップグレードする必要がある場合、ノードを直接シャットダウンすると接続やセッションが失われ、データ損失が発生する可能性があります。さらに、この操作により多数のデバイスが一時的にオフラインになり再接続を行うため、サーバーの負荷が増加し、全体の業務に影響を及ぼす可能性があります。
 
-Therefore, EMQX provides node evacuation functionality to help migrate all connection and session data from the node to other nodes in the cluster before shutting down, reducing the impact on the overall business.
+そこでEMQXは、ノード退避機能を提供し、ノードをシャットダウンする前にそのノード上のすべての接続およびセッションデータをクラスター内の他のノードに移行することで、全体の業務への影響を軽減します。
 
-### How It Works
+### 動作の仕組み
 
-The node evacuation works in the following sequence:
+ノード退避は以下の順序で動作します：
 
-1. The node to be evacuated stops receiving connections.
-2. The node to be evacuated gradually disconnects its current clients at a preset rate (specified by `conn-evict-rate`). The disconnected clients use the reconnection mechanism to connect to other nodes (the target nodes) in the cluster. The reconnection mechanisms differ depending on the protocol versions:
-   - MQTT v3.1/v3.1.1 clients: specified by load balancing strategy and the client needs to enable the reconnection mechanism;
-   - MQTT v5.0 clients: specified by the `redirect-to` parameter.
-3. Wait for the target node to complete reconnection with the clients and take over the sessions (specified by `wait-takeover`).
-4. After the reconnection waiting time has elapsed, the remaining unclaimed sessions on the nodes to be evacuated will be migrated to the target node:
+1. 退避対象のノードは新規接続の受付を停止します。
+2. 退避対象ノードは、事前に設定されたレート（`conn-evict-rate`で指定）で現在のクライアントを徐々に切断します。切断されたクライアントは再接続機構を使ってクラスター内の他のノード（ターゲットノード）に接続します。再接続機構はプロトコルバージョンにより異なります：
+   - MQTT v3.1/v3.1.1クライアント：ロードバランス戦略で指定され、クライアント側で再接続機能を有効にする必要があります；
+   - MQTT v5.0クライアント：`redirect-to`パラメータで指定されます。
+3. ターゲットノードがクライアントとの再接続を完了し、セッションを引き継ぐのを待ちます（`wait-takeover`で指定）。
+4. 再接続待機時間経過後、退避対象ノードに残る未引き継ぎのセッションをターゲットノードに移行します：
 
-     - The node to which the session will be migrated is specified by `migrate-to`;
+     - セッション移行先ノードは`migrate-to`で指定します；
 
-     - The speed of session migration is specified by `sess-evict-rate`.
+     - セッション移行速度は`sess-evict-rate`で指定します。
 
 
-You can stop the evacuation at any time. If the node to be evacuated closes during the evacuation, the evacuation process will be resumed after the node is restarted.
+退避はいつでも停止可能です。退避中に退避対象ノードがシャットダウンされた場合、ノード再起動後に退避処理が再開されます。
 
-### Start and Stop Node Evacuation via CLI
+### CLIによるノード退避の開始と停止
 
-You can use CLI command to start the node evacuation, get the evacuation status, and stop the node evacuation.
+CLIコマンドを使ってノード退避の開始、退避状況の取得、退避の停止が可能です。
 
-#### Start Node Evacuation
+#### ノード退避の開始
 
-You can use the following CLI command to start the node evacuation. The `--evacuation` parameter means this is an evacuation operation:
+以下のCLIコマンドでノード退避を開始できます。`--evacuation`パラメータは退避操作であることを示します：
 
 ```bash
 ./bin/emqx ctl rebalance start --evacuation \
@@ -44,19 +44,19 @@ You can use the following CLI command to start the node evacuation. The `--evacu
     [--sess-evict-rate CountPerSec]
 ```
 
-| Parameter             | Type             | Description                                                  |
-| --------------------- | ---------------- | ------------------------------------------------------------ |
-| `--wait-health-check` | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the evacuation process begins, and the source node starts rejecting any new incoming connections. |
-| `--redirect-to`       | String           | The redirected server address during reconnection, for MQTT 5.0 clients; Refer to [MQTT 5.0 Specification - Server redirection](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255) for more details. |
-| `--conn-evict-rate`   | Positive integer | Client disconnection rate, count/second; 500 connections per second by default |
-| `--migrate-to`        | String           | Space or comma-separated list of nodes to which sessions will be evacuated |
-| `--wait-takeover`     | Positive integer | Amount of time in seconds to wait before starting session evacuation; Unit: second, 60 seconds by default |
-| `--sess-evict-rate`   | Positive integer | Client evacuation rate, count/second; 500 sessions per second by default |
+| パラメータ             | 型               | 説明                                                  |
+| --------------------- | ---------------- | ----------------------------------------------------- |
+| `--wait-health-check` | 正の整数         | ノードがロードバランサー（LB）によってアクティブなバックエンドノードリストから除外されるのを待つ時間（秒、デフォルト60秒）。この待機時間経過後に退避処理が開始され、ソースノードは新規接続を拒否し始めます。 |
+| `--redirect-to`       | 文字列           | MQTT 5.0クライアント向けの再接続時のリダイレクト先サーバーアドレス。詳細は[MQTT 5.0仕様 - サーバーリダイレクション](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901255)を参照してください。 |
+| `--conn-evict-rate`   | 正の整数         | クライアント切断レート（接続数/秒）、デフォルトは毎秒500接続 |
+| `--migrate-to`        | 文字列           | セッションを退避させるノードのスペースまたはカンマ区切りリスト |
+| `--wait-takeover`     | 正の整数         | セッション退避開始前の待機時間（秒）、単位は秒、デフォルト60秒 |
+| `--sess-evict-rate`   | 正の整数         | セッション退避レート（セッション数/秒）、デフォルトは毎秒500セッション |
 
 
-**Code Example**
+**コード例**
 
-If you want to migrate the clients on the node `emqx@127.0.0.1` to the nodes `emqx2@127.0.0.1` and `emqx3@127.0.0.1`, you can execute the following command on the node `emqx@127.0.0.1`:
+ノード`emqx@127.0.0.1`上のクライアントを`emqx2@127.0.0.1`および`emqx3@127.0.0.1`ノードに移行したい場合、`emqx@127.0.0.1`ノード上で以下のコマンドを実行します：
 
 ```bash
 ./bin/emqx ctl rebalance start --evacuation \
@@ -68,17 +68,17 @@ If you want to migrate the clients on the node `emqx@127.0.0.1` to the nodes `em
 Rebalance(evacuation) started
 ```
 
-This command will disconnect existing clients at a rate of `30` connections per second. After all connections are disconnected, it will wait for `200` seconds during which client sessions will be migrated to the reconnected nodes. Afterward, the remaining sessions will be migrated at a rate of `30` sessions per second to the `emqx2@127.0.0.1` and `emqx3@127.0.0.1` nodes.
+このコマンドは既存のクライアントを毎秒30接続の速度で切断します。すべての接続が切断された後、200秒間待機し、その間にクライアントセッションが再接続されたノードに移行されます。その後、残りのセッションが毎秒30セッションの速度で`emqx2@127.0.0.1`および`emqx3@127.0.0.1`ノードに移行されます。
 
-#### Get Evacuation Status
+#### 退避状況の取得
 
-You can use the following CLI command to get the evacuation status:
+以下のCLIコマンドで退避状況を取得できます：
 
 ```bash
 ./bin/emqx ctl rebalance node-status
 ```
 
-Below is an example of the returned results:
+返却例は以下の通りです：
 
 ```bash
 Rebalance type: evacuation
@@ -95,61 +95,61 @@ Channel statistics:
   initial_sessions: 0
 ```
 
-#### Stop Node Evacuation
+#### ノード退避の停止
 
-You can use the following CLI command to stop evacuation:
+以下のCLIコマンドで退避を停止できます：
 
 ```bash
 ./bin/emqx ctl rebalance stop
 ```
 
-Below is an example of the returned results:
+返却例は以下の通りです：
 
 ```bash
 ./bin/emqx ctl rebalance stop
 Rebalance(evacuation) stopped
 ```
 
-### Start/Stop Node Evacuation via HTTP API
+### HTTP APIによるノード退避の開始／停止
 
-You can also use HTTP API to start/stop the node evacuation and you need to specify the node to be evacuated in the parameters. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
+HTTP APIを使ってノード退避の開始・停止も可能で、退避対象ノードをパラメータで指定する必要があります。詳細は[APIドキュメント](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html)を参照してください。
 
-## Rebalancing
+## 負荷再分散
 
-Due to the same reason as MQTT being a stateful long-lived connection protocol, connections will not be easily disconnected once the connection is established. Even after scaling up the nodes, existing connections do not automatically shift to the newly added nodes. Consequently, if there are not a significant number of new client connections, the additional nodes may remain underutilized for a long period. In such cases, you need to manually migrate connections from high-load nodes to low-load nodes to achieve cluster load balancing.
+MQTTがステートフルな長時間接続プロトコルであるため、接続確立後は簡単に切断されません。ノードをスケールアウトしても、既存の接続が自動的に新規追加ノードに移動することはありません。そのため、新規クライアント接続が多くない場合、追加ノードが長期間ほとんど利用されないことがあります。このような場合、高負荷ノードから低負荷ノードへ手動で接続を移行し、クラスターの負荷をバランスさせる必要があります。
 
-<img src="./assets/rebalancing.png" alt="rebalancing" style="zoom:50%;" />
+<img src="./assets/rebalancing.png" alt="負荷再分散" style="zoom:50%;" />
 
-### How It Works
+### 動作の仕組み
 
-Rebalancing is a more complicated process since it involves several nodes.
+負荷再分散は複数ノードが関与するため、より複雑なプロセスです。
 
-You can initiate a cluster load rebalancing task on any node. EMQX will automatically calculate the necessary connection migration plan based on the current connection load of each node. It will then migrate the corresponding number of connections and sessions from high-load nodes to low-load nodes to achieve load balancing between nodes. The workflow is as follows:
+任意のノードでクラスター負荷再分散タスクを開始できます。EMQXは各ノードの現在の接続負荷に基づいて必要な接続移行計画を自動計算し、高負荷ノードから低負荷ノードへ対応する数の接続およびセッションを移行してノード間の負荷バランスを実現します。ワークフローは以下の通りです：
 
-1. Calculate the migration plan and divide the nodes involved in rebalancing (specified by `--nodes`) into source nodes and target nodes:
-   - Source nodes: High-load nodes
-   - Target nodes: Low-load nodes
-2. Stop accepting new connections on the source nodes.
-3. Wait for a period of time (specified by `wait-health-check`) until the load balancer (LB) removes the source nodes from the active backend node list.
-4. Gradually disconnect connected clients on the source nodes until the average number of connections matches that of the target nodes.
-5. Wait for the target nodes to reconnect with clients and take over the sessions (specified by `wait-takeover`).
-6. After the reconnection waiting time exceeds, the source nodes will migrate the remaining unclaimed sessions to the target nodes at the rate specified by `sess-evict-rate`.
+1. 移行計画を計算し、再分散に関与するノード（`--nodes`で指定）をソースノードとターゲットノードに分割：
+   - ソースノード：高負荷ノード
+   - ターゲットノード：低負荷ノード
+2. ソースノードで新規接続の受付を停止します。
+3. 一定時間（`wait-health-check`で指定）待機し、ロードバランサー（LB）がソースノードをアクティブなバックエンドノードリストから除外するのを待ちます。
+4. ソースノード上の接続クライアントを徐々に切断し、平均接続数がターゲットノードと一致するまで続けます。
+5. ターゲットノードがクライアントと再接続し、セッションを引き継ぐのを待ちます（`wait-takeover`で指定）。
+6. 再接続待機時間経過後、ソースノードは未引き継ぎのセッションを`sess-evict-rate`で指定された速度でターゲットノードに移行します。
 
-At this point, the load rebalancing task is completed, and the source nodes return to their normal state.
+これで負荷再分散タスクは完了し、ソースノードは通常状態に戻ります。
 
 ::: tip
 
-Rebalancing is ephemeral. If one of the participating nodes crashes, the whole process is aborted on all nodes.
+負荷再分散は一時的な処理です。参加ノードのいずれかがクラッシュした場合、全ノードで処理が中断されます。
 
 :::
 
-### Start and Stop Rebalancing via CLI
+### CLIによる負荷再分散の開始と停止
 
-You can use CLI command to start the rebalancing, get the rebalancing status, and stop the rebalancing.
+CLIコマンドで負荷再分散の開始、状況取得、停止が可能です。
 
-#### Start Rebalancing
+#### 負荷再分散の開始
 
-The command for starting the rebalancing includes the following fields:
+負荷再分散開始コマンドのフィールドは以下の通りです：
 
 ```bash
 rebalance start \
@@ -165,21 +165,21 @@ rebalance start \
     [--rel-sess-threshold Fraction]
 ```
 
-| Fields                 | Type             | Description                                                  |
-| ---------------------- | ---------------- | ------------------------------------------------------------ |
-| `--nodes`              | String           | Space or comma-separated list of nodes participating in the rebalance. It may or may not include the coordinator (node on which the command is run) |
-| `--wait-health-check`  | Positive integer | The duration (in seconds, 60 seconds by default) during which the node waits for the Load Balancer (LB) to remove it from the active backend node list. When this specified waiting time elapses, the load rebalancing process begins. |
-| `--conn-evict-rate`    | Positive integer | Client disconnection rate on source nodes; 500 connections per second by default |
-| `--abs-conn-threshold` | Positive integer | Absolute threshold for checking connection balance; 1000 by default |
-| `--rel-conn-threshold` | Number<br /> > 1.0 | Relative threshold for checking connection balance; 1.1 by default |
-| `--wait-takeover`      | Positive integer | Specified waiting time (in seconds, default 60 seconds) for clients to reconnect and take over the sessions after all connections are disconnected. |
-| `--sess-evict-rate`    | Positive integer | Session evacuation rate on source nodes; 500 sessions per second by default |
-| `--abs-sess-threshold` | Positive integer | Absolute threshold for checking session balance; 1000 by default |
-| `--rel-sess-threshold` | Number<br /> > 1.0 | Relative threshold for checking session balance; 1.1 by default |
+| フィールド              | 型               | 説明                                                  |
+| ---------------------- | ---------------- | ----------------------------------------------------- |
+| `--nodes`              | 文字列           | 再分散に参加するノードのスペースまたはカンマ区切りリスト。コマンドを実行するノード（コーディネーター）を含む場合も含まない場合もあります。 |
+| `--wait-health-check`  | 正の整数         | ノードがロードバランサー（LB）によってアクティブなバックエンドノードリストから除外されるのを待つ時間（秒、デフォルト60秒）。この待機時間経過後に負荷再分散処理が開始されます。 |
+| `--conn-evict-rate`    | 正の整数         | ソースノードでのクライアント切断レート。デフォルトは毎秒500接続 |
+| `--abs-conn-threshold` | 正の整数         | 接続バランス確認の絶対閾値。デフォルトは1000 |
+| `--rel-conn-threshold` | 数値<br /> > 1.0 | 接続バランス確認の相対閾値。デフォルトは1.1 |
+| `--wait-takeover`      | 正の整数         | すべての接続切断後、クライアントが再接続しセッションを引き継ぐまでの待機時間（秒、デフォルト60秒） |
+| `--sess-evict-rate`    | 正の整数         | ソースノードでのセッション退避レート。デフォルトは毎秒500セッション |
+| `--abs-sess-threshold` | 正の整数         | セッションバランス確認の絶対閾値。デフォルトは1000 |
+| `--rel-sess-threshold` | 数値<br /> > 1.0 | セッションバランス確認の相対閾値。デフォルトは1.1 |
 
-**Check Session Balance**
+**セッションバランスの確認**
 
-Connections are considered to be balanced when the following condition holds:
+接続は以下の条件を満たす場合にバランスが取れているとみなされます：
 
 ```bash
 avg(DonorConns) < avg(RecipientConns) + abs_conn_threshold
@@ -187,11 +187,11 @@ OR
 avg(DonorConns) < avg(RecipientConns) * rel_conn_threshold
 ```
 
-A similar rule is applied to disconnected sessions.
+切断されたセッションにも同様のルールが適用されます。
 
-**Example**
+**例**
 
-To achieve load rebalancing among the three nodes `emqx@127.0.0.1`, `emqx2@127.0.0.1`, and `emqx3@127.0.0.1`, you can use the following command:
+3つのノード`emqx@127.0.0.1`、`emqx2@127.0.0.1`、`emqx3@127.0.0.1`間で負荷再分散を行う場合、以下のコマンドを使用します：
 
 ```bash
 ./bin/emqx ctl rebalance start \
@@ -205,15 +205,15 @@ To achieve load rebalancing among the three nodes `emqx@127.0.0.1`, `emqx2@127.0
 Rebalance started
 ```
 
-#### Get Rebalance Status
+#### 負荷再分散状況の取得
 
-The CLI command for getting rebalance status is:
+負荷再分散状況取得用CLIコマンドは以下の通りです：
 
 ```bash
 ./bin/emqx ctl rebalance node-status
 ```
 
-**Example**
+**例**
 
 ```bash
 ./bin/emqx ctl rebalance node-status
@@ -228,34 +228,34 @@ Connection goal: 0.0
 Current average donor node connection count: 300.0
 ```
 
-#### Stop Rebalancing
+#### 負荷再分散の停止
 
-The CLI command to stop rebalancing is:
+負荷再分散停止用CLIコマンドは以下の通りです：
 
 ```bash
 emqx ctl rebalance stop
 ```
 
-Below is an example of the returned results:
+返却例は以下の通りです：
 
 ```bash
 ./bin/emqx ctl rebalance stop
 Rebalance stopped
 ```
 
-### Start/Stop Rebalancing via HTTP API
+### HTTP APIによる負荷再分散の開始／停止
 
-All the operations available from the CLI are also available from the API. Start/stop commands require a node as a parameter. For details, see [API Docs](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html).
+CLIで利用可能なすべての操作はAPIでも利用可能です。開始／停止コマンドはノードをパラメータとして指定する必要があります。詳細は[APIドキュメント](https://docs.emqx.com/en/enterprise/v5.1/admin/api-docs.html)を参照してください。
 
-## Integrate Load Balancer
+## ロードバランサーの統合
 
-Users can integrate a load balancer to perform evacuation/rebalancing. When a disconnected client attempts to reconnect, the load balancer will redirect it to the recipient nodes based on the current status of backend nodes. Users need to configure health check parameters for integrating the load balancer; otherwise, there can be an excess number of disconnections. To assist in creating this configuration, EMQX provides a health check REST API:
+ユーザーはロードバランサーを統合して退避／再分散を実行できます。切断されたクライアントが再接続を試みる際、ロードバランサーはバックエンドノードの現在の状態に基づいて受け入れノードへリダイレクトします。ユーザーはロードバランサー統合のためにヘルスチェックパラメータを設定する必要があります。設定しないと切断数が過剰になる可能性があります。これを支援するため、EMQXはヘルスチェック用REST APIを提供しています：
 
 `GET /api/v5/load_rebalance/availability_check`
 
-The health check responds with HTTP code 503 for the donor or evacuated nodes and HTTP code 200 for nodes operating normally and receiving connections.
+ヘルスチェックは、ドナーまたは退避中のノードに対してはHTTPコード503を返し、正常稼働中で接続を受け入れているノードにはHTTPコード200を返します。
 
-For example, you can use the following configuration for HAProxy and an EMQX cluster with 3 nodes, with the MQTT listeners on ports 3001, 3002, and 3003, and REST API ports on 5001, 5002, and 5003:
+例えば、3ノードのEMQXクラスターで、MQTTリスナーがポート3001、3002、3003、REST APIポートが5001、5002、5003の場合、HAProxyの設定例は以下の通りです：
 
 ```bash
 defaults

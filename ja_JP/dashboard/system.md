@@ -1,91 +1,91 @@
-# System
+# システム
 
-The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, hot upgrade and general settings.
+EMQX ダッシュボードの **システム** メニューでは、ユーザーおよびロール管理、監査ログ、APIキー、ライセンス、SSO、データのバックアップと復元、ホットアップグレード、一般設定などのシステム管理オプションにアクセスできます。
 
-## Users
+## ユーザー
 
-The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
+**ユーザー** ページでは、[CLI](../admin/cli.md) で生成されたものを含む、すべてのアクティブなダッシュボードユーザーの概要を確認できます。
 
-To add new users, click the + Create button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
+新しいユーザーを追加するには、ページ右上の + 作成 ボタンをクリックします。ポップアップダイアログが表示され、必要なユーザー情報の入力を求められます。入力後、**作成** ボタンをクリックしてユーザーアカウントを作成します。ユーザー管理のために、編集、パスワード更新、ユーザー情報の削除などの操作は、アクション列から簡単にアクセスできます。
 
-> For security reasons, starting with EMQX 5.0.0, Dashboard users cannot be used for REST API authentication.
+> セキュリティ上の理由から、EMQX 5.0.0 以降、ダッシュボードユーザーは REST API 認証には使用できません。
 
-<img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
+<img src="./assets/ee-users.png" alt="ユーザー画面" style="zoom:67%;" />
 
-Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (RBAC) feature for EMQX Enterprise users.
+EMQX 5.3 以降、ダッシュボードでは EMQX Enterprise ユーザー向けにロールベースアクセス制御（RBAC）機能が導入されました。
 
-RBAC allows you to assign permissions to users based on their roles within the organization. This feature simplifies authorization management, enhances security by restricting access, and improves organizational compliance, making it an essential access control mechanism for the Dashboard.
+RBAC により、組織内の役割に基づいてユーザーに権限を割り当てることが可能です。この機能は認可管理を簡素化し、アクセス制限によるセキュリティ強化や組織のコンプライアンス向上に寄与し、ダッシュボードの重要なアクセス制御機構となっています。
 
-Currently, either of the following two predefined roles can be set for a user. You can select the role from the **Role** dropdown when you create users.
-+ Administrator
+現在、ユーザーには以下のいずれかの事前定義されたロールを設定できます。ユーザー作成時に **ロール** ドロップダウンから選択可能です。
 
-    Administrators have full access to manage all EMQX features and resources, including client management, system configuration, API key, and user management.
++ 管理者（Administrator）
 
-+ Viewer
+    管理者はクライアント管理、システム設定、APIキー、ユーザー管理など、すべての EMQX 機能とリソースを完全に管理できます。
 
-    Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
++ 閲覧者（Viewer）
 
-## Audit Logs
+    閲覧者はすべての EMQX データおよび設定にアクセスでき、REST API のすべての `GET` リクエストに対応します。ただし、データの作成、変更、削除はできません。
 
-The **Audit Logs** page allows administrators to configure audit logging for monitoring critical operational changes within the EMQX cluster in real time.
+## 監査ログ
 
-For a detailed overview of the Audit Log feature, see [Audit Log](../dashboard/audit-log.md).
+**監査ログ** ページでは、管理者が EMQX クラスター内の重要な運用変更をリアルタイムで監視するための監査ログ記録を設定できます。
 
-## API Keys
+監査ログ機能の詳細については、[監査ログ](../dashboard/audit-log.md) をご参照ください。
 
-On the **API Keys** page, you can generate an API key and secret key for accessing the [HTTP API](../admin/api.md) by following the steps below.
+## API キー
 
-1. Click the **+ Create** button in the top right corner of the page to bring up the Create API Key pop-up dialog. 
+**API キー** ページでは、[HTTP API](../admin/api.md) へのアクセス用に API キーとシークレットキーを生成できます。手順は以下の通りです。
 
-2. On the Create API Key dialog, configure the detailed information for the API key. 
+1. ページ右上の **+ 作成** ボタンをクリックし、API キー作成ポップアップダイアログを表示します。
 
-   - The API key will never expire if the Expire At box is left empty.
-   - Select a role for the API key (optional). For more information about roles, see [Roles and Permissions](../admin/api.md#roles-and-permissions).
+2. API キー作成ダイアログで、API キーの詳細情報を設定します。
 
-3. Click the **Confirm** button, and the API key and secret Key are created and displayed in the **Created Successfully** dialog. 
+   - 「Expire At」欄を空欄にすると、API キーは期限切れになりません。
+   - API キーにロールを割り当てることも可能です（任意）。ロールの詳細については、[ロールと権限](../admin/api.md#roles-and-permissions) を参照してください。
 
-   ::: warning Notice
+3. **確認** ボタンをクリックすると、API キーとシークレットキーが生成され、**作成成功** ダイアログに表示されます。
 
-   You need to save the API Key and Secret Key in a safe place because the secret key will not be shown again.
+   ::: warning 注意
+
+   シークレットキーは再表示されませんので、安全な場所に必ず保存してください。
 
    :::
 
-    Click the **Close** button to close the dialog.
+    **閉じる** ボタンをクリックしてダイアログを閉じます。
 
-<img src="./assets/api-key.png" alt="image" style="zoom:67%;" />
+<img src="./assets/api-key.png" alt="APIキー画面" style="zoom:67%;" />
 
-You can view the details of the API key by clicking the name in the **Name** column. You click the **Edit** button in the **Actions** column to reset the expiration time, change the status, and edit the note of the API key. If an API key is no longer needed, you can delete it by clicking the **Delete** button.
+API キーの詳細は、**名前** 列の名前をクリックして確認できます。**アクション** 列の **編集** ボタンからは、有効期限のリセット、ステータス変更、メモ編集が可能です。不要になった API キーは **削除** ボタンで削除できます。
 
-<img src="./assets/api-key-detail.png" alt="image" style="zoom:50%;" />
+<img src="./assets/api-key-detail.png" alt="APIキー詳細画面" style="zoom:50%;" />
 
-## License
+## ライセンス
 
-Click on **License** under the **System** menu on the left to access the License page. On this page, you can view the basic information of your current License, including the License connection quota usage, EMQX version, customer, and issue information. 
+左側の **システム** メニューから **ライセンス** をクリックすると、ライセンスページにアクセスできます。このページでは、現在のライセンスの基本情報（ライセンス接続数の使用状況、EMQX バージョン、顧客情報、発行情報など）を確認できます。
 
-Click **Update License** to upload your License Key. In the **License Settings** section, you can set the high and low watermark limits for the license connection quota usage. For more information about the license, see [Work with EMQX Enterprise License](../deploy/license.md).
+**ライセンス更新** をクリックすると、ライセンスキーをアップロードできます。**ライセンス設定** セクションでは、ライセンス接続数の使用状況に対する高水位・低水位の閾値を設定可能です。ライセンスの詳細については、[EMQX Enterprise ライセンスの利用](../deploy/license.md) をご参照ください。
 
 ## SSO
 
-The **SSO** page provides settings for the administrators to configure the SSO feature for user login management. For more information about the SSO feature, see [Single Sign-On (SSO)](./sso.md).
+**SSO** ページでは、管理者がユーザーログイン管理のために SSO 機能を設定できます。SSO 機能の詳細については、[シングルサインオン（SSO）](./sso.md) をご覧ください。
 
-## Backup & Restore
+## バックアップと復元
 
-The **Backup & Restore** page provides settings for backing up your operating data and configuration files. You can perform data import and export operations on this page. For details of the Backup and Restore function, see [Backup and Restore](../operations/backup-restore.md).
+**バックアップと復元** ページでは、運用データおよび設定ファイルのバックアップ設定を行えます。このページでデータのインポートおよびエクスポート操作が可能です。バックアップと復元機能の詳細は、[バックアップと復元](../operations/backup-restore.md) をご参照ください。
 
-## Hot Upgrade
+## ホットアップグレード
 
-The **Hot Upgrade** page allows you to upgrade EMQX without service interruption by uploading a hot upgrade package. To obtain an upgrade package, please contact the [EMQX team](https://www.emqx.com/en/contact).
+**ホットアップグレード** ページでは、サービスを停止せずに EMQX をアップグレードするためのホットアップグレードパッケージをアップロードできます。アップグレードパッケージの入手については、[EMQX チーム](https://www.emqx.com/en/contact) にお問い合わせください。
 
-## Settings
+## 設定
 
-To access the settings, click the gear icon in the upper-right corner of the Dashboard.
+ダッシュボード右上の歯車アイコンをクリックすると、設定にアクセスできます。
 
-In the **Settings** menu, you can customize the Dashboard's language and theme:
+**設定** メニューでは、ダッシュボードの言語とテーマをカスタマイズできます。
 
-- **Language**: Choose your preferred display language.
-- **Theme**: Select between light and dark themes, or enable automatic synchronization with your operating system's theme. When sync is enabled, the theme will follow your OS settings, and manual selection will be disabled.
+- **言語**：表示言語を選択します。
+- **テーマ**：ライトテーマとダークテーマの切り替え、または OS のテーマに自動同期を有効にできます。同期を有効にすると、テーマは OS の設定に従い、手動選択は無効になります。
 
-Additionally, the Settings menu includes a toggle to enable or disable the [AI SQL Generator](../data-integration/rule-get-started.md#sql-generator) feature on the **Rules** page.
+さらに、設定メニューには **ルール** ページの [AI SQL ジェネレーター](../data-integration/rule-get-started.md#sql-generator) 機能の有効化・無効化のトグルも含まれています。
 
-<img src="./assets/settings_ee.png" alt="settings_ee" style="zoom:67%;" />
-
+<img src="./assets/settings_ee.png" alt="設定画面" style="zoom:67%;" />

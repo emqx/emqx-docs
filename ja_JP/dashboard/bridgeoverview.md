@@ -1,8 +1,8 @@
-# Data Integration
+# データ統合
 
-The Integration section on the Dashboard provides functions for creating rules, data integration with different data systems, schema validation, and message transformation. You can also perform the management operations, such as editing the settings and viewing statistics for the functions. The sub-sections include the following:
+ダッシュボードの統合セクションでは、ルールの作成、さまざまなデータシステムとのデータ統合、スキーマ検証、メッセージ変換の機能を提供しています。また、設定の編集や機能の統計情報の閲覧などの管理操作も行えます。サブセクションは以下の通りです。
 
-- **Webhook**: For users who want to integrate with HTTP services but don't need to use rules for data processing, this page offers a simpler and more user-friendly creation and configuration experience. For a detailed step-by-step guide, see [Webhook](../data-integration/webhook.md).
-- **Flow Designer**: A powerful tool for visually viewing and managing data processing and integration. For a detailed introduction, see [Flow Designer](../flow-designer/introduction.md).
-- [**Rules**](./rules.md): Provides all the functions about creating rules, testing rules, adding actions to the rules, and viewing rule execution statistics.
-- **Connector**: As an indispensable component of data integration, connectors are used to connect with external data systems. For how to create and manage connectors, see [Connector](../data-integration/connector.md).
+- **Webhook**：HTTPサービスと統合したいが、データ処理のためにルールを使用する必要がないユーザー向けに、より簡単で使いやすい作成および設定体験を提供します。詳細なステップバイステップガイドは[Webhook](../data-integration/webhook.md)をご覧ください。
+- **Flow Designer**：データ処理と統合を視覚的に確認・管理できる強力なツールです。詳しい紹介は[Flow Designer](../flow-designer/introduction.md)をご参照ください。
+- [**Rules**](./rules.md)：ルールの作成、ルールのテスト、ルールへのアクション追加、ルール実行統計の閲覧に関するすべての機能を提供します。
+- **Connector**：データ統合に欠かせないコンポーネントであり、外部データシステムとの接続に使用されます。コネクターの作成および管理方法については[Connector](../data-integration/connector.md)をご参照ください。

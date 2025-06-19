@@ -1,135 +1,128 @@
-# LLM-Based MQTT Data Processing
+# LLMベースのMQTTデータ処理
 
-Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT and Anthropic Claude. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
+EMQX 5.10.0以降、FlowデザイナーはOpenAI GPTやAnthropic Claudeなどの大規模言語モデル（LLM）との統合をサポートしています。この機能により、ログの要約、センサーデータの分類、MQTTメッセージの拡張、リアルタイムインサイトの生成など、自然言語プロンプトを用いたインテリジェントなメッセージフローを構築できます。
 
-## Feature Overview
+## 機能概要
 
-LLM-Based Processing Nodes in Flow Designer are AI-powered components that connect to external LLM APIs to process message content. These nodes allow users to send MQTT data to models like `gpt-4o` or `claude-3-sonnet`, receive the response, and pass it along downstream in the flow.
+FlowデザイナーのLLMベース処理ノードは、外部のLLM APIに接続してメッセージ内容を処理するAI搭載コンポーネントです。これらのノードを使うことで、MQTTデータを`gpt-4o`や`claude-3-sonnet`などのモデルに送信し、応答を受け取り、フローの下流に渡すことが可能です。
 
-::: tip Note
+::: tip 注意
 
-Invoking an LLM and processing data takes time. The entire process may take several seconds to over ten seconds, depending on the response speed of the model. Therefore, LLM processing nodes are not suitable for scenarios with high message throughput (TPS).
+LLMの呼び出しとデータ処理には時間がかかります。モデルの応答速度によっては、処理全体で数秒から十数秒かかる場合があります。そのため、LLM処理ノードは高スループット（TPS）が求められるシナリオには適していません。
 
 :::
 
-### Key Concepts
+### 主要な概念
 
-- **LLM Provider**: A named configuration for an AI service (OpenAI / Anthropic).
-- **Completion Profile**: A reusable bundle of LLM model parameters (model ID, system prompt, token limits, etc.).
-- **AI Completion Node**: A flow component that sends input to the LLM and stores its result as a user-defined alias.
-- `ai_completion`: A Rule SQL function that sends text/binary data to an LLM and returns its response.
+- **LLMプロバイダー**：AIサービス（OpenAI / Anthropic）の名前付き設定。
+- **Completion Profile**：LLMモデルのパラメーター（モデルID、システムプロンプト、トークン制限など）をまとめた再利用可能な設定。
+- **AI Completion Node**：入力をLLMに送信し、その結果をユーザー定義のエイリアスに格納するフローコンポーネント。
+- `ai_completion`：テキストやバイナリデータをLLMに送信し応答を返すRule SQL関数。
 
-### How It Works
+### 動作の仕組み
 
-When an MQTT message is received in Flow Designer, the AI Completion Node internally calls the built-in SQL function `ai_completion/2,3` to send data to the configured LLM.
+FlowデザイナーでMQTTメッセージを受信すると、AI Completion Nodeは内部で組み込みのSQL関数`ai_completion/2,3`を呼び出し、設定されたLLMにデータを送信します。
 
 ```mermaid
 graph LR
-  A[MQTT Message] --> B[Flow Designer Node]
+  A[MQTTメッセージ] --> B[Flowデザイナーノード]
   B --> C["Rule SQL (ai_completion)"]
   C --> D[LLM API]
-  D --> E[LLM Response]
-  E --> F[Downstream Node]
+  D --> E[LLM応答]
+  E --> F[下流ノード]
 ```
 
-1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
-2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.
-3. The **OpenAI** or **Anthropic** node uses the `ai_completion` function behind the scenes to:
+1. メッセージは**Messages**ノード（例：トピックをサブスクライブ）を経由してフローに入ります。
+2. **Data Processing**ノード（任意）で`device_id`、`payload`、`timestamp`などのフィールドを抽出または変換できます。
+3. **OpenAI**または**Anthropic**ノードは背後で`ai_completion`関数を使い、
 
-     - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
-     - Send the selected input (e.g., `payload`) to the LLM.
-     - Receive a response from the LLM API (e.g., a summary or classification result).
-4. The response is stored under the **Output Result Alias**, making it available to any downstream node, such as:
+     - 選択された**Completion Profile**（プロバイダー情報、モデル名、システムメッセージなど）を参照します。
+     - 選択された入力（例：`payload`）をLLMに送信します。
+     - LLM APIからの応答（例：要約や分類結果）を受け取ります。
+4. 応答は**Output Result Alias**に格納され、以下のような下流ノードで利用可能になります。
 
-     - **Republish** (publish to another topic)
+     - **Republish**（別トピックへのパブリッシュ）
+     - **Database**（PostgreSQL、MongoDBなどへの結果挿入）
+     - **Bridge**（リモートブローカーやクラウドサービスへの転送）
 
-     - **Database** (insert the result into PostgreSQL, MongoDB, etc.)
+### 対応LLMプロバイダー
 
-     - **Bridge** (forward to remote brokers or cloud services)
+EMQX 5.10.0では以下のプロバイダーをサポートしています：
 
-### Supported LLM Providers
+- **OpenAI**：GPT-3.5、GPT-4、GPT-4oなど
+- **Anthropic**：Claude 3モデル
 
-EMQX 5.10.0 supports the following providers:
+## LLMベース処理ノードの設定
 
-- **OpenAI**: GPT-3.5, GPT-4, GPT-4o, etc.
-- **Anthropic**: Claude 3 models
+FlowデザイナーでLLMを使用するには、OpenAIノードまたはAnthropicノードのいずれかを選択して専用の処理ノードを設定します。各ノードでは、MQTTメッセージデータのどのフィールドをLLMに送るか、システムプロンプトによるモデルの動作指定、AI生成結果の格納先などを定義できます。設定後、これらのノードは背後で`ai_completion`関数を呼び出し、選択したLLMでデータ処理を行います。
 
-## Configure LLM-Based Processing Nodes
+### OpenAIノードの設定
 
-To use LLMs in Flow Designer, you must configure a dedicated processing node for your chosen provider, either an OpenAI or an Anthropic node. Each node allows you to define how MQTT message data is sent to the LLM, including which input fields to use, how the model should behave via system prompts, and where to store the AI-generated result for further processing. Once configured, these nodes seamlessly invoke the `ai_completion` function behind the scenes to process data using the selected LLM.
+OpenAIノードを使用するには：
 
-### Configure an OpenAI Node
+1. **Processing**パネルから**OpenAI**ノードをドラッグします。
 
-To use an OpenAI node:
+2. ソースまたは前処理ノードに接続します。
 
-1. Drag the **OpenAI** node from the **Processing** panel.
+3. 以下の項目を設定します：
 
-2. Connect it to a source or preprocessing node.
+   - **Input**：ソースフィールドを入力または選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
 
-3. Configure the following fields:
+   - **System Message**：AIモデルに期待する出力を生成させるためのプロンプトメッセージを入力します。例：「入力JSONデータの数値キーの値を合計し、結果のみを出力してください」。
 
-   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+   - **Model**：LLMプロバイダーのモデルを選択します。例：`gpt-4o`、`gpt-3.5-turbo`。
 
-   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+   - **API Key**：OpenAIのAPIキーを入力します。
 
-   - **Model**: Select the LLM provider, e.g., `gpt-4o`, `gpt-3.5-turbo`.
+   - **Base URL**：任意のカスタムエンドポイントを入力します。空欄の場合はOpenAIのデフォルトエンドポイントが使用されます。
 
-   - **API Key**: Enter your OpenAI API key.
-
-   - **Base URL**: Enter an optional custom endpoint. Leave empty to use OpenAI’s default endpoint.
-
-   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+   - **Output Result Alias**：LLMの出力結果を格納する変数名です。後続のアクションや処理で参照します。例：`summary`
 
      ::: tip
 
-     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+     エイリアスに英数字とアンダースコア以外の文字が含まれる場合、数字で始まる場合、またはSQLキーワードの場合は、ダブルクォーテーションで囲んでください。
 
      :::
 
+4. **保存**をクリックして設定を適用します。
 
-4. Click **Save** to apply your configuration.
+### Anthropicノードの設定
 
-### Configure an Anthropic Node
+Anthropicノードを使用するには：
 
-To use an Anthropic node:
+1. **Processing**パネルから**Anthropic**ノードをドラッグします。
 
-1. Drag the **Anthropic** node from the **Processing** panel.
+2. メッセージ入力またはData Processingノードに接続します。
 
-2. Connect it to the message input or a Data Processing node.
+3. 以下の項目を入力します：
 
-3. Fill out the configuration:
+   - **Input**：ソースフィールドを入力または選択します。選択肢は`event`、`id`、`clientid`、`username`、`payload`などです。
 
-   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+   - **System Message**：AIモデルに期待する出力を生成させるためのプロンプトメッセージを入力します。例：「入力JSONデータの数値キーの値を合計し、結果のみを出力してください」。
 
-   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+   - **Model**：LLMプロバイダーのモデルを選択します。例：`claude-3-sonnet-20240620`。
 
-   - **Model**: Select the LLM provider, e.g., `claude-3-sonnet-20240620`.
+   - **Max Tokens**：応答の最大トークン数を制御します（デフォルト：`100`）。
 
-   - **Max Tokens**: Controls response length (default: `100`).
+   - **Anthropic Version**：Anthropicのバージョンを選択します（デフォルト：`2023-06-01`）。
 
-   - **Anthropic Version**: Select the version of Anthropic (default: `2023-06-01`).
+   - **API Key**：AnthropicのAPIキーを入力します。
 
-   - **API Key**: Enter your Anthropic API key.
+   - **Base URL**：任意のカスタムエンドポイントを入力します。空欄の場合はAnthropicのデフォルトエンドポイントが使用されます。
 
-   - **Base URL**: Enter an optional custom endpoint. Leave empty to use Anthropic’s default endpoint.
-
-   - **Output Result Alias**: 
-
-   - Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+   - **Output Result Alias**：LLMの出力結果を格納する変数名です。後続のアクションや処理で参照します。例：`summary`
 
      ::: tip
 
-     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+     エイリアスに英数字とアンダースコア以外の文字が含まれる場合、数字で始まる場合、またはSQLキーワードの場合は、ダブルクォーテーションで囲んでください。
 
      :::
 
+4. **保存**をクリックして設定を適用します。
 
-4. Click **Save** to apply your configuration.
+## クイックスタート
 
-## Quick Start
+以下の2つの例では、EMQXでLLMベース処理ノードを使ったフローの迅速な構築とテスト方法を示しています：
 
-The following two examples demonstrate how to quickly build and test Flows using LLM-based processing nodes in EMQX:
-
-- [Create a Flow Using OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
-- [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
-
+- [OpenAIノードを使ったフローの作成](./openai-node-quick-start.md)：GPTモデルでMQTTメッセージを要約または変換します。
+- [Anthropicノードを使ったフローの作成](./anthropic-node-quick-start.md)：ClaudeモデルでMQTTメッセージの数値処理を行います。

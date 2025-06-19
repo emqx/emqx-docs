@@ -1,46 +1,46 @@
-# Telemetry
+# テレメトリ
 
-EMQ collects usage data for EMQX through its telemetry feature. This functionality helps us gain insights into how our user community interacts with EMQX, enabling us to understand usage patterns and continuously enhance our products. By sharing these metrics, you contribute to improving EMQX's performance and features.
+EMQXはテレメトリ機能を通じて利用状況データを収集しています。この機能により、ユーザーコミュニティがEMQXをどのように利用しているかを把握し、使用パターンを理解することで製品の継続的な改善に役立てています。これらのメトリクスを共有することで、EMQXのパフォーマンスや機能向上に貢献いただけます。
 
-We prioritize your privacy. Telemetry data is anonymized and does not include personal or identifiable information, such as server models, hardware IDs, or IP addresses. This data is never shared with third parties.
+プライバシーを最優先に考えており、テレメトリデータは匿名化されており、サーバーモデル、ハードウェアID、IPアドレスなどの個人や識別可能な情報は含まれていません。このデータが第三者に共有されることはありません。
 
-Telemetry is disabled by default for users with a Commercial License and enabled by default for the following license types:
+テレメトリは商用ライセンスのユーザーではデフォルトで無効化されており、以下のライセンスタイプではデフォルトで有効になっています。
 
 - EMQX Community
-- Education or Non-Profit
-- Trial
+- 教育機関または非営利団体
+- トライアル
 
-These defaults can be overridden by configuring the `telemetry.enable` flag in the EMQX configuration file. For example, you can permanently disable the Telemetry through the configuration file:
+これらのデフォルト設定はEMQXの設定ファイル内の `telemetry.enable` フラグを変更することで上書き可能です。例えば、設定ファイルでテレメトリを恒久的に無効化するには以下のように設定します。
 
 ```bash
 telemetry.enable = false
 ```
 
-Alternatively, you can control telemetry behavior at startup using an environment variable:
+また、起動時に環境変数でテレメトリの動作を制御することも可能です。
 
 ```bash
 export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 ```
 
-By customizing these settings, you have full control over whether telemetry data is collected.
+これらの設定をカスタマイズすることで、テレメトリデータの収集を完全に制御できます。
 
-## Telemetry Metrics
+## テレメトリメトリクス
 
-We collect Telemetry data that includes the following:
+収集されるテレメトリデータには以下が含まれます。
 
-- Hardware specifications of the cluster (excluding hardware UUIDs)
-- Cluster topology
-- EMQX version
-- The enabled state of certain configurations
-- Feature enablement
-- Plug-in usage
-- Metrics
+- クラスターのハードウェア仕様（ハードウェアUUIDは除く）
+- クラスターのトポロジー
+- EMQXのバージョン
+- 特定設定の有効状態
+- 機能の有効化状況
+- プラグインの使用状況
+- メトリクス情報
 
-Telemetry data is reported through encrypted HTTP requests to `https://telemetry.emqx.io/api/telemetry`. The data is stored securely in our private environment and is not exposed to any public network.
+テレメトリデータは暗号化されたHTTPリクエストを通じて `https://telemetry.emqx.io/api/telemetry` に送信されます。データは安全なプライベート環境に保存され、公開ネットワークには一切公開されません。
 
-For Telemetry data collection codes, please refer to [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
+テレメトリデータ収集のコードは [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl) をご参照ください。ご質問がある場合は [Issues](http://github.com/emqx/emqx/issues) からお問い合わせください。
 
-The data transferred example is as follows：
+送信されるデータの例は以下の通りです：
 
 ```json
 {

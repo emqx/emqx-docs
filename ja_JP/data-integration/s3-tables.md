@@ -1,93 +1,93 @@
-# Ingest MQTT Data into Amazon S3 Tables
+# Amazon S3 Tables への MQTT データ取り込み
 
-[Amazon S3 Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) is a purpose-built storage solution optimized for analytics workloads. It provides high-performance, scalable, and secure storage for tabular data, such as IoT sensor readings, in the Apache Iceberg format.
+[Amazon S3 Tables](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables.html) は、分析ワークロードに最適化された専用のストレージソリューションです。Apache Iceberg フォーマットで IoT センサーの読み取り値などの表形式データを、高性能かつスケーラブルかつ安全に保存できます。
 
-EMQX now supports seamless integration with Amazon S3 Tables, enabling efficient storage of MQTT messages into S3 table buckets. This integration allows for flexible and scalable IoT data storage, facilitating advanced analytics and processing using AWS services like Amazon Athena, Amazon Redshift, and Amazon EMR.
+EMQX は Amazon S3 Tables とのシームレスな連携をサポートし、MQTT メッセージを効率的に S3 テーブルバケットに保存できるようになりました。この連携により、柔軟かつスケーラブルな IoT データストレージが可能となり、Amazon Athena、Amazon Redshift、Amazon EMR などの AWS サービスを用いた高度な分析や処理を支援します。
 
-This page provides a detailed introduction to the data integration between EMQX and Amazon S3 Tables and offers practical guidance on the rule and Sink creation.
+本ページでは EMQX と Amazon S3 Tables 間のデータ統合について詳しく解説し、ルールおよび Sink の作成方法を実践的に案内します。
 
-## How It Works
+## 動作概要
 
-EMQX integrates with Amazon S3 Tables to enable real-time, structured ingestion of MQTT data into Amazon S3 for long-term storage and analytics. This integration leverages EMQX’s rule engine and S3 Tables Sink to transform and stream MQTT messages directly into Apache Iceberg-formatted tables stored in S3 Table Buckets.
+EMQX は Amazon S3 Tables と連携し、MQTT データをリアルタイムかつ構造化された形で Amazon S3 に取り込み、長期保存および分析に活用できるようにします。この連携は EMQX のルールエンジンと S3 Tables Sink を活用し、MQTT メッセージを Apache Iceberg フォーマットのテーブルに変換して直接 S3 テーブルバケットにストリーミングします。
 
-In a typical IoT scenario:
+一般的な IoT シナリオでは以下のように動作します。
 
-- **EMQX** acts as the MQTT broker, handling device connectivity, message routing, and data processing.
-- **Amazon S3 Tables** serves as the destination for durable, queryable storage of MQTT message data in tabular form.
-- **Amazon Athena** is used to define Iceberg tables and run SQL queries against the stored data.
+- **EMQX** は MQTT ブローカーとして、デバイスの接続管理、メッセージのルーティング、データ処理を担当します。
+- **Amazon S3 Tables** は MQTT メッセージデータを表形式で耐久的かつクエリ可能なストレージとして保存します。
+- **Amazon Athena** は Iceberg テーブルの定義や保存データへの SQL クエリ実行に利用されます。
 
 ![emqx-integration-s3-tables](./assets/emqx-integration-s3-tables.png)
 
-The workflow proceeds as follows:
+ワークフローは以下の通りです。
 
-1. **Device Connection to EMQX**: IoT devices connect to EMQX via MQTT and begin publishing telemetry data.
-2. **Message Routing and Rule Matching**: EMQX uses its built-in rule engine to match incoming MQTT messages against defined topics and extract specific fields or values.
-3. **Data Transformation**: Rules in EMQX can filter, transform, or enrich message payloads to match the schema of the target Iceberg table.
-4. **Writing to Amazon S3 Tables**: The rule triggers the S3 Tables Sink action, which batches the transformed data and sends it to Amazon S3 Tables using the Iceberg-compatible write API. Data is persisted as Parquet files under Iceberg table partitions.
-5. **Query and Analytics**: Once ingested, data can be queried with Amazon Athena, joined with other datasets, or analyzed using Redshift Spectrum, Amazon EMR, or third-party analytics engines such as Presto and Trino.
+1. **デバイスの EMQX への接続**：IoT デバイスが MQTT 経由で EMQX に接続し、テレメトリデータをパブリッシュします。
+2. **メッセージルーティングとルールマッチング**：EMQX は組み込みのルールエンジンを使い、受信した MQTT メッセージを定義済みトピックにマッチさせ、特定のフィールドや値を抽出します。
+3. **データ変換**：EMQX のルールでメッセージペイロードをフィルタリング、変換、または強化し、ターゲットとなる Iceberg テーブルのスキーマに合わせます。
+4. **Amazon S3 Tables への書き込み**：ルールが S3 Tables Sink アクションをトリガーし、変換済みデータをバッチ処理して Iceberg 互換の書き込み API を用いて Amazon S3 Tables に送信します。データは Iceberg テーブルのパーティション下に Parquet ファイルとして永続化されます。
+5. **クエリと分析**：取り込んだデータは Amazon Athena でクエリ可能となり、他のデータセットと結合したり、Redshift Spectrum、Amazon EMR、Presto、Trino などのサードパーティ分析エンジンで分析可能です。
 
-## Features and Advantages
+## 特長と利点
 
-Using Amazon S3 Tables data integration in EMQX can bring the following features and advantages to your business:
+EMQX で Amazon S3 Tables データ統合を利用することで、以下の特長と利点を得られます。
 
-- **Real-time Stream Processing**: EMQX's rule engine allows real-time extraction, transformation, and conditional routing of MQTT messages before delivery to S3 Tables.
-- **Iceberg-Based Storage in S3**: Messages are written to Apache Iceberg tables, eliminating the need for traditional databases while enabling SQL-like access patterns.
-- **Easy Integration with Analytics Tools**: Once data is in S3 Tables, you can query it using Amazon Athena (SQL), Amazon EMR, Redshift Spectrum, or third-party engines like Presto, Trino, or Snowflake.
-- **Flexible and Cost-Efficient Storage**: Amazon S3 provides highly durable, low-cost object storage, ideal for archiving, compliance, and time-series analytics on device-generated data.
+- **リアルタイムストリーム処理**：EMQX のルールエンジンにより、MQTT メッセージをリアルタイムに抽出・変換・条件付きルーティングし、S3 Tables に配信できます。
+- **Iceberg ベースの S3 ストレージ**：メッセージは Apache Iceberg テーブルに書き込まれ、従来のデータベースを不要にしつつ、SQL ライクなアクセスパターンを実現します。
+- **分析ツールとの簡単連携**：S3 Tables にデータがあれば、Amazon Athena（SQL）、Amazon EMR、Redshift Spectrum、Presto、Trino、Snowflake などでクエリや分析が可能です。
+- **柔軟かつコスト効率の良いストレージ**：Amazon S3 は高耐久かつ低コストのオブジェクトストレージを提供し、アーカイブ、コンプライアンス、デバイス生成データの時系列分析に最適です。
 
-## Before You Start
+## はじめる前に
 
-This section introduces the preparations required for creating an Amazon S3 Tables Sink in EMQX.
+このセクションでは、EMQX で Amazon S3 Tables Sink を作成するための準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-Before proceeding, make sure you are familiar with the following:
+作業を進める前に、以下の内容を理解していることを確認してください。
 
-#### EMQX Concepts:
+#### EMQX の概念：
 
-- [Rule Engine](./rules.md): Understand how rules define the logic for extracting and transforming data from MQTT messages.
-- [Data Integration](./data-bridges.md): Understand the concept of connectors and sinks in EMQX data integration.
+- [ルールエンジン](./rules.md)：MQTT メッセージからデータを抽出・変換するロジックを定義する方法を理解してください。
+- [データ統合](./data-bridges.md)：EMQX のコネクターおよび Sink の概念を理解してください。
 
-#### AWS Concepts:
+#### AWS の概念：
 
-If you're new to AWS S3 Tables, review the following key terms:
+AWS S3 Tables に不慣れな場合は、以下の主要用語を確認してください。
 
-- **Table Bucket**: A specialized S3 bucket used for storing Iceberg-based table data and metadata in S3 Tables.
-- **Amazon Athena**: A serverless query engine that lets you run SQL queries directly on data stored in Amazon S3. Athena supports standard SQL syntax, including Data Definition Language (DDL) statements such as `CREATE TABLE` to define schema and structure for querying.
-- **Catalog**: A metadata container in Athena that organizes databases (namespaces) and tables.
-- **Database (Namespace)**: A logical group of tables under a catalog.
-- **Iceberg Table**: A high-performance, transactional table format for data lakes. It supports schema evolution, partition pruning, and time travel queries.
+- **テーブルバケット**：S3 Tables で Iceberg ベースのテーブルデータとメタデータを保存するための特殊な S3 バケット。
+- **Amazon Athena**：Amazon S3 に保存されたデータに対して直接 SQL クエリを実行できるサーバーレスクエリエンジン。DDL ステートメント（例：`CREATE TABLE`）を使ってスキーマや構造を定義可能。
+- **カタログ**：Athena のメタデータコンテナで、データベース（ネームスペース）やテーブルを管理。
+- **データベース（ネームスペース）**：カタログ内のテーブルを論理的にグループ化したもの。
+- **Iceberg テーブル**：高性能でトランザクション対応のデータレイク向けテーブルフォーマット。スキーマ進化、パーティションプルーニング、タイムトラベルクエリをサポート。
 
-### Prepare an S3 Tables Bucket
+### S3 Tables バケットの準備
 
-Before creating a Sink in EMQX, you need to prepare the destination of MQTT data in AWS S3 Tables, including:
+EMQX で Sink を作成する前に、AWS S3 Tables 側で MQTT データの保存先を準備する必要があります。以下を用意してください。
 
-- A Table Bucket to store the actual data files.
-- A Namespace to logically group related tables.
-- An Iceberg-based Table to receive structured MQTT data.
+- 実際のデータファイルを保存するテーブルバケット
+- 関連テーブルを論理的にまとめるネームスペース
+- 構造化された MQTT データを受け取る Iceberg ベースのテーブル
 
-1. Log into the AWS Management Console.
+1. AWS マネジメントコンソールにログインします。
 
-1. Go to the S3 service. In the left navigation pane, click **Table buckets**.
+2. S3 サービスに移動し、左側のナビゲーションペインで **Table buckets** をクリックします。
 
-1. Click **Create table bucket**. Enter a name for your table bucket (e.g., `mybucket`) and click **Create table bucket**.
+3. **Create table bucket** をクリックし、テーブルバケット名（例：`mybucket`）を入力して **Create table bucket** をクリックします。
 
-1. After the bucket is created, click on it to go the the Tables list.
+4. バケット作成後、そのバケットをクリックしてテーブル一覧画面に移動します。
 
-1. Click **Create table with Athena**. A pop-up should appear asking for the namespace.  
+5. **Create table with Athena** をクリックすると、ネームスペースの入力を求めるポップアップが表示されます。
 
-1. Select **Create a namespace**. Provide a namespace name and confirm creation.
+6. **Create a namespace** を選択し、ネームスペース名を入力して作成を確定します。
 
-1. After the namespace is created, continue by clicking **Create table with Athena** again.
+7. ネームスペース作成後、再度 **Create table with Athena** をクリックして続行します。
 
-1. Define your Iceberg table schema:
+8. Iceberg テーブルのスキーマを定義します。
 
-   - Click **Query table with Athena**. In the **Query editor**:
+   - **Query table with Athena** をクリックし、**Query editor** で以下を設定します。
 
-     - Select your Catalog (e.g., `s3tablescatalog/mybucket`, if your bucket is named `mybucket`) from the **Catalog** selector.
-     - Select the namespace you've just created from the **Database** selector.
+     - **Catalog** セレクターからカタログ（例：バケット名が `mybucket` の場合は `s3tablescatalog/mybucket`）を選択。
+     - **Database** セレクターから先ほど作成したネームスペースを選択。
 
-   - Execute the following DDL to create your table and ensure the table type is set to `ICEBERG`.  For example:
+   - 以下の DDL を実行してテーブルを作成し、テーブルタイプが `ICEBERG` に設定されていることを確認します。例：
 
      ```sql
      CREATE TABLE testtable (
@@ -96,9 +96,9 @@ Before creating a Sink in EMQX, you need to prepare the destination of MQTT data
      TBLPROPERTIES ('table_type' = 'ICEBERG');
      ```
 
-     This defines an Iceberg-based table that will be used to store structured MQTT data from EMQX.
+     これは EMQX からの構造化 MQTT データを保存する Iceberg ベースのテーブルを定義します。
 
-9. Verify the table. To ensure the table has been successfully created and is currently empty, run:
+9. テーブルの検証として、以下を実行しテーブルが作成されており空であることを確認します。
 
    ```sql
    select * from testtable
@@ -106,38 +106,46 @@ Before creating a Sink in EMQX, you need to prepare the destination of MQTT data
 
    ::: tip
 
-   Make sure the correct Catalog and Database (namespace) are selected in Athena before executing any SQL. This ensures the table is created in the intended S3 Table Bucket.
+   Athena で SQL を実行する際は、必ず正しいカタログとデータベース（ネームスペース）が選択されていることを確認してください。これにより、意図した S3 テーブルバケット内にテーブルが作成されます。
 
    :::
 
-## Create a Connector
+## コネクターの作成
 
-Before adding the S3 Tables Sink, you need to create the corresponding connector.
+S3 Tables Sink を追加する前に、対応するコネクターを作成します。
 
-1. Go to the Dashboard **Integration** -> **Connector** page.
-2. Click the **Create** button in the top right corner.
-3. Select **S3 Tables** as the connector type and click next.
-4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-s3-tables`.
-5. Provide the required connection details:
-   - **S3Tables ARN**: Enter the Amazon Resource Name (ARN) of your S3 Table Bucket. You can find this in the Table buckets section in the AWS Console.
-   - **Access Key ID** and **Secret Access Key**: Enter the AWS access credentials associated with an IAM user or role that has permission to access S3 Tables and Athena.
-   - **Enable TLS**: TLS is enabled by default when connecting to S3 Tables. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
-   - **Health Check Timeout**: Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables.
-7. Use the default values for the remaining settings.
-8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the S3 Tables service.
-9. Click the **Create** button at the bottom to complete the connector creation.
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
 
-You have now completed the connector creation and will proceed to create a rule and Sink for specifying the data to be written into the S3 Tables service.
+2. 右上の **Create** ボタンをクリックします。
 
-## Create a Rule with Amazon S3 Tables Sink
+3. コネクタータイプとして **S3 Tables** を選択し、次へ進みます。
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the `mybucket` bucket in S3 Tables through the configured Sink.
+4. コネクター名を入力します。英数字の大文字・小文字の組み合わせで、ここでは `my-s3-tables` と入力します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+5. 必要な接続情報を入力します。
 
-2. Click the **Create** button in the top right corner.
+   - **S3Tables ARN**：S3 テーブルバケットの Amazon リソースネーム（ARN）を入力します。AWS コンソールの Table buckets セクションで確認可能です。
+   - **Access Key ID** と **Secret Access Key**：S3 Tables と Athena へのアクセス権限を持つ IAM ユーザーまたはロールの AWS アクセス認証情報を入力します。
+   - **Enable TLS**：S3 Tables への接続時は TLS がデフォルトで有効です。TLS 接続オプションの詳細は [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources) を参照してください。
+   - **Health Check Timeout**：コネクターが S3 Tables との接続状態を自動的にヘルスチェックする際のタイムアウト時間を指定します。
 
-3. Enter the rule ID `my_rule`, and input the following rule SQL in the SQL editor:
+7. 残りの設定はデフォルト値を使用します。
+
+8. **Create** をクリックする前に、**Test Connectivity** をクリックして S3 Tables サービスへの接続確認が可能です。
+
+9. 最後に **Create** ボタンをクリックしてコネクター作成を完了します。
+
+これでコネクター作成が完了しました。次にルールと Sink を作成し、S3 Tables へのデータ書き込みを指定します。
+
+## Amazon S3 Tables Sink を用いたルールの作成
+
+このセクションでは、EMQX でソース MQTT トピック `t/#` からメッセージを処理し、処理結果を S3 Tables の `mybucket` バケットに書き込むルールの作成方法を示します。
+
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
+
+2. 右上の **Create** ボタンをクリックします。
+
+3. ルール ID に `my_rule` を入力し、SQL エディターに以下のルール SQL を入力します。
 
    ```sql
    SELECT
@@ -149,78 +157,78 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
+   SQL に不慣れな場合は、**SQL Examples** や **Enable Debug** をクリックしてルール SQL の学習や結果のテストが可能です。
 
    :::
 
    ::: tip
 
-   Ensure that the output fields match the schema defined in your Iceberg table. If a required column is missing or misnamed, data may fail to append to the table.
+   出力フィールドが Iceberg テーブルのスキーマと一致していることを必ず確認してください。必須カラムが欠落または誤った名前の場合、データのテーブルへの追加に失敗する可能性があります。
 
    :::
 
-4. Add an action, select `S3 Tables` from the **Action Type** dropdown list, keep the action dropdown as the default `create action` option, or choose a previously created S3 Tables action from the action dropdown. Here, create a new Sink and add it to the rule.
+4. アクションを追加し、**Action Type** ドロップダウンから `S3 Tables` を選択します。アクションのドロップダウンはデフォルトの `create action` のままにするか、既存の S3 Tables アクションを選択してください。ここでは新しい Sink を作成してルールに追加します。
 
-5. Provide a Sink name and an optional description.
+5. Sink 名と任意で説明を入力します。
 
-6. Select the `my-s3-tables` connector created earlier from the **Connector** dropdown. Alternatively, click the **Create** button next to the dropdown to quickly define a new connector. Refer to [Create a Connector](#create-a-connector) for the required configuration parameters.
+6. **Connector** ドロップダウンから先ほど作成した `my-s3-tables` コネクターを選択します。新しいコネクターを素早く定義したい場合は、ドロップダウン横の **Create** ボタンをクリックしてください。設定パラメーターは [コネクターの作成](#コネクターの作成) を参照してください。
 
-7. Configure the Sink settings:
+7. Sink の設定を行います。
 
-   - **Namespace**: The namespace where your table resides. If it includes multiple segments, use dot notation (e.g., `my.name.space`).
-   - **Table**: The name of the Iceberg table to append data to (e.g., `testtable`).
-   - **Max Records**: The maximum number of records to batch before writing to S3. Once reached, the batch is flushed and uploaded immediately.
-   - **Time Interval**: The maximum time (in milliseconds) to wait before flushing data, even if the record count has not reached the Max Records threshold.
+   - **Namespace**：テーブルが存在するネームスペース。複数セグメントの場合はドット区切りで指定（例：`my.name.space`）。
+   - **Table**：データを追加する Iceberg テーブル名（例：`testtable`）。
+   - **Max Records**：S3 へ書き込む前にバッチ処理する最大レコード数。到達すると即座にバッチをフラッシュしてアップロードします。
+   - **Time Interval**：Max Records に達していなくても、指定した最大待機時間（ミリ秒）経過後にデータをフラッシュします。
 
-8. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+8. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+9. **詳細設定** を展開し、必要に応じて高度な設定オプションを調整します（任意）。詳細は [詳細設定](#advanced-settings) を参照してください。
 
-10. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+10. 残りの設定はデフォルト値を使用し、**Create** ボタンをクリックして Sink 作成を完了します。作成成功後、ルール作成画面に戻り、新しい Sink がルールのアクションに追加されます。
 
-11. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+11. ルール作成画面で **Create** ボタンをクリックし、ルール作成全体を完了します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new S3 Tables Sink on the **Actions (Sink)** tab.
+これでルール作成が正常に完了しました。**Rules** ページで新規作成したルールを確認でき、**Actions (Sink)** タブで新しい S3 Tables Sink を確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into S3 Tables after being parsed by the rule `my_rule`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーを視覚的に確認でき、トピック `t/#` のメッセージがルール `my_rule` によって解析され、S3 Tables に書き込まれる流れを把握できます。
 
-## Test the Rule
+## ルールのテスト
 
-This section shows how to test the rule configured with the S3 Tables Sink.
+このセクションでは、S3 Tables Sink を設定したルールのテスト方法を説明します。
 
-1. Use MQTTX to publish a message to the topic `t/1`:
+1. MQTTX を使い、トピック `t/1` にメッセージをパブリッシュします。
 
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "str": "hello S3 Tables", "int": 123 }'
    ```
 
-   This message contains a `payload.str` field and a `payload.int` field, which match the rule SQL and the table schema you defined earlier.
+   このメッセージは `payload.str` と `payload.int` フィールドを含み、ルール SQL とテーブルスキーマに合致しています。
 
-2. Monitor rule metrics and Sink status in the **Rules** page. There should be one new incoming and one new outgoing message.
+2. **Rules** ページでルールのメトリクスおよび Sink の状態を監視します。新規の受信メッセージと送信メッセージがそれぞれ 1 件ずつ増えているはずです。
 
-3. Open the Athena query editor. Ensure the correct **Catalog** (e.g., `s3tablescatalog/mybucket`) and **Database** (namespace) are selected.
+3. Athena のクエリエディターを開き、正しい **Catalog**（例：`s3tablescatalog/mybucket`）と **Database**（ネームスペース）が選択されていることを確認します。
 
-4. Run the following SQL query:
+4. 以下の SQL クエリを実行します。
 
    ```sql
    SELECT * FROM testtable
    ```
 
-   You should see a row like:
+   以下のような行が表示されるはずです。
 
    | c_str           | c_long |
    | --------------- | ------ |
    | hello S3 Tables | 123    |
 
-## Advanced Settings
+## 詳細設定
 
-This section delves into the advanced configuration options available for the S3 Tables Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+このセクションでは、S3 Tables Sink の詳細設定オプションについて説明します。ダッシュボードの Sink 設定画面で **Advanced Settings** を展開し、用途に応じて以下のパラメーターを調整できます。
 
-| Field Name                | Description                                                  | Default Value  |
-| ------------------------- | ------------------------------------------------------------ | -------------- |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and S3 Tables. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`           |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from S3 Tables, the request is deemed to have expired. |                |
-| **Health Check Interval** | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with S3 Tables. | `15`           |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the S3 Tables Sink. The buffer workers temporarily store data before sending it to S3 Tables, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`          |
-| **Query Mode**            | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to S3 Tables does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at S3 Tables. | `Asynchronous` |
-| **In-flight  Window**     | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with S3 Tables. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`          |
+| フィールド名               | 説明                                                                                                          | デフォルト値  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------ |
+| **Buffer Pool Size**      | EMQX と S3 Tables 間のデータフローを管理するバッファワーカープロセスの数を指定します。これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへの送信を最適化しスムーズなデータ転送を支えます。 | `16`         |
+| **Request TTL**           | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストがバッファ内にこの TTL を超えて滞留するか、送信後に S3 Tables からタイムリーな応答やアックが得られない場合、リクエストは期限切れとみなされます。 |              |
+| **Health Check Interval** | Sink が S3 Tables との接続状態を自動的にヘルスチェックする間隔（秒）を指定します。                                                         | `15`         |
+| **Max Buffer Queue Size** | S3 Tables Sink の各バッファワーカーがバッファリング可能な最大バイト数を指定します。ワーカーはデータを一時保存し、効率的なデータストリーム処理を実現します。システム性能やデータ転送要件に応じて調整してください。 | `256`        |
+| **Query Mode**            | メッセージ送信を最適化するため、`synchronous`（同期）または `asynchronous`（非同期）モードを選択可能です。非同期モードでは S3 Tables への書き込みが MQTT メッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージ到着前に受信する可能性があります。 | `Asynchronous` |
+| **In-flight Window**      | 「インフライトキューリクエスト」とは、送信済みで応答やアックをまだ受け取っていないリクエストを指します。この設定は Sink と S3 Tables 間の通信で同時に存在可能なインフライトリクエストの最大数を制御します。<br/>`Request Mode` が `asynchronous` の場合、同一 MQTT クライアントからのメッセージを厳密に順次処理したい場合は、この値を `1` に設定してください。 | `100`        |

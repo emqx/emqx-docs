@@ -1,94 +1,93 @@
-# Ingest MQTT Data into GreptimeDB
+# GreptimeDBへのMQTTデータ取り込み
 
-[GreptimeDB](https://github.com/GreptimeTeam/greptimedb) is an open-source time-series database with a special focus on scalability, analytical capabilities and efficiency. It's designed to work on the infrastructure of the cloud era, and users benefit from its elasticity and commodity storage. EMQX now supports connection to mainstream versions of GreptimeDB, GreptimeCloud or GreptimeDB Enterprise.
+[GreptimeDB](https://github.com/GreptimeTeam/greptimedb)は、スケーラビリティ、分析機能、効率性に特化したオープンソースの時系列データベースです。クラウド時代のインフラ上での動作を想定して設計されており、ユーザーはその弾力性と汎用ストレージの恩恵を受けられます。EMQXは現在、GreptimeDBの主流バージョンであるGreptimeCloudやGreptimeDB Enterpriseとの接続をサポートしています。
 
-This page provides a comprehensive introduction to the data integration between EMQX and GreptimeDB with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとGreptimeDB間のデータ連携について包括的に紹介し、データ連携の作成および検証方法を実践的に解説します。
 
-## How It Works
+## 動作概要
 
-GreptimeDB data integration is a built-in feature in EMQX that combines the real-time data capturing and transmission capabilities of EMQX with the data storage and analysis capabilities of GreptimeDB. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to GreptimeDB for storage and analysis, eliminating the need for complex coding. The workflow is as follows:
+GreptimeDBデータ連携はEMQXに組み込まれた機能で、EMQXのリアルタイムデータキャプチャと転送能力と、GreptimeDBのデータ保存・分析能力を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからGreptimeDBへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。ワークフローは以下の通りです。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and GreptimeDB:
+以下の図は、EMQXとGreptimeDB間の典型的なデータ連携アーキテクチャを示しています。
 
 ![EMQX Integration GreptimeDB](./assets/emqx-integration-greptimedb.png)
 
-1. **Message publication and reception**: Industrial devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol. This data includes production line identifiers and energy consumption values. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Rule Engine Processes Messages**: The built-in rule engine processes messages from specific sources based on topic matching. When a message arrives, it passes through the rule engine, which matches it with corresponding rules and processes the message data. This can include transforming data formats, filtering specific information, or enriching messages with context information.
-3. **Data ingestion into GreptimeDB**: Rules defined in the rule engine trigger operations to write messages to GreptimeDB. The GreptimeDB Sink provides Line Protocol templates that allow flexible definitions of the data format to write specific message fields to the corresponding tables and columns in GreptimeDB.
+1. **メッセージのパブリッシュと受信**：産業用デバイスはMQTTプロトコルを通じてEMQXに正常に接続し、定期的にエネルギー消費データをパブリッシュします。このデータには生産ラインの識別子やエネルギー消費値が含まれます。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づき特定のソースからのメッセージを処理します。メッセージが到着するとルールエンジンを通過し、対応するルールとマッチングしてメッセージデータを処理します。これにはデータ形式の変換、特定情報のフィルタリング、メッセージへのコンテキスト情報付加などが含まれます。
+3. **GreptimeDBへのデータ取り込み**：ルールエンジンで定義されたルールにより、メッセージをGreptimeDBに書き込む操作がトリガーされます。GreptimeDB SinkはLine Protocolテンプレートを提供し、特定のメッセージフィールドをGreptimeDBの対応するテーブルやカラムに柔軟に書き込むデータ形式を定義できます。
 
-After energy consumption data is written to GreptimeDB, you can flexibly use SQL statements or Prometheus query language to analyze the data. For example:
+エネルギー消費データがGreptimeDBに書き込まれた後は、SQL文やPrometheusクエリ言語を用いて柔軟に分析が可能です。例えば：
 
-- Connect to visualization tools such as Grafana to generate charts and display energy consumption data.
-- Connect to application systems such as ERP for production analysis and production plan adjustments.
-- Connect to business systems to perform real-time energy usage analysis, facilitating data-driven energy management.
+- Grafanaなどの可視化ツールに接続してチャートを生成し、エネルギー消費データを表示する。
+- ERPなどの業務システムに接続し、生産分析や生産計画の調整に活用する。
+- ビジネスシステムに接続し、リアルタイムのエネルギー使用分析を行い、データ駆動型のエネルギー管理を実現する。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with GreptimeDB brings the following features and advantages to your business:
+GreptimeDBとのデータ連携は、以下の特長と利点をビジネスにもたらします。
 
-- **Ease of Use**: EMQX and GreptimeDB both offer a user-friendly experience in development. EMQX provides the standard MQTT protocol along with ready-to-use various authentication, authorization, and clustering features. GreptimeDB offers user-friendly designs like Time-Series Tables and schemaless architecture. The integration of both can accelerate the process of business integration and development.
-- **Efficient Data Handling**: EMQX can handle a large number of IoT device connections and message throughput efficiently. GreptimeDB excels in data writing, storage, and querying, meeting the data processing needs of IoT scenarios without overwhelming the system.
-- **Message Transformation**: Messages can undergo rich processing and transformation within EMQX rules before being written to GreptimeDB.
-- **Efficient Storage and Scalability**: EMQX and GreptimeDB both have cluster scaling capabilities, allowing flexible horizontal scaling as your business grows to meet expanding demands.
-- **Advanced Querying Capabilities**: GreptimeDB provides optimized functions, operators, and indexing techniques for efficient querying and analysis of timestamp data, enabling precise insights to be extracted from IoT time-series data.
+- **使いやすさ**：EMQXとGreptimeDBはともに開発者に優しい設計です。EMQXは標準のMQTTプロトコルに加え、多様な認証・認可・クラスタリング機能を提供します。GreptimeDBは時系列テーブルやスキーマレス構造などユーザーフレンドリーな設計を持ちます。両者の連携により、ビジネス統合と開発を加速できます。
+- **効率的なデータ処理**：EMQXは多数のIoTデバイス接続とメッセージスループットを効率的に処理可能です。GreptimeDBはデータ書き込み、保存、クエリに優れており、IoTシナリオのデータ処理要件をシステムに負荷をかけずに満たします。
+- **メッセージ変換**：メッセージはEMQXルール内で豊富な処理・変換を経てからGreptimeDBに書き込まれます。
+- **効率的な保存とスケーラビリティ**：EMQXとGreptimeDBはともにクラスタースケール機能を持ち、ビジネスの成長に応じて柔軟に水平スケールが可能です。
+- **高度なクエリ機能**：GreptimeDBはタイムスタンプデータの効率的なクエリ・分析のために最適化された関数、演算子、インデックス技術を提供し、IoT時系列データから精緻な洞察を引き出せます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create a GreptimeDB data integration, including how to install a GreptimeDB server.
+このセクションでは、GreptimeDBデータ連携の作成を始める前に必要な準備、特にGreptimeDBサーバーのインストール方法について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQXデータ連携の[ルール](./rules.md)に関する知識
+- [データ連携](./data-bridges.md)に関する知識
 
-### Install GreptimeDB Server
+### GreptimeDBサーバーのインストール
 
-1. [Install GreptimeDB](https://greptime.com/download) via Docker, and then run the docker image.
+1. Dockerを使って[GreptimeDB](https://greptime.com/download)をインストールし、Dockerイメージを起動します。
 
    ```bash
-   # TO start the GreptimeDB docker image
-   docker run -p 127.0.0.1:4000-4003:4000-4003 \
-     -v "$(pwd)/greptimedb_data:/greptimedb_data" \
-     --name greptime --rm \
-     greptime/greptimedb:latest standalone start \
-     --http-addr 0.0.0.0:4000 \
-     --rpc-bind-addr 0.0.0.0:4001 \
-     --mysql-addr 0.0.0.0:4002 \
-     --postgres-addr 0.0.0.0:4003 \
-     --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
+   # GreptimeDBのDockerイメージを起動する
+   docker run -p 4000-4004:4000-4004 \
+   -p 4242:4242 -v "$(pwd)/greptimedb:/tmp/greptimedb" \
+   --name greptime --rm \
+   greptime/greptimedb standalone start \
+   --http-addr 0.0.0.0:4000 \
+   --rpc-addr 0.0.0.0:4001 \
+   --mysql-addr 0.0.0.0:4002 \
+   --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
    ```
 
-2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/deployments/authentication/static).
-3. With GreptimeDB running, visit [http://localhost:4000/dashboard](http://localhost:4000/dashboard) to use the GreptimeDB dashbaord. The username and password are `greptime_user` and `greptime_pwd`.
+2. `user-provider`パラメータはGreptimeDBの認証を設定します。ファイルによる設定も可能です。詳細は[ドキュメント](https://docs.greptime.com/user-guide/deployments/authentication/static)を参照してください。
+3. GreptimeDBが起動したら、[http://localhost:4000/dashboard](http://localhost:4000/dashboard)にアクセスしてGreptimeDBダッシュボードを利用できます。ユーザー名とパスワードはそれぞれ`greptime_user`と`greptime_pwd`です。
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the GreptimeDB server.
+このセクションでは、SinkをGreptimeDBサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and GreptimeDB on the local machine. If you have GreptimeDB and EMQX running remotely, adjust the settings accordingly.
+以下の手順はEMQXとGreptimeDBをローカルマシンで動作させていることを前提としています。リモート環境の場合は設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **GreptimeDB** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_greptimedb`.
-   - **Server Host**: Enter `127.0.0.1:4001`. If you are creating a connection to GreptimeCloud, use 443 as the port by entering `{url}:443`.
-   - **Database**: Enter `public`. If you are connecting to GreptimeCloud, enter the service name instead.
-   - **Username** and **Password**: Enter `greptime_user` and `greptime_pwd`, which are set in the [Install GreptimeDB Server](#install-greptimedb-server). If you are connecting to GreptimeCloud, enter the service username and password.
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GreptimeDB server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GreptimeDB Sink to specify the data to be forwarded to GreptimeDB. For detailed steps, see [Create a Rule with GreptimeDB Sink](#create-a-rule-with-greptimedb-sink).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
+2. ページ右上の **Create** をクリックします。
+3. **Create Connector** ページで **GreptimeDB** を選択し、**Next** をクリックします。
+4. **Configuration** ステップで以下を設定します：
+   - コネクター名を入力します。英数字の組み合わせで、例：`my_greptimedb`。
+   - **Server Host**：`127.0.0.1:4001` と入力します。GreptimeCloudに接続する場合はポートを443にして `{url}:443` と入力してください。
+   - **Database**：`public` と入力します。GreptimeCloudの場合はサービス名を入力します。
+   - **Username** と **Password**：`greptime_user` と `greptime_pwd` を入力します（[GreptimeDBサーバーのインストール](#greptimedbサーバーのインストール)で設定したもの）。GreptimeCloudの場合はサービスのユーザー名とパスワードを入力してください。
+5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターがGreptimeDBサーバーに接続できるかテストできます。
+6. ページ下部の **Create** ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックしてGreptimeDB Sinkを使ったルール作成に進めます。詳細は[GreptimeDB Sinkを使ったルール作成](#create-a-rule-with-greptimedb-sink)を参照してください。
 
-## Create a Rule with GreptimeDB Sink
+## GreptimeDB Sinkを使ったルール作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to GreptimeDB. 
+このセクションでは、EMQXでルールを作成し、ソースMQTTトピック `t/#` からのメッセージを処理して、設定済みのSinkを通じてGreptimeDBに送信する方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードに入り、**Integration** -> **Rules** をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の **Create** をクリックします。
 
-3. Input `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Here we want to save the MQTT messages under topic `t/#`  to GreptimeDB, we can use the SQL syntax below. 
+3. ルールIDに `my_rule` を入力し、**SQL Editor** にルールを設定します。ここではトピック `t/#` のMQTTメッセージをGreptimeDBに保存するため、以下のSQL文を使用します。
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   注意：独自のSQL文を指定する場合は、Sinkが必要とするすべてのフィールドを `SELECT` 部分に含めてください。
 
    ```sql
    SELECT
@@ -99,55 +98,51 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は **SQL Examples** と **Enable Test** をクリックしてSQLルールの学習とテストができます。
 
    :::
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to GreptimeDB.
+4. + **Add Action** ボタンをクリックして、ルールに紐づくアクションを定義します。このアクションにより、EMQXはルールで処理したデータをGreptimeDBに送信します。
 
-5. Select `GreptimeDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action** ドロップダウンから `GreptimeDB` を選択します。**Action** はデフォルトの `Create Action` のままにします。既にSinkを作成している場合はそれを選択可能ですが、ここでは新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+6. Sinkの名前を入力します。英数字の組み合わせで指定してください。
 
-7. From the **Connector** dropdown box, select the `my_greptimedb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector** ドロップダウンから先ほど作成した `my_greptimedb` を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックします。設定パラメータは[コネクターの作成](#コネクターの作成)を参照してください。
 
-8. Configure **Write Syntax**. Specify a text-based format that provides the measurement, tags, fields, and timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax. GreptimeDB supports data formats compatible with InfluxDB. <!--Select the data format as **JSON** or **Line Protocol**,-->
-
-   <!--For **JSON** format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.-->
-
-   <!--For **Line Protocol** format, specify a text-based format that provides the measurement, tags, fields, and timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.-->
+8. **Write Syntax** を設定します。これはテキストベースのフォーマットで、データポイントのmeasurement、tags、fields、timestampを指定し、[InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/)の構文に準拠したプレースホルダーをサポートします。GreptimeDBはInfluxDB互換のデータフォーマットをサポートしています。
 
    ::: tip
 
-   - To write a signed integer type value to GreptimeDB, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`.
-   - To write an unsigned integer type value to GreptimeDB, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. 
+   - GreptimeDBに符号付き整数型の値を書き込む場合は、プレースホルダーの後に `i` を付けます。例：`${payload.int}i`
+   - 符号なし整数型の値を書く場合は、プレースホルダーの後に `u` を付けます。例：`${payload.int}u`
 
    :::
 
-9. Specify the **Time Precision**: Select `millisecond` by default. 
+9. **Time Precision** を指定します。デフォルトは `millisecond` です。
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のために、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-11. **Advanced settings (optional)**: Choose whether to use **sync** or **async** query mode, and whether to enable queue or batch. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+11. **詳細設定（任意）**：**sync** または **async** クエリモードの選択、キューやバッチの有効化を設定します。詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-12. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the GreptimeDB server.
+12. **Create** をクリックする前に、**Test Connectivity** をクリックしてSinkがGreptimeDBサーバーに接続できるかテストできます。
 
-13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+13. **Create** ボタンをクリックしてSinkの設定を完了します。新しいSinkが **Action Outputs** に追加されます。
 
-14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+14. **Create Rule** ページに戻り、設定内容を確認して **Create** をクリックしルールを生成します。
 
-You have now successfully created the rule for forwarding data through the GreptimeDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new GreptimeDB Sink.
+これでGreptimeDB Sinkを通じたデータ転送ルールの作成が完了しました。**Integration** -> **Rules** ページで新規作成したルールを確認できます。**Actions(Sink)** タブをクリックすると新しいGreptimeDB Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to GreptimeDB after parsing by rule `my_rule`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `t/#` のメッセージがルール `my_rule` により解析されGreptimeDBに送信・保存されている様子を確認できます。
 
-## Test the Rule
+## ルールのテスト
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
+MQTTXを使ってトピック `t/1` にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello GreptimeDB" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+Sinkの稼働状況を確認すると、新規の受信メッセージと送信メッセージが1件ずつあるはずです。
 
-In the GreptimeDB dashboard, you can confirm whether the message is written into the GreptimeDB via `SQL`.
+GreptimeDBダッシュボードでSQLを使い、メッセージがGreptimeDBに書き込まれていることを確認できます。

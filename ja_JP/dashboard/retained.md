@@ -1,50 +1,50 @@
 # Retained Messages
 
-You can view all retained messages in the EMQX on the **Retained Messages** page. When a user publishes a retained message, EMQX will save this message in the system. The user can view this message on the Retained Messages page. When the user subscribes to the topic of this retained message, EMQX will publish this message to the topic, and users can receive this message immediately. The retained message is never expired by default unless the user manually deletes this message.
+EMQXの**Retained Messages**ページでは、すべての保持メッセージを確認できます。ユーザーが保持メッセージをパブリッシュすると、EMQXはこのメッセージをシステム内に保存します。ユーザーはRetained Messagesページでこのメッセージを確認でき、保持メッセージのトピックをサブスクライブすると、EMQXはそのメッセージをトピックにパブリッシュし、ユーザーは即座にメッセージを受信できます。保持メッセージは、ユーザーが手動で削除しない限り、デフォルトで期限切れになりません。
 
 ## Retained Messages List
 
-The Retained Messages List displays all retained messages currently stored in the system. The list includes the topic, Quality of Service (QoS) level, Client ID of the publisher, and the time when the retained message was published. Within the list, you can click the **Show Payload** and **Delete** buttons to inspect the payload of a retained message and delete a retained message respectively. Clicking the **Refresh** button in the top-right corner refreshes the current retained messages list while clicking **Settings** redirects to the retained messages settings page.
+Retained Messages Listには、現在システムに保存されているすべての保持メッセージが表示されます。リストにはトピック、QoSレベル、パブリッシャーのClient ID、保持メッセージがパブリッシュされた時間が含まれます。リスト内の**Show Payload**ボタンと**Delete**ボタンをクリックすることで、それぞれ保持メッセージのペイロードを確認したり、保持メッセージを削除したりできます。右上の**Refresh**ボタンをクリックすると現在の保持メッセージリストが更新され、**Settings**をクリックすると保持メッセージ設定ページに遷移します。
 
-EMQX by default retains messages for three system topics. In a clustered environment, retained messages under different system topics are stored based on the node name:
+EMQXはデフォルトで3つのシステムトピックのメッセージを保持します。クラスター環境では、異なるシステムトピックの保持メッセージはノード名に基づいて保存されます。
 
-- $SYS/brokers/+/sysdescr: System description of the current EMQX node.
-- $SYS/brokers/+/version: The version number of the current EMQX node.
-- $SYS/brokers: Number and names of all nodes in the current EMQX cluster.
+- $SYS/brokers/+/sysdescr: 現在のEMQXノードのシステム説明。
+- $SYS/brokers/+/version: 現在のEMQXノードのバージョン番号。
+- $SYS/brokers: 現在のEMQXクラスター内のすべてのノードの数と名前。
 
 ![image](./assets/retained-messages.png)
 
 ### Delete Retained Message
 
-Usually, you can delete retained messages from the client by publishing an empty message to the topic of the retained message. In addition to this method, you can also delete a specified retained message by clicking the **Delete** button in the retained messages list. Furthermore, you have the option to delete all retained messages across the cluster by using the **Clear All** button. You can also set the expiration time for retained messages on the retained messages configuration page. When a retained message reaches its expiration time, EMQX will automatically delete the message.
+通常、クライアントから保持メッセージのトピックに空のメッセージをパブリッシュすることで保持メッセージを削除できます。この方法に加え、保持メッセージリストの**Delete**ボタンをクリックして特定の保持メッセージを削除することも可能です。さらに、**Clear All**ボタンを使用してクラスター全体の保持メッセージを一括削除することもできます。保持メッセージの有効期限は保持メッセージ設定ページで設定でき、有効期限に達した保持メッセージはEMQXが自動的に削除します。
 
 ### View Payload
 
-If you want to view the Payload of the retained message, you can click the **Show Payload** in **Actions** column of the retained message item.
+保持メッセージのペイロードを確認したい場合は、保持メッセージ項目の**Actions**列にある**Show Payload**をクリックしてください。
 
-On the pop-up window, you can click the **Copy** button at the lower right corner to copy the payload. You can also select the payload display format from the drop-down list at the lower left corner have more intuitive display for some special payload formats, such as JSON or Hex format.
+ポップアップウィンドウでは、右下の**Copy**ボタンをクリックしてペイロードをコピーできます。また、左下のドロップダウンリストからペイロードの表示形式を選択でき、JSONや16進数など特定のペイロード形式をより直感的に表示できます。
 
 ## Retainer Settings
 
-By clicking the **Settings** button in the upper right corner of the **Retained Messages** page, you will be redirected to the **Retainer** tab on the **Management** -> **MQTT Settings** page where you can enable or disable the retained messages feature and also configure the settings for retained messages.
+**Retained Messages**ページ右上の**Settings**ボタンをクリックすると、**Management** -> **MQTT Settings**ページの**Retainer**タブに遷移します。ここで保持メッセージ機能の有効／無効を切り替えたり、保持メッセージの設定を行えます。
 
 ::: tip
 
-If you disable the retained messages feature by clicking the toggle switch, an **Enable** button will be displayed on the Retained Messages page. By clicking the button, you will be redirected to the **Retainer** tab.
+保持メッセージ機能をトグルスイッチで無効にすると、Retained Messagesページに**Enable**ボタンが表示されます。このボタンをクリックすると、**Retainer**タブに遷移します。
 
 :::
 
 <img src="./assets/mqtt-settings-retainer.png" alt="mqtt-settings-retainer" style="zoom:50%;" />
 
-Below are detailed descriptions of each field.
+以下は各項目の詳細説明です。
 
-| Configuration item      | Type     | Optional value    | Default value | Description                                                  |
-| ----------------------- | -------- | ----------------- | ------------- | ------------------------------------------------------------ |
-| Storage Type            | -        | Built-in Database | -             | -                                                            |
-| Storage Method          | Enum     | `ram`, `disc`     | `ram`         | `ram`: Only stored in memory; <br />`disc`: Stored in memory and hard disk. |
-| Max Retained Messages   | Integer  | ≥ 0               | 0 (Unlimited) | 0: Unlimit. <br />When you set a limit on the maximum number of retained messages, EMQX replaces existing messages once the limit is reached. However, you cannot store retained messages for new topics beyond the limit. |
-| Max Payload Size        | Bytesize |                   | 1MB           | Retain the maximum payload value of the message. If the payload value exceeds the maximum value, the EMQX will treat the retained reserved message as a normal message. |
-| Message Expire Interval | Duration |                   | Never Expire  | The expiration time of the retained message, and 0 means never expire. If the message expiration interval is set in the PUBLISH packet, the message expiration interval in the PUBLISH packet shall prevail. |
-| Message Clear Interval  | Duration |                   | Disabled      | Interval to clean up expired messages.                       |
-| Max Publish Rate        | Integer  | ≥ 0               | 2000          | The maximum rate of publishing retained messages. Messages published over the limit are delivered but not stored as retained. |
-| Deliver Rate            | Integer  | ≥ 0               | 1000          | The maximum rate of delivering retained messages.            |
+| 設定項目                | タイプ     | オプション値        | デフォルト値   | 説明                                                         |
+| ----------------------- | ---------- | ------------------- | -------------- | ------------------------------------------------------------ |
+| Storage Type            | -          | Built-in Database   | -              | -                                                            |
+| Storage Method          | Enum       | `ram`, `disc`       | `ram`          | `ram`: メモリのみ保存<br />`disc`: メモリとハードディスクに保存。 |
+| Max Retained Messages   | Integer    | ≥ 0                 | 0 (無制限)     | 0は無制限。<br />最大保持メッセージ数を設定すると、上限に達した際に既存のメッセージが置き換えられます。ただし新しいトピックの保持メッセージは上限を超えて保存できません。 |
+| Max Payload Size        | Bytesize   |                     | 1MB            | メッセージの最大ペイロードサイズ。超過した場合、EMQXは保持メッセージではなく通常メッセージとして扱います。 |
+| Message Expire Interval | Duration   |                     | 期限切れなし   | 保持メッセージの有効期限。0は期限切れなし。PUBLISHパケットにメッセージ有効期限が設定されている場合は、そちらが優先されます。 |
+| Message Clear Interval  | Duration   |                     | 無効           | 期限切れメッセージをクリーンアップする間隔。                      |
+| Max Publish Rate        | Integer    | ≥ 0                 | 2000           | 保持メッセージのパブリッシュ最大レート。上限を超えたメッセージは配信されますが保持されません。 |
+| Deliver Rate            | Integer    | ≥ 0                 | 1000           | 保持メッセージの配信最大レート。                                   |

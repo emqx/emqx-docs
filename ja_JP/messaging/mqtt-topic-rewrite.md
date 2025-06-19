@@ -1,32 +1,28 @@
-# Topic Rewrite
+# トピック書き換え
 
-Many IoT devices do not support reconfiguration or upgrade, so it is hard to change their subscribed topics. To solve this issue, EMQX has introduced the topic rewrite feature, that is, with relevant rules set, EMQX will rewrite the subscribed topic of the client sending a new message or subscribing to a new topic.
+多くのIoTデバイスは再設定やアップグレードに対応していないため、サブスクライブするトピックを変更することが困難です。この問題を解決するために、EMQXではトピック書き換え機能を導入しています。関連するルールを設定することで、EMQXは新しいメッセージを送信するクライアントや新しいトピックをサブスクライブするクライアントのサブスクライブトピックを自動的に書き換えます。
 
-You can combine the [retained message](./mqtt-retained-message.md) and [delayed publish](./mqtt-delayed-publish.md) feature with this topic rewriting. For example, when users want to use the delayed publish, they can use topic rewrite to redirect the message to the required topic.
+このトピック書き換え機能は、[保持メッセージ](./mqtt-retained-message.md)や[遅延パブリッシュ](./mqtt-delayed-publish.md)機能と組み合わせて利用できます。例えば、遅延パブリッシュを使用したい場合に、トピック書き換えを使ってメッセージを必要なトピックにリダイレクトすることが可能です。
 
 ::: tip
-Authorization checks are performed before the topic is rewritten.
+トピックの書き換えは、書き換え前に認可チェックが行われます。
 :::
 
-:::tip
+::: tip
 
-Topic rewriting only applies to the actual topics when it comes to client subscriptions/unsubscriptions for shared subscription topics. In other words, it only affects the portion of shared subscription topics after removing the prefix `$share/<group-name>/` or `$queue`.
+トピック書き換えは、クライアントのサブスクライブ／アンサブスクライブ時に共有サブスクリプショントピックに対しては、実際のトピック部分にのみ適用されます。つまり、共有サブスクリプショントピックのプレフィックス `$share/<group-name>/` や `$queue` を除いた部分にのみ影響します。
 
-For example, when a client subscribes/unsubscribes to a shared subscription topic filter like `$share/group/t/1` or `$queue/t/2`, it will only attempt to match and rewrite `t/1` or `t/2`, ignoring `$share/group/` and `$queue/`.
+例えば、クライアントが `$share/group/t/1` や `$queue/t/2` のような共有サブスクリプショントピックフィルターをサブスクライブ／アンサブスクライブする場合、EMQXは `$share/group/` や `$queue/` を無視して `t/1` や `t/2` の部分だけをマッチングおよび書き換えの対象とします。
 
-For more information about shared subscriptions and `$queue`, please refer to [Shared Subscriptions](./mqtt-shared-subscription).
+共有サブスクリプションや `$queue` の詳細については、[共有サブスクリプション](./mqtt-shared-subscription)をご参照ください。
 
 :::
 
-## Configure Topic Rewrite Rules
+## トピック書き換えルールの設定
 
-EMQX topic rewrite rules need to be configured.
-You may add multiple topic rewrite rules.
-The number of rules is not limited, but any MQTT message that carries a topic needs to match the rewrite rule again.
-Therefore, the performance overhead in high-throughput scenarios is proportional to the number of rules,
-so, use this feature with caution.
+EMQXのトピック書き換えルールは設定が必要です。複数のトピック書き換えルールを追加できます。ルール数に制限はありませんが、トピックを持つすべてのMQTTメッセージは再度ルールにマッチングされるため、高スループット環境ではルール数に比例してパフォーマンスオーバーヘッドが発生します。したがって、この機能は慎重に使用してください。
 
-The format of rewrite rule for each topic is as follows:
+各トピックの書き換えルールのフォーマットは以下の通りです。
 
 ```bash
 rewrite = [
@@ -39,32 +35,23 @@ rewrite = [
 ]
 ```
 
-Each rewrite rule consists of a filter, regular expression.
+各書き換えルールはフィルターと正規表現で構成されます。
 
-The rewrite rules are divided into `publish`, `subscribe` and `all` rules. The `publish` rule matches the topics carried by PUBLISH messages, and the `subscribe` rule matches the topics carried by SUBSCRIBE and UNSUBSCRIBE messages. The `all` rule is valid for topics carried by PUBLISH, SUBSCRIBE and UNSUBSCRIBE messages.
+書き換えルールは `publish`、`subscribe`、`all` の3種類に分かれます。`publish` ルールはPUBLISHメッセージのトピックにマッチし、`subscribe` ルールはSUBSCRIBEおよびUNSUBSCRIBEメッセージのトピックにマッチします。`all` ルールはPUBLISH、SUBSCRIBE、UNSUBSCRIBEメッセージのトピックすべてに有効です。
 
-On the premise that the topic rewrite is enabled, when receiving MQTT packet such as PUBLISH messages with a topic,
-EMQX will use the topic in the packet to sequentially match the topic filter part of the rules in the configuration file.
-Once the match is successful the regular expression is used to extract the information in the topic,
-and then the old topic is replaced by the target expression to form a new topic.
+トピック書き換えが有効な状態で、PUBLISHメッセージなどのMQTTパケットを受信すると、EMQXはパケット内のトピックを使って設定ファイル内のルールのトピックフィルター部分と順にマッチングを試みます。マッチングに成功すると、正規表現を使ってトピック内の情報を抽出し、元のトピックをターゲット式に置き換えて新しいトピックを生成します。
 
-The target expression can use variables in the format of `$N` to match the elements extracted from the regular expression.
-The value of `$N` is the Nth element extracted from the regular expression,
-for example, `$1` is the first element extracted by the regular expression.
+ターゲット式では、正規表現から抽出した要素を `$N` 形式の変数で参照できます。ここで `$N` は正規表現で抽出したN番目の要素を意味し、例えば `$1` は最初の要素です。
 
-And the target expression alose support use `${clientid}` to represent the `client ID` and `${username}` to represent the client `username`.
+また、ターゲット式では `${clientid}` をクライアントID、`${username}` をクライアントのユーザー名として使用できます。
 
-It should be noted that EMQX reads the rewrite rules in order of the configuration file.
-When a topic can match the topic filters of multiple topic rewrite rules at the same time,
-EMQX uses the first matching rule to rewrite the topic.
+なお、EMQXは設定ファイルの記述順にルールを読み込みます。複数のトピック書き換えルールのトピックフィルターに同時にマッチした場合は、最初にマッチしたルールでトピックを書き換えます。
 
-If the regular expression in the rule does not match the topic of the MQTT packet,
-the rewrite fails, and no other rule will be used to rewrite.
-Therefore, users need to carefully design MQTT packet topics and topic rewrite rules.
+ルール内の正規表現がMQTTパケットのトピックにマッチしない場合は書き換えに失敗し、他のルールは適用されません。したがって、MQTTパケットのトピックとトピック書き換えルールは慎重に設計する必要があります。
 
-## Example
+## 例
 
-Assume that the following topic rewrite rules have been added to the configuration file:
+以下のトピック書き換えルールが設定ファイルに追加されているとします。
 
 ```bash
 rewrite = [
@@ -89,10 +76,10 @@ rewrite = [
 ]
 ```
 
-At this time we subscribe to five topics:  `y/a/z/b`, `y/def`, `x/1/2`, `x/y/2`, and `x/y/z` :
+このとき、以下の5つのトピックにサブスクライブするとします：`y/a/z/b`、`y/def`、`x/1/2`、`x/y/2`、`x/y/z`。
 
-+ `y/def` does not match any of the topic filters, so it does not perform topic rewriting, and just subscribes to `y/def` topics.
-+ `y/a/z/b` matches the  `y/+/z/#` topic filter, EMQX executes the first rule, and matches the element `[a、b]` through a regular expression, brings the matched second element into `y/z/$2`, and actually subscribes to the topic `y/z/b`.
-+ `x/1/2` matches `x/#` topic filter, EMQX executes the second rule. It does not match elements through regular expressions, does not perform topic rewrite, and actually subscribes to the topic of `x/1/2`.
-+ `x/y/2`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches the third preferentially. Through regular replacement, it actually subscribed to the `z/y/2`  topic.
-+ `x/y/z`  matches two topic filters of `x/#` and `x/y/+` at the same time, EMQX reads the configuration in reverse order, so it matches the third preferentially. The element is not matched through the regular expression, the topic rewrite is not performed, and it actually subscribes to the `x/y/z` topic. It should be noted that even if the regular expression matching of the third fails, it will not match the rules of the second again.
++ `y/def` はどのトピックフィルターにもマッチしないため、トピック書き換えは行われず、そのまま `y/def` トピックにサブスクライブします。  
++ `y/a/z/b` は `y/+/z/#` トピックフィルターにマッチするため、EMQXは最初のルールを適用します。正規表現で `[a、b]` の要素を抽出し、2番目の要素を `$2` に代入して `y/z/$2` に当てはめるため、実際には `y/z/b` トピックにサブスクライブします。  
++ `x/1/2` は `x/#` トピックフィルターにマッチするため、EMQXは2番目のルールを適用しますが、正規表現にマッチしないためトピック書き換えは行われず、実際には `x/1/2` トピックにサブスクライブします。  
++ `x/y/2` は `x/#` と `x/y/+` の2つのトピックフィルターに同時にマッチします。EMQXは設定ファイルを上から順に読み込むため、3番目のルールを優先的に適用します。正規表現により置換され、実際には `z/y/2` トピックにサブスクライブします。  
++ `x/y/z` も `x/#` と `x/y/+` の2つのトピックフィルターに同時にマッチしますが、3番目のルールの正規表現にマッチしないためトピック書き換えは行われず、実際には `x/y/z` トピックにサブスクライブします。なお、3番目の正規表現がマッチしなくても2番目のルールは適用されません。

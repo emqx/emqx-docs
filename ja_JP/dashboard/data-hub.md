@@ -1,8 +1,7 @@
-# Smart Data Hub
+# スマートデータハブ
 
-The Smart Data Hub section on the Dashboard allows you to create and configure the schema, schema validation rules, and message transformation rules.
+ダッシュボードのスマートデータハブセクションでは、スキーマ、スキーマ検証ルール、およびメッセージ変換ルールの作成と設定ができます。
 
-- [**Schema Registry**](../data-integration/schema-registry.md): You can create an internal or external schema to be used in the schema validation or SQL rules. For how to create a schema on Dashboard, see [Schema Registry Example - Avro](../data-integration/schema-registry-example-avro.md) or [Schema Registry Example - Protobuf](../data-integration/schema-registry-example-protobuf.md).
-- **Schema Validation**: Use a validation rule to ensure that data to be published to specific topics must conform to predefined data formats. For how to create validation rules, see [Configure Schema Validation in Dashboard](../data-integration/schema-validation.md#configure-schema-validation-in-dashboard).
-- **Message Transform**: Define transformation expressions to adapt data as it flows through the system. For how to create transformations, see [Configure Message Transformation in Dashboard](../data-integration/message-transformation.md#configure-message-transformation-in-dashboard).
-
+- [**スキーマレジストリ**](../data-integration/schema-registry.md)：スキーマ検証やSQLルールで使用する内部または外部のスキーマを作成できます。ダッシュボードでのスキーマ作成方法については、[スキーマレジストリ例 - Avro](../data-integration/schema-registry-example-avro.md) または [スキーマレジストリ例 - Protobuf](../data-integration/schema-registry-example-protobuf.md) を参照してください。
+- **スキーマ検証**：特定のトピックにパブリッシュされるデータが事前定義されたデータ形式に準拠していることを保証するために、検証ルールを使用します。検証ルールの作成方法については、[ダッシュボードでのスキーマ検証の設定](../data-integration/schema-validation.md#configure-schema-validation-in-dashboard) を参照してください。
+- **メッセージ変換**：システム内を流れるデータを適応させるための変換式を定義します。変換ルールの作成方法については、[ダッシュボードでのメッセージ変換の設定](../data-integration/message-transformation.md#configure-message-transformation-in-dashboard) を参照してください。

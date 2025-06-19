@@ -1,35 +1,35 @@
 # gRPC Hook Extension
 
-The **Extension Hook** is supported by the **emqx-exhook** plugin. It allows users to process EMQX [Hooks](hooks.md) using other programming languages.
+**Extension Hook** は **emqx-exhook** プラグインによってサポートされています。これにより、ユーザーは他のプログラミング言語を使って EMQX の [Hooks](hooks.md) を処理することが可能になります。
 
-In this way, other programming languages can handle emqx events for the purpose of customizing and extending emqx. For example, users can use other programming languages to implement:
+この仕組みにより、他のプログラミング言語で emqx のイベントを処理し、emqx のカスタマイズや拡張を行うことができます。例えば、以下のような実装が可能です。
 
-- Authentication for client connecting
-- Authorization for publishing/subscribing
-- Persistence and bridging for messages
-- Process client connected/disconnected events
+- クライアント接続時の認証
+- パブリッシュ／サブスクライブの認可
+- メッセージのパーシステンスおよびブリッジング
+- クライアントの接続／切断イベントの処理
 
 
-## Design
+## 設計
 
-The **emqx-exhook** plugin uses [gRPC](https://www.grpc.io) as the communication framework for RPC.
+**emqx-exhook** プラグインは RPC の通信フレームワークとして [gRPC](https://www.grpc.io) を使用しています。
 
-The architecture is as illustrated below:
+アーキテクチャは以下の図の通りです。
 
 ![exhook_workflow](./assets/exhook_workflow.png)
 
-It indicates that EMQX acts as a gRPC client, sending hook events from EMQX to the user's gRPC server.
+この図は、EMQX が gRPC クライアントとして動作し、EMQX からユーザーの gRPC サーバーへフックイベントを送信することを示しています。
 
-Consistent with EMQX native hooks, it also supports a chained approach to calculating and returning.
+EMQX ネイティブのフックと同様に、計算および戻り値をチェーンで処理する方式もサポートしています。
 
-[Callback Functions Chain](./hooks.md#callback-functions-chain)
+[コールバック関数チェーン](./hooks.md#callback-functions-chain)
 
 
-## APIs
+## API
 
-As the event handler, i.e. user implemented server side of gRPC. It can define the list of hooks that need to be mounted, and the implement callback functions for how to go about handling each event when it arrives.
+イベントハンドラー、すなわちユーザーが実装する gRPC サーバー側として、マウントすべきフックのリストを定義し、各イベント到着時の処理方法をコールバック関数として実装します。
 
-These interfaces are defined as a gRPC service called `HookProvider`:
+これらのインターフェースは `HookProvider` という gRPC サービスとして定義されています。
 
 ```
 syntax = "proto3";
@@ -82,32 +82,35 @@ service HookProvider {
 }
 ```
 
-The HookProvider part:
+HookProvider の役割:
 
-- `OnProviderLoaded`: Defines how the HookProvider will be loaded. This method returns the list of hooks that need to be mounted. Only the hooks in this list will be called back to the user's HookProvider service.
-- `OnProviderUnloaded`: Notify the user that the HookProvider has been uninstalled from emqx
+- `OnProviderLoaded`：HookProvider のロード方法を定義します。このメソッドはマウントすべきフックのリストを返します。このリストにあるフックのみがユーザーの HookProvider サービスにコールバックされます。
+- `OnProviderUnloaded`：HookProvider が emqx からアンインストールされたことをユーザーに通知します。
 
-The hook events part:
+フックイベントの役割:
 
-- The methods prefixed with `OnClient`, `OnSession`, and `OnMessage` correspond to the methods in [hooks](hooks.md). They have the same call timing and a similar argument list.
-- Only `OnClientAuthenticate`, `OnClientCheckAcl`, `OnMessagePublish` are allowed to carry the return values to EMQX, other callbacks are not supported.
+- `OnClient`、`OnSession`、`OnMessage` で始まるメソッドは [hooks](hooks.md) のメソッドに対応しており、呼び出しタイミングや引数リストも類似しています。
+- `OnClientAuthenticate`、`OnClientAuthorize`、`OnMessagePublish` のみが EMQX へ戻り値を返すことが許可されており、他のコールバックは戻り値をサポートしていません。
 
-For details of the interface and parameter data structures refer to: [exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
+インターフェースおよびパラメータの詳細は以下を参照してください。  
+[exhook.proto](https://github.com/emqx/emqx/blob/master/apps/emqx_exhook/priv/protos/exhook.proto)
 
-## Developing Guide
+## 開発ガイド
 
-The user needs to implement the gRPC service of `HookProvider` to receive callback events from EMQX.
+ユーザーは `HookProvider` の gRPC サービスを実装し、EMQX からのコールバックイベントを受け取る必要があります。
 
-The main development steps are as following:
+主な開発手順は以下の通りです。
 
-1. Copy the `lib/emqx_exhook-<x.y.z>/priv/protos/exhook.proto` file to your project.
-2. Generate the code for the gRPC server side of `exhook.proto` using the gRPC framework for the corresponding programming language.
-3. Implement the interfaces defined in exhook.proto on demand
+1. `lib/emqx_exhook-<x.y.z>/priv/protos/exhook.proto` ファイルをプロジェクトにコピーします。
+2. 対応するプログラミング言語の gRPC フレームワークを使い、`exhook.proto` の gRPC サーバー側コードを生成します。
+3. 必要に応じて exhook.proto で定義されたインターフェースを実装します。
 
-Once the development is complete, the service needs to be deployed to a server that can communicate with EMQX and ensure that the ports are open.
+開発完了後は、EMQX と通信可能なサーバーにサービスをデプロイし、ポートが開放されていることを確認してください。
 
-You can use the [EMQX Dashboard](http://127.0.0.1:18083/#/exhook) to manage and monitor the ExHook service.
+[EMQX Dashboard](http://127.0.0.1:18083/#/exhook) を使って ExHook サービスの管理および監視が可能です。
 
-One of the gRPC frameworks for each language can be found at: [grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
+各言語向けの gRPC フレームワークは以下で見つけられます。  
+[grpc-ecosystem/awesome-grpc](https://github.com/grpc-ecosystem/awesome-grpc)
 
-We also provide sample programs for some common programming languages: [emqx-extension-examples](https://github.com/emqx/emqx-extension-examples)
+また、いくつかの主要なプログラミング言語向けのサンプルプログラムも提供しています。  
+[emqx-extension-examples](https://github.com/emqx/emqx-extension-examples)

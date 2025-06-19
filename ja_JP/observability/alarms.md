@@ -1,190 +1,180 @@
-# Alarm
+# アラーム
 
-EMQX offers a built-in monitoring and alarm functionality for monitoring the internal state changes, such as CPU occupancy, system, and process memory occupancy, number of processes, rule engine resource status, and cluster partition and healing. EMQX triggers and records these changes when they exceed a threshold or deviate from expectations, and removes them from the list once they are restored.
+EMQX は、CPU 使用率、システムおよびプロセスのメモリ使用率、プロセス数、ルールエンジンのリソース状態、クラスターのパーティションや修復状況など、内部状態の変化を監視するための組み込みの監視およびアラーム機能を提供しています。これらの変化が閾値を超えたり期待値から逸脱した場合に EMQX がアラームをトリガーして記録し、状態が復旧するとリストから削除します。
 
-This page introduces the alarm information EMQX provides, how to obtain and check the detailed alarm information, and how to configure the alarm settings and thresholds in EMQX. The monitoring and alarm function keeps you notified of potential problems during operation. By configuring alarms and setting appropriate thresholds, you can make sure that EMQX remains secure, stable, and reliable.
+本ページでは、EMQX が提供するアラーム情報の内容、詳細なアラーム情報の取得・確認方法、および EMQX におけるアラーム設定と閾値の構成方法について紹介します。監視およびアラーム機能により、運用中の潜在的な問題を通知し続けることが可能です。適切な閾値を設定してアラームを構成することで、EMQX の安全性、安定性、信頼性を確保できます。
 
-## Alarm List
+## アラーム一覧
 
-The following table lists the alarms that can be triggered to indicate potential problems during system monitoring.
+以下の表は、システム監視中に潜在的な問題を示すためにトリガーされる可能性のあるアラームを示しています。
 
 ::: tip
 
-Depending on the severity and impacts on the system, alarms can have 3 levels:
+アラームはシステムへの影響度や重大度に応じて3つのレベルがあります：
 
-- **Error**: Errors caused by user presets. The client can perceive the error and retry.
+- **Error（エラー）**: ユーザー設定によるエラー。クライアントはエラーを認識し再試行可能です。
 
-- **Warning**: Occasional errors must be taken seriously if they occur frequently.
+- **Warning（警告）**: 発生頻度が高い場合は注意が必要な一時的なエラー。
 
-- **Critical**: Irreversible data loss between the client and server, causing communication and business interruption.
+- **Critical（重大）**: クライアントとサーバー間で不可逆的なデータ損失が発生し、通信や業務に支障をきたす状態。
 
-The levels are defined from development perspectives and are only for recommendation. You can define your own alarm levels according to the business needs.
+これらのレベルは開発視点で定義されており、あくまで推奨です。ビジネス要件に応じて独自のアラームレベルを定義して構いません。
 
 :::
 
-| **Alarm**                 | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
-| :------------------------ | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
-| high_system_memory_usage  | Warning  | System memory usage is too high                              | "System memory usage is higher than ~p%"     | `os_mon.sysmem_high_watermark = 70%`                         |
-| high_process_memory_usage | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%      | `os_mon.procmem_high_watermark = 5%`                         |
-| high_cpu_usage            | Warning  | CPU usage is too high                                        | ~p% cpu usage                                | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
-| too_many_processes        | Warning  | Too many processes                                           | ~p% process usage                            | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
-| license_quota             | Warning  | License exceeds quota                                        | License: the number of connections exceeds % | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
-| license_expiry            | Critical | License expired                                              | License will be expired at %                 | -                                                            |
-| partition                 | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
-| resource                  | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
-| conn_congestion           | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
+| **アラーム**                | レベル    | 説明                                                        | **詳細**                                    | **閾値**                                                    |
+| :------------------------- | -------- | :---------------------------------------------------------- | :------------------------------------------ | :---------------------------------------------------------- |
+| high_system_memory_usage   | Warning  | システムメモリ使用率が高い                                  | システムメモリ使用率が約 ~p% を超えている   | `os_mon.sysmem_high_watermark = 70%`                        |
+| high_process_memory_usage  | Warning  | 単一の Erlang プロセスのメモリ使用率が高い（システムメモリ使用率の割合） | プロセスのメモリ使用率が約 ~p% を超えている | `os_mon.procmem_high_watermark = 5%`                        |
+| high_cpu_usage             | Warning  | CPU 使用率が高い                                           | 約 ~p% の CPU 使用率                         | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
+| too_many_processes         | Warning  | プロセス数が多すぎる                                       | 約 ~p% のプロセス使用率                      | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
+| license_quota              | Warning  | ライセンスの接続数が上限を超えている                       | ライセンス：接続数が % を超えている          | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
+| license_expiry             | Critical | ライセンスが期限切れ                                        | ライセンスは % に期限切れとなります          | -                                                           |
+| partition                  | Critical | ノードでパーティションが発生                                | ノード ~s でパーティションが発生             | -                                                           |
+| resource                   | Critical | リソースが切断されている                                   | リソース ~s(~s) がダウン                      | -                                                           |
+| conn_congestion            | Critical | 接続プロセスの輻輳                                        | 接続が輻輳している                            | -                                                           |
 
-## Get Alarms
+## アラームの取得
 
-EMQX offers several methods for retrieving alarms and viewing detailed information about them. One way is through the EMQX Dashboard, where you can view both active and historical alarms in a user-friendly interface. This serves as a central location to easily access an overview of alarms that have been triggered. 
+EMQX では、アラームの取得および詳細情報の確認に複数の方法を提供しています。ひとつは EMQX ダッシュボードを通じて、アクティブなアラームと履歴アラームの両方をユーザーフレンドリーなインターフェースで閲覧する方法です。ここではトリガーされたアラームの概要を簡単に確認できます。
 
-Additionally, you can subscribe to system topics via MQTT to receive real-time notifications of system alarms. Another method is through Webhook integration, where alarm events can be sent to an external HTTP service for further processing. Alarms can also be accessed through logs or the REST API.
+また、MQTT のシステムトピックをサブスクライブしてリアルタイムにシステムアラームの通知を受け取る方法もあります。さらに Webhook 統合を利用して、アラームイベントを外部の HTTP サービスへ送信し処理することも可能です。ログや REST API を通じてアラームを取得することもできます。
 
-### View Alarms on Dashboard
+### ダッシュボードでアラームを確認する
 
-On the EMQX Dashboard, click **Monitoring** -> **Alarms**. Then, select the **Active** or **History** tab to view a list of currently active alarms and historical alarms.
+EMQX ダッシュボードで **Monitoring** -> **Alarms** をクリックし、**Active** タブまたは **History** タブを選択すると、現在アクティブなアラームおよび履歴アラームの一覧を確認できます。
 
-<img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
+<img src="./assets/view-alarms.png" alt="アラームの表示" style="zoom:50%;" />
 
-### Get Alarms via System Topic
+### システムトピック経由でアラームを取得する
 
-EMQX will publish an MQTT message to system topics `$SYS/brokers/<Node>/alarms/activate` or `$SYS/brokers/<Node>/alarms/deactivate` when an alarm is triggered or cleared. Users can subscribe to the topic to receive alarm notifications.
+アラームがトリガーまたは解除されると、EMQX は MQTT メッセージをシステムトピック `$SYS/brokers/<Node>/alarms/activate` または `$SYS/brokers/<Node>/alarms/deactivate` にパブリッシュします。ユーザーはこれらのトピックをサブスクライブしてアラーム通知を受け取れます。
 
-The payload in the alarm notification message is in JSON format and contains the following fields:
+アラーム通知メッセージのペイロードは JSON 形式で、以下のフィールドを含みます：
 
-| Field           | Type             | Description                                                  |
-| --------------- | ---------------- | ------------------------------------------------------------ |
-| `name`          | string           | Alarm name                                                   |
-| `details`       | object           | Alarm details                                                |
-| `message`       | string           | Human-readable alarm instructions                            |
-| `activate_at`   | integer          | A UNIX timestamp in microseconds representing the activation time of the alarm |
-| `deactivate_at` | integer / string | A UNIX timestamp in microseconds representing the deactivation time of the alarm. The value of this field for the activated alarm is `infinity`. |
-| `activated`     | boolean          | Whether the alarm is activated                               |
+| フィールド名        | 型              | 説明                                                         |
+| ------------------- | --------------- | ------------------------------------------------------------ |
+| `name`              | string          | アラーム名                                                   |
+| `details`           | object          | アラームの詳細情報                                           |
+| `message`           | string          | 人間が読みやすいアラームの説明                              |
+| `activate_at`       | integer         | アラームが発動した時刻をマイクロ秒単位の UNIX タイムスタンプで表現 |
+| `deactivate_at`     | integer/string  | アラームが解除された時刻をマイクロ秒単位の UNIX タイムスタンプで表現。アクティブなアラームの場合は `infinity` が入る。 |
+| `activated`         | boolean         | アラームが現在発動中かどうか                                |
 
-Taking the alarm of high system memory usage as an example, you will receive an alarm message like below:
+例えば、システムメモリ使用率が高いアラームの場合、以下のようなアラームメッセージを受け取ります：
 
-<img src="./assets/alarm_activate_msg.png" alt="alarm massage" style="zoom:50%;" />
+<img src="./assets/alarm_activate_msg.png" alt="アラームメッセージ" style="zoom:50%;" />
 
-Alarms will not be repeatedly reported. That is, if one alarm on high CPU usage is activated, the system will not generate another alarm of the same type. The generated alarm will be automatically deactivated when the monitored metric returns to normal, or you can manually deactivate the alarm.
+同じ種類のアラームは繰り返し報告されません。例えば高 CPU 使用率のアラームが発動中の場合、同じタイプのアラームは新たに生成されません。監視対象の指標が正常に戻ると自動的にアラームは解除されるか、手動で解除することも可能です。
 
-### Get Alarms from Log
+### ログからアラームを取得する
 
-The activation and deactivation of alarms can be written to log (console or file). When failures occur during message transmission or event processing, detailed information can be logged, and the logging system can also be used to capture alerts through log analysis. The following example shows the detailed alarm information printed in the log:
-The log level is `warning`, and the `msg` field is `alarm_is_activated` and `alarm_is_deactivated`.
+アラームの発動および解除はログ（コンソールまたはファイル）に出力されます。メッセージ送信やイベント処理で障害が発生した場合、詳細情報をログに記録でき、ログ分析を通じてアラートを検知することも可能です。以下はログに出力された詳細なアラーム情報の例です。ログレベルは `warning` で、`msg` フィールドは `alarm_is_activated` および `alarm_is_deactivated` となっています。
 
-<img src="./assets/view-alarms-log.png" alt="view-alarms-log" style="zoom:50%;" />
+<img src="./assets/view-alarms-log.png" alt="ログでのアラーム表示" style="zoom:50%;" />
 
-### Get Alarms via REST API
+### REST API でアラームを取得する
 
-You can query and manage alarms through the API. Click **Alarms** on the left navigation menu on the UI to execute this API request. For how to work with EMQX API, see [REST API](../admin/api.md).
+API を通じてアラームの照会や管理が可能です。UI の左ナビゲーションメニューで **Alarms** をクリックすると、この API リクエストが実行されます。EMQX API の利用方法については [REST API](../admin/api.md) を参照してください。
 
-<img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
+<img src="./assets/view-alarms-api.png" alt="APIでのアラーム表示" style="zoom:45%;" />
 
-### Integrate Webhook to Send Alarm Events
+### Webhook 統合によるアラームイベント送信
 
-Starting from EMQX version 5.8.5, the rule engine supports two new alarm events:
+EMQX バージョン 5.8.5 以降、ルールエンジンは以下の2つの新しいアラームイベントをサポートしています：
 
 - [$events/sys/alarm_activated](../data-integration/rule-sql-events-and-fields.md#system-alarm-activated-event-events-sys-alarm-activated)
 - [$events/sys/alarm_deactivated](../data-integration/rule-sql-events-and-fields.md#system-alarm-deactivated-event-events-sys-alarm-deactivated)
 
-These events allow you to receive notifications of alarm activities via external HTTP services through Webhook integration.
+これらのイベントにより、Webhook 統合を通じて外部 HTTP サービスへアラームの発動・解除通知を受け取ることが可能です。
 
-To configure Webhook integration:
+Webhook 統合の設定手順：
 
-1. In the EMQX Dashboard, navigate to **Monitoring** -> **Alarms**. 
-2. Click the **Set Up Webhook** button in the upper right corner to open the Webhook integration setup page.
-3. Enter a name for the Webhook integration and a note (optional). In the **Trigger** field,  `Alarm Activated` and `Alarm Deactivated` are pre-selected.
-4. Enter the Webhook URL where you want to send the notifications.
-5. For more configuration options, refer to [Create Webhook](../data-integration/webhook.md).
-6. Click **Save** when you finish.
+1. EMQX ダッシュボードで **Monitoring** -> **Alarms** に移動します。  
+2. 右上の **Set Up Webhook** ボタンをクリックし、Webhook 統合設定ページを開きます。  
+3. Webhook 統合の名前と任意のメモを入力します。**Trigger** フィールドには `Alarm Activated` と `Alarm Deactivated` が事前選択されています。  
+4. 通知を送信したい Webhook URL を入力します。  
+5. 詳細な設定オプションについては [Create Webhook](../data-integration/webhook.md) を参照してください。  
+6. 設定が完了したら **Save** をクリックします。
 
 ![alarm_webhook_setup](./assets/alarm_webhook_setup.png)
 
-## Alarm Configuration
+## アラーム設定
 
-Alarm configuration includes configuring alarm settings and alarm thresholds. Alarm settings determine how the alarm message is displayed and stored, while alarm thresholds establish limits or values that trigger the alarm when potential problems are detected. The alarm configuration feature allows you to customize the alarm settings and thresholds to meet your business needs.
+アラーム設定は、アラームの表示・保存方法を決める「アラーム設定」と、アラームをトリガーする閾値を定める「アラーム閾値」の2つに分かれます。これにより、ビジネス要件に応じてアラームの設定や閾値をカスタマイズできます。
 
-### Configure Alarm Settings
+### アラーム設定の構成
 
-The settings for alarms can only be configured by modifying the configuration items in the configuration file. The following table lists the configuration items available for alarm setting configuration.
+アラームの設定は設定ファイル内の設定項目を変更することでのみ構成可能です。以下の表はアラーム設定に関する設定項目の一覧です。
 
-| Configuration Item    | Description                                                  | Default Value        | Optional Values |
-| --------------------- | ------------------------------------------------------------ | -------------------- | --------------- |
-| alarm.actions         | Actions of writing the alarm to log (console or file) and publishing the alarm as an MQTT message to the system topics `$SYS/brokers/<node_name>/alarms/activate` and `$SYS/brokers/<node_name>/alarms/deactivate`. The actions are triggered when the alarm is activated or deactivated. | `["log", "publish"]` | -               |
-| alarm.size_limit      | The maximum total number of deactivated alarms to be kept as history. When this limit is exceeded, the oldest deactivated alarms are deleted. | `1000`               | `1-3000`        |
-| alarm.validity_period | Retention time of deactivated alarms. Alarms are not deleted immediately when deactivated but after a period of time. | `24h`                | -               |
+| 設定項目               | 説明                                                        | デフォルト値          | 選択可能な値       |
+| ---------------------- | ----------------------------------------------------------- | --------------------- | ------------------ |
+| alarm.actions          | アラーム発動・解除時にアラームをログ（コンソールまたはファイル）に書き込み、MQTT メッセージとしてシステムトピック `$SYS/brokers/<node_name>/alarms/activate` および `$SYS/brokers/<node_name>/alarms/deactivate` にパブリッシュするアクション。 | `["log", "publish"]`   | -                  |
+| alarm.size_limit       | 履歴として保持する解除済みアラームの最大件数。この制限を超えると最も古い解除済みアラームから削除される。 | `1000`                | `1-3000`           |
+| alarm.validity_period  | 解除済みアラームの保持期間。解除直後に削除せず一定期間保持する。 | `24h`                 | -                  |
 
-### Configure Alarm Thresholds via Dashboard
+### ダッシュボードでアラーム閾値を設定する
 
-Alarm thresholds can be configured on EMQX Dashboard. There are two ways to launch the **Monitoring** page for configuring the alarm thresholds:
+EMQX ダッシュボードでアラーム閾値を設定できます。アラーム閾値設定用の **Monitoring** ページを開く方法は2通りあります：
 
-1. On the **Alarms** page, click the **Setting** button and you will be led to the **Monitoring** page.
-2. From the left navigation menu, click **Management** -> **Monitoring**.
+1. **Alarms** ページで **Setting** ボタンをクリックすると **Monitoring** ページに遷移します。  
+2. 左ナビゲーションメニューから **Management** -> **Monitoring** をクリックします。
 
-On the  **Monitoring** -> **System** tab, click the **Erlang VM** tab, you can configure the following items for the system performance of the Erlang Virtual Machine:
+**Monitoring** -> **System** タブの中の **Erlang VM** タブでは、Erlang 仮想マシンのシステムパフォーマンスに関する以下の項目を設定できます：
 
-<img src="./assets/monitoring-system-ee.png" alt="monitoring-system" style="zoom:40%;" />
+<img src="./assets/monitoring-system-ee.png" alt="システム監視設定" style="zoom:40%;" />
 
-- **Process limit check interval**: Specify the time interval for checking the periodic process limit. The default value is `30` seconds.
-- **Process high watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage exceeds the specified number, an alarm is raised. The default value is `80` percent.
+- **Process limit check interval**: プロセス数の定期チェック間隔（秒）。デフォルトは `30` 秒。  
+- **Process high watermark**: ローカルノードで同時に存在可能なプロセス数の閾値。指定した割合を超えるとアラームが発動。デフォルトは `80%`。  
+- **Process low watermark**: プロセス数が指定した割合まで減少するとアラームが解除される閾値。デフォルトは `60%`。  
+- **Enable Long GC monitoring**: デフォルトは無効。Erlang プロセスが長時間ガベージコレクションを行った場合、警告レベルのログ `long_gc` を出力し、システムトピック `$SYS/sysmon/long_gc` に MQTT メッセージをパブリッシュ。  
+- **Enable Long Schedule monitoring**: デフォルトは有効。Erlang VM が長時間スケジューリングされたタスクを検知すると警告レベルのログ `long_schedule` を出力。タスクの適切なスケジュール時間をミリ秒単位で設定可能。デフォルトは `240` ミリ秒。  
+- **Enable Large Heap monitoring**: デフォルトは有効。Erlang プロセスが大きなヒープ領域を消費した場合、警告レベルのログ `large_heap` を出力し、システムトピック `$SYS/sysmon/large_heap` に MQTT メッセージをパブリッシュ。ヒープサイズの閾値をバイト単位で設定可能。デフォルトは `32` MB。  
+- **Enable Busy Distribution Port monitoring**: デフォルトは有効。クラスター内の他ノードと通信するための RPC 接続が過負荷状態になると、警告レベルのログ `busy_dis_port` を出力し、システムトピック `$SYS/sysmon/busy_dist_port` に MQTT メッセージをパブリッシュ。  
+- **Enable Busy Port monitoring**: デフォルトは有効。ポートが過負荷状態になると警告レベルのログ `busy_port` を出力し、システムトピック `$SYS/sysmon/busy_port` に MQTT メッセージをパブリッシュ。
 
-- **Process low watermark**: Specify the threshold value of processes that can simultaneously exist at the local node. When the percentage is lowered to the specified number, an alarm is cleared. The default value is `60` percent.
+設定完了後は **Save Changes** をクリックしてください。
 
-- **Enable Long GC monitoring**: Disabled by default. When enabled, a warning-level log `long_gc` is emitted and an MQTT message is published to the system topic `$SYS/sysmon/long_gc` when an Erlang process spends long time performing garbage collection.
-- **Enable Long Schedule monitoring**: Enabled by default, which means when the Erlang VM detects a task scheduled for too long, a warning level log `long_schedule` is emitted. You can set the proper time scheduled for a task in the text box. The default value is `240` milliseconds.
+**Operating System** タブでは、システムパフォーマンスに関する以下の項目を設定できます：
 
-- **Enable Large Heap monitoring**: Enabled by default, which means when an Erlang process consumed a large amount of memory for its heap space, a warning level log `large_heap` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/large_heap`. You can set the limit of space bytesize in the text box. The default value is `32` MB.
+<img src="./assets/monitoring-operating-system-ee.png" alt="OS監視設定" style="zoom:40%;" />
 
-- **Enable Busy Distribution Port monitoring**: Enabled by default, which means when the Remote Procedure Call (RPC) connection used to communicate with other nodes in the cluster is overloaded, a warning level log `busy_dis_port` log is emitted, and an MQTT message is published to system topic `$SYS/sysmon/busy_dist_port`.
+- **The time interval of the periodic CPU check**: CPU 使用率の定期チェック間隔（秒）。デフォルトは `60` 秒。  
+- **CPU high watermark**: システム CPU 使用率の閾値。指定した割合を超えるとアラームが発動。デフォルトは `80%`。  
+- **CPU low watermark**: CPU 使用率が指定した割合まで低下するとアラームが解除される閾値。デフォルトは `60%`。  
+- **Mem check interval**: メモリ使用率の定期チェック間隔（秒）。デフォルトは `60` 秒。  
+- **SysMem high watermark**: システム全体のメモリ使用率の閾値。指定した割合を超えるとアラームが発動。デフォルトは `70%`。  
+- **ProcMem high watermark**: 単一の Erlang プロセスが使用するメモリ使用率の閾値。指定した割合を超えるとアラームが発動。デフォルトは `5%`。
 
-- **Enable Busy Port monitory**: Enabled by default, which means when a port is overloaded, a warning level log `busy_port` is emitted, and an MQTT message is published to the system topic `$SYS/sysmon/busy_port`.
+設定完了後は **Save Changes** をクリックしてください。
 
-After you complete the configurations, click **Save Changes**.
+### 設定項目でアラーム閾値を構成する
 
-Click the **Operating System** tab, you can configure the following items for the system performance:
+設定ファイルのアラーム閾値に関する設定項目を変更して閾値を構成することも可能です。現在変更可能な設定項目は以下の通りです：
 
-<img src="./assets/monitoring-operating-system-ee.png" alt="monitoring-operating-system-ee" style="zoom:40%;" />
+| 設定項目                          | 説明                                                        | デフォルト値    |
+| -------------------------------- | ----------------------------------------------------------- | -------------- |
+| sysmon.os.cpu_check_interval      | CPU 使用率のチェック間隔                                    | `60s`          |
+| sysmon.os.cpu_high_watermark      | CPU 使用率の高水位閾値。これを超えるとアラームが発動する。  | `80%`          |
+| sysmon.os.cpu_low_watermark       | CPU 使用率の低水位閾値。これを下回るとアラームが解除される。 | `60%`          |
+| sysmon.os.mem_check_interval      | メモリ使用率のチェック間隔                                  | `60s`          |
+| sysmon.os.sysmem_high_watermark   | システムメモリ使用率の高水位閾値。これを超えるとアラームが発動。 | `70%`          |
+| sysmon.os.procmem_high_watermark  | プロセスメモリ使用率の高水位閾値。単一プロセスの使用率がこれを超えるとアラームが発動。 | `5%`           |
+| sysmon.vm.process_check_interval  | プロセス数のチェック間隔                                   | `30s`          |
+| sysmon.vm.process_high_watermark  | プロセス占有率の高水位閾値。作成済みプロセス数/最大数の割合で測定。これを超えるとアラーム発動。 | `80%`          |
+| sysmon.vm.process_low_watermark   | プロセス占有率の低水位閾値。これを下回るとアラーム解除。    | `60%`          |
+| sysmon.vm.long_gc                 | Long GC 監視の有効化設定                                   | `disabled`     |
+| sysmon.vm.long_schedule           | Long Schedule 監視の有効化設定                             | `disabled`     |
+| sysmon.vm.large_heap              | Large Heap 監視の有効化設定                                | `disabled`     |
+| sysmon.vm.busy_dist_port          | Busy Distribution Port 監視の有効化設定                    | `true`        |
+| sysmon.vm.busy_port               | Busy Port 監視の有効化設定                                 | `true`        |
+| sysmon.top.num_items              | 監視グループごとのトッププロセス数                         | `10`           |
+| sysmon.top.sample_interval        | トッププロセスのチェック間隔                               | `2s`           |
+| sysmon.top.max_procs              | VM 内のプロセス数がこの値を超えるとデータ収集を停止         | `1000000`      |
 
-- **The time interval of the periodic CPU check**: Specify the time interval for checking the CPU usage. The default value is `60` seconds.
-- **CPU high watermark**: Specify the threshold value of how much system CPU can be used. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `80` percent.
+EMQX Enterprise では、ライセンスの期限が30日未満になるか、接続数が高水位閾値を超えた場合にアラームが発生します。接続数の高/低水位閾値は以下の設定項目を変更して調整可能です。ライセンス設定の詳細は [License](../configuration/license.md) を参照してください。
 
-- **CPU low watermark**: Specify the threshold value of how much system CPU can be used. When the percentage is lowered to the specified value, a corresponding alarm is released. The default value is `60` percent.
-
-- **Mem check interval**: Enabled by default. You can specify the time interval for periodic memory checks. The default value is `60` seconds.
-
-- **SysMem high watermark**: Specify the threshold for how much system memory can be allocated. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `70`%.
-
-- **ProcMem high watermark**: Specify the threshold for how much system memory can be allocated by one Erlang process. When the percentage exceeds the specified value, a corresponding alarm is raised. The default value is `5`%.
-
-After you complete the configurations, click **Save Changes**.
-
-### Configure Alarm Thresholds via Configuration Items
-
-You can also configure alarm thresholds by modifying the configuration items for alarm thresholds. The following configuration items are currently available to be modified in the configuration file:
-
-| Configuration Item                | Description                                                  | Default Value |
-| --------------------------------- | ------------------------------------------------------------ | ------------- |
-| sysmon.os.cpu_check_interval      | Check interval for CPU usage.                                | `60s`         |
-| sysmon.os.cpu_high_watermark      | The high watermark of the CPU usage, the threshold to activate the alarm. | `80%`         |
-| sysmon.os.cpu_low_watermark       | The low watermark of the CPU usage, the threshold to deactivate the alarm. | `60%`         |
-| sysmon.os.mem_check_interval      | Check interval for memory usage.                             | `60s`         |
-| sysmon.os.sysmem_high_watermark   | The high watermark of the system memory usage. The alarm will be activated when the total memory occupied reaches this value. | `70%`         |
-| sysmon.os.procmem_high_watermark  | The high watermark of the process memory usage. The alarm will be activated when the memory occupied by a single process reaches this value. | `5%`          |
-| sysmonn.vm.process_check_interval | Check interval for the number of processes.                  | `30s`         |
-| sysmon.vm.process_high_watermark  | The high watermark of the process occupancy rate; The alarm will be activated when this threshold is reached; Measured as a ratio of the number of created processes/maximum number limit. | `80%`         |
-| sysmon.vm.process_low_watermark   | The low water mark of the process occupancy rate; The alarm will be deactivated when it goes below this threshold; Measured as a ratio of the number of created processes/maximum number limit. | `60%`         |
-| sysmonn.vm.long_gc                | Whether to enable Long GC monitoring.                        | `disabled`    |
-| sysmon.vm.long_schedule           | Whether to enable Long Schedule monitoring.                  | `disabled`    |
-| sysmon.vm.large_heap              | Whether to enable Large Heap monitoring.                     | `disabled`    |
-| sysmon.vm.busy_dist_port          | Whether to enable Busy Distribution Port monitoring.         | `true`        |
-| sysmon.vm.busy_port               | Whether to enable Busy Port monitoring.                      | `true`        |
-| sysmonn.top.num_items             | Number of top processes per monitoring group                 | `10`          |
-| sysmon.top.sample_interlval       | Check interval for top processes.                            | `2s`          |
-| sysmon.top.max_procs              | Stop collecting data when the number of processes in the VM exceeds this value. | `1000000`     |
-
-The EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in the configuration file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
-
-| Configuration item                      | Description                                                  | Default value |
-| --------------------------------------- | ------------------------------------------------------------ | ------------- |
-| license.connection_high_watermark_alarm | The high watermark of the max connections the license supports. The alarm is activated when this threshold is reached. Measured as a ratio of active connections/max connections. | `80%`         |
-| license.connection_low_watermark_alarm  | The low watermark of the max connections the license supports. The alarm is deactivated when it goes below this threshold. Measured as a ratio of active connections/max connections. | `75%`         |
+| 設定項目                              | 説明                                                        | デフォルト値    |
+| ----------------------------------- | ----------------------------------------------------------- | -------------- |
+| license.connection_high_watermark_alarm | ライセンスがサポートする最大接続数に対する高水位閾値。これを超えるとアラームが発動。アクティブ接続数/最大接続数の割合で測定。 | `80%`          |
+| license.connection_low_watermark_alarm  | ライセンスがサポートする最大接続数に対する低水位閾値。これを下回るとアラームが解除。アクティブ接続数/最大接続数の割合で測定。 | `75%`          |

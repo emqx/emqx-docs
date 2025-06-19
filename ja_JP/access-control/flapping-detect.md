@@ -1,43 +1,42 @@
 # Flapping Detect
 
-Based on the Banned Clients function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
+Banned Clients機能に基づき、EMQXは頻繁にログインするクライアントを自動的にバンして、他のクライアントに影響を与える可能性のあるサーバーリソースの消費を防ぎます。これらのクライアントは一定期間バンされます。
 
-It should be noted that the automatic ban only bans the client by the client ID, not by the user name and IP address. A malicious client may still be able to attack if they change the client ID for each attempt.
+なお、自動バンはクライアントIDによってのみバンを行い、ユーザー名やIPアドレスによるバンは行いません。そのため、悪意のあるクライアントが試行ごとにクライアントIDを変更すると攻撃を続ける可能性があります。
 
-This feature is disabled by default, and you can enable it via EMQX Dashboard or configuration file.
+この機能はデフォルトで無効になっており、EMQX Dashboardまたは設定ファイルから有効化できます。
 
-## Enable Flapping Detect on Dashboard
+## DashboardでFlapping Detectを有効化する
 
-Go to Dashboard, and click **Access Control** -> **Flapping Detect** from the left navigation menu to enter the **Flapping Detect** page. Enable the flapping detection feature by clicking the toggle switch.
+Dashboardにアクセスし、左側のナビゲーションメニューから **Access Control** -> **Flapping Detect** をクリックして **Flapping Detect** ページに入ります。トグルスイッチをクリックしてフラッピング検出機能を有効にします。
 
-- **Detection Time Window**: You can specify the duration for which the system monitors the client's flapping behavior. The default value is `1` minute.
-- **Max Disconnection Count**: You can specify the maximum number of disconnections allowed for an MQTT client during the detection window time. It allows you to set precise criteria for identifying and responding to clients exhibiting flapping behavior. The default number is `15`.
-- **Ban Duration**: You can specify for how long the client should be banned. The default value is `5` minutes.
+- **Detection Time Window**: クライアントのフラッピング挙動を監視する期間を指定できます。デフォルト値は `1` 分です。
+- **Max Disconnection Count**: 検出期間内にMQTTクライアントが許容される最大切断回数を指定できます。フラッピング挙動を示すクライアントを正確に識別し対応するための基準を設定できます。デフォルトは `15` 回です。
+- **Ban Duration**: クライアントをバンする期間を指定できます。デフォルト値は `5` 分です。
 
-Click **Save Changes** to finish the setting.
+設定が完了したら **Save Changes** をクリックします。
 
-<img src="./assets/flapping-detect.png" alt="flapping-detect" style="zoom:67%;" />
+<img src="./assets/flapping-detect.png" alt="フラッピング検出" style="zoom:67%;" />
 
-## Enable Flapping Detect in Configuration File
+## 設定ファイルでFlapping Detectを有効化する
 
-You can also enable the flapping detect feature by adding the following configuration:
+以下の設定を追加することで、フラッピング検出機能を有効化できます。
 
 ```bash
 flapping_detect {
 
   enable = true
 
-  ## The maximum number of disconnections allowed for an MQTT client during the detection window time
+  ## 検出期間内にMQTTクライアントが許容される最大切断回数
   max_count = 15
 
-  ## The duration for which the system monitors the client's flapping behavior
+  ## クライアントのフラッピング挙動を監視する期間
   window_time = 1m
 
-  ## How long the clientid will be banned
+  ## クライアントIDがバンされる期間
   ban_time = 5m
 
 }
 ```
 
-These settings may be specified individually for each zone.
-
+これらの設定はゾーンごとに個別に指定することも可能です。

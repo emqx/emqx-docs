@@ -1,14 +1,14 @@
-# Cluster Security
+# クラスターのセキュリティ
 
-EMQX provides several security mechanisms to ensure the confidentiality, integrity, and availability of data, including [authentication](../../access-control/authn/authn.md) and [authorization](../../access-control/authz/authz.md) mechanisms on the node level, [a secret cookie](#set-node-cookie) to ensure secure communication between nodes in a cluster, and [TLS/SSL encryption](#configure-tls-ssl-to-secure-cluster-connections) to provide end-to-end encryption for inter-node traffic.
+EMQXは、データの機密性、完全性、および可用性を確保するために、ノードレベルでの[認証](../../access-control/authn/authn.md)および[認可](../../access-control/authz/authz.md)機構、クラスター内ノード間の安全な通信を保証するための[シークレットクッキー](#set-node-cookie)、およびノード間トラフィックのエンドツーエンド暗号化を提供する[TLS/SSL暗号化](#configure-tls-ssl-to-secure-cluster-connections)など、複数のセキュリティ機構を提供しています。
 
-To help provision firewall rules, we will also touch on EMQX's inter-broker [communication port mapping rules](#port-mapping). 
+ファイアウォールルールのプロビジョニングを支援するために、EMQXのブローカー間[通信ポートのマッピングルール](#port-mapping)についても説明します。
 
-## Set Node Cookie
+## ノードクッキーの設定
 
-For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. 
+セキュリティ上の理由から、クラスターに参加するすべてのノードの`emqx.conf`でデフォルトのクッキー設定をシークレットクッキーに変更する必要があります。
 
-Note: All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+注意：クラスターに参加するすべてのノードは同じシークレットクッキーを使用する必要があります。使用されるマジッククッキーの詳細については、[Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security)を参照してください。
 
 ```
 node {
@@ -16,64 +16,63 @@ node {
 }
 ```
 
-:::tip Tip 
+:::tip ヒント
 
-All nodes to join the cluster should use the same security cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security). 
+クラスターに参加するすべてのノードは同じセキュリティクッキーを使用する必要があります。使用されるマジッククッキーの詳細については、[Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security)を参照してください。
 
 :::
 
-## Configure TLS/SSL to Secure Cluster Connections
+## クラスター接続を保護するためのTLS/SSLの設定
 
-EMQX also supports using TLS to secure the communication channel between EMQX nodes to protect the confidentiality, integrity, and authenticity of the data exchanged between them. TLS comes at the cost of increased CPU load and RAM usage, please configure as per your business needs. 
+EMQXは、ノード間の通信チャネルをTLSで保護し、交換されるデータの機密性、完全性、および真正性を守ることもサポートしています。TLSはCPU負荷とRAM使用量の増加を伴うため、ビジネスニーズに応じて設定してください。
 
-This section introduces how to configure TLS for EMQX clusters. On how to obtain an SSL/TLS certificate, see [Enable SSL/TLS Connection](../../network/emqx-mqtt-tls.md). 
+本節では、EMQXクラスターでのTLS設定方法を紹介します。SSL/TLS証明書の取得方法については、[SSL/TLS接続の有効化](../../network/emqx-mqtt-tls.md)を参照してください。
 
-## Use TLS/SSL for Cluster RPC Connections
+## クラスターRPC接続にTLS/SSLを使用する
 
-To configure TLS/SSL for cluster RPC below configuration items should be set in `emqx.conf`.
+クラスターRPCにTLS/SSLを設定するには、以下の設定項目を`emqx.conf`に記述します。
 
 ```
 rpc {
   driver = ssl
-  # PEM format file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the cluster peers.
+  # リスナーがクラスターのピアの真正性を検証するために使用する信頼されたCA（認証局）証明書を含むPEM形式のファイル
   cacertfile = "/path/to/cert/ca.pem"
-  # PEM format file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+  # リスナーのSSL/TLS証明書チェーンを含むPEM形式のファイル。証明書がルートCAから直接発行されていない場合、中間CA証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。
   certfile = "/path/to/cert/domain.pem"
-  # PEM format file containing the private key corresponding to the SSL/TLS certificate
+  # SSL/TLS証明書に対応する秘密鍵を含むPEM形式のファイル
   keyfile = "/path/to/cert/domain.key"
-  # Set to 'verify_peer' to verify the authenticity of the clients' certificates, otherwise 'verify_none'.
+  # クライアント証明書の真正性を検証する場合は'verify_peer'、そうでなければ'verify_none'に設定
   verify = verify_peer
-  # If set to true, the handshake fails if the peer does not have a certificate to send, that is, sends an empty certificate. If set to false, it fails only if the peer sends an invalid certificate (an empty certificate is considered valid).
+  # trueに設定すると、ピアが証明書を送信しない（空の証明書を送信する）場合にハンドシェイクが失敗します。falseの場合は、ピアが無効な証明書を送信した場合のみ失敗します（空の証明書は有効とみなされます）。
   fail_if_no_peer_cert = true
 }
 ```
 
-### Use TLS/SSL for Erlang Distribution
+### Erlang DistributionにTLS/SSLを使用する
 
-EMQX core nodes use Erlang distribution to synchronize database updates and manage nodes in the cluster, such as starting/stopping a component or collecting runtime metrics, etc.
+EMQXコアノードは、Erlang Distributionを使用してデータベースの更新を同期し、クラスター内のノード管理（コンポーネントの起動/停止やランタイムメトリクスの収集など）を行います。
 
-* Make sure to verify `etc/ssl_dist.conf` file has the right paths to keys and certificates.
-* Ensure config `cluster.proto_dist` is set to `inet_tls`.
+* `etc/ssl_dist.conf`ファイルに正しい鍵および証明書のパスが設定されていることを確認してください。
+* 設定の`cluster.proto_dist`が`inet_tls`に設定されていることを確認してください。
 
-## Port Mapping
+## ポートマッピング
 
-It's a good practice to keep the clustering ports internal by configuring firewall rules e.g., [AWS security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html) or [iptables](https://en.wikipedia.org/wiki/Iptables). If there is a firewall between the cluster nodes, the conventional listening ports should be allowed for other nodes in the cluster to reach. This section introduces the port mapping rules, which ensure that the firewall rules are configured correctly, allowing EMQX nodes to connect to each other while preventing unauthorized access from external sources.
+クラスターのポートを内部に限定するために、[AWSセキュリティグループ](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)や[iptables](https://en.wikipedia.org/wiki/Iptables)などのファイアウォールルールを設定することは良いプラクティスです。クラスター内のノード間にファイアウォールがある場合、他のノードが到達できるように従来のリスニングポートを許可する必要があります。本節では、ファイアウォールルールが正しく設定され、EMQXノードが相互接続できる一方で外部からの不正アクセスを防止するためのポートマッピングルールを紹介します。
 
-EMQX uses a port mapping rule for clustering to ensure that the communication between nodes is reliable and efficient. EMQX nodes communicate with each other through two different channels, Erlang Distribution ports and Cluster RPC ports. 
+EMQXはクラスター通信の信頼性と効率を確保するためにポートマッピングルールを使用しています。EMQXノードは、Erlang DistributionポートとクラスターRPCポートという2つの異なるチャネルを通じて通信します。
 
-| Channel                       | Description                                                  | Default Port                                       |
-| ----------------------------- | ------------------------------------------------------------ | -------------------------------------------------- |
-| **Erlang Distribution Ports** | For node communications                                      | `4370`                                             |
-| **Cluster RPC Ports**         | For node administrative tasks, such as node joining or leaving | `5370` or<br />`5369` if EMQX is deployed via Docker |
+| チャネル                       | 説明                                                         | デフォルトポート                                      |
+| ----------------------------- | ------------------------------------------------------------ | ---------------------------------------------------- |
+| **Erlang Distributionポート** | ノード間通信に使用                                           | `4370`                                               |
+| **クラスターRPCポート**       | ノードの管理タスク（ノードの参加・離脱など）に使用           | `5370` または<br />Docker展開時は `5369`            |
 
-EMQX applies the same port mapping rule for Erlang Distribution Ports and Cluster RPC Ports, which is: 
+EMQXはErlang DistributionポートとクラスターRPCポートに同じポートマッピングルールを適用しており、以下の式で計算されます。
 
 ```
 ListeningPort = BasePort + Offset
 ```
 
-The offset is calculated based on the numeric suffix of the node's name. If the node's name does not have a numeric suffix, then the offset is set to 0. For example:
+オフセットはノード名の数値サフィックスに基づいて計算されます。ノード名に数値サフィックスがない場合、オフセットは0に設定されます。例：
 
-- For node `emqx@192.168.0.12`, it does not have a numeric suffix, the port will be `4370` for Erlang Distribution Ports (or `5370` for Cluster RPC Ports). 
-- For node `emqx1@192.168.0.12`, the numeric suffix is 1, the port will be `4371`  (or `5371` for Cluster RPC Ports). 
-
+- ノード名が`emqx@192.168.0.12`の場合、数値サフィックスがないため、Erlang Distributionポートは`4370`（クラスターRPCポートは`5370`）になります。
+- ノード名が`emqx1@192.168.0.12`の場合、数値サフィックスは1なので、ポートは`4371`（クラスターRPCポートは`5371`）になります。

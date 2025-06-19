@@ -1,95 +1,90 @@
-# Log Trace
+# ログトレース
 
-EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, IP addresses, or rule IDs. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
+EMQX 5.0では、特定のクライアントID、トピック、IPアドレス、またはルールIDに対してリアルタイムでデバッグレベルのログ出力を可能にするログトレース機能を導入しました。これにより、過剰なログによるシステムパフォーマンスへの影響を抑えつつ、本番環境での詳細なデバッグが可能となり、EMQXの問題診断と解決の効率が向上します。
 
-## How Log Trace Works 
+## ログトレースの仕組み
 
-The Log Trace feature is implemented using the built-in Erlang Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace disk logs and creates a separate process for each client connection to process its messages.
+ログトレース機能は、組み込みのErlang Logger Filter関数を利用して実装されており、全体のメッセージスループットへの影響はほとんどありません。EMQXは独立したファイルハンドラーを使用してトレースのディスクログを永続化し、各クライアント接続ごとに別プロセスを生成してそのメッセージを処理します。
 
-When a client sends a message, the independent process responsible for that connection will first check if the message complies with the rules set by the customized Trace Filter. For example, the process may check if the message is from a specified client ID:
+クライアントがメッセージを送信すると、その接続を担当する独立プロセスはまずカスタマイズされたトレースフィルターのルールにメッセージが合致するかを確認します。例えば、指定されたクライアントIDからのメッセージかどうかをチェックします。
 
-- If the message is from the specified client ID, the process will convert the message into binary data and then asynchronously send it to the appropriate File Handler. 
-- If it is not from the specified client ID, EMQX will execute the original transfer logic. 
+- 指定されたクライアントIDからのメッセージであれば、そのメッセージをバイナリデータに変換し、非同期で該当するファイルハンドラーに送信します。  
+- 指定されたクライアントIDでなければ、EMQXは元の転送ロジックを実行します。
 
-The File Handlers are responsible for persisting the binary data into Trace files on disk. 
+ファイルハンドラーはバイナリデータをトレースファイルとしてディスクに永続化する役割を担います。
 
-## Why Use Log Trace
+## ログトレースを使う理由
 
-The Log Trace feature offers several key benefits that make it an effective tool for debugging and monitoring in production environments.
+ログトレース機能は、本番環境でのデバッグや監視に効果的な以下の主要な利点を提供します。
 
-- **Safety**: The filtering process is performed independently for each client, which prevents the File Handler from being overloaded with incoming messages. Since most of the logs are filtered out, this approach is safe for production environments. 
-- **Reliability**: This feature ensures that trace logging does not impact the overall message throughput of EMQX and provides a reliable and efficient way to store and retrieve log data.
-- **Agility**: Log Trace can be used for various scenarios, such as debugging abnormal messages or data losses, client disconnection, subscription failure, and etc. For system malfunctions that occur at a specific time, you can set the task start/stop time for automatic log collection, which is very convenient.
+- **安全性**：フィルタリング処理は各クライアントごとに独立して行われるため、ファイルハンドラーが大量のメッセージで過負荷になることを防ぎます。ほとんどのログはフィルタリングされるため、本番環境でも安全に利用できます。  
+- **信頼性**：トレースログがEMQX全体のメッセージスループットに影響を与えず、ログデータの保存と取得を信頼性高く効率的に行えます。  
+- **機動性**：異常メッセージやデータロス、クライアント切断、サブスクリプション失敗など様々なシナリオで利用可能です。特定時間に発生したシステム障害に対しては、タスクの開始・停止時間を設定して自動的にログ収集できるため非常に便利です。
 
-## Create Log Trace
+## ログトレースの作成
 
-This section demonstrates how to create Log Trace rules in the Dashboard. You can trace interactions based on Client ID, Topic, IP address, or Rule ID.
+このセクションでは、ダッシュボードでログトレースルールを作成する方法を説明します。クライアントID、トピック、IPアドレス、またはルールIDに基づいてトレースできます。
 
-1. Click **Diagnose** -> **Log Trace** on the left navigation menu. 
-2. On the **Log Trace** page, click **Create** to configure your trace rules. 
+1. 左側のナビゲーションメニューで **Diagnose** -> **Log Trace** をクリックします。  
+2. **Log Trace** ページで **Create** をクリックしてトレースルールを設定します。
 
-### Configure Common Trace Options
+### 共通トレースオプションの設定
 
-On the **Create Trace** dialog, configure the following options that apply to all trace types:
+**Create Trace** ダイアログで、すべてのトレースタイプに共通する以下のオプションを設定します。
 
-- **Name**: Enter a descriptive name for the trace to identify it in the logs. This name will appear in the trace list and should provide useful context, such as the type of trace (e.g., "Client ID Trace" or "Topic Trace") for quicker search and identification. 
-- **Start Time / End Time**: Select the start and end times for the trace. If the start time is earlier than or the same as the current time, the trace will begin from the current time.
-- **Formatter**: Select the formatter to specify how the log output should be formatted. Options include `JSON` and `Text`.
-- **Payload Encode**: Specify the format in which the payload will be encoded in the trace log file. Choose one of the following options:
-  - `Text`: A text-based or plain text protocol. Recommended for JSON-encoded payloads.
-  - `HEX`: Binary hexadecimal encoding. Recommended for custom binary protocols.
-  - `Hidden`: Obfuscates the payload as `******` (useful for masking sensitive information).
-- **Payload Limit**: Set the maximum number of bytes that will be printed for the payload in the trace file. This option is only effective when **Payload Encode** is set to either `Text` or `HEX`. If the payload exceeds this limit, it will be truncated. The default value is `1024 B`. When the Payload Limit is disabled, the trace will not impose a limit on the payload size. It is enabled by default.
+- **Name**：ログ内で識別しやすい説明的な名前を入力します。この名前はトレース一覧に表示され、トレースの種類（例：「Client ID Trace」や「Topic Trace」）などの有用なコンテキストを含めることで検索や識別が容易になります。  
+- **Start Time / End Time**：トレースの開始時間と終了時間を選択します。開始時間が現在時刻より過去または同時の場合は、現在時刻からトレースが開始されます。  
+- **Formatter**：ログ出力のフォーマットを指定します。`JSON` または `Text` が選択可能です。  
+- **Payload Encode**：トレースログファイル内のペイロードのエンコード形式を指定します。以下のいずれかを選択してください。  
+  - `Text`：テキストベースまたはプレーンテキストプロトコル。JSONエンコードされたペイロードに推奨されます。  
+  - `HEX`：バイナリの16進数エンコード。カスタムバイナリプロトコルに推奨されます。  
+  - `Hidden`：ペイロードを `******` としてマスク（機密情報の隠蔽に有用）。  
+- **Payload Limit**：トレースファイルに出力するペイロードの最大バイト数を設定します。このオプションは **Payload Encode** が `Text` または `HEX` の場合にのみ有効です。ペイロードが制限を超える場合は切り詰められます。デフォルトは `1024 B` です。無効にするとペイロードサイズに制限はかかりません。デフォルトで有効です。
 
-### Trace by Client ID
+### クライアントIDによるトレース
 
-1. On the Create Trace dialog, select `Client ID` from the **Type** drop-down list.
-2. Type the Client IDs to be traced.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. Create Traceダイアログで、**Type** ドロップダウンリストから `Client ID` を選択します。  
+2. トレース対象のクライアントIDを入力します。  
+3. 共通オプションを設定します。詳細は[共通トレースオプションの設定](#共通トレースオプションの設定)を参照してください。  
+4. **Create** をクリックして完了します。
 
-The log trace will contain interactions for the specified Client ID with the EMQX connection.
+指定されたクライアントIDのEMQX接続に関するインタラクションがログトレースに含まれます。
 
-### Trace by Topic
+### トピックによるトレース
 
-1. On the Create Trace dialog, select `Topic` from the **Type** drop-down list.
-2. Type the topic to be traced. Wildcard characters are supported, for example, `/pay/#`.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. Create Traceダイアログで、**Type** ドロップダウンリストから `Topic` を選択します。  
+2. トレース対象のトピックを入力します。ワイルドカード文字もサポートしています（例：`/pay/#`）。  
+3. 共通オプションを設定します。詳細は[共通トレースオプションの設定](#共通トレースオプションの設定)を参照してください。  
+4. **Create** をクリックして完了します。
 
-The log trace will contain information about publishing, subscription and unsubscription of the specified topic.
+指定されたトピックのパブリッシュ、サブスクライブ、サブスクリプション解除に関する情報がログトレースに含まれます。
 
-### Trace by IP Address
+### IPアドレスによるトレース
 
-1. On the Create Trace dialog, select `IP Address` from the **Type** drop-down list.
-2. Type the IP address to be traced, for example, `192.168.0.5`.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. Create Traceダイアログで、**Type** ドロップダウンリストから `IP Address` を選択します。  
+2. トレース対象のIPアドレスを入力します（例：`192.168.0.5`）。  
+3. 共通オプションを設定します。詳細は[共通トレースオプションの設定](#共通トレースオプションの設定)を参照してください。  
+4. **Create** をクリックして完了します。
 
-The log trace will contain interactions for the specified IP address with the EMQX connection.
+指定されたIPアドレスのEMQX接続に関するインタラクションがログトレースに含まれます。
 
-### Trace by Rule ID
+### ルールIDによるトレース
 
-1. On the Create Trace dialog, select `Rule ID` from the **Type** drop-down list.
-2. Enter the rule ID you need to trace. You can find the rule ID on the **Integration** -> **Rules** page.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. Create Traceダイアログで、**Type** ドロップダウンリストから `Rule ID` を選択します。  
+2. トレース対象のルールIDを入力します。ルールIDは **Integration** -> **Rules** ページで確認できます。  
+3. 共通オプションを設定します。詳細は[共通トレースオプションの設定](#共通トレースオプションの設定)を参照してください。  
+4. **Create** をクリックして完了します。
 
-The trace results will include the execution results of the rule SQL and the execution logs for all actions added to the rule, useful for debugging and optimizing the rule.
+トレース結果にはルールSQLの実行結果およびルールに追加されたすべてのアクションの実行ログが含まれ、ルールのデバッグや最適化に役立ちます。
 
-The [Test Rules](../data-integration/rule-get-started.md#test-rules) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
+[Test Rules](../data-integration/rule-get-started.md#test-rules) 操作では、このトレースタイプを自動的に作成・管理できます。ルールをテストすると、EMQXは自動的にトレースタスクを生成し、テスト終了後に自動削除します。
 
-## View Log Trace 
+## ログトレースの確認
 
-The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the specified end time.
+作成されたトレースレコードが一覧表示されます。最大で30件のトレースログを作成可能です。リストに表示されるログファイルサイズは非圧縮ファイルサイズの合計です。**Stop** ボタンをクリックすると手動でログ記録を停止できます。または指定した終了時間まで待機します。
 
-Click a specific trace record by the name, you can select to download the log on different nodes.
+特定のトレースレコード名をクリックすると、異なるノードでログのダウンロードを選択できます。
 
-<img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
+<img src="./assets/log-trace-node-ee.png" alt="ログトレースノード" style="zoom:50%;" />
 
-Trace logs have a maximum capacity of 512MB logs per node. Once the generated log file reaches the maximum limit, it stops appending any further logs and raises an alert in the primary log file. In the event of a timeout during Dashboard downloading, you can locate the log file in the `/data/trace` directory on the server. When an EMQX cluster is restarted, the unfinished log trace will be resumed.
-
-
-
-
-
+トレースログはノードごとに最大512MBまで保存可能です。生成されたログファイルが最大容量に達すると、それ以上のログ追記を停止し、プライマリログファイルにアラートを出します。ダッシュボードからのダウンロードがタイムアウトした場合は、サーバーの `/data/trace` ディレクトリにログファイルが保存されているのでそちらをご確認ください。EMQXクラスターを再起動すると、未完了のログトレースは再開されます。

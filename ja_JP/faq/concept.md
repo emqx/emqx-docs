@@ -1,31 +1,31 @@
-# Concept FAQs
+# コンセプトFAQ
 
-## Which products do we offer?
+## どのような製品を提供していますか？
 
-EMQX has [two main product lines](https://www.emqx.com/en/products/emqx). Different products support different numbers of connections, features, services, etc.
+EMQXには[2つの主要な製品ライン](https://www.emqx.com/en/products/emqx)があります。製品ごとに対応可能な接続数、機能、サービスなどが異なります。
 
-- **EMQX Enterprise**: EMQX Enterprise is the commercial self-hosted edition of an MQTT messaging platform. It supports data persistence (supports Redis, MySQL, MongoDB or PostgreSQL), data integration to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment, etc. It supports 1 million concurrent MQTT connections.
-- **EMQX Cloud**: [EMQX Cloud](https://www.emqx.com/cloud) is our fully managed MQTT cloud service where EMQ handles all aspects of infrastructure deployment, maintenance, scaling, and upgrades. As the world's first fully managed MQTT 5.0 public cloud service, EMQX Cloud provides a one-stop O&M colocation and a unique isolated environment for MQTT services. In the era of Internet of Everything, EMQX Cloud can help you quickly build industry applications and easily realize the collection, transmission, computation and persistence of IoT data.
+- **EMQX Enterprise**: EMQX Enterpriseは商用のセルフホスト型MQTTメッセージングプラットフォームです。データのパーシステンス（Redis、MySQL、MongoDB、PostgreSQL対応）、Kafkaへのデータ連携、LoRaWANサポート、EMQX監視、Kubernetesデプロイメントなどをサポートします。最大100万の同時MQTT接続に対応しています。
+- **EMQX Cloud**: [EMQX Cloud](https://www.emqx.com/cloud)は完全マネージド型のMQTTクラウドサービスで、EMQがインフラのデプロイ、保守、スケーリング、アップグレードをすべて管理します。世界初の完全マネージドMQTT 5.0パブリッククラウドサービスとして、ワンストップの運用・保守コロケーションとMQTTサービスの独立した環境を提供します。IoT時代において、EMQX Cloudは業界向けアプリケーションの迅速な構築と、IoTデータの収集、送信、計算、パーシステンスを容易に実現します。
 
-## What's a WebSocket? When to use a Websocket to connect to EMQX?
+## WebSocketとは何ですか？EMQXに接続する際にWebSocketを使うのはどんな場合ですか？
 
-WebSocket is a full-duplex communication protocol with an API supported by modern web browsers. A user can use the WebSocket API to create a dual direction communication channel between a web browser and a server. Through a WebSocket, the server can push messages to the web browser. EMQX provides support for WebSocket. This means that users can publish to MQTT topics and subscribe to MQTT topics from browsers.
+WebSocketは双方向通信を可能にするプロトコルで、現代のウェブブラウザがサポートするAPIです。ユーザーはWebSocket APIを使い、ウェブブラウザとサーバー間に双方向通信チャネルを作成できます。WebSocketを通じて、サーバーはブラウザにメッセージをプッシュできます。EMQXはWebSocketをサポートしており、ブラウザからMQTTトピックへのパブリッシュやサブスクライブが可能です。
 
-## How does the EMQX achieve high concurrency and high availability?
+## EMQXはどのように高い同時接続数と高可用性を実現していますか？
 
-High concurrency and availability are design goals of EMQX. To achieve these goals, several technologies are applied:
+高い同時接続数と高可用性はEMQXの設計目標です。これを実現するために以下の技術を採用しています：
 
-- Making maximum use of the soft-realtime, high concurrent and fault-tolerant Erlang/OTP platform;
-- Full asynchronous architecture;
-- Layered design of connection, session, route and cluster;
-- Separated messaging and control panel;
+- ソフトリアルタイム、高同時接続、フォールトトレランスに優れたErlang/OTPプラットフォームを最大限活用
+- 完全非同期アーキテクチャ
+- 接続、セッション、ルート、クラスターの階層設計
+- メッセージングとコントロールパネルの分離
 
-With the well design and implementation, a single EMQX node can handle 5 millions connections.
+これらの設計と実装により、単一のEMQXノードで500万接続を処理可能です。
 
-EMQX supports clustering. The EMQX performance can be scale-out with the increased number of nodes in cluster, and the MQTT service will not be interrupted when a single node is down.
+EMQXはクラスタリングをサポートしており、クラスタ内のノード数を増やすことで性能をスケールアウトできます。ノードが1つダウンしてもMQTTサービスは中断されません。
 
-## Can EMQX guarantee the original order when forwarding messages to subscribers?
+## EMQXはメッセージをサブスクライバーに転送する際、元の順序を保証しますか？
 
-EMQX ensures that messages with the same topic from the same client are forwarded in the order they were received, regardless of the QoS level. The message forwarding order remains consistent regardless of message loss or duplication, as per MQTT requirements.
+EMQXは同一クライアントから同一トピックに対するメッセージの転送順序を、QoSレベルに関わらず受信順に保証します。メッセージの損失や重複があっても、MQTT仕様に基づき転送順序は一貫しています。
 
-However, EMQX does not guarantee the forwarding order of messages from different topics. These messages can be considered as entering separate channels. For example, if messages from topic A arrive at EMQX before messages from topic B, it is possible that messages from topic B will be forwarded earlier.
+ただし、異なるトピック間のメッセージ転送順序は保証しません。これらは別々のチャネルとして扱われます。例えば、トピックAのメッセージがトピックBのメッセージより先にEMQXに到着しても、トピックBのメッセージが先に転送される可能性があります。

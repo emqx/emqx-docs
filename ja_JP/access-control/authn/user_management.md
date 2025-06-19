@@ -1,33 +1,32 @@
-# Use HTTP API to Manage User Data
+# HTTP API を使ったユーザーデータ管理
 
-For the authentication data stored in the built-in database, you can use EMQX Dashboard or HTTP API to create, update, delete and list user credentials, which are:
+組み込みデータベースに保存されている認証データについては、EMQX ダッシュボードまたは HTTP API を使ってユーザー認証情報の作成、更新、削除、一覧取得が可能です。対象は以下の通りです：
 
-- [Use built-in database for password authentication](./mnesia.md)
-- [MQTT 5.0 enhanced authentication](./scram.md)
+- [パスワード認証に組み込みデータベースを使用する](./mnesia.md)
+- [MQTT 5.0 強化認証](./scram.md)
 
+## API エンドポイント
 
-## API Endpoints
+グローバル MQTT チェーンのユーザー用エンドポイントは `/api/v5/authentication/{id}/users` です。  
+特定の MQTT リスナーチェーンのユーザー用エンドポイントは `/api/v5/listeners/{listener_id}/authentication/{id}` です。  
+グローバルな `gateway` プロトコルチェーンのユーザー用エンドポイントは `/api/v5/gateway/{protocol}/authentication` です。  
+`gateway` プロトコルのリスナーチェーンのユーザー用エンドポイントは `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication` です。
 
-The endpoint for the users of the global MQTT chain is `/api/v5/authentication/{id}/users`.
-Endpoint for the uses of a concrete MQTT listener chain is `/api/v5/listeners/{listener_id}/authentication/{id}`.
-Endpoint for the users of a global `gateway` protocol chain is `/api/v5/gateway/{protocol}/authentication`.
-Endpoint for the uses of a `gateway` protocol listener chain is `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`.
+識別子の規則については、[認証 API ドキュメント](./authn.md#http-api) を参照してください。
 
-See the [authentication API documentation](./authn.md#http-api) for identifier conventions.
+## ユーザーのインポート
 
-## Importing Users
+`password_based:built_in_database` 認証方式に対してユーザーインポートがサポートされています。
 
-User import is supported for the `password_based:built_in_database` authenticator.
-
-The endpoints for importing users into the corresponding chains are:
+対応するチェーンにユーザーをインポートするためのエンドポイントは以下の通りです：
 
 - `/api/v5/authentication/{id}/import_users`
 - `/api/v5/gateway/{protocol}/authentication/import_users`
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/import_users`
 
-The request should be a multipart form-data `POST`.
+リクエストは multipart form-data の `POST` 形式で送信してください。
 
-Example:
+例：
 
 ```
 curl -v -u admin:public -X 'POST' \
@@ -36,7 +35,7 @@ curl -v -u admin:public -X 'POST' \
     'http://localhost:18083/api/v5/authentication/password_based%3Abuilt_in_database/import_users'
 ```
 
-The following file formats (identified by file extension) are supported:
+サポートされているファイル形式（拡張子で判別）は以下の通りです：
 
 * .csv
   ```txt

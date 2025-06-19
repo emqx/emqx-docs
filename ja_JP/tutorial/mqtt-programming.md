@@ -1,44 +1,43 @@
-# MQTT Programming
+# MQTTプログラミング
 
-This page explores how to use MQTT in various scenarios to achieve seamless communication between clients and MQTT brokers. Whether you are involved in server-side development, front-end development, mobile development, or embedded hardware development, you can find key features for implementing MQTT applications on this page, such as connecting to a broker, subscribing to topics, and sending and receiving messages.
+このページでは、クライアントとMQTTブローカー間のシームレスな通信を実現するためのさまざまなシナリオにおけるMQTTの使い方を解説します。サーバーサイド開発、フロントエンド開発、モバイル開発、組み込みハードウェア開発のいずれに携わっていても、ブローカーへの接続、トピックのサブスクライブ、メッセージの送受信など、MQTTアプリケーションを実装するための主要な機能をこのページで見つけることができます。
 
-The reference examples listed on this page provide detailed step-by-step instructions and code explanations for various MQTT programming scenarios. They help you implement MQTT applications and introduce specific libraries, frameworks, and tools for each application scenario, simplifying the integration process and ensuring a good development experience.
+本ページに掲載されているリファレンス例は、さまざまなMQTTプログラミングのシナリオに対して詳細なステップバイステップの手順とコード解説を提供しています。これにより、MQTTアプリケーションの実装を支援するとともに、各アプリケーションシナリオに適したライブラリ、フレームワーク、ツールを紹介し、統合プロセスを簡素化し、良好な開発体験を保証します。
 
-**Server-side Development**
+**サーバーサイド開発**
 
-- [How to Use MQTT in Java](https://www.emqx.com/en/blog/how-to-use-mqtt-in-java)
-- [How to Use MQTT in Node.js Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-nodejs)
-- [How to Use MQTT in PHP Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-php)
-- [How to Use MQTT in Golang](https://www.emqx.com/en/blog/how-to-use-mqtt-in-golang)
-- [How to Use MQTT in Python](https://www.emqx.com/en/blog/how-to-use-mqtt-in-python)
-- [Python Async MQTT Framework - HBMQTT](https://www.emqx.com/en/blog/python-async-mqtt-client-hbmqtt)
-- [How to Use MQTT in Dart](https://www.emqx.com/en/blog/how-to-use-mqtt-in-dart)
-- [Comparison of Python MQTT Clients](https://www.emqx.com/en/blog/comparision-of-python-mqtt-client)
-- [How to Use MQTT in Rust](https://www.emqx.com/en/blog/how-to-use-mqtt-in-rust)
+- [JavaでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-java)
+- [Node.jsプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-nodejs)
+- [PHPプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-php)
+- [GolangでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-golang)
+- [PythonでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-python)
+- [Python非同期MQTTフレームワーク - HBMQTT](https://www.emqx.com/en/blog/python-async-mqtt-client-hbmqtt)
+- [DartでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-dart)
+- [Python MQTTクライアントの比較](https://www.emqx.com/en/blog/comparision-of-python-mqtt-client)
+- [RustでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-rust)
 
-**Front-end Development**
+**フロントエンド開発**
 
-- [Connecting to MQTT Broker with WebSocket](https://www.emqx.com/en/blog/connect-to-mqtt-broker-with-websocket)
-- [MQTT.js Beginner's Tutorial](https://www.emqx.com/en/blog/mqtt-js-tutorial)
-- [How to Use MQTT in Vue Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-vue)
-- [How to Use MQTT in React Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-react)
-- [How to Use MQTT in Angular Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-angular)
-- [How to Use MQTT in Electron Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-electron)
+- [WebSocketでMQTTブローカーに接続する方法](https://www.emqx.com/en/blog/connect-to-mqtt-broker-with-websocket)
+- [MQTT.js初心者向けチュートリアル](https://www.emqx.com/en/blog/mqtt-js-tutorial)
+- [VueプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-vue)
+- [ReactプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-react)
+- [AngularプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-angular)
+- [ElectronプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-electron)
 
-**Mobile Development**
+**モバイル開発**
 
-- [Using MQTT in Flutter Projects](https://www.emqx.com/en/blog/using-mqtt-in-flutter)
-- [CocoaMQTT v2.0: First MQTT 5.0 Client for iOS](https://www.emqx.com/en/blog/ios-mqtt5-client)
-- [How to Use MQTT in React Native Projects](https://www.emqx.com/en/blog/how-to-use-mqtt-in-react-native)
-- [Connecting to MQTT with Kotlin in Android](https://www.emqx.com/en/blog/android-connects-mqtt-using-kotlin)
-- [MQTT TLS/SSL Authentication in Android](https://www.emqx.com/en/blog/android-mqtt-ssl-tls-authentication)
+- [FlutterプロジェクトでのMQTTの利用](https://www.emqx.com/en/blog/using-mqtt-in-flutter)
+- [CocoaMQTT v2.0：iOS向け初のMQTT 5.0クライアント](https://www.emqx.com/en/blog/ios-mqtt5-client)
+- [React NativeプロジェクトでのMQTTの使い方](https://www.emqx.com/en/blog/how-to-use-mqtt-in-react-native)
+- [AndroidでKotlinを使ってMQTTに接続する方法](https://www.emqx.com/en/blog/android-connects-mqtt-using-kotlin)
+- [AndroidでのMQTT TLS/SSL認証](https://www.emqx.com/en/blog/android-mqtt-ssl-tls-authentication)
 
-**Embedded Hardware Development**
+**組み込みハードウェア開発**
 
-- [Using MQTT on Raspberry Pi](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
-- [MQTT Tutorial with MicroPython on Raspberry Pi](https://www.emqx.com/en/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi)
-- [ESP32 Connects to Free Public MQTT Broker](https://www.emqx.com/en/blog/esp32-connects-to-the-free-public-mqtt-broker)
-- [ESP8266 Connects to Free Public MQTT Broker](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
-- [ESP8266 + MQTT: Remote Control of LED Lights](https://www.emqx.com/en/blog/esp8266_mqtt_led)
-- [Uploading Sensor Data to MQTT Cloud Service via NodeMCU (ESP8266)](https://www.emqx.com/en/blog/upload-sensor-data-to-mqtt-cloud-service-via-nodemcu-esp8266)
-
+- [Raspberry PiでのMQTTの利用](https://www.emqx.com/en/blog/use-mqtt-with-raspberry-pi)
+- [Raspberry Piを使ったMicroPythonによるMQTTチュートリアル](https://www.emqx.com/en/blog/micro-python-mqtt-tutorial-based-on-raspberry-pi)
+- [ESP32が無料パブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp32-connects-to-the-free-public-mqtt-broker)
+- [ESP8266が無料パブリックMQTTブローカーに接続](https://www.emqx.com/en/blog/esp8266-connects-to-the-public-mqtt-broker)
+- [ESP8266 + MQTT：LEDライトのリモート制御](https://www.emqx.com/en/blog/esp8266_mqtt_led)
+- [NodeMCU（ESP8266）経由でセンサーデータをMQTTクラウドサービスにアップロード](https://www.emqx.com/en/blog/upload-sensor-data-to-mqtt-cloud-service-via-nodemcu-esp8266)

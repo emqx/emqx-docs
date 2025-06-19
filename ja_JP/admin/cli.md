@@ -1,47 +1,47 @@
-# Command Line Interface
+# コマンドラインインターフェース
 
-This page introduces all kinds of startup and administrative commands supported by EMQX and gives detailed introductions to ctl administrative commands.
+このページでは、EMQXがサポートする起動および管理コマンドの種類を紹介し、ctl管理コマンドについて詳細に解説します。
 
-## Startup Commands
+## 起動コマンド
 
-EMQX supports some basic startup and administrative commands, which can be executed using the `emqx <command>` command.
+EMQXは基本的な起動および管理コマンドをサポートしており、`emqx <command>` コマンドで実行できます。
 
-Here are some commonly used startup and administrative commands:
+よく使われる起動および管理コマンドは以下の通りです：
 
-| Command    | Description                                                  |
+| コマンド    | 説明                                                         |
 | ---------- | ------------------------------------------------------------ |
-| start      | Start EMQX in daemon mode, without requiring an interactive shell during runtime. |
-| console    | Start EMQX in Erlang or Elixir interactive shell. Used for debugging EMQX in a development environment, requiring interaction with EMQX. |
-| foreground | Start EMQX in foreground mode, without using an interactive shell. Used to start EMQX in a development environment without running it in the background. |
-| stop       | Stop the running EMQX node.                                  |
-| ctl        | Manage and monitors EMQX. Executing `emqx ctl help` can get more detailed information. |
+| start      | EMQXをデーモンモードで起動します。実行時に対話型シェルは不要です。 |
+| console    | EMQXをErlangまたはElixirの対話型シェルで起動します。開発環境でのデバッグに使用し、EMQXとの対話が必要です。 |
+| foreground | EMQXをフォアグラウンドモードで起動します。対話型シェルは使用しません。開発環境でバックグラウンドでなく起動する際に使用します。 |
+| stop       | 実行中のEMQXノードを停止します。                           |
+| ctl        | EMQXの管理と監視を行います。`emqx ctl help`で詳細情報を取得できます。 |
 
-The following are advanced commands for development and debugging, and ordinary users usually don't need to care about them:
+以下は開発やデバッグ向けの高度なコマンドで、通常のユーザーはあまり意識する必要はありません：
 
-| Command        | Description                                                  |
+| コマンド        | 説明                                                         |
 | -------------- | ------------------------------------------------------------ |
-| remote_console | Connect to the interactive shell of a remote EMQX node.      |
-| attach         | Attach to a running EMQX node to perform interactive operations. |
-| ertspath       | Retrieve the path of the EMQX Erlang library.                |
-| root_dir       | Retrieve the path of the EMQX root directory.                |
-| pid            | Retrieve the process ID of the running EMQX node.            |
-| ping           | Check if the EMQX node is running.                           |
-| check_config   | Validate if the EMQX configuration file is correct.          |
-| console_clean  | Clear the output of the interactive shell console.           |
-| escript        | Execute an Escript script on the EMQX node.                  |
+| remote_console | リモートEMQXノードの対話型シェルに接続します。               |
+| attach         | 実行中のEMQXノードにアタッチして対話操作を行います。         |
+| ertspath       | EMQXのErlangライブラリのパスを取得します。                   |
+| root_dir       | EMQXのルートディレクトリのパスを取得します。                 |
+| pid            | 実行中のEMQXノードのプロセスIDを取得します。                 |
+| ping           | EMQXノードが稼働中かどうかを確認します。                     |
+| check_config   | EMQXの設定ファイルが正しいか検証します。                     |
+| console_clean  | 対話型シェルのコンソール出力をクリアします。                 |
+| escript        | EMQXノード上でEscriptスクリプトを実行します。                |
 
-## The ctl Commands
+## ctlコマンド
 
-The EMQX `ctl` command provides multiple subcommands for managing and monitoring EMQX. The `ctl` command needs to be run after the EMQX service is started.
+EMQXの`ctl`コマンドは、EMQXの管理および監視のための複数のサブコマンドを提供します。`ctl`コマンドはEMQXサービス起動後に実行する必要があります。
 
-> EMQX also provides `emqx_ctl` command, which is an alias of `emqx ctl`.
-> The `ctl` command remotely connects to the specified EMQX node by starting a hidden Erlang node, executes an Erlang remote call, and then prints the returned result. Therefore, it is advised to avoid excessive usage of the `ctl` command.
+> EMQXは`emqx_ctl`コマンドも提供しており、これは`emqx ctl`のエイリアスです。  
+> `ctl`コマンドは隠れたErlangノードを起動して指定したEMQXノードにリモート接続し、Erlangのリモートコールを実行し、結果を表示します。したがって、`ctl`コマンドの過剰な使用は避けることが推奨されます。
 
-Below is a list of all the subcommands of the `ctl` command along with their brief descriptions. This section aims to introduce the functionality of the commands, while detailed parameter information can be viewed using the `help` command.
+以下に`ctl`コマンドの全サブコマンドと簡単な説明を示します。詳細なパラメータ情報は`help`コマンドで確認できます。
 
 ## status
 
-This command is a quick inspection to see if the broker is up and running.
+ブローカーが起動しているかどうかを素早く確認するコマンドです。
 
 ```bash
 $ emqx ctl status
@@ -50,7 +50,7 @@ Node 'emqx@127.0.0.1' 5.0.3 is started
 
 ## broker
 
-This command is to inspect the local broker running status, statistics and metrics.
+ローカルブローカーの稼働状況、統計、メトリクスを確認するコマンドです。
 
 ```bash
 $ emqx ctl broker
@@ -62,13 +62,13 @@ uptime    : 52 seconds
 
 ## observer
 
-This command provides Erlang virtual machine insights including a realtime view like linux's `top` command. Subcommands are as follows:
+Erlang仮想マシンの情報を提供し、Linuxの`top`コマンドのようなリアルタイムビューを表示します。サブコマンドは以下の通りです：
 
-| Command           | Description                                                  |
+| コマンド           | 説明                                                         |
 | ----------------- | ------------------------------------------------------------ |
-| observer status   | Launch the observer in the current console, used to monitor and debug the status and activities of the EMQX node. |
-| observer bin_leak | Force all processes to perform garbage collection and prints the top 100 processes that release the maximum amount of binary data, potentially revealing potential memory leak issues. |
-| observer load Mod | Ensure that the specified module is loaded on all nodes in the EMQX cluster. This command can be used to load modules when it is necessary to ensure that they are available throughout the entire cluster. |
+| observer status   | 現在のコンソールでobserverを起動し、EMQXノードの状態や活動を監視・デバッグします。 |
+| observer bin_leak | 全プロセスにガベージコレクションを強制し、最大のバイナリデータを解放した上位100プロセスを表示し、メモリリークの可能性を調査します。 |
+| observer load Mod | 指定したモジュールをEMQXクラスター内の全ノードにロードします。クラスター全体でモジュールを利用可能にする際に使用します。 |
 
 ### observer status
 
@@ -102,19 +102,19 @@ Loaded 'Mod' module on []: ok
 
 ## conf cluster_sync
 
-This command is mostly for troubleshooting when there is something wrong with cluster-calls used to sync configuration changes between the nodes in the cluster. 
+このコマンドは、クラスター内のノード間で設定変更を同期するためのcluster-callsに問題がある場合のトラブルシューティングに主に使用します。
 
-::: tip 
+::: tip
 
-In EMQX 5.0.x, this command was named `cluster_call`. This old command is still available in EMQX 5.1 but it is not displayed in the help information.
+EMQX 5.0.xではこのコマンドは`cluster_call`という名前でした。この古いコマンドはEMQX 5.1でも利用可能ですが、ヘルプ情報には表示されません。
 
 :::
 
-EMQX HTTP API can be used to modify many configurations. When an API is called, for example, through operations in the Dashboard, the node receiving the request first writes the modified content locally to `data/configs/cluster.hocon`. Then, the same operation is recorded in the database and asynchronously forwarded to other nodes in the cluster.
+EMQXのHTTP APIは多くの設定変更に使用できます。API呼び出し（例えばダッシュボード操作）を受けたノードは、まず変更内容をローカルの`data/configs/cluster.hocon`に書き込みます。その後、同じ操作をデータベースに記録し、非同期でクラスター内の他ノードに転送します。
 
-If for some reason, this replication can not apply in a peer node, this command can be used to inspect and even fix the replication so it can move forward.
+何らかの理由で、この複製がピアノードで適用できない場合、このコマンドで複製状況を確認し、修正して進めることが可能です。
 
-EMQX generates an ID (tnxid) for each configuration modification within the cluster scope. This ID strictly increases within the cluster scope, and every modification, such as changing a configuration from the Dashboard, is recorded in the database. The following example shows viewing the content of the second modification (tnxid=2), which is an operation to enable a TLS listener.
+EMQXはクラスター範囲内の各設定変更に対してID（tnxid）を生成します。このIDはクラスター内で厳密に増加し、ダッシュボードからの設定変更などすべての変更がデータベースに記録されます。以下の例は、tnxid=2の2番目の変更内容（TLSリスナーを有効化する操作）を表示しています。
 
 ```bash
 $ emqx ctl conf cluster_sync inspect 2
@@ -129,18 +129,18 @@ $ emqx ctl conf cluster_sync inspect 2
 ```
 
 ::: tip
-The `skip` and `fast_forward` commands may result in diverged configs between the nodes in the cluster.
+`skip`や`fast_forward`コマンドはクラスター内のノード間で設定が乖離する可能性があります。
 :::
 
 ## admins
 
-The `admins` command can be used to create, update or delete administrative users. It has the following subcommands:
+`admins`コマンドは管理ユーザーの作成、更新、削除に使用します。サブコマンドは以下の通りです：
 
-| Command                                        | Description                                       |
-| ---------------------------------------------- | ------------------------------------------------- |
-| admins add \<Username> \<Password> \<Description> | Add a Dashboard user.                             |
-| admins passwd \<Username> \<Password>            | Reset the password for a specific Dashboard user. |
-| admins del \<Username>                          | Delete a specific Dashboard user.                 |
+| コマンド                                        | 説明                                   |
+| ---------------------------------------------- | ------------------------------------- |
+| admins add \<Username> \<Password> \<Description> | ダッシュボードユーザーを追加します。 |
+| admins passwd \<Username> \<Password>            | 指定したダッシュボードユーザーのパスワードをリセットします。 |
+| admins del \<Username>                          | 指定したダッシュボードユーザーを削除します。 |
 
 ### admins add \<Username> \<Password> \<Description>
 
@@ -165,16 +165,16 @@ ok
 
 ## retainer
 
-The `retainer` command can be used to inspect or manage retained messages. It also comes with a `emqx ctl retainer reindex` command which can be used to create or update indices for retained messages.
+`retainer`コマンドは保持されたメッセージの確認や管理に使用します。`emqx ctl retainer reindex`コマンドで保持メッセージのインデックス作成や更新も可能です。
 
-| Command                        | Description                                                  |
+| コマンド                        | 説明                                                         |
 | ------------------------------ | ------------------------------------------------------------ |
-| retainer info                  | Display the number of retained messages.                     |
-| retainer topics                | Display all topics with retained messages.                   |
-| retainer clean                 | Clear all retained messages.                                 |
-| retainer clean \<Topic>         | Clear retained messages according to the specific topic filter. |
-| retainer reindex status        | Display the status of reindexing process.                    |
-| retainer reindex start [force] | Generate a new index for retained message topics based on the configuration settings. Pass `true` as the `<force>` parameter to ignore any previously started reindexing process. |
+| retainer info                  | 保持メッセージの数を表示します。                             |
+| retainer topics                | 保持メッセージがあるすべてのトピックを表示します。           |
+| retainer clean                 | すべての保持メッセージをクリアします。                       |
+| retainer clean \<Topic>         | 指定したトピックフィルターに従って保持メッセージをクリアします。 |
+| retainer reindex status        | インデックス作成処理の状態を表示します。                     |
+| retainer reindex start [force] | 設定に基づき保持メッセージトピックの新しいインデックスを生成します。`<force>`に`true`を渡すと、既に開始されたインデックス作成を無視します。 |
 
 ### retainer info
 
@@ -220,20 +220,19 @@ Reindexed 0 messages
 Reindexing finished
 ```
 
-
 ## cluster
 
-This command is used to view and manage the cluster status of nodes.
+クラスター内のノードの状態を確認・管理するコマンドです。
 
-Note that the `join` command in EMQX for joining a cluster is a "request" sent to the node specified in the parameters, rather than an "invitation". In other words, the command `emqx ctl cluster join <OneOfTheClusteredNodes>` is used to send a request to join the cluster of the node specified by `<OneOfTheClusteredNodes>`, rather than having that node join its own cluster.
+EMQXの`join`コマンドはクラスター参加の「リクエスト」を指定ノードに送るもので、「招待」ではありません。つまり、`emqx ctl cluster join <OneOfTheClusteredNodes>`は、指定ノードのクラスターに参加するリクエストを送るコマンドであり、指定ノード自身が自分のクラスターに参加するわけではありません。
 
-| Command                      | Description                                | Use cases and Considerations                                 |
-| ---------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
-| emqx ctl cluster             | Command for cluster control of EMQX.       |                                                              |
-| cluster join \<Node\>        | Join a cluster.                            | - Use this command to join a node to the EMQX cluster where the specified node is located.<br />- Ensure that the specified node is active and accessible. |
-| cluster leave                | Leave the cluster.                         | - Use this command to remove the node from the current EMQX cluster. |
-| cluster force-leave \<Node\> | Forcefully remove a node from the cluster. | - Use this command to forcefully remove the specified node from the EMQX cluster.<br />- Note that this operation may cause cluster state inconsistency, so use it with caution. |
-| cluster status [--json]      | View the cluster status.                   | - Use this command to view the status of the EMQX cluster.<br />- The optional `--json` parameter displays the cluster status in JSON format.<br />- Useful for monitoring and debugging the health of the cluster. |
+| コマンド                      | 説明                                   | 利用例・注意点                                               |
+| ---------------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| emqx ctl cluster             | EMQXのクラスター制御コマンドです。    |                                                              |
+| cluster join \<Node\>        | クラスターに参加します。               | - 指定ノードが存在しアクセス可能であることを確認してください。<br />- 指定ノードのクラスターに参加するために使用します。 |
+| cluster leave                | クラスターから離脱します。             | - 現在のクラスターからノードを除外するために使用します。     |
+| cluster force-leave \<Node\> | 強制的にノードをクラスターから除外します。 | - 指定ノードを強制的にクラスターから除外します。<br />- クラスター状態の不整合を招く可能性があるため注意して使用してください。 |
+| cluster status [--json]      | クラスターの状態を確認します。         | - クラスターの状態を表示します。<br />- `--json`オプションでJSON形式で表示可能です。<br />- クラスターの監視やデバッグに役立ちます。 |
 
 ### cluster join \<Node\>
 
@@ -277,13 +276,13 @@ $ emqx ctl cluster status --json
 
 ## clients
 
-This command is to view and manage connected clients.
+接続中のクライアントを確認・管理するコマンドです。
 
-| Command                   | Description                                                  |
+| コマンド                   | 説明                                                         |
 | ------------------------- | ------------------------------------------------------------ |
-| clients list              | View all clients currently connected to EMQX. This command can be used to monitor active clients and the number of connections. |
-| clients show \<ClientId\> | View detailed connection information for a specific client.  |
-| clients kick \<ClientId\> | Forcefully disconnect a specified client.                    |
+| clients list              | 現在EMQXに接続中のすべてのクライアントを表示します。アクティブなクライアントや接続数の監視に使用します。 |
+| clients show \<ClientId\> | 特定クライアントの詳細な接続情報を表示します。               |
+| clients kick \<ClientId\> | 指定したクライアントを強制切断します。                       |
 
 ### emqx ctl clients list
 
@@ -308,18 +307,17 @@ ok
 ```
 
 :::tip
-If a large number of clients are connected to the system, the `list` command may be time-consuming and resource-intensive.
+多数のクライアントが接続している場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
 :::
-
 
 ## topics
 
-This command is to view all subscribed topics in current system.
+現在のシステムでサブスクライブされているすべてのトピックを確認するコマンドです。
 
-| Command               | Description                                                  |
+| コマンド               | 説明                                                         |
 | --------------------- | ------------------------------------------------------------ |
-| topics list           | List all topics. This command can be used to monitor the number and distribution of topics. |
-| topics show \<Topic\> | Show detailed information about a specific topic.            |
+| topics list           | すべてのトピックを一覧表示します。トピック数や分布の監視に使用します。 |
+| topics show \<Topic\> | 特定トピックの詳細情報を表示します。                         |
 
 ### topics list
 
@@ -336,17 +334,17 @@ t/1 -> emqx@127.0.0.1
 ```
 
 :::tip
-If there are a large number of topic subscriptions in the cluster, the `list` command may be time-consuming and resource-intensive.
+クラスター内に多数のトピックサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
 :::
 
 ## exclusive
 
-This command is to view all exclusive topics in the current system or delete an exclusive topic.
+現在のシステム内のすべての排他トピックを確認したり、排他トピックを削除したりするコマンドです。
 
-| Command                    | Description                |
-| -------------------------- | -------------------------- |
-| exclusive list             | List all exclusive topics. |
-| exclusive delete \<Topic\> | Delete an exclusive topic. |
+| コマンド                    | 説明                     |
+| -------------------------- | ------------------------ |
+| exclusive list             | すべての排他トピックを一覧表示します。 |
+| exclusive delete \<Topic\> | 排他トピックを削除します。 |
 
 ### exclusive list
 
@@ -364,14 +362,14 @@ ok
 
 ## subscriptions
 
-This command is to view, add or delete clients' subscriptions.
+クライアントのサブスクリプションを確認、追加、削除するコマンドです。
 
-| Command                                          | Description                               |
-| ------------------------------------------------ | ----------------------------------------- |
-| subscriptions list                               | List all subscriptions.                   |
-| subscriptions show \<ClientId\>                  | Show subscriptions for a specific client. |
-| subscriptions add \<ClientId\> \<Topic\> \<QoS\> | Mannually add a subscription.             |
-| subscriptions del \<ClientId\> \<Topic>          | Manually remove a subscription.           |
+| コマンド                                          | 説明                               |
+| ------------------------------------------------ | --------------------------------- |
+| subscriptions list                               | すべてのサブスクリプションを一覧表示します。 |
+| subscriptions show \<ClientId\>                  | 特定クライアントのサブスクリプションを表示します。 |
+| subscriptions add \<ClientId\> \<Topic\> \<QoS\> | 手動でサブスクリプションを追加します。 |
+| subscriptions del \<ClientId\> \<Topic\>          | 手動でサブスクリプションを削除します。 |
 
 ### subscriptions list
 
@@ -403,25 +401,25 @@ ok
 ```
 
 :::tip
-When there are a large number of subscriptions in the system, the `list` command may be time-consuming and resource-intensive.
+システム内に多数のサブスクリプションがある場合、`list`コマンドは時間がかかりリソースを多く消費する可能性があります。
 :::
 
 ## plugins
 
-This command is used to view and manage plugin installation.
+プラグインのインストール状況を確認・管理するコマンドです。
 
-| Command                                  | Description                                                  |
+| コマンド                                  | 説明                                                         |
 | ---------------------------------------- | ------------------------------------------------------------ |
-| plugins list                             | List all installed plugins.                                  |
-| plugins describe \<Name-Vsn\>            | Display detailed information about an installed plugin.      |
-| plugins allow \<Name-Vsn\>               | Grant the permission to install a specified plugin via the Dashboard. |
-| plugins install \<Name-Vsn\>             | Install a plugin package that is located in the plugin installation directory. |
-| plugins uninstall \<Name-Vsn\>           | Uninstall a specified plugin.                                |
-| plugins start \<Name-Vsn\>               | Start a specified plugin.                                    |
-| plugins stop \<Name-Vsn\>                | Stop a specified plugin.                                     |
-| plugins restart \<Name-Vsn\>             | Restart a specified plugin.                                  |
-| plugins disable \<Name-Vsn\>             | Disable automatic startup of a plugin.                       |
-| plugins enable \<Name-Vsn\> \[Position\] | Enable automatic startup of a plugin and specify the startup position. |
+| plugins list                             | インストール済みのプラグインを一覧表示します。               |
+| plugins describe \<Name-Vsn\>            | インストール済みプラグインの詳細情報を表示します。           |
+| plugins allow \<Name-Vsn\>               | ダッシュボード経由で指定プラグインのインストールを許可します。 |
+| plugins install \<Name-Vsn\>             | プラグインインストールディレクトリにあるプラグインパッケージをインストールします。 |
+| plugins uninstall \<Name-Vsn\>           | 指定プラグインをアンインストールします。                     |
+| plugins start \<Name-Vsn\>               | 指定プラグインを起動します。                                 |
+| plugins stop \<Name-Vsn\>                | 指定プラグインを停止します。                                 |
+| plugins restart \<Name-Vsn\>             | 指定プラグインを再起動します。                               |
+| plugins disable \<Name-Vsn\>             | プラグインの自動起動を無効化します。                         |
+| plugins enable \<Name-Vsn\> \[Position\] | プラグインの自動起動を有効化し、起動順序の位置を指定します。 |
 
 ### plugins list
 
@@ -483,11 +481,11 @@ emqx ctl plugins disable emqx_auth_mnesia-3.0.1
 emqx ctl plugins enable emqx_auth_mnesia-3.0.1 front
 ```
 
-You can use `front`, `rear`, or `before Other-Vsn` to specify a relative position for adjusting the startup order. If no Position is provided, the configured plugins will remain in their original positions, and the new plugin will be appended at the end.
+`front`、`rear`、または`before Other-Vsn`を使って起動順序の相対位置を指定できます。位置を指定しない場合は、既存のプラグインの順序は変わらず、新しいプラグインは末尾に追加されます。
 
 ## vm
 
-Inspect statistic data collected from the Erlang virtual machine.
+Erlang仮想マシンから収集した統計データを確認します。
 
 ```bash
 $ emqx ctl vm
@@ -513,7 +511,7 @@ ports/limit             : 1048576
 
 ## mnesia
 
-This command is used to view the running status and metrics of the built-in database (Mnesia).
+組み込みデータベース（Mnesia）の稼働状況とメトリクスを確認するコマンドです。
 
 ```bash
 $ emqx ctl mnesia
@@ -564,17 +562,17 @@ disc_only_copies   = []
 
 ## log
 
-This command can be used to manage log handlers states, such as setting logging level etc.
+ログハンドラーの状態管理（ログレベル設定など）に使用するコマンドです。
 
-| Command                                        | Description                                                  |
+| コマンド                                        | 説明                                                         |
 | ---------------------------------------------- | ------------------------------------------------------------ |
-| log set-level \<Level\>                        | Set the overall log level.                                   |
-| log primary-level                              | Show the current primary log level. `primary-level` represents the primary log level of EMQX, which is used to specify the default log level for the entire system. Setting `primary-level` will affect all log outputs unless specific log handlers have their own independent log levels. |
-| log primary-level \<Level\>                    | Set the primary log level.                                   |
-| log handlers list                              | Show the log handlers. `handlers` refer to the collection of log handlers used for handling logs. Each log handler can set its own log level independently and define how to handle and store log messages. |
-| log handlers start \<HandlerId\>               | Start a specific handler.                                    |
-| log handlers stop \<HandlerId\>                | Stop a specific handler。                                    |
-| log handlers set-level \<HandlerId\> \<Level\> | Set the log level for a specific handler.                    |
+| log set-level \<Level\>                        | 全体のログレベルを設定します。                              |
+| log primary-level                              | 現在のプライマリログレベルを表示します。`primary-level`はEMQXの全体のデフォルトログレベルを示し、特定のハンドラーが独自のレベルを持たない限りすべてに影響します。 |
+| log primary-level \<Level\>                    | プライマリログレベルを設定します。                          |
+| log handlers list                              | ログハンドラー一覧を表示します。ハンドラーはログの処理・保存方法を定義し、独自のログレベルを設定できます。 |
+| log handlers start \<HandlerId\>               | 指定したハンドラーを起動します。                            |
+| log handlers stop \<HandlerId\>                | 指定したハンドラーを停止します。                            |
+| log handlers set-level \<HandlerId\> \<Level\> | 指定したハンドラーのログレベルを設定します。                |
 
 ### log set-level \<Level\>
 
@@ -628,17 +626,17 @@ debug
 
 ## trace
 
-This command is used to trace (and log) events of a given client or topic etc.
+特定のクライアントやトピックなどのイベントをトレース（ログ記録）するコマンドです。
 
-| Command                                              | Description                                     |
-| ---------------------------------------------------- | ----------------------------------------------- |
-| trace list                                           | List all traces started on the local node.      |
-| trace start client \<ClientId\> \<File\> [\<Level\>] | Start tracing for a specific client.            |
-| trace stop client \<ClientId\>                       | Stop tracing for a specific client.             |
-| trace start topic \<Topic\> \<File\> [\<Level\>]     | Start tracing for a specific topic.             |
-| trace stop topic \<Topic\>                           | Stop tracing for a specific topic.              |
-| trace start ip_address \<IP\> \<File\> [\<Level\>]   | Start tracing for a specific client IP address. |
-| trace stop ip_address \<IP\>                         | Stop tracing for a specific client IP address.  |
+| コマンド                                              | 説明                                   |
+| ---------------------------------------------------- | ------------------------------------- |
+| trace list                                           | ローカルノードで開始されたすべてのトレースを一覧表示します。 |
+| trace start client \<ClientId\> \<File\> [\<Level\>] | 特定クライアントのトレースを開始します。 |
+| trace stop client \<ClientId\>                       | 特定クライアントのトレースを停止します。 |
+| trace start topic \<Topic\> \<File\> [\<Level\>]     | 特定トピックのトレースを開始します。   |
+| trace stop topic \<Topic\>                           | 特定トピックのトレースを停止します。   |
+| trace start ip_address \<IP\> \<File\> [\<Level\>]   | 特定クライアントIPアドレスのトレースを開始します。 |
+| trace stop ip_address \<IP\>                         | 特定クライアントIPアドレスのトレースを停止します。 |
 
 ### trace list
 
@@ -661,7 +659,7 @@ $ emqx ctl trace stop client emqx_c
 stop tracing clientid emqx_c successfully
 ```
 
-### trace start topic \<Topic> \<File> [\<Level>]
+### trace start topic \<Topic> \<File> [\<Level\>]
 
 ```bash
 $ emqx ctl trace start topic t/1 trace.log info
@@ -675,7 +673,7 @@ $ emqx ctl trace stop topic t/1
 stop tracing topic t/1 successfully
 ```
 
-### trace start ip_address \<IP> \<File> [\<Level>]
+### trace start ip_address \<IP> \<File> [\<Level\>]
 
 ```bash
 $ emqx ctl trace start ip_address 127.0.0.1 trace.log debug
@@ -690,30 +688,30 @@ stop tracing ip_address 127.0.0.1 successfully
 ```
 
 ::: tip
-It's recommended to use absolute paths for trace log files when start from command line.
-`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
+コマンドラインから開始する場合は、トレースログファイルに絶対パスを使用することを推奨します。  
+例：`emqx ctl trace start client foobar /abs/path/to/trace.log debug`
 :::
 
 ::: tip
-You can also manage traces from the dashboard UI. See [tracer](../observability/tracer.md).
+トレースはダッシュボードUIからも管理可能です。詳細は[tracer](../observability/tracer.md)を参照してください。
 :::
 
 `emqx ctl traces`
 
-This command is like the `trace` command, but applies on all nodes in the cluster.
+このコマンドは`trace`コマンドに似ていますが、クラスター内の全ノードに適用されます。
 
 ## traces
 
-This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. 
+クラスター内の全ノードでトレーサーを開始・停止するコマンドです。
 
-| Command                                                 | Description                       |
-| ------------------------------------------------------- | --------------------------------- |
-| traces list                                             | List all cluster traces started   |
-| traces start \<Name> client \<ClientId> [\<Duration>]   | Traces for a client in cluster    |
-| traces start \<Name> topic \<Topic> [\<Duration>]       | Traces for a topic in cluster     |
-| traces start \<Name> ip_address \<IPAddr> [\<Duration>] | Traces for a client IP in cluster |
-| traces stop \<Name>                                     | Stop trace in cluster             |
-| traces delete \<Name>                                   | Delete trace in cluster           |
+| コマンド                                                 | 説明                             |
+| ------------------------------------------------------- | -------------------------------- |
+| traces list                                             | クラスターで開始されたすべてのトレースを一覧表示します。 |
+| traces start \<Name> client \<ClientId> [\<Duration>]   | クラスター内のクライアントのトレースを開始します。       |
+| traces start \<Name> topic \<Topic> [\<Duration>]       | クラスター内のトピックのトレースを開始します。           |
+| traces start \<Name> ip_address \<IPAddr> [\<Duration>] | クラスター内のクライアントIPのトレースを開始します。     |
+| traces stop \<Name>                                     | クラスター内のトレースを停止します。                     |
+| traces delete \<Name>                                   | クラスター内のトレースを削除します。                     |
 
 ### traces list
 
@@ -759,15 +757,15 @@ Del cluster_trace mytraces_ip successfully
 
 ## listeners
 
-This command is used to manage listeners.
+リスナーの管理に使用するコマンドです。
 
-| Command                                      | Description                                                  |
+| コマンド                                      | 説明                                                         |
 | -------------------------------------------- | ------------------------------------------------------------ |
-| listeners                                    | List information of all listeners.                           |
-| listeners stop \<Identifier\>                | Stop a listener. Identifier is in the format `{type}:{name}`, e.g., `tcp:default`. (Temporarily effective; the original state will be restored after EMQX restarts.) |
-| listeners start \<Identifier\>               | Start a listener. (Temporarily effective; the original state will be restored after EMQX restarts.) |
-| listeners restart \<Identifier\>             | Restart a listener.                                          |
-| listeners enable \<Identifier\> <true/false> | Enable or disable a listener. (Persisted to the configuration; permanently effective.) |
+| listeners                                    | すべてのリスナー情報を一覧表示します。                       |
+| listeners stop \<Identifier\>                | リスナーを停止します。Identifierは`{type}:{name}`形式（例：`tcp:default`）。一時的な効果で、EMQX再起動後に元の状態に戻ります。 |
+| listeners start \<Identifier\>               | リスナーを起動します。一時的な効果で、EMQX再起動後に元の状態に戻ります。 |
+| listeners restart \<Identifier\>             | リスナーを再起動します。                                     |
+| listeners enable \<Identifier\> <true/false> | リスナーの有効・無効を設定します。設定は永続化され、永続的に有効です。 |
 
 ### listeners
 
@@ -811,7 +809,7 @@ Stop tcp:default listener successfully.
 ```
 
 ::: tip
-Stopping a listener causes all the connected clients to disconnect.
+リスナーを停止すると、接続中のすべてのクライアントが切断されます。
 :::
 
 ### listeners start \<Identifier\>
@@ -829,7 +827,7 @@ Restarted tcp:default listener successfully.
 ```
 
 ::: tip
-Restarting a listener causes all the connected clients to disconnect.
+リスナーを再起動すると、接続中のすべてのクライアントが切断されます。
 :::
 
 ### listeners enable \<Identifier\> <true/false> 
@@ -844,39 +842,38 @@ $ emqx ctl listeners enable tcp:default false
 Disabled tcp:default listener successfully.
 ```
 
-
 ## authz cache-clean
 
 `emqx ctl authz cache-clean`
 
-This command is useful when you want to force evict cached authz (ACL) data.
+キャッシュされた認可（ACL）データを強制的に削除したい場合に便利なコマンドです。
 
 ## pem_cache
 
 `emqx ctl pem_cache`
 
-This command is to force EMQX reload updated pem (x509 keys and certificates) files after for example a certificate renewal.
+証明書更新などの後に、pem（x509キーおよび証明書）ファイルをEMQXに再読み込みさせるためのコマンドです。
 
 ## olp
 
 `emqx ctl olp`
 
-OLP stands for overload protection.
-The `olp` command is to check overload status, and also the enable/disabled system overload protection.
+OLPはオーバーロードプロテクション（過負荷保護）を意味します。  
+`olp`コマンドは過負荷状態の確認や、システムのオーバーロード保護の有効・無効を管理します。
 
-For more details, see `overload_protection` configuration doc.
+詳細は`overload_protection`設定ドキュメントを参照してください。
 
 ::: tip
-`olp` is not enabled by default, enabling from CLI does not persist it to the configs.
+`olp`はデフォルトで有効ではありません。CLIから有効化しても設定に永続化されません。
 :::
 
 ## gateway-registry
 
 `emqx ctl gateway-registry`
 
-List the registered gateways in the system.
+システムに登録されているゲートウェイを一覧表示します。
 
-Currently there are by default 5 registered gateways:
+デフォルトで以下の5つのゲートウェイが登録されています：
 
 * coap
 * exproto
@@ -884,21 +881,21 @@ Currently there are by default 5 registered gateways:
 * mqttsn
 * stomp
 
-EMQX is designed to be plugable, so that more gateways can be installed as pluginsand register to EMQX at runtime.
-Once registered, a gateway can be managed with management APIs and CLIs (see `gateway` command below).
+EMQXはプラグイン可能な設計であり、より多くのゲートウェイをプラグインとしてインストールし、ランタイムにEMQXに登録できます。  
+登録されたゲートウェイは管理APIやCLI（以下の`gateway`コマンド参照）で管理可能です。
 
-## gatewa
+## gateway
 
-This command can be used to inspect or manage gateway loading/running status.
+ゲートウェイの読み込みや稼働状態を確認・管理するコマンドです。
 
-| Command                            | Descriptio                                          |
-| ---------------------------------- | --------------------------------------------------- |
-| gateway list                       | List information of all gateways.                   |
-| gateway lookup \<Name\>            | Look up detailed information of a specific gateway. |
-| gateway load \<Name\> \<JsonConf\> | Load a gateway and configure its parameters.        |
-| gateway unload \<Name\>            | Unload a gateway.                                   |
-| gateway stop \<Name\>              | Stop a gateway.                                     |
-| gateway start \<Name\>             | Start a gateway.                                    |
+| コマンド                            | 説明                                                         |
+| ---------------------------------- | ------------------------------------------------------------ |
+| gateway list                       | すべてのゲートウェイ情報を一覧表示します。                   |
+| gateway lookup \<Name\>            | 特定ゲートウェイの詳細情報を確認します。                     |
+| gateway load \<Name\> \<JsonConf\> | ゲートウェイを読み込み、設定パラメータを指定します。          |
+| gateway unload \<Name\>            | ゲートウェイをアンロードします。                             |
+| gateway stop \<Name\>              | ゲートウェイを停止します。                                   |
+| gateway start \<Name\>             | ゲートウェイを起動します。                                   |
 
 ### gateway list
 
@@ -960,21 +957,20 @@ $ emqx ctl gateway start coap
 ok
 ```
 
-
 ## gateway-metrics
 
-Inspect gateway metrics.
+ゲートウェイのメトリクスを確認します。
 
 ## rules
 
-This command is used to list rules crated in the Rule Engine.
+ルールエンジンで作成されたルールを一覧表示するコマンドです。
 
-| Command             | Description                                                  |
+| コマンド             | 説明                                                         |
 | ------------------- | ------------------------------------------------------------ |
-| rules list          | List all rules, including information such as rule ID, name and etc. |
-| rules show \<RuleID> | Display the detailed information of a specific rule.         |
+| rules list          | ルールID、名前などの情報を含むすべてのルールを一覧表示します。 |
+| rules show \<RuleID> | 特定ルールの詳細情報を表示します。                           |
 
-Note that below is an example of the execution of each rule:
+以下はルールの実行例です：
 
 ### rules list
 
@@ -1011,15 +1007,15 @@ Actions:
              user_properties => <<"${user_properties}">>}
 ```
 
-CLI is only for inspection, Rule and action managements are managed from dashboard.
+CLIは確認用であり、ルールやアクションの管理はダッシュボードで行います。
 
 ## license
 
-| Command                | Description                         |
-| ---------------------- | ----------------------------------- |
-| license info           | Display License information.        |
-| license update License | Update License information.         |
-| license update default | Revert to default Community License |
+| コマンド                | 説明                             |
+| ---------------------- | -------------------------------- |
+| license info           | ライセンス情報を表示します。     |
+| license update License | ライセンス情報を更新します。     |
+| license update default | デフォルトのCommunity Licenseに戻します。 |
 
 ### license info
 
@@ -1042,7 +1038,7 @@ expiry          : false
 emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
-You need to replace `YOUR_LICENSE_STRING` with the actual License string.
+`YOUR_LICENSE_STRING`は実際のライセンス文字列に置き換えてください。
 
 ### license update default
 

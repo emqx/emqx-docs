@@ -1,16 +1,16 @@
-# Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1
+# EMQX 4.4 と EMQX 5.1 間のゲートウェイ互換性
 
-This page presents the compatibility information for gateway configurations between EMQX 4.4 and EMQX 5.1.
+本ページでは、EMQX 4.4 と EMQX 5.1 間のゲートウェイ設定の互換性情報を紹介します。
 
-## Common Incompatibility Changes
+## 共通の互換性変更点
 
-### Configuration
+### 設定
 
-In EMQX 4.x, the gateway can be configured through configuration files such as `etc/plugins/emqx_stomp.conf` or via modules on the Dashboard (i.e., using the `POST http://127.0.0.1:18084/api/v4/modules` interface).
+EMQX 4.x では、ゲートウェイは `etc/plugins/emqx_stomp.conf` のような設定ファイルや、ダッシュボード上のモジュール（`POST http://127.0.0.1:18084/api/v4/modules` インターフェース）を通じて設定できます。
 
-In EMQX 5.1, all gateway can be configured in `etc/emqx.conf` or `PUT http://127.0.0.1:18083/api/v5/gateways/coap`.
+EMQX 5.1 では、すべてのゲートウェイ設定は `etc/emqx.conf` または `PUT http://127.0.0.1:18083/api/v5/gateways/coap` で行います。
 
-For example, in EMQX 4.x:
+例えば、EMQX 4.x では：
 
 ```
 stomp.listener = 61613
@@ -26,7 +26,7 @@ stomp.frame.max_header_length = 1024
 stomp.frame.max_body_length = 8192
 ```
 
-In EMQX 5.x:
+EMQX 5.x では：
 
 ```
 gateway.stomp {
@@ -42,23 +42,23 @@ gateway.stomp {
 }
 ```
 
-### Management via HTTP API or Dashboard
+### HTTP API やダッシュボードによる管理
 
-In EMQX 4.x, there is no separate HTTP API and webpage for management. For example, if you want to query the device list for MQTT-SN, you need to use `GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn`. It is combined with the query interface for MQTT devices (even other protocols, i.e. CoAP, LwM2M, etc.).
+EMQX 4.x では、管理用の専用 HTTP API やウェブページはありません。例えば、MQTT-SN のデバイス一覧を取得するには `GET http://127.0.0.1:8081/api/v4/clients?protocol=mqtt-sn` を使用し、MQTT デバイス（および他のプロトコル、例：CoAP、LwM2M など）とのクエリインターフェースが統合されています。
 
-In EMQX 5.x, we provided more proprietary interfaces to accomplish these functions. For example, `GET /api/v5/gateways/mqttsn/clients`, and more newly added HTTP APIs:
+EMQX 5.x では、これらの機能を実現するために専用のインターフェースを多数提供しています。例えば、`GET /api/v5/gateways/mqttsn/clients` や以下の新規 HTTP API があります：
 
-- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways) 
-- [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)
-- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients) 
+- [Gateways](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateways)  
+- [Gateway-Authentication](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Authentication)  
+- [Gateway-Clients](https://docs.emqx.com/en/enterprise/v5.0/admin/api-docs.html#tag/Gateway-Clients)  
 
-It also provides dedicated Dashboard pages for managing clients, gateway configurations, listeners, and more.
+また、クライアント管理、ゲートウェイ設定、リスナー管理などの専用ダッシュボードページも提供しています。
 
-### Listeners
+### リスナー
 
-In EMQX 4.x, each gateway has its own format for listener configuration. However, in EMQX 5.1, the configuration format for all listeners has been standardized. 
+EMQX 4.x では、各ゲートウェイごとにリスナー設定のフォーマットが異なっていました。しかし EMQX 5.1 では、すべてのリスナー設定フォーマットが統一されています。
 
-For example, in EMQX 4.x
+例えば、EMQX 4.x では：
 
 ```
 ## etc/plugins/emqx_stomp.conf
@@ -75,10 +75,10 @@ lwm2m.bind.udp.1 = 0.0.0.0:5683
 lwm2m.bind.dtls.1 = 0.0.0.0:5684
 ```
 
-In EMQX 5.x, all protocol gateways have the same format for the listener configuration. Take the Exproto gateway as an example:
+EMQX 5.x では、すべてのプロトコルゲートウェイで同じフォーマットを使用します。Exproto ゲートウェイの例：
 
 ```
-## etc/emqx.conf or base.hocon (since EMQX 5.9)
+## etc/emqx.conf または base.hocon (EMQX 5.9 以降)
 gateway.exproto {
     listeners.tcp.default {
         bind = "0.0.0.0:7993"
@@ -94,11 +94,11 @@ gateway.exproto {
 }
 ```
 
-### Authentication
+### 認証
 
-In version EMQX 4.x, each gateway is configured with a hybrid authentication for MQTT.
+EMQX 4.x では、各ゲートウェイは MQTT 用のハイブリッド認証で設定されていました。
 
-But in EMQX 5.0, you need to configure a separate authenticator for each gateway. For example:
+EMQX 5.0 以降は、ゲートウェイごとに別々の認証機構を設定する必要があります。例：
 
 ```
 gateway.coap {
@@ -113,21 +113,21 @@ gateway.coap {
 }
 ```
 
-## Incompatibility in Protocol Functionality and Configuration Items
+## プロトコル機能および設定項目の非互換性
 
 ### Stomp
 
-`stomp.default_user.login`, `stomp.default_user.passcode` and `stomp.allow_anonymous` are removed in EMQX 5.x.
+`stomp.default_user.login`、`stomp.default_user.passcode`、および `stomp.allow_anonymous` は EMQX 5.x で削除されました。
 
 ### MQTT-SN
 
-- Listeners of DTLS type are supported in EMQX 5.1, but not in EMQX 4.x.
-- `mqtt.sn.username`, `mqtt.sn.password` and `mqtt.sn.subs_resume` are not removed.
-- `mqtt.sn.advertise_duration` is renamed to `gateway.mqttsn.broadcast`.
+- DTLS タイプのリスナーは EMQX 5.1 でサポートされていますが、EMQX 4.x では未対応です。  
+- `mqtt.sn.username`、`mqtt.sn.password`、`mqtt.sn.subs_resume` は削除されていません。  
+- `mqtt.sn.advertise_duration` は `gateway.mqttsn.broadcast` に名称変更されました。
 
 ### ExProto
 
-Previously, the ConnectionAdapter service configuration format was:
+以前の ConnectionAdapter サービス設定フォーマット：
 
 ```
 exproto.server.http.port = 9100
@@ -137,7 +137,7 @@ exproto.server.https.certfile = etc/certs/cert.pem
 exproto.server.https.keyfile = etc/certs/key.pem
 ```
 
-Now, it is:
+現在は：
 
 ```
 gateway.exproto {
@@ -148,7 +148,7 @@ gateway.exproto {
 }
 ```
 
-Previously, the ConnectionHandler configuration was on listeners:
+以前の ConnectionHandler 設定はリスナー上にありました：
 
 ```
 exproto.listener.protoname.connection_handler_url = http://127.0.0.1:9001
@@ -157,7 +157,7 @@ exproto.listener.protoname.connection_handler_url = http://127.0.0.1:9001
 #exproto.listener.protoname.connection_handler_keyfile =
 ```
 
-Now, the configuration is:
+現在は：
 
 ```
 gateway.exproto {
@@ -168,17 +168,17 @@ gateway.exproto {
 }
 ```
 
-This means that in version 5.0, it is not possible to specify different ConnectionHandler service addresses for each listening port.
+つまり、5.0 以降はリスニングポートごとに異なる ConnectionHandler サービスアドレスを指定できません。
 
 ### CoAP
 
-The implementation specification for the CoAP protocol is completely redesigned.
+CoAP プロトコルの実装仕様は完全に再設計されました。
 
-Refers to the [CoAP](../gateway/coap.md) for the new design.
+新しい設計については [CoAP](../gateway/coap.md) を参照してください。
 
 ### LwM2M
 
-Previously, the option structure was:
+以前のオプション構造：
 
 ```
 lwm2m.topics.command = dn/#
@@ -188,7 +188,7 @@ lwm2m.topics.register = up/resp
 lwm2m.topics.update = up/resp
 ```
 
-Now, the structure is:
+現在の構造：
 
 ```
 gateway.lwm2m {

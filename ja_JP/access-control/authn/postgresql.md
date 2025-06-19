@@ -1,24 +1,25 @@
-# Integrate with PostgreSQL
+# PostgreSQLとの統合
 
-EMQX supports integrating with PostgreSQL for password authentication. 
+EMQXはパスワード認証のためにPostgreSQLとの統合をサポートしています。
 
 ::: tip
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)の知識が必要です。
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-EMQX PostgreSQL authenticator supports almost any storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
+EMQXのPostgreSQL認証機能はほぼあらゆるストレージスキーマに対応しています。  
+認証情報の保存方法やアクセス方法はビジネス要件に応じて自由に設計可能で、単一または複数のテーブルやビューなどを利用できます。
 
-Users need to provide a query statement template and ensure the following fields are included:
+ユーザーはクエリ文のテンプレートを用意し、以下のフィールドを含める必要があります。
 
-- `password_hash`: required; password (in plain text or hashed) stored in the database; 
-- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 
-- `is_superuser`: optional; flag if the current client is a superuser; default: `false`.
+- `password_hash`：必須。データベースに保存されているパスワード（プレーンテキストまたはハッシュ値）。  
+- `salt`：任意。`salt = ""` またはこのフィールドを省略すると、ソルト値が付加されないことを示します。  
+- `is_superuser`：任意。現在のクライアントがスーパーユーザーかどうかのフラグ。デフォルトは `false`。
 
-Example table structure for storing credentials:
+認証情報を保存するためのテーブル構造の例：
 
 ```sql
 CREATE TABLE mqtt_user (
@@ -32,77 +33,78 @@ CREATE TABLE mqtt_user (
 ```
 
 ::: tip
-The above example has created an implicit `UNIQUE` index field (username) that is helpful for the queries.
-When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+上記の例では、クエリに役立つ暗黙の `UNIQUE` インデックス（username）が作成されています。  
+システム内のユーザー数が多い場合は、クエリの応答時間を短縮しEMQXへの負荷を軽減するために、事前にテーブルの最適化とインデックス設定を行ってください。
 :::
 
-In this table, MQTT users are identified by `username`.
+このテーブルでは、MQTTユーザーは `username` で識別されます。
 
-For example, if you want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, and suffixed salt `salt`, the query statement should be:
+例えば、スーパーユーザー（`is_superuser`: `true`）として、ユーザー名 `user123`、パスワード `secret`、ソルト `salt` を持つレコードを追加する場合、クエリ文は以下のようになります。
 
 ```bash
 INSERT INTO mqtt_user(username, password_hash, salt, is_superuser) VALUES ('user123', 'f84fa2149dbb62ed4e0cf1f550d2949b33a6513d3a7707e08502511c79ccb0ee', 'salt', true);
 INSERT 0 1
 ```
 
-The corresponding configuration parameters are:
+対応する設定パラメータは以下の通りです。
 
-- password_hash_algorithm: `sha256`
+- password_hash_algorithm: `sha256`  
 - salt_position: `suffix`
 
-SQL: 
+SQL例：
 
 ```sql
 query = "SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${username} LIMIT 1"
 ```
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use PostgreSQL for password authentication. 
+EMQXダッシュボードを使って、PostgreSQLをパスワード認証に利用する設定が可能です。
 
-1. In EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner.
-3. Click to select **Password-Based** as **Mechanism**, and **PostgreSQL** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. EMQXダッシュボードの左側ナビゲーションメニューから **Access Control** -> **Authentication** をクリックします。  
+2. **Authentication** ページの右上にある **Create** をクリックします。  
+3. **Mechanism** に **Password-Based** を選択し、**Backend** に **PostgreSQL** を選択すると、以下のように **Configuration** タブが表示されます。
 
-<img src="./assets/authn-postgresql.png" alt="Authentication with postgresql" style="zoom:67%;" />
+<img src="./assets/authn-postgresql.png" alt="PostgreSQLによる認証" style="zoom:67%;" />
 
-4. Follow the instructions below to configure the authentication backend:
-   - Enter the information for connecting to PostgreSQL.
+4. 以下の手順に従い認証バックエンドを設定します。  
+   - PostgreSQLへの接続情報を入力します。
 
-     - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-     - **Database**: PostgreSQL database name.
-     - **Username**: Specify user name. 
-     - **Password**: Specify user password. 
-   - Configure settings related to authentication:
-     - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
-       - For `md5`, `sha`, `sha256` or `sha512`:
-         - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`.  You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-       - For `plain`:
-         - **Salt Position**: should be `disable`.
-       - For `bcrypt`:
-         - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
-       - For `pbkdf2`:
-         - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
-         - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
-         - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this PostgreSQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-   - **Advanced Settings**:
-     - **Connection Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a PostgreSQL server. Default: `8`. 
-     - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [SQL data schema and query statement](#sql-table-structure-and-query-statement). 
+     - **Server**：EMQXが接続するサーバーのアドレス（`host:port`）を指定します。  
+     - **Database**：PostgreSQLのデータベース名。  
+     - **Username**：ユーザー名を指定します。  
+     - **Password**：ユーザーパスワードを指定します。  
+   - 認証に関する設定を行います。  
+     - **Password Hash**：プレーンテキストのパスワードに適用され、データベースに保存される前のハッシュアルゴリズムを選択します。選択肢は `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。  
+       - `md5`、`sha`、`sha256`、`sha512` の場合：  
+         - **Salt Position**：ソルト（ランダムデータ）をパスワードにどのように混ぜるかを指定します。`suffix`、`prefix`、`disable` のいずれかです。外部ストレージからEMQX内蔵データベースへユーザー認証情報を移行する場合を除き、デフォルト値のままで問題ありません。  
+         - ハッシュ結果は16進数文字列で表現され、大文字小文字を区別せずに保存済みの認証情報と比較されます。  
+       - `plain` の場合：  
+         - **Salt Position** は `disable` に設定してください。  
+       - `bcrypt` の場合：  
+         - **Salt Rounds**：ハッシュ関数を適用する回数を2のべき乗で表す「コストファクター」です。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ強化のためにはより高い値を推奨します。コストファクターを1増やすと認証にかかる時間が約2倍になります。  
+       - `pbkdf2` の場合：  
+         - **Pseudorandom Function**：鍵生成に使うハッシュ関数を選択します（例：`sha256`）。  
+         - **Iteration Count**：ハッシュ関数の実行回数。デフォルトは `4096`。  
+         - **Derived Key Length**（任意）：生成される鍵のバイト長。空欄の場合は選択した擬似乱数関数により決定されます。  
+         - ハッシュ結果は16進数文字列で表現され、大文字小文字を区別せずに保存済みの認証情報と比較されます。  
+   - **Precondition**：[Variform式](../../configuration/configuration.md#variform-expressions)で記述し、このPostgreSQL認証機能をクライアント接続に適用するか制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証処理が実行されます。それ以外の場合はスキップされます。詳細は[認証の事前条件](./authn.md#authentication-preconditions)をご覧ください。  
+   - **Enable TLS**：TLSを有効にする場合はスイッチをオンにします。TLSの有効化については[ネットワークとTLS](../../network/overview.md)を参照してください。  
+   - **Advanced Settings**：  
+     - **Connection Pool size**（任意）：EMQXノードからPostgreSQLサーバーへの同時接続数を指定します。デフォルトは `8`。  
+     - **Disable Prepared Statements**（任意）：PGBouncerのトランザクションモードやSupabaseなど、プリペアドステートメントをサポートしないPostgreSQLサービスを利用する場合に有効にします。このオプションはEMQX v5.7.1で追加されました。  
+   - **SQL**：データスキーマに合わせてクエリ文を入力します。詳細は[SQLデータスキーマとクエリ文](#データスキーマとクエリ文)をご参照ください。
 
-After you finish the settings, click **Create**.
+設定が完了したら、**Create** をクリックしてください。
 
-## Configure with Configuration Items
+## 設定項目による設定
 
-You can configure the EMQX PostgreSQL authenticator with EMQX configuration items. <!--For detailed operation steps, see [authn-postgresql:authentication](../../configuration/configuration-manual.html#authn-postgresql:authentication). -->
+EMQXの設定項目を使ってPostgreSQL認証を設定することも可能です。  
+<!-- 詳細な操作手順は[authn-postgresql:authentication](../../configuration/configuration-manual.html#authn-postgresql:authentication)をご覧ください。 -->
 
-PostgreSQL authentication is identified with `mechanism = password_based` and `backend = postgresql`.
+PostgreSQL認証は `mechanism = password_based` と `backend = postgresql` で識別されます。
 
-Sample configuration:
+設定例：
 
 ```bash
 {

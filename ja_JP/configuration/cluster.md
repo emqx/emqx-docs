@@ -1,15 +1,15 @@
-# Cluster Configuration
+# クラスター構成
 
-In EMQX, a cluster is a group of EMQX nodes that work together to provide a highly scalable and fault-tolerant MQTT messaging system. Clustering allows you to distribute the load across multiple nodes and ensure that the system can continue to operate even if one or more nodes fail.
+EMQXにおけるクラスターとは、高いスケーラビリティとフォールトトレランスを備えたMQTTメッセージングシステムを提供するために協調動作するEMQXノードのグループです。クラスタリングにより、複数のノードに負荷を分散でき、1つ以上のノードが故障してもシステムが継続して稼働できるようにします。
 
-## Configure Node Names
+## ノード名の設定
 
-Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated by `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for instance:
+クラスター作成の前に、EMQXのノード名の概念について理解しましょう。EMQXノードは名前で識別されます。ノード名は、ノード名部分とホスト部分の2つで構成され、`@`で区切られます。例えば、`emqx@s1.emqx.io` のようになります。ホスト部分はIPアドレスか完全修飾ドメイン名（FQDN）でなければなりません。例として：
 
-- For the EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
-- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
+- サーバー `s1.emqx.io` にデプロイされたEMQXノードの場合、ノード名は `emqx@s1.emqx.io` とします。
+- このサーバーが固定IP（`192.168.0.10`）を持つ場合、ノード名は `emqx@192.168.0.10` とします。
 
-When configuring nodes with `emqx.conf`, you can work with the code below:
+`emqx.conf`でノードを設定する場合、以下のように記述します。
 
 ```bash
 node {
@@ -18,20 +18,20 @@ node {
 }
 ```
 
-Where, 
+ここで、
 
-- `name` refers to the desired node name, for example, `emqx@localhost`.
-- `role` refers to the function that an EMQX node performs within an EMQX cluster. There are 2 types of roles: core nodes and replicant codes. For a detailed explanation of core nodes and replicant nodes, see [EMQX Clustering - Core and Replicant Nodes](../deploy/cluster/mria-introduction.md). 
-  - Default value: `core` 
-  - Optional value: `core` or `replicant`
+- `name` は設定したいノード名を指します。例：`emqx@localhost`。
+- `role` はEMQXクラスター内でノードが果たす役割を示します。役割はコアノード（core）とレプリカントノード（replicant）の2種類があります。コアノードとレプリカントノードの詳細は[EMQXクラスタリング - コアノードとレプリカントノード](../deploy/cluster/mria-introduction.md)を参照してください。  
+  - デフォルト値：`core`  
+  - 選択可能な値：`core` または `replicant`
 
-## Configure Cluster
+## クラスターの設定
 
-This section introduces how to configure an EMQX cluster. You can add the cluster configuration items either on a core or a replicant node. If you are working on a replicant node, there are some configuration items, for example, `core_nodes`, that only take effect under certain preconditions:
+このセクションでは、EMQXクラスターの設定方法を説明します。クラスター設定はコアノードまたはレプリカントノードのいずれかで行えます。レプリカントノードで設定する場合、例えば `core_nodes` のように特定の条件下でのみ有効になる設定項目があります。
 
-- `node.db_backend` of the node is set to `rlog`, indicating the node uses `rlog` as the database backend. 
-- `node.role` is set to `replicant`, indicating this code functions as a replicant node. 
-- `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if the automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../deploy/cluster/create-cluster.md). 
+- ノードの `node.db_backend` が `rlog` に設定されていること（`rlog` をデータベースバックエンドとして使用）。
+- ノードの `node.role` が `replicant` に設定されていること（レプリカントノードとして機能）。
+- ノードの `node.discovery_strategy` が `manual` または `static` に設定されていること。自動クラスター検出機構を使用する場合は設定不要です。ノード検出戦略と関連設定の詳細は[クラスターの作成](../deploy/cluster/create-cluster.md)を参照してください。
 
 ```bash
 cluster {
@@ -47,23 +47,22 @@ cluster {
 }
 ```
 
-Where,
+各設定項目の説明は以下の通りです。
 
-| Configuration Item       | Description                                                  | Default Value | Optional Values                                   |
-| ------------------------ | ------------------------------------------------------------ | ------------- | ------------------------------------------------- |
-| `name`                   | This sets the name of the cluster                            | `emqxcl`      |                                                   |
-| `discovery_strategy`     | This sets the node discovery strategy for the cluster.       | `manual`      | `manual`, `static`, `dns`, `etcd`, `k8s`, `singleton` |
-| `core_nodes`             | This sets the core nodes that this replicant code will connect to.<br />Multiple nodes can be added here, separated with a `,` | --            | --                                                |
-| `driver`                 | This sets the transport protocol for inter-EMQX node communication. | `tcp`         | `tcp`, `SSL`                                      |
-| `ssl_options`            | This sets the SSL/TLS configuration options for the listener, it has three properties | --            | --                                                |
-| `ssl_options.cacertfile` | PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates. | --            | --                                                |
-| `ssl_options.certfile`   | PEM file containing the SSL/TLS certificate chain for the listener. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain. | --            | --                                                |
-| `ssl_options.keyfile`    | PEM file containing the private key corresponding to the SSL/TLS certificate. | --            | --                                                |
-| `ssl_options.fail_if_no_peer_cert` | If set to `true`, the server fails if the client does not have a certificate to send, that is, sends an empty certificate. If set to `false`, it fails only if the client sends an invalid certificate (an empty certificate is considered valid). | --            | --                                                |
+| 設定項目                  | 説明                                                         | デフォルト値  | 選択可能な値                                      |
+| ------------------------- | ------------------------------------------------------------ | ------------ | ------------------------------------------------- |
+| `name`                    | クラスターの名前を設定します                                 | `emqxcl`     |                                                   |
+| `discovery_strategy`      | クラスターのノード検出戦略を設定します                       | `manual`     | `manual`, `static`, `dns`, `etcd`, `k8s`, `singleton` |
+| `core_nodes`              | レプリカントノードが接続するコアノードを設定します。複数ノードはカンマ区切りで指定可能 | --           | --                                                |
+| `driver`                  | EMQXノード間通信のトランスポートプロトコルを設定します       | `tcp`        | `tcp`, `SSL`                                      |
+| `ssl_options`             | リスナーのSSL/TLS設定オプションで、3つのプロパティを持ちます | --           | --                                                |
+| `ssl_options.cacertfile`  | クライアント証明書の真正性を検証するための信頼されたCA証明書（PEM形式）ファイル | --           | --                                                |
+| `ssl_options.certfile`    | リスナー用のSSL/TLS証明書チェーン（PEM形式）ファイル。ルートCA以外の証明書の場合は中間CA証明書を連結してチェーンを形成 | --           | --                                                |
+| `ssl_options.keyfile`     | SSL/TLS証明書に対応する秘密鍵（PEM形式）ファイル             | --           | --                                                |
+| `ssl_options.fail_if_no_peer_cert` | `true`の場合、クライアントが証明書を送信しない（空の証明書）とサーバーは失敗します。`false`の場合は無効な証明書送信時のみ失敗します（空の証明書は有効とみなす） | --           | --                                                |
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはより詳細なカスタマイズに対応するため、多くの設定項目を提供しています。詳細は[EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご覧ください。
 
 :::
-

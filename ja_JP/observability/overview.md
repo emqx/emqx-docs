@@ -1,44 +1,41 @@
-# Logs and Observability
+# ログとオブザーバビリティ
 
-EMQX provides a series of observability-related features to help with system monitoring, management, and diagnosing. All these features can be accessed and configured on the Dashboard under the following menu items:
+EMQX は、システムの監視、管理、診断を支援する一連のオブザーバビリティ関連機能を提供しています。これらの機能はすべて、ダッシュボードの以下のメニュー項目からアクセスおよび設定が可能です。
 
-**Monitoring**:
+**監視**:
 
-- [Metrics](./metrics-and-stats.md)
+- [メトリクス](./metrics-and-stats.md)
 
-  EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. Users can use the EMQX Dashboard, HTTP API, and system topics to trace the metrics data. 
+  EMQX はメトリクス監視機能を提供しており、運用担当者はこれを基に現在のサービス状況を監視し、システムの異常をトラブルシューティングできます。ユーザーは EMQX ダッシュボード、HTTP API、およびシステムトピックを利用してメトリクスデータを追跡できます。
 
-- [Alarm](./alarms.md)
+- [アラーム](./alarms.md)
 
-  EMQX has offered a built-in monitoring and alarm functionality for monitoring the CPU occupancy, system and process memory occupancy, number of processes, rule engine resource status, cluster partition and healing, and will raise an alarm in case of system malfunctions.
+  EMQX は CPU 使用率、システムおよびプロセスメモリ使用率、プロセス数、ルールエンジンのリソース状況、クラスターのパーティションおよび修復状況を監視する組み込みの監視・アラーム機能を備えており、システム異常発生時にアラームを発報します。
 
-**Management**:
+**管理**:
 
-- [Logs](./log.md)
+- [ログ](./log.md)
 
-  Logs provide a reliable source of information for troubleshooting and system performance optimization. You can find the record about the access, operating, or network issues from EMQX logs.
+  ログはトラブルシューティングやシステムパフォーマンス最適化のための信頼できる情報源です。EMQX のログからアクセス状況、操作履歴、ネットワーク問題の記録を確認できます。
 
-- [Integrate with Prometheus](./prometheus.md)
+- [Prometheus との統合](./prometheus.md)
 
-  [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for multidimensional data models, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and pushing metrics to `pushgateway`.
+  [Prometheus](https://prometheus.io/) は SoundCloud がオープンソースで提供する監視ソリューションで、多次元データモデルのサポート、柔軟なクエリ言語、強力なアラーム管理機能が特徴です。EMQX は Prometheus と統合してシステムメトリクスを収集し、`pushgateway` へメトリクスをプッシュすることをサポートしています。
 
-- [Integrate with Datadog](./datadog)
+- [Datadog との統合](./datadog)
 
-  [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
+  [Datadog](https://www.datadoghq.com/) はアプリケーション向けに統合されたリアルタイムのオブザーバビリティおよびセキュリティソリューションを提供するプラットフォームです。EMQX は Datadog との統合をサポートしており、EMQX の稼働状況の把握、システムパフォーマンス問題の監視・トラブルシューティング、Datadog コンソール上でのメトリクス表示を支援します。
 
-**Diagnose**:
+**診断**:
 
-- [Topic Metrics](./topic-metrics.md)
+- [トピックメトリクス](./topic-metrics.md)
 
-  EMQX provides a topic monitoring feature(called Topic Metrics) that allows you to count the number of messages sent and received, the rate, and other metrics for a given topic. You can view and use this feature through the **Diagnose** -> **Topic Metrics** page on Dashboard, or you can configure it through the HTTP API.
+  EMQX はトピック監視機能（トピックメトリクス）を提供しており、指定したトピックに対して送受信されたメッセージ数やレートなどのメトリクスをカウントできます。この機能はダッシュボードの **診断** -> **トピックメトリクス** ページから閲覧・利用でき、HTTP API 経由での設定も可能です。
 
-- [Slow Subscriptions](./slow-subscribers-statistics.md)
+- [スローサブスクリプション](./slow-subscribers-statistics.md)
 
-  Typically, EMQX will finish the message transmission within milliseconds, affected mainly by the network. However, there are cases where the latency of subscription messages is very high on the client side. To solve this problem, EMQX provides a Slow subscriptions feature.
+  通常、EMQX はメッセージの送信をミリ秒単位で完了しますが、ネットワークの影響を受けます。しかしクライアント側でサブスクリプションメッセージのレイテンシが非常に高くなるケースがあります。この問題を解決するために、EMQX はスローサブスクリプション機能を提供しています。
 
-- [Log Trace](./tracer.md)
+- [ログトレース](./tracer.md)
 
-  EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
-
-
-
+  EMQX 5.x ではログトレース機能が追加され、特定のクライアントID、トピック、IP に対してリアルタイムにデバッグレベルのログ出力を有効化できます。

@@ -1,24 +1,24 @@
-# Connect via Java SDK
+# Java SDKで接続する
 
-[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) is an MQTT client library written in Java(MQTT Java Client), which can be used in JVM or other Java compatible platforms (such as Android ).
+[Eclipse Paho Java Client](https://www.eclipse.org/paho/clients/java/) は、Javaで書かれたMQTTクライアントライブラリ（MQTT Javaクライアント）であり、JVMやAndroidなどのJava互換プラットフォームで利用できます。
 
-Eclipse Paho Java Client provides asynchronous and synchronous API of MqttAsyncClient and MqttClient .
+Eclipse Paho Java Clientは、非同期APIのMqttAsyncClientと同期APIのMqttClientを提供しています。
 
-## Install Paho Java via Maven
+## MavenでPaho Javaをインストールする
 
-The Paho Java client library can be easily installed through the package management tool Maven. Until now, the latest version is installed as follows:
+Paho Javaクライアントライブラリは、パッケージ管理ツールMavenを使って簡単にインストールできます。最新バージョンは以下のように指定します。
 
 ```xml
 <dependency>
   <groupId>org.eclipse.paho</groupId>
-	<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-       <version>1.2.5</version>
+  <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+  <version>1.2.5</version>
 </dependency>
 ```
 
-## Paho Java usage example
+## Paho Javaの使用例
 
-In the Java system, Paho Java is a relatively stable and widely used MQTT client library. This example contains the complete code of Paho Java in the Java language connecting to EMQX, sending and receiving messages:
+Java環境では、Paho Javaは比較的安定して広く使われているMQTTクライアントライブラリです。以下の例は、Java言語でEMQXに接続し、メッセージの送受信を行うPaho Javaの完全なコードです。
 
 **App.java**
 
@@ -45,42 +45,42 @@ public class App {
         try {
             MqttClient client = new MqttClient(broker, clientId, persistence);
 
-            // MQTT connection option
+            // MQTT接続オプション
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setUserName("emqx_test");
             connOpts.setPassword("emqx_test_password".toCharArray());
-            // retain session
+            // セッションを保持しない
             connOpts.setCleanSession(true);
 
-            // set callback
+            // コールバックを設定
             client.setCallback(new PushCallback());
 
-            // establish a connection
-            System.out.println("Connecting to broker: " + broker);
+            // 接続を確立
+            System.out.println("ブローカーに接続中: " + broker);
             client.connect(connOpts);
 
-            System.out.println("Connected");
-            System.out.println("Publishing message: " + content);
+            System.out.println("接続完了");
+            System.out.println("メッセージをパブリッシュ中: " + content);
 
-            // Subscribe
+            // サブスクライブ
             client.subscribe(subTopic);
 
-            // Required parameters for message publishing
+            // メッセージパブリッシュに必要なパラメータ設定
             MqttMessage message = new MqttMessage(content.getBytes());
             message.setQos(qos);
             client.publish(pubTopic, message);
-            System.out.println("Message published");
+            System.out.println("メッセージをパブリッシュしました");
 
             client.disconnect();
-            System.out.println("Disconnected");
+            System.out.println("切断しました");
             client.close();
             System.exit(0);
         } catch (MqttException me) {
-            System.out.println("reason " + me.getReasonCode());
-            System.out.println("msg " + me.getMessage());
-            System.out.println("loc " + me.getLocalizedMessage());
-            System.out.println("cause " + me.getCause());
-            System.out.println("excep " + me);
+            System.out.println("理由 " + me.getReasonCode());
+            System.out.println("メッセージ " + me.getMessage());
+            System.out.println("ローカライズメッセージ " + me.getLocalizedMessage());
+            System.out.println("原因 " + me.getCause());
+            System.out.println("例外 " + me);
             me.printStackTrace();
         }
     }
@@ -88,7 +88,7 @@ public class App {
 
 ```
 
-**Callback message processing class OnMessageCallback.java**
+**メッセージコールバック処理クラス OnMessageCallback.java**
 
 ```java
 package io.emqx;
@@ -99,24 +99,23 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class OnMessageCallback implements MqttCallback {
     public void connectionLost(Throwable cause) {
-        // After the connection is lost, it usually reconnects here
-        System.out.println("disconnect, you can reconnect");
+        // 接続が失われた後、通常ここで再接続を行う
+        System.out.println("切断されました。再接続可能です");
     }
 
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        // The messages obtained after subscribe will be executed here
-        System.out.println("Received message topic:" + topic);
-        System.out.println("Received message QoS:" + message.getQos());
-        System.out.println("Received message content:" + new String(message.getPayload()));
+        // サブスクライブ後に受信したメッセージはここで処理される
+        System.out.println("受信したメッセージ トピック:" + topic);
+        System.out.println("受信したメッセージ QoS:" + message.getQos());
+        System.out.println("受信したメッセージ内容:" + new String(message.getPayload()));
     }
 
     public void deliveryComplete(IMqttDeliveryToken token) {
-        System.out.println("deliveryComplete---------" + token.isComplete());
+        System.out.println("配信完了---------" + token.isComplete());
     }
 }
 ```
 
+## Paho JavaのMQTT 5.0対応状況
 
-## Paho Java MQTT 5.0 Support
-
-Currently, Paho Java is still adapting to MQTT 5.0 and has not yet fully supported it .
+現時点で、Paho JavaはMQTT 5.0に対応中であり、まだ完全にはサポートされていません。

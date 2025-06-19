@@ -1,125 +1,125 @@
-# Enable SSL/TLS Connection
+# SSL/TLS 接続の有効化
 
-EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. The SSL/TLS encryption functionality encrypts network connections at the transport layer, enhancing the security of communication data while ensuring its integrity.
+EMQX は、MQTT クライアントのアクセスを受け入れる際に、SSL/TLS を介して安全な接続を確立できます。SSL/TLS 暗号化機能はトランスポート層でネットワーク接続を暗号化し、通信データのセキュリティを強化するとともに、その完全性を保証します。
 
-This page introduces the funtionalities and advantages of the SSL/TLS connection and how to establish an SSL/TLS connection between the client and EMQX. 
+本ページでは、SSL/TLS 接続の機能と利点、およびクライアントと EMQX 間で SSL/TLS 接続を確立する方法について紹介します。
 
-## Safety Benefits
+## セキュリティ上の利点
 
-Enabling SSL/TLS connection provides the following safety benefits:
+SSL/TLS 接続を有効にすることで、以下のセキュリティ上の利点が得られます。
 
-1. **Strong Authentication**: Both communicating parties will verify each other's identities by checking the X.509 digital certificate held by the other party. These types of digital certificates are usually issued by trusted Certificate Authorities (CAs) and cannot be forged.
-2. **Confidentiality**: Each session will be encrypted using the session key negotiated by both parties. No third party can know the communication content, so even if the session key is compromised, it does not affect the security of other sessions.
-3. **Integrity**: The possibility of data being tampered with in encrypted communication is extremely low.
+1. **強力な認証**: 通信する双方が相手の X.509 デジタル証明書を検証し、相手の身元を確認します。これらの証明書は通常、信頼された認証局（CA）によって発行されており、偽造できません。
+2. **機密性**: 各セッションは双方で交渉されたセッションキーで暗号化されます。第三者が通信内容を知ることはできず、仮にセッションキーが漏洩しても他のセッションの安全性には影響しません。
+3. **完全性**: 暗号化通信においてデータが改ざんされる可能性は極めて低いです。
 
-## Two Usage Modes
+## 2つの利用モード
 
-You can enable SSL/TLS encrypted connections for all connections, including MQTT connection, to ensure the security of access and message transmission. For client SSL/TLS connections, you can choose one of the following two modes based on your usage scenario:
+MQTT 接続を含むすべての接続に対して SSL/TLS 暗号化接続を有効にし、アクセスおよびメッセージ送信のセキュリティを確保できます。クライアントの SSL/TLS 接続については、利用シナリオに応じて以下の2つのモードから選択可能です。
 
-| Usage Mode                                                   | Advantages                                                   | Disadvantages                                                |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Directly establish SSL/TLS connection between the client and EMQX. | Easy to use, no additional components required               | It will increase EMQX's resource consumption, and if the number of connections is huge, it may lead to high CPU and memory consumption. |
-| Terminate TLS connection through a proxy or load balancer.   | No impact on EMQX performance, and provides load balancing capabilities. | Only a few cloud vendors' load balancers support TCP SSL/TLS termination. In addition, users need to deploy software such as HAProxy themselves. |
+| 利用モード                                                   | 利点                                                   | 欠点                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------ | --------------------------------------------------- |
+| クライアントと EMQX 間で直接 SSL/TLS 接続を確立する。         | 利用が簡単で追加コンポーネントが不要。                   | EMQX のリソース消費が増加し、接続数が多い場合は CPU やメモリ消費が高くなる可能性がある。 |
+| プロキシやロードバランサーを介して TLS 接続を終了させる。     | EMQX のパフォーマンスに影響がなく、ロードバランシング機能を提供できる。 | TCP SSL/TLS 終端をサポートするクラウドベンダーのロードバランサーは限られている。また、ユーザー自身で HAProxy などのソフトウェアをデプロイする必要がある。 |
 
-For information on how to terminate TLS connections through a proxy or load balancer, refer to [Cluster Load Balancing](../deploy/cluster/lb.md).
+プロキシやロードバランサーを介した TLS 接続終了の詳細は、[Cluster Load Balancing](../deploy/cluster/lb.md) を参照してください。
 
-## One-Way/Two-Way Authentication
+## 一方向認証／双方向認証
 
-EMQX provides comprehensive SSL/TLS capability support, enabling both one-way and two-way client/server mutual trust authentication through X.509 certificates:
+EMQX は包括的な SSL/TLS 機能をサポートし、X.509 証明書を用いたクライアント／サーバー間の一方向認証および双方向相互認証を実現できます。
 
-| Authentication Method  | Description                                                  | Verification Method                                          | Pros and Cons                                                |
-| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| One-way Authentication | The client verifies the server's identity, but the server does not verify the client's identity. | Clients typically do not need to provide a certificate, and only need to verify that the server's certificate is issued by a trusted Certificate Authority (CA). | Can only ensure the confidentiality and integrity of communication data, but cannot guarantee the identity of the communication parties. |
-| Two-way Authentication | Both the server and client mutually verify each other's identity. | Requires issuing certificates for each device, the server verifies the client's certificate to confirm its legitimacy. | Ensures mutual trust between the server and client, and prevents man-in-the-middle attacks. |
+| 認証方式               | 説明                                                      | 検証方法                                                  | 長所と短所                                               |
+| ---------------------- | --------------------------------------------------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| 一方向認証             | クライアントがサーバーの身元を検証するが、サーバーはクライアントの身元を検証しない。 | クライアントは通常証明書を提供する必要がなく、サーバー証明書が信頼された CA によって発行されていることのみを検証する。 | 通信データの機密性と完全性は保証できるが、通信相手の身元は保証できない。 |
+| 双方向認証             | サーバーとクライアントが互いに身元を検証し合う。           | 各デバイスに証明書を発行し、サーバーがクライアント証明書の正当性を検証する。 | サーバーとクライアント間の相互信頼を保証し、中間者攻撃を防止できる。 |
 
-## SSL/TLS Certificates
+## SSL/TLS 証明書
 
-You need to prepare the SSL/TLS certificates for authentication before establishing an SSL/TLS connection. EMQX only provides a set of SSL/TLS certificates (located in the `etc/certs` directory of the installation package) for testing purposes. When used in a production environment, reliable certificates signed by a trusted CA should be used. For information on how to apply for relevant certificates, see [Obtain SSL/TLS Certificates](./tls-certificate.md).
+SSL/TLS 接続を確立する前に認証用の証明書を準備する必要があります。EMQX はテスト目的でのみ使用する証明書セット（インストールパッケージの `etc/certs` ディレクトリ内）を提供しています。実運用環境では、信頼された CA によって署名された信頼性のある証明書を使用してください。証明書の取得方法は [Obtain SSL/TLS Certificates](./tls-certificate.md) を参照してください。
 
-## Enable SSL/TLS with One-Way Authentication
+## 一方向認証での SSL/TLS 有効化
 
-EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for one-way authentication. You can configure it through the Dashboard and configuration files to implement certificate replacement and modify other configuration items.
+EMQX はデフォルトでポート `8883` で SSL/TLS リスナーを有効にし、一方向認証を設定しています。ダッシュボードや設定ファイルで証明書の差し替えやその他の設定変更が可能です。
 
-### Enable via Dashboard
+### ダッシュボードでの有効化
 
-1. Go to EMQX Dashboard. Click **Management** -> **Listeners** from the left navigation menu.
+1. EMQX ダッシュボードにアクセスし、左側ナビゲーションメニューから **Management** -> **Listeners** をクリックします。
 
-2. On the **Listeners** page, click **default** from the **Name** column of the SSL listener. 
+2. **Listeners** ページで、SSL リスナーの **Name** 列にある **default** をクリックします。
 
-   - **TLS Verify**: Disabled by default for one-way authentication.
-   - **TLS Cert**, **TLS Key** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
-   - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
-   - **Fail If No Peer Cert**: Used together with **TLS Verify** is enabled. Set to `false` by default.
-     - If set to `true`, verification of the client's identity fails if the client sends an empty certificate. The SSL/TLS connection will be rejected.
-     - If set to `false`, verification of the client's identity fails only if the client sends an invalid certificate (An empty certificate is considered to be valid). The SSL/TLS connection will be rejected.
-   - **Intermediate Certificate Depth**: The allowed maximum depth of certification path; the default value is `10`.
-   - **Key Password**: Type the password if the private key file is password-protected.
-   - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toogle switch. For more information, see [OCSP Stapling](./ocsp.md).
-   - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toogle switch. For more information, see [CRL Check](./crl.md).
+   - **TLS Verify**: 一方向認証のためデフォルトで無効。
+   - **TLS Cert**、**TLS Key**、**CA Cert**: **Reset** ボタンをクリックして現在の証明書ファイルをプライベート証明書ファイルに差し替え可能。
+   - **SSL Versions**: すべての TLS/DTLS バージョンをサポート。デフォルトは `tlsv1.3` と `tlsv1.2`。PSK 認証に PSK 暗号スイートを使う場合は `tlsv1.2`、`tlsv1.1`、`tlsv1` を設定してください。PSK 認証の詳細は [Enable PSK Authentication](./psk-authentication.md) を参照。
+   - **Fail If No Peer Cert**: **TLS Verify** が有効な場合に使用。デフォルトは `false`。
+     - `true` の場合、クライアントが空の証明書を送信すると検証失敗となり、SSL/TLS 接続は拒否される。
+     - `false` の場合、無効な証明書を送信した場合のみ検証失敗となり、空の証明書は有効とみなされる（一方向認証）。
+   - **Intermediate Certificate Depth**: 証明書パスの最大深度。デフォルトは `10`。
+   - **Key Password**: プライベートキーがパスワード保護されている場合に入力。
+   - **Enable OCSP Stapling**: デフォルトで無効。SSL/TLS 証明書の失効状態を取得する必要がある場合はトグルスイッチで有効化。詳細は [OCSP Stapling](./ocsp.md) を参照。
+   - **Enable CRL Check**: デフォルトで無効。接続クライアント証明書の失効確認が必要な場合はトグルスイッチで有効化。詳細は [CRL Check](./crl.md) を参照。
 
-3. After you complete the editing, click the **Update** button.
+3. 編集が完了したら、**Update** ボタンをクリックします。
 
-   <img src="./assets/edit-listener.png" alt="edit-listener" style="zoom:40%;" />
+   <img src="./assets/edit-listener.png" alt="リスナー編集" style="zoom:40%;" />
 
-### Enable via Configuration File
+### 設定ファイルでの有効化
 
-You can also enable the SSL/TLS connection by modifying the `listeners.ssl.default` configuration group in the configuration file.
+設定ファイルの `listeners.ssl.default` 設定グループを変更して SSL/TLS 接続を有効にすることも可能です。
 
-1. Place your private SSL/TLS certificate files in the `etc/certs` directory of EMQX.
+1. プライベート SSL/TLS 証明書ファイルを EMQX の `etc/certs` ディレクトリに配置します。
 
-2. Open the configuration file `base.hocon` (located in either the `./etc` or `/etc/emqx/etc` directory depending on your installation method). 
+2. インストール方法により `./etc` または `/etc/emqx/etc` ディレクトリにある設定ファイル `base.hocon` を開きます。
 
-3. Modify the `listeners.ssl.default` configuration group. Replace the certificate files with your own certificate files.
+3. `listeners.ssl.default` 設定グループを編集し、証明書ファイルを自分の証明書ファイルに置き換えます。
 
-   If you need to enable one-way authentication, add `verify = verify_none`:
+   一方向認証を有効にする場合は `verify = verify_none` を追加します。
 
 ```bash
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
   ssl_options {
-    # PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-    # For one-way authentication, the file content can be empty.
+    # クライアント証明書の真正性を検証するためにリスナーが使用する信頼された CA（認証局）証明書を含む PEM ファイル。
+    # 一方向認証の場合、ファイル内容は空でもよい。
     cacertfile = "etc/certs/rootCAs.pem"
-    # PEM file containing the SSL/TLS certificate chain for the listener.
-    # If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    # リスナー用の SSL/TLS 証明書チェーンを含む PEM ファイル。
+    # 証明書がルート CA から直接発行されていない場合、中間 CA 証明書をリスナー証明書の後に連結してチェーンを形成する必要がある。
     certfile = "etc/certs/server-cert.pem"
-    # PEM file containing the private key corresponding to the SSL/TLS certificate.
+    # SSL/TLS 証明書に対応するプライベートキーを含む PEM ファイル。
     keyfile = "etc/certs/server-key.pem"
-    # Set `verify_peer` to verify the authenticity of the client certificates. Must be set to 'verify_peer' for two-way authentication (mTLS).
-    # Set 'verify_none' to allow any client to connect, regardless of the client certificate.
+    # クライアント証明書の真正性を検証するために 'verify_peer' を設定。双方向認証（mTLS）では必須。
+    # 任意のクライアント接続を許可する場合は 'verify_none' を設定。
     verify = verify_none
-    # If set to `true`, the handshake fails if the client does not have a certificate to send. Must be set to `true` for two-way authentication (mTLS).
-    # If set to `false`, it fails only if the client sends an invalid certificate (an empty certificate is considered valid). i.e. one-way authentication.
+    # クライアントが証明書を送信しない場合にハンドシェイクを失敗させるかどうか。双方向認証（mTLS）では true に設定。
+    # false の場合は無効な証明書を送信した場合のみ失敗（一方向認証）。
     fail_if_no_peer_cert = true
   }
 }
 ```
 
-### EMQX v4 configuration
+### EMQX v4 の設定
 
-**In the EMQX, the default listening port of `mqtt:ssl` is 8883.**
+**EMQX では、`mqtt:ssl` のデフォルトリスニングポートは 8883 です。**
 
-Copy the file `emqx.pem`, `emqx.key` and `ca.pem` generated by OpenSSL tool into the directory `etc/certs/` of EMQX, and refer the following configuration to modify `base.hocon`:
+OpenSSL ツールで生成した `emqx.pem`、`emqx.key`、`ca.pem` ファイルを EMQX の `etc/certs/` ディレクトリにコピーし、以下の設定を参考に `base.hocon` を修正します。
 
 ```shell
-## listener.ssl.$name is the IP address and port that the MQTT/SSL
-## Value: IP:Port | Port
+## listener.ssl.$name は MQTT/SSL の IP アドレスとポート
+## 値: IP:Port | Port
 listener.ssl.external = 8883
 
-# PEM file containing the private key corresponding to the SSL/TLS certificate.
+# SSL/TLS 証明書に対応するプライベートキーを含む PEM ファイル
 listener.ssl.external.keyfile = etc/certs/emqx.key
 
-# PEM file containing the SSL/TLS certificate chain for the listener.
+# SSL/TLS 証明書チェーンを含む PEM ファイル
         fail_if_no_peer_cert = false
       }
     }
 ```
 
-4. Restart EMQX to apply the configuration.
+4. 設定を反映するために EMQX を再起動します。
 
-## Test Client Connection with One-way Authentication
+## 一方向認証でのクライアント接続テスト
 
-You can use [MQTTX CLI](https://mqttx.app/cli) for testing. One-way authentication typically requires the client to provide a CA certificate, so the client can verify the server's identity:
+[MQTTX CLI](https://mqttx.app/cli) を使ってテストできます。一方向認証ではクライアントが CA 証明書を提供し、サーバーの身元を検証します。
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -127,13 +127,13 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --ca certs/rootCA.crt
 ```
 
-If the server certificate Common Name (CN) does not match the server address specified by the client during connection, the following error will occur:
+サーバー証明書の Common Name (CN) がクライアントが接続時に指定したサーバーアドレスと一致しない場合、以下のエラーが発生します。
 
 ```bash
 Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not cert's CN: Server
 ```
 
-In this case, you can set the client certificate CN to match the server address, or ignore the certificate CN validation with the `--insecure` option:
+この場合、クライアント証明書の CN をサーバーアドレスに合わせるか、`--insecure` オプションで証明書 CN の検証を無視できます。
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -142,32 +142,32 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --insecure
 ```
 
-## Enable SSL/TLS with Two-Way Authentication
+## 双方向認証での SSL/TLS 有効化
 
-Two-way authentication is an extension of one-way authentication, where EMQX is further configured to verify client certificates, ensuring the legitimacy of the client's identity.
+双方向認証は一方向認証の拡張で、EMQX がクライアント証明書を検証し、クライアントの正当性を保証します。
 
-In addition to this, you will need to generate certificates for the client. For specific operations, refer to [Issue Client Certificates](./tls-certificate.md#issue-client-certificates).
+これに加えて、クライアント用の証明書を発行する必要があります。具体的な手順は [Issue Client Certificates](./tls-certificate.md#issue-client-certificates) を参照してください。
 
-For the Dashboard method, you can choose to **Enable** under **TLS Verify**, and configure the **Fail if No Peer Cert** option to `true` to enforce two-way authentication.
+ダッシュボードでは、**TLS Verify** を **Enable** に設定し、**Fail if No Peer Cert** を `true` に設定することで双方向認証を強制できます。
 
-You can also add the following configuration to the `listeners.ssl.default` configuration group in the configuration file:
+設定ファイルの `listeners.ssl.default` 設定グループに以下を追加しても構いません。
 
 ```bash
 listeners.ssl.default {
   ...
   ssl_options {
     ...
-    # Peer verification enabled
+    # ピア検証を有効化
     verify = verify_peer
-    # Forced two-way authentication. If the client cannot provide a certificate, the SSL/TLS connection will be rejected.
+    # 双方向認証を強制。クライアントが証明書を提供できない場合、SSL/TLS 接続は拒否される。
     fail_if_no_peer_cert = true
   }
 }
 ```
 
-## Test Client Connection with Two-way Authentication
+## 双方向認証でのクライアント接続テスト
 
-You can use [MQTTX CLI](https://mqttx.app/cli) for testing. In addition to providing a CA certificate, two-way authentication also requires the client to provide its own certificate:
+[MQTTX CLI](https://mqttx.app/cli) を使ってテストできます。双方向認証では CA 証明書に加え、クライアント自身の証明書も提供する必要があります。
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -177,13 +177,13 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --key certs/client-0001.key
 ```
 
-If the server certificate CN does not match the server address specified by the client during the connection, the following error will occur:
+サーバー証明書の CN がクライアントが接続時に指定したサーバーアドレスと一致しない場合、以下のエラーが発生します。
 
 ```bash
 Error [ERR_TLS_CERT_ALTNAME_INVALID]: Hostname/IP does not match certificate's altnames: Host: localhost. is not cert's CN: Server
 ```
 
-In this case, you can set the client certificate CN to match the server address, or ignore the certificate CN validation with the `--insecure` option:
+この場合、クライアント証明書の CN をサーバーアドレスに合わせるか、`--insecure` オプションで証明書 CN の検証を無視できます。
 
 ```bash
 mqttx sub -t 't/1' -h localhost -p 8883 \
@@ -194,8 +194,8 @@ mqttx sub -t 't/1' -h localhost -p 8883 \
   --insecure
 ```
 
-## Update SSL/TLS certificates
+## SSL/TLS 証明書の更新
 
-When your private SSL/TLS certificate files expire, you need to manually update them by replacing the old certificates with the new ones in the `./etc` or `/etc/emqx/etc` directory.
+プライベート SSL/TLS 証明書ファイルの有効期限が切れた場合は、`./etc` または `/etc/emqx/etc` ディレクトリ内の古い証明書を新しいものに手動で差し替えて更新してください。
 
-EMQX supports rotating SSL/TLS certificates without restarting. By default, EMQX reloads the SSL/TLS certificates every 120 seconds.
+EMQX は再起動なしで SSL/TLS 証明書のローテーションをサポートしています。デフォルトで EMQX は 120 秒ごとに SSL/TLS 証明書をリロードします。

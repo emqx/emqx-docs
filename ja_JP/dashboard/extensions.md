@@ -1,16 +1,16 @@
 # Extensions
 
-With the Extensions features, users can use the gateway to access non-MQTT protocol connections and message publishing and receiving, and use the Plugin or ExHook to modify and extend the system. Click **Management** and scroll down to the **Extensions** section, where you will find:
+Extensions機能により、ユーザーはゲートウェイを使って非MQTTプロトコルの接続やメッセージのパブリッシュおよび受信を行うことができ、PluginやExHookを利用してシステムの修正や拡張が可能です。**Management**をクリックし、下にスクロールして**Extensions**セクションを表示すると、以下が確認できます。
 
-- **Gateways**: Handles connections, authentication, and message sending and receiving for all non-MQTT protocols and provides a unified user layer interface and concept for them.
-- **ExHook**: Provides the ability to modify or extend the system functionality of EMQX using other languages.
-- **Plugins**: Modifies or extends system functionality by installing plugins written in Erlang.
+- **Gateways**: 非MQTTプロトコルの接続、認証、メッセージ送受信を処理し、それらに対して統一されたユーザーレイヤーのインターフェースと概念を提供します。
+- **ExHook**: 他の言語を使ってEMQXのシステム機能を修正または拡張する機能を提供します。
+- **Plugins**: Erlangで書かれたプラグインをインストールすることでシステム機能を修正または拡張します。
 
 ## Gateways
 
-EMQX Multi-Protocol Gateways support handling all non-MQTT protocol connections, authentication, and message sending and receiving. They provide a unified conceptual model for various protocols.
+EMQXのマルチプロトコルゲートウェイは、すべての非MQTTプロトコルの接続、認証、メッセージ送受信を処理します。さまざまなプロトコルに対して統一された概念モデルを提供します。
 
-In the gateways page, you can enable a gateway and configure its basic settings, such as listener configuration. EMQX also provides custom configuration options. For detailed configuration guidance, refer to the quick start documentation for the following common gateways:
+ゲートウェイページでは、ゲートウェイを有効化し、リスナー設定などの基本設定を行うことができます。EMQXはカスタム設定オプションも提供しています。詳細な設定手順については、以下の一般的なゲートウェイのクイックスタートドキュメントを参照してください。
 
 - [MQTT-SN](../gateway/mqttsn.md)
 - [STOMP](../gateway/stomp.md)
@@ -22,35 +22,35 @@ In the gateways page, you can enable a gateway and configure its basic settings,
 - [GB/T 32960](../gateway/gbt32960.md)
 - [JT/T 808](../gateway/jt808.md)
 
-Before enabling a gateway, it must be properly set up. Once set up, you can monitor the number of connections for each enabled protocol gateway and manage gateway statuses (enable/disable) on the **Gateways** page.
+ゲートウェイを有効にする前に、正しくセットアップされている必要があります。セットアップ後は、各有効化されたプロトコルゲートウェイの接続数を監視し、**Gateways**ページでゲートウェイの状態（有効／無効）を管理できます。
 
-<img src="./assets/gateways.png" alt="image" style="zoom:67%;" />
+<img src="./assets/gateways.png" alt="ゲートウェイ一覧" style="zoom:67%;" />
 
 ::: tip
-Disabling a gateway will cause all connections under the gateway to be disconnected, and the connections need to be re-established. Please be careful.
+ゲートウェイを無効にすると、そのゲートウェイに属するすべての接続が切断され、再接続が必要になります。ご注意ください。
 :::
 
 ### Gateway Setup
 
-On the Gateways page, select the protocol gateway you wish to enable and click the **Setup** button in the **Action** column. The page for initializing the protocol gateway includes three steps:
+Gatewaysページで有効化したいプロトコルゲートウェイを選択し、**Action**列の**Setup**ボタンをクリックします。プロトコルゲートウェイの初期化ページは以下の3ステップで構成されています。
 
-1. Configure the basic configurations
-2. Configure listeners
-3. Configure the authentication
+1. 基本設定の構成
+2. リスナーの設定
+3. 認証の設定
 
-Configuration items can be different for different protocol gateways. You can update the configuration items after the initialization is completed by going to the [Gateway Details](#gateway-details) page.
+設定項目はプロトコルゲートウェイごとに異なる場合があります。初期化完了後は、[Gateway Details](#gateway-details)ページで設定項目の更新が可能です。
 
-<img src="./assets/gateway-init.png" alt="image" style="zoom:67%;" />
+<img src="./assets/gateway-init.png" alt="ゲートウェイ初期設定" style="zoom:67%;" />
 
-> Gateways configured via Dashboard will take effect across the cluster.
+> Dashboard経由で設定されたゲートウェイはクラスター全体に反映されます。
 
-#### Basic Configuration
+#### 基本設定
 
-Configuration items can be different for different protocol gateways. For detailed configuration guidance, refer to the documentation for specific gateways.
+設定項目はプロトコルゲートウェイによって異なります。詳細な設定手順は各ゲートウェイのドキュメントを参照してください。
 
-#### Listeners
+#### リスナー
 
-After completing the basic configuration, you can proceed to set up the gateway's listeners. Each gateway can have multiple listeners enabled, depending on the protocol. The following table outlines the supported listener types for various protocol gateways:
+基本設定完了後、ゲートウェイのリスナー設定に進みます。プロトコルに応じて複数のリスナーを有効化できます。以下の表は各プロトコルゲートウェイでサポートされているリスナー種別を示しています。
 
 |            | TCP  | UDP  | SSL  | DTLS | Websocket | Websocket over TLS |
 | ---------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
@@ -63,9 +63,9 @@ After completing the basic configuration, you can proceed to set up the gateway'
 | JT/T 808   | ✔︎    |      | ✔︎    |      |           |                    |
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 
-#### Authentication
+#### 認証
 
-After configuring the listener, you can optionally configure the protocol gateway's access authentication as needed, or allow any client to connect in if no authenticator is configured; different protocol gateways support the following authentication types
+リスナー設定後、必要に応じてプロトコルゲートウェイのアクセス認証を設定できます。認証設定がない場合は任意のクライアントが接続可能です。各プロトコルゲートウェイがサポートする認証タイプは以下の通りです。
 
 |            | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | DTLS | JWT  | Scram | LDAP |
 | ---------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- | ----- | ---- |
@@ -79,78 +79,78 @@ After configuring the listener, you can optionally configure the protocol gatewa
 
 ### Gateway Details
 
-Once the protocol gateway is enabled, you will be redirected to the **Gateways** page. Here, you can manage and customize the gateway settings:
+プロトコルゲートウェイを有効化すると、**Gateways**ページにリダイレクトされます。ここでゲートウェイの管理やカスタマイズが可能です。
 
-- **Customize Settings**: Click the **Settings** button in the **Actions** column to update the gateway's basic configuration, listener settings, and authentication settings as needed.
-- **View Connected Clients**: Click the **Clients** button in the **Actions** column to view a list of clients connected to the server via the protocol gateway. The client list includes details such as the client ID, username, IP address (same as displayed on the Clients page), status, and the time of connection or registration. To disconnect a client, click the **Kick Out** button in the **Actions** column.
-- **Search Clients**: Use filters for client ID, username, and node to quickly locate specific clients.
+- **設定のカスタマイズ**: **Actions**列の**Settings**ボタンをクリックし、基本設定、リスナー設定、認証設定を必要に応じて更新できます。
+- **接続クライアントの表示**: **Actions**列の**Clients**ボタンをクリックすると、プロトコルゲートウェイ経由でサーバーに接続しているクライアント一覧が表示されます。クライアントID、ユーザー名、IPアドレス（Clientsページと同様）、ステータス、接続または登録時間などの詳細が確認できます。クライアントを切断するには、**Actions**列の**Kick Out**ボタンをクリックします。
+- **クライアント検索**: クライアントID、ユーザー名、ノードでフィルターをかけて特定のクライアントを素早く検索できます。
 
-<img src="./assets/gateway-clients.png" alt="image" style="zoom:67%;" />
+<img src="./assets/gateway-clients.png" alt="ゲートウェイクライアント一覧" style="zoom:67%;" />
 
 ## ExHook
 
-Hooks are a common extension mechanism that allows developers to execute custom code at specific event points. ExHook provides the ability to modify or expand system functions using other programming languages. The hook mechanism supported in EMQX enables users to flexibly modify or extend system functionalities by intercepting module function calls, message passing, and event delivery.
+Hookは特定のイベントポイントでカスタムコードを実行できる一般的な拡張機構です。ExHookは他のプログラミング言語を使ってシステム機能を修正・拡張する機能を提供します。EMQXでサポートされるHook機構により、モジュール関数呼び出し、メッセージ送受信、イベント配信をインターセプトして柔軟にシステム機能を修正・拡張できます。
 
-In the ExHook page, you can view basic information and the status of currently added hooks, as well as add and configure them.
+ExHookページでは、現在追加されているHookの基本情報や状態を確認でき、追加や設定が行えます。
 
-Definitions and development guidelines for ExHooks can be found in [hooks](../extensions/hooks.md).
+ExHookの定義や開発ガイドラインは[hooks](../extensions/hooks.md)をご参照ください。
 
-<img src="./assets/exhook.png" alt="image" style="zoom:67%;" />
+<img src="./assets/exhook.png" alt="ExHook一覧" style="zoom:67%;" />
 
-### Add ExHook
+### ExHookの追加
 
-Click the **+ Add** button at the top right of the page to go to the Add ExHook page. Configure the settings with the basic information and connection parameters of the ExHook to be added and click **Create** to submit the data. After successful creation, you will be redirected to the ExHook list page.
+ページ右上の**+ Add**ボタンをクリックするとExHook追加ページに移動します。追加するExHookの基本情報や接続パラメータを設定し、**Create**をクリックしてデータを送信します。作成が成功するとExHook一覧ページにリダイレクトされます。
 
-<img src="./assets/exhook-add.png" alt="image" style="zoom:67%;" />
+<img src="./assets/exhook-add.png" alt="ExHook追加画面" style="zoom:67%;" />
 
-### View Details
+### 詳細の表示
 
-After successful creation, you can access the ExHook details page by clicking on the ExHook name on the ExHook list page. On the details page, you can view the current ExHook metrics, including the total number of registered hooks, the total number of successful executions, the total number of failed executions and the current execution rate of all hooks. You can edit the basic information and click the **Update** button to save it.
+作成成功後は、ExHook一覧ページのExHook名をクリックすると詳細ページにアクセスできます。詳細ページでは、登録済みHookの総数、成功実行数、失敗実行数、現在の実行率などのメトリクスを確認できます。基本情報の編集も可能で、編集後は**Update**ボタンで保存します。
 
-<img src="./assets/exhook-detail.png" alt="image" style="zoom:67%;" />
+<img src="./assets/exhook-detail.png" alt="ExHook詳細画面" style="zoom:67%;" />
 
-Click on **Registered hooks** tab to view the list of hooks currently implemented by ExHook, as well as the parameters and execution metrics of each hook.
+**Registered hooks**タブをクリックすると、現在ExHookで実装されているHookの一覧と、それぞれのパラメータや実行メトリクスを確認できます。
 
-<img src="./assets/exhook-hooks.png" alt="image" style="zoom:67%;" />
+<img src="./assets/exhook-hooks.png" alt="登録済みHook一覧" style="zoom:67%;" />
 
 ## Plugins
 
-EMQX supports extending custom business logic through plugins or implementing other protocol adaptations via the plugin protocol extension interface. On the Plugins page, you can install and start developed plugin packages and maintain or configure them. For detailed usage guidance, refer to [Plugins](../extensions/plugins.md).
+EMQXはプラグインを通じてカスタムビジネスロジックを拡張したり、プラグインのプロトコル拡張インターフェースを使って他のプロトコル対応を実装したりできます。Pluginsページでは開発済みのプラグインパッケージをインストール・起動し、メンテナンスや設定が可能です。詳細な使い方は[Plugins](../extensions/plugins.md)を参照してください。
 
-To manage system plugins, navigate to **Plugins** under the **Extensions** menu on the left.
+システムプラグインの管理は、左メニューの**Extensions**内の**Plugins**から行います。
 
-### Plugin List
+### プラグイン一覧
 
-The **Plugins** page displays a list of installed plugins, showing details such as the plugin name, version, author, and running status. To locate specific plugins, use the filters at the top of the page to search by name or running status.
+**Plugins**ページにはインストール済みプラグインの一覧が表示され、プラグイン名、バージョン、作者、稼働状況などの詳細が確認できます。特定のプラグインを探す場合は、ページ上部のフィルターで名前や稼働状況で検索可能です。
 
-### Install Plugins
+### プラグインのインストール
 
-For detailed steps, refer to [Install Plugins via Dashboard](../extensions/plugins.md#install-plugins-via-dashboard).
+詳細な手順は[Install Plugins via Dashboard](../extensions/plugins.md#install-plugins-via-dashboard)を参照してください。
 
-Once the package is successfully installed, you will be redirected to the plugin list page. Newly installed plugins are stopped by default. To activate a plugin, click the **Start** button next to it.
+パッケージのインストールが成功するとプラグイン一覧ページにリダイレクトされます。新規インストールされたプラグインはデフォルトで停止状態です。プラグインを有効化するには、該当プラグインの**Start**ボタンをクリックします。
 
-### Manage Plugin Execution Order
+### プラグイン実行順序の管理
 
-For systems with multiple plugins, the order of execution is determined by the enablement sequence. You can adjust this order by:
+複数プラグインがあるシステムでは、有効化順に実行順序が決まります。順序は以下の方法で調整可能です。
 
-- Dragging and dropping plugins directly on the page.
-- Using the sorting option under the **More** menu in the **Actions** column.
+- ページ上でプラグインをドラッグ＆ドロップする
+- **Actions**列の**More**メニュー内の並び替えオプションを使用する
 
-The updated execution order takes effect after the next node restart.
+変更した実行順序は次回ノード再起動後に反映されます。
 
-### Uninstall Plugins
+### プラグインのアンインストール
 
-To remove a plugin, click the **Uninstall** button under the **More** menu in the **Actions** column.
+プラグインを削除するには、**Actions**列の**More**メニュー内の**Uninstall**ボタンをクリックします。
 
-<img src="./assets/plugins.png" alt="image" style="zoom:67%;" />
+<img src="./assets/plugins.png" alt="プラグイン一覧" style="zoom:67%;" />
 
-### Plugin Details
+### プラグイン詳細
 
-Click on a plugin's name to access its details page. This page provides:
+プラグイン名をクリックすると詳細ページにアクセスできます。このページでは以下を確認できます。
 
-- **Documentation**: The left panel displays the `README.md` file from the plugin installation package.
-- **Plugin Information**: The right panel shows metadata from the `release.json` file, such as version, author, and other relevant details.
+- **ドキュメント**: 左ペインにプラグインインストールパッケージ内の`README.md`ファイルが表示されます。
+- **プラグイン情報**: 右ペインに`release.json`ファイルからのメタデータ（バージョン、作者、その他情報）が表示されます。
 
-If the plugin's documentation includes a developer website link, you can visit it by clicking **Read More** in the top-right corner.
+プラグインのドキュメントに開発者のウェブサイトリンクが含まれている場合は、右上の**Read More**をクリックしてアクセスできます。
 
-<img src="./assets/plugin-detail.png" alt="image" style="zoom:67%;" />
+<img src="./assets/plugin-detail.png" alt="プラグイン詳細画面" style="zoom:67%;" />

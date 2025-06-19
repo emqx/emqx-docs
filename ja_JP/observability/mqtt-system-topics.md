@@ -1,47 +1,46 @@
-# System Topic
+# システムトピック
 
-EMQX periodically publishes its running status, message statistics, client online and offline events to the system topic starting with `$SYS/`.
+EMQXは定期的に稼働状況、メッセージ統計、クライアントのオンライン・オフラインイベントを、`$SYS/`で始まるシステムトピックにパブリッシュします。
 
-The `$SYS` topic path begins with `$SYS/brokers/{node}/`, where `{node}` is the name of the node where the event/message is generated, for example:
+`$SYS`トピックのパスは`$SYS/brokers/{node}/`で始まり、`{node}`はイベントやメッセージが発生したノード名を示します。例：
 
 ```bash
 $SYS/brokers/emqx@127.0.0.1/version
 $SYS/brokers/emqx@127.0.0.1/uptime
 ```
 
-The `$SYS` system message publish interval is configured via Dashboard‘s `Management/MQTT Setting/System Topic`.
+`$SYS`システムメッセージのパブリッシュ間隔は、ダッシュボードの `Management/MQTT Setting/System Topic` で設定します。
 
 ::: tip
-By default, only MQTT clients on localhost are allowed to subscribe to the `$SYS` topic.
-Please refer to [File Authorization](../access-control/authz/file.md) to modify the ACL rules for publish and subscribe.
+デフォルトでは、localhost上のMQTTクライアントのみが`$SYS`トピックのサブスクライブを許可されています。  
+パブリッシュおよびサブスクライブのACLルールを変更するには、[File Authorization](../access-control/authz/file.md) を参照してください。
 
-
-Most of the data of the `$SYS` topic in EMQX can be obtained through other methods with lower Couplings.
-The device online and offline status can be captured and processed in the Rule Engine.
+EMQXの`$SYS`トピックの多くのデータは、より疎結合な他の方法でも取得可能です。  
+デバイスのオンライン・オフライン状態はルールエンジンでキャプチャし処理できます。  
 :::
 
-## Cluster Status Information
+## クラスター状態情報
 
-| Topic                          | Description       |
-| ------------------------------ | ----------------- |
-| $SYS/brokers                   | cluster node list |
-| $SYS/brokers/\${node}/version  | EMQX  version     |
-| $SYS/brokers/\${node}/uptime   | EMQX startup time |
-| $SYS/brokers/\${node}/datetime | EMQX time         |
-| $SYS/brokers/\${node}/sysdescr | EMQX description  |
+| トピック                          | 説明               |
+| -------------------------------- | ------------------ |
+| $SYS/brokers                     | クラスターのノード一覧 |
+| $SYS/brokers/\${node}/version    | EMQXのバージョン    |
+| $SYS/brokers/\${node}/uptime     | EMQXの起動時間      |
+| $SYS/brokers/\${node}/datetime   | EMQXの時刻          |
+| $SYS/brokers/\${node}/sysdescr   | EMQXの説明          |
 
-## Client Online and Offline Events
+## クライアントのオンライン・オフラインイベント
 
-Those events is enabled by default, please refer to `sys_topics.sys_event_messages` to turn it off.
+これらのイベントはデフォルトで有効です。無効にするには`sys_topics.sys_event_messages`を参照してください。
 
-`$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
+`$SYS`トピックのプレフィックス：`$SYS/brokers/${node}/clients/`
 
-| Topic                    | Description                                                       |
-| ------------------------ | ----------------------------------------------------------------- |
-| ${clientid}/connected    | Online event. This message is published when a client goes online |
-| ${clientid}/disconnected | Offline event. This message is published when a client is offline |
+| トピック                    | 説明                                               |
+| --------------------------- | -------------------------------------------------- |
+| ${clientid}/connected       | オンラインイベント。クライアントがオンラインになるとパブリッシュされます |
+| ${clientid}/disconnected    | オフラインイベント。クライアントがオフラインになるとパブリッシュされます |
 
- The Payload of the `connected` event message can be parsed into JSON format:
+`connected`イベントメッセージのペイロードはJSON形式で解析可能です：
 
 ```bash
 {
@@ -60,7 +59,7 @@ Those events is enabled by default, please refer to `sys_topics.sys_event_messag
 }
 ```
 
- The Payload of the `disconnected` event message can be parsed into JSON format:
+`disconnected`イベントメッセージのペイロードはJSON形式で解析可能です：
 
 ```bash
 {
@@ -76,18 +75,18 @@ Those events is enabled by default, please refer to `sys_topics.sys_event_messag
 }
 ```
 
-## Client Subscribed and Unsubscribed Events
+## クライアントのサブスクライブ・アンサブスクライブイベント
 
-Those events is disenabled by default, please refer to `sys_topics.sys_event_messages` to turn it on.
+これらのイベントはデフォルトで無効です。有効にするには`sys_topics.sys_event_messages`を参照してください。
 
-`$SYS` topic prefix: `$SYS/brokers/${node}/clients/`
+`$SYS`トピックのプレフィックス：`$SYS/brokers/${node}/clients/`
 
-| Topic                    | Description                              |
-| ------------------------ | ---------------------------------------- |
-| ${clientid}/subscribed   | Subscribed event. This message is published when a client subscribes a topic |
-| ${clientid}/unsubscribed | Unsubscribed event. This message is published when a client unsubscribes a topic |
+| トピック                    | 説明                                               |
+| --------------------------- | -------------------------------------------------- |
+| ${clientid}/subscribed      | サブスクライブイベント。クライアントがトピックをサブスクライブするとパブリッシュされます |
+| ${clientid}/unsubscribed    | アンザブスクライブイベント。クライアントがトピックのサブスクライブを解除するとパブリッシュされます |
 
-The Payload of the `subscribed` event message can be parsed into JSON format:
+`subscribed`イベントメッセージのペイロードはJSON形式で解析可能です：
 
 ```bash
 {
@@ -105,10 +104,9 @@ The Payload of the `subscribed` event message can be parsed into JSON format:
     "protocol":"mqtt",
     "clientid":"emqtt-8348fe27a87976ad4db3"
 }
-
 ```
 
- The Payload of the `unsubscribed` event message can be parsed into JSON format:
+`unsubscribed`イベントメッセージのペイロードはJSON形式で解析可能です：
 
 ```bash
 {
@@ -120,138 +118,137 @@ The Payload of the `subscribed` event message can be parsed into JSON format:
 }
 ```
 
+## 統計情報
 
-## Statistics
+システムトピックのプレフィックス：`$SYS/brokers/${node}/stats/`
 
-System topic prefix : `$SYS/brokers/${node}/stats/`
+### クライアント統計
 
-### Client Statistics
+| トピック               | 説明                      |
+| ---------------------- | ------------------------- |
+| connections/count      | 現在のクライアント総数    |
+| connections/max        | 最大クライアント数        |
 
-| Topic             | Description                     |
-| ----------------- | ------------------------------- |
-| connections/count | Total number of current clients |
-| connections/max   | Maximum number of clients       |
+### サブスクリプション統計
 
-### Subscription Statistics
+| トピック                      | 説明                                      |
+| ----------------------------- | ----------------------------------------- |
+| suboptions/count              | 現在のサブスクリプションオプション数     |
+| suboptions/max                | 最大サブスクリプションオプション数       |
+| subscribers/count             | 現在のサブスクライバー数                   |
+| subscribers/max               | 最大サブスクライバー数                     |
+| subscriptions/count           | 現在のサブスクリプション総数               |
+| subscriptions/max             | 最大サブスクリプション数                   |
+| subscriptions/shared/count    | 現在の共有サブスクリプション総数           |
+| subscriptions/shared/max      | 最大共有サブスクリプション数               |
 
-| Topic                      | Description                                  |
-| -------------------------- | -------------------------------------------- |
-| suboptions/count           | number of current subscription options       |
-| suboptions/max             | total number of maximum subscription options |
-| subscribers/count          | number of current subscribers                |
-| subscribers/max            | maximum number of subscriptions              |
-| subscriptions/count        | total number of current subscription         |
-| subscriptions/max          | maximum number of subscriptions              |
-| subscriptions/shared/count | total number of current shared subscriptions |
-| subscriptions/shared/max   | maximum number of shared subscriptions       |
+### トピック統計
 
-### Topic Statistics
+| トピック           | 説明                      |
+| ------------------ | ------------------------- |
+| topics/count       | 現在のトピック総数        |
+| topics/max         | 最大トピック数            |
 
-| Topic        | Description                    |
-| ------------ | ------------------------------ |
-| topics/count | total number of current topics |
-| topics/max   | maximum number of topics       |
+### ルート統計
 
-### Routes Statistics
+| トピック           | 説明                      |
+| ------------------ | ------------------------- |
+| routes/count       | 現在のルート総数          |
+| routes/max         | 最大ルート数              |
 
-| Topic        | Description                    |
-| ------------ | ------------------------------ |
-| routes/count | total number of current Routes |
-| routes/max   | maximum number of Routes       |
+`topics/count` と `topics/max` は `routes/count` と `routes/max` と数値的に同じです。
 
- The topics/count and topics/max are numerically equal to routes/count and routes/max.
+### スループット（バイト／パケット／メッセージ）統計
 
-### Throughput (Bytes/Packets/Message) Statistics
+システムトピックのプレフィックス：`$SYS/brokers/${node}/metrics/`
 
- System Topic Prefix : `$SYS/brokers/${node}/metrics/`
+### 送受信バイト統計
 
-### Sent and Received Bytes Statistics
+| トピック           | 説明                      |
+| ------------------ | ------------------------- |
+| bytes/received     | 累積受信バイト数          |
+| bytes/sent         | 累積送信バイト数          |
 
-| Topic          | Description                |
-| -------------- | -------------------------- |
-| bytes/received | Accumulated received bytes |
-| bytes/sent     | Accumulated sent bytes     |
+### 送受信MQTTパケット統計
 
-### Sent and Received MQTT Packets Statistics
+| トピック                      | 説明                                              |
+| ----------------------------- | ------------------------------------------------- |
+| packets/received             | 累積受信MQTTパケット数                            |
+| packets/sent                 | 累積送信MQTTパケット数                            |
+| packets/connect/received     | CONNECTパケットの累積受信数                        |
+| packets/connack/sent         | CONNACKパケットの累積送信数                        |
+| packets/publish/received     | PUBLISHパケットの累積受信数                        |
+| packets/publish/sent         | PUBLISHパケットの累積送信数                        |
+| packets/publish/error        | PUBLISHエラーパケットの累積処理数                  |
+| packets/publish/auth_error   | PUBLISH拒否パケットの累積数                        |
+| packets/publish/dropped      | PUBLISHドロップパケットの累積数                    |
+| packets/puback/received      | PUBACKパケットの累積受信数                         |
+| packets/puback/sent          | PUBACKパケットの累積送信数                         |
+| packets/puback/inuse         | PUBACKドロップパケットの累積数                     |
+| packets/puback/missed        | PUBACKミスパケットの累積数                         |
+| packets/pubrec/received      | PUBRECパケットの累積受信数                         |
+| packets/pubrec/sent          | PUBRECパケットの累積送信数                         |
+| packets/pubrec/inuse         | PUBRECドロップパケットの累積数                     |
+| packets/pubrec/missed        | PUBRECミスパケットの累積数                         |
+| packets/pubrel/received      | PUBRELパケットの累積受信数                         |
+| packets/pubrel/sent          | PUBRELパケットの累積送信数                         |
+| packets/pubrel/missed        | PUBRELミスパケットの累積数                         |
+| packets/pubcomp/received     | PUBCOMPパケットの累積受信数                        |
+| packets/pubcomp/sent         | PUBCOMPパケットの累積送信数                        |
+| packets/pubcomp/inuse        | PUBCOMPドロップパケットの累積数                    |
+| packets/pubcomp/missed       | PUBCOMPミスパケットの累積数                        |
+| packets/subscribe/received   | SUBSCRIBEパケットの累積受信数                      |
+| packets/subscribe/error      | SUBSCRIBEエラーパケットの累積処理数                |
+| packets/subscribe/auth_error | SUBSCRIBE拒否パケットの累積数                      |
+| packets/suback/sent          | SUBACKパケットの累積送信数                         |
+| packets/unsubscribe/received | UNSUBSCRIBEパケットの累積受信数                    |
+| packets/unsuback/sent        | UNSUBACKパケットの累積送信数                       |
+| packets/pingreq/received     | PINGREQパケットの累積受信数                        |
+| packets/pingresp/sent        | PINGRESPパケットの累積送信数                       |
+| packets/disconnect/received  | DISCONNECTパケットの累積受信数                     |
+| packets/disconnect/sent      | DISCONNECTパケットの累積送信数                      |
+| packets/auth/received        | AUTHパケットの累積受信数                           |
+| packets/auth/sent            | AUTHパケットの累積送信数                           |
 
-| Topic                        | Description                                      |
-| ---------------------------- | ------------------------------------------------ |
-| packets/received             | Accumulative received MQTT packets               |
-| packets/sent                 | Accumulative sent MQTT packets                   |
-| packets/connect/received     | Accumulative received packets of CONNECT         |
-| packets/connack/sent         | Accumulative sent packets of CONNACK             |
-| packets/publish/received     | Accumulative received packets of PUBLISH         |
-| packets/publish/sent         | Accumulative sent packets of PUBLISH             |
-| packets/publish/error        | Accumulative handling packets of PUBLISH error   |
-| packets/publish/auth_error   | Accumulative denied packets of PUBLISH           |
-| packets/publish/dropped      | Accumulative dropped packets of PUBLISH          |
-| packets/puback/received      | Accumulative received packets of PUBACK          |
-| packets/puback/sent          | Accumulative sent packets of PUBACK              |
-| packets/puback/inuse         | Accumulative dropped packets of PUBACK           |
-| packets/puback/missed        | Accumulative missed packets of PUBACK            |
-| packets/pubrec/received      | Accumulative received packets of PUBREC          |
-| packets/pubrec/sent          | Accumulative sent packets of PUBREC              |
-| packets/pubrec/inuse         | Accumulative dropped packets of PUBREC           |
-| packets/pubrec/missed        | Accumulative missed packets of PUBREC            |
-| packets/pubrel/received      | Accumulative received packets of PUBREL          |
-| packets/pubrel/sent          | Accumulative sent packets of PUBREL              |
-| packets/pubrel/missed        | Accumulative missed packets of PUBREL            |
-| packets/pubcomp/received     | Accumulative received packets of PUBCOMP         |
-| packets/pubcomp/sent         | Accumulative sent packets of PUBCOMP             |
-| packets/pubcomp/inuse        | Accumulative dropped packets of PUBCOMP          |
-| packets/pubcomp/missed       | Accumulative missed packets of PUBCOMP           |
-| packets/subscribe/received   | Accumulative received packets of SUBSCRIBE       |
-| packets/subscribe/error      | Accumulative handling packets of SUBSCRIBE error |
-| packets/subscribe/auth_error | Accumulative denied packets of SUBSCRIBE         |
-| packets/suback/sent          | Accumulative sent packets of SUBACK              |
-| packets/unsubscribe/received | Accumulative received packets of UNSUBSCRIBE     |
-| packets/unsuback/sent        | Accumulative sent packets of UNSUBACK            |
-| packets/pingreq/received     | Accumulative received packets of PINGREQ         |
-| packets/pingresp/sent        | Accumulative sent packets of PINGRESP            |
-| packets/disconnect/received  | Accumulative received packets of DISCONNECT      |
-| packets/disconnect/sent      | Accumulative sent packets of DISCONNECT          |
-| packets/auth/received        | Accumulative received packets of AUTH            |
-| packets/auth/sent            | Accumulative sent packets of AUTH                |
+### MQTT送受信メッセージ統計
 
-### MQTT Sent and Received Messages Statistics
+| トピック                      | 説明                                              |
+| ----------------------------- | ------------------------------------------------- |
+| messages/received             | 累積受信メッセージ数                              |
+| messages/sent                 | 累積送信メッセージ数                              |
+| messages/qos0/received        | QoS 0の累積受信メッセージ数                        |
+| messages/qos0/sent            | QoS 0の累積送信メッセージ数                        |
+| messages/qos1/received        | QoS 1の累積受信メッセージ数                        |
+| messages/qos1/sent            | QoS 1の累積送信メッセージ数                        |
+| messages/qos2/received        | QoS 2の累積受信メッセージ数                        |
+| messages/qos2/sent            | QoS 2の累積送信メッセージ数                        |
+| messages/publish              | 累積PUBLISHメッセージ数                            |
+| messages/dropped              | ドロップされたメッセージの総数                      |
+| messages/dropped/expired      | ドロップされたメッセージの総数（期限切れ）          |
+| messages/dropped/no_subscribers | ドロップされたメッセージの総数（サブスクライバーなし） |
+| messages/forward              | ノードによって転送されたメッセージの総数            |
+| messages/retained             | 累積保持メッセージ数                               |
+| messages/delayed              | 累積遅延メッセージ数                               |
+| messages/delivered            | 累積配信済みメッセージ数                           |
+| messages/acked                | 累積アック済みメッセージ数                         |
 
-| Topic                           | Description                                      |
-| ------------------------------- | ------------------------------------------------ |
-| messages/received               | Accumulative received messages                   |
-| messages/sent                   | Accumulative sent messages                       |
-| messages/qos0/received          | Accumulative received messages of QoS 0           |
-| messages/qos0/sent              | Accumulative sent messages of QoS 0               |
-| messages/qos1/received          | Accumulative received messages QoS 1              |
-| messages/qos1/sent              | Accumulative sent messages QoS 1                  |
-| messages/qos2/received          | Accumulative received messages of QoS 2           |
-| messages/qos2/sent              | Accumulative sent messages of QoS 2               |
-| messages/publish                | Accumulative PUBLISH messages                    |
-| messages/dropped                | Total number of dropped messages                 |
-| messages/dropped/expired        | Total number of dropped messages (Expired)       |
-| messages/dropped/no_subscribers | Total number of dropped messages (No subscriber) |
-| messages/forward                | Total number of messages forwarded by the node   |
-| messages/retained               | Accumulative retained messages                   |
-| messages/delayed                | Accumulative delayed messages                    |
-| messages/delivered              | Accumulative delivered messages                  |
-| messages/acked                  | Accumulative acknowledged messages               |
+## アラーム - システムアラーム
 
-## Alarms - System Alarms
+システムトピックのプレフィックス：`$SYS/brokers/${node}/alarms/`
 
-System Topic Prefix: `$SYS/brokers/${node}/alarms/`
+| トピック      | 説明               |
+| ------------- | ------------------ |
+| activate      | 新規発生したアラーム |
+| deactivate    | 解消されたアラーム   |
 
-| Topic      | Description           |
-| ---------- | --------------------- |
-| activate   | newly generated alarm |
-| deactivate | cleared alarm         |
+## Sysmon - システムモニタリング
 
-## Sysmon - System Monitoring
+システムトピックのプレフィックス：`$SYS/brokers/${node}/sysmon/`
 
-System Topic Prefix: `$SYS/brokers/${node}/sysmon/`
-
-| Topic          | Description                                                                                          |
-| -------------- | ---------------------------------------------------------------------------------------------------- |
-| long_gc        | Garbage collection takes too long                                                                    |
-| long_schedule  | Process scheduling takes too long, taking up too many time slices of the scheduler                   |
-| large_heap     | Process memory usage is too high                                                                     |
-| busy_port      | The process sends a message to a busy port and the process is hung                                   |
-| busy_dist_port | The distributed communication port used for inter-node communication is busy and the process is hung |
+| トピック          | 説明                                                                 |
+| ----------------- | -------------------------------------------------------------------- |
+| long_gc           | ガベージコレクションに時間がかかりすぎている                         |
+| long_schedule     | プロセススケジューリングに時間がかかりすぎており、スケジューラーのタイムスライスを多く消費している |
+| large_heap        | プロセスのメモリ使用量が多すぎる                                    |
+| busy_port         | プロセスがビジーポートにメッセージを送信し、プロセスがハングしている  |
+| busy_dist_port    | ノード間通信に使われる分散通信ポートがビジーで、プロセスがハングしている |

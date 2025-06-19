@@ -1,52 +1,52 @@
-# Create and Manage Cluster
+# クラスターの作成と管理
 
-You can create an EMQX cluster either manually or automatically. This page will introduce you to both manual and automatic clustering methods and guide you in creating and managing EMQX clusters using these two different approaches.
+EMQXクラスターは手動または自動で作成できます。本ページでは、手動クラスタリングと自動クラスタリングの両方の方法について紹介し、これら2つの異なるアプローチを用いたEMQXクラスターの作成と管理方法を案内します。
 
 ::: tip
 
-The cluster mode is only available with a valid license key.
+クラスター機能は有効なライセンスキーがある場合にのみ利用可能です。
 
 :::
 
-## Basic Concepts
+## 基本概念
 
-You can learn about the basic knowledge of the EMQX cluster and how it works in [Cluster](./introduction.md) and [Architecture](./mria-introduction.md). To create a cluster, you also need to be familiar with the following concepts:
+EMQXクラスターの基本知識や動作については、[Cluster](./introduction.md) と [Architecture](./mria-introduction.md) をご参照ください。クラスターを作成するには、以下の概念にも慣れておく必要があります。
 
-### Node Name
+### ノード名
 
-EMQX nodes are identified by their names. All nodes are set with a unique node name in the format of `name@host`, where the host must be an IP address or fully qualified domain name (FQDN). For example:
+EMQXノードはノード名で識別されます。すべてのノードは `name@host` 形式の一意なノード名を持ち、`host` にはIPアドレスまたは完全修飾ドメイン名（FQDN）を指定します。例：
 
-- For an EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
-- If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
+- サーバー `s1.emqx.io` にデプロイされたEMQXノードの場合、ノード名は `emqx@s1.emqx.io` となります。
+- このサーバーに静的IP（`192.168.0.10`）がある場合、ノード名は `emqx@192.168.0.10` となります。
 
 ::: tip
-EMQX node names are immutable, as they are baked into the database schema and data files. Therefore, it is recommended to use static FQDNs for EMQX node names.
+EMQXノード名はデータベーススキーマやデータファイルに組み込まれているため変更できません。そのため、EMQXノード名には静的なFQDNの使用を推奨します。
 :::
 
-### Node Discovery
+### ノード検出
 
-Node discovery is a necessary process in creating a cluster, allowing individual EMQX nodes to discover each other and communicate, regardless of their location or IP address. 
+ノード検出はクラスター作成に必要なプロセスであり、個々のEMQXノードが互いに発見し通信できるようにします。場所やIPアドレスに関係なく通信が可能です。
 
-### Manual and Auto Clustering
+### 手動クラスタリングと自動クラスタリング
 
-Based on the node discovery strategies, the way to create clusters can be divided into manual clustering and automatic clustering. 
+ノード検出の戦略に基づき、クラスター作成方法は手動クラスタリングと自動クラスタリングに分けられます。
 
-Manual clustering is the method that creates an EMQX cluster by manually specifying which nodes should be part of the cluster. Auto clustering is another method that allows multiple EMQX nodes to form a cluster automatically without manual configuration. Auto clustering simplifies the process of setting up an EMQX cluster and makes it easier to add or remove nodes from the cluster dynamically. EMQX supports auto clustering based on static node list, DNS Record, etcd, and Kubernetes.
+手動クラスタリングは、どのノードをクラスターに参加させるかを手動で指定してクラスターを作成する方法です。自動クラスタリングは、複数のEMQXノードが手動設定なしに自動でクラスターを形成できる方法です。自動クラスタリングはクラスター構築の手間を軽減し、ノードの動的な追加や削除を容易にします。EMQXは静的ノードリスト、DNSレコード、etcd、Kubernetesなどに基づく自動クラスタリングをサポートしています。
 
-The following table shows different node discovery strategies and cluster creation methods supported by EMQX:
+以下の表は、EMQXがサポートするノード検出戦略とクラスター作成方法の一覧です。
 
-| Strategy    | Description                                                  |
-| ----------- | ------------------------------------------------------------ |
-| `manual`    | Manually create a cluster with commands                      |
-| `static`    | Autocluster through static node list                         |
-| `dns`       | Autocluster through DNS A and SRV records                    |
-| `etcd`      | Autocluster through etcd                                     |
-| `k8s`       | Autocluster provided by Kubernetes                           |
-| `singleton` | Clustering is disabled. The node rejects all connection attempts to and from other nodes. |
+| 戦略           | 説明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| `manual`       | コマンドで手動でクラスターを作成                             |
+| `static`       | 静的ノードリストによる自動クラスタリング                     |
+| `dns`          | DNSのAレコードおよびSRVレコードによる自動クラスタリング      |
+| `etcd`         | etcdによる自動クラスタリング                                 |
+| `k8s`          | Kubernetesによる自動クラスタリング                           |
+| `singleton`    | クラスタリング無効。ノードは他ノードとの接続試行をすべて拒否 |
 
-EMQX supports automatic cluster creation based on the [Ekka](https://github.com/emqx/ekka) library. Ekka is a cluster management library developed for Erlang/OTP applications. Except for automatic discovery of Erlang nodes (Service Discovery) and automatic clustering (Autocluster), it also implements functionalities such as automatic healing of network partitions (Network Partition Autoheal) and automatic removal of downed nodes (Autoclean).
+EMQXは[Erlang/OTPアプリケーション向けに開発されたEkkaライブラリ](https://github.com/emqx/ekka)に基づく自動クラスター作成をサポートしています。EkkaはErlangノードの自動検出（Service Discovery）や自動クラスタリング（Autocluster）に加え、ネットワークパーティションの自動修復（Network Partition Autoheal）やダウンしたノードの自動削除（Autoclean）などの機能も実装しています。
 
-You can define the way of clustering by configuring the node discovery strategy in the `emqx.conf` configuration file. The manual clustering is configured by default. 
+クラスタリング方法は `emqx.conf` 設定ファイルでノード検出戦略を設定することで指定できます。デフォルトは手動クラスタリングです。
 
 ```bash
 cluster {
@@ -55,72 +55,71 @@ cluster {
 }
 ```
 
-## Before You Start
+## はじめる前に
 
-This section provides you with the guidance about how to configure nodes and network environments before creating a cluster.
+このセクションでは、クラスター作成前にノードやネットワーク環境をどのように設定するかを案内します。
 
-### Configure Node Names
+### ノード名の設定
 
-Before creating a cluster, you need to know how to name the nodes to join the cluster. Suppose you want to create a cluster for 2 nodes deployed in `s1.emqx.io` and `s2.emqx.io` respectively, you can follow the steps below to create the cluster.
+クラスターに参加するノードの名前付け方法を理解しておく必要があります。例えば、`s1.emqx.io` と `s2.emqx.io` にそれぞれデプロイされた2ノードのクラスターを作成する場合、以下の手順に従います。
 
-Configure the node name in the `emqx.conf` configuration file of the 1st node, for example:
+1つ目のノードの `emqx.conf` にノード名を設定します。
 
 ```bash
 node.name = emqx@s1.emqx.io
-
 ```
 
-You can also override the node name with an environment variable. For example in `docker run` command's `-e` option, or systemd's `emqx.service` file, define the environment variable as below:
+ノード名は環境変数で上書きすることも可能です。例えば、`docker run` コマンドの `-e` オプションや systemd の `emqx.service` ファイルで以下のように定義します。
 
 ```bash
 EMQX_NODE__NAME='emqx@s1.emqx.io'
 ```
 
-Repeat the above step for the other node to join the cluster.
+クラスターに参加させる他のノードも同様に設定してください。
 
-Now you have named 2 nodes to join the cluster, `emqx@s1.emqx.io` and `emqx@s2.emqx.io`. You can create a cluster either manually or automatically.
+これで `emqx@s1.emqx.io` と `emqx@s2.emqx.io` の2ノードがクラスターに参加する準備ができました。手動または自動でクラスターを作成できます。
 
-### Set Node Cookies
+### ノードクッキーの設定
 
-For security concerns, you should change the default cookie settings to a Secret cookie in `emqx.conf` on all nodes to join the cluster. All nodes to join the cluster should use the same Secret cookie. For details about the magic cookie used, see [Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security).
+セキュリティ上の理由から、クラスター参加ノードすべての `emqx.conf` でデフォルトのクッキー設定を秘密のクッキーに変更してください。クラスターに参加するすべてのノードは同じ秘密のクッキーを使用する必要があります。マジッククッキーの詳細は[Distributed Erlang - Security](https://www.erlang.org/doc/reference_manual/distributed.html#security)をご参照ください。
 
 ```
 node {
-  cookie = "<a Secret cookie>"
+  cookie = "<秘密のクッキー>"
 }
 ```
 
-### Configure Network Environment
+### ネットワーク環境の設定
 
-Ensure that the network connections between nodes are functioning properly. If there is a firewall or security group between nodes, you need to open the ports for internal cluster communication, including:
+ノード間のネットワーク接続が正常に機能していることを確認してください。ノード間にファイアウォールやセキュリティグループがある場合は、内部クラスター通信に必要な以下のポートを開放してください。
 
-- **4370**: Erlang distributed transport port
-- **5370**: Cluster RPC port, suitable for physical machine environments
-- **5369**: Cluster RPC port, suitable for Docker environments
+- **4370**: Erlang分散トランスポートポート
+- **5370**: クラスターRPCポート（物理マシン環境向け）
+- **5369**: クラスターRPCポート（Docker環境向け）
 
-If multiple EMQX nodes are deployed on a single server, each node will use different cluster communication ports. For details on firewall configurations, see [Intra-cluster communication port](./security.md).
+1台のサーバーに複数のEMQXノードをデプロイする場合、各ノードは異なるクラスター通信ポートを使用します。ファイアウォール設定の詳細は[クラスター内通信ポート](./security.md)をご参照ください。
 
-## Quick Start
+## クイックスタート
 
-This section demonstrates how to quickly create a cluster in a Docker network using two different clustering methods:
+このセクションでは、Dockerネットワーク上で2つの異なるクラスタリング方法を使ってクラスターを素早く作成する手順を示します。
 
 ::: tip
 
-If you plan to run EMQX on Docker environments across multiple physical machines and form a cluster, additional setup will be required. Please refer to [Configure Network Environment](#configure-network-environment) to map the necessary cluster communication ports in the container and ensure these ports are open in the firewall.
+複数の物理マシンにまたがるDocker環境でEMQXを実行しクラスターを形成する場合、追加の設定が必要です。コンテナ内のクラスター通信ポートのマッピングとファイアウォールでのポート開放については[ネットワーク環境の設定](#configure-network-environment)を参照してください。
 
 :::
 
 :::: tabs type:card
 
-::: tab Manual Clustering Example
+::: tab 手動クラスタリングの例
 
-1. Create a Docker network for node-to-node communication. Containers in the same network can access each other through container names or network aliases:
+1. ノード間通信のためのDockerネットワークを作成します。同じネットワーク内のコンテナはコンテナ名やネットワークエイリアスで相互アクセス可能です。
 
    ```bash
    docker network create emqx-net
    ```
 
-2. Start the first node and set the node name through environment variables. The default clustering method by EMQX is manual, so no extra settings are needed. Add the node to the Docker network and set a network alias that matches the node host.
+2. 1つ目のノードを起動し、環境変数でノード名を設定します。EMQXのデフォルトクラスタリング方法は手動なので追加設定は不要です。ノードをDockerネットワークに参加させ、ノードホスト名に一致するネットワークエイリアスを設定します。
 
    ```bash
    docker run -d \
@@ -136,7 +135,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
        emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-3. After the first node starts, launch the second node. The new node needs to join the same network as the first node. Since the first node has already occupied ports such as 1883, no port mapping is done here.
+3. 1つ目のノード起動後、2つ目のノードを起動します。新しいノードは1つ目のノードと同じネットワークに参加する必要があります。1つ目のノードが既に1883などのポートを占有しているため、ここではポートマッピングは行いません。
 
    ```bash
    docker run -d \
@@ -147,7 +146,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
        emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-4. Create a cluster by executing the following command on any node to connect the current node with the other node. For more information on the command, refer to [Manual Clustering](#manual-clustering).
+4. いずれかのノード上で以下のコマンドを実行し、現在のノードを他のノードに接続してクラスターを作成します。コマンドの詳細は[手動クラスタリング](#manual-clustering)を参照してください。
 
    ```bash
    docker exec -it emqx2 \
@@ -156,21 +155,21 @@ If you plan to run EMQX on Docker environments across multiple physical machines
 
 :::
 
-::: tab Automatic Clustering Example (static method)
+::: tab 自動クラスタリングの例（静的ノードリスト方式）
 
-1. Create a Docker network for node-to-node communication. Containers in the same network can access each other through container names or network aliases:
+1. ノード間通信のためのDockerネットワークを作成します。同じネットワーク内のコンテナはコンテナ名やネットワークエイリアスで相互アクセス可能です。
 
    ```bash
    docker network create emqx-net
    ```
 
-2. Start the first node, and set the node name and clustering method through environment variables:
+2. 1つ目のノードを起動し、環境変数でノード名とクラスタリング方法を設定します。
 
-   - The `EMQX_NODE_NAME` environment variable is used to set the node name.
-   - The `EMQX_CLUSTER__DISCOVERY_STRATEGY` environment variable is used to set the cluster discovery strategy, here using [static clustering](#autocluster-by-static-node-list).
-   - The `EMQX_CLUSTER__STATIC__SEEDS` environment variable is used to set the static node list, which should include all node names.
+   - `EMQX_NODE_NAME` 環境変数でノード名を設定
+   - `EMQX_CLUSTER__DISCOVERY_STRATEGY` 環境変数でクラスタ検出戦略を設定（ここでは[静的クラスタリング](#autocluster-by-static-node-list)を使用）
+   - `EMQX_CLUSTER__STATIC__SEEDS` 環境変数で静的ノードリストを設定（すべてのノード名を含む必要があります）
 
-   Also, you need to add the node to the Docker network and set a network alias matching the node host.
+   また、ノードをDockerネットワークに参加させ、ノードホスト名に一致するネットワークエイリアスを設定します。
 
    ```bash
    docker run -d \
@@ -188,7 +187,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
        emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-3. After the first node starts, launch the second node. The clustering method and the new node need to join the same network as the first node. Since the first node has already occupied ports such as 1883, no port mapping is done here.
+3. 1つ目のノード起動後、2つ目のノードを起動します。クラスタリング方法は同じにし、新しいノードも1つ目のノードと同じネットワークに参加させます。1つ目のノードが既に1883などのポートを占有しているため、ここではポートマッピングは行いません。
 
    ```bash
    docker run -d \
@@ -206,7 +205,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
 
 ::::
 
-Execute the `emqx ctl cluster status` command on any node to view the cluster status. If the cluster status is normal, the following information will be output:
+いずれかのノード上で `emqx ctl cluster status` コマンドを実行し、クラスター状態を確認します。正常にクラスターが構築されていれば、以下のような情報が出力されます。
 
 ```bash
 $ docker exec -it emqx1 emqx ctl cluster status
@@ -215,21 +214,21 @@ Cluster status: #{running_nodes =>
                 stopped_nodes => []}
 ```
 
-Now you have completed a simple cluster creation process. Next, you can modify and deploy according to the instructions in the following sections to select the cluster creation method you need.
+これで簡単なクラスター作成が完了しました。次に、以下のセクションの指示に従ってクラスター作成方法を選択し、設定やデプロイを行えます。
 
-## Manual Clustering
+## 手動クラスタリング
 
-This section explains the procedure of creating a cluster manually. During the manual clustering process, you must manually configure each node in the cluster, including setting up network connections between the nodes. Compared to auto clustering, manual clustering allows for finely-tuned configuration of custom network topologies and is very suitable in situations where auto clustering mechanisms are unavailable or inappropriate.
+このセクションでは手動でクラスターを作成する手順を説明します。手動クラスタリングでは、クラスター内の各ノードを手動で設定し、ノード間のネットワーク接続も構築する必要があります。自動クラスタリングに比べて、カスタムネットワークトポロジーの細かい調整が可能であり、自動クラスタリングが利用できないまたは適さない場合に適しています。
 
 :::tip 
 
-Manual clustering can only be used for core nodes. If you are using a core-replica node deployment architecture, please use auto clustering to manage the cluster. 
+手動クラスタリングはコアノードのみで使用可能です。コア-レプリカノード構成の場合は自動クラスタリングを利用してください。
 
 :::
 
-Suppose you have two nodes, `emqx@node1.emqx.com` and `emqx@node2.emqx.com`. You can manually create a cluster for them through the following steps:
+例えば、`emqx@node1.emqx.com` と `emqx@node2.emqx.com` の2ノードがある場合、以下の手順で手動クラスタリングを行います。
 
-1. Set the cluster discovery strategy to `manual`:
+1. クラスター検出戦略を `manual` に設定します。
 
    ```bash
    cluster {
@@ -238,7 +237,7 @@ Suppose you have two nodes, `emqx@node1.emqx.com` and `emqx@node2.emqx.com`. You
    }
    ```
 
-2. After starting the two nodes, execute the cluster join command on one of the nodes:
+2. 2ノードを起動後、いずれかのノードでクラスター参加コマンドを実行します。
 
    ```bash
    $ ./bin/emqx ctl cluster join emqx@node1.emqx.com
@@ -249,14 +248,13 @@ Suppose you have two nodes, `emqx@node1.emqx.com` and `emqx@node2.emqx.com`. You
 
    :::tip
 
-   - This command must run on the node to join the cluster, that is, as a **request** rather than **invite**.
-   - After `emqx@s2.emqx.io` joins `emqx@s1.emqx.io` to form a cluster, it will clear the local data and synchronize the data in `emqx@s1.emqx.io`.
-
-   - If `emqx@s2.emqx.io`  wants to join another cluster, it must first leave the current cluster. On how to leave the cluster, see  [Leave Cluster](#leave-cluster).
+   - このコマンドはクラスターに参加するノード上で実行する必要があります。つまり、**招待する側ではなく参加を要求する側で実行します**。
+   - `emqx@s2.emqx.io` が `emqx@s1.emqx.io` に参加すると、ローカルデータはクリアされ、`emqx@s1.emqx.io` のデータに同期されます。
+   - `emqx@s2.emqx.io` が別のクラスターに参加したい場合は、まず現在のクラスターから離脱する必要があります。離脱方法は [クラスターからの離脱](#leave-cluster) を参照してください。
 
    :::
 
-3. Query the status of the cluster on any node:
+3. いずれかのノードでクラスター状態を確認します。
 
    ```bash
    $ ./bin/emqx ctl cluster status
@@ -264,23 +262,23 @@ Suppose you have two nodes, `emqx@node1.emqx.com` and `emqx@node2.emqx.com`. You
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
-Now you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster.
+これで2ノードのクラスター作成に成功しました。クラスター状態の監視やノード管理については、[クラスター状態の照会](#query-cluster-status)、[クラスターのノード管理](#manage-cluster-nodes)、[ネットワークプロトコルの設定](#configure-network-protocols)をご参照ください。
 
-Starting from EMQX v5.9.0, you can also invite and manage nodes via the EMQX Dashboard. For detailed information, refer to [Cluster](../../dashboard/cluster_settings.md#cluster).
+EMQX v5.9.0以降は、EMQXダッシュボードからノードの招待や管理も可能です。詳細は[Cluster](../../dashboard/cluster_settings.md#cluster)を参照してください。
 
-## Auto Clustering
+## 自動クラスタリング
 
-This section explains how to create a cluster automatically by various auto-clustering methods.  
+このセクションでは、各種自動クラスタリング方法によるクラスター作成方法を説明します。
 
-### Autocluster by Static Node List
+### 静的ノードリストによる自動クラスタリング
 
-In EMQX, autocluster by static node list is to use a pre-defined static node list on each node to join the cluster. After starting, the nodes will create a cluster automatically according to the node list.
+EMQXの静的ノードリストによる自動クラスタリングは、各ノードにあらかじめ定義された静的ノードリストを設定し、起動後にノードリストに基づいて自動的にクラスターを形成する方式です。
 
-Static clustering is the easiest way to create an EMQX cluster automatically with no dependencies on other network components or services. As long as each node can communicate with each other through the TCP protocol, they can form an EMQX cluster.
+静的クラスタリングは、他のネットワークコンポーネントやサービスに依存せず、最も簡単にEMQXクラスターを自動作成できる方法です。各ノードがTCPプロトコルで相互通信できればクラスターを形成可能です。
 
-To enable this feature, configure the cluster mode and node list in `emqx.conf`:
+この機能を有効にするには、`emqx.conf` にクラスター方式とノードリストを設定します。
 
-**Example code:**
+**例：**
 
 ```bash
 cluster {
@@ -289,62 +287,56 @@ cluster {
         seeds = ["emqx@s1.emqx.io", "emqx@s2.emqx.io"]
     }
 }
-
 ```
 
-<!--v5.0.23 e5.0.4 之前仅支持: ["emqx1", "emqx2"]
-v5.0.23e5.0.4 之后是都支持-->
+<!--v5.0.23 e5.0.4 以前は ["emqx1", "emqx2"] のみ対応
+v5.0.23e5.0.4 以降は両方対応-->
 
-Where,
+- `discovery_strategy` はノード検出戦略で `static` に設定
+- `seeds` は配列で、クラスターに参加するノード名を複数カンマ区切りで指定可能
 
-- `discovery_strategy` is the node discovery strategy, set it to `static`.
-- `seeds` is an array, where you can add the node to join the cluster, multiple nodes can be separated with `,`.
+すべてのノードを起動すると、自動的にクラスターが形成されます。
 
-After all nodes are started, the cluster will be automatically established.
+### DNSレコードによる自動クラスタリング
 
-### Autocluster by DNS Records
+[DNS](https://tools.ietf.org/html/rfc1034)（Domain Name System）は、ドメイン名の問い合わせに対して対応するIPアドレス（Aレコード）を返す仕組みです。1つのドメイン名に複数のAレコード（複数IPアドレス）を設定でき、1つの名前に複数のIPを対応させることができます。EMQXのDNS自動クラスタリングはこの1対多のマッピングを利用し、クラスター内のすべてのノードを特定し、各ノードがクラスターに参加できるようにします。
 
-[DNS](https://tools.ietf.org/html/rfc1034) is short for Domain Name System. When a DNS server receives a domain name query request, it returns the corresponding IP address of that domain name, which is the so-called A (Address) record. DNS allows a domain name to have multiple A records, i.e., multiple IP addresses, thus forming a mapping where one name corresponds to multiple IP addresses. EMQX's DNS auto clustering utilizes this one-to-many mapping to locate all the nodes in the cluster, allowing each independent node to join the cluster.
+#### DNSサービスの設定
 
-#### Configure DNS Services
+多くのパブリッククラウドサービスはDNSサービスを提供しています。ドメイン名を割り当てた後、各EMQXノードのIPアドレスをこのドメインのAレコードに追加するだけで設定完了です。プライベートクラウドや内部ネットワークにEMQXをデプロイする場合は、[BIND](https://www.isc.org/bind/)などのソフトウェアで独自のDNSシステムを構築する必要があります。
 
-Most public cloud services have DNS services. After assigning a domain name, you only need to add the IP address of each EMQX node to the A record of this domain to finish the configuration. If EMQX is deployed in a private cloud or internal network, you will need to deploy your own DNS system, for example, with software [BIND](https://www.isc.org/bind/).
+### DNSレコードによる自動クラスタリングの設定
 
-### Configure Autocluster by DNS Records
+DNSサービスが準備できたら、`emqx.conf` の `cluster.dns` 設定項目でクラスターに参加するすべてのノードを指定します。
 
-After the DNS service is ready, you can add all nodes to join the cluster in `emqx.conf` with the `cluster.dns` configuration item:
-
-**Example code:**
+**例：**
 
 ```bash
 cluster {
     discovery_strategy = dns
     dns {
         name = "localhost"
-        ## support DNS A record and DNS SRV record
+        ## DNS AレコードおよびDNS SRVレコードをサポート
         record_type = a
     }
 }
-
 ```
 
-Where,
+- `discovery_strategy` はノード検出戦略で `dns` に設定
+- `cluster.dns.name` は文字列でドメイン名を指定
+- `cluster.dns.record_type` は列挙型で `a` または `srv` を指定可能
 
-- `discovery_strategy` is the node discovery strategy, set it to `dns`.
-- `cluster.dns.name` is a a string, input the localhost.
-- `cluster.dns.record_type` is a enum, optional value: `a` or `srv`.
+すべてのノードを起動すると、自動的にクラスターが形成されます。
 
-After all nodes are started, the cluster will be automatically established.
+### etcdによる自動クラスタリング
 
-### Autocluster Using etcd
+[etcd](https://etcd.io/) はCoreOSが開発したオープンソースプロジェクトで、分散システムにおけるサービス検出や接続確立に広く利用されています。EMQXの自動クラスタリングに適しています。
 
-[etcd](https://etcd.io/) is an open-source project initiated by CoreOS. It is widely used in distributed systems for service discovery and connection establishing, which is exactly what EMQX auto clustering needs.
+ネットワーク内にetcdサーバー（クラスター）を構築すれば、EMQXはetcd経由で自動的にクラスターを作成できます。etcdのインストールや設定方法は[etcd Install](https://etcd.io/docs/latest/install/)を参照してください。
 
-After you deploy an etcd server (cluster) in your network, EMQX can automatically create the cluster via etcd. For how to install and configure etcd, see [etcd Install](https://etcd.io/docs/latest/install/).
+etcdによる自動クラスタリングを有効にするには、`emqx.conf` の `cluster.etcd` 設定項目を使用します。
 
-To enable autocluster using etcd, you can work with the `cluster.etcd` configuration items in `emqx.conf`.
-
-**Example code:**
+**例：**
 
 ```bash
 cluster {
@@ -355,17 +347,14 @@ cluster {
         node_ttl = 1m
     }
 }
-
 ```
 
-Where:
+- `discovery_strategy` はノード検出戦略で `etcd` に設定
+- `cluster.etcd.server` はetcdサーバーのアドレス。複数ノードはカンマ区切りで指定可能
+- `cluster.etcd.prefix` はEMQXサービス検出に使うetcdのキーのプレフィックス
+- `cluster.etcd.node_ttl` はetcdキーの有効期限（デフォルトは `1m`）
 
-- `discovery_strategy` is the node discovery strategy, set it to `etcd`.
-- `cluster.etcd.server` is the server address, multiple nodes can be separated with `,`.
-- `cluster.etcd.prefix` is the etcd key prefix used for EMQX service discovery. <!--not sure if the explanations is enough-->
-- `cluster.etcd.node_ttl` is a duration, indicating the expiration time of the etcd key associated with the node, default: `1m`.
-
-After completing the configuration, you can start the EMQX nodes one by one, and use the etcdctl tool to observe the changes on the etcd server:
+設定完了後、EMQXノードを順次起動し、etcdctlツールでetcdサーバーの変化を確認できます。
 
 ```bash
 $ etcdctl ls /emqxcl/emqxcl --recursive
@@ -375,15 +364,15 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 /emqxcl/emqxcl/nodes/emqx@s2.emqx.io
 ```
 
-The result shows that all nodes are started normally and joined the cluster automatically.
+この結果は、すべてのノードが正常に起動し自動的にクラスターに参加したことを示しています。
 
-### Autocluster on Kubernetes
+### Kubernetes上での自動クラスタリング
 
-The [EMQX Kubernetes Operator](https://docs.emqx.com/en/emqx-operator/latest/) helps you quickly create and manage EMQX clusters on a Kubernetes environment quickly, greatly simplifying the EMQX cluster deployment and management process by turning deployment and management efforts into a low-cost, labeled, repeatable job.
+[EMQX Kubernetes Operator](https://docs.emqx.com/en/emqx-operator/latest/) を使えば、Kubernetes環境でEMQXクラスターを素早く作成・管理でき、デプロイや管理作業を低コストでラベル付け可能な繰り返し作業に変換できます。
 
-If you want to deploy and manage EMQX by yourself, you can still use Kubernetes API for node discovery and auto clustering. To use this feature,  you need first to create RBAC for the EMQX Pod to allow EMQX to get cluster node information from the Kubernetes APIServer via the endpoints resource. On how to configure, see [Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
+自分でEMQXをKubernetes上にデプロイ・管理する場合でも、Kubernetes APIを使ったノード検出と自動クラスタリングが可能です。この機能を使うには、まずEMQX Pod用にRBACを作成し、Kubernetes APIサーバーのendpointsリソースからクラスターのノード情報を取得できるようにします。設定方法は[Using RBAC Authorization](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)を参照してください。
 
-To enable EMQX autocluster on Kubernetes, you can work with the `cluster.k8s` configuration item in `emqx.conf`.
+Kubernetes上のEMQX自動クラスタリングは、`emqx.conf` の `cluster.k8s` 設定項目で設定します。
 
 ```bash
 cluster {
@@ -397,29 +386,28 @@ cluster {
 }
 ```
 
-Where:
+- `discovery_strategy` はノード検出戦略で `k8s` に設定
+- `cluster.K8s.apiserver` はKubernetes APIエンドポイントURL（デフォルトは `http://10.110.111.204:8080`）
+- `cluster.K8s.service_name` はEMQXサービス名（デフォルトは `emqx`）
+- `cluster.K8s.address_type` は検出したノードに接続するためのアドレスタイプ（デフォルトは `ip`、オプションは `ip`、`dns`、`hostname`）
+- [任意] `cluster.K8s.suffix` はノード名のサフィックス。`cluster.K8s.address_type` が `dns` の場合のみ必要（デフォルトは `pod.local`）
+- `cluster.K8s.namespace` はKubernetesのネームスペース（文字列、デフォルトは `default`）
 
-- `discovery_strategy` is the node discovery strategy, set it to `k8s`
-- `cluster.K8s.apiserver` is the Kubernetes API endpoint URL, default: `http://10.110.111.204:8080`
-- `cluster.K8s.service_name` is the EMQX service name, default: `emqx`
-- `cluster.K8s.address_type` is the address type to connect the discovered nodes, default: `ip`, optional values: `ip`, `dns`, `hostname`
-- [optional] `cluster.K8s.suffix` is the node name suffix, only needed when `cluster.K8s.address_type` is set to `dns`,  default: `pod.local`
-- `cluster.K8s.namespace` is the Kubernetes namespace, it is a string object, default: `default`
-
-Start all nodes one by one after the configuration, and the cluster will be automatically established.
+設定後、ノードを順次起動すると自動的にクラスターが形成されます。
 
 ::: tip
 
-When working EMQX autocluster on Kubernetes, [Calico](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/) rather than Fannel plugin is recommended.
+Kubernetes上のEMQX自動クラスタリングでは、Fannelプラグインよりも[Calico](https://kubernetes.io/docs/tasks/administer-cluster/network-policy-provider/calico-network-policy/)の使用を推奨します。
+
 :::
 
-## Manage Cluster
+## クラスターの管理
 
-After you create a cluster, you can monitor the cluster status and manage the cluster nodes.
+クラスター作成後は、クラスター状態の監視やノード管理が可能です。
 
-### Query Cluster Status
+### クラスター状態の照会
 
-Run the command below on any cluster node to query the cluster status:
+任意のクラスター内ノードで以下のコマンドを実行し、クラスター状態を照会します。
 
 ```bash
 $ ./bin/emqx ctl cluster status
@@ -427,34 +415,34 @@ $ ./bin/emqx ctl cluster status
 Cluster status: [{running_nodes,['emqx@s1.emqx.io','emqx@s2.emqx.io']}]
 ```
 
-### Leave Cluster
+### クラスターからの離脱
 
-There are two ways to leave a cluster:
+クラスターから離脱する方法は2通りあります。
 
-1. Run the `cluster leave` command: This lets the current node leave the cluster. It notifies the other nodes in the cluster and stops participating in cluster operations. The node will complete any ongoing tasks before leaving.
-2. Run the `cluster force-leave <node@host>` command: This removes a node from the cluster. The target node will be forcefully removed from the cluster. This command is typically used when a node fails or becomes unresponsive.
+1. `cluster leave` コマンドを実行する方法：現在のノードがクラスターから離脱します。他のノードに通知し、クラスター操作への参加を停止します。離脱前に進行中のタスクを完了します。
+2. `cluster force-leave <node@host>` コマンドを実行する方法：指定したノードをクラスターから強制的に削除します。通常、ノードが故障したり応答しなくなった場合に使用します。
 
-For example, in the previously built cluster, if `emqx@s2.emqx.io` wants to leave the cluster, you can run the command below on `emqx@s2.emqx.io`:
+例えば、先ほど作成したクラスターで `emqx@s2.emqx.io` が離脱したい場合、`emqx@s2.emqx.io` 上で以下を実行します。
 
 ```bash
 ./bin/emqx ctl cluster leave
 ```
 
-Or run the command below on `emqx@s1.emqx.io` to remove `emqx@s2.emqx.io` from the cluster:
+または、`emqx@s1.emqx.io` 上で以下を実行して `emqx@s2.emqx.io` をクラスターから削除します。
 
 ```bash
 ./bin/emqx ctl cluster force-leave emqx@s2.emqx.io
 ```
 
-### Configure Network Protocols
+### ネットワークプロトコルの設定
 
-After the cluster is created, you can continue to set the network protocols for the nodes. EMQX supports connecting the nodes via TCP or TLS. The connection method can be configured in `emqx.conf`:
+クラスター作成後、ノード間の接続に使用するネットワークプロトコルを設定できます。EMQXはTCPまたはTLSによるノード接続をサポートしています。接続方法は `emqx.conf` で設定可能です。
 
-To use TCP IPv4 and TCP IPv6, you can set with the `cluster.proto_dist` in `emqx.conf`.
+TCP IPv4およびTCP IPv6を使用する場合は、`emqx.conf` の `cluster.proto_dist` を設定します。
 
-- TCP IPv4: `inet_tcp ` (Default)
+- TCP IPv4: `inet_tcp` （デフォルト）
 - TCP IPv6: `inet6_tcp`
 
-To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, then configure the `ssl_dist.conf` file in the `etc` folder and specify the TLS certificate. For details, see [Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html).
+SSLを有効にするには、まず `cluster.proto_dist` を `inet_tls` に設定し、`etc` フォルダ内の `ssl_dist.conf` ファイルでTLS証明書を指定します。詳細は[Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html)を参照してください。
 
-<!--need an example code here-->
+<!-- ここに設定例が必要です -->

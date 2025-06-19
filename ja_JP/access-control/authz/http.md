@@ -1,52 +1,52 @@
-# Use HTTP Service
+# HTTPサービスの利用
 
 ::: tip
-Starting from EMQX v5.8.0, the HTTP authenticator supports including ACL rules in the response body to preset permissions for clients. You are recommended to use the new format for better performance. For details, see [HTTP Authentication](../authn/http.md).
+EMQX v5.8.0以降、HTTP認証器はレスポンスボディにACLルールを含めてクライアントの権限を事前設定できるようになりました。より高いパフォーマンスのために新しいフォーマットの使用を推奨します。詳細は[HTTP認証](../authn/http.md)をご参照ください。
 :::
 
-EMQX supports the authorization based on the HTTP service. The user needs to build an external HTTP application as a data source by themselves. EMQX makes requests to the HTTP service and determines the authorization result based on the data returned by the HTTP API, thus achieving complex authorization logic.
+EMQXはHTTPサービスをベースとした認可をサポートしています。ユーザーは外部のHTTPアプリケーションをデータソースとして自ら構築する必要があります。EMQXはHTTPサービスにリクエストを送り、HTTP APIから返されるデータに基づいて認可結果を判定し、複雑な認可ロジックを実現します。
 
 ::: tip Tip
 
-- Knowledge about [basic EMQX authorization concepts](./authz.md)
+- [EMQX認可の基本概念](./authz.md)の知識
 
 :::
 
-## HTTP Request and Response
+## HTTPリクエストとレスポンス
 
-When the client initiates a subscription or publishing operation, the HTTP Authorizer constructs and sends a request based on the configured request template. Users need to implement authorization logic in the authorization service and return the results according to the following requirements.
+クライアントがサブスクライブまたはパブリッシュ操作を開始すると、HTTP認可者は設定されたリクエストテンプレートに基づいてリクエストを構築し送信します。ユーザーは認可サービス内に認可ロジックを実装し、以下の要件に従って結果を返す必要があります。
 
-### Request
+### リクエスト
 
-The request can use JSON format, with the following placeholders in the URL and request body:
+リクエストはJSON形式を利用でき、URLおよびリクエストボディ内で以下のプレースホルダーが使用可能です：
 
-- `${clientid}`: The client ID.
-- `${username}`: The username used by the client on login.
-- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
-- `${peerhost}`: The source IP address of the client.
-- `${proto_name}`: The protocol name used by the client, e.g. `MQTT`, `CoAP`.
-- `${mountpoint}`: The mountpoint of the gateway listener (topic prefix).
-- `${action}`: The action being requested, e.g. `publish`, `subscribe`.
-- `${topic}`: The topic (or topic filter) to be published or subscribed in the current request.
-- `${qos}`: The QoS of the message to be published or subscribed in the current request.
-- `${retain}`: Whether the message to be published in the current request is a retained message.
-- `${zone}`: The client's Zone at runtime. The Zone is a logical classification of the client, such as region or environment, that can be dynamically applied based on the client's configuration.
+- `${clientid}`：クライアントID。
+- `${username}`：クライアントのログイン時に使用されたユーザー名。
+- `${client_attrs.NAME}`：クライアント属性。`NAME`は実行時に事前設定された属性名に置き換えられます。クライアント属性の詳細は[MQTTクライアント属性](../../client-attributes/client-attributes.md)をご覧ください。
+- `${peerhost}`：クライアントの送信元IPアドレス。
+- `${proto_name}`：クライアントが使用するプロトコル名（例：`MQTT`、`CoAP`）。
+- `${mountpoint}`：ゲートウェイリスナーのマウントポイント（トピックプレフィックス）。
+- `${action}`：リクエストされているアクション（例：`publish`、`subscribe`）。
+- `${topic}`：現在のリクエストでパブリッシュまたはサブスクライブされるトピック（またはトピックフィルター）。
+- `${qos}`：現在のリクエストでパブリッシュまたはサブスクライブされるメッセージのQoS。
+- `${retain}`：現在のリクエストでパブリッシュされるメッセージがリテインドかどうか。
+- `${zone}`：実行時のクライアントのゾーン。ゾーンはクライアントの論理的分類（例：地域や環境）であり、クライアント設定に基づいて動的に適用されます。
 
-### Response
+### レスポンス
 
-After checking, the authorization service needs to return a response in the following format:
+認可サービスはチェック後、以下の形式でレスポンスを返す必要があります：
 
-- Response `content-type` must be `application/json`.
-- If the HTTP Status Code is `200`, the authorization result is granted by HTTP Body. It depends on the value of the `result` field:
-  - `allow`: Allow Publish or Subscribe.
-  - `deny`: Deny Publish or Subscribe.
-  - `ignore`: Ignore this request, it will be handed over to the next authorizer.
-- If the HTTP Status Code is `204`, it means that this Publish or Subscribe request is allowed.
-- HTTP Status Codes other than `200` and `204`, mean "ignore", for example, this HTTP service not available.
+- レスポンスの`content-type`は`application/json`であること。
+- HTTPステータスコードが`200`の場合、認可結果はHTTPボディの`result`フィールドの値により判定されます：
+  - `allow`：パブリッシュまたはサブスクライブを許可。
+  - `deny`：パブリッシュまたはサブスクライブを拒否。
+  - `ignore`：このリクエストを無視し、次の認可者に処理を委ねる。
+- HTTPステータスコードが`204`の場合、このパブリッシュまたはサブスクライブリクエストは許可されたことを意味します。
+- `200`および`204`以外のHTTPステータスコードは「無視」とみなされます。例えば、HTTPサービスが利用不可の場合などです。
 
-<!--- NOTE: the code supports `application/x-www-form-urlencoded` too, but it is not very easy to extend in the future, hence hidden from doc -->
+<!--- 注意：コードは`application/x-www-form-urlencoded`もサポートしていますが、将来的な拡張が難しいためドキュメントには記載していません -->
 
-Example response:
+レスポンス例：
 
 ```json
 HTTP/1.1 200 OK
@@ -54,59 +54,59 @@ Headers: Content-Type: application/json
 ...
 Body:
 {
-    "result": "allow" | "deny" | "ignore" // Default `"ignore"`
+    "result": "allow" | "deny" | "ignore" // デフォルトは "ignore"
 }
 ```
 
-::: tip EMQX 4.x compatibility statement:
+::: tip EMQX 4.x互換性について
 
-In version 4.x, EMQX only used the status code returned by the HTTP API, while the content is discarded. For example, `200` indicates `allow`, and `403` indicates `deny`. In order to provide more information to the user, we added the return of the request content in EMQX 5.0 version.
+4.xバージョンでは、EMQXはHTTP APIのステータスコードのみを使用し、コンテンツは破棄していました。例えば、`200`は`allow`、`403`は`deny`を意味していました。より多くの情報をユーザーに提供するため、EMQX 5.0でリクエストコンテンツの返却を追加しました。
 
 :::
 
 ::: tip
 
-It is recommended to use the `POST` method. When using the `GET` method, some sensitive information may be exposed through HTTP server logs.
+`POST`メソッドの使用を推奨します。`GET`メソッド使用時は、HTTPサーバーログにより一部の機密情報が露出する可能性があります。
 
-For untrusted environments, HTTPS should be used.
+信頼できない環境ではHTTPSの利用を推奨します。
 
 :::
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左ナビゲーションツリーで**アクセス制御** -> **認可**をクリックし、**認可**ページに入ります。
 
-2. Click **Create** at the top right corner, select **HTTP Server** as **Backend**, and click **Next**. The **Configuration** tab is shown as below.
+2. 右上の**作成**をクリックし、**バックエンド**として**HTTPサーバー**を選択し、**次へ**をクリックします。以下のように**設定**タブが表示されます。
 
-   <img src="./assets/authz-http_ee.png" alt="authz-http_ee" style="zoom:67%;" />
+   <img src="./assets/authz-http_ee.png" alt="HTTP認可設定画面" style="zoom:67%;" />
 
-3. Follow the instructions below to do the configuration.
+3. 以下の指示に従い設定を行います。
 
-   **HTTP**: Configure the HTTP request method, the IP address and request headers here.
+   **HTTP**：HTTPリクエストメソッド、IPアドレス、リクエストヘッダーを設定します。
 
-   - **Request Method**: Select the HTTP request method, optional values: `GET`, `POST`.
-   - **URL**: Enter the IP address of the HTTP application.
-   - **Headers** (optional): Configure the HTTP request headers. Keys and values support using [placeholders](./authz.md#authorization-placeholders).
+   - **リクエストメソッド**：HTTPリクエストメソッドを選択します。選択肢は`GET`、`POST`。
+   - **URL**：HTTPアプリケーションのIPアドレスを入力します。
+   - **ヘッダー**（任意）：HTTPリクエストヘッダーを設定します。キーと値は[プレースホルダー](./authz.md#authorization-placeholders)の使用が可能です。
 
-   **Connection Configuration**: Configure concurrent connections, connection timeout, maximum HTTP requests, and request timeout.
+   **接続設定**：同時接続数、接続タイムアウト、最大HTTPリクエスト数、リクエストタイムアウトを設定します。
 
-   - **Pool size** (optional): This is an integer that specifies the number of concurrent connections from EMQX nodes to external HTTP servers. The default value is `8`. 
-   - **Connection Timeout** (optional): Enter the duration to wait for a connection timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
-   - **HTTP Pipelining** (optional): Positive integer, specifies the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
-   - **Request Timeout** (optional): Enter the duration to wait for a request timeout, with optional units: **hours**, **minutes**, **seconds**, **milliseconds**.
-   - **TLS Configuration**: Configure whether to enable TLS.
+   - **プールサイズ**（任意）：EMQXノードから外部HTTPサーバーへの同時接続数を整数で指定します。デフォルトは`8`。
+   - **接続タイムアウト**（任意）：接続タイムアウトまでの待機時間を入力します。単位は**時間**、**分**、**秒**、**ミリ秒**が指定可能です。
+   - **HTTPパイプライニング**（任意）：正の整数で、レスポンスを待たずに送信可能な最大HTTPリクエスト数を指定します。デフォルトは`100`。
+   - **リクエストタイムアウト**（任意）：リクエストタイムアウトまでの待機時間を入力します。単位は**時間**、**分**、**秒**、**ミリ秒**が指定可能です。
+   - **TLS設定**：TLSを有効にするかどうかを設定します。
 
-   **Authorization Configuration**: Complete the configuration of the HTTP request body here. <!--Related information needs to be added.-->
+   **認可設定**：HTTPリクエストボディの設定を完了します。<!--関連情報を追加予定-->
 
-4. Click **Create** to finish the setting.
+4. **作成**をクリックして設定を完了します。
 
-## Configure with Configuration Items
+## 設定項目による設定
 
-The HTTP authorization requires configuration with `type=http`.
+HTTP認可は`type=http`で設定します。
 
-HTTP `POST` and `GET` requests are supported. Each of them has some specific options. <!--For detailed information, see [authz:http_post](../../configuration/configuration-manual.html#authz:http_post) and [authz:http_get](../../configuration/configuration-manual.html#authz:http_get).-->
+HTTPの`POST`および`GET`リクエストがサポートされており、それぞれ固有のオプションがあります。<!--詳細は[authz:http_post](../../configuration/configuration-manual.html#authz:http_post)および[authz:http_get](../../configuration/configuration-manual.html#authz:http_get)を参照してください。-->
 
-Example of an HTTP authorizer configured with `POST` request:
+`POST`リクエストで設定したHTTP認可者の例：
 
 ```bash
 {
@@ -126,7 +126,7 @@ Example of an HTTP authorizer configured with `POST` request:
 }
 ```
 
-Example of an HTTP authorizer configured with `GET` request:
+`GET`リクエストで設定したHTTP認可者の例：
 
 ```bash
 {
@@ -144,4 +144,3 @@ Example of an HTTP authorizer configured with `GET` request:
     }
 }
 ```
-

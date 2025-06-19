@@ -1,86 +1,85 @@
-# Bridge MQTT Data through Nari SysKeeper
+# Nari SysKeeperを介したMQTTデータのブリッジ
 
-Nari SysKeeper 2000 is a network physical isolation device. As a security management system, it is widely used in various industries, especially in fields requiring high-level security measures such as critical infrastructure and enterprise IT systems. EMQX supports data bridges between EMQX clusters deployed in different production zones. Production zones are divided into three security levels: I-III, where Security Zone I-II represents more secure, controlled areas, and Security Zone III is a less restrictive area, acting as a bridge between public-facing services and more secure internal areas. Typically, Security Zones I-II and III are isolated from each other. Through data bridging, MQTT messages can pass through the one-way SysKeeper network gate between Security Zones I-II and III, bridging with another EMQX cluster in a different security zone.
+Nari SysKeeper 2000はネットワーク物理分離装置です。セキュリティ管理システムとして、特に重要インフラや企業ITシステムなど高レベルのセキュリティ対策が求められる分野で広く利用されています。EMQXは、異なるプロダクションゾーンに展開されたEMQXクラスター間のデータブリッジをサポートしています。プロダクションゾーンは3つのセキュリティレベル（I〜III）に分かれており、セキュリティゾーンI-IIはより安全で管理された領域を表し、セキュリティゾーンIIIは制限が緩い領域で、公開向けサービスとより安全な内部領域の橋渡し役を担います。通常、セキュリティゾーンI-IIとIIIは相互に分離されています。データブリッジを通じて、MQTTメッセージはセキュリティゾーンI-IIとIII間の一方向SysKeeperネットワークゲートを通過し、異なるセキュリティゾーンの別のEMQXクラスターとブリッジされます。
 
-This page provides a comprehensive introduction to the data integration between EMQX and Nari SysKeeper with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとNari SysKeeper間のデータ統合について包括的に紹介し、データ統合の作成および検証手順を実践的に解説します。
 
-## How It Works
+## 動作概要
 
-The Nari SysKeeper data bridge is an out-of-the-box feature in EMQX, combining MQTT's real-time data capture and bridging capabilities with SysKeeper's powerful security isolation abilities. Through the built-in [rule engine](./rules.md) component, the integration simplifies the process of EMQX bridging through SysKeeper, eliminating the need for complex coding.
+Nari SysKeeperデータブリッジはEMQXの標準機能であり、MQTTのリアルタイムデータキャプチャとブリッジ機能をSysKeeperの強力なセキュリティ分離機能と組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントを通じて、SysKeeper経由のEMQXブリッジが簡素化され、複雑なコーディングが不要になります。
 
-The diagram below illustrates a typical architecture of the data bridge between EMQX and SysKeeper. 
+以下の図は、EMQXとSysKeeper間のデータブリッジの典型的なアーキテクチャを示しています。
 
 <img src="./assets/syskeeper_bridge_architecture.png" alt="syskeeper_bridge_architecture" style="zoom:67%;" />
 
-The passthrough operation can be seen as a single-directional data bridge between two EMQX clusters deployed in Security Zone I-II and Security Zone III, with the following workflow:
+このパススルー動作は、セキュリティゾーンI-IIとセキュリティゾーンIIIに展開された2つのEMQXクラスター間の一方向データブリッジとして捉えられ、以下のワークフローで動作します。
 
-1. **Create SysKeeper Proxy**: A SysKeeper Proxy needs to be created on EMQX in Security Zone III. The SysKeeper Proxy will start a special TCP listener to receive messages from the SysKeeper Forwarder.
-2. **Message Publication and Reception**: Various devices in the power system connect directly to EMQX or through gateways (such as [NeuronEX](https://www.emqx.com/en/products/neuronex)) converting to MQTT protocol to successfully connect to EMQX. They send messages via MQTT based on their operational status, readings, or triggered events. When EMQX receives these messages, it initiates the matching process within its rule engine.
-3. **Message Data Processing**: When a message arrives, it passes through the rule engine and is processed by the rules defined in EMQX. The rules determine which messages need to be bridged through SysKeeper to another EMQX cluster based on predefined criteria. If the rules specify data processing operations, these are applied, such as converting data formats, filtering out specific information, or enriching the message with additional context.
-4. **Forwarding Through SysKeeper Forwarder**: The results from the rules are sent through the SysKeeper Forwarder, passing through the SysKeeper isolation device, to the SysKeeper Proxy created in EMQX in Security Zone III, thereby ingesting the messages into Security Zone III. When the SysKeeper Proxy is unavailable, EMQX provides an in-memory message buffer to prevent data loss. Data is temporarily held in the buffer and may be offloaded to disk to prevent memory overload. Note that data will not be preserved if the data integration or the EMQX node is restarted.
-5. **Data Utilization**: In Security Zone III, the MQTT messages will be republished in their original form, and businesses can use the rule engine and data integration for further processing.
+1. **SysKeeper Proxyの作成**：セキュリティゾーンIIIのEMQX上にSysKeeper Proxyを作成します。SysKeeper ProxyはSysKeeper Forwarderからのメッセージを受信するための特別なTCPリスナーを起動します。
+2. **メッセージのパブリッシュと受信**：電力システム内の各種デバイスは、直接EMQXに接続するか、[NeuronEX](https://www.emqx.com/en/products/neuronex)などのゲートウェイを介してMQTTプロトコルに変換し、EMQXに正常に接続します。これらのデバイスは、稼働状況や計測値、イベント発生に応じてMQTTメッセージを送信します。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+3. **メッセージデータの処理**：メッセージはルールエンジンを通過し、EMQXに定義されたルールで処理されます。ルールは、どのメッセージをSysKeeper経由で別のEMQXクラスターにブリッジするかを事前定義された条件に基づいて判定します。ルールでデータ処理操作が指定されている場合は、データ形式の変換や特定情報のフィルタリング、メッセージへの追加コンテキスト付加などが適用されます。
+4. **SysKeeper Forwarder経由の転送**：ルールの結果はSysKeeper Forwarderを通じてSysKeeper分離装置を経由し、セキュリティゾーンIIIのEMQXに作成されたSysKeeper Proxyに送信され、セキュリティゾーンIIIにメッセージが取り込まれます。SysKeeper Proxyが利用できない場合、EMQXはメモリ内メッセージバッファを提供し、データ損失を防ぎます。データは一時的にバッファに保持され、メモリ過負荷を防ぐためにディスクにオフロードされることもあります。ただし、データ統合やEMQXノードが再起動されるとデータは保持されません。
+5. **データの活用**：セキュリティゾーンIIIでは、MQTTメッセージが元の形式で再パブリッシュされ、ビジネスはルールエンジンやデータ統合を用いてさらに処理を行うことができます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you must complete before creating the Nari SysKeeper data bridge in the Dashboard.
+このセクションでは、DashboardでNari SysKeeperデータブリッジを作成する前に完了すべき準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
-- Understanding of the basic concepts and working principles of Nari SysKeeper devices
+- EMQXデータ統合の[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
+- Nari SysKeeper装置の基本概念および動作原理の理解
 
-### Start a Nari SysKeeper Proxy in Security Zone III
+### セキュリティゾーンIIIでNari SysKeeper Proxyを起動する
 
-To deliver MQTT messages through Nari SysKeeper, you need to enable a data proxy in Zone III to receive connections from the SysKeeper Forwarder in Zone I-II.
+Nari SysKeeperを介してMQTTメッセージを送信するには、ゾーンIIIでSysKeeper Forwarderからの接続を受け付けるデータプロキシを有効にする必要があります。
 
-This section introduces how to start a Nari SysKeeper Proxy in Security Zone III.
+ここでは、セキュリティゾーンIIIでNari SysKeeper Proxyを起動する方法を紹介します。
 
-1. Go to Dashboard, and click **Integration** -> **Connector**.
+1. Dashboardにアクセスし、**Integration** -> **Connector**をクリックします。
 
-2. Click **Create** on the top right corner of the page. Select the **SysKeeper Proxy** and click **Next**:
+2. ページ右上の**Create**をクリックし、**SysKeeper Proxy**を選択して**Next**をクリックします。
 
-3. Enter a name for the Connector. The name should combine upper/lower case letters or numbers, for example, `my_sysk_proxy`.
+3. コネクターの名前を入力します。名前は大文字・小文字の英字または数字の組み合わせとしてください。例：`my_sysk_proxy`
 
-4. Set **Listen Address** to `0.0.0.0:9002`. The SysKeeper Proxy will start a TCP listener. Make sure that the port is not occupied by other processes and that the firewall allows access to this port.
+4. **Listen Address**を`0.0.0.0:9002`に設定します。SysKeeper ProxyはTCPリスナーを起動します。ポートが他のプロセスで使用されていないこと、ファイアウォールがこのポートへのアクセスを許可していることを確認してください。
 
-5. Leave the values of other configuration options as default.
+5. その他の設定はデフォルトのままにします。
 
-6. Click the **Create** button.
+6. **Create**ボタンをクリックします。
 
-Now you have created a Nari SysKeeper Proxy in the Security Zone III. Next, you need to create a Nari SysKeeper Forwarder.
+これでセキュリティゾーンIIIにNari SysKeeper Proxyが作成されました。次にNari SysKeeper Forwarderを作成します。
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to configure a Connector for Nari SysKeeper Forwarder in Security Zone I-II to forward the connections to the SysKeeper Proxy.
+このセクションでは、セキュリティゾーンI-IIでSysKeeper Proxyへの接続を転送するためのNari SysKeeper Forwarderコネクターの設定方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+1. EMQX Dashboardにアクセスし、**Integration** -> **Connector**をクリックします。
 
-2. Click **Create** on the top right corner of the page. Click to select the **SysKeeper Forwarder** and click **Next**.
+2. ページ右上の**Create**をクリックし、**SysKeeper Forwarder**を選択して**Next**をクリックします。
 
-3. Enter a name for the Connector. The name should combine upper/lower case letters or numbers, for example, `my_sysk`.
+3. コネクターの名前を入力します。名前は大文字・小文字の英字または数字の組み合わせとしてください。例：`my_sysk`
 
-4. Set the **Server** to the address of the SysKeeper proxy server, for example, `172.17.0.1:9002`.
+4. **Server**にSysKeeper Proxyサーバーのアドレスを設定します。例：`172.17.0.1:9002`
 
-   - The address `172.17.0.1` is the virtual IP address configured by SysKeeper for Security Zone III.
-   - The port `9002` is the listening port configured by the SysKeeper Proxy of EMQX in Security Zone III.
+   - アドレス`172.17.0.1`はSysKeeperがセキュリティゾーンIII用に設定した仮想IPアドレスです。
+   - ポート`9002`はセキュリティゾーンIIIのEMQX SysKeeper Proxyがリスニングしているポートです。
 
-5. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the SysKeeper Proxy.
+5. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがSysKeeper Proxyに接続できるかテストできます。
 
-6. Click **Create** to complete the creation of the Connector. In the pop-up dialogue, you can click **Back to Connector List** or click **Create Rule** to continue to create a rule and a Sink for specifying the data to be forwarded to SysKeeper. For details steps, refer to [Create a Rule and Sink](#create-a-rule-and-sink).
+6. **Create**をクリックしてコネクターの作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成に進みます。詳細は[ルールとSinkの作成](#create-a-rule-and-sink)を参照してください。
 
+## SysKeeper Forwarder Sinkを用いたルールの作成
 
-## Create a Rule with SysKeeper Forwarder Sink
+このセクションでは、EMQXでソースMQTTトピック`t/#`からのメッセージを処理し、処理結果を設定済みのSysKeeper Forwarder Sink経由で別のEMQXクラスターのSysKeeper Proxyに送信するルールの作成方法を示します。
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and send the processed results through the configured SysKeeper Forwarder Sink to the SysKeeper Proxy in another EMQX cluster.
+1. EMQX Dashboardにアクセスし、**Integration -> Rules**をクリックします。
 
-1. Go to the EMQX Dashboard, and click **Integration -> Rules**.
+2. ページ右上の**Create**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+3. ルールIDを入力します。例：`my_rule`
 
-3. Enter a rule ID, for example, `my_rule`.
-
-4. Enter the following statement in the SQL editor, which will forward the MQTT messages matching the topic pattern `t/#`:
+4. SQLエディターに以下のステートメントを入力します。これはトピックパターン`t/#`にマッチするMQTTメッセージを転送します。
 
    ```sql
    SELECT
@@ -92,56 +91,56 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は、**SQL Examples**をクリックし、**Enable Test**でSQLルールの学習とテストが可能です。
 
    :::
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to SysKeeper.
+5. + **Add Action**ボタンをクリックし、ルールによりトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをSysKeeperに送信します。
 
-6. Select `SysKeeper Forwarder` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+6. **Type of Action**ドロップダウンリストから`SysKeeper Forwarder`を選択します。**Action**ドロップダウンはデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、この例では新規Sinkを作成します。
 
-7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+7. Sinkの名前を入力します。名前は大文字・小文字の英字および数字の組み合わせとしてください。
 
-8. Select the `my_sysk` just created from the **Connector** dropdown box.
+8. **Connector**ドロップダウンから先ほど作成した`my_sysk`を選択します。
 
-9. Enter the configuration information:
+9. 以下の設定情報を入力します。
 
-   - **Topic**: The topic for the republished messages. The placeholders are supported, for example, `${topic}`.
-   - **QoS**: The QoS for the republished messages.
-   - **Message Template**: The payload template for the republished messages. The placeholders are supported, for example, `${payload}`.
+   - **Topic**：再パブリッシュするメッセージのトピック。プレースホルダーが使用可能です。例：`${topic}`
+   - **QoS**：再パブリッシュするメッセージのQoS
+   - **Message Template**：再パブリッシュするメッセージのペイロードテンプレート。プレースホルダーが使用可能です。例：`${payload}`
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-11. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+11. **Create**をクリックしてSinkの作成を完了します。**Create Rule**ページに戻ると、**Action Outputs**タブに新しいSinkが表示されます。
 
-12. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+12. **Create Rule**ページで設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new SysKeeper Forwarder.
+これでルールが正常に作成され、**Rule**ページに新しいルールが表示されます。**Actions(Sink)**タブをクリックすると、新しいSysKeeper Forwarderが確認できます。
 
-You can click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under the topic `t/#` are published through SysKeeper Forwarder after parsing by the rule `my_rule`.
+**Integration** -> **Flow Designer**をクリックするとトポロジーを確認できます。トピック`t/#`のメッセージがルール`my_rule`で解析された後、SysKeeper Forwarderを通じてパブリッシュされていることがわかります。
 
-## Test the Rule
+## ルールのテスト
 
-You can use the built-in WebSocket client in the Dashboard to test your SysKeeper Forwarder Sink and rule.
+Dashboardに組み込まれたWebSocketクライアントを使って、SysKeeper Forwarder Sinkとルールの動作をテストできます。
 
-1. In Security Zone III, Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard.
+1. セキュリティゾーンIIIで、Dashboardの左ナビゲーションメニューから**Diagnose** -> **WebSocket Client**をクリックします。
 
-2. Fill in the connection information for the current EMQX instance.
+2. 現在のEMQXインスタンスへの接続情報を入力します。
 
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
+   - ローカルでEMQXを実行している場合はデフォルト値を使用できます。
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードの入力が必要です。
 
-3. Click **Connect** to connect the client to the EMQX instance.
+3. **Connect**をクリックしてクライアントをEMQXインスタンスに接続します。
 
-4. Use this client to subscribe to the topic `t/test`.
+4. このクライアントでトピック`t/test`をサブスクライブします。
 
-5. In Security Zone I-II, repeat the above steps to create a client for publishing.
+5. セキュリティゾーンI-IIで、同様の手順でパブリッシュ用クライアントを作成します。
 
-6. Scroll down to the publish area and type the following:
+6. パブリッシュエリアに以下を入力します。
 
-   - **Topic**: `t/test`
+   - **Topic**：`t/test`
 
-   - **Payload**:
+   - **Payload**：
 
      ```json
      {
@@ -149,8 +148,8 @@ You can use the built-in WebSocket client in the Dashboard to test your SysKeepe
      }
      ```
 
-   - **QoS**: `1`
+   - **QoS**：`1`
 
-7. Click **Publish** to send the message.
+7. **Publish**をクリックしてメッセージを送信します。
 
-8. In Security Zone III, you will see that the client has received this message if everything is correct.
+8. セキュリティゾーンIIIで、すべて正しく設定されていればクライアントがこのメッセージを受信します。

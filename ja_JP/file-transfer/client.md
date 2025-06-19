@@ -1,49 +1,48 @@
-# File Transfer Clients Development
+# ファイル転送クライアント開発
 
-This page provides an overview of the file transfer process from a client's perspective, along with detailed information on commands for uploading files to EMQX. It aims to assist in developing client-side file transfer functionality.
+このページでは、クライアント視点でのファイル転送プロセスの概要と、EMQXへのファイルアップロードに関する詳細なコマンド情報を提供します。クライアント側のファイル転送機能開発の支援を目的としています。
 
-## File Transfer Process
+## ファイル転送プロセス
 
-While reusing existing MQTT connections, clients can control file transfer sessions by publishing predetermined messages to topics with specific prefixes.
+既存のMQTT接続を再利用しつつ、クライアントは特定のプレフィックスを持つトピックにあらかじめ定められたメッセージをパブリッシュすることで、ファイル転送セッションを制御できます。
 
-The client-side file transfer process is as follows:
+クライアント側のファイル転送プロセスは以下の通りです：
 
-1. **Preparation for Transfer**: The client device selects the file to be uploaded and generates a unique `file_id` to identify the transfer session.
-2. **Initialize File Transfer**: The client device publishes an `init` command to the `$file/{file_id}/init` topic. The message is in JSON format and contains metadata of the file, such as the file name, size, and checksum.
-3. **Segmented File Transfer**: The client transfers the file by consecutively publishing messages to the `$file/{file_id}/{offset}[/{checksum}]` topic. The message content is the data block of the current file segment, with an optional `checksum` field for the data block's checksum.
-4. **Completing File Transfer**: The client publishes a `fin` command to the `$file/{file_id}/fin/{file_size}[/{checksum}]` topic, indicating the completion of the file transfer. The message content is empty, the `file_size` parameter indicates the total size of the file, and the `checksum` field is the checksum of the entire file.
+1. **転送準備**：クライアントデバイスはアップロードするファイルを選択し、転送セッションを識別するための一意の`file_id`を生成します。
+2. **ファイル転送の初期化**：クライアントデバイスは`$file/{file_id}/init`トピックに`init`コマンドをパブリッシュします。メッセージはJSON形式で、ファイル名、サイズ、チェックサムなどのファイルメタデータを含みます。
+3. **分割ファイル転送**：クライアントは`$file/{file_id}/{offset}[/{checksum}]`トピックに連続してメッセージをパブリッシュし、ファイルを転送します。メッセージ内容は現在のファイルセグメントのデータブロックで、オプションでデータブロックのチェックサムを示す`checksum`フィールドを含めることができます。
+4. **ファイル転送の完了**：クライアントは`$file/{file_id}/fin/{file_size}[/{checksum}]`トピックに`fin`コマンドをパブリッシュし、ファイル転送の完了を示します。メッセージ内容は空で、`file_size`パラメータはファイルの総サイズを示し、`checksum`フィールドはファイル全体のチェックサムです。
 
-For a detailed introduction and considerations of each step in the transfer command, refer to the following sections.
+各転送コマンドの詳細な説明や注意点については、以下のセクションをご参照ください。
 
-![EMQX File Transfer Process](./assets/emqx-ft-flow.jpg)
+![EMQX ファイル転送プロセス](./assets/emqx-ft-flow.jpg)
 
-## File Transfer Commands
+## ファイル転送コマンド
 
-File transfer commands are MQTT messages with specific topic formats and message contents:
+ファイル転送コマンドは、特定のトピック形式とメッセージ内容を持つMQTTメッセージです：
 
-- **Topic**: Topic prefixes include `$file/` and `$file-async/`, used for synchronous and asynchronous transfers, respectively, allowing clients to mix use in different commands within the same file transfer session.
-  - **Synchronous Transfer**: The client needs to wait for EMQX to confirm the execution result of a command before proceeding with subsequent operations.
-  - **Asynchronous Transfer**: The client does not need to wait for EMQX to confirm the command execution and can immediately send new commands after one is sent, which can speed up the process.
-- **QoS**: All commands are published with a QoS level of 1 to ensure reliability.
-- **Message Body**: Either a JSON format or a message body containing data blocks.
+- **トピック**：トピックプレフィックスには`$file/`と`$file-async/`があり、それぞれ同期転送と非同期転送に使用されます。同一ファイル転送セッション内で異なるコマンドに混在して使用可能です。
+  - **同期転送**：クライアントはEMQXによるコマンド実行結果の確認を待ってから次の操作に進みます。
+  - **非同期転送**：クライアントはEMQXのコマンド実行確認を待たずに、コマンド送信後すぐに新たなコマンドを送信でき、処理速度が向上します。
+- **QoS**：すべてのコマンドは信頼性確保のためQoSレベル1でパブリッシュされます。
+- **メッセージ本文**：JSON形式またはデータブロックを含むメッセージ本文となります。
 
-After each command is published, command execution results can be obtained through the PUBACK message or the response topic. Refer to [Retrieve Command Execution Results](#retrieve-command-execution-results) for details.
+各コマンド送信後、コマンド実行結果はPUBACKメッセージまたはレスポンストピックで取得可能です。詳細は[コマンド実行結果の取得](#retrieve-command-execution-results)をご覧ください。
 
 :::tip
 
-1. All file transfer commands are processed by the EMQX broker and are not sent to other MQTT clients.
-2. The asynchronous transfer mode is available in EMQX v5.3.2 and later.
-3. For MQTT v3.1/v3.1.1 clients, as PUBACK Reason Code is not available, it is recommended to use the asynchronous transfer mode.
+1. すべてのファイル転送コマンドはEMQXブローカーで処理され、他のMQTTクライアントには送信されません。  
+2. 非同期転送モードはEMQX v5.3.2以降で利用可能です。  
+3. MQTT v3.1/v3.1.1クライアントではPUBACK Reason Codeが利用できないため、非同期転送モードの使用を推奨します。
 
 :::
 
-### init Command
+### init コマンド
 
-The `init` command is used to initialize a file transfer session.
+`init`コマンドはファイル転送セッションを初期化するために使用します。
 
-- Topic: `$file/{file_id}/init` or `$file-async/{file_id}/init`
-
-- Message Body: A JSON object with the following fields:
+- トピック：`$file/{file_id}/init` または `$file-async/{file_id}/init`
+- メッセージ本文：以下のフィールドを持つJSONオブジェクト
 
   ```json
   {
@@ -56,19 +55,19 @@ The `init` command is used to initialize a file transfer session.
   }
   ```
 
-| Field          | Description                                                  |
-| -------------- | ------------------------------------------------------------ |
-| `file_id`      | Unique identifier for the file transfer session.             |
-| `name`         | Filename. If it conflicts with reserved filenames (e.g., ".", "..") or contains special characters, it will be percent-encoded. The binary length of the filename should not exceed 240 bytes. |
-| `size`         | Size of the file.                                            |
-| `checksum`     | SHA256 checksum of the file (optional). If provided, EMQX will verify the file's checksum. |
-| `expire_at`    | Timestamp for when the file may be deleted from storage (seconds since the epoch). |
-| `segments_ttl` | Validity period of file segments (in seconds). This value is limited to the range set by `minimum_segments_ttl` and `maximum_segments_ttl`. See [Segment Storage](./broker.md#segment-storage). |
-| `user_data`    | Arbitrary JSON object for storing additional information and metadata about the file. |
+| フィールド       | 説明                                                                                      |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| `file_id`      | ファイル転送セッションを識別する一意のID。                                               |
+| `name`         | ファイル名。予約語（例："."、".."）と衝突する場合や特殊文字を含む場合はパーセントエンコードされます。ファイル名のバイナリ長は240バイト以内が推奨されます。 |
+| `size`         | ファイルサイズ。                                                                           |
+| `checksum`     | ファイルのSHA256チェックサム（任意）。指定するとEMQXがファイルのチェックサムを検証します。   |
+| `expire_at`    | ストレージからファイルが削除される可能性のあるタイムスタンプ（エポック秒）。               |
+| `segments_ttl` | ファイルセグメントの有効期間（秒）。`minimum_segments_ttl`と`maximum_segments_ttl`で制限されます。詳細は[セグメントストレージ](./broker.md#segment-storage)を参照。 |
+| `user_data`    | ファイルに関する追加情報やメタデータを格納する任意のJSONオブジェクト。                     |
 
-In the message body, the only required field is `name`.
+メッセージ本文で必須なのは`name`フィールドのみです。
 
-Example:
+例：
 
 ```json
 {
@@ -80,58 +79,58 @@ Example:
 }
 ```
 
-### segment Command
+### segment コマンド
 
-The `segment` command is used to upload a data block of the file.
+`segment`コマンドはファイルのデータブロックをアップロードするために使用します。
 
-- Topic: `$file/{file_id}/{offset}[/{checksum}]` or `$file-async/{file_id}/{offset}[/{checksum}]`
-- Message Body: Binary data of the file block.
+- トピック：`$file/{file_id}/{offset}[/{checksum}]` または `$file-async/{file_id}/{offset}[/{checksum}]`
+- メッセージ本文：ファイルブロックのバイナリデータ
 
-| Field      | Description                                                  |
-| ---------- | ------------------------------------------------------------ |
-| `file_id`  | Unique identifier for the file transfer session.             |
-| `offset`   | Starting offset (in bytes) of the file block, calculated from the beginning of the file. |
-| `checksum` | Optional SHA256 checksum of the file block.                  |
+| フィールド    | 説明                                                                                      |
+| ------------ | ----------------------------------------------------------------------------------------- |
+| `file_id`    | ファイル転送セッションを識別する一意のID。                                               |
+| `offset`     | ファイルの先頭からのバイト単位の開始オフセット。                                         |
+| `checksum`   | ファイルブロックのSHA256チェックサム（任意）。                                           |
 
-### fin Command
+### fin コマンド
 
-The `fin` command is used to complete the file transfer session.
+`fin`コマンドはファイル転送セッションを完了するために使用します。
 
-- Topic: `$file/{file_id}/fin/{file_size}[/{checksum}]` or `$file-async/{file_id}/fin/{file_size}[/{checksum}]`
-- Message Body: Empty message body.
+- トピック：`$file/{file_id}/fin/{file_size}[/{checksum}]` または `$file-async/{file_id}/fin/{file_size}[/{checksum}]`
+- メッセージ本文：空のメッセージ本文
 
-| Field       | Description                                                  |
-| ----------- | ------------------------------------------------------------ |
-| `file_id`   | Unique identifier for the file transfer session.             |
-| `file_size` | Total size of the file (in bytes).                           |
-| `checksum`  | Optional SHA256 checksum of the entire file. If specified, it takes precedence over the `checksum` field provided in the `init` command. |
+| フィールド     | 説明                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| `file_id`     | ファイル転送セッションを識別する一意のID。                                               |
+| `file_size`   | ファイルの総サイズ（バイト単位）。                                                       |
+| `checksum`    | ファイル全体のSHA256チェックサム（任意）。指定すると`init`コマンドの`checksum`より優先されます。 |
 
-After receiving the `fin` command, EMQX verifies whether all segments required to assemble the file have been received. If the file is successfully exported and its checksum is valid, EMQX responds with a successful Reason Code. In case of any errors, an appropriate error response is sent.
+`fin`コマンドを受信後、EMQXはファイルを組み立てるために必要なすべてのセグメントが受信済みか検証します。ファイルのエクスポートが成功しチェックサムが有効な場合、EMQXは成功のReason Codeで応答します。エラーがある場合は適切なエラー応答が送信されます。
 
-## Retrieve Command Execution Results
+## コマンド実行結果の取得
 
-The results of command execution are indicated by MQTT PUBACK Reason Codes:
+コマンド実行結果はMQTTのPUBACK Reason Codeで示されます：
 
-- **Synchronous transfer**: The PUBACK reason code represents the final result of the operation.
-- **Asynchronous transfer**: A non-zero PUBACK reason code indicates immediate failure of the operation, while a zero reason code means the command has been accepted for processing, but the result will be returned through a response message upon completion.
+- **同期転送**：PUBACKのReason Codeが操作の最終結果を表します。
+- **非同期転送**：非ゼロのPUBACK Reason Codeは即時の失敗を示し、ゼロのReason Codeはコマンドが処理受理されたことを示します。結果は処理完了後にレスポンスメッセージで返されます。
 
 ### PUBACK Reason Codes
 
-| Reason Code | Meaning in MQTT         | Meaning in File Transfer                                     |
-| ----------- | ----------------------- | ------------------------------------------------------------ |
-| None        |                         | Same as 0x00.                                                |
-| 0x00        | Success                 | The file block has been successfully persisted.              |
-| 0x10        | No matching subscribers | The server requires the client to retransmit all file blocks. |
-| 0x80        | Unspecified error       | For `segment` commands, the server requires the client to retransmit the current file block; for `fin` commands, the server requires the client to retransmit all file blocks. |
-| 0x83        | Specific error          | The server requires the client to cancel the transmission.   |
-| 0x97        | Quota exceeded          | The server requests the client to pause transmission, the client should wait before attempting to retransmit the file segment again. |
+| Reason Code | MQTTでの意味              | ファイル転送での意味                                             |
+| ----------- | ------------------------- | -------------------------------------------------------------- |
+| None        |                           | 0x00と同じ意味。                                               |
+| 0x00        | 成功                      | ファイルブロックが正常にパーシステンスされた。                   |
+| 0x10        | 該当するサブスクライバーなし | サーバーはクライアントに全ファイルブロックの再送を要求。         |
+| 0x80        | 未指定のエラー            | `segment`コマンドの場合は現在のファイルブロックの再送を、`fin`コマンドの場合は全ファイルブロックの再送を要求。 |
+| 0x83        | 特定のエラー              | サーバーはクライアントに送信のキャンセルを要求。                 |
+| 0x97        | クォータ超過             | サーバーはクライアントに送信の一時停止を要求。クライアントは再送まで待機すべき。 |
 
-### Response Messages
+### レスポンスメッセージ
 
-- Topic: `$file-response/{clientId}`, where `clientId` is the client ID.
-- Message: A JSON object containing the response result.
+- トピック：`$file-response/{clientId}` (`clientId`はクライアントID)
+- メッセージ：レスポンス結果を含むJSONオブジェクト
 
-Example:
+例：
 
 ```json
 {
@@ -143,24 +142,24 @@ Example:
 }
 ```
 
-| Field                | Description                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| `vsn`                | Version of the response message format                       |
-| `topic`              | The command topic being responded to, e.g., `$file-async/somefileid/init` |
-| `packet_id`          | MQTT message ID of the command being responded to            |
-| `reason_code`        | Execution result code for the command. For details, see [Reason Codes](#PUBACK-Reason-Codes) |
-| `reason_description` | Description of the execution result                          |
+| フィールド            | 説明                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| `vsn`                | レスポンスメッセージフォーマットのバージョン                                             |
+| `topic`              | 応答対象のコマンドトピック（例：`$file-async/somefileid/init`）                           |
+| `packet_id`          | 応答対象のコマンドのMQTTメッセージID                                                    |
+| `reason_code`        | コマンドの実行結果コード。詳細は[Reason Codes](#PUBACK-Reason-Codes)参照                 |
+| `reason_description` | 実行結果の説明                                                                           |
 
-Clients can obtain the actual operation results of commands via the `$file-response/{clientId}` topic, regardless of whether the operation is synchronous or asynchronous.
+クライアントは同期・非同期に関わらず、`$file-response/{clientId}`トピックを通じてコマンドの実際の操作結果を取得できます。
 
-## Considerations
+## 注意事項
 
-1. If the client disconnects during file transfer, or needs to interrupt the transfer for higher priority message delivery, simply re-send the unacknowledged data blocks or commands after resuming file transfer. This method avoids retransmitting the entire file, enhancing transmission efficiency.
-2. As EMQX needs to assemble the file from received file segments and export it to the configured storage, the `fin` command may take a longer time to process. During this time, the client can continue sending other commands while waiting for the `fin` command to complete. If a disconnection occurs during the `fin` command, the client can simply re-send the command to resume file transfer. If the file transfer has already been completed, EMQX will immediately reply with a successful transmission.
+1. ファイル転送中にクライアントが切断された場合や、優先度の高いメッセージ送信のために転送を中断する必要がある場合は、未アックのデータブロックやコマンドを再送するだけで問題ありません。これによりファイル全体の再送を避け、転送効率を向上させます。  
+2. EMQXは受信したファイルセグメントからファイルを組み立て、設定されたストレージにエクスポートするため、`fin`コマンドの処理には時間がかかる場合があります。この間、クライアントは他のコマンド送信を継続可能です。`fin`コマンド処理中に切断が発生した場合は、単にコマンドを再送することでファイル転送を再開できます。すでに転送完了している場合は、EMQXが即座に成功応答を返します。
 
-## Client Code Examples
+## クライアントコード例
 
-Explore file transfer client code examples in various languages and client libraries:
+各種言語・クライアントライブラリでのファイル転送クライアントコード例を参照できます：
 
 - [C - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-C-paho/emqx_file_transfer.c)
 - [Python3 - Paho](https://github.com/emqx/MQTT-Client-Examples/blob/master/mqtt-client-Python3/file_transfer.py)

@@ -1,63 +1,63 @@
-# Integrate with Prometheus
+# Prometheusとの統合
 
-EMQX supports integration with third-party monitoring systems, such as [Prometheus](https://prometheus.io/). It is the monitoring solution open-sourced by SoundCloud. It offers a versatile set of features, including support for multidimensional data models, flexible query language, and powerful alarm management.
+EMQXは、[Prometheus](https://prometheus.io/)などのサードパーティ監視システムとの統合をサポートしています。PrometheusはSoundCloudによってオープンソース化された監視ソリューションで、多次元データモデルのサポート、柔軟なクエリ言語、強力なアラーム管理など多彩な機能を提供します。
 
-Using a third-party monitoring system can bring the following advantages:
+サードパーティ監視システムを利用することで、以下のような利点があります。
 
-- A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, you can get the monitoring information of the server host.
-- More intuitive monitoring report with figures and charts, such as using [Grafana dashboard](#use-grafana-to-visualize-EMQX-metrics) to visualize the EMQX metrics.
-- Various alarm notification options, such as using Prometheus Alertmanager to set up alarm rules and notification methods.
+- EMQXの監視データを他のシステムの監視データと統合した、包括的な監視システムを構築可能。例えば、サーバーホストの監視情報も取得できます。
+- [Grafanaダッシュボード](#use-grafana-to-visualize-EMQX-metrics)などを使って、図やグラフによるより直感的な監視レポートが得られます。
+- Prometheus Alertmanagerを利用したアラームルールや通知方法の設定など、多様なアラーム通知オプションを利用できます。
 
-EMQX supports two methods for integrating Prometheus metrics monitoring:
+EMQXはPrometheusのメトリクス監視統合に対して、以下の2つの方法をサポートしています。
 
-- **Pull Mode**: Prometheus directly collects metrics through EMQX's REST API.
-- **Push Mode**: EMQX pushes metrics to the Pushgateway service, from which Prometheus collects the metrics.
+- **Pullモード**: PrometheusがEMQXのREST APIを通じて直接メトリクスを収集します。
+- **Pushモード**: EMQXがメトリクスをPushgatewayサービスにプッシュし、Prometheusがそこからメトリクスを収集します。
 
-This page introduces the configuration steps for both methods. You can click **Management** -> **Monitoring** in the left navigation menu of the EMQX Dashboard, and in the **Integration** tab, select **Prometheus** to perform the configuration. You can also click the **Help** button on the page to view specific configuration steps for each mode.
+本ページでは両モードの設定手順を紹介します。EMQXダッシュボードの左側ナビゲーションメニューで **Management** -> **Monitoring** をクリックし、**Integration** タブで **Prometheus** を選択して設定を行えます。また、ページ内の **Help** ボタンをクリックすると、各モードの具体的な設定手順を確認できます。
 
-## Configure Pull Mode Integration
+## Pullモード統合の設定
 
-EMQX provides the following REST APIs for Prometheus to collect system metrics:
+EMQXはPrometheusがシステムメトリクスを収集するために、以下のREST APIを提供しています。
 
-- `/api/v5/prometheus/stats`: Basic metrics and counters of EMQX.
-- `/api/v5/prometheus/auth`: Key metrics and counters in access control, including authentication and authorization.
-- `/api/v5/prometheus/data_integration`: Metrics and counters related to the rule engine, connectors, actions, Sink/Source, and encoding/decoding.
+- `/api/v5/prometheus/stats`: EMQXの基本的なメトリクスとカウンター。
+- `/api/v5/prometheus/auth`: 認証・認可を含むアクセス制御に関する主要なメトリクスとカウンター。
+- `/api/v5/prometheus/data_integration`: ルールエンジン、コネクター、アクション、Sink/Source、エンコード/デコードに関するメトリクスとカウンター。
 
-When calling the above APIs to obtain metrics, you can use the URL query parameter `mode` to get different types of metric data. The meanings of different parameters are as follows:
+これらのAPIを呼び出してメトリクスを取得する際、URLクエリパラメータ `mode` を用いて異なるタイプのメトリクスデータを取得できます。パラメータの意味は以下の通りです。
 
 :::: tabs type: card
 
-::: tab Single Node Mode
+::: tab シングルノードモード
 
 ```
 mode=node
 ```
 
-The default mode returns the metrics of the current request node. If no specific mode is specified, the system defaults to returning metrics in this mode.
+デフォルトモードで、現在のリクエストノードのメトリクスを返します。特に指定がない場合はこのモードが適用されます。
 
 :::
 
-::: tab Cluster Aggregated Mode
+::: tab クラスター集約モード
 
 ```
 mode=all_nodes_aggregated
 ```
 
-Aggregate cluster metrics, returning the *arithmetic sum* or *logical sum* of all running node metrics in the cluster.
+クラスターのメトリクスを集約し、クラスター内のすべての稼働ノードのメトリクスの*算術和*または*論理和*を返します。
 
-- For metrics like "on status" and "running status", the system will return their logical sum, i.e., returns 1 if all nodes are on or running, otherwise returns 0.
+- 「オン状態」や「稼働状態」などのメトリクスは論理和を返します。すべてのノードがオンまたは稼働中なら1を返し、それ以外は0を返します。
 
-- Some metrics are independent on different nodes and will not return aggregated values. For example, CPU and memory usage. The system will add node names as labels to distinguish the metrics of different nodes. For example:
+- CPUやメモリ使用率などノードごとに独立したメトリクスは集約値を返しません。ノード名をラベルとして付与し、異なるノードのメトリクスを区別します。例：
 
   ```bash
   emqx_vm_cpu_use{node="emqx@172.17.0.2"} 7.6669163995887715
   emqx_vm_cpu_idle{node="emqx@172.17.0.2"} 92.33308360041123
-  
+
   emqx_vm_cpu_use{node="emqx@172.17.0.3"} 7.676007766679973
   emqx_vm_cpu_idle{node="emqx@172.17.0.3"} 92.32399223332003
   ```
 
-- Some metrics should have consistent values on any node in the cluster. For cluster-consistent metrics, the value on the node that accepts the API request will be returned directly. They are not summed and do not include node names as labels. For example:
+- クラスター内のどのノードでも値が一貫しているべきメトリクスは、APIリクエストを受けたノードの値を直接返します。これらは合算されず、ノード名のラベルも付きません。例：
 
   ```bash
   emqx_topics_count 3
@@ -65,25 +65,25 @@ Aggregate cluster metrics, returning the *arithmetic sum* or *logical sum* of al
   emqx_cert_expiry_at{listener_type="wss",listener_name="default"} 1904285225
   ```
 
-- Other metrics return arithmetic sums, i.e., the returned metrics are the sum of all node metrics.
+- その他のメトリクスは算術和を返します。すなわち、返されるメトリクスは全ノードのメトリクスの合計です。
 
 :::
 
-::: tab Cluster Unaggregated Mode
+::: tab クラスター非集約モード
 
 ```
 mode=all_nodes_unaggregated
 ```
 
-This is the cluster unaggregated metric mode, returning the individual metrics of all running nodes in the cluster.
+クラスター非集約メトリクスモードで、クラスター内のすべての稼働ノードの個別メトリクスを返します。
 
-- The system will add node names as labels to distinguish the metrics of different nodes. For example:
+- ノード名をラベルとして付与し、異なるノードのメトリクスを区別します。例：
 
   ```bash
   emqx_connections_count{node="emqx@127.0.0.1"} 0
   ```
 
-- Some metrics should have consistent values on any node in the cluster. For example, "blacklist count", "retained message count", etc. For cluster-consistent metrics, the value on the node that accepts the API request will be returned directly. Node names are not included as labels. For example:
+- 「ブラックリスト数」や「保持メッセージ数」など、クラスター内のどのノードでも値が一貫しているべきメトリクスは、APIリクエストを受けたノードの値を直接返します。ノード名のラベルは付きません。例：
 
   ```bash
   emqx_retained_count 3
@@ -93,22 +93,22 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 ::::
 
-For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+PrometheusのPullエンドポイントの詳細は、[EMQX Enterprise APIドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)を参照してください。
 
-::: tip 
+::: tip
 
-By default, the pull mode API does not require authentication. You can configure the **Enable Basic Auth** switch on the page to enable basic authentication for the interface. Once enabled, you need to create an [API key](../admin/api.md#authentication) on EMQX and apply it to the Prometheus configuration to obtain metric data.
+デフォルトではPullモードAPIは認証不要です。ページ上の **Enable Basic Auth** スイッチを設定すると、インターフェースにベーシック認証を有効化できます。有効化後は、EMQXで[APIキー](../admin/api.md#authentication)を作成し、Prometheus設定に適用してメトリクスを取得する必要があります。
 
 :::
 
-### Prometheus Configuration for Reference
+### 参考用Prometheus設定例
 
 ```yaml
 # prometheus.yaml
 global:
-  scrape_interval:     10s # The default scrape interval is every 10 seconds.
-  evaluation_interval: 10s # The default evaluation interval is every 10 seconds.
-  # On this machine, every time series will be exported by default.
+  scrape_interval:     10s # デフォルトのスクレイプ間隔は10秒ごとです。
+  evaluation_interval: 10s # デフォルトの評価間隔も10秒ごとです。
+  # このマシン上のすべての時系列がデフォルトでエクスポートされます。
   external_labels:
     monitor: 'emqx-monitor'
 scrape_configs:
@@ -140,28 +140,28 @@ scrape_configs:
       password: ''
 ```
 
-## Configure Push Mode Integration
+## Pushモード統合の設定
 
-EMQX supports pushing metrics to Pushgateway, from which Prometheus can then collect these metrics. EMQX supports pushing metrics to Pushgateway, which is disabled by default. To enable the Pushgateway service, you can click the **Enable Pushgateway** toggle switch on the Prometheus configuration page in the Dashboard. 
+EMQXはメトリクスをPushgatewayにプッシュし、Prometheusがそこからメトリクスを収集する方式をサポートしています。Pushgatewayサービスはデフォルトで無効化されています。ダッシュボードのPrometheus設定ページで **Enable Pushgateway** トグルスイッチをクリックすると有効化できます。
 
-<img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
+<img src="./assets/enable-push-gateway.png" alt="Pushgatewayを有効化" style="zoom:40%;" />
 
-Configure the following fields according to your business needs, and then click **Save Changes**. 
+ビジネス要件に応じて以下の項目を設定し、**Save Changes** をクリックしてください。
 
-- **Interval**: Specify the time interval for reporting the monitoring metrics data to Pushgateway. The default value it `15` seconds.
-- **Pushgateway Server**: Type the URL of Prometheus server. It is `http://127.0.0.1:9091` by default.
-- **Job Name**: Specify variables that include the EMQX cluster name, node name, and hostname. The default value is `${name}/instance/${name}~${host}`. For example, when the EMQX node name is `emqx@127.0.0.1`, the `name` variable takes the value `emqx` and the `host` variable takes the value `127.0.0.1`.
-- **Headers**: Type the key and value of the HTTP headers for the monitoring metrics that are pushed to Pushgateway. You can add a list of headers by clicking the **Add** button. The type is string, for example, { Authorization = "some-authz-tokens"}.
+- **Interval**: メトリクスデータをPushgatewayに報告する時間間隔を指定します。デフォルトは`15`秒です。
+- **Pushgateway Server**: PrometheusサーバーのURLを入力します。デフォルトは `http://127.0.0.1:9091` です。
+- **Job Name**: EMQXクラスター名、ノード名、ホスト名を含む変数を指定します。デフォルトは `${name}/instance/${name}~${host}` です。例えば、EMQXノード名が `emqx@127.0.0.1` の場合、`name` は `emqx`、`host` は `127.0.0.1` になります。
+- **Headers**: Pushgatewayにプッシュする監視メトリクスのHTTPヘッダーのキーと値を入力します。**Add** ボタンをクリックして複数のヘッダーを追加可能です。型は文字列で、例として `{ Authorization = "some-authz-tokens" }` のように設定します。
 
-At the same time, you can click the **Help** button and refer to the steps on the **Use Pushgateway** tab for configuration.
+同時に、**Help** ボタンをクリックし、**Use Pushgateway** タブの手順を参照して設定を行うこともできます。
 
-::: tip 
+::: tip
 
-The Push mode currently only includes EMQX's basic metrics and counters from the `/api/v5/prometheus/stats` endpoint, so the Pull mode is more recommended.
+Pushモードでは現状、`/api/v5/prometheus/stats` エンドポイントのEMQX基本メトリクスとカウンターのみが含まれるため、Pullモードの利用を推奨します。
 
 :::
 
-You can also enable and configure the Pushgateway by adding the following configuration to the configuration file. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
+Pushgatewayの有効化および設定は、設定ファイルに以下の内容を追加することでも可能です。設定項目の詳細は[Configuration - Prometheus](../configuration/prometheus.md)を参照してください。
 
 ```bash
 prometheus {
@@ -172,12 +172,12 @@ prometheus {
 }
 ```
 
-## Use Grafana to Visualize EMQX Metrics
+## GrafanaでEMQXメトリクスを可視化する
 
-You can also use Grafana with Prometheus to visualize EMQX metrics, which can be achieved by importing the EMQX template files into Grafana. To download the template, click [EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) or click the **Help** button at the bottom of the **Integration** tab of the **Monitoring** page.
+GrafanaとPrometheusを組み合わせてEMQXメトリクスを可視化することも可能です。これはEMQXのテンプレートファイルをGrafanaにインポートすることで実現できます。テンプレートのダウンロードは、[EMQX | Grafana Dashboard](https://grafana.com/grafana/dashboards/17446-emqx/) をクリックするか、**Monitoring** ページの **Integration** タブ下部の **Help** ボタンから行えます。
 
 ::: tip
 
-For detailed operating steps, see [Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana)
+詳細な操作手順は [Monitoring MQTT broker with Prometheus and Grafana](https://www.emqx.com/en/blog/emqx-prometheus-grafana) をご覧ください。
 
 :::

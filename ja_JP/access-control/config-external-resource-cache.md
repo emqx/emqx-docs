@@ -1,17 +1,17 @@
-You can enable and configure the external resource cache through the EMQX Dashboard:
+EMQXダッシュボードから外部リソースキャッシュを有効化および設定できます。
 
-1. Navigate to **Access Control** -> **Authorization**. 
+1. **アクセス制御** -> **認可** に移動します。
 
-2. Click the **External Resource Cache Settings** button in the upper-right corner. A side panel will appear from the right.
+2. 右上の **外部リソースキャッシュ設定** ボタンをクリックします。右側からサイドパネルが表示されます。
 
-3. In the panel, use the **Enable External Resource Cache** button to turn the caching feature on or off. Once enabled, configure the following cache settings:
+3. パネル内で **外部リソースキャッシュを有効にする** ボタンを使ってキャッシュ機能をオンまたはオフにします。有効化したら、以下のキャッシュ設定を行います。
 
-   | Field Name                        | Description                                                  |
+   | フィールド名                      | 説明                                                         |
    | --------------------------------- | ------------------------------------------------------------ |
-   | **Maximum Number of Cache Items** | Maximum number of cached entries per node. Default: `1,000,000`. |
-   | **Maximum Memory**                | Limit on cache memory usage. Default: `100 MB`.              |
-   | **Cache TTL**                     | Duration a cached entry remains valid. Default: `1 minute`.  |
+   | **最大キャッシュアイテム数**       | ノードごとの最大キャッシュエントリ数。デフォルト：`1,000,000`。 |
+   | **最大メモリ**                    | キャッシュメモリ使用量の上限。デフォルト：`100 MB`。          |
+   | **キャッシュTTL**                 | キャッシュエントリの有効期間。デフォルト：`1分`。             |
 
-4. Click **Update** to apply the settings.
+4. **更新** をクリックして設定を適用します。
 
-These settings are applied cluster-wide to ensure consistent behavior across all nodes.
+これらの設定はクラスター全体に適用され、すべてのノードで一貫した動作を保証します。

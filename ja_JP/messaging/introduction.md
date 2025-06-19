@@ -1,26 +1,23 @@
 # Publish/Subscribe
 
-As a world-class MQTT broker, EMQX supports the [publish/subscribe messaging pattern](./mqtt-concepts.md#publish-subscribe-pattern), which is a key feature of the MQTT protocol. EMQX's publish/subscribe functionality offers a variety of features that make it well-suited for complex and high-performance messaging applications. These features include support for wildcard topics, topic-based message filtering, message persistence, and Quality of Service (QoS) settings. 
+世界クラスのMQTTブローカーであるEMQXは、MQTTプロトコルの主要な機能である[パブリッシュ／サブスクライブメッセージングパターン](./mqtt-concepts.md#publish-subscribe-pattern)をサポートしています。EMQXのパブリッシュ／サブスクライブ機能は、ワイルドカードトピックのサポート、トピックベースのメッセージフィルタリング、メッセージのパーシステンス、QoS（サービス品質）設定など、多様な機能を備えており、複雑かつ高性能なメッセージングアプリケーションに適しています。
 
-The publish function allows devices that are connected to the EMQX broker to send messages to a particular topic. The message can contain any type of data, such as sensor readings, status updates, or commands. When a device publishes a message to a topic, EMQX receives the message and forwards it to all devices that have subscribed to that topic.
+パブリッシュ機能は、EMQXブローカーに接続されたデバイスが特定のトピックにメッセージを送信できるようにします。メッセージにはセンサーの読み取り値、ステータス更新、コマンドなど、あらゆる種類のデータを含めることが可能です。デバイスがトピックにメッセージをパブリッシュすると、EMQXはそのメッセージを受信し、そのトピックをサブスクライブしているすべてのデバイスに転送します。
 
-The subscribe function in EMQX allows devices to receive messages from a particular topic. Devices can subscribe to one or more topics, and they will receive all messages that are published on those topics. This allows devices to monitor specific events or data streams in real-time, without having to constantly poll for updates.
+EMQXのサブスクライブ機能は、デバイスが特定のトピックからメッセージを受信できるようにします。デバイスは1つ以上のトピックをサブスクライブでき、サブスクライブしたトピックにパブリッシュされたすべてのメッセージを受け取ります。これにより、デバイスはリアルタイムで特定のイベントやデータストリームを監視でき、常に更新をポーリングする必要がなくなります。
 
-<img src="./assets/pub-sub-pattern.png" alt="pub-sub-pattern" style="zoom:35%;" />
+<img src="./assets/pub-sub-pattern.png" alt="パブリッシュ／サブスクライブパターン" style="zoom:35%;" />
 
-In this chapter, you will learn the [MQTT Core Concepts](./mqtt-concepts.md). You will also learn how to try the publish/subscribe function in EMQX and also try the following MQTT-specific features using the MQTT client tools.
+本章では、[MQTTのコアコンセプト](./mqtt-concepts.md)を学びます。また、EMQXでのパブリッシュ／サブスクライブ機能の試し方や、MQTTクライアントツールを使って以下のMQTT固有の機能を試す方法も解説します。
 
-- [Shared Subscription](./mqtt-shared-subscription.md)
-- [Retained Message](./mqtt-retained-message.md)
-- [Will Message](./mqtt-will-message.md)
-- [Topic Wildcards](./mqtt-wildcard-subscription.md)
+- [共有サブスクリプション](./mqtt-shared-subscription.md)
+- [保持メッセージ](./mqtt-retained-message.md)
+- [遺言メッセージ](./mqtt-will-message.md)
+- [トピックワイルドカード](./mqtt-wildcard-subscription.md)
 
-Except for the MQTT-specific features, some extended features are also implemented in EMQX. This chapter also introduces the following extended features and how to configure them in EMQX Dashboard and test them using the client tools:
+MQTT固有の機能以外にも、EMQXではいくつかの拡張機能が実装されています。本章では以下の拡張機能の概要と、EMQXダッシュボードでの設定方法およびクライアントツールを使ったテスト方法についても紹介します。
 
-- [Exclusive Subscription](./mqtt-exclusive-subscription.md)
-- [Delayed Publish](./mqtt-delayed-publish.md)
-- [Auto Subscribe](./mqtt-auto-subscription.md)
-- [Topic Rewrite](./mqtt-topic-rewrite.md)
-
-
-
+- [排他サブスクリプション](./mqtt-exclusive-subscription.md)
+- [遅延パブリッシュ](./mqtt-delayed-publish.md)
+- [自動サブスクライブ](./mqtt-auto-subscription.md)
+- [トピック書き換え](./mqtt-topic-rewrite.md)

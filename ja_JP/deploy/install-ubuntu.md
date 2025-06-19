@@ -1,70 +1,70 @@
-# Install EMQX on Ubuntu
+# UbuntuへのEMQXインストール
 
-This page guides you on installing and starting EMQX on the Ubuntu system.
+本ページでは、Ubuntuシステム上でのEMQXのインストールおよび起動方法についてご案内します。
 
-Supported versions:
+対応バージョン：
 
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
 
-## Install with Apt Package Manager
+## Aptパッケージマネージャーによるインストール
 
-EMQX supports installing with Apt Package Manager to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with apt:
+EMQXはAptパッケージマネージャーによるインストールをサポートしており、ユーザーの皆様に便利で信頼性の高いEMQXのインストールおよびアップデート管理方法を提供します。以下はaptを使ったEMQXのインストール手順です：
 
-1. Install the EMQX apt repository:
+1. EMQXのaptリポジトリをインストールします：
 
    ```bash
    curl -s https://packagecloud.io/install/repositories/emqx/emqx-enterprise5/script.deb.sh | sudo bash
    ```
 
-2. Install EMQX:
+2. EMQXをインストールします：
 
    ```bash
    sudo apt-get install emqx
    ```
 
-3. Start EMQX:
+3. EMQXを起動します：
 
    ```bash
    sudo systemctl start emqx
    ```
 
-## Manual package installation
+## 手動パッケージインストール
 
-EMQX supports installation via deb packages or tar.gz packages. For installation on other supported systems or to try other versions, please visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise) for installation information.
+EMQXはdebパッケージまたはtar.gzパッケージによるインストールもサポートしています。その他の対応システムでのインストールや別バージョンを試す場合は、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご参照ください。
 
-### Install with deb
+### debパッケージによるインストール
 
-1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
-2. Select the latest version `@EE_VERSION@` and select the `deb` package according to the required version and CPU architecture in the **Package Type** dropdown.
-3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
+1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。  
+2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`deb`パッケージを選択します。  
+3. 下記リンクをクリックしてダウンロードします。コマンドラインによるダウンロードおよびインストール手順もご利用いただけます。
 
-#### Start EMQX
+#### EMQXの起動
 
-Start EMQX as a systemd service.
+systemdサービスとしてEMQXを起動します。
 
 ```bash
 sudo systemctl start emqx
 ```
 
-#### Uninstall EMQX
+#### EMQXのアンインストール
 
-To uninstall EMQX, run:
+EMQXをアンインストールするには、以下のコマンドを実行してください。
 
 ```
 sudo apt remove --purge emqx
 ```
 
-### Install with tar.gz
+### tar.gzパッケージによるインストール
 
-1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
-2. Select the latest version `@EE_VERSION@` and select the `tar.gz` package according to the required version and CPU architecture in the **Package Type** dropdown.
-3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
+1. 公式ダウンロードページの[**Ubuntuタブ**](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu)にアクセスします。  
+2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**のドロップダウンから必要なバージョンとCPUアーキテクチャに応じて`tar.gz`パッケージを選択します。  
+3. 下記リンクをクリックしてダウンロードします。コマンドラインによるダウンロードおよびインストール手順もご利用いただけます。
 
-#### Start EMQX
+#### EMQXの起動
 
-After the installation, run the command below to start EMQX.
+インストール後、以下のコマンドを実行してEMQXを起動します。
 
 ```bash
 ./emqx/bin/emqx foreground

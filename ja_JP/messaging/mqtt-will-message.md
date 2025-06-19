@@ -1,79 +1,78 @@
 # MQTT Will Message
 
-EMQX implements the will message feature of MQTT. If a will message is set for a client, EMQX sends the message to relevant subscribers when the client is accidentally disconnected, so that the subscribers can be informed and update the client status.
+EMQXはMQTTのwill message機能を実装しています。クライアントにwill messageが設定されている場合、クライアントが予期せず切断されると、EMQXは関連するサブスクライバーにそのメッセージを送信し、サブスクライバーがクライアントの状態を把握・更新できるようにします。
 
-You can use client tools to try this messaging service in EMQX. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a will message is published and received.
+EMQXでこのメッセージングサービスを試すには、クライアントツールを使用できます。本節では、[MQTTX Desktop](https://mqttx.app/)と[MQTTX CLI](https://mqttx.app/cli)を使ってクライアントをシミュレートし、will messageがどのようにパブリッシュされ受信されるかを紹介します。
 
-:::tip Prerequisites
+:::tip 前提条件
 
-- Knowledge about MQTT [Will Message](./mqtt-concepts.md#will-message)
-- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
+- MQTTの[Will Message](./mqtt-concepts.md#will-message)に関する知識
+- [MQTTX](./publish-and-subscribe.md)を使った基本的なパブリッシュおよびサブスクライブ操作
 
 :::
 
-## Publish Will Message with MQTTX Desktop
+## MQTTX DesktopでWill Messageをパブリッシュする
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQXとMQTTX Desktopを起動します。**New Connection**をクリックして、パブリッシャーとしてクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name**欄に`Demo`と入力します。
+   - **Host**にlocalhostの`127.0.0.1`を入力します（本デモの例として）。
+   - 他の設定はデフォルトのままにして、**Connect**をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT接続の作成に関する詳細な手順は[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)で紹介しています。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新しい接続の一般設定" style="zoom:35%;" />
 
-   Scroll down the page and in **Last Will and Testament** section, fill in the will message configuration.
+   ページをスクロールダウンし、**Last Will and Testament**セクションでwill messageの設定を入力します。
 
-   - **Last-Will Topic**: Enter `offline`.
-   - **Last-Will QoS**: Set as the default value `0`.
-   - **Last-Will Retain**: Set disabled as default. If enabled, the will message will also be a retained message.
-   - **Last-Will Payload**: Enter `I'm offline`.
-   - **Will Delay Intervals (s)**: Set `5` seconds.
+   - **Last-Will Topic**：`offline`と入力します。
+   - **Last-Will QoS**：デフォルトの`0`に設定します。
+   - **Last-Will Retain**：デフォルトで無効のままにします。有効にするとwill messageもリテインドメッセージになります。
+   - **Last-Will Payload**：`I'm offline`と入力します。
+   - **Will Delay Intervals (s)**：`5`秒に設定します。
 
-   Leave the rest settings as default. Click the **Connect** button.
+   他の設定はデフォルトのままにして、**Connect**ボタンをクリックします。
 
-   <img src="./assets/Configure-new-connection-will.png" alt="Configure-new-connection-will" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-will.png" alt="will messageの設定" style="zoom:35%;" />
 
-2. In the **Connections** pane, click **+** -> **New Connection** to create a new client connection. Set the connection **Name** as `Subscriber` and **Host** as `127.0.0.1`. Leave other settings as default and click **Connect**.
+2. **Connections**ペインで**+** -> **New Connection**をクリックし、新しいクライアント接続を作成します。接続の**Name**を`Subscriber`、**Host**を`127.0.0.1`に設定します。他はデフォルトのままにして**Connect**をクリックします。
 
-3. Click **New Subscription** in the **Subscriber** pane. Enter `offline` in the **Topic** textbox. Leave the other settings as default. Click the **Confirm** button.
+3. **Subscriber**ペインで**New Subscription**をクリックします。**Topic**テキストボックスに`offline`と入力し、他の設定はデフォルトのままにして**Confirm**をクリックします。
 
-   <img src="./assets/Subscribe-will-message.png" alt="Subscribe-will-message" style="zoom:35%;" />
+   <img src="./assets/Subscribe-will-message.png" alt="will messageのサブスクライブ" style="zoom:35%;" />
 
-4. Select the client connection named `Demo` in the **Connections** pane. Right-click and select **New Window**. In the new window, click the **Connect** button.
+4. **Connections**ペインで`Demo`という名前のクライアント接続を選択し、右クリックして**New Window**を選びます。新しいウィンドウで**Connect**ボタンをクリックします。
 
-   <img src="./assets/Open-new-window.png" alt="Open-new-window" style="zoom:35%;" />
+   <img src="./assets/Open-new-window.png" alt="新しいウィンドウを開く" style="zoom:35%;" />
 
-5. Close the new window and wait for 5 seconds. The client `Subscriber` receives a will message `I'm offline`.
+5. 新しいウィンドウを閉じて5秒待ちます。`Subscriber`クライアントがwill messageの`I'm offline`を受信します。
 
-   <img src="./assets/Receive-will-message.png" alt="Receive-will-message" style="zoom:35%;" />
+   <img src="./assets/Receive-will-message.png" alt="will messageの受信" style="zoom:35%;" />
 
 
 
-## Publish Will Message with MQTTX CLI
+## MQTTX CLIでWill Messageをパブリッシュする
 
-1. Initiate a connection request with one client. Set the topic to `t/1` and payload to `A will message from MQTTX CLI`:
+1. 1つのクライアントで接続要求を開始します。トピックを`t/1`、ペイロードを`A will message from MQTTX CLI`に設定します：
 
    ```bash
    $ mqttx conn -h 'localhost' -p 1883 --will-topic 't/1' --will-message 'A will message from MQTTX CLI'
    Connected
    ```
 
-2. Subscribe to topic `t/1` with another client for receiving the will messages:
+2. 別のクライアントでトピック`t/1`をサブスクライブし、will messageを受信できるようにします：
 
    ```bash
    mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
    ```
 
-3. Disconnect the client specified in step 1, then the client specified in step 2 will receive the will message:
+3. ステップ1で指定したクライアントを切断すると、ステップ2で指定したクライアントがwill messageを受信します：
 
    ```bash
    topic:  t/1
    payload:  A will message from MQTTX CLI
    ```
-

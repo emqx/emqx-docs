@@ -1,63 +1,63 @@
 ---
-title: EMQX Technical Support
-description: Find expert technical support for EMQX Enterprise, offering robust solutions and professional assistance to optimize your IoT middleware platform.
+title: EMQX テクニカルサポート
+description: EMQX Enterprise向けの専門的なテクニカルサポートをご提供し、堅牢なソリューションとプロフェッショナルな支援でIoTミドルウェアプラットフォームの最適化を支援します。
 ---
 
-# EMQX Technical Support
+# EMQX テクニカルサポート
 
-EMQ is the world's leading software provider of open-source IoT data infrastructure. We are dedicated to empowering future-proof IoT applications through one-stop, cloud-native products that connect, move, process, and analyze real-time IoT data—from edge to cloud to multi-cloud.
+EMQは、世界をリードするオープンソースIoTデータインフラストラクチャのソフトウェアプロバイダーです。エッジからクラウド、マルチクラウドまで、リアルタイムIoTデータの接続、移動、処理、分析を実現するワンストップのクラウドネイティブ製品を通じて、将来にわたって活用可能なIoTアプリケーションの実現を支援しています。
 
-Our core product EMQX, the world's most scalable and reliable open-source MQTT messaging platform, supports 100M concurrent IoT device connections per cluster while maintaining 1M message per second throughput and sub-millisecond latency. It boasts more than 20K+ enterprise users, connecting 100M+ IoT devices, and is trusted by over 400 customers in mission-critical IoT scenarios, including well-known brands like HPE, VMware, Verifone, SAIC Volkswagen and Ericsson.
+当社のコア製品であるEMQXは、世界で最もスケーラブルかつ信頼性の高いオープンソースのMQTTメッセージングプラットフォームであり、1クラスターあたり1億台のIoTデバイス同時接続をサポートし、毎秒100万メッセージのスループットとサブミリ秒のレイテンシを維持します。2万社以上の企業ユーザー、1億台以上のIoTデバイスを接続し、HPE、VMware、Verifone、上汽フォルクスワーゲン、エリクソンなどの著名ブランドを含む400社以上のミッションクリティカルなIoTシナリオで信頼されています。
 
-EMQ's global R&D center is located in Stockholm. We have 10+ offices throughout the Americas, Europe, and the Asia-Pacific region.
+EMQのグローバルR&Dセンターはストックホルムにあり、アメリカ大陸、ヨーロッパ、アジア太平洋地域に10以上のオフィスを展開しています。
 
-If you have any questions about EMQX products or our IoT solutions, you are welcome to contact us at:
+EMQX製品やIoTソリューションに関するご質問がございましたら、以下までお気軽にお問い合わせください。
 
 **EMQ**
 
-**Email:** [contact@emqx.io](mailto:contact@emqx.io)
+**メール:** [contact@emqx.io](mailto:contact@emqx.io)
 
-**Product Feedback**: [EMQX Support Portal](https://www.emqx.com/en/support)
+**製品フィードバック:** [EMQX Support Portal](https://www.emqx.com/en/support)
 
-**Sales:** [sales@emqx.io](mailto:sales@emqx.io)
+**営業:** [sales@emqx.io](mailto:sales@emqx.io)
 
-**Security:** [security@emqx.io](mailto:security@emqx.io)
+**セキュリティ:** [security@emqx.io](mailto:security@emqx.io)
 
-**Marketing:** [marketing@emqx.io](mailto:marketing@emqx.io)
+**マーケティング:** [marketing@emqx.io](mailto:marketing@emqx.io)
 
-**Address**: 
+**所在地:** 
 
-- Headquarter: #A303, Building 3, No.88 Longyuan Road, Yuhang District, Hangzhou, Zhejiang, China
-- Global R&D center: Stockholm Mazarinvägen 36 Sköndal, Stockholm, Sweden
-- Europe office: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
-- US office: Silicon Valley 305 Vineyard Town Center #140 Morgan Hill CA 95037
+- 本社： 中国 浙江省 杭州市 余杭区 龍源路88号 3号館 A303
+- グローバルR&Dセンター： スウェーデン ストックホルム Mazarinvägen 36 Sköndal
+- ヨーロッパオフィス： ドイツ フランクフルト Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M)
+- 米国オフィス： シリコンバレー 305 Vineyard Town Center #140 Morgan Hill CA 95037
 
-The EMQX service team provides you with professional support:
+EMQXサービスチームは、専門的なサポートを提供いたします：
 
-- You can contact the [EMQX service team](https://www.emqx.com/en/contact?product=emqx) for professional support on designing, deploying, or customizing your IoT solutions.
-- Browse the [EMQX Support Portal](https://www.emqx.com/en/support) to find out about the commercial support we cover.
+- IoTソリューションの設計、デプロイ、カスタマイズに関する専門的なサポートは、[EMQXサービスチーム](https://www.emqx.com/en/contact?product=emqx)までご連絡ください。
+- [EMQX Support Portal](https://www.emqx.com/en/support)では、当社が提供する商用サポート内容をご確認いただけます。
 
-**Commercial Support Level**
+**商用サポートレベル**
 
-| Features                  | Standard                                                     | Professional                                                 |
-| ------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Support hours             | 5*8                                                          | 7*24                                                         |
-| Email support             | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| Online chat tool support  | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| Telephone hotline support | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| Response time             | 8 hours                                                      | 2 hours                                                      |
-| Hot bug fixes             | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
-| 3rd-party plug-in support | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 機能                       | スタンダード                                               | プロフェッショナル                                         |
+| -------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| サポート時間               | 5*8                                                        | 7*24                                                       |
+| メールサポート             | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| オンラインチャットサポート | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 電話ホットラインサポート   | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| 応答時間                   | 8時間                                                      | 2時間                                                      |
+| 重要バグ修正               | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
+| サードパーティプラグインサポート | <img src="./assets/no-support.png" alt="no support" style="zoom:50%;" /> | <img src="./assets/support.png" alt="support" style="zoom:50%;" /> |
 
-For EMQX developers and users, you are welcome to join the EMQX forum, slack channel or visit Github pages to ask questions, find answers, and share ideas and best practices:
+EMQXの開発者およびユーザーの皆様は、EMQXフォーラムやSlackチャンネル、GitHubページにて質問、回答の検索、アイデアやベストプラクティスの共有にご参加いただけます：
 
-- [EMQX forum](https://www.emqx.io/forum/): Join the EMQX forum to ask questions about EMQX. 
-- [Slack](https://slack-invite.emqx.io/): To connect with EMQX developers and users worldwide.
-- [GitHub](https://github.com/emqx/emqx): To get EMQX codes, report issues, and request new features.
+- [EMQXフォーラム](https://www.emqx.io/forum/)：EMQXに関する質問を投稿できます。
+- [Slack](https://slack-invite.emqx.io/)：世界中のEMQX開発者やユーザーとつながれます。
+- [GitHub](https://github.com/emqx/emqx)：EMQXのコード取得、問題報告、新機能リクエストが可能です。
 
-You may also reach us at:
+また、以下のSNSでも情報発信やご連絡を受け付けております：
 
 - [Twitter](https://twitter.com/EMQTech)
-- [Youtube](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q)
+- [YouTube](https://www.youtube.com/channel/UC5FjR77ErAxvZENEWzQaO5Q)
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)

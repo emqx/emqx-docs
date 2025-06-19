@@ -1,37 +1,37 @@
-# In-flight and Message Queue
+# インフライトおよびメッセージキュー
 
-## Introduction
+## はじめに
 
-To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 messages in-flight at the same time. These sent but unconfirmed messages will be stored in the Inflight Window until acknowledgment is complete.
+メッセージのスループットを向上させ、ネットワークの変動による影響を軽減するために、EMQXは複数の未アック済みのQoS 1およびQoS 2メッセージを同時にインフライト状態に保つことができます。送信済みで未確認のメッセージは、アックが完了するまでインフライトウィンドウに格納されます。
 
-When the number of in-flight messages exceeds the limit, that is, the length limit of Inflight Window is reached(see `max_inflight`), EMQX will no longer send subsequent messages, but will store these messages in the Message Queue. Once a message is acknowledged in the Inflight Window, the message in the Message Queue will be sent in first-in, first-out order and stored in the Inflight Window.
+インフライトメッセージの数が制限値、すなわちインフライトウィンドウの長さ制限（`max_inflight`参照）を超えた場合、EMQXはそれ以上のメッセージを送信せず、これらのメッセージをメッセージキューに格納します。インフライトウィンドウ内のメッセージがアックされると、メッセージキュー内のメッセージが先入れ先出し（FIFO）順に送信され、インフライトウィンドウに格納されます。
 
-If the number of in-flight QoS 1, 2 messages reaches the maximum limit of the Inflight Window (see `max_inflight`), the newly arrived messages will not be forwarded immediately, but will be temporarily stored in the Message Queue. 
+QoS 1およびQoS 2のインフライトメッセージ数がインフライトウィンドウの最大制限（`max_inflight`参照）に達すると、新たに到着したメッセージは即座に転送されず、一時的にメッセージキューに保存されます。
 
-Messages in the Message Queue are sent in FIFO order and added to the Inflight Window only after previous messages have been confirmed and removed. QoS 0 messages, however, are not affected by this process and are always forwarded immediately.
+メッセージキュー内のメッセージはFIFO順に送信され、前のメッセージが確認されて削除された後にのみインフライトウィンドウに追加されます。ただし、QoS 0メッセージはこのプロセスの影響を受けず、常に即座に転送されます。
 
-If the Message Queue also reaches the length limit, subsequent messages will still be cached to the Message Queue, but the oldest message in the Message Queue will be discarded. Therefore, it is very important to set a suitable Message Queue length limit (see `max_mqueue_len`) 
+メッセージキューも長さ制限に達した場合、以降のメッセージは引き続きメッセージキューにキャッシュされますが、メッセージキュー内の最も古いメッセージが破棄されます。したがって、適切なメッセージキューの長さ制限（`max_mqueue_len`参照）を設定することが非常に重要です。
 
-The Message Queue is also used to store messages (including QoS 0 messages) that arrive while the subscriber is offline and that will be sent the next time the subscriber comes online. Considering that QoS 0 messages may have a lower importance, you can choose to disable EMQX from storing QoS 0 messages to the queue, see `mqueue_store_qos0`.
+また、メッセージキューはサブスクライバーがオフラインの間に到着したメッセージ（QoS 0メッセージを含む）を保存し、サブスクライバーが次回オンラインになった際に送信するためにも使用されます。QoS 0メッセージは重要度が低い場合があるため、EMQXがQoS 0メッセージをキューに保存するのを無効にすることも可能です（`mqueue_store_qos0`参照）。
 
-Note that the Inflight Window and Message Queue are not global. EMQX will allocate a separate Inflight Window and Message Queue for each client connection.
+なお、インフライトウィンドウとメッセージキューはグローバルではなく、EMQXは各クライアント接続ごとに個別のインフライトウィンドウとメッセージキューを割り当てます。
 
-## Inflight Window and Receive Maximum
+## インフライトウィンドウとReceive Maximum
 
-The MQTT v5 protocol adds a `Receive Maximum`  attribute to CONNECT packets, and the official explanation for it is:
+MQTT v5プロトコルはCONNECTパケットに`Receive Maximum`属性を追加しており、その公式説明は以下の通りです。
 
-> The client uses this value to limit the maximum number of published messages with a QoS of1 and a QoS of 2 that the client is willing to process simultaneously. There is no mechanism to limit the published messages with a QoS of 0 that the server is trying to send.
+> クライアントは、この値を使用して、同時に処理可能なQoS 1およびQoS 2のパブリッシュメッセージの最大数を制限します。サーバーが送信しようとするQoS 0のパブリッシュメッセージを制限する仕組みはありません。
 
-That is, the server can send subsequent PUBLISH packets to the client with different message identifiers while waiting for acknowledgment, until the number of unacknowledged messages reaches the `Receive Maximum` limit.
+つまり、サーバーはアックを待つ間に異なるメッセージ識別子を持つPUBLISHパケットをクライアントに送信できますが、未アックメッセージ数が`Receive Maximum`の制限に達するまで送信可能です。
 
-It is not difficult to see that `Receive Maximum` is actually the same as the Inflight Window mechanism in EMQX. However, EMQX already provided this function to the accessed MQTT client before the MQTT v5.0 protocol was released. Now, the clients using the MQTT v5.0 protocol will set the maximum length of the Inflight Window according to the specification of the Receive Maximum, while clients with earlier versions of the MQTT protocol will still set it according to the configuration.
+このことから、`Receive Maximum`は実質的にEMQXのインフライトウィンドウ機構と同じであることがわかります。ただし、EMQXはMQTT v5.0プロトコルがリリースされる前からこの機能をMQTTクライアントに提供していました。現在、MQTT v5.0プロトコルを使用するクライアントはReceive Maximumの仕様に従ってインフライトウィンドウの最大長を設定し、以前のバージョンのMQTTプロトコルを使用するクライアントは従来通り設定に基づいて設定されます。
 
-However, EMQX does not necessarily grant the `Receive Maximum` value requested in the CONNECT packet. Instead, the `Receive Maximum` granted in the CONNACK packet is capped by the `mqtt.max_inflight` configuration.
+ただし、EMQXはCONNECTパケットで要求された`Receive Maximum`の値を必ずしも許可するわけではありません。代わりに、CONNACKパケットで許可される`Receive Maximum`は`mqtt.max_inflight`設定によって上限が制限されます。
 
-## Configuration Items
+## 設定項目
 
-| Configuration Items    | Type    | Optional Value  | Default Value | Description                                                  |
-| ---------------------- | ------- | --------------- | ------------- | ------------------------------------------------------------ |
-| mqtt.max_inflight      | integer | (0, 65536)      | 32            | Inflight Window length limit, 0 means no limit               |
-| mqtt.max_mqueue_len    | integer | [0, ∞)          | 1000          | Message Queue length limit, 0 means no limit                 |
-| mqtt.mqueue_store_qos0 | enum    | `true`, `false` | true          | Whether EMQX stores QoS 0 messages to the Message Queue when the client is offline |
+| 設定項目               | 型       | オプション値       | デフォルト値 | 説明                                                             |
+| ---------------------- | -------- | ------------------ | ------------ | ---------------------------------------------------------------- |
+| mqtt.max_inflight      | integer  | (0, 65536)         | 32           | インフライトウィンドウの長さ制限。0は無制限を意味します          |
+| mqtt.max_mqueue_len    | integer  | [0, ∞)             | 1000         | メッセージキューの長さ制限。0は無制限を意味します                |
+| mqtt.mqueue_store_qos0 | enum     | `true`, `false`    | true         | クライアントがオフライン時にEMQXがQoS 0メッセージをメッセージキューに保存するかどうか |

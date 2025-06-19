@@ -1,28 +1,28 @@
-# Developer Guide
+# 開発者ガイド
 
-The Developer Guide is designed to provide developers with the information to get started with EMQX and build applications on top of it.
+開発者ガイドは、開発者がEMQXを使い始め、EMQX上でアプリケーションを構築するための情報を提供することを目的としています。
 
-This chapter explores the core concepts of MQTT, MQTT-specific features, and some extended features in EMQX. We will also explain how to configure these features in the EMQX Dashboard and test them using client tools. The following features are covered in the guide:
+本章では、MQTTの基本概念、MQTT特有の機能、およびEMQXの拡張機能について解説します。また、これらの機能をEMQXダッシュボードで設定し、クライアントツールを使ってテストする方法も説明します。ガイドで扱う機能は以下の通りです。
 
-- [MQTT Core Concepts](../messaging/mqtt-concepts.md)
-- [Test with MQTT Clients](../messaging/publish-and-subscribe.md)
-- [Shared Subscription](../messaging/mqtt-shared-subscription.md)
-- [Retained Message](../messaging/mqtt-retained-message.md)
-- [Will Message](../messaging/mqtt-will-message.md)
-- [Wildcard Subscription](../messaging/mqtt-wildcard-subscription.md)
-- [Exclusive Subscription](../messaging/mqtt-exclusive-subscription.md)
-- [Delayed Publish](../messaging/mqtt-delayed-publish.md)
-- [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
-- [Topic Rewrite](../messaging/mqtt-topic-rewrite.md)
+- [MQTTの基本概念](../messaging/mqtt-concepts.md)
+- [MQTTクライアントでのテスト](../messaging/publish-and-subscribe.md)
+- [共有サブスクリプション](../messaging/mqtt-shared-subscription.md)
+- [保持メッセージ](../messaging/mqtt-retained-message.md)
+- [遺言メッセージ](../messaging/mqtt-will-message.md)
+- [ワイルドカードサブスクリプション](../messaging/mqtt-wildcard-subscription.md)
+- [排他サブスクリプション](../messaging/mqtt-exclusive-subscription.md)
+- [遅延パブリッシュ](../messaging/mqtt-delayed-publish.md)
+- [自動サブスクライブ](../messaging/mqtt-auto-subscription.md)
+- [トピック書き換え](../messaging/mqtt-topic-rewrite.md)
 
-Additionally, this guide introduces EMQX's [MQTT Durable Session](../durability/durability_introduction.md) feature and provides steps for quickly experiencing this feature.
+さらに、本ガイドではEMQXの[MQTT Durable Session](../durability/durability_introduction.md)機能を紹介し、この機能を素早く体験するための手順も提供します。
 
-EMQX's support of the MQTT protocol makes it compatible with most MQTT client libraries and SDKs. The developer guide provides [step-by-step instructions and code samples](./introduction.md) to help developers start building their MQTT projects quickly. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
+EMQXはMQTTプロトコルをサポートしているため、ほとんどのMQTTクライアントライブラリやSDKと互換性があります。開発者ガイドでは、開発者が迅速にMQTTプロジェクトを開始できるように、[ステップバイステップの手順とコードサンプル](./introduction.md)を提供しています。MQTTクライアントSDKの完全なリストと比較については、[MQTTクライアントSDK](https://www.emqx.com/en/mqtt-client-sdk)をご覧ください。
 
 ::: tip
 
-Not all SDKs are displayed on the document.
+すべてのSDKがドキュメントに表示されているわけではありません。
 
 :::
 
-EMQX also provides API documents to facilitate your development. [REST API](../admin/api.md) guides you on quickly getting started with the HTTP management API exposed by EMQX.
+また、EMQXは開発を支援するためのAPIドキュメントも提供しています。[REST API](../admin/api.md)では、EMQXが公開するHTTP管理APIの迅速な利用方法を案内しています。

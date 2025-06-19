@@ -1,12 +1,12 @@
-# Multi-Protocol Gateway
+# マルチプロトコルゲートウェイ
 
-EMQX Multi-Protocol Gateway enables handling all non-MQTT protocol connections, authentication, and message sending and receiving. It provides a unified conceptual model for various protocols.
+EMQX マルチプロトコルゲートウェイは、MQTT以外のすべてのプロトコル接続、認証、およびメッセージの送受信を処理する機能を提供します。さまざまなプロトコルに対して統一された概念モデルを提供します。
 
-Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different designs and implementations, making it challenging to use them.
+EMQX 5.0以前は、MQTT以外のプロトコルアクセスは個別のプロトコルプラグインによって実装されており、これらのプラグインは設計や実装が異なっていたため、利用が難しい面がありました。
 
-Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
+5.0以降、EMQXはマルチプロトコルゲートウェイとして統一された概念および運用モデルを定義し、より使いやすくなっています。
 
-The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the REST API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
+マルチプロトコルゲートウェイは、MQTT-SN、STOMP、CoAP、LwM2Mなどのプロトコルをサポートしています。Dashboard上で直接有効化・設定できるほか、REST APIや`base.hocon`を用いて管理することも可能です。これらのゲートウェイの有効化方法や、ビジネスニーズに合わせた設定カスタマイズについては、以下のリンクをご参照ください。
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
@@ -19,25 +19,24 @@ The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2
 - [JT/T 808](./jt808.md)
 - [NATS](./nats.md)
 
-## How the Multi-Protocol Gateway Works
+## マルチプロトコルゲートウェイの仕組み
 
-EMQX Multi-Protocol Gateway defines a unified conceptual and operational model for several key components, including listeners, connections/sessions, publish/subscribe, authentication, and authorization. 
+EMQX マルチプロトコルゲートウェイは、リスナー、コネクション／セッション、パブリッシュ／サブスクライブ、認証、認可など、いくつかの主要コンポーネントに対して統一された概念および運用モデルを定義しています。
 
-<img src="./assets/gateway_struct.png" alt="gateway_struct" style="zoom:50%;" />
+<img src="./assets/gateway_struct.png" alt="ゲートウェイ構造" style="zoom:50%;" />
 
-Here's a brief overview of each component:
+各コンポーネントの概要は以下の通りです：
 
-- **Listener**: Support listener types: TCP, SSL, UDP, DTLS. Each gateway can create multiple listeners.
-- **Connection/Session**: Gateway creates a session for each accepted client connection, which manages the subscription list, deliver/receive queue, and the retransmission logic of client messages.
-- **Publish/Subscribe**: Each type of gateway defines how to adapt to the MQTT protocol's PUB/SUB message model. Non-PUB/SUB protocols require configuring message topics and payloads, and each type of gateway may use a different message format.
+- **リスナー**：TCP、SSL、UDP、DTLSのリスナータイプをサポートします。各ゲートウェイは複数のリスナーを作成可能です。
+- **コネクション／セッション**：ゲートウェイは受け入れたクライアントコネクションごとにセッションを作成し、サブスクリプションリスト、送受信キュー、クライアントメッセージの再送制御を管理します。
+- **パブリッシュ／サブスクライブ**：各ゲートウェイタイプは、MQTTプロトコルのPUB/SUBメッセージモデルへの適応方法を定義します。PUB/SUBを持たないプロトコルではメッセージのトピックやペイロードの設定が必要であり、ゲートウェイタイプごとに異なるメッセージフォーマットを使用する場合があります。
+- **認証**：各ゲートウェイは認証機能を設定でき、クライアント情報を用いたログイン認可を行います。
 
-- **Authentication**: Each gateway can be configured with authenticators to use the client information for login authorization.
+## 主な機能
 
-## Key Features
+### リスナー
 
-### Listener
-
-Each gateway can have multiple listeners enabled, and different protocol gateways support the following listener types:
+各ゲートウェイは複数のリスナーを有効化でき、プロトコルごとに以下のリスナータイプをサポートしています：
 
 |            | TCP  | UDP  | SSL  | DTLS | Websocket | Websocket over TLS |
 | ---------- | ---- | ---- | ---- | ---- | --------- | ------------------ |
@@ -50,76 +49,75 @@ Each gateway can have multiple listeners enabled, and different protocol gateway
 | GB/T 32960 | ✔︎    |      | ✔︎    |      |           |                    |
 | JT/T 808   | ✔︎    |      |      | ✔︎    |           |                    |
 | NATS       | ✔︎    |      | ✔︎    |      | ✔︎         | ✔︎                  |
-### Message Format
 
-To ensure compatibility with the PUB/SUB messaging model, each gateway type must adapt to the presence or absence of a PUB/SUB concept in its underlying protocol.
+### メッセージフォーマット
 
-For protocols with a PUB/SUB concept, like [MQTT-SN](./mqttsn.md) and [Stomp](./stomp.md), compatibility is achieved by using the client-sent topic and payload, and no message format conversion is needed.
+PUB/SUBメッセージモデルとの互換性を確保するため、各ゲートウェイタイプは基盤となるプロトコルにPUB/SUBの概念があるかどうかに適応する必要があります。
 
-For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](./lwm2m.md), there are no definitions for topics, publishing, or subscribing. Here, the gateway must design the message content format, with each type potentially using a distinct format.
+PUB/SUBの概念を持つプロトコル（[MQTT-SN](./mqttsn.md)、[STOMP](./stomp.md)など）では、クライアントが送信するトピックとペイロードをそのまま使用するため、メッセージフォーマットの変換は不要です。
 
-- **CoAP**: The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) standard. For details, see [Message Publish](./coap.md#message-publish), [Topic Subscribe](./coap.md#topic-subscribe), [Topic Unsubscribe](./coap.md#topic-unsubscribe).
-- **LwM2M**: The messaging model of LwM2M protocol is based on the [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
+一方、[CoAP](./coap.md)や[LwM2M](./lwm2m.md)のようにPUB/SUBの概念を持たないプロトコルでは、トピックやパブリッシュ・サブスクライブの定義がなく、ゲートウェイ側でメッセージ内容のフォーマットを設計する必要があります。各ゲートウェイタイプで異なるフォーマットを使用する場合があります。
 
-### Authentications
+- **CoAP**：CoAPゲートウェイは、[Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09)標準で定義されたURIパスとメソッドを使用します。詳細は[メッセージパブリッシュ](./coap.md#message-publish)、[トピックサブスクライブ](./coap.md#topic-subscribe)、[トピックサブスクライブ解除](./coap.md#topic-unsubscribe)をご参照ください。
+- **LwM2M**：LwM2Mプロトコルのメッセージモデルは、[Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html)に基づいており、MQTTのパブリッシュ／サブスクライブモデルとは全く異なります。詳細は[LwM2Mゲートウェイ - メッセージフォーマット](./lwm2m.md#message-format)をご覧ください。
 
-Authentication is the process of verifying the identity of a client attempting to connect to a system. Starting from version 5.0, the gateway supports authenticators for login authorization. 
+### 認証
 
-Different gateways may support different types of authenticators, but all gateways support HTTP-based authentication. [HTTP-based authentication](../access-control/authn/http.md). See the table below for the authentication types supported:
+認証は、システムに接続しようとするクライアントの身元を検証するプロセスです。バージョン5.0以降、ゲートウェイはログイン認可のための認証機能をサポートしています。
 
-|            | HTTP Server | Built-in Database | MySQL | MongoDB | PostgreSQL | Redis | JWT  | LDAP |
-| ---------- | ----------- | ----------------- | ----- | ------- | ---------- | ----- | ---- | ---- |
-| MQTT-SN    | ✔︎           |                   |       |         |            |       |      |      |
-| STOMP      | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| CoAP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| LwM2M      | ✔︎           |                   |       |         |            |       |      |      |
-| Exproto    | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| OCPP       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
-| GB/T 32960 | ✔︎           |                   |       |         |            |       |      |      |
-| JT/T 808   | N/A         | N/A               | N/A   | N/A     | N/A        | N/A   | N/A  |      |
-| NATS       | ✔︎           | ✔︎                 | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+ゲートウェイによってサポートされる認証タイプは異なりますが、すべてのゲートウェイでHTTPベースの認証が利用可能です。[HTTPベース認証](../access-control/authn/http.md)をご参照ください。以下の表はサポートされる認証タイプの一覧です：
 
-Note: Any client can log in if no authenticator is configured. 
+|            | HTTPサーバー | 組み込みデータベース | MySQL | MongoDB | PostgreSQL | Redis | JWT  | LDAP |
+| ---------- | ------------ | -------------------- | ----- | ------- | ---------- | ----- | ---- | ---- |
+| MQTT-SN    | ✔︎           |                      |       |         |            |       |      |      |
+| STOMP      | ✔︎           | ✔︎                    | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+| CoAP       | ✔︎           | ✔︎                    | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+| LwM2M      | ✔︎           |                      |       |         |            |       |      |      |
+| Exproto    | ✔︎           | ✔︎                    | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+| OCPP       | ✔︎           | ✔︎                    | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
+| GB/T 32960 | ✔︎           |                      |       |         |            |       |      |      |
+| JT/T 808   | N/A          | N/A                  | N/A   | N/A     | N/A        | N/A   | N/A  |      |
+| NATS       | ✔︎           | ✔︎                    | ✔︎     | ✔︎       | ✔︎          | ✔︎     | ✔︎    | ✔︎    |
 
-#### How Authentication Works on the Gateway
+注：認証機能が設定されていない場合は、どのクライアントもログイン可能です。
 
-The EMQX Multi-Protocol Gateway is responsible for authenticating clients that connect to it. This is accomplished through the creation of a `ClientInfo` for each connection.
+#### ゲートウェイにおける認証の仕組み
 
-The `ClientInfo` includes generic fields such as `Username` and `Password`, which are commonly used for authentication purposes. Additionally, each gateway has its own specific client information fields, such as `Endpoint Name` for LwM2M, which may also be used for authentication.
+EMQX マルチプロトコルゲートウェイは、接続してくるクライアントの認証を担当します。これは各コネクションに対して`ClientInfo`を作成することで実現されます。
 
-When an authenticator is configured, the gateway compares the client's Username and Password fields with those stored in its database. If they match, the client is authenticated and granted access to the gateway.
+`ClientInfo`には、認証に一般的に使用される`Username`や`Password`などの汎用フィールドが含まれます。さらに、LwM2Mの`Endpoint Name`のように、各ゲートウェイ固有のクライアント情報フィールドも存在し、これらも認証に利用される場合があります。
 
+認証機能が設定されている場合、ゲートウェイはクライアントのUsernameおよびPasswordを自身のデータベースに保存された情報と照合し、一致すればクライアントを認証しゲートウェイへのアクセスを許可します。
 
 ::: tip
 
-Client ID for different gateways can be duplicated, but when a duplicated Client ID logs in to a gateway, it will terminate the existing session associated with that Client ID.
+異なるゲートウェイ間でクライアントIDは重複しても問題ありませんが、同一ゲートウェイ内でクライアントIDが重複してログインすると、既存のそのクライアントIDに紐づくセッションは切断されます。
 
 :::
 
-## Integration with External Systems
+## 外部システムとの連携
 
-For better integration with external systems, the gateway also supports hooks defined in the EMQX.
+外部システムとの連携を強化するため、ゲートウェイはEMQXで定義されたフックもサポートしています。
 
-Due to the heterogeneity of semantics between gateways, only some of the core hooks are available.
+ただし、ゲートウェイ間の意味論の違いにより、コアフックの一部のみが利用可能です。
 
-Client connection-related hooks with the following supportability:
+クライアント接続に関連するフックのサポート状況は以下の通りです：
 
-For improved interoperability with external systems, the gateway is designed to support hooks as defined in EMQX.
+外部システムとの相互運用性向上のため、ゲートウェイはEMQXで定義されたフックをサポートする設計となっています。
 
-However, due to the differences in semantics among various gateways, only a subset of the core hooks can be utilized, see the table below for the client connection-related hooks supported: 
+しかし、各ゲートウェイ間の意味論の違いにより、利用可能なコアフックは一部に限られます。以下の表はクライアント接続関連のサポートされるフック一覧です：
 
-| Name                  | Required or Not | Description                                                  | Supported Protocols |
-| --------------------- | --------------- | ------------------------------------------------------------ | ------------------- |
-| `client.connect`      | Optional        | Number of client connection requests, including successful or failed connection requests | All gateways        |
-| `client.connack`      | Optional        | Number of `CONNACK` messages received by the clients         | All gateways        |
-| `client.authenticate` | Required        | Number of clients authenticated                              |                     |
-| `client.connected`    | Required        | Number of clients connected successfully                     | All gateways        |
-| `client.disconnected` | Required        | Number of clients disconnected, including active or abnormal disconnections | All gateways        |
-| `client.authorize`    | Required        | Number of authorized clients publish/subscribe requests      | All gateways        |
-| `client.subscribe`    | Optional        | Number of client's attempts to subscribe to a topic          | MQTT-SN<br />STOMP    |
-| `client.unsubscribe`  | Optional        | Number of client's attempts to unsubscribe from a topic      | MQTT-SN<br/>STOMP   |
+| 名前                   | 必須かどうか    | 説明                                                         | 対応プロトコル       |
+| ---------------------- | --------------- | ------------------------------------------------------------ | -------------------- |
+| `client.connect`       | 任意            | クライアント接続要求の数（成功・失敗を含む）                 | 全ゲートウェイ       |
+| `client.connack`       | 任意            | クライアントが受信した`CONNACK`メッセージの数                | 全ゲートウェイ       |
+| `client.authenticate`  | 必須            | 認証されたクライアントの数                                    |                      |
+| `client.connected`     | 必須            | 正常に接続されたクライアントの数                              | 全ゲートウェイ       |
+| `client.disconnected`  | 必須            | クライアントの切断数（正常切断および異常切断を含む）          | 全ゲートウェイ       |
+| `client.authorize`     | 必須            | 認可されたクライアントのパブリッシュ／サブスクライブ要求数    | 全ゲートウェイ       |
+| `client.subscribe`     | 任意            | クライアントのトピックサブスクライブ試行数                    | MQTT-SN<br />STOMP   |
+| `client.unsubscribe`   | 任意            | クライアントのトピックサブスクライブ解除試行数                | MQTT-SN<br/>STOMP    |
 
-Session and message-related hooks have no heterogeneity issues between protocols, so these hooks are fully supported for each type of gateway.
+セッションおよびメッセージ関連のフックはプロトコル間の意味論の違いがないため、各ゲートウェイタイプで完全にサポートされています。
 
-For a detailed explanation of hooks, see [Hooks](../extensions/hooks.md).
-
+フックの詳細については[Hooks](../extensions/hooks.md)をご参照ください。

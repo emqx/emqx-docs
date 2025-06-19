@@ -1,87 +1,87 @@
-# NATS Protocol Gateway
+# NATS プロトコルゲートウェイ
 
-Starting from EMQX 5.10.0, EMQX introduces the NATS protocol gateway based on the [NATS Protocol](https://docs.nats.io/reference/reference-protocols/nats-protocol). It enables EMQX to accept connections from NATS clients and perform message interoperability with MQTT. This document describes its capabilities and guides you through the process of enabling and configuring the NATS gateway.
+EMQX 5.10.0 以降、EMQX は [NATS プロトコル](https://docs.nats.io/reference/reference-protocols/nats-protocol) に基づく NATS プロトコルゲートウェイを導入しました。これにより、EMQX は NATS クライアントからの接続を受け入れ、MQTT とのメッセージ相互運用を実現します。本ドキュメントでは、その機能概要と NATS ゲートウェイの有効化および設定方法について説明します。
 
-## Feature Overview
+## 機能概要
 
-The NATS protocol gateway currently supports the following core features:
+NATS プロトコルゲートウェイは現在、以下の主要な機能をサポートしています。
 
-### Protocol Support
+### プロトコルサポート
 
-- **Full support for NATS protocol message types**:
-  - Connection and session management: `INFO`, `CONNECT`
-  - Message publish/subscribe: `PUB`, `HPUB`, `SUB`, `UNSUB`
-  - Message delivery and response: `MSG`, `HMSG`
-  - Heartbeats and status: `PING`, `PONG`, `+OK`, `-ERR`
-- **Verbose mode support**: Enables response acknowledgment when clients connect with `CONNECT verbose=true`.
+- **NATS プロトコルのメッセージタイプを完全サポート**：
+  - 接続およびセッション管理：`INFO`、`CONNECT`
+  - メッセージのパブリッシュ／サブスクライブ：`PUB`、`HPUB`、`SUB`、`UNSUB`
+  - メッセージ配信および応答：`MSG`、`HMSG`
+  - ハートビートおよびステータス：`PING`、`PONG`、`+OK`、`-ERR`
+- **冗長モード（Verbose mode）対応**：クライアントが `CONNECT verbose=true` で接続した場合に応答確認を有効化。
 
-### Interoperability with MQTT
+### MQTT との相互運用性
 
-- **Bidirectional message interoperability with MQTT**:
-  - Messages published by NATS clients are translated into MQTT publishes.
-  - MQTT messages are forwarded to NATS clients subscribed to the corresponding topics.
-- **Support for NATS wildcard subscriptions**, automatically converted to MQTT-compatible topic formats.
-- **Support for Queue Group shared subscriptions**: NATS Queue Group subscriptions are converted to the MQTT shared subscription format.
-- **Support for Request/Reply mode**, including:
-  - Requests from NATS clients are translated into MQTT requests.
-  - If no MQTT subscriber is found for the target topic, EMQX returns an error response quickly.
+- **MQTT との双方向メッセージ相互運用**：
+  - NATS クライアントからパブリッシュされたメッセージは MQTT のパブリッシュに変換されます。
+  - MQTT メッセージは対応するトピックをサブスクライブしている NATS クライアントに転送されます。
+- **NATS のワイルドカードサブスクリプションをサポート**し、MQTT 互換のトピック形式に自動変換。
+- **Queue Group の共有サブスクリプションをサポート**：NATS Queue Group サブスクリプションは MQTT の共有サブスクリプション形式に変換されます。
+- **リクエスト／レスポンスモードをサポート**：
+  - NATS クライアントからのリクエストは MQTT リクエストに変換されます。
+  - 対象トピックに MQTT サブスクライバーが存在しない場合、EMQX は速やかにエラー応答を返します。
 
-### Networking and Connectivity
+### ネットワークおよび接続性
 
-- **Multiple transport protocols supported**: TCP, TLS, WebSocket (WS), and WebSocket over TLS (WSS).
+- **複数のトランスポートプロトコルをサポート**：TCP、TLS、WebSocket（WS）、および TLS 上の WebSocket（WSS）。
 
-## Cross-Protocol Messaging Between NATS and MQTT
+## NATS と MQTT 間のクロスプロトコルメッセージング
 
-The NATS protocol is fully compatible with the publish/subscribe messaging model and interoperates with MQTT messaging through the NATS gateway. The conversion rules are as follows:
+NATS プロトコルはパブリッシュ／サブスクライブメッセージングモデルに完全対応しており、NATS ゲートウェイを介して MQTT メッセージと相互運用します。変換ルールは以下の通りです。
 
-- **PUB and HPUB messages are treated as publish operations**:
-  - The topic is derived from the `subject` field in the PUB message. For example, `t.a` will be converted to MQTT topic `t/a`.
-  - The message payload is taken directly from the PUB message body.
-  - If the client connects with `CONNECT verbose=1`, the translated MQTT message uses QoS 1; otherwise, QoS is set to 0.
-- **SUB messages are treated as subscription requests**:
-  - The topic is derived from the `subject` field in the SUB message. For example, `t.a` will be converted to MQTT topic `t/a`.
-  - QoS follows the same rule: `verbose=1` results in QoS 1; otherwise, QoS 0.
-  - Wildcards are supported. For example, `*.b.>` is converted to `+/b/#`.
-  - Queue Groups are supported. The Queue Group value in the SUB message is converted into the group name for MQTT shared subscriptions.
-- **UNSUB messages are treated as unsubscription requests**, and the subscription ID (sid) is used to identify the subscription to be removed.
-
-::: tip
-
-The NATS gateway does not implement its own access control for publish/subscribe operations. Topic permissions must be managed using the unified [authorization configuration](../access-control/authz/authz.md).
-
-:::
-
-## Enable the NATS Gateway
-
-Starting from EMQX 5.10.0, the NATS gateway can be enabled in three ways:
-
-- Through the Dashboard
-- Using the REST API
-- By editing the `base.hocon` configuration file
+- **PUB および HPUB メッセージはパブリッシュ操作として扱われます**：
+  - トピックは PUB メッセージの `subject` フィールドから派生します。例：`t.a` は MQTT トピック `t/a` に変換されます。
+  - メッセージのペイロードは PUB メッセージの本文から直接取得されます。
+  - クライアントが `CONNECT verbose=1` で接続した場合、変換後の MQTT メッセージは QoS 1 を使用し、それ以外は QoS 0 となります。
+- **SUB メッセージはサブスクリプション要求として扱われます**：
+  - トピックは SUB メッセージの `subject` フィールドから派生します。例：`t.a` は MQTT トピック `t/a` に変換されます。
+  - QoS は同様のルールに従い、`verbose=1` であれば QoS 1、それ以外は QoS 0。
+  - ワイルドカードをサポートします。例：`*.b.>` は `+/b/#` に変換されます。
+  - Queue Group をサポートします。SUB メッセージの Queue Group 値は MQTT 共有サブスクリプションのグループ名に変換されます。
+- **UNSUB メッセージはサブスクリプション解除要求として扱われ、サブスクリプション ID（sid）で解除対象を特定します**。
 
 ::: tip
 
-In cluster mode, configurations made via the Dashboard or REST API are automatically applied across all nodes. To apply settings to a specific node only, use the `base.hocon` configuration file on that node.
+NATS ゲートウェイはパブリッシュ／サブスクライブ操作に対する独自のアクセス制御を実装していません。トピックの権限管理は統一された[認可設定](../access-control/authz/authz.md)で行う必要があります。
 
 :::
 
-### Enable via Dashboard
+## NATS ゲートウェイの有効化
 
-To quickly enable the NATS gateway from the EMQX Dashboard:
+EMQX 5.10.0 以降、NATS ゲートウェイは以下の3つの方法で有効化できます。
 
-1. Navigate to **Management** -> **Gateways** in the left-hand menu.
-2. On the **Gateways** page, locate **NATS** and click the **Setup** button in the **Actions** column to enter the **Initialize NATS** setup wizard.
-3. Follow the steps in the wizard:
-   - On the **Basic Configuration** step, accept the default values and click **Next**.
-   - On the **Listeners** step, either configure a listener or skip and click **Next**.
-      (For detailed listener configuration, see [Add a Listener](#add-a-listener).)
-   - Click **Enable** to activate the NATS gateway.
+- ダッシュボードから
+- REST API を使用して
+- `base.hocon` 設定ファイルを編集して
 
-Once activation is complete, you will be redirected to the **Gateways** page, where the status of the NATS gateway will show as **Enabled**.
+::: tip
 
-### Enable via REST API
+クラスター モードでは、ダッシュボードまたは REST API で行った設定はすべてのノードに自動的に適用されます。特定のノードのみに設定を適用したい場合は、そのノードの `base.hocon` 設定ファイルを使用してください。
 
-You can use the following example to enable the NATS gateway via the REST API:
+:::
+
+### ダッシュボードから有効化
+
+EMQX ダッシュボードから NATS ゲートウェイを素早く有効化する手順：
+
+1. 左メニューの **管理** -> **ゲートウェイ** に移動します。
+2. **ゲートウェイ** ページで **NATS** を探し、**操作** 列の **セットアップ** ボタンをクリックして **NATS 初期化** ウィザードを開きます。
+3. ウィザードの手順に従います：
+   - **基本設定** ステップではデフォルト値を受け入れ、**次へ** をクリック。
+   - **リスナー** ステップではリスナーを設定するかスキップして **次へ** をクリック。
+     （詳細なリスナー設定は [リスナーの追加](#add-a-listener) を参照してください。）
+   - **有効化** をクリックして NATS ゲートウェイを起動します。
+
+有効化が完了すると、**ゲートウェイ** ページにリダイレクトされ、NATS ゲートウェイの状態が **有効** と表示されます。
+
+### REST API で有効化
+
+以下の例は REST API を使って NATS ゲートウェイを有効化する方法です。
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
@@ -101,11 +101,11 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/nats' \
     }
   ]
 }'
-
 ```
-### Enable via Configuration File
 
-You can use the following configuration example to enable the NATS gateway via `base.hocon`:
+### 設定ファイルで有効化
+
+`base.hocon` を編集して NATS ゲートウェイを有効化する例は以下の通りです。
 
 ```properties
 gateway.nats {
@@ -120,111 +120,112 @@ gateway.nats {
   }
 }
 ```
-The NATS gateway supports TCP, SSL, WS, and WSS type listeners. For the complete list of configurable parameters, refer to the gateway configuration - listeners section in the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
-## Customize Your NATS Gateway
+NATS ゲートウェイは TCP、SSL、WS、WSS タイプのリスナーをサポートします。設定可能なパラメータの完全な一覧は、[EMQX Enterprise 設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) のゲートウェイ設定 - リスナーセクションを参照してください。
 
-In addition to the default settings, EMQX provides various configuration options to better suit your specific business needs. This section provides a detailed overview of the available options on the **Gateways** page.
+## NATS ゲートウェイのカスタマイズ
 
-### Basic Settings
+デフォルト設定に加え、EMQX は特定のビジネスニーズに合わせてさまざまな設定オプションを提供しています。本節では **ゲートウェイ** ページで利用可能な設定項目を詳細に説明します。
 
-1. On the **Gateways** page, locate **NATS** and click the **Settings** button in the **Actions** column.
+### 基本設定
 
-2. In the **Settings** tab, you can configure the gateway's connection parameters, mountpoint prefix, and client identity overrides.
+1. **ゲートウェイ** ページで **NATS** を探し、**操作** 列の **設定** ボタンをクリックします。
 
-   - **Server Name**: A unique identifier for the gateway, used for internal reference. Default: `emq_nats_gateway`.
+2. **設定** タブで、ゲートウェイの接続パラメータ、マウントポイントプレフィックス、クライアント識別情報の上書きを設定できます。
 
-   - **Mountpoint**: A string prefix automatically added to all topics passing through the gateway. This helps isolate topics between protocols. For example, using `nats/` enables cross-protocol routing without requiring clients to manually include the prefix.
+   - **サーバー名**：ゲートウェイの内部参照用の一意識別子。デフォルトは `emq_nats_gateway`。
 
-   - **Default Heartbeat Interval**: The interval at which the server sends `PING` packets to check if the client is still alive. Default: `60` seconds.
+   - **マウントポイント**：ゲートウェイを通過するすべてのトピックに自動的に付加される文字列プレフィックス。プロトコル間のトピック分離に役立ちます。例として `nats/` を使用すると、クライアントが手動でプレフィックスを付けることなくクロスプロトコルルーティングが可能になります。
 
-   - **Heartbeat Timeout Threshold**: If the client fails to respond within this time frame, it is considered disconnected.
+   - **デフォルトハートビート間隔**：サーバーがクライアントの生存確認のために `PING` パケットを送信する間隔（秒）。デフォルトは `60` 秒。
 
-   - **Maximum Payload Size**: The maximum size (in bytes) of a single `PUB` or `HPUB` message payload. Default: `1048576` bytes.
+   - **ハートビートタイムアウト閾値**：クライアントが応答しない場合に切断とみなす時間。
 
-   - **Idle Timeout**: The period (in seconds) after which an inactive client connection is considered stale and will be closed. Default: `30` seconds.
+   - **最大ペイロードサイズ**：単一の `PUB` または `HPUB` メッセージのペイロード最大サイズ（バイト）。デフォルトは `1048576` バイト。
 
-   - **Enable Statistics**: Whether to enable statistics collection and reporting for this gateway. Default: enabled.
+   - **アイドルタイムアウト**：非アクティブなクライアント接続を切断するまでの秒数。デフォルトは `30` 秒。
 
-   - **Client Info Override**: Defines how to extract authentication information from the `CONNECT` packet.
+   - **統計情報の有効化**：このゲートウェイの統計収集およびレポートを有効にするかどうか。デフォルトは有効。
+
+   - **クライアント情報の上書き**：`CONNECT` パケットから認証情報を抽出する方法を定義。
 
      ::: tip
 
-     When authentication is enabled, make sure to map the correct fields for `username` and `password` to ensure proper credential processing.
+     認証が有効な場合は、`username` と `password` の正しいフィールドをマッピングして、適切に資格情報を処理できるようにしてください。
 
      :::
 
-     - **Username**: Maps to the `user` field in the `CONNECT` packet.
-     - **Password**: Maps to the `pass` field in the `CONNECT` packet.
-     - **Client ID**: Can be set to `${generated}` for auto-generation, or customized using specific logic.
+     - **ユーザー名**：`CONNECT` パケットの `user` フィールドにマッピング。
+     - **パスワード**：`CONNECT` パケットの `pass` フィールドにマッピング。
+     - **クライアント ID**：`${generated}` を指定すると自動生成されます。特定のロジックでカスタマイズも可能。
 
-3. Click **Update** to apply your changes.
+3. **更新** をクリックして変更を適用します。
 
-### Add a Listener
+### リスナーの追加
 
-You can further customize your gateway by editing, deleting, or adding new listeners in the **Listeners** tab.
+**リスナー** タブでリスナーの編集、削除、新規追加が可能です。
 
-1. In the **Listeners** tab, click **+ Add Listener**.
+1. **リスナー** タブで **+ リスナー追加** をクリックします。
 
-2. In the **Add Listener** dialog, configure the following options:
+2. **リスナー追加** ダイアログで以下のオプションを設定します。
 
-   **Basic Settings**
+   **基本設定**
 
-   - **Name**: A unique name to identify the listener.
-   - **Type**: Select the listener type. Supported options for NATS are `tcp`, `ssl`, `ws`, and `wss`.
-   - **Bind**: The port on which the listener will accept incoming connections.
+   - **名前**：リスナーを識別する一意の名前。
+   - **タイプ**：リスナーの種類を選択。NATS では `tcp`、`ssl`、`ws`、`wss` がサポートされています。
+   - **バインド**：リスナーが接続を受け付けるポート番号。
 
-   **Listener Settings**
+   **リスナー設定**
 
-   - **Max Connections**: The maximum number of concurrent connections allowed. Default: `1024000`.
-   - **Max Connection Rate (Listener)**: Maximum number of new connections accepted per second. Default: `1000`.
-   - **Proxy Protocol**: Whether to enable Proxy Protocol v1/v2. Default: `false`.
-   - **Proxy Protocol Timeout**: Timeout for receiving the Proxy Protocol header. If no header is received within the specified time, the connection is closed. Default: `3` seconds.
+   - **最大接続数**：同時接続の最大数。デフォルトは `1024000`。
+   - **最大接続レート（リスナー）**：1秒あたりに受け入れる新規接続の最大数。デフォルトは `1000`。
+   - **プロキシプロトコル**：Proxy Protocol v1/v2 の有効化。デフォルトは `false`。
+   - **プロキシプロトコルタイムアウト**：Proxy Protocol ヘッダー受信のタイムアウト。指定時間内にヘッダーが受信されない場合、接続を切断。デフォルトは `3` 秒。
 
-   **Verify Peer Settings** (only applicable for SSL and WSS listeners)
+   **ピア検証設定**（SSL および WSS リスナーのみ適用）
 
-   Mutual TLS is enabled by default. You must configure the TLS certificate, private key, and CA certificate. These can be uploaded or directly pasted into the form fields. For more information, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
+   相互 TLS はデフォルトで有効です。TLS 証明書、秘密鍵、CA 証明書を設定する必要があります。これらはアップロードまたは直接フォームに貼り付け可能です。詳細は [SSL/TLS 接続の有効化](../network/emqx-mqtt-tls.md) を参照してください。
 
-   - **TLS Cert**: The TLS certificate file path or its contents.
-   - **TLS Key**: The TLS private key file path or its contents.
-   - **CA Cert**: The CA certificate file path or its contents.
-   - **Force Verify Peer Certificate**: Whether to require client certificate verification. Default: `true`.
+   - **TLS 証明書**：TLS 証明書のファイルパスまたは内容。
+   - **TLS キー**：TLS 秘密鍵のファイルパスまたは内容。
+   - **CA 証明書**：CA 証明書のファイルパスまたは内容。
+   - **ピア証明書の強制検証**：クライアント証明書検証を必須にするか。デフォルトは `true`。
 
-3. Click **Add** to complete listener creation.
+3. **追加** をクリックしてリスナー作成を完了します。
 
-### Configure Authentication
+### 認証の設定
 
-The NATS protocol supports various authentication methods, including username/password and token-based authentication. The NATS gateway supports the following authentication backends:
+NATS プロトコルはユーザー名／パスワード認証やトークン認証など複数の認証方式をサポートしています。NATS ゲートウェイは以下の認証バックエンドをサポートします。
 
-- [Built-in Database Authentication](../access-control/authn/mnesia.md)
-- [MySQL Authentication](../access-control/authn/mysql.md)
-- [MongoDB Authentication](../access-control/authn/mongodb.md)
-- [PostgreSQL Authentication](../access-control/authn/postgresql.md)
-- [Redis Authentication](../access-control/authn/redis.md)
-- [HTTP Server Authentication](../access-control/authn/http.md)
-- [JWT Authentication](../access-control/authn/jwt.md)
-- [LDAP Authentication](../access-control/authn/ldap.md)
+- [組み込みデータベース認証](../access-control/authn/mnesia.md)
+- [MySQL 認証](../access-control/authn/mysql.md)
+- [MongoDB 認証](../access-control/authn/mongodb.md)
+- [PostgreSQL 認証](../access-control/authn/postgresql.md)
+- [Redis 認証](../access-control/authn/redis.md)
+- [HTTP サーバー認証](../access-control/authn/http.md)
+- [JWT 認証](../access-control/authn/jwt.md)
+- [LDAP 認証](../access-control/authn/ldap.md)
 
-Unlike the MQTT protocol, the gateway supports only a single authenticator, not a list (or chain) of authenticators. If no authenticator is enabled, all NATS clients are allowed to connect without authentication.
+MQTT プロトコルとは異なり、ゲートウェイは単一の認証機構のみをサポートし、複数の認証機構のリストやチェーンはサポートしません。認証機構が有効でない場合、すべての NATS クライアントは認証なしで接続可能です。
 
-The NATS gateway extracts authentication credentials from the `CONNECT` packet:
+NATS ゲートウェイは `CONNECT` パケットから認証情報を抽出します：
 
-- **Client ID**: Auto-generated by default.
-- **Username**: Value of the `user` field.
-- **Password**: Value of the `pass` field.
+- **クライアント ID**：デフォルトで自動生成されます。
+- **ユーザー名**：`user` フィールドの値。
+- **パスワード**：`pass` フィールドの値。
 
-#### Configure via Dashboard
+#### ダッシュボードでの設定
 
-The example below demonstrates configuring password-based authentication using an HTTP server:
+以下は HTTP サーバーを利用したパスワード認証の設定例です。
 
-1. In the NATS gateway settings, go to the **Authentication** tab.
-2. Click **+ Create Authentication**, select **Password-Based** as the mechanism, and choose **HTTP Server** as the data source. Click **Next**.
-3. Fill in the configuration parameters. Refer to [HTTP Password Authentication](../access-control/authn/http.md) for details on each option.
-4. Click **Create**, then review and confirm the settings by clicking **Update**.
+1. NATS ゲートウェイ設定の **認証** タブに移動します。
+2. **+ 認証作成** をクリックし、メカニズムに **パスワードベース** を選択、データソースに **HTTP サーバー** を選択して **次へ** をクリック。
+3. 設定パラメータを入力します。各オプションの詳細は [HTTP パスワード認証](../access-control/authn/http.md) を参照してください。
+4. **作成** をクリックし、設定内容を確認後、**更新** をクリックして確定します。
 
-#### Configure via REST API
+#### REST API での設定
 
-The following example shows how to configure built-in database authentication by using REST API:
+以下は組み込みデータベース認証を REST API で設定する例です。
 
 ```
 curl -X 'POST' \
@@ -243,9 +244,9 @@ curl -X 'POST' \
 }'
 ```
 
-#### Configure via Configuration File
+#### 設定ファイルでの設定
 
-The following example shows how to configure built-in database authentication in the configuration file:
+以下は設定ファイルで組み込みデータベース認証を設定する例です。
 
 ```
 gateway.nats {
@@ -262,9 +263,9 @@ gateway.nats {
 }
 ```
 
-For other authentication types, refer to the documentation on [EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticators).
+その他の認証タイプについては、[EMQX 認証機構](../access-control/authn/authn.md#emqx-authenticators) のドキュメントを参照してください。
 
-### Configure User-Level Interfaces
+### ユーザーレベルインターフェースの設定
 
-- For complete configuration reference, see: [NATS Gateway Configuration](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
-- For REST API details, see: [Gateway REST API Documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 完全な設定リファレンスは以下を参照してください： [NATS ゲートウェイ設定](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
+- REST API の詳細は以下を参照してください： [ゲートウェイ REST API ドキュメント](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)

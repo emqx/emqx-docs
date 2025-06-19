@@ -1,56 +1,55 @@
-# Rule SQL Reference
+# Rule SQL リファレンス
 
-EMQX uses a SQL-based syntax in its rules for data extraction, filtering, enrichment, and transformation. This SQL-like syntax has two types of statements: `SELECT` and `FOREACH`. 
+EMQX のルールでは、データの抽出、フィルタリング、拡張、変換に SQL ベースの構文を使用します。この SQL ライクな構文には、`SELECT` と `FOREACH` の2種類のステートメントがあります。
 
-| Statement | Description                                                  |
-| --------- | ------------------------------------------------------------ |
-| `SELECT`  | For situations where the result of the SQL statement is a single message. |
-| `FOREACH` | For producing zero or more messages from a single input message. |
+| ステートメント | 説明                                                  |
+| -------------- | ----------------------------------------------------- |
+| `SELECT`       | SQL ステートメントの結果が単一メッセージとなる場合に使用します。 |
+| `FOREACH`      | 1つの入力メッセージからゼロ個以上のメッセージを生成する場合に使用します。 |
 
-Each rule can have exactly one statement. SQL statements provide a rich set of built-in functions, enabling you to perform simple transformations and create timestamps, among other operations. 
+各ルールは正確に1つのステートメントを持つことができます。SQL ステートメントは豊富な組み込み関数を提供しており、簡単な変換やタイムスタンプの作成などが可能です。
 
-SQL statements also supports embedding [jq programs](https://stedolan.github.io/jq/) within expressions, which allows you to do complex data transformations whenever required. Expressions can be embedded within the `SELECT` and `FOREACH` statements. For the fields that can be referenced in the `SELECT` and `FOREACH` statements, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
+また、SQL ステートメントは式内に [jq プログラム](https://stedolan.github.io/jq/) を埋め込むことをサポートしており、必要に応じて複雑なデータ変換を行えます。式は `SELECT` と `FOREACH` ステートメント内に埋め込むことができます。`SELECT` と `FOREACH` ステートメントで参照可能なフィールドについては、[データソースとフィールド](./rule-sql-events-and-fields.md) を参照してください。
 
-<img src="./assets/rules/data-integration-arch.jpg" alt="image" style="zoom:40%;" />
+<img src="./assets/rules/data-integration-arch.jpg" alt="データ統合アーキテクチャ" style="zoom:40%;" />
 
-## The `SELECT` Statement 
+## `SELECT` ステートメント
 
-The `SELECT` statement selects specific fields from an input message, rename fields, transform data, and filter messages based on conditions. 
+`SELECT` ステートメントは、入力メッセージから特定のフィールドを選択し、フィールド名の変更、データ変換、条件に基づくメッセージのフィルタリングを行います。
 
-The basic format of a `SELECT` statement in the rule engine SQL is as follows:
+ルールエンジン SQL における `SELECT` ステートメントの基本形式は以下の通りです。
 
 ```sql
 SELECT <fields_expressions> FROM <topic> [WHERE <conditions>]
 ```
 
-You can use the `SELECT` clause to specify which fields (from both message payload and metadata) to include in the output, and use the  `WHERE` clause to filter messages based on specific conditions 
+`SELECT` 句で出力に含めるフィールド（メッセージのペイロードおよびメタデータの両方から）を指定し、`WHERE` 句で特定の条件に基づいてメッセージをフィルタリングできます。
 
-### The `FROM` Clause
+### `FROM` 句
 
-The `FROM` clause is used to specify the data source for your query. You can choose to select data from specific topics or events that match a certain condition.
+`FROM` 句はクエリのデータソースを指定します。特定のトピックや条件に合致するイベントからデータを選択できます。
 
-#### Select by Topics
+#### トピックによる選択
 
-For example, if you want to defines a rule applies to all messages published to topics matching the pattern `t/#` and `my/other/topic`, you can work with the statement below:
+例えば、トピックパターン `t/#` と `my/other/topic` にパブリッシュされたすべてのメッセージに適用されるルールを定義する場合、以下のように記述します。
 
 ```sql
 SELECT clientid, payload.clientid as myclientid FROM "t/#", "my/other/topic"
 ```
 
-Where, 
+ここで、
 
-- the `SELECT` clause is to specify the fields to be included in the output
+- `SELECT` 句は出力に含めるフィールドを指定しています。
 
-  - `clientid`: is the client ID in the metadata
+  - `clientid`: メタデータ内のクライアントID
 
-  - `payload.clientid`: is the client ID in the message payload. All fields in the message payload are stored under `payload`.
+  - `payload.clientid`: メッセージペイロード内のクライアントID。ペイロード内のすべてのフィールドは `payload` の下に格納されています。
 
-    - The `as` syntax renames the `payload.clientid` field as `myclientid`. 
+    - `as` 構文で `payload.clientid` フィールドを `myclientid` として名前変更しています。
 
+#### イベントによる選択
 
-#### Select by Events
-
-You can also attach rules to events. For example, if you want to get the IP address and port number when client `c1` initiates a connection to EMQX, you can use the statement below:
+ルールをイベントに紐づけることも可能です。例えば、クライアント `c1` が EMQX に接続を開始した際の IP アドレスとポート番号を取得したい場合、以下のように記述します。
 
 ```sql
 SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
@@ -58,15 +57,15 @@ SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
 
 ::: tip
 
-You can find all available events in the EMQX Dashboard (under the **Events** tab when editing a rule).
+利用可能なすべてのイベントは EMQX ダッシュボードのルール編集時の **Events** タブで確認できます。
 
 :::
 
-### The `WHERE` Clause
+### `WHERE` 句
 
-The `WHERE` clause provides an optional way to refine message filtering by specifying additional conditions that the messages must meet, in addition to the topic/event filter specified in the `FROM` clause.
+`WHERE` 句は、`FROM` 句で指定したトピックやイベントのフィルターに加えて、メッセージが満たすべき追加条件を指定し、メッセージの絞り込みを行うオプションの方法です。
 
-For instance, the following SQL statement filters messages under topic `t/#` that are sent by the user name `eric`:
+例えば、トピック `t/#` のメッセージのうち、ユーザー名が `eric` のものだけをフィルタリングする場合は以下のように記述します。
 
 ```sql
 SELECT * FROM "t/#" WHERE username = 'eric'
@@ -74,47 +73,47 @@ SELECT * FROM "t/#" WHERE username = 'eric'
 
 ::: tip
 
-The fields used in the `WHERE` clause must be one field available in the message metadata or payload, or there will be an error. 
+`WHERE` 句で使用するフィールドは、メッセージのメタデータまたはペイロード内に存在するフィールドでなければなりません。そうでない場合はエラーになります。
 
 :::
 
-### Work with Expressions
+### 式の利用
 
-[Expressions](#expressions-and-operations) can also be used to transform data in the `SELECT` and `WHERE` clause. For example, the following SQL statement formats the `clientid` field value by converting it to uppercase and adding a suffix. The result is named `cid` in the output message: 
+[式](#expressions-and-operations)は、`SELECT` や `WHERE` 句内でデータ変換に使用できます。例えば、以下の SQL ステートメントは `clientid` フィールドの値を大文字に変換し、サフィックスを追加して、結果を出力メッセージの `cid` として名前付けしています。
 
 ```sql
 SELECT (upper(clientid) + '_UPPERCASE_LETTERS') as cid FROM "t/#"
 ```
 
-The following showcase the use of a parenthesized arithmetic expression to transform data: 
+次の例は、括弧付きの算術式を使ったデータ変換の例です。
 
 ```sql
 SELECT (payload.integer_field + 2) * 2 as num FROM "t/#"
 ```
 
-You can also use dot notation to access fields in a payload with a complex structure (this assumes that the payload is JSON formatted): 
+ドット表記を使って複雑な構造のペイロード内のフィールドにアクセスすることもできます（ペイロードが JSON 形式であることが前提です）。
 
 ```sql
 SELECT payload.a.b.c.deep as my_field FROM "t/#"
 ```
 
-The statement below shows an example of how the equality operator (=) can be used to test that a field has a certain value in the WHERE-clause. Using * in the SELECT-clause will forward all metadata and the payload to the output message:
+以下のステートメントは、`WHERE` 句で等価演算子（=）を使ってフィールドが特定の値を持つかどうかをテストする例です。`SELECT *` はメタデータとペイロードのすべてを出力メッセージに転送します。
 
 ```sql
 SELECT * FROM "t/#" WHERE payload.x.y = 1
 ```
 
-You can use the `and` and `or` operators to form complex boolean expressions in the WHERE-clause:
+`WHERE` 句では `and` と `or` 演算子を使って複雑なブール式を作成できます。
 
 ```sql
 SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temprature > 39
 ```
 
-## The `FOREACH` Statement
+## `FOREACH` ステートメント
 
-The `FOREACH` statement can be seen as a more general form of the `SELECT` statement. It can produce zero or more output messages for each input message. You can use the `FOREACH` statement to filter data based on specific conditions and output the results to MQTT topics or data bridges. 
+`FOREACH` ステートメントは `SELECT` ステートメントのより一般的な形と考えられます。1つの入力メッセージからゼロ個以上の出力メッセージを生成できます。`FOREACH` ステートメントを使うと、特定条件に基づくデータのフィルタリングと、結果の MQTT トピックやデータブリッジへの出力が可能です。
 
-The basic format of a `FOREACH` statement in the rule engine SQL is as follows:
+ルールエンジン SQL における `FOREACH` ステートメントの基本形式は以下の通りです。
 
 ```sql
 FOREACH <expression_that_evaluates_to_array> [as <name>]
@@ -124,16 +123,16 @@ FROM <topic>
 [WHERE <condition>]
 ```
 
-A `FOREACH` statement starts with a `FOREACH`-clause that is used to create an array from the input message. The `FROM` and `WHERE` clauses have the same purpose and work the same as the clauses with the corresponding names in the SELECT statement. Besides the `FOREACH`, `FROM` and `WHERE` clauses, the `FOREACH` statement has two more optional clauses:
+`FOREACH` ステートメントは、`FOREACH` 句で入力メッセージから配列を作成することから始まります。`FROM` と `WHERE` 句は `SELECT` ステートメントの同名句と同じ目的で動作します。`FOREACH` ステートメントには、`FOREACH`、`FROM`、`WHERE` 句に加えて、以下の2つのオプション句があります。
 
-| Clause   | Optional/Required | Description                                                  |
-| -------- | ----------------- | ------------------------------------------------------------ |
-| `DO`     | Optional          | Transform each element in the array selected by `FOREACH`.<br /><br />Correspond to the `SELECT` clause in the `SELECT` statement and accepts the same expressions. |
-| `INCASE` | Optional          | Filter out array elements that do not match the specified conditions.<br /><br />Accepts the same expressions as the `WHERE` clause. |
+| 句        | 必須/任意 | 説明                                                  |
+| --------- | --------- | ----------------------------------------------------- |
+| `DO`      | 任意      | `FOREACH` で選択された配列の各要素を変換します。<br /><br />`SELECT` ステートメントの `SELECT` 句に対応し、同じ式を受け入れます。 |
+| `INCASE`  | 任意      | 指定した条件に合致しない配列要素をフィルタリングします。<br /><br />`WHERE` 句と同じ式を受け入れます。 |
 
 ::: tip
 
-Except for the FOREACH clause, all other clauses in the `FOREACH` statement have corresponding clauses in the `SELECT` statement. This implies that the FOREACH statement can be seen as a generalization of the `SELECT` statement, as mentioned earlier. The following two statements are equivalent (note that `jq('.', payload)` wraps the payload inside an array): 
+`FOREACH` 句以外のすべての句は `SELECT` ステートメントの対応する句と対応しています。したがって、`FOREACH` ステートメントは前述の通り `SELECT` ステートメントの一般化と見なせます。以下の2つのステートメントは同等です（`jq('.', payload)` はペイロードを配列でラップしています）。
 
 ```sql
 FOREACH jq('.', payload) as it
@@ -147,9 +146,9 @@ FROM "t/#"
 ```
 :::
 
-The as-syntax in the FOREACH clause exemplified above is utilized to assign a name to the array items, which allows for easy referencing of the "current" item within the DO clause. If the "`as name`" part is omitted, the default name "item" will be used.
+`FOREACH` 句の `as` 構文は配列の要素に名前を付けるために使われ、`DO` 句内で「現在の」要素を参照しやすくします。`as name` 部分を省略すると、デフォルトで `item` という名前が使われます。
 
-Below is an example to show how to use the `FOREACH` statement to output two values. Both values contain only one field called `value`. The value of the field `value` is the value of the field `field_1` in one of the messages and the value of `field_2` in the other message:
+以下は、`FOREACH` ステートメントで2つの値を出力する例です。両方の値は `value` という1つのフィールドのみを持ち、その値はそれぞれメッセージの `field_1` と `field_2` の値です。
 
 ```sql 
 FOREACH jq('[.field_1, .field_2]', payload) 
@@ -157,11 +156,10 @@ DO item as value
 FROM "t/#"
 ```
 
-The `FOREACH` statement requires input data to be in an array format. If the input message already contains an array, you can directly apply the `FOREACH` statement. 
+`FOREACH` ステートメントの入力データは配列形式である必要があります。入力メッセージがすでに配列を含む場合は、直接 `FOREACH` ステートメントを適用できます。
 
-For example, for messages published to topics `t/#`, if you want to output the timestamp, client ID, sensor name, and index when the sensor idx is 1 or above, you can use the code below:
+例えば、トピック `t/#` にパブリッシュされたメッセージで、センサーの `idx` が1以上の場合にタイムスタンプ、クライアントID、センサー名、インデックスを出力したい場合は以下のコードを使います。
 
-<!--- Removed inline comments as the rule engine does not currently support comments as far as I know -->
 ```sql
 FOREACH
     payload.sensors as sensor  
@@ -175,18 +173,18 @@ INCASE
 FROM "t/#"
 ```
 
-Where,
+ここで、
 
-- The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array items `sensor` with the "`as name`"-syntax.
-- The `DO` clause specifies the fields to be included in the output:
-  - `timestamp` is the timestamp from the input message's metadata.
-  - `clientid` is the client ID from the input message's metadata.
-  - `sensor.name` will be capitalized with the build-in `upper` function and renamed as `name` with the "`as name`"-syntax. Please note that "sensor" specifically refers to the current item within the array that is selected by the FOREACH clause.
-  - `sensor.idx`  will be renamed as `idx` with the `as` clause.
-- The `INCASE` clause adds another filter condition, so you only get sensors where the value of the idx-field is 1 and above.
-- The `FROM` clause specifies that you want messages from topics that match the pattern "t/#". 
+- `FOREACH` 句は入力メッセージのペイロード内の `sensors` フィールドを配列として指定し、配列要素に `sensor` という名前を付けています。
+- `DO` 句は出力に含めるフィールドを指定しています。
+  - `timestamp` は入力メッセージのメタデータからのタイムスタンプです。
+  - `clientid` は入力メッセージのメタデータからのクライアントIDです。
+  - `sensor.name` は組み込み関数 `upper` で大文字化され、`as` 構文で `name` と名前変更されます。ここでの `sensor` は `FOREACH` 句で選択された配列の現在の要素を指します。
+  - `sensor.idx` は `as` 句で `idx` と名前変更されます。
+- `INCASE` 句はフィルター条件を追加し、`idx` フィールドの値が1以上のセンサーのみを出力します。
+- `FROM` 句はトピックパターン `t/#` にマッチするメッセージを対象としています。
 
-After creating your rules, it's always recommended to test your rules before putting them into production. The Dashboard UI contains a test feature that allows you to test your rules with sample messages. For details on how to test the SQL statements, see [Test the Rule](./rule-get-started.md#test-the-rule). The rule above can be tested by putting in the following JSON formatted text as payload:
+ルールを作成したら、運用前に必ずテストすることをお勧めします。ダッシュボードの UI にはサンプルメッセージでルールをテストできる機能があります。SQL ステートメントのテスト方法については、[ルールのテスト](./rule-get-started.md#test-the-rule) を参照してください。上記のルールは以下の JSON 形式のペイロードでテスト可能です。
 
 ```json
 {"sensors": [
@@ -197,7 +195,7 @@ After creating your rules, it's always recommended to test your rules before put
 }
 ```
 
-If the input message does not contain an array, you can use the `jq` function to wrap the payload in an array, for example, in the code below. 
+入力メッセージに配列が含まれていない場合は、`jq` 関数を使ってペイロードを配列でラップできます。例えば以下のように記述します。
 
 ```sql
 FOREACH jq('.', payload) 
@@ -205,44 +203,41 @@ DO item.field_1, item.field_2
 FROM "t/#"
 ```
 
-EMQX supports using the `jq` function for advanced transformations. You can refer to the [ build-in `jq` function](./rule-sql-jq.md) for more code examples.
+EMQX は高度な変換のために `jq` 関数をサポートしています。詳細なコード例は [組み込み `jq` 関数](./rule-sql-jq.md) を参照してください。
 
-## Expressions and Operations 
+## 式と演算
 
-EMQX rule syntax allows using expressions to transform data and filter messages, which can be used in various clauses, including `SELECT`, `FOREACH`, `DO`, `INCASE`, and `WHERE`. This section offers more information on using these expressions. The following are the operations that can be used to form expressions, and remember that there is a wide range of [built-in functions](./rule-sql-builtin-functions.md) that can also be used in expressions.
+EMQX のルール構文では、データ変換やメッセージのフィルタリングに式を使用でき、`SELECT`、`FOREACH`、`DO`、`INCASE`、`WHERE` などの句で利用可能です。この節では式の使い方について説明します。以下は式を構成する演算子の一覧で、他にも多数の[組み込み関数](./rule-sql-builtin-functions.md)が利用可能です。
 
+### 算術演算
 
-### Arithmetic Operations
+| 演算子 | 用途                                   | 戻り値                      |
+| ------ | -------------------------------------- | --------------------------- |
+| `+`    | 加算、または文字列の連結               | 合計、または連結された文字列 |
+| `-`    | 減算                                   | 差分                        |
+| `*`    | 乗算                                   | 積                          |
+| `/`    | 除算                                   | 商                          |
+| `div`  | 整数除算                               | 整数の商                    |
+| `mod`  | 剰余                                   | 剰余                        |
 
-| Function | Purpose                                                                                               | Returned value              |      |
-| -------- | ------------------------------------------------------------                                          | --------------------------- | ---- |
-| `+`      | addition, or string concatenation                                                                     | Sum, or concatenated string |      |
-| `-`      | Subtraction                                                                                           | Difference                  |      |
-| `*`      | multiplication                                                                                        | product                     |      |
-| `/`      | division                                                                                              | Quotient                    |      |
-| `div`    | Integer division                                                                                      | Integer quotient            |      |
-| `mod`    | modulus                                                                                               | module                      |      |
+### 論理演算
 
+| 演算子 | 用途                     | 戻り値      |
+| ------ | ------------------------ | ----------- |
+| `>`    | より大きい               | true/false  |
+| `<`    | より小さい               | true/false  |
+| `<=`   | 以下                     | true/false  |
+| `>=`   | 以上                     | true/false  |
+| `<>`   | 等しくない               | true/false  |
+| `!=`   | 等しくない               | true/false  |
+| `=`    | 2つのオペランドが完全に等しいかをチェック（値の比較に使用） | true/false  |
+| `=~`   | トピックがトピックフィルターにマッチするかをチェック（トピックマッチング専用） | true/false  |
+| `and`  | 論理積                   | true/false  |
+| `or`   | 論理和                   | true/false  |
 
-### Logical Operations
+### CASE 式
 
-| Function | Purpose | Returned Value |
-| ------ | ------------------- | ---------- |
-| `>` | greater than | true/false |
-| `<` | less than | true/false |
-| `<=` | less than or equal | true/false |
-| `>=` | greater than or equal | true/false |
-| `<>` | not equal | true/false |
-| `!=` | not equal | true/false |
-| `=`      | Check if the two operands are completely equal. It can be used to compare values                      | true/false                  |
-| `=~`     | Check if a topic can match the topic filter. It can only be used for topic matching                   | true/false                  |
-| `and`    | logical and                                                                                           | true/false                  |
-| `or`     | logical or                                                                                            | true/false                  |
-
-
-### CASE Expressions 
-
-The `CASE` expression can be used to perform conditional operations. A case expression corresponds to an if-then-else statement in other languages. How to use the `CASE` expression is illustrated by the following example.
+`CASE` 式は条件付き処理を行うために使用します。`CASE` 式は他言語の if-then-else 文に相当します。以下の例で使い方を示します。
 
 ```sql
 SELECT
@@ -253,80 +248,101 @@ SELECT
 FROM "t/#"
 ```
 
-Suppose the message is:
+メッセージが以下の場合、
 
 ```json
 {"x": 8}
 ```
 
-Then the output will be:
+出力は以下のようになります。
 
 ```json
 {"x": 7}
 ```
 
-## More Examples
+## さらなる例
 
-### Examples of `SELECT` Statements 
+### `SELECT` ステートメントの例
 
--  Extract all fields from the messages with the topic "t/a":
+- トピック "t/a" のメッセージからすべてのフィールドを抽出:
+
     ```sql
     SELECT * FROM "t/a"
     ```
--  Extract all fields from the messages with the topics "t/a" or "t/b":
+
+- トピック "t/a" または "t/b" のメッセージからすべてのフィールドを抽出:
+
     ```sql
     SELECT * FROM "t/a","t/b"
     ```
--  Extract all fields from the message with a topic that matches 't/#'.
+
+- トピックが 't/#' にマッチするメッセージからすべてのフィールドを抽出:
+
     ```sql
     SELECT * FROM "t/#"
     ```
--  Extract the qos, username, and clientid fields from the input message with a topic that matches 't/#' (the output message will have a payload with the fields qos, username, and clientid):
+
+- トピックが 't/#' にマッチするメッセージから qos、username、clientid フィールドを抽出（出力メッセージのペイロードにこれらのフィールドが含まれます）:
+
     ```sql
     SELECT qos, username, clientid FROM "t/#"
     ```
--  Extract the username field from any message with a payload field named username with the value 'Steven' (it is not recommended to use the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) '#' in the FROM clause as this means that the rule has to be checked for all messages that are sent to EMQX):
+
+- ペイロードに username フィールドがあり、その値が 'Steven' のメッセージから username フィールドを抽出（FROM 句で `#` を使うと EMQX に送信されるすべてのメッセージに対してルールが評価されるため推奨されません）:
+
     ```sql
     SELECT username FROM "#" WHERE username='Steven'
     ```
-- Extract the `x` field from the payload of the input message and rename the field to `y` in the output message. The new alias `y` for `payload.x` can also be used in the `WHERE` clause. A rule with this SQL statement matches messages with the payload `{"x": 1}` but not messages with the payload `{"x": 2}`:
+
+- 入力メッセージのペイロードの `x` フィールドを抽出し、出力メッセージでフィールド名を `y` に変更。`WHERE` 句で新しいエイリアス `y` を使用。ペイロードが `{"x": 1}` のメッセージにマッチし、`{"x": 2}` にはマッチしません。
+
     ```sql
     SELECT payload.x as x FROM "tests/test_topic_1" WHERE y = 1
     ```
-- This SQL statement matches messages with the payload `{"x": {"y": 1}}` (and for example `{"x": {"y": 1}, "other": "field}`):
+
+- ペイロードが `{"x": {"y": 1}}` のメッセージ（例：`{"x": {"y": 1}, "other": "field"}` も含む）にマッチ:
+
     ```sql
     SELECT * FROM "#" WHERE payload.x.y = 1
     ```
--  If an MQTT client with clientid = 'c1' connected, extract its source IP address and port number:
+
+- クライアントID が 'c1' の MQTT クライアントが接続した場合、そのソース IP アドレスとポート番号を抽出:
+
     ```sql
     SELECT peername as ip_port FROM "$events/client_connected" WHERE clientid = 'c1'
     ```
-- Matches all subscriptions to topics that matches the pattern 't/topic' and have a quality of service (QoS) level of 1. It extracts the clientid to the output message.
+
+- トピックが 't/topic' にマッチし、QoS レベルが 1 のすべてのサブスクリプションにマッチ。clientid を出力メッセージに抽出:
+
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic = 'my/topic' and qos = 1
     ```
-- Similar to the above example but here the topic match operator `=~` is used to match the [topic filter](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) 't/#':
+
+- 上記例と類似だが、トピックマッチ演算子 `=~` を使い、トピックフィルター 't/#' にマッチ:
+
     ```sql
     SELECT clientid FROM "$events/session_subscribed" WHERE topic =~ 't/#' and qos = 1
     ```
-- Extract the User Property with Key "foo" (User properties is new in the MQTT 5.0 protocol so this is not relevant for older MQTT versions):
+
+- キーが "foo" のユーザープロパティを抽出（ユーザープロパティは MQTT 5.0 プロトコルの新機能で、古い MQTT バージョンには該当しません）:
+
     ```sql
     SELECT pub_props.'User-Property'.foo as foo FROM "t/#"
     ```
 
 ::: tip
 
-- Topics in the `FROM` clause need to be enclosed in double quotes (`""`) or single quotes (`''`).
-- The `WHERE` clause is followed by the filter condition. If a string is used in the condition, it needs to be enclosed in single quotes (`''`).
-- If there are multiple topics in the FROM clause, they need to be separated by commas `","`. For example, `SELECT * FROM "t/1", "t/2".`
-- You can use the period symbol (`.`) to access inner fields of the payload. For example, if the payload is a nested JSON structure, you can use `payload.outer_field.inner_field` to access the `inner_field` of the `outer_field`.
-- Try not to create aliases for payload, as this will affect performance. That is, try not to use this: `SELECT payload as p`.
-- Some escape sequences need to be unescaped when used, see [unescape function](./rule-sql-builtin-functions.md#unescapestring-string---string).
+- `FROM` 句のトピックはダブルクォーテーション（`""`）またはシングルクォーテーション（`''`）で囲む必要があります。
+- `WHERE` 句の条件で文字列を使う場合はシングルクォーテーション（`''`）で囲みます。
+- `FROM` 句に複数のトピックがある場合はカンマ（`,`）で区切ります。例：`SELECT * FROM "t/1", "t/2"`。
+- ペイロードの内部フィールドにアクセスするにはドット記法（`.`）を使用します。例：ネストした JSON 構造のペイロードの場合、`payload.outer_field.inner_field` で `outer_field` の `inner_field` にアクセス可能です。
+- ペイロードに対してエイリアスを作成するとパフォーマンスに影響が出るため、`SELECT payload as p` のような使い方は避けてください。
+- 一部のエスケープシーケンスは使用時にアンエスケープが必要です。詳細は [unescape 関数](./rule-sql-builtin-functions.md#unescapestring-string---string) を参照してください。
 :::
 
-### Examples of `FOREACH` Statements
+### `FOREACH` ステートメントの例
 
-Suppose there are messages with client ID `c_steve` coming to the topic ` t/1`. The message body is in JSON format, and the sensors field is an array containing multiple objects as is shown in the following example:
+クライアントID が `c_steve` のメッセージがトピック `t/1` に届くとします。メッセージ本文は JSON 形式で、`sensors` フィールドは複数のオブジェクトを含む配列です。例は以下の通りです。
 
 ```json
 {
@@ -339,25 +355,25 @@ Suppose there are messages with client ID `c_steve` coming to the topic ` t/1`. 
 }
 ```
 
-#### Example 1
+#### 例1
 
-In this example it is required that each object in sensors array is re-published to the topic `sensors/${idx}` (where index is taken from the object) with the content of `${name}` (where name is taken from the object). That means that for for the example input given above the rule engine will issue the following three messages:
+この例では、`sensors` 配列の各オブジェクトをトピック `sensors/${idx}`（`${idx}` はオブジェクトのインデックス）に、内容を `${name}`（オブジェクトの名前）として再パブリッシュします。上記の入力例では、以下の3つのメッセージが発行されます。
 
-1. *Topic*: sensors/0
-   *Content*: a
-2. *Topic*: sensors/1
-   *Content*: b
-3. *Topic*: sensors/2
-   *Content*: c
+1. *トピック*: sensors/0  
+   *内容*: a  
+2. *トピック*: sensors/1  
+   *内容*: b  
+3. *トピック*: sensors/2  
+   *内容*: c  
 
-For the rule in this example, we need to configure the following action:
+このルールのアクション設定は以下の通りです。
 
-- *Action type*: message republish
-- *Target topic*: `sensors/${idx}`
-- *Target QoS*: 2 
-- Message content template: `${name}`
+- *アクションタイプ*: メッセージ再パブリッシュ
+- *ターゲットトピック*: `sensors/${idx}`
+- *ターゲット QoS*: 2
+- *メッセージコンテンツテンプレート*: `${name}`
 
-And the following SQL statement:
+SQL ステートメントは以下の通りです。
 
 ```sql
 FOREACH
@@ -365,27 +381,25 @@ FOREACH
 FROM "t/#"
 ```
 
-In the SQL statement above, the `FOREACH` clause specifies the array `sensors` that needs to be traversed. The `FOREACH` statement will perform a "message republish" action for each object in the result array, so the republish action will be performed three times.
+この SQL では、`FOREACH` 句で配列 `sensors` を指定しています。`FOREACH` ステートメントは配列の各オブジェクトに対して「メッセージ再パブリッシュ」アクションを実行し、3回実行されます。
 
+#### 例2
 
+この例では、`sensors` 配列のうち `id` フィールドの値が1以上のオブジェクトだけをトピック `sensors/${idx}` に、内容を `clientid=${clientid},name=${name},date=${date}` として再パブリッシュします。上記の入力例では、`id` が0の要素は除外されるため、2つのメッセージが発行されます。
 
-#### Example 2
+1. *トピック*: sensors/1  
+   *内容*: clientid=c_steve,name=b,date=2023-04-24  
+2. *トピック*: sensors/2  
+   *内容*: clientid=c_steve,name=c,date=2023-04-24  
 
-In this example, it is required that each object in the `sensors` array with a value for the `id` field which is greater than or equal to 1 is re-published to the topic `sensors/${idx}` with the content `clientid=${clientid},name=${name},date=${date}`. This means that the rule will issue two messages when given the example input message specified above (since the array element with the `id` field set to zero will be filtered out).
+アクション設定は以下の通りです。
 
-1. *Topic*: sensors/1
-   *Content*: clientid=c_steve,name=b,date=2023-04-24
-2. *Topic*: sensors/2
-   *Content*: clientid=c_steve,name=c,date=2023-04-24
+- *アクションタイプ*: メッセージ再パブリッシュ
+- *ターゲットトピック*: `sensors/${idx}`
+- *ターゲット QoS*: 2
+- *メッセージコンテンツテンプレート*: `clientid=${clientid},name=${name},date=${date}`
 
-For the rule in this example, we need to configure the following action:
-
-- *Action type*: message republish
-- *Target topic*: `sensors/${idx}`
-- *Target QoS*: 2 
-- *Message content template*: `clientid=${clientid},name=${name},date=${date}`
-
-And the following SQL statement:
+SQL ステートメントは以下の通りです。
 
 ```sql
 FOREACH
@@ -399,10 +413,9 @@ INCASE
 FROM "t/#"
 ```
 
-In the above SQL statement, the `FOREACH` clause specifies that the array `sensors` needs to be traversed. The `DO` clause selects the fields required for each operation. The `clientid` field is selected from the message meta data and `name` and `idx` are selected from the current sensor object. The name `item` represents the current object in the sensors array. The `INCASE` clause specifies a filter condition for the array objects (objects that do not match the filter will be ignored).
+この SQL では、`FOREACH` 句で配列 `sensors` を指定し、`DO` 句で各操作に必要なフィールドを選択しています。`clientid` はメッセージのメタデータから、`name` と `idx` は現在のセンサーオブジェクトから選択しています。`item` は `sensors` 配列の現在のオブジェクトを表します。`INCASE` 句は配列オブジェクトのフィルター条件を指定し、条件に合わないオブジェクトは無視されます。
 
-In `DO` and `INCASE` clauses, you can use `item` to access the current object, or you can customize a variable name by using the `as` syntax in `FOREACH`. So the SQL statement in this example can also be written as follows:
-
+`DO` と `INCASE` 句では、`item` で現在のオブジェクトにアクセスできますが、`FOREACH` 句の `as` 構文で変数名をカスタマイズできます。したがって、上記の SQL は以下のようにも書けます。
 
 ```sql
 FOREACH
@@ -416,11 +429,11 @@ INCASE
 FROM "t/#"
 ```
 
-#### Example 3
+#### 例3
 
-This extends Example 2 by also removing the `c_` prefix of `c_steve` in the clientid field.
+例2を拡張し、`clientid` フィールドの `c_steve` の `c_` プレフィックスを削除します。
 
-The rule engine comes with a number of built in functions can be called in the `FOREACH`, `DO` and `INCASE` clauses. If you want to change `c_steve` into `steve`, you can change the SQL in Example 2 into:
+ルールエンジンには `FOREACH`、`DO`、`INCASE` 句内で呼び出せる多数の組み込み関数があります。`c_steve` を `steve` に変換したい場合、例2の SQL を以下のように変更します。
 
 ```sql
 FOREACH
@@ -434,8 +447,9 @@ INCASE
 FROM "t/#"
 ```
 
-Multiple expressions can be placed in the `FOREACH` clause as long as the last expression specifies the array to be traversed.
-For example, if the input messages payload was formatted like this instead:
+複数の式を `FOREACH` 句に記述できますが、最後の式が配列を指定する必要があります。
+
+例えば、入力メッセージのペイロードが以下のように構造化されている場合、
 
 ```json
 {
@@ -450,7 +464,7 @@ For example, if the input messages payload was formatted like this instead:
 }
 ```
 
-Then the `FOREACH` clause can give the payload data another name before selecting the array:
+`FOREACH` 句でペイロードの `data` に別名を付けてから配列を選択できます。
 
 ```sql
 FOREACH
@@ -459,7 +473,7 @@ FOREACH
 ...
 ```
 
-This is equivalent to:
+これは以下と同等です。
 
 ```sql
 FOREACH
@@ -467,7 +481,4 @@ FOREACH
 ...
 ```
 
-This feature can be useful when you are working with payloads that are structured in complex ways.
-
-
-
+この機能は、複雑な構造のペイロードを扱う際に便利です。

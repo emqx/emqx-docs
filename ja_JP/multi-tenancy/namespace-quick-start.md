@@ -1,71 +1,71 @@
-# Quick Start: Experience Namespaces
+# クイックスタート：ネームスペースの体験
 
-This section guides you through using the [MQTTX client](https://mqttx.app) to connect to EMQX and quickly experience the core capabilities of the namespace feature: tenant identification, client isolation, and topic isolation.
+このセクションでは、[MQTTXクライアント](https://mqttx.app)を使用してEMQXに接続し、ネームスペース機能のコア機能であるテナント識別、クライアント分離、トピック分離を素早く体験する方法を案内します。
 
-## Enable the `tns` Attribute for Namespace Identification
+## ネームスペース識別のために `tns` 属性を有効化する
 
-1. First, configure a client attribute in `base.hocon` to extract the namespace (tenant identifier) from the username:
+1. まず、`base.hocon` にクライアント属性を設定し、ユーザー名からネームスペース（テナント識別子）を抽出します：
 
    ```
    mqtt.client_attrs_init = [{expression = "nth(1, tokens(username, '-'))", set_as_attr = tns}]
    ```
 
-   > Example: If a client connects with the username `tenantA-user1`, EMQX will extract `tenantA` as the namespace (`tns`).
+   > 例：クライアントがユーザー名 `tenantA-user1` で接続すると、EMQXは `tenantA` をネームスペース（`tns`）として抽出します。
 
-   Alternatively, you can configure this in the Dashboard:
+   または、ダッシュボードからも設定可能です：
 
-   <img src="./assets/enable_namespace.png" alt="enable_namespace" style="zoom:67%;" />
+   <img src="./assets/enable_namespace.png" alt="ネームスペースを有効化" style="zoom:67%;" />
 
-2. Create an MQTT client connection using MQTTX, simulating tenant `tenantA`, and set the username to `tenantA-user1`. Connect the client to EMQX.
+2. MQTTXを使って、テナント `tenantA` をシミュレートするMQTTクライアント接続を作成し、ユーザー名を `tenantA-user1` に設定します。クライアントをEMQXに接続してください。
 
-3. Go to the **Namespace** page in the Dashboard and disable the **View Explicitly Created Namespace Only** toggle. You should see the automatically created namespace `tenantA`.
+3. ダッシュボードの **Namespace** ページに移動し、**View Explicitly Created Namespace Only** のトグルをオフにします。自動的に作成されたネームスペース `tenantA` が表示されるはずです。
 
-   Click **Clients** in the **Actions** column to view the client connected to this namespace.
+   **Actions** 列の **Clients** をクリックすると、このネームスペースに接続しているクライアントを確認できます。
 
    ![namespace_client](./assets/namespace_client.png)
 
-## Configure and Verify Namespace Isolation
+## ネームスペース分離の設定と検証
 
-1. To isolate client IDs and topics between namespaces, add the following configuration to `base.hocon`:
+1. ネームスペース間でクライアントIDとトピックを分離するために、以下の設定を `base.hocon` に追加します：
 
    ```
    mqtt.clientid_override = "concat([client_attrs.tns, '-', clientid])"
    listener.tcp.default.mountpoint = "${client_attrs.tns}/"
    ```
 
-   This configuration will:
+   この設定により：
 
-   - Automatically prepend the tenant prefix to the client ID to avoid conflicts.
-   - Automatically prepend the namespace prefix to topic names for topic-level isolation between tenants.
+   - クライアントIDにテナントプレフィックスが自動的に付加され、衝突を回避します。
+   - トピック名にネームスペースプレフィックスが自動的に付加され、テナント間でトピックレベルの分離が実現します。
 
-   You can also set this up in the Dashboard:
+   ダッシュボードからも設定可能です：
 
-   <img src="./assets/clientid_override.png" alt="clientid_override" style="zoom:67%;" />
+   <img src="./assets/clientid_override.png" alt="clientid_override 設定" style="zoom:67%;" />
    
-   <img src="./assets/listener_mountpoint.png" alt="listener_mountpoint" style="zoom:67%;" />
+   <img src="./assets/listener_mountpoint.png" alt="listener_mountpoint 設定" style="zoom:67%;" />
 
-2. Use MQTTX to create two MQTT client connections to simulate two tenants: `tenantA` and `tenantB`.
+2. MQTTXを使って、2つのMQTTクライアント接続を作成し、2つのテナント `tenantA` と `tenantB` をシミュレートします。
 
-   **Client A (Tenant: tenantA)**:
+   **クライアントA（テナント：tenantA）**：
 
-   | Parameter | Value           |
-   | --------- | --------------- |
-   | Client ID | `client1`       |
-   | Username  | `tenantA-user1` |
-   | Subscribe | `test/topic`    |
+   | パラメータ | 値               |
+   | ---------- | ---------------- |
+   | Client ID  | `client1`        |
+   | Username   | `tenantA-user1`  |
+   | Subscribe  | `test/topic`     |
 
-   **Client B (Tenant: tenantB)**:
+   **クライアントB（テナント：tenantB）**：
 
-   | Parameter | Value           |
-   | --------- | --------------- |
-   | Client ID | `client1`       |
-   | Username  | `tenantB-user2` |
-   | Publish   | `test/topic`    |
+   | パラメータ | 値               |
+   | ---------- | ---------------- |
+   | Client ID  | `client1`        |
+   | Username   | `tenantB-user2`  |
+   | Publish    | `test/topic`     |
 
-3. Use Client B to publish a message. Verify the result in MQTTX and the EMQX Dashboard:
+3. クライアントBでメッセージをパブリッシュし、MQTTXおよびEMQXダッシュボードで結果を確認します：
 
-   - Although both clients use the same client ID (`client1`), due to the prefix rule, they connect as `tenantA-client1` and `tenantB-client1`, avoiding conflicts.
-   - Even though both clients use the same topic (`test/topic`), Client A will **not receive** messages published by Client B because they are isolated by namespace.
-   - In the **Monitoring** -> **Clients** page:
-     - Client A's subscribed topic appears as `tenantA/test/topic`.
-     - Client B's published topic appears as `tenantB/test/topic`.
+   - 両クライアントは同じクライアントID（`client1`）を使用していますが、プレフィックスルールにより `tenantA-client1` と `tenantB-client1` として接続され、衝突を回避しています。
+   - 両クライアントは同じトピック（`test/topic`）を使用していますが、クライアントAはネームスペースで分離されているため、クライアントBがパブリッシュしたメッセージを**受信しません**。
+   - ダッシュボードの **Monitoring** -> **Clients** ページでは：
+     - クライアントAのサブスクライブしているトピックは `tenantA/test/topic` と表示されます。
+     - クライアントBのパブリッシュしたトピックは `tenantB/test/topic` と表示されます。

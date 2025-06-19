@@ -1,21 +1,21 @@
-# Rate Limiter Configuration
+# レートリミッターの設定
 
-Limiter is a new feature introduced in EMQX 5.0, it is a mechanism to restrict the number of messages that a client or topic can publish or subscribe to in a specified time. For more information on the Limiter and how it works, see [Rate Limit](../rate-limit/rate-limit.md). 
+LimiterはEMQX 5.0で導入された新機能で、クライアントやトピックが指定された時間内にパブリッシュまたはサブスクライブできるメッセージ数を制限する仕組みです。Limiterの詳細や動作については、[Rate Limit](../rate-limit/rate-limit.md)をご参照ください。
 
-## Listener-Level Limiters
+## リスナー単位のリミッター
 
-Limiters can operate at the listener level. EMQX uses the following types of limiters to specify the rate limits:
+リミッターはリスナー単位で動作させることができます。EMQXでは以下の種類のリミッターを用いてレート制限を指定します。
 
-| Type           | Dashboard UI                                      | Description                                                  | Post-Overload Behavior          |
-| :------------- | ------------------------------------------------- | :----------------------------------------------------------- | :------------------------------ |
-| bytes_rate     | Max Message Publishing Traffic (Per Client)       | The size of messages in bytes published per second by a single client | Pause receiving client messages |
-| bytes_burst    | Max Message Publishing Traffic Burst (Per Client) | Number of bytes that can be sent in a burst by a single client, based on the regular `Data Publishing Rate`. | Pause receiving client messages |
-| messages_rate  | Max Message Publishing Rate (Per Client)          | The number of messages published per second by a single client | Pause receiving client messages |
-| messages_burst | Max Message Publishing Burst (Per Client)         | Number of messages that can be sent in a burst by a single client, on top of regular `Messages Publish Rate` | Pause receiving client messages |
-| max_conn_rate  | Max Connection Rate (Listener)                    | The number of connections per second for the current listener | Pause receiving new connections |
-| max_conn_rate  | Max Connection Burst (Listener)                   | The maximum number of connections that the listener can accept in bursts | Pause receiving new connections |
+| 種類           | ダッシュボードUI                                    | 説明                                                         | オーバーロード後の動作                 |
+| :------------- | ------------------------------------------------- | :----------------------------------------------------------- | :------------------------------------ |
+| bytes_rate     | Max Message Publishing Traffic (Per Client)       | 単一クライアントが1秒あたりにパブリッシュするメッセージのバイト数 | クライアントからのメッセージ受信を一時停止 |
+| bytes_burst    | Max Message Publishing Traffic Burst (Per Client) | 通常の`Data Publishing Rate`に基づく、単一クライアントがバーストで送信できるバイト数 | クライアントからのメッセージ受信を一時停止 |
+| messages_rate  | Max Message Publishing Rate (Per Client)          | 単一クライアントが1秒あたりにパブリッシュするメッセージ数   | クライアントからのメッセージ受信を一時停止 |
+| messages_burst | Max Message Publishing Burst (Per Client)         | 通常の`Messages Publish Rate`に加えて、単一クライアントがバーストで送信できるメッセージ数 | クライアントからのメッセージ受信を一時停止 |
+| max_conn_rate  | Max Connection Rate (Listener)                     | 現在のリスナーに対する1秒あたりの接続数                     | 新規接続の受け入れを一時停止           |
+| max_conn_rate  | Max Connection Burst (Listener)                    | リスナーがバーストで受け入れ可能な最大接続数                 | 新規接続の受け入れを一時停止           |
 
-For example, to set a limiter for the default TCP listener, you can use the configuration below:
+例えば、デフォルトのTCPリスナーにリミッターを設定する場合、以下のように設定します。
 
 ```bash
 listeners.tcp.default {
@@ -29,29 +29,29 @@ listeners.tcp.default {
 }
 ```
 
-This configuration implies:
+この設定は以下を意味します。
 
-- The maximum rate of connection establishment on the listener is 1000 per second.
-- The listener can accept a maximum of 10,000 connections within 60 minutes.
-- The maximum publishing rate for messages is 1000 per second per client.
-- The listener allows a burst of up to 10,000 messages within a short period every 60 minutes.
-- The maximum publishing rate for data is 1MB per second per client.
-- The listener allows a burst of up to 100MB within a short period every 60 minutes.
+- リスナーの接続確立の最大レートは1秒あたり1000件です。
+- リスナーは60分間に最大10,000件の接続を受け入れられます。
+- クライアントごとのメッセージパブリッシュの最大レートは1秒あたり1000件です。
+- リスナーは60分ごとに短時間で最大10,000件のメッセージのバーストを許容します。
+- クライアントごとのデータパブリッシュの最大レートは1秒あたり1MBです。
+- リスナーは60分ごとに短時間で最大100MBのデータバーストを許容します。
 
-## Node-Level Limiters
+## ノード単位のリミッター
 
-Limiters can also operate at the node level, limiting the speed of individual client connections to each EMQX node and the rate at which messages or data are published to the node. EMQX nodes use the following types of limiters to specify rate limits:
+リミッターはノード単位でも動作し、各EMQXノードへの個々のクライアント接続の速度や、ノードにパブリッシュされるメッセージやデータのレートを制限します。EMQXノードでは以下の種類のリミッターを用いてレート制限を指定します。
 
-| Type           | Dashboard UI             | Description                                                  | Post-Overload Behavior                                       |
-| -------------- | ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| bytes_rate     | Data Publish Rate        | The amount of data (in bytes) sent by a single client to each EMQX node | When the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages with a "Quota Exceeded" error (0x97). |
-| bytes_burst    | Data Publish Burst       | The burst amount of data allowed per client, based on the regular `data publish rate` | When the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages with a "Quota Exceeded" error (0x97). |
-| messages_rate  | Message Publish Rate     | The rate at which a single client sends messages to each EMQX node | When the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages with a "Quota Exceeded" error (0x97). |
-| messages_burst | Message Publish Burst    | The number of messages allowed to be sent per node in bursts, based on the regular `message publishing rate` | When the limit is reached, EMQX will drop QoS 0 messages and reject QoS 1 and QoS 2 messages with a "Quota Exceeded" error (0x97). |
-| max_conn_rate  | Maximum Connection Rate  | The rate at which new connections are accepted per node      | When the limit is reached, EMQX will pause processing connections in the Accept queue, delaying or rejecting new connections. |
-| max_conn_burst | Maximum Connection Burst | The maximum number of connections that a node can accept in bursts | Pause receiving new connections                              |
+| 種類           | ダッシュボードUI             | 説明                                                         | オーバーロード後の動作                                                                                   |
+| -------------- | ---------------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| bytes_rate     | Data Publish Rate            | 単一クライアントが各EMQXノードに送信するデータ量（バイト単位） | 制限に達した場合、QoS 0メッセージは破棄され、QoS 1およびQoS 2メッセージは「Quota Exceeded」エラー（0x97）で拒否されます。 |
+| bytes_burst    | Data Publish Burst           | 通常の`data publish rate`に基づく、クライアントごとに許可されるデータのバースト量 | 制限に達した場合、QoS 0メッセージは破棄され、QoS 1およびQoS 2メッセージは「Quota Exceeded」エラー（0x97）で拒否されます。 |
+| messages_rate  | Message Publish Rate         | 単一クライアントが各EMQXノードに送信するメッセージのレート | 制限に達した場合、QoS 0メッセージは破棄され、QoS 1およびQoS 2メッセージは「Quota Exceeded」エラー（0x97）で拒否されます。 |
+| messages_burst | Message Publish Burst        | 通常の`message publishing rate`に基づく、ノードごとに許可されるメッセージのバースト数 | 制限に達した場合、QoS 0メッセージは破棄され、QoS 1およびQoS 2メッセージは「Quota Exceeded」エラー（0x97）で拒否されます。 |
+| max_conn_rate  | Maximum Connection Rate      | ノードごとに受け入れる新規接続のレート                       | 制限に達した場合、Acceptキューでの接続処理が一時停止され、新規接続の遅延または拒否が発生します。             |
+| max_conn_burst | Maximum Connection Burst     | ノードがバーストで受け入れ可能な最大接続数                   | 新規接続の受け入れを一時停止します。                                                                       |
 
- For example, to set a limiter to an EMQX node, you can configure the following in `emqx.conf`:
+例えば、EMQXノードにリミッターを設定するには、`emqx.conf`に以下のように記述します。
 
 ```bash
 mqtt.limiter {
@@ -64,7 +64,7 @@ mqtt.limiter {
 }
 ```
 
-Zone-level limiters can be embedded in the `zone` section as follows:
+ゾーン単位のリミッターは`zone`セクション内に以下のように埋め込むことができます。
 
 ```bash
 zones.my_zone.mqtt {
@@ -72,13 +72,13 @@ zones.my_zone.mqtt {
 }
 ```
 
-- The node can receive a maximum of 500 messages every 10 seconds, and any excess will be dropped/rejected.
-- The node allows a burst of up to 10,000 messages within a short period every 60 minutes.
-- The node can receive a maximum of 500MB of data every 10 seconds, and any excess will be dropped/rejected.
-- The node allows a burst of up to 100MB within a short period every 60 minutes.
+- ノードは10秒ごとに最大500メッセージを受信でき、それを超えるメッセージは破棄または拒否されます。
+- ノードは60分ごとに短時間で最大10,000メッセージのバーストを許容します。
+- ノードは10秒ごとに最大500MBのデータを受信でき、それを超えるデータは破棄または拒否されます。
+- ノードは60分ごとに短時間で最大100MBのデータバーストを許容します。
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはカスタマイズニーズに応じたより詳細な設定項目を提供しています。詳細は[EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご覧ください。
 
 :::

@@ -1,20 +1,20 @@
-# Quick Start: Create a Flow Using Anthropic Node
+# クイックスタート：Anthropicノードを使ったFlowの作成
 
-This page demonstrates how to use Claude 3 Sonnet to perform fault classification and generate corrective recommendations based on incoming telemetry. It simulates a real-world scenario where IoT systems, such as smart factories or buildings, receive status messages from devices and require automated, intelligent interpretation of those issues.
+このページでは、Claude 3 Sonnetを使用してフォールト分類を行い、受信したテレメトリに基づいて是正推奨を生成する方法を示します。これは、スマートファクトリーやスマートビルディングなどのIoTシステムがデバイスからのステータスメッセージを受信し、それらの問題を自動かつインテリジェントに解釈する実際のシナリオをシミュレートしています。
 
-## Scenario Description
+## シナリオの説明
 
-In many industrial or smart building scenarios, IoT devices report multiple metrics in a single MQTT message. For example, a power monitoring device may send power consumption across different circuits in one payload.
+多くの産業やスマートビルディングのシナリオでは、IoTデバイスが単一のMQTTメッセージ内で複数のメトリクスを報告します。例えば、電力監視デバイスが複数の回路にわたる電力消費量を1つのペイロードで送信する場合があります。
 
-Each message is published to the topic `devices/power_report` and includes:
+各メッセージはトピック `devices/power_report` にパブリッシュされ、以下を含みます：
 
-- `device_id`: Identifier of the device
-- Multiple numeric metrics, such as `circuit_1`, `circuit_2`, `circuit_3`, etc.
-- Additional non-numeric fields like `status` or `timestamp`
+- `device_id`：デバイスの識別子
+- `circuit_1`、`circuit_2`、`circuit_3`などの複数の数値メトリクス
+- `status` や `timestamp` のような数値以外のフィールド
 
-Your goal is to sum all numeric values in the message (i.e., total power consumption across circuits) using an LLM (Claude 3 Sonnet), and republish only the numeric result for downstream processing or billing.
+このメッセージ内のすべての数値を合計（すなわち回路全体の総消費電力）し、LLM（Claude 3 Sonnet）を使って計算し、その数値結果のみを下流処理や課金のために再パブリッシュすることが目的です。
 
-## Sample Message
+## サンプルメッセージ
 
 ```json
 {
@@ -27,79 +27,79 @@ Your goal is to sum all numeric values in the message (i.e., total power consump
 }
 ```
 
-## Expected Output (from Claude)
+## 期待される出力（Claudeから）
 
 ```
 322.4
 ```
 
-This value is the total of all numeric circuit readings.
+この値はすべての数値回路読み取り値の合計です。
 
-## Create the Flow
+## Flowの作成
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Make sure you have a valid **Anthropic API Key** and set the correct API version (e.g., `2023-06-01`).
+有効な **Anthropic APIキー** を用意し、正しいAPIバージョン（例：`2023-06-01`）を設定してください。
 
 :::
 
-1. Click the **Create Flow** button on the **Flows** page.
+1. **Flows** ページで **Create Flow** ボタンをクリックします。
 
-2. Add a **Messages** node.
+2. **Messages** ノードを追加します。
 
-   - Drag a **Messages** node from the Source panel.
-   - Set the topic to `devices/power_report`.
-   - Click **Save**.
+   - ソースパネルから **Messages** ノードをドラッグします。
+   - トピックを `devices/power_report` に設定します。
+   - **Save** をクリックします。
 
-3. Add an **Anthropic** node.
+3. **Anthropic** ノードを追加します。
 
-   - Drag an **Anthropic** node from the Processing section and connect it to the Data Processing node.
-   - Configure the node:
-     - **Input**: Enter `payload`.
-     - **System Message**:  You can enter a dynamic prompt like the following:  
+   - 処理セクションから **Anthropic** ノードをドラッグし、Data Processingノードに接続します。
+   - ノードを設定します：
+     - **Input**：`payload` を入力します。
+     - **System Message**：以下のような動的プロンプトを入力できます。  
        
        ```
        You are a power consumption calculator. Given an input JSON object with various keys, sum all numeric values (e.g., circuit readings) and return only the total.
        ```
-     - **Model**: Select `claude-3-sonnet-20240620`.
-     - **Max Tokens**: Enter `50`.
-     - **Anthropic Version**: Enter `2023-06-01`.
-     - **API Key**: Enter your Anthropic API key.
-     - **Base URL**: Leave empty.
-     - **Output Result Alias**: Enter `total_power`.
-   - Click **Save**.
+     - **Model**：`claude-3-sonnet-20240620` を選択します。
+     - **Max Tokens**：`50` を入力します。
+     - **Anthropic Version**：`2023-06-01` を入力します。
+     - **API Key**：AnthropicのAPIキーを入力します。
+     - **Base URL**：空欄のままにします。
+     - **Output Result Alias**：`total_power` を入力します。
+   - **Save** をクリックします。
 
-4. Add a **Republish** node.
+4. **Republish** ノードを追加します。
 
-   - Drag a **Republish** node from the Sink section and connect it to the Anthropic node.
-   - Set the topic to `devices/power_total`.
-   - Set the payload to `${total_power}`.
-   - Click **Save**.
+   - シンクセクションから **Republish** ノードをドラッグし、Anthropicノードに接続します。
+   - トピックを `devices/power_total` に設定します。
+   - ペイロードを `${total_power}` に設定します。
+   - **Save** をクリックします。
 
-5. Click **Save** in the upper-right corner to save the Flow.
+5. 右上の **Save** ボタンをクリックしてFlowを保存します。
 
    ![anthropic_node_flow](./assets/anthropic_node_flow.png)
 
-6. Flows and form rules are interoperable. You can also view the SQL and related rule configurations on the Rule page.
+6. Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
 
    ![anthropic_node_rule_page](./assets/anthropic_node_rule_page.png)
 
-## Test the Flow
+## Flowのテスト
 
-1. Connect an MQTT client to EMQX.
+1. MQTTクライアントをEMQXに接続します。
 
-   To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
+   Flowを素早くテストするには、ダッシュボードの **Diagnostic Tools** -> **WebSocket Client** を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/) ツールや実際のMQTTクライアントも利用可能です：
 
-   - Connect to your EMQX server.
-   - Subscribe to the topic `devices/power_total`.
+   - EMQXサーバーに接続します。
+   - トピック `devices/power_total` をサブスクライブします。
 
-2. Start Testing.
+2. テスト開始。
 
-   - In the Flow Designer, click any node to open the Edit panel.
+   - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
 
-   - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
+   - **Edit** をクリックし、続けて **Start Test** をクリックして画面下部にテストパネルを開きます。
 
-   - Click **Input Simulated Data** and publish this message to topic `devices/power_report` by clicking **Submit Test**:
+   - **Input Simulated Data** をクリックし、以下のメッセージをトピック `devices/power_report` にパブリッシュするため **Submit Test** をクリックします：
 
      ```json
      {
@@ -112,18 +112,18 @@ Make sure you have a valid **Anthropic API Key** and set the correct API version
      }
      ```
 
-3. Review results and node processing metrics.
+3. 結果とノード処理メトリクスを確認します。
 
-   - You can see the successful execution result of the flow.
+   - Flowの正常な実行結果が表示されます。
 
      ![anthropic_node_test_result](./assets/anthropic_node_test_result.png)
 
-   - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
+   - **WebSocket Client** ページに戻ると、AI生成の集計結果が受信できます：
    
      > 322.4
      
-   - If the test results are unsuccessful, error messages will be displayed accordingly.
+   - テスト結果が失敗した場合は、エラーメッセージが表示されます。
    
-   - To view the running statistics and metrics of the **Anthropic** node, click the node to open the Edit panel and click the **Overview** tab.
+   - **Anthropic** ノードの稼働状況やメトリクスを確認するには、ノードをクリックして編集パネルを開き、**Overview** タブをクリックします。
    
      ![anthropic_node_statis](./assets/anthropic_node_statistics.png)

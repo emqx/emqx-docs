@@ -1,43 +1,43 @@
-# Authorization
+# 認可
 
-In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. When a client performs a publish/subscribe operation, EMQX follows a specific procedure or uses the user-specified query statement to query the client's permission list from the configured data source. Based on the query result, EMQX allows or rejects the current operation.
+EMQXにおける認可とは、MQTTクライアントのパブリッシュ／サブスクライブ操作に対する権限管理を指します。クライアントがパブリッシュ／サブスクライブ操作を行う際、EMQXは特定の手順に従うか、ユーザー指定のクエリ文を用いて設定されたデータソースからクライアントの権限リストを照会します。照会結果に基づき、EMQXは現在の操作を許可または拒否します。
 
-A single permission data of a client has the following components:
+クライアントの単一の権限データは以下の要素で構成されます：
 
-| **Permission** | **Client**            | **Operation**                       | **Operation Details**          |
-| -------------- | --------------------- | ----------------------------------- | -------------------------- |
-| Allow/Deny     | Client ID/Username/IP | Publish/Subscribe/Publish-Subscribe | Topic/QoS/Retained Message |
+| **権限**       | **クライアント**           | **操作**                           | **操作の詳細**                |
+| -------------- | -------------------------- | --------------------------------- | ----------------------------- |
+| Allow/Deny     | クライアントID／ユーザー名／IP | Publish／Subscribe／Publish-Subscribe | トピック／QoS／保持メッセージ |
 
 ::: tip
-Starting from EMQX 5.1.1, the support for checking QoS and retained messages in operation details is introduced.
+EMQX 5.1.1以降、操作の詳細におけるQoSおよび保持メッセージのチェックがサポートされました。
 :::
 
-The permission list of the client needs to be stored in a specific data source (database, file) in advance. You can update the list during runtime by updating the corresponding data record. 
+クライアントの権限リストは事前に特定のデータソース（データベース、ファイルなど）に保存しておく必要があります。対応するデータレコードを更新することで、実行時にリストを更新可能です。
 
-A file-based authorizer is configured in EMQX by default and you can use the authorizer directly. The authorization is processed based on the predefined rules configured in the ACL file. 
+EMQXではデフォルトでファイルベースのオーソライザーが設定されており、そのまま利用できます。認可はACLファイルに設定された事前定義ルールに基づいて処理されます。
 
-## Integrate with Data Storage Objects
+## データストレージオブジェクトとの統合
 
-The EMQX authorization mechanism supports integration with various data storage objects, including built-in databases, files, MySQL, PostgreSQL, MongoDB, and Redis. You can manage permission data through REST API or EMQX Dashboard. <!-- Using a CSV or JSON file to import the data in a batch is currently not supported.-->.
+EMQXの認可機構は、組み込みデータベース、ファイル、MySQL、PostgreSQL、MongoDB、Redisなど多様なデータストレージオブジェクトとの統合をサポートしています。権限データはREST APIやEMQXダッシュボードを通じて管理可能です。<!-- CSVやJSONファイルによる一括インポートは現在サポートされていません。-->
 
-In addition, EMQX can also connect to HTTP services developed by our users to meet different authorization requirements.
+さらに、EMQXはユーザーが開発したHTTPサービスと接続し、異なる認可要件に対応することも可能です。
 
-According to the backend data storage used, there are different types of EMQX authorizers as listed below. Each authorizer has its own configuration options. You can click the corresponding links in the table for more details.
+バックエンドのデータストレージに応じて、以下のような種類のEMQXオーソライザーがあります。各オーソライザーは独自の設定オプションを持ちます。詳細は表中のリンクを参照してください。
 
-| Database          | Description                                                  |
+| データベース       | 説明                                                         |
 | ----------------- | ------------------------------------------------------------ |
-| ACL File          | [Authorization with static rules configured in a file](./file.md) |
-| Built-in database | [Authorization with built-in database as rules storage](./mnesia.md) |
-| MySQL             | [Authorization with MySQL as rules storage](./mysql.md)      |
-| PostgreSQL        | [Authorization with PostgreSQL as rules storage](./postgresql.md) |
-| MongoDB           | [Authorization with MongoDB as rules storage](./mongodb.md)  |
-| Redis             | [Authorization with Redis as rules storage](./redis.md)      |
-| LDAP              | [Authorization with LDAP directory as rules storage](./ldap.md) |
-| HTTP              | [Authorization with external HTTP service](./http.md)        |
+| ACLファイル        | [ファイルに設定された静的ルールによる認可](./file.md)         |
+| 組み込みデータベース | [組み込みデータベースをルールストレージとした認可](./mnesia.md) |
+| MySQL             | [MySQLをルールストレージとした認可](./mysql.md)               |
+| PostgreSQL        | [PostgreSQLをルールストレージとした認可](./postgresql.md)     |
+| MongoDB           | [MongoDBをルールストレージとした認可](./mongodb.md)           |
+| Redis             | [Redisをルールストレージとした認可](./redis.md)               |
+| LDAP              | [LDAPディレクトリをルールストレージとした認可](./ldap.md)      |
+| HTTP              | [外部HTTPサービスを利用した認可](./http.md)                   |
 
-Below is an example of how to configure an EMQX MySQL authorizer.
+以下はEMQXのMySQLオーソライザーの設定例です。
 
-Example:
+例：
 
 ```bash
 {
@@ -52,183 +52,181 @@ Example:
 }
 ```
 
-## Authorization Chain
+## 認可チェーン
 
-EMQX allows users to create an authorization chain by configuring multiple authorizers rather than one single authorizer to make authorization more flexible. EMQX follows the authorizers' position in the chain to perform the authorization in sequence. With the authorization chain configured, when EMQX fails to retrieve the matching authentication information from the first authorizer, it switches to the next authenticator to continue the process.
+EMQXは単一のオーソライザーではなく複数のオーソライザーを設定して認可チェーンを作成することができ、認可処理の柔軟性を高めます。EMQXはチェーン内のオーソライザーの順序に従い順番に認可を実行します。認可チェーンが設定されている場合、最初のオーソライザーで一致する認可情報が取得できないと、次のオーソライザーに切り替えて処理を継続します。
 
-The process of the authorization check is as follows:
+認可チェックの流れは以下の通りです：
 
-1. If EMQX successfully retrieves the client's permission information, it matches the client's operation to the retrieved permission list.
-   - If they match, EMQX allows or denies the operation based on permission setting.
-   - If they do not match, EMQX switches to the next authorizer to continue the process.
+1. EMQXがクライアントの権限情報を正常に取得した場合、クライアントの操作と取得した権限リストを照合します。
+   - 一致すれば、権限設定に基づき操作を許可または拒否します。
+   - 一致しなければ、次のオーソライザーに切り替えて処理を継続します。
 
-2. If EMQX fails to retrieve the client's permission information, it checks if there are any other authorizers configured.
-   - If yes, EMQX switches to the next authorizer to continue the process.
-   - If it is already the last authorizer, EMQX follows the setting of `no_match` to determine whether to allow or reject the client operation.
+2. EMQXがクライアントの権限情報を取得できなかった場合、他のオーソライザーが設定されているか確認します。
+   - 設定されていれば、次のオーソライザーに切り替えて処理を継続します。
+   - 最後のオーソライザーであれば、`no_match`の設定に従いクライアントの操作を許可または拒否します。
 
-::: warning Note
+::: warning 注意
 
-To avoid problems with the authorization, you need to remember to disable or remove the ACL file authorizer when necessary because it has `{allow, all}` at the end by default to allow all authz requests.
+認可の問題を避けるため、ACLファイルオーソライザーは必要に応じて無効化または削除してください。デフォルトで末尾に `{allow, all}` があり、すべての認可リクエストを許可してしまうためです。
 
 :::
 
-For information on how to adjust the sequence of the authorizer in an authorization chain and how to check the running metrics, see [Manage Authorizers](#manage-authorizers).
+オーソライザーの順序調整や稼働状況の確認方法は、[オーソライザー管理](#manage-authorizers)を参照してください。
 
-## Client Authorization Cache
+## クライアント認可キャッシュ
 
-EMQX provides a session-based authorization data cache mechanism. This cache stores authorization results in the client’s session state and reduces the need for repeated authorization rule evaluation during the same connection. The client authorization cache mechanism improves the efficiency of permission checks for client publish/subscribe operations and helps reduce the access load on the authorization data backend caused by a large number of client requests.
+EMQXはセッションベースの認可データキャッシュ機構を提供しています。このキャッシュはクライアントのセッション状態に認可結果を保存し、同一接続内での繰り返し認可ルール評価を減らします。クライアント認可キャッシュはクライアントのパブリッシュ／サブスクライブ操作の権限チェック効率を向上させ、多数のクライアントリクエストによる認可データバックエンドへのアクセス負荷軽減に寄与します。
 
-### How Client Authorization Cache Works
+### クライアント認可キャッシュの動作
 
-When a client connects and performs publish/subscribe operations:
+クライアントが接続しパブリッシュ／サブスクライブ操作を行う際：
 
-1. EMQX checks the authorization cache stored in the current session.
-2. If a matching rule is found in the session cache, EMQX uses it directly.
-3. If no cached rule exists (or the rule has expired), EMQX performs a full authorization check using the configured authorizers.
-4. The result is cached in the session for subsequent reuse during the connection.
+1. EMQXは現在のセッションに保存された認可キャッシュを確認します。
+2. セッションキャッシュに一致するルールがあれば、それを直接使用します。
+3. キャッシュが存在しないか期限切れの場合、設定されたオーソライザーで完全な認可チェックを行います。
+4. 結果はセッションにキャッシュされ、同一接続内で再利用されます。
 
 ::: tip
 
-The cache is client-session specific and is cleared when the client disconnects or reconnects.
+キャッシュはクライアントセッション固有であり、クライアントの切断または再接続時にクリアされます。
 
 :::
 
-### Configure Client Authorization Cache in Dashboard
+### ダッシュボードでのクライアント認可キャッシュ設定
 
-You can enable or configure the client authorization cache in the EMQX Dashboard:
+EMQXダッシュボードでクライアント認可キャッシュを有効化・設定できます：
 
-1. Go to **Access Control** -> **Authorization** -> **Settings**.
+1. **アクセス制御** -> **認可** -> **設定** に移動します。
 
-2. Configure the following options:
+2. 以下のオプションを設定します：
 
-   | Field Name                           | Description                                                  |
-   | ------------------------------------ | ------------------------------------------------------------ |
-   | **Enable Cache**                     | Toggle to enable or disable client authorization cache for each client session. |
-   | **Max number of cached Items**       | Maximum number of cached entries per client. Default: `32`.  |
-   | **Time to live for the cached data** | Lifetime of each cached entry. Default: `1 minute`.          |
-   | **Excluded Topics**                  | List of topics for which caching is disabled.                |
-   | **No Match Action**                  | Action to take if no authorizer returns a match. Options: `allow` (the client's operation) / `deny` (the client's operation). Default: `allow`. |
-   | **Deny Action**                      | Action when an operation is denied. Options: `ignore` (operation request) / `disconnect` (the connection of current client). Default: `ignore`. |
-   | **Clear Cache**                      | Button to manually clear all active session authorization caches. |
+   | 項目名                             | 説明                                                         |
+   | ---------------------------------- | ------------------------------------------------------------ |
+   | **キャッシュを有効にする**         | クライアントセッションごとの認可キャッシュを有効／無効に切り替えます。 |
+   | **キャッシュ最大件数**             | クライアントごとのキャッシュ最大エントリ数。デフォルト：`32`。 |
+   | **キャッシュ有効期限**             | キャッシュエントリの有効期間。デフォルト：`1分`。            |
+   | **除外トピック**                   | キャッシュを無効にするトピックのリスト。                      |
+   | **一致しない場合の動作**           | オーソライザーが一致しなかった場合の動作。`allow`（許可）／`deny`（拒否）。デフォルト：`allow`。 |
+   | **拒否時の動作**                   | 操作が拒否された場合の動作。`ignore`（操作リクエストを無視）／`disconnect`（クライアント接続を切断）。デフォルト：`ignore`。 |
+   | **キャッシュクリア**               | アクティブなセッション認可キャッシュを手動で全てクリアするボタン。 |
 
-You can also configure these options via the configuration file. For more details, see [Configuration file](../../configuration/configuration.md).
+これらの設定は設定ファイルからも行えます。詳細は[設定ファイル](../../configuration/configuration.md)を参照してください。
 
 ::: tip
 
-If set properly, caching can greatly improve performance. So, it is recommended to timely adjust the setting based on your system performance.
+適切に設定すればキャッシュはパフォーマンスを大幅に向上させます。システムの状況に応じて設定を調整することを推奨します。
 
 :::
 
-## External Resource Cache
+## 外部リソースキャッシュ
 
-In addition to session-based caching, EMQX also supports a node-level cache for storing authorization results retrieved from external backends, such as MySQL, MongoDB, or Redis. This feature improves performance by reducing repeated access to remote data sources.
+セッションベースのキャッシュに加え、EMQXはMySQL、MongoDB、Redisなどの外部バックエンドから取得した認可結果をノードレベルでキャッシュする機能も提供しています。この機能により、リモートデータソースへの繰り返しアクセスを減らしパフォーマンスを向上させます。
 
-::: tip Note
+::: tip 注意
 
-The external resource cache applies only to external data sources. For local sources such as the built-in database or file-based authorizers, EMQX does not use this cache.
-
-:::
-
-### How External Resource Cache Works
-
-When a publish/subscribe operation triggers an external backend query:
-
-1. EMQX checks the external resource cache (shared across all clients on the node).
-2. EMQX checks the cache for a previously stored result:
-   - If a valid result is found, it counts as a **Cache Hit**, and no call to the external backend is made.
-   - If no result is found, it counts as a **Cache Miss**, and EMQX queries the external backend.
-
-3. The result returned from the backend is stored in the cache for future use, incrementing the **Cache Insert** metric.
-
-::: tip Note
-
-Unlike the session-based Authorization Cache, the External Resource Cache is node-wide, shared across all clients on the same node, and persists across client sessions.
+外部リソースキャッシュは外部データソースにのみ適用されます。組み込みデータベースやファイルベースのオーソライザーには適用されません。
 
 :::
 
-### Enable and Configure External Resource Cache
+### 外部リソースキャッシュの動作
+
+パブリッシュ／サブスクライブ操作が外部バックエンドへのクエリをトリガーした場合：
+
+1. EMQXは外部リソースキャッシュ（ノード全体で共有）を確認します。
+2. キャッシュに有効な結果があれば、**キャッシュヒット**とカウントし外部バックエンドへの呼び出しは行いません。
+3. 結果がなければ、**キャッシュミス**とカウントし外部バックエンドにクエリを送ります。
+4. バックエンドから返された結果はキャッシュに保存され、**キャッシュ挿入**メトリクスが増加します。
+
+::: tip 注意
+
+セッションベースの認可キャッシュと異なり、外部リソースキャッシュはノード単位で全クライアント間で共有され、クライアントセッションを跨いで持続します。
+
+:::
+
+### 外部リソースキャッシュの有効化と設定
 
 <!--@include: ../config-external-resource-cache.md-->
 
-### Monitor External Resource Cache Status
+### 外部リソースキャッシュの状態監視
 
 <!--@include: ../monitor-cache-status.md-->
 
-## Authorization Placeholders
+## 認可プレースホルダー
 
-EMQX authorizers allow using placeholders in their configuration. During the authorization step, these placeholders are replaced with actual client information to construct a query or HTTP request that matches the current client.
+EMQXのオーソライザー設定ではプレースホルダーを使用可能です。認可処理時にこれらは実際のクライアント情報に置き換えられ、現在のクライアントに合致するクエリやHTTPリクエストを構築します。
 
-A valid placeholder follows the format `${PATH.TO.VALUE}`, where PATH.TO.VALUE is a dot-notated path to a value in an object. Valid characters include letters, digits, dots (`.`), and underscores (`_`). Placeholders containing unsupported characters will be treated as plain text. 
+有効なプレースホルダーは `${PATH.TO.VALUE}` の形式で、PATH.TO.VALUEはオブジェクト内の値へのドット区切りパスです。使用可能な文字は英数字、ドット（`.`）、アンダースコア（`_`）です。サポートされていない文字を含むプレースホルダーは文字列として扱われます。
 
-### Placeholders in Data Queries
+### データクエリ内のプレースホルダー
 
-Placeholders are used to construct query statement. For example, in one EMQX MySQL authorizer, the default query SQL uses the placeholder `${username}`:
+プレースホルダーはクエリ文の構築に使われます。例えば、EMQX MySQLオーソライザーのデフォルトクエリは `${username}` を使っています：
 
 ```sql
 SELECT action, permission, topic FROM mqtt_acl where username = ${username}
 ```
 
-When a client (name: `emqx_u`) initiates a connect request, the constructed query statement is like:
+クライアント（名前：`emqx_u`）が接続リクエストを送ると、構築されるクエリは以下のようになります：
 
 ```sql
 SELECT action, permission, topic FROM mqtt_acl where username = 'emqx_u'
 ```
 
-The following placeholders are supported in query statements:
+クエリ文でサポートされるプレースホルダーは以下の通りです：
 
-* `${username}`:  It is replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it is overridden by the fields or the content of the certificate.
-* `${clientid}`:  It is replaced by the client ID at runtime. The client ID is normally explicitly specified by the client in the `CONNECT` packet. If `use_username_as_clientid` or `peer_cert_as_clientid` is enabled, this field is overridden by the username, fields in the certificate, or the content of the certificate.
-* `${peerhost}`: It is replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
-- `${peerport}`: It will be replaced with the client's IP port at runtime.
-- `${peername}`:  It will be replaced with the client's IP address and port at runtime, and the format is `IP: PORT`.
-* `${cert_common_name}`: It is replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
-* `${cert_subject}`:  It is replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
-* `${client_attrs.NAME}`:  A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
-* `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authorization templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
+* `${username}`：実行時にユーザー名に置き換えられます。ユーザー名は`CONNECT`パケットの`Username`フィールドから取得されます。`peer_cert_as_username`が有効な場合は証明書のフィールドや内容で上書きされます。
+* `${clientid}`：実行時にクライアントIDに置き換えられます。通常は`CONNECT`パケットでクライアントが明示的に指定します。`use_username_as_clientid`や`peer_cert_as_clientid`が有効な場合はユーザー名や証明書のフィールド・内容で上書きされます。
+* `${peerhost}`：実行時にクライアントのIPアドレスに置き換えられます。EMQXは[Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)をサポートしており、TCPプロキシやロードバランサーの背後にあっても実際のIPアドレスを取得可能です。
+* `${peerport}`：実行時にクライアントのIPポートに置き換えられます。
+* `${peername}`：実行時にクライアントのIPアドレスとポート（`IP:PORT`形式）に置き換えられます。
+* `${cert_common_name}`：実行時にクライアントTLS証明書のCommon Nameに置き換えられます。ロードバランサーがクライアント証明書情報をTCPリスナーに送る場合はProxy Protocol v2を使用してください。
+* `${cert_subject}`：実行時にクライアントTLS証明書のSubjectに置き換えられます。ロードバランサーがクライアント証明書情報をTCPリスナーに送る場合はProxy Protocol v2を使用してください。
+* `${client_attrs.NAME}`：クライアント属性。`NAME`は事前定義された設定に基づき実行時に置き換えられます。詳細は[MQTTクライアント属性](../../client-attributes/client-attributes.md)を参照してください。
+* `${zone}`：実行時にクライアントのゾーンに置き換えられます。`${zone}`プレースホルダーは認可テンプレート内で直接使用可能です。ゾーン設定の詳細は[ゾーンオーバーライド](../../configuration/configuration.md#zone-override)を参照してください。
 
-### Topic Placeholders
+### トピック内のプレースホルダー
 
-EMQX also allows placeholders to be used in topics to support dynamic themes. The supported placeholders are as follows:
+EMQXは動的トピックをサポートするため、トピック内でもプレースホルダーの使用を許可しています。サポートされるプレースホルダーは以下の通りです：
 
 * `${clientid}`
 * `${username}`
-* `${client_attrs.NAME}`: A client attribute. `NAME` is to be replaced by an attribute name extraction rule configured in `mqtt.client_attrs_init`.
+* `${client_attrs.NAME}`：クライアント属性。`NAME`は`mqtt.client_attrs_init`で設定された属性名抽出ルールにより置き換えられます。
 
-Placeholders can be used as topic segments, like `a/b/${username}/c/d`.
+プレースホルダーはトピックのセグメントとして使用可能で、例：`a/b/${username}/c/d` のように記述します。
 
-To avoid placeholder interpolation, starting from EMQX 5.4, you can escape `$` as `${$}`. For example, `t/${$}{username}` is treated as `t/${username}` literally without interpolation, rather than the topic name with `username` replaced.
+プレースホルダーの展開を避けたい場合、EMQX 5.4以降は `$` を `${$}` とエスケープできます。例えば、`t/${$}{username}` は展開されず文字通り `t/${username}` と解釈されます。
 
 ::: tip
 
-If you use the `eq` syntax in query statements, note that the topic following `eq` does not support placeholder interpolation. This behavior can change in future versions. 
+クエリ文で `eq` 構文を使う場合、`eq` の後に続くトピックはプレースホルダー展開をサポートしません。この挙動は将来のバージョンで変更される可能性があります。
 
-The `eq` syntax is to match exactly a topic filter, but not any topic that matches the filter. For example, `eq t/#` matches `t/#`, not `t/1` or `t/2`.
+`eq` 構文はトピックフィルターと完全一致を判定するもので、フィルターにマッチする任意のトピックを意味しません。例：`eq t/#` は `t/#` にのみマッチし、`t/1` や `t/2` にはマッチしません。
 
 :::
 
-## Authorization Check Priority
+## 認可チェックの優先順位
 
-Besides the cache and authorization checker, the authorization result may also be affected by the [Super User Role and Permission set](../authn/authn.md#super-user) during the authentication phase.
+キャッシュや認可チェッカーに加え、認可結果は認証フェーズの[スーパーユーザーロールと権限セット](../authn/authn.md#super-user)の影響を受けます。
 
-For super users, all their operations will be skipped from the authorization check. If the [Access Control List (ACL) list](../authn/acl.md) is set, EMQX will first follow the client's permission data before running the authorization checker. The priority is as follows:
+スーパーユーザーの場合、すべての操作は認可チェックをスキップします。[アクセス制御リスト（ACL）](../authn/acl.md)が設定されている場合、EMQXは認可チェッカー実行前にクライアントの権限データを優先して参照します。優先順位は以下の通りです：
 
 ```bash
-Super user > permission data > authorization check
+スーパーユーザー > 権限データ > 認可チェック
 ```
 
-## Configure Authorization Mechanisms
+## 認可機構の設定
 
-EMQX provides three ways to configure authorization, namely: Dashboard, Configuration file, and HTTP API.
+EMQXは認可設定を以下の3つの方法で行えます：ダッシュボード、設定ファイル、HTTP API。
 
-### Configure Authorization via Dashboard
+### ダッシュボードでの認可設定
 
-EMQX Dashboard is an intuitive way to configure EMQX authorizer, where you can configure relevant parameters, check their working status, and adjust their position in the authorization chain.
+EMQXダッシュボードは直感的にオーソライザーを設定できるインターフェースです。関連パラメータの設定、稼働状況の確認、認可チェーン内の位置調整が可能です。
 
-<img src="./assets/authentication-with-dashboard.png" alt="authentication-with-dashboard" style="zoom:80%;" />
+<img src="./assets/authentication-with-dashboard.png" alt="ダッシュボードによる認証設定" style="zoom:80%;" />
 
-### Configure Authorization via Configuration File
+### 設定ファイルでの認可設定
 
-You can also configure authorization in the `authorization` fields in the configuration file. The general config structure is the following:
+設定ファイルの `authorization` フィールドに認可設定を記述できます。一般的な構成例は以下の通りです：
 
 ```bash
 authorization {
@@ -246,63 +244,63 @@ authorization {
 }
 ```
 
-Where, 
+各項目の説明：
 
-- `sources` (optional): An ordered array; each array element defines the data source of the corresponding authorizer. For detailed configurations, see the corresponding configuration file.
+- `sources`（任意）：順序付き配列。各要素は対応するオーソライザーのデータソースを定義します。詳細は各オーソライザーの設定ファイルを参照してください。
 
-- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting also triggers the enabling of black/white list. 
+- `no_match`：設定されたオーソライザーのいずれも認可ルールを見つけられなかった場合のデフォルト動作。値は `allow` または `deny`。デフォルトは `allow`。この設定によりブラック／ホワイトリスト機能も有効になります。
 
-- `deny_action`: Determines the next step if a publish/subscribe operation is rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
+- `deny_action`：パブリッシュ／サブスクライブ操作が拒否された場合の次の処理。値は `ignore` または `disconnect`。デフォルトは `ignore`。`ignore` は操作を静かに無視し、`disconnect` はクライアント接続を切断します。
 
-- `cache`: Defines the client authorization cache settings, including:
+- `cache`：クライアント認可キャッシュの設定。以下を含みます：
 
-  * `cache.enable`: Specifies whether to enable client authorization cache, default: `true`. If the authorization is solely based on the JWT packets, it is recommended to configure this field `false`.
+  * `cache.enable`：クライアント認可キャッシュの有効／無効。デフォルトは `true`。JWTパケットのみで認可を行う場合は `false` に設定することを推奨します。
     
-  * `cache.max_size`: Specifies the maximum number of elements in the cache; default: 32. Older records will be removed from the cache if the specified number exceeds.
+  * `cache.max_size`：キャッシュ内の最大要素数。デフォルトは32。上限を超えた古いレコードは削除されます。
     
-  * `cache.excludes`: A list of excluded topics, for which authorization cache will not be generated; default value: `[]`.
+  * `cache.excludes`：キャッシュ対象外のトピックリスト。デフォルトは空リスト `[]`。
     
-  * `cache.ttl`: Specifies the effective time of cached values, default: `1m` (one minute). 
+  * `cache.ttl`：キャッシュの有効期間。デフォルトは `1m`（1分）。
 
-### Configure Authorization via HTTP API
+### HTTP APIでの認可設定
 
-There are several API endpoints for managing authorization:
+認可管理用のAPIエンドポイントは以下の通りです：
 
-* `/api/v5/authorization/settings`: for general parameters, `no_match`, `deny_action`, and `cache`;
-* `/api/v5/authorization/sources`: for managing and arranging authorizers;
-* `/api/v5/authorization/cache`: for cleaning client authorization cache;
-* `/api/v5/authorization/sources/built_in_database`:  for managing authorization rules of `built_in_database` authorizer.
+* `/api/v5/authorization/settings`：一般パラメータ、`no_match`、`deny_action`、`cache`の管理
+* `/api/v5/authorization/sources`：オーソライザーの管理と順序調整
+* `/api/v5/authorization/cache`：クライアント認可キャッシュのクリア
+* `/api/v5/authorization/sources/built_in_database`：`built_in_database`オーソライザーの認可ルール管理
 
-For detailed operation steps, see [HTTP API](../../admin/api.md).
+詳細な操作手順は[HTTP API](../../admin/api.md)を参照してください。
 
-## Manage Authorizers
+## オーソライザー管理
 
-You can view and manage authorizers in the **Access Control**->**Authorization** page in the Dashboard.
+ダッシュボードの **アクセス制御** -> **認可** ページでオーソライザーの閲覧・管理が可能です。
 
-### Adjust Authorizer Order
+### オーソライザーの順序調整
 
-As mentioned in [Authorization chain](#authorization-chain), authorizers are executed according to the configured sequence. You can select **Up**, **Down**, **Move to top**, and **Move to bottom** from the **More** dropdown list to move the authorizer. You can also adjust the authorizer positions in the `authorization.sources` configuration item.
+[認可チェーン](#認可チェーン)で述べた通り、オーソライザーは設定された順序で実行されます。**その他**ドロップダウンから「上へ」「下へ」「先頭へ移動」「末尾へ移動」を選択して順序を変更できます。`authorization.sources`設定項目でも順序を調整可能です。
 
-### Check Authorizer Status
+### オーソライザーの状態確認
 
-You can check the connection status in the **Status** column:
+**状態**列で接続状態を確認できます：
 
-| Status       | Meaning                                                      | Troubleshooting                                              |
-| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Connected    | All nodes are connected to the data source successfully.     | -                                                            |
-| Disconnected | Parts of or all nodes are not connected to the data source (database, file). | Check if the data source is available; <br />Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
-| Connecting   | Parts of or all nodes are reconnecting to the data source (database, file). | Check if the data source is available; <br/>Restart the authorizer manually (**Disable** and **Enable** again) after troubleshooting. |
+| 状態           | 意味                                                         | トラブルシューティング                                      |
+| -------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Connected      | すべてのノードがデータソースに正常に接続されている。          | -                                                            |
+| Disconnected   | 一部または全ノードがデータソース（データベース、ファイル）に接続できていない。 | データソースの稼働状況を確認；<br />問題解決後にオーソライザーを手動で再起動（**無効化**→**有効化**） |
+| Connecting     | 一部または全ノードがデータソースに再接続中。                  | データソースの稼働状況を確認；<br />問題解決後にオーソライザーを手動で再起動（**無効化**→**有効化**） |
 
-### Running Metrics
+### 稼働メトリクス
 
-You can view the statistic metrics of each authorizer on the Overview page of the authorizer. The following metrics are listed:
+オーソライザーの概要ページで各種統計メトリクスを確認できます。主なメトリクスは以下の通りです：
 
-- **Allow**: Number of authorizations passed.
-- **Deny**: Number of authorizations failed.
-- **No match**: Number of times client authorization data is not found.
-- **Ignored**: Number of ignored authorization queries because the authorization is not applicable or encounters an error, resulting in an undecidable outcome.
-- **Rate(tps)**: Execution rates of authorizations.
+- **Allow**：許可された認可数
+- **Deny**：拒否された認可数
+- **No match**：クライアントの認可データが見つからなかった回数
+- **Ignored**：認可が適用されなかったかエラーで判定できなかったため無視された認可クエリ数
+- **Rate(tps)**：認可処理の実行レート
 
-You can also check the authorization status and execution status on each node through **Node Status**.
+また、**ノード状態**から各ノードの認可状況や実行状況も確認可能です。
 
-If you want to view the overall running metrics of authorization, see [Metrics - Authentication & Authorization](../../observability/metrics-and-stats.md#Metrics+-+Authentication+%26+Authorization).
+認可全体の稼働メトリクスを確認したい場合は、[メトリクス - 認証＆認可](../../observability/metrics-and-stats.md#Metrics+-+Authentication+%26+Authorization)を参照してください。

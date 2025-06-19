@@ -1,13 +1,13 @@
-# Password-Based Authentication
+# パスワード認証
 
-EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials that can indicate identities, such as username, client ID, and the corresponding password.
+EMQXは、最もシンプルで一般的なパスワード認証をサポートしており、クライアントがユーザー名、クライアントID、および対応するパスワードなど、IDを示す資格情報を提供することを要求します。
 
-Besides the built-in database, EMQX also supports integration with various backend databases for password authentication. Click the link below for more information:
+組み込みデータベースに加えて、EMQXはパスワード認証のためにさまざまなバックエンドデータベースとの連携もサポートしています。詳細は以下のリンクをご参照ください。
 
-- [Build-in database](./mnesia.md)
-- [Integrate with MySQL](./mysql.md)
-- [Integrate with PostgreSQL](./postgresql.md)
-- [Integrate with Redis](./redis.md)
-- [Integrate with MongoDB](./mongodb.md)
-- [Integrate with LDAP](./ldap.md)
-- [Use HTTP service](./http.md)
+- [組み込みデータベース](./mnesia.md)
+- [MySQLとの連携](./mysql.md)
+- [PostgreSQLとの連携](./postgresql.md)
+- [Redisとの連携](./redis.md)
+- [MongoDBとの連携](./mongodb.md)
+- [LDAPとの連携](./ldap.md)
+- [HTTPサービスの利用](./http.md)

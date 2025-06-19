@@ -1,81 +1,80 @@
-# Configuration Files
+# 設定ファイル
 
-Users can configure EMQX with configuration files or environment variables. This section mainly introduces the EMQX configuration files and provides the basic configuration instructions for the most commonly used functions in EMQX. For comprehensive configuration items with detailed explanations, see [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+ユーザーは設定ファイルまたは環境変数を使ってEMQXを設定できます。本セクションでは主にEMQXの設定ファイルについて紹介し、EMQXで最もよく使われる機能の基本的な設定方法を説明します。詳細な設定項目と解説については、[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)を参照してください。
 
-## Config Directories
+## 設定ディレクトリ
 
-After EMQX is installed, it creates a set of directories to manage its configuration and runtime data. These directories are separated into two main categories:
+EMQXをインストールすると、設定および実行時データを管理するための一連のディレクトリが作成されます。これらのディレクトリは大きく2つのカテゴリに分かれています。
 
-- **Static Configuration Directory (`etc`)**: Ready-only and contains immutable or static configuration files.
-- **Dynamic Configuration Directory (`data/configs`)**: Writable and stores runtime-generated or dynamically updated configuration files.
+- **静的設定ディレクトリ（`etc`）**：読み取り専用で、不変または静的な設定ファイルを格納します。
+- **動的設定ディレクトリ（`data/configs`）**：書き込み可能で、実行時に生成または動的に更新される設定ファイルを格納します。
 
-### Static Configuration Directory (`etc`)
+### 静的設定ディレクトリ（`etc`）
 
-The `etc` directory holds the configuration files that define EMQX's initial setup. These files are typically modified during deployment or upgrades and are read-only at runtime to ensure stability. The location of the `etc` directory depends on the installation method:
+`etc`ディレクトリにはEMQXの初期設定を定義する設定ファイルが格納されています。これらのファイルは通常、デプロイやアップグレード時に変更され、実行時は安定性を確保するため読み取り専用となっています。`etc`ディレクトリの場所はインストール方法によって異なります。
 
-| Installation                               | Path            |
-| ------------------------------------------ | --------------- |
-| Installed with RPM or DEB package          | `/etc/emqx`     |
-| Running in docker container                | `/opt/emqx/etc` |
-| Extracted from portable compressed package | `./etc`         |
+| インストール方法                           | パス              |
+| ------------------------------------------ | ----------------- |
+| RPMまたはDEBパッケージでインストール      | `/etc/emqx`       |
+| Dockerコンテナで実行                       | `/opt/emqx/etc`   |
+| ポータブル圧縮パッケージから展開          | `./etc`           |
 
-### Dynamic Configuration Directory (`data/configs`)
+### 動的設定ディレクトリ（`data/configs`）
 
-At runtime, EMQX allows dynamic reconfiguration through the Dashboard, REST API, or CLI. Changes made using these tools are stored in the `data/configs` directory to ensure persistence across sessions. The location of this directory also depends on the installation method:
+実行時には、Dashboard、REST API、CLIを通じて動的に設定変更が可能です。これらの変更は永続化のため`data/configs`ディレクトリに保存されます。このディレクトリの場所もインストール方法に依存します。
 
-| Installation                               | Path                     |
+| インストール方法                           | パス                     |
 | ------------------------------------------ | ------------------------ |
-| Installed with RPM or DEB package          | `/var/lib/emqx/configs`  |
-| Running in docker container                | `/opt/emqx/data/configs` |
-| Extracted from portable compressed package | `./data/configs`         |
+| RPMまたはDEBパッケージでインストール      | `/var/lib/emqx/configs`  |
+| Dockerコンテナで実行                       | `/opt/emqx/data/configs` |
+| ポータブル圧縮パッケージから展開          | `./data/configs`         |
 
 ::: tip
-It is possible to change the data directory by modifying the `node.data_dir` setting in the configuration or the `EMQX_NODE__DATA_DIR` environment variable. However, when running a cluster, all nodes must use the same directory path.
+`node.data_dir`設定や環境変数`EMQX_NODE__DATA_DIR`を変更することで、データディレクトリの場所を変更可能です。ただし、クラスター運用時はすべてのノードで同じディレクトリパスを使用する必要があります。
 :::
 
-Although not encouraged, the content of the configuration files can overlap. In case of overlapping, the conflict is resolved by a predefined override rule, see [Config Override Rules](#config-override-rules).
+設定ファイルの内容が重複することは推奨されませんが、もし重複があった場合は事前に定められた上書きルールに従って解決されます。詳細は[Config Override Rules](#config-override-rules)を参照してください。
 
-## Config Examples
+## 設定例
 
-While the [Schema](#schema) section provides a detailed reference, configuration examples can be helpful for understanding and applying settings in EMQX.
+[Schema](#schema)セクションは詳細なリファレンスですが、設定例はEMQXの設定を理解し適用する際に役立ちます。
 
-- If you installed EMQX using RPM or DEB packages, you can find configuration examples in the `etc/emqx/examples` directory.
-- If you are running EMQX in a Docker container, you can find configuration examples in the `opt/emqx/etc/examples` directory.
+- RPMまたはDEBパッケージでインストールした場合は、`etc/emqx/examples`ディレクトリに設定例があります。
+- Dockerコンテナで実行している場合は、`opt/emqx/etc/examples`ディレクトリに設定例があります。
 
-## Base Configuration File
+## ベース設定ファイル
 
-Starting from EMQX 5.8.4, there is a base configuration file named `base.hocon` in the `etc` directory. This file contains default settings that can be overridden by higher-level configuration files at runtime.
+EMQX 5.8.4以降、`etc`ディレクトリに`base.hocon`というベース設定ファイルが存在します。このファイルにはデフォルト設定が含まれており、実行時により上位の設定ファイルで上書き可能です。
 
-For example, you may want to start the deployment with a basic authentication configuration, and then override it with a more complex configuration at runtime from the Dashboard UI.
+例えば、認証の基本設定でデプロイを開始し、後からDashboard UIでより複雑な設定に上書きすることができます。
 
-For immutable configurations such as `node` and `cluster` configs, it is **NOT** recommended to set them in the `base.hocon` file. See the [Immutable Configurations File](#immutable-configuration-file) for more details.
+`node`や`cluster`などの不変設定は`base.hocon`に設定することは**推奨されません**。詳細は[Immutable Configurations File](#immutable-configuration-file)を参照してください。
 
 ::: tip
-The `base.hocon` file is not synchronized across the cluster and only applies to the node where it is located.
+`base.hocon`ファイルはクラスター間で同期されず、そのノードにのみ適用されます。
 :::
 
-## Configuration Rewrite File
+## 設定書き換えファイル
 
-In `data/configs` directory, the `cluster.hocon` file contains configuration items for the entire cluster.
-Configuration changes made from the Dashboard, REST API, and CLI will be persisted to this file.
+`data/configs`ディレクトリ内の`cluster.hocon`ファイルはクラスター全体の設定項目を含みます。Dashboard、REST API、CLIからの設定変更はこのファイルに永続化されます。
 
-If a node in the cluster is restarted or if new nodes are added, the node will automatically copy and apply the `cluster.hocon` file from another node in the cluster. For this reason, it is not recommended to modify the file manually.
+クラスター内のノードが再起動されたり新規ノードが追加された場合、ノードは自動的に他のノードから`cluster.hocon`をコピーして適用します。このため、手動での編集は推奨されません。
 
-Configurations in this file are applied on top of those in the `base.hocon` file. For details on the configuration override hierarchy, see [Config Override Rules](#config-override-rules).
+このファイルの設定は`base.hocon`の設定の上に適用されます。設定の上書き階層については[Config Override Rules](#config-override-rules)を参照してください。
 
-Since EMQX version 5.1, any changes to the cluster configuration will trigger a backup of the `cluster.hocon` file before it is overwritten. These backups are timestamped with the node's local time, and up to 10 backup files can be retained.
+EMQX 5.1以降、クラスター設定の変更時には`cluster.hocon`のバックアップが上書き前に作成されます。バックアップはノードのローカル時刻でタイムスタンプが付けられ、最大10個まで保持されます。
 
-## Immutable Configuration File
+## 不変設定ファイル
 
-For backward compatibility, the `emqx.conf` file remains the primary configuration file for critical system settings, including `node` and `cluster` configurations. This file has a higher priority than both `base.hocon` and `cluster.hocon`, but with a lower priority than environment variables.
+後方互換性のため、`emqx.conf`ファイルは`node`や`cluster`設定など重要なシステム設定の主要な設定ファイルとして残っています。このファイルは`base.hocon`や`cluster.hocon`よりも優先度が高いですが、環境変数よりは低い優先度です。
 
-For more details on configuration overrides, refer to the [Config Override Rules](#config-override-rules) section.
+設定の上書き詳細は[Config Override Rules](#config-override-rules)を参照してください。
 
-## Configuration Paths
+## 設定パス
 
-In EMQX, configuration values can be referenced using dot-separated paths, similar to a tree structure. Starting from the root (always a Struct), each segment in the path refers to a field name or a Map key. For array elements, a 1-based index is used.
+EMQXでは設定値をツリー構造のようにドット区切りのパスで参照できます。ルートは常にStructで、各セグメントはフィールド名またはMapのキーを表します。配列要素は1始まりのインデックスを使います。
 
-Here are some examples of configuration paths:
+設定パスの例：
 
 ```bash
 node.name = "emqx.127.0.0.1"
@@ -83,15 +82,15 @@ zone.zone1.max_packet_size = "10M"
 authentication.1.enable = true
 ```
 
-## HOCON Configuration Format
+## HOCON設定フォーマット
 
-From EMQX v5.0, EMQX uses [Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon) as the configuration file format.
+EMQX v5.0以降、設定ファイルフォーマットとして[Human-Optimized Config Object Notation (HOCON)](https://github.com/emqx/hocon)を採用しています。
 
-HOCON is a format for human-readable data and a superset of JSON. With features like inheritance, combined, and quotes, HOCON further simplifies the configuration work.
+HOCONは人間に読みやすいデータフォーマットで、JSONのスーパーセットです。継承や結合、引用符の機能により設定作業をさらに簡素化します。
 
-**HOCON syntax：**
+**HOCON構文例：**
 
-HOCON values can be represented as JSON-like objects, for example:
+JSON風のオブジェクト表現：
 
 ```bash
 node {
@@ -103,7 +102,7 @@ node {
 }
 ```
 
-or in flattening:
+またはフラット化した表現：
 
 ```bash
 node.name = "127.0.0.1"
@@ -111,17 +110,17 @@ node.cookie = "mysecret"
 node.cluster_call.retry_interval = "1m"
 ```
 
-This cuttlefish-like flattening format is backward compatible with the previous EMQX versions, but it is used differently:
+このフラット化形式は以前のEMQXバージョンとの後方互換性がありますが、使い方が異なります。
 
-HOCON recommends adding quotes at both ends of the string. Strings without special characters can also be unquoted, for example, `foo`, `foo_bar`, while cuttlefish regards all characters to the right of `=` as values.
+HOCONでは文字列は両端に引用符を付けることを推奨します。特殊文字がなければ引用符なしも可能です（例：`foo`、`foo_bar`）。一方、フラット化形式は`=`の右側をすべて値として扱います。
 
-For more information about HOCON syntax, please refer to [HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md).
+HOCON構文の詳細は[HOCON Documentation](https://github.com/lightbend/config/blob/main/HOCON.md)を参照してください。
 
-## Environment Variables
+## 環境変数
 
-Besides configuration files, you can also use environment variables to configure EMQX.
+設定ファイルのほかに環境変数でもEMQXを設定できます。
 
-For example, environment variable `EMQX_NODE__NAME=emqx2@127.0.0.1` will override the following configuration:
+例えば、環境変数`EMQX_NODE__NAME=emqx2@127.0.0.1`は以下の設定を上書きします。
 
 ```bash
 # emqx.conf
@@ -130,25 +129,25 @@ node {
 }
 ```
 
-Configuration items and environment variables can be converted by the following rules:
+設定項目と環境変数の変換ルールは以下の通りです。
 
-1. Since the `.` separator in the configuration file cannot be used in environment variables. EMQX uses double underscores `__` as the configuration separator.
-2. To distinguish the converted configuration items from other environment variables, EMQX also adds a prefix `EMQX_` to the environment variable.
-3. The value of the environment variable is parsed according to the HOCON value, making it possible to use the environment variable to pass the value of complex data types, but please note that special characters such as `:` and `=` need to be wrapped in double quotes `"`.
+1. 設定ファイルの`.`は環境変数に使えないため、EMQXは区切りに`__`（ダブルアンダースコア）を使います。
+2. 他の環境変数と区別するため、`EMQX_`をプレフィックスとして付けます。
+3. 環境変数の値はHOCON値として解析されるため、複雑なデータ型も渡せます。ただし、`:`や`=`などの特殊文字はダブルクォート`"`で囲む必要があります。
 
-Conversion example:
+変換例：
 
 ```bash
-# Environment variables
+# 環境変数
 
-## localhost:1883 will be parsed into a struct `{"localhost": 1883}`, so it needs to be wrapped in double quotes
+## localhost:1883 は構造体 {"localhost": 1883} として解析されるため、ダブルクォートで囲む必要があります
 export EMQX_LISTENERS__SSL__DEFAULT__BIND='"127.0.0.1:8883"'
 
-## Pass the HOCON array directly by character
+## HOCON配列を文字列で直接渡す
 export EMQX_LISTENERS__SSL__DEFAULT__SSL_OPTIONS__CIPHERS='["TLS_AES_256_GCM_SHA384"]'
 
 
-# Configuration file
+# 設定ファイル
 listeners.ssl.default {
     ...
     bind = "127.0.0.1:8883"
@@ -161,9 +160,9 @@ listeners.ssl.default {
 
 ::: tip
 
-EMQX will ignore undefined root paths, for example, `EMQX_UNKNOWN_ROOT__FOOBAR` , because `UNKNOWN_ROOT` is not a pre-defined root path.
+EMQXは未定義のルートパス（例：`EMQX_UNKNOWN_ROOT__FOOBAR`）を無視します。`UNKNOWN_ROOT`は事前定義されたルートパスではないためです。
 
-When a known root path is set with an unknown field name, EMQX will output a `warning` log at startup. For example, when `enable` is incorrectly configured as `enabled`, it will output:
+既知のルートパスに未知のフィールド名が設定されると、起動時に`warning`ログを出力します。例えば、`enable`を誤って`enabled`と設定した場合は以下のように出力されます。
 
 ```bash
 [warning] unknown_env_vars: ["EMQX_AUTHENTICATION__ENABLED"]
@@ -171,36 +170,36 @@ When a known root path is set with an unknown field name, EMQX will output a `wa
 
 :::
 
-## Config Override Rules
+## 設定上書きルール
 
-In EMQX, configuration values are applied hierarchically, with the following override rules:
+EMQXでは設定値は階層的に適用され、以下の上書きルールがあります。
 
-- Within the same file, values defined later will override earlier ones.
-- Higher-level configurations will replace lower-level ones.
+- 同一ファイル内では後に定義された値が前の値を上書きします。
+- 上位の設定ファイルは下位の設定を置き換えます。
 
-The order of configuration priority is as follows:
+設定の優先順位は以下の通りです。
 
-`base.hocon < cluster.hocon < emqx.conf < environment variables`.  
+`base.hocon < cluster.hocon < emqx.conf < 環境変数`
 
-This means that the settings in `base.hocon` have the lowest priority and can be overridden by settings in higher-priority files. Environment variables that start with `EMQX_` have the highest priority.
+つまり、`base.hocon`の設定は最も優先度が低く、上位のファイルで上書き可能です。`EMQX_`で始まる環境変数が最も優先されます。
 
 ::: tip
-Before version 5.8.4, the `base.hocon` file did not exist. The priority order remains the same, but without `base.hocon`.
+バージョン5.8.4以前は`base.hocon`ファイルが存在しませんでした。優先順位は同じですが、`base.hocon`はありません。
 :::
 
-Changes made through EMQX Dashboard UI, HTTP API, or CLI are persisted in `cluster.hocon` at runtime and will take effect immediately. However, changes may get reverted after a node restart if the same configuration items are set differently in `emqx.conf` or environment variables.  
+Dashboard UI、HTTP API、CLIからの変更は実行時に`cluster.hocon`に永続化され即時反映されます。ただし、`emqx.conf`や環境変数で同じ設定項目が異なる値で設定されていると、ノード再起動後に変更が元に戻る可能性があります。
 
-To avoid confusion, **do not overlap configuration settings** between `emqx.conf` and `cluster.hocon`.
+混乱を避けるため、`emqx.conf`と`cluster.hocon`で設定を重複させることは**避けてください**。
 
 ::: tip
-1. If you're using an older version of EMQX (e.g., 5.0.2/v5.0.22 or earlier, where the `cluster-override.conf` file still exists), the priority order for configuration settings is: `emqx.conf < ENV < HTTP API (cluster-override.conf)`.
-2. When upgrading from version 5.0.2/v5.0.22 or earlier to the latest version, the priority order remains unchanged, and `cluster.hocon` will not be created to maintain compatibility.
-3. The `cluster-override.conf` mechanism is removed in version 5.1.
-   :::
+1. 古いEMQXバージョン（例：5.0.2/v5.0.22以前）では`cluster-override.conf`ファイルが存在し、設定優先順位は`emqx.conf < ENV < HTTP API (cluster-override.conf)`でした。
+2. 5.0.2/v5.0.22以前から最新バージョンにアップグレードする場合、優先順位は変わらず、互換性維持のため`cluster.hocon`は作成されません。
+3. `cluster-override.conf`機構はバージョン5.1で廃止されました。
+:::
 
-### Override
+### 上書き例
 
-In the following configuration, the `debug` value of `level` defined in the last line will overwrite the previously defined `error`, but the `enable` field remains unchanged:
+以下の設定では、最後の行で`level`の`debug`値が先の`error`を上書きしますが、`enable`フィールドは変更されません。
 
 ```bash
 log {
@@ -210,11 +209,11 @@ log {
   }
 }
 
-## Set the console log printing level to debug, and keep the other configurations
+## コンソールログのレベルをdebugに設定し、他の設定は維持
 log.console.level = debug
 ```
 
-The packet size limit was first set to 1MB, then overridden to 10MB:
+パケットサイズ制限は最初に1MBに設定され、その後10MBに上書きされます。
 
 ```bash
 zones {
@@ -225,14 +224,14 @@ zones {
 zones.zone1.mqtt.max_packet_size = 10M
 ```
 
-### List Element Override
+### 配列要素の上書き
 
-EMQX array has two expression ways:
+EMQXの配列は以下の2つの表現方法があります。
 
-- List, for example, `[1, 2, 3]`
-- Map (subscribing), for example: `{"1"=1, "2"=2, "3"=3}`
+- リスト形式（例：`[1, 2, 3]`）
+- マップ形式（サブスクリプション）（例：`{"1"=1, "2"=2, "3"=3}`）
 
-The following 3 formats are equivalent:
+以下の3つの形式は同等です。
 
 ```bash
 authentication.1 = {...}
@@ -240,7 +239,7 @@ authentication = {"1": {...}}
 authentication = [{...}]
 ```
 
-Based on this feature, we can easily override the value of an element in an array, for example:
+この特徴を利用すると、配列の特定要素の値を簡単に上書きできます。
 
 ```bash
 authentication  = [
@@ -251,13 +250,13 @@ authentication  = [
   }
 ]
 
-# The `enable` field of the first element can be overridden in the following way:
+# 1番目の要素の`enable`フィールドを以下のように上書き可能
 authentication.1.enable = false
 ```
 
 ::: tip
 
-Arrays (in list format) will be fully overwritten and the original value cannot be kept, for example:
+リスト形式の配列は完全に上書きされ、元の値は保持されません。例えば：
 
 ```bash
 authentication = [
@@ -268,47 +267,47 @@ authentication = [
   }
 ]
 
-## With the following method, all fields except `enable` of the first element will be lost.
+## 以下の方法では、1番目の要素の`enable`以外のフィールドがすべて失われます。
 authentication = [{ enable = true }]
 ```
 
 :::
 
-### Zone Override
+### ゾーンの上書き
 
-A zone in EMQX is a concept for grouping configurations. Zones can be associated with listeners by setting the `zone` field to the name of the desired zone. MQTT clients connected to listeners associated with a zone will inherit the configurations from that zone, which may override global settings.
+EMQXのゾーンは設定をグループ化する概念です。リスナーに`zone`フィールドでゾーン名を設定すると、そのリスナーに接続するMQTTクライアントはゾーンの設定を継承し、グローバル設定を上書きすることがあります。
 
 ::: tip
-By default, listeners are linked to a zone named `default`. The `default` zone is a logical grouping and does not exist in the configuration files.
+デフォルトではリスナーは`default`という名前のゾーンに紐付けられています。`default`ゾーンは論理的なグループであり、設定ファイルには存在しません。
 :::
 
-The following configuration items can be overridden at the zone level:
+ゾーンレベルで上書き可能な設定項目は以下の通りです。
 
-- `mqtt`: MQTT connection and session settings, such as allowing a greater maximum packet size for MQTT messages in a specific zone.
-- `force_shutdown`: Policies for forced shutdowns.
-- `force_gc`: Fine-tuning for Erlang process garbage collection.
-- `flapping_detect`: Detection of client flapping.
-- `durable_sessions`: Session persistence settings, such as enabling durable storage for MQTT sessions in a specific zone.
+- `mqtt`：MQTT接続やセッション設定（例：特定ゾーンでより大きな最大パケットサイズを許可）
+- `force_shutdown`：強制シャットダウンのポリシー
+- `force_gc`：Erlangプロセスのガベージコレクションの微調整
+- `flapping_detect`：クライアントのフラッピング検出
+- `durable_sessions`：セッション永続化設定（例：特定ゾーンで永続セッションを有効化）
 
-In EMQX version 5, the default configuration file does not include any zones, which differs from version 4, where there are two default zones: `internal` and `external`.
+EMQXバージョン5のデフォルト設定ファイルにはゾーンは含まれていません。これはバージョン4の`internal`と`external`という2つのデフォルトゾーンとは異なります。
 
-To create a zone, you need to define it in the config file, for example:
+ゾーンを作成するには設定ファイルで定義します。例：
 
 ```bash
 zones {
-  # Multiple zones can be defined
+  # 複数のゾーンを定義可能
   my_zone1 {
-    # Zones share the same configuration schema as the global configurations
+    # ゾーンはグローバル設定と同じスキーマを共有
     mqtt {
-      # Allow a larger packet size for connections in this zone
+      # このゾーンの接続でより大きなパケットサイズを許可
       max_packet_size = 10M
     }
     force_shutdown {
-      # Configuration specific to this zone
+      # このゾーン固有の設定
       ...
     }
     durable_sessions {
-      # Enable durable storage for sessions in this zone
+      # このゾーンで永続セッションを有効化
       enable = true
       ...
     }
@@ -319,7 +318,7 @@ zones {
 }
 ```
 
-In a listener, set the `zone` field to associate it with a zone that has been created.
+リスナーで`zone`フィールドに作成済みのゾーン名を設定します。
 
 ```bash
 listeners.tcp.default {
@@ -329,58 +328,53 @@ listeners.tcp.default {
 }
 ```
 
-## Schema
+## スキーマ
 
-To make the HOCON objects type-safe, EMQX introduced a schema for it. This schema defines data types, field names, and metadata, allowing for configuration value validation and more.
+HOCONオブジェクトの型安全性を高めるため、EMQXはスキーマを導入しています。このスキーマはデータ型、フィールド名、メタデータを定義し、設定値の検証などに利用されます。
 
-The [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) are generated from the schema.
+[EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)はこのスキーマから生成されています。
 
 ::: tip
-The zone configuration schema is not included in the configuration manual because it is identical for each group. For example, `zones.my_zone1.mqtt {...}` has the same schema as `mqtt {...}`.
+ゾーンの設定スキーマは各グループで同一のため、設定マニュアルには含まれていません。例えば、`zones.my_zone1.mqtt {...}`は`mqtt {...}`と同じスキーマです。
 :::
 
-### Primitive Data Types
+### プリミティブデータ型
 
-Primitive data types in the configuration manual are largely self-explanatory, requiring minimal documentation. Below is a comprehensive list of all primitive types you will encounter.
+設定マニュアルのプリミティブ型はほとんど自明であり、簡単な説明のみで十分です。以下に代表的な型を示します。
 
 #### Integer
 
-Represents a whole number. Examples include `42`, `-3`, `0`.
+整数を表します。例：`42`、`-3`、`0`
 
 #### Integer(Min..Max)
 
-An integer that falls within a specified range. For example, `1..+inf` means from `1` to positive infinity (`+inf`), indicating that only positive integers are acceptable.
+指定範囲内の整数。例：`1..+inf`は1以上の正の整数を意味します。
 
 #### Enum(symbol1, symbol2, ...)
 
-Defines an enumerated type that can only take one of the predefined symbols. For instance, `Enum(debug,info,warning,error)` defines acceptable logging levels.
+列挙型で、あらかじめ定義されたシンボルのいずれかのみを取ります。例：`Enum(debug,info,warning,error)`はログレベルの指定に使います。
 
 #### String
 
-The **String** data type represents a sequence of characters and supports several formats for diverse use cases:
+文字列型で、複数の形式をサポートします。
 
-- **Unquoted**: Ideal for simple identifiers or names that avoid special characters (see below for details).
+- **無引用符**：特殊文字を含まない単純な識別子や名前に適します（詳細は下記参照）。
+- **引用符付き文字列**：特殊文字や空白を含む場合はダブルクォート`"`で囲み、必要に応じてバックスラッシュ`\`でエスケープします。例：`"line1\nline2"`。
+- **三重引用符文字列**：`"""`で囲み、`\`以外のエスケープ不要で複雑な内容を簡単に記述可能です。三重引用符の直前後にある引用符はエスケープが必要です。
+- **インデント付き三重引用符文字列**：`"""~`と`~"""`で囲み、EMQX 5.6以降で導入。設定ファイル内でインデントを保持でき、複数行や整形テキストに適します。
 
-- **Quoted Strings**: For strings that include special characters or whitespace,
-  use double quotes (`"`), utilizing the backslash (`\`) to escape characters as needed. Example: `"line1\nline2"`.
+**無引用符文字列の注意点：**
 
-- **Triple-quoted String**: Enclosed with triple quotes (`"""`), these strings do not require escapes (except for `\`),
-  simplifying the inclusion of complex content. Note that quotes adjacent to the triple-quotes must be escaped to be considered part of the string.
+- 禁止文字：`$`、`"`、`{`、`}`、`[`、`]`、`:`、`=`、`,`、`+`、`#`、`` ` ``、`^`、`?`、`!`、`*`、`&`、`\`、空白
+- `//`で始めない（コメントと誤認されるため）
+- `true`、`false`、`null`で始めない（ブール値やnullと誤認されるため）
 
-- **Triple-quoted String with Indentation**: Surrounded by `"""~` and `~"""`,
-  introduced since EMQX 5.6, this format allows for indentation within the string for better layout in the configuration file, ideal for multi-line or formatted text.
+**三重引用符文字列のガイドライン：**
 
-**Special Considerations for Unquoted Strings:**
-- Avoid "forbidden characters": `$`, `"`, `{`, `}`, `[`, `]`, `:`, `=`, `,`, `+`, `#`, `` ` ``, `^`, `?`, `!`, `*`, `&`, `\`, or whitespace.
-- Do not start with `//` (which introduces a comment).
-- Do not begin with `true`, `false`, or `null` in a way that could be misinterpreted as boolean or null values.
+- 三重引用符の隣接する引用符はエスケープまたは`~`区切りを使用
+- 複数行文字列はスペース（タブ不可）によるインデント可能。インデントレベルは最小の先頭スペース数で決定
 
-**Guidelines for Triple-quoted Strings:**
-- To include a quote character adjacent to the triple-quotes, escape it or use the `~` delimiter for clarity.
-- Multiline strings support indentation with spaces (not tabs) for readability.
-  The indentation level is determined by the smallest number of leading spaces on any line.
-
-For example:
+例：
 
 ```
 rule_xlu4 {
@@ -393,130 +387,119 @@ rule_xlu4 {
 }
 ```
 
-For additional details on string quoting conventions in HOCON, consult [the HOCON specification](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings).
+HOCONの文字列引用規則の詳細は[HOCON仕様](https://github.com/lightbend/config/blob/main/HOCON.md#unquoted-strings)を参照してください。
 
-For insights into EMQ's specialized adaptations of the triple-quoted string with indentation, refer to the [emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats).
+EMQX独自のインデント付き三重引用符文字列の詳細は[emqx/hocon.git README](https://github.com/emqx/hocon?tab=readme-ov-file#divergence-from-spec-and-caveats)を参照してください。
 
 #### String("constant")
 
-A constant string value, effectively acting as a single-value enumeration (`Enum`). This could be used to define a static value that doesn't change, such as a specific setting or mode.
+定数文字列値で、単一値の列挙型（`Enum`）のように振る舞います。特定の静的な設定値やモードを定義するのに使います。
 
 #### Boolean
 
-Either `true` or `false`, which is case sensitive.
+`true`または`false`（大文字小文字を区別）
 
 #### Float
 
-A floating-point number, supporting decimals. Examples include `3.14`, `-0.001`.
+小数点を含む浮動小数点数。例：`3.14`、`-0.001`
 
 #### Duration
 
-Represents a span of time in a human-readable format. Examples and explanation of format.
+人間に読みやすい時間の長さを表します。フォーマットの例と説明があります。
 
 #### Duration(s)
 
-Specifies a `Duration` type with a precision level of seconds. Further details and examples.
+秒単位の精度を持つ`Duration`型。詳細と例があります。
 
 #### Secret
 
-A type intended for sensitive information, such as passwords and tokens. Explanation of its usage and importance.
+パスワードやトークンなどの機密情報用の型。使用方法と重要性について説明があります。
 
+### 複合データ型
 
-### Complex Data Types
-
-Complex data types in EMQX's HOCON configuration are designed to encapsulate data structures that can include both other complex types and primitive values.
-These data types enable flexible and hierarchical data representation.
+EMQXのHOCON設定の複合型は、他の複合型やプリミティブ値を含む構造化データを表現します。柔軟で階層的なデータ表現を可能にします。
 
 #### Struct `Struct(name)`
 
-Represents a structure with fields enclosed between curly braces `{}`.
-The `name` parameter is a reference to a schema that specifies the structure's fields and their respective types.
+波括弧`{}`で囲まれたフィールドを持つ構造体。`name`はスキーマでフィールド名と型を指定します。
 
-#### Map `Map($name-\>Type)`
+#### Map `Map($name->Type)`
 
-Similar to `Struct`, a `Map` holds key-value pairs without predefined names for the fields.
-
-The `$name` variable indicates that the keys can be any string (except for a string with dot `.` in it),
-representing the name of an entity or attribute.
-The `Type` specifies that all values in the map must be of the same data type, allowing for uniform collections of data items.
+`Struct`に似ていますが、フィールド名が事前定義されておらず、任意の文字列（`.`を含まない）をキーに持ちます。`Type`はすべての値が同じ型であることを示します。
 
 #### OneOf `OneOf(Type1, Type2, ...)`
 
-Defines a union type that can include two or more types to indicate that one struct field can be any one of the member types.
-For example, this allows a configuration entry to be either `String(infinity)` or a `Duration`.
+複数の型のいずれかを取るユニオン型。1つのフィールドが複数の型のいずれかを許容します。例：`String(infinity)`または`Duration`のどちらか。
 
 #### Array `Array(Type)`
 
-Defines an array consisting of elements that adhere to the specified `Type`.
-
+指定型の要素からなる配列。
 
 ::: tip
 
-If a Map field name is a positive integer number, it is interpreted as an alternative representation of an `Array`. For example:
+Mapのフィールド名が正の整数の場合、`Array`の別表現として解釈されます。例：
 
 ```bash
 myarray.1 = 74
 myarray.2 = 75
 ```
 
-will be interpreted as `myarray = [74, 75]`, which is handy when trying to override array elements.
+は`myarray = [74, 75]`と解釈され、配列要素の上書きに便利です。
 
 :::
 
-### Variform Expressions
+### Variform式
 
-Variform is a lightweight, expressive language designed for string manipulation and runtime evaluation.
-It is not a full-fledged programming language but a specialized tool that can be embedded within
-configurations for EMQX to perform string operations dynamically.
+Variformは文字列操作や実行時評価のための軽量で表現力豊かな言語です。完全なプログラミング言語ではなく、EMQXの設定内で動的に文字列操作を行うために埋め込まれます。
 
 ::: tip
-Variform expressions are only applicable to certain configuration items. Do not use them unless specifically stated.
+Variform式は特定の設定項目にのみ適用されます。明示されていない限り使用しないでください。
 :::
 
-::: tip NULL value:
-In Variform expressions, a value-binding reference or sub-expression evaluation may result in an undefined value, which is represented as an empty string (`''`).
+::: tip NULL値について
+Variform式では、値のバインディング参照や部分式の評価が未定義値となる場合、空文字列（`''`）として扱います。
 
-It is important to note that if a JSON-decoded field is `null`, it is treated as undefined value (hence `''`), but not string value `"null"`.
+JSONで`null`のフィールドは未定義値（空文字列）として扱われ、文字列`"null"`とは異なります。
 :::
 
-#### Syntax
+#### 構文
 
-To illustrate:
+例：
 
 ```js
 function_call(clientid, another_function_call(username))
 ```
 
-This expression combines or manipulates clientid and username to generate a new string value.
+これは`clientid`と`username`を組み合わせて新しい文字列を生成します。
 
-Variform supports below literals:
+Variformがサポートするリテラル：
 
-- Boolean: `true` or `false`.
-- Integer: For example, `42`.
-- Float: For example, `3.14`.
-- String: ASCII characters between single quotes `'` or double quotes `"`.
-- Array: Elements between `[` and `]`, separated by a comma `,`.
-- Variable: Referencing to predefined values, for example `clientid`.
-- Function: Predefined functions, for example, `concat([...])`.
+- ブール値：`true`または`false`
+- 整数：例`42`
+- 浮動小数点数：例`3.14`
+- 文字列：シングルクォート`'`またはダブルクォート`"`で囲むASCII文字
+- 配列：`[`と`]`で囲み、カンマ`,`で区切る
+- 変数：事前定義された値への参照（例：`clientid`）
+- 関数：事前定義関数（例：`concat([...])`）
 
-Variform does not support the following:
+Variformは以下をサポートしません：
 
-- Arithmetic operations
-- Loops
-- User-defined variables
-- User-defined functions
-- Exception handling and error recovery
-- Escape sequence in string literals. Call the `unescape` function to unescape special characters.
+- 算術演算
+- ループ
+- ユーザー定義変数
+- ユーザー定義関数
+- 例外処理やエラー回復
+- 文字列リテラル内のエスケープシーケンス（特殊文字のアンエスケープには`unescape`関数を使用）
 
-Below is a configuration example with a Variform expression embedded.
+以下はVariform式を埋め込んだ設定例です。
 
 ```js
 mqtt {
     client_attrs_init = [
         {
-            # Extract the prefix of client ID before the first -
+            # clientidの最初の'-'までのプレフィックスを抽出
             expression = "nth(1, tokens(clientid, '-'))"
-            # And set as client_attrs.group
+            # client_attrs.groupとして設定
             set_as_attr = group
         }
     ]
@@ -524,82 +507,77 @@ mqtt {
 ```
 
 ::: tip
-When an unescape function is required in the expression, it's a good idea to use triple quote (`"""`) strings in HOCON config so there is no need to perform double escaping.
+式内で`unescape`関数を使う場合、HOCON設定で三重引用符`"""`文字列を使うと二重エスケープ不要で便利です。
 
-For example
+例：
 
 ```
-#### For multi-line client ID, take the first line.
+#### 複数行のclient IDの最初の行を取得
 expression = """nth(1, tokens(clientid, unescape('\n')))"""
 ```
 :::
 
-#### Pre-defined Functions
+#### 事前定義関数
 
-EMQX includes a rich set of string, array, random, and hashing functions similar to those available in rule engine string functions.
-These functions can be used to manipulate and format the extracted data. For instance, `lower()`, `upper()`,
-and `concat()` help in adjusting the format of extracted strings, while `hash()` and `hash_to_range()` allow for creating hashed or ranged outputs based on the data.
+EMQXはルールエンジンの文字列関数に似た豊富な文字列、配列、乱数、ハッシュ関数を備えています。これらは抽出データの操作や整形に使えます。例：`lower()`、`upper()`、`concat()`、`hash()`、`hash_to_range()`など。
 
-Below are the functions that can be used in the expressions:
+利用可能な関数例：
 
-- **String functions**:
-  - [String Operation Functions](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
-  - A new function `any_to_string/1` is also added to convert any intermediate non-string value to a string.
-- **Array functions**: [nth/2](../data-integration/rule-sql-builtin-functions.md#nth-n-integer-array-array-any)
-- **Random functions**: rand_str, rand_int
-- **Schema-less encode/decode functions**:
+- **文字列関数**：
+  - [文字列操作関数](../data-integration/rule-sql-builtin-functions.md#string-operation-functions)
+  - 新関数`any_to_string/1`（任意の中間値を文字列に変換）
+- **配列関数**：`nth/2`など
+- **乱数関数**：`rand_str`、`rand_int`
+- **スキーマレスエンコード/デコード関数**：
   - [bin2hexstr(Data)](../data-integration/rule-sql-builtin-functions.md#bin2hexstr-data-binary-string)
   - [hexstr2bin(Data)](../data-integration/rule-sql-builtin-functions.md#hexstr2bin-data-string-binary)
   - [base64_decode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-decode-data-string-bytes-string)
   - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
-  - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
-- **Hash functions**:
-  - `hash(Algorihtm, Data)`: Algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s
-  - `hash_to_range(Input, Min, Max)`: Use sha256 to hash the Input data and map the hash to an integer between Min and Max inclusive ( Min =< X =< Max)
-  - `map_to_rage(Input, Min, Max)`: Map the input to an integer between Min and Max inclusive (Min =< X =< Max)
-- **Compare functions**:
-  - `num_eq(A, B)`: Return 'true' if two numbers are the same, otherwise 'false'.
-  - `num_neq(A, B)`: Return 'true' if two numbers are NOT the same, otherwise 'false'.
-  - `num_gt(A, B)`: Return 'true' if A is greater than B, otherwise 'false'.
-  - `num_gte(A, B)`: Return 'true' if A is not less than B, otherwise 'false'.
-  - `num_lt(A, B)`: Return 'true' if A is less than B, otherwise 'false'.
-  - `num_lte(A, B)`: Return 'true' if A is not greater than B, otherwise 'false'.
-  - `str_eq(A, B)`: Return 'true' if two strings are the same, otherwise 'false'.
-  - `str_neq(A, B)`: Return 'true' if two strings are NOT the same, otherwise 'false'
-  - `str_gt(A, B)`: Return 'true' if A is behind B in lexicographic order, otherwise 'false'.
-  - `str_gte(A, B)`: Return 'true' if A is not before B in lexicographic order, otherwise 'false'.
-  - `str_lt(A, B)`: Return 'true' if A is before B in lexicographic order, otherwise 'false'.
-  - `str_lte(A, B)`: Return 'true' if A is not after B in lexicographic order, otherwise 'false'.
-  - `is_empty_var(V)`: Check if a variable is empty. Empty in Variform means the value is not present (`undefined`), JSON's `null` (but not string `"null"`), or an empty string `""`.
-  - `not(Bool)`: Return `true` if `Bool` is `false`, and return `false` if the condition is `true`. It also accepts string parameters. If the input is a string, the output is also a string.
+  - `int2hexstr(Integer)`：整数を16進文字列に変換（例：15 → 'F'）
+- **ハッシュ関数**：
+  - `hash(Algorithm, Data)`：アルゴリズムはmd4、md5、sha（sha1）、sha224、sha256、sha384、sha512、sha3_224、sha3_256、sha3_384、sha3_512、shake128、shake256、blake2b、blake2sのいずれか
+  - `hash_to_range(Input, Min, Max)`：sha256でハッシュし、Min〜Maxの整数にマッピング（Min <= X <= Max）
+  - `map_to_range(Input, Min, Max)`：入力をMin〜Maxの整数にマッピング（Min <= X <= Max）
+- **比較関数**：
+  - `num_eq(A, B)`：数値が等しければ`true`、それ以外は`false`
+  - `num_neq(A, B)`：数値が異なれば`true`、それ以外は`false`
+  - `num_gt(A, B)`：A > Bなら`true`、それ以外は`false`
+  - `num_gte(A, B)`：A >= Bなら`true`、それ以外は`false`
+  - `num_lt(A, B)`：A < Bなら`true`、それ以外は`false`
+  - `num_lte(A, B)`：A <= Bなら`true`、それ以外は`false`
+  - `str_eq(A, B)`：文字列が等しければ`true`、それ以外は`false`
+  - `str_neq(A, B)`：文字列が異なれば`true`、それ以外は`false`
+  - `str_gt(A, B)`：辞書順でAがBより後なら`true`、それ以外は`false`
+  - `str_gte(A, B)`：辞書順でAがBより前でないなら`true`、それ以外は`false`
+  - `str_lt(A, B)`：辞書順でAがBより前なら`true`、それ以外は`false`
+  - `str_lte(A, B)`：辞書順でAがBより後でないなら`true`、それ以外は`false`
+  - `is_empty_var(V)`：変数が空か判定。Variformの空は未定義値（`undefined`）、JSONの`null`（文字列`"null"`は除く）、または空文字列`""`
+  - `not(Bool)`：`Bool`が`false`なら`true`、`true`なら`false`。文字列も受け付け、文字列入力時は文字列出力。
 
-- **System functions**:
-  - `getenv(Name)`: Return the value of the environment variable `Name` with the following constraints:
-    - Prefix `EMQXVAR_` is added before reading from OS environment variables. For example, `getenv('FOO_BAR')` is to read `EMQXVAR_FOO_BAR`.
-    - Values are immutable once loaded from the OS environment.
+- **システム関数**：
+  - `getenv(Name)`：環境変数`Name`の値を返す。ただしOS環境変数からは`EMQXVAR_`プレフィックスを付けて読み込む。例：`getenv('FOO_BAR')`は`EMQXVAR_FOO_BAR`を読み込む。読み込んだ値は不変。
 
-#### Conditions
+#### 条件式
 
-The variform expression so far has no comprehensive control flows.
-Below functions can help to preform basic control of which value to return from the expression.
+Variform式は包括的な制御構造を持ちませんが、以下の関数で基本的な条件制御が可能です。
 
-- `iif(Condition, ThenExpression, ElseExpression)`: returns `ThenExpression` if `Condition` yields `true` or a non-empty string value, otherwise returns `ElseExpression`.
-- `coalesce(Arg1, Arg2, ...)`: returns the first non-empty argument.
-- `coalesce([Element1, Element2, ...])`: returns the first non-empty element.
+- `iif(Condition, ThenExpression, ElseExpression)`：`Condition`が`true`または非空文字列なら`ThenExpression`を返し、そうでなければ`ElseExpression`を返す。
+- `coalesce(Arg1, Arg2, ...)`：最初の非空引数を返す。
+- `coalesce([Element1, Element2, ...])`：配列内の最初の非空要素を返す。
 
-#### Error Handling
+#### エラー処理
 
-As the default behavior of scripting environments like Bash, Variform expression is designed to yield an empty string ("") in scenarios where errors occur, such as unbound variables or exceptions during runtime.
+Bashなどのスクリプト環境と同様に、Variform式は未バインド変数や実行時例外が発生した場合、空文字列（`""`）を返す設計です。
 
-- Unbound Variables: If an expression references a variable that has not been defined or is out of scope (unbound), the expression will be evaluated as an empty string.
-- Runtime Exceptions: Any exceptions that occur during the execution of an expression, whether due to incorrect function usage, invalid data types, or other unforeseen issues, will result in the expression yielding an empty string. For example, the array index is out of range.
+- 未バインド変数：定義されていない変数参照は空文字列として評価されます。
+- 実行時例外：関数の誤用や無効なデータ型、配列インデックス範囲外などの例外は空文字列を返します。
 
-#### Example Expressions
+#### 式の例
 
-- `nth(1, tokens(clientid, '.'))`:  Extract the prefix of a dot-separated client ID.
-- `strlen(username, 0, 5)`: Extract a partial username.
-- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`: Extract digits from client ID using a regular expression. If the regular expression yields empty string, then return `'000'`.
-- `iif(true, "Value if true", "Value if false")`: Returns `Value if true`
-- `iif("", "Value if true", "Value if false")`: Returns `Value if false`
-- `iif("hello", "Value if true", "Value if false")`: Returns `Value if true`
-- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`: Returns `foo` if `clientid` starts with `foo.`, otherwise `bar`.
+- `nth(1, tokens(clientid, '.'))`：ドット区切りのclientidのプレフィックスを抽出
+- `strlen(username, 0, 5)`：usernameの一部を抽出
+- `coalesce(regex_extract(clientid,'[0-9]+'),'vin-1000')`：正規表現でclientidから数字を抽出。空文字列なら`'000'`を返す
+- `iif(true, "Value if true", "Value if false")`：`Value if true`を返す
+- `iif("", "Value if true", "Value if false")`：`Value if false`を返す
+- `iif("hello", "Value if true", "Value if false")`：`Value if true`を返す
+- `iif(regex_match(clientid,'^foo\.+*'),'foo','bar')`：clientidが`foo.`で始まれば`foo`、そうでなければ`bar`を返す

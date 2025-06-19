@@ -1,42 +1,42 @@
-# Install EMQX on macOS
-This page guides you on installing and starting EMQX on macOS with a zip file.
+# macOSへのEMQXインストール
+このページでは、macOSにzipファイルを使ってEMQXをインストールし、起動する方法を説明します。
 
-Supported versions:
+対応バージョン：
 
 - macOS 15
 - macOS 14
 - macOS 13
 
-For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise).
+他のシステムへのインストールや他バージョンのインストールについては、[EMQX Enterpriseダウンロードサイト](https://www.emqx.com/en/downloads-and-install/enterprise)をご覧ください。
 
-## Install EMQX Enterprise
+## EMQX Enterpriseのインストール
 
-1. Go to the download site and select the [**macOS** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
-2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as you need.
-3. Click the link below for downloading. You can also follow the command instructions on the page.
+1. ダウンロードサイトにアクセスし、[**macOS**タブ](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS)を選択します。
+2. 最新バージョン `@EE_VERSION@` を選択します。**Package Type**のドロップダウンから、macOSのバージョンとCPUアーキテクチャに応じた`zip`パッケージを選択してください。
+3. 下のリンクをクリックしてダウンロードします。ページ内のコマンド手順に従うことも可能です。
 
-## Start and Stop EMQX
+## EMQXの起動と停止
 
-EMQX can be started in daemon mode, foreground mode, or interactive mode. Note that only one instance of EMQX can be running at any time with the default configuration.
+EMQXはデーモンモード、フォアグラウンドモード、インタラクティブモードで起動できます。デフォルト設定では、同時に実行できるEMQXのインスタンスは1つだけです。
 
-   ```bash
-   # start as daemon
-   ./bin/emqx start
+```bash
+# デーモンとして起動
+./bin/emqx start
 
-   # start in foreground
-   ./bin/emqx foreground
+# フォアグラウンドで起動
+./bin/emqx foreground
 
-   # start in interactive mode, with Erlang shell
-   ./bin/emqx console
-   ```
+# インタラクティブモードで起動（Erlangシェル付き）
+./bin/emqx console
+```
 
-After a successful start, EMQX will output this message (if it was started in the foreground or interactive mode):
+起動に成功すると、フォアグラウンドまたはインタラクティブモードで起動した場合に以下のメッセージが表示されます：
 
 ```bash
 EMQX Enterprise @EE_VERSION@ is running now!
 ```
 
-You may also see some warning messages which are intended for operators of the production environment and can be ignored if EMQX is used in the local environment for tests, experiments, or client development:
+また、以下のような警告メッセージが表示されることがあります。これは本番環境の運用者向けの注意であり、テストや実験、クライアント開発のためにローカル環境でEMQXを使用する場合は無視して問題ありません。
 
 ```bash
 ERROR: DB Backend is RLOG, but an incompatible OTP version has been detected. Falling back to using Mnesia DB backend.
@@ -46,18 +46,18 @@ WARNING: Configure node.cookie in /path/to/emqx/etc/emqx.conf or override from e
 WARNING: NOTE: Use the same cookie for all nodes in the cluster.
 ```
 
-You can check the status of EMQX with this command:
+EMQXの状態は以下のコマンドで確認できます：
 
 ```bash
 ./bin/emqx ctl status
 ```
 
-Start your web browser and enter `http://localhost:18083/` (`localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
+ウェブブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力すると、[EMQXダッシュボード](../dashboard/introduction.md)にアクセスできます。ここからクライアントの接続や稼働状況の確認が可能です。
 
-The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
+初期のユーザー名とパスワードは `admin` と `public` です。ログイン後にパスワード変更が求められます。
 
-To stop EMQX:
+EMQXの停止方法：
 
-* Use `emqx stop` or `bin/emqx stop` if it is started in daemon mode.
-* Press Ctrl+C if it is started in foreground mode.
-* Press Ctrl+C twice if it is started in interactive mode.
+* デーモンモードで起動している場合は `emqx stop` または `bin/emqx stop` を使用してください。
+* フォアグラウンドモードの場合は Ctrl+C を押してください。
+* インタラクティブモードの場合は Ctrl+C を2回押してください。
