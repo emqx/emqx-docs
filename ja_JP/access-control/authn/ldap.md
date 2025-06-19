@@ -1,78 +1,76 @@
-# Integrate with LDAP
+# LDAPとの統合
 
-[Lightweight Directory Access Protocol (LDAP)](https://ldap.com/) is a protocol used to access and manage directory information. EMQX supports integrating with an LDAP server for password authentication. This integration enables users to use their LDAP credentials for authentication in EMQX.
+[Lightweight Directory Access Protocol (LDAP)](https://ldap.com/) は、ディレクトリ情報にアクセスおよび管理するためのプロトコルです。EMQXはパスワード認証のためにLDAPサーバーとの統合をサポートしています。この統合により、ユーザーはEMQXでの認証にLDAPの認証情報を使用できます。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)についての知識
 
 :::
 
-## Password Authentication Methods
+## パスワード認証方式
 
-EMQX's LDAP integration includes two distinct authentication methods:
-- **LDAP Bind Authentication**
+EMQXのLDAP統合には、以下の2つの異なる認証方式があります。
 
-  EMQX directly uses LDAP binding to authenticate usernames and passwords. When a client connects, EMQX receives the provided username and password, then constructs a Distinguished Name (DN) using the configured `base_dn` and `filter`. It then attempts to bind (log in) to the LDAP server as the client using these credentials. If the bind operation succeeds, the authentication is accepted; otherwise, the connection is rejected.
+- **LDAPバインド認証**
 
-  This method relies solely on the existing LDAP user entries and does not require EMQX to retrieve or process any sensitive data like password hashes. It is simple to set up and does not require modifying the LDAP schema.
+  EMQXはLDAPバインドを直接使用してユーザー名とパスワードを認証します。クライアントが接続すると、EMQXは提供されたユーザー名とパスワードを受け取り、設定された`base_dn`と`filter`を用いて識別名（DN）を構築します。その後、これらの認証情報を使ってLDAPサーバーにバインド（ログイン）を試みます。バインド操作が成功すれば認証が承認され、失敗すれば接続は拒否されます。
 
-  This approach is suitable for situations where:
+  この方式は既存のLDAPユーザーエントリのみに依存し、EMQXがパスワードハッシュなどの機密データを取得・処理する必要がありません。設定が簡単でLDAPスキーマの変更も不要です。
 
-  - User accounts already exist in the LDAP server.
-  - The LDAP schema cannot be changed or extended.
-  - You prefer minimal setup, and the LDAP server handles authentication directly.
+  この方式は以下のような場合に適しています。
 
-- **Local Password Comparison**
+  - ユーザーアカウントがすでにLDAPサーバーに存在している。
+  - LDAPスキーマを変更または拡張できない。
+  - 最小限の設定でLDAPサーバー側で直接認証を処理したい。
 
-  EMQX connects to the LDAP server using the bind account specified by the `username` and `password` configuration options (i.e., the bind DN). It then locates the client’s LDAP entry and retrieves the stored password (usually in a hashed format) from a specific attribute. The provided client password is then compared with the retrieved hash locally within EMQX.
+- **ローカルパスワード比較**
 
-  This method provides greater flexibility and control over the authentication process. It supports various password hash algorithms, allows retrieval of additional user attributes, and can be integrated with custom authentication logic or security policies.
+  EMQXは`username`と`password`設定で指定されたバインドアカウント（バインドDN）を使ってLDAPサーバーに接続します。その後、クライアントのLDAPエントリを検索し、特定の属性から保存されているパスワード（通常はハッシュ形式）を取得します。クライアントから提供されたパスワードはEMQX内で取得したハッシュとローカルに比較されます。
 
-  This approach is suitable for situations where:
+  この方式は認証プロセスに対してより柔軟かつ詳細な制御を提供します。様々なパスワードハッシュアルゴリズムをサポートし、追加のユーザー属性を取得でき、カスタム認証ロジックやセキュリティポリシーと統合可能です。
 
-  - You need to store or process custom authentication attributes (e.g., `isSuperuser`, ACL rules).
-  - You have permission to configure schemas and data on the LDAP server.
-  - More advanced security or validation logic is required beyond simple LDAP binding.
+  この方式は以下のような場合に適しています。
 
-In both methods, EMQX can retrieve additional attributes such as the `isSuperuser` flag or ACL rules from the LDAP entry, using the `base_dn` and `filter` configuration. These attributes can be used to determine administrative permissions or enforce fine-grained access control. For detailed information, see [Retrieve ACL Rules from LDAP](#retrieve-acl-rules-from-ldap).
+  - `isSuperuser`やACLルールなどのカスタム認証属性を保存・処理する必要がある。
+  - LDAPサーバーのスキーマやデータを設定する権限がある。
+  - 単純なLDAPバインド以上の高度なセキュリティや検証ロジックが必要。
 
-## LDAP Data Schema and Query
+両方式ともに、EMQXは`base_dn`と`filter`設定を使って`isSuperuser`フラグやACLルールなどの追加属性をLDAPエントリから取得できます。これらの属性は管理者権限の判定や細かいアクセス制御の適用に利用されます。詳細は[LDAPからACLルールを取得する](#retrieve-acl-rules-from-ldap)をご参照ください。
+
+## LDAPデータスキーマとクエリ
 
 ::: tip
 
-This section applies to the "Local Password Comparison" authentication method. If you are using the "LDAP Bind Authentication" method, you can bypass this section.
+このセクションは「ローカルパスワード比較」認証方式に適用されます。「LDAPバインド認証」方式を使用している場合は、このセクションはスキップできます。
 
 :::
 
-This section describes how to configure LDAP schema, create LDAP credentials, and store the credentials for password authentication.
+このセクションでは、LDAPスキーマの設定、LDAP認証情報の作成、およびパスワード認証用の認証情報の保存方法について説明します。
 
-An LDAP schema defines the structure and rules for organizing and storing authentication data within an LDAP directory. The LDAP authenticator supports almost all LDAP schema. Here is an example schema for OpenLDAP:
+LDAPスキーマは、LDAPディレクトリ内で認証データを整理・保存するための構造とルールを定義します。LDAP認証機能はほぼすべてのLDAPスキーマをサポートしています。以下はOpenLDAPの例です。
 
 ```sql
-
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.1.4 NAME 'isSuperuser'
 	EQUALITY booleanMatch
 	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
 	SINGLE-VALUE
 	USAGE userApplications )
 
-
 objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
 	SUP top
 	STRUCTURAL
 	MAY ( isSuperuser )
     MUST ( uid $ userPassword ) )
-
 ```
-The given schema example defines an attribute named `isSuperuser` to indicate whether a user is a superuser. It also defines an object class named `mqttUser` which is used to represent the user and the object class must include the `userPassword` attribute.
 
-To create LDAP credentials, users need to define some necessary attribute names, the distinguished name (dn) of the base object, and a filter for the LDAP query.
+上記のスキーマ例では、ユーザーがスーパーユーザーかどうかを示す`isSuperuser`属性を定義しています。また、ユーザーを表すためのオブジェクトクラス`mqttUser`を定義し、このオブジェクトクラスは`userPassword`属性を必須としています。
 
-Below are some sample LDAP credentials specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
+LDAP認証情報を作成するには、必要な属性名、ベースオブジェクトの識別名（dn）、およびLDAPクエリのフィルターを定義する必要があります。
+
+以下は、OpenLDAPのスキーマに基づいた[LDAPデータ交換フォーマット（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/)で指定されたLDAP認証情報のサンプルです。
 
 ```sql
-
 ## create organization: emqx.io
 dn:dc=emqx,dc=io
 objectclass: top
@@ -117,14 +115,13 @@ objectClass: mqttUser
 uid: mqttuser0003
 isSuperuser: TRUE
 userPassword:: e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
-
 ```
 
-Edit the LDAP configuration file `slapd.conf` to include the schema and LDIF file so that they will be loaded when the LDAP server is started. Below is an example `slapd.conf` file:
+LDAPサーバー起動時にスキーマとLDIFファイルが読み込まれるよう、LDAP設定ファイル`slapd.conf`を編集します。以下は`slapd.conf`の例です。
 
 ::: tip
 
-You can determine how to store LDAP credentials and access them based on your business needs.
+LDAP認証情報の保存方法やアクセス方法は、ビジネス要件に応じて決定してください。
 
 :::
 
@@ -146,62 +143,61 @@ rootpw {SSHA}eoF7NhNrejVYYyGHqnt+MdKNBh4r1w3W
 directory       /usr/local/etc/openldap/data
 ```
 
-## Configure LDAP Authentication via Dashboard
+## ダッシュボードでLDAP認証を設定する
 
-You can configure how to use LDAP for password authentication in the EMQX Dashboard.
+EMQXダッシュボードでパスワード認証にLDAPを使用する設定が可能です。
 
-1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner.
-3. Click to select **Password-Based** as **Mechanism**, and **LDAP** as **Backend** to go to the **Configuration** tab, as shown below.
+1. EMQXダッシュボードの左ナビゲーションメニューから **アクセス制御** -> **認証** をクリックします。
+2. **認証** ページの右上にある **作成** をクリックします。
+3. **メカニズム**に **パスワードベース** を、**バックエンド**に **LDAP** を選択し、**設定**タブに進みます。以下のように表示されます。
 
 <img src="./assets/authn-ldap.png" alt="authn-ldap"  />
 
-4. Follow the instructions below for the configuration:
+4. 以下の指示に従って設定を行います。
 
-   - Enter the information needed to connect to the LDAP server.
+   - LDAPサーバーに接続するための情報を入力します。
 
-     - **Server**: Specify the server address that EMQX connects to (`host:port`).
-     - **Username**: Specifies the account name EMQX uses to bind to the LDAP server (i.e., the bind DN), for example: `cn=root,dc=emqx,dc=io`. This account must have permission to read user entries and is typically the same as the `rootdn` defined in the LDAP configuration file (e.g., `slapd.conf`).
-     - **Password**: The plaintext password corresponding to the above username, used to complete the bind operation. This value should match the actual password of the `rootpw` defined in the LDAP configuration.
+     - **サーバー**：EMQXが接続するサーバーのアドレス（`host:port`）を指定します。
+     - **ユーザー名**：EMQXがLDAPサーバーにバインドするために使用するアカウント名（バインドDN）を指定します。例：`cn=root,dc=emqx,dc=io`。このアカウントはユーザーエントリの読み取り権限を持ち、通常はLDAP設定ファイル（例：`slapd.conf`）で定義された`rootdn`と同じです。
+     - **パスワード**：上記ユーザー名に対応する平文のパスワードで、バインド操作を完了するために使用されます。この値はLDAP設定の`rootpw`の実際のパスワードと一致する必要があります。
 
-   - **Authentication configuration**: Fill in the authentication-related settings.
+   - **認証設定**：認証に関する設定を入力します。
 
-     - **Password Authentication Method**: Select the authentication method: `LDAP Bind Authentication` (default) or `Local Password Comparison`.
+     - **パスワード認証方式**：認証方式を選択します。`LDAPバインド認証`（デフォルト）または`ローカルパスワード比較`から選択します。
 
-     - **Bind Password**: Specifies the password that EMQX uses to authenticate itself to the LDAP server before it can perform any operations or queries. It is referenced through a placeholder `${password}` that will be resolved at runtime with the actual password defined in the configuration option **Password**.
+     - **バインドパスワード**：EMQXがLDAPサーバーに対して自身を認証するために使用するパスワードを指定します。これは設定オプション**パスワード**で定義された実際のパスワードに置き換えられるプレースホルダー`${password}`で参照されます。
 
-     - **Base DN**: Specifies the starting point (i.e., base DN) for LDAP search operations. EMQX begins searching for user entries that match the configured filter from this DN. Placeholders such as `${username}` are supported for dynamically constructing the client identity. For more information, see, see [RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1).
+     - **ベースDN**：LDAP検索操作の開始点（ベースDN）を指定します。EMQXはこのDNから設定されたフィルターに一致するユーザーエントリを検索します。`${username}`などのプレースホルダーを使ってクライアント識別子を動的に構築できます。詳細は[RFC 4511 Search Request](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)をご参照ください。
 
        ::: tip
 
-       DN refers to Distinguished Name. This is a unique identifier of each object entry and it also describes the location of the entry within the information tree.
+       DNは識別名（Distinguished Name）を指します。これは各オブジェクトエントリの一意の識別子であり、情報ツリー内のエントリの位置も示します。
 
        :::
 
-     - **Password Hash Attribute**: Specifies the attribute representing the user's password, applicable when `Local Password Comparison` is selected as the authentication method. The value of this attribute should follow [RFC 3112](#https://datatracker.ietf.org/doc/html/rfc3112), the supported algorithms are `md5`,  `sha`, `sha256`, `sha384`, `sha512`, and `ssha`.
+     - **パスワードハッシュ属性**：認証方式に`ローカルパスワード比較`を選択した場合に適用される、ユーザーのパスワードを表す属性を指定します。この属性の値は[RFC 3112](https://datatracker.ietf.org/doc/html/rfc3112)に準拠し、サポートされるアルゴリズムは`md5`、`sha`、`sha256`、`sha384`、`sha512`、`ssha`です。
 
-     - **Is Superuser Attribute**: Identifies the attribute that indicates whether a user is a superuser, applicable when `Local Password Comparison` is selected as the authentication method.  The value of this attribute should be in boolean, if absent is equal to `false`.
-   
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this LDAP authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-   
-   - **Filter**: Defines the criteria for the LDAP query. The filter sets conditions that an entry must meet to be considered a match.
-     The syntax of the filter follows [RFC 4515](#https://www.rfc-editor.org/rfc/rfc4515) and also supports placeholders.
-   
-   - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-     - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to LDAP. Default: `8`.
-     - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the query is timed out. Default: `5` seconds.
-   
-5. After you finish the settings, click **Create**.
+     - **スーパーユーザー属性**：認証方式に`ローカルパスワード比較`を選択した場合に適用される、ユーザーがスーパーユーザーかどうかを示す属性を指定します。この属性の値はブール値で、存在しない場合は`false`とみなされます。
 
-## Configure LDAP Authentication via Configuration Items
+   - **前提条件**：[Variform式](../../configuration/configuration.md#variform-expressions)を使って、このLDAP認証機能をクライアント接続に適用するかどうかを制御します。この式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列の`"true"`の場合にのみ認証機能が呼び出されます。それ以外の場合はスキップされます。前提条件の詳細は[認証の前提条件](./authn.md#authentication-preconditions)をご覧ください。
 
-You can configure the EMQX LDAP authenticator with EMQX configuration items.<!--插入超链接-->
+   - **TLSを有効化**：TLSを有効にする場合はトグルスイッチをオンにします。TLSの有効化については[ネットワークとTLS](../../network/overview.md)をご参照ください。
 
-LDAP authentication is identified with `mechanism = password_based` and `backend = ldap`.
+   - **フィルター**：LDAPクエリの条件を定義します。フィルターはエントリが一致するための条件を設定します。フィルターの構文は[RFC 4515](https://www.rfc-editor.org/rfc/rfc4515)に準拠し、プレースホルダーもサポートされます。
 
-Below is a sample configuration for the **Local Password Comparison** method:
+   - **詳細設定**：同時接続数や接続タイムアウトまでの待機時間を設定します。
+     - **コネクションプールサイズ**（任意）：EMQXノードからLDAPへの同時接続数を整数値で指定します。デフォルトは`8`です。
+     - **クエリタイムアウト**（任意）：EMQXがクエリのタイムアウトと判断するまでの待機時間を秒単位で指定します。デフォルトは`5`秒です。
+
+5. 設定が完了したら、**作成**をクリックします。
+
+## 設定ファイルでLDAP認証を設定する
+
+EMQXの設定ファイルでLDAP認証機能を設定することも可能です。
+
+LDAP認証は`mechanism = password_based`および`backend = ldap`で識別されます。
+
+以下は**ローカルパスワード比較**方式の設定例です。
 
 ```bash
 {
@@ -222,7 +218,7 @@ Below is a sample configuration for the **Local Password Comparison** method:
 }
 ```
 
-Below is a sample configuration for the **LDAP Bind Authentication** method:
+以下は**LDAPバインド認証**方式の設定例です。
 
 ```bash
 {
@@ -242,31 +238,31 @@ Below is a sample configuration for the **LDAP Bind Authentication** method:
 }
 ```
 
-## Retrieve ACL Rules from LDAP
+## LDAPからACLルールを取得する
 
-In addition to authenticating clients, EMQX can also retrieve per-user ACL (Access Control List) rules from the same LDAP entry used during authentication. This allows both authentication and authorization to be managed centrally via LDAP.
+EMQXはクライアントの認証に加えて、認証時に使用した同じLDAPエントリからユーザーごとのACL（アクセス制御リスト）ルールを取得することも可能です。これにより、認証と認可をLDAPで一元管理できます。
 
-During the authentication process, EMQX uses the configured `base_dn` and `filter` to locate the user’s LDAP entry. If ACL-related attributes are found, EMQX retrieves them and caches the result in the client’s session. These rules are then used to perform authorization checks (such as publish/subscribe permissions) without requiring repeated LDAP queries.
+認証処理中に、EMQXは設定された`base_dn`と`filter`を使ってユーザーのLDAPエントリを特定します。ACL関連の属性が見つかれば、それらを取得してクライアントのセッションにキャッシュします。このルールはパブリッシュやサブスクライブの権限チェックに使用され、LDAPへの繰り返しクエリを不要にします。
 
-### Supported ACL Attributes
+### サポートされるACL属性
 
-To enable the feature of retrieving ACL rules from LDAP, you need to define any the following attributes in the LDAP schema:
+LDAPからACLルールを取得する機能を有効にするには、LDAPスキーマに以下のいずれかの属性を定義する必要があります。
 
-- **`mqttPublishTopic`**: Whitelist of topics the client is allowed to publish to.
-- **`mqttSubscriptionTopic`**: Whitelist of topics the client is allowed to subscribe to.
-- **`mqttPubSubTopic`**: Topics the client is allowed to both publish and subscribe to.
-- **`mqttAclRule`**: Fine-grained ACL rules defined in JSON format, allowing detailed control over actions (e.g., publish or subscribe), permissions (allow or deny), and topic filters.
-- **`mqttAclTtl`**: Optional attribute specifying how long the ACL rules remain valid (time-to-live) in the client session.
+- **`mqttPublishTopic`**：クライアントがパブリッシュを許可されているトピックのホワイトリスト。
+- **`mqttSubscriptionTopic`**：クライアントがサブスクライブを許可されているトピックのホワイトリスト。
+- **`mqttPubSubTopic`**：クライアントがパブリッシュおよびサブスクライブを許可されているトピック。
+- **`mqttAclRule`**：JSON形式で定義された詳細なACLルール。アクション（パブリッシュやサブスクライブ）、許可（許可または拒否）、トピックフィルターなどを細かく制御可能。
+- **`mqttAclTtl`**：クライアントセッション内でACLルールが有効な期間（TTL）を指定する任意の属性。
 
-The attribute names shown above are just examples. You can customize them in the LDAP authenticator configuration using the appropriate fields.
+上記の属性名はあくまで例です。LDAP認証機能の設定で適切なフィールドを使いカスタマイズ可能です。
 
-The behavior and meaning of these attributes are the same as those defined in the [LDAP authorizer](../authz/ldap.md), except for `mqttAclTtl`, which is unique to the LDAP authenticator. This attribute allows you to control how long the fetched ACL rules are cached in the client's session. Its value can be a numeric string in seconds (e.g., `60`) or a duration with supported time units like `1s`, `15m`, `1h`, or `1d`.
+これらの属性の動作や意味は[LDAPオーソライザー](../authz/ldap.md)で定義されているものと同じですが、`mqttAclTtl`はLDAP認証機能固有の属性です。この属性により、取得したACLルールをクライアントセッション内でどのくらいキャッシュするかを制御できます。値は秒数の数値文字列（例：`60`）や、`1s`、`15m`、`1h`、`1d`などの時間単位付きの期間で指定できます。
 
-After the specified TTL expires, EMQX will no longer use the cached rules and will fall back to default authorization settings, unless new rules are retrieved in a subsequent authentication or session.
+指定されたTTLが経過すると、EMQXはキャッシュされたルールを使用せず、デフォルトの認可設定に戻ります。ただし、後続の認証やセッションで新しいルールが取得されれば再度適用されます。
 
-### Example LDAP Schema
+### ACLルール用LDAPスキーマ例
 
-The example schema below defines the attributes for ACL rules:
+以下の例はACLルール用の属性を定義したスキーマです。
 
 ```
 attributetype ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.1.4 NAME 'isSuperuser'
@@ -306,9 +302,9 @@ objectclass ( 1.3.6.1.4.1.11.2.53.2.2.3.1.2.3.4 NAME 'mqttUser'
   MUST ( uid $ userPassword ))
 ```
 
-### Example LDIF Entry with ACL Attributes
+### ACL属性を含むLDIFエントリの例
 
-Below is an example of LDAP authentication data specified in [LDAP Data Interchange Format (LDIF)](https://ldap.com/ldif-the-ldap-data-interchange-format/) based on the given schema for OpenLDAP:
+以下は、OpenLDAPのスキーマに基づき、ACL属性を含むLDAP認証データの[LDAPデータ交換フォーマット（LDIF）](https://ldap.com/ldif-the-ldap-data-interchange-format/)の例です。
 
 ```sql
 dn:dc=emqx,dc=io
@@ -351,9 +347,9 @@ mqttAclTtl: 1s
 userPassword:: e1NTSEF9bjlYZHRvRzRRL1RRM1RRRjRZK2toSmJNQkg0cVhqNE0=
 ```
 
-### LDAP Authenticator Configuration Example
+### LDAP認証機能の設定例
 
-To enable ACL rule retrieval and caching, you need to **explicitly** configure the attribute names in the LDAP authenticator configuration:
+ACLルールの取得とキャッシュを有効にするには、LDAP認証機能の設定で属性名を**明示的に**指定する必要があります。
 
 ```bash
 {
@@ -378,8 +374,3 @@ To enable ACL rule retrieval and caching, you need to **explicitly** configure t
   acl_ttl_attribute = "mqttAclTtl"
 }
 ```
-
-
-
-
-

@@ -1,45 +1,45 @@
-# Ingest MQTT Data into DynamoDB
+# DynamoDBへのMQTTデータ取り込み
 
-[DynamoDB](https://www.amazonaws.cn/en/dynamodb/) is a fully managed, high-performance, serverless key-value store database service on AWS. It is designed for applications that require fast, scalable, and reliable data storage. EMQX supports integration with DynamoDB, enabling you to save MQTT messages and client events to DynamoDB, facilitating the registration and management of IoT devices, as well as the long-term storage and real-time analysis of device data. Through the DynamoDB data integration, MQTT messages and client events can be stored in DynamoDB, and events can also trigger updates or deletions of data within DynamoDB, thereby enabling the recording of information such as device online status and connection history.
+[DynamoDB](https://www.amazonaws.cn/en/dynamodb/)は、AWS上で提供されるフルマネージドの高性能サーバーレスなキー・バリューストア型データベースサービスです。高速でスケーラブルかつ信頼性の高いデータストレージを必要とするアプリケーション向けに設計されています。EMQXはDynamoDBとの連携をサポートしており、MQTTメッセージやクライアントイベントをDynamoDBに保存することで、IoTデバイスの登録・管理やデバイスデータの長期保存およびリアルタイム分析を実現します。DynamoDBデータ連携を通じて、MQTTメッセージやクライアントイベントをDynamoDBに格納できるほか、イベントに応じてDynamoDB内のデータ更新や削除をトリガーし、デバイスのオンライン状態や接続履歴などの情報を記録可能です。
 
-This page provides a comprehensive introduction to the data integration between EMQX and DynamoDB with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとDynamoDB間のデータ連携について包括的に解説し、データ連携の作成および検証方法を実践的に説明します。
 
-## How It Works
+## 動作概要
 
-DynamoDB data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with DynamoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to DynamoDB for storage and management, eliminating the need for complex coding. 
+DynamoDBデータ連携はEMQXに標準搭載された機能であり、EMQXのデバイス接続およびメッセージ伝送機能とDynamoDBの強力なデータストレージ機能を組み合わせています。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからDynamoDBへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and DynamoDB:
+以下の図は、EMQXとDynamoDB間の典型的なデータ連携アーキテクチャを示しています。
 
 ![EMQX Integration DynamoDB](./assets/emqx-integration-dynamodb.png)
 
-Ingesting MQTT data into DynamoDB works as follows:
+MQTTデータをDynamoDBに取り込む流れは以下の通りです：
 
-1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to DynamoDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into DynamoDB**: Once the rule engine identifies a message for DynamoDB storage, it triggers an action of forwarding the messages to DynamoDB. Processed data will be seamlessly written into the collection of the DynamoDB database.
-4. **Data storage and utilization**: With the data now stored in DynamoDB, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+1. **メッセージのパブリッシュと受信**：接続車両、IIoTシステム、エネルギー管理プラットフォームなどのIoTデバイスがMQTTプロトコルでEMQXに正常に接続し、特定のトピックにMQTTメッセージをパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **メッセージデータの処理**：メッセージ到着後、ルールエンジンを通過し、EMQXで定義されたルールに基づいて処理されます。ルールは事前定義された条件により、DynamoDBへルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などの変換が適用されます。
+3. **DynamoDBへのデータ取り込み**：ルールエンジンがDynamoDB保存対象のメッセージを特定すると、DynamoDBへの転送アクションをトリガーします。処理済みデータはDynamoDBのテーブルにシームレスに書き込まれます。
+4. **データの保存と活用**：DynamoDBに保存されたデータは、様々なユースケースでクエリ機能を活用できます。例えば、接続車両分野では車両の状態監視、リアルタイムメトリクスに基づくルート最適化、資産追跡に利用可能です。IIoT環境では機械の健康監視、メンテナンス予測、生産スケジュール最適化などに活用されます。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with DynamoDB offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+DynamoDBとのデータ連携は、効率的なデータ伝送、保存、活用を実現する多彩な特長とメリットを提供します：
 
-- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to DynamoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in DynamoDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
-- **Flexible Data Model**: DynamoDB uses key-value and document data models, suitable for storing and managing structured device events and message data, allowing for easy storage of different MQTT message structures.
-- **Powerful Scalability**: EMQX offers cluster scalability, capable of seamless horizontal scaling based on device connections and message volume; DynamoDB, requiring no server or infrastructure management, automatically handles underlying resource management and scaling. The combination of both provides high-performance and highly reliable data storage and scalability.
+- **リアルタイムデータストリーミング**：EMQXはリアルタイムデータストリームの処理に最適化されており、ソースシステムからDynamoDBへの効率的かつ信頼性の高いデータ伝送を実現します。即時のインサイトやアクションが必要なユースケースに適しています。
+- **柔軟なデータ変換**：EMQXは強力なSQLベースのルールエンジンを備え、DynamoDBに保存する前にデータの前処理が可能です。フィルタリング、ルーティング、集約、強化など多様なデータ変換機能をサポートし、ニーズに応じたデータ整形を実現します。
+- **柔軟なデータモデル**：DynamoDBはキー・バリューおよびドキュメントデータモデルを採用しており、構造化されたデバイスイベントやメッセージデータの保存・管理に適しています。異なるMQTTメッセージ構造の格納も容易です。
+- **強力なスケーラビリティ**：EMQXはクラスターのスケーラビリティを提供し、デバイス接続数やメッセージ量に応じてシームレスな水平スケールが可能です。DynamoDBはサーバーやインフラ管理不要で、基盤リソースの管理とスケーリングを自動で行います。両者の組み合わせにより、高性能かつ高信頼性のデータ保存とスケーラビリティを実現します。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create a DynamoDB data integration, including how to install a DynamoDB server and create a data table.
+このセクションでは、DynamoDBデータ連携の作成前に必要な準備として、DynamoDBサーバーのインストールおよびデータテーブルの作成方法を説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
+- EMQXデータ連携の[ルール](./rules.md)に関する知識
+- [データ連携](./data-bridges.md)に関する知識
 
-### Install DynamoDB Local Server and Create Table
+### DynamoDBローカルサーバーのインストールとテーブル作成
 
-1. Use the following command to run DynamoDB server locally:
+1. 以下のコマンドでDynamoDBサーバーをローカルで起動します：
 
    - Access Key ID: `root`
    - Secret Access Key: `public`
@@ -53,12 +53,12 @@ This section describes the preparations you need to complete before you start to
      amazon/dynamodb-local:2.4.0
    ```
 
-2. Prepare a table definition file, place it in the current directory, and name it `mqtt_msg.json`. The table definition is as follows:
+2. テーブル定義ファイルを作成し、カレントディレクトリに`mqtt_msg.json`という名前で保存します。テーブル定義は以下の通りです：
 
-   - Define `device_id` as the hash key (partition key).
-   - Define `timestamp` as the range key (sort key).
-   - Define an attribute named `device_id` of type string (S).
-   - Define an attribute named `timestamp` of type number (N).
+   - `device_id`をハッシュキー（パーティションキー）として定義
+   - `timestamp`をレンジキー（ソートキー）として定義
+   - 属性`device_id`は文字列型（S）
+   - 属性`timestamp`は数値型（N）
 
    ```json
    {
@@ -90,7 +90,7 @@ This section describes the preparations you need to complete before you start to
    }
    ```
 
-3. Use Docker to run `aws-cli` command to create a new table using the file:
+3. Dockerを使って`aws-cli`コマンドを実行し、上記ファイルを用いてテーブルを作成します：
 
    ```bash
    docker run --rm -v $PWD:/dynamo_data \
@@ -102,7 +102,7 @@ This section describes the preparations you need to complete before you start to
        --endpoint-url http://host.docker.internal:8000
    ```
 
-4. Use Docker to run `aws-cli` command to verify if the table creation was successful:
+4. Dockerで`aws-cli`コマンドを実行し、テーブル作成が成功したか確認します：
 
    ```bash
    docker run --rm \
@@ -113,7 +113,7 @@ This section describes the preparations you need to complete before you start to
        --endpoint-url http://host.docker.internal:8000
    ```
 
-   The following JSON will be printed if the table was created successfully.
+   テーブル作成が成功していれば、以下のJSONが出力されます。
 
    ```json
    {
@@ -123,36 +123,36 @@ This section describes the preparations you need to complete before you start to
    }
    ```
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a connector to connect the Sink to the DynamoDB server.
+このセクションでは、SinkをDynamoDBサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and DynamoDB on the local machine. If you have DynamoDB and EMQX running remotely, adjust the settings accordingly.
+以下の手順は、EMQXとDynamoDBをローカルマシンで実行していることを前提としています。リモート環境で実行している場合は設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **DynamoDB** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_dynamodb`.
-   - **DynamoDB Region**: Enter `us-west-2`.
-   - **DynamoDB Endpoint**: Enter `http://127.0.0.1:8000`, or the actual URL if the DynamoDB server is running remotely.
-   - **AWS Access Key ID**: Enter `root`.
-   - **AWS Secret Access Key**: Enter `public`.
-5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the DynamoDB server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the DynamoDB and to record client events. For detailed steps, see [Create a Rule with DynamoDB Sink for Message Storage](#create-a-rule-with-dynamodb-sink-for-message-storage) and [Create a Rule with DynamoDB Sink for Events Recording](#create-a-rule-with-dynamodb-sink-for-events-recording).
+1. EMQXダッシュボードにアクセスし、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**DynamoDB**を選択し、**Next**をクリックします。
+4. **Configuration**ステップで以下を設定します：
+   - **Connector name**：コネクター名を入力します。英数字の組み合わせで、例：`my_dynamodb`
+   - **DynamoDB Region**：`us-west-2`を入力
+   - **DynamoDB Endpoint**：`http://127.0.0.1:8000`（DynamoDBサーバーがリモートの場合は実際のURLを入力）
+   - **AWS Access Key ID**：`root`
+   - **AWS Secret Access Key**：`public`
+5. 詳細設定（任意）：詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
+6. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがDynamoDBサーバーに接続できるかテスト可能です。
+7. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてSinkを指定したルール作成に進めます。詳細は[メッセージ保存用DynamoDB Sinkのルール作成](#create-a-rule-with-dynamodb-sink-for-message-storage)および[イベント記録用DynamoDB Sinkのルール作成](#create-a-rule-with-dynamodb-sink-for-events-recording)を参照してください。
 
-## Create a Rule with DynamoDB Sink for Message Storage
+## メッセージ保存用DynamoDB Sinkのルール作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and writing the processed data to the DynamoDB table `mqtt_msg` via a configured Sink. 
+このセクションでは、ダッシュボード上でMQTTのソーストピック`t/#`からのメッセージを処理し、処理済みデータを設定済みのSink経由でDynamoDBテーブル`mqtt_msg`に書き込むルール作成方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードで**Integration** -> **Rules**を開きます。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. Enter `my_rule` as the rule ID. To create a rule for message storage, enter the following statement in the **SQL Editor**, which means the MQTT messages under topic `t/#`  will be saved to DynamoDB.
+3. ルールIDに`my_rule`と入力し、メッセージ保存用ルールとして以下のSQL文を**SQL Editor**に入力します。これはトピック`t/#`配下のMQTTメッセージをDynamoDBに保存することを意味します。
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   注意：独自のSQL文を指定する場合は、Sinkが必要とする全フィールドを`SELECT`に含めてください。
 
    ```sql
    SELECT 
@@ -163,73 +163,73 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   初心者の方は**SQL Examples**や**Enable Test**をクリックしてSQLルールの学習やテストを行うことを推奨します。
 
    :::
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to DynamoDB.
+4. + **Add Action**ボタンをクリックし、ルールでトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをDynamoDBに送信します。
 
-5. Select `DynamoDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**ドロップダウンから`DynamoDB`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、本デモでは新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+6. Sink名を入力します。英数字の組み合わせで指定してください。
 
-7. Select the `my_dynamodb` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**ドロップダウンから先ほど作成した`my_dynamodb`を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは[コネクターの作成](#create-a-connector)を参照してください。
 
-8. Confiture the following settings:
+8. 以下の設定を行います：
 
-   - **Table**: Enter `mqtt_msg`, the name of the table previously created.
+   - **Table**：先に作成したテーブル名`mqtt_msg`を入力
 
-   - **Hash Key**: Enter `${clientid}` to use the client ID as the hash key.
+   - **Hash Key**：`${clientid}`を入力し、クライアントIDをハッシュキーとして使用
 
-   - **Range Key** (optional): Enter `${timestamp}` to use the message timestamp as the range key.
+   - **Range Key**（任意）：`${timestamp}`を入力し、メッセージのタイムスタンプをレンジキーとして使用
 
-   - **Message Template**: Leave the template empty by default.
+   - **Message Template**：デフォルトで空欄のままにします
 
      ::: tip
 
-     When this value is empty the whole message will be stored in the database. The actual value is JSON template data.
+     この値が空の場合、メッセージ全体がデータベースに保存されます。実際の値はJSONテンプレートデータです。
 
      :::
-     
-     If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **Message template** to define the rule engine behavior:
-     
-     - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-     
-     - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
-     
+
+     SQLテンプレート内でプレースホルダー変数が未定義の場合、**Message template**上部の**Undefined Vars as Null**スイッチでルールエンジンの動作を切り替えられます：
+
+     - **Disabled**（デフォルト）：未定義変数は文字列`undefined`としてデータベースに挿入されます。
+
+     - **Enabled**：未定義変数は`NULL`として挿入されます。
+
        ::: tip
-     
-       If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
-     
+
+       可能な限りこのオプションは有効にしてください。無効化は後方互換性確保のためのみ推奨されます。
+
        :::
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. **詳細設定（任意）**：必要に応じて**sync**または**async**クエリモードを選択します。詳細は[Sinkの機能](./data-bridges.md#features-of-sink)を参照してください。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the server.
+11. **Create**をクリックする前に、**Test Connectivity**でSinkがサーバーに接続できるかテスト可能です。
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+12. **Create**ボタンをクリックし、Sink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+13. **Create Rule**ページに戻り、設定内容を確認して**Create**ボタンをクリックしルールを生成します。
 
-You have now successfully created the rule for forwarding data through the DynamoDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new DynamoDB Sink.
+これでDynamoDB Sinkを通じたデータ転送ルールの作成が完了しました。**Integration** -> **Rules**ページで新規作成ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいDynamoDB Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to DynamoDB after parsing by rule `my_rule`.
+また、**Integration** -> **Flow Designer**を開くとトポロジーが表示され、トピック`t/#`配下のメッセージがルール`my_rule`で処理されDynamoDBに送信・保存されていることが確認できます。
 
-## Create a Rule with DynamoDB Sink for Events Recording
+## イベント記録用DynamoDB Sinkのルール作成
 
-This section demonstrates how to create a rule for recording the clients' online/offline status and writing the events data to the DynamoDB table `mqtt_msg` via a configured Sink.
+このセクションでは、クライアントのオンライン／オフライン状態を記録し、イベントデータを設定済みのSink経由でDynamoDBテーブル`mqtt_msg`に書き込むルール作成方法を説明します。
 
 ::: tip
 
-For convenience, the `mqtt_msg` topic will be reused to receive online/offline events.
+利便性のため、オンライン／オフラインイベント受信用に`mqtt_msg`トピックを再利用します。
 
 :::
 
-The rule and action creation steps are similar to those in [Create a Rule with DynamoDB Sink for Message Storage](#create-a-rule-with-dynamodb-sink-for-message-storage) except for the SQL rule syntax.
+ルールおよびアクション作成手順は[メッセージ保存用DynamoDB Sinkのルール作成](#メッセージ保存用dynamodb-sinkのルール作成)とほぼ同様ですが、SQLルール文が異なります。
 
-The SQL rule syntax for online/offline status recording is as follows:
+オンライン／オフライン状態記録用のSQLルール文は以下の通りです：
 
 ```sql
 SELECT
@@ -238,23 +238,24 @@ FROM
   "$events/client_connected", "$events/client_disconnected"
 ```
 
-### Test the Rules
+### ルールのテスト
 
-Use MQTT X to send a message to topic `t/1` to trigger an online/offline event. 
+MQTT Xを使ってトピック`t/1`にメッセージを送信し、オンライン／オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello DynamoDB" }'
 ```
 
-Check the running status of the Sinks, there should be 1 new incoming and 1 new outgoing message and 2 event records.
+Sinkの稼働状況を確認すると、1件の新規受信メッセージと1件の新規送信メッセージ、及び2件のイベントレコードがあるはずです。
 
-Check whether the data is written into the `mqtt_msg`  data table. 
+データが`mqtt_msg`テーブルに書き込まれているか確認します。
 
 ```bash
 docker run --rm -e AWS_ACCESS_KEY_ID=root -e AWS_SECRET_ACCESS_KEY=public -e AWS_DEFAULT_REGION=us-west-2 amazon/aws-cli dynamodb scan --table-name=mqtt_msg --endpoint-url http://host.docker.internal:8000
 ```
 
-The output will be:
+出力例：
+
 ```json
 {
     "Items": [
@@ -411,6 +412,3 @@ The output will be:
     "ConsumedCapacity": null
 }
 ```
-
-
-

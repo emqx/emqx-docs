@@ -1,36 +1,35 @@
-# MQTT 5.0 Enhanced Authentication - Kerberos
+# MQTT 5.0 強化認証 - Kerberos
 
-Kerberos is a network authentication protocol that uses "tickets" to allow nodes to securely prove their identity to one another over a non-secure network. It is designed to provide strong authentication for client/server applications through secret-key cryptography. 
+Kerberosは、「チケット」を使用してノード同士が安全でないネットワーク上で互いの身元を安全に証明できるネットワーク認証プロトコルです。秘密鍵暗号方式を用いてクライアント/サーバーアプリケーションに対して強力な認証を提供するよう設計されています。
 
-EMQX integrates Kerberos authentication following the SASL/GSSAPI mechanism from RFC 4422. The Generic Security Services Application Program Interface (GSSAPI) provides a standardized API that abstracts the details of the Kerberos protocol, allowing secure communication between the MQTT clients and the server without requiring the application to manage the specifics of the Kerberos authentication process.
+EMQXはRFC 4422のSASL/GSSAPIメカニズムに従い、Kerberos認証を統合しています。Generic Security Services Application Program Interface（GSSAPI）はKerberosプロトコルの詳細を抽象化した標準化されたAPIを提供し、MQTTクライアントとサーバー間の安全な通信を実現しつつ、アプリケーションがKerberos認証プロセスの詳細を管理する必要をなくします。
 
-This page introduces how to configure the Kerberos authenticator in EMQX.
+本ページでは、EMQXでのKerberos認証器の設定方法を紹介します。
 
 ::: tip
-Enhanced authentication in MQTT is only supported starting from protocol version 5.
+MQTTの強化認証はプロトコルバージョン5以降でのみサポートされています。
 
-Since there is no mechanism negotiation, the client must explicitly specify `GSSAPI-KERBEROS` as the authentication mechanism.
+メカニズム交渉がないため、クライアントは認証メカニズムとして明示的に `GSSAPI-KERBEROS` を指定する必要があります。
 
 :::
 
-## Prerequisites for Configuration
+## 設定の前提条件
 
-Before configuring Kerberos authentication in EMQX, ensure that your environment meets the requirements, including installing essential libraries and properly setting up the Kerberos system.
+EMQXでKerberos認証を設定する前に、環境が要件を満たしていることを確認してください。必要なライブラリのインストールやKerberosシステムの適切なセットアップが含まれます。
 
-### Install Kerberos Library
+### Kerberosライブラリのインストール
 
-Before configuring the Kerberos authenticator, you must install the MIT Kerberos library on the EMQX node.
+Kerberos認証器を設定する前に、EMQXノードにMIT Kerberosライブラリをインストールする必要があります。
 
-- On Debian/Ubuntu, the required packages are `libsasl2-2` and `libsasl2-modules-gssapi-mit`.
+- Debian/Ubuntuでは、必要なパッケージは `libsasl2-2` と `libsasl2-modules-gssapi-mit` です。
 
-- On Redhat, the required packages are `krb5-libs` and `cyrus-sasl-gssapi`.
+- Redhatでは、必要なパッケージは `krb5-libs` と `cyrus-sasl-gssapi` です。
 
+### Kerberosライブラリの設定
 
-### Configure Kerberos Library
+Kerberosライブラリの設定ファイルは `/etc/krb5.conf` です。このファイルにはKerberosライブラリの設定情報（レルムやKey Distribution Center（KDC）など）が含まれています。Kerberosライブラリはこのファイルを参照してKDCやレルムを特定します。
 
-The Kerberos library configuration file is `/etc/krb5.conf`. The file contains the configuration information for the Kerberos library, including the realms and Key Distribution Centers (KDCs). The Kerberos library uses this file to locate the KDCs and realms.
-
-Here is an example of a `krb5.conf` file:
+以下は `krb5.conf` ファイルの例です：
 
 ```ini
 [libdefaults]
@@ -44,40 +43,39 @@ Here is an example of a `krb5.conf` file:
    }
 ```
 
-### Keytab Files
+### Keytabファイル
 
-To configure the Kerberos authenticator, you need a running KDC (Key Distribution Center) server and valid keytab files for both the server and clients. Keytab files store cryptographic keys associated with the server's principal. They allow the server to authenticate to the Kerberos KDC without manual password entry.
+Kerberos認証器を設定するには、稼働中のKDC（Key Distribution Center）サーバーと、サーバーおよびクライアントの両方に有効なkeytabファイルが必要です。keytabファイルはサーバーのプリンシパルに関連付けられた暗号鍵を格納し、サーバーが手動でパスワードを入力することなくKerberos KDCに認証できるようにします。
 
-EMQX can only support keytab files at the default location. You can configure the system default value by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
+EMQXはデフォルトの場所にあるkeytabファイルのみをサポートしています。環境変数 `KRB5_KTNAME` を使用するか、`/etc/krb5.conf` の `default_keytab_name` を設定してシステムのデフォルト値を指定できます。
 
-::: tip Note
+::: tip 注意
 
-The keytab file `/etc/krb5.conf` must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+keytabファイルはEMQXノード上に配置し、EMQXサービスを実行するユーザーが読み取り権限を持っている必要があります。
 
 :::
 
-## Configure via Dashboard
+## ダッシュボードからの設定
 
-1. In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page.
+1. EMQXダッシュボードの左メニューから **アクセス制御** -> **認証** に移動し、**認証**ページを開きます。
 
-2. Click **Create** at the top right corner, then select **GSSAPI** as the **Mechanism**, and **Kerberos** as the **Backend**.
+2. 右上の **作成** をクリックし、**メカニズム**に **GSSAPI** を、**バックエンド**に **Kerberos** を選択します。
 
-3. Click **Next** to go to the **Configuration** step.
+3. **次へ** をクリックして **設定** ステップに進みます。
 
-4. Configure the following fields:
+4. 以下の項目を設定します：
 
-   - **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`. 
+   - **Principal**：サーバーのKerberosプリンシパルを設定します。これはKerberos認証システム内でサーバーの身元を定義します。例：`mqtt/cluster1.example.com@EXAMPLE.COM`。
 
-     Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
+     注意：使用するレルムはEMQXノードの `/etc/krb5.conf` に設定されている必要があります。
    
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Kerberos authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+   - **Precondition**：このKerberos認証器をクライアント接続に適用するかどうかを制御するための[Variform式](../../configuration/configuration.md#variform-expressions)です。この式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証器が呼び出されます。それ以外の場合はスキップされます。詳細は[認証の前提条件](./authn.md#authentication-preconditions)を参照してください。
 
+5. **作成** をクリックして設定を完了します。
 
-5. Click **Create** to complete the configuration.
+## 設定項目による設定
 
-## Configure via Configuration Items
-
-Sample configuration:
+設定例：
 
 ```hcl
   {
@@ -87,11 +85,11 @@ Sample configuration:
   }
 ```
 
-The `principal` is the server principal, which must be present in the system's default keytab file.
+`principal` はサーバープリンシパルであり、システムのデフォルトkeytabファイルに存在している必要があります。
 
-## Authentication Flow
+## 認証フロー
 
-The following diagram shows how the authentication process works.
+以下の図は認証プロセスの流れを示しています。
 
 ```mermaid
 sequenceDiagram
@@ -107,50 +105,50 @@ sequenceDiagram
     Server-->>Client: CONNACK (rc=0, Authentication Method="GSSAPI-KERBEROS")
 ```
 
-## Common Issues and Troubleshooting
+## よくある問題とトラブルシューティング
 
-Here’s a guide to resolving some common issues you may encounter when configuring Kerberos authentication in EMQX:
+EMQXでKerberos認証を設定する際によくある問題の解決方法を以下に示します。
 
 ### `Keytab contains no suitable keys for mqtt/cluster1.example.com@EXAMPLE.COM`
 
-**Cause:** The keytab file does not contain the required keys for the principal. 
+**原因:** keytabファイルにプリンシパルに必要な鍵が含まれていません。
 
-**Solution:**
+**対処法:**
 
-- Ensure that the default keytab file is correctly configured.
+- デフォルトのkeytabファイルが正しく設定されていることを確認してください。
 
-- Use the `klist -k` command to inspect the keytab file. For example: `klist -kte /etc/krb5.keytab`.
+- `klist -k` コマンドでkeytabファイルを確認します。例：`klist -kte /etc/krb5.keytab`。
 
-  Note that EMQX currently supports keytab files only at the default location. If this error occurs, the system will return the path of the current default keytab file in the error message.
+  現状、EMQXはデフォルトの場所にあるkeytabファイルのみサポートしています。このエラーが発生した場合、エラーメッセージに現在のデフォルトkeytabファイルのパスが表示されます。
 
-- Try to configure the system default keytab file path by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
+- 環境変数 `KRB5_KTNAME` を使用するか、`/etc/krb5.conf` の `default_keytab_name` を設定してシステムのデフォルトkeytabファイルパスを指定してみてください。
 
 ### `invalid_server_principal_string`
 
-**Cause:** The Kerberos principal string is incorrectly formatted. 
+**原因:** Kerberosプリンシパル文字列の形式が誤っています。
 
-**Solution:** Ensure that the Kerberos principal string is in the correct format: `service/SERVER-FQDN@REALM.NAME`.
+**対処法:** Kerberosプリンシパル文字列が正しい形式であることを確認してください：`service/SERVER-FQDN@REALM.NAME`。
 
 ### `Cannot find KDC for realm "EXAMPLE.COM"`
 
-**Cause:** The specified Kerberos realm (`EXAMPLE.COM`) is not listed in the `/etc/krb5.conf` file's `realms` section. 
+**原因:** 指定されたKerberosレルム（`EXAMPLE.COM`）が `/etc/krb5.conf` の `realms` セクションに記載されていません。
 
-**Solution:** Add the missing realm information to the `realms` section of your `/etc/krb5.conf` file.
+**対処法:** `/etc/krb5.conf` の `realms` セクションに該当レルムの情報を追加してください。
 
 ### `Cannot contact any KDC for realm "EXAMPLE.COM"`
 
-**Cause:** The KDC service for the specified realm is either not running or cannot be reached. 
+**原因:** 指定されたレルムのKDCサービスが稼働していないか、到達できません。
 
-**Solution:** Verify that the KDC service is running and accessible. Check network connectivity and ensure the KDC server is correctly configured.
+**対処法:** KDCサービスが稼働中でアクセス可能であることを確認してください。ネットワーク接続をチェックし、KDCサーバーの設定が正しいことを確認してください。
 
 ### `Resource temporarily unavailable`
 
-**Cause:** The KDC service configured in `/etc/krb5.conf` is either not running or not reachable. 
+**原因:** `/etc/krb5.conf` に設定されたKDCサービスが稼働していないか、到達できません。
 
-**Solution:** Make sure the KDC service is operational and that the EMQX node can communicate with it.
+**対処法:** KDCサービスが正常に稼働しており、EMQXノードから通信可能であることを確認してください。
 
 ### `Preauthentication failed`
 
-**Cause:** The server ticket is invalid, possibly due to an outdated keytab file.
+**原因:** サーバーチケットが無効です。keytabファイルが古い可能性があります。
 
-**Solution:** Verify that the keytab file is up to date and contains the correct credentials.
+**対処法:** keytabファイルが最新で正しい資格情報を含んでいることを確認してください。

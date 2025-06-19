@@ -1,17 +1,17 @@
-# Feature Comparison
+# 機能比較
 
-This page lists features supported across different deployment types in detail.
+このページでは、さまざまなデプロイタイプでサポートされている機能を詳細に一覧化しています。
 
-## Core / Enterprise Features
+## コア／エンタープライズ機能
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Features</th>
-    <th colspan="1">Self-Hosted</th>
+    <th rowspan="2">機能</th>
+    <th colspan="1">セルフホスト</th>
     <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">Notes and Links</th>
+    <th rowspan="2">備考およびリンク</th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -21,151 +21,151 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>MQTT 5.0 Broker</b></td>
+    <td><b>MQTT 5.0 ブローカー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Complete MQTT 5.0 protocol implementation</td>
+    <td> 完全なMQTT 5.0プロトコル実装</td>
   </tr>
   <tr>
     <td><b>MQTT over QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Globally Poineering Support<br>In development for Cloud</td>
+    <td> 世界初のサポート<br>クラウド向け開発中</td>
   </tr>
   <tr>
-    <td><b>MQTT Add-ons</b></td>
+    <td><b>MQTT アドオン</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">Shared subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-exclusive-subscription.html">Exclusive subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-delayed-publish.html">Delayed publish</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-auto-subscription.html">Auto-subscription</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-topic-rewrite.html">Topic rewrite</a><br>More customization options</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-shared-subscription.html">共有サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-exclusive-subscription.html">排他サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-delayed-publish.html">遅延パブリッシュ</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-auto-subscription.html">自動サブスクリプション</a><br><a href="https://docs.emqx.com/en/emqx/latest/messaging/mqtt-topic-rewrite.html">トピック書き換え</a><br>その他のカスタマイズオプション</td>
   </tr>
   <tr>
-    <td><b>Multi-protocol Gateways</b></td>
+    <td><b>マルチプロトコルゲートウェイ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> More industry device access</td>
+    <td> より多くの業界デバイスアクセス</td>
   </tr>
   <tr>
-    <td><b>Multi-tenancy</b></td>
+    <td><b>マルチテナンシー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higer system flexibility and utilization<br>(Coming soon)</td>
+    <td> システムの柔軟性と利用率向上<br>（近日公開予定）</td>
   </tr>
   <tr>
-    <td><b>Cluster Linking</b></td>
+    <td><b>クラスターリンク</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Seamless connection of devices and application data<br>(Coming soon)</td>
+    <td> デバイスとアプリケーションデータのシームレス接続<br>（近日公開予定）</td>
   </tr>
   <tr>
-    <td><b>Event History</b></td>
+    <td><b>イベント履歴</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Client fault diagnosis and behavioral audit</td>
+    <td> クライアントの障害診断および行動監査</td>
   </tr>
   <tr>
-    <td><b>Message Queuing</b></td>
+    <td><b>メッセージキューイング</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Unified architecture for data transmission and analysis<br>(Coming soon)</td>
+    <td> データ送受信と分析の統一アーキテクチャ<br>（近日公開予定）</td>
   </tr>
   <tr>
-    <td><b>Stream Processing</b></td>
+    <td><b>ストリーム処理</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higher reliability and disaster recovery capabilities<br>(Coming soon)</td>
+    <td> 高い信頼性と災害復旧機能<br>（近日公開予定）</td>
   </tr>
   <tr>
-    <td><b>Data Persistence</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Built-in RocksDB backend or external databases</td>
+    <td><b>データパーシステンス</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内蔵RocksDBバックエンドまたは外部データベース</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">Improved stability and reliability</a></td>
+    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">安定性と信頼性の向上</a></td>
   </tr>
   <tr>
-    <td><b>Schema Registry</b></td>
+    <td><b>スキーマレジストリ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html">Schema Registry</a> ensures data consistency and compatibility</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html">スキーマレジストリ</a> によりデータの一貫性と互換性を保証</td>
   </tr>
   <tr>
-    <td><b>Message Codec</b></td>
+    <td><b>メッセージコーデック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Flexible message format conversion for:<br>JSON<br>Avro<br>Protobuf<br>Custom codec (HTTP/gRPC)</td>
+    <td>柔軟なメッセージフォーマット変換：<br>JSON<br>Avro<br>Protobuf<br>カスタムコーデック（HTTP/gRPC）</td>
   </tr>
 <tr>
-    <td><b>Schema Validation</b></td>
+    <td><b>スキーマバリデーション</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td> Ensuring integrity and legality of messages</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
+    <td> メッセージの整合性と合法性を保証</td>
   </tr>
   <tr>
-    <td><b>Rule Engine</b></td>
+    <td><b>ルールエンジン</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQL-based built-in Rule Engine and real-time data processing</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rules.html">SQLベースの組み込みルールエンジンとリアルタイムデータ処理</a></td>
   </tr>
 <tr>
-    <td><b>Flow Designer</b></td>
+    <td><b>フローデザイナー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">データ統合の簡単なオーケストレーション</a></td>
   </tr>
   <tr>
-    <td><b>File Transfer</b></td>
+    <td><b>ファイル転送</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td>Unified platform data transmission</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
+    <td>統一プラットフォームのデータ送信</td>
   </tr>
   <tr>
-    <td><b>Kafka Integration</b></td>
+    <td><b>Kafka統合</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html">Stream MQTT Data into Apache Kafka</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html">Apache KafkaへのMQTTデータストリーム</a></td>
   </tr>
   <tr>
-    <td><b>Enterprise Data Integrations</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40+</td>
+    <td><b>エンタープライズデータ統合</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 40以上</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40+</td>
-    <td><a href="https://www.emqx.com/en/integrations">Accelerate business development and delivery speed</a></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" />40以上</td>
+    <td><a href="https://www.emqx.com/en/integrations">ビジネス開発と提供速度の加速</a></td>
   </tr>
   <tr>
-    <td><b>Troubleshooting</b></td>
+    <td><b>トラブルシューティング</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/observability/tracer.html">Log Trace</a><br><a href="https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html">Slow Subscriptions</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/observability/tracer.html">ログトレース</a><br><a href="https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html">遅延サブスクリプション</a></td>
   </tr>
   <tr>
-    <td><b>Cloud-Native &amp; K8s</b></td>
+    <td><b>クラウドネイティブ＆K8s</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/deployments">Reduce system deployment and management costs</a></td>
+    <td><a href="https://www.emqx.com/en/deployments">システムのデプロイおよび管理コスト削減</a></td>
   </tr>
   <tr>
-    <td><b>Edge Computing</b></td>
+    <td><b>エッジコンピューティング</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Reduce data transmission latency and costs<br><a href="https://www.emqx.com/en/products/neuronex">Neuron</a><br><a href="https://www.emqx.com/en/products/nanomq">NanoMQ</a></td>
+    <td> データ送信のレイテンシとコスト削減<br><a href="https://www.emqx.com/en/products/neuronex">Neuron</a><br><a href="https://www.emqx.com/en/products/nanomq">NanoMQ</a></td>
   </tr>
 </tbody>
 </table>
@@ -173,16 +173,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Scalability and Performance
+## スケーラビリティとパフォーマンス
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Scalability/Performance</th>
-    <th colspan="1">Self-Hosted</th>
+    <th rowspan="2">スケーラビリティ／パフォーマンス</th>
+    <th colspan="1">セルフホスト</th>
     <th colspan="2">MQTT as a Service</th>
-    <th rowspan="2">Notes and Links</th>
+    <th rowspan="2">備考およびリンク</th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -192,45 +192,45 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Scalability</b></td>
-    <td><span style="font-weight:normal">Up to 100 nodes cluster<br>Up to 100 million MQTT connections per cluster</span></td>
-    <td><span style="font-weight:normal">1000 auto scale</span></td>
-    <td><span style="font-weight:normal">1000 - unlimited</span></td>
-    <td><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">Reaching 100M MQTT connections with EMQX 5.0</a></td>
+    <td><b>スケーラビリティ</b></td>
+    <td><span style="font-weight:normal">最大100ノードクラスター<br>クラスターあたり最大1億MQTT接続</span></td>
+    <td><span style="font-weight:normal">1000自動スケール</span></td>
+    <td><span style="font-weight:normal">1000～無制限</span></td>
+    <td><a href="https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0">EMQX 5.0で1億MQTT接続を達成</a></td>
   </tr>
   <tr>
-    <td><b>Availability</b></td>
-    <td><span style="font-weight:normal">Core-Replica cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
-    <td><span style="font-weight:normal">Masterless cluster</span></td>
+    <td><b>可用性</b></td>
+    <td><span style="font-weight:normal">コア-レプリカクラスター</span></td>
+    <td><span style="font-weight:normal">マスターレスクラスター</span></td>
+    <td><span style="font-weight:normal">マスターレスクラスター</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
-    <td><b>Reliability</b></td>
-    <td><span style="font-weight:normal">Data persistence in RocksDB with highly available replication</span></td>
-    <td><span style="font-weight:normal">Session persistence</span></td>
-    <td><span style="font-weight:normal">Session persistence</span></td>
-    <td><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">Highly Reliable MQTT Data Persistence Based on RocksDB</a></td>
+    <td><b>信頼性</b></td>
+    <td><span style="font-weight:normal">高可用レプリケーションを備えたRocksDBによるデータパーシステンス</span></td>
+    <td><span style="font-weight:normal">セッションパーシステンス</span></td>
+    <td><span style="font-weight:normal">セッションパーシステンス</span></td>
+    <td><a href="https://www.emqx.com/en/blog/mqtt-persistence-based-on-rocksdb">RocksDBに基づく高信頼MQTTデータパーシステンス</a></td>
   </tr>
   <tr>
-    <td><b>Performance</b></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
-    <td><span style="font-weight:normal">1000 MQTT messages per second</span></td>
-    <td><span style="font-weight:normal">5M+ MQTT messages per second</span></td>
+    <td><b>パフォーマンス</b></td>
+    <td><span style="font-weight:normal">毎秒500万以上のMQTTメッセージ</span></td>
+    <td><span style="font-weight:normal">毎秒1000のMQTTメッセージ</span></td>
+    <td><span style="font-weight:normal">毎秒500万以上のMQTTメッセージ</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
-    <td><b>Latency</b></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
-    <td><span style="font-weight:normal">1~5 millisecond</span></td>
+    <td><b>レイテンシ</b></td>
+    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
+    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
+    <td><span style="font-weight:normal">1～5ミリ秒</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
   <tr>
     <td><b>SLA</b></td>
-    <td><span style="font-weight:normal">N/A</span></td>
-    <td><span style="font-weight:normal">99.9% uptime</span></td>
-    <td><span style="font-weight:normal">Up to 99.99%</span><br><span style="font-weight:normal">uptime</span></td>
+    <td><span style="font-weight:normal">該当なし</span></td>
+    <td><span style="font-weight:normal">99.9% アップタイム</span></td>
+    <td><span style="font-weight:normal">最大99.99%</span><br><span style="font-weight:normal">アップタイム</span></td>
     <td><span style="font-weight:normal"> </span></td>
   </tr>
 </tbody>
@@ -240,16 +240,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Clustering Architecture
+## クラスタリングアーキテクチャ
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">MQTT & Connectivity<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">MQTT & 接続性<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -273,7 +273,7 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>MQTT Retainer</b></td>
+    <td><b>MQTT リテーナー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -305,31 +305,31 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is now the only MQTT broker in the world that supports QUIC transport.</td>
+    <td>EMQXは現在、QUICトランスポートをサポートする唯一のMQTTブローカーです。</td>
   </tr>
   <tr>
-    <td><b>LB (Proxy Protocol)</b></td>
+    <td><b>LB（プロキシプロトコル）</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Proxy protocol v1, v2</td>
+    <td>プロキシプロトコル v1、v2</td>
   </tr>
   <tr>
-    <td><b>LB (Custom)</b></td>
+    <td><b>LB（カスタム）</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>GmSSL<br>Smooth connection migration</td>
+    <td>GmSSL<br>スムーズな接続移行</td>
   </tr>
   <tr>
-    <td><b>IPv6 Support</b></td>
+    <td><b>IPv6サポート</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Multi-protocol Gateway</b></td>
+    <td><b>マルチプロトコルゲートウェイ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -397,16 +397,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## MQTT and Connectivity
+## MQTT と接続性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">MQTT & Connectivity<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">MQTT & 接続性<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -430,7 +430,7 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>MQTT Retainer</b></td>
+    <td><b>MQTT リテーナー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -462,31 +462,31 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is now the only MQTT broker in the world that supports QUIC transport.</td>
+    <td>EMQXは現在、QUICトランスポートをサポートする唯一のMQTTブローカーです。</td>
   </tr>
   <tr>
-    <td><b>LB (Proxy Protocol)</b></td>
+    <td><b>LB（プロキシプロトコル）</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Proxy protocol v1, v2</td>
+    <td>プロキシプロトコル v1、v2</td>
   </tr>
   <tr>
-    <td><b>LB (Custom)</b></td>
+    <td><b>LB（カスタム）</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>GmSSL<br>Smooth connection migration</td>
+    <td>GmSSL<br>スムーズな接続移行</td>
   </tr>
   <tr>
-    <td><b>IPv6 Support</b></td>
+    <td><b>IPv6サポート</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Multi-protocol Gateway</b></td>
+    <td><b>マルチプロトコルゲートウェイ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -554,16 +554,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Security
+## セキュリティ
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Security<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">セキュリティ<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -577,56 +577,56 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Protect data transmission security: TLS 1.1, 1.2, 1.3</td>
+    <td>データ送信のセキュリティ保護：TLS 1.1、1.2、1.3</td>
   </tr>
   <tr>
     <td><b>QUIC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Enhance efficiency of weak network and mobile network data transmission</td>
+    <td>弱いネットワークやモバイルネットワークのデータ送信効率を向上</td>
   </tr>
   <tr>
     <td><b>OCSP Stapling</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Provide more flexible security practices</td>
+    <td>より柔軟なセキュリティ運用を提供</td>
   </tr>
   <tr>
-    <td><b>Flapping Detect</b></td>
+    <td><b>フラッピング検出</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
-    <td>Detect and intercept frequent online and offline connections</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
+    <td>頻繁なオンライン・オフライン接続を検出・遮断</td>
   </tr>
   <tr>
-    <td><b>Audit Logs</b></td>
+    <td><b>監査ログ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Support audit tracing for important operations</td>
+    <td>重要操作の監査トレーシングをサポート</td>
   </tr>
   <tr>
-    <td><b>Dashboard SSO</b></td>
+    <td><b>ダッシュボードSSO</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Secure and simplified authentication processes</td>
+    <td>安全かつ簡素化された認証プロセス</td>
   </tr>
   <tr>
-    <td><b>Dashboard/REST API RBAC</b></td>
+    <td><b>ダッシュボード／REST API RBAC</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Minimize permissions to ensure system security</td>
+    <td>権限を最小限に抑えシステムの安全性を確保</td>
   </tr>
   <tr>
-    <td><b>Black Duck Analysis</b></td>
+    <td><b>Black Duck解析</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>Secure and simplified authentication processes</td>
+    <td>安全かつ簡素化された認証プロセス</td>
   </tr>
 </tbody>
 </table>
@@ -634,16 +634,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Authentication and Authorization
+## 認証と認可
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Authentication/Authorization<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">認証／認可<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -653,63 +653,63 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Username/Password</b></td>
+    <td><b>ユーザー名／パスワード</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html">Password-Based Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html">パスワード認証</a></td>
   </tr>
   <tr>
     <td><b>JWT</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html">JWT認証</a></td>
   </tr>
   <tr>
-    <td><b>MQTT 5.0 Enhanced Authentication</b></td>
+    <td><b>MQTT 5.0 強化認証</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html">MQTT 5.0 Enhanced Authentication</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html">MQTT 5.0 強化認証</a></td>
   </tr>
   <tr>
-    <td><b>LDAP Authentication</b></td>
+    <td><b>LDAP認証</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>PSK Authentication</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication">Enable PSK Authentication</a></td>
-  </tr>
-  <tr>
-    <td><b>X.509 Certificates</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> Managed by EMQX Cloud</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Fine-grained Access Control</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Authentication Database Backends</b></td>
+    <td><b>PSK認証</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication">PSK認証の有効化</a></td>
+  </tr>
+  <tr>
+    <td><b>X.509証明書</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> EMQX Cloudで管理</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>ACL Database Backends</b></td>
+    <td><b>細粒度アクセス制御</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>認証データベースバックエンド</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>ACLデータベースバックエンド</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -721,14 +721,14 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Data Integration
+## データ統合
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Data Integration<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">データ統合<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
   </tr>
   <tr>
@@ -739,13 +739,13 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>MQTT Bridge</b></td>
+    <td><b>MQTTブリッジ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>Webhook/HTTP Server</b></td>
+    <td><b>Webhook/HTTPサーバー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -912,16 +912,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Rule Engine
+## ルールエンジン
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Rule Engine<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">ルールエンジン<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -931,81 +931,81 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Schema Registry</b></td>
+    <td><b>スキーマレジストリ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Ensure data format consistency</td>
+    <td>データフォーマットの一貫性を保証</td>
   </tr>
   <tr>
-    <td><b>JSON Codec</b></td>
+    <td><b>JSONコーデック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Avro Codec</b></td>
+    <td><b>Avroコーデック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Protobuf Codec</b></td>
+    <td><b>Protobufコーデック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Sparkplug B Codec</b></td>
+    <td><b>Sparkplug Bコーデック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>JSON Schema Validation</b></td>
+    <td><b>JSONスキーマバリデーション</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Avro Validation</b></td>
+    <td><b>Avroバリデーション</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>ProtoBuf Validation</b></td>
+    <td><b>ProtoBufバリデーション</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Built-in Functions</b></td>
+    <td><b>組み込み関数</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html">Functions available in SQL statements, rich built-in libraries, support custom extensions</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html">SQL文で利用可能な関数、豊富な組み込みライブラリ、カスタム拡張対応</a></td>
   </tr>
   <tr>
-    <td><b>jq Functions</b></td>
+    <td><b>jq関数</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Efficient JSON data processing</td>
+    <td>効率的なJSONデータ処理</td>
   </tr>
   <tr>
-    <td><b>Event Trigger</b></td>
+    <td><b>イベントトリガー</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">Client events</a>, event-driven business development</td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">クライアントイベント</a>、イベント駆動型ビジネス開発</td>
   </tr>
 </tbody>
 </table>
@@ -1013,16 +1013,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Extensibility
+## 拡張性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Extensibility<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">拡張性<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1032,35 +1032,35 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Hooks</b></td>
+    <td><b>フック</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks">Hooks</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks">フック</a></td>
   </tr>
   <tr>
-    <td><b>Plugins</b></td>
+    <td><b>プラグイン</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins">Plugins</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins">プラグイン</a></td>
   </tr>
   <tr>
-    <td><b>Plugin Hot Loading</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td> </td>
-  </tr>
-  <tr>
-    <td><b>Plugin Hot Configuration</b></td>
+    <td><b>プラグインホットロード</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Gateways</b></td>
+    <td><b>プラグインホット設定</b></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td>N/A</td>
+    <td>N/A</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td><b>ゲートウェイ</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
@@ -1079,16 +1079,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Operability
+## 運用性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Operability<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">運用性<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1098,18 +1098,18 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Dashboard</b></td>
+    <td><b>ダッシュボード</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX dashboard is feature-rich.<br>Configs can be hot udpated through dashboard.</td>
+    <td>EMQXダッシュボードは多機能です。<br>設定はダッシュボードからホットアップデート可能です。</td>
   </tr>
   <tr>
-    <td><b>Configuration</b></td>
+    <td><b>設定</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> HOCON</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td>The HOCON format is simple and concise.</td>
+    <td>HOCON形式はシンプルかつ簡潔です。</td>
   </tr>
   <tr>
     <td><b>HTTP API</b></td>
@@ -1126,14 +1126,14 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>Config Hot Updates</b></td>
+    <td><b>設定ホットアップデート</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Operational Auditing</b></td>
+    <td><b>運用監査</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1145,16 +1145,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Observability
+## 可観測性
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Observability<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">可観測性<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1164,18 +1164,18 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Dashboard</b></td>
+    <td><b>ダッシュボード</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Monitor clusters in real time with an elegant dashboard</td>
+    <td>エレガントなダッシュボードでクラスターをリアルタイム監視</td>
   </tr>
   <tr>
-    <td><b>Metrics</b></td>
+    <td><b>メトリクス</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Node metrics</td>
+    <td>ノードメトリクス</td>
   </tr>
   <tr>
     <td><b>Grafana</b></td>
@@ -1195,53 +1195,53 @@ This page lists features supported across different deployment types in detail.
     <td><b>Datadog</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
     <td></td>
   </tr>
   <tr>
     <td><b>OpenTelemetry</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
     <td></td>
   </tr>
   <tr>
-    <td><b>Cluster Metrics</b></td>
+    <td><b>クラスター メトリクス</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Alarm Alerts</b></td>
+    <td><b>アラーム通知</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Slow Subscription Monitoring</b></td>
+    <td><b>遅延サブスクリプション監視</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Topic Monitoring</b></td>
+    <td><b>トピック監視</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 製品ロードマップに含む</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Client Monitoring</b></td>
+    <td><b>クライアント監視</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Log Trace</b></td>
+    <td><b>ログトレース</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1253,16 +1253,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Cloud Native and K8S
+## クラウドネイティブとK8S
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Cloud Native &amp; K8s<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">クラウドネイティブ＆K8s<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1279,7 +1279,7 @@ This page lists features supported across different deployment types in detail.
     <td><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
   </tr>
   <tr>
-    <td><b>Kubernetes Operator</b></td>
+    <td><b>Kubernetesオペレーター</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
@@ -1298,16 +1298,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Cloud Platform Availability
+## クラウドプラットフォームの対応状況
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Cloud Platform<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">クラウドプラットフォーム<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1317,20 +1317,20 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>AWS Marketplace</b></td>
+    <td><b>AWSマーケットプレイス</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX is available on AWS Marketplace.<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
+    <td>EMQXはAWSマーケットプレイスで利用可能です。<br><a href="https://aws.amazon.com/marketplace/pp/prodview-cwa2e6xbrwtzi">AWS Marketplace: EMQX Enterprise on Ubuntu 20.04</a> </td>
   </tr>
   <tr>
-    <td><b>Azure Marketplace</b></td>
+    <td><b>Azureマーケットプレイス</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>GCP Marketplace</b></td>
+    <td><b>GCPマーケットプレイス</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -1363,16 +1363,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## MQTT Tools and SDKs
+## MQTTツールとSDK
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">MQTT Tools & SDKs<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">MQTTツール＆SDK<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1382,74 +1382,74 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>MQTT Desktop Client</b></td>
+    <td><b>MQTTデスクトップクライアント</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>MQTT X - The best tool for learning MQTT.<br><a href="https://mqttx.app/">MQTTX: Your All-in-one MQTT Client Toolbox</a></td>
+    <td>MQTT X - MQTT学習に最適なツール。<br><a href="https://mqttx.app/">MQTTX: オールインワンMQTTクライアントツールボックス</a></td>
   </tr>
   <tr>
     <td><b>MQTT CLI</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://mqttx.app/cli">MQTTX CLI: A Powerful and Easy-to-use MQTT CLI Tool</a></td>
+    <td><a href="https://mqttx.app/cli">MQTTX CLI: 強力で使いやすいMQTT CLIツール</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Web Tool</b></td>
+    <td><b>MQTT Webツール</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>Feature-rich and Easy-to-use.<br><a href="https://mqttx.app/web">MQTTX Web: Easy-to-use MQTT Websocket Client Tool</a></td>
+    <td>多機能で使いやすい。<br><a href="https://mqttx.app/web">MQTTX Web: 使いやすいMQTT WebSocketクライアントツール</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Benchmark</b></td>
+    <td><b>MQTTベンチマーク</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Lightweight MQTT benchmark tool written in Erlang</a></td>
+    <td><a href="https://github.com/emqx/emqtt-bench">GitHub - emqx/emqtt-bench: Erlangで書かれた軽量MQTTベンチマークツール</a></td>
   </tr>
   <tr>
-    <td><b>MQTT Load Testing</b></td>
+    <td><b>MQTT負荷テスト</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>XMeter - The world’s #1 MQTT load testing tool</td>
+    <td>XMeter - 世界No.1のMQTT負荷テストツール</td>
   </tr>
   <tr>
     <td><b>MQTT & JMeter</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter Plugin</a></td>
+    <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeterプラグイン</a></td>
   </tr>
   <tr>
-    <td><b>MQTT SDK for C</b></td>
+    <td><b>C向けMQTT SDK</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> NanoSDK</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/nanomq/NanoSDK">GitHub - nanomq/NanoSDK: NanoSDK - MQTT 5.0-compliant SDK with QUIC support in NNG flavor</a></td>
+    <td><a href="https://github.com/nanomq/NanoSDK">GitHub - nanomq/NanoSDK: NNGフレーバーでQUIC対応のMQTT 5.0準拠SDK</a></td>
   </tr>
   <tr>
     <td><b>MQTT Erlang SDK</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/emqtt">GitHub - emqx/emqtt: Erlang MQTT 5.0 Client</a></td>
+    <td><a href="https://github.com/emqx/emqtt">GitHub - emqx/emqtt: Erlang MQTT 5.0クライアント</a></td>
   </tr>
   <tr>
     <td><b>MQTT iOS SDK</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/CocoaMQTT">GitHub - emqx/CocoaMQTT: MQTT 5.0 client library for iOS and macOS written in Swift</a></td>
+    <td><a href="https://github.com/emqx/CocoaMQTT">GitHub - emqx/CocoaMQTT: Swiftで書かれたiOS/macOS向けMQTT 5.0クライアントライブラリ</a></td>
   </tr>
   <tr>
-    <td><b>MQTT QUIC Client</b></td>
+    <td><b>MQTT QUICクライアント</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><a href="https://github.com/emqx/quic">GitHub - emqx/quic: QUIC protocol for Erlang & Elixir</a></td>
+    <td><a href="https://github.com/emqx/quic">GitHub - emqx/quic: Erlang & Elixir向けQUICプロトコル</a></td>
   </tr>
 </tbody>
 </table>
@@ -1457,16 +1457,16 @@ This page lists features supported across different deployment types in detail.
 
 
 
-## Support Services
+## サポートサービス
 
 <div style="text-align: center;">
 <table>
 <thead>
   <tr>
-    <th rowspan="2">Support Services<br></th>
-    <th colspan="1">Self-Hosted<br></th>
+    <th rowspan="2">サポートサービス<br></th>
+    <th colspan="1">セルフホスト<br></th>
     <th colspan="2">MQTT as a Service<br></th>
-    <th rowspan="2">Notes and Links<br></th>
+    <th rowspan="2">備考およびリンク<br></th>
   </tr>
   <tr>
     <td>EMQX Enterprise</td>
@@ -1476,28 +1476,28 @@ This page lists features supported across different deployment types in detail.
 </thead>
 <tbody>
   <tr>
-    <td><b>Technical Support</b></td>
-    <td>5*8, 7*24 Global Support</td>
-    <td>5*8 Global Support</td>
-    <td>5*8, 7*24 Global Support</td>
+    <td><b>テクニカルサポート</b></td>
+    <td>5*8、7*24 グローバルサポート</td>
+    <td>5*8 グローバルサポート</td>
+    <td>5*8、7*24 グローバルサポート</td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Architecture Consulting</b></td>
+    <td><b>アーキテクチャコンサルティング</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Project Integration</b></td>
+    <td><b>プロジェクト統合</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td> </td>
   </tr>
   <tr>
-    <td><b>Custom Development</b></td>
+    <td><b>カスタム開発</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -1506,4 +1506,3 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-

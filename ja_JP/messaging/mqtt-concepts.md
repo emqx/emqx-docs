@@ -1,85 +1,85 @@
-# MQTT Core Concepts
+# MQTT コアコンセプト
 
-MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption.
+MQTT（Message Queue Telemetry Transport）は、IoT（モノのインターネット）で最も広く使われている軽量メッセージングプロトコルです。このプロトコルはメッセージ通信においてパブリッシュ／サブスクライブ（pub/sub）パターンに基づいています。シンプルかつ効率的なメッセージフォーマットを用いることで、ネットワークのオーバーヘッドを最小限に抑え、消費電力を削減しながら、デバイスやアプリケーション間でリアルタイムにデータ交換が可能です。
 
-Served as an MQTT messaging platform, EMQX provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt).
+MQTTメッセージングプラットフォームとして機能するEMQXは、MQTTのメッセージング機能を完全にサポートしています。本節ではMQTTのコアコンセプトを簡潔に紹介します。各コンセプトの詳細やMQTT全般については、[MQTTブログシリーズ](https://www.emqx.com/en/blog/category/mqtt)のリンクからさらに学習できます。
 
-## Publish/Subscribe Pattern
+## パブリッシュ／サブスクライブパターン
 
-The protocol is event-driven and connects devices using the pub/sub pattern. Different from the traditional client/server pattern, it is a messaging pattern in which senders (publishers) do not send messages directly to specific receivers (subscribers). Instead, publishers categorize messages into topics, and subscribers subscribe to specific topics that they are interested in. When a publisher sends a message to a topic, the MQTT broker routes and filters all incoming messages, and then delivers the message to all the subscribers that have expressed interest in that topic.
+このプロトコルはイベント駆動型で、pub/subパターンを用いてデバイスを接続します。従来のクライアント／サーバパターンとは異なり、送信者（パブリッシャー）が特定の受信者（サブスクライバー）に直接メッセージを送るのではなく、パブリッシャーはメッセージをトピックに分類し、サブスクライバーは関心のあるトピックをサブスクライブします。パブリッシャーがトピックにメッセージをパブリッシュすると、MQTTブローカーがすべての受信メッセージをルーティングおよびフィルタリングし、そのトピックに関心を示したすべてのサブスクライバーにメッセージを配信します。
 
-The publisher and subscriber are decoupled from each other and do not need to know each other's existence. Their sole connection is based on a predetermined agreement regarding the message. The Pub/Sub pattern enables flexible message communication, as subscribers and publishers can be dynamically added or removed as needed. It also makes the implementation of message broadcasting, multicasting, and unicasting easier.
+パブリッシャーとサブスクライバーは互いに独立しており、お互いの存在を知る必要はありません。両者の唯一の接点は、メッセージに関する事前の取り決めに基づいています。Pub/Subパターンは柔軟なメッセージ通信を可能にし、サブスクライバーやパブリッシャーは必要に応じて動的に追加・削除できます。また、メッセージのブロードキャスト、マルチキャスト、ユニキャストの実装も容易になります。
 
-For more information on the Pub/Sub pattern, see [Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model).
+Pub/Subパターンの詳細については、[Introduction to MQTT Publish-subscribe Pattern](https://www.emqx.com/en/blog/mqtt-5-introduction-to-publish-subscribe-model)をご覧ください。
 
-## MQTT Server
+## MQTTサーバー
 
-The MQTT server acts as a broker between the publishing clients and subscribing clients, forwarding all received messages to the matching subscribing clients. Therefore, sometimes the server is directly referred to as the MQTT Broker.
+MQTTサーバーは、パブリッシュするクライアントとサブスクライブするクライアントの間でブローカーとして機能し、受信したすべてのメッセージを該当するサブスクライバーに転送します。そのため、サーバーはしばしばMQTTブローカーと呼ばれます。
 
-## MQTT Client
+## MQTTクライアント
 
-The clients refer to devices or applications that can connect to an MQTT server using the MQTT protocol. They can act as both publishers and subscribers or in either of those roles separately.
+クライアントとは、MQTTプロトコルを使ってMQTTサーバーに接続できるデバイスやアプリケーションを指します。クライアントはパブリッシャーおよびサブスクライバーの両方の役割を担うことも、どちらか一方の役割だけを担うことも可能です。
 
-## Topic and Wildcards
+## トピックとワイルドカード
 
-Topics are used to identify and differentiate between different messages, forming the basis of MQTT message routing. Publishers can specify the topic of a message when publishing, while subscribers can choose to subscribe to topics of interest to receive relevant messages.
+トピックは異なるメッセージを識別・区別するために使われ、MQTTメッセージのルーティングの基盤となります。パブリッシャーはメッセージをパブリッシュする際にトピックを指定し、サブスクライバーは関心のあるトピックをサブスクライブして関連メッセージを受信します。
 
-Subscribers can use wildcards in the subscribed topics to achieve the goal of subscribing to multiple topics at once. MQTT provides two types of topic wildcards, single-level wildcard and multi-level wildcard, to meet different subscription needs.
+サブスクライバーは、サブスクライブするトピックにワイルドカードを使うことで、複数のトピックを一度にサブスクライブすることができます。MQTTは、単一レベルワイルドカードとマルチレベルワイルドカードという2種類のトピックワイルドカードを提供し、さまざまなサブスクリプションニーズに対応しています。
 
-For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+トピックとワイルドカードの詳細については、[Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics)をご覧ください。
 
-## Quality of Service (QoS)
+## QoS（サービス品質）
 
-MQTT defines three levels of QoS to provide different levels of message reliability. Each message can independently set its own QoS when published.
+MQTTは、メッセージの信頼性レベルを提供するために3つのQoSレベルを定義しています。各メッセージはパブリッシュ時に独立してQoSレベルを設定できます。
 
-- QoS 0: delivers a message at most once and may be lost;
-- QoS 1: delivers a message at least once and guarantees arrival, but may be duplicated;
-- QoS 2: delivers a message exactly once and guarantees arrival without duplication.
+- QoS 0：メッセージを最大1回配信し、失われる可能性があります。
+- QoS 1：メッセージを少なくとも1回配信し、到達を保証しますが重複する可能性があります。
+- QoS 2：メッセージを正確に1回配信し、重複なく到達を保証します。
 
-As the QoS level increases, the complexity of message transmission also increases. You need to choose the appropriate QoS level based on the actual scenario.
+QoSレベルが上がるほどメッセージ送信の複雑さも増します。実際のシナリオに応じて適切なQoSレベルを選択する必要があります。
 
-For more information on QoS, see [Introduction to MQTT QoS 0, 1, 2](https://www.emqx.com/en/blog/introduction-to-mqtt-qos).
+QoSの詳細については、[Introduction to MQTT QoS 0, 1, 2](https://www.emqx.com/en/blog/introduction-to-mqtt-qos)をご覧ください。
 
-## Session
+## セッション
 
-QoS is a theoretical mechanism designed to ensure reliable message delivery, while a session ensures the proper implementation of QoS 1 and 2 protocol procedures.
+QoSは信頼性の高いメッセージ配信を実現するための理論的な仕組みですが、セッションはQoS 1および2のプロトコル手順を正しく実装するための状態管理を担います。
 
-A session refers to the stateful interaction between a client and a server, which can persist for the same duration as the network connection or span across multiple network connections, commonly known as a persistent session. The connection can either resume from an existing session or start from a new session.
+セッションとは、クライアントとサーバー間の状態を持つやり取りを指し、ネットワーク接続の継続時間と同じ期間持続する場合もあれば、複数のネットワーク接続にまたがって持続する場合もあります。後者は一般に永続セッションと呼ばれます。接続は既存のセッションから再開することも、新しいセッションから開始することも可能です。
 
-For more information on sessions, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
+セッションの詳細については、[MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session)をご覧ください。
 
-## Retained Message
+## 保持メッセージ（Retained Message）
 
-Unlike regular messages, retained messages can be stored on an MQTT server. When any new subscriber subscribes to a topic that matches the topic of a retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
+通常のメッセージとは異なり、保持メッセージはMQTTサーバーに保存されます。新しいサブスクライバーが保持メッセージのトピックにマッチするトピックをサブスクライブすると、そのメッセージが即座に配信されます。これは、そのメッセージがサブスクライブ前にパブリッシュされていた場合でも同様です。
 
-The retained message feature allows subscribers to receive data updates immediately upon connecting, without having to wait for the publisher to re-publish the message. Retained messages can be thought of as a message "cloud drive" in some ways: upload messages to the "cloud drive" at any time, and retrieve messages from the "cloud drive" at any time. However, this "cloud drive" is limited to storing only one latest retained message per topic.
+保持メッセージ機能により、サブスクライバーは接続直後にデータ更新を受け取ることができ、パブリッシャーが再度メッセージをパブリッシュするのを待つ必要がありません。保持メッセージはある意味でメッセージの「クラウドドライブ」のように考えられます。いつでもメッセージを「クラウドドライブ」にアップロードし、いつでもそこからメッセージを取得できます。ただし、この「クラウドドライブ」はトピックごとに最新の保持メッセージ1件のみ保存可能です。
 
-You can try to publish a retained message using the MQTTX Client by following the instructions in [Retained Message](./mqtt-retained-message.md).
+MQTTXクライアントを使って保持メッセージをパブリッシュする方法は、[Retained Message](./mqtt-retained-message.md)の手順をご参照ください。
 
-To learn more about retained message technologies, see [The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message).
+保持メッセージ技術の詳細については、[The Beginner's Guide to MQTT Retained Messages](https://www.emqx.com/en/blog/mqtt5-features-retain-message)をご覧ください。
 
-## Will Message
+## 遺言メッセージ（Will Message）
 
-The feature of Pub/Sub pattern determines that no client, other than the server, is aware of a client leaving the communication network. However, a will message provides the ability for a disconnected client to notify other clients.
+Pub/Subパターンの特性上、サーバー以外のクライアントは通信ネットワークから離脱したクライアントの存在を知ることができません。しかし、遺言メッセージを使うことで、切断されたクライアントが他のクライアントに通知を行うことが可能になります。
 
-Clients can set their own will message with the server when they establish a connection, and the server publishes this message immediately or after a specified delay if the client disconnects unexpectedly. Clients subscribed to the corresponding will message topic will receive this message and take appropriate action, such as updating the online status of that client, etc.
+クライアントは接続時にサーバーに遺言メッセージを設定でき、クライアントが予期せず切断された場合にサーバーはこのメッセージを即時または指定した遅延後にパブリッシュします。対応する遺言メッセージのトピックをサブスクライブしているクライアントはこのメッセージを受信し、該当クライアントのオンライン状態更新など適切な処理を行います。
 
-You can try to publish a will message using the MQTTX Client by following the instructions in [Will Message](./mqtt-will-message.md).
+MQTTXクライアントを使って遺言メッセージをパブリッシュする方法は、[Will Message](./mqtt-will-message.md)の手順をご参照ください。
 
-To learn more about will message technologies, see [Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message).
+遺言メッセージ技術の詳細については、[Use of MQTT Will Message](https://www.emqx.com/en/blog/use-of-mqtt-will-message)をご覧ください。
 
-## Shared Subscription
+## 共有サブスクリプション（Shared Subscription）
 
-In common cases, messages are forwarded to all matching subscribers. However, in some cases, you may want to coordinate multiple clients to process received messages in a horizontally scalable way to increase load capacity. Alternatively, users may want to add a backup client for clients to seamlessly switch to when the primary client goes offline, ensuring high availability.
+通常、メッセージは該当するすべてのサブスクライバーに転送されますが、複数のクライアントで受信メッセージを水平スケーラブルに処理し、負荷能力を向上させたい場合や、プライマリクライアントがオフラインになった際にシームレスに切り替わるバックアップクライアントを追加し、高可用性を確保したい場合があります。
 
-The shared subscription feature provides such a capability. Clients can be divided into multiple subscription groups, and messages are still forwarded to all subscription groups, but only one client within each subscription group receives the message at a time.
+共有サブスクリプション機能はこのような要件に対応します。クライアントを複数のサブスクリプショングループに分け、メッセージはすべてのグループに転送されますが、各グループ内では一度に1つのクライアントのみがメッセージを受信します。
 
-You can try to create a shared subscription using the MQTTX Client by following the instructions in [Shared Subscription](./mqtt-shared-subscription.md).
+MQTTXクライアントを使って共有サブスクリプションを作成する方法は、[Shared Subscription](./mqtt-shared-subscription.md)の手順をご参照ください。
 
-To learn more about shared subscription technologies, see [Shared subscription - MQTT 5.0 new features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription).
+共有サブスクリプション技術の詳細については、[Shared subscription - MQTT 5.0 new features](https://www.emqx.com/en/blog/introduction-to-mqtt5-protocol-shared-subscription)をご覧ください。
 
-## System Topic
+## システムトピック（System Topic）
 
-Topics prefixed with `$SYS/` are reserved for the server to publish specific messages, such as server uptime, client online/offline event notifications, and the current number of connected clients. These topics are commonly referred to as system topics, and clients can subscribe to these system topics to obtain information about the server.
+`$SYS/`で始まるトピックは、サーバーが特定のメッセージ（サーバーのアップタイム、クライアントのオンライン／オフラインイベント通知、現在接続中のクライアント数など）をパブリッシュするために予約されています。これらのトピックは一般にシステムトピックと呼ばれ、クライアントはこれらをサブスクライブすることでサーバーの情報を取得できます。
 
-For more information on the system topic, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+システムトピックの詳細については、[Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics)をご覧ください。

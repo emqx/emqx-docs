@@ -1,102 +1,101 @@
 # Auto Subscribe
 
-Auto Subscribe is an extended MQTT feature supported by EMQX. With **Auto Subscription** enabled, users can set multiple EMQX rules. After a client is successfully connected to EMQX, EMQX will complete the subscription process for the client automatically, and the clients no longer need to send `SUBSCRIBE` requests.
+Auto Subscribeは、EMQXがサポートする拡張されたMQTT機能です。**Auto Subscription**を有効にすると、ユーザーは複数のEMQXルールを設定できます。クライアントがEMQXに正常に接続されると、EMQXはクライアントのサブスクライブ処理を自動的に完了し、クライアントはもはや`SUBSCRIBE`リクエストを送信する必要がなくなります。
 
-Before EMQX 5.0, this feature is called **Proxy Subscription**.
+EMQX 5.0以前では、この機能は**Proxy Subscription**と呼ばれていました。
 
-## Configure Auto Subscribe via Dashboard
+## DashboardでのAuto Subscribe設定
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Auto Subscribe**. 
+1. EMQXダッシュボードを開きます。左側のナビゲーションメニューで、**Management** -> **Auto Subscribe**をクリックします。
 
-2. On the **Auto Subscribe** page, click the **+ Add** button at the upper right corner. 
+2. **Auto Subscribe**ページで、右上の**+ Add**ボタンをクリックします。
 
-3. In the pop-up dialog box, type the test topic `a/1` in the **Topic** text box. Leave other settings as default.
+3. ポップアップダイアログで、**Topic**テキストボックスにテスト用トピック`a/1`を入力します。他の設定はデフォルトのままにします。
 
-   - **Topic**: Type the topic that is automatically subscribed to for the client. You can dynamically build the topic using placeholders. For details, see [Placeholders](#placeholders).
+   - **Topic**: クライアントが自動的にサブスクライブするトピックを入力します。プレースホルダーを使って動的にトピックを構築できます。詳細は[Placeholders](#placeholders)を参照してください。
 
-   - **QoS**: Specify the quality of service of the topic. Options: `0`, `1`, and `2`.
+   - **QoS**: トピックのサービス品質を指定します。選択肢は`0`、`1`、`2`です。
 
-   - **No local**: Options: `False` or `True`.
+   - **No local**: 選択肢は`False`または`True`です。
 
-   - **Retain as Published**: Specify if the message sent with the specified topic will be retained. Options:  `False` or `True`.
+   - **Retain as Published**: 指定したトピックで送信されたメッセージを保持するかどうかを指定します。選択肢は`False`または`True`です。
 
-   - **Retained Handling**: Options: `0`, `1`, and `2`.
+   - **Retained Handling**: 選択肢は`0`、`1`、`2`です。
 
-     <img src="./assets/config-auto-subscribe-dashboard.png" alt="config-auto-subscribe-dashboard" style="zoom:35%;" /> 
+     <img src="./assets/config-auto-subscribe-dashboard.png" alt="Auto SubscribeのDashboard設定画面" style="zoom:35%;" /> 
 
-   Click the **Add** button on the dialogue box. The auto subscribe topic `a/1` is created successfully.
+   ダイアログボックスの**Add**ボタンをクリックします。これで自動サブスクライブトピック`a/1`が正常に作成されます。
 
-   <img src="./assets/auto-sub-success.png" alt="auto-sub-success" style="zoom:50%;" />
+   <img src="./assets/auto-sub-success.png" alt="Auto Subscribe設定成功画面" style="zoom:50%;" />
 
-Now the auto subscription function is enabled. New subscribers will subscribe to the topic `a/1` automatically once they are connected to the broker.
+これでAuto Subscription機能が有効になりました。新しいサブスクライバーは、ブローカーに接続されると自動的にトピック`a/1`をサブスクライブします。
 
-## Try Auto Subscription Using MQTTX Desktop
+## MQTTX DesktopでAuto Subscriptionを試す
 
-The topic `a/1` is configured as the auto-subscribe topic in [Configure Auto Subscribe via Dashboard](#configure-auto-subscribe-via-dashboard). The following procedure demonstrates how a client subscribes to the topic `a/1` automatically once it is connected to the broker.
+[DashboardでのAuto Subscribe設定](#dashboardでのauto-subscribe設定)でトピック`a/1`が自動サブスクライブトピックとして設定されています。以下の手順は、クライアントがブローカーに接続されると自動的にトピック`a/1`をサブスクライブする様子を示します。
 
-:::tip Prerequisite
+:::tip 前提条件
 
-Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)を使った基本的なパブリッシュとサブスクライブ操作の理解。
 
 :::
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQXとMQTTX Desktopを起動します。**New Connection**をクリックして、パブリッシャーとしてクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name**フィールドに`Demo`と入力します。
+   - **Host**にローカルホスト`127.0.0.1`を入力します（このデモの例として）。
+   - 他の設定はデフォルトのままにして、**Connect**をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT接続の作成に関する詳細な手順は[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)を参照してください。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新規接続設定画面" style="zoom:35%;" />
 
-3. Create another MQTT client connection named `Subscriber`.
+3. もう一つのMQTTクライアント接続を作成し、名前を`Subscriber`にします。
 
-3. Select client `Demo` in the **Connections** pane. Enter `a/1` as the topic. Send a message to this topic.
+3. **Connections**ペインでクライアント`Demo`を選択し、トピックに`a/1`を入力してメッセージを送信します。
 
-   - The client `Subscriber` receives the message automatically without creating a new subscription.
+   - クライアント`Subscriber`は、新たにサブスクライブを作成しなくても自動的にメッセージを受信します。
 
-   - The client `Demo` also receives the message as it is also a new connection.
+   - クライアント`Demo`も新しい接続であるため、メッセージを受信します。
 
      ::: tip
 
-     In the publish/subscribe pattern, a client can be both sender and subscriber.
+     パブリッシュ／サブスクライブパターンでは、クライアントは送信者とサブスクライバーの両方になり得ます。
 
      :::
 
-4. Go to EMQX Dashboard. Click **Monitoring** -> **Subscriptions** from the left navigation menu. It shows two subscriptions automatically subscribe to the topic `a/1`.
+4. EMQXダッシュボードに戻り、左側のナビゲーションメニューから**Monitoring** -> **Subscriptions**をクリックします。トピック`a/1`に自動的にサブスクライブされた2つのサブスクリプションが表示されます。
 
-   <img src="./assets/view-auto-sub-dashboard.png" alt="view-auto-sub-dashboard" style="zoom:50%;" />
+   <img src="./assets/view-auto-sub-dashboard.png" alt="Auto Subscribeのサブスクリプション表示画面" style="zoom:50%;" />
 
-## Try Auto Subscription using MQTTX CLI
+## MQTTX CLIでAuto Subscriptionを試す
 
-:::tip Prerequisite
+:::tip 前提条件
 
-Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)
+[MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)を使った基本的なパブリッシュとサブスクライブ操作の理解。
 
 :::
 
-1. Create a new connection with client ID as `emqx_c`.
+1. クライアントIDを`emqx_c`として新しい接続を作成します。
 
    ```bash
    mqttx conn -i emqx_c
    ```
 
-2. Go to EMQX Dashboard. Click **Monitoring** ->**Subscriptions** in the left navigation menu. It shows the client `emqx_c` subscribes to the topic `a/1`.
+2. EMQXダッシュボードに移動し、左側のナビゲーションメニューから**Monitoring** -> **Subscriptions**をクリックします。クライアント`emqx_c`がトピック`a/1`をサブスクライブしていることが表示されます。
 
-   <img src="./assets/auto-sub-emqx_c.png" alt="auto-sub-emqx_c" style="zoom:60%;" />
+   <img src="./assets/auto-sub-emqx_c.png" alt="emqx_cのAuto Subscribeサブスクリプション画面" style="zoom:60%;" />
 
 ## Placeholders
 
-Auto Subscribe supports placeholders to dynamically build topics. The format of the placeholder is `${}`. The variables supported by the placeholder are:
+Auto Subscribeはプレースホルダーをサポートしており、トピックを動的に構築できます。プレースホルダーの形式は`${}`です。サポートされる変数は以下の通りです。
 
-- `${clientid}`: Client ID.
-- `${username}`: Client username.
-- `${host}`: IP address when the client connects to EMQX.
+- `${clientid}`: クライアントID
+- `${username}`: クライアントのユーザー名
+- `${host}`: クライアントがEMQXに接続した際のIPアドレス
 
-For example, when the client ID is `emqx_c` and the configured topic is `a/${clientid}`, the client will automatically subscribe to the topic `a/emqx_c` after connecting to EMQX.
-
+例えば、クライアントIDが`emqx_c`で、設定されたトピックが`a/${clientid}`の場合、クライアントはEMQXに接続後、自動的にトピック`a/emqx_c`をサブスクライブします。

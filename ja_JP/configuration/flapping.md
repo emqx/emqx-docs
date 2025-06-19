@@ -1,8 +1,8 @@
-# Flapping Detect Configuration
+# Flapping Detect 設定
 
-Flapping in EMQX refers to a situation where an MQTT client rapidly connects and disconnects from the broker in a short period. The flapping mechanism is to detect flapping clients and to disconnect the client from a connection. 
+EMQXにおけるフラッピングとは、MQTTクライアントが短時間にブローカーへ頻繁に接続・切断を繰り返す状況を指します。フラッピング検出機能は、こうしたフラッピング状態のクライアントを検出し、接続を切断するための仕組みです。
 
-For example, if you want to mark clients that make 15 connection attempts within a 1-minute window as flapping clients, and then ban the detected clients from connecting to EMQX for 5 minutes, you can work with the code below:
+例えば、1分間に15回接続を試みたクライアントをフラッピングクライアントとしてマークし、検出されたクライアントを5分間EMQXへの接続禁止にしたい場合は、以下のコードのように設定します。
 
 ```bash
 flapping_detect {
@@ -13,20 +13,20 @@ flapping_detect {
 }
 ```
 
-Where, <!--did not add the dashboard UI as it seems that most configurations listed here cannot be configured with the UI-->
+ここで、<!--ダッシュボードUIはほとんどの設定項目がUIで設定できないため割愛しています-->
 
-- `max_count` is to set the maximum number of connection attempts allowed from a client within a specified time window (defined by window_time)
-- `window_time` is to set the time window in which the maximum number of connection attempts from a client are counted.
-- `ban_time` is to set the duration for which a client is banned from connecting to the EMQX after it has been detected as flapping. 
+- `max_count` は、指定した時間窓（`window_time`）内でクライアントが許容される最大接続試行回数を設定します。
+- `window_time` は、クライアントの接続試行回数をカウントする時間窓を設定します。
+- `ban_time` は、フラッピングと検出されたクライアントがEMQXへの接続を禁止される期間を設定します。
 
 ::: tip
 
-You can also customize the settings via the Dashboard by clicking **Access Control** -> **Flapping Detect** on the left navigation menu. Once you have configured these items with Dashboard, your settings will override the same configuration items in the config file.
+ダッシュボードの左側ナビゲーションメニューから **Access Control** -> **Flapping Detect** をクリックすることで、設定をカスタマイズすることも可能です。ダッシュボードで設定した内容は、設定ファイルの同じ項目を上書きします。
 
 :::
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはさらに多くの設定項目を提供しており、より細かいカスタマイズが可能です。詳細は[EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご参照ください。
 
 :::

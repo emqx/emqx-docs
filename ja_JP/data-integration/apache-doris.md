@@ -1,74 +1,73 @@
-# Ingest MQTT Data into Apache Doris
+# Apache Doris に MQTT データを取り込む
 
-[Apache Doris](https://doris.apache.org/) is a modern Massively Parallel Processing (MPP) analytical database system known for high concurrency, high performance, and ease of use. It is particularly well-suited for scenarios involving real-time analytics and data warehousing. With EMQX 5.10.0, you can integrate MQTT data with Apache Doris, enabling efficient storage, real-time analysis, and powerful data visualization.
+[Apache Doris](https://doris.apache.org/) は、高い同時接続性、高性能、使いやすさで知られる最新のMassively Parallel Processing（MPP）分析データベースシステムです。リアルタイム分析やデータウェアハウジングのシナリオに特に適しています。EMQX 5.10.0 では、MQTT データを Apache Doris と統合でき、効率的なストレージ、リアルタイム分析、強力なデータ可視化を実現します。
 
-This guide provides practical instructions on how to configure and validate the data integration between EMQX and Apache Doris.
+本ガイドでは、EMQX と Apache Doris 間のデータ統合の設定および検証方法について実践的な手順を提供します。
 
-::: tip Note
+::: tip 注意
 
-Apache Doris data integration in EMQX supports Apache Doris version 2.1.7 and later.
+EMQX の Apache Doris データ統合は Apache Doris バージョン 2.1.7 以降をサポートしています。
 
 :::
 
-## How It Works
+## 動作の仕組み
 
-Apache Doris data integration is an out-of-the-box feature in EMQX, which enables complex business development through simple configuration. In a typical IoT application, EMQX, as the IoT platform, is responsible for device connection and transmitting messages. Apache Doris, as the data storage platform, is responsible for storing device status and metadata, as well as message data storage and data analysis.
+Apache Doris データ統合は EMQX の標準機能として提供されており、シンプルな設定で複雑なビジネス開発を可能にします。典型的な IoT アプリケーションでは、EMQX が IoT プラットフォームとしてデバイスの接続とメッセージの送受信を担当し、Apache Doris がデータストレージプラットフォームとしてデバイスの状態やメタデータ、メッセージデータの保存および分析を担当します。
 
 <img src="./assets/doris-integration.png" alt="doris-integration" style="zoom:67%;" />
 
-EMQX forwards device events and data to Apache Doris through the rule engine and Sink. Applications can read the data in Apache Doris to sense the device status, obtain device online and offline records, and analyze device data. The specific workflow is as follows:
+EMQX はルールエンジンと Sink を通じてデバイスのイベントとデータを Apache Doris に転送します。アプリケーションは Apache Doris のデータを読み取り、デバイスの状態を把握したり、デバイスのオンライン・オフライン記録を取得したり、デバイスデータを分析したりできます。具体的なワークフローは以下の通りです：
 
-- **IoT devices connect to EMQX**: After IoT devices are successfully connected through the MQTT protocol, online events will be triggered. The events include information such as device ID, source IP address, and other attributes.
-- **Message publication and reception**: The devices publish telemetry and status data to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
-- **Rule Engine Processing Messages**: With the built-in rules engine, messages and events from specific sources can be processed based on topic matching. The rules engine matches the corresponding rules and processes messages and events, such as converting data formats, filtering out specific information, or enriching messages with contextual information.
-- **Write to Apache Doris**: The rule triggers the writing of messages to Apache Doris. With the help of SQL templates, users can extract data from the rule processing results to construct SQL and send it to Apache Doris for execution, so that specific fields of the message can be written or updated into the corresponding tables and columns of the database.
+- **IoT デバイスが EMQX に接続**：IoT デバイスが MQTT プロトコルを介して正常に接続されると、オンラインイベントがトリガーされます。イベントにはデバイスID、送信元IPアドレスなどの属性情報が含まれます。
+- **メッセージのパブリッシュと受信**：デバイスは特定のトピックにテレメトリや状態データをパブリッシュします。EMQX はこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+- **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンにより、特定のソースからのメッセージやイベントをトピックマッチングに基づいて処理します。ルールエンジンは対応するルールをマッチングし、データ形式の変換、特定情報のフィルタリング、メッセージへのコンテキスト情報の付加などを行います。
+- **Apache Doris への書き込み**：ルールがトリガーされるとメッセージを Apache Doris に書き込みます。SQL テンプレートを利用して、ルール処理結果からデータを抽出し SQL を構築して Apache Doris に送信し、メッセージの特定フィールドを対応するテーブルやカラムに書き込んだり更新したりします。
 
-After the event and message data are written to Apache Doris, you can connect to Apache Doris to read the data for flexible application development, such as:
+イベントおよびメッセージデータが Apache Doris に書き込まれた後、Apache Doris に接続してデータを読み取り、以下のような柔軟なアプリケーション開発が可能です：
 
-- Connect to visualization tools, such as Grafana, to generate charts based on data and show data changes.
-- Connect to the device management system, view the device list and status, detect abnormal device behavior, and eliminate potential problems in a timely manner.
+- Grafana などの可視化ツールに接続し、データに基づくチャートを生成してデータ変化を表示する。
+- デバイス管理システムに接続し、デバイス一覧や状態を確認、異常なデバイス挙動を検知し、潜在的な問題を迅速に解消する。
 
-## Features and Benefits
+## 特長と利点
 
-The data integration with Apache Doris can bring the following features and advantages to your business:
+Apache Doris とのデータ統合により、以下の特長と利点をビジネスにもたらします：
 
-- **Flexible Event Handling**: Through the EMQX rules engine, Apache Doris can handle device lifecycle events, greatly facilitating the development of various management and monitoring tasks required for implementing IoT applications. By analyzing event data, you can promptly detect device failures, abnormal behavior, or trend changes to take appropriate measures.
-- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written to Apache Doris, making storage and usage more convenient.
-- **Real-Time Data Ingestion**: Apache Doris supports real-time data ingestion via HTTP and JDBC interfaces. When integrated with EMQX, MQTT data can be written directly into Doris tables with low latency, making it ideal for scenarios that require immediate query and analytics capabilities.
-- **Streaming Synchronization**: Apache Doris also supports ingesting real-time data streams from sources like Flink, Kafka, and transactional databases. This makes it ideal for building unified pipelines that combine MQTT data from EMQX with other streaming data sources for comprehensive real-time analysis.
-- **Standard SQL and Ecosystem Compatibility**: Doris is fully compatible with MySQL syntax and supports standard SQL, allowing users to perform powerful analytical queries without learning new languages. It integrates easily with business intelligence (BI) tools and client applications for dashboards, reports, and automation workflows.
-- **Runtime Metrics**: Support for viewing runtime metrics of each Sink, such as total message count, success/failure counts, current rates, and more.
+- **柔軟なイベント処理**：EMQX ルールエンジンを通じて、Apache Doris はデバイスのライフサイクルイベントを処理でき、IoT アプリケーションの実装に必要な各種管理・監視タスクの開発を大幅に容易にします。イベントデータを分析することで、デバイスの故障や異常挙動、傾向変化を迅速に検知し、適切な対策を講じられます。
+- **メッセージ変換**：メッセージは EMQX ルールを通じて広範な処理・変換が可能で、Apache Doris への書き込み前にデータの整形やフィルタリングを行い、保存および活用を容易にします。
+- **リアルタイムデータ取り込み**：Apache Doris は HTTP や JDBC インターフェースによるリアルタイムデータ取り込みをサポートします。EMQX と統合することで、MQTT データを低レイテンシで直接 Doris テーブルに書き込め、即時のクエリや分析に適しています。
+- **ストリーミング同期**：Apache Doris は Flink、Kafka、トランザクションデータベースなど他のストリーミングデータソースからのリアルタイムデータ取り込みもサポートし、EMQX の MQTT データと組み合わせた統合パイプライン構築に最適です。
+- **標準 SQL とエコシステム互換性**：Doris は MySQL 構文に完全対応し標準 SQL をサポートするため、新たな言語を学ぶことなく強力な分析クエリを実行可能です。BI ツールやクライアントアプリケーションとの連携も容易で、ダッシュボード、レポート、自動化ワークフローに活用できます。
+- **ランタイム指標**：各 Sink のランタイム指標（総メッセージ数、成功/失敗数、現在の処理レートなど）を閲覧可能です。
 
-Through flexible event handling, extensive message transformation, flexible data operations, and real-time monitoring and analysis capabilities, you can build efficient, reliable, and scalable IoT applications, benefiting your business decisions and optimizations.
+柔軟なイベント処理、広範なメッセージ変換、柔軟なデータ操作、リアルタイム監視・分析機能を活用し、効率的で信頼性が高くスケーラブルな IoT アプリケーションを構築し、ビジネスの意思決定や最適化に役立てられます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the Apache Doris data integration in EMQX Dashboard, including installing the Apache Doris server and creating data tables.
+本節では、EMQX ダッシュボードで Apache Doris データ統合を作成する前に必要な準備について説明します。Apache Doris サーバーのインストールやデータテーブルの作成を含みます。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
+- EMQX データ統合の [ルール](./rules.md) に関する知識
+- [データ統合](./data-bridges.md) に関する知識
 
-- Knowledge about [Data Integration](./data-bridges.md)
+### Apache Doris サーバーのインストール
 
-### Install Apache Doris Server
+[公式ガイド](https://doris.apache.org/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment) に従い、Docker Compose を使ってローカルで Doris を起動してください。
 
-Follow the [official guide](https://doris.apache.org/docs/dev/gettingStarted/quick-start#use-docker-for-quick-deployment) to run Doris locally using Docker Compose.
+### データテーブルの作成
 
-### Create Data Tables
+MySQL クライアントを使って Doris Frontend に接続し、コマンドを発行します。詳細は [公式ドキュメント](https://doris.apache.org/docs/dev/gettingStarted/quick-start#run-queries) を参照してください。
 
-You can use a MySQL client to connect to a Doris Frontend and issue commands.  See the [official documentation](https://doris.apache.org/docs/dev/gettingStarted/quick-start#run-queries).
-
-For example:
+例：
 
 ```sh
 mysql -uroot -P9030 -h127.0.0.1
 ```
 
-You need to create a database and two tables in Apache Doris:
+Apache Doris に以下のデータベースと2つのテーブルを作成する必要があります：
 
-- The data table `emqx_messages` is for storing the client ID, topic, payload, and creation time of every message.
-- The data table `emqx_client_events` is for storing the client ID, event type, and creation time of every event.
+- `emqx_messages` テーブル：クライアントID、トピック、ペイロード、作成日時を保存するためのデータテーブル
+- `emqx_client_events` テーブル：クライアントID、イベントタイプ、作成日時を保存するためのデータテーブル
 
 ```sql
 create database mqtt;
@@ -91,38 +90,36 @@ create table if not exists
   properties (replication_num = 1);
 ```
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the Apache Doris server.
+本節では、Sink を Apache Doris サーバーに接続するためのコネクターの作成方法を説明します。
 
-The following steps assume that you run both EMQX and Apache Doris on the local machine. If you have Apache Doris and EMQX running remotely, adjust the settings accordingly.
+以下の手順は、EMQX と Apache Doris をローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Doris** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower case letters and numbers, for example: `my_doris`.
-   - **Server Host**: Enter `127.0.0.1:9030`, or the actual hostname if the Apache Doris server is running remotely.
-   - **Database Name**: Enter `mqtt`.
-   - **Username**: Enter `root`.
-   - **Password**: Enter `public`.
-5. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Apache Doris server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to Apache Doris and record client events. For detailed steps, see [Create a Rule with Apache Doris Sink for Message Storage](#create-a-rule-with-apache-doris-sink-for-message-storage) and [Create a Rule with Apache Doris Sink for Events Recording](#create-a-rule-with-apache-doris-sink-for-events-recording).
+1. EMQX ダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
+2. ページ右上の **Create** をクリックします。
+3. **Create Connector** ページで **Doris** を選択し、**Next** をクリックします。
+4. **Configuration** ステップで以下の情報を設定します：
+   - **Connector name**：コネクター名を入力します。大文字・小文字の英数字の組み合わせで、例：`my_doris`
+   - **Server Host**：`127.0.0.1:9030` または Apache Doris サーバーがリモートの場合は実際のホスト名を入力
+   - **Database Name**：`mqtt`
+   - **Username**：`root`
+   - **Password**：`public`
+5. 高度な設定（任意）：[高度な設定](#advanced-configurations)を参照してください。
+6. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが Apache Doris サーバーに接続できるかテスト可能です。
+7. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックしてルール作成に進み、Apache Doris へのデータ転送やクライアントイベントの記録を指定できます。詳細は [メッセージ保存用 Apache Doris Sink のルール作成](#create-a-rule-with-apache-doris-sink-for-message-storage) および [イベント記録用 Apache Doris Sink のルール作成](#create-a-rule-with-apache-doris-sink-for-events-recording) を参照してください。
 
-## Create a Rule with Apache Doris Sink for Message Storage
+## メッセージ保存用 Apache Doris Sink のルール作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to the Apache Doris data table `emqx_messages` via the configured Sink.
+本節では、MQTT トピック `t/#` からのメッセージを処理し、処理済みデータを設定済み Sink を通じて Apache Doris の `emqx_messages` データテーブルに保存するルールの作成方法を示します。
 
-This demonstration assumes that you run both EMQX and Apache Doris on the local machine. If you have Apache Doris and EMQX running remotely, adjust the settings accordingly.
+EMQX と Apache Doris をローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を調整してください。
 
-1. Go to EMQX Dashboard, click **Integration** -> **Rules**.
+1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+2. ページ右上の **Create** をクリックします。
+3. ルールID に `my_rule` を入力し、**SQL Editor** に以下のステートメントを設定します。これはトピック `t/#` 配下の MQTT メッセージを Apache Doris に保存することを意味します。
 
-2. Click **Create** in the top right corner of the page.
-
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor** with the following statement, which means the MQTT messages under topic `t/#`  will be saved to Apache Doris.
-
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   注意：独自の SQL 構文を指定する場合は、Sink が必要とするすべてのフィールドを `SELECT` 部分に含めてください。
 
    ```sql
    SELECT
@@ -133,21 +130,17 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は **SQL Examples** と **Enable Test** をクリックして SQL ルールを学習・テストできます。
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Apache Doris.
+4. + **Add Action** ボタンをクリックして、ルールによってトリガーされるアクションを定義します。このアクションにより、EMQX はルールで処理したデータを Apache Doris に送信します。
+5. **Type of Action** ドロップダウンリストから `Apache Doris` を選択します。**Action** ドロップダウンはデフォルトの `Create Action` のままにします。既に作成済みの Sink があれば選択可能です。本デモでは新しい Sink を作成します。
+6. Sink の名前を入力します。名前は大文字・小文字の英数字の組み合わせで指定してください。
+7. **Connector** ドロップダウンから先ほど作成した `my_mysql` を選択します。ドロップダウン横のボタンから新しいコネクターを作成することも可能です。設定パラメータは [コネクターの作成](#create-a-connector) を参照してください。
+8. 使用する機能に応じて **SQL Template** を設定します：
 
-5. Select `Apache Doris` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
-
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
-
-7. Select the `my_mysql` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
-
-8. Configure the **SQL Template** based on the feature to use:
-
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   注意：これは前処理済みの SQL なので、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
    ```sql
    INSERT INTO emqx_messages(clientid, topic, payload, created_at) VALUES(
@@ -158,37 +151,33 @@ This demonstration assumes that you run both EMQX and Apache Doris on the local 
    )
    ```
 
-   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+   SQL テンプレート内に未定義のプレースホルダー変数がある場合、**SQL template** 上部の **Undefined Vars as Null** スイッチでルールエンジンの動作を切り替えられます：
 
-   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-
-   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+   - **Disabled**（デフォルト）：ルールエンジンは文字列 `undefined` をデータベースに挿入します。
+   - **Enabled**：変数が未定義の場合、`NULL` を挿入することを許可します。
 
      ::: tip
 
-     If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
+     可能な限りこのオプションは有効にしてください。無効にするのは後方互換性を確保する場合のみです。
 
      :::
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリ Sink がメッセージ処理に失敗した場合にトリガーされます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
+10. **高度な設定（任意）**：[高度な設定](#advanced-configurations) を参照してください。
+11. **Create** ボタンをクリックして Sink の設定を完了します。新しい Sink が **Action Outputs** に追加されます。
+12. **Create Rule** ページに戻り、設定内容を確認して **Create** ボタンをクリックしルールを生成します。
 
-10. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
+これでルールの作成が完了しました。**Integration** -> **Rules** ページで新規作成したルールを確認できます。**Actions(Sink)** タブをクリックすると、新しい Apache Doris Sink が表示されます。
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+また、**Integration** -> **Flow Designer** をクリックしてトポロジーを確認すると、トピック `t/#` 配下のメッセージが Apache Doris に送信・保存されていることがわかります。
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+## イベント記録用 Apache Doris Sink のルール作成
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Apache Doris Sink.
+本節では、クライアントのオンライン/オフライン状態を記録し、イベントデータを設定済み Sink を通じて Apache Doris の `emqx_client_events` テーブルに保存するルールの作成方法を示します。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#`  are sent and saved to Apache Doris.
+ルール作成手順は [メッセージ保存用 Apache Doris Sink のルール作成](#メッセージ保存用-apache-doris-sink-のルール作成) とほぼ同様ですが、SQL ルール構文と SQL テンプレートが異なります。
 
-## Create a Rule with Apache Doris Sink for Events Recording
-
-This section demonstrates how to create a rule for recording the clients' online/offline status and saving the events data to the Apache Doris table `emqx_client_events` via a configured Sink.
-
-The rule creation steps are similar to those in [Creating a rule with Apache Doris Sink for Message Storage](#create-a-rules-with-apache-doris-sink-for-message-storage) except for the SQL rule syntax and SQL template.
-
-To create a rule for online/offline status recording, you can enter the following statement in the **SQL Editor**:
+オンライン/オフライン状態記録用のルールは、**SQL Editor** に以下のステートメントを入力します：
 
 ```sql
 SELECT
@@ -197,7 +186,7 @@ FROM
   "$events/client/connected", "$events/client/disconnected"
 ```
 
-To insert the client events data to the data table, you can use the following SQL template:
+クライアントイベントデータをデータテーブルに挿入するための SQL テンプレートは以下の通りです：
 
 ```sql
 INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
@@ -207,17 +196,17 @@ INSERT INTO emqx_client_events(clientid, event, created_at) VALUES (
 )
 ```
 
-## Test the Rules
+## ルールのテスト
 
-Use MQTTX to send a message to topic  `t/1`  to trigger an online/offline event.
+MQTTX を使ってトピック `t/1` にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Apache Doris" }'
 ```
 
-Check the running status of the two Sinks, there should be one new incoming and one new outgoing message, and 2 event records.
+2つの Sink の稼働状況を確認すると、新規の受信メッセージ数と送信メッセージ数が1つずつ増加し、イベントレコードが2件追加されているはずです。
 
-Check whether the data is written into the `emqx_messages` data table.
+`emqx_messages` データテーブルにデータが書き込まれているか確認します。
 
 ```bash
 mysql> select * from emqx_messages;
@@ -229,7 +218,7 @@ mysql> select * from emqx_messages;
 1 row in set (0.01 sec)
 ```
 
-Check whether the data is written into the `emqx_client_events` table.
+`emqx_client_events` テーブルにデータが書き込まれているか確認します。
 
 ```bash
 mysql> select * from emqx_client_events;
@@ -242,18 +231,18 @@ mysql> select * from emqx_client_events;
 2 rows in set (0.00 sec)
 ```
 
-## Advanced Configurations
+## 高度な設定
 
-This section delves deeper into the advanced configuration options available for the Apache Doris Connector and Sink. When configuring the Connector and Sink in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+本節では、Apache Doris コネクターおよび Sink の高度な設定オプションについて詳述します。ダッシュボードでコネクターや Sink を設定する際、**Advanced Settings** に移動して以下のパラメータをニーズに応じて調整してください。
 
-| **Fields**                | **Descriptions**                                             | **Recommended Value** |
-| ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Connection Pool Size**  | Specifies the number of concurrent connections that can be maintained in the connection pool when interfacing with the Apache Doris service. This option helps in managing the application's scalability and performance by limiting or increasing the number of active connections between EMQX and Apache Doris.<br/>**Note**: Setting an appropriate connection pool size depends on various factors such as system resources, network latency, and the specific workload of your application. Too large a pool size may lead to resource exhaustion, while too small a size may limit throughput. | `8`                   |
-| **Start Timeout**         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in Apache Doris—is fully operational and ready to handle data transactions. | `5` second            |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type Sinks between EMQX and Apache Doris. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For Sinks that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Apache Doris, the request is deemed to have expired. | `45` second           |
-| **Health Check Interval** | Specifies the time interval, in seconds, at which the Connector will perform automated health checks on the connection to Apache Doris. | `15` second           |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker in the Connector. Buffer workers temporarily store data before it is sent to Apache Doris, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256` MB              |
-| **Max Batch Size**        | Specifies the maximum size of data batches transmitted from EMQX to Apache Doris in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Apache Doris.<br />If the "Max Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
-| **Query Mode**            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Apache Doris does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Apache Doris. | `Async`               |
-| **Inflight Window**       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the Connector is communicating with Apache Doris.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **項目**                   | **説明**                                                                                                   | **推奨値**           |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| **Connection Pool Size**   | Apache Doris サービスとの接続プール内で維持可能な同時接続数を指定します。この設定により、EMQX と Apache Doris 間のアクティブ接続数を制御し、アプリケーションのスケーラビリティとパフォーマンスを管理します。<br/>**注意**：適切な接続プールサイズはシステムリソース、ネットワークレイテンシ、アプリケーションの負荷などに依存します。大きすぎるとリソース枯渇の恐れがあり、小さすぎるとスループットが制限されます。 | `8`                  |
+| **Start Timeout**          | コネクターが自動起動したリソース（例：Apache Doris のデータベースインスタンス）が正常状態になるまで待機する最大時間（秒）を指定します。この設定により、リソースが完全に稼働しデータ取引可能になるまで処理を進めないようにします。 | `5` 秒               |
+| **Buffer Pool Size**       | EMQX と Apache Doris 間の egress タイプ Sink でデータフローを管理するバッファワーカーの数を指定します。これらのワーカーはデータを一時的に格納・処理し、ターゲットサービスへの送信を円滑にします。ingress（受信）専用の Sink では適用されないため、"0" に設定可能です。 | `16`                 |
+| **Request TTL**            | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストはバッファリング開始時からカウントされ、TTL を超えるか、Apache Doris からの応答やアックがタイムリーに得られない場合、期限切れとみなされます。 | `45` 秒              |
+| **Health Check Interval**  | コネクターが Apache Doris への接続のヘルスチェックを自動的に実施する間隔（秒）を指定します。 | `15` 秒              |
+| **Max Buffer Queue Size**  | コネクター内の各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーは Apache Doris への送信前にデータを一時保管し、データフローの効率化に寄与します。システム性能やデータ転送要件に応じて調整してください。 | `256` MB             |
+| **Max Batch Size**         | EMQX から Apache Doris へ一度に転送するデータバッチの最大サイズを指定します。サイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。<br />`1` に設定すると、データレコードはバッチ化せず個別に送信されます。 | `1`                  |
+| **Query Mode**             | メッセージ送信要件に応じて、`asynchronous`（非同期）または `synchronous`（同期）クエリモードを選択できます。非同期モードでは Apache Doris への書き込みが MQTT メッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージを Apache Doris 到着前に受信する可能性があります。 | `Async`              |
+| **Inflight Window**        | "インフライトクエリ" とは、開始されたがまだ応答やアックを受け取っていないクエリを指します。コネクターが Apache Doris と通信する際に同時に存在可能なインフライトクエリの最大数を制御します。<br/>**Query Mode** が `async` の場合、このパラメータは特に重要です。同一 MQTT クライアントからのメッセージを厳密な順序で処理する必要がある場合は、値を 1 に設定してください。 | `100`                |

@@ -1,161 +1,161 @@
-# Cluster Settings
+# クラスター設定
 
-EMQX provides hot configuration capabilities, which can dynamically modify the configuration at runtime without restarting the EMQX node. The EMQX Dashboard provides visual configuration pages with the hot configuration functions, allowing you to easily modify the configuration of EMQX. 
+EMQXはホットコンフィグレーション機能を提供しており、EMQXノードを再起動することなく、実行時に設定を動的に変更できます。EMQXダッシュボードはホットコンフィグレーション機能を備えた視覚的な設定ページを提供し、EMQXの設定を簡単に変更できます。
 
-The Cluster Settings module provides the following submodules:
+クラスター設定モジュールは以下のサブモジュールを提供します：
 
-- MQTT Settings
-- Cluster
-- Namespace
-- Listeners
-- Logging
-- Monitoring
-- Cluster Linking
+- MQTT設定
+- クラスター
+- ネームスペース
+- リスナー
+- ロギング
+- モニタリング
+- クラスターリンク
 
-## MQTT Settings
+## MQTT設定
 
-The **MQTT Settings** page provides MQTT protocol-related configuration functions. On this page, you can configure various MQTT-related parameters, including:
+**MQTT設定**ページはMQTTプロトコルに関連する設定機能を提供します。このページでは、以下を含む様々なMQTT関連パラメータを設定できます：
 
-### General
+### 一般
 
-The **General** tab page contains general basic configuration items for the MQTT protocol, such as idle timeout, maximum packet size, maximum client ID length, maximum topic levels, and maximum allowed QoS levels.
+**一般**タブページには、アイドルタイムアウト、最大パケットサイズ、最大クライアントID長、最大トピックレベル数、許可される最大QoSレベルなど、MQTTプロトコルの基本的な一般設定項目が含まれています。
 
-### Session
+### セッション
 
-The **Session** tab page includes configuration items related to MQTT session management, such as session expiry interval (only supported for non-MQTT 5.0 connections; MQTT 5.0 connections need to be configured on the client side), maximum subscription count, maximum flight window, and whether to store QoS 0 messages.
+**セッション**タブページには、MQTTセッション管理に関連する設定項目が含まれており、セッション有効期限間隔（MQTT 5.0以外の接続のみサポート。MQTT 5.0接続はクライアント側で設定が必要）、最大サブスクリプション数、最大フライトウィンドウ、QoS 0メッセージの保存有無などがあります。
 
 ### Durable Sessions
 
-The **Durable Sessions** tab page includes configuration items related to the [MQTT Durable Sessions](../durability/durability_introduction.md) feature, such as message retention duration, message query batch size, idle poll interval, session heartbeat interval, etc.
+**Durable Sessions**タブページには、[MQTT Durable Sessions](../durability/durability_introduction.md)機能に関連する設定項目が含まれており、メッセージ保持期間、メッセージクエリバッチサイズ、アイドルポーリング間隔、セッションハートビート間隔などがあります。
 
 ### Retainer
 
-The **Retainer** tab page contains MQTT protocol-related configuration items for retained messages, such as whether to enable retained messages, message storage type and method, maximum number of retained messages, retained message payload size, and message expiry interval. For more details, refer to [Configuring Retained Messages](./retained.md#retainer-settings).
+**Retainer**タブページには、保持メッセージに関するMQTTプロトコル関連の設定項目が含まれており、保持メッセージの有効化、メッセージ保存タイプと方法、最大保持メッセージ数、保持メッセージのペイロードサイズ、メッセージ有効期限間隔などがあります。詳細は[保持メッセージの設定](./retained.md#retainer-settings)を参照してください。
 
-> When retained messages are disabled, existing retained messages will not be deleted.
+> 保持メッセージを無効にしても、既存の保持メッセージは削除されません。
 
-### System Topic
+### システムトピック
 
-The **System Topic** tab page provides configuration items for EMQX's built-in system topics. EMQX periodically publishes operational status, usage statistics, and real-time client events to system topics prefixed with `$SYS/`. When clients subscribe to these topics, EMQX will publish related information to those topics. Configuration items for system topics include message publish interval, heartbeat interval, etc.
+**システムトピック**タブページでは、EMQXの組み込みシステムトピックに関する設定項目を提供します。EMQXは定期的に運用状況、使用統計、リアルタイムクライアントイベントを`$SYS/`で始まるシステムトピックにパブリッシュします。クライアントがこれらのトピックをサブスクライブすると、関連情報がパブリッシュされます。システムトピックの設定項目には、メッセージパブリッシュ間隔、ハートビート間隔などがあります。
 
-### Force Shutdown
+### 強制シャットダウン
 
-The **Force Shutdown** tab allows you to configure the automatic shutdown behavior based on resource usage thresholds. This feature safeguards the EMQX from potential instability due to excessive resource consumption, such as message queue length or heap size.
+**強制シャットダウン**タブでは、リソース使用率の閾値に基づく自動シャットダウンの動作を設定できます。この機能は、メッセージキューの長さやヒープサイズなどの過剰なリソース消費によるEMQXの不安定化を防止します。
 
-You can configure settings for the following fields in the **Force Shutdown** tab page:
+**強制シャットダウン**タブページで設定可能な項目は以下の通りです：
 
-- **Enable Force Shutdown**: This toggle switch enables or disables the force shutdown feature. When enabled, the system automatically triggers the shutdown of client processes if the specified resource thresholds are surpassed. It is enabled by default.
-- **Max Heap Size**: Specifies the maximum allowed heap size for the system. If the heap size surpasses this limit, the system will initiate a forced shutdown to maintain stability. The default value is `32 MB`.
-- **Max Mailbox Size**: Defines the maximum allowed length for the mailbox message queue. If the queue exceeds this length, a forced shutdown will be triggered to prevent system overload. The default value is `1000`.
+- **強制シャットダウンを有効にする**：このトグルスイッチで強制シャットダウン機能を有効または無効にします。有効時は指定されたリソース閾値を超えた場合にクライアントプロセスのシャットダウンを自動的にトリガーします。デフォルトで有効です。
+- **最大ヒープサイズ**：システムの最大許容ヒープサイズを指定します。ヒープサイズがこの制限を超えると、システムの安定性を維持するために強制シャットダウンが開始されます。デフォルト値は`32 MB`です。
+- **最大メールボックスサイズ**：メールボックスのメッセージキューの最大許容長さを定義します。キューがこの長さを超えると、システム過負荷を防ぐために強制シャットダウンがトリガーされます。デフォルト値は`1000`です。
 
-## Cluster
+## クラスター
 
-The **Cluster** configuration page allows you to manage EMQX cluster nodes, including viewing details, inviting new nodes, and removing existing ones.
+**クラスター**設定ページでは、EMQXクラスターのノード管理が可能で、詳細の閲覧、新規ノードの招待、既存ノードの削除が行えます。
 
-To view node details, click the node name. You will be redirected to the **Cluster View** page for detailed information.
+ノードの詳細を確認するには、ノード名をクリックしてください。詳細情報のために**クラスター表示**ページにリダイレクトされます。
 
-To invite a node, click **Invite**, enter the node's IP address or hostname in the **Node Name** field, and click **Confirm**.
+ノードを招待するには、**招待**をクリックし、**ノード名**欄にノードのIPアドレスまたはホスト名を入力して**確認**をクリックします。
 
-To remove a node, click **Remove**. A confirmation dialog will appear before the node is removed from the cluster.
+ノードを削除するには、**削除**をクリックします。削除前に確認ダイアログが表示されます。
 
 ![cluster-node](./assets/cluster-node.png)
 
-EMQX also supports creating and managing clusters using Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md)
+EMQXはコマンドラインインターフェース（CLI）を使ったクラスターの作成・管理もサポートしています。詳細は[クラスターの作成と管理](../deploy/cluster/create-cluster.md)を参照してください。
 
-## Namespace
+## ネームスペース
 
-The Namespace feature in EMQX provides logical isolation for different client groups within a single cluster. You can manage namespaces on the **Namespace** page. For more detailed guidance on how to manage and configure namespaces, refer to the [Namespace](../multi-tenancy/namespace-overview.md).
+EMQXのネームスペース機能は、単一クラスター内で異なるクライアントグループを論理的に分離します。ネームスペースは**ネームスペース**ページで管理可能です。管理および設定の詳細は[ネームスペース](../multi-tenancy/namespace-overview.md)を参照してください。
 
-## Listeners
+## リスナー
 
-The **Listeners** displays a list of listeners by default. EMQX provides four common listeners:
+**リスナー**ページはデフォルトでリスナーの一覧を表示します。EMQXは以下の4つの一般的なリスナーを提供しています：
 
-- TCP listener using port 1883
-- SSL/TLS secure connection listener using port 8883
-- WebSocket listener using port 8083
-- WebSocket secure listener using port 8084
+- ポート1883を使用するTCPリスナー
+- ポート8883を使用するSSL/TLSセキュア接続リスナー
+- ポート8083を使用するWebSocketリスナー
+- ポート8084を使用するWebSocketセキュアリスナー
 
 ![image](./assets/config-listener-list.png)
 
-Typically, you can use these default listeners by specifying the corresponding port and protocol type. To add another type of listener, click the **+Add Listener** button in the top-right corner to create a new listener.
+通常は、対応するポートとプロトコルタイプを指定してこれらのデフォルトリスナーを使用します。別のタイプのリスナーを追加するには、右上の**+Add Listener**ボタンをクリックして新しいリスナーを作成します。
 
-### Add Listener
+### リスナーの追加
 
-In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
+**Add Listener**ポップアップパネルにはリスナー追加用のフォームが表示され、基本設定項目が含まれています。リスナーを識別するための名前を入力し、リスナータイプ（TCP、SSL、WS、WSS）を選択、リスナーアドレス（IPアドレスとポート番号）を入力します。IPアドレスを指定するとリスナーのアクセス範囲を制限できます。ポート番号のみの指定も可能です。
 
 ![image](./assets/config-listener-add.png)
 
-#### Rate Limiting
+#### レート制限
 
-In the **Limiter** section of the **Add Listener** form, you can limit the message receiving and publishing rates during EMQX operation, such as:
+**Add Listener**フォームの**Limiter**セクションでは、EMQX稼働中のメッセージ受信およびパブリッシュレートを制限できます。例えば：
 
-- Maximum Connection Rate (Listener)
-- Maximum Message Publishing Rate (Per Client)
-- Maximum Message Publishing Rraffic (Per Client)
+- 最大接続レート（リスナー単位）
+- 最大メッセージパブリッシュレート（クライアント単位）
+- 最大メッセージパブリッシュトラフィック（クライアント単位）
 
-Configuring rate limiting ensures the stability of the system and network when message data overload or excessive client requests occur.
+レート制限を設定することで、メッセージデータの過負荷や過剰なクライアント要求発生時のシステムおよびネットワークの安定性を確保します。
 
-For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit/rate-limit.md).
+レート制限の詳細設定は[レート制限](../rate-limit/rate-limit.md)を参照してください。
 
-For more details on listener configuration, refer to [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+リスナー設定の詳細は[EMQX Enterprise設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)をご覧ください。
 
-### Manage Listeners
+### リスナーの管理
 
-After adding a listener, you can see it in the list. Click on the listener's name to enter the editing page, where you can modify or delete the listener configuration. Note that the listener name, type, and listener address cannot be modified in the settings.
+リスナー追加後は一覧に表示されます。リスナー名をクリックすると編集ページに入り、設定の変更や削除が可能です。なお、リスナー名、タイプ、リスナーアドレスは設定画面で変更できません。
 
-Click the **Delete** button on the editing page to remove the listener. When deleting a listener, you will need to enter the listener's name to confirm the deletion. You can also toggle the enable switch to enable or disable the listener. The list also shows the number of connections for each listener.
+編集ページの**削除**ボタンをクリックするとリスナーを削除できます。削除時は確認のためリスナー名の入力が必要です。また、有効スイッチでリスナーの有効・無効を切り替えられます。リストには各リスナーの接続数も表示されます。
 
-::: tip Warning
+::: tip 注意
 
-Modifying and deleting listeners is a risky operation and should be done carefully. If a listener is updated or deleted, client connections on that listener will be disconnected.
-
-:::
-
-## Logging
-
-The **Logging** page includes tabs for **Console Log**, **File Log**, **Log Throttling**, and **Audit Log**.
-
-EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log handler, set the log level, log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
-
-In the **Log Throttling** tab page, you can configure the time window for log throttling. For more information on log throttling, refer to [Log Rate Limiting](../observability/log.md#log-throttling).
-
-In the **Audit Log** page, you can enable or disable the audit log feature in the EMQX and configure it. For detailed configuration instructions, refer to [Audit Log](./audit-log.md).
-
-## Monitoring
-
-::: tip Note
-
-The Monitoring feature is only available in the EMQX Enterprise edition.
+リスナーの変更および削除はリスクを伴う操作です。リスナーを更新または削除すると、そのリスナー上のクライアント接続は切断されますので注意してください。
 
 :::
 
-The **Monitoring** page contains two tabs:
+## ロギング
 
-- **System**: Depending on the user's needs, the settings for the [Alarms](./diagnose.md#alarms) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
-- **Integration**: Provides configuration for integration with third-party monitoring platforms.
+**ロギング**ページには、**コンソールログ**、**ファイルログ**、**ログスロットリング**、**監査ログ**のタブがあります。
 
-### System
+EMQXはコンソールログとファイルログの2種類のログ出力をサポートしており、用途に応じていずれかまたは両方を選択可能です。対応する設定ページでログハンドラの有効・無効、ログレベル、ログフォーマットタイプを設定でき、ファイルログではログファイルのパスやログ名も指定できます。ログの詳細設定は[ダッシュボードによるログ設定](../observability/log.md#configure-logging-via-dashboard)を参照してください。
 
-If the default value of the current alarm trigger threshold or alarm monitoring check interval does not meet the actual needs, you can adjust the settings on this page. The current settings are divided into two modules: **Erlang VM** and **Operating System**, the default values and descriptions of each configuration item can be found in [Alarms](../observability/alarms.md).
+**ログスロットリング**タブページでは、ログスロットリングの時間ウィンドウを設定できます。ログスロットリングの詳細は[ログレート制限](../observability/log.md#log-throttling)を参照してください。
 
-<img src="./assets/monitoring-system.png" alt="image" style="zoom:67%;" />
+**監査ログ**ページでは、EMQXの監査ログ機能の有効・無効設定および構成が可能です。詳細設定は[監査ログ](./audit-log.md)をご覧ください。
 
-### Integration
+## モニタリング
 
-This page mainly provides integration configurations with third-party monitoring platforms. Currently, EMQX supports integration with **Prometheus**, **OpenTelemetry**, and **Datadog**.
+::: tip 注意
 
-When using the `Prometheus` third-party monitoring service, you can quickly enable the configuration on this page and set parameters such as the push data address and data reporting interval. You can directly use the API `/prometheus/stats` provided by EMQX to get monitoring data. When using this API, no authentication information is required. Please refer to [Prometheus](../observability/prometheus.md) for specific API.
+モニタリング機能はEMQX Enterpriseエディションのみ利用可能です。
 
-In most cases, you do not need to use `Pushgateway` to monitor the metrics data of EMQX. And you can choose to configure a `Pushgateway` service address to push the monitoring data to `Pushgateway`, and then `Pushgateway` pushes the data to the `Prometheus` service. Click to view [When to use Pushgateway](https://prometheus.io/docs/practices/pushing/).
+:::
 
-On the bottom of the page, click the **Help** button, select the default or use the `Pushgateway` method, configure the address or API information of the relevant service according to the provided usage steps, and then quickly generate the corresponding `Prometheus` configuration file. Finally, use this configuration file to start the `Prometheus` service.
+**モニタリング**ページは以下の2つのタブを含みます：
 
-Users can customize and modify the monitoring data in `Grafana` according to their needs. After starting the `Prometheus` service, you can click the `Download Grafana Template` button at the end of the help page to download the configuration file of the default dashboard provided by us. Import the file into `Grafana`, and we can view the monitoring data of EMQX through the visualization panel. Users can also download the template from the [Grafana official website](https://grafana.com/grafana/dashboards/17446-emqx/).
+- **システム**：ユーザーのニーズに応じて、[アラーム](./diagnose.md#alarms)機能のアラーム閾値やチェック間隔などの設定を調整可能です。
+- **統合**：サードパーティのモニタリングプラットフォームとの統合設定を提供します。
+
+### システム
+
+現在のアラームトリガー閾値や監視チェック間隔のデフォルト値が実際のニーズに合わない場合は、このページで設定を調整できます。設定は**Erlang VM**と**オペレーティングシステム**の2つのモジュールに分かれており、各設定項目のデフォルト値や説明は[アラーム](../observability/alarms.md)に記載されています。
+
+<img src="./assets/monitoring-system.png" alt="システムモニタリング画面" style="zoom:67%;" />
+
+### 統合
+
+このページは主にサードパーティのモニタリングプラットフォームとの統合設定を提供します。現在、EMQXは**Prometheus**、**OpenTelemetry**、**Datadog**との統合をサポートしています。
+
+`Prometheus`を利用する場合、このページで設定を素早く有効化でき、プッシュデータのアドレスやデータ報告間隔などを設定可能です。EMQXが提供するAPI `/prometheus/stats`を使って監視データを取得できます。このAPI利用時に認証情報は不要です。詳細は[Prometheus](../observability/prometheus.md)を参照してください。
+
+通常、EMQXのメトリクスデータ監視に`Pushgateway`を使う必要はありませんが、`Pushgateway`サービスアドレスを設定して監視データを`Pushgateway`にプッシュし、その後`Pushgateway`が`Prometheus`サービスにデータを送信する構成も可能です。詳細は[Pushgatewayの利用タイミング](https://prometheus.io/docs/practices/pushing/)をご覧ください。
+
+ページ下部の**ヘルプ**ボタンをクリックし、デフォルトまたは`Pushgateway`方式を選択し、案内に従って関連サービスのアドレスやAPI情報を設定すると、対応する`Prometheus`設定ファイルを素早く生成できます。生成した設定ファイルを使って`Prometheus`サービスを起動してください。
+
+ユーザーは`Grafana`で監視データをカスタマイズ・修正可能です。`Prometheus`サービス起動後、ヘルプページの最後にある`Download Grafana Template`ボタンをクリックして、当社が提供するデフォルトダッシュボードの設定ファイルをダウンロードできます。ファイルを`Grafana`にインポートすると、可視化パネルでEMQXの監視データを閲覧できます。テンプレートは[Grafana公式サイト](https://grafana.com/grafana/dashboards/17446-emqx/)からも入手可能です。
 
 ![image](./assets/emqx-grafana.jpg)
 
-For detailed configuration of OpenTelemetry and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md) and [Integrate with Datadog](../observability/datadog.md).
+OpenTelemetryおよびDatadog統合の詳細設定は[OpenTelemetryとの統合](../observability/opentelemetry/opentelemetry.md)および[Datadogとの統合](../observability/datadog.md)を参照してください。
 
-## Cluster Linking
+## クラスターリンク
 
-The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../cluster-linking/introduction.md).
+クラスターリンク機能は複数の独立したEMQXクラスターを接続し、地理的に分散したクラスター間でクライアント同士の通信を可能にします。ユーザーはこのページでクラスターリンクの作成および設定が可能です。作成と設定の詳細は[EMQXクラスターリンク](../cluster-linking/introduction.md)を参照してください。

@@ -1,20 +1,20 @@
 ---
-description: This chapter gives you a tour of how to download and install EMQX and how to test the connecting and messaging services with our built-in WebSocket tool.
+description: この章では、EMQXのダウンロードとインストール方法、および組み込みのWebSocketツールを使った接続とメッセージングサービスのテスト方法をご案内します。
 ---
 
-# Get Started with EMQX
+# EMQXを始める
 
-EMQX is the world’s most scalable and reliable MQTT messaging platform that can help you to connect, move, and process your business data reliably in real-time. With this all-in-one MQTT platform, you can easily build your Internet of Things (IoT) applications with significant business impacts.
+EMQXは、世界で最もスケーラブルかつ信頼性の高いMQTTメッセージングプラットフォームであり、ビジネスデータをリアルタイムで確実に接続、移動、処理するのに役立ちます。このオールインワンのMQTTプラットフォームを使えば、IoTアプリケーションを簡単に構築し、ビジネスに大きな影響を与えることができます。
 
-This chapter gives you a tour of how to download and install EMQX and how to test the connecting and messaging services with our built-in WebSocket tool.
+本章では、EMQXのダウンロードとインストール方法、および組み込みのWebSocketツールを使った接続とメッセージングサービスのテスト方法をご案内します。
 
 ::: tip
-Besides the deployment methods introduced in this quickstart guide, you are also welcome to try our EMQX Cloud, a fully managed MQTT service for IoT. You only need to [register for an account](https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2Fnew) before you can start your MQTT services and connect your IoT devices to any cloud with zero need for infrastructure maintenance.
+本クイックスタートガイドで紹介しているデプロイ方法のほかに、IoT向けの完全マネージドMQTTサービスであるEMQX Cloudもぜひお試しください。インフラ管理不要で、[アカウント登録](https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2Fnew)を行うだけで、すぐにMQTTサービスを開始し、IoTデバイスを任意のクラウドに接続できます。
 :::
 
-## Install EMQX
+## EMQXのインストール
 
-EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator), or installed on a computer or virtual machine (VM) via a download package. If you choose to install EMQX with a download package, the following operating systems are currently supported:
+EMQXは、[Docker](../deploy/install-docker.md)での実行、[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)によるインストール、またはコンピュータや仮想マシン（VM）にダウンロードパッケージでインストールすることが可能です。ダウンロードパッケージによるインストールを選択した場合、現在以下のOSがサポートされています。
 
 - RedHat
 - CentOS
@@ -25,136 +25,132 @@ EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX
 - macOS
 - Linux
 
-For other platforms not listed above, you can [contact EMQ](https://www.emqx.com/en/contact) for support.
+上記以外のプラットフォームについては、[EMQ](https://www.emqx.com/en/contact)までお問い合わせください。
 
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
-In addition, you can also deploy EMQX with one click through [EMQX Terraform](https://www.emqx.com/en/emqx-terraform) on the cloud, for example, [Alibaba Cloud](https://github.com/emqx/tf-alicloud) and [AWS](https://github.com/emqx/tf-aws).
+また、[EMQX Terraform](https://www.emqx.com/en/emqx-terraform)を使ってクラウド上にワンクリックでデプロイすることも可能です。例として、[Alibaba Cloud](https://github.com/emqx/tf-alicloud)や[AWS](https://github.com/emqx/tf-aws)があります。
 
 <!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
 
-### Install EMQX Using Docker
+### Dockerを使ったEMQXのインストール
 
-Container deployment is the quickest way to start exploring EMQX. This quick start guide shows you how to install and run EMQX through Docker. 
+コンテナによるデプロイは、EMQXを素早く試す最も簡単な方法です。本クイックスタートガイドでは、Dockerを使ったEMQXのインストールと起動方法を説明します。
 
-1. To download and start the latest version of EMQX, enter the command below.
+1. 最新版のEMQXをダウンロードして起動するには、以下のコマンドを入力してください。
 
-   Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
+   事前に[Docker](https://www.docker.com/)がインストールされ、起動していることを確認してください。
 
    ```bash
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx-enterprise:latest
    ```
 
+2. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
 
-2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
-
-   Default user name and password:
+   デフォルトのユーザー名とパスワード：
 
    `admin`
 
    `public`
 
-### Install EMQX Using Installation Package
+### インストールパッケージを使ったEMQXのインストール
 
-You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecure (Apple Silicon) as an example to illustrate the installation steps.
+コンピュータやVMにインストールパッケージを使ってEMQXをインストールし、設定の調整やパフォーマンスチューニングを行うことも可能です。以下の手順はmacOS 15（Sequoia）およびarm64アーキテクチャ（Apple Silicon）を例に説明しています。
 
 ::: tip
 
-Considering all the runtime dependencies, it is recommended to use installation packages for testing and hot upgrades, and **NOT** recommended in a production environment.
+すべてのランタイム依存関係を考慮すると、テストやホットアップグレードにはインストールパッケージの使用を推奨しますが、本番環境での使用は**推奨しません**。
 
 :::
 
-1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
+1. [公式ダウンロードサイトのmacOSタブ](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS)にアクセスします。
 
-2. Select the latest version `@EE_VERSION@` and select `macOS 15 arm64 / zip` from **Package Type**.
+2. 最新バージョン `@EE_VERSION@` を選択し、**Package Type**から `macOS 15 arm64 / zip` を選びます。
 
-3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
+3. 下のリンクをクリックしてパッケージをダウンロードし、インストールします。ページ内のコマンド説明も参照できます。
 
-5. To run EMQX, enter:
+5. EMQXを起動するには、以下を実行します。
 
    ```bash
    ./emqx/bin/emqx foreground
    ```
-   This will start EMQX in an interactive shell. Closing the shell will stop EMQX.
-   Alternatively (but not recommended), you can also start EMQX in the background with the following command:
+   これによりインタラクティブシェルでEMQXが起動します。シェルを閉じるとEMQXも停止します。  
+   なお（推奨しませんが）、以下のコマンドでバックグラウンド起動も可能です。
 
    ```bash
    ./emqx/bin/emqx start
    ```
 
-6. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
+6. Webブラウザを起動し、アドレスバーに `http://localhost:18083/` （`localhost`はIPアドレスに置き換え可能）を入力して[EMQXダッシュボード](../dashboard/introduction.md)にアクセスします。ここからクライアントの接続や稼働状況の確認が可能です。
 
-   The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
+   デフォルトのユーザー名とパスワードは `admin` と `public` です。ログイン後にパスワード変更を求められます。
 
-7. To stop EMQX, enter:
+7. EMQXを停止するには、以下を実行します。
 
    ```bash
    ./emqx/bin/emqx stop
    ```
 
-To uninstall EMQX after your testing, simply delete the EMQX folder.
+テスト終了後にEMQXをアンインストールするには、EMQXフォルダを削除するだけです。
 
+## MQTTXで接続を検証する
 
-## Use MQTTX to Verify Connection
+EMQXの起動に成功したら、MQTTXを使って接続とメッセージサービスのテストを続けて行えます。
 
-Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTTX.
+[MQTTX](https://mqttx.app)は、macOS、Linux、Windowsで動作する洗練されたクロスプラットフォームのMQTT 5.0デスクトップクライアントです。チャットスタイルのUIで複数のクライアント接続を素早く作成・保存でき、MQTT/MQTTS接続やメッセージのサブスクライブ・パブリッシュのテストが可能です。
 
-[MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. Users can quickly create connections and save multiple clients through a chat-style user interface of MQTTX. Users can also test the MQTT/MQTTS connection, and the subscription and the publication of MQTT messages.
+ここでは、アプリのダウンロードやインストール不要で使えるブラウザベースのMQTT 5.0 WebSocketクライアントツールである[MQTTX Web](https://mqttx.app/web)を使った接続検証方法を紹介します。
 
-This section introduces how to verify the connection with [MQTTX Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application.
+::: tip 前提条件
+接続テスト前に以下の情報を準備してください：
 
-::: tip Prerequisites
-The broker address and the port information should be prepared before testing the connection:
-
-- **EMQX address**: The IP address of your server, in general.
-- **Port**: Click **Management** -> **Listeners** from the left navigation menu in the Dashboard to get the port number.
+- **EMQXアドレス**：一般的にはサーバーのIPアドレス
+- **ポート**：ダッシュボードの左メニューから **Management** -> **Listeners** をクリックし、ポート番号を確認
 :::
 
-### Create a Connection
+### 接続の作成
 
-1. Click [MQTTX Web](https://mqttx.app/web-client#/recent_connections) to visit the browser-based MQTTX.
+1. [MQTTX Web](https://mqttx.app/web-client#/recent_connections)にアクセスします。
 
-2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page:
+2. MQTT接続の設定と確立を行います。**+ New Connection** ボタンをクリックして設定画面を開きます：
 
-   - **Name**: Input a connection name, for example, `MQTTX_Test`.
+   - **Name**：接続名を入力します。例：`MQTTX_Test`
 
    - **Host**
 
-     - Select the protocol type via the drop-down list, for example, select `ws://` if the WebSockets protocol is adopted; MQTTX Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTTX desktop client](https://mqttx.app/);
-     - Fill in the EMQX address, for example, **emqx@127.0.0.1**;
+     - プロトコルタイプをドロップダウンリストから選択します。WebSocketプロトコルを使う場合は `ws://` を選択してください。MQTTX WebはWebSocketプロトコルのみサポートしています。SSL/TLS接続をテストする場合は、[MQTTXデスクトップクライアント](https://mqttx.app/)をダウンロードしてください。
+     - EMQXアドレスを入力します。例：`emqx@127.0.0.1`
 
-   - **Port**: for example, `8083` is for the WebSockets protocol;
+   - **Port**：例としてWebSocketプロトコル用の `8083`
 
-     Keep the default setting for the other fields or set it as your business needs. For a detailed explanation of different fields, see [MQTT User Manual - Connect](https://mqttx.app/docs/get-started).
+   他の項目はデフォルトのままか、ビジネス要件に合わせて設定してください。各項目の詳細は[MQTT User Manual - Connect](https://mqttx.app/docs/get-started)を参照してください。
 
+3. 画面右上の **Connect** ボタンをクリックします。
 
-3. Click the **Connect** button at the top right corner of the page.
+4. メッセージのパブリッシュ／受信をテストします。チャットエリア右下の送信アイコンをクリックすると、送信に成功したメッセージがチャットウィンドウに表示されます。
 
-4. Test the publish/receive of messages: Click the send icon in the bottom right corner of the chat area, then the messages successfully sent will appear in the chat window above.
+### トピックのパブリッシュとサブスクライブ
 
-### Publish and Subscribe to Topics
+接続が成功したら、続けて異なるトピックのサブスクライブとメッセージのパブリッシュを行えます。
 
-After the connection is successfully established, you can continue to subscribe to different topics and publish messages.
+1. **+ New Subscription** をクリックします。MQTTX Webは設定に基づき、QoSレベル0でトピック `testtopic/#` をサブスクライブします。この手順を繰り返して異なるトピックをサブスクライブでき、MQTTX Webはトピックごとに色分けして区別します。
 
-1. Click **+ New Subscription**. MQTTX Web has already filled in some fields, according to the setting, you will subscribe to topic `testtopic/#`  with QoS level of 0. You can repeat this step to subscribe to different topics, and MQTTX Web will differentiate topics with colors.
+2. チャットエリア右下の送信アイコンをクリックしてメッセージのパブリッシュ／受信をテストします。送信に成功したメッセージがチャットウィンドウに表示されます。
 
-2. In the right corner of the chat area at the bottom, click the send icon to test the message publishing/receiving. The messages successfully sent will appear in the chat window. 
+<img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web テスト" style="zoom: 25%;" />
 
-<img src="./assets/MQTTXWeb-test.png" alt="MQTT X Web test" style="zoom: 25%;" />
+さらに、一方向／双方向SSL認証のテストやカスタムスクリプトによるテストデータのシミュレーションなどを行いたい場合は、[MQTTX](https://mqttx.app)を使って引き続き検証できます。
 
-If you want to continue the testing, such as one-way/two-way SSL authentication, and simulate test data with customized scripts, you can continue to explore with [MQTTX](https://mqttx.app).
+### ダッシュボードでメトリクスを確認
 
-### View Metrics on Dashboard
-
-On the Cluster Overview page in the EMQX Dashboard, you can check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
+EMQXダッシュボードのクラスター概要ページでは、**Connections**、**Topics**、**Subscriptions**、**Incoming Messages**、**Outgoing messages**、**Dropped Messages**などのメトリクスを確認できます。
 
 ![emqx-dashboard_ee](./assets/emqx-dashboard_ee.png)
 
-## Next Steps
+## 次のステップ
 
-So far, you have completed the installation, startup, and access test of EMQX, you can continue to try out more advanced capabilities of EMQX, such as [authentication and authorization](../access-control/authn/authn.md) and integration with [Rule Engine](../data-integration/rules.md).
+ここまででEMQXのインストール、起動、アクセスのテストが完了しました。次は、[認証と認可](../access-control/authn/authn.md)や[ルールエンジン](../data-integration/rules.md)との連携など、EMQXのより高度な機能を試してみてください。
 
-## Frequently Asked Questions
+## よくある質問
 
-You can visit the [EMQ Q&A Community](https://askemq.com/) to participate in discussions, ask and answer questions about the usage of EMQX and other EMQ-related products, and exchange experiences with other EMQX users in IoT-related technologies. Additionally, feel free to [contact us](https://www.emqx.com/en/contact) at any time for professional technical support.
-
+[EMQ Q&Aコミュニティ](https://askemq.com/)では、EMQXやその他EMQ関連製品の使い方に関する議論、質問・回答、IoT関連技術のユーザー同士の情報交換が行えます。また、専門的な技術サポートが必要な場合は、いつでも[お問い合わせ](https://www.emqx.com/en/contact)ください。

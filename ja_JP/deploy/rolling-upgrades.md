@@ -1,96 +1,96 @@
-# EMQX Enterprise Rolling Upgrade
+# EMQX Enterprise ローリングアップグレード
 
-In a clustered deployment, EMQX nodes can be upgraded one at a time without incurring any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../deploy/cluster/rebalancing.md).
+クラスター構成のデプロイメントにおいて、EMQX ノードはダウンタイムなしで1台ずつアップグレードできます。このプロセスはローリングアップグレードと呼ばれます。クライアントのセッション移行をスムーズに行うために、EMQX Enterprise のクラスターリバランシング機能を使って、アップグレード前にノードからクライアントを退避させることが可能です。クラスターリバランシングの詳細は[こちら](../deploy/cluster/rebalancing.md)をご覧ください。
 
-## Important Licensing Notice for Upgrades to EMQX 5.9 or Later
+## EMQX 5.9以降へのアップグレードに関する重要なライセンス通知
 
-Starting from version 5.9.0, EMQX Enterprise is released under the Business Source License (BSL) 1.1, replacing the previous model that separated Open Source and Enterprise editions.
-
-::: tip
-
-For detailed information about the licensing changes, see the [EMQX Licensing FAQ](https://www.emqx.com/en/content/license-faq).
-
-:::
-
-While the technical steps for upgrading EMQX (like replacing binaries) are similar to previous version upgrades, version 5.9.0 introduces important licensing changes, especially for clustered deployments. If you are upgrading from an Open Source version earlier than 5.9 or upgrading a single-node deployment to clustering deployments, please note the following critical changes:
-
-1. **New Licensing Model**: EMQX 5.9.0+ includes a default EMQX Community License. This default license enables all features but restricts deployment to a single node.
-2. **Clustering Requirement**: Clustering was supported in the previous Open Source edition. Under the new model, clustering is not permitted by default in EMQX 5.9.0+. If you are upgrading a clustered Open Source deployment and wish to retain clustering capabilities, you must [obtain a Commercial License](./license.md#apply-for-a-license).
-3. **License Configuration Requirement**: This Commercial License must be [configured on each node](./license.md#update-and-configure-license-settings) before you start any node with EMQX 5.9.0+ in a cluster during the upgrade process. If the license is missing or misconfigured, the node will not function correctly in the cluster.
+バージョン5.9.0以降、EMQX Enterpriseは従来のオープンソース版とエンタープライズ版を分けるモデルから、Business Source License (BSL) 1.1の下でリリースされています。
 
 ::: tip
 
-If a License configuration is added to `emqx.conf`, any runtime changes made from the Dashboard, HTTP API, or CLI will be lost after the node is restarted. This is because `emqx.conf` and environment variables have the highest priority when loading configurations during startup.
+ライセンス変更の詳細については、[EMQX ライセンスFAQ](https://www.emqx.com/en/content/license-faq)をご参照ください。
 
 :::
 
-## Rolling Upgrade Considerations for EMQX 5.10 or Later
+EMQXのアップグレード手順（バイナリの置き換えなど）は従来のバージョンアップとほぼ同様ですが、バージョン5.9.0では特にクラスター構成に関して重要なライセンス変更が導入されています。5.9より前のオープンソース版からアップグレードする場合や、単一ノード構成からクラスター構成にアップグレードする場合は、以下の重要な変更点にご注意ください。
 
-Starting from EMQX 5.10.0, only the _v2_ routing storage schema is supported. The legacy _v1_ schema, which was the default in versions before 5.4.0, is no longer compatible. As a result, clusters still using the *v1* schema, particularly those that have been incrementally upgraded from earlier versions, cannot perform rolling upgrades to 5.10.0 or later.
+1. **新しいライセンスモデル**：EMQX 5.9.0以降はデフォルトでEMQX Community Licenseが適用されます。このデフォルトライセンスは全機能を有効にしますが、単一ノードでのデプロイに制限されます。
+2. **クラスター機能の制限**：以前のオープンソース版ではクラスターがサポートされていましたが、新モデルではEMQX 5.9.0以降、デフォルトでクラスターは許可されていません。クラスター機能を維持したい場合は、[商用ライセンスを取得](./license.md#apply-for-a-license)する必要があります。
+3. **ライセンス設定の必須化**：アップグレード中にEMQX 5.9.0以降のノードをクラスターで起動する前に、各ノードに対してこの商用ライセンスを[設定](./license.md#update-and-configure-license-settings)する必要があります。ライセンスが設定されていないか誤って設定されている場合、ノードはクラスター内で正常に動作しません。
 
-::: tip Important
+::: tip
 
-If your cluster is still using the *v1* routing schema, a full cluster restart is required to complete the upgrade.
+`emqx.conf`にライセンス設定を追加した場合、ダッシュボード、HTTP API、CLIからのランタイム設定変更はノード再起動後に失われます。これは起動時に`emqx.conf`と環境変数が設定読み込みの最優先となるためです。
 
 :::
 
-### Determine the Current Routing Schema
+## EMQX 5.10以降のローリングアップグレードに関する注意点
 
-Before proceeding, check which routing schema your EMQX cluster uses by running the following command:
+EMQX 5.10.0以降では、_v2_ ルーティングストレージスキーマのみがサポートされます。5.4.0以前のデフォルトだった旧スキーマ_v1_は非互換となりました。そのため、特に段階的にアップグレードされたクラスタで_v1_スキーマを使用している場合、5.10.0以降へのローリングアップグレードはできません。
+
+::: tip 重要
+
+クラスタがまだ_v1_ルーティングスキーマを使用している場合は、アップグレード完了のためにクラスタ全体の再起動が必要です。
+
+:::
+
+### 現在のルーティングスキーマの確認
+
+以下のコマンドでEMQXクラスタが使用しているルーティングスキーマを確認してください。
 ```
 $ emqx eval 'emqx_router:get_schema_vsn()'
 ```
 
-If the output is `v2`, you can proceed with a regular rolling upgrade.
+出力が`v2`であれば、通常のローリングアップグレードが可能です。
 
-If the output is `v1`, you must perform a full cluster restart following the steps below.
+出力が`v1`の場合は、以下の手順でクラスタ全体の再起動を伴うアップグレードを行ってください。
 
-### Upgrade Procedure for _v1_ Routing Schema
+### _v1_ ルーティングスキーマのアップグレード手順
 
-If your cluster uses the *v1* schema, follow these steps to upgrade to EMQX 5.10.0 or later:
+クラスタが_v1_スキーマを使用している場合、EMQX 5.10.0以降へのアップグレードは以下の手順で実施してください。
 
-1. Stop **all** nodes in the cluster.
-2. Remove the `broker.routing.storage_schema` option from any configuration file where it is defined.
-3. Upgrade all nodes to version 5.10.0 or newer.
-4. Start core nodes first.
-5. Start replicant nodes.
+1. クラスタ内の**全ノード**を停止します。
+2. 任意の設定ファイルに定義されている`broker.routing.storage_schema`オプションを削除します。
+3. 全ノードを5.10.0以降のバージョンにアップグレードします。
+4. コアノードを先に起動します。
+5. レプリカントノードを起動します。
 
-## General Procedure for Performing a Rolling Upgrade
+## ローリングアップグレードの一般的な手順
 
-To upgrade each node in the cluster without downtime, follow these steps:
+ダウンタイムなしでクラスタ内の各ノードをアップグレードするには、以下の手順に従ってください。
 
-1. Evacuate clients from the node using cluster rebalancing. (optional)
-2. Stop the old version node.
-3. [Back up](../operations/backup-restore.md) the config files and data directory of the nodes.
-4. Install a new version of EMQX.
-5. Start the new version node.
+1. クラスターリバランシングを使ってノードからクライアントを退避させます（任意）。
+2. 旧バージョンのノードを停止します。
+3. ノードの設定ファイルおよびデータディレクトリを[バックアップ](../operations/backup-restore.md)します。
+4. 新しいバージョンのEMQXをインストールします。
+5. 新しいバージョンのノードを起動します。
 
-:::tip Note
-Do not perform cluster-wide config changes during a rolling upgrade. Configuration changes made from the Dashboard, HTTP API, or CLI are applied to all nodes in the cluster. Making configuration changes during a rolling upgrade may cause nodes to become out of sync.
+:::tip 注意
+ローリングアップグレード中にクラスタ全体の設定変更は行わないでください。ダッシュボード、HTTP API、CLIからの設定変更はクラスタ内全ノードに適用されます。アップグレード中に設定変更を行うとノード間で設定の不整合が発生する恐れがあります。
 :::
 
-## Rolling Upgrade Using RPM and DEB Packages
+## RPMおよびDEBパッケージを使ったローリングアップグレード
 
-When using RPM or DEB packages, you can upgrade EMQX by simply installing the newer version package.
+RPMまたはDEBパッケージを使用している場合は、新しいバージョンのパッケージをインストールするだけでEMQXをアップグレードできます。
 
-## Rolling Upgrade Using Docker
+## Dockerを使ったローリングアップグレード
 
-When using Docker, you can upgrade EMQX by simply pulling the newer version image and restarting the container.
+Dockerを使用している場合は、新しいバージョンのイメージをプルしてコンテナを再起動するだけでEMQXをアップグレードできます。
 
-## Rolling Upgrade from Open Source to Enterprise Edition
+## オープンソース版からEnterprise版へのローリングアップグレード
 
-If you are running an open-source version of EMQX and would like to upgrade to the Enterprise Edition, the process is the same as upgrading to a newer version of the Open Source Edition.
+オープンソース版のEMQXを実行していてEnterprise版にアップグレードする場合、手順はオープンソース版の新バージョンへのアップグレードと同じです。
 
-There is no difference in installation and upgrade between the Open Source and Enterprise Editions of EMQX.
-The only thing special is that you need to manually [configure your License](./license.md) for the Enterprise edition nodes after each upgrade.
-You cannot apply the License key to the whole cluster before all nodes are upgraded.
+EMQXのオープンソース版とEnterprise版のインストールおよびアップグレードに違いはありません。
+唯一の違いは、アップグレード後にEnterprise版ノードに対して手動で[ライセンス設定](./license.md)を行う必要がある点です。
+全ノードのアップグレードが完了する前にクラスタ全体にライセンスキーを適用することはできません。
 
-For example, add the following line to `etc/base.hocon` (`etc/emqx.conf` if upgrade target version is before `e5.8.5`):
+例として、`etc/base.hocon`（アップグレード対象バージョンが`e5.8.5`より前の場合は`etc/emqx.conf`）に以下の行を追加します。
 ```
 license.key = "your license"
 ```
 
-:::tip Note
-If a License configuration is added to `emqx.conf`, any runtime changes made from the Dashboard, HTTP API, or CLI will be lost after the node is restarted.
-This is because `emqx.conf` and environment variables have the highest priority when loading configurations during startup.
+:::tip 注意
+`emqx.conf`にライセンス設定を追加した場合、ダッシュボード、HTTP API、CLIからのランタイム設定変更はノード再起動後に失われます。
+これは起動時に`emqx.conf`と環境変数が設定読み込みの最優先となるためです。
 :::

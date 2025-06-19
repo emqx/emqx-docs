@@ -1,78 +1,78 @@
 # EMQX Dashboard
 
-EMQX provides a built-in Dashboard management console for users to monitor and manage EMQX clusters and configure the required features via web pages. The new Dashboard comes with a fresh new design and provides the easy-to-use MQTT broker management UI. 
+EMQXは、EMQXクラスターの監視および管理を行い、必要な機能をウェブページ経由で設定できる組み込みのDashboard管理コンソールを提供します。新しいDashboardは刷新されたデザインを採用し、使いやすいMQTTブローカー管理UIを提供します。
 
-The new UI / UX design of EMQX Dashboard optimizes the display and content of key data and metrics, enhancing the visual experience while providing more comprehensive, powerful and easy-to-use built-in features, such as authentication and permission management for connection, subscription and publishing, support for data integration transformation using data bridging and with the rules engine, etc. Quick and easy access using the browser provides users with the convenience of using EMQX for more IoT business development.
+EMQX Dashboardの新しいUI/UXデザインは、主要なデータやメトリクスの表示と内容を最適化し、視覚的な体験を向上させるとともに、接続、サブスクライブ、パブリッシュの認証・認可管理、データブリッジやルールエンジンを用いたデータ統合変換のサポートなど、より包括的で強力かつ使いやすい組み込み機能を提供します。ブラウザからの迅速かつ簡単なアクセスにより、ユーザーはより便利にEMQXを利用してIoTビジネスの開発を進められます。
 
 ![image](./assets/dashboard_preview.png)
 
-## Main Features
+## 主な機能
 
-This section introduces various features of EMQX that you can configure and manage through the Dashboard.
+このセクションでは、Dashboardを通じて設定および管理可能なEMQXの各種機能を紹介します。
 
-### [Monitoring](./monitoring.md)
+### [モニタリング](./monitoring.md)
 
-View overall information of the running EMQX cluster, including connection count, subscribed topics, message delivery counts, inbound rates, and outbound rates. It also includes node lists, node information, and various system metric information. Additionally, you can view and manage client connections and subscription data.
+稼働中のEMQXクラスターの全体情報を表示します。接続数、サブスクライブされたトピック、メッセージ配信数、インバウンド／アウトバウンドレートなどを含みます。また、ノード一覧、ノード情報、各種システムメトリクス情報も確認可能です。さらに、クライアント接続やサブスクリプションデータの閲覧・管理も行えます。
 
-### [Access Control](./acloverview.md)
+### [アクセス制御](./acloverview.md)
 
-Add and configure authentication and authorization mechanisms in EMQX visually.
+EMQXの認証および認可機構を視覚的に追加・設定できます。
 
-### [Integration](./bridgeoverview.md)
+### [統合](./bridgeoverview.md)
 
-Utilize a powerful SQL-based rule engine and data integration, or the Flow editor's visual capabilities, for low-code data processing and integration. This helps in real-time extraction, filtering, enrichment, transformation, storage, and validation of MQTT data.
+強力なSQLベースのルールエンジンやデータ統合機能、またはFlowエディターのビジュアル機能を活用し、ローコードでのデータ処理と統合を実現します。これにより、MQTTデータのリアルタイム抽出、フィルタリング、強化、変換、保存、検証が可能です。
 
-### Management
+### 管理
 
-#### Cluster Settings
+#### クラスター設定
 
-Supports online modification and update of MQTT, log, listeners, and other configuration items, which take effect immediately after successful updates.
+MQTT、ログ、リスナーなどの設定項目をオンラインで変更・更新でき、更新成功後は即時反映されます。
 
-#### Advanced MQTT
+#### 高度なMQTT設定
 
-Manage and configure topic rewriting, automatic subscription, delayed publishing, and file transfer functionalities.
+トピック書き換え、自動サブスクライブ、遅延パブリッシュ、ファイル転送機能の管理と設定が可能です。
 
-#### Extensions
+#### 拡張機能
 
-Custom plugin integration to extend connection protocols through built-in gateway management and configuration. Also, use Hooks to modify or extend system functionality by intercepting function calls, message passing, and event passing between modules.
+カスタムプラグインの統合により、組み込みのゲートウェイ管理・設定を通じて接続プロトコルを拡張できます。また、Hooksを利用して関数呼び出しやメッセージ、モジュール間のイベント伝達をインターセプトし、システム機能を修正・拡張できます。
 
-### Problem Analysis and Diagnostics
+### 問題分析と診断
 
-In addition to debugging through online MQTT over WebSocket client connections and topic metrics, support is also available for diagnostics and issue discovery using features like slow subscriptions and log trace.
+オンラインのMQTT over WebSocketクライアント接続やトピックメトリクスによるデバッグに加え、スロウサブスクリプションやログトレースなどの機能を用いた診断や問題発見もサポートしています。
 
-### System
+### システム
 
-Manage and configure user accounts, audit logs, API keys, license settings, and single sign-on functionalities.
+ユーザーアカウント、監査ログ、APIキー、ライセンス設定、シングルサインオン機能の管理と設定が可能です。
 
-## Launch Dashboard
+## Dashboardの起動
 
-EMQX Dashboard is a web application that listens to port `18083` by default. After installing EMQX successfully, you can access and use the EMQX Dashboard by opening <http://localhost:18083/> (replace localhost with the actual IP address if deployed on a non-local machine) through your browser.
+EMQX Dashboardはウェブアプリケーションで、デフォルトでポート`18083`をリッスンします。EMQXを正常にインストール後、ブラウザで <http://localhost:18083/> （非ローカル環境の場合はlocalhostを実際のIPアドレスに置き換えてください）にアクセスすることでDashboardを利用できます。
 
 ::: tip
-EMQX can still be used normally without the Dashboard enabled. The Dashboard just provides the option for users to use it visually.
+Dashboardを有効にしなくてもEMQXは通常通り利用可能です。Dashboardはユーザーが視覚的に操作するためのオプション機能です。
 :::
 
-### First Login
+### 初回ログイン
 
-For users who have installed EMQX for the first time, you can use the default username `admin` and default password `public` to log in web page after opening the Dashboard in your browser.
+EMQXを初めてインストールしたユーザーは、Dashboardをブラウザで開いた後、デフォルトのユーザー名`admin`とパスワード`public`でログインできます。
 
-After logging in for the first time, the system will automatically detect that you are logging in with the default username and password. It will force you to change the default password, which is good for the security of accessing the Dashboard. Note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
+初回ログイン時、システムはデフォルトのユーザー名とパスワードでのログインを検出し、セキュリティ確保のためパスワードの変更を強制します。変更後のパスワードは元のパスワードと同一にできず、`public`の再利用は推奨されません。
 
-### Reset Password
+### パスワードのリセット
 
-You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).
+Dashboardのログインパスワードは`admins`コマンドでリセット可能です。詳細は[CLI - admins](../admin/cli.md#admins)をご覧ください。
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>
 ```
 
-### Password Expiration
+### パスワードの有効期限
 
-If the duration of your current Dashboard login password exceeds the configured password expiration period (`password_expired_time`), you will be prompted to update your password upon login. For details about the `password_expired_time` setting, refer to the [Dashboard Configuration](../configuration/dashboard.md).
+現在のDashboardログインパスワードの使用期間が設定された有効期限（`password_expired_time`）を超えると、ログイン時にパスワード更新を促されます。`password_expired_time`設定の詳細は[Dashboard設定](../configuration/dashboard.md)を参照してください。
 
-Users with the "Administrator" role can also configure the password expiration time using the [REST API](../admin/api.md). 
+「管理者」ロールのユーザーは[REST API](../admin/api.md)を使ってパスワード有効期限を設定することも可能です。
 
-**Example**:
+**例**:
 
 ```bash
 curl -X 'PUT' \
@@ -82,17 +82,16 @@ curl -X 'PUT' \
   -d '{"password_expired_time": "1d"}'
 ```
 
-In this example, the password expiration time is set to 1 day.
+この例では、パスワード有効期限を1日に設定しています。
 
-### Account Lockout and Unlock
+### アカウントロックと解除
 
-To enhance security, the EMQX Dashboard implements an "Account Lockout and Unlock" mechanism. When a user enters the wrong password 5 times within a 5-minute window, their account will be locked for 10 minutes.
+セキュリティ強化のため、EMQX Dashboardは「アカウントロックと解除」機能を実装しています。ユーザーが5分間に5回パスワードを誤入力すると、そのアカウントは10分間ロックされます。
 
-Users with the "Administrator" role can manually unlock the account via the CLI by resetting the user's password. After 10 minutes, the account will automatically be unlocked, and the user will be able to log in again normally.
+「管理者」ロールのユーザーはCLIからユーザーのパスワードをリセットすることで手動でアカウントを解除できます。10分経過後は自動的にロックが解除され、通常通りログイン可能になります。
 
-Administrators can also configure the lockout duration and the number of failed attempts required for lockout through the backend settings. For details of the settings, refer to the [Dashboard Configuration](../configuration/dashboard.md).
+管理者はバックエンド設定を通じてロック時間やロック発動までの失敗回数も設定可能です。詳細は[Dashboard設定](../configuration/dashboard.md)をご覧ください。
 
-## Configure Dashboard
+## Dashboardの設定
 
-Dashboard listens to the HTTP by default, and the default port number is 18083. Users can enable HTTPS or change the listener port. For more information on how to configure and modify the Dashboard settings,  refer to the [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-
+DashboardはデフォルトでHTTPをリッスンし、ポート番号は18083です。ユーザーはHTTPSを有効化したり、リスナーポートを変更したりできます。Dashboard設定の詳細な変更方法については、[EMQX Enterprise設定マニュアル](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)を参照してください。

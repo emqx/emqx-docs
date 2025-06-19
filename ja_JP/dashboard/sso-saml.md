@@ -1,72 +1,66 @@
-# Configure SAML-Based SSO
+# SAMLベースのSSOの設定
 
-This page explains how to configure and use Single Sign-On (SSO) based on the Security Assertion Markup Language (SAML) 2.0 standard protocol.
+このページでは、Security Assertion Markup Language（SAML）2.0標準プロトコルに基づくシングルサインオン（SSO）の設定および利用方法について説明します。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
+[シングルサインオン（SSO）](./sso.md)の基本概念に慣れていることを推奨します。
 
 :::
 
-## Supported SAML Services
+## 対応しているSAMLサービス
 
-The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based SSO, such as:
+EMQXダッシュボードは、SAML 2.0プロトコルをサポートするアイデンティティサービスと連携して、SAMLベースのSSOを実現できます。対応例は以下の通りです。
 
 - [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
-Other identity providers are in the process of integration and will be supported in future versions.
+その他のアイデンティティプロバイダーについても統合を進めており、今後のバージョンでサポート予定です。
 
-## Configure SSO by Integrating with Okta 
+## Oktaとの連携によるSSO設定
 
-This section guides you on how to use Okta as an Identity Provider (IdP) and configure SSO. You need to complete configurations on both the Okta and EMQX Dashboard sides.
+このセクションでは、Oktaをアイデンティティプロバイダー（IdP）として使用し、SSOを設定する手順を説明します。Okta側とEMQXダッシュボード側の両方で設定を完了する必要があります。
 
-### Step 1: Enable Okta in EMQX Dashboard
+### ステップ1：EMQXダッシュボードでOktaを有効化
 
-1. Go to **System** -> **SSO** in the Dashboard.
-2. Click the **Enable** button on the **SAML 2.0** card.
-3. On the configuration page, enter the following information:
-   - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
-   - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
-4. Click **Update** to finish the configuration.
+1. ダッシュボードの **System** -> **SSO** に移動します。  
+2. **SAML 2.0** カードの **Enable** ボタンをクリックします。  
+3. 設定ページで以下の情報を入力します。  
+   - **Dashboard Address**：ユーザーが実際にアクセスするダッシュボードのアドレスを指定します。特定のパスは含めず、例えば `http://localhost:18083` のように入力してください。このアドレスは自動的に連結され、IdP側設定用の **SSO Address** と **Metadata Address** が生成されます。  
+   - **SAML Metadata URL**：一旦空欄のままにしておき、ステップ2の設定完了後に入力します。  
+4. **Update** をクリックして設定を完了します。
 
-### Step 2: Add a SAML 2.0 Application in Okta's Application Catalog
+### ステップ2：OktaのアプリケーションカタログにSAML 2.0アプリケーションを追加
 
-1. Log in to Okta as an administrator and go to the **Okta Admin Console**.
+1. 管理者としてOktaにログインし、**Okta Admin Console** にアクセスします。  
+2. **Applications -> Applications** ページに移動し、**Create App integration** ボタンをクリックします。  
+3. ポップアップでサインイン方法として `SAML 2.0` を選択し、**Next** をクリックします。  
+4. **General Settings** タブでアプリケーション名を入力します。例：`EMQX Dashboard`。**Next** をクリックします。  
+5. **Configure SAML** タブで、ステップ1のダッシュボードで提供された情報を設定します。  
+   - **Single sign-on URL**：ダッシュボードで表示された **SSO Address** を入力します。例：`http://localhost:18083/api/v5/sso/saml/acs`  
+   - **Audience URI (SP Entity ID)**：ダッシュボードで表示された **Metadata Address** を入力します。例：`http://localhost:18083/api/v5/sso/saml/metadata`  
+   その他の項目は任意で、必要に応じて設定してください。  
+6. 設定内容を確認し、**Next** をクリックします。  
+7. **Feedback** タブで **I'm an Okta customer adding an internal app** を選択し、必要に応じて他の情報を入力してから **Finish** をクリックし、アプリケーション作成を完了します。
 
-2. Go to the **Applications -> Applications** page, click the **Create App integration** button, and select `SAML 2.0` as the sign-in method in the pop-up dialog, then click **Next**.
+<img src="./assets/okta_config.png" alt="Oktaの設定画面" style="zoom:67%;" />
 
-3. On the **General Settings** tab, enter your application name, for example, `EMQX Dashboard`. Click **Next**.
+### ステップ3：Oktaでの設定完了とユーザー・グループの割り当て
 
-4. On the **Configure SAML** tab, configure the information provided in the Dashboard in Step 1:
+1. Oktaの **Sign On** タブに移動し、**Metadata URL** をコピーします。  
+2. ダッシュボードのステップ1での **SAML Metadata URL** にコピーしたURLを貼り付け、**Update** をクリックします。  
+3. Oktaの **Assignments** タブで、EMQXダッシュボードアプリケーションに対してユーザーおよびグループを割り当てます。ここで割り当てられたユーザーのみがこのアプリケーションにログイン可能です。
 
-   - **Single sign-on URL**: Enter the **SSO Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/acs`.
-   - **Audience URI (SP Entity ID)**: Enter the **Metadata Address** provided in Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/metadata`.
+## ログインとユーザー管理
 
-   Other information is optional and can be configured based on your actual requirements.
+SAMLシングルサインオンを有効化すると、EMQXダッシュボードのログインページにSSOオプションが表示されます。**SAML** ボタンをクリックすると、IdPのログインページに遷移し、割り当てられたユーザー資格情報でログインできます。
 
-5. Review the settings and click **Next**.
+<img src="./assets/sso_saml.png" alt="SAMLログイン画面" style="zoom:67%;" />
 
-6. On the **Feedback** tab, select **I'm an Okta customer adding an internal app**, fill in other information as needed, and click **Finish** to complete the application creation.
+<img src="./assets/okta_login.png" alt="Oktaログイン画面" style="zoom:67%;" />
 
-<img src="./assets/okta_config.png" alt="okta_config" style="zoom:67%;" />
+SAML認証に成功すると、EMQXは自動的にダッシュボードユーザーを追加します。追加されたユーザーは[ユーザー管理](./system.md#users)で、役割や権限の割り当てなどが可能です。
 
-### Step 3: Complete Configuration and Assign Users and Groups in Okta
+## ログアウト
 
-1. In Okta, go to the **Sign On** tab and copy the **Metadata URL**.
-2. In the Dashboard, paste the copied **Metadata URL** into the **SAML Metadata URL** in Step 1 and click **Update**.
-3. In the **Okta > Assignments** tab, you can now assign users and groups to the EMQX Dashboard application. Only users assigned here can log in to this application.
-
-## Login and User Management
-
-After enabling SAML Single Sign-On, the EMQX Dashboard will display the SSO option on the login page. Click the **SAML** button to go to the IdP preset login page, where you can enter the credentials assigned to the user for login.
-
-<img src="./assets/sso_saml.png" alt="sso_saml" style="zoom:67%;" />
-
-<img src="./assets/okta_login.png" alt="okta_login" style="zoom:67%;" />
-
-After successful SAML authentication, EMQX will automatically add a Dashboard user, which you can manage in [Users](./system.md#users), such as assigning roles and permissions.
-
-## Logout
-
-Users can click their username in the top navigation bar of the Dashboard and then click the **Logout** button in the dropdown menu to log out. Please note that this only logs you out of the Dashboard, and SAML does not currently support Single Sign-Out.
+ユーザーはダッシュボードの上部ナビゲーションバーにあるユーザー名をクリックし、ドロップダウンメニューの **Logout** ボタンを押してログアウトできます。ただし、これはダッシュボードからのログアウトのみであり、SAMLは現在シングルサインアウトをサポートしていませんのでご注意ください。

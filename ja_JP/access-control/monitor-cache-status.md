@@ -1,19 +1,19 @@
-To view cache metrics and monitor usage in real-time:
+キャッシュメトリクスを表示し、リアルタイムで使用状況を監視するには：
 
-1. Click the arrow next to **External Resource Cache Settings** and select **External Resource Cache Status**. A side panel will appear showing cache metrics.
-2. Use the drop-down to view metrics per node or across the cluster.
+1. **External Resource Cache Settings** の横にある矢印をクリックし、**External Resource Cache Status** を選択します。サイドパネルが表示され、キャッシュメトリクスが確認できます。  
+2. ドロップダウンメニューを使って、ノード単位またはクラスター全体のメトリクスを表示できます。
 
-The metrics include the following:
+メトリクスには以下が含まれます：
 
-- **Memory Usage**: Total memory currently used by the cache.
-- **Cache Entries**: Total number of stored cache results.
-- **Cache Hits**: Number of times EMQX found a valid result in the cache, avoiding a call to the external backend.
-  - Metrics shown: Current rate, 5-minute average, Maximum rate
-- **Cache Misses**: Number of times EMQX looked for a result in the cache but didn’t find one, resulting in a backend query.
-  - Metrics shown: Current rate, 5-minute average, Maximum rate
-- **Cache Inserts**: Number of new results added to the cache after a miss.
-  - Metrics shown: Current rate, 5-minute average, Maximum rate
+- **Memory Usage**：キャッシュが現在使用している合計メモリ量。  
+- **Cache Entries**：保存されているキャッシュ結果の総数。  
+- **Cache Hits**：EMQXがキャッシュ内で有効な結果を見つけ、外部バックエンドへの呼び出しを回避した回数。  
+  - 表示されるメトリクス：現在のレート、5分間平均、最大レート  
+- **Cache Misses**：EMQXがキャッシュ内で結果を見つけられず、バックエンドクエリが発生した回数。  
+  - 表示されるメトリクス：現在のレート、5分間平均、最大レート  
+- **Cache Inserts**：ミス後にキャッシュに新しい結果が追加された回数。  
+  - 表示されるメトリクス：現在のレート、5分間平均、最大レート  
 
-At the bottom of the panel, a node list provides an overview of **Memory Usage**, **Cache Entries**, and **Cache Hits** for each node in the cluster.
+パネル下部にはノードリストがあり、クラスター内の各ノードごとの **Memory Usage**、**Cache Entries**、**Cache Hits** の概要を確認できます。
 
-You can refresh or reset the statistics using the buttons in the top-right corner of the panel.
+パネル右上のボタンで統計情報の更新やリセットが可能です。

@@ -1,90 +1,90 @@
-# Integrate with Datadog
+# Datadogとの統合
 
-[Datadog](https://www.datadoghq.com/) is a cloud-based observability and security platform that offers automated infrastructure monitoring, application performance monitoring, log management, and real-user monitoring. It unifies these capabilities into a real-time application solution, enabling developers to easily monitor, analyze, and optimize performance and reliability.
+[Datadog](https://www.datadoghq.com/) は、クラウドベースのオブザーバビリティおよびセキュリティプラットフォームであり、自動化されたインフラストラクチャ監視、アプリケーションパフォーマンス監視、ログ管理、リアルユーザーモニタリングを提供します。これらの機能をリアルタイムのアプリケーションソリューションとして統合し、開発者がパフォーマンスと信頼性を簡単に監視、分析、最適化できるようにします。
 
-EMQX provides an out-of-the-box [Datadog integration](https://docs.datadoghq.com/integrations/emqx/) to help users better understand the running status of EMQX, and facilitate monitoring and troubleshooting system performance issues. Thus, users can build more efficient, reliable, and real-time data transmission IoT applications.
+EMQXは、EMQXの稼働状況をよりよく理解し、システムパフォーマンスの監視やトラブルシューティングを支援するための、[Datadog統合](https://docs.datadoghq.com/integrations/emqx/)を標準で提供しています。これにより、ユーザーはより効率的で信頼性が高くリアルタイムなデータ伝送が可能なIoTアプリケーションを構築できます。
 
-## How Datadog Integration Works
+## Datadog統合の仕組み
 
-The integration between EMQX and Datadog is not a new feature. It makes full use of the existing features of EMQX. The working principle is as follows:
+EMQXとDatadogの統合は新機能ではなく、EMQXの既存機能をフル活用しています。動作原理は以下の通りです。
 
-1. Install Datadog Agent on the EMQX cluster side and add [Datadog - EMQX integration](https://docs.datadoghq.com/integrations/emqx/), an out-of-the-box extension plug-in provided by Datadog for EMQX.
+1. EMQXクラスター側にDatadog Agentをインストールし、DatadogがEMQX向けに提供する標準プラグインである[Datadog - EMQX統合](https://docs.datadoghq.com/integrations/emqx/)を追加します。
 
-2. By modifying the preset configuration of the integration, allow Datadog Agent to periodically pull indicator data from EMQX's Prometheus pull REST API. The indicator data is processed by the Datadog Agent and uploaded to the Datadog platform.
+2. 統合のプリセット設定を変更し、Datadog AgentがEMQXのPrometheusプル型REST APIから定期的に指標データを取得できるようにします。取得した指標データはDatadog Agentで処理され、Datadogプラットフォームにアップロードされます。
 
-3. In the Datadog cloud platform, you can view various indicator data through the preset Dashboard charts of the integration.
+3. Datadogクラウドプラットフォーム上で、統合のプリセットダッシュボードチャートを通じて各種指標データを確認できます。
 
-Next, we will follow the above steps to set up.
+以下では、上記の手順に従ってセットアップを行います。
 
-## Install the Datadog Agent
+## Datadog Agentのインストール
 
-[Datadog Agent](https://docs.datadoghq.com/getting_started/agent/) collects EMQX metrics and sends them to the Datadog cloud. It needs to be deployed on the server where the EMQX cluster is located or on a server that can access the EMQX node.
+[Datadog Agent](https://docs.datadoghq.com/getting_started/agent/)はEMQXのメトリクスを収集し、Datadogクラウドに送信します。EMQXクラスターが稼働するサーバー、またはEMQXノードにアクセスできるサーバーにデプロイする必要があります。
 
-If you are using Datadog for the first time, visit [Datadog](https://www.datadoghq.com/) to create an account and log in to the Datadog console. Next, you need to install the Datadog Agent on the server where EMQX is located, following the steps below:
+初めてDatadogを利用する場合は、[Datadog](https://www.datadoghq.com/)にアクセスしてアカウントを作成し、Datadogコンソールにログインしてください。次に、EMQXが稼働するサーバーにDatadog Agentをインストールします。手順は以下の通りです。
 
-1. Navigate to **Integrations** → **Agent** in the menu bar to access the Agent Installation Instructions page.
+1. メニューバーの**Integrations** → **Agent**に移動し、Agentインストール手順ページを開きます。
 
-2. Choose your operating system version and follow the provided instructions.
+2. ご利用のOSバージョンを選択し、表示された手順に従ってください。
 
 ![Install Datadog Agent](./assets/datadog-agent-install.png)
 
-## Add EMQX Integration to Datadog
+## DatadogにEMQX統合を追加
 
-EMQX offers out-of-box [Datadog integration](https://docs.datadoghq.com/integrations/emqx/) that can be easily incorporated into your Datadog console by following these steps:
+EMQXは標準で[Datadog統合](https://docs.datadoghq.com/integrations/emqx/)を提供しており、以下の手順でDatadogコンソールに簡単に組み込めます。
 
-1. Open your Datadog console and navigate to **Integrations** → **Integrations** in the menu bar.
+1. Datadogコンソールを開き、メニューバーの**Integrations** → **Integrations**に移動します。
 
-2. In the search box, type `EMQX` to find the integration with the same name and author.
+2. 検索ボックスに `EMQX` と入力し、同名かつ同じ作者の統合を探します。
 
-3. Click the **Install Integration** button in the upper right corner of the pop-up box to add the EMQX integration to Datadog.
+3. ポップアップ右上の**Install Integration**ボタンをクリックし、EMQX統合をDatadogに追加します。
 
 ![Install Datadog EMQX Integration](./assets/datadog-search-emqx-intergration.png)
 
-4. After completing the installation, navigate to the **Configure** tab to access the configuration guidelines for the EMQX integration. Carry out the necessary configuration within the Datadog Agent.
+4. インストール完了後、**Configure**タブに移動し、EMQX統合の設定ガイドラインを確認します。Datadog Agent内で必要な設定を行います。
 
 ![Config EMQX Datadog Integration](./assets/datadog-integration-configuration.png)
 
-## Add and Enable EMQX Integration on Datadog Agent
+## Datadog AgentにEMQX統合を追加・有効化
 
-Following the configuration guidelines, add the EMQX integration to the Datadog Agent to configure the collection and reporting of EMQX metrics.
+設定ガイドラインに従い、Datadog AgentにEMQX統合を追加して、EMQXメトリクスの収集とレポートを設定します。
 
-1. Execute the following command on the server where the Datadog Agent is hosted to add the EMQX integration. Note that this example uses version 1.1.0; always refer to the latest guidelines for the appropriate version:
+1. Datadog Agentが稼働するサーバー上で以下のコマンドを実行し、EMQX統合を追加します。例ではバージョン1.1.0を使用していますが、常に最新のガイドラインに従い適切なバージョンを指定してください。
 
     ```bash
     datadog-agent integration install -t datadog-emqx==1.1.0
     ```
 
-2. Once the installation is complete, modify the Agent configuration file to enable EMQX integration.
+2. インストール完了後、Agentの設定ファイルを編集してEMQX統合を有効化します。
 
-    Navigate to the Agent configuration directory (usually located at `/opt/datadog-agent/etc/conf.d/`). Locate the `emqx.d` directory within this directory. You'll find a sample configuration file named `conf.yaml.example` in the `emqx.d` directory.
+    Agentの設定ディレクトリ（通常は `/opt/datadog-agent/etc/conf.d/`）に移動し、その中の `emqx.d` ディレクトリを探します。`emqx.d` 内にある `conf.yaml.example` というサンプル設定ファイルを同じディレクトリにコピーし、`conf.yaml` にリネームします。
 
-    Create a copy of this file in the same directory and rename it to `conf.yaml`. Edit the `conf.yaml` file, adjusting the following configuration item:
+    `conf.yaml` ファイルを編集し、以下の設定項目を調整します。
 
     ```bash
     instances:
       - openmetrics_endpoint: http://localhost:18083/api/v5/prometheus/stats?mode=all_nodes_aggregated
     ```
 
-    The `openmetrics_endpoint` specifies the address from which the Datadog Agent extracts metrics data in OpenMetrics format. In this case, it's set to the HTTP API address of EMQX. Make sure to replace this with an address accessible by the Datadog Agent.
+    `openmetrics_endpoint` はDatadog AgentがOpenMetrics形式のメトリクスデータを取得するためのアドレスを指定します。ここではEMQXのHTTP APIアドレスを指定しています。Datadog Agentからアクセス可能なアドレスに置き換えてください。
 
-    The API also allows specifying the range of metrics to pull via the `mode` query parameter. The meaning of each parameter is as follows:
-    
-    | **Parameter**          | **Description**                                              |
-    | ---------------------- | ------------------------------------------------------------ |
-    | node                   | Returns metrics for the current requested node. If no mode parameter is specified, this is used by default. |
-    | all_nodes_unaggregated | Returns metrics for each individual node in the cluster, maintaining the independence of metrics. The results include node names for differentiation. |
-    | all_nodes_aggregated   | Returns aggregated metric values for all nodes in the cluster. |
-    
-    For a unified view, use the `mode=all_nodes_aggregated` option. This ensures that the Datadog control sees values for the entire EMQX cluster.
+    APIでは、`mode` クエリパラメータで取得するメトリクスの範囲を指定できます。各パラメータの意味は以下の通りです。
 
-3. Refer to [this document](https://docs.datadoghq.com/agent/guide/agent-commands/#start-stop-and-restart-the-agent) to restart the Agent. Take macOS as an example:
+    | **パラメータ**           | **説明**                                                      |
+    | ------------------------ | ------------------------------------------------------------- |
+    | node                     | 現在リクエストしているノードのメトリクスを返します。modeパラメータが指定されていない場合のデフォルトです。 |
+    | all_nodes_unaggregated    | クラスター内の各ノードごとのメトリクスを返し、メトリクスの独立性を保ちます。結果にはノード名が含まれ区別可能です。 |
+    | all_nodes_aggregated      | クラスター内の全ノードのメトリクスを集約した値を返します。         |
+
+    統一的なビューを得るには `mode=all_nodes_aggregated` オプションを使用してください。これによりDatadog側でEMQXクラスター全体の値を確認できます。
+
+3. [こちらのドキュメント](https://docs.datadoghq.com/agent/guide/agent-commands/#start-stop-and-restart-the-agent)を参照し、Agentを再起動してください。macOSの場合の例は以下の通りです。
 
     ```bash
     launchctl stop com.datadoghq.agent
     launchctl start com.datadoghq.agent
     ```
 
-4. After rebooting your system, use the following command to verify if the EMQX integration is successfully enabled. If you see `Instance ID: ... \[OK\]`, it indicates that the integration has been successfully enabled.
+4. システム再起動後、以下のコマンドでEMQX統合が正常に有効化されているか確認します。`Instance ID: ... [OK]` と表示されれば成功です。
 
     ```bash
     $ datadog-agent status | grep emqx -A 4
@@ -99,56 +99,55 @@ Following the configuration guidelines, add the EMQX integration to the Datadog 
           Average Execution Time : 43ms
           Last Execution Date : 2024-05-11 17:35:41 CST / 2024-05-11 09:35:41 UTC (1715420141000)
           Last Successful Execution Date : 2024-05-11 17:35:41 CST / 2024-05-11 09:35:41 UTC (1715420141000)
-    
     ```
 
-Now you have completed all the necessary configurations on the Datadog Agent. The Agent will periodically collect EMQX runtime data and send them to Datadog. 
+これでDatadog Agent側の設定は完了です。Agentは定期的にEMQXの稼働データを収集し、Datadogに送信します。
 
-Next, let's check the Datadog console to ensure that the metrics are being collected correctly.
+次にDatadogコンソールでメトリクスが正しく収集されているか確認しましょう。
 
-## View EMQX Metrics on the Datadog Console
+## DatadogコンソールでEMQXメトリクスを確認
 
-The Datadog Agent's EMQX integration provides a ready-to-use Dashboard chart that displays node status, message status, and other more in-depth observability metrics. You can follow these steps to utilize it:
+Datadog AgentのEMQX統合は、ノード状態やメッセージ状態などの詳細なオブザーバビリティメトリクスを表示する使いやすいダッシュボードチャートを提供しています。利用手順は以下の通りです。
 
-1. Open the Datadog console and navigate to **Integrations** → **Integrations** in the menu bar.
+1. Datadogコンソールを開き、メニューバーの**Integrations** → **Integrations**に移動します。
 
-2. Locate the installed EMQX integration and click to open it.
+2. インストール済みのEMQX統合を探してクリックします。
 
-3. Switch to the **Monitoring Resources** tab within the pop-up box to open the **EMQX Overview** charts under **Dashboards**.
+3. ポップアップ内の**Monitoring Resources**タブに切り替え、**Dashboards**の下にある**EMQX Overview**チャートを開きます。
 
     ![Monitoring Resources Tab](./assets/datadog-dashboard-overview.png)
 
-**The charts provide the following information:**
+**チャートで確認できる情報は以下の通りです。**
 
-- **OpenMetrics Health**: The number of active metrics collectors.
-- **Total Connections**: The overall count of connections, including those that remain the sessions despite being disconnected.
-- **NodeRunning**: The number of running nodes within the cluster.
-- **Active Topics**: The number of currently active topics.
-- **NodeStopped**: The count of stopped nodes in the cluster.
+- **OpenMetrics Health**: アクティブなメトリクスコレクターの数
+- **Total Connections**: セッションを維持したまま切断された接続も含む、全接続数
+- **NodeRunning**: クラスター内の稼働中ノード数
+- **Active Topics**: 現在アクティブなトピック数
+- **NodeStopped**: クラスター内の停止ノード数
 - **Connection**
-  - **Total**: The total number of connections, including those that maintain the session even when disconnected.
-  - **Live**: The number of actively maintained TCP connections.
+  - **Total**: セッションを維持したまま切断された接続も含む、全接続数
+  - **Live**: アクティブなTCP接続数
 - **Topic**
-  - **Total**: The overall number of topics.
-  - **Shared**: The count of shared topics.
-- **Session**: The total number of sessions.
-- **Erlang VM**: The CPU, memory, and queue usage of the Erlang virtual machine.
+  - **Total**: 全トピック数
+  - **Shared**: 共有トピック数
+- **Session**: セッション総数
+- **Erlang VM**: Erlang仮想マシンのCPU、メモリ、キュー使用状況
 - **Retainer & Delayed**
-  - **Retained**: The number of retained messages.
-  - **Delayed**: The count of delayed messages.
+  - **Retained**: 保持中のメッセージ数
+  - **Delayed**: 遅延メッセージ数
 - **Message**
-  - **Sent & Received**: The rate of sent and received messages.
-  - **Delayed & Retained**: The rate of delayed and retained messages.
-  - **Publish & Delivered**: The rate of message publishing and delivery.
-  - **Delivery Dropped**: The number of delivered messages that were dropped.
+  - **Sent & Received**: 送受信メッセージのレート
+  - **Delayed & Retained**: 遅延および保持メッセージのレート
+  - **Publish & Delivered**: メッセージのパブリッシュおよび配信レート
+  - **Delivery Dropped**: 配信がドロップされたメッセージ数
 - **Client**
-  - **Connected & Disconnected**: The rate of connections being established and terminated.
-  - **Sub & UnSub**: The subscription and unsubscription rates.
-  - **AuthN & AuthZ**: Information on authentication and authorization rates.
-  - **Delivery Dropped**: The number of dropped delivery messages.
-- **Mria**: The total number of Mria transactions.
+  - **Connected & Disconnected**: 接続確立および切断のレート
+  - **Sub & UnSub**: サブスクライブおよびサブスクライブ解除のレート
+  - **AuthN & AuthZ**: 認証および認可のレート情報
+  - **Delivery Dropped**: ドロップされた配信メッセージ数
+- **Mria**: Mriaトランザクションの総数
 
-Below are screenshots of some of the overview metrics charts; the values dynamically change based on the load of EMQX and client activity.
+以下は概要メトリクスチャートのスクリーンショットです。値はEMQXの負荷やクライアントのアクティビティに応じて動的に変化します。
 
 ![Metrics Overview](./assets/datadog-dashboard-detail.png)
 
@@ -158,8 +157,8 @@ Below are screenshots of some of the overview metrics charts; the values dynamic
 
 ![Client Event](./assets/datadog-dashboard-events.png)
 
-## Next Steps
+## 次のステップ
 
-The charts built into Datadog's EMQX integration show only some of the key metrics. You can also refer to [this document](https://docs.datadoghq.com/integrations/emqx/#metrics) to access all the reported EMQX metrics and create your own monitoring charts based on them.
+DatadogのEMQX統合に組み込まれているチャートは主要なメトリクスの一部のみを表示しています。すべてのレポートされるEMQXメトリクスは[こちらのドキュメント](https://docs.datadoghq.com/integrations/emqx/#metrics)を参照し、独自の監視チャートを作成できます。
 
-You can configure alert rules in Datadog based on these metrics. When certain metrics reach preset thresholds or abnormal situations occur, Datadog will send notifications to remind you to take necessary actions promptly, minimizing the impact of system failures on your business.
+これらのメトリクスを基にDatadogでアラートルールを設定可能です。特定のメトリクスが設定した閾値に達したり異常が発生した場合、Datadogが通知を送信し、迅速な対応を促すことでシステム障害によるビジネスへの影響を最小限に抑えられます。

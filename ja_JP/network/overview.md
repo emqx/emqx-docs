@@ -1,30 +1,30 @@
-# Network and TLS
+# ネットワークとTLS
 
-Security is essential for end-to-end encrypted communication in IoT scenarios. Secure Sockets Layer (SSL) and Transport Layer Security (TLS) protocols are often adopted in network communications to ensure that the data transmission remains confidential and cannot be intercepted or modified by an attacker. The SSL/TLS encryption function encrypts network connections at the transport layer and involves the use of digital certificates to authenticate the identity of the parties involved and to establish a secure communication channel.
+IoTシナリオにおけるエンドツーエンドの暗号化通信では、セキュリティが不可欠です。Secure Sockets Layer（SSL）およびTransport Layer Security（TLS）プロトコルは、データ通信の機密性を確保し、攻撃者による傍受や改ざんを防ぐためにネットワーク通信で広く採用されています。SSL/TLS暗号化機能はトランスポート層でネットワーク接続を暗号化し、デジタル証明書を用いて通信当事者の認証と安全な通信チャネルの確立を行います。
 
-EMQX adopts SSL and TLS cryptographic protocols to ensure secure network communication when:
+EMQXは以下の場合に安全なネットワーク通信を保証するため、SSLおよびTLS暗号プロトコルを採用しています。
 
-- Establishing a connection between MQTT clients and EMQX
-- Connecting to external resources, such as a database
-- Different EMQX nodes in a cluster communicate with each other
+- MQTTクライアントとEMQX間の接続確立時
+- データベースなど外部リソースへの接続時
+- クラスター内の異なるEMQXノード間の通信時
 
-EMQX provides comprehensive support for SSL/TLS capabilities, including support for one-way/two-way authentication and X.509 certificate authentication.
+EMQXは片方向／双方向認証やX.509証明書認証を含む、SSL/TLS機能を包括的にサポートしています。
 
-## TLS for Client Connection
+## クライアント接続のTLS
 
-The [Enable SSL/TLS Connection](./emqx-mqtt-tls.md) section in this chapter introduces how to enable an SSL/TLS connection between the MQTT client and EMQX in detail. The [Obtain SSL/TLS Certificates](./tls-certificate.md) page provides you with instructions on creating self-signed certificates. To further enhance the security with the SSL/TLS enabled, you can also enable the [CRL check](./crl.md) for certificate verification and [OCSP stapling](./ocsp.md) for revocation status checking of the SSL/TLS certificate. The [Client TLS](./mqtt-client-tls.md) section provides information on the sample MQTT client code and project. The TLS use guide is included in these samples.
+本章の[Enable SSL/TLS Connection](./emqx-mqtt-tls.md)セクションでは、MQTTクライアントとEMQX間でSSL/TLS接続を有効にする方法を詳しく解説しています。[Obtain SSL/TLS Certificates](./tls-certificate.md)ページでは自己署名証明書の作成手順を案内しています。SSL/TLSを有効にした上でさらにセキュリティを強化するために、証明書検証用の[CRLチェック](./crl.md)やSSL/TLS証明書の失効状態確認のための[OCSPスタップリング](./ocsp.md)も有効化可能です。[Client TLS](./mqtt-client-tls.md)セクションには、サンプルのMQTTクライアントコードとプロジェクトが含まれており、TLS利用ガイドもこれらのサンプルに含まれています。
 
-## TLS for External Resource Access
+## 外部リソースアクセスのTLS
 
-EMQX also offers you the option of enabling TLS when there is a need to access external resources. For example, when using password-based authentication with access to a web server via HTTPS or connecting to a database for data integration. You can switch on the **Enable TLS** when configuring these features on the EMQX Dashboard.
+EMQXは外部リソースにアクセスする際にもTLSを有効にするオプションを提供しています。たとえば、HTTPS経由でのWebサーバーアクセスにパスワード認証を使う場合や、データ統合のためにデータベースに接続する場合などです。EMQXダッシュボードでこれらの機能を設定する際に、**Enable TLS**をオンにできます。
 
-- **SNI** means Server Name Indication, indicating whether the server domain name and certificate are verified to be the same; A null value means no validation.
-- When the server needs to verify the client certificate, the **TLS Cert** and **TLS Key** must be filled in.
-- When **TLS Verify** is enabled, the **CA Cert** field must be filled in to verify the legitimacy of the server certificate.
+- **SNI**（Server Name Indication）は、サーバーのドメイン名と証明書が一致するかを示します。null値の場合は検証なしを意味します。
+- サーバーがクライアント証明書を検証する必要がある場合は、**TLS Cert**と**TLS Key**の入力が必須です。
+- **TLS Verify**を有効にした場合は、サーバー証明書の正当性を検証するために**CA Cert**フィールドの入力が必要です。
 
-<img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
+<img src="./assets/enable-TLS-dashboard.png" alt="TLS有効化ダッシュボード" style="zoom:50%;" />
 
-In addition, you can add `ssl` options when you configure the features in the configuration file. For example, you can configure the `authentication` group in the configuration file by adding the following statement:
+また、設定ファイルでこれらの機能を設定する際に`ssl`オプションを追加可能です。例えば、設定ファイルの`authentication`グループに以下のように記述します。
 
 ```bash
 authentication {
@@ -35,18 +35,18 @@ authentication {
 
   ssl {
     enable = true
-    # PEM format file containing the trusted CA (certificate authority) certificates that the HTTP client uses to verify the authenticity of the HTTP server.
+    # HTTPクライアントがHTTPサーバーの真正性を検証するために使用する信頼されたCA（認証局）証明書を含むPEM形式ファイル
     cacertfile = "etc/certs/cacert.pem"
-    # PEM format file containing the SSL/TLS certificate chain for the HTTP client to send. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
+    # HTTPクライアントが送信するSSL/TLS証明書チェーンを含むPEM形式ファイル。証明書がルートCAから直接発行されていない場合は、中間CA証明書をリスナー証明書の後に連結してチェーンを形成する必要があります。
     certfile = "etc/certs/cert.pem"
-    # PEM format file containing the private key corresponding to the certificate
+    # 証明書に対応する秘密鍵を含むPEM形式ファイル
     keyfile = "etc/certs/key.pem"
-    ## Set 'verify_peer' to verify the authenticity of the server's certificate chain, otherwise 'verify_none'
+    ## サーバーの証明書チェーンの真正性を検証する場合は'verify_peer'、検証しない場合は'verify_none'を設定
     verify = verify_peer
   }
 }
 ```
 
-## TLS for Nodes Communication
+## ノード間通信のTLS
 
-Instructions on how to enable SSL/TLS for cluster connections are not covered in this chapter, and you can refer to [Cluster Security](../deploy/cluster/security.md) for details.
+クラスター接続におけるSSL/TLSの有効化方法については本章では扱っておらず、詳細は[Cluster Security](../deploy/cluster/security.md)をご参照ください。

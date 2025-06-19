@@ -1,60 +1,60 @@
 # Webhook
 
-Webhook provides a way to integrate EMQX client messages and events with external HTTP servers. Compared to using rule engines and data bridges, Webhook offers a more straightforward method, significantly lowering the barrier to entry, and quickly enabling integration between EMQX and external systems.
+Webhook は、EMQX クライアントのメッセージやイベントを外部の HTTP サーバーと連携させる方法を提供します。ルールエンジンやデータブリッジを使う場合と比べて、Webhook はよりシンプルな手法であり、導入のハードルを大幅に下げ、EMQX と外部システムの迅速な連携を可能にします。
 
-This page comprehensively introduces information related to Webhook, along with practical usage instructions.
+本ページでは、Webhook に関する情報を包括的に紹介し、実践的な利用方法を解説します。
 
-## How It Works
+## 仕組み
 
-When a client publishes a message to a specific topic or performs certain actions, it triggers the Webhook. Webhook is compatible with all messages and events supported by the rule engine.
+クライアントが特定のトピックにメッセージをパブリッシュしたり、特定の操作を行うと Webhook がトリガーされます。Webhook はルールエンジンがサポートするすべてのメッセージとイベントに対応しています。
 
-You can configure Webhook to be triggered in the following scenarios. For the request content of each event, refer to [SQL Data Source and Fields](./rule-sql-events-and-fields.md).
+Webhook は以下のシナリオでトリガーされるよう設定できます。各イベントのリクエスト内容については、[SQL データソースとフィールド](./rule-sql-events-and-fields.md)を参照してください。
 
 ![EMQX Webhook 集成](./assets/emqx-integration-http.jpg)
 
-### Messages
+### メッセージ
 
-When a publisher publishes a message, or the message status changes, including:
+パブリッシャーがメッセージをパブリッシュしたり、メッセージの状態が変化した場合にトリガーされます。具体的には以下のイベントです：
 
-- Message published
-- Message delivered
-- Message acknowledged
-- Message forwarded and dropped
-- Message delivery dropped
+- メッセージがパブリッシュされた
+- メッセージが配信された
+- メッセージがアックされた
+- メッセージが転送されて破棄された
+- メッセージ配信が破棄された
 
-Multiple topic filters can be set for messages; only the matching messages will trigger the Webhook.
+メッセージについては複数のトピックフィルターを設定可能で、マッチしたメッセージのみが Webhook をトリガーします。
 
-### Events
+### イベント
 
-When a client performs specific operations, or the status changes, including:
+クライアントが特定の操作を行ったり、状態が変化した場合にトリガーされます。具体的には以下のイベントです：
 
-- Connection established
-- Connection terminated
-- Connection confirmed
-- Authorization result
-- Session subscription completed
-- Session unsubscribed
+- 接続確立
+- 接続終了
+- 接続確認完了
+- 認可結果
+- セッションのサブスクライブ完了
+- セッションのサブスクライブ解除
 
-## Features
+## 特長
 
-Using EMQX's Webhook integration can bring the following advantages to your business:
+EMQX の Webhook 連携を利用することで、以下のようなメリットがあります：
 
-- **Pass Data to More Downstream Systems**: Webhook can easily integrate MQTT data into more external systems like analytics platforms, cloud services, etc., enabling multi-system data distribution.
-- **Real-Time Response and Trigger Business Processes**: Through Webhook, external systems can receive MQTT data in real-time and trigger business processes, enabling quick responses. For example, receiving alarm data and triggering business workflows.
-- **Customize Data Processing**: External systems can further process the received data as needed, implementing more complex business logic, without being limited by EMQX's functionalities.
-- **Loosely Coupled Integration Method**: Webhook uses a simple HTTP interface, providing a loosely coupled way of system integration.
+- **より多くの下流システムへデータを渡せる**：Webhook により、MQTT データを分析プラットフォームやクラウドサービスなど、より多くの外部システムと簡単に連携でき、マルチシステムへのデータ配信が可能になります。
+- **リアルタイム応答と業務プロセスのトリガー**：Webhook を通じて外部システムが MQTT データをリアルタイムに受信し、業務プロセスをトリガーできるため、迅速な対応が可能です。例えば、アラームデータを受け取って業務ワークフローを起動するケースなどです。
+- **データ処理のカスタマイズ**：外部システム側で受信データをさらに処理し、より複雑な業務ロジックを実装でき、EMQX の機能に縛られません。
+- **疎結合な連携手法**：Webhook はシンプルな HTTP インターフェースを使うため、システム連携を疎結合に実現できます。
 
-In summary, Webhook integration provides real-time, flexible, and customized data integration capabilities, satisfying the need for flexible and rich application development.
+まとめると、Webhook 連携はリアルタイムかつ柔軟でカスタマイズ可能なデータ連携を提供し、柔軟で豊かなアプリケーション開発ニーズに応えます。
 
-## Get Started
+## はじめに
 
-This section takes macOS as an example to introduce how to configure and use Webhook.
+ここでは macOS を例に、Webhook の設定と利用方法を紹介します。
 
-### Create HTTP Service
+### HTTP サービスの作成
 
-Here we quickly create an HTTP server using Python, listening on the local port 8082, and print the URL when receiving a Webhook request. In actual applications, please replace it with your business server:
+ここでは Python を使ってローカルのポート 8082 で待ち受ける HTTP サーバーを簡単に作成し、Webhook リクエストを受信した際に内容を表示します。実際の運用では、業務サーバーに置き換えてください。
 
-First, we use Python to build a simple HTTP service to receive `POST /` requests. The service prints the request content and returns 200 OK:
+まず、Python で `POST /` リクエストを受け取るシンプルな HTTP サービスを作成します。リクエスト内容を表示し、200 OK を返します。
 
 ```python
 from flask import Flask, json, request
@@ -71,48 +71,48 @@ if __name__ == '__main__':
   api.run()
 ```
 
-Save the above code as `http_server.py` file, and run the following commands in the directory where the file is located:
+上記コードを `http_server.py` というファイル名で保存し、ファイルのあるディレクトリで以下のコマンドを実行します。
 
 ```shell
-# Install flask dependency
+# flask の依存関係をインストール
 pip install flask
 
-# Start Service
+# サービスを起動
 python3 http_server.py
 ```
 
-### Create Webhook
+### Webhook の作成
 
-1. Click **Integration** -> **Webhooks** from the Dashboard left menu.
-2. Click the **Create** button on the page.
-3. Enter Webhook name and notes, which should be a combination of uppercase and lowercase English letters and numbers. Here you can enter `my_webhook`.
-4. Select the trigger according to your needs, in this case, select **All messages and events**. For other options, refer to [How it Works](#how-it-works).
-5. Select the request method as POST, URL as `http://localhost:5000`. You can test if the connection is configured correctly by clicking the **Test** button next to the URL input box, and use the default values for the rest.
-6. Click the **Save** button at the bottom to complete the rule creation.
+1. ダッシュボードの左メニューから **Integration** -> **Webhooks** をクリックします。
+2. ページ上の **Create** ボタンをクリックします。
+3. Webhook の名前と説明を入力します。英大文字・小文字と数字の組み合わせにしてください。ここでは `my_webhook` と入力します。
+4. トリガーをニーズに応じて選択します。ここでは **All messages and events** を選択します。他の選択肢は [仕組み](#仕組み) を参照してください。
+5. リクエストメソッドを POST、URL を `http://localhost:5000` に設定します。URL入力欄横の **Test** ボタンで接続確認ができます。その他の設定はデフォルトのままで構いません。
+6. ページ下部の **Save** ボタンをクリックしてルール作成を完了します。
 
 ![EMQX Webhook](./assets/webhook.png)
 
-You have now completed the Webhook creation.
+これで Webhook の作成が完了しました。
 
-### Test Webhook
+### Webhook のテスト
 
-Use MQTTX CLI to publish a message to the `t/1` topic:
+MQTTX CLI を使って `t/1` トピックにメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Webhook" }'
 ```
 
-This operation will sequentially trigger the following events:
+この操作により、以下のイベントが順にトリガーされます。
 
-- Connection established
-- Connection confirmed
-- Authorization checked and completed
-- Message published
-- Connection terminated
+- 接続確立
+- 接続確認完了
+- 認可チェック完了
+- メッセージパブリッシュ
+- 接続終了
 
-If the `t/1` topic has no subscribers, it will also trigger the **message forwarded and dropped** event after the message is published.
+もし `t/1` トピックにサブスクライバーがいなければ、メッセージパブリッシュ後に **message forwarded and dropped** イベントもトリガーされます。
 
-Check whether the corresponding events and message data have been forwarded to the HTTP service. You should see the following data:
+HTTP サービスに対応するイベントとメッセージデータが転送されているか確認してください。以下のようなデータが表示されるはずです。
 
 ```shell
 got post request:  b'{"username":"undefined","timestamp":1694681417717,"sockname":"127.0.0.1:1883","receive_maximum":32,"proto_ver":5,"proto_name":"MQTT","peername":"127.0.0.1:61003","node":"emqx@127.0.0.1","mountpoint":"undefined","metadata":{"rule_id":"my-webhook_WH_D"},"keepalive":30,"is_bridge":false,"expiry_interval":0,"event":"client.connected","connected_at":1694681417714,"conn_props":{"User-Property":{},"Request-Problem-Information":1},"clientid":"emqx_c","clean_start":true}'

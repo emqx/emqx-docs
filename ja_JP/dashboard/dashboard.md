@@ -1,106 +1,106 @@
-# Dashboard Home Page
+# ダッシュボード ホームページ
 
-After successful login, you can access the home page of the EMQX Dashboard, specifically the **Cluster Overview** page. This page includes the following tabs:
+ログインに成功すると、EMQXダッシュボードのホームページ、具体的には**クラスター概要**ページにアクセスできます。このページには以下のタブがあります。
 
-- **Cluster Overview**: Displays an overview of the data across the entire cluster.
-- **Nodes**: View the list of nodes and node-specific information within the cluster.
-- **Metrics**: View all data metrics within the cluster or individual nodes.
+- **クラスター概要**：クラスター全体のデータ概要を表示します。
+- **ノード**：クラスター内のノード一覧およびノード固有の情報を表示します。
+- **メトリクス**：クラスター全体または個別ノードのすべてのデータメトリクスを表示します。
 
-## Cluster Overview
+## クラスター概要
 
-This page provides an overview of the data for the entire EMQX cluster in operation, including the following information.
+このページでは、稼働中のEMQXクラスター全体のデータ概要を以下の情報とともに提供します。
 
-### Message Rate
+### メッセージレート
 
-In EMQX, messages represent the key data transmitted by all connected MQTT clients or real devices. Clients or devices send and receive messages through topics, enabling data communication between them.
+EMQXにおいて、メッセージはすべての接続されたMQTTクライアントや実機デバイスが送受信する重要なデータを表します。クライアントやデバイスはトピックを介してメッセージを送受信し、相互にデータ通信を行います。
 
-The card in the upper left corner of this overview page provides a clearer and easier way to monitor the rate changes in the current volume of messages incoming and outgoing in the system (message rate is measured in how many messages per second) by visualizing the rate spectrum with real-time rate values.
+概要ページの左上にあるカードは、システム内の現在のメッセージの入出力量の変化率（メッセージレートは1秒あたりのメッセージ数で測定）をリアルタイムのレート値で可視化し、変化をより分かりやすく監視できるようにしています。
 
-<img src="./assets/message_rate.png" alt="message_rate" style="zoom:70%;" />
+<img src="./assets/message_rate.png" alt="メッセージレート" style="zoom:70%;" />
 
-### Connections and Subscriptions
+### 接続数とサブスクリプション数
 
-As an MQTT broker, the number of connections and topics subscribed to EMQX is one of the most important metrics to observe. The connections are the number of MQTT clients or real devices currently connected to EMQX, the number of subscriptions is the total number of topics currently subscribed to in each client, and topics are the unique subscriptions.
+MQTTブローカーとして、EMQXに接続されている接続数とサブスクライブされているトピック数は最も重要な指標の一つです。接続数は現在EMQXに接続されているMQTTクライアントや実機デバイスの数、サブスクリプション数は各クライアントが現在サブスクライブしているトピックの合計数、トピック数はユニークなサブスクリプション数を指します。
 
-In the card on the top right of the overview page, you can quickly see the number of connections, subscriptions, and topics in the cluster. The statistics in the card will be updated in real-time when a connection or a subscription topic is updated.
+概要ページの右上のカードでは、クラスター内の接続数、サブスクリプション数、トピック数を素早く確認できます。接続やサブスクリプショントピックが更新されると、カード内の統計はリアルタイムで更新されます。
 
 ![image](./assets/connections_subscriptions.png)
 
 ::: tip
 
-Subscriptions are differentiated by client, while topics are unique subscriptions and the same topic may be included in different clients.
+サブスクリプションはクライアントごとに区別されますが、トピックはユニークなサブスクリプションであり、同一トピックが異なるクライアントに含まれる場合があります。
 
 :::
 
-In addition to providing real-time statistics, the bottom of the page also provides a visual chart that allows you to view historical and current changes in the number of connections and subscriptions by time (the time format: YYYY/MM/DD HH:mm), which allows you to monitor the trend of the number of connections and subscriptions within the entire EMQX cluster more clearly and intuitively. Hovering over the chart and clicking the icon in the top right corner allows you to enlarge the chart.
+リアルタイム統計に加え、ページ下部には接続数とサブスクリプション数の時間による過去および現在の変化を視覚的に確認できるチャートがあり（時間形式：YYYY/MM/DD HH:mm）、EMQXクラスター全体の接続数とサブスクリプション数の推移をより明確かつ直感的に監視できます。チャート上にカーソルを合わせ、右上のアイコンをクリックするとチャートを拡大表示できます。
 
 ![image](./assets/connection_chart.png)
 
-### Messages
+### メッセージ数
 
-The number of messages is the statistics of the number of data transferred between clients or devices, and on the page includes the incomming, outgoing and dropped messages.
+メッセージ数はクライアントやデバイス間で転送されたデータ数の統計であり、ページには受信、送信、破棄されたメッセージ数が含まれます。
 
-In the lower part of the overview page, you can see a visual chart of the number of messages, and view the historical and current number of messages by time change (the time format: YYYY/MM/DD HH:mm), which allows users to better monitor dynamically the real-time changes of all messages within the current EMQX cluster. Hovering over the chart and clicking the icon in the top right corner allows you to enlarge the chart.
+概要ページの下部ではメッセージ数の視覚的なチャートを確認でき、時間による過去および現在のメッセージ数の変化（時間形式：YYYY/MM/DD HH:mm）を表示し、ユーザーが現在のEMQXクラスター内のすべてのメッセージのリアルタイム変化を動的に監視しやすくしています。チャート上にカーソルを合わせ、右上のアイコンをクリックするとチャートを拡大表示できます。
 
-Clicking the "Reset Monitoring Data" button on the right side of the page will clear the chart data on the cluster overview page and start displaying new monitoring data from the current time.
+ページ右側の「監視データをリセット」ボタンをクリックすると、クラスター概要ページのチャートデータがクリアされ、現在時刻から新しい監視データの表示が開始されます。
 
 ![image](./assets/messages_chart.png)
 
 ::: tip
 
-All of the above time-varying charts can be viewed by selecting the time range in the upper left corner: statistics are available for data changes over the past 1 hour, past 6 hours, past 12 hours, past 1 day, past 3 days, and past 7 days.
+上記のすべての時間変動チャートは、左上の時間範囲選択で表示可能です：過去1時間、過去6時間、過去12時間、過去1日、過去3日、過去7日のデータ変化を統計できます。
 
 :::
 
-## Nodes
+## ノード
 
-EMQX, the most scalable MQTT broker for IoT, supports cluster deployment, where each EMQX instance within the cluster functions as a node.
+IoT向けで最もスケーラブルなMQTTブローカーであるEMQXはクラスター展開をサポートしており、クラスター内の各EMQXインスタンスはノードとして機能します。
 
-### Node Data
+### ノードデータ
 
-You can monitor the whole EMQX cluster by the card in the middle of the overview page, including a topology diagram to visualize the association and distribution of all nodes in the cluster.
+概要ページ中央のカードでは、クラスター全体の監視が可能で、クラスター内のすべてのノードの関連性と分布を可視化するトポロジ図が表示されます。
 
-Hover over a node in the topology diagram to view its basic information and operation status. This includes the node name, node role, number of connections, subscriptions, and topics, as well as the current EMQX version. Clicking on the version number opens the changelog for a quick overview of updates in the current version. Additionally, you can view the CPU load and memory usage of the operating system on which the node is deployed (memory metrics are only available for nodes deployed on Linux).
+トポロジ図上のノードにカーソルを合わせると、その基本情報と稼働状況が表示されます。これにはノード名、ノードの役割、接続数、サブスクリプション数、トピック数、現在のEMQXバージョンが含まれます。バージョン番号をクリックすると、現在のバージョンの更新内容を素早く確認できる変更履歴が開きます。さらに、ノードがデプロイされているOSのCPU負荷やメモリ使用量も確認できます（メモリメトリクスはLinux上にデプロイされたノードのみ利用可能です）。
 
 ![nodes](./assets/nodes.png)
 
 ::: tip
 
-If a node in the topology diagram turns gray, it indicates that the node is currently stopped.
+トポロジ図のノードが灰色になっている場合、そのノードは現在停止中であることを示します。
 
 :::
 
-### Node List
+### ノード一覧
 
-Clicking **View Nodes** at the upper right corner of the node card or selecting the **Nodes** tab at the top navigates to the Nodes page. This page lists all nodes currently in the EMQX cluster, offering a quick view of each node's name, status, uptime, version, connections, Erlang process count, memory usage, CPU load, and other key metrics. Clicking the **Refresh** button in the top right corner updates the list with the latest node information in real time.
+ノードカードの右上にある**ノードを表示**をクリックするか、上部の**ノード**タブを選択すると、ノード一覧ページに移動します。このページでは、現在EMQXクラスター内にあるすべてのノードが一覧表示され、各ノードの名前、状態、アップタイム、バージョン、接続数、Erlangプロセス数、メモリ使用量、CPU負荷などの主要なメトリクスを素早く確認できます。右上の**更新**ボタンをクリックすると、最新のノード情報にリアルタイムでリストを更新します。
 
 ![image](./assets/node_list.png)
 
-### Node Details
+### ノード詳細
 
-The node list can only show partial basic information about nodes. To view the comprehensive information about a node, click the node name in the **Name** column to access the node's details page. On the details page, you will find the following cards:
+ノード一覧ではノードの基本情報の一部しか表示できません。ノードの詳細情報を確認するには、**名前**列のノード名をクリックしてノード詳細ページにアクセスします。詳細ページには以下のカードがあります。
 
-- In the **Node Info** card, in addition to basic node information, you can also view details such as the maximum file handle count for the current node, system paths, and log paths (displaying log paths requires enabling file log processing in the configuration).
-- In the **Node Statistics** card, you can see various statistics about the current node, including the number of connections, subscriptions, topics, retained messages, sessions, and shared subscriptions. The statistics values are divided into two parts separated by a slash ("/"): the left side shows real-time data and the right side shows the high watermark data, which represents the peak values reached by the current data.
+- **ノード情報**カードでは、基本的なノード情報に加え、現在のノードの最大ファイルハンドル数、システムパス、ログパスなどの詳細も確認できます（ログパスの表示には設定でファイルログ処理を有効にする必要があります）。
+- **ノード統計**カードでは、現在のノードに関する各種統計情報を確認できます。接続数、サブスクリプション数、トピック数、保持メッセージ数、セッション数、共有サブスクリプション数などが含まれます。統計値はスラッシュ（"/"）で区切られた2つの部分に分かれており、左側がリアルタイムデータ、右側がハイウォーターマークデータ（現在のデータが到達したピーク値）を示します。
 
 ![image](./assets/node-detail.png)
 
-## Metrics
+## メトリクス
 
-Clicking the **Metrics** tab at the top allows you to access the metrics page, where you can view all data metrics generated during the operation of the EMQX cluster or a specific node. This includes message information, message statistics, and traffic send/receive statistics. These metrics provide insights into the current service status.
+上部の**メトリクス**タブをクリックすると、EMQXクラスター全体または特定のノードの稼働中に生成されるすべてのデータメトリクスを閲覧できるメトリクスページにアクセスします。ここにはメッセージ情報、メッセージ統計、トラフィック送受信統計が含まれ、現在のサービス状況を把握するのに役立ちます。
 
-In the dropdown menu at the top right corner, you can choose to view either cluster-wide data or data specific to a single node. Clicking the adjacent **Refresh** button enables real-time monitoring of metrics data on the current page.
+右上のドロップダウンメニューでクラスター全体のデータか特定ノードのデータかを選択できます。隣の**更新**ボタンをクリックすると、現在のページでメトリクスデータのリアルタイム監視が可能です。
 
-For detailed explanations and comprehensive details of metric data, please visit [Metrics](../observability/metrics-and-stats.md).
+メトリクスデータの詳細な説明や包括的な情報については、[Metrics](../observability/metrics-and-stats.md)をご覧ください。
 
-### Connections, Sessions, and Access
+### 接続、セッション、アクセス
 
-The metric data covers 4 aspects: bytes, packets, messages, and events. In the card, you can view metric data related to events, including counts of events such as connection sessions and authentication and authorization events.
+メトリクスデータはバイト数、パケット数、メッセージ数、イベント数の4つの側面をカバーしています。カードでは、接続セッションや認証・認可イベントなどのイベントに関連するメトリクスデータを確認できます。
 
 ![image](./assets/metrics-1.png)
 
-### Messaging
+### メッセージング
 
-The four cards below provide statistics on the data generated during message transmission, such as statistics on traffic sent and received (in bytes), statistics on the number of packets, the number of messages and the number of messages delivered.
+以下の4つのカードは、メッセージ送受信時に生成されるデータの統計を提供します。送受信トラフィック（バイト単位）、パケット数、メッセージ数、配信済みメッセージ数の統計が含まれます。
 
 ![image](./assets/metrics-2.png)

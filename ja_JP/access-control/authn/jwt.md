@@ -1,46 +1,46 @@
-# JWT Authentication
+# JWT認証
 
-[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism. It does not rely on the server to retain client authentication information or session information. EMQX supports using JWT for user authentication. 
+[JSON Web Token (JWT)](https://jwt.io/) はトークンベースの認証機構です。サーバー側でクライアントの認証情報やセッション情報を保持する必要がありません。EMQXはユーザー認証にJWTを使用することをサポートしています。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQXの基本的な認証概念](../authn/authn.md)の知識
 
 :::
 
-## Authentication Principle
+## 認証の原理
 
-The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator will verify the JWT signature using the list of public keys queried from the JWKS endpoint. 
+クライアントは接続リクエストにJWTを含め、EMQXは事前に設定されたシークレットまたは公開鍵を使ってJWTの署名を検証します。ユーザーがJWKSエンドポイントを設定している場合、JWT認証機はJWKSエンドポイントから取得した公開鍵のリストを用いてJWTの署名を検証します。
 
-If the signature verification is successful, the JWT authenticator proceeds to check the claims. The JWT authenticator actively checks the validity of the JWT based on these claims such as `iat` (Issued At), `nbf` (Not Before), and `exp` (Expiration Time). Additional custom claims can also be specified for verification. The client is granted access only if both the signature and claims verifications are successful.
+署名検証が成功すると、JWT認証機はクレームのチェックに進みます。JWT認証機は`iat`（発行時刻）、`nbf`（有効開始時刻）、`exp`（有効期限）などのクレームに基づきJWTの有効性を積極的に検証します。追加のカスタムクレームも検証対象として指定可能です。署名とクレームの両方の検証が成功した場合にのみ、クライアントにアクセスが許可されます。
 
-Starting from EMQX version 5.7.0, JWT authentication includes an option to disconnect clients after their JWT expires. The configuration parameter `disconnect_after_expire` is set to `true` by default. To keep clients connected even after their JWT has expired, you can set this parameter to `false`.
+EMQXバージョン5.7.0以降では、JWT認証にJWTの有効期限切れ後にクライアントを切断するオプションが追加されました。設定パラメータ`disconnect_after_expire`はデフォルトで`true`に設定されています。JWTが期限切れになってもクライアントを接続し続けたい場合は、このパラメータを`false`に設定してください。
 
-## Best Practice
+## ベストプラクティス
 
-The JWT authenticator essentially only checks the signature of the JWT, which means that the JWT authenticator does not guarantee the legitimacy of the client's identity.
+JWT認証機は基本的にJWTの署名のみを検証するため、クライアントの正当性を保証するものではありません。
 
-The best practice is to deploy an independent authentication server. The client first accesses the authentication server, the authentication server verifies the identity of the client, and issues JWT for the legitimate client, and then the client uses the obtained JWT to connect to EMQX.
+ベストプラクティスとしては、独立した認証サーバーを構築し、クライアントはまず認証サーバーにアクセスして認証サーバーがクライアントの正当性を検証し、正当なクライアントに対してJWTを発行します。その後、クライアントは取得したJWTを用いてEMQXに接続します。
 
 :::tip
 
-Since the payload in the JWT is only Base64 encoded, anyone who gets the JWT can decode the payload to get the original information by Base64 decoding. Therefore, it is not recommended to store some sensitive data in the payload of JWT.
+JWTのペイロードはBase64エンコードされているだけなので、JWTを入手した誰でもBase64デコードにより元の情報を取得できます。そのため、JWTのペイロードに機密性の高いデータを格納することは推奨されません。
 
-To reduce the possibility of JWT leakage and theft, it is recommended to set a reasonable validity period and also enable TLS to encrypt client connections.
+JWTの漏洩や盗難の可能性を減らすために、適切な有効期限を設定し、TLSを有効にしてクライアント接続を暗号化することを推奨します。
 
 :::
 
-## Access Control List (Optional)
+## アクセス制御リスト（オプション）
 
-The Access Control List (ACL) is an optional extension of an authentication result to control the client's permissions after login. The JWT can include an `acl` field to specify the client's permissions.
+アクセス制御リスト（ACL）は認証結果の拡張機能であり、ログイン後のクライアントの権限を制御します。JWTには`acl`フィールドを含めてクライアントの権限を指定できます。
 
-See [Access Control List (ACL)](./acl.md) for more information.
+詳細は[アクセス制御リスト（ACL）](./acl.md)をご参照ください。
 
-## Client Attributes
+## クライアント属性
 
-Starting from EMQX v5.7.0, you can use the optional `client_attrs` field in the JWT Payload to set [client attributes](../../client-attributes/client-attributes.md). Please note that both the keys and values must be of string type.
+EMQX v5.7.0以降、JWTペイロード内のオプションフィールド`client_attrs`を使用して[クライアント属性](../../client-attributes/client-attributes.md)を設定できます。キーと値は両方とも文字列型である必要があります。
 
-Example:
+例：
 
 ```json
 {
@@ -53,48 +53,51 @@ Example:
 }
 ```
 
-## Configure JWT Authentication in Dashboard
+## ダッシュボードでのJWT認証設定
 
-1. Select **Access Control** -> **Authentication** from the left navigation menu. 
+1. 左側のナビゲーションメニューから **Access Control** -> **Authentication** を選択します。
 
-2. On the **Authentication** page, click **Create** in the top right corner. Click to select **JWT** as the **Mechanism**, and click **Next**. Skip the Backend selection and go to the **Configuration** tab. 
+2. **Authentication** ページの右上にある **Create** をクリックし、**Mechanism** に **JWT** を選択して **Next** をクリックします。Backendの選択はスキップして、**Configuration** タブに進みます。
 
    <img src="./assets/authn-jwt.png" alt="JWT" style="zoom:67%;" />
 
-3. Configure the following options:
+3. 以下のオプションを設定します：
 
-   - **JWT From**: Determines where the JWT is located in the client connection request. Available options are `password` and `username`, corresponding to the `Password` and `Username` fields in the MQTT `CONNECT` packet for MQTT clients.
+   - **JWT From**：クライアント接続リクエスト内のJWTの位置を指定します。利用可能な値は`password`と`username`で、MQTTクライアントの`CONNECT`パケット内の`Password`および`Username`フィールドに対応します。
 
-   - **Algorithm**: Specify the encryption algorithm of JWT. Optional values ​​are `hmac-based` and `public-key`. Each selection dictates different configuration requirements.
+   - **Algorithm**：JWTの署名アルゴリズムを指定します。選択肢は`hmac-based`と`public-key`で、それぞれ設定項目が異なります。
 
-     - `hmac-based`: Uses a symmetric key for both generating and verifying the JWT's signature. Supported algorithms include HS256, HS384, and HS512. Configuration must include:
-       - `Secret`: The key used to verify the signature, identical to the one used for signature generation.
-       - `Secret Base64 Encode`: Configures whether the `Secret` is Base64 encoded, which determines if EMQX needs to decode the secret during signature verification.
+     - `hmac-based`：対称鍵を用いてJWTの署名生成と検証を行います。サポートされるアルゴリズムはHS256、HS384、HS512です。設定には以下が必要です：
+       - `Secret`：署名検証に使用する鍵で、署名生成時と同じものを指定します。
+       - `Secret Base64 Encode`：`Secret`がBase64エンコードされているかどうかを設定し、EMQXが署名検証時にデコードするかを決定します。
 
-     - `public-key`: Uses a private key to generate the JWT's signature and a public key for verification. Supported algorithms are RS256, RS384, RS512, ES256, ES384, and ES512. Configuration must include:
-        - `Public Key`: Specify the public key in PEM format used to verify the signature.
+     - `public-key`：秘密鍵でJWTの署名を生成し、公開鍵で検証します。サポートされるアルゴリズムはRS256、RS384、RS512、ES256、ES384、ES512です。設定には以下が必要です：
+       - `Public Key`：署名検証に使用するPEM形式の公開鍵を指定します。
 
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this JWT authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   - **Disconnect After Expiration**: Configures whether to disconnect clients after their JWT expires, enabled by default.
-   - **Payload**: Specify additional claims checks that the user wants to perform. Users can define multiple key-value pairs with the **Claim** and **Expacted Value** fields, where the key is used to find the corresponding claim in the JWT, so it needs to have the same name as the JWT claim to be checked, and the value is used to compare with the actual value of the claim. Currently, the placeholders supported are `${clientid}` and `${username}`. 
+   - **Precondition**：[Variform式](../../configuration/configuration.md#variform-expressions)で、このJWT認証機をクライアント接続に適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列の`"true"`の場合にのみ認証機が呼び出されます。それ以外の場合はスキップされます。詳細は[認証の前提条件](./authn.md#authentication-preconditions)をご覧ください。
 
-4. Click **Create** to complete the configuration.
+   - **Disconnect After Expiration**：JWTの有効期限切れ後にクライアントを切断するかどうかを設定します。デフォルトで有効です。
 
+   - **Payload**：追加で検証したいクレームを指定します。ユーザーは複数のキーと値のペアを**Claim**と**Expected Value**フィールドで定義できます。キーはJWT内のクレーム名と一致させる必要があり、値は実際のクレーム値と比較されます。現在サポートされているプレースホルダーは`${clientid}`と`${username}`です。
 
-EMQX also supports periodically obtaining the latest JWKS from the JWKS endpoint, which is essentially a set of public keys used to verify any JWT issued by the authorization server and signed using the RSA or ECDSA algorithm. If you want to use this feature, you need to switch to the **JWKS** configuration page.
+4. **Create** をクリックして設定を完了します。
+
+EMQXはJWKSエンドポイントから最新のJWKSを定期的に取得することもサポートしています。JWKSは認可サーバーが発行しRSAまたはECDSAアルゴリズムで署名された任意のJWTを検証するための公開鍵の集合です。この機能を利用する場合は、**JWKS**設定ページに切り替えてください。
 
 <img src="./assets/authn-jwt-2.png" style="zoom:67%;" />
 
-You need to configure the following JWKS-specific configuration items:
+以下のJWKS固有の設定項目を構成します：
 
-- **JWKS Server**: Specify the server endpoint address for EMQX to query JWKS, the endpoint needs to support GET requests and return a JWKS that conforms to the specification.
-- **JWKS Refresh Interval**: Specify the refresh interval of JWKS, that is, the interval for EMQX to query JWKS.
-- **Headers**: Specify any additional HTTP headers that must be included in the requests to the JWKS server. Adding these HTTP headers ensures that the requests to the JWKS server are properly formatted according to your server's requirements. This configuration allows users to add key-value pairs, for example:
+- **JWKS Server**：EMQXがJWKSを取得するサーバーのエンドポイントアドレスを指定します。エンドポイントはGETリクエストをサポートし、仕様に準拠したJWKSを返す必要があります。
+
+- **JWKS Refresh Interval**：JWKSの更新間隔を指定します。EMQXがJWKSを問い合わせる間隔です。
+
+- **Headers**：JWKSサーバーへのリクエストに含める追加のHTTPヘッダーを指定します。これにより、サーバーの要件に応じた適切なリクエストが可能になります。キーと値のペアを追加できます。例：
   - **Key**: `Accept`
   - **Value**: `application/json`
 
-Click **Create** to complete the configuration.
+**Create** をクリックして設定を完了します。
 
-<!-- ## Configure with Configuration Items
+<!-- ## 設定項目による設定
 
-You can also configuration items for the configuration. For detailed steps, see [authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based). -->
+設定項目による設定も可能です。詳細な手順は[authn-jwt:*](../../configuration/configuration-manual.html#authn-jwt:hmac-based)をご参照ください。 -->

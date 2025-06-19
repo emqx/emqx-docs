@@ -1,102 +1,100 @@
-# Configure and Manage Durable Sessions
+# Durable Sessions の設定と管理
 
-This document provides references and instructions for configuring, managing, and optimizing the [MQTT Durable Sessions](./durability_introduction.md) feature within EMQX, including sessions and storage configuration.
+本ドキュメントでは、EMQX における [MQTT Durable Sessions](./durability_introduction.md) 機能の設定、管理、および最適化に関するリファレンスと手順を提供します。セッションおよびストレージの設定も含みます。
 
-## Configuration Parameters
+## 設定パラメータ
 
-MQTT Durable Sessions configuration is divided into two main categories:
+MQTT Durable Sessions の設定は主に以下の2つのカテゴリに分かれています。
 
-- `durable_sessions`: Contains settings related to MQTT clients' sessions, including how they consume data from durable storage and data retention parameters.
-- `durable_storage` Manages the settings of the durable storage system holding the MQTT message data.
+- `durable_sessions`：MQTT クライアントのセッションに関する設定で、耐久ストレージからのデータ消費方法やデータ保持パラメータを含みます。
+- `durable_storage`：MQTT メッセージデータを保持する耐久ストレージシステムの設定を管理します。
 
-### Durable Sessions Configuration
+### Durable Sessions の設定
 
-You can configure the parameters for durable sessions in the Dashboard. Click **Management** -> **MQTT Settings** in the left menu of the Dashboard, and then select the **Durable Session** tab to configure the parameters.
+Dashboard で Durable Sessions のパラメータを設定できます。Dashboard の左メニューから **Management** -> **MQTT Settings** をクリックし、**Durable Session** タブを選択してパラメータを設定してください。
 
-<img src="./assets/dashboard_session_config.png" alt="dashboard_session_config" style="zoom:67%;" />
+<img src="./assets/dashboard_session_config.png" alt="ダッシュボードのセッション設定" style="zoom:67%;" />
 
-| Parameter                                   | Dashboard UI               | Description                                                  |
-| ------------------------------------------- | -------------------------- | ------------------------------------------------------------ |
-| `durable_sessions.enable`                   | Enable Durable Sessions    | Enables session durability. This configuration item cannot be modified through hot configuration; you need to set it in the configuration file. Note: Restart of the EMQX node is required for changes to take effect. |
-| `durable_sessions.message_retention_period` | Message Retention Period   | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
-| `durable_sessions.batch_size`               | Message Query Batch Size   | Controls the maximum size of message batches consumed from the storage by durable sessions. |
-| `durable_sessions.idle_poll_interval`       | Idel Poll Interval         | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
-| `durable_sessions.heartbeat_interval`       | Session Heartbeat Interval | Specifies the interval for saving session metadata.          |
-| `durable_sessions.renew_streams_interval`   | -                          | Defines how often sessions query the storage for new streams. |
-| `durable_sessions.session_gc_interval`      | Session GC Interval        | Specifies the interval for sweeping through sessions and deleting expired ones. |
+| パラメータ                                   | Dashboard UI 表示名           | 説明                                                         |
+| ------------------------------------------- | ---------------------------- | ------------------------------------------------------------ |
+| `durable_sessions.enable`                   | Enable Durable Sessions      | セッションの耐久性を有効化します。この設定はホットコンフィグレーションでは変更できず、設定ファイルで指定する必要があります。変更を反映するには EMQX ノードの再起動が必要です。 |
+| `durable_sessions.message_retention_period` | Message Retention Period     | Durable Sessions 内の MQTT メッセージの保持期間を定義します。注意：このパラメータはグローバル設定です。 |
+| `durable_sessions.batch_size`               | Message Query Batch Size     | Durable Sessions がストレージから消費するメッセージのバッチ最大サイズを制御します。 |
+| `durable_sessions.idle_poll_interval`       | Idel Poll Interval           | Durable Sessions が新しいメッセージをストレージに問い合わせる頻度を制御します。新しいメッセージが見つかると、クライアントのインフライトキューに空きがあれば即座に次のバッチを取得します。 |
+| `durable_sessions.heartbeat_interval`       | Session Heartbeat Interval   | セッションメタデータを保存する間隔を指定します。               |
+| `durable_sessions.renew_streams_interval`   | -                            | セッションが新しいストリームをストレージに問い合わせる頻度を定義します。 |
+| `durable_sessions.session_gc_interval`      | Session GC Interval          | セッションを巡回し、期限切れのセッションを削除する間隔を指定します。 |
 
-
-The following parameters can be overridden per [zone](../configuration/configuration.md#zone-override):
+以下のパラメータは [ゾーン](../configuration/configuration.md#zone-override)ごとにオーバーライド可能です。
 
 - `durable_sessions.enable`
 - `durable_sessions.batch_size`
 - `durable_sessions.idle_poll_interval`
 - `durable_sessions.renew_streams_interval`
 
-### Durable Storage Configuration
+### Durable Storage の設定
 
-The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `message`.
+`<DS>` は「durable storage（耐久ストレージ）」のプレースホルダーです。現在、利用可能な `<DS>` のパラメータは `message` です。
 
-| Parameter                                 | Description                                                  |
+| パラメータ                                 | 説明                                                         |
 | ----------------------------------------- | ------------------------------------------------------------ |
-| `durable_storage.<DS>.data_dir`           | Directory in the file system where EMQX stores the data.     |
-| `durable_storage.<DS>.n_shards`           | [Numer of shards](./managing-replication.md#number-of-shards). |
-| `durable_storage.<DS>.n_sites`            | [Number of sites](./managing-replication.md#number-of-sites). |
-| `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard. |
-| `durable_storage.<DS>.local_write_buffer` | Contains parameters related to message buffering. See [Local Write Buffer Configuration](#local-write-buffer-configuration). |
-| `durable_storage.<DS>.layout`             | Contains parameters that control how EMQX lays out data on disk. See [Storage Layout Configuration](#storage-layout-configuration). |
+| `durable_storage.<DS>.data_dir`           | EMQX がデータを保存するファイルシステム上のディレクトリ。     |
+| `durable_storage.<DS>.n_shards`           | [シャード数](./managing-replication.md#number-of-shards)。    |
+| `durable_storage.<DS>.n_sites`            | [サイト数](./managing-replication.md#number-of-sites)。       |
+| `durable_storage.<DS>.replication_factor` | [レプリケーションファクター](./managing-replication.md#replication-factor) は各シャードのレプリカ数を決定します。 |
+| `durable_storage.<DS>.local_write_buffer` | メッセージのバッファリングに関するパラメータを含みます。詳細は [ローカル書き込みバッファの設定](#local-write-buffer-configuration) を参照してください。 |
+| `durable_storage.<DS>.layout`             | EMQX がディスク上にデータを配置する方法を制御するパラメータを含みます。詳細は [ストレージレイアウトの設定](#storage-layout-configuration) を参照してください。 |
 
-#### Local Write Buffer Configuration
+#### ローカル書き込みバッファの設定
 
-EMQX writes MQTT messages from clients to the durable storage in batches to maximize the throughput. Batching is configured using the following parameters under `durable_storage.<DS>.layout` configuration sub-tree:
+EMQX はクライアントからの MQTT メッセージを耐久ストレージにバッチ単位で書き込み、スループットを最大化します。バッチ処理は `durable_storage.<DS>.layout` 設定サブツリーの以下のパラメータで制御されます。
 
-| Parameter        | Description                                                  |
+| パラメータ        | 説明                                                         |
 | ---------------- | ------------------------------------------------------------ |
-| `max_items`      | The buffer is flushed when its size reaches this value.      |
-| `flush_interval` | The buffer is also flushed at this interval, provided it contains at least one message. |
+| `max_items`      | バッファのサイズがこの値に達したときにフラッシュされます。    |
+| `flush_interval` | バッファに少なくとも1件のメッセージがある場合、この間隔でフラッシュされます。 |
 
-#### Storage Layout Configuration
+#### ストレージレイアウトの設定
 
-Storage layout determines how EMQX organizes data on disk. Setting `durable_storage.<DS>.layout.type` parameter can change the layout used by the new [generations](./durability_introduction.html#generation). This change does not affect existing generations. The configuration of each layout type varies and is contained under the `durable_storage.<DS>.layout` sub-tree. Currently, the `wildcard_optimized` layout type is available.
+ストレージレイアウトは EMQX がディスク上にデータをどのように配置するかを決定します。`durable_storage.<DS>.layout.type` パラメータを設定することで、新しい [世代](./durability_introduction.html#generation)で使用されるレイアウトを変更できます。この変更は既存の世代には影響しません。各レイアウトタイプの設定は `durable_storage.<DS>.layout` サブツリーに含まれます。現在利用可能なレイアウトタイプは `wildcard_optimized` のみです。
 
-##### Configuration of `wildcard_optimized` Layout Type
+##### `wildcard_optimized` レイアウトタイプの設定
 
-The `wildcard_optimized` layout is aimed to optimize wildcard subscriptions matching a large number of MQTT topics. It achieves this by autonomously accumulating knowledge about topic structures over time. Leveraging a lightweight machine learning algorithm, it predicts the wildcard topic filters that clients are likely to subscribe to. Subsequently, it organizes these topics into a unified stream, allowing efficient consumption in a single sweep.
+`wildcard_optimized` レイアウトは、多数の MQTT トピックに対するワイルドカードサブスクライブのマッチングを最適化することを目的としています。トピック構造に関する知識を自律的に蓄積し、軽量な機械学習アルゴリズムを活用してクライアントがサブスクライブしそうなワイルドカードトピックフィルターを予測します。その後、これらのトピックを統合されたストリームに整理し、一度のスイープで効率的に消費できるようにします。
 
-
-| Parameter              | Description                                                  |
+| パラメータ              | 説明                                                         |
 | ---------------------- | ------------------------------------------------------------ |
-| `bits_per_topic_level` | Determines the size of the topic level hash.                 |
-| `epoch_bits`           | Defines the message offset within an epoch, calculated using the least significant bits of the message timestamp (in microseconds). The number of bits comprising the offset is determined by this parameter. |
-| `topic_index_bytes`    | Specifies the size of the stream identifier in bytes.        |
+| `bits_per_topic_level` | トピックレベルのハッシュサイズを決定します。                |
+| `epoch_bits`           | メッセージタイムスタンプ（マイクロ秒単位）の下位ビットを用いて計算されるエポック内のメッセージオフセットのビット数を定義します。 |
+| `topic_index_bytes`    | ストリーム識別子のバイトサイズを指定します。                 |
 
-**Epoch Configuration**
+**エポックの設定**
 
-Wildcard-optimized streams are segmented into time intervals known as epochs. Messages within each epoch can be processed in a single sweep, thereby enhancing efficiency and throughput. However, larger epochs introduce latency as messages from the current epoch cannot be immediately consumed.
+Wildcard-optimized ストリームはエポックと呼ばれる時間区間に分割されます。各エポック内のメッセージは一度のスイープで処理できるため、効率とスループットが向上します。ただし、エポックが大きいと現在のエポック内のメッセージを即時に消費できず、レイテンシが増加します。
 
-The time interval covered by each epoch can be calculated using the formula: `epoch length (μs) = 2 ^ epoch_bits`.
+各エポックの時間間隔は以下の式で計算できます：`epoch length (μs) = 2 ^ epoch_bits`
 
-| Epoch Bits | Epoch Length |
-| ---------- | ------------ |
-| 1          | 2 μs         |
-| 2          | 4 μs         |
-| 10         | ~1 ms        |
-| 17         | ~100 ms      |
-| 20         | ~1 s         |
-| 21         | ~2 s         |
-| 24         | ~17 s        |
+| Epoch Bits | エポック長さ   |
+| ---------- | -------------- |
+| 1          | 2 μs           |
+| 2          | 4 μs           |
+| 10         | 約1 ms         |
+| 17         | 約100 ms       |
+| 20         | 約1 秒         |
+| 21         | 約2 秒         |
+| 24         | 約17 秒        |
 
-By default, the `epoch_bits` parameter is configured to 20 (~1 s), striking a balance between latency and efficiency. Adjusting this value can fine-tune the trade-off between latency and throughput.
+デフォルトで `epoch_bits` は 20（約1秒）に設定されており、レイテンシと効率のバランスを取っています。この値を調整することで、レイテンシとスループットのトレードオフを微調整できます。
 
-## CLI Commands
+## CLI コマンド
 
-The following CLI commands are available for managing the durable storage:
+耐久ストレージの管理に利用できる CLI コマンドは以下の通りです。
 
 ### `emqx_ctl ds info`
 
-Displays an overview of the durable storage state.
+耐久ストレージの状態概要を表示します。
 
-Example:
+例：
 
 ```bash
 $ emqx_ctl ds info
@@ -146,29 +144,28 @@ SHARDS:
 `-------------`------------------`-------------`
 ```
 
-This command output includes:
+このコマンドの出力には以下が含まれます。
 
-- `THIS SITE`: ID of the site claimed by the local EMQX node.
-- `SITES`: List of all known sites, including EMQX node names and their statuses.
-- `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
+- `THIS SITE`：ローカル EMQX ノードが管理するサイトの ID。
+- `SITES`：既知のすべてのサイトのリスト。EMQX ノード名とそのステータスを含みます。
+- `SHARDS`：耐久ストレージのシャードと、そのレプリカが存在するサイト ID のリスト。
 
 ### `emqx_ctl ds set-replicas <DS> <Site1> <Site2> ...`
 
-This command allows to set the list of sites containing replicas of the durable storage in the cluster.
-Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
+クラスタ内で耐久ストレージのレプリカを保持するサイトのリストを設定します。実行すると、シャードをサイト間で公平に割り当てる操作計画を作成し、バックグラウンドで実行を続けます。
 
-::: warning Important Notice
-Updating the list of durable storage replicas can be costly as it may involve copying large volumes of data between sites.
+::: warning 重要なお知らせ
+耐久ストレージのレプリカリストの更新は、大量のデータをサイト間でコピーする可能性があるためコストがかかる場合があります。
 :::
 
-Example:
+例：
 
 ```bash
 $ emqx_ctl ds set-replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
 
-After executing this command, the output of `ds info` may look like this:
+このコマンド実行後、`ds info` の出力は以下のようになる場合があります。
 
 ```bash
 $ emqx_ctl ds info
@@ -228,156 +225,156 @@ SHARDS:
 `-------------`------------------`--------------------`
 ```
 
-The new section `REPLICA TRANSITIONS` lists pending operations. Once all operations are complete, this list will be empty.
+新たに追加された `REPLICA TRANSITIONS` セクションは保留中の操作を示します。すべての操作が完了すると、このリストは空になります。
 
 ### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
 
-These commands add or remove a site from the list of replicas of the durable storage. They are similar to the `set_replicas` command but update one site at a time.
+これらのコマンドは、耐久ストレージのレプリカサイトリストにサイトを追加または削除します。`set_replicas` コマンドと似ていますが、一度に1サイトずつ更新します。
 
-Example:
+例：
 
 ```bash
 $ emqx_ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 
-For more detailed information, see [Add Sites](./managing-replication.md#add-sites) and [Remove Sites](./managing-replication.md#remove-sites).
+詳細は [Add Sites](./managing-replication.md#add-sites) および [Remove Sites](./managing-replication.md#remove-sites) を参照してください。
 
 ## REST API
 
-The following REST API endpoints are available for managing and monitoring the built-in durable sessions:
+組み込みの Durable Sessions の管理および監視に利用可能な REST API エンドポイントは以下の通りです。
 
-- `/ds/sites`: Lists known sites.
-- `/ds/sites/:site`: Provides information about a site (status, current EMQX node name managing the site, etc.).
-- `/ds/storages`: Lists durable storage.
-- `/ds/storages/:ds`: Provides information about the durable storage and its shards.
-- `/ds/storages/:ds/replicas`: Lists or updates sites containing replicas of durable storage.
-- `/ds/storages/:ds/replicas/:site`: Adds or removes a replica of the durable storage on a site.
+- `/ds/sites`：既知のサイト一覧を取得します。
+- `/ds/sites/:site`：サイトの情報（ステータス、現在管理している EMQX ノード名など）を取得します。
+- `/ds/storages`：耐久ストレージの一覧を取得します。
+- `/ds/storages/:ds`：耐久ストレージおよびそのシャードの情報を取得します。
+- `/ds/storages/:ds/replicas`：耐久ストレージのレプリカを保持するサイトの一覧取得および更新を行います。
+- `/ds/storages/:ds/replicas/:site`：特定サイトの耐久ストレージレプリカの追加または削除を行います。
 
-See EMQX OpenAPI schema for more information.
+詳細は EMQX OpenAPI スキーマを参照してください。
 
-## Metrics
+## メトリクス
 
-The following Prometheus metrics are relevant to durable sessions:
+Durable Sessions に関連する Prometheus メトリクスは以下の通りです。
 
 ### `emqx_ds_egress_batches`
 
-Increments each time a batch of messages is successfully written to durable storage.
+耐久ストレージへのメッセージバッチの書き込みが成功するたびにインクリメントされます。
 
 ### `emqx_ds_egress_messages`
 
-Counts messages successfully written to durable storage.
+耐久ストレージへのメッセージの書き込み成功数をカウントします。
 
 ### `emqx_ds_egress_bytes`
 
-Counts the total volume of payload data successfully written to durable storage. Note: This metric only considers message payloads, so the actual volume of data written may be larger.
+耐久ストレージに書き込まれたペイロードデータの総量をカウントします。注意：このメトリクスはメッセージペイロードのみを対象としているため、実際の書き込みデータ量はこれより多い場合があります。
 
 ### `emqx_ds_egress_batches_failed`
 
-Increments each time writing data to durable storage fails for any reason.
+耐久ストレージへの書き込みが何らかの理由で失敗するたびにインクリメントされます。
 
 ### `emqx_ds_egress_flush_time`
 
-A rolling average of time (in μs) spent writing batches to durable storage. It's a key indicator of replication speed.
+耐久ストレージへのバッチ書き込みにかかる時間（μs）のローリング平均です。レプリケーション速度の重要な指標です。
 
 ### `emqx_ds_store_batch_time`
 
-A rolling average of time (in μs) spent writing batches to the local RocksDB storage. Unlike `emqx_ds_egress_flush_time`, it excludes network replication costs, making it a key indicator of disk I/O efficiency.
+ローカルの RocksDB ストレージへのバッチ書き込みにかかる時間（μs）のローリング平均です。`emqx_ds_egress_flush_time` と異なり、ネットワークレプリケーションのコストを除外しているため、ディスク I/O の効率を示す重要な指標です。
 
 ### `emqx_ds_builtin_next_time`
 
-A rolling average of time (in μs) spent consuming a batch of messages from durable storage.
+耐久ストレージからメッセージバッチを消費するのにかかる時間（μs）のローリング平均です。
 
-### `emqx_ds_storage_bitfield_lts_counter_seek` and `emqx_ds_storage_bitfield_lts_counter_next`
+### `emqx_ds_storage_bitfield_lts_counter_seek` および `emqx_ds_storage_bitfield_lts_counter_next`
 
-These counters are specific to the "wildcard optimized" storage layout. They measure the efficiency of consuming data from local storage. The `seek` primitive is generally slower, so the rate of `emqx_ds_storage_bitfield_lts_counter_next` should ideally grow faster than `seek`.
+これらのカウンターは「wildcard optimized」ストレージレイアウト固有のもので、ローカルストレージからのデータ消費効率を測定します。`seek` 操作は一般に遅いため、`emqx_ds_storage_bitfield_lts_counter_next` の増加速度が `seek` より速いことが望ましいです。
 
-Increasing the `durable_storage.messages.layout.epoch_bits` parameter can help improve this ratio.
+`durable_storage.messages.layout.epoch_bits` パラメータを増やすことで、この比率を改善できます。
 
 ### `emqx_ds_raft_db_shards_num`
 
-The number of shards the DB is split into.
+DB が分割されているシャード数を示します。
 
 ### `emqx_ds_raft_db_sites_num`
 
-This gauge tracks the number of current and assigned sites a DS DB is replicated across.
+DS DB がレプリケートされている現在および割り当てられたサイト数を示すゲージです。
 
-Most of the time, the number of current sites is equal to the number of assigned sites. If the current stays different from the assigned for a long time, something is likely wrong with the replica transfers.
+通常、現在のサイト数は割り当てられたサイト数と等しいはずです。長期間異なる場合は、レプリカ転送に問題がある可能性があります。
 
 ### `emqx_ds_raft_shard_replication_factor`
 
-Tracks the number of replicas in the replica set of a DS DB shard.
+DS DB シャードのレプリカセット内のレプリカ数を追跡します。
 
-If this number falls below the configured and expected replication factor, durability is at risk. Consider rebalancing replicas across more sites.
+この数が設定されたレプリケーションファクターを下回ると、耐久性が危険にさらされます。レプリカをより多くのサイトに再配置することを検討してください。
 
 ### `emqx_ds_raft_db_shards_online_num`
 
-Tracks the number of DS DB shards actively managed on this node.
+このノードでアクティブに管理されている DS DB シャード数を追跡します。
 
-This number should be equal to the number of shards currently assigned to this node. If this is not the case, availability might be compromised. Check the logs for details.
+この数は、このノードに割り当てられているシャード数と等しいはずです。異なる場合は可用性に問題がある可能性があります。詳細はログを確認してください。
 
 ### `emqx_ds_raft_shard_transition_queue_len`
 
-Tracks the number of pending replica set transitions for a DS DB shard.
+DS DB シャードの保留中のレプリカセット遷移数を追跡します。
 
-If this number stays non-zero for a long time, something is wrong with the replica transfers.
+この数が長期間ゼロでない場合は、レプリカ転送に問題があります。
 
 ### `emqx_ds_raft_shard_transitions`
 
-Counts the number of started / completed / skipped / crashed replica set transitions of a DB shard.
+DB シャードのレプリカセット遷移の開始／完了／スキップ／クラッシュした回数をカウントします。
 
-Crashed transitions should always be zero. If this is not the case, consider checking the logs for errors.
+クラッシュした遷移は常にゼロであるべきです。そうでない場合はログを確認してください。
 
 ### `emqx_ds_raft_shard_transition_errors`
 
-Counts the number of transient errors that occurred during the orchestration of replica set transitions of a DB shard.
+DB シャードのレプリカセット遷移のオーケストレーション中に発生した一時的なエラーの数をカウントします。
 
-If this counter grows, something is wrong with the replica transfers. Consider checking the logs for errors.
+このカウンターが増加する場合は、レプリカ転送に問題があります。ログを確認してください。
 
 ### `emqx_ds_raft_snapshot_reads`
 
-Counts the number of started / completed snapshot reads for a DS DB shard, when a shard was the source of snapshot replication.
+シャードがスナップショットレプリケーションのソースであった際のスナップショット読み取りの開始／完了回数をカウントします。
 
 ### `emqx_ds_raft_snapshot_read_errors`
 
-Counts the number of errors that occurred during reading the snapshot on the source DS DB shard, which caused snapshot replication to be aborted.
+ソース DS DB シャードでのスナップショット読み取り中に発生し、スナップショットレプリケーションが中断されたエラーの数をカウントします。
 
-Errors are not expected to happen. Look for possible reasons in the logs.
+エラーは発生しないことが期待されます。原因はログで確認してください。
 
 ### `emqx_ds_raft_snapshot_read_chunks`
 
-Counts the number of individual chunks read on the DS DB shard acting as a source of snapshot transfer, and later transferred to the recipient.
+スナップショット転送のソース DS DB シャードで読み取られ、受信側に転送された個々のチャンク数をカウントします。
 
 ### `emqx_ds_raft_snapshot_read_chunk_bytes`
 
-Counts the number of bytes read as chunks on the source DS DB shard.
+ソース DS DB シャードでチャンクとして読み取られたバイト数をカウントします。
 
 ### `emqx_ds_raft_snapshot_writes`
 
-Counts the number of started / completed snapshot writes for a DS DB shard when a shard was the recipient of snapshot replication.
+シャードがスナップショットレプリケーションの受信側であった際のスナップショット書き込みの開始／完了回数をカウントします。
 
 ### `emqx_ds_raft_snapshot_write_errors`
 
-Counts the number of errors that occurred during writing the snapshot to the recipient DS DB shard, which caused snapshot replication to be aborted.
+受信側 DS DB シャードへのスナップショット書き込み中に発生し、スナップショットレプリケーションが中断されたエラーの数をカウントします。
 
-This is also not expected to grow. Consider checking the logs for details.
+これも増加しないことが期待されます。詳細はログを確認してください。
 
 ### `emqx_ds_raft_snapshot_write_chunks`
 
-Counts the number of individual chunks received from the source DS DB shard and written to the recipient.
+ソース DS DB シャードから受信し、受信側に書き込まれた個々のチャンク数をカウントします。
 
 ### `emqx_ds_raft_snapshot_write_chunk_bytes`
 
-Counts the number of bytes written as chunks on the recipient DS DB shard.
+受信側 DS DB シャードにチャンクとして書き込まれたバイト数をカウントします。
 
 ### `emqx_ds_raft_current_timestamp_us`
 
-Tracks the latest operation timestamp currently replicated by a shard server (in microseconds).
+シャードサーバーが現在レプリケートしている最新の操作タイムスタンプ（マイクロ秒単位）を追跡します。
 
-Normally, each replica should always have the same timestamp. If this is not the case, something is wrong with the replication.
+通常、各レプリカは同じタイムスタンプを持つはずです。異なる場合はレプリケーションに問題があります。
 
 ### `emqx_ds_raft_rasrv_state_changes`
 
-Counts the number of times the Raft server turned into a candidate / follower / leader.
+Raft サーバーが候補者／フォロワー／リーダーに変わった回数をカウントします。
 
-Frequent state changes are a sign of instability. Consider checking the logs for details.
+頻繁な状態変化は不安定の兆候です。ログを確認してください。

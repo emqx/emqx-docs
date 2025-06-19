@@ -1,78 +1,80 @@
-# Usage FAQs
+# 使用に関するよくある質問
 
-## What happens when my License expires?
+## ライセンスが期限切れになるとどうなりますか？
 
-If you are an EMQX Enterprise user, when your License reaches its expiration date, a warning starts to appear each time the node is started to remind you of the expiration.  Depending on your license type, additional restrictions may apply:
+EMQX Enterpriseユーザーの場合、ライセンスの有効期限が切れると、ノード起動時に期限切れを通知する警告が表示されます。ライセンスタイプによっては、追加の制限が適用されることがあります。
 
-- **For Licenses issued for "small" customers or trial Licenses:** No new MQTT connections are allowed, even if the total number of connections is less than the limit specified in the License.  Existing connections won't be disconnected, but they won't be able to reconnect if they drop.
-- **For Licenses not issued for "small" customers or trial Licenses**: New MQTT connections are still permitted, as long as the total count remains below the maximum limit.
+- **「小規模」顧客向けまたはトライアルライセンスの場合：** ライセンスで指定された接続数の上限に達していなくても、新規のMQTT接続は許可されません。既存の接続は切断されませんが、切断された場合は再接続できません。
+- **「小規模」顧客向けやトライアル以外のライセンスの場合：** 合計接続数が最大上限を超えない限り、新規のMQTT接続は許可されます。
 
-If you are unsure which type of License you have, please confirm with your account manager.
+ご自身のライセンスタイプが不明な場合は、担当のアカウントマネージャーにご確認ください。
 
-## How do I update my License?
+## ライセンスはどのように更新しますか？
 
-You can use the following command to update your EMQX Enterprise License:
+以下のコマンドでEMQX Enterpriseのライセンスを更新できます。
 
 ```bash
 ./bin/emqx ctl 
 
-    license info             # Show license info 
-    license update <License> # Update license given as a string
+    license info             # ライセンス情報を表示 
+    license update <License> # 文字列として与えられたライセンスを更新
 ```
 
-You can also update your License through the Dashboard. For how to apply for a License and update it through the Dashboard, see [Work with EMQX Enterprise License](../deploy/license.md).
+また、ダッシュボードからもライセンスを更新可能です。ライセンスの申請方法やダッシュボードを使った更新方法については、[EMQX Enterpriseライセンスの利用](../deploy/license.md)をご参照ください。
 
-## Why can't I receive retained messages when using shared subscriptions?
+## 共有サブスクリプションを使うと保持メッセージが受信できないのはなぜですか？
 
-According to the MQTT protocol, when a client uses a shared subscription, the server is not allowed to send retained messages to that client.
+MQTTプロトコルの仕様により、クライアントが共有サブスクリプションを使用している場合、サーバーはそのクライアントに保持メッセージを送信できません。
 
-## Why do messages sometimes get lost when using shared subscriptions?
+## 共有サブスクリプションを使うとメッセージが時々失われるのはなぜですか？
 
-When a shared subscriber's connection is disconnected but the session remains active, the server continues to deliver messages to the subscriber, which are temporarily stored in the session. As a result, other active shared subscribers may appear as if they have not consumed all the messages. In addition, if the shared subscriber chooses to create a new session when reconnecting, the messages cached in the old session will be permanently lost.
+共有サブスクライバーの接続が切断されてもセッションがアクティブな場合、サーバーはメッセージの配信を続け、そのメッセージはセッション内に一時的に保存されます。そのため、他のアクティブな共有サブスクライバーはすべてのメッセージを消費していないように見えることがあります。また、共有サブスクライバーが再接続時に新しいセッションを作成すると、古いセッションにキャッシュされたメッセージは永久に失われます。
 
-If it is confirmed that the above situation does not exist, yet the issue of message loss persists, you can use the [Log Trace](../observability/tracer.md) to conduct further investigation.
+上記の状況がないにもかかわらずメッセージの損失が続く場合は、[ログトレース](../observability/tracer.md)を使ってさらに調査してください。
 
-## How to troubleshoot the cause of SSL/TLS connection failure?
+## SSL/TLS接続失敗の原因をどのように調査しますか？
 
-Usually when the SSL/TLS connection handshake fails, EMQX will output the corresponding failure reason in the [Log](../observability/log.md). The following are some common keywords in the log and their corresponding meanings:
+通常、SSL/TLS接続のハンドシェイクに失敗すると、EMQXは[ログ](../observability/log.md)に失敗理由を出力します。以下はログに現れる一般的なキーワードとその意味です。
 
 - certificate_expired
 
-   The `certificate_expired` keyword appears in the log, indicating that the certificate has expired, please renew it in time.
+   ログに`certificate_expired`が表示された場合、証明書の有効期限が切れているため、速やかに更新してください。
 
 - no_suitable_cipher
 
-   The `no_suitable_cipher` keyword appears in the log, indicating that a suitable cipher suite was not found during the handshake process. The possible reasons are that the certificate type does not match the cipher suite, the cipher suite supported by both the server and the client was not found, and so on.
+   ログに`no_suitable_cipher`が表示された場合、ハンドシェイク時に適切な暗号スイートが見つからなかったことを示します。証明書の種類が暗号スイートと合わない、サーバーとクライアントの両方でサポートされる暗号スイートが存在しないなどが考えられます。
 
 - handshake_failure
 
-   The `handshake_failure` keyword appears in the log. There are many reasons, which may be analyzed in conjunction with the error reported by the client. For example, the client may find that the connected server address does not match the domain name in the server certificate.
+   ログに`handshake_failure`が表示された場合、原因は多岐にわたります。クライアントのエラー報告と合わせて分析してください。例えば、クライアントが接続先サーバーのアドレスとサーバー証明書のドメイン名が一致しないことを検出する場合があります。
 
 - unknown_ca
 
-   The `unknown_ca` keyword appears in the log, which means that the certificate verification fails. Common reasons are that the intermediate CA certificate is omitted, the Root CA certificate is not specified, or the wrong Root CA certificate is specified. In the two-way authentication, we can judge whether the certificate configuration of the server or the client is wrong according to other information in the log. If there is a problem with the server certificate, the error log is usually:
+   ログに`unknown_ca`が表示された場合、証明書の検証に失敗しています。中間CA証明書の省略、ルートCA証明書の未指定、誤ったルートCA証明書の指定が一般的な原因です。双方向認証の場合、ログの他の情報からサーバーまたはクライアントの証明書設定の誤りを判断できます。
+
+   サーバー証明書に問題がある場合、エラーログは通常以下のようになります。
 
    ```
    {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify received CLIENT ALERT: Fatal - Unknown CA\n"}}}
    ```
 
-   `CLIENT ALERT` means this is a warning message from the client. The server certificate fails the client's check.
+   `CLIENT ALERT`はクライアントからの警告メッセージであり、サーバー証明書がクライアントの検証に失敗したことを示します。
 
-   If there is a problem with the client certificate, the error log is usually:
+   クライアント証明書に問題がある場合、エラーログは通常以下のようになります。
 
    ```
    {ssl_error,{tls_alert,{unknown_ca,"TLS server: In state certify at ssl_handshake.erl:1887 generated SERVER ALERT: Fatal - Unknown CA\n"}}}
    ```
 
-   `SERVER ALERT` means that the server finds that the client certificate cannot pass the authentication when checking the client certificate, and the client will receive this warning message from the server.
+   `SERVER ALERT`はサーバーがクライアント証明書の認証に失敗し、クライアントに警告メッセージを送信したことを示します。
 
 - protocol_version
 
-   The `protocol_version` keyword appears in the log, indicating a mismatch between the TLS protocol versions supported by the client and server.
+   ログに`protocol_version`が表示された場合、クライアントとサーバー間でTLSプロトコルのバージョンが一致していません。
 
-## How to troubleshoot abnormal disconnections on MQTT clients?
+## MQTTクライアントの異常切断の原因をどのように調査しますか？
 
-You can execute `emqx ctl listeners` in the Shell, which will return statistics of disconnections on each listener, including the reason for the disconnection and the number of disconnections. For example:
+Shellで`emqx ctl listeners`を実行すると、各リスナーの切断統計情報が返されます。切断理由や切断回数が含まれます。例：
 
 ```
 $ . /bin/emqx ctl listeners
@@ -86,43 +88,43 @@ tcp:default
   shutdown_count : [{keepalive_timeout,1},{idle_timeout,2}]
 ```
 
-Here are some common disconnection reasons:
+よくある切断理由は以下の通りです。
 
-- `keepalive_timeout`: The client heartbeat timed out and the connection was closed by EMQX.
-- `tcp_closed`: The client directly closed the TCP connection without sending a DISCONNECT packet.
-- `frame_too_large`: The size of the packet sent by the client exceeds the maximum limit and the connection was closed by EMQX.
-- `protocol_error`: EMQX closed the connection due to non-compliant behavior, e.g., the client sent multiple CONNECT packets within the same connection.
-- `idle_timeout`: EMQX closed the connection because it did not receive a CONNECT packet from the client within 15 seconds of the TCP connection being established.
+- `keepalive_timeout`: クライアントのハートビートがタイムアウトし、EMQXが接続を切断。
+- `tcp_closed`: クライアントがDISCONNECTパケットを送信せずにTCP接続を直接閉じた。
+- `frame_too_large`: クライアントが送信したパケットサイズが最大制限を超え、EMQXが接続を切断。
+- `protocol_error`: クライアントの非準拠動作によりEMQXが接続を切断。例として同一接続内で複数のCONNECTパケット送信など。
+- `idle_timeout`: TCP接続確立後15秒以内にクライアントからCONNECTパケットを受信できず、EMQXが接続を切断。
 
-You can also use the [Log Trace](../observability/tracer.md) to trace all the logs related to the Client ID, IP, and topic you specify, and then you can analyze why the client disconnected based on these logs.
+また、[ログトレース](../observability/tracer.md)を使い、指定したクライアントID、IP、トピックに関連するすべてのログを追跡し、切断原因を分析できます。
 
-## When I was executing the stress test, the connection number and throughput were lower than expected. How can I tune the system to make full use of it?
+## ストレステスト時に接続数やスループットが期待より低かった場合、システムを最大限活用するためにはどう調整すればよいですか？
 
-When executing a stress test, besides ensuring the necessary hardware resources, it is also necessary to tune the OS and the Erlang VM to make maximum use of the resources. The most common tuning is to modify the global limitation of file handles, the user limitation of file handles, the TCP backlog and buffer, the limitation of process number of Erlang VM, and so on. You will also need to tune the client machine to ensure it has the ability and resources to handle all the subs and pubs.
+ストレステストを実施する際は、必要なハードウェアリソースの確保に加え、OSやErlang VMのチューニングが必要です。主なチューニング項目は、ファイルハンドルのグローバル制限およびユーザー制限、TCPのバックログやバッファ、Erlang VMのプロセス数制限などです。また、クライアント側のマシンも、すべてのサブスクライブおよびパブリッシュを処理できる能力とリソースを持つよう調整してください。
 
-Different use cases require different tuning. Refer to [Performance Tuning](../performance/tune.md) for tuning the system for general purposes.
+ユースケースによって最適なチューニングは異なります。一般的なチューニング方法については、[パフォーマンスチューニング](../performance/tune.md)をご参照ください。
 
-## When I encounter problems related to client connection, publishing, and subscription, such as failure to connect, abnormal disconnection, etc., how should I troubleshoot?
+## クライアント接続、パブリッシュ、サブスクライブに関する問題（接続失敗、異常切断など）が発生した場合、どのようにトラブルシュートすればよいですか？
 
-EMQX's debug logs already capture all the behaviors and phenomena. By viewing the debug logs, we can determine when the client initiated the connection, the parameters specified during the connection, the success of rejection of the connection, and the reasons for rejection, among other details. However, the extensive information logged in debug mode can consume additional resources and make it challenging to analyze individual clients or topics.
+EMQXのデバッグログにはすべての動作や現象が記録されています。デバッグログを確認することで、クライアントがいつ接続を開始したか、接続時に指定したパラメータ、接続の成功・拒否の有無やその理由などを把握できます。ただし、デバッグモードでは大量の情報が記録されるため、個別のクライアントやトピックの解析が困難になることがあります。
 
-To address this, EMQX provides a [Log Trace](../observability/tracer.md) feature. We can specify the clients or topics we want to trace, and EMQX will output all the debug logs related to those clients or topics to the designated log file. This facilitates self-analysis and seeking assistance from the community.
+これに対処するため、EMQXは[ログトレース](../observability/tracer.md)機能を提供しています。トレース対象のクライアントやトピックを指定すると、それらに関連するすべてのデバッグログを指定のログファイルに出力します。これにより自己解析やコミュニティへの相談が容易になります。
 
-It's important to note that if the client cannot establish a connection with EMQX due to network issues, the log tracing feature will not be useful since EMQX does not receive any messages in such cases. This situation often arises from network configuration problems like firewalls or security groups, resulting in closed server ports. This is particularly common when deploying EMQX on cloud instances. Therefore, in addition to log tracing, troubleshooting network-related issues involves checking port occupation, listening status, and network configurations.
+なお、クライアントがネットワーク障害によりEMQXと接続できない場合、EMQXはメッセージを受信しないためログトレースは役に立ちません。このような場合は、ファイアウォールやセキュリティグループなどのネットワーク設定によりサーバーポートが閉じられていることが多く、特にクラウド環境でのEMQXデプロイ時に発生しやすいです。したがって、ログトレースに加え、ポートの占有状況やリスニング状態、ネットワーク設定の確認も重要です。
 
-## Why are there client IDs like "CENSYS" or other unfamiliar clients?
+## 「CENSYS」などの見慣れないクライアントIDが接続しているのはなぜですか？
 
-CENSYS is an internet scanning and reconnaissance tool that performs regular scans of the IPv4 address space to identify default ports for various protocols such as HTTP, SSH, MQTT, and etc. Therefore, if you notice MQTT clients with a client ID of "CENSYS" or other unfamiliar clients accessing your MQTT broker, it indicates a relatively lower level of security protection. To address this issue effectively, consider implementing the following measures:
+CENSYSはインターネットのスキャンおよび偵察ツールで、IPv4アドレス空間を定期的にスキャンし、HTTP、SSH、MQTTなどの各種プロトコルのデフォルトポートを調査します。したがって、MQTTブローカーに「CENSYS」などのクライアントIDを持つ不明なクライアントがアクセスしている場合、セキュリティ保護レベルが比較的低いことを示しています。この問題に対処するため、以下の対策を検討してください。
 
-1. Avoid using default configurations, such as the AppID and AppSecret used for verifying HTTP API access permissions in EMQX.
-2. Enable authentication mechanisms like password-based authentication or JWT authentication to prevent unauthorized access where only knowledge of an IP address is sufficient for login.
-3. Enable TLS mutual authentication to allow access only to clients with valid certificates.
-4. Enable proper authorization mechanisms to restrict access to sensitive data for unauthorized devices.
-5. Configure your firewall to close unnecessary ports as much as possible.
+1. EMQXのHTTP APIアクセス権限を検証するAppIDやAppSecretなど、デフォルト設定を使用しない。
+2. パスワード認証やJWT認証などの認証機構を有効にし、IPアドレスだけでログインできないようにする。
+3. TLS相互認証を有効にし、有効な証明書を持つクライアントのみアクセスを許可する。
+4. 適切な認可機構を有効にし、認可されていないデバイスによる機密データへのアクセスを制限する。
+5. ファイアウォールで不要なポートを可能な限り閉じる。
 
-## How to reset the Dashboard login password if I forget it?
+## ダッシュボードのログインパスワードを忘れた場合、どのようにリセットしますか？
 
-The default username and password of the Dashboard are admin and public respectively. For security reasons, the Dashboard will force you to change your password when you log in for the first time. If you forget the password you set previously, you can use the following command to set a new password without providing the old password:
+ダッシュボードの初期ユーザー名とパスワードはそれぞれ`admin`と`public`です。セキュリティ上の理由から、初回ログイン時にパスワード変更が強制されます。以前設定したパスワードを忘れた場合は、以下のコマンドで旧パスワードを入力せずに新しいパスワードを設定できます。
 
 ```bash
 ./bin/emqx ctl admins passwd <Username> <Password>

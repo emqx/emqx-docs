@@ -1,32 +1,32 @@
-# Single Sign-On (SSO)
+# シングルサインオン（SSO）
 
-Single Sign-On (SSO) is an authentication mechanism that allows users to log in to multiple applications or systems using a single set of credentials, such as a username and password, without the need for separate authentication in each application. When EMQX Dashboard enables the SSO feature, users can conveniently log in to the EMQX Dashboard using their enterprise account credentials. Organizations can centrally manage user identities and permissions and simplify their user management processes. This feature enhances the security of enterprise data and systems while ensuring user convenience.
+シングルサインオン（SSO）は、ユーザーが複数のアプリケーションやシステムに対して、ユーザー名やパスワードなどの単一の認証情報でログインできる認証機構です。各アプリケーションで個別に認証を行う必要がありません。EMQXダッシュボードでSSO機能を有効にすると、ユーザーは企業アカウントの認証情報を使って簡単にログインできます。これにより、組織はユーザーのIDと権限を一元管理でき、ユーザー管理の手間を軽減します。この機能は企業のデータやシステムのセキュリティを強化しつつ、ユーザーの利便性も向上させます。
 
-EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
+EMQXは、LDAP（Lightweight Directory Access Protocol）およびSAML 2.0（Security Assertion Markup Language）標準に基づくSSO機能を実装しており、[OpenLDAP](https://www.openldap.org/)、[Azure AD (Microsoft Entra ID)](https://azure.microsoft.com/en-in/products/active-directory)、[Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/)などの主要なIDサービスとの連携をサポートしています。
 
-## LDAP-Based SSO
+## LDAPベースのSSO
 
-EMQX Dashboard allows you to integrate LDAP for SSO. LDAP is an application-layer protocol to access and maintain distributed directory information services. It is a common authentication and authorization protocol for SSO solutions in enterprise environments.
+EMQXダッシュボードはLDAPを利用したSSO連携を可能にします。LDAPは分散ディレクトリ情報サービスにアクセス・管理するためのアプリケーション層プロトコルであり、企業環境におけるSSOソリューションで一般的な認証・認可プロトコルです。
 
-EMQX sends the user's LDAP credentials to the directory server for validation when using LDAP SSO. Upon successful validation, it creates user session information and logs the user into the Dashboard.
+LDAP SSOを使用する場合、EMQXはユーザーのLDAP認証情報をディレクトリサーバーに送信して検証を行います。検証が成功すると、ユーザーのセッション情報を作成し、ダッシュボードへのログインを許可します。
 
-## SAML-Based SSO
+## SAMLベースのSSO
 
-EMQX Dashboard allows you to integrate Identity Provider (IdP) services that support SAML for SSO. SAML is an XML-based open standard data format widely used in enterprise environments for SSO solutions.
+EMQXダッシュボードは、SAMLをサポートするIDプロバイダー（IdP）サービスとの連携を可能にします。SAMLはXMLベースのオープン標準フォーマットで、企業環境のSSOソリューションで広く利用されています。
 
-With SAML SSO, users only need to authenticate themselves once with the Identity Provider. The Identity Provider generates a SAML assertion containing user information and sends it to the EMQX Dashboard. Upon receiving and successfully verifying the SAML assertion, EMQX Dashboard creates user session information and logs the user into the Dashboard. SAML provides the capability for cross-domain authentication and authorization, supporting seamless integration between multiple applications. Enterprises can easily incorporate EMQX into their existing SAML identity systems, enabling users to access EMQX services conveniently and securely.
+SAML SSOでは、ユーザーはIDプロバイダーで一度認証するだけで済みます。IDプロバイダーはユーザー情報を含むSAMLアサーションを生成し、EMQXダッシュボードに送信します。ダッシュボードはこのSAMLアサーションを受け取り、検証に成功するとユーザーのセッション情報を作成しログインを許可します。SAMLはクロスドメイン認証・認可を可能にし、複数のアプリケーション間でのシームレスな連携をサポートします。企業は既存のSAML IDシステムにEMQXを容易に組み込み、ユーザーは安全かつ便利にEMQXサービスを利用できます。
 
-## Configuration and Usage Workflow
+## 設定と利用のワークフロー
 
-1. Administrators configure and enable SSO in the Dashboard. Once configured, the EMQX Dashboard displays an SSO entry point on the login page.
-2. User information is configured on the Identity Provider (IdP) side.
-3. Users are guided to choose different Single Sign-On methods on the Dashboard login page.
-4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard.
-5. Administrators assign roles and permissions to different users. Users can access corresponding resources after refreshing their login.
+1. 管理者がダッシュボードでSSOを設定・有効化します。設定後、ログインページにSSOの入口が表示されます。  
+2. IDプロバイダー（IdP）側でユーザー情報を設定します。  
+3. ユーザーはダッシュボードのログインページで利用するSSO方式を選択します。  
+4. ログイン成功後、EMQXダッシュボードはユーザー情報に基づいてセッションを作成し、アクセスを許可します。  
+5. 管理者はユーザーごとに役割や権限を割り当てます。ユーザーはログインを更新することで対応するリソースにアクセス可能になります。
 
-## Configuration Examples
+## 設定例
 
-Below are configuration examples for SSO based on LDAP and SAML 2.0:
+以下はLDAPおよびSAML 2.0に基づくSSOの設定例です。
 
-- [Configure LDAP Single Sign-On](./sso-ldap.md)
-- [Configure SAML Single Sign-On](./sso-saml.md)
+- [LDAPシングルサインオンの設定](./sso-ldap.md)  
+- [SAMLシングルサインオンの設定](./sso-saml.md)

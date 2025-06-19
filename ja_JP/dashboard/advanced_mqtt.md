@@ -1,17 +1,17 @@
 # Advanced MQTT
 
-## Topic Rewrite
+## トピック書き換え
 
-The Topic Rewrite feature allows modification of device business topics. By setting up rules in EMQX, it can rewrite the original topic to a new target topic during subscription or publishing. This page enables users to add topic rewriting rules via the Dashboard without modifying configuration files. For detailed topic rewriting rules, refer to [Topic Rewrite](../messaging/mqtt-topic-rewrite.md).
+トピック書き換え機能は、デバイスの業務用トピックを変更することを可能にします。EMQXでルールを設定することで、サブスクライブやパブリッシュ時に元のトピックを新しいターゲットトピックに書き換えることができます。本ページでは、設定ファイルを変更せずにダッシュボードからトピック書き換えルールを追加できます。詳細なトピック書き換えルールについては、[Topic Rewrite](../messaging/mqtt-topic-rewrite.md)をご参照ください。
 
-## Auto-Subscription
+## 自動サブスクライブ
 
-Auto-subscription is an MQTT extension feature supported by EMQX. It allows EMQX to automatically subscribe to specified topics for devices based on predefined rules after they successfully connect, without requiring additional subscription requests. This page allows users to configure the auto-subscription feature via the Dashboard. For detailed configuration guidance, refer to [Auto-Subscription](../messaging/mqtt-auto-subscription.md).
+自動サブスクライブは、EMQXがサポートするMQTTの拡張機能です。デバイスが正常に接続した後、追加のサブスクライブ要求なしに、あらかじめ定義されたルールに基づいて指定されたトピックに自動的にサブスクライブすることを可能にします。本ページでは、ダッシュボードから自動サブスクライブ機能の設定が行えます。詳細な設定方法は、[Auto-Subscription](../messaging/mqtt-auto-subscription.md)をご参照ください。
 
-## Delayed Publish
+## 遅延パブリッシュ
 
-Delayed publish is an MQTT extension feature supported by EMQX. When a client publishes a message using a special topic prefix `$delayed/{DelayInterval}`, the delayed publish feature is triggered, allowing the message to be published after a user-configured delay interval. This page enables users to configure the delayed publish feature via the Dashboard. For detailed configuration guidance, refer to [Configure Delayed Publish via Dashboard](../messaging/mqtt-delayed-publish.md#configure-delayed-publish-via-dashboard).
+遅延パブリッシュは、EMQXがサポートするMQTTの拡張機能です。クライアントが特別なトピックプレフィックス `$delayed/{DelayInterval}` を使ってメッセージをパブリッシュすると、遅延パブリッシュ機能が起動し、ユーザーが設定した遅延時間後にメッセージがパブリッシュされます。本ページでは、ダッシュボードから遅延パブリッシュ機能の設定が行えます。詳細な設定方法は、[Configure Delayed Publish via Dashboard](../messaging/mqtt-delayed-publish.md#configure-delayed-publish-via-dashboard)をご参照ください。
 
-## File Transfer
+## ファイル転送
 
-File transfer based on MQTT is an advanced feature of EMQX Enterprise. EMQX extends the MQTT protocol to allow client devices to transfer, manage, and store offline file data, such as audio, video, images, and diagnostic logs, in addition to transmitting real-time structured data like sensor data and control instructions. You can configure this feature on the file transfer page. For detailed configuration guidance, refer to [Enabling and Configuring File Transfer via Dashboard](../file-transfer/broker.md#enable-and-configure-file-transfer-via-dashboard).
+MQTTに基づくファイル転送は、EMQX Enterpriseの高度な機能です。EMQXはMQTTプロトコルを拡張し、クライアントデバイスがセンサーのデータや制御指令などのリアルタイム構造化データに加え、音声、映像、画像、診断ログなどのオフラインファイルデータを転送、管理、保存できるようにします。この機能はファイル転送ページで設定可能です。詳細な設定方法は、[Enabling and Configuring File Transfer via Dashboard](../file-transfer/broker.md#enable-and-configure-file-transfer-via-dashboard)をご参照ください。

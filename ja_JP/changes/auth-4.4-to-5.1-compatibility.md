@@ -1,50 +1,50 @@
-# Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1 
+# EMQX 4.4 と EMQX 5.1 間の認証／認可の互換性問題
 
-This page presents the compatibility information for authentication and authorization configurations between EMQX 4.4 and EMQX 5.1.
+本ページでは、EMQX 4.4 と EMQX 5.1 間の認証および認可設定の互換性情報を紹介します。
 
-## Common Incompatibility Changes 
+## 共通の互換性変更点
 
-### SSL Options
+### SSL オプション
 
-EMQX 5.1 provides the option of enabling TLS when there is a need to access external resources, such as connecting to a database (MySQL, PostgreSQL, MongoDB, Redis) for authentication, or using password-based authentication with access to a web server via HTTPS.  For more information, refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+EMQX 5.1 では、MySQL、PostgreSQL、MongoDB、Redis などの外部リソースにアクセスする際や、HTTPS 経由でのパスワード認証を行う場合に TLS を有効にするオプションが提供されています。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
 
-### Placeholders
+### プレースホルダー
 
-Backends that support some kind of data interpolation (MySQL, PostgreSQL, MongoDB, Redis, HTTP for external requests, JWT for data interpolation) now use `${variable}` placeholders instead of `%X` ones.
+MySQL、PostgreSQL、MongoDB、Redis、外部リクエスト用の HTTP、JWT のデータ補間をサポートするバックエンドは、従来の `%X` 形式のプレースホルダーから `${variable}` 形式に変更されました。
 
-## Authentication
+## 認証
 
-### Common Changes (All Authentication Sources)
+### 共通の変更点（すべての認証ソース）
 
-#### Password Hashing
+#### パスワードハッシュ
 
-All password-based providers (Built-in database, MySQL, PostgreSQL, MongoDB, Redis) now have the same `password_hash` options, configured in the same way. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
+組み込みデータベース、MySQL、PostgreSQL、MongoDB、Redis などのパスワードベースのプロバイダーはすべて、同じ `password_hash` オプションを持ち、同様に設定されます。詳細は [Password Hashing](../access-control/authn/authn.md#password-hashing) を参照してください。
 
-#### Per-Listener Authentication
+#### リスナーごとの認証
 
-Unlike in version 4.4, each MQTT listener in EMQX 5.1 may have its own authentication configuration. Additionally, the `enable_authn` listener option is available:
+EMQX 5.1 では、4.4 と異なり、各 MQTT リスナーごとに独自の認証設定が可能です。さらに、`enable_authn` リスナーオプションが追加されました：
 
-- `enable_authn=true` is the default, delegating authentication to the authentication chain.
-- `enable_authn=false` completely disables authentication for the listener.
-- `enable_authn=quick_deny_anonymous` is similar to `true`, but also immediately rejects connecting clients without credentials.
+- `enable_authn=true`（デフォルト）は認証チェーンに認証を委譲します。
+- `enable_authn=false` はリスナーの認証を完全に無効化します。
+- `enable_authn=quick_deny_anonymous` は `true` と同様ですが、認証情報なしで接続するクライアントを即座に拒否します。
 
-#### Remove the Anonymous Mechanism
+#### 匿名アクセス機構の削除
 
-EMQX 5.1 no longer has explicit `allow_anonymous` settings. All clients are allowed to connect by default. If you **add and enable** any authenticator, EMQX will try to authenticate the clients. To allow anonymous access, remove or disable all authenticators in the global or listener-specific chain.
+EMQX 5.1 では明示的な `allow_anonymous` 設定はなくなりました。すべてのクライアントはデフォルトで接続が許可されます。認証器を追加して有効化すると、EMQX はクライアントの認証を試みます。匿名アクセスを許可するには、グローバルまたはリスナー固有の認証チェーンからすべての認証器を削除または無効化してください。
 
-After traversing the configured authentication chain, if none of the authenticator in the chain can decide that this client is allowed to connect, then the connection is rejected.
+設定された認証チェーンを通過しても、いずれの認証器もクライアントの接続許可を判断できなければ、接続は拒否されます。
 
-The `bypass_auth_plugins` configuration is also deleted. When you wants to allow all clients to connect without authentication, you can set `listeners.{type}.{name}.enable_authn = false`.
+`bypass_auth_plugins` 設定も削除されました。すべてのクライアントを認証なしで接続許可したい場合は、`listeners.{type}.{name}.enable_authn = false` を設定してください。
 
-### Built-in Database (Mnesia)
+### 組み込みデータベース（Mnesia）
 
-- Mnesia is now referred to as the "built-in" database; No user records in the configuration.
-- Change `password_hash` to `password_hash_algorithm`: {name = Algo, salt_position = prefix}. For details, refer to [Password Hashing](../access-control/authn/authn.md#password-hashing).
-- `user_id_type` is used to identify whether the `clientid` or `username` should be used as MQTT user identifiers. Mixed types of records are not allowed.
-- The REST APIs to manage the authentication data records are changed. For more information, refer to the API doc for `POST /authentication/{id}/users`.
-- Users can use the data import API to import data from older versions into EMQX 5.x, see `POST /authentication/{id}/import_users` for details.
+- Mnesia は「組み込み」データベースと呼ばれ、設定内にユーザーレコードはありません。
+- `password_hash` は `password_hash_algorithm` に変更され、`{name = Algo, salt_position = prefix}` の形式です。詳細は [Password Hashing](../access-control/authn/authn.md#password-hashing) を参照してください。
+- `user_id_type` は MQTT ユーザー識別子として `clientid` または `username` のどちらを使うかを指定します。混在は許されません。
+- 認証データレコード管理用の REST API が変更されました。詳細は `POST /authentication/{id}/users` の API ドキュメントを参照してください。
+- 古いバージョンからのデータインポート用 API も利用可能です。詳細は `POST /authentication/{id}/import_users` を参照してください。
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -67,17 +67,17 @@ authentication {
 }
 ```
 
-### Built-in Database (Enhanced Authentication)
+### 組み込みデータベース（強化認証）
 
-- SHA1 hashing support used in EMQX 4.4 is no longer available. Use the `algorithm` parameter to choose between `sha512'`and `sha256` algorithms.
-- `iteration_count` can now be configured to specify the calculation times of hash function (4096 was implicitly used in EMQX 4.4).
+- EMQX 4.4 で使われていた SHA1 ハッシュはサポートされません。`algorithm` パラメータで `sha512` または `sha256` を選択してください。
+- `iteration_count` でハッシュ関数の計算回数を指定可能です（4.4 では暗黙的に 4096 回）。
 
-#### Example
+#### 例
 
 EMQX 4.4
 
 ```
-# No configuration
+# 設定なし
 ```
 
 EMQX 5.1
@@ -100,47 +100,40 @@ EMQX 5.1
   backend = redis
 ```
 
-- `type` is changed to `redis_type`.
-  - For type `single`,  `server` is changed to `servers`.
-  - For type `sentinel`,  `server` is changed to `servers`.
-  - For type `cluster`,  `database` option is no longer available.
-  
-- `database` is still `database` (except for the `cluster` type); this option is no more applicable for `cluster` type.
-
-- `pool` is changed to `pool_size`.
-
-- `password` is still `password`.
-
-- `query_timeout` is no longer used.
-
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
-- `auth_cmd` is changed to `cmd`. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET` and `HMGET` query commands. Use `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) in the command. The command should fetch at least the `password` (compatible with 4.x) or `password_hash` field and optionally the `salt` and `is_superuser` fields.
-
-- `super_cmd` is no longer used. Provide the `is_superuser` field in `cmd` instead. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
+- `type` は `redis_type` に変更されました。
+  - `single` タイプの場合、`server` は `servers` に変更。
+  - `sentinel` タイプの場合も同様に `server` は `servers` に変更。
+  - `cluster` タイプでは `database` オプションは廃止。
+- `database` は `cluster` タイプ以外では引き続き使用可能。
+- `pool` は `pool_size` に変更。
+- `password` はそのまま。
+- `query_timeout` は廃止。
+- `ssl.*` オプションは共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `auth_cmd` は `cmd` に変更。Redis ハッシュデータ構造と `HGET`、`HMGET` コマンドのみサポート。コマンド内で `${var}` 形式のプレースホルダーを使用可能。コマンドは少なくとも `password`（4.x 互換）または `password_hash` フィールドを取得し、オプションで `salt` と `is_superuser` フィールドも取得してください。
+- `super_cmd` は廃止。代わりに `cmd` 内で `is_superuser` フィールドを提供してください。クライアントにスーパーユーザー権限を与える場合は、Redis クエリコマンドに `is_superuser` フィールドを追加してください。
 
   ::: details
   
   ```shell
-  # bad
+  # NG
   GET emqx_user:${username}
-  # bad
+  # NG
   HMGET emqx_user:${username} passwd
   
-  # good
+  # OK
   HMGET emqx_user:${username} password_hash
   
-  # good
+  # OK
   HMGET emqx_user:${username} password_hash is_superuser
   ```
   
   :::
-  
-- `password_hash` now uses common `password_hash_algorithm` parameters.
 
-You can use `auto_reconnect` to automatically reconnect to Redis on failure.
+- `password_hash` は共通の `password_hash_algorithm` パラメータを使用。
 
-#### Example
+障害時に Redis に自動再接続するには `auto_reconnect` を使用できます。
+
+#### 例
 
 EMQX 4.4
 
@@ -203,17 +196,12 @@ authentication {
   mechanism = password_based
 ```
 
-- `server`, `username`, `password`, `database`, `query_timeout` are retained.
-
-- `pool` is changed to `pool_size`.
-
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
-- `password_hash` is changed to`common password_hash_algorithm` parameters.
-
-- `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
-
-- `super_query` is not used anymore, `is_superuser` column is provided in query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+- `server`、`username`、`password`、`database`、`query_timeout` は引き続き使用可能。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `password_hash` は共通の `password_hash_algorithm` パラメータに変更。
+- `auth_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用。クエリは少なくとも `password` または `password_hash` カラムを取得し、オプションで `salt` と `is_superuser` カラムを取得してください。
+- `super_query` は廃止。`is_superuser` カラムは `query` 内で提供してください。クライアントにスーパーユーザー権限を与える場合は、認証 SQL の結果に `is_superuser` フィールドを含めてください。
 
   ```sql
   SELECT
@@ -224,9 +212,9 @@ authentication {
     where username = ${username} LIMIT 1
   ```
 
-You can use `auto_reconnect`  to reconnect to MySQL automatically on failure.
+障害時に MySQL に自動再接続するには `auto_reconnect` を使用可能。
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -293,21 +281,14 @@ authentication {
   backend = postgresql
 ```
 
-- `server`, `username`, `password`, `database` are retained.
-
-- `query_timeout` is not used anymore.
-
-- `encoding` is not used anymore.
-
-- `pool` is changed to `pool_size`.
-
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
-- `password_hash` is changed to common `password_hash_algorithm` parameters.
-
-- `auth_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. Query should fetch at least `password` or `password_hash` column and optionally `salt` and `is_superuser` columns.
-
-- `super_query` is not used anymore, `is_superuser` column is provided in the query instead. If you need to give clients super-user permissions, please ensure that the authentication SQL result contains the `is_superuser` field.
+- `server`、`username`、`password`、`database` は引き続き使用可能。
+- `query_timeout` は廃止。
+- `encoding` は廃止。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `password_hash` は共通の `password_hash_algorithm` パラメータに変更。
+- `auth_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用。クエリは少なくとも `password` または `password_hash` カラムを取得し、オプションで `salt` と `is_superuser` カラムを取得してください。
+- `super_query` は廃止。`is_superuser` カラムは `query` 内で提供してください。クライアントにスーパーユーザー権限を与える場合は、認証 SQL の結果に `is_superuser` フィールドを含めてください。
 
   ```sql
   SELECT
@@ -318,7 +299,7 @@ authentication {
     where username = ${username} LIMIT 1
   ```
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -386,27 +367,18 @@ mechanism = password_based
 backend = mongodb
 ```
 
-- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
-
+- `type` は `mongo_type` に変更。値は `single`、`rs`、`sharded` のいずれか。未知の値は廃止。
 - `server`
-  - For `rs`, `sharded` to `servers`
-  - For `single` to `server`
-  
-- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
-
-- `r_mode` is availalable only for `rs` type.
-
-- `pool` is changed to `pool_size`.
-
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
-- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
-
-- `auth_query.salt_field` is changed to `salt_field`.
-
-- `auth_query.super_field` is changed to `is_superuser_field`.
-
-- `super_query` is not used anymore. Provide `is_superuser_field` field in the documents fetched with `filter` together with `is_superuser_field` setting.
+  - `rs`、`sharded` タイプは `servers`
+  - `single` タイプは `server`
+- `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` は引き続き使用可能。
+- `r_mode` は `rs` タイプのみ使用可能。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `auth_query.selector` は `filter` に変更。文字列ではなく、セレクターのデータ構造全体を指定します。`${var}` 形式のプレースホルダーはセレクター値で使用可能。
+- `auth_query.salt_field` は `salt_field` に変更。
+- `auth_query.super_field` は `is_superuser_field` に変更。
+- `super_query` は廃止。`filter` で取得するドキュメントに `is_superuser_field` を含めてください。
 
   ::: details
 
@@ -423,11 +395,10 @@ backend = mongodb
 
   ::: 
 
-- `password_hash` is changed to `common password_hash_algorithm` parameters.
+- `password_hash` は共通の `password_hash_algorithm` パラメータに変更。
+- `query_timeout` は廃止。
 
-- `query_timeout` is not used.
-
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -517,34 +488,32 @@ authentication {
 mechanism = jwt
 ```
 
--  `secret`, `from`, `verify_claims`, `acl_claim_name`, `refresh_interval` are retained.
-- `pubkey ` is changed to `public_key`.
-- `jwks` is changed to `endpoint`.
-- `signature_format` is no more available.
+- `secret`、`from`、`verify_claims`、`acl_claim_name`、`refresh_interval` は引き続き使用可能。
+- `pubkey` は `public_key` に変更。
+- `jwks` は `endpoint` に変更。
+- `signature_format` は廃止。
 
-In `verifiy_claims`, `${var}`-style placeholders (``${username}`` and `${clientid}`) should be used in selector values instead of `%X` ones.
+`verify_claims` 内のセレクター値では `%X` 形式ではなく `${var}` 形式のプレースホルダー（`${username}`、`${clientid}`）を使用してください。
 
-Additional parameters:
+追加パラメータ：
 
-- `use_jwks`: whether to fetch keys from JWKS
-- `algorithm`:  `public-key|hmac-based` which type of signature to verify.
-- `secret_base64_encoded`: specifies secret format
-- `pool_size`: number of connections to JWKS server
-- `ssl` SSL options for connecting to JWKS server
+- `use_jwks`: JWKS からキーを取得するかどうか
+- `algorithm`: `public-key` または `hmac-based` の署名検証タイプ
+- `secret_base64_encoded`: シークレットのフォーマット指定
+- `pool_size`: JWKS サーバーへの接続数
+- `ssl`: JWKS サーバー接続用の SSL オプション
 
-Not all sets of parameters are allowed. 
+すべてのパラメータセットが許可されているわけではありません。
 
-EMQX 4.x supports `public key` and `hmac secret` algorithms, as well as `jwks` at the same time. Unlike EMQX 4.4, not all combinations of  (`secret`,` secret_base64_encoded`,`public_key`,` endpoint`, `pool_size`, `refresh_interval` , `ssl` ) parameters are allowed. EMQX 5.1 uses one algorithm at a time only, which is set in the global config. `use_jwks` and `algorithm` identify the available sets:
+EMQX 4.x は `public key`、`hmac secret`、`jwks` を同時にサポートしていましたが、EMQX 5.1 では一度に一つのアルゴリズムのみ使用し、グローバル設定で指定します。`use_jwks` と `algorithm` で利用可能なパラメータセットが決まります：
 
-With `use_jwks=true` and `algorithm=public-key`:  `endpoint`, `pool_size`,``refresh_interval`, `ssl`
+- `use_jwks=true` かつ `algorithm=public-key`：`endpoint`、`pool_size`、`refresh_interval`、`ssl`
+- `use_jwks=false` かつ `algorithm=public-key`：`public_key`
+- `use_jwks=false` かつ `algorithm=hmac-based`：`secret`、`secret_base64_encoded`
 
-With `use_jwks=false` and a`lgorithm=public-key`:  `public_key`
+`use_jwks=true` と `algorithm=hmac-based` の組み合わせは無効です。
 
-With `use_jwks=false` and `algorithm=hmac-based`: `secret`, `secret_base64_encoded`
-
-Combination `use_jwks=true` and `algorithm=hmac-based` is invalid.
-
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -588,34 +557,34 @@ mechanism = password_based
 backend = http
 ```
 
--  `method`, `pool_size`, `connect_timeout`, and `enable_pipelining` are retained.
--  `auth_req.url` is changed to `url`.
--  `auth_req.headers` is changed to `headers`.
--  `auth_req.params` is changed with `body`.
--  `timeout` is changed to `request_timeout`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `super_req` is not available. Provide `is_superuser` field in the service response instead.
+- `method`、`pool_size`、`connect_timeout`、`enable_pipelining` は引き続き使用可能。
+- `auth_req.url` は `url` に変更。
+- `auth_req.headers` は `headers` に変更。
+- `auth_req.params` は `body` に変更。
+- `timeout` は `request_timeout` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `super_req` は廃止。代わりにサービスレスポンスに `is_superuser` フィールドを含めてください。
 
-Unlike version 4.4,  `url`, `headers`, and `body` parameters allow placeholders. In version 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
+4.4 と異なり、`url`、`headers`、`body` パラメータでプレースホルダーが使用可能です。5.1 では `body` は文字列ではなくマップで、POST リクエストでは JSON または X-WWW-Form-Urlencoded 形式でシリアライズされ、GET リクエストではクエリパラメータとして送信されます。
 
-Unlike version 4.4, HTTP authentication only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. In version 5.1, the authentication result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes.
+4.4 と異なり、HTTP 認証は成功した HTTP ステータスコード（2XX）のレスポンスのみを有効とし、レスポンスボディ内の JSON フィールド（`result`）で認証結果を判断します。
 
 ::: details
 
-**Success response status code:**
+**成功レスポンスステータスコード:**
 
 ```shell
-200 or 204
+200 または 204
 ```
 
-The authenticator will be ignored if the request fails or returns another status code.
+リクエスト失敗や他のステータスコードの場合、認証器は無視されます。
 
-**Success response body (JSON):**
+**成功レスポンスボディ（JSON）:**
 
-| Name         | Type    | Required | Description             |
-| ------------ | ------- | -------- | ----------------------- |
-| result       | Enum    | true     | `allow | deny | ignore` |
-| is_superuser | Boolean | false    |                         |
+| 名前         | 型       | 必須 | 説明                   |
+| ------------ | -------- | ---- | ---------------------- |
+| result       | Enum     | 必須 | `allow | deny | ignore` |
+| is_superuser | Boolean  | 任意 |                         |
 
 ```json
 {
@@ -626,7 +595,7 @@ The authenticator will be ignored if the request fails or returns another status
 
 :::
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -689,21 +658,21 @@ EMQX 5.1
 }
 ```
 
-## Authorization
+## 認可
 
-### ACL File
+### ACL ファイル
 
-1. Removed the `acl_file` configuration. The file-based ACL (acl.conf) will be used as one of the authorization sources and added to EMQX by default.
-2. `acl.conf` data file syntax has been changed.
-2. In dsl, `pubsub` is renamed to `all`.
+1. `acl_file` 設定は削除されました。ファイルベースの ACL（acl.conf）はデフォルトで EMQX の認可ソースの一つとして使用されます。
+2. `acl.conf` のデータファイル構文が変更されました。
+3. DSL 内の `pubsub` は `all` に名称変更されました。
 
-| 4.x    | 5.1      | Compatibility |
-| ------ | -------- | ------------- |
-| user   | username | Yes           |
-| client | clientid | Yes           |
-| pubsub | all      | No            |
+| 4.x    | 5.1      | 互換性       |
+| ------ | -------- | ------------ |
+| user   | username | あり         |
+| client | clientid | あり         |
+| pubsub | all      | なし         |
 
-#### Example
+#### 例
 
 EMQX 4.3
 
@@ -729,17 +698,17 @@ EMQX 5.1
 {allow, all}.
 ```
 
-### Built-in Database
+### 組み込みデータベース
 
-- Mnesia renamed to the Built-in Database.
-- The data format and REST API have changed. 4.x ACL data can be exported with `./bin/emqx_ctl data export` command. Users may convert the data into 5.x format and import it through the corresponding REST API `/authorization/sources/built_in_database/rules/{clients,users}`.
+- Mnesia は組み込みデータベースに名称変更。
+- データ形式と REST API が変更されました。4.x の ACL データは `./bin/emqx_ctl data export` コマンドでエクスポート可能。ユーザーは 5.x 形式に変換し、対応する REST API `/authorization/sources/built_in_database/rules/{clients,users}` でインポートしてください。
 
-#### Example
+#### 例
 
 EMQX 4.4
 
 ```
-# No settings
+# 設定なし
 ```
 
 EMQX 5.1
@@ -753,7 +722,7 @@ EMQX 5.1
 
 ### JWT
 
-This is the implicit ACL based on claims fetched during JWT authentication. In ACL claims, `${variable}` placeholders instead of `%X` ones should be used.
+JWT 認証時に取得したクレームに基づく暗黙の ACL です。ACL クレーム内では `%X` 形式ではなく `${variable}` 形式のプレースホルダーを使用してください。
 
 ### HTTP
 
@@ -761,34 +730,32 @@ This is the implicit ACL based on claims fetched during JWT authentication. In A
 type = http
 ```
 
-- `method`, `pool_size`, `connect_timeout`, `enable_pipelining` are retained.
-- `acl_req.url` is changed to `url`. 
-- `acl_req.headers` is changed to `headers`. 
-- `acl_req.params` is changed to `body`. 
-- `timeout` to `request_timeout`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+- `method`、`pool_size`、`connect_timeout`、`enable_pipelining` は引き続き使用可能。
+- `acl_req.url` は `url` に変更。
+- `acl_req.headers` は `headers` に変更。
+- `acl_req.params` は `body` に変更。
+- `timeout` は `request_timeout` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
 
-Unlike 4.4,  `url`, `headers`, and `body` parameters allow placeholders.   
+4.4 と異なり、`url`、`headers`、`body` パラメータでプレースホルダーが使用可能です。5.1 では `body` は文字列ではなくマップで、POST リクエストでは JSON または X-WWW-Form-Urlencoded 形式でシリアライズされ、GET リクエストではクエリパラメータとして送信されます。
 
-In 5.1, `body` is not a string, but a map. It is serialized using JSON or X-WWW-Form-Urlencoded format (for post requests) or as query params (for get requests).
-
-Unlike 4.4, the authorization result is now determined through JSON fields within the response body, rather than utilizing HTTP response status codes. HTTP authorization only respects responses with successful HTTP code (2XX) and takes the resolution from the response body (from `result`) field. 
+4.4 と異なり、認可結果は HTTP ステータスコードではなくレスポンスボディ内の JSON フィールド（`result`）で判断されます。HTTP 認可は成功した HTTP ステータスコード（2XX）のレスポンスのみを有効とします。
 
 ::: details
 
-**Success response status code:**
+**成功レスポンスステータスコード:**
 
 ```shell
-200 or 204
+200 または 204
 ```
 
-Other status codes or request failure will be treated as `ignore`.
+その他のステータスコードやリクエスト失敗は `ignore` として扱われます。
 
-**Success response body (JSON):**
+**成功レスポンスボディ（JSON）:**
 
-| Name   | Type | Required | Description             |
-| ------ | ---- | -------- | ----------------------- |
-| result | Enum | true     | `allow | deny | ignore` |
+| 名前   | 型    | 必須 | 説明                   |
+| ------ | ----- | ---- | ---------------------- |
+| result | Enum  | 必須 | `allow | deny | ignore` |
 
 ```json
 {
@@ -798,7 +765,7 @@ Other status codes or request failure will be treated as `ignore`.
 
 :::
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -865,24 +832,24 @@ EMQX 5.1
   type = redis
 ```
 
-auto_reconnect may be used to reconnect to Redis automatically on failure.
+障害時に Redis に自動再接続するには `auto_reconnect` を使用可能。
 
-- `type` is changed to `redis_type`.
-  - For type `single`,  `server` is changed to `servers`.
-  - For type `sentinel`,  `server` is changed to `servers`.
-  - For type `cluster`,  `database` option is no longer available.
-- `database` is changed to `database` (except for the `cluster` type; this option is not available for clusters anymore).
-- `pool` is changed to `pool_size`.
-- `password` is changed to `password`.
-- `query_timeout` is no longer used.
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `auth_cmd` is changed to `cmd`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used in the command. 
-- Redis data source still only supports white list mode, which requires setting `acl_nomatch = deny`;
-- The `access` field name changes to `action`, and the data changes from numbers to action strings.
+- `type` は `redis_type` に変更。
+  - `single` タイプは `server` が `servers` に変更。
+  - `sentinel` タイプも同様に `server` が `servers` に変更。
+  - `cluster` タイプでは `database` オプションは廃止。
+- `database` は `cluster` タイプ以外で使用可能。
+- `pool` は `pool_size` に変更。
+- `password` はそのまま。
+- `query_timeout` は廃止。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `auth_cmd` は `cmd` に変更。`${var}` 形式のプレースホルダーをコマンド内で使用可能。
+- Redis データソースは引き続きホワイトリストモードのみサポートし、`acl_nomatch = deny` の設定が必要です。
+- `access` フィールド名は `action` に変更され、値は数値からアクション文字列に変更されました。
 
-If you want to continue using the data from in 4.x, please make necessary migrations manually.
+4.x のデータを継続利用する場合は、手動でマイグレーションしてください。
 
-::: details The correspondence between 4.x and 5.x data
+::: details 4.x と 5.x の対応表
 
 | 4.x  | 5.x       | action              |
 | ---- | --------- | ------------------- |
@@ -890,7 +857,7 @@ If you want to continue using the data from in 4.x, please make necessary migrat
 | 2    | publish   | publish             |
 | 3    | all       | subscribe & publish |
 
-**Data example in 5.x**
+**5.x のデータ例**
 
 ```
 HSET mqtt_acl:emqx_u t/# subscribe
@@ -900,7 +867,7 @@ HSET mqtt_acl:emqx_u a/1 publish
 
 :::
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -956,15 +923,13 @@ EMQX 5.1
   type = mysql
 ```
 
-- The `ipaddr/username/clientid` field is no longer required in the query result.
+- クエリ結果に `ipaddr`、`username`、`clientid` フィールドは不要になりました。
+- `access` フィールド名は `action` に変更され、整数から文字列または列挙型に変更されました。
+- `allow` フィールド名は `permission` に変更され、整数から文字列または列挙型に変更されました。
 
-- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
+  ::: details 4.x の整数値と 5.x の文字列／列挙型の対応
 
-- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
-
-  ::: details The correspondence between 4.x integer values and 5.x character/enumeration values
-
-  **Access/action field mapping**
+  **Access/action フィールド対応**
 
   | 4.x (int) | 5.x (varchar/enum) | action              |
   | --------- | ------------------ | ------------------- |
@@ -972,7 +937,7 @@ EMQX 5.1
   | 2         | publish            | publish             |
   | 3         | all                | subscribe & publish |
 
-  **Allow/permission field mapping**
+  **Allow/permission フィールド対応**
 
   | 4.x (int) | 5.x (varchar/enum) | permission |
   | --------- | ------------------ | ---------- |
@@ -981,23 +946,20 @@ EMQX 5.1
 
   :::
 
-- `server`, `username`, `password`, `database`, `query_timeout` are retained.
+- `server`、`username`、`password`、`database`、`query_timeout` は引き続き使用可能。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `acl_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用してください。
 
-- `pool` is changed to `pool_size`.
+障害時に MySQL に自動再接続するには `auto_reconnect` を使用可能。
 
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+ストレージスキーマが変更されました。
 
-- `acl_query` is changed to query.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used.
+EMQX 4.4 では、クエリは `[Allow, IpAddr, Username, ClientId, Access, Topic]` の順でカラムを取得する必要がありました。
 
-You can use `auto_reconnect` to reconnect to MySQL automatically on failure.
+EMQX 5.1 では、クエリは `permission, action, topic` のカラムを任意の順序で取得すればよいですが、カラム名は厳密にこれらである必要があります。`IpAddr, Username, ClientId` はクエリ内で指定することが推奨されます。
 
-Storage schema is changed.
-
-In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
-
-In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part (`IpAddr, Username, ClientId`) is now suggested to be a part of the query.
-
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -1056,13 +1018,13 @@ EMQX 5.1
 type = postgresql
 ```
 
-- The `ipaddr/username/clientid` field is no longer required in the query result.
-- The `access` field name is changed to `action`, and its data type is changed from integer to character or character enumeration.
-- The `allow` field name is changed to `permission`, and its data type is changed from integer to character or character enumeration.
+- クエリ結果に `ipaddr`、`username`、`clientid` フィールドは不要になりました。
+- `access` フィールド名は `action` に変更され、整数から文字列または列挙型に変更されました。
+- `allow` フィールド名は `permission` に変更され、整数から文字列または列挙型に変更されました。
 
-::: details The correspondence between 4.x integer values and 5.x character/enumeration values
+::: details 4.x の整数値と 5.x の文字列／列挙型の対応
 
-**Access/action field mapping**
+**Access/action フィールド対応**
 
 | 4.x (int) | 5.x (varchar/enum) | action              |
 | --------- | ------------------ | ------------------- |
@@ -1070,7 +1032,7 @@ type = postgresql
 | 2         | publish            | publish             |
 | 3         | all                | subscribe & publish |
 
-**Allow/permission field mapping**
+**Allow/permission フィールド対応**
 
 | 4.x (int) | 5.x (varchar/enum) | permission |
 | --------- | ------------------ | ---------- |
@@ -1079,20 +1041,20 @@ type = postgresql
 
 :::
 
-- `server`, `username`, `password`, `database` are retained.
-- `query_timeout` is not used anymore.
-- `encoding` is not used anymore.
-- `pool` is changed to `pool_size`.
-- `ssl.*` options are changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `acl_query` is changed to `query`.  `${var}`-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) should be used. 
+- `server`、`username`、`password`、`database` は引き続き使用可能。
+- `query_timeout` は廃止。
+- `encoding` は廃止。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `acl_query` は `query` に変更。`${var}` 形式のプレースホルダーを使用してください。
 
-Storage schema is changed.
+ストレージスキーマが変更されました。
 
-In EMQX 4.4, the query should fetch rows with columns `[Allow, IpAddr, Username, ClientId, Access, Topic]` under any name exactly in this order.
+EMQX 4.4 では、クエリは `[Allow, IpAddr, Username, ClientId, Access, Topic]` の順でカラムを取得する必要がありました。
 
-In EMQX 5.1, the query should fetch rows with columns `permission, action, topic` in any order but under exactly these names. The “who“ part `(IpAddr, Username, ClientId)` is now suggested to be a part of the query.
+EMQX 5.1 では、クエリは `permission, action, topic` のカラムを任意の順序で取得すればよいですが、カラム名は厳密にこれらである必要があります。`IpAddr, Username, ClientId` はクエリ内で指定することが推奨されます。
 
-### Example
+#### 例
 
 EMQX 4.4
 
@@ -1151,20 +1113,20 @@ EMQX 5.1
 type = mongodb
 ```
 
-- `type` is changed to `mongo_type` field. Possible values are `single`, `rs`, `sharded`. Unknown value is not available anymore.
+- `type` は `mongo_type` に変更。値は `single`、`rs`、`sharded` のいずれか。未知の値は廃止。
 - `server`
-  - For `rs`, `sharded` to `servers`
-  - For `single` to `server`
-- `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
-- `r_mode` is availalable only for `rs` type.
-- `pool` is changed to `pool_size`.
-- `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.
-- `query_timeout` is not used.
+  - `rs`、`sharded` タイプは `servers`
+  - `single` タイプは `server`
+- `srv_record`、`username`、`password`、`auth_source`、`database`、`w_mode`、`topology`、`collection` は引き続き使用可能。
+- `r_mode` は `rs` タイプのみ使用可能。
+- `pool` は `pool_size` に変更。
+- `ssl.*` は共通の SSL オプションに変更。詳細は [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access) を参照してください。
+- `auth_query.selector` は `filter` に変更。文字列ではなく、セレクターのデータ構造全体を指定します。`${var}` 形式のプレースホルダーはセレクター値で使用可能。
+- `query_timeout` は廃止。
 
-Storage schema is changed.
+ストレージスキーマが変更されました。
 
-In EMQX 4.4, the resulting documents should contain topics lists by action key, like in Redis or JWT:
+EMQX 4.4 では、結果ドキュメントは Redis や JWT と同様にアクションキーごとにトピックリストを含む必要がありました：
 
 ```
 {
@@ -1174,11 +1136,11 @@ In EMQX 4.4, the resulting documents should contain topics lists by action key, 
 }
 ```
 
-In EMQX 5.1, MongoDB data source can be used for both allow and deny rules. Previously, only white list mode was supported, and it was required to set `acl_nomatch = deny`. The documents should contain individual rules with `permission`, `action`, `topics` fields. Note that `topics` should be an array of topics. For details, see [AuthZ-MongoDB](../access-control/authz/mongodb.md).
+EMQX 5.1 では、MongoDB データソースは許可ルールと拒否ルールの両方に使用可能です。以前はホワイトリストモードのみサポートし、`acl_nomatch = deny` の設定が必要でした。ドキュメントは `permission`、`action`、`topics` フィールドを個別に持つ必要があります。`topics` はトピックの配列です。詳細は [AuthZ-MongoDB](../access-control/authz/mongodb.md) を参照してください。
 
-If you want to continue using the data from in 4.x, please make the necessary migrations manually.
+4.x のデータを継続利用する場合は、手動でマイグレーションしてください。
 
-::: details Data example in 5.x
+::: details 5.x のデータ例
 
 ```json
 [
@@ -1195,7 +1157,7 @@ If you want to continue using the data from in 4.x, please make the necessary mi
 
 :::
 
-#### Example
+#### 例
 
 EMQX 4.4
 
@@ -1261,4 +1223,3 @@ EMQX 5.1
   }
 }
 ```
-

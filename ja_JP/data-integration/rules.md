@@ -1,38 +1,38 @@
-# Rule Engine
+# ルールエンジン
 
-EMQX provides users with the rule engine feature for data processing, which works in conjunction with [Data Integration](./data-bridges.md) to extract, filter, enrich, transform, and store IoT data. This accelerates application integration and drives business innovation.
+EMQXは、データ処理のためのルールエンジン機能を提供しており、[データ統合](./data-bridges.md)と連携してIoTデータの抽出、フィルタリング、強化、変換、保存を行います。これにより、アプリケーション統合が加速し、ビジネスのイノベーションを促進します。
 
 ![data-integration-arch](./assets/rules/data-integration-arch.jpg)
 
-EMQX rule engine is especially useful for transforming or rerouting incoming messages. For instance, you can create rules that filter out irrelevant data, perform transformations, and trigger alerts or notifications based on specific events or conditions.
+EMQXのルールエンジンは、特に受信したメッセージの変換やルーティングに有効です。例えば、不要なデータをフィルタリングしたり、変換を行ったり、特定のイベントや条件に基づいてアラートや通知をトリガーするルールを作成できます。
 
-This chapter provides an in-depth exploration of the rule engine and its capabilities. 
+本章では、ルールエンジンの詳細な機能とその使い方について解説します。
 
-## How Rule Engine Works
+## ルールエンジンの仕組み
 
-Rules specify how to retrieve data from a **data source**, perform **data transformations**, and the **actions** that should be applied to the results.
+ルールは、**データソース**からデータを取得し、**データ変換**を行い、その結果に対して適用すべき**アクション**を指定します。
 
 <img src="./assets/sql_process.png" alt="sql_process" style="zoom:50%;" />
 
-- **Data Source**: The data source of a rule can be a message, event, or external data system. The `FROM` clause in the rule's SQL specifies the data source, while the `WHERE` clause adds additional constraints on which messages the rule processes.
+- **データソース**：ルールのデータソースは、メッセージ、イベント、または外部データシステムが対象となります。ルールのSQLの`FROM`句でデータソースを指定し、`WHERE`句で処理対象となるメッセージに対する追加の制約を設定します。
 
-  For more information on the various types of supported data sources and fields that can be referenced in the `WHERE` clause, see [Data Sources and Fields](./rule-sql-events-and-fields.md).
+  対応するデータソースの種類や`WHERE`句で参照可能なフィールドの詳細については、[データソースとフィールド](./rule-sql-events-and-fields.md)をご参照ください。
 
-- **Data Transformation**: Data transformations describe the process of transforming an input message. The `SELECT` part of the SQL extracts and transforms data from the input message. Embedded SQL sample statements can be used to implement advanced transformations, such as adding a timestamp to the output message.
+- **データ変換**：データ変換は入力メッセージを変換する処理を指します。SQLの`SELECT`部分で入力メッセージからデータを抽出・変換します。埋め込みSQLのサンプル文を用いて、出力メッセージにタイムスタンプを付加するなどの高度な変換も実装可能です。
 
-  For a detailed explanation of the syntax and built-in SQL functions, see [Rule SQL Reference](./rule-sql-syntax.md) and [Built-in SQL Functions](./rule-sql-builtin-functions.md).
+  SQL文法や組み込みSQL関数の詳細は、[ルールSQLリファレンス](./rule-sql-syntax.md)および[組み込みSQL関数](./rule-sql-builtin-functions.md)をご覧ください。
 
-- **Actions**: After the input is processed according to the specified rules, one or more actions can be defined to process the SQL execution results. The Rule Engine will sequentially perform corresponding actions, such as storing the processing results in a database or republishing them to another MQTT topic. The supported actions are as follows:
+- **アクション**：入力がルールに従って処理された後、SQLの実行結果に対して1つ以上のアクションを定義できます。ルールエンジンは順次対応するアクションを実行し、処理結果をデータベースに保存したり、別のMQTTトピックにパブリッシュしたりします。サポートされるアクションは以下の通りです。
 
-  - [Message Republishing](./rule-get-started.md#add-republish-action): Publish the results to a specified MQTT topic.
-  - [Console Output](./rule-get-started.md#add-console-output-action): Output the results to the console or logs.
-  - [Forwarding to Sinks](./data-bridges.md#add-forwarding-with-sinks-action): Send the results to external data systems, such as MQTT services, Kafka, PostgreSQL, etc.
+  - [メッセージの再パブリッシュ](./rule-get-started.md#add-republish-action)：結果を指定したMQTTトピックにパブリッシュする。
+  - [コンソール出力](./rule-get-started.md#add-console-output-action)：結果をコンソールやログに出力する。
+  - [シンクへの転送](./data-bridges.md#add-forwarding-with-sinks-action)：結果をMQTTサービス、Kafka、PostgreSQLなどの外部データシステムに送信する。
 
-For a step-by-step guide on creating a rule with the EMQX Dashboard, see [Create Rules](./rule-get-started.md).
+EMQXダッシュボードでルールを作成する手順については、[ルールの作成](./rule-get-started.md)をご参照ください。
 
-## Rule SQL Examples
+## ルールSQLの例
 
-Rule SQL is used to specify the data source of a rule and define the data processing procedure. Here is an example of an SQL statement:
+ルールSQLは、ルールのデータソースを指定し、データ処理の手順を定義するために使用します。以下はSQL文の例です。
 
 ```sql
 SELECT
@@ -43,42 +43,42 @@ WHERE
     clientid = 'foo'
 ```
 
-In the above SQL statement:
+上記のSQL文では、
 
-- Data source: Messages with the topic `t/#`;
-- Data processing: If the client ID of the message sender is `foo`, select the `data` field from the message content and assign it to a new variable `d`.
+- データソース：トピック`t/#`のメッセージ
+- データ処理：メッセージ送信者のクライアントIDが`foo`の場合、メッセージ内容の`data`フィールドを抽出し、新しい変数`d`に割り当てる
 
-::: tip 
+::: tip
 
-The "." syntax requires the data to be in JSON or Map format. If it's in another data type, SQL functions must be used for data type conversion. 
+`.`構文はデータがJSONまたはMap形式である必要があります。別のデータ型の場合は、SQL関数を用いて型変換を行う必要があります。
 
 :::
 
-For detailed information on the format and usage of Rule SQL statements, refer to the [SQL Manual](./rule-sql-syntax.md).
+ルールSQL文の形式や使い方の詳細は、[SQLマニュアル](./rule-sql-syntax.md)をご参照ください。
 
-## Typical Application Scenarios of Rules
+## ルールの典型的な適用シナリオ
 
-- **Action Monitoring**: In the development of smart home intelligent locks, locks may go offline due to network, power failures, or vandalism, leading to functional abnormalities. By using rules to monitor offline events and push this fault information to application services, it's possible to achieve immediate fault detection capabilities at the access layer.
-- **Data Filtering**: In truck fleet management for connected vehicles, vehicle sensors collect and report a large amount of operational data. The application platform is only concerned with data when the vehicle speed exceeds 40 km/h. In this scenario, rules can be used to conditionally filter messages, writing only the relevant data to the business message queue.
-- **Message Routing**: In smart billing applications, terminal devices use different topics to distinguish between business types. By configuring rules, messages related to billing can be directed to a billing message queue and send confirmation notifications to business systems upon message arrival at the device. Non-billing information can be directed to other message queues, thereby achieving business message routing configuration.
-- **Message Encoding/Decoding**: In applications such as other public/private TCP protocol access or industrial scenarios, local processing functions in rules (which can be custom-developed on EMQX) can be used for encoding/decoding binary/special format message bodies. Messages can also be routed through rules to external computational resources like serverless functions for processing (which can be developed by users), converting messages into a JSON format that is easier for business applications to handle. This simplifies project integration difficulties and enhances the capability for rapid application development and delivery.
+- **アクション監視**：スマートホームのインテリジェントロック開発において、ネットワーク障害や電源切れ、破壊行為によりロックがオフラインになると機能異常が発生します。ルールでオフラインイベントを監視し、この障害情報をアプリケーションサービスにプッシュすることで、アクセス層での即時障害検知が可能になります。
+- **データフィルタリング**：コネクテッドビークルのトラック車両管理では、車両センサーが大量の運行データを収集・報告します。アプリケーションプラットフォームは車速が40km/hを超えた場合のみデータを必要とします。この場合、ルールで条件付きフィルタリングを行い、関連するデータのみを業務用メッセージキューに書き込みます。
+- **メッセージルーティング**：スマート課金アプリケーションでは、端末デバイスが異なるトピックで業務種別を区別します。ルールを設定することで、課金関連メッセージを課金メッセージキューに振り分け、端末到着時に業務システムへ確認通知を送信します。課金以外の情報は別のメッセージキューに振り分けることで、業務メッセージのルーティング設定を実現します。
+- **メッセージのエンコード／デコード**：他のパブリック／プライベートTCPプロトコルアクセスや産業用途などのアプリケーションでは、ルール内のローカル処理機能（EMQX上でカスタム開発可能）を使ってバイナリや特殊フォーマットのメッセージボディをエンコード／デコードできます。また、ルールを通じてメッセージをサーバーレス関数など外部計算リソースにルーティングし（ユーザー開発可能）、業務アプリケーションで扱いやすいJSON形式に変換することも可能です。これによりプロジェクト統合の難易度が軽減され、迅速なアプリケーション開発・提供が促進されます。
 
-## Key Benefits
+## 主なメリット
 
-EMQX's rule engine feature offers users the following benefits:
+EMQXのルールエンジン機能は、ユーザーに以下のメリットを提供します。
 
-**Simplified data processing**
+**データ処理の簡素化**
 
-The SQL-like syntax and stream processing capabilities of the rule engine streamline filtering, transforming, and distributing data without the need for custom code or additional tools.
+SQLライクな文法とストリーム処理機能により、カスタムコードや追加ツールなしでデータのフィルタリング、変換、配信を効率的に行えます。
 
-**Real-time insights and actions**
+**リアルタイムのインサイトとアクション**
 
-By triggering actions based on specific conditions, the Rule Engine empowers users to gain real-time insights and take appropriate actions.
+特定条件に基づくアクションのトリガーにより、リアルタイムでのインサイト取得と適切な対応が可能です。
 
-**Reduced development time and effort**
+**開発時間と工数の削減**
 
-The Rule Engine eases IoT application development by providing an extensive range of built-in capabilities, minimizing the need for custom code and maintenance efforts.
+豊富な組み込み機能により、カスタムコードやメンテナンスの負担を軽減し、IoTアプリケーション開発を容易にします。
 
-**Scalability and reliability**
+**スケーラビリティと信頼性**
 
-Designed to handle high throughput and numerous connected devices, the Rule Engine allows users to scale their IoT solutions without compromising performance or reliability.
+高スループットおよび多数の接続デバイスに対応できる設計で、性能や信頼性を損なうことなくIoTソリューションのスケールアップが可能です。

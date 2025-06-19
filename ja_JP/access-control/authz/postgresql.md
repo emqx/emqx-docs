@@ -1,25 +1,25 @@
-# Integrate with PostgreSQL
+# PostgreSQLとの統合
 
-This authorizer implements authorization checks through matching publish/subscription requests against lists of rules stored in the PostgreSQL database.
+このオーソライザーは、PostgreSQLデータベースに保存されたルールリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装しています。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authorization concepts](./authz.md)
+[EMQXの基本的な認可概念](./authz.md)の知識が必要です。
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-PostgreSQL authorizer supports almost any storage schema. It is up to the user to decide how to store acl rules and access them: using one or multiple tables, views, etc.
+PostgreSQLオーソライザーはほぼあらゆるストレージスキーマをサポートします。ACLルールの保存方法やアクセス方法（単一または複数のテーブル、ビューなど）はユーザーの判断に委ねられます。
 
-Users need to provide a query statement template and ensure the following fields are included:
-* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
-* `qos` (Optional) value specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. The default is all QoS levels.
-* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0` and `1`. The default is to allow retained messages.
+ユーザーはクエリ文のテンプレートを用意し、以下のフィールドが含まれていることを確認する必要があります：
+* `permission` の値はルールがマッチした場合に適用されるアクションを指定します。`deny` または `allow` のいずれかである必要があります。
+* `action` の値はルールが関連するリクエストを指定します。`publish`、`subscribe`、または `all` のいずれかである必要があります。
+* `topic` の値はルールが関連するトピックのフィルターを指定します。ワイルドカードや[トピックプレースホルダー](./authz.md#topic-placeholders)をサポートする文字列である必要があります。
+* `qos`（任意）はルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれかです。複数のQoSレベルを指定する場合はカンマ区切りの文字列（例：`0,1`）も可能です。デフォルトはすべてのQoSレベルです。
+* `retain`（任意）は現在のルールがリテインメッセージをサポートするかどうかを指定します。値は `0` または `1` で、デフォルトはリテインメッセージを許可します。
 
-Example table structure for storing credentials:
+認証情報を保存するためのテーブル構造の例：
 
 ```sql
 CREATE TABLE mqtt_acl(
@@ -34,52 +34,54 @@ CREATE TABLE mqtt_acl(
 CREATE INDEX mqtt_acl_username_idx ON mqtt_acl(username);
 ```
 
-In this table, MQTT users are identified by `username`.
+このテーブルでは、MQTTユーザーは `username` によって識別されます。
 
-For example, if you want to add an authorization rule for a user `user123` who is allowed to publish topics `data/user123/#`, the query statement should be:
+例えば、ユーザー `user123` に対してトピック `data/user123/#` へのパブリッシュを許可する認可ルールを追加したい場合、クエリ文は以下のようになります：
 
 ```bash
 postgres=# INSERT INTO mqtt_acl(username, permission, action, topic, ipaddress) VALUES ('user123', 'allow', 'publish', 'data/user123/#', '127.0.0.1');
 INSERT 0 1
 ```
 
-The corresponding config parameters are:
+対応する設定パラメータは以下の通りです：
+
 ```bash
 query = "SELECT permission, action, topic, ipaddress, qos, retain FROM mqtt_acl WHERE username = ${username} and ipaddress = ${peerhost}"
 ```
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use PostgreSQL for user authorization.
+EMQXダッシュボードを使って、PostgreSQLをユーザー認可に利用する設定が可能です。
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
 
-2. Click **Create** at the top right corner, then click to select **PostgreSQL** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
+2. 右上の **作成** をクリックし、**バックエンド** で **PostgreSQL** を選択します。次に **次へ** をクリックします。以下のように **設定** タブが表示されます。
 
-   <img src="./assets/authz-PostgreSQL_ee.png" alt="authz-PostgreSQL_ee" style="zoom:67%;" />
+   <img src="./assets/authz-PostgreSQL_ee.png" alt="PostgreSQL認可設定画面" style="zoom:67%;" />
 
-3. Follow the instructions below to configure the settings:
+3. 以下の指示に従って設定を行います：
 
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Database**: PostgreSQL database name.
-   - **Username**: Specify user name. 
-   - **Password**: Specify user password. 
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. 
+   - **サーバー**：EMQXが接続するサーバーのアドレスを指定します（`host:port`）。
+   - **データベース**：PostgreSQLのデータベース名。
+   - **ユーザー名**：ユーザー名を指定します。
+   - **パスワード**：ユーザーパスワードを指定します。
+   - **TLSを有効にする**：TLSを有効にする場合はトグルをオンにします。
    
-   - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to PostgreSQL. Default: **8**. 
-   - **Disable Prepared Statements** (optional): If you are using a PostgreSQL service that does not support prepared statements, such as PGBouncer in transaction mode or Supabase, enable this option. This option was introduced in EMQX v5.7.1.
+   - **接続プールサイズ**（任意）：EMQXノードからPostgreSQLへの同時接続数を整数で指定します。デフォルトは **8**。
+   - **プリペアドステートメントを無効化**（任意）：PGBouncerのトランザクションモードやSupabaseなど、プリペアドステートメントをサポートしないPostgreSQLサービスを利用する場合に有効にします。このオプションはEMQX v5.7.1で追加されました。
    
-   - **SQL**: Fill in the query statement according to the data schema. For more information, see [Data Schema and Query Statement](#data-schema-and-query-statement). 
+   - **SQL**：データスキーマに合わせてクエリ文を入力します。詳細は[データスキーマとクエリ文](#データスキーマとクエリ文)を参照してください。
    
-4. Click **Create** to finish the settings.
+4. **作成** をクリックして設定を完了します。
 
-## Configure with Configuration Items
+## 設定項目による設定
 
-You can configure the EMQX PostgresSQL authorizer with EMQX configuration items.
+EMQXの設定項目でPostgreSQLオーソライザーを設定することも可能です。
 
-The PostgreSQL authorizer is identified by type `postgresql`. <!--For detailed configuration, see [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql).-->
+PostgreSQLオーソライザーは `postgresql` タイプで識別されます。  
+<!--詳細な設定は [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql) を参照してください。-->
 
-Sample configuration:
+設定例：
 
 ```bash
 {
@@ -92,4 +94,3 @@ Sample configuration:
   query = "SELECT permission, action, topic FROM mqtt_acl WHERE username = ${username}"
 }
 ```
-

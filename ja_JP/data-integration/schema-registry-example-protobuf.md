@@ -1,38 +1,38 @@
-# Schema Registry Example - Protobuf
+# スキーマレジストリの例 - Protobuf
 
-This page demonstrates how the schema registry and rule engine support message encoding and decoding in the Protobuf format.
+このページでは、スキーマレジストリとルールエンジンがProtobuf形式のメッセージのエンコードおよびデコードをどのようにサポートするかを示します。
 
-## Decoding Scenario
+## デコードシナリオ
 
-A device publishes a binary message encoded using Protobuf, which needs to be matched by the rule engine and then republished to the topic associated with the `name` field. The format of the topic is `person/${name}`.
+デバイスがProtobufでエンコードされたバイナリメッセージをパブリッシュし、そのメッセージをルールエンジンでマッチさせて、`name`フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は `person/${name}` です。
 
-For example, you to republish a message with the `name` field equal to "Shawn" to the topic `person/Shawn`.
+例えば、`name`フィールドが "Shawn" のメッセージをトピック `person/Shawn` に再パブリッシュします。
 
-### Create Schema
+### スキーマの作成
 
-To enable the rule engine to decode or encode Protobuf messages correctly, you must first register a schema that defines the structure of the Protobuf message using the Schema Registry.
+ルールエンジンがProtobufメッセージを正しくデコードまたはエンコードできるように、まずスキーマレジストリを使ってProtobufメッセージの構造を定義するスキーマを登録する必要があります。
 
-1. Go to the Dashboard, select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
+1. ダッシュボードの左ナビゲーションメニューから **Smart Data Hub** -> **Schema Registry** を選択します。
 
-2. Under the **Internal Schema** tab, click **Create**.
+2. **Internal Schema** タブの下で、**Create** をクリックします。
 
-3. Enter the **Name** of the schema, for example: `protobuf_person`. This name will be used in encoding and decoding functions.
+3. スキーマの **Name** を入力します。例：`protobuf_person`。この名前はエンコード・デコード関数で使用されます。
 
-4. Select the schema **Type**: choose `Protobuf`.
+4. スキーマの **Type** を選択します。`Protobuf` を選択してください。
 
-5. Select a **Creation Method**. There are two options:
+5. **Creation Method** を選択します。選択肢は2つあります：
 
    ::: tip
 
-   The example demonstrated on this page uses the **Input** method.
+   このページの例では **Input** メソッドを使用しています。
 
    :::
 
-   - **Input** (for simple schema):
+   - **Input**（シンプルなスキーマ向け）:
 
-     - Select **Input** as the creation method.
+     - 作成方法に **Input** を選択します。
 
-     - Paste the Protobuf definition directly into the **Schema** field, for example:
+     - Protobuf定義を直接 **Schema** フィールドに貼り付けます。例：
 
        ```protobuf
        message Person {
@@ -42,20 +42,23 @@ To enable the rule engine to decode or encode Protobuf messages correctly, you m
        }
        ```
 
-   - **Upload Protobuf Bundle** (for complex or multi-file schemas):
+   - **Upload Protobuf Bundle**（複雑または複数ファイルのスキーマ向け）:
 
-     - Select **Upload Protobuf Bundle** as the creation method.
-     - Click **Select file** to upload a `.tar.gz` bundle containing your `.proto` files.
-     - In **Root Proto File**, specify the entry point file name (e.g., `person.proto`).  This file **must** reside at the root of the bundle file.
+     - 作成方法に **Upload Protobuf Bundle** を選択します。
 
-6. Click **Create** to register the schema.
+     - `.proto` ファイルを含む `.tar.gz` バンドルをアップロードするために **Select file** をクリックします。
 
-### Create Rule
-1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
+     - **Root Proto File** にエントリポイントファイル名（例：`person.proto`）を指定します。このファイルはバンドルのルートに存在する必要があります。
 
-2. On the **Rules** page, click **Create** at the top right corner.
+6. **Create** をクリックしてスキーマを登録します。
 
-3. Use the schema you have just created to write the rule SQL statement:
+### ルールの作成
+
+1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
+
+2. **Rules** ページの右上の **Create** をクリックします。
+
+3. 先ほど作成したスキーマを使って、以下のようなルールSQL文を記述します：
 
    ```sql
    SELECT
@@ -66,23 +69,27 @@ To enable the rule engine to decode or encode Protobuf messages correctly, you m
      person.name = 'Shawn'
    ```
 
-   The key point here is `schema_decode('protobuf_person', payload, 'Person')`:
+   ポイントは `schema_decode('protobuf_person', payload, 'Person')` の部分です：
 
-   - The `schema_decode` function decodes the contents of the payload field according to the schema `protobuf_person`;
-   - `as person` stores the decoded value in the variable `person`;
-   - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
+   - `schema_decode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をデコードします。
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
-5. In the **Topic** field, type `person/${person.name}` as the destination topic.
-6. In the **Payload** field, type message content template: `${person}`.
+   - `as person` はデコードした値を変数 `person` に格納します。
 
-This action sends the decoded "person" message to the topic `person/${person.name}` in JSON format. `${person.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
 
-### Prepare Device-Side Code
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-Once the rule is created, you can simulate the data for testing.
+5. **Topic** フィールドに、送信先トピックとして `person/${person.name}` と入力します。
 
-The following code uses the Python language to fill a user message, encode it as binary data, then send it to the `t/1` topic. See [full code](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c) for details.
+6. **Payload** フィールドに、メッセージ内容のテンプレートとして `${person}` と入力します。
+
+このアクションにより、デコードされた "person" メッセージがJSON形式でトピック `person/${person.name}` に送信されます。`${person.name}` は変数プレースホルダーで、実行時にデコードされたメッセージの `name` フィールドの値に置き換えられます。
+
+### デバイス側コードの準備
+
+ルールが作成されたら、テスト用にデータをシミュレートできます。
+
+以下のコードはPython言語を使い、ユーザーメッセージを作成してバイナリデータとしてエンコードし、`t/1` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/3c5fdbae2843d63c2380886e69d6123c)を参照してください。
 
 ```python
 def publish_msg(client):
@@ -96,16 +103,21 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-### Check Rule Execution Results
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
-2) Fill in the connection information for the current EMQX instance.
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
+### ルール実行結果の確認
 
-3. Click **Connect** to connect to the EMQX instance as an MQTT client.
-4. In the **Subscription** area, type `person/#` in the **Topic** field and click **Subscribe**.
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
 
-5. Install the Python dependencies and execute the device-side code:
+2) 現在のEMQXインスタンスの接続情報を入力します。
+
+   - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
+
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
+
+3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
+
+4. **Subscription** エリアの **Topic** フィールドに `person/#` と入力し、**Subscribe** をクリックします。
+
+5. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install protobuf paho-mqtt
@@ -116,27 +128,27 @@ def publish_msg(client):
    publish to topic: t/1, payload: b'\n\x05Shawn\x10\x01\x1a\x11shawn@example.com'
    ```
 
-6. Check that a message with the topic `person/Shawn` is received on the Websocket side:
+6. WebSocket側でトピック `person/Shawn` のメッセージを受信していることを確認します：
 
    ```json
    {"name":"Shawn","id":1,"email":"shawn@example.com"}
    ```
 
-## Encoding Scenario
+## エンコードシナリオ
 
-A device subscribes to a topic `protobuf_out` expecting a binary message encoded using Protobuf. The rule engine is used to encode such a message and publish it to the associated topic.
+デバイスがトピック `protobuf_out` をサブスクライブし、Protobufでエンコードされたバイナリメッセージを受信することを期待しています。ルールエンジンを使ってそのようなメッセージをエンコードし、関連トピックにパブリッシュします。
 
-### Create Schema
+### スキーマの作成
 
-Use the same schema as described in the [decoding scenario](#decoding-scenario).
+[デコードシナリオ](#デコードシナリオ)で説明したのと同じスキーマを使用します。
 
-### Create Rule
+### ルールの作成
 
-1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
+1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. On the **Rules** page, click **Create** at the top right corner.
+2. **Rules** ページの右上の **Create** をクリックします。
 
-3. Use the schema you have just created to write the rule SQL statement:
+3. 先ほど作成したスキーマを使って、以下のルールSQL文を記述します：
 
    ```sql
    SELECT
@@ -145,24 +157,29 @@ Use the same schema as described in the [decoding scenario](#decoding-scenario).
      "protobuf_in"
    ```
 
-   The key point here is `schema_encode('protobuf_person', json_decode(payload), 'Person')`:
+   ポイントは `schema_encode('protobuf_person', json_decode(payload), 'Person')` の部分です：
 
-   - The `schema_encode` function encodes the contents of the payload field according to the schema `protobuf_person`;
-   - `as protobuf_person` stores the encoded value in the variable `protobuf_person`;
-   - The last argument `Person` specifies that the message type in the payload is the `Person` type defined in the Protobuf schema.
-   - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
+   - `schema_encode` 関数は、`protobuf_person` スキーマに従ってペイロードの内容をエンコードします。
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
-5. In the **Topic** field, type `protobuf_out` as the destination topic.
-6. In the **Payload** field, type message content template: `${protobuf_person}`.
+   - `as protobuf_person` はエンコードした値を変数 `protobuf_person` に格納します。
 
-This action sends the Protobuf encoded user message to the topic `protobuf_out`. `${protobuf_person}` is a variable placeholder that will be replaced at runtime with the value of the result of `schema_encode` (a binary value).
+   - 最後の引数 `Person` は、ペイロード内のメッセージタイプがProtobufスキーマで定義された `Person` 型であることを指定します。
 
-### Prepare Device-Side Code
+   - `json_decode(payload)` は、`payload` が一般的にJSONエンコードされたバイナリであるため、`schema_encode` の入力としてMap型が必要なため使用します。
 
-Once the rules have been created, you can simulate the data for testing.
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-The following code uses the Python language to fill a user message, encode it as binary data, then send it to the `protobuf_in` topic. See [full code](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa) for details.
+5. **Topic** フィールドに送信先トピックとして `protobuf_out` と入力します。
+
+6. **Payload** フィールドにメッセージ内容のテンプレートとして `${protobuf_person}` と入力します。
+
+このアクションにより、Protobufでエンコードされたユーザーメッセージがトピック `protobuf_out` に送信されます。`${protobuf_person}` は変数プレースホルダーで、実行時に `schema_encode` の結果（バイナリ値）に置き換えられます。
+
+### デバイス側コードの準備
+
+ルールが作成されたら、テスト用にデータをシミュレートできます。
+
+以下のコードはPython言語を使い、ユーザーメッセージを作成してバイナリデータとしてエンコードし、`protobuf_in` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/c5f03f99f982401d16ef6583e30144fa)を参照してください。
 
 ```python
 def on_message(client, userdata, msg):
@@ -172,24 +189,27 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(p))
 ```
 
-### Check Rule Execution Results
+### ルール実行結果の確認
 
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
-2) Fill in the connection information for the current EMQX instance.
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
 
-3. Click **Connect** to connect to the EMQX instance as an MQTT client.
+2) 現在のEMQXインスタンスの接続情報を入力します。
 
-4. In the **Publish** area, type `protobuf_in` in the **Topic** field and type the following message in the **Payload** field:
+   - EMQXをローカルで実行している場合は、デフォルト値を使用できます。
+
+   - 認証設定などEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードを入力する必要があります。
+
+3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
+
+4. **Publish** エリアの **Topic** フィールドに `protobuf_in` と入力し、**Payload** フィールドに以下のメッセージを入力します：
 
    ```json
    {"name":"Shawn","id":1,"email":"shawn@example.com"}
    ```
 
-5.  Click **Publish**.
+5. **Publish** をクリックします。
 
-6. Install the Python dependencies and execute the device-side code:
+6. Pythonの依存パッケージをインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install protobuf paho-mqtt

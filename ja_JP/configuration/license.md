@@ -1,26 +1,26 @@
-# License Configuration
+# ライセンス設定
 
-You can update your license by using `emqx ctl license update` command. The command will update the license file and reload the license. 
+`emqx ctl license update` コマンドを使用してライセンスを更新できます。このコマンドはライセンスファイルを更新し、ライセンスをリロードします。
 
 ```bash
 emqx ctl license update <license_key>
 ```
 
-or
+または
 
 ```bash
-# Make sure the license file is uploaded to all nodes in the cluster at the same file path.
+# クラスター内のすべてのノードに同じファイルパスでライセンスファイルがアップロードされていることを確認してください。
 emqx ctl license update 'file://<license_file_path>'
 ```
 
-Where,
+ここで、
 
-- `<license_key>` is the license key string without new lines.
-- `<license_file_path>` is the path to the file where the license key is stored.
+- `<license_key>` は改行なしのライセンスキー文字列です。
+- `<license_file_path>` はライセンスキーが保存されているファイルのパスです。
 
-If the license is configured via `'file://<license_file_path>'` notation, EMQX will be automatically reloading it every 2 minutes.
+`'file://<license_file_path>'` 表記でライセンスを設定した場合、EMQXは2分ごとに自動的にライセンスをリロードします。
 
-Additionally, you can configure the settings for the license connection quota usage in the configuration file as follows:
+さらに、設定ファイルでライセンスの接続クォータ使用状況に関する設定を以下のように行うことができます。
 
 ```bash
 license {
@@ -30,22 +30,22 @@ license {
 }
 ```
 
-Where,
+ここで、
 
-- `key` is the field contains a license key encoded in base64 format.
-- `connection_low_watermark` is to set a threshold below which license connection quota usage alarms are deactivated; default: `"75%"`
-- `connection_high_watermark` is to set a threshold above which license connection quota usage alarms are activated; default: `"80%"`
+- `key` はbase64形式でエンコードされたライセンスキーを含むフィールドです。
+- `connection_low_watermark` はライセンス接続クォータ使用量のアラームを解除する閾値を設定します。デフォルトは `"75%"` です。
+- `connection_high_watermark` はライセンス接続クォータ使用量のアラームを発動する閾値を設定します。デフォルトは `"80%"` です。
 
-After execution, you can run `emqx ctl license info` to confirm that the new license file has taken effect.
+実行後、`emqx ctl license info` を実行して新しいライセンスファイルが反映されていることを確認できます。
 
 ::: tip
 
-You can also configure the license file through the EMQX Dashboard. For how to configure the license via Dashboard, see [Work with License](../deploy/license.md). Once you have configured these items with the Dashboard, your settings will override the same configuration items in the config file.
+ライセンスファイルはEMQXダッシュボードからも設定可能です。ダッシュボードでのライセンス設定方法については、[Work with License](../deploy/license.md) を参照してください。ダッシュボードで設定した内容は設定ファイルの同じ項目より優先されます。
 
 :::
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQXはカスタマイズニーズに対応するため、さらに多くの設定項目を提供しています。詳細は [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/) をご覧ください。
 
 :::

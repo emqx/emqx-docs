@@ -1,4 +1,3 @@
-# Reference
+# リファレンス
 
-This chapter is a comprehensive reference guide for the MQTT protocol and EMQX-specific features. Here, you will find detailed information and explanations about MQTT versions, terminologies, features, and reason codes, empowering you with a deeper understanding of the MQTT protocol and the functionalities provided by EMQX.
-
+この章は、MQTTプロトコルおよびEMQX固有の機能に関する包括的なリファレンスガイドです。ここでは、MQTTのバージョン、用語、機能、理由コードなどの詳細な情報と説明を提供しており、MQTTプロトコルおよびEMQXが提供する機能についてより深く理解できるようになります。

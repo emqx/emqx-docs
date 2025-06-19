@@ -1,7 +1,7 @@
-# Delayed Publish
+# 遅延パブリッシュ
 
-On the Delayed Publish page, you can view information about messages published using the MQTT extension feature [Delayed Publish](../messaging/mqtt-delayed-publish.md). This includes the delayed publish topic, QoS, Payload, client ID, delay time, remaining time, and publish time.
+遅延パブリッシュページでは、MQTT拡張機能である[遅延パブリッシュ](../messaging/mqtt-delayed-publish.md)を使用してパブリッシュされたメッセージの情報を確認できます。ここには、遅延パブリッシュのトピック、QoS、ペイロード、クライアントID、遅延時間、残り時間、パブリッシュ時間が含まれます。
 
-Click on **Settings** in the upper right corner to navigate to the Delayed Publish settings page. Here, you can enable or disable the Delayed Publish feature and set the maximum number of delayed messages.
+右上の**設定**をクリックすると、遅延パブリッシュの設定ページに移動します。ここで遅延パブリッシュ機能の有効化・無効化や、遅延メッセージの最大数を設定できます。
 
 <!-- Need screenshot -->

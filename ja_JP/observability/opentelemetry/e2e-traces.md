@@ -1,88 +1,88 @@
-# OpenTelemetry-Based End-to-End MQTT Tracing
+# OpenTelemetryベースのエンドツーエンドMQTTトレーシング
 
-In modern distributed systems, tracking the flow of requests and analyzing performance is essential for ensuring reliability and observability. End-to-end tracing is a concept designed to capture the full path of a request from start to finish, enabling users to gain deep insights into system behavior and performance.
+現代の分散システムにおいて、リクエストの流れを追跡しパフォーマンスを分析することは、信頼性と可観測性を確保するために不可欠です。エンドツーエンドトレーシングは、リクエストの開始から終了までの全経路をキャプチャすることを目的とした概念であり、システムの挙動やパフォーマンスに関する深い洞察を得ることができます。
 
-Starting from version 5.8.3, EMQX integrates an OpenTelemetry-based end-to-end tracing feature tailored for the MQTT protocol. This functionality allows users to clearly trace the publishing, routing, and delivery of messages, particularly in multi-node cluster environments. It not only aids in optimizing system performance but also helps in rapid fault localization and enhancing system reliability.
+EMQXはバージョン5.8.3以降、MQTTプロトコルに特化したOpenTelemetryベースのエンドツーエンドトレーシング機能を統合しています。この機能により、特にマルチノードクラスター環境において、メッセージのパブリッシュ、ルーティング、配信を明確にトレースできます。これにより、システムパフォーマンスの最適化だけでなく、迅速な障害箇所の特定やシステム信頼性の向上にも役立ちます。
 
-This page provides a detailed guide on how to enable the end-to-end tracing feature in EMQX to achieve a comprehensive visualization of MQTT message flows.
+本ページでは、MQTTメッセージのフローを包括的に可視化するために、EMQXでエンドツーエンドトレーシング機能を有効化する方法を詳しく解説します。
 
-## Set Up OpenTelemetry Collector
+## OpenTelemetry Collectorのセットアップ
 
-Refer to [Setting Up OpenTelemetry Collector](./traces.md#setting-up-opentelemetry-collector) for configuration details.
+設定の詳細については、[OpenTelemetry Collectorのセットアップ](./traces.md#setting-up-opentelemetry-collector)を参照してください。
 
-## Enable End-to-End Tracing in EMQX
+## EMQXでエンドツーエンドトレーシングを有効化する
 
 ::: tip
 
-Since end-to-end tracing can affect the system performance, only enable it when necessary.
+エンドツーエンドトレーシングはシステムパフォーマンスに影響を与える可能性があるため、必要な場合のみ有効化してください。
 
 :::
 
-This section guides you through enabling OpenTelemetry-based end-to-end tracing in EMQX and demonstrates MQTT distributed tracing capabilities in a multi-node setup.
+このセクションでは、EMQXでOpenTelemetryベースのエンドツーエンドトレーシングを有効化する手順と、マルチノード環境でのMQTT分散トレーシング機能のデモを紹介します。
 
-### Configure End-to-End Tracing via Dashboard
+### ダッシュボードからエンドツーエンドトレーシングを設定する
 
-1. Click **Management** -> **Monitoring** from the Dashboard menu on the left.
-2. Select the **Integration** tab on the Monitoring page.
-3. Configure the following settings:
-   - **Monitoring platform**: Select `OpenTelemetry`.
-   - **Feature Selection**: Select `Traces`.
-   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`. `http://localhost:4317`.
-   - **Enable TLS**: Enable TLS encryption for secure communication as needed, typically for security requirements in production environments.
-   - **Trace Mode**: Select `End-to-End` to enable end-to-end tracing functionality.
-   - **Cluster Identifier**: Add a property value to the span attributes to help identify which EMQX cluster the data comes from. The property key will be `cluster.id`. Typically, set a simple and easily identifiable name or use the cluster name to differentiate between EMQX clusters. The default is `emqxcl`.
-   - **Traces Export Interval**: Set the time interval for exporting trace data, with a default of `5` seconds.
-   - **Max Queue Size**: Set the maximum size of the trace data queue. The default is `2048` entries.
+1. ダッシュボードの左メニューから **Management** -> **Monitoring** をクリックします。  
+2. Monitoringページで **Integration** タブを選択します。  
+3. 以下の設定を行います：  
+   - **Monitoring platform**: `OpenTelemetry` を選択します。  
+   - **Feature Selection**: `Traces` を選択します。  
+   - **Endpoint**: トレースデータのエクスポート先アドレスを設定します。デフォルトは `http://localhost:4317` です。  
+   - **Enable TLS**: 必要に応じてTLS暗号化を有効にします。通常、本番環境のセキュリティ要件に合わせて設定します。  
+   - **Trace Mode**: `End-to-End` を選択し、エンドツーエンドトレーシング機能を有効化します。  
+   - **Cluster Identifier**: span属性に追加するプロパティ値を設定し、どのEMQXクラスターからのデータかを識別できるようにします。プロパティキーは `cluster.id` です。通常はシンプルで識別しやすい名前やクラスター名を設定します。デフォルトは `emqxcl` です。  
+   - **Traces Export Interval**: トレースデータのエクスポート間隔を秒単位で設定します。デフォルトは `5` 秒です。  
+   - **Max Queue Size**: トレースデータキューの最大サイズを設定します。デフォルトは `2048` エントリです。  
 
-4. Click **Trace Advanced Configuration** to configure advanced settings if necessary.
+4. 必要に応じて **Trace Advanced Configuration** をクリックし、詳細設定を行います。  
 
-   - **Trace Configuration**: Used to set additional trace options, including whether to trace specific events (such as client connections, message transmissions, rule-engine executions, etc.).
-     - **Follow Traceparent**: Set whether to follow the `traceparent`. When set to `true`, EMQX will attempt to retrieve the `traceparent` identifier from the `User-Property` sent by the client and associate the end-to-end tracing with it. Otherwise, EMQX will generate a new trace for the end-to-end tracing. The default value is `true`.
-   - **Client ID White List**: Set a whitelist to restrict which clients' connections or messages will be traced. This can help avoid unnecessary tracing and reduce additional system resource consumption.
-   - **Topic White List**: Set a topic whitelist, allowing only matching topics to be traced. This works similarly to the client whitelist, helping to control the scope of the tracing.
+   - **Trace Configuration**: クライアント接続やメッセージ送受信、ルールエンジンの実行など、特定イベントのトレース有無を設定できます。  
+     - **Follow Traceparent**: `traceparent` を追跡するかどうかを設定します。`true` に設定すると、EMQXはクライアントから送信された `User-Property` 内の `traceparent` 識別子を取得し、エンドツーエンドトレーシングに紐付けます。`false` の場合は新規トレースを生成します。デフォルトは `true` です。  
+   - **Client ID White List**: トレース対象とするクライアント接続やメッセージを制限するホワイトリストを設定できます。不要なトレースを避け、システムリソースの消費を抑制できます。  
+   - **Topic White List**: トピックのホワイトリストを設定し、マッチするトピックのみをトレース対象とします。クライアントホワイトリストと同様にトレース範囲の制御に役立ちます。  
 
-   Click **Confirm** after you save the configuration and close the window.
+   設定後、**Confirm** をクリックして設定を保存しウィンドウを閉じます。  
 
-5. Click **Save Changes** to save the configuration.
+5. **Save Changes** をクリックして設定を保存します。
 
-<img src="./assets/e2e-dashboard-conf-page-en.png" alt="Otel-E2E-Trace-dashboard-page" style="zoom:67%;" />
+<img src="./assets/e2e-dashboard-conf-page-en.png" alt="OpenTelemetryエンドツーエンドトレーシング ダッシュボード設定画面" style="zoom:67%;" />
 
-### Configure End-to-End Tracing via Configuration File
+### 設定ファイルからエンドツーエンドトレーシングを設定する
 
-Add the following configuration to the EMQX `cluster.hocon` file (assuming EMQX is running locally).
+EMQXがローカルで稼働している前提で、`cluster.hocon` ファイルに以下の設定を追加します。
 
-For more details on configuration options, refer to the OpenTelemetry subsection of [EMQX Dashboard Monitoring Integration](http://localhost:18083/#/monitoring/integration).
+設定オプションの詳細は、[EMQXダッシュボード監視統合のOpenTelemetry項目](http://localhost:18083/#/monitoring/integration)を参照してください。
 
 ```bash
 opentelemetry {
   exporter { endpoint = "http://localhost:4317" }
   traces {
    enable = true
-   # End-to-end tracing mode
+   # エンドツーエンドトレーシングモード
    trace_mode = e2e
-   # End-to-end tracing options
+   # エンドツーエンドトレーシングオプション
    e2e_tracing_options {
-     ## Trace client connection/disconnection events
+     ## クライアント接続/切断イベントをトレース
      client_connect_disconnect = true
-     ## Trace client subscription/unsubscription events
+     ## クライアントのサブスクライブ/アンインサブスクライブイベントをトレース
      client_subscribe_unsubscribe = true
-     ## Trace client messaging events
+     ## クライアントのメッセージングイベントをトレース
      client_messaging = true
-     ## Trace Rule-Engine Executions
+     ## ルールエンジンの実行をトレース
      trace_rule_engine = true
-     ## Maximum whitelist length for client IDs
+     ## クライアントIDホワイトリストの最大長
      clientid_match_rules_max = 30
-     ## Maximum whitelist length for topic filters
+     ## トピックフィルターホワイトリストの最大長
      topic_match_rules_max = 30
-     ## Cluster identifier
+     ## クラスター識別子
      cluster_identifier = emqxcl
-     ## Message trace level (QoS)
+     ## メッセージトレースレベル（QoS）
      msg_trace_level = 2
-     ## Sampling rate for events not in the whitelist
-     ## Note: Sampling applies only when tracing is enabled
+     ## ホワイトリスト外イベントのサンプリング率
+     ## 注：トレースが有効な場合のみサンプリングが適用されます
      sample_ratio = "100%"
-     ## Follow traceparent
-     ## Whether end-to-end tracing follows the `traceparent` passed in by the client
+     ## traceparentの追跡
+     ## クライアントから渡された`traceparent`をエンドツーエンドトレーシングで追跡するか
      follow_traceparent
     }
   }
@@ -92,66 +92,66 @@ opentelemetry {
 }
 ```
 
-## Demonstrate End-to-End Tracing in EMQX
+## EMQXでのエンドツーエンドトレーシングのデモ
 
-1. Start EMQX nodes, for example, start a two-node cluster with node names `emqx@172.19.0.2` and `emqx@172.19.0.3` to demonstrate distributed tracing functionality.
+1. EMQXノードを起動します。例として、`emqx@172.19.0.2` と `emqx@172.19.0.3` の2ノードクラスターを起動し、分散トレーシング機能をデモします。
 
-2. Use MQTTX CLI as a client to subscribe to the same topic on different nodes.
+2. MQTTX CLIをクライアントとして使用し、異なるノードで同じトピックをサブスクライブします。
 
-   - Subscribe on the `emqx@172.19.0.2` node:
+   - `emqx@172.19.0.2` ノードでサブスクライブ：
 
      ```bash
      mqttx sub -t t/1 -h 172.19.0.2 -p 1883
      ```
 
-   - Subscribe on the `emqx@172.19.0.3` node:
+   - `emqx@172.19.0.3` ノードでサブスクライブ：
 
      ```bash
      mqttx sub -t t/1 -h 172.19.0.3 -p 1883
      ```
 
-3. After approximately 5 seconds (the default interval for exporting trace data in EMQX), navigate to the Jaeger WEB UI at [http://localhost:16686](http://localhost:16686/) to view trace data.
+3. 約5秒後（EMQXのトレースデータエクスポートのデフォルト間隔）、[http://localhost:16686](http://localhost:16686/) のJaeger WEB UIにアクセスし、トレースデータを確認します。
 
-   Select the `emqx` service and click **Find Traces**. If the `emqx` service does not appear immediately, wait a moment and refresh the page. You should see traces for client connection and subscription events:
+   `emqx` サービスを選択し、**Find Traces** をクリックします。`emqx` サービスがすぐに表示されない場合は、少し待ってページを更新してください。クライアント接続およびサブスクライブイベントのトレースが確認できます：
 
    ![Jaeger-WEB-UI-e2e-Client-Events](./assets/e2e-client-events.png)
 
-4. Publish a message:
+4. メッセージをパブリッシュします：
 
    ```bash
    mqttx pub -t t/1 -h 172.19.0.2 -p 1883
    ```
 
-5. After a short delay, you can find detailed traces of the MQTT message in the Jaeger WEB UI.
+5. 少し待つと、Jaeger WEB UIでMQTTメッセージの詳細なトレースが確認できます。
 
-   Click a trace to view detailed span information and the trace timeline. Depending on the number of subscribers, cross-node message routing, QoS levels, and the `msg_trace_level` configuration, an MQTT message trace may include varying numbers of spans.
+   トレースをクリックすると、詳細なspan情報とトレースタイムラインが表示されます。サブスクライバー数、ノード間のメッセージルーティング、QoSレベル、`msg_trace_level` 設定により、MQTTメッセージのトレースに含まれるspan数は異なります。
 
-   Below is an example trace timeline and span information when two clients have QoS 2 subscriptions, the publisher sends a QoS 2 message, and the `msg_trace_level` is set to 2.
+   以下は、2クライアントがQoS 2でサブスクライブし、パブリッシャーがQoS 2のメッセージを送信、`msg_trace_level` が2に設定されている場合のトレースタイムラインとspan情報の例です。
 
-   Notably, since the client `mqttx_9137a6bb` is connected to a different EMQX node than the publisher, two additional spans (`message.forward` and `message.handle_forward`) appear to represent cross-node transmission.
+   特に、クライアント `mqttx_9137a6bb` がパブリッシャーとは異なるEMQXノードに接続しているため、ノード間の送信を表す2つの追加span（`message.forward` と `message.handle_forward`）が表示されています。
 
    ![Jaeger-WEB-UI-e2e-Message](./assets/e2e-message.png)
 
-   In addition, for messages or events that trigger the execution of the rule engine, when the rule engine tracking option is enabled, the tracking information of rule and action execution can also be obtained.
+   また、メッセージやイベントがルールエンジンの実行をトリガーする場合、ルールエンジンのトラッキングオプションが有効であれば、ルールおよびアクションの実行トラッキング情報も取得可能です。
 
    ![Jaeger-WEB-UI-e2e-With-Rule-Engine](./assets/e2e-with-rule-engine.png)
 
    ::: tip
 
-   The end-to-end tracing with rule-engine execution feature is supported only in EMQX version 5.9.0 and later.
+   ルールエンジンの実行を含むエンドツーエンドトレーシング機能は、EMQXバージョン5.9.0以降でサポートされています。
 
    :::
 
-   ::: warning Important Notice
+   ::: warning 重要なお知らせ
 
-   Please enable this feature with caution. When a message or event triggers multiple rules and actions, a single trace may generate a large number of spans, increasing system load.
-   Please estimate an appropriate sampling rate based on message volume and the number of rules and actions.
+   この機能は慎重に有効化してください。メッセージやイベントが複数のルールやアクションをトリガーすると、単一のトレースで大量のspanが生成され、システム負荷が増加します。  
+   メッセージ量やルール・アクション数に応じて適切なサンプリング率を見積もってください。
 
    :::
 
-## Manage Trace Span Overload
+## トレースspanのオーバーロード管理
 
-EMQX accumulates trace spans and periodically exports them in batches. The export interval is controlled by the `opentelemetry.trace.scheduled_delay` parameter, which defaults to 5 seconds. The batch trace span processor includes overload protection, allowing accumulation of spans up to a limit, which defaults to 2048 spans. You can adjust this limit using the following configuration:
+EMQXはトレースspanを蓄積し、定期的にバッチでエクスポートします。エクスポート間隔は `opentelemetry.trace.scheduled_delay` パラメータで制御され、デフォルトは5秒です。バッチトレースspanプロセッサにはオーバーロード保護機能があり、最大蓄積数（デフォルト2048span）を超えると新規spanは破棄されます。以下の設定でこの制限を調整可能です。
 
 ```yaml
 opentelemetry {
@@ -162,14 +162,14 @@ opentelemetry {
 }
 ```
 
-When the `max_queue_size` limit is reached, new trace spans are dropped until the current queue is exported.
+`max_queue_size` の上限に達すると、現在のキューがエクスポートされるまで新規トレースspanは破棄されます。
 
-::: tip Note
+::: tip 補足
 
-If the traced messages are distributed to a large number of subscribers, or if the message volume is high and the sampling rate is set too high, only a small portion of spans may be exported, with most spans discarded due to overload protection.
+トレース対象メッセージが多数のサブスクライバーに配信される場合や、メッセージ量が多くサンプリング率が高い場合、オーバーロード保護により多くのspanが破棄され、エクスポートされるspanはごく一部になる可能性があります。
 
-For end-to-end tracing mode, consider increasing the `max_queue_size` value based on message volume and sampling rate, and reducing the `scheduled_delay` configuration to increase span export frequency. This helps avoid loss of spans due to overload protection.
+エンドツーエンドトレーシングモードでは、メッセージ量やサンプリング率に応じて `max_queue_size` を増やし、`scheduled_delay` を短縮してspanのエクスポート頻度を上げることを検討してください。これによりオーバーロード保護によるspanの損失を抑制できます。
 
-**However, note that higher export frequency and larger queue sizes may increase system resource consumption. You should carefully estimate factors such as message TPS and available system resources before enabling this feature and apply appropriate configurations.**
+**ただし、エクスポート頻度の増加やキューサイズの拡大はシステムリソース消費を増加させるため、メッセージTPSや利用可能なシステムリソースを十分に見積もった上で適切に設定してください。**
 
 :::

@@ -1,85 +1,85 @@
-# Schema Validation
+# スキーマバリデーション
 
-EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
+EMQXには、指定したトピックからサブスクライブされるメッセージがあらかじめ定義されたデータ形式に準拠していることを保証するための組み込みのスキーマバリデーション機能があります。スキーマバリデーションはJSON Schema、Protobuf、Avroなど複数のスキーマ形式および組み込みのSQL文による検証をサポートしています。本ページではスキーマバリデーションの機能概要と利用方法について説明します。
 
-## Why Validate Data
+## データをバリデートする理由
 
-Clients may publish non-standard messages to the Broker, which could lead to exceptions in subscribers and data systems or pose security risks. EMQX can identify and block these non-compliant messages by validating data formats early, ensuring system stability and reliability. schema validation brings benefits in the following aspects:
+クライアントがブローカーに非標準のメッセージをパブリッシュすると、サブスクライバーやデータシステムで例外が発生したり、セキュリティリスクを引き起こしたりする可能性があります。EMQXはデータ形式を早期に検証してこれらの非準拠メッセージを検出・ブロックすることで、システムの安定性と信頼性を確保します。スキーマバリデーションは以下のような利点をもたらします。
 
-- **Data Integrity**: Validates the structure and format of MQTT messages to ensure data consistency and correctness.
-- **Data Quality**: Enforces data quality by checking for missing or invalid fields, data types, and formats, ensuring data consistency and quality.
-- **Unified Data Model**: Ensures that the entire team and project use a unified data model, reducing inconsistencies and errors.
-- **Reuse and Sharing**: Allows team members to reuse and share schemas, improving collaboration efficiency and reducing repetitive work and errors.
-- **Security**: Prevents malicious or incorrectly formatted messages from being processed, reducing the risk of security vulnerabilities.
-- **Interoperability**: Ensures messages conform to standardized formats, facilitating communication between different devices and systems.
-- **Debugging**: Easily identify and debug invalid or incorrectly formatted messages.
+- **データ整合性**：MQTTメッセージの構造と形式を検証し、データの一貫性と正確性を保証します。
+- **データ品質**：欠損や無効なフィールド、データ型、形式をチェックし、データの品質を維持します。
+- **統一データモデル**：チーム全体やプロジェクトで統一されたデータモデルを使用し、不整合やエラーを減らします。
+- **再利用と共有**：スキーマをチーム内で再利用・共有できるため、協力効率が向上し、作業の重複やミスを減らせます。
+- **セキュリティ**：悪意のあるメッセージや不正な形式のメッセージの処理を防ぎ、セキュリティリスクを低減します。
+- **相互運用性**：標準化された形式に準拠したメッセージを保証し、異なるデバイスやシステム間の通信を円滑にします。
+- **デバッグ**：無効または誤った形式のメッセージを容易に特定・デバッグできます。
 
-## Workflow
+## ワークフロー
 
-When a message is published, it is validated against predefined rules. If validation succeeds, the process continues; otherwise, user-configured actions are executed, such as message discarding or disconnection.
+メッセージがパブリッシュされると、あらかじめ定義されたルールに基づいて検証が行われます。検証に成功すれば処理が継続され、失敗した場合はユーザー設定のアクションが実行されます（メッセージ破棄や切断など）。
 
-1. When a message is published, the publish permissions are first checked through the [authorization mechanism](../access-control/authz/authz.md) in EMQX. After passing the permission check, validation rules are matched based on the publishing topic from a user-configured list of validators. A validator can be set for multiple topics or topic filters.
+1. メッセージのパブリッシュ時に、まずEMQXの[認可機構](../access-control/authz/authz.md)でパブリッシュ権限が確認されます。権限チェックを通過した後、ユーザー設定の検証リストからパブリッシュされたトピックに基づいて検証ルールがマッチングされます。1つのバリデーターは複数のトピックやトピックフィルターに設定可能です。
 
-2. Once a validation rule is matched, the message is validated against the preset Schema or SQL.
+2. 検証ルールがマッチすると、メッセージはあらかじめ設定されたスキーマまたはSQLに対して検証されます。
 
-   - Supports multiple types of Schema: JSON Schema, Protobuf, and Avro.
-   - Supports SQL statements that comply with EMQX rule engine syntax.
-   - A single policy can add multiple Schemas or SQLs and specify their relationships:
-     - **All Pass**: Validation is considered successful only if all validations pass.
-     - **Any Pass**: Validation stops and is considered successful if any validation passes.
+   - JSON Schema、Protobuf、Avroなど複数のスキーマタイプをサポート。
+   - EMQXルールエンジンの構文に準拠したSQL文もサポート。
+   - 1つのポリシーに複数のスキーマやSQLを追加し、以下の関係性を指定可能：
+     - **すべて合格**：すべての検証が合格した場合のみ成功とみなす。
+     - **いずれか合格**：いずれかの検証が合格した時点で検証を停止し成功とみなす。
 
-3. Once validated successfully, the message continues to the next process, such as triggering the rule engine or dispatching to subscribers.
+3. 検証に成功すると、ルールエンジンのトリガーやサブスクライバーへの配信など次の処理に進みます。
 
-4. If validation fails, the following user-configured actions can be executed:
+4. 検証に失敗した場合、以下のユーザー設定アクションが実行されます。
 
-   - **Discard Message**: Terminate the publish and discard the message, returning a specific reason code (131 - Implementation Specific Error) for QoS 1 and QoS 2 messages via PUBACK.
-   - **Disconnect and Discard Message**: Discard the message and disconnect the publishing client.
-   - **Ignore**: No additional actions are taken.
+   - **メッセージ破棄**：パブリッシュを終了しメッセージを破棄。QoS 1およびQoS 2メッセージにはPUBACKで特定の理由コード（131 - Implementation Specific Error）を返します。
+   - **切断してメッセージ破棄**：メッセージを破棄し、パブリッシュしたクライアントを切断。
+   - **無視**：追加のアクションは行いません。
 
-   Regardless of the configured action, a log entry can be generated upon validation failure; users can configure the log's output level, which defaults to `warning`. A validation failure can also trigger a rule engine event `$events/schema_validation/failed`, allowing users to catch this event for custom handling, such as publishing the erroneous message to another topic or sending it to Kafka for analysis.
+   設定されたアクションにかかわらず、検証失敗時にログを出力可能で、ログの出力レベルはユーザーが設定でき、デフォルトは`warning`です。検証失敗はルールエンジンイベント`$events/schema_validation/failed`をトリガーでき、ユーザーはこのイベントをキャッチして、誤ったメッセージを別トピックにパブリッシュしたりKafkaに送信して解析したりするカスタム処理が可能です。
 
-## User Guide
+## ユーザーガイド
 
-This section demonstrates how to configure the schema validation feature and how to test your setup.
+このセクションでは、スキーマバリデーション機能の設定方法と動作確認方法を説明します。
 
-### Configure Schema Validation in Dashboard
+### ダッシュボードでのスキーマバリデーション設定
 
-This section demonstrates how to create and configure a schema validator in the Dashboard.
+ダッシュボードでスキーマバリデーターを作成・設定する手順は以下の通りです。
 
-1. Click on **Smart Data Hub** -> **Schema Validation** in the left navigation of the Dashboard.
-2. Click **Create** at the top right of the **Schema Validation** page.
-3. On the Create Schema Validation page, configure the following settings:
-   - **Name**: Enter the name of the validator.
-   - **Message Source Topic**: Set the topics whose messages need to be validated. Multiple topics or topic filters can be set.
-   - **Note** (optional): Enter any notes.
-   - **Validation Method**:
-     - **Validation Strategy**: Specify the relationship between multiple validation strategies.
-       - **All Pass** (by default): Considered passing only when all validation methods pass.
-       - **Any Pass**: Stops further validation and is considered passing if any validation method passes.
-     - **Validation List**: select the schema from the **Type** dropdown, and add schema or SQL. For how to create a schema, see [Create Validation Schema](#create-validation-schema).
-   - **Validation Failure Operation**:
-     - **Action After Failure**: Select the actions to perform if validation fails:
-       - **Drop Message**: Terminate the publish and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.
-       - **Disconnect and Drop Message**: Discard the message and disconnect the publishing client.
-       - **Ignore**: Perform no additional actions.
-   - **Output Logs**: Select whether to log a message upon validation failure; default is enabled.
-   - **Logs Level**: Set the log output level; the default is `warning`.
+1. ダッシュボード左ナビゲーションの **Smart Data Hub** -> **Schema Validation** をクリックします。
+2. **Schema Validation** ページ右上の **Create** をクリックします。
+3. 「Create Schema Validation」ページで以下の設定を行います。
+   - **Name**：バリデーターの名前を入力します。
+   - **Message Source Topic**：検証対象とするメッセージのトピックを設定します。複数のトピックやトピックフィルターを設定可能です。
+   - **Note**（任意）：メモを入力します。
+   - **Validation Method**：
+     - **Validation Strategy**：複数の検証方式の関係性を指定します。
+       - **All Pass**（デフォルト）：すべての検証方式が合格した場合のみ合格とみなします。
+       - **Any Pass**：いずれかの検証方式が合格した時点で検証を停止し合格とみなします。
+     - **Validation List**：**Type** ドロップダウンからスキーマを選択し、スキーマまたはSQLを追加します。スキーマの作成方法は[Create Validation Schema](#create-validation-schema)を参照してください。
+   - **Validation Failure Operation**：
+     - **Action After Failure**：検証失敗時に実行するアクションを選択します。
+       - **Drop Message**：パブリッシュを終了しメッセージを破棄。QoS 1およびQoS 2メッセージにはPUBACKで特定の理由コードを返します。
+       - **Disconnect and Drop Message**：メッセージを破棄し、パブリッシュしたクライアントを切断します。
+       - **Ignore**：追加のアクションは行いません。
+   - **Output Logs**：検証失敗時にログを出力するか選択します。デフォルトは有効です。
+   - **Logs Level**：ログの出力レベルを設定します。デフォルトは`warning`です。
 
-4. Click **Create** to complete the settings.
+4. **Create** をクリックして設定を完了します。
 
-Now you can see an enabled new validator appears in the list on the Schema Validation page. You can disable it as you need. You can update the validator settings by clicking **Settings** in the **Actions** column. You can also delete the validator or move the position of the validator by clicking **More**.
+設定完了後、スキーマバリデーションページのリストに有効な新しいバリデーターが表示されます。必要に応じて無効化可能です。**Actions**列の**Settings**をクリックすると設定の更新ができ、**More**からはバリデーターの削除や順序変更も可能です。
 
-### Configure Schema Validation in Configuration File
+### 設定ファイルでのスキーマバリデーション設定
 
-For configuration details, see [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+設定の詳細は[Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)を参照してください。
 
-### Create Validation Schema
+### バリデーションスキーマの作成
 
-This section demonstrates how to create a validation schema, using JSON Schema as an example. The JSON Schema must meet the following requirements:
+ここではJSON Schemaを例にバリデーションスキーマの作成方法を示します。JSON Schemaは以下の条件を満たす必要があります。
 
-- The JSON object must include a property named `temp`.
-- The `temp` property must be an integer.
-- The `temp` property must be at least 101.
+- JSONオブジェクトに`temp`という名前のプロパティが含まれること。
+- `temp`プロパティは整数型であること。
+- `temp`プロパティの値は101以上であること。
 
 ```json
 {
@@ -95,23 +95,23 @@ This section demonstrates how to create a validation schema, using JSON Schema a
 }
 ```
 
-### Test Schema Validation Setup
+### スキーマバリデーション設定のテスト
 
-You can use the example schema created in [Create Validation Schema](#create-validation-schema) to test your schema validation setup.
+[Create Validation Schema](#create-validation-schema)で作成した例のスキーマを使って、スキーマバリデーションの動作をテストできます。
 
-Use [mqttx](https://mqttx.app/cli) to publish a message with a payload that conforms to the MQTT message rules:
+[mqttx](https://mqttx.app/cli)を使い、MQTTメッセージルールに準拠したペイロードでメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -t t/1 -m '{"temp": 102}'
 ```
 
-Use mqttx to publish a message with a payload that does not conform to the MQTT message rules:
+次に、ルールに準拠しないペイロードでメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -t t/1 -m '{"temp": 100}'
 ```
 
-The log output should look like the following:
+ログ出力は以下のようになります。
 
 ```bash
 2024-05-16T06:24:10.733827+00:00 [warning] tag: SCHEMA_VALIDATION, clientid: mqttx_1db4547e, msg: validation_failed, peername: 127.0.0.1:40850, action: drop, validation: <<"check-json">>
@@ -119,22 +119,22 @@ The log output should look like the following:
 
 ### REST API
 
-For detailed information on how to use schema validation through the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+REST APIを使ったスキーマバリデーションの詳細な利用方法は[EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)を参照してください。
 
-## Statistics and Indicators
+## 統計と指標
 
-When enabled, the schema validation exposes statistics and indicators on the Dashboard. You can click the name of the validator on the Schema Validation page to see the following:
+有効化すると、スキーマバリデーションの統計情報と指標がダッシュボードに表示されます。スキーマバリデーションページでバリデーター名をクリックすると以下を確認できます。
 
-**Statistics**:
+**統計情報**：
 
-- **Total**: The total number of triggers since the system started.
-- **Success**: Number of successful data validations.
-- **Failed**: Number of failed data validations.
+- **Total**：システム起動以降のトリガー総数。
+- **Success**：成功したデータ検証数。
+- **Failed**：失敗したデータ検証数。
 
-**Rate Indicators**:
+**レート指標**：
 
-- Current verification speed
-- Speed in the last 5 minutes
-- Historical maximum speed
+- 現在の検証速度
+- 過去5分間の速度
+- 過去の最大速度
 
-Statistics are resettable and also added to Prometheus, accessible via the `/prometheus/schema_validation` path.
+統計情報はリセット可能で、Prometheusにも追加されており、`/prometheus/schema_validation` パスからアクセス可能です。

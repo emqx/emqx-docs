@@ -1,16 +1,15 @@
-# Plugin and Extension
+# プラグインと拡張機能
 
-EMQX 5.0 supports extensions in the form of plugins, multilingual gRPC hooks and protocol extensions to facilitate your development workflow, and you can choose the extension method according to your needs.
+EMQX 5.0 は、プラグイン、多言語 gRPC フック、およびプロトコル拡張の形で拡張機能をサポートしており、開発ワークフローを支援します。用途に応じて拡張方法を選択できます。
 
-## Plugins
+## プラグイン
 
-Through EMQX's plugin development interface, users can access the core process to customize business logic, such as access control, message routing, or message storage. In addition, our protocol extensions help our users to manage client access through a unified [Gateway](../gateway/gateway.md) framework.
+EMQX のプラグイン開発インターフェースを通じて、ユーザーはコアプロセスにアクセスし、アクセス制御、メッセージルーティング、メッセージ保存などのビジネスロジックをカスタマイズできます。さらに、プロトコル拡張により、統一された[ゲートウェイ](../gateway/gateway.md)フレームワークを通じてクライアントのアクセス管理が可能です。
 
-Developing plugins requires an understanding of EMQX and Erlang.
+プラグイン開発には、EMQX と Erlang の理解が必要です。
 
-## Multilingual gRPC Hooks and Protocol Extension
+## 多言語 gRPC フックおよびプロトコル拡張
 
-EMQX offers a multilingual extension combining multilingual [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) hooks and protocol extension.
+EMQX は、多言語対応の[汎用リモートプロシージャコール（gRPC）](https://grpc.io/)フックとプロトコル拡張を組み合わせた多言語拡張機能を提供します。
 
-Through multilingual extensions, users can write services in Python or Java and integrate them with EMQX through the gRPC channel, enabling features similar to plugins, such as Hooks processing or private TCP/UDP protocol parsing.
-
+多言語拡張を利用することで、ユーザーは Python や Java でサービスを記述し、gRPC チャネルを通じて EMQX と統合できます。これにより、フック処理や独自の TCP/UDP プロトコル解析など、プラグインに類似した機能を実現できます。

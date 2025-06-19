@@ -1,68 +1,66 @@
-# Ingest MQTT Data into Cassandra
+# CassandraへのMQTTデータ取り込み
 
-<!-- 提供一段简介，描述支 Sink 的基本工作方式、关键特性和价值，如果有局限性也应当在此处说明（如必须说明的版本限制、当前未解决的问题）。 -->
+[Apache Cassandra](https://cassandra.apache.org/_/index.html) は、大規模データセットの処理と高スループットアプリケーションの構築を目的とした、人気のあるオープンソースの分散型NoSQLデータベース管理システムです。EMQXとApache Cassandraの統合により、メッセージやイベントをCassandraデータベースに保存できるようになり、時系列データの保存、デバイス登録・管理、リアルタイムデータ分析などの機能を実現します。
 
-[Apache Cassandra](https://cassandra.apache.org/_/index.html) is a popular open-source, distributed NoSQL database management system designed to handle large datasets and build high-throughput applications. EMQX's integration with Apache Cassandra provides the ability to store messages and events in the Cassandra database, enabling functionalities such as time-series data storage, device registration and management, as well as real-time data analysis.
-
-This page provides a comprehensive introduction to the data integration between EMQX and Cassandra with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとCassandra間のデータ統合について、実践的な手順を交えて包括的に紹介します。
 
 :::tip
-The current implementation only supports Cassandra v3.x, not yet compatible with v4.x.
+現在の実装はCassandra v3.xのみ対応しており、v4.xには未対応です。
 :::
 
-## How It Works
+## 動作概要
 
-Cassandra data integration is an out-of-the-box feature in EMQX that combines EMQX's device connectivity and message transmission capabilities with Cassendra's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Cassandra for storage and management, eliminating the need for complex coding.
+Cassandraデータ統合はEMQXの標準機能であり、EMQXのデバイス接続およびメッセージ送受信機能とCassandraの強力なデータ保存機能を組み合わせています。内蔵の[ルールエンジン](./rules.md)コンポーネントにより、EMQXからCassandraへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and Cassandra:
+以下の図は、EMQXとCassandra間の典型的なデータ統合アーキテクチャを示しています。
 
 ![EMQX Integration Cassandra](./assets/emqx-integration-cassandra.png)
 
-Ingesting MQTT data into Cassandra works as follows:
+CassandraへのMQTTデータ取り込みの流れは以下の通りです：
 
-1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Cassandra. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into Cassandra**: Once the rule engine identifies a message for Cassandra storage, it triggers an action of forwarding the messages to Cassandra. Processed data will be seamlessly written into the collection of the Cassandra database.
-4. **Data storage and utilization**: With the data now stored in Cassandra, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+1. **メッセージのパブリッシュと受信**：接続車両、IIoTシステム、エネルギー管理プラットフォームなどのIoTデバイスは、MQTTプロトコルを通じてEMQXに接続し、特定のトピックにMQTTメッセージをパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **メッセージデータの処理**：メッセージはルールエンジンを通過し、EMQXで定義されたルールに従って処理されます。ルールは事前に定義された条件に基づき、Cassandraにルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などが適用されます。
+3. **Cassandraへのデータ取り込み**：ルールエンジンがCassandra保存対象のメッセージを特定すると、メッセージをCassandraに転送するアクションをトリガーします。処理済みデータはCassandraデータベースのコレクションにシームレスに書き込まれます。
+4. **データの保存と活用**：データがCassandraに保存されることで、企業はそのクエリ機能を活用して様々なユースケースに対応できます。例えば、接続車両の分野では、車両の健康状態の把握、リアルタイム指標に基づくルート最適化、資産追跡などに利用可能です。IIoT環境では、機械の健康監視、メンテナンス予測、生産スケジュールの最適化などに活用されます。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with Cassandra offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+Cassandraとのデータ統合は、効率的なデータ伝送、保存、活用を実現するために以下の特長とメリットを提供します：
 
-- **Large-Scale Time-Series Data Storage**: EMQX can handle massive device connections and message transmissions. Leveraging Cassandra's high scalability and distributed storage features, it can achieve storage and management of large-scale datasets, including time-series data, and supports time-range based queries and aggregation operations.
-- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Cassandra. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **High Availability Assurance**: Both EMQX and Cassandra provide clustering capabilities. When used in combination, device connections and data can be distributed across multiple servers. In case of a node failure, the system can automatically switch to other available nodes, thus ensuring high scalability and fault tolerance.
-- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Cassandra. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
-- **Flexible Data Model**: Cassandra uses a column-based data model, supporting flexible data schemas and dynamic addition of columns. This is suitable for storing and managing structured device events and message data, and can easily store various MQTT message data.
+- **大規模時系列データの保存**：EMQXは大量のデバイス接続とメッセージ送受信を処理可能です。Cassandraの高いスケーラビリティと分散ストレージ機能を活用し、大規模データセット（時系列データを含む）の保存・管理を実現し、時間範囲に基づくクエリや集約操作をサポートします。
+- **リアルタイムデータストリーミング**：EMQXはリアルタイムデータストリームの処理に最適化されており、ソースシステムからCassandraへの効率的かつ信頼性の高いデータ伝送を保証します。即時の洞察とアクションが求められるユースケースに適しています。
+- **高可用性の保証**：EMQXとCassandraは共にクラスタリング機能を提供します。組み合わせて使用することで、デバイス接続とデータを複数のサーバーに分散可能です。ノード障害時には自動的に他の利用可能なノードに切り替わり、高いスケーラビリティとフォールトトレランスを確保します。
+- **柔軟なデータ変換**：EMQXの強力なSQLベースのルールエンジンにより、Cassandraに保存する前にデータの前処理が可能です。フィルタリング、ルーティング、集約、強化など多様な変換機能をサポートし、ニーズに応じてデータを整形できます。
+- **柔軟なデータモデル**：Cassandraはカラムベースのデータモデルを採用し、柔軟なスキーマと動的なカラム追加をサポートします。構造化されたデバイスイベントやメッセージデータの保存・管理に適しており、多様なMQTTメッセージデータを容易に格納できます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create a TimescaleDB data bridge, including how to install a Cassandra server and create keyspace and table.
+このセクションでは、TimescaleDBデータブリッジの作成を始める前に必要な準備について説明します。Cassandraサーバーのインストール方法やキー スペースとテーブルの作成手順も含みます。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- EMQXデータ統合の[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-### Install Cassandra Server
+### Cassandraサーバーのインストール
 
-Start the simple Cassandra service via docker:
+Dockerを使って簡単にCassandraサービスを起動します：
 
 ```bash
 docker run --name cassa --rm -p 9042:9042 cassandra:3.11.14
 ```
 
-### Create Keyspace and Table
+### キースペースとテーブルの作成
 
-You need to create keyspace and tables before you create the data bridge for Cassandra.
+Cassandra用のデータブリッジを作成する前に、キースペースとテーブルを作成する必要があります。
 
-1. Create a Keyspace named `mqtt`:
+1. `mqtt`という名前のキースペースを作成します：
 
 ```bash
 docker exec -it cassa cqlsh "-e CREATE KEYSPACE mqtt WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1}"
 ```
 
-2. Create a table in Cassandra: `mqtt_msg`:
+2. Cassandraに`mqtt_msg`テーブルを作成します：
 
 ```bash
 docker exec -it cassa cqlsh "-e \
@@ -75,33 +73,33 @@ docker exec -it cassa cqlsh "-e \
         PRIMARY KEY(msgid, topic));"
 ```
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the Cassandra server.
+このセクションでは、SinkをCassandraサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and Cassandra on the local machine. If you have Cassandra and EMQX running remotely, adjust the settings accordingly.
+以下の手順は、EMQXとCassandraをローカルマシンで実行していることを前提としています。リモート環境で実行している場合は、設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Cassandra** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_cassandra`.
-   - Enter `127.0.0.1:9042` for the **Servers**, `mqtt` as the **Keyspace**, and leave others as default.
-   - Determine whether to enable TLS. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Cassandra server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Cassandra. For detailed steps, see [Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**Cassandra**を選択し、**Next**をクリックします。
+4. **Configuration**ステップで以下を設定します：
+   - コネクター名を入力します。英数字の組み合わせが推奨されます（例：`my_cassandra`）。
+   - **Servers**に`127.0.0.1:9042`、**Keyspace**に`mqtt`を入力し、他はデフォルトのままにします。
+   - TLSを有効にするかどうかを選択します。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+5. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがCassandraサーバーに接続できるか確認できます。
+6. ページ下部の**Create**ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで**Back to Connector List**または**Create Rule**を選択して、ルールとSinkの作成を続けることができます。詳細は[Create a Rule with Cassandra Sink](#create-a-rule-with-cassandra-sink)を参照してください。
 
-## Create a Rule with Cassandra Sink
+## Cassandra Sink付きルールの作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`  and saving the processed results to the Cassandra table `mqtt_msg` through an action with configured Sink. 
+このセクションでは、ダッシュボード上で、ソースMQTTトピック`t/#`からのメッセージを処理し、処理結果をCassandraの`mqtt_msg`テーブルに保存するルールの作成方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードで、**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. Suppose you want to forward the MQTT messages under topic `t/#` to Cassandra, you can use the SQL syntax below. 
+3. ルールIDに`my_rule`を入力し、**SQL Editor**でルールを設定します。例えば、トピック`t/#`配下のMQTTメッセージをCassandraに転送したい場合、以下のSQL文を使用します。
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the Sink in the `SELECT` part.
+   注意：独自のSQL文を指定する場合は、Sinkが必要とする全フィールドを`SELECT`句に含めてください。
 
    ```sql
    SELECT 
@@ -110,46 +108,45 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   注意：初心者の方は**SQL Examples**や**Enable Test**をクリックして、SQLルールの学習やテストが可能です。
 
-4. Click the **+ Add Action** button to define an action that will be triggered by the rule.  With this action, EMQX sends the data processed by the rule to Cassandra. 
+4. **+ Add Action**ボタンをクリックし、ルールにトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをCassandraに送信します。
 
-5. Select `Cassandra` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**ドロップダウンから`Cassandra`を選択します。**Action**はデフォルトの`Create Action`のままにします。既存のSinkがあれば選択可能ですが、この例では新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+6. Sink名を入力します。英数字の組み合わせが推奨されます。
 
-7. Select the `my_cassandra` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**ドロップダウンから先ほど作成した`my_cassandra`を選択します。隣のボタンから新規コネクター作成も可能です。設定パラメータの詳細は[Create a Connector](#create-a-connector)を参照してください。
 
-8. Configure the **CQL template** to save `topic`, `id`, `clientid`, `qos`, `palyload` and `timestamp` to Cassandra. This template will be executed via Cassandra Query Language, and the sample code is as follows:
+8. Cassandraに`topic`、`id`、`clientid`、`qos`、`payload`、`timestamp`を保存するための**CQLテンプレート**を設定します。このテンプレートはCassandra Query Languageで実行され、サンプルは以下の通りです：
 
    ```sql
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. **詳細設定（任意）**：必要に応じて**同期（sync）**または**非同期（async）**クエリモードを選択します。詳細は[Features of Sink](./data-bridges.md#features-of-sink)を参照してください。
 
-11. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+11. **Create**ボタンをクリックしてSinkの設定を完了します。**Create Rule**ページの**Action Outputs**タブに新しいSinkが表示されます。
 
-12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+12. **Create Rule**ページで設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。作成したルールはルール一覧に表示され、**status**は`connected`となります。
 
+これでルールの作成が完了し、**Rule**ページに新しいルールが表示されます。**Actions(Sink)**タブをクリックすると、新しいCassandra Sinkが確認できます。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Cassandra Sink. 
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認でき、トピック`t/#`配下のメッセージがルール`my_rule`で解析され、Cassandraに送信・保存されていることが分かります。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Cassandra after parsing by the rule `my_rule`. 
+## ルールのテスト
 
-## Test the Rule
-
-Use MQTTX to send messages to topic  `t/1`:
+MQTTXを使ってトピック`t/1`にメッセージを送信します：
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Cassandra" }'
 ```
 
-Check the running status of the rule and Sink, the statistical count here should increase somewhat.
+ルールとSinkの稼働状況を確認し、統計カウントが増加していることを確認してください。
 
-Check whether messages are stored into Cassandra with the following command:
+以下のコマンドでCassandraにメッセージが保存されているか確認します：
 
 ```bash
 docker exec -it cassa cqlsh "-e SELECT * FROM mqtt.mqtt_msg;"

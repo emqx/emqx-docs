@@ -1,36 +1,35 @@
 # Sparkplug B
 
-[Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) is an open-source specification developed by the [Eclipse Foundation's TAHU project](https://www.eclipse.org/tahu/), designed to provide a well-defined payload and state management system for MQTT. The primary aim is to achieve interoperability and consistency within the industrial IoT sector.
+[Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) は、[Eclipse FoundationのTAHUプロジェクト](https://www.eclipse.org/tahu/)によって開発されたオープンソース仕様であり、MQTTのための明確に定義されたペイロードおよび状態管理システムを提供することを目的としています。主な目的は、産業用IoT分野における相互運用性と一貫性の実現です。
 
-Sparkplug encoding scheme version B (Sparkplug B) defines the MQTT namespace for Supervisory Control and Data Acquisition (SCADA) systems, real-time control systems, and devices. It ensures standardized data transmission by encapsulating a structured data format that includes metrics, process variables, and device status information in a concise and easy-to-process format. By using Sparkplug B, organizations can improve their operational efficiency, avoid data silos, and enable seamless communication between devices within an MQTT network.
+SparkplugエンコーディングスキームのバージョンB（Sparkplug B）は、監視制御およびデータ取得（SCADA）システム、リアルタイム制御システム、およびデバイス向けのMQTTネームスペースを定義しています。メトリクス、プロセス変数、デバイスの状態情報を含む構造化データ形式を簡潔かつ処理しやすい形でカプセル化することで、標準化されたデータ伝送を保証します。Sparkplug Bを使用することで、組織は運用効率を向上させ、データのサイロ化を回避し、MQTTネットワーク内のデバイス間でシームレスな通信を可能にします。
 
-This page guides you through the implementation of Sparkplug B in EMQX, including data format, functions, and practical examples.
+本ページでは、EMQXにおけるSparkplug Bの実装方法について、データ形式、機能、実用例を交えて解説します。
 
-## Sparkplug B Data Format 
+## Sparkplug B データ形式
 
+Sparkplug Bは、データ通信の標準化のために明確に定義されたペイロード構造を利用します。コアには[Protocol Buffers（Protobuf）](https://developers.google.com/protocol-buffers)を用いてSparkplugメッセージを構造化しており、軽量で効率的かつ柔軟なデータ交換を実現しています。
 
-Sparkplug B utilizes a well-defined payload structure to standardize data communication. At its core, it employs [Protocol Buffers (Protobuf)](https://developers.google.com/protocol-buffers) for structuring Sparkplug messages, resulting in lightweight, efficient, and flexible data interchange.
+EMQXは、[Schema Registry](./schema-registry.md)機能を通じてSparkplug Bを高度にサポートしています。Schema Registryを使うことで、Sparkplug Bを含むさまざまなデータ形式に対するカスタムエンコーダーおよびデコーダーを作成可能です。レジストリに[適切なSparkplug Bスキーマ](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto)を定義することで、EMQXのルールエンジン内で`schema_decode`および`schema_encode`関数を用いて、指定されたフォーマットに準拠したデータのアクセスや操作が可能になります。
 
-EMQX offers advanced support for Sparkplug B through the [Schema Registry](./schema-registry.md) feature. With the Schema Registry, you can create custom encoders and decoders for various data formats, including Sparkplug B. By defining the [appropriate Sparkplug B schema](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto) in the registry, you can use the `schema_decode` and `schema_encode` functions in EMQX's rule engine to access and manipulate data adhering to the specified format.
+さらに、EMQXはSparkplug Bに対する組み込みサポートも提供しており、この特定のフォーマットに関してはSchema Registryを使う必要がありません。`sparkplug_encode`および`sparkplug_decode`関数がEMQXに標準搭載されており、ルールエンジン内でのSparkplug Bメッセージのエンコード・デコードを簡単に行えます。
 
-Additionally, EMQX offers built-in support for Sparkplug B, eliminating the need for the schema registry for this specific format. The `sparkplug_encode` and `sparkplug_decode` functions are readily available in EMQX, simplifying the encoding and decoding of Sparkplug B messages within the rule engine.
+## Sparkplug B 関数
 
-## Sparkplug B Functions
+EMQXは、Sparkplug Bデータのエンコードおよびデコード用に2つのルールエンジンSQL関数、`sparkplug_encode`と`sparkplug_decode`を提供しています。[実用例](#practical-examples)セクションでは、これらの関数をさまざまなシナリオでどのように使うかを解説しています。
 
-EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `sparkplug_encode` and `sparkplug_decode`.  The [Practical Examples](#practical-examples) section helps you to understand how to use these functions in different scenarios.
+Sparkplug Bのエンコード・デコード関数は、ルールエンジンとその`jq`関数の柔軟性により、多様なタスクに利用可能です。ルールエンジンおよび`jq`関数の詳細は以下のページをご参照ください。
 
-The Sparkplug B encoding and decoding functions can be used to perform a wide variety of tasks due to the flexibility of the rule engine and its `jq` function. To learn more about the rule engine and its `jq` function, refer to the following pages:
-
-* [Create Rules](./rule-get-started.md)
-* [Rule Engine SQL Language](./rule-sql-syntax.md)
-* [The Rule Engine JQ Fuction](./rule-sql-jq.md)
-* [Full Description of the JQ Programming Language](https://stedolan.github.io/jq/manual/)
+* [ルールの作成](./rule-get-started.md)
+* [ルールエンジンSQL言語](./rule-sql-syntax.md)
+* [ルールエンジンのJQ関数](./rule-sql-jq.md)
+* [JQプログラミング言語の完全な説明](https://stedolan.github.io/jq/manual/)
 
 ### sparkplug_decode
 
-The `sparkplug_decode` function is used to decode Sparkplug B messages, for example, if you want forward a message to a specific topic based on the contents of a Sparkplug B encoded message or change the Sparkplug B message in some way. It converts the raw Sparkplug B encoded payload into a more user-friendly format that can be further processed or analyzed.
+`sparkplug_decode`関数はSparkplug Bメッセージをデコードするために使用します。例えば、Sparkplug Bでエンコードされたメッセージの内容に基づいて特定のトピックに転送したり、メッセージを何らかの形で変更したい場合に利用します。生のSparkplug Bエンコード済みペイロードを、さらに処理や解析がしやすい形式に変換します。
 
-Example usage:
+使用例：
 
 ```sql
 select
@@ -38,15 +37,15 @@ select
 from t
 ```
 
-In the example above, `payload` refers to the raw Sparkplug B message that you wish to decode.
+上記例では、`payload`がデコード対象の生のSparkplug Bメッセージを指します。
 
-The [Sparkplug B Protobuf schema](https://github.com/emqx/emqx/blob/039e27a153422028e3d0e7d517a521a84787d4a8/lib-ee/emqx_ee_schema_registry/priv/sparkplug_b.proto) can provide further insights into the structure of messages.
+[Sparkplug B Protobufスキーマ](https://github.com/emqx/emqx/blob/039e27a153422028e3d0e7d517a521a84787d4a8/lib-ee/emqx_ee_schema_registry/priv/sparkplug_b.proto)はメッセージ構造の理解に役立ちます。
 
 ### sparkplug_encode
 
-The `sparkplug_encode` function is used to encode data into a Sparkplug B message. This is particularly useful when you need to send Sparkplug B messages to MQTT clients or other components of your system.
+`sparkplug_encode`関数はデータをSparkplug Bメッセージにエンコードするために使用します。MQTTクライアントやシステムの他のコンポーネントにSparkplug Bメッセージを送信する際に特に有用です。
 
-Example usage:
+使用例：
 
 ```sql
 select
@@ -54,13 +53,13 @@ select
 from t
 ```
 
-In the example above, `payload` refers to the data that you wish to encode into a Sparkplug B message.
+上記例では、`payload`がSparkplug Bメッセージにエンコードしたいデータを指します。
 
-## Practical Examples
+## 実用例
 
-This section provides practical examples for handling Sparkplug B messages using the `sparkplug_decode` and `sparkplug_encode` functions. Note that the examples given are just a small subset of what you can do.
+このセクションでは、`sparkplug_decode`および`sparkplug_encode`関数を用いたSparkplug Bメッセージの取り扱いに関する実用例を紹介します。ここで示す例は可能な操作のほんの一部です。
 
-Consider scenarios where you have a Sparkplug B encoded message with the following structure:
+以下の構造を持つSparkplug Bエンコード済みメッセージを例に考えます。
 
 ```json
 {
@@ -101,16 +100,15 @@ Consider scenarios where you have a Sparkplug B encoded message with the followi
 }
 ```
 
+### データ抽出
 
-### Extract Data 
+デバイスからトピック `my/sparkplug/topic` にメッセージが届き、その中の `counter_group1/counter1_run` メトリクスだけを抽出して、JSON形式のメッセージとして別のトピック `interesting_counters/counter1_run_updates` に転送したい場合の手順を示します。EMQXダッシュボードでルールを作成し、[MQTTX](https://mqttx.app/)クライアントツールでテストする方法を説明します。
 
-Suppose you get messages from a device on the topic `my/sparkplug/topic` and want to forward just the `counter_group1/counter1_run` metric to another topic called `intresting_counters/counter1_run_updates` as a JSON formatted message. The instructions below demonstrate how to achieve this task by creating a rule in EMQX Dashboard and testing the rule using [MQTTX](https://mqttx.app/) client tool.
+#### ダッシュボードでルール作成
 
-#### Create Rule in Dashboard
+1. EMQXダッシュボードにアクセスし、左側のナビゲーションメニューから **Integration** -> **Rules** をクリックします。**+ Create** をクリックして **Create Rule** ページに入ります。
 
-1. Go to EMQX Dashboard. Click **Integration** -> **Rules** from the left navigation menu. Click **+ Create** to enter the **Create Rule** page.
-
-2. Enter the following SQL statement in **SQL Editor**:
+2. **SQL Editor** に以下のSQL文を入力します。
 
    ```sql
    FOREACH
@@ -123,32 +121,37 @@ Suppose you get messages from a device on the topic `my/sparkplug/topic` and wan
    FROM "my/sparkplug/topic"
    ```
 
-   Here, the `jq` function is used to iterate over the array of metrics and filter out the one with the name "`counter_group1/counter1_run`".
+   ここでは、`jq`関数を使ってメトリクス配列を反復処理し、名前が `"counter_group1/counter1_run"` のものだけを抽出しています。
 
    ::: tip
 
-   The Sparkplug B specification recommends sending data only when it changes, leading to payloads where only a subset of metrics are present. If there is no item in the array with the specified name, this rule will not output anything.
+   Sparkplug B仕様では、データが変化したときのみ送信することが推奨されているため、ペイロードにはメトリクスのサブセットしか含まれないことがあります。指定した名前のアイテムが配列に存在しない場合、このルールは何も出力しません。
 
    :::
 
-2. Click **+ Add Action** on the right side of the page. Select `Republish` from the **Action** drop-down list. Enter `interesting_counters/counter1_run_updates` as the republish topic and enter `${item}` in the **Payload** field for the action. Click **Add**.
-3.  Back on the **Create Rule** page, click **Create**. You can see that a rule is created in the Rule list.
+3. ページ右側の **+ Add Action** をクリックし、**Action** ドロップダウンリストから `Republish` を選択します。リパブリッシュ先のトピックに `interesting_counters/counter1_run_updates` を入力し、**Payload** フィールドには `${item}` と入力します。**Add** をクリックします。
 
-#### Test the Rule 
+4. **Create Rule** ページに戻り、**Create** をクリックします。ルール一覧に新しいルールが作成されたことが確認できます。
 
-You can simulate an MQTT client using the MQTTX client tool to publish the Sparkplug B message to the topic `my/sparkplug/topic`. Then, you can verify that the message is transformed and forwarded to the topic `interesting_counters/counter1_run_updates` as a JSON-formatted message:
+#### ルールのテスト
 
-1. Open the MQTTX client desktop and connect to the EMQX broker. For detailed information on working with the MQTTX, refer to the [MQTTX Client](../messaging/publish-and-subscribe.md).
+MQTTXクライアントツールを使って、Sparkplug Bメッセージをトピック `my/sparkplug/topic` にパブリッシュし、メッセージが変換されてJSON形式で `interesting_counters/counter1_run_updates` トピックに転送されることを確認します。
 
-2. Create a new subscription and subscribe to the topic `interesting_counters/counter1_run_updates`.
+1. MQTTXクライアントデスクトップを開き、EMQXブローカーに接続します。MQTTXの詳細は[MQTTXクライアント](../messaging/publish-and-subscribe.md)を参照してください。
 
-3. In the message-sending area at the lower right corner, enter `my/sparkplug/topic` as the topic. Select `Base64` as the payload type.
+2. 新しいサブスクリプションを作成し、トピック `interesting_counters/counter1_run_updates` をサブスクライブします。
 
-4. Copy the following Base64 encoded Sparkplug B message and paste it into the payload field. The message corresponds to the encoded Sparkplug message example given previously. `CPHh67HrMBIqChxjb3VudGVyX2dyb3VwMS9jb3VudGVyMV8xc2VjGPXh67HrMCACUKgDEikKHGNvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxXzVzZWMY9eHrseswIAJQVBIqCh1jb3VudGVyX2dyb3VwMS9jb3VudGVyMV8xMHNlYxj14eux6zAgAlAqEigKG2NvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxX3J1bhj14eux6zAgBVABEioKHWNvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxX3Jlc2V0GPXh67HrMCAFUAAYWA`
+3. 画面右下のメッセージ送信エリアにトピック `my/sparkplug/topic` を入力し、ペイロードタイプを `Base64` に設定します。
 
-5. Click the send button to send the message.
+4. 以下のBase64エンコード済みSparkplug Bメッセージをコピーしてペイロード欄に貼り付けます。これは前述のSparkplugメッセージのエンコード例に対応しています。
 
-   If everything has worked as expected, you should receive a message in JSON format like the following:
+   ```
+   CPHh67HrMBIqChxjb3VudGVyX2dyb3VwMS9jb3VudGVyMV8xc2VjGPXh67HrMCACUKgDEikKHGNvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxXzVzZWMY9eHrseswIAJQVBIqCh1jb3VudGVyX2dyb3VwMS9jb3VudGVyMV8xMHNlYxj14eux6zAgAlAqEigKG2NvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxX3J1bhj14eux6zAgBVABEioKHWNvdW50ZXJfZ3JvdXAxL2NvdW50ZXIxX3Jlc2V0GPXh67HrMCAFUAAYWA
+   ```
+
+5. 送信ボタンをクリックしてメッセージを送信します。
+
+   正常に動作すれば、以下のようなJSON形式のメッセージが受信できます。
 
    ```json
    {
@@ -159,22 +162,22 @@ You can simulate an MQTT client using the MQTTX client tool to publish the Spark
    }
    ```
 
-### Update Data
+### データ更新
 
-Consider a scenario where you discover an incorrect metric named `counter_group1/counter1_run` and want to remove it from the Sparkplug B encoded payload before forwarding the message. 
+誤ったメトリクス `counter_group1/counter1_run` を発見し、メッセージ転送前にSparkplug Bエンコード済みペイロードから削除したい場合を考えます。
 
-Similar to the demonstration in [Extract Data](#extract-data), you can create the following rule with a republish action in EMQX Dashboard.
+[データ抽出](#データ抽出)の例と同様に、EMQXダッシュボードで以下のルールを作成し、リパブリッシュアクションを設定します。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Save name of metric to delete
+   # 削除対象のメトリクス名を保存
    "counter_group1/counter1_run" as $to_delete |
-   # Filter out metric with name $to_delete
+   # $to_deleteの名前を持つメトリクスを除外
    [ .metrics[] | select(.name != $to_delete) ] as $updated_metrics |
-   # Update payload with new metrics
+   # 新しいメトリクス配列でペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    sparkplug_decode(payload)) AS item
@@ -182,20 +185,20 @@ DO sparkplug_encode(item) AS updated_payload
 FROM "my/sparkplug/topic"
 ```
 
-In this rule, `sparkplug_decode` is used to decode the message, and then `jq` is used to filter out the metric with the name `counter_group1/counter1_run`. Then, `sparkplug_encode` in the `DO` clause is used to encode the message again. 
+このルールでは、`sparkplug_decode`でメッセージをデコードし、`jq`で名前が`counter_group1/counter1_run`のメトリクスを除外しています。その後、`DO`句の`sparkplug_encode`で再度メッセージをエンコードしています。
 
-In the republish action, use `${updated_payload}` as the payload because it is the name assigned to the updated Sparkplug B encoded message.
+リパブリッシュアクションのペイロードには、更新後のSparkplug Bエンコード済みメッセージに割り当てた`${updated_payload}`を指定してください。
 
-Similarly, you can also use `sparkplug_decode` and `sparkplug_encode` to update the value of a metric. Consider a scenario where you want to update the value of the metric with the name `counter_group1/counter1_run` to 0. You can achieve this by using the following rule:
+同様に、メトリクスの値を更新することも可能です。例えば、`counter_group1/counter1_run`の値を0に更新したい場合は、以下のルールを使用します。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Save name of metric to update
+   # 更新対象のメトリクス名を保存
    "counter_group1/counter1_run" as $to_update |
-   # Update value of metric with name $to_update
+   # $to_updateの名前を持つメトリクスの値を更新
    [
      .metrics[] |
      if .name == $to_update
@@ -203,7 +206,7 @@ jq('
         else .
      end
    ] as $updated_metrics |
-   # Update payload with new metrics
+   # 新しいメトリクス配列でペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    sparkplug_decode(payload)) AS item
@@ -211,24 +214,24 @@ DO sparkplug_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
-Or consider a scenario where you want to add a new metric with the name `counter_group1/counter1_new` and value 42. You can achieve this by using the following rule:
+また、新しいメトリクス `counter_group1/counter1_new` を値42で追加したい場合は、以下のルールを利用できます。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Save old metrics
+   # 既存のメトリクスを保存
    $payload | .metrics as $old_metrics |
-   # New value
+   # 新しいメトリクスの値
    {
      "name": "counter_group1/counter1_new",
      "int_value": 42,
      "datatype": 5
    } as $new_value |
-   # Create new metrics array 
+   # 新しいメトリクス配列を作成
    ($old_metrics + [ $new_value ]) as $updated_metrics |
-   # Update payload with new metrics
+   # 新しいメトリクス配列でペイロードを更新
    $payload | .metrics = $updated_metrics
    ',
    sparkplug_decode(payload)) AS item
@@ -236,19 +239,19 @@ DO sparkplug_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
-### Filter Messages 
+### メッセージのフィルタリング
 
-Consider a scenario where you want to forward only the messages where the value of the metric with the name `counter_group1/counter1_run` is greater than 0. You can achieve this by using the following rule:
+メトリクス名 `counter_group1/counter1_run` の値が0より大きいメッセージのみを転送したい場合、以下のルールを使えます。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Save name of metric to filter on
+   # フィルタ対象のメトリクス名を保存
    "counter_group1/counter1_run" as $to_filter |
    .metrics[] | select(.name == $to_filter) | .int_value as $value |
-   # Filter out messages where value of metric with name $to_filter is 0 or smaller
+   # $to_filterの値が0以下のメッセージは除外
    if $value > 0 then $payload else empty end
    ',
    sparkplug_decode(payload)) AS item
@@ -256,21 +259,21 @@ DO sparkplug_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
-In the above rule, the `jq` function outputs an empty array if the value of the metric with the name `counter_group1/counter1_run` is 0 or smaller. This means that the message will not be forwarded to any of the actions connected to the rule if the value is 0 or smaller.
+このルールでは、`jq`関数が`counter_group1/counter1_run`の値が0以下の場合に空配列を出力します。したがって、値が0以下のメッセージはルールに接続されたアクションに転送されません。
 
-### Split Messages 
+### メッセージの分割
 
-Consider a scenario where you want to split a Sparkplug B encoded message into multiple messages, with each metric in the metrics array being republished as a separate Sparkplug B encoded message. This can be accomplished with the following rule:
+Sparkplug Bエンコード済みメッセージを複数のメッセージに分割し、メトリクス配列内の各メトリクスを別々のSparkplug Bエンコード済みメッセージとしてリパブリッシュしたい場合、以下のルールで実現できます。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Output one message for each metric
+   # 各メトリクスごとに1つのメッセージを出力
    .metrics[] |
         . as $metric |
-        # Let the current metric be the only one in the metrics array
+        # 現在のメトリクスのみをメトリクス配列に設定
         $payload | .metrics = [ $metric ]
    ',
    sparkplug_decode(payload)) AS item
@@ -278,24 +281,23 @@ DO sparkplug_encode(item) AS output_payload
 FROM "my/sparkplug/topic"
 ```
 
-In the above rule, the `jq` function outputs an array with multiple items (given that there is more than one item in the metrics array).
-All the actions connected to the rule will be triggered for each item in the array.
-With the rule above, you need to set the payload in the republish action to `${output_payload}` as `output_payload` is the name we assigned to the Sparkplug B encoded message in the `DO` clause.
+このルールでは、`jq`関数が複数のアイテムを含む配列を出力します（メトリクス配列に複数アイテムがある場合）。ルールに接続されたすべてのアクションは配列内の各アイテムごとにトリガーされます。
 
-### Split Messages and Send to Topics Based on Content 
+リパブリッシュアクションのペイロードには、`DO`句で割り当てた`${output_payload}`を指定してください。
 
-Consider a scenario where you want to split a Sparkplug B encoded message, but you also want to send each message to a different topic based on, for example, the metrics name. Suppose that the output topic name should be constructed by concatenating the strings `"my_metrics/"` with the name of the metric contained in the message. You can accomplish this with the following slightly modified code:
+### メッセージの分割と内容に基づくトピックへの送信
 
+Sparkplug Bエンコード済みメッセージを分割しつつ、例えばメトリクス名に基づいてそれぞれ異なるトピックに送信したい場合を考えます。出力トピック名は、文字列 `"my_metrics/"` とメトリクス名を連結して構成するとします。以下のように少し修正したコードで実現可能です。
 
 ```sql
 FOREACH
 jq('
-   # Save payload
+   # ペイロードを保存
    . as $payload |
-   # Output one message for each metric
+   # 各メトリクスごとに1つのメッセージを出力
    .metrics[] |
         . as $metric |
-        # Let the current metric be the only one in the metrics array
+        # 現在のメトリクスのみをメトリクス配列に設定
         $payload | .metrics = [ $metric ]
    ',
    sparkplug_decode(payload)) AS item
@@ -305,6 +307,6 @@ first(jq('"my_metrics/" + .metrics[0].name', item)) AS output_topic
 FROM "my/sparkplug/topic"
 ```
 
-To configure the republish action, set the topic name to `${output_topic}` as it is the name assigned in the `DO` clause to the output topic and set the payload to `${output_payload}`.
+リパブリッシュアクションの設定では、トピック名に`${output_topic}`を指定します。これは`DO`句で出力トピックに割り当てた名前です。ペイロードには`${output_payload}`を指定してください。
 
-The `jq` function call is wrapped in the `DO` clause using the `first` function to obtain the first and only output object.
+`jq`関数の呼び出しは`DO`句内で`first`関数に包まれており、最初の1つの出力オブジェクトを取得しています。

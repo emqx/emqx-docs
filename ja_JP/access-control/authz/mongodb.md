@@ -1,24 +1,24 @@
-# Integrate with MongoDB
+# MongoDBとの統合
 
-This authorizer implements authorization checks by matching publish/subscribe requests against lists of rules stored in the MongoDB database.
+このオーソライザーは、MongoDBデータベースに保存されたルールのリストとパブリッシュ／サブスクライブ要求を照合することで認可チェックを実装します。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authorization concepts](./authz.md)
+[基本的なEMQX認可の概念](./authz.md)の知識
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-MongoDB authorizer supports storing authorization rules as MongoDB documents. Users need to provide a query template to make sure that the result contains the following fields:
+MongoDBオーソライザーは、認可ルールをMongoDBドキュメントとして保存することをサポートしています。ユーザーは、結果に以下のフィールドが含まれるようにクエリテンプレートを提供する必要があります。
 
-* `permission` value specifies the applied action if the rule matches. It should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
-* `qos` (Optional) value specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
-* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0`, `1,` or `true`, `false`. The default is to allow retained messages.
+* `permission` の値は、ルールがマッチした場合に適用されるアクションを指定します。`deny` または `allow` のいずれかである必要があります。
+* `action` の値は、ルールが関連するリクエストを指定します。`publish`、`subscribe`、または `all` のいずれかである必要があります。
+* `topic` の値は、ルールに関連するトピックのフィルターを指定します。ワイルドカードおよび[トピックプレースホルダー](./authz.md#topic-placeholders)をサポートする文字列である必要があります。
+* `qos`（任意）は、現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
+* `retain`（任意）は、現在のルールが保持メッセージをサポートするかどうかを指定します。値は `0`、`1`、または `true`、`false` のいずれかです。デフォルトは保持メッセージを許可します。
 
-Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
+ユーザー名 `emqx_u` のクライアントがトピック `t/1` にQoS 1でパブリッシュすることを拒否する例：
 
 ```js
 > db.mqtt_acl.insertOne(
@@ -38,62 +38,62 @@ Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
 }
 ```
 
-The corresponding configuration parameters are:
+対応する設定パラメータは以下の通りです：
 ```bash
 collection = "mqtt_acl"
 filter { username = "${username}" }
 ```
 
 ::: tip
-When there is a significant number of users in the system, optimize and index the collection to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+システム内のユーザー数が多い場合は、クエリの応答時間を短縮しEMQXの負荷を軽減するために、事前にコレクションを最適化およびインデックス化してください。
 :::
 
-For this MongoDB data schema, the corresponding Dashboard configuration parameter is **Filter**: `{ username = "${username}" }`.
+このMongoDBデータスキーマに対するDashboardの対応設定パラメータは **Filter**: `{ username = "${username}" }` です。
 
-## Configurate with Dashboard
+## Dashboardでの設定
 
-You can use EMQX Dashboard to configure how to use MongoDB for user authorization.
+EMQX Dashboardを使ってMongoDBをユーザー認可に利用する設定が可能です。
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. [EMQX Dashboard](http://127.0.0.1:18083/#/authentication)の左ナビゲーションツリーで **Access Control** -> **Authorization** をクリックし、**Authorization** ページに入ります。
 
-2. Click **Create** at the top right corner, then click to select **MongoDB** as **Backend**. Click **Next**. The **Configuration** tab is shown below.
+2. 右上の **Create** をクリックし、**Backend** に **MongoDB** を選択してから **Next** をクリックします。以下の **Configuration** タブが表示されます。
 
-   <img src="./assets/authz-MongoDB_ee.png" alt="authz-MongoDB_ee" style="zoom:67%;" />
+   <img src="./assets/authz-MongoDB_ee.png" alt="MongoDB認可設定画面" style="zoom:67%;" />
 
-3. Follow the instructions below to configure the settings.
+3. 以下の指示に従って設定を行います。
 
-   **Connect**: Fill in the information needed to connect MongDB.
+   **Connect**: MongoDBに接続するための情報を入力します。
 
-   - **MongoDB Mode**: Select how MongoDB is deployed, including `Single`, `Replica Set`, and `Sharding`.
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Database**: MongoDB database name.
-   - **Collection**: Name of MongoDB collection where authorization rules are stored; Data type: strings.
-   - **Username**: Specify MongoDB user name. 
-   - **Password**: Specify MongDB user password. 
+   - **MongoDB Mode**: MongoDBのデプロイ方式を選択します。`Single`、`Replica Set`、`Sharding` のいずれかです。
+   - **Server**: EMQXが接続するサーバーアドレス（`host:port`）を指定します。
+   - **Database**: MongoDBのデータベース名を指定します。
+   - **Collection**: 認可ルールが保存されているMongoDBコレクション名。データ型は文字列です。
+   - **Username**: MongoDBのユーザー名を指定します。
+   - **Password**: MongoDBのユーザーパスワードを指定します。
 
-   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+   **TLS Configuration**: TLSを有効にする場合はトグルスイッチをオンにします。
 
-   **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authz.md#authorization-placeholders) are supported. 
+   **Filter**: 資格情報検索用のMongoDBセレクターとして解釈されるマップです。[プレースホルダー](./authz.md#authorization-placeholders)が使用可能です。
 
    **Advanced Settings**:
    
-   - **Auth Source**: Specify the authentication source to use when connecting to MongoDB. This could be a specific database or a MongoDB authentication database that manages user credentials.
-   - **Use Legacy Protocol**: Select whether to use MongoDB's legacy protocol for communicating with the database. Options are `auto`, `true`, and `false`. The default is `auto`, which will attempt to automatically determine if the newer protocol is supported.
-   - **Record Limit**: Limit the number of authorization records to fetch from MongoDB.
-   - **Skip**: Set the number of authorization records to skip when retrieving the list of records.
+   - **Auth Source**: MongoDB接続時に使用する認証ソースを指定します。特定のデータベースやユーザー資格情報を管理するMongoDB認証データベースを指定可能です。
+   - **Use Legacy Protocol**: MongoDBとの通信にレガシープロトコルを使用するかどうかを選択します。`auto`、`true`、`false` のいずれか。デフォルトは `auto` で、新しいプロトコルがサポートされているか自動判定します。
+   - **Record Limit**: MongoDBから取得する認可レコードの最大数を制限します。
+   - **Skip**: 認可レコードの取得時にスキップするレコード数を設定します。
    
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MongoDB. Default: `8`. 
-   - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour.
-   
-4. Click **Create** to finish the settings.
+   - **Pool size**（任意）: EMQXノードからMongoDBへの同時接続数を整数で指定します。デフォルトは `8`。
+   - **Connect Timeout**（任意）: EMQXが接続タイムアウトと判断するまでの待機時間を指定します。単位はミリ秒、秒、分、時間がサポートされます。
 
-## Configure with Configuration Items
+4. **Create** をクリックして設定を完了します。
 
-You can configure the EMQX MongoDB authorizer with EMQX configuration items.
+## 設定項目による設定
 
-The MongoDB authorizer is identified by type `mongodb`. The authorizer supports connecting to MongoDB running in 3 types of deployment modes. <!---For detailed configuration information, see:[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single),[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded) and [authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
+EMQXの設定項目を使ってMongoDBオーソライザーを設定できます。
 
-Sample configuration:
+MongoDBオーソライザーは `mongodb` タイプで識別されます。オーソライザーは3種類のMongoDBデプロイモードに接続することをサポートしています。<!---詳細な設定情報は以下を参照してください：[authz:mongo_single](../../configuration/configuration-manual.html#authz:mongo_single)、[authz:mongo_sharded](../../configuration/configuration-manual.html#authz:mongo_sharded)、[authz:mongo_rs](../../configuration/configuration-manual.html#authz:mongo_rs)-->
+
+設定例：
 
 :::: tabs type:card
 

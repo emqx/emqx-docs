@@ -1,18 +1,18 @@
-# Incompatible Changes in EMQX 5.7
+# EMQX 5.7 の互換性のない変更点
 
 
 ## e5.7.2
 
-- [#13327](https://github.com/emqx/emqx/pull/13327) The fix for issues in Kafka, Confluent, and Azure Event Hubs integrations has resulted in a change to the directory path scheme for on-disk buffers of these integrations. The new scheme uses the action name instead of the topic name. Upgrading to this version will invalidate old buffer files, and require manual cleanup of the old directories.
-- [#13332](https://github.com/emqx/emqx/pull/13332) Error messages for misconfigured Amazon S3 integrations are now more descriptive and user-friendly. The Amazon S3 Sink configurations with an invalid object key templates for aggregated upload will no longer work. Before this change, such configurations were considered valid but resulted in non-functional integrations.
-- [#13420](https://github.com/emqx/emqx/pull/13420) Added a configuration validation that prevents configuring an empty set of topic filters for a Schema Validation.  Any such configurations have to define at least one topic filter to be valid.  Such configurations, though, are probably very rare, as a Schema Validation with empty topics is essentially the same as having no validation at all.
+- [#13327](https://github.com/emqx/emqx/pull/13327) Kafka、Confluent、および Azure Event Hubs の統合に関する問題修正に伴い、これらの統合のオンディスクバッファのディレクトリパスのスキームが変更されました。新しいスキームではトピック名の代わりにアクション名を使用します。このバージョンにアップグレードすると古いバッファファイルは無効となり、古いディレクトリの手動クリーンアップが必要です。
+- [#13332](https://github.com/emqx/emqx/pull/13332) Amazon S3 統合の設定ミスに対するエラーメッセージがより詳細かつユーザーフレンドリーになりました。集約アップロード用の無効なオブジェクトキーのテンプレートを含む Amazon S3 Sink の設定は動作しなくなります。この変更以前は、そのような設定は有効とみなされていましたが、実際には機能しない統合となっていました。
+- [#13420](https://github.com/emqx/emqx/pull/13420) スキーマバリデーションのトピックフィルターが空のセットで設定されることを防ぐ設定検証を追加しました。このような設定は少なくとも1つのトピックフィルターを定義しなければ有効ではありません。トピックが空のスキーマバリデーションは実質的にバリデーションがないのと同じであるため、このような設定は非常に稀だと考えられます。
 
 ## e5.7.0
 
-- [#12947](https://github.com/emqx/emqx/pull/12947) For JWT authentication, a new boolean option `disconnect_after_expire` has been added with default value set to `true`. When enabled, the client will be disconnected after the JWT token expires.
+- [#12947](https://github.com/emqx/emqx/pull/12947) JWT 認証に新しいブールオプション `disconnect_after_expire` が追加され、デフォルト値は `true` です。有効にすると、JWT トークンの有効期限切れ後にクライアントは切断されます。
 
-  Previously, the clients with actual JWTs could connect to the broker and stay connected even after the JWT token expired. Now, the client will be disconnected after the JWT token expires. To preserve the previous behavior, set `disconnect_after_expire` to `false`.
+  以前は、有効な JWT を持つクライアントは JWT トークンが期限切れになってもブローカーに接続し続けることができました。現在は JWT トークンの期限切れ後にクライアントが切断されます。以前の動作を維持したい場合は、`disconnect_after_expire` を `false` に設定してください。
   
-- [#12957](https://github.com/emqx/emqx/pull/12957) Stopped building packages for macOS 12.
+- [#12957](https://github.com/emqx/emqx/pull/12957) macOS 12 向けのパッケージのビルドを停止しました。
 
-- [#12895](https://github.com/emqx/emqx/pull/12895) Complemented some necessary but missed keys for the DynamoDB connector and the action. The old configuration is obsolete, as it didn't function properly before this fix. Specifically, for the DynamoDB connector, the addition of a new key, `region`, is required. Additionally, `hash_key` and `range_key` are now supported in the DynamoDB action, with `hash_key` being mandatory.
+- [#12895](https://github.com/emqx/emqx/pull/12895) DynamoDB コネクターおよびアクションに必要ながら抜けていたキーを補完しました。古い設定はこの修正前は正しく機能していなかったため廃止されます。具体的には、DynamoDB コネクターには新しいキー `region` の追加が必須となりました。さらに、DynamoDB アクションでは `hash_key` と `range_key` がサポートされ、`hash_key` は必須です。

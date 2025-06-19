@@ -1,83 +1,83 @@
-# Architecture
+# アーキテクチャ
 
-<!--need to add a section about how users can work with a cluster with all nodes as core nodes-->
+<!--ユーザーがすべてのノードをコアノードとしてクラスタを操作する方法についてのセクションを追加する必要があります-->
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster.
+EMQX 5.0 は、[Mria](https://github.com/emqx/mria) を用いてクラスタアーキテクチャを再設計し、EMQX の水平スケーラビリティを大幅に向上させました。新しい設計により、単一クラスタで1億の MQTT 接続をサポート可能です。
 
 <img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 40%;" />
 
-In this [Mria](https://github.com/emqx/mria), each node assumes one of two roles: Core node or Replicant.
-Core nodes serve as a data layer for the database.
-Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md).
+この [Mria](https://github.com/emqx/mria) では、各ノードはコアノードまたはレプリカントのいずれかの役割を担います。  
+コアノードはデータベースのデータレイヤーとして機能します。  
+レプリカントノードはコアノードに接続し、コアノードからのデータ更新を受動的にレプリケーションします。コアノードとレプリカントノードの動作については、[EMQX クラスタリング](../../design/clustering.md) をご参照ください。
 
-By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster.
+デフォルトでは、すべてのノードがコアノードの役割を担うため、クラスタは [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster) と同様に動作します。これは3ノード以下の小規模クラスタに推奨されます。コア＋レプリカントモードは、クラスタに3ノードを超える場合にのみ推奨されます。
 
-## Enable Core + Replicant Mode
+## コア＋レプリカントモードの有効化
 
-To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster discovery strategy (`cluster.discovery_strategy`). 
+コア＋レプリカントモードを有効にするには、特定のノードをレプリカントノードとして指定する必要があります。これは `node.role` パラメータを `replicant` に設定することで実現します。加えて、自動クラスタ検出戦略（`cluster.discovery_strategy`）を有効にする必要があります。
 
 ::: tip
 
-Replicant nodes cannot use `manual` discovery strategy to discover core nodes. 
+レプリカントノードは、コアノードを検出するために `manual` 検出戦略を使用できません。
 
 :::
 
-Configuration example:
+設定例：
 
 ```bash
 node {
-    ## To set a node as a replicant node:
+    ## ノードをレプリカントノードとして設定する場合：
     role = replicant
 }
 cluster {
-    ## Enable static discovery strategy:
+    ## 静的検出戦略を有効化：
     discovery_strategy = static
     static.seeds = [emqx@host1.local, emqx@host2.local]
 }
 ```
 
-## Monitor and Debug
+## 監視とデバッグ
 
-<!-- TODO 后续补充数值类型 Gauge or Counter -->
+<!-- TODO 後続で数値タイプ Gauge または Counter を補足 -->
 
-The Mria performance can be monitored using Prometheus metrics or Erlang console.
+Mria のパフォーマンスは Prometheus メトリクスや Erlang コンソールを使って監視できます。
 
-### Prometheus Indicators
+### Prometheus 指標
 
-You can integrate with Prometheus to monitor the cluster operations. On how to integrate with Prometheus, see [Log and observability - Integrate with Prometheus](../../observability/prometheus.md).
+Prometheus と連携してクラスタの動作を監視可能です。Prometheus との連携方法は [ログと可観測性 - Prometheus 連携](../../observability/prometheus.md) をご覧ください。
 
-#### Core Nodes
+#### コアノード
 
-| Indicators                         | Description                                                  |
+| 指標名                             | 説明                                                         |
 | ---------------------------------- | ------------------------------------------------------------ |
-| `emqx_mria_last_intercepted_trans` | Transactions received by the shard since the node started    |
-| `emqx_mria_weight`                 | Instantaneous load of the Core node                          |
-| `emqx_mria_replicants`             | Replicant nodes connected to the Core node Numbers are grouped per shard. |
-| `emqx_mria_server_mql`             | Pending transactions waiting to be sent to the replicant nodes. Less is optimal. <br />If this indicator shows a growing trend, more Core nodes are needed. |
+| `emqx_mria_last_intercepted_trans` | ノード起動以降にシャードが受信したトランザクション数       |
+| `emqx_mria_weight`                 | コアノードの瞬間的な負荷                                      |
+| `emqx_mria_replicants`             | コアノードに接続しているレプリカントノード数。シャードごとに集計されます。 |
+| `emqx_mria_server_mql`             | レプリカントノードに送信待ちのトランザクション数。少ないほど良い。<br />この指標が増加傾向にある場合は、コアノードを増やす必要があります。 |
 
-#### Replicant Nodes
+#### レプリカントノード
 
-| Indicators                     | Description                                                  |
+| 指標名                         | 説明                                                         |
 | ------------------------------ | ------------------------------------------------------------ |
-| `emqx_mria_lag`                | Indicate how far the Replicant lags behind the upstream Core node. Less is better. |
-| `emqx_mria_bootstrap_time`     | Startup time of the Replica node. This value should remain stable if the system operates normally. |
-| `emqx_mria_bootstrap_num_keys` | Number of database records copied from the Core node during startup. This value should remain stable if the system operates normally. |
-| `emqx_mria_message_queue_len`  | Queue length during message replication. Should be around 0. |
-| `emqx_mria_replayq_len`        | Internal replay queue length on the Replicant nodes. Less is better. |
+| `emqx_mria_lag`                | レプリカントが上流のコアノードにどれだけ遅れているかを示します。少ないほど良い。 |
+| `emqx_mria_bootstrap_time`     | レプリカントノードの起動時間。正常に動作していれば安定した値となります。 |
+| `emqx_mria_bootstrap_num_keys` | 起動時にコアノードからコピーしたデータベースレコード数。正常に動作していれば安定した値となります。 |
+| `emqx_mria_message_queue_len`  | メッセージレプリケーション時のキュー長。0付近が望ましい。 |
+| `emqx_mria_replayq_len`        | レプリカントノード内部のリプレイキュー長。少ないほど良い。 |
 
-### Console Commands
+### コンソールコマンド
 
-You can also monitor the operating status of the cluster with command `emqx eval 'mria_rlog:status().'`  on the Erlang console.
+Erlang コンソールで `emqx eval 'mria_rlog:status().'` コマンドを実行することで、クラスタの稼働状況を監視できます。
 
-If EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
+EMQX クラスタが正常に動作している場合、現在のログレベル、処理済みメッセージ数、破棄されたメッセージ数などのステータス情報一覧が取得できます。
 
-<!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
+<!--ここにクエリ文と返却メッセージを追加し、Erlang コンソールのリンク https://www.erlang.org/doc/man/shell.html を貼る予定-->
 
-## Pseudo-Distributed Cluster
+## 疑似分散クラスタ
 
-EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
+EMQX はテストや開発用途向けに疑似分散クラスタ機能も提供しています。これは、単一マシン上で複数の EMQX インスタンスを起動し、それぞれをクラスタのノードとして構成するセットアップを指します。
 
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
+最初のノードを起動した後、以下のコマンドで2番目のノードを起動し、手動でクラスタに参加させます。ポート競合を避けるために、いくつかのリスニングポートを調整する必要があります。
 
 ```bash
 EMQX_NODE__NAME='emqx2@127.0.0.1' \
@@ -94,8 +94,8 @@ EMQX_NODE__NAME='emqx2@127.0.0.1' \
 ./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically.
+上記の例は手動でクラスタを作成する方法です。自動クラスタリングの方法は [自動クラスタリング](./create-cluster.md#auto-clustering) セクションもご参照ください。
 
-The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
+ダッシュボードは、すべてのクラスタノードが同じポート番号を使用することを前提に設計されています。単一マシン上で異なるポートを使うとダッシュボードのUIに問題が生じる可能性があるため、本番環境での使用は推奨されません。
 
-<!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->
+<!--疑似分散クラスタのクイックスタートを追加予定 @WIVWIV -->

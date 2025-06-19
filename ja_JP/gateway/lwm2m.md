@@ -1,21 +1,21 @@
-# LwM2M Gateway
+# LwM2M ゲートウェイ
 
-[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/) is a protocol designed for IoT devices and machine-to-machine communication.
-It is a lightweight protocol that supports devices with limited processing power and memory.
+[LwM2M（Lightweight Machine-to-Machine）](https://lwm2m.openmobilealliance.org/) は、IoTデバイスおよびマシン間通信向けに設計されたプロトコルです。  
+処理能力やメモリが限られたデバイスをサポートする軽量プロトコルです。
 
-The **LwM2M Gateway** in EMQX can accept LwM2M clients and translate theirevents and messages into MQTT Publish messages.
+EMQX の **LwM2M ゲートウェイ** は、LwM2M クライアントを受け入れ、そのイベントやメッセージを MQTT のパブリッシュメッセージに変換します。
 
-In the current implementation, it has the following limitations:
-- Based UDP/DTLS transport.
-- Only supports v1.0.2. The v1.1.x and v1.2.x is not supported yet.
-- Not included LwM2M Bootstrap services.
+現状の実装には以下の制限があります：
+- UDP/DTLS ベースのトランスポート。
+- v1.0.2 のみサポート。v1.1.x および v1.2.x は未対応。
+- LwM2M ブートストラップサービスは含まれていません。
 
 
-## Quick Start
+## クイックスタート
 
-In EMQX 5.0, LwM2M gateways can be configured and enabled through the Dashboard.
+EMQX 5.0 では、LwM2M ゲートウェイはダッシュボードから設定および有効化できます。
 
-It can also be enabled via the REST API, or configuration file:
+また、REST API や設定ファイルからも有効化可能です：
 
 :::: tabs type:card
 
@@ -92,18 +92,19 @@ gateway.lwm2m {
 
 
 ::: tip
-Configuring the gateway in `base.hocon` requires changes on a per-node basis, but configuring it via Dashboard or the REST API will take effect across the cluster.
+`base.hocon` でゲートウェイを設定する場合はノードごとに変更が必要ですが、ダッシュボードや REST API で設定するとクラスター全体に反映されます。
 :::
 
-The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
+LwM2M ゲートウェイは UDP および DTLS タイプのリスナーのみをサポートしています。  
+設定可能なパラメータの完全なリストは次を参照してください：[Gateway Configuration - Listeners](../configuration/configuration-manual.html)
 
 
-## Authentication
+## 認証
 
-Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
-Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
+LwM2M プロトコルはクライアントのエンドポイント名のみを提供し、ユーザー名やパスワードはありません。  
+そのため、LwM2M ゲートウェイは [HTTP サーバー認証](../access-control/authn/http.md) のみをサポートしています。
 
-For example, to create an HTTP authentication for LwM2M gateway via REST API or configuration file:
+例えば、REST API または設定ファイルで LwM2M ゲートウェイ用の HTTP 認証を作成する例：
 
 :::: tabs type:card
 
@@ -165,43 +166,36 @@ gateway.lwm2m {
 ::::
 
 
-## Message Format
+## メッセージフォーマット
 
-The Messaging model of LwM2M protocol is based on [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different
-from the Publish/Subscribe model of the MQTT protocol. So, in the LwM2M Gateway,
-we need to make a Message Format to compatible these message models.
+LwM2M プロトコルのメッセージモデルは [リソースモデルと操作](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html) に基づいています。  
+これは MQTT プロトコルのパブリッシュ／サブスクライブモデルとは全く異なります。  
+そのため、LwM2M ゲートウェイではこれらのメッセージモデルを互換させるためのメッセージフォーマットが必要です。
 
-### Client Registration Interface
+### クライアント登録インターフェース
 
-#### Register
+#### Register（登録）
 
-the **Register** message is sent by the LwM2M client to the LwM2M server to
-register itself with the server. It contains information about the client and
-its capabilities like endpoint name, lifetime, LwM2M version, objects, object 
-instances, etc.
+**Register** メッセージは LwM2M クライアントが LwM2M サーバーに自身を登録するために送信します。  
+クライアントの情報や機能（エンドポイント名、ライフタイム、LwM2M バージョン、オブジェクト、オブジェクトインスタンスなど）を含みます。
 
-The Register message is the first message sent by the client to initiate
-communication with the server.
+Register メッセージはクライアントがサーバーとの通信を開始する最初のメッセージです。
 
-The **Register** message will be converted to following MQTT message by LwM2M
-Gateway.
+**Register** メッセージは LwM2M ゲートウェイによって以下の MQTT メッセージに変換されます。
 
-The **Topic** format is:
+**Topic** の形式は以下の通りです：
 ```
 {?mountpoint}{?translators.register.topic}
 ```
 
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.register.topic}` is the value of `translators.register.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.register.topic}` は LwM2M ゲートウェイ設定の `translators.register.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.register.topic` is `up/register`, then the topic for the
-response message would be `lwm2m/<your-real-client-endpoint-name>/up/register`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.register.topic` が `up/register` の場合、レスポンスメッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/register` となります。
 
 
-The **Payload** format is:
+**Payload** の形式は以下の通りです：
 ```json
 {
   "msgType": "register",
@@ -215,18 +209,16 @@ The **Payload** format is:
 }
 ```
 
-Variables:
-- `{?EndpointName}`: String, the endpoint name of LwM2M client.
-- `{?Version}`: String, the protocol version of LwM2M client.
-- `{?LifeTime}`: Number, the life time of LwM2M client requested.
-- `{?Binding}`: Enum, this parameter specifies the type of binding that the
-  client supports for communication with the server. It can be:
-  * `"U"`: UDP
-  * `"UQ"`: UDP with data queuing
-- `{?ObjectList}`: Array, the list of Objects supported and Object Instances
-  available on the LwM2M Client.
+変数：
+- `{?EndpointName}`：文字列、LwM2M クライアントのエンドポイント名。
+- `{?Version}`：文字列、LwM2M クライアントのプロトコルバージョン。
+- `{?LifeTime}`：数値、LwM2M クライアントが要求するライフタイム。
+- `{?Binding}`：列挙型、クライアントがサーバーとの通信に対応するバインディングタイプ。以下のいずれか：
+  * `"U"`：UDP
+  * `"UQ"`：データキューイング付きUDP
+- `{?ObjectList}`：配列、LwM2M クライアントがサポートするオブジェクトおよびオブジェクトインスタンスのリスト。
 
-For example, a full MQTT Payload for Register message can be:
+例として、Register メッセージの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "msgType": "register",
@@ -240,37 +232,29 @@ For example, a full MQTT Payload for Register message can be:
 }
 ```
 
-#### Update
+#### Update（更新）
 
-The **Update** message is sent by the LwM2M client to the LwM2M server to update
-the registration information. It is similar to the Register message but it is
-sent after an initial registration has taken place.
-The Update message contains information about any changes to the client's
-capabilities or status, such as a change in IP address or an update to the data
-modeled by LwM2M objects.
-The Update message extends the client's registration period, so it is a way
-for the client to let the server know it is still available and active.
+**Update** メッセージは LwM2M クライアントが LwM2M サーバーに登録情報を更新するために送信します。  
+Register メッセージに似ていますが、初回登録後に送信されます。  
+Update メッセージには、IPアドレスの変更や LwM2M オブジェクトでモデル化されたデータの更新など、クライアントの機能や状態の変更情報が含まれます。  
+Update メッセージはクライアントの登録期間を延長し、クライアントがまだ利用可能かつアクティブであることをサーバーに知らせる役割を持ちます。
 
-The frequency of the Update message is determined by the lifetime value
-specified in the Register message.
+Update メッセージの送信頻度は Register メッセージで指定されたライフタイム値によって決まります。
 
-The **Update** message will be converted to following MQTT message by LwM2M Gateway.
+**Update** メッセージは LwM2M ゲートウェイによって以下の MQTT メッセージに変換されます。
 
-The **Topic** format is:
+**Topic** の形式は以下の通りです：
 ```
 {?mountpoint}{?translators.update.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.update.topic}` is the value of `translators.update.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.update.topic}` は LwM2M ゲートウェイ設定の `translators.update.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.update.topic` is `up/update`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/up/update`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.update.topic` が `up/update` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/update` となります。
 
 
-The **Payload** format is:
+**Payload** の形式は以下の通りです：
 ```json
 {
   "msgType": "update",
@@ -284,9 +268,9 @@ The **Payload** format is:
 }
 ```
 
-Variables that are the same as the Register message.
+変数は Register メッセージと同じです。
 
-For example, a full MQTT Payload for Update message can be:
+例として、Update メッセージの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "msgType": "update",
@@ -300,37 +284,30 @@ For example, a full MQTT Payload for Update message can be:
 }
 ```
 
-### LwM2M Device Management & Service Enablement Interface
+### LwM2M デバイス管理およびサービス有効化インターフェース
 
-This interface is used by LwM2M Server to access Object Instances and Resources
-available from a registered LwM2M Client.
+このインターフェースは、LwM2M サーバーが登録済みの LwM2M クライアントからオブジェクトインスタンスやリソースにアクセスするために使用します。
 
-The interface provides this access through the use of "Create", "Read", "Write",
-"Delete", "Execute", "Write-Attributes", or "Discover" operations.
+"Create"、"Read"、"Write"、"Delete"、"Execute"、"Write-Attributes"、"Discover" の各操作を通じてアクセスを提供します。
 
-The operations that Resource supports are defined in the Object definition using
-the Object Template files.
+リソースがサポートする操作は、オブジェクトテンプレートファイルを用いたオブジェクト定義で決まります。
 
-To send commands to the LwM2M client, you need to send MQTT messages to EMQX in
-a fixed format. These messages will be converted by the LwM2M Gateway into the
-correct LwM2M message and sent to the client.
+LwM2M クライアントにコマンドを送信するには、EMQX に固定フォーマットの MQTT メッセージを送信します。  
+これらのメッセージは LwM2M ゲートウェイによって正しい LwM2M メッセージに変換され、クライアントに送信されます。
 
 
-The **Topic** of command request is:
+コマンド要求の **Topic** は以下の通りです：
 ```
 {?mountpoint}{?translators.command.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.command.topic}` is the value of `translators.command.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.command.topic}` は LwM2M ゲートウェイ設定の `translators.command.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.command.topic` is `dn/cmd`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/dn/cmd`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
 
 
-The **Payload** format of command request is:
+コマンド要求の **Payload** 形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -338,34 +315,30 @@ The **Payload** format of command request is:
   "data": {?Data}
 }
 ```
-Variables:
-- `{?ReqID}`: Integer, request-id, used for matching the response to the request
-- `{?MsgType}`: String, can be one of the following:
-  - `"read"`: LwM2M Read
-  - `"discover"`: LwM2M Discover
-  - `"write"`: LwM2M Write
-  - `"write-attr"`: LwM2M Write Attributes
-  - `"execute"`: LwM2M Execute
-  - `"create"`: LwM2M Create
-  - `"delete"`: LwM2M Delete
-- `{?RequestData}`: JSON Object, its value depends on the {?MsgType} and will be
-  explained in next sections
+変数：
+- `{?ReqID}`：整数、リクエストID。レスポンスとの照合に使用。
+- `{?MsgType}`：文字列、以下のいずれか：
+  - `"read"`：LwM2M Read
+  - `"discover"`：LwM2M Discover
+  - `"write"`：LwM2M Write
+  - `"write-attr"`：LwM2M Write Attributes
+  - `"execute"`：LwM2M Execute
+  - `"create"`：LwM2M Create
+  - `"delete"`：LwM2M Delete
+- `{?RequestData}`：JSON オブジェクト。`{?MsgType}` に依存し、次節で説明。
 
-The **Topic** of command response is:
+コマンド応答の **Topic** は以下の通りです：
 ```
 {?mountpoint}{?translators.response.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.response.topic}` is the value of `translators.response.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.response.topic}` は LwM2M ゲートウェイ設定の `translators.response.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.response.topic` is `up/resp`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
 
 
-The **Payload** format of the command response is:
+コマンド応答の **Payload** 形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -373,36 +346,30 @@ The **Payload** format of the command response is:
   "data": {?Data}
 }
 ```
-Variables:
-- `{?ReqID}`: Integer, request-id, used for matching the request
-- `{?MsgType}`: String, the MsgType for the requested command, same as the Request command
-- `{?ResponseData}`: JSON Object, the command response content.
+変数：
+- `{?ReqID}`：整数、リクエストID。リクエストとの照合に使用。
+- `{?MsgType}`：文字列、リクエストコマンドと同じ MsgType。
+- `{?ResponseData}`：JSON オブジェクト、コマンド応答の内容。
 
 
-#### Read
+#### Read（読み取り）
 
-The "Read" operation is used to access the value of a Resource, an array of Resource
-Instances, an Object Instance or all the Object Instance of an Object.
+"Read" 操作はリソース、リソースインスタンスの配列、オブジェクトインスタンス、またはオブジェクトのすべてのオブジェクトインスタンスの値にアクセスするために使用します。
 
-In request command, when the **MsgType** is `"read"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"read"` の場合、**RequestData** の構造は以下の通りです：
 
 ```json
 {
   "path": {?ResourcePath}
 }
 ```
-Variables:
-- `{?ResourcePath}`: String, the requested resource path, it has three possible
-  scenarios:
-  * Only `ObjectID`, e.g. `/3`, it means reading the values of all instances and resources
-    under that Object.
-  * `ObjectID/InstanceID`, e.g. `/3/0`, it means reading the values of all resources
-    under that Object Instance.
-  * Full path, which is `{ObjectID}/{InstanceID}/{ResourceID}`, e.g. `/3/0/1`, it
-    means reading the value of a specific resource.
+変数：
+- `{?ResourcePath}`：文字列、要求されたリソースパス。以下の3つのシナリオがあります：
+  * オブジェクトIDのみ、例：`/3`。該当オブジェクトのすべてのインスタンスとリソースの値を読み取る。
+  * オブジェクトID/インスタンスID、例：`/3/0`。該当オブジェクトインスタンスのすべてのリソースの値を読み取る。
+  * フルパス（`{ObjectID}/{InstanceID}/{ResourceID}`）、例：`/3/0/1`。特定のリソースの値を読み取る。
 
-For example, a full MQTT Payload for Read command can be:
+例として、Read コマンドの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 1,
@@ -413,7 +380,7 @@ For example, a full MQTT Payload for Read command can be:
 }
 ```
 
-In the response, the structure of the **ResponseData** should be as follows:
+レスポンスでは、**ResponseData** の構造は以下の通りです：
 ```json
 {
   "reqPath": {?ResourcePath},
@@ -422,14 +389,13 @@ In the response, the structure of the **ResponseData** should be as follows:
   "content": {?ReadResponseData}
 }
 ```
-Variables:
-- `{?ResourcePath}`, String, equals to the `path` field of that Request.
-- `{?ResponseCode}`, String, LwM2M status code, e.g. "2.01", "4.00", etc.
-- `{?ResponseMsg}`, String, LwM2M response message, e.g. "content", "bad_request".
-- `{?ReadResponseData}`, JSON Object, the value results for that Request. It's
-  a array of resources values.
+変数：
+- `{?ResourcePath}`：文字列、リクエストの `path` フィールドと同じ。
+- `{?ResponseCode}`：文字列、LwM2M ステータスコード。例："2.01"、"4.00" など。
+- `{?ResponseMsg}`：文字列、LwM2M 応答メッセージ。例："content"、"bad_request"。
+- `{?ReadResponseData}`：JSON オブジェクト、リクエストの値の結果。リソース値の配列。
 
-For example, a fully MQTT Payload for Read Response can be:
+例として、Read レスポンスの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 1,
@@ -448,17 +414,13 @@ For example, a fully MQTT Payload for Read Response can be:
 }
 ```
 
-#### Discover
+#### Discover（探索）
 
-The "Discover" operation is used to discover LwM2M Attributes attached to
-an Object, Object Instances, and Resources.
-This operation can be used to discover which Resources are instantiated in a
-given Object Instance.
-The returned payload is a list of application/link-format CoRE Links [RFC6690]
-for each targeted Object, Object Instance, or Resource.
+"Discover" 操作はオブジェクト、オブジェクトインスタンス、リソースに付随する LwM2M 属性を探索するために使用します。  
+この操作は特定のオブジェクトインスタンスにどのリソースがインスタンス化されているかを探索するために使われます。  
+返されるペイロードは、対象のオブジェクト、オブジェクトインスタンス、リソースごとにアプリケーション/リンク形式の CoRE リンク [RFC6690] のリストです。
 
-In request command, when the **MsgType** is `"discover"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"discover"` の場合、**RequestData** の構造は以下の通りです：
 
 ```json
 {
@@ -466,15 +428,12 @@ In request command, when the **MsgType** is `"discover"`, the structure of the
 }
 ```
 
-It has the same format as the **Read** message:
-* Only `ObjectID`, e.g. `/3`, it means discovering all instances, resources and attributes
-  under that Object.
-* `ObjectID/InstanceID`, e.g. `/3/0`, it means discovering all resources and attributes
-  under that Object Instance.
-* Full path, which is `{ObjectID}/{InstanceID}/{ResourceID}`, e.g. `/3/0/1`, it
-  means discovering all attributes of a specific resource.
+**Read** メッセージと同じ形式です：
+* オブジェクトIDのみ、例：`/3`。該当オブジェクトのすべてのインスタンス、リソース、属性を探索。
+* オブジェクトID/インスタンスID、例：`/3/0`。該当オブジェクトインスタンスのすべてのリソースと属性を探索。
+* フルパス（`{ObjectID}/{InstanceID}/{ResourceID}`）、例：`/3/0/1`。特定のリソースのすべての属性を探索。
 
-For example, a full MQTT Payload for Discover command can be:
+例として、Discover コマンドの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 2,
@@ -485,8 +444,7 @@ For example, a full MQTT Payload for Discover command can be:
 }
 ```
 
-
-In the response, the structure of the **ResponseData** should be as follows:
+レスポンスでは、**ResponseData** の構造は以下の通りです：
 ```json
 {
   "reqPath": {?ResourcePath},
@@ -495,10 +453,9 @@ In the response, the structure of the **ResponseData** should be as follows:
   "content": {?DiscoverResponseData}
 }
 ```
-It has same variables as the **Read** response, except the `content` field.
-The `{?DiscoverResponseData}` is a array of resources and attributes.
+**Read** レスポンスと同じ変数ですが、`content` フィールドはリソースと属性の配列です。
 
-For example, a fully MQTT Payload for Discover Response can be:
+例として、Discover レスポンスの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 123,
@@ -517,14 +474,13 @@ For example, a fully MQTT Payload for Discover Response can be:
 }
 ```
 
-#### Write
+#### Write（書き込み）
 
-The "Write" operation is used to change the value of a Resource, the values of an array of Resources Instances or the values of multiple Resources from an Object Instance.
+"Write" 操作はリソースの値、リソースインスタンスの配列の値、またはオブジェクトインスタンスの複数リソースの値を変更するために使用します。
 
-In request command, when the **MsgType** is `"write"`, the **RequestData** has
-two possible structure.
+リクエストコマンドで **MsgType** が `"write"` の場合、**RequestData** は2つの構造が考えられます。
 
-For writing a value to a single Resource:
+単一リソースへの書き込みの場合：
 ```json
 {
     "path": {?ResourcePath},
@@ -532,11 +488,11 @@ For writing a value to a single Resource:
     "value": {?Value}
 }
 ```
-- `{?ResourcePath}`: String, the requested fully resource path, i.e: `31024/11/1`.
-- `{?ValueType}`: String, can be: "Time", "String", "Integer", "Float", "Boolean", "Opaque", "Objlnk"
-- `{?Value}`: Value of the resource, depends on "type".
+- `{?ResourcePath}`：文字列、完全なリソースパス。例：`31024/11/1`。
+- `{?ValueType}`：文字列、"Time"、"String"、"Integer"、"Float"、"Boolean"、"Opaque"、"Objlnk" のいずれか。
+- `{?Value}`：リソースの値。`type` に依存。
 
-For example, a full MQTT Payload for Write command can be:
+例として、Write コマンドの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 3,
@@ -549,7 +505,7 @@ For example, a full MQTT Payload for Write command can be:
 }
 ```
 
-For writing multiple Resources:
+複数リソースへの書き込みの場合：
 ```json
 {
   "basePath": {?BasePath},
@@ -562,9 +518,9 @@ For writing multiple Resources:
   ]
 }
 ```
-The full path is concatenation of `{?BasePath}` and `"{ResourcePath}`.
+完全なパスは `{?BasePath}` と `"{ResourcePath}"` の連結です。
 
-For example, a full MQTT Payload for Write command can be:
+例として、Write コマンドの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 3,
@@ -587,14 +543,13 @@ For example, a full MQTT Payload for Write command can be:
 }
 ```
 
-#### Write-Attributes
+#### Write-Attributes（属性書き込み）
 
-In LwM2M 1.0, only Attributes from the `<NOTIFICATION>` class MAY be changed in using the "Write-Attributes" operation.
+LwM2M 1.0 では、"Write-Attributes" 操作は `<NOTIFICATION>` クラスの属性のみ変更可能です。
 
-The operation permits multiple Attributes to be modified within the same operation.
+この操作では複数の属性を同時に変更できます。
 
-In request command, when the **MsgType** is `"write-attr"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"write-attr"` の場合、**RequestData** の構造は以下の通りです：
 
 ```json
 {
@@ -606,37 +561,34 @@ In request command, when the **MsgType** is `"write-attr"`, the structure of the
   "st": {?Step}
 }
 ```
-Variables:
-- `{?PeriodMin}`: Number, Minimum period for notifications.
-- `{?PeriodMax}`: Number, Maximum period for notifications.
-- `{?GreaterThan}`: Number, Notification triggered when resource value is greater than this value.
-- `{?LessThan}`: Number, Notification triggered when resource value is less than this value.
-- `{?Step}`: Number, Notification triggered when the change in resource value exceeds this value.
+変数：
+- `{?PeriodMin}`：数値、通知の最小周期。
+- `{?PeriodMax}`：数値、通知の最大周期。
+- `{?GreaterThan}`：数値、リソース値がこの値を超えたときに通知。
+- `{?LessThan}`：数値、リソース値がこの値を下回ったときに通知。
+- `{?Step}`：数値、リソース値の変化がこの値を超えたときに通知。
 
-#### Execute
+#### Execute（実行）
 
-The "Execute" operation is used by the LwM2M Server to initiate some action,
-and can only be performed on individual Resources.
+"Execute" 操作は LwM2M サーバーが特定のアクションを開始するために使用し、個別のリソースに対してのみ実行可能です。
 
-In the request command, when the **MsgType** is `"execute"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"execute"` の場合、**RequestData** の構造は以下の通りです：
 ```json
 {
   "path": {?ResourcePath},
   "args": {?Arguments}
 }
 ```
-Variables:
-- {?Arguments}: String, LwM2M Execute Arguments.
+変数：
+- `{?Arguments}`：文字列、LwM2M Execute の引数。
 
 
-#### Create
+#### Create（作成）
 
-The "Create" operation is used by the LwM2M Server to create Object Instance(s)
-within the LwM2M Client. The "Create" operation MUST target an Object.
+"Create" 操作は LwM2M サーバーが LwM2M クライアント内にオブジェクトインスタンスを作成するために使用します。  
+"Create" 操作はオブジェクトを対象としなければなりません。
 
-In request command, when the **MsgType** is `"create"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"create"` の場合、**RequestData** の構造は以下の通りです：
 
 ```json
 {
@@ -650,49 +602,42 @@ In request command, when the **MsgType** is `"create"`, the structure of the
   ]
 }
 ```
-Variables:
-- `{?ObjectID}`: Integer, LwM2M Object ID
+変数：
+- `{?ObjectID}`：整数、LwM2M オブジェクトID
 
-#### Delete
+#### Delete（削除）
 
-The "Delete" operation is used for LwM2M Server to delete an Object Instance
-within the LwM2M Client.
+"Delete" 操作は LwM2M サーバーが LwM2M クライアント内のオブジェクトインスタンスを削除するために使用します。
 
-In request command, when the **MsgType** is `"create"`, the structure of the 
-**RequestData** should be as follows:
+リクエストコマンドで **MsgType** が `"create"` の場合、**RequestData** の構造は以下の通りです：
 ```json
 {
   "path": "{?ObjectID}/{?InstanceID}"
 }
 ```
-Variables:
-- `{?InstanceID}`: Integer, LwM2M Object Instance ID
+変数：
+- `{?InstanceID}`：整数、LwM2M オブジェクトインスタンスID
 
-### Information Reporting Interface
+### 情報報告インターフェース
 
-This interface is used by a LwM2M Server to observe any changes in a Resource
-on a registered LwM2M Client, receiving notifications when new values are available.
-This observation relationship is initiated by sending  an "Observe" operation to
-the L2M2M Client for an Object, an Object Instance or a Resource.
-An observation ends when a "Cancel Observation" operation is performed.
+このインターフェースは LwM2M サーバーが登録済みの LwM2M クライアントのリソースの変化を監視し、新しい値が利用可能になると通知を受け取るために使用します。  
+この監視関係はオブジェクト、オブジェクトインスタンス、またはリソースに対して "Observe" 操作を送信することで開始されます。  
+監視は "Cancel Observation" 操作が行われると終了します。
 
-#### Observe and Cancel Observation
+#### Observe と Cancel Observation（監視および監視キャンセル）
 
-The **Topic** of observe and cancel observe request is:
+Observe および Cancel Observe リクエストの **Topic** は以下の通りです：
 ```
 {?mountpoint}{?translators.command.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.command.topic}` is the value of `translators.command.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.command.topic}` は LwM2M ゲートウェイ設定の `translators.command.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.command.topic` is `dn/cmd`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/dn/cmd`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.command.topic` が `dn/cmd` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/dn/cmd` となります。
 
 
-The **Payload** format of observe and cancel observe request is:
+Observe および Cancel Observe リクエストの **Payload** 形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -703,15 +648,14 @@ The **Payload** format of observe and cancel observe request is:
     }
 }
 ```
-Variables:
-- `{?ReqID}`: Integer, request-id, is the {?ReqID} in the request
-- `{?MsgType}`: String, can be:
-  * `"observe"`: LwM2M Observe
-  * `"cancel-observe"`: LwM2M Cancel Observe
-- {?ResourcePath}: String, the LwM2M resource to be observed/cancel-observed.
-  It only supports fully resource path, e.g. `/3/0/1`.
+変数：
+- `{?ReqID}`：整数、リクエストID。リクエスト内の {?ReqID}。
+- `{?MsgType}`：文字列、以下のいずれか：
+  * `"observe"`：LwM2M Observe
+  * `"cancel-observe"`：LwM2M Cancel Observe
+- `{?ResourcePath}`：文字列、監視または監視キャンセル対象の LwM2M リソース。完全なリソースパスのみサポート。例：`/3/0/1`。
 
-For example, a full MQTT Payload for Observe command can be:
+例として、Observe コマンドの完全な MQTT ペイロードは以下のようになります：
 ```json
 {
   "reqID": 10,
@@ -722,21 +666,18 @@ For example, a full MQTT Payload for Observe command can be:
 }
 ```
 
-The **Topic** of the Observe response is:
+Observe 応答の **Topic** は以下の通りです：
 ```
 {?mountpoint}{?translators.response.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.response.topic}` is the value of `translators.response.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.response.topic}` は LwM2M ゲートウェイ設定の `translators.response.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.response.topic` is `up/resp`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/up/resp`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.response.topic` が `up/resp` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/resp` となります。
 
 
-The **Payload** format of the Observe response is:
+Observe 応答の **Payload** 形式は以下の通りです：
 ```json
 {
   "reqID": {?ReqID},
@@ -754,38 +695,34 @@ The **Payload** format of the Observe response is:
   }
 }
 ```
-Variables:
-- `{?ReqID}`: Integer, request-id, used for matching the request
-- `{?MsgType}`: String, the MsgType for the requested command, same as the Request command
-- `{?RequestPath}`, String, equals to the `path` field of that Request.
-- `{?ResponseCode}`, String, LwM2M status code, e.g. "2.01", "4.00", etc.
-- `{?ResponseMsg}`, String, LwM2M response message, e.g. "content", "bad_request".
-- `{?ResourcePath}`: String, the requested fully resource path, i.e: `31024/11/1`.
-- `{?Value}`: the current value of the resource being observed.
+変数：
+- `{?ReqID}`：整数、リクエストID。リクエストとの照合に使用。
+- `{?MsgType}`：文字列、リクエストコマンドと同じ MsgType。
+- `{?RequestPath}`：文字列、リクエストの `path` フィールドと同じ。
+- `{?ResponseCode}`：文字列、LwM2M ステータスコード。例："2.01"、"4.00" など。
+- `{?ResponseMsg}`：文字列、LwM2M 応答メッセージ。例："content"、"bad_request"。
+- `{?ResourcePath}`：文字列、要求された完全なリソースパス。例：`31024/11/1`。
+- `{?Value}`：監視中のリソースの現在の値。
 
-#### Notify
+#### Notify（通知）
 
-The "Notify" operation is sent from the LwM2M Client to the LwM2M Server during
-a valid observation on an Object Instance or Resource.
-This operation includes the new value of the Object Instance or Resource.
+"Notify" 操作は LwM2M クライアントから LwM2M サーバーに対して、オブジェクトインスタンスまたはリソースの有効な監視中に送信されます。  
+この操作にはオブジェクトインスタンスまたはリソースの新しい値が含まれます。
 
-The notifications from LwM2M clients will be converted to MQTT message.
+LwM2M クライアントからの通知は MQTT メッセージに変換されます。
 
-The **Topic** of the Notification message is:
+通知メッセージの **Topic** は以下の通りです：
 ```json
 {?mountpoint}{?translators.notify.topic}
 ```
-Variables:
-- `{?mountpoint}` is the value of `mountpoint` option in LwM2M Gateway configurations.
-- `{?translators.notify.topic}` is the value of `translators.notify.topic` option
-  in LwM2M Gateway configurations.
+変数：
+- `{?mountpoint}` は LwM2M ゲートウェイ設定の `mountpoint` オプションの値です。
+- `{?translators.notify.topic}` は LwM2M ゲートウェイ設定の `translators.notify.topic` オプションの値です。
 
-For example, if the `mountpoint` is configured as `lwm2m/${endpoint_name}/`
-and the `translators.notify.topic` is `up/notify`, then the topic for the
-message would be `lwm2m/<your-real-client-endpoint-name>/up/notify`.
+例えば、`mountpoint` が `lwm2m/${endpoint_name}/` に設定されており、`translators.notify.topic` が `up/notify` の場合、メッセージのトピックは `lwm2m/<実際のクライアントエンドポイント名>/up/notify` となります。
 
 
-The **Payload** format of the Notification message is:
+通知メッセージの **Payload** 形式は以下の通りです：
 
 ```json
 {
@@ -805,20 +742,20 @@ The **Payload** format of the Notification message is:
   }
 }
 ```
-Variables:
-- `{?ReqID}`: Integer, request-id, used for matching the request
-- `{?ObserveSeqNum}`: Number, value of "Observe" option in CoAP message
-- `{?ResponseCode}`, String, LwM2M status code, e.g. "2.01", "4.00", etc.
-- `{?ResponseMsg}`, String, LwM2M response message, e.g. "content", "bad_request".
-- `{?RequestPath}`, String, equals to the `path` field of that Request.
-- `{?ResourcePath}`: String, the requested fully resource path, i.e: `31024/11/1`.
-- `{?Value}`: the latest value of the resource.
+変数：
+- `{?ReqID}`：整数、リクエストID。リクエストとの照合に使用。
+- `{?ObserveSeqNum}`：数値、CoAP メッセージの "Observe" オプションの値。
+- `{?ResponseCode}`：文字列、LwM2M ステータスコード。例："2.01"、"4.00" など。
+- `{?ResponseMsg}`：文字列、LwM2M 応答メッセージ。例："content"、"bad_request"。
+- `{?RequestPath}`：文字列、リクエストの `path` フィールドと同じ。
+- `{?ResourcePath}`：文字列、要求された完全なリソースパス。例：`31024/11/1`。
+- `{?Value}`：リソースの最新値。
 
-## User Interfaces
+## ユーザーインターフェース
 
-- Detailed configuration options: [Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
-- Detailed HTTP APIs Description: [REST API - Gateway](../admin/api.md)
+- 詳細な設定オプション：[Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) および [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
+- 詳細な HTTP API 説明：[REST API - Gateway](../admin/api.md)
 
-## Client libraries
+## クライアントライブラリ
 
 - [wakaama](https://github.com/eclipse/wakaama)

@@ -1,72 +1,72 @@
 # Connector
 
-The EMQX connector is a key concept in data integration, serving as the underlying connection channel for Sink/Source, used to connect to external data systems. 
+EMQXのコネクターはデータ統合における重要な概念であり、Sink/Sourceの基盤となる接続チャネルとして機能し、外部データシステムへの接続に使用されます。
 
-## Basic Concepts
+## 基本概念
 
-The connector focuses solely on connecting to external data systems. Users can create different connectors for various external data systems, and a single connector can provide connections for multiple Sinks/Sources.
+コネクターは外部データシステムへの接続に特化しています。ユーザーは異なる外部データシステムごとに複数のコネクターを作成でき、1つのコネクターで複数のSink/Sourceへの接続を提供することも可能です。
 
-Taking MySQL Sink as an example, the relationship between the connector, rules, and Sink is illustrated in the following diagram:
+MySQL Sinkを例にとると、コネクター、ルール、Sinkの関係は以下の図のようになります。
 
 ![EMQX Connector Concept](./assets/connector-sink.jpg)
 
-### Features and Advantages
+### 特徴と利点
 
-When creating Sinks/Sources, users can choose an existing connector without worrying about the details of the underlying connection. The benefits of this design are:
+Sink/Sourceを作成する際、ユーザーは既存のコネクターを選択するだけで、基盤となる接続の詳細を気にする必要がありません。この設計のメリットは以下の通りです。
 
-- Separating connection configuration from data processing and mapping configuration makes the design of data processing flows more modular and flexible.
-- The creation and configuration of connectors do not affect the design of data processing flows. If connection information needs to be changed, it can be modified in the connector, which helps simplify configuration and maintenance.
-- For some external data systems that need to connect to multiple Sinks/Sources, this can be achieved by creating a single connector, avoiding repetitive configuration work.
+- 接続設定をデータ処理やマッピング設定から分離することで、データ処理フローの設計がよりモジュール化され柔軟になります。
+- コネクターの作成・設定はデータ処理フローの設計に影響を与えません。接続情報の変更が必要な場合はコネクター側で修正でき、設定や保守が簡素化されます。
+- 複数のSink/Sourceに接続する必要がある外部データシステムの場合、1つのコネクターを作成するだけで対応でき、設定の重複を避けられます。
 
-## Create a Connector
+## コネクターの作成
 
-When you create a data integration, you must create a connector for the Sink/Source for the integration to work. You can create and manage connectors via the Dashboard. One connector can be reused for different Sink/Source.
+データ統合を作成する際は、統合で使用するSink/Sourceごとにコネクターを作成する必要があります。コネクターはダッシュボードから作成および管理でき、1つのコネクターを複数のSink/Sourceで再利用可能です。
 
-:::tip 
+:::tip
 
-You can also create a connector during the process of creating a Sink/Source, which will automatically enter the connector creation process. 
+Sink/Source作成時にコネクターを新規作成することもでき、その場合は自動的にコネクター作成プロセスに入ります。
 
 :::
 
-1. On the Dashboard, click **Integration** -> **Connectors** in the left navigation menu.
+1. ダッシュボードの左ナビゲーションメニューで **Integration** -> **Connectors** をクリックします。
 
-2. Click the **Create** button in the top right corner of the page to enter the connector creation process.
+2. ページ右上の **Create** ボタンをクリックし、コネクター作成プロセスに入ります。
 
-3. On the connector type selection page, select the required connector and click **Next** to fill in the connection parameters. Supported connectors can be referenced [here](./data-bridges.md#supported-integrations).
+3. コネクタータイプ選択ページで必要なコネクターを選択し、**Next** をクリックして接続パラメータを入力します。対応コネクターは[こちら](./data-bridges.md#supported-integrations)を参照してください。
 
    ![EMQX Select Connector](./assets/choose-connector-type.png)
 
-4. On the connector configuration information page, fill in the basic information of the connector, including the connector name, description, and connection parameters. The content here refers to the connector parameter section in the usage documentation of each Sink/Source and is not repeated here.
+4. コネクター設定情報ページで、コネクター名、説明、接続パラメータなど基本情報を入力します。ここでの内容は各Sink/Sourceの利用ドキュメント内のコネクターパラメータ欄を参照してください。
 
    ![EMQX Connector Configuration](./assets/config-connector.png)
 
-## View and Manage Connectors
+## コネクターの表示と管理
 
-After a connector is created, you can view its basic information on the Connectors page. You can also enable or disable it, and manage it, such as editing the settings, creating rules, duplicating the connector, or deleting it through the **Actions** column of the connector list. 
+コネクター作成後は、Connectorsページで基本情報を確認できます。有効化・無効化の切り替えや、設定編集、ルール作成、複製、削除などの管理操作はコネクター一覧の **Actions** 列から行えます。
 
-<img src="./assets/view_connector.png" alt="view_connector"  />
+<img src="./assets/view_connector.png" alt="コネクターの表示"  />
 
-If the connector is used by a Sink/Source, updating the connector configuration will cause the Sink/Source to reload, which may cause data processing interruptions. It is recommended to update during off-peak business hours.
+コネクターがSink/Sourceで使用されている場合、コネクター設定の更新によりSink/Sourceがリロードされ、データ処理が一時的に中断する可能性があります。更新は業務の閑散時間帯に行うことを推奨します。
 
-A connector that is in use cannot be deleted. To delete a connector, first delete the Sink/Source using the connector. When you delete a connector, a warning dialog will pop up displaying the Sink/Source associated with the connector. Clicking the Sink/Source will bring you to the rule settings page where you can delete the Sink/Source.
+使用中のコネクターは削除できません。削除するには、まずそのコネクターを使用しているSink/Sourceを削除してください。コネクター削除時には、関連するSink/Sourceを表示する警告ダイアログが表示されます。Sink/Sourceをクリックするとルール設定ページに遷移し、そこでSink/Sourceを削除できます。
 
 ![delete_associated_sink](./assets/delete_associated_sink.png)
 
-## Connector Status
+## コネクターのステータス
 
-You can view the running status of connectors on the Dashboard for troubleshooting and monitoring.
+ダッシュボードでコネクターの稼働状況を確認でき、トラブルシューティングや監視に役立ちます。
 
-Connectors have the following statuses:
+コネクターのステータスは以下の通りです。
 
-- **Connecting**: The initial state before any health check is performed, where the connector is still trying to connect to the external data system.
-- **Connected**: The connector has successfully connected to the external data system. In this state, if a health check fails, the bridge may switch to a "connecting" or "disconnected" state, depending on the severity of the failure.
-- **Disconnected**: The connector has failed the health check and is in an unhealthy state. Depending on its configuration, it may periodically attempt to automatically reconnect.
-- **Inconsistent**: The connector status is inconsistent across cluster nodes. For example, the connector is in the connected state on some nodes and in the disconnected state on others.
+- **Connecting**: ヘルスチェックが実施される前の初期状態で、外部データシステムへの接続を試みている段階です。
+- **Connected**: コネクターが外部データシステムに正常に接続されている状態です。この状態でヘルスチェックが失敗すると、障害の深刻度に応じて「connecting」または「disconnected」状態に遷移することがあります。
+- **Disconnected**: ヘルスチェックに失敗し不健康な状態です。設定によっては定期的に自動再接続を試みます。
+- **Inconsistent**: クラスターのノード間でコネクターの状態が不一致です。例えば、一部のノードでは接続済み、一部では切断状態となっている場合です。
 
-## Considerations - Connection Pool
+## 注意事項 - コネクションプール
 
-Some connectors offer the concept of a connection pool, a set of reusable connection objects. Through the connection pool, users do not need to recreate connections for each request, helping to reduce resource consumption and improve connection efficiency and concurrency.
+一部のコネクターはコネクションプールという再利用可能な接続オブジェクトの集合を提供します。コネクションプールを利用することで、リクエストごとに接続を再作成する必要がなくなり、リソース消費の削減や接続効率・同時処理性能の向上に寄与します。
 
-The size of the connection pool refers to the size on each EMQX node, and EMQX creates a separate connection pool on each node. Given that EMQX is typically deployed in a cluster, this may lead to the actual number of connections exceeding the limits of the external data system.
+コネクションプールのサイズは各EMQXノードごとのサイズを指し、EMQXは各ノードに独立したコネクションプールを作成します。EMQXは通常クラスターでデプロイされるため、実際の接続数が外部データシステムの制限を超える可能性があります。
 
-For example, in an EMQX cluster with 3 nodes, if the connection pool size of the connector is set to 8, then EMQX will create 3 x 8 = 24 connections.
+例えば、3ノードのEMQXクラスターでコネクションプールサイズを8に設定した場合、EMQXは合計で3 × 8 = 24接続を作成します。

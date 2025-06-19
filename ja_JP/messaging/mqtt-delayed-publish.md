@@ -1,94 +1,91 @@
-# Delayed Publish
+# 遅延パブリッシュ
 
-Delayed Publish is an extended MQTT feature supported by EMQX. When a client publishes a message to EMQX with the topic prefix `$delayed/{DelayInteval}`, it triggers the delayed publish feature. The messages will be published after a period of time predefined by the user.
+遅延パブリッシュは、EMQXがサポートする拡張MQTT機能です。クライアントがトピックプレフィックス `$delayed/{DelayInterval}` を付けてEMQXにメッセージをパブリッシュすると、遅延パブリッシュ機能がトリガーされます。メッセージはユーザーが事前に定義した時間経過後にパブリッシュされます。
 
-The specific format of the delay-publish topic is as below:
+遅延パブリッシュのトピックの具体的な形式は以下の通りです。
 
 ```bash
 $delayed/{DelayInterval}/{TopicName}
 ```
 
-- `$delayed`: Messages prefixed with `$delay` will be treated as messages that need to be delayed. The delay interval is determined by the content of the next topic level.
-- `{DelayTime}`: Specify the time interval or timestamp for delaying the publishing of this MQTT message with the unit of seconds. If it's an interval, the maximum allowed interval is 42949669 seconds (about 497 days). If it's a timestamp, it cannot be earlier or later than 42949669 seconds from the current system time. The message is discarded if it fails to parse `{DelayTime}` as an integer or if it's not in the valid range.
-- `{TopicName}`: The topic name of the MQTT message.
+- `$delayed`：`$delayed`で始まるメッセージは遅延が必要なメッセージとして扱われます。遅延時間は次のトピックレベルの内容で決まります。
+- `{DelayTime}`：このMQTTメッセージのパブリッシュを遅延させる時間間隔またはタイムスタンプを秒単位で指定します。時間間隔の場合、最大許容間隔は42949670秒（約497日）です。タイムスタンプの場合は、現在のシステム時刻から42949670秒以内でなければなりません。`{DelayTime}`が整数として解析できないか、または有効範囲外の場合はメッセージは破棄されます。
+- `{TopicName}`：MQTTメッセージのトピック名です。
 
-Example:
+例：
 
-- `$delayed/15/x/y`: Publish MQTT message to the topic `x/y` after 15 seconds
-- `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
-- `$delayed/1743490800/chat/id`: Publish message to the topic `chat/id` on April 1st, 2025 at 9:00 (Stockholm timezone).
-- `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
+- `$delayed/15/x/y`：15秒後にトピック `x/y` にMQTTメッセージをパブリッシュする
+- `$delayed/60/a/b`：1分後にトピック `a/b` にMQTTメッセージをパブリッシュする
+- `$delayed/1743490800/chat/id`：2025年4月1日9:00（ストックホルム時間）にトピック `chat/id` にメッセージをパブリッシュする
+- `$delayed/3600/$SYS/topic`：1時間後にトピック `$SYS/topic` にMQTTメッセージをパブリッシュする
 
-## Configure Delayed Publish via Dashboard
+## ダッシュボードで遅延パブリッシュを設定する
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Management**-> **Delayed Publish**. 
+1. EMQXダッシュボードを開きます。左側のナビゲーションメニューで **Management** -> **Delayed Publish** をクリックします。
 
-2. On the **Delayed Publish** page, you can configure as follows:
+2. **Delayed Publish** ページで以下を設定できます：
 
-   - **Enable**: Enable or disable delayed publish. By default, it is enabled.
-   - **Max Delayed Messages**: You can specify the max number of delayed messages.
+   - **Enable**：遅延パブリッシュを有効または無効にします。デフォルトでは有効です。
+   - **Max Delayed Messages**：遅延メッセージの最大数を指定できます。
    
-   <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
+   <img src="./assets/configure-delayed-publish-dashboard.png" alt="遅延パブリッシュ設定ダッシュボード" style="zoom:45%;" />
 
-## Try Delayed Publish with MQTTX Desktop
+## MQTTX Desktopで遅延パブリッシュを試す
 
-:::tip Prerequisite
+:::tip 前提条件
 
-Basic publishing and subscribing operations using [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)
+[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を使った基本的なパブリッシュとサブスクライブ操作
 
 :::
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQXとMQTTX Desktopを起動します。**New Connection** をクリックしてパブリッシャーとしてクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name** フィールドに `Demo` と入力します。
+   - **Host** にローカルホスト `127.0.0.1` を入力します（このデモの例として）。
+   - 他の設定はデフォルトのままにして **Connect** をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT接続の作成に関する詳細な手順は [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) を参照してください。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新規接続設定一般" style="zoom:35%;" />
 
-2. Create another MQTT connection. Configure it as a subscriber.
+2. もう一つMQTT接続を作成し、サブスクライバーとして設定します。
 
-3. Select the connection named `Demo` in the **Connections** pane. Type the topic name `$delayed/10/x/y` in the topic text box and type the message as `Delayed Message`.
+3. **Connections** ペインで `Demo` という名前の接続を選択します。トピックテキストボックスに `$delayed/10/x/y` と入力し、メッセージに `Delayed Message` と入力します。
 
-   - `$delayed`: Indicates it is a delay message.
-   - `10`: Indicates the delayed interval is 10 seconds.
-   - `x/y`: Indicates the topic name of the message.
+   - `$delayed`：遅延メッセージであることを示します。
+   - `10`：遅延間隔が10秒であることを示します。
+   - `x/y`：メッセージのトピック名を示します。
 
-4. Select the connection named `Subscriber`. Click the **New Subscription** button to create a subscription.  Type `x/y` in the **Topic** textbox to subscribe to this topic. Click **Confirm**.
+4. **Connections** ペインで `Subscriber` という名前の接続を選択します。**New Subscription** ボタンをクリックしてサブスクリプションを作成します。**Topic** テキストボックスに `x/y` と入力してこのトピックをサブスクライブし、**Confirm** をクリックします。
 
-   <img src="./assets/subscribe-delayed-message.png" alt="subscribe-delayed-message" style="zoom:35%;" />
+   <img src="./assets/subscribe-delayed-message.png" alt="遅延メッセージのサブスクライブ" style="zoom:35%;" />
 
-5. Select the connection named `Demo` in the **Connections** pane. Click the send button to send the `Delayed Message` with topic `$delayed/10/x/y`.
+5. **Connections** ペインで `Demo` という名前の接続を選択します。送信ボタンをクリックして、トピック `$delayed/10/x/y` で `Delayed Message` を送信します。
 
-6. Wait for 10 seconds. You will see the connection named `Subscriber` receive the delayed message after 10 seconds.
+6. 10秒待ちます。`Subscriber` という名前の接続が10秒後に遅延メッセージを受信するのが確認できます。
 
-   <img src="./assets/receive-delayed-message.png" alt="receive-delayed-message" style="zoom:35%;" />
+   <img src="./assets/receive-delayed-message.png" alt="遅延メッセージの受信" style="zoom:35%;" />
 
-## Try Delayed Publish with MQTTX CLI
+## MQTTX CLIで遅延パブリッシュを試す
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Basic publishing and subscribing operations using [MQTTX CLI](./publish-and-subscribe.md#mqttx-cli)
+[MQTTX CLI](./publish-and-subscribe.md#mqttx-cli) を使った基本的なパブリッシュとサブスクライブ操作
 
 :::
 
-1. Create a new connection as a subscriber and subscribe to the topic `t/1`.
+1. サブスクライバーとして新しい接続を作成し、トピック `t/1` をサブスクライブします。
 
    ```bash
    mqttx sub -t t/1 -v
    ```
 
-2. Open a new window in the terminal for the client as publisher. Use the following command to send a delayed message. The subscriber will receive the message after 5 seconds.
+2. 新しいターミナルウィンドウを開き、パブリッシャーとして以下のコマンドを使って遅延メッセージを送信します。サブスクライバーは5秒後にメッセージを受信します。
 
    ```bash
    mqttx pub -t "\$delayed/5/t/1" -m "Hello Delayed msg"
    ```
-
-
-

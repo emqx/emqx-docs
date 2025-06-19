@@ -1,95 +1,93 @@
-# Schema Registry
+# スキーマレジストリ
 
-Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
+IoTデバイス端末の多様性や各メーカーによる異なるコーディングフォーマットのため、プラットフォーム上のアプリケーションがデバイス管理のためにIoTプラットフォームにアクセスする際に、統一されたデータフォーマットの必要性が生じます。
 
-The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in
-various scenarios.
+スキーマレジストリは、エンコードおよびデコードに使用されるスキーマを管理し、エンコードやデコードのリクエストを処理して結果を返します。スキーマレジストリはルールエンジンと連携して、さまざまなシナリオにおけるデバイスアクセスやルール設計に適応可能です。
 
-EMQX Schema Registry currently supports codecs in the below formats:
+EMQXのスキーマレジストリは現在、以下の形式のコーデックをサポートしています：
 
 - [Avro](https://avro.apache.org)
 - [Protobuf](https://developers.google.com/protocol-buffers/)
 - [JSON Schema](https://json-schema.org/)
-- External HTTP server
+- 外部HTTPサーバー
 
-Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
+AvroおよびProtobufはスキーマ依存のデータフォーマットです。エンコードされたデータはバイナリ形式で、デコードされたデータは[Map形式](#rule-engine-internal-data-format-map)になります。デコードされたデータはルールエンジンや他のプラグインで直接利用可能です。スキーマレジストリはAvroやProtobufなどの組み込みエンコードフォーマットのスキーマテキストを管理します。
 
-JSON schema can be used to validate if the input JSON object is following the schema definitions or if the JSON object output from the rule engine is valid before producing the data to downstream.
+JSONスキーマは、入力されたJSONオブジェクトがスキーマ定義に準拠しているか、またはルールエンジンから出力されたJSONオブジェクトが下流にデータを生成する前に有効かどうかを検証するために使用できます。
 
-External HTTP Server makes all decoding and encoding of payloads go through a configured black-box server that handles the logic.  It's useful for cases where one wishes to have custom encoding/decoding logic.
+外部HTTPサーバーは、ペイロードのすべてのデコードおよびエンコードを設定されたブラックボックスサーバーを経由させ、そのロジックを処理します。カスタムのエンコード／デコードロジックを実装したい場合に有用です。
 
-The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
+以下の図はスキーマレジストリの適用例を示しています。複数のデバイスが異なるフォーマットでデータを報告し、スキーマレジストリで統一された内部フォーマットにデコードされ、バックエンドアプリケーションに転送されます。
 
-<img src="./assets/schema-registry.png" alt="schema-registry" style="zoom:67%;" />
+<img src="./assets/schema-registry.png" alt="スキーマレジストリ" style="zoom:67%;" />
 
-## Architecture Design
+## アーキテクチャ設計
 
-EMQX can use schema for encoding, decoding, and validating whether the published messages comply with the schema specifications. It maintains schema text for built-in encoding formats, including Avro and Protobuf.
+EMQXは、パブリッシュされるメッセージのエンコード、デコード、スキーマ仕様への準拠検証にスキーマを利用できます。AvroやProtobufなどの組み込みエンコードフォーマットのスキーマテキストを管理しています。
 
-The Schema API provides for add, query, and delete operations via schema name, so the schema name needs to be specified when encoding and decoding.
+スキーマAPIはスキーマ名による追加、照会、削除操作を提供するため、エンコードやデコード時にはスキーマ名の指定が必要です。
 
 ![architecture](./assets/schema_registry/schema_registry1.svg)
 
-A common use case is to use the rule engine to call the encoding and decoding interfaces provided by the Schema Registry and then use the encoded or decoded data as input for subsequent actions.
+一般的なユースケースとしては、ルールエンジンからスキーマレジストリが提供するエンコード・デコードインターフェースを呼び出し、その結果のエンコード済みまたはデコード済みデータを後続のアクションの入力として利用します。
 
-Example of an encoding call:
+エンコード呼び出しの例：
 
 ```erlang
 schema_encode(SchemaName, Map) -> Bytes
 ```
 
-Example of a decoding call:
+デコード呼び出しの例：
 
 ```erlang
 schema_decode(SchemaName, Bytes) -> Map
 ```
 
-When encoding data from MQTT messages which are JSON-encoded, you also need to decode it to the Map internal format using the `json_decode` function before encoding with the schema function.  For example:
+JSONエンコードされたMQTTメッセージのデータをエンコードする際は、スキーマ関数でエンコードする前に`json_decode`関数でMap内部フォーマットにデコードする必要があります。例：
 
 ```erlang
 schema_encode(SchemaName, json_decode(Map)) -> Bytes
 ```
 
-When checking if JSON data can be validated against the JSON schema before encoding or after decoding, use the following schema validation example:
+JSONデータがJSONスキーマに準拠しているかをエンコード前またはデコード後に検証する場合は、以下のスキーマ検証関数を使用します：
 
 ```erlang
 schema_check(SchemaName, Map | Bytes) -> Boolean
 ```
 
-## Schema Registry + Rule Engine
+## スキーマレジストリとルールエンジン
 
-The message processing layer of EMQX can be divided into three parts: Messaging, Rule Engine, and Data Conversion.
+EMQXのメッセージ処理層は、メッセージング、ルールエンジン、データ変換の3つの部分に分けられます。
 
-EMQX's PUB/SUB system routes messages to specified topics. The rule engine has the flexibility to configure business rules for the data, match messages to the rules and then specify the corresponding action. Data format conversion occurs before the rule matching process, converting the data into a Map format that can participate in rule matching, and then matching it.
+EMQXのPUB/SUBシステムはメッセージを指定されたトピックにルーティングします。ルールエンジンはデータに対するビジネスルールを柔軟に設定でき、メッセージをルールにマッチングさせて対応するアクションを指定します。データフォーマットの変換はルールマッチングの前に行われ、データをルールマッチングに参加可能なMap形式に変換してからマッチングします。
 
-<img src="./assets/SchemaAndRuleEngine.png" alt="SchemaAndRuleEngine" style="zoom:67%;" />
+<img src="./assets/SchemaAndRuleEngine.png" alt="スキーマとルールエンジン" style="zoom:67%;" />
 
+### ルールエンジン内部データフォーマット（Map）
 
-### Rule Engine Internal Data Format (Map)
+ルールエンジン内部で使用されるデータフォーマットはErlangのMapです。元のデータがバイナリや他の形式の場合は、上記の`schema_decode`や`json_decode`などのコーデック関数を使ってMapに変換する必要があります。JSONオブジェクトに非常に近い構造です。
 
-The data format used in the internal rule engine is Erlang Map, so if the original data is in binary or other formats, it must be converted to Map using codec functions (such as `schema_decode` and `json_decode` as mentioned above).  It is very similar to a JSON object.
+Mapはキーと値のペアのデータ構造で、`#{key => value}`の形式を取ります。例えば、`user = #{id => 1, name => "Steve"}`は`id`が`1`、`name`が`"Steve"`の`user` Mapを定義しています。
 
-A Map is a data structure of the form Key-Value, in the form `#{key => value}`. For example, `user = #{id => 1, name => "Steve"} ` defines a `user` Map with `id` of `1` and `name` of `"Steve"`.
-
-The SQL statement provides the `.` operator to extract and add Map fields in a nested way. The following is an example of this Map operation using a SQL statement:
+SQL文は`.`演算子を提供し、ネストされたMapのフィールドを抽出・追加できます。以下はSQL文でのMap操作の例です：
 
 ```sql
 SELECT user.id AS my_id
 ```
 
-The filter result of the SQL statement is `#{my_id => 1}`.
+このSQL文のフィルター結果は`#{my_id => 1}`となります。
 
-### JSON Codec
+### JSONコーデック
 
-The SQL statements of the rule engine provide support for encoding and decoding JSON formatted strings. The SQL functions for converting JSON strings to Map format are `json_decode()` and `json_encode()`:
+ルールエンジンのSQL文はJSON形式の文字列のエンコード・デコードをサポートしています。JSON文字列をMap形式に変換するSQL関数は`json_decode()`と`json_encode()`です：
 
 ```sql
 SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 ```
 
-The SQL statement above will match an MQTT message with the content of the payload as a JSON string: `{"x" = 1, "y" = 1}`, and the topic as `t/a`.
+上記SQL文は、ペイロードの内容がJSON文字列`{"x" = 1, "y" = 1}`で、トピックが`t/a`のMQTTメッセージにマッチします。
 
-`json_decode(payload) as p` decodes the JSON string into the following Map data structure so that the fields in the Map can be used in the `WHERE` clause using p.x and p.y.
+`json_decode(payload) as p`はJSON文字列を以下のMapデータ構造にデコードし、`WHERE`句でp.xやp.yを使ってフィールドを参照可能にします。
 
 ```erlang
 #{
@@ -100,32 +98,30 @@ The SQL statement above will match an MQTT message with the content of the paylo
 }
 ```
 
-**Note:** The `AS` clause is required to assign the decoded data to a key so that subsequent operations can be performed on it later.
+**注意：** `AS`句はデコードしたデータにキーを割り当て、後続の操作で利用可能にするために必須です。
 
+## 外部スキーマレジストリ
 
-## External Schema Registry
+バージョン5.8.1以降、EMQXは外部のConfluent Schema Registry（CSR）を設定可能になりました。この機能により、ルール処理中に外部レジストリからスキーマを動的に取得し、効率的にメッセージのエンコード・デコードが行えます。
 
-Starting with version 5.8.1, EMQX supports configuring an external Confluent Schema Registry (CSR). This feature allows users to dynamically retrieve schemas from external registries during rule processing, enabling efficient message encoding and decoding.
+### ダッシュボードでの外部スキーマレジストリ作成
 
-### Create External Schema Registry in Dashboard
+EMQXダッシュボードから直接外部スキーマレジストリを設定でき、スキーマ統合の管理が容易です。
 
-You can configure an external schema registry directly through the EMQX Dashboard, making it easy to manage your schema integration.
+EMQXダッシュボードの **Smart Data Hub** -> **Schema Registry** に移動し、スキーマページの **External** タブを選択します。
 
-Go to **Smart Data Hub** -> **Schema Registry** on EMQX Dashboard. Select the **External** tab on the Schema page.
+右上の **Create** ボタンをクリックし、以下の項目を設定します：
 
-Click the **Create** button at the upper right corner. Configure the following fields:
+- **Name**：エンコード・デコード関数で使用する外部スキーマレジストリ名を入力します。
+- **Type**：外部スキーマレジストリの種類を選択します。現在は`Confluent`のみ対応しています。
+- **URL**：Confluent Schema Registryのエンドポイントを入力します。
+- **Authentication**：`Basic auth`を選択した場合、外部レジストリにアクセスするための認証情報（ユーザー名とパスワード）を入力します。
 
-- **Name**: Enter an external schema registry name that will be used in the encoding and decoding functions.
-- **Type**: Select the type of external schema registry. Currently, only `Confluent` is supported.
-- **URL**: Enter the endpoint of your Confluent Schema Registry.
-- **Authentication**: If you select `Basic auth`, enter the authentication credentials (username and password) for accessing the external registry.
+設定完了後、**Create** をクリックします。
 
-Click **Create** after you complete the settings.
+### 設定ファイルによる外部スキーマレジストリの設定
 
-### Configure External Schema Registry via Configuration File
-
-You can configure an external Confluent Schema Registry via the EMQX configuration file. Here’s an example of how to set it up:
-
+EMQXの設定ファイルで外部Confluent Schema Registryを設定することも可能です。以下は設定例です：
 
 ```hcl
 schema_registry {
@@ -142,18 +138,18 @@ schema_registry {
 }
 ```
 
-In this example:
+この例では：
 
-- `my_external_registry` is the name assigned to the external schema registry.
-- `type = confluent` specifies the type of external registry.
-- `url` is the endpoint of your Confluent Schema Registry.
-- `auth` contains the authentication credentials (username and password) for accessing the external registry.
+- `my_external_registry` は外部スキーマレジストリに割り当てた名前です。
+- `type = confluent` は外部レジストリの種類を指定しています。
+- `url` はConfluent Schema Registryのエンドポイントです。
+- `auth` は外部レジストリにアクセスするための認証情報（ユーザー名とパスワード）です。
 
-### Use External Schema Registry in Rule Engine
+### ルールエンジンでの外部スキーマレジストリ利用
 
-Once an external registry is configured, you can use several functions in the EMQX rule engine to encode and decode payloads using the schemas stored in the external registry.
+外部レジストリを設定すると、EMQXルールエンジンで外部レジストリに格納されたスキーマを使ってペイロードのエンコード・デコードを行う複数の関数が利用可能になります。
 
-The following functions utilize a configured external CSR:
+以下の関数は設定済みの外部CSRを利用します：
 
 ```sql
 avro_encode('my_external_registry', payload, my_schema_id)
@@ -162,52 +158,52 @@ schema_encode_and_tag('my_local_avro_schema', 'my_external_registry', payload, '
 schema_decode_tagged('my_external_registry', payload)
 ```
 
-#### Function Usage Examples
+#### 関数利用例
 
-In all function usage examples below, the following example values and variable names are used:
+以下の関数利用例では、次の値と変数名を使用しています：
 
-- `my_external_registry` is the name you assigned to the external registry in EMQX.
-- `my_schema_id` is the schema ID registered in the CSR (always an integer in CSR).
-- `my_local_avro_schema` is the name of a locally configured Avro schema in EMQX.
-- `my_subject` is the subject name defined in the CSR.
+- `my_external_registry`：EMQXで外部レジストリに割り当てた名前
+- `my_schema_id`：CSRに登録されたスキーマID（CSRでは常に整数）
+- `my_local_avro_schema`：EMQXにローカル設定されたAvroスキーマ名
+- `my_subject`：CSRで定義されたサブジェクト名
 
 ##### `avro_encode`
 
-`avro_encode` encodes a payload using the schema ID from the external registry. The schema is retrieved dynamically at runtime and cached for subsequent runs. In Confluent Schema Registry, schema IDs are integers.
+`avro_encode`は外部レジストリのスキーマIDを使ってペイロードをエンコードします。スキーマは実行時に動的に取得され、その後の実行でキャッシュされます。Confluent Schema RegistryではスキーマIDは整数です。
 
-::: tip Note
+::: tip 注意
 
-When encoding, the payload must be in the internal data format of the rule engine, which is a decoded map. This is why `json_decode` is used in the example.
+エンコード時のペイロードはルールエンジンの内部データ形式であるデコード済みMapである必要があります。これが例で`json_decode`を使う理由です。
 
 :::
 
-Example:
+例：
 
 ```sql
 select
-  -- 123 is the schema ID that is registered in CSR
+  -- 123はCSRに登録されたスキーマID
   avro_encode('my_external_registry', json_decode(payload), 123) as encoded
 from 't'
 ```
 
 ##### `avro_decode`
 
-This function decodes an Avro payload based on the specified schema ID from the external registry. The schema is dynamically fetched during runtime and cached for subsequent operations.
+この関数は外部レジストリの指定スキーマIDに基づきAvroペイロードをデコードします。スキーマは実行時に動的に取得され、その後の操作でキャッシュされます。
 
-Example:
+例：
 
 ```sql
 select
-  -- 123 is the schema ID that is registered in CSR
+  -- 123はCSRに登録されたスキーマID
   avro_decode('my_external_registry', payload, 123) as decoded
 from 't'
 ```
 
 ##### `schema_encode_and_tag`
 
-This function uses a locally registered Avro schema, an external CSR schema name, and a subject to encode a payload (already in internal map format), and to tag the resulting payload with a schema ID.  The schema ID comes from registering the local schema to CSR.
+この関数はローカル登録済みAvroスキーマ、外部CSRスキーマ名、サブジェクトを使い、（すでに内部Map形式の）ペイロードをエンコードし、結果のペイロードにスキーマIDでタグ付けします。スキーマIDはローカルスキーマをCSRに登録した際のものです。
 
-Example:
+例：
 
 ```sql
 select
@@ -222,7 +218,7 @@ from 't'
 
 ##### `schema_decode_tagged`
 
-This function uses a CSR name to decode a payload, assuming it is tagged with the schema ID retrieved from CSR.
+この関数はCSR名を使って、スキーマIDでタグ付けされたペイロードをデコードします。
 
 ```sql
 select

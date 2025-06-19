@@ -1,97 +1,97 @@
-# Backup and Restore
+# バックアップとリストア
 
-EMQX adopts a distributed storage schema and also introduces a cluster transfer feature to ensure the system's high availability.
+EMQXは分散ストレージスキーマを採用し、システムの高可用性を確保するためにクラスター転送機能も導入しています。
 
-This page discusses how to back up your operating data and configuration files to prevent data loss in case of system malfunctions.
+本ページでは、システム障害時のデータ損失を防ぐために、運用データおよび設定ファイルのバックアップ方法について説明します。
 
-## Function Description
+## 機能説明
 
-EMQX provides CLI commands for data import and export to implement backup and recovery. Although similar to the commands in EMQX 4.x, the export file format is incompatible with 4.x:
+EMQXはバックアップとリカバリを実現するために、データのインポートおよびエクスポート用のCLIコマンドを提供しています。EMQX 4.xのコマンドと類似していますが、エクスポートファイルのフォーマットは4.xとは互換性がありません。
 
-- In EMQX 4.x, a single JSON file was used to save all necessary data of EMQX configuration and the built-in database.
-- In EMQX 5.x, the exported data is compressed into a tar file format, allowing for more efficient and structured handling of potentially large amounts of user data.
+- EMQX 4.xでは、EMQXの設定および組み込みデータベースに必要なすべてのデータを単一のJSONファイルに保存していました。
+- EMQX 5.xでは、エクスポートされたデータがtarファイル形式で圧縮され、大量のユーザーデータをより効率的かつ構造的に扱えるようになっています。
 
-In addition to CLI commands, the EMQX Enterprise also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
+CLIコマンドに加えて、EMQX Enterpriseではダッシュボード上にデータのバックアップおよびリカバリページがあり、そこでデータのインポート・エクスポート操作を行うことができます。
 
-The data that EMQX supports for import and export includes:
+EMQXがインポートおよびエクスポートに対応しているデータは以下の通りです：
 
-- Contents of EMQX [configuration rewrite file](../configuration/configuration.md#configuration-rewrite-file):
-  - Authentication and authorization configuration
-  - Rules, connectors, and Sink/Source
-  - Listeners, gateway configuration
-  - Other EMQX configurations
-- Built-in database (Mnesia) data
-  - Dashboard users and REST API keys
-  - Client authentication credentials (built-in database password authentication, enhanced authentication)
-  - PSK authentication data
-  - Authorization rules
-  - Blacklist data
-  - Retained messages
-- SSL/TLS certificates stored in the EMQX data directory (`node.data_dir`)
-- Authorization `acl.conf` file stored in the EMQX data directory
+- EMQXの[設定リライトファイル](../configuration/configuration.md#configuration-rewrite-file)の内容：
+  - 認証および認可設定
+  - ルール、コネクター、Sink/Source
+  - リスナー、ゲートウェイ設定
+  - その他のEMQX設定
+- 組み込みデータベース（Mnesia）データ
+  - ダッシュボードユーザーおよびREST APIキー
+  - クライアント認証情報（組み込みデータベースのパスワード認証、拡張認証）
+  - PSK認証データ
+  - 認可ルール
+  - ブラックリストデータ
+  - 保持メッセージ
+- EMQXデータディレクトリ（`node.data_dir`）に保存されているSSL/TLS証明書
+- EMQXデータディレクトリに保存されている認可用`acl.conf`ファイル
 
-::: tip Special Note
+::: tip 特記事項
 
-1. The exported file only includes SSL/TLS certificates and the `acl.conf` file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
-2. The exported file name format is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`.
-3. Starting from EMQX v5.7.1, even if the storage method of retained messages is configured as ram (memory), it will also be backed up.
-
-:::
-
-### Export
-
-Data can be exported from any running cluster node.
-
-### Import
-
-To import data, the EMQX node must be running, and some conditions need to be met for the import operation to be successful:
-
-- If the [core node + replica node](../deploy/cluster/mria-introduction.md) mode is enabled, data import can only be performed on the core node. This will not affect the actual import behavior, as data will be replicated to all cluster nodes, including core and replica nodes. Operating on the core node ensures correct data import.
-- The data file cannot be renamed.
-
-If any of the above conditions are not met, the import process will be aborted, and a corresponding error message will be displayed.
-
-During the data import operation, data will be inserted (if it does not exist in the target EMQX cluster) or updated (if there are conflicts) into EMQX. The import process will not delete any existing data from the EMQX cluster.
-
-::: tip Special Note
-
-In rare cases, existing data may be incompatible with the imported data. For example, an EMQX cluster uses built-in database authentication and sets the salt position to "suffix," while the imported data sets the same configuration to "prefix." After the import, the new configuration will take effect, and previously created old user credentials will no longer work.
-
-Therefore, importing data into an EMQX cluster without clearing data may require extra caution.
+1. エクスポートファイルにはEMQXデータディレクトリに保存されているSSL/TLS証明書および`acl.conf`ファイルのみが含まれます。データディレクトリ外にある証明書や`acl.conf`ファイルがある場合は、インポート前に手動で適切な場所にコピーしておく必要があります。
+2. エクスポートファイルのファイル名形式は`emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`で、エクスポート先ディレクトリは`<EMQX data directory>/backup`です。
+3. EMQX v5.7.1以降では、保持メッセージのストレージ方式がram（メモリ）に設定されている場合でもバックアップされます。
 
 :::
 
-## Dashboard Example
+### エクスポート
 
-This section explains how to perform data import and export operations on the Dashboard.
+データは稼働中の任意のクラスターのノードからエクスポート可能です。
+
+### インポート
+
+データをインポートするにはEMQXノードが稼働中である必要があり、インポート操作が成功するためには以下の条件を満たす必要があります：
+
+- [コアノード＋レプリカノード](../deploy/cluster/mria-introduction.md)モードが有効な場合、データインポートはコアノードでのみ実行可能です。実際のインポート動作には影響しません。データはコアノードとレプリカノードを含むすべてのクラスターのノードにレプリケートされます。コアノードで操作することで正しいデータインポートが保証されます。
+- データファイルの名前を変更してはいけません。
+
+上記の条件を満たさない場合、インポート処理は中止され、対応するエラーメッセージが表示されます。
+
+データインポート中は、対象のEMQXクラスターに存在しないデータは挿入され、競合がある場合は更新されます。インポート処理は既存のデータを削除しません。
+
+::: tip 特記事項
+
+稀に既存データとインポートデータが互換性がない場合があります。例えば、EMQXクラスターが組み込みデータベース認証を使用し、saltの位置を「suffix」に設定しているのに対し、インポートデータでは同じ設定が「prefix」になっている場合、インポート後に新しい設定が有効となり、以前作成した古いユーザー認証情報が使えなくなります。
+
+そのため、データをクリアせずにEMQXクラスターにデータをインポートする際は特に注意が必要です。
+
+:::
+
+## ダッシュボードでの例
+
+このセクションでは、ダッシュボード上でのデータインポートおよびエクスポート操作方法を説明します。
 
 :::tip
 
-- Backup and recovery through the Dashboard are available in EMQX Enterprise edition v5.4.0 and later versions.
-- Backup files exported via CLI can also be managed on the Backup and Recovery page of the Dashboard.
+- ダッシュボードによるバックアップとリカバリはEMQX Enterpriseエディションv5.4.0以降で利用可能です。
+- CLIでエクスポートしたバックアップファイルもダッシュボードのバックアップ＆リカバリページで管理できます。
 
 :::
 
-1. Log in to the Dashboard and go to **System** -> **Backup & Restore** page.
+1. ダッシュボードにログインし、**システム** -> **バックアップ＆リストア**ページに移動します。
 
-2. To export data, click the **Create** button in the top right corner to create a backup file based on the current data of the EMQX cluster. You can view the file information on the backup file list page:
+2. データをエクスポートするには、右上の**作成**ボタンをクリックし、EMQXクラスターの現在のデータに基づくバックアップファイルを作成します。バックアップファイル一覧ページでファイル情報を確認できます：
 
-   - **File Name**: The name of the backup file.
-   - **Node Name**: This name refers to the node where the backup file is stored, and it does not mean that the backup only contains data from that node.
-   - **Created At**: The creation time of the backup file.
-   - **File Size**: The size of the backup file.
+   - **ファイル名**：バックアップファイルの名前
+   - **ノード名**：バックアップファイルが保存されているノード名であり、そのノードのデータのみを含むわけではありません
+   - **作成日時**：バックアップファイルの作成日時
+   - **ファイルサイズ**：バックアップファイルのサイズ
 
-   You can click **Download** in the **Actions** column to download the file and back it up locally.
+   **操作**列の**ダウンロード**をクリックするとファイルをダウンロードし、ローカルに保存できます。
 
-3. To import data, click the **Upload** button in the top right corner to upload a backup file to the current EMQX cluster. The file will not be restored immediately upon upload. You can go to the **Actions** column in the backup file list and click **Restore** to import the backup file into the current EMQX cluster.
+3. データをインポートするには、右上の**アップロード**ボタンをクリックしてバックアップファイルを現在のEMQXクラスターにアップロードします。アップロード直後に復元は行われません。バックアップファイル一覧の**操作**列にある**復元**をクリックすると、バックアップファイルを現在のEMQXクラスターにインポートできます。
 
 ![EMQX backup & restore](./assets/backup-restore.png)
 
-## CLI Example
+## CLIでの例
 
-This section shows how to import and export data using the command-line interface.
+このセクションでは、コマンドラインインターフェースを使ったデータのインポートおよびエクスポート方法を示します。
 
-1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`:
+1. データをエクスポートします。エクスポートファイルのファイル名形式は`emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`で、エクスポート先ディレクトリは`<EMQX data directory>/backup`です：
 
     ```bash
     $ ./emqx ctl data export
@@ -108,11 +108,10 @@ This section shows how to import and export data using the command-line interfac
     Exporting emqx_banned database table...
     Data has been successfully exported to data/backup/emqx-export-2023-06-19-15-14-19.947.tar.gz.
     ```
-2. Import data. The name of the imported file can be specified as an absolute path or a relative path.
-   If the file resides in `<EMQX data directory>/backup` directory, its basename without a path can also be used, e.g.:
+2. データをインポートします。インポートするファイル名は絶対パスまたは相対パスで指定できます。ファイルが`<EMQX data directory>/backup`ディレクトリにある場合は、パスなしのベース名だけでも指定可能です。例：
 
     ```bash
-    # import the file by the absolute path
+    # 絶対パスでファイルをインポート
     $ ./emqx ctl data import /tmp/emqx-export-2023-06-19-15-14-19.947.tar.gz
     Importing data from "/tmp/emqx-export-2023-06-19-15-14-19.947.tar.gz"...
     Importing cluster configuration...
@@ -126,7 +125,7 @@ This section shows how to import and export data using the command-line interfac
     Importing emqx_admin database table...
     Data has been imported successfully.
    
-    # import the file by the path relative to EMQX root directory:
+    # EMQXルートディレクトリからの相対パスでファイルをインポート
     $ ./emqx ctl data import ../../../tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz
     Importing data from "../../../tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz"...
     Importing cluster configuration...
@@ -140,7 +139,7 @@ This section shows how to import and export data using the command-line interfac
     Importing emqx_app database table...
     Data has been imported successfully.
    
-    # import the file from `<EMQX data directory>/backup` directory:
+    # `<EMQX data directory>/backup`ディレクトリからファイルをインポート
     $ cp /tmp/emqx-export-2023-06-21-13-28-06.418.tar.gz /opt/emqx/data/backup/
     $ ./emqx ctl data import emqx-export-2023-06-21-13-28-06.418.tar.gz
     Importing data from "data/backup/emqx-export-2023-06-21-13-28-06.418.tar.gz"...

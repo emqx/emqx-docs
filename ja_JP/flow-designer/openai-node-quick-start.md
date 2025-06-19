@@ -1,18 +1,18 @@
-# Quick Start: Create a Flow Using OpenAI Node
+# クイックスタート：OpenAIノードを使ったFlowの作成
 
-This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case.
+このセクションでは、FlowデザイナーでLLMベースのFlowを実際のユースケースを通じて素早く作成・テストする方法を説明します。
 
-This demonstration shows you how to build a workflow that receives sensor data from MQTT topics and uses an LLM (e.g., OpenAI GPT) to interpret the data and summarize its meaning in natural language. The resulting summary is republished to a new topic, `ai/summary`, for downstream consumption.
+このデモでは、MQTTトピックからセンサーデータを受信し、LLM（例：OpenAI GPT）を使ってデータを解釈し、その意味を自然言語で要約するワークフローを構築します。生成された要約は、新しいトピック `ai/summary` に再パブリッシュされ、下流で利用されます。
 
-## Scenario Description
+## シナリオ説明
 
-Assume a device reports temperature and humidity readings to the MQTT topic `sensors/temp_humid`. Each message includes raw sensor data in JSON format. The EMQX Flow will perform the following steps:
+デバイスがMQTTトピック `sensors/temp_humid` に温度と湿度の読み取り値を報告すると仮定します。各メッセージはJSON形式の生データを含みます。EMQX Flowは以下の手順を実行します。
 
-- **Data Processing**: Extract the device ID and sensor values.
-- **LLM-Based Processing**: Use an OpenAI model to summarize the sensor reading.
-- **Message Republish**: Publish the AI-generated summary to a new topic, `ai/summary`.
+- **データ処理**：デバイスIDとセンサー値を抽出します。
+- **LLMベースの処理**：OpenAIモデルを使ってセンサーの読み取り値を要約します。
+- **メッセージ再パブリッシュ**：AI生成の要約を新しいトピック `ai/summary` にパブリッシュします。
 
-**Sample message:**
+**サンプルメッセージ：**
 
 ```json
 {
@@ -23,80 +23,78 @@ Assume a device reports temperature and humidity readings to the MQTT topic `sen
 }
 ```
 
-**Expected output (AI-generated):**
+**期待される出力（AI生成）：**
 
 ```
 Device device123 reported a temperature of 38.2°C and 75% humidity.
 ```
 
-## Create the Flow
+## Flowの作成
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Make sure you have a valid OpenAI API Key.
+有効なOpenAI APIキーを用意してください。
 
 :::
 
-1. Click the **Create Flow** button on the **Flows** page.
+1. **Flows**ページで**Create Flow**ボタンをクリックします。
 
-2. Add a **Messages** node.
+2. **Messages**ノードを追加します。
 
-   - Drag a **Messages** node from the Source panel.
-   - Set the topic to `sensors/temp_humid`.
-   - Click **Save**.
+   - ソースパネルから**Messages**ノードをドラッグします。
+   - トピックを`sensors/temp_humid`に設定します。
+   - **Save**をクリックします。
 
-3. Add a **Data Processing** node.
+3. **Data Processing**ノードを追加します。
 
-   - Drag a **Data Processing** node from the **Processing** section.
-   - Add the following mappings:
-     - `payload.device_id` to alias `device_id`
-     - `payload.temperature` to alias `temperature`
-     - `payload.humidity` to alias `humidity`
-   - Click **Save**.
+   - **Processing**セクションから**Data Processing**ノードをドラッグします。
+   - 以下のマッピングを追加します：
+     - `payload.device_id` → エイリアス `device_id`
+     - `payload.temperature` → エイリアス `temperature`
+     - `payload.humidity` → エイリアス `humidity`
+   - **Save**をクリックします。
 
-4. Add an **OpenAI** node.
+4. **OpenAI**ノードを追加します。
 
-   - Drag an **OpenAI** node from the Processing section and connect it to the Data Processing node.
-   - Configure the node:
-     - **Input**: Enter `payload`.
-     - **System Message**: Enter `Generate a short summary of the device’s sensor readings in human-readable format`.
-     - **Model**: Select `gpt-4o`.
-     - **API Key**: Enter your OpenAI API key.
-     - **Base URL**: Leave empty.
-     - **Output Result Alias**: Enter `summary`.
-   - Click **Save**.
+   - **Processing**セクションから**OpenAI**ノードをドラッグし、Data Processingノードに接続します。
+   - ノードを設定します：
+     - **Input**：`payload`を入力
+     - **System Message**：`Generate a short summary of the device’s sensor readings in human-readable format` と入力
+     - **Model**：`gpt-4o`を選択
+     - **API Key**：OpenAI APIキーを入力
+     - **Base URL**：空欄のまま
+     - **Output Result Alias**：`summary`と入力
+   - **Save**をクリックします。
 
-5. Add a **Republish** node.
+5. **Republish**ノードを追加します。
 
-   - Drag a **Republish** node from the Sink section and connect it to the OpenAI node.
-   - Set the topic to `ai/summary`.
-   - Set the payload to `${summary}`.
-   - Click **Save**.
+   - **Sink**セクションから**Republish**ノードをドラッグし、OpenAIノードに接続します。
+   - トピックを`ai/summary`に設定します。
+   - ペイロードを`${summary}`に設定します。
+   - **Save**をクリックします。
 
-6. Connect all the nodes and click **Save** in the upper-right corner to save the Flow.
+6. すべてのノードを接続し、右上の**Save**をクリックしてFlowを保存します。
 
    ![openai_node_flow](./assets/openai_node_flow.png)
 
-   Flows and form rules are interoperable. You can also view the SQL and related rule configurations on the Rule page.
+   Flowとフォームルールは相互運用可能です。RuleページでSQLや関連ルール設定も確認できます。
 
    ![openai_node_rule_page](./assets/openai_node_rule_page.png)
 
-## Test the Flow
+## Flowのテスト
 
-1. Connect an MQTT client to EMQX.
+1. MQTTクライアントをEMQXに接続します。
 
-   To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
+   Flowを素早くテストするには、ダッシュボードの**Diagnostic Tools** → **WebSocket Client**を使ってMQTTクライアントをシミュレートできます。あるいは、[MQTTX](https://mqttx.app/)などのツールや実際のMQTTクライアントも利用可能です。
 
-   - Connect to your EMQX server.
-   - Subscribe to the topic `ai/summary`.
+   - EMQXサーバーに接続します。
+   - トピック`ai/summary`をサブスクライブします。
 
-2. Start Testing.
+2. テストを開始します。
 
-   - In the Flow Designer, click any node to open the Edit panel.
-
-   - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
-
-   - Click **Input Simulated Data** and publish this message to topic `sensors/temp_humid` by clicking **Submit Test**:
+   - Flowデザイナーで任意のノードをクリックし、編集パネルを開きます。
+   - **Edit**をクリックし、続けて**Start Test**をクリックして画面下部にテストパネルを表示します。
+   - **Input Simulated Data**をクリックし、以下のメッセージをトピック`sensors/temp_humid`にパブリッシュするために**Submit Test**をクリックします。
 
      ```json
      {
@@ -106,21 +104,18 @@ Make sure you have a valid OpenAI API Key.
      }
      ```
 
-3. Review results.
+3. 結果を確認します。
 
-   - You can see the successful execution result of the flow.
+   - Flowの正常な実行結果が表示されます。
 
      ![openai_node_test_result](./assets/openai_node_test_result.png)
 
-   - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
+   - **WebSocket Client**ページに戻ると、以下のようなAI生成の要約を受信できます。
 
      > “The sensor readings from device "device123" indicate that the current temperature is 38.2°C and the humidity level is 75%.”
 
-   - If the test results are unsuccessful, error messages will be displayed accordingly.
-   
-   - To view the running statistics and metrics of the **OpenAI** node, click the node to open the Edit panel and click the **Overview** tab.
-   
+   - テストが失敗した場合は、エラーメッセージが表示されます。
+
+   - **OpenAI**ノードの稼働状況やメトリクスを確認するには、ノードをクリックして編集パネルを開き、**Overview**タブをクリックしてください。
+
      ![openai_node_statistics](./assets/openai_node_statistics.png)
-
-
-

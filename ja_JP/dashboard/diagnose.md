@@ -1,49 +1,49 @@
-# Diagnose
+# 診断
 
-The Diagnose module provides some debugging tools to help users debug and locate errors and issues in usage.
+診断モジュールは、ユーザーがエラーや問題の原因を特定しデバッグするためのツールを提供します。
 
-- **Alarms**: View current and historical alarms for the system.
-- **WebSocket Client**: Use the WebSocket client on the page for quick connection and publish-subscribe debugging.
-- **Topic Monitoring**: Monitor and view message incoming, outgoing, and dropped data based on topics.
-- **Slow Subscriptions**: Enable slow subscription statistics to view subscriptions on the page that consume more than a set threshold of time for the entire flow of message transmission based on client ID.
-- **Log Trace**: Real-time filtering of logs for a specific client, Topic, or IP, which can be viewed or downloaded on the page.
+- **アラーム**：システムの現在および過去のアラームを確認できます。
+- **WebSocketクライアント**：ページ上のWebSocketクライアントを使って、接続やパブリッシュ・サブスクライブのデバッグを迅速に行えます。
+- **トピック監視**：トピックごとにメッセージの受信、送信、ドロップされたデータを監視・表示します。
+- **遅延サブスクリプション**：遅延サブスクリプション統計を有効にすると、クライアントIDごとにメッセージ送信の全体フローで設定した閾値を超える時間を消費しているサブスクリプションをページ上で確認できます。
+- **ログトレース**：特定のクライアント、トピック、IPに対してリアルタイムでログをフィルタリングし、ページ上で閲覧またはダウンロードできます。
 
-## Alarms
+## アラーム
 
-Click on Alerts under the Diagnose menu on the left to go to the Alerts page. The alarms page allows you to view the server's current alarms and historical alarms (inactivated alarms). The alarm information includes the alarm name, the content of the alarm message, the node that triggered the alarm, the alarm level, the activation time of the alarm, and the duration of the alarm.
+左側の診断メニューから「アラート」をクリックすると、アラートページに移動します。アラームページでは、サーバーの現在のアラームと過去のアラーム（非アクティブなアラーム）を確認できます。アラーム情報には、アラーム名、アラームメッセージの内容、アラームを発生させたノード、アラームレベル、アラームの発生時間、アラームの継続時間が含まれます。
 
-On the current alarms page, you can click on the `Refresh` button in the top right corner to refresh the list and see if any new alarms have occurred. If the default value of the current alarm trigger threshold or alarm monitoring interval does not meet your actual needs, you can click the `Settings` button in the top right corner to jump to the [Monitoring](./configuration.md#monitoring) page for settings. On the Alarm History page, you can clear the alarm history by clicking on the `Clear History Alarms` button in the top right corner.
+現在のアラームページでは、右上の`更新`ボタンをクリックしてリストを更新し、新しいアラームが発生しているか確認できます。現在のアラームのトリガー閾値や監視間隔のデフォルト値が実際の要件に合わない場合は、右上の`設定`ボタンをクリックして[監視](./configuration.md#monitoring)ページに移動し設定を変更できます。アラーム履歴ページでは、右上の`履歴アラームをクリア`ボタンをクリックしてアラーム履歴を削除できます。
 
-Information on currently supported alarms and more details can be found in [alarms](../observability/alarms.md).
+現在サポートされているアラームの情報や詳細は[アラーム](../observability/alarms.md)をご参照ください。
 
-<img src="./assets/alarm.png" alt="image" style="zoom:67%;" />
+<img src="./assets/alarm.png" alt="アラーム画面" style="zoom:67%;" />
 
-## WebSocket Client
+## WebSocketクライアント
 
-Click on **WebSocket Client** under the **Diagnose** menu on the left to go to the WebSocket Client page. The WebSocket Client page provides a simple but effective MQTT testing tool that includes connect, subscribe, and publish functionality for quick debugging of the client's connect, publish, and subscribe functionality, as well as the ability to view your own sent and received message data. Multiple WebSocket connections can be added by clicking the `+` button at the top of the page; the connection status and sent and received data for all connections will be cleared when the page is refreshed.
+左側の診断メニューから**WebSocketクライアント**をクリックすると、WebSocketクライアントページに移動します。WebSocketクライアントページは、クライアントの接続、サブスクライブ、パブリッシュ機能を迅速にデバッグできるシンプルかつ効果的なMQTTテストツールを提供します。自身が送受信したメッセージデータの確認も可能です。ページ上部の`+`ボタンをクリックすると複数のWebSocket接続を追加でき、ページを更新すると全接続の状態および送受信データはクリアされます。
 
-<img src="./assets/web-socket.png" alt="image" style="zoom:67%;" />
+<img src="./assets/web-socket.png" alt="WebSocketクライアント画面" style="zoom:67%;" />
 
-## Topic Metrics
+## トピックメトリクス
 
-Click on **Topic Monitoring** under the **Diagnose** menu on the left to go to the Topic Metrics page. In Topic Monitoring, you can click the `Create` button in the top right corner of the page, enter the topic you want to monitor and click `Add` to create a new topic metric statistic. Once created successfully, you can view the number and rate of message incoming, outgoing and dropped for that topic by topic, as well as view the data for each QoS for the above metrics in the details. Click on the `Reset` button to reset the existing statistics for a topic. The monitoring list can be displayed by clicking on a statistical indicator in the header of the table to sort it in order or in reverse order, as required.
+左側の診断メニューから**トピック監視**をクリックすると、トピックメトリクスページに移動します。トピック監視では、ページ右上の`作成`ボタンをクリックし、監視したいトピックを入力して`追加`をクリックすると新しいトピックメトリクス統計を作成できます。作成に成功すると、トピックごとのメッセージの受信数、送信数、ドロップ数およびそれらのレートを確認でき、詳細では各QoSごとのデータも閲覧可能です。`リセット`ボタンをクリックすると、既存の統計をリセットできます。テーブルのヘッダーにある統計指標をクリックすると昇順・降順で監視リストを並べ替えられます。
 
-<img src="./assets/topic-metrics.png" alt="image" style="zoom:67%;" />
+<img src="./assets/topic-metrics.png" alt="トピックメトリクス画面" style="zoom:67%;" />
 
-> For overall performance reasons, only topic names are currently supported for topic statistics, i.e. topic filters with + or # wildcards, e.g. a/+ etc. are not supported.
+> 全体のパフォーマンス上の理由から、現在トピック統計はトピック名のみ対応しており、+や#のワイルドカードを含むトピックフィルター（例：a/+など）はサポートしていません。
 
-## Slow Subscriptions
+## 遅延サブスクリプション
 
-Click on **Slow Subscriptions** under the **Diagnose** menu on the left to go to the Slow Subscriptions page. To use slow subscription statistics, you need to enable this feature after setting up the base settings for slow subscriptions. A description of the individual configuration items can be found in [slow subscriptions](../observability/slow-subscribers-statistics.md#configure-and-enable-slow-subscriptions). When enabled, messages whose time consumption for the full flow of message delivery exceeds the configured `time delay threshold` will participate in the statistics. By default, the statistics list shows the subscriber and subject information in descending order of latency. Clicking on the `Client ID` will redirect you to the subscriber's connection details page, where you can view the connection information to investigate the cause of the slow subscription.
+左側の診断メニューから**遅延サブスクリプション**をクリックすると、遅延サブスクリプションページに移動します。遅延サブスクリプション統計を利用するには、まず基本設定を行いこの機能を有効化する必要があります。各設定項目の説明は[遅延サブスクリプション](../observability/slow-subscribers-statistics.md#configure-and-enable-slow-subscriptions)をご参照ください。有効化すると、メッセージ配信の全フローで設定した`time delay threshold`を超える時間を消費したメッセージが統計対象となります。統計リストはデフォルトでレイテンシの降順でサブスクライバーとトピック情報を表示します。`Client ID`をクリックすると該当サブスクライバーの接続詳細ページに遷移し、接続情報を確認して遅延の原因を調査できます。
 
-<img src="./assets/slow-sub.png" alt="image" style="zoom:67%;" />
+<img src="./assets/slow-sub.png" alt="遅延サブスクリプション画面" style="zoom:67%;" />
 
-## Log Trace
+## ログトレース
 
-Click on **Log Trace** under the **Diagnose** menu on the left to go to the Log Trace page. If you need to filter logs in real time for a specific client, Topic or IP for debugging and troubleshooting purposes, you can use the Log Trace feature. Click on the `Create` button in the top right corner of the page and select the object you want to trace, where the client ID and IP need to be entered exactly and the Topic supports wildcard matching in addition to exact matching. You can also manually stop a trace in progress in the list; stopped traces can be deleted from the list.
+左側の診断メニューから**ログトレース**をクリックすると、ログトレースページに移動します。特定のクライアント、トピック、IPのログをリアルタイムでフィルタリングし、デバッグやトラブルシューティングに利用できます。ページ右上の`作成`ボタンをクリックし、トレース対象を選択します。クライアントIDとIPは完全一致で入力し、トピックは完全一致に加えワイルドカードマッチングもサポートします。進行中のトレースはリストから手動で停止可能で、停止済みのトレースはリストから削除できます。
 
-<img src="./assets/log-trace.png" alt="image" style="zoom:67%;" />
+<img src="./assets/log-trace.png" alt="ログトレース画面" style="zoom:67%;" />
 
-You can see all current traces in the list and view or download the logs of a particular trace. In a clustered environment, clicking the `Download` button in the list downloads the logs of the node corresponding to the Dashboard; clicking the `View` button allows you to select a node for viewing and downloading the logs.
+リストで現在のすべてのトレースを確認でき、特定のトレースのログを閲覧またはダウンロード可能です。クラスター環境では、リストの`ダウンロード`ボタンをクリックするとダッシュボードに対応するノードのログがダウンロードされ、`表示`ボタンをクリックするとログの閲覧・ダウンロード用にノードを選択できます。
 
 ![image](./assets/log-trace-detail.png)

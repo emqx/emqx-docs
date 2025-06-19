@@ -1,8 +1,7 @@
-# Known Issues in EMQX 5.3
+# EMQX 5.3 の既知の問題
 
 ## e5.3.0
 
-- **Limitation in SAML-Based SSO**
+- **SAMLベースのSSOの制限**
 
-  EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity.
-
+  EMQXダッシュボードは、Security Assertion Markup Language（SAML）2.0標準に基づくシングルサインオンをサポートしており、OktaやOneLoginをアイデンティティプロバイダーとして統合しています。しかし、SAMLベースのSSOは現在、証明書署名検証機構をサポートしておらず、その複雑さからAzure Entra IDとは互換性がありません。

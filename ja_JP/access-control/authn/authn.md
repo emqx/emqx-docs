@@ -1,206 +1,205 @@
-# Authentication
+# 認証
 
-Authentication is the process of verifying the identity of a client. It is an essential part of most applications and can help to protect our services from illegal client connections. 
+認証とは、クライアントの身元を検証するプロセスです。ほとんどのアプリケーションにおいて不可欠な要素であり、不正なクライアント接続からサービスを保護するのに役立ちます。
 
-EMQX supports several authentication mechanisms and also supports [TLS X.509](https://en.wikipedia.org/wiki/X.509) certificate authentication and [TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279) authentication, which offers an option for the authentication request between the client and the server side. 
+EMQXは複数の認証機構をサポートしており、[TLS X.509](https://en.wikipedia.org/wiki/X.509)証明書認証や[TLS-PSK](https://www.rfc-editor.org/rfc/rfc4279)認証もサポートしています。これにより、クライアントとサーバー間の認証要求に対する選択肢が提供されます。
 
-This section covers the basic concepts of identity authentication and the settings. 
+本節では、身元認証の基本概念と設定方法について説明します。
 
 ::: tip
 
-By default, EMQX does not enable the authentication feature, meaning it allows all clients to connect. If you are using it in a production environment, configure at least one authentication method in advance.
+デフォルトでは、EMQXは認証機能を有効にしておらず、すべてのクライアントの接続を許可します。実運用環境で使用する場合は、少なくとも1つの認証方式を事前に設定してください。
 
 :::
 
-## Authentication Mechanism
+## 認証機構
 
-The authentication mechanisms supported in EMQX include:
+EMQXがサポートする認証機構は以下の通りです：
 
-- X.509 Certificate Authentication
-- JWT authentication
-- Username/password authentication
-- Enhanced authentication of MQTT 5.0
-- PSK Authentication
+- X.509証明書認証
+- JWT認証
+- ユーザー名／パスワード認証
+- MQTT 5.0の拡張認証
+- PSK認証
 
-### X.509 Certificate Authentication
+### X.509証明書認証
 
-EMQX supports [X.509 certificate authentication](./x509.md) for client authentication. Using X.509 certificate authentication in EMQX, clients and servers can establish trusted connections through TLS/SSL, ensuring the authenticity of communication parties and the integrity of the data transmitted. EMQX allows for both one-way and two-way authentication: one-way authentication, where only the server is authenticated by the client, and two-way authentication, where both client and server mutually verify each other's certificates. This flexibility caters to various levels of security requirements and deployment scenarios.
+EMQXはクライアント認証のために[X.509証明書認証](./x509.md)をサポートしています。EMQXでX.509証明書認証を使用すると、クライアントとサーバーはTLS/SSLを通じて信頼できる接続を確立し、通信相手の真正性と送信データの完全性を保証します。EMQXは片方向認証（クライアントがサーバーのみを認証）と双方向認証（クライアントとサーバーがお互いの証明書を検証）をサポートしており、様々なセキュリティ要件や展開シナリオに対応可能です。
 
-### JWT Authentication
+### JWT認証
 
-[JSON Web Token (JWT)](https://jwt.io/) is a token-based authentication mechanism that does not rely on the server to retain client authentication or session information.
+[JSON Web Token (JWT)](https://jwt.io/)は、サーバーがクライアントの認証情報やセッション情報を保持しないトークンベースの認証機構です。
 
-The client carries the JWT in the connection request, and EMQX uses the pre-configured secret or public key to verify the JWT signature. If the user configures a JWKS endpoint, the JWT authenticator verifies the JWT signature using the list of public keys queried from the JWKS endpoint.
+クライアントは接続要求時にJWTを携帯し、EMQXは事前に設定されたシークレットまたは公開鍵を使ってJWT署名を検証します。ユーザーがJWKSエンドポイントを設定している場合、JWT認証器はJWKSエンドポイントから取得した公開鍵リストを用いてJWT署名を検証します。
 
-### Password Authentication
+### パスワード認証
 
-EMQX supports the simplest and most popular password authentication, which requires the client to provide credentials indicating identities, such as username, client ID, and the corresponding password. In some cases, users may choose to use some fields in the TLS certificate (such as the certificate's Common Name) as the client's identity credentials. Either way, these credentials are stored in advance in a database, where passwords are usually stored in salted and hashed forms.
+EMQXは最もシンプルで一般的なパスワード認証をサポートしており、クライアントはユーザー名、クライアントID、対応するパスワードなどの認証情報を提供する必要があります。場合によっては、TLS証明書の一部フィールド（例：証明書のCommon Name）をクライアントの識別情報として使用することも可能です。いずれの場合も、これらの認証情報は事前にデータベースに保存されており、パスワードは通常ソルト付きハッシュ形式で保存されます。
 
-This is how password authentication in EMQX works: The client will carry the identity credentials when initiating a connect request, EMQX will query the database for the hashed password corresponding to the identity credentials provided by the client, and will only accept the connection after the match is successful.
+EMQXにおけるパスワード認証の流れは以下の通りです：クライアントは接続要求時に認証情報を携帯し、EMQXはクライアントが提供した認証情報に対応するハッシュ化されたパスワードをデータベースから照会し、一致した場合にのみ接続を許可します。
 ![emqx-authn-flow](./assets/emqx-authn-flow.png)
 
-Besides the built-in database, EMQX also supports integration with various backend databases for password authentication, including MySQL, PostgreSQL, MongoDB, and Redis.
+組み込みデータベースのほか、EMQXはMySQL、PostgreSQL、MongoDB、Redisなどの各種バックエンドデータベースとの統合もサポートしています。
 
-EMQX can also be configured to delegate authentication work to external services, such as an HTTP server developed by our users.
+また、EMQXはユーザーが開発したHTTPサーバーなど外部サービスに認証処理を委譲する設定も可能です。
 
-### MQTT 5.0 Enhanced Authentication
+### MQTT 5.0 拡張認証
 
-[MQTT 5.0 enhanced authentication](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication) extends the basic authentication to include challenge/response style authentication. The implementation of enhanced authentication allows the use of various more secure authentication mechanisms, such as Salted Challenge Response Authentication Mechanism (SCRAM) authentication, Kerberos authentication, etc. The concrete EMQX implementation of the enhanced authentication supports SCRAM user management through our built-in database and external HTTP services.
+[MQTT 5.0拡張認証](https://www.emqx.com/en/blog/mqtt5-enhanced-authentication)は、基本認証を拡張しチャレンジ／レスポンス方式の認証を含みます。拡張認証の実装により、SCRAM認証やKerberos認証など、より安全な認証機構の利用が可能になります。EMQXの拡張認証実装は、組み込みデータベースおよび外部HTTPサービスを通じたSCRAMユーザー管理をサポートしています。
 
-### PSK Authentication
+### PSK認証
 
-[PSK authentication](../../network/psk-authentication.md) in EMQX provides a simpler yet secure alternative to certificate-based TLS. It relies on a shared secret key known both to the client and the server, bypassing the need for digital certificates. This mechanism is particularly useful in resource-constrained environments, where the overhead of handling certificates can be significant.
+EMQXの[PSK認証](../../network/psk-authentication.md)は、証明書ベースのTLSに代わるよりシンプルかつ安全な方法を提供します。クライアントとサーバーが共有する秘密鍵に基づくため、デジタル証明書を必要としません。この機構は、証明書処理のオーバーヘッドが大きいリソース制約環境で特に有効です。
 
-## EMQX Authenticator
+## EMQX認証器
 
-EMQX supports below authentication methods (referred to as authenticator hereafter) based on the authentication mechanism and backend database used: 
+EMQXは、認証機構およびバックエンドデータベースに基づき、以下の認証方式（以下「認証器」と呼びます）をサポートしています。
 
-| Mechanism      | Database          | Description                                                  |
-| -------------- | ----------------- | ------------------------------------------------------------ |
-| Password-Based | Built-in Database | [Authentication with Mnesia database as credential storage](./mnesia.md) |
-| Password-Based | MySQL             | [Authentication with MySQL database as credential storage](mysql.md) |
-| Password-Based | PostgreSQL        | [Authentication with PostgreSQL database as credential storage](postgresql.md) |
-| Password-Based | MongoDB           | [Authentication with MongoDB database as credential storage](./mongodb.md) |
-| Password-Based | Redis             | [Authentication with Redis database as credential storage](./redis.md) |
-| Password-Based | LDAP              | [Authentication with LDAP server as credential storage](./ldap.md) |
-| Password-Based | HTTP Server       | [Authentication using external HTTP API for credential verification](./http.md) |
-| JWT            |                   | [Authentication using JWT](./jwt.md)                         |
-| SCRAM          | Built-in Database | [Authentication using SCRAM](./scram.md)                     |
-| SCRAM          | HTTP Server       | [Authentication using RESP API-Based SCRAM](./scram_restapi.md) |
-| GSSAPI         | Kerberos          | [Authentication using GSSAPI with Kerberos](./kerberos.md)   |
-| Rule-Based     |                   | [Authentication using Client-info](./cinfo.md)                         |
+| 機構           | データベース        | 説明                                                         |
+| -------------- | ------------------- | ------------------------------------------------------------ |
+| パスワードベース | 組み込みデータベース | [Mnesiaデータベースを認証情報ストレージとして利用する認証](./mnesia.md) |
+| パスワードベース | MySQL               | [MySQLデータベースを認証情報ストレージとして利用する認証](mysql.md) |
+| パスワードベース | PostgreSQL          | [PostgreSQLデータベースを認証情報ストレージとして利用する認証](postgresql.md) |
+| パスワードベース | MongoDB             | [MongoDBデータベースを認証情報ストレージとして利用する認証](./mongodb.md) |
+| パスワードベース | Redis               | [Redisデータベースを認証情報ストレージとして利用する認証](./redis.md) |
+| パスワードベース | LDAP                | [LDAPサーバーを認証情報ストレージとして利用する認証](./ldap.md) |
+| パスワードベース | HTTPサーバー        | [外部HTTP APIを利用した認証情報検証認証](./http.md)          |
+| JWT            |                     | [JWTを利用した認証](./jwt.md)                               |
+| SCRAM          | 組み込みデータベース | [SCRAMを利用した認証](./scram.md)                           |
+| SCRAM          | HTTPサーバー        | [RESP APIベースのSCRAM認証](./scram_restapi.md)              |
+| GSSAPI         | Kerberos            | [Kerberosを用いたGSSAPI認証](./kerberos.md)                  |
+| ルールベース    |                     | [Client-infoを利用した認証](./cinfo.md)                      |
 
-## Authentication Chain
+## 認証チェーン
 
-EMQX supports the creation of an authentication chain, which allows multiple authenticators to be evaluated in a defined sequence. Each authenticator in the chain must be of a different type (e.g., one HTTP, one LDAP, one built-in database).
+EMQXは認証チェーンの作成をサポートしており、複数の認証器を定義された順序で評価できます。チェーン内の各認証器は異なるタイプ（例：HTTP、LDAP、組み込みデータベース）である必要があります。
 
 ::: tip
 
-Currently, EMQX only supports creating an authentication chain for MQTT clients. Gateways do not support authentication chains and should use a single authenticator instead.
+現時点でEMQXはMQTTクライアント向けの認証チェーンのみサポートしています。ゲートウェイは認証チェーンをサポートせず、単一の認証器を使用してください。
 
 :::
 
-When the X.509 certificate-based authentication is applied, it is always executed before performing the authentication chain.
+X.509証明書ベースの認証が適用されている場合、認証チェーンの実行前に必ず実行されます。
 
-### How the Authentication Chain Works
+### 認証チェーンの動作
 
-With the authentication chain configured, EMQX first tries to retrieve the matching authentication information from the first authenticator, if fails, it switches to the next authenticator to continue the process. 
+認証チェーンが設定されている場合、EMQXはまず最初の認証器から認証情報の取得を試み、失敗した場合は次の認証器へ処理を移します。
 
-Here’s how it works, using password-based authentication as an example:
+パスワード認証を例に動作を説明します：
 
-1. **Evaluate Preconditions (if configured):**
-   If the authenticator has a [precondition](#authenticator-preconditions), EMQX first evaluates the expression based on client attributes information (e.g., `listener`, `clientid`, `username`).
-   - If the expression evaluates to `true`, the authenticator is invoked.
-   - If not, the authenticator is skipped.
-2. **Execute the Authenticator:**
-   - If credentials are found and valid (e.g., the password is correct), the client is authenticated successfully and allowed to connect.
-   - If credentials are found but invalid, the client is denied access.
-   - If no credentials are found, EMQX moves to the next authenticator in the chain.
+1. **前提条件の評価（設定されている場合）：**  
+   認証器に[前提条件](#authenticator-preconditions)が設定されている場合、EMQXはクライアント属性情報（例：`listener`、`clientid`、`username`）に基づいて式を評価します。  
+   - 式が`true`の場合、認証器を呼び出します。  
+   - そうでない場合、認証器はスキップされます。  
+2. **認証器の実行：**  
+   - 認証情報が見つかり有効（例：パスワードが正しい）なら、クライアントは認証成功となり接続が許可されます。  
+   - 認証情報が見つかったが無効なら、クライアントはアクセス拒否されます。  
+   - 認証情報が見つからなければ、EMQXは次の認証器へ処理を移します。  
 
-3. **Skip on Error or Disabled:**
-   An authenticator will also be skipped if it is disabled, or if there is an internal error during execution, for example, if the database is unavailable.
-4. **Fallback Behavior:**
-   If all authenticators are skipped or none can authenticate the client, EMQX denies the connection by default.
+3. **エラーまたは無効時のスキップ：**  
+   認証器が無効化されている場合や実行中に内部エラー（例：データベースが利用不可）が発生した場合もスキップされます。  
+4. **フォールバック動作：**  
+   すべての認証器がスキップされるか、いずれもクライアントを認証できなかった場合、EMQXはデフォルトで接続を拒否します。
 
 ![](./assets/authn-chain.png)
 
-### Authenticator Preconditions
+### 認証器の前提条件
 
-Starting from EMQX 5.9, you can assign a precondition to each authenticator to control whether it should be invoked for a given client. A precondition is a [Variform expression](../../configuration/configuration.md#variform-expressions) that evaluates client attributes (such as `listener`, `username`, `clientid`, etc.). If the expression does not evaluate to `true`, the authenticator is skipped.
+EMQX 5.9以降、各認証器に前提条件を割り当てて、特定のクライアントに対して認証器を呼び出すか制御できます。前提条件は[Variform式](../../configuration/configuration.md#variform-expressions)であり、クライアント属性（`listener`、`username`、`clientid`など）を評価します。式が`true`でない場合、認証器はスキップされます。
 
-This feature enables conditional logic in the authentication chain. It allows for fine-grained control over authentication logic, such as applying different authenticators for clients connecting through different listeners or based on client attributes. EMQX can then invoke authenticators only when appropriate and avoid unnecessary requests to external systems.
+この機能により認証チェーン内で条件分岐が可能となり、例えば異なるリスナー経由のクライアントに異なる認証器を適用するなど、細かな認証ロジック制御が可能です。EMQXは適切な場合にのみ認証器を呼び出し、不要な外部システムへのリクエストを回避します。
 
-#### Supported Client Attributes in Precondition
+#### 前提条件でサポートされるクライアント属性
 
-Supported client attributes in a precondition include:
+前提条件で利用可能なクライアント属性は以下の通りです：
 
-- `username`: The username of the client
-- `password`: The password of the client
-- `clientid`: The client ID of the client
-- `client_attrs.*`: The client attributes of the client
-- `cert_common_name`: The subject field from the client's TLS certificate
-- `cert_subject`: The Common Name (CN) from the client's TLS certificate
-- `peersni`: The SNI (Server Name Indication) sent by the TLS client
-- `listener`: The listener ID (e.g. `tcp:default`)
-- `zone`: The associated config zone
+- `username`: クライアントのユーザー名
+- `password`: クライアントのパスワード
+- `clientid`: クライアントID
+- `client_attrs.*`: クライアント属性
+- `cert_common_name`: クライアントTLS証明書のSubjectフィールド
+- `cert_subject`: クライアントTLS証明書のCommon Name (CN)
+- `peersni`: TLSクライアントが送信したSNI（Server Name Indication）
+- `listener`: リスナーID（例：`tcp:default`）
+- `zone`: 関連付けられた設定ゾーン
 
-#### Precondition Examples
+#### 前提条件の例
 
-To authenticate clients connected via different listeners using different authenticators:
+異なるリスナー経由のクライアントに異なる認証器を適用する例：
 
-- HTTP authenticator for clients on `tcp:default`:
+- `tcp:default`のクライアントに対してHTTP認証器を適用：
 
   ```
   str_eq(listener, 'tcp:default')
   ```
 
-- PostgreSQL authenticator for clients on `ssl:default`:
+- `ssl:default`のクライアントに対してPostgreSQL認証器を適用：
 
   ```
   str_eq(listener, 'ssl:default')
   ```
 
-## External Resource Cache
+## 外部リソースキャッシュ
 
-EMQX provides a node-level caching mechanism for authentication results retrieved from external backends, such as MySQL, MongoDB, or Redis. This cache is designed to improve the performance of authentication result lookups and reduce repeated access to external resources, especially in high-throughput environments.
+EMQXはMySQL、MongoDB、Redisなどの外部バックエンドから取得した認証結果をノードレベルでキャッシュする機構を提供しています。このキャッシュは認証結果の検索性能を向上させ、特に高スループット環境での外部リソースへの繰り返しアクセスを削減します。
 
-::: tip Note
+::: tip 注意
 
-The external resource cache applies only to external data sources. For local sources such as the built-in database authenticators, EMQX does not use this cache.
+外部リソースキャッシュは外部データソースにのみ適用されます。組み込みデータベース認証器などローカルソースには適用されません。
 
 :::
 
-### How External Resource Cache Works
+### 外部リソースキャッシュの動作
 
-The external resource cache stores authentication results at the node level. These results are shared across all client sessions on the same node and help avoid redundant queries to external authentication backends.
+外部リソースキャッシュはノード単位で認証結果を保存し、同一ノード上のすべてのクライアントセッションで共有されます。これにより、外部認証バックエンドへの冗長な問い合わせを回避します。
 
-1. A client connects and triggers authentication.
-2. EMQX checks the cache for a previously stored result:
-   - If a valid result is found, it counts as a **Cache Hit**, and no call to the external backend is made.
-   - If no result is found, it counts as a **Cache Miss**, and EMQX queries the external backend.
+1. クライアントが接続し認証をトリガーする。  
+2. EMQXはキャッシュに以前の認証結果があるか確認する：  
+   - 有効な結果があれば**キャッシュヒット**となり、外部バックエンドへの呼び出しは行われません。  
+   - 結果がなければ**キャッシュミス**となり、EMQXは外部バックエンドに問い合わせます。  
+3. バックエンドから返された結果は将来の利用のためキャッシュに保存され、**キャッシュ挿入**メトリクスが増加します。
 
-3. The result returned from the backend is stored in the cache for future use, incrementing the **Cache Insert** metric.
+この仕組みによりレイテンシが低減され、バックエンドの負荷を抑えつつシステムの応答性を維持します。
 
-This mechanism helps reduce latency, minimize backend usage, and maintain system responsiveness under load.
-
-### Enable and Configure External Resource Cache
+### 外部リソースキャッシュの有効化と設定
 
 <!--@include: ../config-external-resource-cache.md-->
 
-### Monitor External Resource Cache Status
+### 外部リソースキャッシュの状態監視
 
 <!--@include: ../monitor-cache-status.md-->
 
-## Super User
+## スーパーユーザー
 
-Usually, authentication only verifies the client's identity credentials, and whether the client has the right to publish and subscribe to certain topics is determined by the authorization system. But EMQX also provides a super user role and a permission preset feature to facilitate the follow-up publish/subscribe authorization steps.
+通常、認証はクライアントの身元確認のみを行い、特定トピックのパブリッシュ／サブスクライブ権限は認可システムで判断されます。しかしEMQXはスーパーユーザー役割と権限プリセット機能を提供し、その後のパブリッシュ／サブスクライブ権限設定を容易にします。
 
 ::: tip
 
-Permission preset is supported in JWT and HTTP authentication. An [Access Control List (ACL)](./acl.md) of publish/subscribe permissions owned by the current client will be carried via the JWT Payload and HTTP response body. Permissions will be preset to the client after passing the authentication.
+権限プリセットはJWT認証およびHTTP認証でサポートされています。現在のクライアントが所有するパブリッシュ／サブスクライブ権限の[アクセス制御リスト（ACL）](./acl.md)はJWTペイロードやHTTPレスポンスボディに含まれ、認証通過後にクライアントへプリセットされます。
 
 :::
 
-You can check if a user is a superuser with the  `is_superuser` field in a database query, HTTP response, or JWT claims.
+ユーザーがスーパーユーザーかどうかは、データベースクエリ、HTTPレスポンス、JWTクレームの`is_superuser`フィールドで確認できます。
 
-## Password Hashing
+## パスワードハッシュ化
 
-Storing a password in plain text would mean that anyone who looked through the database would be able to just read the user’s passwords. Therefore it is recommended to use password hashing algorithms to store the password as the generated hash. EMQX supports a variety of password hashing algorithms to meet various security requirements.
+パスワードを平文で保存すると、データベースを覗いた誰もがパスワードを読み取れてしまいます。したがって、パスワードはハッシュ化アルゴリズムを用いて生成されたハッシュ値として保存することが推奨されます。EMQXは様々なパスワードハッシュ化アルゴリズムをサポートし、多様なセキュリティ要件に対応しています。
 
-Besides, EMQX also supports adding salt to hashing, the unique hash produced by adding the salt (password_hash) can protect us against different attacks. 
+また、EMQXはソルトをハッシュに加えることもサポートしており、ソルトを加えたユニークなハッシュ（password_hash）は様々な攻撃から保護します。
 
-### Workflow
+### ワークフロー
 
-The workflow of password hashing is as follows:
+パスワードハッシュ化のワークフローは以下の通りです：
 
-1. EMQX authenticator uses the configured query statement to query qualified identity credentials from the database, including hashed passwords and salt values;
-2. When a client tries to connect, EMQX authenticator hashes the password provided by the client with the configured hash algorithm and the queried salt value;
-3. EMQX authenticator compares the hash password queried from the database in step 1 with the hash value calculated in step 2. If they match, it allows the permission request.
+1. EMQX認証器は設定されたクエリ文を用いて、データベースからハッシュ化パスワードやソルト値を含む適格な認証情報を照会します。  
+2. クライアントが接続を試みると、EMQX認証器はクライアントが提供したパスワードを設定されたハッシュアルゴリズムと照会したソルト値でハッシュ化します。  
+3. EMQX認証器はステップ1で照会したハッシュパスワードとステップ2で計算したハッシュ値を比較し、一致すれば接続を許可します。
 
-Below is the hashing algorithms EMQX supports: 
+以下はEMQXがサポートするハッシュアルゴリズムの例です：
 
 ```
-# simple algorithms
+# シンプルなアルゴリズム
 password_hash_algorithm {
   name = sha256             # plain, md5, sha, sha512
   salt_position = suffix    # prefix, disable
@@ -216,87 +215,87 @@ password_hash_algorithm {
   name = pbkdf2
   mac_fun = sha256          # md4, md5, ripemd160, sha, sha224, sha384, sha512
   iterations = 4096
-  dk_length = 32           # optional, Unit: Byte
+  dk_length = 32           # オプション、単位：バイト
 }
 ```
 
-Note that there can be large performance differences between different hashing algorithms, so use your discretion. For reference, here are the average runtimes achieved after running each hashing algorithm 100 times on a 4-core 8GB machine:
+ハッシュアルゴリズムによって性能に大きな差があるため、用途に応じて選択してください。参考までに、4コア8GBマシンで各アルゴリズムを100回実行した平均実行時間は以下の通りです：
 
 ![](./assets/hash-compare.png)
 
-## Authentication Placeholders
+## 認証プレースホルダー
 
-EMQX supports using placeholders in the query statements and HTTP requests. During the authentication step, these placeholders will be replaced with actual client information to construct a query or HTTP request that matches the current client.
+EMQXはクエリ文やHTTPリクエスト内でプレースホルダーを使用可能です。認証時にこれらのプレースホルダーは実際のクライアント情報に置換され、現在のクライアントに合致したクエリやHTTPリクエストが構築されます。
 
-A valid placeholder follows the format `${PATH.TO.VALUE}`, where PATH.TO.VALUE is a dot-notated path to a value in an object. Valid characters include letters, digits, dots (`.`), and underscores (`_`). Placeholders containing unsupported characters will be treated as plain text. 
+有効なプレースホルダーは`${PATH.TO.VALUE}`の形式で、PATH.TO.VALUEはオブジェクト内の値へのドット区切りパスです。使用可能な文字は英数字、ドット（`.`）、アンダースコア（`_`）です。サポートされない文字を含むプレースホルダーは単なるテキストとして扱われます。
 
-For example, in EMQX MySQL authenticator, The default query SQL uses the placeholder `${username}`: 
+例えば、EMQXのMySQL認証器ではデフォルトのクエリSQLに`${username}`プレースホルダーが使われています：
 
 ```
 SELECT password_hash, salt FROM mqtt_user where username = ${username} LIMIT 1
 ```
 
-So, when a client (name: `emqx_u`) initiates a connect request, the constructed query statement is like: 
+したがって、クライアント（名前：`emqx_u`）が接続要求を送ると、構築されるクエリは以下のようになります：
 
 ```
 SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 ```
 
-EMQX currently supports the following placeholders:
+EMQXがサポートするプレースホルダーは以下の通りです：
 
-- `${clientid}`:  It will be replaced by the client ID at runtime. The client ID is normally explicitly specified by the client in the `CONNECT` packet. If `use_username_as_clientid` or `peer_cert_as_clientid` is enabled, this field will be overridden by the username, fields in the certificate, or the content of the certificate.
+- `${clientid}`: 実行時にクライアントIDに置換されます。クライアントIDは通常`CONNECT`パケットで明示的に指定されますが、`use_username_as_clientid`や`peer_cert_as_clientid`が有効な場合はユーザー名や証明書のフィールド、証明書内容に上書きされます。
 
-- `${username}`: It will be replaced with the username at runtime. The username comes from the `Username` field in the `CONNECT` packet. If `peer_cert_as_username` is enabled, it will be overridden by the fields or the content of the certificate.
+- `${username}`: 実行時にユーザー名に置換されます。ユーザー名は`CONNECT`パケットの`Username`フィールドから取得されます。`peer_cert_as_username`が有効な場合は証明書のフィールドや内容に上書きされます。
 
-- `${password}`: It will be replaced with the password at runtime. The password comes from the `Password` field in the `CONNECT` packet.
+- `${password}`: 実行時にパスワードに置換されます。パスワードは`CONNECT`パケットの`Password`フィールドから取得されます。
 
-- `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
+- `${peerhost}`: 実行時にクライアントのIPアドレスに置換されます。EMQXは[Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)をサポートしており、TCPプロキシやロードバランサーの背後に配置されていても実際のIPアドレスを取得可能です。
 
-- `${peerport}`: It will be replaced with the client's IP port at runtime.
+- `${peerport}`: 実行時にクライアントのIPポートに置換されます。
 
-- `${peername}`:  It will be replaced with the client's IP address and port at runtime, and the format is `IP: PORT`.
+- `${peername}`: 実行時にクライアントのIPアドレスとポートに置換され、形式は`IP:PORT`です。
 
-- `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+- `${cert_subject}`: 実行時にクライアントTLS証明書のSubjectに置換されます。ロードバランサーがクライアント証明書情報をTCPリスナーに送信する場合、Proxy Protocol v2を使用していることを確認してください。
 
-- `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+- `${cert_common_name}`: 実行時にクライアントTLS証明書のCommon Nameに置換されます。ロードバランサーがクライアント証明書情報をTCPリスナーに送信する場合、Proxy Protocol v2を使用していることを確認してください。
 
-- `${client_attrs.NAME}`: A client attribute. `NAME` will be replaced by an attribute name set based on predefined configurations at runtime. For details about the client attributes, see [MQTT Client Attributes](../../client-attributes/client-attributes.md).
+- `${client_attrs.NAME}`: クライアント属性。`NAME`は事前設定に基づく属性名に置換されます。クライアント属性の詳細は[MQTT Client Attributes](../../client-attributes/client-attributes.md)を参照してください。
 
-- `${zone}`: It will be replaced with the client's Zone at runtime. The `${zone}` placeholder can be used directly in authentication templates. For details about the Zone configuration, see [Zone Override](../../configuration/configuration.md#zone-override).
+- `${zone}`: 実行時にクライアントのゾーンに置換されます。`${zone}`プレースホルダーは認証テンプレート内で直接使用可能です。ゾーン設定の詳細は[Zone Override](../../configuration/configuration.md#zone-override)を参照してください。
 
-  For example, the following ACL rule uses `${zone}` to dynamically apply permissions based on a client’s assigned Zone:
+  例えば、以下のACLルールは`${zone}`を用いてクライアントの割り当てゾーンに応じて動的に権限を適用します：
 
   ```
   {allow, all, all, ["${zone}/${username}/#"]}
   ```
 
-## Configure Authentication
+## 認証の設定
 
-EMQX provides three ways to configure the authentication: Dashboard, Configuration file and HTTP API.
+EMQXは認証の設定方法として、ダッシュボード、設定ファイル、HTTP APIの3つを提供しています。
 
-### Configure Authentication via Dashboard
+### ダッシュボードによる認証設定
 
-EMQX Dashboard is an intuitive way to configure EMQX authenticators, where you can check their status or customize the settings. For example, as shown in the screenshot below, you have configured 2 authenticators: password authentication based on built-in database and JWT authentication. 
+EMQXダッシュボードは認証器の設定や状態確認を直感的に行える方法です。例えば、下図のように組み込みデータベースベースのパスワード認証とJWT認証の2つの認証器を設定できます。
 
 ![](./assets/authn-dashboard-2.png)
 
-### Configure Authentication via Configuration File
+### 設定ファイルによる認証設定
 
-You can also configure EMQX authenticators with our configuration file. 
+設定ファイルでもEMQX認証器を設定可能です。
 
-For example, as shown in the `authentication` field below, we have created an authentication chain with multiple authenticators, these authenticators will run in the order as they are in the configuration file. 
+例えば、以下の`authentication`フィールドでは複数の認証器からなる認証チェーンを作成しており、設定ファイルに記載された順に認証器が実行されます。
 
 ```
 # base.hocon
 
-# Specific global authentication chain for all MQTT listeners
+# すべてのMQTTリスナーに対するグローバル認証チェーン
 authentication = [
   ...
 ]
 
 listeners.tcp.default {
   ...
-  # Specific authentication chain for the specified MQTT listener
+  # 指定したMQTTリスナーに対する認証チェーン
   authentication = [
     ...
   ]
@@ -304,7 +303,7 @@ listeners.tcp.default {
 
 gateway.stomp {
   ...
-  # Specific global authenticator for all STOMP listeners
+  # すべてのSTOMPリスナーに対するグローバル認証器
   authentication = {
     ...
   }
@@ -312,59 +311,58 @@ gateway.stomp {
 }
 ```
 
-Different types of authenticators have different configuration item requirements. For more information, you may refer to the Configuration chapter.<!--后续插入到对应章节的超链接-->
+認証器の種類によって設定項目は異なります。詳細は設定章を参照してください。<!--後続で対応章へのリンク挿入予定-->
 
-### Configure Authentication via HTTP API
+### HTTP APIによる認証設定
 
-Compared with the configuration file, the HTTP API is more convenient to use and supports runtime updates, which can automatically synchronize configuration changes to the entire cluster.
+設定ファイルに比べ、HTTP APIはより便利でランタイム更新をサポートし、設定変更をクラスタ全体に自動同期できます。
 
-You can manage EMQX authentication chains and authenticators via EMQX authentication API, for example, to create a global authenticator, or to update the configuration of a specific authenticator.
+EMQX認証APIを通じて認証チェーンや認証器の管理が可能で、グローバル認証器の作成や特定認証器の設定更新などが行えます。
 
-- `/api/v5/authentication`: API endpoint for managing global MQTT authentications;
-- `/api/v5/gateway/{protocol}/authentication`: API endpoint for managing global authentication for other access protocols;
-- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: API endpoint for managing authentication of listeners for other access protocols;
+- `/api/v5/authentication`: グローバルMQTT認証管理用APIエンドポイント  
+- `/api/v5/gateway/{protocol}/authentication`: 他アクセスプロトコルのグローバル認証管理用APIエンドポイント  
+- `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 他アクセスプロトコルのリスナー認証管理用APIエンドポイント  
 
-#### Authenticator ID
+#### 認証器ID
 
-To operate on a specific authenticator, you need to append an authenticator ID to the above endpoints, such as `/api/v5/authentication/{id}`. To facilitate maintenance, the ID here is not automatically generated by EMQX and returned by the API, but follows a set of predefined specifications:
+特定の認証器を操作するには、上記エンドポイントに認証器IDを付加します（例：`/api/v5/authentication/{id}`）。IDはEMQXが自動生成してAPIで返すのではなく、以下の仕様に従います：
 
 ```
 <mechanism>:<backend>
 ```
 
-or:
+または：
 
 ```
 <mechanism>
 ```
 
-For example, 
+例：
 
-1. `password_based:built_in_database`
-2. `jwt`
-3. `scram:built_in_database`
+1. `password_based:built_in_database`  
+2. `jwt`  
+3. `scram:built_in_database`  
 
-We have a similar set of conventions for the listener ID:
+リスナーIDも同様に以下の規則に従います：
 
 ```bash
 <transport_protocol>:<name>
 ```
 
-The format of the gateway listener ID is to add the protocol name in front:
+ゲートウェイリスナーIDはプロトコル名を前に付けた形式です：
 
 ```bash
 <protocol>:<transport_protocol>:<name>
 ```
 
-Note that both authenticator IDs and listener IDs need to follow URL encoding conventions when they are used in URLs, for example, we need to replace `:` with `%3A`:
+認証器IDおよびリスナーIDはURLで使用する際、URLエンコード規則に従う必要があります。例えば、`:`は`%3A`に置換します：
 
 ```bash
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ```
 
-#### Data Operation API
+#### データ操作API
 
-For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
+[組み込みデータベース](./mnesia.md)および[MQTT 5.0拡張認証](./scram.md)を利用する認証では、認証データの作成、更新、削除、一覧取得を行うHTTP APIを提供しています。詳細は[HTTP APIでの認証データ管理](./user_management.md)を参照してください。
 
-For more detailed API requests and parameters, see [HTTP API](../../admin/api.md).
-
+詳細なAPIリクエストやパラメータは[HTTP API](../../admin/api.md)を参照してください。

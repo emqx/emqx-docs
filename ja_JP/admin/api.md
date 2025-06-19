@@ -1,54 +1,54 @@
 # REST API
 
-EMQX exposes an HTTP management API designed following OpenAPI (Swagger) 3.0 specification.
+EMQXはOpenAPI（Swagger）3.0仕様に準拠したHTTP管理APIを公開しています。
 
-After EMQX is started, you can visit [http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) to view the API document and execute the management APIs from the Swagger UI. By default, under the Dashboard configuration, `swagger_support` is set to `true`, indicating Swagger UI support is enabled, which means all Swagger-related features are turned on, such as generating interactive API documentation. You can also set it to `false` to disable this feature. For more information, see [Dashboard configuration](../configuration/dashboard.md).
+EMQX起動後、[http://localhost:18083/api-docs/index.html](http://localhost:18083/api-docs/index.html) にアクセスするとAPIドキュメントを閲覧でき、Swagger UIから管理APIを実行できます。デフォルトでは、Dashboardの設定で `swagger_support` が `true` に設定されており、Swagger UIが有効であることを示しています。これにより、インタラクティブなAPIドキュメントの生成など、Swagger関連機能がすべて有効になります。無効化したい場合は `false` に設定してください。詳細は[Dashboard設定](../configuration/dashboard.md)を参照してください。
 
-The section introduces how to work with EMQX REST API.
+本節ではEMQX REST APIの利用方法を紹介します。
 
-## Basic Path
+## 基本パス
 
-EMQX has version control on the REST API, all API paths from EMQX 5.0.0 start with `/api/v5`.
+EMQXのREST APIはバージョン管理されており、EMQX 5.0.0以降のすべてのAPIパスは `/api/v5` から始まります。
 
-## HTTP Headers
+## HTTPヘッダー
 
-Most API requests require the `Accept` header to be set to `application/json`, and then the response will be returned in JSON format unless otherwise specified.
+ほとんどのAPIリクエストでは `Accept` ヘッダーに `application/json` を設定する必要があり、指定がなければレスポンスはJSON形式で返されます。
 
-## HTTP Response Status Code
+## HTTPレスポンスステータスコード
 
-EMQX follows the [HTTP Response Status Code](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) standard. The possible status codes are as follows:
+EMQXは[HTTPレスポンスステータスコード](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)の標準に準拠しています。主なステータスコードは以下の通りです。
 
-| Codes | Description                                                  |
-| ----- | ------------------------------------------------------------ |
-| 200   | Request successfully, and the returned JSON data will provide more details |
-| 201   | Created successfully, and the new object will be returned in the Body |
-| 204   | Request successfully. Usually used for delete and update operations, and the returned Body will be empty |
-| 400   | Bad Request. Usually request body or parameter error         |
-| 401   | Unauthorized. API key expires or does not exist.             |
-| 403   | Forbidden. Check if the object is in use or has dependency constraints. |
-| 404   | Not Found. You can refer to the `message` field in the Body to check the reason |
-| 409   | Conflict. The object already exists or the number limit is exceeded |
-| 500   | Internal Server Error. Check the reason in the Body and logs |
+| コード | 説明                                                        |
+| ------ | ----------------------------------------------------------- |
+| 200    | リクエスト成功。返却されるJSONデータに詳細が含まれます。    |
+| 201    | 作成成功。新規オブジェクトがBodyに返されます。              |
+| 204    | リクエスト成功。通常は削除や更新操作で、Bodyは空です。      |
+| 400    | 不正なリクエスト。リクエストボディやパラメータのエラー。    |
+| 401    | 認証エラー。APIキーが期限切れまたは存在しません。            |
+| 403    | 禁止。オブジェクトが使用中、または依存関係の制約があります。|
+| 404    | 見つかりません。Bodyの `message` フィールドで理由を確認可能。|
+| 409    | コンフリクト。オブジェクトが既に存在するか、数の上限超過。  |
+| 500    | サーバ内部エラー。Bodyやログで原因を確認してください。      |
 
-## Authentication
+## 認証
 
-EMQX's REST API supports two main methods for authentication: basic Authentication using API keys and bearer token authentication.
+EMQXのREST APIは主にAPIキーを用いたBasic認証とBearerトークン認証の2種類をサポートしています。
 
-### Basic Authentication Using API Keys
+### APIキーを用いたBasic認証
 
-In this method, you use API keys and secret keys as the username and password to authenticate your API requests. EMQX's REST API follows [HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework), where these credentials are required. Before using the EMQX REST API, you must create an API key.
+この方法では、APIキーとシークレットキーをそれぞれユーザー名とパスワードとしてAPIリクエストを認証します。EMQXのREST APIは[HTTP Basic Authentication](https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#the_general_http_authentication_framework)に準拠しており、これらの認証情報が必要です。EMQX REST APIを利用する前にAPIキーを作成してください。
 
-::: tip Note
+::: tip 注意
 
-For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication.
+セキュリティ上の理由から、EMQX 5.0.0以降はDashboardユーザーの認証情報でREST APIを認証できません。代わりにAPIキーを作成し、認証に使用してください。
 
 :::
 
-#### Create API Keys
+#### APIキーの作成
 
-You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [System - API Keys](../dashboard/system.md#api-keys).
+Dashboardの **System** -> **API Key** から手動でAPIキーを作成できます。詳細は[System - API Keys](../dashboard/system.md#api-keys)を参照してください。
 
-You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
+また、ブートストラップファイル方式でAPIキーを作成することも可能です。以下の設定ファイルでファイルパスを指定します。
 
 ```bash
 api_key = {
@@ -56,13 +56,17 @@ api_key = {
 }
 ```
 
-In the specified file, add multiple API keys in the format `{API Key}:{Secret Key}:{?Role}`, separated by new lines:
+指定ファイル内に複数のAPIキーを以下の形式で改行区切りで記述します。
 
-- **API Key**: Any string as the key identifier.
-- **Secret Key**: Use a random string as the secret key.
-- **Role (optional)**: Specify the key's [role](#roles-and-permissions).
+```
+{API Key}:{Secret Key}:{?Role}
+```
 
-For example:
+- **API Key**：任意の文字列でキー識別子
+- **Secret Key**：ランダムな文字列をシークレットキーとして使用
+- **Role（任意）**：キーの[ロール](#roles-and-permissions)を指定
+
+例：
 
 ```bash
 my-app:AAA4A275-BEEC-4AF8-B70B-DAAC0341F8EB
@@ -70,23 +74,23 @@ ec3907f865805db0:Ee3taYltUKtoBVD9C3XjQl9C6NXheip8Z9B69BpUv5JxVHL:viewer
 foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 ```
 
-API keys created this way are valid indefinitely.
+この方法で作成したAPIキーは無期限で有効です。
 
-Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key and Role will be updated.
+EMQX起動時にファイル内のデータがAPIキーリストに追加され、既存のAPIキーがあればSecret KeyとRoleが更新されます。
 
-#### Roles and Permissions
+#### ロールと権限
 
-The REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
+REST APIはロールベースアクセス制御を実装しています。APIキー作成時に以下の3つの定義済みロールのいずれかを割り当てられます。
 
-- **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
-- **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.
-- **Publisher**: Designed specifically for MQTT message publishing, this role is limited to accessing APIs related to message publishing. The corresponding role identifier is `publisher`.
+- **Administrator**：すべてのリソースにアクセス可能。ロール指定がない場合のデフォルト。ロール識別子は `administrator`。
+- **Viewer**：リソースやデータの閲覧のみ可能。REST APIのすべてのGETリクエストに対応。ロール識別子は `viewer`。
+- **Publisher**：MQTTメッセージのパブリッシュ専用。メッセージパブリッシュ関連APIのみアクセス可能。ロール識別子は `publisher`。
 
-#### Authentication Method Using API Keys
+#### APIキーを用いた認証方法
 
-Once you have your API key and secret key, you can use them to authenticate your requests. The API key is used as the username and the secret key as the password for Basic Authentication.
+APIキーとシークレットキーを用いてリクエストを認証します。APIキーがユーザー名、シークレットキーがパスワードとしてBasic認証に利用されます。
 
-Examples in different languages:
+各言語での例：
 
 :::: tabs type:card
 :::tab cURL
@@ -231,23 +235,23 @@ axios
 :::
 ::::
 
-### Authentication Using Bearer Token
+### Bearerトークンを用いた認証
 
-As an alternative to API key-based authentication, you can use bearer tokens for secure and programmatic access to the EMQX REST API. To obtain a bearer token, send a request to the login API endpoint as described below.
+APIキー認証の代替として、Bearerトークンを使った安全かつプログラム的なEMQX REST APIアクセスが可能です。Bearerトークンは以下のログインAPIエンドポイントにリクエストを送信して取得します。
 
-#### Obtain a Bearer Token
+#### Bearerトークンの取得
 
-To request a bearer token, make an HTTP `POST` request to the following login API endpoint:
+以下のログインAPIエンドポイントにHTTP `POST` リクエストを送信してください。
 
 ```bash
 POST http://your-emqx-address:8483/api/v5/login
 ```
 
-**Headers:**
+**ヘッダー:**
 
 - `Content-Type: application/json`
 
-**Request Body:**
+**リクエストボディ:**
 
 ```json
 {
@@ -256,34 +260,34 @@ POST http://your-emqx-address:8483/api/v5/login
 }
 ```
 
-- Replace `your-emqx-address` with the address or IP of your EMQX node.
-- Replace `"admin"` and `"yourpassword"` with your EMQX Dashboard credentials.
+- `your-emqx-address` はEMQXノードのアドレスまたはIPに置き換えてください。
+- `"admin"` と `"yourpassword"` はEMQX Dashboardの認証情報に置き換えてください。
 
-The response will include the bearer token, which you can use to authenticate API requests.
+レスポンスにBearerトークンが含まれ、APIリクエストの認証に利用できます。
 
-#### Use Bearer Token for Authentication
+#### Bearerトークンを用いた認証方法
 
-Once you have the bearer token, include it in the `Authorization` header of your API requests, like this:
+Bearerトークンを取得したら、APIリクエストの `Authorization` ヘッダーに以下のように含めてください。
 
 ```bash
 --header "Authorization: Bearer <your-token>"
 ```
 
-## Pagination
+## ページネーション
 
-For some APIs with large amounts of data, pagination functionality is provided. There are 2 types of pagination methods based on the data characteristics.
+大量データを扱う一部APIではページネーション機能が提供されています。データの特性に応じて2種類のページネーション方式があります。
 
-### Page Number Pagination
+### ページ番号方式
 
-In most APIs that support pagination, you can control the pagination by using the `page` (page number) and `limit` (page size) parameters. The maximum page size is `10000`. If the `limit` parameter is not specified, the default is `100`.
+ページネーション対応APIの多くは、`page`（ページ番号）と `limit`（ページサイズ）パラメータで制御します。最大ページサイズは `10000` です。`limit` 指定がない場合はデフォルトで `100` となります。
 
-For example:
+例：
 
 ```bash
 GET /clients?page=1&limit=100
 ```
 
-In the response result, the `meta` field will contain pagination information. EMQX cannot predict the total number of data entries for requests using search conditions. Therefore, the `meta.hasnext` field indicates whether there is another page of data:
+レスポンスの `meta` フィールドにページネーション情報が含まれます。EMQXは検索条件付きリクエストの総件数を予測できないため、`meta.hasnext` フィールドで次ページの有無を示します。
 
 ```json
 {
@@ -297,19 +301,19 @@ In the response result, the `meta` field will contain pagination information. EM
 }
 ```
 
-### Cursor Pagination
+### カーソル方式
 
-In a few APIs where data changes rapidly, and page number pagination is inefficient, cursor pagination is used.
+データが急速に変化し、ページ番号方式が非効率な一部APIではカーソル方式を採用しています。
 
-You can specify the starting position of the data using the `position` or `cursor` (starting position) parameter, and the `limit` (page size) parameter specifies the number of entries loaded from the starting position. The maximum page size is `10000`. If the `limit` parameter is not specified, it defaults to `100`.
+`position` または `cursor`（開始位置）パラメータでデータの開始位置を指定し、`limit`（ページサイズ）パラメータで開始位置から取得する件数を指定します。最大ページサイズは `10000` です。`limit` 指定がない場合はデフォルトで `100` となります。
 
-For example:
+例：
 
 ```bash
 GET /clients/{clientid}/mqueue_messages?position=1716187698257189921_0&limit=100
 ```
 
-The `meta` field in the response will contain pagination information, with `meta.position` or `meta.cursor` indicating the starting position of the next page:
+レスポンスの `meta` フィールドにページネーション情報が含まれ、`meta.position` または `meta.cursor` に次ページの開始位置が示されます。
 
 ```json
 {
@@ -333,13 +337,13 @@ The `meta` field in the response will contain pagination information, with `meta
 }
 ```
 
-This pagination method efficiently handles scenarios where data changes rapidly, ensuring continuity and efficiency in data retrieval.
+この方式はデータ変動が激しいシナリオで連続性と効率性を確保します。
 
-## Error Codes
+## エラーコード
 
-Besides the HTTP response status codes, EMQX also defines a list of error codes to identify specific errors.
+HTTPレスポンスステータスコードに加え、EMQXは特定のエラーを識別するためのエラーコード一覧を定義しています。
 
-When an error happens, the error code is returned in JSON format by the Body:
+エラー発生時はBodyにJSON形式でエラーコードが返されます。
 
 ```bash
 # GET /clients/foo
@@ -350,36 +354,35 @@ When an error happens, the error code is returned in JSON format by the Body:
 }
 ```
 
-| Error Codes                                    | Description                                                  |
+| エラーコード                                   | 説明                                                         |
 | ---------------------------------------------- | ------------------------------------------------------------ |
-| WRONG_USERNAME_OR_PWD                          | Wrong username or password <img width=200/>                  |
-| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | Wrong username & password or key & secret                    |
-| BAD_REQUEST                                    | Request parameters not legal                                 |
-| NOT_MATCH                                      | Conditions not matched                                       |
-| ALREADY_EXISTS                                 | Resources already exist                                      |
-| BAD_CONFIG_SCHEMA                              | Configuration data not legal                                 |
-| BAD_LISTENER_ID                                | Bad listener ID                                              |
-| BAD_NODE_NAME                                  | Bad Node Name                                                |
-| BAD_RPC                                        | RPC Failed. Check the cluster status and the requested node status |
-| BAD_TOPIC                                      | Topic syntax error, topic needs to comply with the MQTT protocol standard |
-| EXCEED_LIMIT                                   | Resources to be created exceed the maximum limit or minimum limit |
-| INVALID_PARAMETER                              | Request parameters not legal and exceed the boundary value   |
-| CONFLICT                                       | Conflicting request resources                                |
-| NO_DEFAULT_VALUE                               | Request parameters do not use default values                 |
-| DEPENDENCY_EXISTS                              | Resource depends on other resources                          |
-| MESSAGE_ID_SCHEMA_ERROR                        | Message ID parsing error                                     |
-| INVALID_ID                                     | Bad ID schema                                                |
-| MESSAGE_ID_NOT_FOUND                           | Message ID does not exist                                    |
-| NOT_FOUND                                      | Resource not found or does not exist                         |
-| CLIENTID_NOT_FOUND                             | Client ID not found or does not exist                        |
-| CLIENT_NOT_FOUND                               | Client not found or does not exist(usually not an MQTT client) |
-| RESOURCE_NOT_FOUND                             | Resource not found                                           |
-| TOPIC_NOT_FOUND                                | Topic not found                                              |
-| USER_NOT_FOUND                                 | User not found                                               |
-| INTERNAL_ERROR                                 | Server inter error                                           |
-| SERVICE_UNAVAILABLE                            | Service unavailable                                          |
-| SOURCE_ERROR                                   | Source error                                                 |
-| UPDATE_FAILED                                  | Update fails                                                 |
-| REST_FAILED                                    | Reset source or configuration fails                          |
-| CLIENT_NOT_RESPONSE                            | Client not responding                                        |
-
+| WRONG_USERNAME_OR_PWD                          | ユーザー名またはパスワードが間違っています                  |
+| WRONG_USERNAME_OR_PWD_OR_API_KEY_OR_API_SECRET | ユーザー名＆パスワードまたはキー＆シークレットが間違っています |
+| BAD_REQUEST                                    | リクエストパラメータが不正です                               |
+| NOT_MATCH                                      | 条件が一致しません                                           |
+| ALREADY_EXISTS                                 | リソースが既に存在します                                     |
+| BAD_CONFIG_SCHEMA                              | 設定データが不正です                                         |
+| BAD_LISTENER_ID                                | リスナーIDが不正です                                         |
+| BAD_NODE_NAME                                  | ノード名が不正です                                           |
+| BAD_RPC                                        | RPC失敗。クラスター状態および対象ノードの状態を確認してください |
+| BAD_TOPIC                                      | トピックの構文エラー。トピックはMQTTプロトコル標準に準拠する必要があります |
+| EXCEED_LIMIT                                   | 作成リソースが最大または最小制限を超えています               |
+| INVALID_PARAMETER                              | リクエストパラメータが不正または境界値を超えています         |
+| CONFLICT                                       | リクエストリソースに競合があります                           |
+| NO_DEFAULT_VALUE                               | リクエストパラメータにデフォルト値が使用されていません       |
+| DEPENDENCY_EXISTS                              | リソースが他のリソースに依存しています                       |
+| MESSAGE_ID_SCHEMA_ERROR                        | メッセージIDの解析エラー                                     |
+| INVALID_ID                                     | IDスキーマが不正です                                         |
+| MESSAGE_ID_NOT_FOUND                           | メッセージIDが存在しません                                   |
+| NOT_FOUND                                      | リソースが見つかりません                                     |
+| CLIENTID_NOT_FOUND                             | クライアントIDが見つかりません                               |
+| CLIENT_NOT_FOUND                               | クライアントが見つかりません（通常はMQTTクライアントではない） |
+| RESOURCE_NOT_FOUND                             | リソースが見つかりません                                     |
+| TOPIC_NOT_FOUND                                | トピックが見つかりません                                     |
+| USER_NOT_FOUND                                 | ユーザーが見つかりません                                     |
+| INTERNAL_ERROR                                 | サーバ内部エラー                                             |
+| SERVICE_UNAVAILABLE                            | サービス利用不可                                             |
+| SOURCE_ERROR                                   | ソースエラー                                                 |
+| UPDATE_FAILED                                  | 更新失敗                                                   |
+| REST_FAILED                                    | リセットソースまたは設定失敗                                 |
+| CLIENT_NOT_RESPONSE                            | クライアントが応答しません                                   |

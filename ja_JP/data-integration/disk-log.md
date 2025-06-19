@@ -1,75 +1,75 @@
-# Ingest MQTT Data into Disk Log
-The Disk Log data integration allows EMQX to persist event data to disk in [JSON Lines](https://jsonlines.org/) format, similar to traditional rotating log files. This enables long-term event retention for troubleshooting or historical tracking.
+# MQTTデータをディスクログに取り込む
+ディスクログデータ統合により、EMQXはイベントデータを[JSON Lines](https://jsonlines.org/)形式でディスクに永続化できます。これは従来のローテートログファイルに似ており、トラブルシューティングや履歴追跡のための長期的なイベント保持を可能にします。
 
-This page provides a detailed introduction to the data integration between EMQX with Disk Log and offers practical guidance on the rule and Sink creation.
+本ページでは、EMQXとディスクログ間のデータ統合について詳しく解説し、ルールおよびSinkの作成方法を実践的に案内します。
 
-## How It Works
+## 動作概要
 
-While EMQX includes built-in system logging for monitoring operational events (such as errors, warnings, and system activities), the Disk Log integration serves a different purpose: it enables EMQX to persist actual MQTT message data and client-level events to disk for retention and offline processing.
+EMQXにはエラーや警告、システムアクティビティなどの運用イベントを監視するための組み込みシステムログがありますが、ディスクログ統合は異なる目的を持ちます。実際のMQTTメッセージデータやクライアントレベルのイベントをディスクに永続化し、保持およびオフライン処理を可能にします。
 
-Implemented using EMQX’s rule engine and Sink mechanism, the Disk Log integration enables users to define exactly what data is captured and how it should be stored:
+EMQXのルールエンジンとSink機構を用いて実装されており、ユーザーはどのデータをキャプチャし、どのように保存するかを正確に定義できます。
 
-1. Rules are used to filter, transform, and extract the data of interest from MQTT messages or client events.
-2. A Disk Log Sink is attached to the rule to define how and where to store the data. The Sink forwards the formatted data (as JSON) to the corresponding Connector.
-3. The Disk Log Connector manages the physical writing of data to the file system. It handles the log file path configuration, log file rotation policy, etc.
-4. Once the rule is triggered and the data is passed to the Sink, the Sink invokes the configured Connector to write the data in JSON Lines format to a specified local directory, making it easy to consume using standard tools and downstream data systems.
+1. ルールでMQTTメッセージやクライアントイベントから関心のあるデータをフィルター、変換、抽出します。
+2. ルールにディスクログSinkを紐付け、データの保存方法と場所を定義します。Sinkはフォーマット済みデータ（JSON形式）を対応するコネクターに転送します。
+3. ディスクログコネクターがファイルシステムへの物理的な書き込みを管理し、ログファイルパス設定やログローテーションポリシーなどを処理します。
+4. ルールがトリガーされデータがSinkに渡されると、Sinkは設定されたコネクターを呼び出してJSON Lines形式で指定のローカルディレクトリに書き込みます。これにより標準ツールや下流のデータシステムでの利用が容易になります。
 
-### Log Rotation
+### ログローテーション
 
-Disk Log integration writes messages to a specified local directory on the local file system. To manage storage usage, each log file is rotated based on file size and file count thresholds:
+ディスクログ統合はローカルファイルシステム上の指定ディレクトリにメッセージを書き込みます。ストレージ使用量を管理するため、ログファイルはファイルサイズとファイル数の閾値に基づいてローテーションされます。
 
-- EMQX opens a new file and continues writing when the configured maximum file size is reached.
-- When the configured maximum number of files is reached, the oldest file is truncated and opened for writing new entries.
-- Each log file is guaranteed to contain at least one complete entry, even if that entry exceeds the specified file size limit.
+- 設定された最大ファイルサイズに達すると、新しいファイルを開いて書き込みを続けます。
+- 設定された最大ファイル数に達すると、最も古いファイルが切り詰められ、新しいエントリの書き込みに使われます。
+- 各ログファイルには少なくとも1つの完全なエントリが含まれることが保証されます。たとえそのエントリが指定サイズを超えていてもです。
 
-## Features and Benefits
+## 特長とメリット
 
-Disk Log integration provides a flexible, lightweight, and local-first solution for MQTT message persistence. Below are the key features and advantages:
+ディスクログ統合はMQTTメッセージの永続化に対して柔軟で軽量、かつローカルファーストなソリューションを提供します。主な特長と利点は以下の通りです。
 
-- **Fine-Grained Data Control**: Log only the messages or events you care about using SQL-based rules. Apply transformation, filtering, and enrichment to message data before logging.
-- **Structured Output Format**: Stores data in JSON Lines for easy machine processing.
-- **Lightweight and Self-Contained**: No need to connect to external storage systems or databases.
-- **Observability and Debugging**: Enables message-level visibility for troubleshooting or audits. Complements EMQX system logs by recording data flow instead of system events.
+- **細粒度なデータ制御**：SQLベースのルールで必要なメッセージやイベントのみをログ化。ログ前に変換・フィルター・拡張が可能。
+- **構造化された出力形式**：JSON Lines形式でデータを保存し、機械処理が容易。
+- **軽量かつ自己完結型**：外部ストレージシステムやデータベースへの接続不要。
+- **可観測性とデバッグ**：メッセージレベルの可視化を実現し、トラブルシューティングや監査に有用。システムログと補完的に動作し、システムイベントではなくデータフローを記録。
 
-## Before You Start
+## はじめる前に
 
-This section introduces the preparations required before creating a Disk Log Sink in EMQX.
+このセクションでは、EMQXでディスクログSinkを作成する前の準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Understanding of [rules](./rules.md)
-- Understanding of [data integration](./data-bridges.md)
+- [ルール](./rules.md)の理解
+- [データ統合](./data-bridges.md)の理解
 
-### Create a Log Directory
+### ログディレクトリの作成
 
-Create a writable directory on the EMQX host for storing log files. The EMQX system user must have read/write permissions for this directory.
+EMQXホスト上にログファイルを保存するための書き込み可能なディレクトリを作成してください。EMQXのシステムユーザーがこのディレクトリに対して読み書き権限を持っている必要があります。
 
-## Create a Connector
+## コネクターの作成
 
-Before adding the Disk Log Sink, you need to create the corresponding connector.
+ディスクログSinkを追加する前に、対応するコネクターを作成する必要があります。
 
-1. Go to the Dashboard **Integration** -> **Connector** page.
-2. Click the **Create** button in the top right corner.
-3. Select **Disk Log** as the connector type and click **Next**.
-4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-disk-log`.
-5. Enter the connector parameters.
-   - **Log Filepath**: Path to the directory where logs will be stored.
-   - **Maximum File Size**: Maximum file size for each file before rotation. Note: At least one entry is written to each log, so the final file size may exceed this maximum if a single log entry exceeds this value.
-   - **Maximum Number of Files**: Maximum number of files to retain before rotating over older logs.
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can write logs to the configured path.
-7. Click the **Create** button at the bottom to complete the connector creation.
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
+2. 右上の **Create** ボタンをクリックします。
+3. コネクタータイプとして **Disk Log** を選択し、**Next** をクリックします。
+4. コネクター名を入力します。英数字の組み合わせで、ここでは `my-disk-log` と入力します。
+5. コネクターのパラメーターを入力します。
+   - **Log Filepath**：ログを保存するディレクトリのパス。
+   - **Maximum File Size**：ローテーション前の各ファイルの最大サイズ。注意：各ログには少なくとも1つのエントリが書き込まれるため、単一のログエントリがこの値を超える場合、最終的なファイルサイズはこの最大値を超えることがあります。
+   - **Maximum Number of Files**：古いログを上書きする前に保持するファイルの最大数。
+6. **Create** をクリックする前に、**Test Connectivity** をクリックして、設定したパスにログを書き込めるかテストできます。
+7. 画面下部の **Create** ボタンをクリックしてコネクター作成を完了します。
 
-You have now completed the connector creation and will proceed to create a rule and Sink for specifying the data to be written into the Disk Log.
+これでコネクターの作成が完了しました。次に、ディスクログに書き込むデータを指定するためのルールとSinkの作成に進みます。
 
-## Create a Rule with Disk Log Sink
+## ディスクログSink付きルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to local log files through the configured Sink.
+このセクションでは、EMQXでソースMQTTトピック `t/#` からメッセージを処理し、処理結果を設定済みのSinkを通じてローカルログファイルに書き込むルールの作成方法を示します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
-2. Click the **Create** button in the top right corner.
+2. 右上の **Create** ボタンをクリックします。
 
-3. Enter the rule ID `my_rule`, and input the following rule SQL in the SQL editor:
+3. ルールIDに `my_rule` を入力し、SQLエディターに以下のルールSQLを入力します。
 
    ```sql
    SELECT
@@ -80,54 +80,54 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
+   SQLに不慣れな場合は、**SQL Examples** と **Enable Debug** をクリックしてルールSQLの学習や結果のテストが可能です。
 
    :::
 
-4. Add an action, select `Disk Log` from the **Action Type** dropdown list, keep the action dropdown as the default `create action` option, or choose a previously created Disk Log action from the action dropdown. Here, create a new Sink and add it to the rule.
+4. アクションを追加し、**Action Type** ドロップダウンから `Disk Log` を選択します。アクションのドロップダウンはデフォルトの `create action` のままにするか、既存のDisk Logアクションを選択します。ここでは新しいSinkを作成し、ルールに追加します。
 
-5. Enter the Sink's name and description.
+5. Sinkの名前と説明を入力します。
 
-6. Select the `my-disk-log` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
+6. コネクタードロップダウンから先ほど作成した `my-disk-log` コネクターを選択します。ドロップダウン横の作成ボタンをクリックするとポップアップで新規コネクターを素早く作成できます。必要な設定パラメーターは [コネクターの作成](#コネクターの作成) を参照してください。
 
-7. Select the desired **Write Mode** (async or sync).
+7. 希望する **Write Mode**（非同期または同期）を選択します。
 
-8. Configure the **Message Template**, which must render to a valid JSON object.
+8. 有効なJSONオブジェクトにレンダリングされる必要がある **Message Template** を設定します。
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のために、1つ以上のフォールバックアクションを定義できます。プライマリSinkがメッセージ処理に失敗した場合にこれらのアクションがトリガーされます。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-10. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+10. **詳細設定** を展開し、必要に応じて高度な設定オプションを構成します（任意）。詳細は [詳細設定](#詳細設定) をご覧ください。
 
-11. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+11. 残りの設定はデフォルト値のままにし、**Create** ボタンをクリックしてSink作成を完了します。作成成功後、ルール作成画面に戻り、新しいSinkがルールアクションに追加されます。
 
-12. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+12. ルール作成画面で **Create** ボタンをクリックし、ルール作成全体を完了します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Disk Log Sink on the **Actions (Sink)** tab.
+これでルールの作成に成功しました。**Rules** ページで新規作成されたルールを確認でき、**Actions (Sink)** タブで新しいディスクログSinkも確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written to the Disk Log after being parsed by the rule `my_rule`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーを視覚的に確認できます。トポロジーはトピック `t/#` のメッセージがルール `my_rule` によって解析され、ディスクログに書き込まれる流れを示します。
 
-## Test the Rule
+## ルールのテスト
 
-This section shows how to test the rule configured with the direct upload method.
+このセクションでは、直接アップロード方式で設定したルールのテスト方法を示します。
 
-Use MQTTX to publish a message to the topic `t/1`:
+MQTTXを使ってトピック `t/1` にメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Disk Log" }'
 ```
 
-After sending a few messages, check the configured Disk Log directory for the last changed file and check its contents to see the produced event.
+数件メッセージを送信した後、設定したディスクログディレクトリ内の最終更新ファイルを確認し、生成されたイベント内容を確認してください。
 
-## Advanced Settings
+## 詳細設定
 
-This section delves into the advanced configuration options available for the Disk Log Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+このセクションでは、ディスクログSinkの高度な設定オプションについて説明します。ダッシュボードのSink設定画面で **Advanced Settings** を展開し、用途に応じて以下のパラメーターを調整できます。
 
-| Field Name                | Description                                                  | Default Value  |
-| ------------------------- | ------------------------------------------------------------ | -------------- |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and Disk Log. These workers temporarily store and process data before sending it to the disk log, crucial for optimizing performance and throughput. | `16`           |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment for being persisted by Disk Log, the request is deemed to have expired. |                |
-| **Health Check Interval** | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on Disk log. | `15`           |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the Disk Log Sink. The buffer workers temporarily store data before sending it to Disk Log, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`          |
-| **Query Mode**            | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Disk Log does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they are written to Disk Log. | `Asynchronous` |
-| **Batch Size**            | Specifies the maximum size of data batches written from EMQX to Disk Log in a single batch operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Disk Log.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches.  This Action tends to benefit from generous batching sizes. | `1000`                   |
-| **Inflight  Window**     | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with Disk Log. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`          |
+| フィールド名                 | 説明                                                                                                                      | デフォルト値   |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| **Buffer Pool Size**          | EMQXとディスクログ間のデータフローを管理するバッファワーカープロセスの数を指定します。これらのワーカーはデータを一時的に保存・処理し、ディスクログへの送信を最適化するために重要です。 | `16`           |
+| **Request TTL**               | リクエストTTL（Time To Live）は、リクエストがバッファに入ってから有効とみなされる最大時間（秒）を指定します。この時間を超えるか、ディスクログへの永続化応答やアックがタイムリーに得られない場合、リクエストは期限切れと見なされます。 |                |
+| **Health Check Interval**     | Sinkがディスクログの自動ヘルスチェックを行う間隔（秒）を指定します。                                                        | `15`           |
+| **Max Buffer Queue Size**     | 各バッファワーカープロセスがディスクログSinkでバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保存し、効率的なデータストリーム処理を行います。システム性能やデータ転送要件に応じて調整してください。 | `256`          |
+| **Query Mode**                | 同期（`synchronous`）または非同期（`asynchronous`）のリクエストモードを選択し、メッセージ送信を最適化します。非同期モードではディスクログへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージを受信してからディスクログへの書き込みが完了するまでのタイムラグが生じる可能性があります。 | `Asynchronous` |
+| **Batch Size**                | EMQXからディスクログへ一度に書き込むデータバッチの最大サイズを指定します。サイズ調整によりデータ転送の効率と性能を微調整できます。<br />「Batch Size」を「1」に設定すると、データレコードはバッチ化せず個別に送信されます。このアクションは大きめのバッチサイズで効果を発揮します。 | `1000`         |
+| **Inflight Window**           | 「インフライトキューリクエスト」とは、開始されたがまだ応答やアックを受け取っていないリクエストを指します。この設定はSinkとディスクログ間の通信で同時に存在可能なインフライトリクエストの最大数を制御します。<br/>**Request Mode** が `asynchronous` の場合、このパラメーターは特に重要です。同一MQTTクライアントからのメッセージを厳密に順序処理する必要がある場合は、この値を `1` に設定してください。 | `100`          |

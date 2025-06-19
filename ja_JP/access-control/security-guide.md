@@ -1,29 +1,29 @@
-# Security Guide
+# セキュリティガイド
 
-Security is a critical aspect of any MQTT-based application, and this guide is designed to help you understand and implement robust security measures in your EMQX deployments. This chapter explores various security-related topics, focusing on access control, authorization and network security using Transport Layer Security (TLS).
+セキュリティはMQTTベースのアプリケーションにおいて非常に重要な要素であり、本ガイドはEMQXのデプロイにおいて堅牢なセキュリティ対策を理解し実装するための支援を目的としています。本章ではアクセス制御、認可、そしてTransport Layer Security（TLS）を用いたネットワークセキュリティに焦点を当てて解説します。
 
-- [Networking and TLS](../network/overview.md) explain how EMQX supports end-to-end encrypted communication, including enabling SSL/TLS connections and obtaining SSL/TLS certificates.
+- [ネットワークとTLS](../network/overview.md) では、EMQXがエンドツーエンドの暗号化通信をどのようにサポートしているか、SSL/TLS接続の有効化やSSL/TLS証明書の取得方法について説明しています。
 
-- [Authentication](./authn/authn.md)
+- [認証](./authn/authn.md)
 
-  Authentication is the process of verifying the identity of a client. It is essential to most applications and can help protect our services from illegal client connections. EMQX supports several authentication mechanisms to better protect our clients, including:
+  認証はクライアントの身元を検証するプロセスです。ほとんどのアプリケーションに不可欠であり、不正なクライアント接続からサービスを保護するのに役立ちます。EMQXは以下の複数の認証方式をサポートし、クライアントの保護を強化しています。
 
-  - X.509 certificate authentication
-  - Username/password authentication
-  - JWT authentication
-  - Enhanced authentication of MQTT 5.0
-  - PSK authentication
+  - X.509証明書認証
+  - ユーザー名／パスワード認証
+  - JWT認証
+  - MQTT 5.0の拡張認証
+  - PSK認証
 
-  This section introduces how these authentication mechanisms work and how to configure them in EMQX.
+  本節では、これらの認証方式の仕組みとEMQXでの設定方法を紹介します。
 
-- [Authorization](./authz/authz.md)
+- [認可](./authz/authz.md)
 
-  In EMQX, authorization refers to the permission control over the publish/subscribe operation of the MQTT clients. This chapter will introduce how to use the built-in database, ACL file, or how to integrate with MySQL, PostgreSQL, MongoDB, or Redis to configure the authorization rules.
+  EMQXにおける認可とは、MQTTクライアントのパブリッシュ／サブスクライブ操作に対する権限管理を指します。本章では、組み込みデータベースやACLファイルの利用方法、さらにMySQL、PostgreSQL、MongoDB、Redisとの連携による認可ルールの設定方法を解説します。
 
-- [Banned Clients](./blacklist.md)
+- [禁止クライアント](./blacklist.md)
 
-  EMQX provides a blacklisting/banning functionality. System admins can block certain clients from accessing EMQX via Dashboard or HTTP API with their client ID, user name, or IP address.
+  EMQXはブラックリスト／禁止機能を提供しています。システム管理者はダッシュボードやHTTP APIを通じて、クライアントID、ユーザー名、IPアドレスを指定して特定のクライアントのアクセスをブロックできます。
 
-- [Flapping Detect](./flapping-detect.md)
+- [フラッピング検出](./flapping-detect.md)
 
-  EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients.
+  EMQXは頻繁にログインを繰り返すクライアントを自動的に禁止し、他のクライアントに影響を与える可能性のあるサーバーリソースの消費を防止します。

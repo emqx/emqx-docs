@@ -1,89 +1,88 @@
-# Connect via JavaScript SDK
+# JavaScript SDK を使った接続
 
-[MQTT.js](https://www.npmjs.com/package/mqtt) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.
+[MQTT.js](https://www.npmjs.com/package/mqtt) は、JavaScript で実装された MQTT プロトコルクライアント機能のモジュールであり、ブラウザおよび Node.js 環境で利用できます。
 
-Due to the single-threaded nature of JavaScript, MQTT.js is a fully asynchronous MQTT client. MQTT.js supports MQTT and MQTT over WebSocket. The support in different operating environments is as follows:
+JavaScript のシングルスレッド特性により、MQTT.js は完全に非同期の MQTT クライアントです。MQTT.js は MQTT と MQTT over WebSocket をサポートしており、各環境での対応状況は以下の通りです。
 
-- Browser environment: MQTT over WebSocket (including WeChat applet, Alipay applet and other customized browser environments)
-- Node.js environment: MQTT, MQTT over WebSocket
+- ブラウザ環境：MQTT over WebSocket（WeChat アプレット、Alipay アプレットなどのカスタマイズされたブラウザ環境を含む）
+- Node.js 環境：MQTT、MQTT over WebSocket
 
-Except for a small number of connection parameters that is different in different environments, the other APIs are the same.
+接続パラメータの一部は環境によって異なりますが、その他の API は共通です。
 
-Install using npm :
+npm を使ったインストール方法：
 
 ```bash
 npm i mqtt
 ```
 
-Install using CDN (browser):
+CDN を使ったブラウザでのインストール方法：
 
 ```html
 <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 <script>
-    // Initialize a mqtt variable globally
+    // グローバルに mqtt 変数を初期化
     console.log(mqtt)
 </script>
 ```
 
-In the environment where Node.js is installed, you can use MQTT.js globally in the form of a command line of `npm i mqtt -g` command.
+Node.js がインストールされている環境では、`npm i mqtt -g` コマンドで MQTT.js をグローバルに利用できます。
 
 ```bash
 npm i mqtt -g
 
 mqtt help
 
-> MQTT.js command line interface, available commands are:
+> MQTT.js コマンドラインインターフェース、利用可能なコマンドは以下の通りです：
 
-  * publish     publish a message to the broker
-  * subscribe   subscribe for updates from the broker
-  * version     the current MQTT.js version
-  * help        help about commands
+  * publish     ブローカーへメッセージをパブリッシュする
+  * subscribe   ブローカーからの更新をサブスクライブする
+  * version     現在の MQTT.js バージョンを表示
+  * help        コマンドのヘルプを表示
 
-> Launch 'mqtt help [command]' to know more about the commands.
+> 詳細は 'mqtt help [command]' を実行してください。
 ```
 
-## MQTT.js usage example
+## MQTT.js 使用例
 
-This example contains the complete code of MQTT.js in JavaScript language connecting EMQX, sending and receiving messages:
+以下は、JavaScript で MQTT.js を使って EMQX に接続し、メッセージの送受信を行う完全なコード例です。
 
 ```javascript
 // const mqtt = require('mqtt')
 import mqtt from 'mqtt'
 
-// connection option
+// 接続オプション
 const options = {
-  		clean: true, // retain session
-      connectTimeout: 4000, // Timeout period
-      // Authentication information
+  		clean: true, // セッションを保持しない
+      connectTimeout: 4000, // タイムアウト時間（ミリ秒）
+      // 認証情報
       clientId: 'emqx_test',
       username: 'emqx_test',
       password: 'emqx_test',
 }
 
-// Connect string, and specify the connection method by the protocol
-// ws Unencrypted WebSocket connection
-// wss Encrypted WebSocket connection
-// mqtt Unencrypted TCP connection
-// mqtts Encrypted TCP connection
-// wxs WeChat applet connection
-// alis Alipay applet connection
+// 接続文字列、プロトコルで接続方法を指定
+// ws 暗号化されていない WebSocket 接続
+// wss 暗号化された WebSocket 接続
+// mqtt 暗号化されていない TCP 接続
+// mqtts 暗号化された TCP 接続
+// wxs WeChat アプレット接続
+// alis Alipay アプレット接続
 const connectUrl = 'wss://broker.emqx.io:8084/mqtt'
 const client = mqtt.connect(connectUrl, options)
 
 client.on('reconnect', (error) => {
-    console.log('reconnecting:', error)
+    console.log('再接続中:', error)
 })
 
 client.on('error', (error) => {
-    console.log('Connection failed:', error)
+    console.log('接続失敗:', error)
 })
 
 client.on('message', (topic, message) => {
-  console.log('receive message：', topic, message.toString())
+  console.log('メッセージ受信：', topic, message.toString())
 })
 ```
 
+## MQTT.js の MQTT 5.0 サポート
 
-## MQTT.js MQTT 5.0 support
-
-Currently, MQTT.js has fully supported MQTT 5.0.
+現在、MQTT.js は MQTT 5.0 を完全にサポートしています。

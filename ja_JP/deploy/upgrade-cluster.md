@@ -1,97 +1,97 @@
-# Upgrade EMQX Cluster from 4.4 to 5.x
+# EMQX クラスターの 4.4 から 5.x へのアップグレード
 
+このページでは、EMQX クラスターを最新バージョンにアップグレードする手順を説明します。
 
-This page provides instructions on how to upgrade your EMQX cluster to the latest version.
+EMQX 5.x は設定、管理 API、クラスタリング API の点で 4.x と互換性がないため、初期バージョンからの[ローリングアップグレード](./rolling-upgrades.md)はサポートされていません。アップグレードを成功させるために、アップグレード手順を開始する前に必ず[開始前の注意点](#considerations-before-you-start)をよくお読みください。
 
-Since EMQX 5.x is not backward compatible with version 4.x in terms of configurations, management APIs, and clustering APIs, a [rolling upgrade](./rolling-upgrades.md) from an early version is not supported. To ensure a successful upgrade, read the [Considerations Before You Start](#considerations-before-you-start) carefully before you start the upgrading procedure.
-
-If you encounter any problems during the upgrade, contact [EMQX Support](https://www.emqx.com/en/support).
+アップグレード中に問題が発生した場合は、[EMQX サポート](https://www.emqx.com/en/support)にお問い合わせください。
 
 ::: tip
 
-Note that performing a fresh installation of the current version will not preserve your existing cluster configuration. You can refer to [Installation](./install.md) for a fresh installation.
+現在のバージョンを新規インストールした場合、既存のクラスター設定は保持されません。新規インストールについては[インストール](./install.md)を参照してください。
 
 :::
 
-## Intended Audience
+## 対象読者
 
-This instruction is intended for anyone who needs to upgrade from earlier versions of EMQX and experienced Linux system administrators familiar with data center operations.
+本手順は、以前のバージョンから EMQX をアップグレードする必要がある方、およびデータセンター運用に精通した Linux システム管理者を対象としています。
 
-## Considerations Before You Start
+## 開始前の注意点
 
-Before you start the upgrade, be aware of the requirements, incompatible changes, and potential pitfalls described in this section.
+アップグレードを開始する前に、本節で説明する要件、非互換変更点、および潜在的な注意点を理解しておいてください。
 
-### Upgrade Version Path
+### アップグレードのバージョンパス
 
-To upgrade an existing EMQX Cluster to version 5.1 or later, you must currently be running a 4.4.x release.
+既存の EMQX クラスターをバージョン 5.1 以降にアップグレードするには、現在 4.4.x リリースを実行している必要があります。
 
-If you are running a version earlier than 4.4.x, you must first upgrade through successive major releases until you reach version 4.4.x. For example, if you are currently running version 4.3.x, you must first upgrade to version 4.4 before proceeding to upgrade to 5.x. Refer to the [4.4 upgrade guide](https://docs.emqx.com/en/enterprise/v4.4/changes/upgrade-4.4.html#data-and-config-backup) for instructions.
+4.4.x より前のバージョンを使用している場合は、段階的にメジャーリリースを経て 4.4.x にアップグレードしてから 5.x に進んでください。例えば、現在 4.3.x を使用している場合は、まず 4.4 にアップグレードし、その後 5.x にアップグレードします。手順については[4.4 アップグレードガイド](https://docs.emqx.com/en/enterprise/v4.4/changes/upgrade-4.4.html#data-and-config-backup)を参照してください。
 
-### Incompatible Changes
+### 非互換変更点
 
-You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../changes/breaking-changes-5.1.0.md), and the following incompatible changes documents in later versions:
+アップグレードを開始する前に、現在の環境との非互換や競合をすべて解消する必要があります。アプリケーションやデプロイメントに影響を与える可能性のある互換性問題や破壊的変更については、以下の資料を参照してください。
 
-- [Incompatible Changes in EMQX 5.4](../changes/breaking-changes-ee-5.4.md)
-- [Incompatible Changes in EMQX 5.5](../changes/breaking-changes-ee-5.5.md)
-- [Incompatible Changes in EMQX 5.6](../changes/breaking-changes-ee-5.6.md)
-- [Incompatible Changes in EMQX 5.7](../changes/breaking-changes-ee-5.7.md)
-- [Incompatible Changes in EMQX 5.8](../changes/breaking-changes-ee-5.8.md)
+- [EMQX 5.1 と EMQX 4.4 間の非互換変更](../changes/breaking-changes-5.1.0.md)
+- [EMQX 5.4 の非互換変更](../changes/breaking-changes-ee-5.4.md)
+- [EMQX 5.5 の非互換変更](../changes/breaking-changes-ee-5.5.md)
+- [EMQX 5.6 の非互換変更](../changes/breaking-changes-ee-5.6.md)
+- [EMQX 5.7 の非互換変更](../changes/breaking-changes-ee-5.7.md)
+- [EMQX 5.8 の非互換変更](../changes/breaking-changes-ee-5.8.md)
 
-It is also advisable to thoroughly test your application in a staging environment before deploying the upgrade to your production environment. This will help ensure a smooth transition and minimize any potential disruptions.
+また、本番環境に適用する前にステージング環境で十分にアプリケーションの動作検証を行うことを推奨します。これによりスムーズな移行と潜在的な障害の最小化が期待できます。
 
-#### Client Applications and Data Bridge Compatibility
+#### クライアントアプリケーションおよびデータブリッジの互換性
 
-Running upgraded deployments with incompatible clients and data bridge versions may result in unexpected or undefined behavior. Therefore, it is important to make sure that your client applications and data bridge backend services are compatible with the latest EMQX version. You can refer to [Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4](../changes/data-integration-4.4-to-5.1-incompatibility.md) and [Client SDKs](../connect-emqx/introduction.md) to verify the compatibility with EMQX 5.x.
+アップグレードした EMQX と互換性のないクライアントやデータブリッジのバージョンを混在させると、予期しない動作や未定義の挙動が発生する可能性があります。したがって、クライアントアプリケーションやデータブリッジのバックエンドサービスが最新の EMQX バージョンと互換性があることを必ず確認してください。互換性の確認には、[EMQX 5.1 と EMQX 4.4 間のデータ統合の非互換性](../changes/data-integration-4.4-to-5.1-incompatibility.md)および[クライアント SDK](../connect-emqx/introduction.md)を参照してください。
 
-### Potential Pitfalls
+### 潜在的な注意点
 
-During the upgrade process, it is important to be aware of common potential pitfalls, including:
+アップグレード中に注意すべき一般的な問題点は以下の通りです。
 
-- Incompatibilities between the upgraded EMQX version and your client applications.
-- Configuration changes that may be required to adapt to the new version.
-- Dependencies on external systems or services that may need to be updated or reconfigured.
+- アップグレード後の EMQX バージョンとクライアントアプリケーション間の非互換性
+- 新バージョンに適応するために必要な設定変更
+- 更新や再設定が必要となる外部システムやサービスへの依存関係
 
-To mitigate these pitfalls, read the latest version of EMQX documentation carefully and perform thorough testing in a staging environment before applying the upgrade to your production environment. Additionally, consider engaging the support services provided by EMQX to ensure a smooth and successful upgrade.
+これらの問題を回避するために、最新の EMQX ドキュメントをよく読み、ステージング環境で十分なテストを行ってから本番環境に適用してください。また、スムーズで確実なアップグレードのために EMQX のサポートサービスの利用も検討してください。
 
-## Upgrade EMQX Cluster
+## EMQX クラスターのアップグレード
 
-::: tip Prerequisites
+::: tip 前提条件
 
-- Make sure that you are running EMQX cluster release 4.4.x.
-- You have read the [release notes](../changes/all-changes-ee.md).
-- Your deployment environment is capable of running VMs with one of the [operating systems supported by EMQX](./install.md), or docker containers.
-- You have sufficient disk space and memory available for the upgrade.
-- You have reviewed any specific prerequisites mentioned in [Performance Tuning (Linux)](../performance/tune.md).
+- EMQX クラスターのリリースが 4.4.x であることを確認してください。
+- [リリースノート](../changes/all-changes-ee.md)を読んでいること。
+- デプロイ環境が EMQX がサポートする[対応 OS](./install.md)の VM または Docker コンテナを実行可能であること。
+- アップグレードに十分なディスク容量とメモリがあること。
+- [パフォーマンスチューニング（Linux）](../performance/tune.md)に記載された特定の前提条件を確認済みであること。
 
 :::
 
-1. Download EMQX `@EE_VERSION@` packages.
+1. EMQX `@EE_VERSION@` パッケージをダウンロードします。
 
-   - **Use a Package Manager:** Check if your operating system's package manager offers the EMQX `@EE_VERSION@` binaries. If available, use the package manager to download and install the binaries.
-   - **Download Binaries Manually:** If the package manager does not provide the EMQX `@EE_VERSION@` binaries or the network of the server is restricted, you can manually download them from the [official EMQX website.](https://www.emqx.com/en/downloads-and-install/enterprise)
+   - **パッケージマネージャーの利用:** OS のパッケージマネージャーに EMQX `@EE_VERSION@` バイナリがあるか確認し、あればそれを使ってダウンロードおよびインストールしてください。
+   - **手動ダウンロード:** パッケージマネージャーで提供されていない、またはサーバーのネットワークが制限されている場合は、[公式 EMQX ウェブサイト](https://www.emqx.com/en/downloads-and-install/enterprise)から手動でダウンロードしてください。
 
-2. Deploy a new EMQX Cluster using the binaries. For detailed installation steps, refer to [Installation](../deploy/install.md). This ensures a clean installation of the latest version.
+2. バイナリを使って新しい EMQX クラスターをデプロイします。詳細なインストール手順は[インストール](../deploy/install.md)を参照してください。これにより最新バージョンのクリーンなインストールが可能です。
 
-3. Migrate EMQX cluster.
+3. EMQX クラスターのマイグレーションを行います。
 
-   - Back up the configurations and data of your EMQX 4.4 cluster using the API or Dashboard.
+   - API またはダッシュボードを使って EMQX 4.4 クラスターの設定とデータをバックアップします。
 
-   - Convert the configuration files format from version 4.4 to the new format compatible with EMQX `@EE_VERSION@`.
+   - バージョン 4.4 の設定ファイル形式を EMQX `@EE_VERSION@` に対応した新しい形式に変換します。
 
-   - Restore the migrated configuration files to the EMQX `@EE_VERSION@` cluster using the command:  `emqx ctl data import <File>`.
+   - コマンド `emqx ctl data import <File>` を使ってマイグレーション済みの設定ファイルを EMQX `@EE_VERSION@` クラスターに復元します。
 
      ::: tip
 
-     A migration tool is available [here](https://github.com/emqx/emqx-data-converter/releases) to help migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@EE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition.  Be sure to inspect the generated configurations to check if they match expectations.
+     既存の EMQX 4.4 クラスターから新しい EMQX `@EE_VERSION@` クラスターへの設定マイグレーションを支援するツールが[こちら](https://github.com/emqx/emqx-data-converter/releases)で提供されています。このツールはマイグレーション手順の自動化を目的としており、スムーズな移行を支援します。生成された設定が期待通りか必ず確認してください。
 
      :::
 
-4. Verify the new EMQX Cluster thoroughly to ensure that it functions as expected. Test its connectivity, messaging capabilities, and any other relevant functionalities to confirm that the upgrade was successful.
+4. 新しい EMQX クラスターが期待通りに動作するかを十分に検証します。接続性、メッセージング機能、その他関連機能をテストし、アップグレードが成功したことを確認してください。
 
-   ::: warning Notice
+   ::: warning 注意
 
-   Downgrading to the previous version is not supported, so make sure that you have fully verified the new cluster before destroying the old cluster.
+   以前のバージョンへのダウングレードはサポートされていません。古いクラスターを破棄する前に、新しいクラスターを十分に検証してください。
 
    :::
 
-5. Switch your production environment to use the upgraded cluster. Update your DNS records, load balancers, or any other relevant configurations to direct traffic to the new cluster. Monitor the system closely after the switch to ensure smooth operation.
+5. 本番環境をアップグレード済みクラスターに切り替えます。DNS レコード、ロードバランサー、その他関連設定を更新して新しいクラスターにトラフィックを誘導してください。切り替え後はシステムを継続的に監視し、正常に稼働していることを確認してください。

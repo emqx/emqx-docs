@@ -1,28 +1,28 @@
-# Use Built-in Database
+# 組み込みデータベースの使用
 
-EMQX provides users with a low-cost, out-of-the-box authorization rule storage method through the built-in database. You can use the built-in database (Mnesia) as a data source by setting it up through the Dashboard or configuration files, and add relevant authorization check rules through the Dashboard or HTTP API.
+EMQX は、組み込みデータベースを通じて低コストで即時に利用可能な認可ルールの保存方法を提供します。Dashboard または設定ファイルで組み込みデータベース（Mnesia）をデータソースとして設定し、Dashboard または HTTP API を通じて関連する認可チェックルールを追加できます。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authorization concepts](./authz.md)
+[EMQX 認可の基本概念](./authz.md)の知識
 
 :::
 
-## Configure with Dashboard
+## Dashboard での設定
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. [EMQX Dashboard](http://127.0.0.1:18083/#/authentication) の左側ナビゲーションツリーで **Access Control** -> **Authorization** をクリックし、**Authorization** ページに入ります。
 
-2. Click **Create** at the top right corner, select **Built-in Database** as **Backend**, and click **Next**. 
+2. 右上の **Create** をクリックし、**Backend** に **Built-in Database** を選択して **Next** をクリックします。
 
-   <img src="./assets/authz-mnesia_ee.png" alt="authz-mnesia_ee" style="zoom:40%;" />
+   <img src="./assets/authz-mnesia_ee.png" alt="組み込みデータベース認可設定画面" style="zoom:40%;" />
 
-3. As built-in database authorization does not require configuration parameters, you can click **Create** to finish.
+3. 組み込みデータベース認可は設定パラメータを必要としないため、**Create** をクリックして完了します。
 
-## Configure with Configuration File
+## 設定ファイルでの設定
 
-The built-in database authorizer is identified by type `built_in_database`.
+組み込みデータベースの認可機能は、`type` が `built_in_database` で識別されます。
 
-Sample configuration:
+設定例：
 
 ```bash
 {
@@ -31,49 +31,47 @@ Sample configuration:
 }
 ```
 
--  `type`: The data source type of the authorization checker; fill in `built_in_database` here.
+- `type`: 認可チェッカーのデータソースタイプ。ここでは `built_in_database` を指定します。
 
-- `enable`: Whether to activate this checker; optional values: `true`, `false`.
+- `enable`: このチェッカーを有効にするかどうか。オプション値は `true` または `false`。
 
-<!--For detailed parameter list, see [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia).-->
+<!--詳細なパラメータ一覧は [authz-mnesia](../../configuration/configuration-manual.html#authz-mnesia) を参照してください。-->
 
-## Create Authorization Rules
+## 認可ルールの作成
 
-You can create authorization rules through Dashboard or API.
+認可ルールは Dashboard または API を通じて作成できます。
 
-### Create with Dashboard
+### Dashboard での作成
 
-On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
+Dashboard の **Authorization** ページで、**Built-in Database** バックエンドの **Actions** 列にある **Permissions** ボタンをクリックします。
 
-<img src="./assets/authz-config-built-in-rules_ee.png" alt="authz-config-built-in-rules_ee" style="zoom:50%;" />
+<img src="./assets/authz-config-built-in-rules_ee.png" alt="組み込みデータベース認可ルール設定画面" style="zoom:50%;" />
 
-You can set authorization checks based on the client ID, username, or topic as needed.
+クライアント ID、ユーザー名、またはトピックに基づいて認可チェックを設定できます。
 
-- **Client ID**: See the **Client ID** tab, specify the client that this rule applies to.
-- **Username**: See the **Username** tab, specify the user that this rule applies to.
-- **Permission**: Whether to allow or deny a certain type of operation request from the current client/user; optional values: **Allow**, **Deny**.
-- **Action**: Configure the operation corresponding to this rule; optional values: **Publish**, **Subscribe**, **Publish & Subscribe**.
-- **Topic**: Configure the topic corresponding to this rule.
+- **Client ID**: **Client ID** タブで、このルールを適用するクライアントを指定します。
+- **Username**: **Username** タブで、このルールを適用するユーザーを指定します。
+- **Permission**: 現在のクライアント／ユーザーからの特定の操作リクエストを許可するか拒否するか。オプション値は **Allow** または **Deny**。
+- **Action**: このルールに対応する操作を設定。オプション値は **Publish**、**Subscribe**、**Publish & Subscribe**。
+- **Topic**: このルールに対応するトピックを設定。
 
-EMQX supports configuring multiple authorization check rules for a single client or user, and you can adjust the execution order and priority of different rules through the **Move Up** and **Move Down** buttons on the page.
+EMQX は単一のクライアントまたはユーザーに対して複数の認可チェックルールを設定可能で、ページ上の **Move Up** と **Move Down** ボタンで異なるルールの実行順序や優先度を調整できます。
 
-If you want to configure authorization check rules for multiple clients or users at the same time, you can import <!--how to understand "传入规则“？--> the relevant configuration through the HTTP API.
+複数のクライアントやユーザーに対して同時に認可チェックルールを設定したい場合は、HTTP API を通じて関連設定をインポートできます。
 
-### Create with API
+### API での作成
 
-Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
+ルールは `/api/v5/authorization/sources/built_in_database` API で管理します。
 
-Each rule is applied to:
-* a particular client identified by clientid
-  *  `/api/v5/authorization/sources/built_in_database/clientid`
-* a particular client identified by username
-  * `/api/v5/authorization/sources/built_in_database/username` 
+各ルールは以下に適用されます：
+* clientid で識別される特定のクライアント
+  * `/api/v5/authorization/sources/built_in_database/clientid`
+* username で識別される特定のクライアント
+  * `/api/v5/authorization/sources/built_in_database/username`
+* 全クライアント
+  * `/api/v5/authorization/sources/built_in_database/all`
 
-* all clients
-  *  `/api/v5/authorization/sources/built_in_database/all` 
-
-
-Below is a quick example of how to create rules for a client (`client1`):
+以下はクライアント (`client1`) に対するルール作成の簡単な例です：
 
 ```bash
 curl -X 'POST' \
@@ -104,10 +102,9 @@ curl -X 'POST' \
 ]'
 ```
 
-Each rule contains:
-* `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
-* `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
-* `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. The default is all QoS levels.
-* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
-
+各ルールは以下を含みます：
+* `permission`: 現在のクライアント／ユーザーからの特定の操作リクエストを許可するか拒否するか。オプション値は `allow` または `deny`。
+* `action`: このルールに対応する操作。オプション値は `publish`、`subscribe`、または `all`。
+* `topic`: このルールに対応するトピック。 [トピックプレースホルダー](./authz.md#topic-placeholders) をサポートします。
+* `qos`: （オプション）ルールが適用される QoS レベルを指定する数値配列。例：`[0, 1]`、`[1, 2]`。デフォルトはすべての QoS レベル。
+* `retain`: （オプション）現在のルールがリテインメッセージをサポートするかどうか。値は `true` または `false`。デフォルトはリテインメッセージを許可。

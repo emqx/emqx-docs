@@ -1,49 +1,49 @@
 ---
-description: This section lists the new features introduced in EMQX 5.0 and 5.1.
+description: このセクションでは、EMQX 5.0および5.1で導入された新機能を一覧で紹介します。
 ---
 
-# New Features
+# 新機能
 
-This section lists the new features introduced in EMQX Enterprise after version 5.0.
+このセクションでは、EMQX Enterprise 5.0以降で導入された新機能を紹介します。
 
-## Core + Replica Cluster Architecture
+## コア＋レプリカ クラスターアーキテクチャ
 
-EMQX 5.0 adopts a new [Mria cluster architecture](../deploy/cluster/mria-introduction.md). With this architecture, one EMQX cluster can support [100 million concurrent MQTT connections](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0), and more, making it the world’s most scalable open-source MQTT broker.
+EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../deploy/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
 
-<img src="./assets/100m-benckmark.png" alt="100m-benckmark" style="zoom:50%;" />
+<img src="./assets/100m-benckmark.png" alt="1億接続ベンチマーク" style="zoom:50%;" />
 
-Besides this obvious scalability improvement, the Mria cluster architecture is also capable of reducing the risk of brain-splitting and its effects in large-scale deployments, to empower our clients with more stable and reliable IoT data access services.
+この明らかなスケーラビリティの向上に加え、Mriaクラスターアーキテクチャは大規模展開におけるブレインスプリットのリスクとその影響を低減し、より安定で信頼性の高いIoTデータアクセスサービスをクライアントに提供します。
 
-To get started, see [Create an EMQX Cluster](../deploy/cluster/create-cluster.md).
+導入方法は[EMQXクラスターの作成](../deploy/cluster/create-cluster.md)をご覧ください。
 
-## Rolling Upgrades without Downtime
+## ダウンタイムなしのローリングアップグレード
 
-Starting with EMQX 5.1, the system now supports seamless rolling upgrades for the cluster. This enhances the overall system availability and reliability by allowing transitions to newer versions without any service interruption.
+EMQX 5.1からは、クラスターのシームレスなローリングアップグレードをサポートしています。これにより、サービスの中断なしに新バージョンへ移行でき、システム全体の可用性と信頼性が向上します。
 
 ## MQTT over QUIC
 
-EMQX 5.0 introduces QUIC support (MQTT over QUIC) as an experimental feature and designs a unique messaging mechanism and management approach. In EMQX 5.1 we added [QUIC multistream](https://www.emqx.com/en/blog/emqx-newsletter-202302) support and from now on consider this feature as "generally available".
+EMQX 5.0では、実験的機能としてQUIC対応（MQTT over QUIC）を導入し、独自のメッセージング機構と管理手法を設計しました。EMQX 5.1では[QUICマルチストリーム](https://www.emqx.com/en/blog/emqx-newsletter-202302)のサポートを追加し、現在はこの機能を「一般提供」と位置付けています。
 
-As the underlying transport protocol of the next-generation Internet protocol HTTP/3,  [QUIC](https://datatracker.ietf.org/doc/html/rfc9000) can provide connectivity for the modern mobile Internet with less connection overhead and message latency compared to TCP/TLS protocols. Therefore, EMQX attempted to replace the transport layer of MQTT with QUIC, which led to the MQTT over QUIC.
+次世代インターネットプロトコルHTTP/3の基盤となるトランスポートプロトコルである[QUIC](https://datatracker.ietf.org/doc/html/rfc9000)は、TCP/TLSに比べて接続オーバーヘッドやメッセージレイテンシを低減し、モダンなモバイルインターネットに適した接続性を提供します。そこでEMQXはMQTTのトランスポート層をQUICに置き換え、MQTT over QUICを実現しました。
 
-To evaluate MQTT over QUIC and verify how it could improve network connectivity, please read [Use MQTT over QUIC ](../mqtt-over-quic/getting-started.md).
+MQTT over QUICの評価やネットワーク接続性の改善効果を検証するには、[MQTT over QUICの使い方](../mqtt-over-quic/getting-started.md)をご覧ください。
 
-## File Transfer over MQTT 
+## MQTTによるファイル転送
 
-EMQX 5.1 introduces File Transfer over MQTT, which supports file transfer using the MQTT protocol.
+EMQX 5.1では、MQTTプロトコルを用いたファイル転送機能を導入しました。
 
-This feature is implemented based on the extended implementation of the standard MQTT protocol, allowing integration with existing clients and applications without modification. Clients can send file segments to specific topics using the MQTT protocol. After the transfer is complete, the server merges the file segments and saves them to the local disk or exports them to object storage compatible with the S3 protocol.
+この機能は標準MQTTプロトコルの拡張実装に基づいており、既存のクライアントやアプリケーションを変更せずに統合可能です。クライアントはMQTTプロトコルで特定のトピックにファイルのセグメントを送信し、転送完了後にサーバー側でファイルセグメントを結合してローカルディスクに保存するか、S3互換のオブジェクトストレージにエクスポートします。
 
-Compared to HTTP/FTP protocols, MQTT has the advantages of low bandwidth consumption and minimal resource utilization, enabling fast and efficient file transfer. The unified IoT data channel also simplifies system architecture, reducing application complexity and maintenance costs.
+HTTP/FTPプロトコルと比較して、MQTTは低帯域幅消費と最小限のリソース利用を実現し、高速かつ効率的なファイル転送が可能です。統一されたIoTデータチャネルによりシステム構成も簡素化され、アプリケーションの複雑さや保守コストを削減します。
 
-Get started with [File Transfer over MQTT](../file-transfer/introduction.md) now.
+[MQTTによるファイル転送](../file-transfer/introduction.md)をぜひお試しください。
 
-## Backup and Restore
+## バックアップとリストア
 
-EMQX 5.1 introduces a set of command-line tools for backup and restore, allowing you to export data and configuration files from the built-in database as a compressed package and restore them to a new cluster.
+EMQX 5.1では、コマンドラインツールによるバックアップとリストア機能を導入しました。組み込みデータベースからデータや設定ファイルを圧縮パッケージとしてエクスポートし、新しいクラスターに復元できます。
 
-::: details Usage example
-Create a backup:
+::: details 使用例
+バックアップの作成例：
 
 ```bash
 $ ./bin/emqx ctl data export
@@ -51,91 +51,91 @@ $ ./bin/emqx ctl data export
 Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-31.592.tar.gz.
 ```
 
-Restore a backup:
+バックアップのリストア例：
 
 ```bash
 ./bin/emqx ctl data import <File>
 ```
 :::
 
-Find more details on [Backup and Restore](../operations/backup-restore.md) page.
+詳細は[バックアップとリストア](../operations/backup-restore.md)をご覧ください。
 
-## Redesigned IoT Data Integration
+## 再設計されたIoTデータ統合
 
-Besides SQL, EMQX 5.x Rule Engine also supports [jq](https://stedolan.github.io/jq/), so it is capable of handling more complex JSON data formats. See more at the [jq Functions documentation](../data-integration/rule-sql-jq.md).
+SQLに加え、EMQX 5.xのルールエンジンは[jq](https://stedolan.github.io/jq/)もサポートし、より複雑なJSONデータ形式の処理が可能になりました。詳細は[jq関数のドキュメント](../data-integration/rule-sql-jq.md)をご参照ください。
 
-EMQX supports sending data to WebHook or establishing bidirectional data integration with external MQTT services by default. It supports processing and sending your IoT data to over 40 cloud services and enterprise systems in real-time, or retrieving data from them and sending it to designated MQTT topics after processing. EMQX 5.0 provides the Flows feature for visualizing the data integration process on the Dashboard. Now, you can easily check how the rules engine processes IoT data and how data flows to external data services or devices.
+EMQXはデフォルトでWebHookへのデータ送信や外部MQTTサービスとの双方向データ統合をサポートします。40以上のクラウドサービスやエンタープライズシステムにリアルタイムでIoTデータを送信したり、そこからデータを取得して処理後に指定トピックへ送信できます。EMQX 5.0ではダッシュボードでデータ統合プロセスを可視化するFlows機能を提供し、ルールエンジンのIoTデータ処理や外部データサービス・デバイスへのデータフローを簡単に確認可能です。
 
-For different data integrations that EMQX supports and how to configure them, see [Data Integration](../data-integration/data-bridges.md).
+対応する各種データ統合の詳細と設定方法は[データ統合](../data-integration/data-bridges.md)をご覧ください。
 
-## Flexible Authentication/Authorization
+## 柔軟な認証／認可
 
-EMQX 5.x offers a built-in client authentication/authorization feature, users only need to do some simple configuration work before integrating with various data sources for user authentication and ensuring data security under various scenarios.
+EMQX 5.xは組み込みのクライアント認証／認可機能を提供し、ユーザーは簡単な設定で様々なデータソースと連携したユーザー認証や多様なシナリオでのデータセキュリティを実現できます。
 
-**New features**
+**新機能**
 
-- Support using Dashboard for the authentication/authorization configuration on the cluster level;
-- Support using Dashboard for configuration, commissioning and management;
-- Support adjusting the running order of the authenticators and authorization checkers;
-- Achieve complete observability with statistics on execution speed and number of times;
-- Support authentication configuration on a listener-level, to provide more flexible access capabilities.
+- クラスター単位での認証／認可設定をDashboardから操作可能
+- Dashboardによる設定、導入、管理をサポート
+- 認証器と認可チェッカーの実行順序調整をサポート
+- 実行速度や回数の統計による完全な可観測性を実現
+- リスナー単位での認証設定をサポートし、より柔軟なアクセス制御を提供
 
-On how to run authentication/authorization configuration with EMQX Dashboard or configuration files, you can continue to read [Authentication](../access-control/authn/authn.md) and [Authorization](../access-control/authz/authz.md).
+Dashboardや設定ファイルによる認証／認可設定の詳細は[認証](../access-control/authn/authn.md)および[認可](../access-control/authz/authz.md)をご覧ください。
 
-## User-Friendly EMQX Dashboard
+## 使いやすくなったEMQXダッシュボード
 
-In EMQX 5.x, we have redesigned the EMQX Dashboard, enhancing the visual experience and supporting more powerful and user-friendly features.
+EMQX 5.xではダッシュボードを全面的に再設計し、視覚的な体験を向上させ、より強力でユーザーフレンドリーな機能を備えています。
 
-**New features**
+**新機能**
 
-- New UI/UX design: Great enhancement of real-time observability
-- Optimized menu structure: Fast and direct access to contents
-- Data monitoring and management: Important data at a glance
-- Visualized access control: Out-of-the-box authentication/authorization management
-- Visualized data flows: Using [Flows](../flow-designer/introduction.md) users can clearly see how data flows from devices or clients through the rule engine
-- Configuration updates during runtime: Hot update that takes effect immediately
+- 新UI/UXデザイン：リアルタイムの可観測性を大幅に強化
+- メニュー構造の最適化：コンテンツへの高速かつ直接的なアクセス
+- データ監視と管理：重要データを一目で把握
+- 可視化されたアクセス制御：認証／認可管理を標準搭載
+- 可視化されたデータフロー：[Flows](../flow-designer/introduction.md)により、デバイスやクライアントからルールエンジンを経てのデータフローを明確に確認可能
+- 実行時の設定更新：即時反映されるホットアップデート対応
 
-## Overload Protection, Limiter and Buffer Queue for Bridges
+## ブリッジ向けの過負荷保護、リミッター、バッファキュー
 
-The new **Limiter** feature enhances connection and messaging rate control by providing more precise and layered rate control options. It ensures that the system operates under the expected workloads by limiting the client behavior at the client, listener, or node levels. The combination of the Overload protection and Limiter features prevents the clients from becoming overwhelmed or receiving excessive request traffic and ensures stable system operation.
+新機能の**リミッター**は、接続数やメッセージレートの制御をより精密かつ階層的に行う機能です。クライアント、リスナー、ノード単位でクライアントの動作を制限し、想定された負荷内でシステムを運用可能にします。過負荷保護とリミッターの組み合わせにより、クライアントの過負荷や過剰なリクエストを防ぎ、安定したシステム運用を実現します。
 
-A generic buffer queue is also added for all bridges, allowing buffer messages generated under stressful conditions. This buffer can be configured to store messages in either memory or disk cache when external resources are unavailable, such as during network fluctuations or service downtime. Buffered messages will be sent once the service is restored. However, requests in the buffer may expire, which is a big difference compared to version 4. If the amount of buffered data exceeds the limit, it will be discarded following the First In First Out (FIFO) rule.
+また、すべてのブリッジに汎用バッファキューを追加し、過負荷時に発生するメッセージをバッファリング可能にしました。このバッファはネットワーク変動やサービスダウン時など外部リソースが利用できない場合に、メモリまたはディスクキャッシュにメッセージを保存します。サービス復旧後にバッファ内のメッセージを送信しますが、バッファ内のリクエストは期限切れになる場合があります。これはバージョン4との大きな違いです。バッファ容量が上限を超えると、先入れ先出し（FIFO）で破棄されます。
 
-## Cloud Native and EMQX Operator
+## クラウドネイティブとEMQXオペレーター
 
-Horizontal expansion and elastic clusters are features that a cloud-native application must support.
+クラウドネイティブアプリケーションには水平スケールと弾力的なクラスターが必須です。
 
-[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) lets you take full advantage of the Replicant node of EMQX 5.x. You can deploy a stateless EMQX node with Kubernetes Deployment and then build the EMQX cluster that supports large-scale MQTT connections and message throughput.
+[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator)を使うことで、EMQX 5.xのレプリカントノードを最大限に活用できます。Kubernetes DeploymentでステートレスなEMQXノードをデプロイし、大規模なMQTT接続数とメッセージスループットをサポートするEMQXクラスターを構築可能です。
 
-## New Gateway Framework
+## 新しいゲートウェイフレームワーク
 
-EMQX 5.1 presents a new extended gateway framework with reconstructed underlying architecture for multi-protocol access and a unified configuration format and management interface:
+EMQX 5.1では、マルチプロトコルアクセスのための基盤アーキテクチャを再構築し、統一された設定フォーマットと管理インターフェースを備えた新しい拡張ゲートウェイフレームワークを提供します。
 
-- **Unified statistic and monitoring indicators:** EMQX 5.0 provides the gateway/client-level statistic indicators, for example, number of bytes sent and received, messages, etc.
-- **Independent connection and session management:** Different from EMQX 4.x, gateway clients are also managed under the MQTT client list, EMQX 5.0 has created an independent gateway page for each gateway, and one Client ID can be reused across gateways.
-- **Independent client authentication**: Different from EMQX 4.x, where the gateway authentication is also managed under the MQTT client, EMQX 5.0 supports configuring a unique authentication mechanism for each gateway.
-- **Easy to expand with clear specifications:** The framework provides a set of standard concepts and interfaces to make it easier to customize the gateways.
+- **統一された統計・監視指標：** EMQX 5.0ではゲートウェイ／クライアントレベルの統計指標（送受信バイト数、メッセージ数など）を提供
+- **独立した接続・セッション管理：** EMQX 4.xではゲートウェイクライアントもMQTTクライアントリストで管理されていましたが、EMQX 5.0ではゲートウェイごとに独立したページを作成し、1つのClient IDを複数ゲートウェイで再利用可能
+- **独立したクライアント認証：** EMQX 4.xではゲートウェイ認証もMQTTクライアント管理下でしたが、EMQX 5.0ではゲートウェイごとに独自の認証機構を設定可能
+- **明確な仕様による拡張の容易さ：** 標準的な概念とインターフェースを提供し、ゲートウェイのカスタマイズを容易に
 
-The new gateway framework further improves EMQX's usability by unifying access and managing multiple protocols. Now clients implementing third-party protocols can also leverage the advantages of EMQX, such as data integration, safe and reliable authentication/authorization, billion-level horizontal expansion capabilities, etc.
+新しいゲートウェイフレームワークにより、複数プロトコルのアクセスを統一的に管理し、EMQXの使いやすさがさらに向上しました。サードパーティプロトコルを実装するクライアントも、データ統合、安全で信頼性の高い認証／認可、数十億規模の水平スケール能力など、EMQXの利点を活用できます。
 
-## **More Feature Updates**
+## **その他の機能更新**
 
-### Simplified Configuration
+### 簡素化された設定
 
-The configuration files have been changed to a concise and readable [HOCON](https://github.com/emqx/hocon) format, and contains commonly used configuration items by default, to improve the readability and maintainability.
+設定ファイルは簡潔で読みやすい[HOCON](https://github.com/emqx/hocon)形式に変更され、よく使われる設定項目をデフォルトで含むことで、可読性と保守性を向上させています。
 
-### Improved REST API
+### 改良されたREST API
 
-REST API is now compliant with the OpenAPI 3.0 specification, and comes with clear and rich API documentation.
+REST APIはOpenAPI 3.0仕様に準拠し、明確で豊富なAPIドキュメントを備えています。
 
-### Rapid Troubleshooting
+### 迅速なトラブルシューティング
 
-More diagnostic tools such as slow subscriptions and online tracing are added so users can quickly troubleshoot issues in production.
+スローサブスクリプションやオンライン追跡などの診断ツールが追加され、本番環境での問題解決を迅速化します。
 
-### Structured Logs
+### 構造化ログ
 
-Machine (indexer) friendly structured logs in JSON format are supported. Error logs are consistently tagged with 'msg' tokens to facilitate locating the cause of the problem.
+機械（インデクサー）に優しいJSON形式の構造化ログをサポート。エラーログは一貫して'msg'トークンでタグ付けされ、問題の原因特定を容易にします。
 
-### Flexible Expansion and Customization
+### 柔軟な拡張とカスタマイズ
 
-A new plugin architecture is developed, with which users can compile, distribute, and install their extension plugins in the form of independent plugin packages to customize and extend the usage of EMQX.
+新しいプラグインアーキテクチャを開発し、ユーザーは独立したプラグインパッケージとして拡張プラグインをコンパイル、配布、インストールしてEMQXの利用をカスタマイズ・拡張可能です。

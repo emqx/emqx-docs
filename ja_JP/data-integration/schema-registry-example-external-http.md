@@ -1,45 +1,45 @@
-# Schema Registry Example - External HTTP Server
+# スキーマレジストリの例 - 外部HTTPサーバー
 
-This page demonstrates how the Schema Registry and Rule Engine support message encoding and decoding using an external HTTP server with custom logic.
+このページでは、スキーマレジストリとルールエンジンが、カスタムロジックを持つ外部HTTPサーバーを用いてメッセージのエンコードおよびデコードをサポートする方法を説明します。
 
-In some scenarios, you might need to apply custom encoding or decoding logic that EMQX does not support natively. EMQX allows you to delegate this processing to an external HTTP service by invoking it through `schema_encode` and `schema_decode` functions within a rule.
+特定のシナリオでは、EMQXがネイティブにサポートしていないカスタムのエンコードやデコードロジックを適用する必要がある場合があります。EMQXは、ルール内の `schema_encode` および `schema_decode` 関数を通じて外部HTTPサービスを呼び出し、この処理を委任することが可能です。
 
-## External HTTP API Specification
+## 外部HTTP API仕様
 
-To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single `POST` endpoint that handles the encoding or decoding requests from EMQX.  
+EMQXの `schema_encode` および `schema_decode` 関数と連携するカスタム外部HTTP APIを実装するには、外部HTTPサーバーはEMQXからのエンコードまたはデコード要求を処理する単一の `POST` エンドポイントを提供する必要があります。
 
-### Request Format
+### リクエスト形式
 
-The request body is a JSON object with the following fields:
+リクエストボディは以下のフィールドを持つJSONオブジェクトです：
 
-- `payload`: Base64-encoded string value passed to the `schema_encode` or `schema_decode` function in Rule Engine.
-- `type`: Either the `encode` or the `decode` string, depending on which function is evaluated, `schema_encode` or `schema_decode`.
-- `schema_name`: A string identifying the name of this External HTTP schema configured in EMQX.
-- `opts`: An arbitrary string that can be configured in EMQX to provide further options, which is passed unaltered to the HTTP server.
+- `payload`：Base64エンコードされた文字列で、ルールエンジンの `schema_encode` または `schema_decode` 関数に渡される値です。
+- `type`：評価される関数に応じて `encode` または `decode` の文字列が入ります。
+- `schema_name`：EMQXで設定されたこの外部HTTPスキーマの名前を識別する文字列です。
+- `opts`：EMQXで設定可能な任意の文字列で、追加オプションとしてHTTPサーバーにそのまま渡されます。
 
-### Response Format
+### レスポンス形式
 
-- The server must respond with HTTP status code `200`.
-- The response body must contain a base64-encoded string representing the result. Note that this base64 value must not be further JSON-encoded when replying to EMQX.
+- サーバーはHTTPステータスコード `200` で応答する必要があります。
+- レスポンスボディは結果を表すBase64エンコードされた文字列を含む必要があります。このBase64値はEMQXに返信する際にさらにJSONエンコードしてはいけません。
 
-## Example Use Case
+## 利用例
 
-Suppose a device publishes a binary message, and you want to encode or decode the payload using a custom XOR operation. This section demonstrates how to integrate custom encoding and decoding logic into EMQX by building a simple external HTTP service.
+例えば、あるデバイスがバイナリメッセージをパブリッシュし、そのペイロードに対してカスタムのXOR演算を用いてエンコードやデコードを行いたい場合を考えます。このセクションでは、シンプルな外部HTTPサービスを構築して、EMQXにカスタムのエンコード・デコードロジックを統合する方法を示します。
 
-### Build an External HTTP Service
+### 外部HTTPサービスの構築
 
-The following example demonstrates how to create and run a simple HTTP server using Python and Flask. The server receives Base64-encoded data and applies an XOR operation to the decoded payload.
+以下の例は、PythonとFlaskを使ってシンプルなHTTPサーバーを作成・起動する方法を示しています。このサーバーはBase64エンコードされたデータを受け取り、デコードしたペイロードにXOR演算を適用します。
 
 <details>
-<summary><strong>Code for sample External HTTP Server</strong></summary>
+<summary><strong>サンプル外部HTTPサーバーのコード</strong></summary>
 
-Ensure [Flask](https://flask.palletsprojects.com/en/stable/) is installed:
+[Flask](https://flask.palletsprojects.com/en/stable/)がインストールされていることを確認してください：
 
 ```sh
 pip install Flask==3.1.0
 ```
 
-Sample code:
+サンプルコード：
 
 ```python
 from flask import Flask, request
@@ -49,51 +49,51 @@ app = Flask(__name__)
 
 @app.route("/serde", methods=['POST'])
 def serde():
-    # The input payload is base64 encoded
+    # 入力ペイロードはBase64エンコードされています
     body = request.get_json(force=True)
     print("incoming request:", body)
     payload64 = body.get("payload")
     payload = base64.b64decode(payload64)
     secret = 122
     response = bytes(b ^ secret for b in payload)
-    # The response must also be base64 encoded
+    # レスポンスもBase64エンコードする必要があります
     response64 = base64.b64encode(response)
     return response64
 ```
 
-To run your server:
+サーバーの起動方法：
 
 ```sh
-# This assumes your server is in the same directory in a file named `myapp.py`
+# サーバーコードが同じディレクトリの `myapp.py` というファイル名であることを想定しています
 flask --app myapp --debug run -h 0.0.0.0 -p 9500
 ```
 
 </details>
 
-### Create External HTTP Schema in EMQX
+### EMQXで外部HTTPスキーマを作成する
 
-1. Go to the Dashboard, and select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
+1. ダッシュボードにアクセスし、左側のナビゲーションメニューから **Smart Data Hub** -> **Schema Registry** を選択します。
 
-2. In the **Internal** tab page, click **Create**.
+2. **Internal** タブページで **Create** をクリックします。
 
-3. Create an External HTTP server schema using the following parameters:
-   - **Name**: `myhttp`
+3. 以下のパラメータで外部HTTPサーバースキーマを作成します：
+   - **Name**：`myhttp`
 
-   - **Type**: `External HTTP`
+   - **Type**：`External HTTP`
 
-   - **URL**: The full URI where your server is running.  For example: `http://server:9500/serde`.
+   - **URL**：サーバーが稼働している完全なURI。例：`http://server:9500/serde`
 
-4. Click **Create**.
+4. **Create** をクリックします。
 
-### Create a Rule to Apply Schema
+### スキーマを適用するルールを作成する
 
-Use the EMQX rule engine to create a rule that applies your schema for message encoding and decoding.
+EMQXのルールエンジンを使って、メッセージのエンコード・デコードにスキーマを適用するルールを作成します。
 
-1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
+1. ダッシュボードで、ナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. On the **Rules** page, click **Create** at the top right corner.
+2. **Rules** ページで右上の **Create** をクリックします。
 
-3. Use the schema you have just created to write the rule SQL statement:
+3. 以下のSQL文を使って、先ほど作成したスキーマを呼び出すルールを記述します：
 
    ```sql
    SELECT
@@ -103,32 +103,35 @@ Use the EMQX rule engine to create a rule that applies your schema for message e
      "t/external_http"
    ```
 
-   Both `schema_encode('myhttp', payload)` and `schema_decode('myhttp', encoded)` will call the configured External HTTP server to encode/decode the given payload.
+   `schema_encode('myhttp', payload)` と `schema_decode('myhttp', encoded)` の両方が設定した外部HTTPサーバーを呼び出し、指定されたペイロードのエンコード・デコードを行います。
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. In the **Topic** field, type `external_http/out` as the destination topic.
+5. **Topic** フィールドに送信先トピックとして `external_http/out` と入力します。
 
-6. In the **Payload** field, type message content template: `${.}`. 
+6. **Payload** フィールドにメッセージ内容のテンプレートとして `${.}` と入力します。
 
-7. Click **Add** to add the action to the rule.
+7. **Add** をクリックしてアクションをルールに追加します。
 
-   This action sends the decoded message to the topic `external_http/out` in JSON format. `${.}` is a variable placeholder that will be replaced at runtime with the value of the whole output of the rule.
+   このアクションはデコードされたメッセージをJSON形式でトピック `external_http/out` に送信します。`${.}` はルールの出力全体の値に実行時に置き換わる変数プレースホルダーです。
 
-8. Click **Save** to complete the rule creation.
+8. **Save** をクリックしてルールの作成を完了します。
 
-### Check Rule Execution Results
+### ルール実行結果の確認
 
-1. In the Dashboard, select **Diagnose** -> **WebSocket Client**.
-2. Fill in the connection information for the current EMQX instance.
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
-3. Click **Connect** to connect to the EMQX instance as an MQTT client.
-4. In the **Subscription** area, type `external_http/out` in the **Topic** field and click **Subscribe**.
+1. ダッシュボードで **Diagnose** -> **WebSocket Client** を選択します。
 
-5. In the **Publish** area, type `t/external_http` in the **Topic** field, write any payload you wish, and click **Publish**.
+2. 現在のEMQXインスタンスへの接続情報を入力します。
+   - ローカルでEMQXを実行している場合はデフォルト値を使用できます。
+   - 認証設定などでEMQXのデフォルト設定を変更している場合は、ユーザー名やパスワードの入力が必要になることがあります。
 
-6. Check that a message with the topic `external_http/out` is received on the Websocket side.  For example, if your payload was `hello`:
+3. **Connect** をクリックしてMQTTクライアントとしてEMQXインスタンスに接続します。
+
+4. **Subscription** エリアの **Topic** フィールドに `external_http/out` と入力し、**Subscribe** をクリックします。
+
+5. **Publish** エリアの **Topic** フィールドに `t/external_http` と入力し、任意のペイロードを記入して **Publish** をクリックします。
+
+6. WebSocket側でトピック `external_http/out` のメッセージを受信できることを確認します。例えば、ペイロードが `hello` の場合：
 
    ```json
    {"encoded":"\u0012\u001F\u0016\u0016\u0015","decoded":"hello"}

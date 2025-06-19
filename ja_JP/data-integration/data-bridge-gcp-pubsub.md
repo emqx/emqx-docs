@@ -1,117 +1,117 @@
-# Ingest MQTT Data into GCP Pub/Sub
+# GCP Pub/Sub への MQTT データ取り込み
 
-[Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) is an asynchronous messaging service designed to achieve extremely high reliability and scalability. EMQX supports seamless integration with Google Cloud Pub/Sub for real-time extraction, processing, and analysis of MQTT data. It can push data to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run, Kubernetes Engine, and Compute Engine. Alternatively, it can also distribute data from Google Cloud to MQTT, helping users rapidly build IoT applications on GCP.
+[Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) は、非常に高い信頼性とスケーラビリティを実現する非同期メッセージングサービスです。EMQX は、MQTT データをリアルタイムで抽出、処理、分析するために Google Cloud Pub/Sub とシームレスに統合できます。Cloud Functions、App Engine、Cloud Run、Kubernetes Engine、Compute Engine などのさまざまな Google Cloud サービスへデータをプッシュ可能です。また、Google Cloud から MQTT へのデータ配信も可能で、ユーザーが GCP 上で迅速に IoT アプリケーションを構築するのに役立ちます。
 
-This page provides a comprehensive introduction to the data integration between EMQX and GCP Pub/Sub with practical instructions on creating and validating the data integration.
+本ページでは、EMQX と GCP Pub/Sub 間のデータ統合について包括的に紹介し、データ統合の作成および検証方法を実践的に解説します。
 
-## How It Works
+## 動作概要
 
-GCP Pub/Sub data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
+GCP Pub/Sub データ統合は、EMQX の標準機能として提供されており、MQTT データストリームを Google Cloud とシームレスに連携させ、豊富なサービスと機能を活用して IoT アプリケーション開発を支援します。
 
 ![GCP_bridge_architect](./assets/gcp_pubsub/GCP_bridge_architect.png)
 
-EMQX forwards MQTT data to GCP Pub/Sub through the rule engine and Sink. Taking the example of a GCP Pub/Sub producer role, the complete process is as follows:
+EMQX はルールエンジンと Sink を介して MQTT データを GCP Pub/Sub に転送します。GCP Pub/Sub のプロデューサー役割の例を挙げると、全体の流れは以下の通りです。
 
-1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
-2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
-3. **Bridging to GCP Pub/Sub**: The rule triggers the action of forwarding messages to GCP Pub/Sub, allowing easy configuration of data properties, ordering keys, and mapping of MQTT topics to GCP Pub/Sub topics. This provides richer context information and order assurance for data integration, enabling flexible IoT data processing.
+1. **IoT デバイスがメッセージをパブリッシュ**: デバイスは特定のトピックを通じてテレメトリや状態データをパブリッシュし、ルールエンジンをトリガーします。
+2. **ルールエンジンがメッセージを処理**: 内蔵のルールエンジンは、特定のトピックにマッチする MQTT メッセージを処理します。ルールにマッチしたメッセージは、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理が行われます。
+3. **GCP Pub/Sub へのブリッジング**: ルールがトリガーされると、メッセージを GCP Pub/Sub に転送するアクションが実行されます。データのプロパティ設定、オーダーキーの指定、MQTT トピックと GCP Pub/Sub トピックのマッピングが容易に設定可能です。これにより、より豊富なコンテキスト情報と順序保証を持つデータ統合が実現し、柔軟な IoT データ処理が可能となります。
 
-After MQTT message data is written to GCP Pub/Sub, you can perform flexible application development, such as:
+MQTT メッセージデータが GCP Pub/Sub に書き込まれた後は、以下のような柔軟なアプリケーション開発が可能です。
 
-- Real-time Data Processing and Analysis: Utilize powerful Google Cloud data processing and analysis tools like Dataflow, BigQuery, and Pub/Sub's own streaming capabilities to perform real-time processing and analysis of message data, obtaining valuable insights and decision support.
-- Event-Driven Functionality: Trigger Google Cloud event handling, such as Cloud Functions and Cloud Run, to achieve dynamic and flexible function triggering and processing.
-- Data Storage and Sharing: Transmit message data to Google Cloud storage services like Cloud Storage and Firestore for secure storage and management of large volumes of data. This allows you to share and analyze this data with other Google Cloud services to meet various business needs.
+- リアルタイムデータ処理・分析：Dataflow、BigQuery、Pub/Sub のストリーミング機能など、Google Cloud の強力なデータ処理・分析ツールを活用し、メッセージデータのリアルタイム処理や分析を行い、貴重な洞察や意思決定支援を得られます。
+- イベント駆動型機能：Cloud Functions や Cloud Run などの Google Cloud イベント処理をトリガーし、動的かつ柔軟な機能トリガーと処理を実現します。
+- データ保存・共有：Cloud Storage や Firestore などの Google Cloud ストレージサービスにメッセージデータを送信し、大量データの安全な保存・管理を行います。これにより他の Google Cloud サービスと連携してデータ共有や分析を行い、多様なビジネスニーズに対応可能です。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with GCP Pub/Sub offers a range of features and benefits:
+GCP Pub/Sub とのデータ統合は以下のような特長とメリットを提供します。
 
-- **Robust Messaging Service**: Both EMQX and GCP Pub/Sub possess high availability and scalability features, ensuring the reliable reception, delivery, and processing of large-scale message streams. They support IoT data sequencing, message quality assurance, and persistence, ensuring the dependable transmission and handling of messages.
-- **Flexible Rules Engine**: With the built-in rules engine, specific source messages and events can be processed based on topic matching. Messages and events can be manipulated, such as data format conversion, filtering out specific information, or enriching messages with context information. Combining this with GCP Pub/Sub allows for further processing and analysis.
-- **Rich Contextual Information**: Through the GCP Pub/Sub data integration, you can add richer contextual information to messages, mapping client attributes to Pub/Sub attributes, sorting keys, and more. This aids in performing more precise analysis and processing in subsequent application development and data handling.
+- **堅牢なメッセージングサービス**：EMQX と GCP Pub/Sub は共に高可用性とスケーラビリティを備え、大規模なメッセージストリームの信頼性の高い受信、配信、処理を保証します。IoT データの順序性、メッセージ品質保証、パーシステンスをサポートし、メッセージの確実な伝送と処理を実現します。
+- **柔軟なルールエンジン**：内蔵のルールエンジンにより、特定の送信元メッセージやイベントをトピックマッチングに基づいて処理可能です。データ形式変換、特定情報のフィルタリング、コンテキスト情報の付加などが行え、GCP Pub/Sub と組み合わせてさらなる処理や分析が可能です。
+- **豊富なコンテキスト情報**：GCP Pub/Sub データ統合を通じて、クライアント属性を Pub/Sub 属性にマッピングしたり、ソートキーを設定したりすることで、メッセージにより豊かなコンテキスト情報を付加できます。これにより、後続のアプリケーション開発やデータ処理でより精密な分析・処理が可能となります。
 
-In summary, integrating EMQX and GCP Pub/Sub enables highly reliable, scalable message delivery, along with extensive tools and services for data analysis and integration. This empowers you to build robust IoT applications and implement flexible business logic based on event-driven capabilities.
+まとめると、EMQX と GCP Pub/Sub の統合により、高信頼かつスケーラブルなメッセージ配信と、データ分析・統合のための豊富なツール・サービスを活用できます。これにより、堅牢な IoT アプリケーションの構築や、イベント駆動型の柔軟なビジネスロジックの実装が可能となります。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the GCP Pub/Sub data integration.
+このセクションでは、GCP Pub/Sub データ統合の作成を開始する前に必要な準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- EMQX のデータ統合に関する [ルール](./rules.md) の知識
+- [データ統合](./data-bridges.md) に関する知識
 
-### Create Service Account Key in GCP
+### GCP でのサービスアカウントキーの作成
 
-You need to create a service account and a service account key to use the GCP PubSub service.
+GCP Pub/Sub サービスを利用するには、サービスアカウントとサービスアカウントキーの作成が必要です。
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permission to inspect/read and publish messages to the topic of interest (e.g.: Pub/Sub Editor role).
+1. GCP アカウントで [サービスアカウント](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) を作成します。サービスアカウントには、対象トピックへのメッセージの検査/読み取りおよびパブリッシュ権限（例：Pub/Sub Editor ロール）があることを確認してください。
 
-2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
-
-   ::: tip
-
-   Store the Service Account key securely for later use.
-
-   :::
-
-   <img src="./assets/gcp_pubsub/service-account-key.png" alt="service-account-key" style="zoom:50%;" />
-
-### Create and Manage Topics in GCP
-
-Before configuring the GCP Pub/Sub data integration on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
-
-1. In the Google Cloud console, go to the **Pub/Sub** ->**Topics** page. For detailed instructions, see [Create and manage topics](https://cloud.google.com/pubsub/docs/create-topic).
+2. 作成したサービスアカウントのメールアドレスをクリックし、**Key** タブを開きます。**Add key** のドロップダウンリストから **Create new key** を選択し、そのアカウント用のサービスアカウントキーを作成して JSON 形式でダウンロードします。
 
    ::: tip
 
-   The Service Account must have permission to publish that topic.
+   サービスアカウントキーは後で使用するため、安全に保管してください。
 
    :::
 
-2. In the **Topic ID** field, enter an ID for your topic. Click **Create topic**.
+   <img src="./assets/gcp_pubsub/service-account-key.png" alt="サービスアカウントキー" style="zoom:50%;" />
 
-   <img src="./assets/gcp_pubsub/create-topic-GCP-console.png" alt="create-topic-GCP-console" style="zoom:50%;" />
+### GCP でのトピックの作成と管理
 
-3. Go to the **Subscriptions** page. Click the **Topic ID** in the list. Create a subscription to the topic.
+EMQX で GCP Pub/Sub データ統合を設定する前に、トピックを作成し、GCP での基本的な管理操作に慣れておく必要があります。
 
-   - Select **Pull** in **Delivery type**.
-   - Select `7` Days for **Message retention duration**.
+1. Google Cloud コンソールで **Pub/Sub** -> **Topics** ページに移動します。詳細な手順は [トピックの作成と管理](https://cloud.google.com/pubsub/docs/create-topic) を参照してください。
 
-   For detailed instructions, see [GCP Pub/Sub Subscription](https://cloud.google.com/pubsub/docs/subscriber).
+   ::: tip
 
-   <img src="./assets/gcp_pubsub/add-subscription-to-topic.png" alt="add-subscription-to-topic" style="zoom:50%;" />
+   サービスアカウントには、そのトピックへのパブリッシュ権限が必要です。
 
-4. Click **Subscription ID** -> **Messages** -> **Pull** can view the message sent to the topic.
+   :::
 
-   <img src="./assets/gcp_pubsub/subscriptions-id.png" alt="subscriptions-id" style="zoom:50%;" />
+2. **Topic ID** フィールドにトピックの ID を入力し、**Create topic** をクリックします。
 
-   <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="subscriptions-id-pull" style="zoom:50%;" />
+   <img src="./assets/gcp_pubsub/create-topic-GCP-console.png" alt="GCP コンソールでのトピック作成" style="zoom:50%;" />
 
-## Create a GCP Pub/Sub Producer Connector
+3. **Subscriptions** ページに移動し、リストの **Topic ID** をクリックします。トピックに対するサブスクリプションを作成します。
 
-Before adding a GCP Pub/Sub Producer Sink action, you need to create a GCP Pub/Sub Producer connector to establish a connection between EMQX and GCP Pub/Sub.
+   - **Delivery type** で **Pull** を選択します。
+   - **Message retention duration** で `7` 日を選択します。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
-2. Click **Create** in the top right corner of the page, select **Google PubSub Producer** on the connector selection page, and click **Next**.
-3. Enter a name and description, such as `my-pubsubproducer`. The name is used to associate the GCP Pub/Sub Producer Sink with the connector and must be unique within the cluster.
-4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to GCP Pub/Sub. For detailed steps, see [Create a Rule with GCP Pub/Sub Producer Sink](#create-a-rule-with-gcp-pub-sub-producer-sink).
+   詳細は [GCP Pub/Sub サブスクリプション](https://cloud.google.com/pubsub/docs/subscriber) を参照してください。
 
-## Create a Rule with GCP Pub/Sub Producer Sink
+   <img src="./assets/gcp_pubsub/add-subscription-to-topic.png" alt="トピックへのサブスクリプション追加" style="zoom:50%;" />
 
-This section demonstrates how to create a rule to specify the data to be saved into GCP Pub/Sub.
+4. **Subscription ID** -> **Messages** -> **Pull** をクリックすると、トピックに送信されたメッセージを確認できます。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+   <img src="./assets/gcp_pubsub/subscriptions-id.png" alt="サブスクリプションID" style="zoom:50%;" />
 
-2. Click **Create** on the top right corner of the page.
+   <img src="./assets/gcp_pubsub/subscriptions-id-pull.png" alt="サブスクリプションIDのメッセージプル" style="zoom:50%;" />
 
-3. Enter `my_rule` as the rule ID.
+## GCP Pub/Sub プロデューサーコネクターの作成
 
-4. Set the rules in the **SQL Editor**. Here if you want to save the MQTT messages under topic `/devices/+/events`  to GCP PubSub, you can use the SQL syntax below.
+GCP Pub/Sub プロデューサー Sink アクションを追加する前に、EMQX と GCP Pub/Sub 間の接続を確立するため、GCP Pub/Sub プロデューサーコネクターを作成する必要があります。
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the payload template in the Sink.
+1. EMQX ダッシュボードで **Integration** -> **Connector** をクリックします。
+2. ページ右上の **Create** をクリックし、コネクター選択画面で **Google PubSub Producer** を選択して **Next** をクリックします。
+3. 名前と説明を入力します（例：`my-pubsubproducer`）。この名前は GCP Pub/Sub プロデューサー Sink とコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
+4. **GCP Service Account Credentials** にて、[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが GCP Pub/Sub サーバーに接続できるかテスト可能です。
+6. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックして Sink を指定したルール作成を続行できます。詳細は [GCP Pub/Sub プロデューサー Sink を用いたルール作成](#create-a-rule-with-gcp-pub-sub-producer-sink) を参照してください。
+
+## GCP Pub/Sub プロデューサー Sink を用いたルールの作成
+
+このセクションでは、GCP Pub/Sub に保存するデータを指定するルールの作成方法を説明します。
+
+1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
+
+2. ページ右上の **Create** をクリックします。
+
+3. ルール ID に `my_rule` を入力します。
+
+4. **SQL Editor** でルールを設定します。例えば、トピック `/devices/+/events` の MQTT メッセージを GCP Pub/Sub に保存したい場合、以下の SQL 文を使用します。
+
+   注意：独自の SQL 文を指定する場合、`SELECT` 部分に Sink のペイロードテンプレートで必要なすべてのフィールドが含まれていることを確認してください。
 
    ```sql
    SELECT
@@ -120,95 +120,95 @@ This section demonstrates how to create a rule to specify the data to be saved i
      "/devices/+/events"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   注意：初心者の場合は、**SQL Examples** と **Enable Test** をクリックして SQL ルールの学習とテストが可能です。
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `Google PubSub Producer` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to GCP Pub/Sub.
+5. **+ Add Action** ボタンをクリックして、ルールでトリガーされるアクションを定義します。**Type of Action** ドロップダウンリストから `Google PubSub Producer` を選択すると、EMQX はルールで処理されたデータを GCP Pub/Sub に送信します。
 
-6. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a GCP Pub/Sub Producer Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
+6. **Action** ドロップダウンは `Create Action` のままにします。あるいは、以前に作成した GCP Pub/Sub プロデューサー Sink を選択することも可能です。本デモでは新しい Sink を作成してルールに追加します。
 
-7. In the **Name** field, enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+7. **Name** フィールドに Sink の名前を入力します。名前は英数字の組み合わせで指定してください。
 
-8. Select the `my_pubsubprodcer` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector** ドロップダウンから先ほど作成した `my_pubsubprodcer` を選択します。隣のボタンから新しいコネクターを作成することも可能です。設定パラメータの詳細は [コネクターの作成](#create-a-connector) を参照してください。
 
-9. In **GCP PubSub Topic**, enter the topic ID `my-iot-core` you created in [Create and Manage Topic in GCP](#create-and-manage-topic-in-gcp).
+9. **GCP PubSub Topic** に、[GCP でのトピックの作成と管理](#gcp-でのトピックの作成と管理) で作成したトピック ID `my-iot-core` を入力します。
 
-10. Define a template in **Payload Template**, or leave it blank.
+10. **Payload Template** にテンプレートを定義するか空欄のままにします。
 
-    - If left blank, it will encode all visible inputs from the MQTT message using JSON format, such as clientid, topic, payload, etc.
-    - If using the defined template, placeholders of the form `${variable_name}` will be filled with the corresponding value from the MQTT context.  For example, `${topic}` will be replaced with `my/topic` if such is the MQTT message topic.
+    - 空欄の場合、MQTT メッセージのクライアントID、トピック、ペイロードなどの可視入力をすべて JSON 形式でエンコードします。
+    - 定義したテンプレートを使用する場合、`${variable_name}` 形式のプレースホルダーは MQTT コンテキストの対応する値で置換されます。例：`${topic}` は MQTT メッセージのトピックが `my/topic` なら `my/topic` に置換されます。
 
-11. Define templates for formatting the attributes and/or ordering key of the outgoing message in **Attributes Template** and **Ordering Key Template** (optional).
+11. **Attributes Template** および **Ordering Key Template** にて、送信メッセージの属性やオーダーキーのフォーマットテンプレートを定義します（任意）。
 
-    - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP Pub/Sub.
-    - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP Pub/Sub outgoing message.
+    - **Attributes** はキーと値の両方に `${variable_name}` 形式のプレースホルダーを使用可能で、MQTT コンテキストから値が抽出されます。キーのテンプレートが空文字列になる場合、そのキーは GCP Pub/Sub 送信メッセージから除外されます。
+    - **Ordering Key** は `${variable_name}` 形式のプレースホルダーを使用可能で、解決後の値が空文字列の場合は GCP Pub/Sub 送信メッセージの `orderingKey` フィールドは設定されません。
 
-12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+12. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は [フォールバックアクション](./data-bridges.md#fallback-actions) を参照してください。
 
-13. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+13. **詳細設定（任意）**：詳細は [Sink の機能](./data-bridges.md#features-of-sink) を参照してください。
 
-14. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP Pub/Sub server.
+14. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが GCP Pub/Sub サーバーに接続できるかテスト可能です。
 
-15. Click the **Create** button to complete the Sink configuration and you will see the new Sink appear under the **Action Outputs** tab.
+15. **Create** ボタンをクリックして Sink の設定を完了すると、新しい Sink が **Action Outputs** タブに表示されます。
 
-16. Back on the **Create Rule** page, click **Create** to create the rule. 
+16. **Create Rule** ページに戻り、**Create** をクリックしてルールを作成します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
+これでルールが正常に作成されました。**Integration** -> **Rules** ページで新規作成したルールを確認できます。**Actions(Sink)** タブをクリックすると、新しい Google PubSub Producer Sink が表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `/devices/+/events` are sent and saved to GCP Pub/Sub after parsing by rule `my_rule`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示され、トピック `/devices/+/events` のメッセージがルール `my_rule` によって解析され、GCP Pub/Sub に送信・保存されていることが確認できます。
 
-## Test the Producer Rule
+## プロデューサールールのテスト
 
-1. Use MQTTX to send messages on the topic `/devices/+/events`.
+1. MQTTX を使ってトピック `/devices/+/events` にメッセージを送信します。
 
    ```bash
    mqttx pub -i emqx_c -t /devices/+/events -m '{ "msg": "hello GCP PubSub" }'
    ```
 
-2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+2. Sink の稼働状況を確認すると、新規の受信メッセージと送信メッセージがそれぞれ1件ずつあるはずです。
 
-3. Go to GCP **Pub/Sub** -> **Subscriptions**, click **MESSAGES** tab. You should see the message.
+3. GCP の **Pub/Sub** -> **Subscriptions** に移動し、**MESSAGES** タブをクリックするとメッセージが確認できます。
 
-## Create a GCP Pub/Sub Consumer Connector
+## GCP Pub/Sub コンシューマーコネクターの作成
 
-Before adding a GCP Pub/Sub Consumer Sink, you need to create a GCP Pub/Sub Consumer connector to establish a connection between EMQX and GCP Pub/Sub.
+GCP Pub/Sub コンシューマー Sink を追加する前に、EMQX と GCP Pub/Sub 間の接続を確立するため、GCP Pub/Sub コンシューマーコネクターを作成する必要があります。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
-2. Click **Create** in the top right corner of the page, select **Google PubSub Consumer** on the connector selection page, and click **Next**.
-3. Enter a name and description, such as `my-pubsubconsumer`. The name is used to associate the GCP Pub/Sub Consumer Sink with the connector and must be unique within the cluster.
-4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GCP Pub/Sub server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GCP Pub/Sub Consumer Source to consume the data from GCP Pub/Sub and forward the data to EMQX. For detailed steps, see [Create a Rule with GCP Pub/Sub Consumer Source](#create-a-rule-with-gcp-pub-sub-cconsumer-source).
+1. EMQX ダッシュボードで **Integration** -> **Connector** をクリックします。
+2. ページ右上の **Create** をクリックし、コネクター選択画面で **Google PubSub Consumer** を選択して **Next** をクリックします。
+3. 名前と説明を入力します（例：`my-pubsubconsumer`）。この名前は GCP Pub/Sub コンシューマー Sink とコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
+4. **GCP Service Account Credentials** にて、[GCP でのサービスアカウントキーの作成](#gcp-でのサービスアカウントキーの作成) でエクスポートした JSON 形式のサービスアカウント認証情報をアップロードします。
+5. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが GCP Pub/Sub サーバーに接続できるかテスト可能です。
+6. ページ下部の **Create** ボタンをクリックしてコネクターの作成を完了します。ポップアップダイアログで **Back to Connector List** をクリックするか、**Create Rule** をクリックして GCP Pub/Sub コンシューマーソースを用いたルール作成を続行できます。詳細は [GCP Pub/Sub コンシューマーソースを用いたルール作成](#create-a-rule-with-gcp-pub-sub-cconsumer-source) を参照してください。
 
-## Create a Rule with GCP Pub/Sub Consumer Source
+## GCP Pub/Sub コンシューマーソースを用いたルールの作成
 
-This section demonstrates how to create a rule in EMQX for consuming the message from GCP Pub/Sub and forwading the message to EMQX. You need to create and configure a Google PubSub Consumer source and add it to the rule as the data inputs. You also need to add a Republish action to the rule to forward the message from GCP Pub/Sub to EMQX.
+このセクションでは、GCP Pub/Sub からメッセージを消費し、EMQX に転送するルールの作成方法を説明します。Google PubSub コンシューマーソースを作成・設定し、ルールのデータ入力として追加します。また、メッセージを EMQX に転送するために Republish アクションをルールに追加します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQX ダッシュボードで **Integration** -> **Rules** をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の **Create** をクリックします。
 
-3. Enter `my_rule_source` as the rule ID.
+3. ルール ID に `my_rule_source` を入力します。
 
-4. Under the **Data Inputs** tab on the right, delete the default Input `Messages`. Click **Add Input**.
+4. 右側の **Data Inputs** タブでデフォルトの Input `Messages` を削除し、**Add Input** をクリックします。
 
-5. From the **Input Type** dropdown, select `Google PubSub Consumer`.
+5. **Input Type** ドロップダウンから `Google PubSub Consumer` を選択します。
 
-6. Keep the default value `Create Source` for the **Source** dropdown. This demonstration will create a new Source and add it to the rule.
+6. **Source** ドロップダウンはデフォルトの `Create Source` のままにします。本デモでは新しいソースを作成してルールに追加します。
 
-7. Enter the **Name** and **Description** (optional) for the Source. The name should combine upper/lower case letters and numbers, for example, `my-gcppubsub-source`.
+7. ソースの **Name** と（任意の）**Description** を入力します。名前は英数字の組み合わせで、例：`my-gcppubsub-source`。
 
-8. Select the `my_pubsubconsumer` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector** ドロップダウンから先ほど作成した `my_pubsubconsumer` を選択します。隣のボタンから新しいコネクターを作成することも可能です。設定パラメータの詳細は [コネクターの作成](#create-a-connector) を参照してください。
 
-9. Configure the following information for the source for consuming the message from GCP Pub/Sub to EMQX:
+9. GCP Pub/Sub から EMQX へメッセージを消費するため、以下の情報を設定します。
 
-   - **GCP PubSub Topic**: Enter the topic name of the GCP Pub/Sub topic to be consumed from, for example, `my-iot-core`.
-   - **Maximum Messages to Pull**: Specifiy the maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
+   - **GCP PubSub Topic**：消費対象の GCP Pub/Sub トピック名を入力します（例：`my-iot-core`）。
+   - **Maximum Messages to Pull**：1 回のプルリクエストで取得する最大メッセージ数を指定します。実際の取得数は指定値未満の場合があります。
 
-10. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+10. 詳細設定（任意）：詳細は [Sink の機能](./data-bridges.md#features-of-sink) を参照してください。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test if the connection to the GCP Pub/Sub server is successful.
+11. **Create** をクリックする前に、**Test Connectivity** をクリックして GCP Pub/Sub サーバーへの接続が成功するかテスト可能です。
 
-12. Click **Create** to complete the source creation. The source is added to the rule under the **Data Inputs** tab and you can see that the rule in the **SQL Editor** is as follows:
+12. **Create** をクリックしてソースの作成を完了します。ソースはルールの **Data Inputs** タブに追加され、**SQL Editor** のルールは以下のようになります。
 
     ```sql
     SELECT
@@ -217,40 +217,40 @@ This section demonstrates how to create a rule in EMQX for consuming the message
       "$bridges/gcppubsub:my-gcppubsub-source"
     ```
 
-    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+    注意：初心者の場合は、**SQL Examples** と **Enable Test** をクリックして SQL ルールの学習とテストが可能です。
 
-    From the `my-gcppubsub-source`, the rule SQL can access the GCP Pub/Sub message fields shown in the following GCP Pub/Sub-to-MQTT topic mapping table. You can adjust the rule SQL for data processing. In this example, you can use the default SQL.
+    `my-gcppubsub-source` から、ルール SQL は以下の GCP Pub/Sub から MQTT トピックへのマッピングテーブルに示す GCP Pub/Sub メッセージフィールドにアクセス可能です。ルール SQL を調整してデータ処理を行えます。本例ではデフォルトの SQL を使用します。
 
-    | Field Name        | Description                                                  |
-    | ----------------- | ------------------------------------------------------------ |
-    | `attributes`      | (Optional) An object containing string key-value pairs, if any |
-    | `message_id`      | The message ID assigned by GCP Pub/Sub to this message       |
-    | `ordering_key`    | (Optional) The message ordering key, if any                  |
-    | `publishing_time` | Message timestamp as defined by GCP Pub/Sub                  |
-    | `topic`           | Originating GCP Pub/Sub topic                                |
-    | `value`           | (Optional) The message payload, if present                   |
+    | フィールド名           | 説明                                                         |
+    | ---------------------- | ------------------------------------------------------------ |
+    | `attributes`           | （任意）文字列のキー・バリューのペアを含むオブジェクト（存在する場合） |
+    | `message_id`           | GCP Pub/Sub がこのメッセージに割り当てたメッセージ ID       |
+    | `ordering_key`         | （任意）メッセージの順序キー（存在する場合）                 |
+    | `publishing_time`      | GCP Pub/Sub によるメッセージのタイムスタンプ                 |
+    | `topic`                | 元の GCP Pub/Sub トピック名                                   |
+    | `value`                | （任意）メッセージのペイロード（存在する場合）               |
 
-    **Note**: Each GCP Pub/Sub-to-MQTT topic mapping must contain a unique GCP Pub/Sub topic name.  That is, the GCP Pub/Sub topic must not be present in more than one mapping.
+    **注意**：各 GCP Pub/Sub から MQTT トピックへのマッピングは、ユニークな GCP Pub/Sub トピック名を含む必要があります。つまり、同じ GCP Pub/Sub トピックが複数のマッピングに存在してはなりません。
 
-Now you have now successfully created the GCP Pub/Sub Consumer Source, but the messages will not be published to EMQX directly. Next, continue with the steps in [Add Republish Action to the Rule](#add-republish-action-to-the-rule) to create a Republish action and add it to the rule.
+これで GCP Pub/Sub コンシューマーソースの作成は完了しましたが、メッセージはまだ直接 EMQX にパブリッシュされません。次に、[ルールへの Republish アクションの追加](#add-republish-action-to-the-rule) を続けて、Republish アクションを作成しルールに追加してください。
 
-### Add Republish Action to the Rule
+### ルールへの Republish アクションの追加
 
-This section demonstrates how to add a Republish action to the rule for forwarding the message consumed from the GCP Pub/Sub Consumer Source and publishing to the EMQX topic `t/1`.
+このセクションでは、GCP Pub/Sub コンシューマーソースから消費したメッセージを転送し、EMQX トピック `t/1` にパブリッシュするための Republish アクションをルールに追加する方法を説明します。
 
-1. Select the **Action Output** tab on the right side of the page, click the **Add Action** button, and select the `Republish` action from the **Type of Action** dropdown list.
+1. ページ右側の **Action Output** タブを選択し、**Add Action** ボタンをクリックして、**Type of Action** ドロップダウンリストから `Republish` アクションを選択します。
 
-2. Fill in the message republish configuration:
+2. メッセージ再パブリッシュの設定を入力します。
 
-   - **Topic**: The topic to publish to MQTT, enter `t/1` here.
+   - **Topic**：MQTT にパブリッシュするトピックを指定します。ここでは `t/1` と入力します。
 
-   - **QoS**: Select `0`, `1`, `2`, or `${qos}`, or enter a placeholder to set QoS from other fields. Selecting `${qos}` here means to follow the original message's QoS.
+   - **QoS**：`0`、`1`、`2`、`${qos}` のいずれかを選択、または他のフィールドから QoS を設定するためのプレースホルダーを入力します。`${qos}` を選択すると元のメッセージの QoS に従います。
 
-   - **Retain**: Select `true` or `false`. Determine whether to publish the message as a retained message, placeholders can also be entered to set the retain message flag from other fields. In this example, select `false`.
+   - **Retain**：`true` または `false` を選択します。メッセージをリテインメッセージとしてパブリッシュするかどうかを決定します。プレースホルダーも使用可能です。本例では `false` を選択します。
 
-   - **Payload**: Set a template for generating the forwarded message payload. Leaving it blank by default means forwarding the rule output result. Here you can enter `${payload}` to indicate forwarding Payload only.
+   - **Payload**：転送するメッセージペイロードのテンプレートを設定します。空欄の場合はルールの出力結果をそのまま転送します。ここでは `${payload}` を入力し、ペイロードのみを転送します。
 
-     The default value for MQTT payload template is `${.}`, which includes all available data encoded as a JSON object.  For example, choosing `${.}` as a template will produce the following for a GCP Pub/Sub message containing all optional fields:
+     MQTT ペイロードテンプレートのデフォルト値は `${.}` で、利用可能なすべてのデータを JSON オブジェクトとしてエンコードします。例えば、すべてのオプションフィールドを含む GCP Pub/Sub メッセージに対して `${.}` をテンプレートに指定すると、以下のような JSON が生成されます。
 
      ```json
      {
@@ -263,16 +263,16 @@ This section demonstrates how to add a Republish action to the rule for forwardi
      }
      ```
 
-     Subfields from the GCP Pub/Sub message may be accessed with dot notation. For example, `${.value}` will resolve to the GCP Pub/Sub message value, and `${.attributes.h1}` will resolve to the value of the `h1` message attribute key if such a subfield exists.  Absent values will be replaced by empty strings.
+     GCP Pub/Sub メッセージのサブフィールドはドット表記でアクセス可能です。例：`${.value}` は GCP Pub/Sub メッセージの値に解決され、`${.attributes.h1}` は `h1` というメッセージ属性キーの値に解決されます。存在しない値は空文字列に置換されます。
 
-   - **MQTT 5.0 Message Properties**: Disabled by default. For detailed settings, see [Add Republish Action](./rule-get-started.md#add-republish-action).
+   - **MQTT 5.0 メッセージプロパティ**：デフォルトで無効です。詳細設定は [Republish アクションの追加](./rule-get-started.md#add-republish-action) を参照してください。
 
-3. Click **Create** to complete the action creation. After successful creation, you will return to the create rule page, and the republish action will be added to the **Action Outputs** tab.
+3. **Create** をクリックしてアクション作成を完了します。作成成功後、ルール作成ページに戻り、Republish アクションが **Action Outputs** タブに追加されます。
 
-4. On the rule creation page, click the **Create** button to complete the entire rule creation.
+4. ルール作成ページで **Create** ボタンをクリックしてルール全体の作成を完了します。
 
-Now that you have successfully created a rule, you can see the newly created rule on the **Rules** page. On the **Sources** tab, you can see the newly created GCP Pub/Sub Consumer Source.
+これでルールが正常に作成されました。**Rules** ページで新規作成したルールを確認できます。**Sources** タブで新しく作成した GCP Pub/Sub コンシューマーソースを確認できます。
 
-You can also click **Integrate** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages from the GCP Pub/Sub Consumer Source will be published to `t/1` through message republishing.
+また、**Integrate** -> **Flow Designer** をクリックするとトポロジーが表示され、GCP Pub/Sub コンシューマーソースからのメッセージが Republish を経由して `t/1` にパブリッシュされる様子を直感的に確認できます。
 
 ## <!--Test the Consumer Rule-->

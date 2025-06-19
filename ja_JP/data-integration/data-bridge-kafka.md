@@ -1,58 +1,58 @@
-# Stream MQTT Data into Apache Kafka
+# Apache KafkaへのMQTTデータストリーミング
 
-[Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. However, Kafka is not built for edge IoT communication and Kafka clients require a stable network connection and more hardware resources. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Kafka](https://www.Kafka.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions.
+[Apache Kafka](https://kafka.apache.org/)は、アプリケーションやシステム間でのリアルタイムなデータストリーム転送を処理できる、広く利用されているオープンソースの分散イベントストリーミングプラットフォームです。しかし、KafkaはエッジIoT通信向けに設計されておらず、Kafkaクライアントは安定したネットワーク接続とより多くのハードウェアリソースを必要とします。IoTの領域では、デバイスやアプリケーションから生成されるデータは軽量なMQTTプロトコルを用いて送信されます。EMQXのKafkaとの統合により、ユーザーはMQTTデータをKafkaにシームレスにストリーミングできます。MQTTのデータストリームはKafkaのトピックに取り込まれ、リアルタイムの処理、保存、分析が可能です。逆に、KafkaのトピックデータはMQTTデバイスによって消費され、タイムリーなアクションを実現します。
 
-<img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
+<img src="./assets/kafka_bridge.jpg" alt="Kafkaブリッジ" style="zoom:67%;" />
 
-This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on how to create and validate the data integration.
+本ページでは、EMQXとKafka間のデータ統合について包括的に紹介し、データ統合の作成および検証方法を実践的に解説します。
 
-## How It Works
+## 動作概要
 
-Apache Kafka data integration is an out-of-the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding.
+Apache Kafkaとのデータ統合は、MQTTベースのIoTデータとKafkaの強力なデータ処理機能のギャップを埋めるためにEMQXに標準搭載された機能です。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、両プラットフォーム間のデータストリーミングと処理を簡素化し、複雑なコーディングを不要にします。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and Kafka used in automotive IoT.
+以下の図は、自動車IoTで利用されるEMQXとKafka間のデータ統合の典型的なアーキテクチャを示しています。
 
-<img src="./assets/kafka_architecture.png" alt="kafka_architecture" style="zoom:67%;" />
+<img src="./assets/kafka_architecture.png" alt="Kafkaアーキテクチャ" style="zoom:67%;" />
 
 <!-- 将数据流入或流出 Apache Kafka 需要分别创建 Kafka Sink（向 Kafka 发送消息）和 Kafka Source（从 Kafka 接收消息）。以 Sink 为例，其工作流程如下： -->
-Streaming data into and out of Apache Kafka needs to create a Kafka Sink (to send messages to Kafka) and a Kafka Source (to receive messages from Kafka), respectively. Take the Sink as an example, the flow is as follows:
+Apache Kafkaへのデータの流入および流出には、それぞれKafka Sink（Kafkaへメッセージを送信）とKafka Source（Kafkaからメッセージを受信）を作成する必要があります。ここではSinkを例に、その処理フローを説明します。
 
-1. **Message publication and reception**: IoT devices on connected vehicles establish successful connections to EMQX through the MQTT protocol and periodically publish messages containing status data via MQTT. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic-matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Bridging to Kafka:** The rule defined in the rule engine triggers the action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
+1. **メッセージのパブリッシュと受信**：接続された車載IoTデバイスはMQTTプロトコルを介してEMQXに正常に接続し、定期的に状態データを含むメッセージをMQTTでパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **メッセージデータの処理**：ブローカーと一体化した組み込みルールエンジンにより、これらのMQTTメッセージはトピックマッチングルールに基づいて処理されます。メッセージが到着するとルールエンジンを通過し、定義されたルールが評価されます。ペイロード変換を指定するルールがあれば、データ形式の変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などの変換が適用されます。
+3. **Kafkaへのブリッジ**：ルールエンジンで定義されたルールがトリガーされると、メッセージはKafkaに転送されます。Kafkaブリッジ機能を用いて、MQTTトピックは事前定義されたKafkaトピックにマッピングされ、処理済みのすべてのメッセージとデータがKafkaトピックに書き込まれます。
 
-After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
+車両データがKafkaに取り込まれた後は、以下のように柔軟にデータへアクセスし活用できます。
 
-- Your services can directly integrate with Kafka clients to consume real-time data streams from specific topics, enabling customized business processing.
-- Utilize Kafka Streams for stream processing, and perform real-time monitoring by aggregating and correlating vehicle statuses in memory.
-- By using Kafka Connect components, you can select various connectors to output data to external systems such as MySQL, ElasticSearch, for storage.
+- サービスはKafkaクライアントと直接連携し、特定トピックからリアルタイムのデータストリームを消費してカスタマイズされたビジネス処理を実行可能です。
+- Kafka Streamsを利用してストリーム処理を行い、車両状態をメモリ上で集約・相関させてリアルタイム監視を実現します。
+- Kafka Connectコンポーネントを活用し、MySQLやElasticSearchなど外部システムへのデータ出力用コネクターを選択して保存できます。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with Apache Kafka brings the following features and benefits to your business:
+Apache Kafkaとのデータ統合は、以下の特長とメリットをビジネスにもたらします。
 
-- **Dependable and bi-directional IoT data messaging:**  The data communication between Kafka and resource-limited IoT devices running on unpredictable mobile networks can be processed under the MQTT protocol that excels in messaging in uncertain networks. EMQX not only batch forwards MQTT messages to Kafka but also subscribes to Kafka messages from backend systems and delivers them to connected IoT clients.
-- **Payload transformation**: Message payload can be processed by the defined SQL rules during the transmission. For example, payloads containing some real-time metrics such as total message count, successful/failed delivery count, and message rate can go through data extraction, filtering, enrichment, and transformation before the messages are ingested into Kafka.
-- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kakfa topics by the configured kafka integration. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
-- **Flexible partition selection strategy**: Supports forwarding messages to the same Kafka partition based on MQTT topics or clients.
-- **Processing capabilities in high-throughput situations**: EMQX Kafka producer supports both synchronous and asynchronous writing modes, allowing you to differentiate between real-time priority and performance priority for data writing strategies and enabling flexible balancing between latency and throughput according to different scenarios.
-- **Runtime metrics**: Supports viewing runtime metrics for each Sink and Source, such as total messages, success/failure counts, current rate, etc.
-- **Dynamic configuration**: You can dynamically configure Sink and Source in the Dashboard or configuration file.
+- **信頼性の高い双方向IoTデータメッセージング**：不安定なモバイルネットワーク上で動作するリソース制約のあるIoTデバイスとKafka間のデータ通信は、不確実なネットワークでのメッセージングに優れたMQTTプロトコルで処理されます。EMQXはMQTTメッセージをバッチでKafkaに転送するだけでなく、バックエンドシステムからのKafkaメッセージをサブスクライブして接続されたIoTクライアントに配信します。
+- **ペイロード変換**：メッセージのペイロードは転送中に定義されたSQLルールで処理可能です。例えば、総メッセージ数、成功/失敗配信数、メッセージレートなどのリアルタイムメトリクスを含むペイロードは、Kafkaに取り込む前にデータ抽出、フィルタリング、強化、変換を経ることができます。
+- **効果的なトピックマッピング**：多数のIoTビジネストピックは設定されたKafka統合によりKafkaトピックにマッピングされます。EMQXはMQTTユーザープロパティのKafkaヘッダーへのマッピングをサポートし、1対1、1対多、多対多の柔軟なトピックマッピング方法を採用し、MQTTトピックフィルター（ワイルドカード）にも対応しています。
+- **柔軟なパーティション選択戦略**：MQTTトピックやクライアントに基づいて同じKafkaパーティションにメッセージを転送することをサポートします。
+- **高スループット環境での処理能力**：EMQX Kafkaプロデューサーは同期・非同期の両書き込みモードをサポートし、リアルタイム優先とパフォーマンス優先のデータ書き込み戦略を区別可能で、シナリオに応じてレイテンシとスループットの柔軟なバランス調整を実現します。
+- **ランタイムメトリクス**：各SinkおよびSourceの総メッセージ数、成功/失敗数、現在のレートなどのランタイムメトリクスの閲覧をサポートします。
+- **動的設定**：Dashboardまたは設定ファイルでSinkおよびSourceを動的に設定可能です。
 
-These features enhance the integration capabilities and flexibility that help you establish an effective and robust IoT platform architecture. Your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively.
+これらの機能は統合能力と柔軟性を高め、効果的で堅牢なIoTプラットフォームアーキテクチャの構築を支援します。増大するIoTデータは安定したネットワーク接続のもとで送信され、さらに効果的に保存・管理されます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the Kafka Sink and Source in the EMQX Dashboard.
+このセクションでは、EMQX DashboardでKafka SinkおよびSourceを作成する前に必要な準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [Data Integration](./data-bridges.md)
+- EMQXのデータ統合[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
 
-### Set Up a Kafka Server
+### Kafkaサーバーのセットアップ
 
-This section takes macOS as an example to illustrate the process. You can install and run Kafka with the commands below:
+ここではmacOSを例にインストールと起動手順を示します。以下のコマンドでKafkaをインストールし起動できます。
 
 ```bash
 wget https://archive.apache.org/dist/kafka/3.3.1/kafka_2.13-3.3.1.tgz
@@ -61,7 +61,7 @@ tar -xzf  kafka_2.13-3.3.1.tgz
 
 cd kafka_2.13-3.3.1
 
-# Use KRaft start Kafka
+# KRaftモードでKafkaを起動
 KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
 
 bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
@@ -69,11 +69,11 @@ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properti
 bin/kafka-server-start.sh config/kraft/server.properties
 ```
 
-For detailed operation steps, you may refer to the [Quick Start section in Kafka Documentation](https://kafka.apache.org/documentation/#quickstart).
+詳細な手順は[Kafka公式ドキュメントのクイックスタート](https://kafka.apache.org/documentation/#quickstart)を参照してください。
 
-### Create Kafka Topics
+### Kafkaトピックの作成
 
-Relevant Kafka topics should be created before creating the data integration in EMQX. Use the commands below to create two topics in Kafka:  `testtopic-in` (for the Sink) and `testtopic-out` (for the Source).
+EMQXでのデータ統合作成前に、Kafkaトピックを作成しておく必要があります。以下のコマンドでSink用の`testtopic-in`とSource用の`testtopic-out`の2つのトピックを作成します。
 
 ```bash
 bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9092
@@ -81,85 +81,85 @@ bin/kafka-topics.sh --create --topic testtopic-in --bootstrap-server localhost:9
 bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:9092
 ```
 
-## Create a Kafka Producer Connector
+## Kafkaプロデューサーコネクターの作成
 
-Before adding a Kafka Sink action, you need to create a Kafka producer connector to establish a connection between EMQX and Kafka.
+Kafka Sinkアクションを追加する前に、EMQXとKafka間の接続を確立するためのKafkaプロデューサーコネクターを作成します。
 
-1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
+1. EMQX Dashboardで**Integration** -> **Connector**をクリックします。
 
-2. Click **Create** in the top right corner of the page, select **Kafka Producer** on the connector selection page, and click **Next**.
+2. ページ右上の**Create**をクリックし、コネクター選択画面で**Kafka Producer**を選択して**Next**をクリックします。
 
-3. Enter a name and description, such as `my-kafka`. The name is used to associate the Kafka Sink with the connector and must be unique within the cluster.
+3. 名前と説明を入力します。例：`my-kafka`。名前はKafka Sinkとコネクターを関連付けるために使用され、クラスター内で一意である必要があります。
 
-4. Configure the parameters required to connect to Kafka:
-   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+4. Kafka接続に必要なパラメータを設定します。
+   - **Bootstrap Hosts**：`127.0.0.1:9092`を入力します。デモではEMQXとKafkaをローカルで実行している想定です。リモート環境の場合は適宜調整してください。
 
-   - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
+   - **Authentication**：Kafkaクラスターで必要な認証方式を選択します。以下の方式をサポートしています。
 
-     - `None`: No authentication.
-     - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
-     - `Basic Auth`: Requires selecting a **mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **username** and **password**.
-     - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab file**.
+     - `None`：認証なし。
+     - `AWS IAM for MSK`：EMQXがEC2インスタンス上で動作し、AWS MSKクラスターを利用する場合。
+     - `Basic Auth`：**mechanism**（`plain`、`scram_sha_256`、`scram_sha_512`のいずれか）を選択し、**username**と**password**を入力。
+     - `Kerberos`：**Kerberos Principal**と**Kerberos Keytab file**を指定。
 
-     See [Authentication Method](#authentication-method) for details on each method.
+     詳細は[認証方式](#authentication-method)を参照してください。
 
-   - Leave other options as default or configure them according to your business needs.
+   - その他のオプションはデフォルトのままか、ビジネス要件に応じて設定してください。
 
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+   - 暗号化接続を確立する場合は、**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 
-5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
+5. **Create**をクリックする前に、**Test Connection**をクリックしてKafkaサーバーへの接続が成功するか確認できます。
 
-5. Click the **Create** button to complete the creation of the connector.
+6. **Create**をクリックしてコネクターの作成を完了します。
 
-Once created, the connector will automatically connect to Kafka. Next, you need to create a rule based on this connector to forward data to the Kafka cluster configured in the connector.
+作成後、コネクターは自動的にKafkaに接続します。次に、このコネクターを基にルールを作成し、Kafkaクラスターへのデータ転送を設定します。
 
-### Authentication Method
+### 認証方式
 
-When creating a Kafka connector in EMQX, you can choose from several authentication methods depending on your Kafka cluster’s security setup:
+EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュリティ設定に応じて以下の認証方式を選択できます。
 
-- **None**: No authentication is required.
+- **None**：認証不要。
 
-- **MSK IAM**: For connecting to Amazon MSK clusters when EMQX is deployed on Amazon EC2 instances.
+- **MSK IAM**：EMQXがAmazon EC2インスタンス上で動作し、Amazon MSKクラスターに接続する場合に使用。
 
-  This method uses the AWS EC2 instance metadata service to generate authentication tokens based on the IAM policies attached to the instance.
+  AWS EC2インスタンスのメタデータサービスを利用し、IAMポリシーに基づく認証トークンを生成します。
 
-  ::: tip Important Notice
+  ::: tip 重要
 
-  MSK IAM authentication is supported only when EMQX is running on EC2 instances connecting to MSK clusters, as it relies on the AWS Metadata API.
-
-  :::
-
-- **Basic Auth**: Uses a username and password for authentication.
-
-  When this method is selected, you must provide:
-  - **Mechanism**: Choose from `plain`, `scram_sha_256`, or `scram_sha_512`.
-  - **Username** and **Password**: Credentials to authenticate with the Kafka cluster.
-
-- **Kerberos**: Uses Kerberos GSSAPI for authentication.
-
-  This method requires:
-  - **Kerberos Principal**: The Kerberos identity used for authentication.
-  - **Kerberos Keytab File**: The file path to the keytab used for non-interactive authentication.
-
-  ::: tip Important Notice
-
-  The Kerberos keytab file must be located at the same path on all EMQX nodes, and the EMQX service user must have read permissions for the file.
+  MSK IAM認証は、EMQXがEC2インスタンス上で動作しMSKクラスターに接続する場合のみサポートされます。AWS Metadata APIに依存しているためです。
 
   :::
 
-## Create a Rule with Kafka Sink
+- **Basic Auth**：ユーザー名とパスワードによる認証。
 
-This section demonstrates how to create a rule in EMQX to process messages from the MQTT topic `t/#` and send the processed results to Kafka's `testtopic-in` topic using the configured Kafka Sink.
+  選択時は以下を指定する必要があります。
+  - **Mechanism**：`plain`、`scram_sha_256`、`scram_sha_512`のいずれかを選択。
+  - **Username**と**Password**：Kafkaクラスター認証用の資格情報。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+- **Kerberos**：Kerberos GSSAPIによる認証。
 
-2. Click **Create** on the top right corner of the page.
+  以下を指定する必要があります。
+  - **Kerberos Principal**：認証に使用するKerberosのプリンシパル。
+  - **Kerberos Keytab File**：非対話認証用のkeytabファイルのパス。
 
-3. Enter a rule ID, for example, `my_rule`.
+  ::: tip 重要
 
-4. Enter the following statement in the **SQL Editor** if you want to forward the MQTT messages from the topic `t/#` to Kafka.
+  KerberosのkeytabファイルはすべてのEMQXノードで同じパスに配置し、EMQXサービスユーザーが読み取り権限を持つ必要があります。
 
-   Note: If you want to specify your own SQL syntax, make sure that you have included all fields required by the sink in the `SELECT` part.
+  :::
+
+## Kafka Sinkを用いたルールの作成
+
+このセクションでは、MQTTトピック`t/#`からのメッセージを処理し、Kafka Sinkを使ってKafkaの`testtopic-in`トピックに送信するルールの作成方法を示します。
+
+1. EMQX Dashboardで**Integration** -> **Rules**をクリックします。
+
+2. ページ右上の**Create**をクリックします。
+
+3. ルールIDを入力します。例：`my_rule`。
+
+4. **SQL Editor**に以下のステートメントを入力します。これはトピック`t/#`のMQTTメッセージをKafkaに転送する例です。
+
+   注意：独自のSQL構文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
 
    ```sql
    SELECT
@@ -170,75 +170,75 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は**SQL Examples**や**Enable Test**をクリックしてSQLルールの学習とテストが可能です。
 
    :::
 
    ::: tip
 
-   EMQX v5.7.2 introduced the functionality to read environment variables in Rule SQL, detailed in [Use Environment Variables in Rule SQL](#use-environment-variables).
+   EMQX v5.7.2からルールSQLで環境変数を読み取る機能が追加されました。詳細は[ルールSQLで環境変数を使う](#use-environment-variables)を参照してください。
 
    :::
 
-5. Click the + **Add Action** button to define the action triggered by the rule. From the **Type of Action** dropdown list, select `Kafka Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Kafka Producer action from the **Action** dropdown box. This demonstration creates a new producer action and adds it to the rule.
+5. + **Add Action**ボタンをクリックしてルールでトリガーされるアクションを定義します。**Type of Action**ドロップダウンから`Kafka Producer`を選択し、**Action**はデフォルトの`Create Action`のままか、既存のKafka Producerアクションを選択します。ここでは新規作成してルールに追加します。
 
-6. Enter the name and description of the Sink in the corresponding text boxes below.
+6. Sinkの名前と説明を対応するテキストボックスに入力します。
 
-7. In the **Connector** dropdown box, select the `my-kafka` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
+7. **Connector**ドロップダウンから先ほど作成した`my-kafka`コネクターを選択します。隣のボタンをクリックするとポップアップで新規コネクター作成も可能です。設定パラメータは[Kafkaプロデューサーコネクターの作成](#create-a-kafka-producer-connector)を参照してください。
 
-8. Configure the data-sending method for the Sink, including:
+8. Sinkのデータ送信方法を設定します。
 
-   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details.
+   - **Kafka Topic**：`testtopic-in`を入力します。EMQX v5.7.2以降、このフィールドは動的トピック設定もサポートしています。詳細は[変数テンプレートの使用](#use-variable-templates)を参照してください。
 
-   - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
+   - **Kafka Headers**：Kafkaメッセージに関連するメタデータやコンテキスト情報を入力します（任意）。プレースホルダーの値はオブジェクトである必要があります。ヘッダー値のエンコードタイプは**Kafka Header Value Encod Type**ドロップダウンから選択可能です。**Add**をクリックしてキー・バリューのペアを追加できます。
 
-   - **Message Key**: The key of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+   - **Message Key**：Kafkaメッセージのキー。純粋な文字列または`${var}`を含む文字列を入力可能です。
 
-   - **Message Value**: The value of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+   - **Message Value**：Kafkaメッセージの値。純粋な文字列または`${var}`を含む文字列を入力可能です。
 
-   - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
+   - **Partition Strategy**：プロデューサーがKafkaパーティションにメッセージを分配する方法を選択します。
 
-   - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
+   - **Compression**：Kafkaメッセージのレコード圧縮/解凍に使用する圧縮アルゴリズムを指定します。
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
+10. **詳細設定（任意）**：[詳細設定](#advanced-configurations)を参照してください。
 
-11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+11. **Create**をクリックしてSinkの作成を完了します。作成後は**Create Rule**画面に戻り、新しいSinkがルールアクションに追加されます。
 
-12. Click the **Create** button to complete the entire rule creation.
+12. **Create**をクリックしてルール作成を完了します。
 
-Now you have successfully created the rule, and you can see the newly created rule on the **Integration** -> **Rules** page, as well as the newly created Kafka Producer Sink on the **Actions(Sink)** tab.
+これでルールが正常に作成され、**Integration** -> **Rules**ページで新規ルールを確認でき、**Actions(Sink)**タブには新規KafkaプロデューサーSinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages under topic `t/#` are sent and saved to Kafka after being parsed by rule `my_rule`.
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認できます。トポロジーでは、トピック`t/#`のメッセージがルール`my_rule`で解析されKafkaに送信・保存される様子が直感的に把握できます。
 
 ![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
-### Configure Kafka Dynamic Topics
+### Kafkaの動的トピック設定
 
-Starting from EMQX v5.7.2, you can dynamically configure the Kafka topics in the Kafka Producer Sink configuration using the environment variables or variable templates. This section introduces these two use cases in dynamic topic configuration.
+EMQX v5.7.2以降、Kafka Producer Sink設定で環境変数や変数テンプレートを用いてKafkaトピックを動的に設定可能です。本節ではこれら2つの動的トピック設定のユースケースを紹介します。
 
-#### Use Environment Variables
+#### 環境変数の利用
 
-EMQX v5.7.2 introduces a new functionality of dynamically assigning the values retrieved from [environment variables](../configuration/configuration.md#environment-variables) to a field within messages during the SQL processing phase. This functionality uses the [getenv](../data-integration/rule-sql-builtin-functions.md#system-function) function from the built-in SQL functions of the rule engine to retrieve environment variables from EMQX. The values of the variables are then set into SQL processing results. As an application of this feature, when configuring Kafka topics in Kafka Sink rule actions, you can reference fields from rule output results to set the Kafka topic. The following is a demonstration of this application:
+EMQX v5.7.2では、ルールSQL処理中に[環境変数](../configuration/configuration.md#environment-variables)から取得した値をメッセージ内のフィールドに動的に割り当てる機能が追加されました。この機能はルールエンジンの組み込みSQL関数[getenv](../data-integration/rule-sql-builtin-functions.md#system-function)を利用し、EMQXの環境変数を取得してSQL処理結果にセットします。この機能を応用し、Kafka SinkルールアクションのKafkaトピック設定でルール出力結果のフィールドを参照してKafkaトピックを設定できます。以下はその例です。
 
-::: tip Note
+::: tip 注意
 
-To prevent leakage of other system environment variables, the names of environment variables used by rule engine must have a fixed prefix `EMQXVAR_`. For example, if the variable name read by `getenv` function is `KAFKA_TOPIC`, the environment variable name must be set to `EMQXVAR_KAFKA_TOPIC`.
+ルールエンジンが読み取る環境変数名は、他のシステム環境変数の漏洩を防ぐために固定プレフィックス`EMQXVAR_`を付ける必要があります。例えば、`getenv`関数で読み取る変数名が`KAFKA_TOPIC`の場合、環境変数名は`EMQXVAR_KAFKA_TOPIC`と設定してください。
 
 :::
 
-1. Start Kafka and pre-create a Kafka topic named `testtopic-in`. Refer to [Before You Start](#before-you-start) for related steps.
+1. Kafkaを起動し、`testtopic-in`トピックを事前作成します。[はじめる前に](#はじめる前に)の手順を参照してください。
 
-2. Start EMQX and configure environment variables. Assuming EMQX is installed via zip, you can directly specify environment variables during startup. For example, set Kafka topic `testtopic-in` as the value of environment variable `EMQXVAR_KAFKA_TOPIC`:
+2. EMQXを起動し環境変数を設定します。zip版インストールの場合、起動時に直接環境変数を指定可能です。例としてKafkaトピック`testtopic-in`を環境変数`EMQXVAR_KAFKA_TOPIC`に設定します。
 
    ```bash
    EMQXVAR_KAFKA_TOPIC=testtopic-in bin/emqx start
    ```
 
-3. Create a connector. Refer to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector) for details.
+3. コネクターを作成します。[Kafkaプロデューサーコネクターの作成](#create-a-kafka-producer-connector)を参照してください。
 
-4. Configure a Kafka Sink rule. Enter the following statement in the **SQL Editor**:
+4. Kafka Sinkルールを設定します。**SQL Editor**に以下を入力します。
 
    ```sql
    SELECT
@@ -250,26 +250,26 @@ To prevent leakage of other system environment variables, the names of environme
 
    ![kafka_dynamic_topic_sql](./assets/kafka_dynamic_topic_sql.png)
 
-5. Enable the SQL test. Verify that the environment variable value `testtopic-in` is successfully retrieved.
+5. SQLテストを有効にし、環境変数値`testtopic-in`が正しく取得できることを確認します。
 
    ![kafka_dynamic_topic_sql_test](./assets/kafka_dynamic_topic_sql_test.png)
 
-6. Add an action to the Kafka Producer Sink. Under **Action Outputs** on the right-hand side of the rule, click **Add Action** to proceed.
+6. Kafka Producer Sinkのアクションを追加します。ルール右側の**Action Outputs**で**Add Action**をクリックします。
 
-   - **Connector**: Select the previously created connector `test-kafka`.
-   - **Kafka Topic**: Configure using the variable template format `${kafka_topic}` based on the SQL rule output.
+   - **Connector**：先ほど作成した`test-kafka`を選択。
+   - **Kafka Topic**：SQLルール出力に基づき変数テンプレート`${kafka_topic}`形式で設定。
 
    ![kafka_dynamic_topic](./assets/kafka_dynamic_topic.png)
 
-7. Complete additional configuration by referring to [Create a Rule with Kafka Sink](#create-a-rule-with-kafka-sink) for further steps, and finally click **Create** to complete the rule creation.
+7. [Kafka Sinkを用いたルールの作成](#kafka-sinkを用いたルールの作成)を参照して残りの設定を完了し、最後に**Create**をクリックしてルール作成を完了します。
 
-8. Refer to the steps in [Test Kafka Producer Rule](#test-kafka-producer-rule) to send a message to Kafka:
+8. [Kafkaプロデューサールールのテスト](#test-kafka-producer-rule)の手順に従い、Kafkaにメッセージを送信します。
 
    ```bash
    mqttx pub -h 127.0.0.1 -p 1883 -i pub -t t/Connection -q 1 -m 'payload string'
    ```
 
-   The message should be received under the Kafka topic `testtopic-in`:
+   メッセージはKafkaトピック`testtopic-in`で受信されるはずです。
 
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
@@ -279,11 +279,11 @@ To prevent leakage of other system environment variables, the names of environme
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
 
-#### Use Variable Templates
+#### 変数テンプレートの利用
 
-Except for setting static topic names in the **Kafka Topic** field, you can also generate dynamic topics using variable templates. This enables constructing Kafka topics based on message content, facilitating flexible message processing and distribution. For example, you can specify formats like `device-${payload.device}` in the field to easily send messages from a specific device to topics suffixed with the device ID, such as `device-1`.
+**Kafka Topic**フィールドに静的なトピック名を設定する代わりに、変数テンプレートを用いて動的にトピックを生成することも可能です。これによりメッセージ内容に基づいてKafkaトピックを構築でき、柔軟なメッセージ処理と振り分けが実現します。例えば、`device-${payload.device}`のように指定すると、特定デバイスからのメッセージを`device-1`などデバイスIDを付加したトピックに簡単に送信できます。
 
-For this specific example, ensure that the message payload sent to Kafka contains a `device` key to correctly render the topic. Below is an example payload:
+この例では、Kafkaに送信するメッセージのペイロードに`device`キーが含まれている必要があります。例：
 
 ```json
 {
@@ -296,22 +296,23 @@ For this specific example, ensure that the message payload sent to Kafka contain
 }
 ```
 
-Failure to include this key will result in topic rendering failure, leading to message drops that cannot be recovered.
+このキーがないとトピックのレンダリングに失敗し、メッセージは回復不能なドロップとなります。
 
-You also need to pre-create all resolved topics in Kafka, such as `device-1`, `device-2`, and so on. If the template resolves to a topic name that does not exist in Kafka, messages will also be dropped due to unrecoverable errors.
+また、Kafka側で解決されるすべてのトピック（例：`device-1`、`device-2`など）を事前に作成しておく必要があります。存在しないトピック名に解決された場合もメッセージは回復不能なエラーでドロップされます。
 
-## Test Kafka Producer Rule
+## Kafkaプロデューサールールのテスト
 
-To test whether the Kafka Producer rule works as you expect, you can use [MQTTX](https://mqttx.app/en) to simulate a client publishing MQTT messages to EMQX.
+Kafkaプロデューサールールが期待通りに動作するかをテストするには、[MQTTX](https://mqttx.app/en)を使ってEMQXにMQTTメッセージをパブリッシュするクライアントをシミュレートします。
 
-1. Use MQTTX to send messages to topic  `t/1`:
+1. MQTTXでトピック`t/1`にメッセージを送信します。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 ```
 
-2. On the **Actions(Sink)** page, click on the name of the Sink to view statistical information. Check the sink's running status; there should be one new incoming message and one new outgoing message.
-3. Use the following command to check if the message has been written to the `testtopic-in` topic:
+2. **Actions(Sink)**ページでSink名をクリックし統計情報を確認します。Sinkの稼働状況をチェックし、新規受信メッセージ数と送信メッセージ数が1件ずつ増えていることを確認します。
+
+3. 以下のコマンドでメッセージが`testtopic-in`トピックに書き込まれているか確認します。
 
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092  --topic testtopic-in
@@ -319,45 +320,52 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 
 <!--TODO 5.4 refactor-->
 
-## Create a Kafka Consumer Connector
+## Kafkaコンシューマーコネクターの作成
 
-Before adding a Kafka Source action, you need to create a Kafka consumer connector to establish a connection between EMQX and Kafka.
+Kafka Sourceアクションを追加する前に、EMQXとKafka間の接続を確立するKafkaコンシューマーコネクターを作成します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Connector** page, click to select **Kafka Consumer**, and then click **Next**.
-4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers, for example, `my-kafka-source`.
-5. Enter the connection information for the source.
-   - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
-   - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
+1. EMQX Dashboardで**Integration** -> **Connector**をクリックします。
 
-     - `None`: No authentication.
-     - `authentication_msk_iam`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
-     - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
-     - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.
+2. ページ右上の**Create**をクリックします。
 
-     See the [Authentication Method](#authentication-method) for details on each method.
-   - Leave other options as default or configure according to your business needs.
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
-6. Advanced settings (optional): See **Advanced Configurations.**
-7. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
-11. Click **Create**. You will be offered the option of creating an associated rule. See [Create a Rule with Kafka Consumer Source](#create-a-rule-with-kafka-consumer-source).
+3. **Create Connector**ページで**Kafka Consumer**を選択し、**Next**をクリックします。
 
-## Create a Rule with Kafka Consumer Source
+4. ソースの名前を入力します。英数字の組み合わせで例：`my-kafka-source`。
 
-This section demonstrates how to create a rule in EMQX to further process the message forwarded by a configured Kafka Consumer source and republish the message to an MQTT topic.
+5. ソースの接続情報を入力します。
+   - **Bootstrap Hosts**：`127.0.0.1:9092`を入力します。デモではEMQXとKafkaをローカルで実行している想定です。リモート環境の場合は適宜調整してください。
+   - **Authentication**：Kafkaクラスターで必要な認証方式を選択します。以下をサポートしています。
 
-### Create a Rule SQL
+     - `None`：認証なし。
+     - `authentication_msk_iam`：EMQXがEC2インスタンス上で動作し、AWS MSKクラスターを利用する場合。
+     - `Basic Auth`：**Mechanism**（`plain`、`scram_sha_256`、`scram_sha_512`のいずれか）を選択し、**Username**と**Password**を入力。
+     - `Kerberos`：**Kerberos Principal**と**Kerberos Keytab File**を指定。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+     詳細は[認証方式](#authentication-method)を参照してください。
+   - その他のオプションはデフォルトのままか、ビジネス要件に応じて設定してください。
+   - 暗号化接続を確立する場合は、**Enable TLS**のトグルをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
 
-2. Click **Create** on the top right corner of the page.
+6. 詳細設定（任意）：[詳細設定](#advanced-configurations)を参照してください。
 
-3. Enter a rule ID, for example, `my_rule`.
+7. **Create**をクリックする前に、**Test Connection**をクリックしてKafkaサーバーへの接続が成功するか確認できます。
 
-4. Enter the following statement in the **SQL Editor** if you want to forward the messages transformed from the Kafka source`$bridges/kafka_consumer:<sourceName>` to EMQX.
+8. **Create**をクリックしてソースの作成を完了します。関連ルールの作成オプションが表示されます。[KafkaコンシューマーSourceを用いたルールの作成](#create-a-rule-with-kafka-consumer-source)を参照してください。
 
-   Note: If you want to specify your own SQL syntax, make sure that the `SELECT` part includes all fields required by the republishing action set in later steps. The `SELECT` statement for the Kafka Source can use fields such as `ts_type`, `topic`, `ts`, `event`, `headers`, `key`, `metadata`, `value`, `timestamp`, `offset`, `node`, etc.
+## KafkaコンシューマーSourceを用いたルールの作成
+
+このセクションでは、KafkaコンシューマーSourceで転送されたメッセージをさらに処理し、MQTTトピックに再パブリッシュするルールの作成方法を示します。
+
+### ルールSQLの作成
+
+1. EMQX Dashboardで**Integration** -> **Rules**をクリックします。
+
+2. ページ右上の**Create**をクリックします。
+
+3. ルールIDを入力します。例：`my_rule`。
+
+4. Kafkaソース`$bridges/kafka_consumer:<sourceName>`から変換されたメッセージをEMQXに転送する場合、**SQL Editor**に以下のステートメントを入力します。
+
+   注意：独自のSQL構文を指定する場合は、後続の再パブリッシュアクションで必要なすべてのフィールドを`SELECT`句に含めてください。Kafka Sourceの`SELECT`文では、`ts_type`、`topic`、`ts`、`event`、`headers`、`key`、`metadata`、`value`、`timestamp`、`offset`、`node`などのフィールドが使用可能です。
 
    ```sql
    SELECT
@@ -366,59 +374,71 @@ This section demonstrates how to create a rule in EMQX to further process the me
      "$bridges/kafka_consumer:<sourceName>"
    ```
 
-   Note: If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   初心者の方は**SQL Examples**や**Enable Test**をクリックしてSQLルールの学習とテストが可能です。
 
-### Add Kafka Consumer Source as Data Input
+### KafkaコンシューマーSourceをデータ入力に追加
 
-1. Select the **Data Inputs** tab on the right side of the Create Rule page and click **Add Input**.
-2. Select **Kafka Consumer** from the **Input Type** dropdown list. keep the **Source** dropdown box to the default `Create Source` option, or choose a previously created Kafka Consumer source from the **Source** dropdown box. This demonstration creates a new consumer source and adds it to the rule.
-3. Enter the name and description of the Source in the corresponding text boxes below.
-4. In the **Connector** dropdown box, select the `my-kafka-consumer` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Consumer Connector](#create-a-kafka-consumer-connector).
-5. Configure the following fields:
+1. ルール作成画面右側の**Data Inputs**タブを選択し、**Add Input**をクリックします。
 
-   - **Kafka Topic**: Specify the Kafka topic from which the consumer source will subscribe to for receiving messages.
-   - **Group ID**: Specify the consumer group identifier for this source. If not provided, a group ID will be automatically generated based on the source name.
-   - **Key Encoding Mode** and **Value Encoding Mode**: Select the encoding mode for Kafka message key and message value.
-7. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
+2. **Input Type**ドロップダウンから**Kafka Consumer**を選択します。**Source**はデフォルトの`Create Source`のままか、既存のKafka Consumerソースを選択します。ここでは新規作成してルールに追加します。
 
-   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
-   - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-8. Advanced settings (optional): See **Advanced Configurations.**
-9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.
-10. Click **Create** to complete the Source creation. Back on the **Create Rule** page, you will see the new Source appear under the **Data Inputs** tab.
+3. ソースの名前と説明を対応するテキストボックスに入力します。
 
-### Add a Republish Action
+4. **Connector**ドロップダウンから先ほど作成した`my-kafka-consumer`コネクターを選択します。隣のボタンをクリックするとポップアップで新規コネクター作成も可能です。設定パラメータは[Kafkaコンシューマーコネクターの作成](#kafkaコンシューマーコネクターの作成)を参照してください。
 
-1. Select the **Action Outputs** tab and click the + **Add Action** button to define an action that will be triggered by the rule.
-2. Select **Republish** from the **Type of Action** drop-down list.
-3. In **Topic** and **Payload** fields, you can enter the topic and payload for the messages you want to republish. For example, enter `t/1` and `${.}` for this demonstration.
-   - You can also use `${}` in the **Topic** field to dynamically specify the MQTT topic, such as `t/${key}` (Note: The parameter provided inside `${}` must be included in the SQL `Select` statement).
-4. Click **Add** to include the action to the rule.
-5. Back on the **Create Rule** page, click **Save**.
+5. 以下のフィールドを設定します。
+
+   - **Kafka Topic**：コンシューマーソースがサブスクライブするKafkaトピックを指定します。
+   - **Group ID**：このソースのコンシューマーグループIDを指定します。未指定の場合はソース名に基づいて自動生成されます。
+   - **Key Encoding Mode**および**Value Encoding Mode**：Kafkaメッセージのキーと値のエンコードモードを選択します。
+
+6. **Offset Reset Policy**：Kafkaコンシューマーがオフセットを持たないか無効な場合に読み取り開始位置を決定するポリシーを選択します。
+
+   - `latest`を選択すると、コンシューマーは最新のオフセットから読み始め、開始前のメッセージはスキップします。
+   - `earliest`を選択すると、コンシューマーはパーティションの先頭から読み始め、開始前のメッセージも含めてすべての履歴データを読み取ります。
+
+7. 詳細設定（任意）：[詳細設定](#advanced-configurations)を参照してください。
+
+8. **Create**をクリックする前に、**Test Connectivity**をクリックしてKafkaサーバーへの接続が成功するか確認できます。
+
+9. **Create**をクリックしてソースの作成を完了します。ルール作成画面の**Data Inputs**タブに新しいソースが表示されます。
+
+### 再パブリッシュアクションの追加
+
+1. **Action Outputs**タブを選択し、+ **Add Action**ボタンをクリックしてルールでトリガーされるアクションを定義します。
+
+2. **Type of Action**ドロップダウンから**Republish**を選択します。
+
+3. **Topic**および**Payload**フィールドに再パブリッシュするメッセージのトピックとペイロードを入力します。例として`Topic`に`t/1`、`Payload`に`${.}`を入力します。
+   - `${}`を用いてMQTTトピックを動的指定することも可能です。例：`t/${key}`（`${}`内のパラメータはSQLの`SELECT`文に含まれている必要があります）。
+
+4. **Add**をクリックしてアクションをルールに追加します。
+
+5. ルール作成画面に戻り、**Save**をクリックします。
 
 ![Kafka_consumer_rule](./assets/Kafka_consumer_rule.png)
 
-## Test Kafka Source Rule
+## Kafka Sourceルールのテスト
 
-To test if the Kafka source and rule work as expected, you can use [MQTTX](https://mqttx.app/) to simulate a client that subscribes to a topic in EMQX and use the Kafaka producer to produce data to a Kafka topic. Then, check if the data from Kafka is republished by EMQX to the topic subscribed by the client.
+Kafka Sourceとルールが期待通りに動作するかをテストするには、[MQTTX](https://mqttx.app/)を使ってEMQXのトピックをサブスクライブするクライアントをシミュレートし、KafkaプロデューサーでKafkaトピックにデータを生成します。その後、KafkaからのデータがEMQXによってクライアントがサブスクライブするトピックに再パブリッシュされているか確認します。
 
-1. Use MQTTX to subscribe to topic `t/1`:
+1. MQTTXでトピック`t/1`をサブスクライブします。
 
    ```bash
    mqttx sub -t t/1 -v
    ```
 
-2. Open a new command line window and start the Kafka producer using the command below:
+2. 新しいコマンドラインウィンドウを開き、以下のコマンドでKafkaプロデューサーを起動します。
 
    ```bash
    bin/kafka-console-producer --bootstrap-server 127.0.0.1:9092 --topic testtopic-out
    ```
 
-   You will be prompted to input a message.
+   メッセージ入力待ちになります。
 
-3. Enter `{"msg": "Hello EMQX"}` to produce a message to the `testtopic-out` topic using the producer and press enter.
+3. `{"msg": "Hello EMQX"}`を入力して`testtopic-out`トピックにメッセージを生成し、Enterキーを押します。
 
-4. Check the subscription in MQTTX. The following message from Kafka should be received under the topic `t/1`:
+4. MQTTXのサブスクリプションを確認します。Kafkaからの以下のメッセージがトピック`t/1`で受信されるはずです。
 
    ```json
    {
@@ -434,48 +454,48 @@ To test if the Kafka source and rule work as expected, you can use [MQTTX](https
    }
    ```
 
-## Advanced Configurations
+## 詳細設定
 
-This section describes some advanced configuration options that can optimize the performance of your data integration and customize the operation based on your specific scenarios. When creating the Connector, Sink and Source, you can unfold the **Advanced Settings** and configure the following settings according to your business needs.
+このセクションでは、データ統合のパフォーマンス最適化やシナリオに応じたカスタマイズを可能にする詳細設定オプションを説明します。コネクター、Sink、Source作成時に**Advanced Settings**を展開し、ビジネス要件に応じて以下の設定を行えます。
 
-| Fields                                    | Descriptions                                                 | Recommended Values |
+| フィールド名                              | 説明                                                         | 推奨値             |
 | ----------------------------------------- | ------------------------------------------------------------ | ------------------ |
-| Min Metadata Refresh Interval             | The minimum time interval the client must wait before refreshing Kafka broker and topic metadata. Setting this value too small may increase the load on the Kafka server unnecessarily. | `3 `second         |
-| Metadata Request Timeout                  | The maximum duration to wait when the bridge requests metadata from Kafka. | `5` second         |
-| Connect Timeout                           | The maximum time to wait for TCP connection establishment, which includes the authentication time if enabled. | `5` second         |
-| Max Wait Time (Source)                    | The maximum duration to wait for a fetch response from the Kafka broker. | `1` second         |
-| Fetch Bytes (Source)                      | The byte size to pull from Kafka with each fetch request. Note that if the configured value is smaller than the message size in Kafka, it may negatively impact fetch performance. | `896` KB           |
-| Max Batch Bytes (Sink)                    | The maximum size, in bytes, for collecting messages within a Kafka batch. Typically, Kafka brokers have a default batch size limit of 1 MB. However, EMQX's default value is intentionally set slightly lower than 1 MB to account for Kafka message encoding overheads, particularly when individual messages are very small. If a single message exceeds this limit, it will still be sent as a separate batch. | `896` KB           |
-| Offset Commit Interval (Source)           | The time interval between two offset commit requests sent for each consumer group. | `5` second         |
-| Required Acks (Sink)                      | Required acknowledgments for the Kafka partition leader to await from its followers before sending an acknowledgment back to the EMQX Kafka producer: <br />`all_isr`: Requires acknowledgment from all in-sync replicas.<br />`leader_only`: Requires acknowledgment only from the partition leader.<br />`none`: No acknowledgment from Kafka is needed. | `all_isr`          |
-| Partition Count Refresh Interval (Source) | The time interval at which the Kafka producer detects an increased number of partitions. Once Kafka's partition count is augmented, EMQX will incorporate these newly discovered partitions into its message dispatching process, based on the specified `partition_strategy`. | `60` second        |
-| Max Inflight (Sink)                       | The maximum number of batches allowed for Kafka producer (per-partition) to send before receiving acknowledgment from Kafka. Greater value typically means better throughput. However, there can be a risk of message reordering when this value is greater than 1.<br />This option controls the number of unacknowledged messages in transit, effectively balancing the load to prevent overburdening the system. | `10`               |
-| Query Mode (Source)                       | Allows you to choose asynchronous or synchronous query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Kafka does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Kafka. | `Async`            |
-| Synchronous Query Timeout (Sink)          | In synchronous query mode, establishes a maximum wait time for confirmation. This ensures timely message transmission completion to avoid prolonged waits.<br />It applies only when the bridge query mode is configured to `Sync`. | `5` second         |
-| Buffer Mode (Sink)                        | Defines whether messages are stored in a buffer before being sent. Memory buffering can increase transmission speeds.<br />`memory`: Messages are buffered in memory. They will be lost in the event of an EMQX node restart.<br />`disk`: Messages are buffered on disk, ensuring they can survive an EMQX node restart.<br />`hybrid`: Messages are initially buffered in memory. When they reach a certain limit (refer to the `segment_bytes` configuration for more details), they are gradually offloaded to disk. Similar to the memory mode, messages will be lost if the EMQX node restarts. | `memory`           |
-| Per-partition Buffer Limit (Sink)         | Maximum allowed buffer size, in bytes, for each Kafka partition. When this limit is reached, older messages will be discarded to make room for new ones by reclaiming buffer space. <br />This option helps to balance memory usage and performance. | `2` GB             |
-| Segment File Bytes (Sink)                 | This setting is applicable when the buffer mode is configured as `disk` or `hybrid`. It controls the size of segmented files used to store messages, influencing the optimization level of disk storage. | `100` MB           |
-| Memory Overload Protection (Sink)         | This setting applies when the buffer mode is configured as `memory`. EMQX will automatically discard older buffered messages when it encounters high memory pressure. It helps prevent system instability due to excessive memory usage, ensuring system reliability. <br />This configuration is effective only on Linux systems. | `Enabled`          |
-| Socket Send / Receive Buffer Size         | Manages the size of socket buffers to optimize network transmission performance. | `1024` KB          |
-| TCP Keepalive                             | This configuration enables TCP keepalive mechanism for Kafka bridge connections to maintain ongoing connection validity, preventing connection disruptions caused by extended periods of inactivity. The value should be provided as a comma-separated list of three numbers in the format `Idle, Interval, Probes`:<br />Idle: This represents the number of seconds a connection must remain idle before the server initiates keep-alive probes. The default value on Linux is 7200 seconds.<br />Interval: The interval specifies the number of seconds between each TCP keep-alive probe. On Linux, the default is 75 seconds.<br />Probes: This parameter defines the maximum number of TCP keep-alive probes to send before considering the connection as closed if there's no response from the other end. The default on Linux is 9 probes.<br />For example, if you set the value to '240,30,5,' it means that TCP keepalive probes will be sent after 240 seconds of idle time, with subsequent probes sent every 30 seconds. If there are no responses for 5 consecutive probe attempts, the connection will be marked as closed. | `none`             |
-| Max Linger Time                           | Maximum duration for a per-partition producer to wait for messages in order to collect a batch to buffer. The default value `0` means no wait. For non-memory buffer mode, `5ms` will significantly reduce IOPS, though with the cost of increased latency. | `0` milliseconds   |
-| Max Linger Bytes                          | Maximum number of bytes for a per-partition producer to wait for messages in order to collect a batch to buffer. | `10` MB            |
-| Health Check Interval                     | The time interval for checking the running status of the connector. | `15` second        |
+| Min Metadata Refresh Interval             | クライアントがKafkaブローカーおよびトピックのメタデータを更新する最小間隔。小さすぎるとKafkaサーバーの負荷が増加する可能性があります。 | `3`秒              |
+| Metadata Request Timeout                  | Kafkaからメタデータを要求する際の最大待機時間。               | `5`秒              |
+| Connect Timeout                           | TCP接続確立の最大待機時間。認証有効時は認証時間も含みます。   | `5`秒              |
+| Max Wait Time (Source)                    | Kafkaブローカーからのフェッチ応答を待つ最大時間。              | `1`秒              |
+| Fetch Bytes (Source)                      | Kafkaから1回のフェッチで取得するバイト数。設定値がメッセージサイズより小さいとフェッチ性能に悪影響があります。 | `896` KB           |
+| Max Batch Bytes (Sink)                    | Kafkaバッチ内で収集するメッセージの最大バイト数。Kafkaブローカーのデフォルトは1MBですが、EMQXはメッセージエンコードのオーバーヘッドを考慮しやや小さめに設定。単一メッセージが制限を超える場合は別バッチで送信。 | `896` KB           |
+| Offset Commit Interval (Source)           | コンシューマーグループごとに送信するオフセットコミット要求の間隔。 | `5`秒              |
+| Required Acks (Sink)                      | Kafkaパーティションリーダーがフォロワーから待つアックの種類：<br />`all_isr`：全てのインシンクレプリカからのアックを要求。<br />`leader_only`：リーダーのみからのアックを要求。<br />`none`：Kafkaからのアック不要。 | `all_isr`          |
+| Partition Count Refresh Interval (Source) | Kafkaプロデューサーがパーティション数増加を検知する間隔。増加検知後、指定の`partition_strategy`に基づき新パーティションをメッセージ送信に組み込みます。 | `60`秒             |
+| Max Inflight (Sink)                       | Kafkaプロデューサーがアック受信前に送信可能な最大バッチ数（パーティションごと）。大きいほどスループット向上。ただし1より大きいとメッセージ順序が入れ替わるリスクあり。 | `10`               |
+| Query Mode (Source)                       | 非同期または同期クエリモードを選択し、メッセージ送信を最適化。非同期モードではKafka書き込みがMQTTパブリッシュをブロックしませんが、クライアントがKafka到着前にメッセージを受信する可能性があります。 | `Async`            |
+| Synchronous Query Timeout (Sink)          | 同期クエリモード時の最大待機時間。メッセージ送信完了をタイムリーに保証し、長時間待機を防止。同期モード設定時のみ有効。 | `5`秒              |
+| Buffer Mode (Sink)                        | メッセージ送信前のバッファリング方式。メモリバッファリングは送信速度向上に寄与。<br />`memory`：メモリにバッファ。EMQXノード再起動時にメッセージは失われる。<br />`disk`：ディスクにバッファ。再起動後もメッセージ保持。<br />`hybrid`：初めはメモリバッファ。一定サイズ超過時に徐々にディスクにオフロード。メモリモード同様、再起動時はメッセージ失われる。 | `memory`           |
+| Per-partition Buffer Limit (Sink)         | Kafkaパーティションごとの最大バッファサイズ（バイト）。上限到達時は古いメッセージを破棄しバッファ領域を確保。メモリ使用量と性能のバランス調整に有効。 | `2`GB              |
+| Segment File Bytes (Sink)                 | バッファモードが`disk`または`hybrid`の場合に適用。メッセージ保存用のセグメントファイルサイズを制御し、ディスクストレージの最適化に影響。 | `100`MB            |
+| Memory Overload Protection (Sink)         | バッファモードが`memory`の場合に適用。メモリ圧迫時に古いバッファメッセージを自動破棄し、システムの安定性を確保。Linuxのみ有効。 | `Enabled`          |
+| Socket Send / Receive Buffer Size         | ネットワーク送受信のソケットバッファサイズを管理し、通信性能を最適化。 | `1024`KB           |
+| TCP Keepalive                             | Kafkaブリッジ接続のTCPキープアライブを有効化し、長時間のアイドルによる接続切断を防止。値は`Idle, Interval, Probes`の3つの数値をカンマ区切りで指定。<br />Idle：サーバーがキープアライブプローブを送るまでのアイドル秒数（Linuxデフォルト7200秒）。<br />Interval：プローブ間隔秒数（Linuxデフォルト75秒）。<br />Probes：応答なしと判断するまでの最大プローブ回数（Linuxデフォルト9回）。<br />例：`240,30,5`は240秒のアイドル後にプローブ開始、30秒間隔で最大5回送信。 | `none`             |
+| Max Linger Time                           | パーティションごとのプロデューサーがバッチ収集のためにメッセージを待つ最大時間。デフォルト`0`は待機なし。メモリバッファ以外では`5ms`がIOPS削減に効果的だがレイテンシ増加のトレードオフあり。 | `0`ミリ秒          |
+| Max Linger Bytes                          | パーティションごとのプロデューサーがバッチ収集のために待つ最大バイト数。 | `10`MB             |
+| Health Check Interval                     | コネクターの稼働状況チェック間隔。                             | `15`秒             |
 
-## More Information
+## さらに詳しく
 
-EMQX provides bunches of learning resources on the data integration with Apache Kafka. Check out the following links to learn more:
+EMQXはApache Kafkaとのデータ統合に関する豊富な学習リソースを提供しています。以下のリンクから詳細を学べます。
 
-**Blogs:**
+**ブログ：**
 
-- [Building Connected Vehicle Streaming Data Pipelines with MQTT and Kafka: A 3-Minute Guide](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
-- [MQTT with Kafka: Supercharging IoT Data Integration](https://www.emqx.com/en/blog/mqtt-and-kafka)
-- [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
+- [MQTTとKafkaによるコネクテッドビークルのストリーミングデータパイプライン構築：3分ガイド](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
+- [MQTTとKafka：IoTデータ統合の強化](https://www.emqx.com/en/blog/mqtt-and-kafka)
+- [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
 
-**Benchmark Report**:
+**ベンチマークレポート：**
 
-- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
+- [EMQX Enterpriseパフォーマンスベンチマークテスト：Kafka統合](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
-**Videos:**
+**動画：**
 
-- [Bridge device data to Kafka using the EMQX Cloud Rule Engine](https://www.emqx.com/en/resources/bridge-device-data-to-kafka-using-the-emqx-cloud-rule-engine) (This video is about Cloud rule engine; will be replaced with more suitable videos in the future)
+- [EMQX Cloudルールエンジンを使ったデバイスデータのKafkaブリッジ](https://www.emqx.com/en/resources/bridge-device-data-to-kafka-using-the-emqx-cloud-rule-engine)（本動画はCloudルールエンジンに関するもので、将来的により適切な動画に差し替え予定）

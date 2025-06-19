@@ -1,117 +1,117 @@
-# Ingest MQTT Data into Tablestore
+# MQTTデータをTablestoreに取り込む
 
-[Tablestore](https://www.alibabacloud.com/en/product/table-store/pricing?spm=a3c0i.29367734.6737026690.8.78847d3fcEhuVv&_p_lc=1) is a scalable, serverless database optimized for IoT scenarios. It offers a one-stop solution called IoTstore for managing time-series, structured, and semi-structured data. It is ideal for scenarios such as IoT, vehicle networking, risk control, messaging, and recommendation systems. Tablestore provides cost-effective, high-performance data storage, with millisecond-level queries, retrieval, and flexible data analysis capabilities. EMQX seamlessly integrates with Tablestore Cloud, Tablestore OSS, and Tablestore Enterprise, enabling efficient data management for IoT use cases.
+[Tablestore](https://www.alibabacloud.com/en/product/table-store/pricing?spm=a3c0i.29367734.6737026690.8.78847d3fcEhuVv&_p_lc=1)は、IoTシナリオに最適化されたスケーラブルでサーバーレスなデータベースです。時系列データ、構造化データ、半構造化データを管理するためのワンストップソリューションであるIoTstoreを提供しています。IoT、車両ネットワーク、リスク管理、メッセージング、レコメンデーションシステムなどのシナリオに最適です。Tablestoreはコスト効率が高く高性能なデータストレージを提供し、ミリ秒単位のクエリや検索、柔軟なデータ分析機能を備えています。EMQXはTablestore Cloud、Tablestore OSS、Tablestore Enterpriseとシームレスに統合し、IoTユースケースにおける効率的なデータ管理を実現します。
 
-## How It Works
+## 動作概要
 
-Tablestore data integration in EMQX seamlessly combines EMQX's real-time data capturing and transmission capabilities with Tablestore's high-performance data storage and analysis functionality. By leveraging the built-in [rule engine](./rules.md), this integration simplifies the process of ingesting and storing data from EMQX into Tablestore, eliminating the need for complex coding. EMQX forwards IoT device data to Tablestore through its rule engine and Sink, enabling efficient storage and analysis.
+EMQXにおけるTablestoreデータ統合は、EMQXのリアルタイムデータキャプチャおよび送信機能と、Tablestoreの高性能なデータストレージおよび分析機能をシームレスに組み合わせています。組み込みの[ルールエンジン](./rules.md)を活用することで、EMQXからTablestoreへのデータ取り込みと保存のプロセスを簡素化し、複雑なコーディングを不要にします。EMQXはルールエンジンとSinkを介してIoTデバイスのデータをTablestoreに転送し、効率的な保存と分析を可能にします。
 
-Once the data is stored, Tablestore provides powerful tools for analysis, including the ability to generate reports, charts, and other visualizations, which are then presented to users via Tablestore’s visualization features.
+データが保存されると、Tablestoreはレポートやチャート、その他の可視化を生成する強力なツールを提供し、これらはTablestoreの可視化機能を通じてユーザーに提示されます。
 
-The diagram below illustrates the typical data integration architecture between EMQX and Tablestore in an energy storage scenario.
+以下の図は、エネルギー貯蔵シナリオにおけるEMQXとTablestoreの典型的なデータ統合アーキテクチャを示しています。
 
 ![MQTT to Tablestore](./assets/mqtt-to-tablestore.png)
 
-EMQX and Tablestore provide an extensible IoT platform for efficiently collecting and analyzing energy consumption data in real-time. In this architecture, EMQX serves as the IoT platform, handling device access, message transmission, and data routing, while Tablestore serves as the data storage and analysis platform, responsible for data storage and analysis functions. The workflow is as follows:
+EMQXとTablestoreは、エネルギー消費データをリアルタイムに効率よく収集・分析するための拡張可能なIoTプラットフォームを提供します。このアーキテクチャでは、EMQXがIoTプラットフォームとしてデバイスアクセス、メッセージ送信、データルーティングを担当し、Tablestoreがデータストレージおよび分析プラットフォームとしてデータの保存と分析機能を担います。ワークフローは以下の通りです。
 
-1. **Message publication and reception**: Energy storage devices and Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and regularly publish energy consumption data using the MQTT protocol, including information such as power consumption, input/output power, etc. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-2. **Message data processing**: Using the built-in rule engine, messages from specific sources can be processed based on topic matching. When a message arrives, it passes through the rule engine, which matches it with the corresponding rule and processes the message data, such as transforming data formats, filtering specific information, or enriching messages with contextual information.
-3. **Data ingestion into Tablestore**: Rules defined in the rule engine trigger the operation of writing messages to Tablestore. The Tablestore Sink provides configurable fields that allow flexible definitions of the data format to be written, mapping specific fields from the message to the corresponding measurement and field in Tablestore.
+1. **メッセージのパブリッシュと受信**：エネルギー貯蔵デバイスや産業用IoTデバイスはMQTTプロトコルを通じてEMQXに正常に接続し、電力消費量、入出力電力などの情報を含むエネルギー消費データを定期的にMQTTプロトコルでパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **メッセージデータの処理**：組み込みのルールエンジンを使い、特定のソースからのメッセージをトピックマッチングに基づいて処理します。メッセージが到着するとルールエンジンを通過し、対応するルールとマッチングして、データ形式の変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を行います。
+3. **Tablestoreへのデータ取り込み**：ルールエンジンで定義されたルールがメッセージをTablestoreに書き込む操作をトリガーします。Tablestore Sinkは設定可能なフィールドを提供し、メッセージの特定フィールドをTablestoreの対応するメジャメントやフィールドにマッピングすることで、柔軟なデータフォーマット定義を可能にします。
 
-After energy consumption data is written to Tablestore, you can analyze the data, for example:
+エネルギー消費データがTablestoreに書き込まれた後、以下のような分析が可能です。
 
-- Connect to visualization tools like Grafana to generate charts based on the data, displaying energy storage data.
-- Connect to business systems for monitoring and alerting on the status of energy storage devices.
+- Grafanaなどの可視化ツールに接続し、データに基づくチャートを生成してエネルギー貯蔵データを表示する。
+- ビジネスシステムに接続し、エネルギー貯蔵デバイスの状態監視やアラートを実施する。
 
-## Features and Benefits
+## 特長とメリット
 
-The Tablestore data integration offers the following features and advantages:
+Tablestoreデータ統合は以下の特長と利点を提供します。
 
-- **Efficient Data Processing**: EMQX can handle a massive number of IoT device connections and message throughput, while Tablestore excels in data writing, storage, and querying. It provides outstanding performance to meet the data processing needs of IoT scenarios without overburdening the system.
-- **Message Transformation**: Messages can undergo extensive processing and transformation through EMQX rules before being written into Tablestore.
-- **Scalability**: Both EMQX and Tablestore are capable of cluster scaling, allowing flexible horizontal expansion of clusters as business needs grow.
-- **Rich Query Capabilities**: Tablestore offers optimized functions, operators, and indexing techniques, enabling efficient querying and analysis of timestamped data, and accurately extracting valuable insights from IoT time-series data.
-- **Efficient Storage**: Tablestore uses encoding methods with high compression ratios, significantly reducing storage costs. It also allows customization of storage durations for different data types to avoid unnecessary data occupying storage space.
+- **効率的なデータ処理**：EMQXは膨大な数のIoTデバイス接続とメッセージスループットを処理可能であり、Tablestoreはデータの書き込み、保存、クエリに優れた性能を発揮します。IoTシナリオのデータ処理要件を満たしつつ、システムに過度の負荷をかけません。
+- **メッセージ変換**：メッセージはEMQXのルールを通じて多様な処理や変換を経てからTablestoreに書き込まれます。
+- **スケーラビリティ**：EMQXとTablestoreはどちらもクラスターのスケールアウトに対応し、ビジネスの成長に応じて柔軟に水平拡張が可能です。
+- **豊富なクエリ機能**：Tablestoreは最適化された関数、演算子、インデックス技術を備え、時系列データの効率的なクエリと分析を実現し、IoT時系列データから価値ある洞察を正確に抽出します。
+- **効率的なストレージ**：Tablestoreは高圧縮率のエンコーディング方式を採用し、ストレージコストを大幅に削減します。また、異なるデータタイプごとに保存期間をカスタマイズでき、不必要なデータがストレージを占有するのを防ぎます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start creating the Tablestore data integration, including creating a database instance, creating and managing a time series table.
+このセクションでは、Tablestoreデータ統合を作成する前に必要な準備、すなわちデータベースインスタンスの作成、時系列テーブルの作成と管理について説明します。
 
 ::: tip
 
-Currently, the data integration with Tablestore only supports the TimeSeries model. Therefore, the following steps focus on the TimeSeries model for data integration.
+現時点でTablestoreとのデータ統合はTimeSeriesモデルのみをサポートしています。したがって、以下の手順はTimeSeriesモデルを前提としています。
 
 :::
 
-### Prerequisites
+### 前提条件
 
-Before you proceed, make sure you have the following:
+以下を準備・理解していることを確認してください。
 
-- Understanding of EMQX data integration [rules](./rules.md).
-- Knowledge of how [data integration](./data-bridges.md) works in EMQX.
+- EMQXデータ統合の[ルール](./rules.md)の理解。
+- EMQXにおける[データ統合](./data-bridges.md)の仕組みの理解。
 
-### Create a Time Series Table
+### 時系列テーブルの作成
 
-1. Log in to the [Tablestore console](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6).
-2. Create a time series model instance. Provide a name for the instance, such as `emqx-demo`. For detailed instructions on creating an instance, refer to the [Tablestore official documentation](https://www.alibabacloud.com/help/en/tablestore/getting-started/use-timeseries-model-in-tablestore-console?spm=a2c63.p38356.help-menu-27278.d_1_2_0.6d7d5e92tyvDzj#section-247-wkm-e7a).
-3. Navigate to the **Instance Management** page.
-4. In the **Instance Details** tab, select **Time Series Tables** and click the **Create Time Series Table** button.
-5. Configure the time series table information, providing a name for the table, such as `timeseries_demo_with_data`. Click **Confirm**.
+1. [Tablestoreコンソール](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6)にログインします。
+2. 時系列モデルのインスタンスを作成します。インスタンス名として例として`emqx-demo`を指定します。インスタンス作成の詳細は[Tablestore公式ドキュメント](https://www.alibabacloud.com/help/en/tablestore/getting-started/use-timeseries-model-in-tablestore-console?spm=a2c63.p38356.help-menu-27278.d_1_2_0.6d7d5e92tyvDzj#section-247-wkm-e7a)を参照してください。
+3. **インスタンス管理**ページに移動します。
+4. **インスタンス詳細**タブで**時系列テーブル**を選択し、**時系列テーブルの作成**ボタンをクリックします。
+5. 時系列テーブル情報を設定し、テーブル名（例：`timeseries_demo_with_data`）を入力して**確認**をクリックします。
 
 ![img](./assets/tablestore_instance_manage.png)
 
-### Manage a Time Series Table
+### 時系列テーブルの管理
 
-To manage the Time Series Table created earlier, click on the table name to enter the **Manage Time Series Table** page. From there, you can follow these steps based on your business requirements:
+先ほど作成した時系列テーブルを管理するには、テーブル名をクリックして**時系列テーブル管理**ページに入ります。ここから、ビジネス要件に応じて以下の操作を行えます。
 
-1. Click the **Query Data** tab.
+1. **データクエリ**タブをクリックします。
 
-2. Click **Add Time Series**.
+2. **時系列の追加**をクリックします。
 
    ::: tip
 
-   This step is optional. If the Time Series table does not already exist, Tablestore will automatically create one when data is written. Therefore, this example does not demonstrate any manual operation on the Time Series.
+   このステップは任意です。時系列テーブルがまだ存在しない場合、Tablestoreはデータ書き込み時に自動的に作成します。そのため、この例では時系列の手動操作は示していません。
 
    :::
 
 ![img](./assets/tablestore_timeline_mamge.png)
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the Tablestore server.
+このセクションでは、SinkをTablestoreサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and Tablestore on the local machine. If you have Tablestore and EMQX running remotely, adjust the settings accordingly.
+以下の手順は、EMQXとTablestoreをローカルマシンで実行していることを前提としています。リモートで実行している場合は設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Tablestore** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, which should be a combination of upper and lower case letters and numbers. Example: `my_tablestore`.
-   - Enter the Tablestore server connection information:
-     - **Endpoint**: Enter the access URL for your Tablestore instance. This should be the address where your Tablestore service is hosted, and you can find it on the Instance details page in your Tablestore console. Enter the URL according to your deployment method, for example `https://emqx-demo.cn-hangzhou.ots.aliyuncs.com` for public network.
-     - **Instance Name**: The name of the Tablestore instance to connect to. In this example, use the name you created before: `emqx-demo`.
-     - **Access Key ID**: The Access Key ID used to authenticate with Tablestore. This key is issued by Alibaba Cloud for accessing Tablestore resources securely.
-     - **Access Key Secret**: The Access Key Secret used for authentication, associated with the Access Key ID.
-     - **Storage Model Type**: Currently only `TimeSeries` is supported.
-   - Configure TLS Parameters. Tablestore uses HTTPS endpoints, so TLS is enabled by default and no additional TLS parameter configuration is required. For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Tablestore server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Tablestore. For detailed steps, see [Create a Rule with Tablestore Sink](#create-a-rule-with-tablestore-sink).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**Tablestore**を選択し、**Next**をクリックします。
+4. **Configuration**ステップで以下を設定します：
+   - コネクター名を入力します。英数字の組み合わせとしてください。例：`my_tablestore`
+   - Tablestoreサーバー接続情報を入力します：
+     - **Endpoint**：TablestoreインスタンスのアクセスURLを入力します。これはTablestoreコンソールのインスタンス詳細ページで確認可能です。デプロイ方法に応じてURLを入力してください。例：パブリックネットワークの場合は`https://emqx-demo.cn-hangzhou.ots.aliyuncs.com`
+     - **Instance Name**：接続するTablestoreインスタンス名。例：`emqx-demo`
+     - **Access Key ID**：Tablestore認証に使用するアクセスキーID。Alibaba Cloudが発行したキーです。
+     - **Access Key Secret**：アクセスキーIDに対応するシークレットキー。
+     - **Storage Model Type**：現在は`TimeSeries`のみサポート。
+   - TLSパラメータの設定。TablestoreはHTTPSエンドポイントを使用するためTLSはデフォルトで有効です。追加設定は不要です。TLS接続オプションの詳細は[外部リソースアクセスのTLS有効化](../network/overview.md#enabling-tls-for-external-resource-access)を参照してください。
+5. **Create**をクリックする前に、**Test Connectivity**をクリックしてコネクターがTablestoreサーバーに接続できるかテストできます。
+6. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで**Back to Connector List**をクリックするか、**Create Rule**をクリックしてルールとSinkの作成を続けてください。詳細は[Tablestore Sink付きルールの作成](#create-a-rule-with-tablestore-sink)を参照してください。
 
-## Create a Rule with Tablestore Sink
+## Tablestore Sink付きルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to Tablestore. 
+このセクションでは、EMQXでソースMQTTトピック`t/#`のメッセージを処理し、処理結果を設定済みのSinkを通じてTablestoreに送信するルールの作成方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
+1. EMQXダッシュボードに入り、左ナビゲーションメニューから**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. On the Create Rule page, enter `my_rule` as the rule ID.
+3. ルール作成ページでルールIDに`my_rule`を入力します。
 
-4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to Tablestore, you can use the SQL syntax below. 
+4. **SQL Editor**でルールを設定します。例えば、トピック`t/#`のMQTTメッセージをTablestoreに保存したい場合、以下のSQL文を使用します。
 
    ::: tip
 
-   If you want to specify your own SQL syntax, make sure that the fields selected (in the `SELECT` part) include all variables in the data format specified in the later configured Sink.
+   独自のSQL文を指定する場合、後で設定するSinkのデータフォーマットに含まれるすべての変数が`SELECT`句に含まれていることを確認してください。
 
    :::
 
@@ -122,86 +122,86 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   注：初心者の方は**SQL Examples**や**Enable Test**をクリックしてSQLルールの学習・テストが可能です。
 
-5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to Tablestore. 
+5. + **Add Action**ボタンをクリックして、ルールがトリガーするアクションを定義します。このアクションでEMQXはルールで処理したデータをTablestoreに送信します。
 
-6. Select `Alibaba Tablestore` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+6. **Type of Action**ドロップダウンリストから`Alibaba Tablestore`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能です。この例では新規Sinkを作成します。
 
-7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+7. Sink名を入力します。英数字の組み合わせとしてください。
 
-8. From the **Connector** dropdown box, select the `my_tablestore` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector**ドロップダウンから先ほど作成した`my_tablestore`を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは[コネクターの作成](#create-a-connector)を参照。
 
-9. Configure the following fields:
+9. 以下のフィールドを設定します：
 
-   - **Data Source**: The data source from which EMQX retrieves the message. It represents the origin of the data being processed. This could be a specific topic or data stream.
+   - **Data Source**：EMQXがメッセージを取得するデータソース。処理対象のデータの起点を示します。特定のトピックやデータストリームを指定可能です。
 
-   - **Table Name**: The name of the Tablestore table where the data will be stored. Enter the table name you created before. You can also dynamically assign a table name using variables such as `${table}`.
+   - **Table Name**：データを保存するTablestoreのテーブル名。先に作成したテーブル名を入力します。`${table}`などの変数を使って動的に指定することも可能です。
 
-   - **Measurement**: The measurement name used in Tablestore, which typically corresponds to a logical grouping or category of data. For example, it could be something like `temperature_readings` or `sensor_data`. You can also use variables (e.g., `${measurement}`) to dynamically assign the metric name.
+   - **Measurement**：Tablestoreで使用するメジャメント名。通常は論理的なデータのグループやカテゴリを示します。例：`temperature_readings`や`sensor_data`。変数（例：`${measurement}`）を使って動的に指定可能です。
 
-   - **Storage Model Type**: The type of data storage model used in Tablestore. Currently, on `timeseries`  is supported, optimized for time-based data.
+   - **Storage Model Type**：Tablestoreで使用するデータストレージモデル。現在は`timeseries`のみサポートされており、時系列データに最適化されています。
 
-   - **Tags**: Tags are key-value pairs associated with each data entry in Tablestore. These can be used to add metadata or labels to the data for easier querying and filtering. You can click **Add** to define multiple tags, for example:
+   - **Tags**：Tablestoreの各データエントリに付与されるキーと値のペア。メタデータやラベルとして利用し、クエリやフィルタリングを容易にします。**Add**をクリックして複数のタグを定義可能です。例：
 
      | Key        | Value     |
      | ---------- | --------- |
      | `location` | `office1` |
      | `device`   | `sensor1` |
 
-   - **Fields**:  A list of fields specifying which data is sent to Tablestore. Each field is mapped to a column in the Tablestore table. You can click **Add** to add the following:
-     - **Column**: The name of the column in Tablestore. The column name can be defined using variables, such as `${column_name}`, which should match the field in the payload of the message example sent later.
-     - **Message value**: The value to be assigned to the column. The value can be a dynamic reference (like `${value}`), a boolean (`true`), a number (`1.3`), or binary data.
-     - **Is Int**: If the column is of numeric type, EMQX will, by default, insert it into Tablestore as a floating-point type. To insert integer values, this flag needs to be set to `true`. When configuring through the configuration file, variables (e.g., `${isint}`) can be used to dynamically assign this flag.
-     - **Is Binary**: If the column is binary, EMQX will, by default, insert it into Tablestore as a string type. To insert binary data, this flag needs to be set to `true`. When configuring through the configuration file, variables (e.g., `${isbinary}`) can be used to dynamically assign this flag.
+   - **Fields**：Tablestoreに送信するデータのフィールドリスト。各フィールドはTablestoreテーブルのカラムにマッピングされます。**Add**をクリックして以下を追加します：
+     - **Column**：Tablestoreのカラム名。`${column_name}`などの変数を使って定義可能で、後述のメッセージペイロードのフィールドと一致させます。
+     - **Message value**：カラムに割り当てる値。動的参照（`${value}`）、真偽値（`true`）、数値（`1.3`）、バイナリデータが指定可能です。
+     - **Is Int**：カラムが数値型の場合、デフォルトでEMQXは浮動小数点型として挿入します。整数値として挿入したい場合はこのフラグを`true`に設定します。設定ファイル経由では変数（`${isint}`）で動的指定可能です。
+     - **Is Binary**：カラムがバイナリの場合、デフォルトでEMQXは文字列型として挿入します。バイナリデータとして挿入したい場合はこのフラグを`true`に設定します。設定ファイル経由では変数（`${isbinary}`）で動的指定可能です。
      
-   - **Timestamp**: The timestamp recorded in Tablestore, represented as an integer value in microseconds. This specifies the timestamp to be inserted into Tablestore. You can provide a fixed value, use the string "NOW" to indicate that EMQX should dynamically fill in the current time when processing the message, or use a variable placeholder (e.g., `${microsecond_timestamp}`) for dynamic assignment.
+   - **Timestamp**：Tablestoreに記録されるタイムスタンプ。マイクロ秒単位の整数値で指定します。固定値、文字列"NOW"（メッセージ処理時にEMQXが現在時刻を動的に埋め込み）、変数プレースホルダー（例：`${microsecond_timestamp}`）で動的指定が可能です。
 
-   - **Meta Update Model**: Defines the update strategy for metadata in Tablestore:
-     - `MUM_IGNORE`: Ignores metadata updates, ensuring that metadata remains unchanged even if there are conflicting updates.
-     - `MUM_NORMAL`: Performs a normal metadata update. If the metadata does not exist, it will be dynamically created before writing the data. If there is a conflict with existing metadata, it may be overwritten.
+   - **Meta Update Model**：Tablestoreのメタデータ更新戦略を定義します：
+     - `MUM_IGNORE`：メタデータ更新を無視し、競合があっても変更しません。
+     - `MUM_NORMAL`：通常のメタデータ更新を行います。メタデータが存在しない場合は動的に作成し、既存のメタデータと競合した場合は上書きされる可能性があります。
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-11. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
+11. **詳細設定（任意）**：[詳細設定](#advanced-configurations)を参照してください。
 
-12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the Tablestore server.
+12. **Create**をクリックする前に、**Test Connectivity**をクリックしてSinkがTablestoreサーバーに接続できるかテスト可能です。
 
-13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+13. **Create**をクリックしてSink作成を完了します。ルール作成ページに戻ると、**Action Outputs**タブに新しいSinkが表示されます。
 
-14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+14. ルール作成ページで設定内容を確認し、**Create**ボタンをクリックしてルールを生成します。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Tablestore Sink.
+これでルールが正常に作成され、**Rule**ページに新しいルールが表示されます。**Actions(Sink)**タブをクリックすると、新しいTablestore Sinkが確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Tablestore after parsing by the rule  `my_rule`.
+また、**Integration** -> **Flow Designer**をクリックしてトポロジーを確認できます。トピック`t/#`のメッセージがルール`my_rule`で解析され、Tablestoreに送信・保存されている様子が確認できます。
 
-## Test the Rule
+## ルールのテスト
 
-1. Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
+1. MQTTXを使ってトピック`t/1`にメッセージを送信し、オンライン/オフラインイベントをトリガーします。
 
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "table": "timeseries_demo_with_data", "measurement": "foo", "microsecond_timestamp": 1734924039271024, "column_name": "cc", "value": 1}'
    ```
 
-2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+2. Sinkの稼働状況を確認し、新規の受信メッセージと送信メッセージが1件ずつあることを確認します。
 
-3. Go to the [Tablestore Console](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6) to check if the data has been written into Tablestore. 
+3. [Tablestoreコンソール](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6)にアクセスし、データがTablestoreに書き込まれているか確認します。
 
-   - In **Metric Name**, enter the measurement name (in this demo, it is `foo`). 
-   - In **Tag**, use `location=office1` and `device=sensor1` as the query condition, then click **Search**.
+   - **Metric Name**にメジャメント名（このデモでは`foo`）を入力します。
+   - **Tag**に`location=office1`および`device=sensor1`をクエリ条件として入力し、**Search**をクリックします。
 
    ![tablestore_query_data](./assets/tablestore_query_data.png)
 
-## Advanced Configurations
+## 詳細設定
 
-This section delves deeper into the advanced configuration options available for the Tablestore Connector and Sink. When configuring the Connector and Sink in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+このセクションでは、TablestoreコネクターおよびSinkの詳細設定オプションについて説明します。ダッシュボードでコネクターやSinkを設定する際、**Advanced Settings**に進み、以下のパラメータをニーズに合わせて調整できます。
 
-| **Fields**            | **Descriptions**                                             | **Recommended Value** |
-| --------------------- | ------------------------------------------------------------ | --------------------- |
-| Buffer Pool Size      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and Tablestore. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For Sinks that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `16`                  |
-| Request TTL           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Tablestore, the request is deemed to have expired. | `45`                  |
-| Health Check Interval | Specifies the time interval, in seconds, at which the Sink will perform automated health checks on the connection to Tablestore. | `15`                  |
-| Max Buffer Queue Size | Specifies the maximum number of bytes that can be buffered by each buffer worker in the Tablestore Sink. Buffer workers temporarily store data before it is sent to Tablestore, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `256`                 |
-| Batch Size            | Specifies the size of data batches that can be transmitted from EMQX to Tablestore in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Tablestore. | `1`                   |
-| Query Mode            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Tablestore does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Tablestore. | `Async`               |
-| Inflight Window       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the Sink is communicating with Tablestore.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| **フィールド**          | **説明**                                                                                                                     | **推奨値**            |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| Buffer Pool Size      | EMQXとTablestore間の出口タイプのブリッジでデータフローを管理するために割り当てられるバッファワーカープロセス数を指定します。これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへの送信を担います。出口（アウトバウンド）シナリオのパフォーマンス最適化とスムーズなデータ送信に重要です。Ingress（インバウンド）データのみ扱うSinkでは「0」に設定可能です。 | `16`                  |
+| Request TTL           | バッファに入ったリクエストが有効とみなされる最大時間（秒）を指定します。リクエストはバッファリング開始時からこのTTLをカウントし、TTLを超えるか、送信後にTablestoreからの応答やアックを受け取れなかった場合、リクエストは期限切れと判断されます。 | `45`                  |
+| Health Check Interval | SinkがTablestore接続の自動ヘルスチェックを行う間隔（秒）を指定します。                                                     | `15`                  |
+| Max Buffer Queue Size | Tablestore Sinkの各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保存し、効率的なデータフローを実現します。システム性能やデータ転送要件に応じて調整してください。 | `256`                 |
+| Batch Size            | EMQXからTablestoreへ一度に転送可能なデータバッチのサイズを指定します。サイズを調整することでデータ転送の効率とパフォーマンスを最適化できます。 | `1`                   |
+| Query Mode            | メッセージ送信の最適化のため、`asynchronous`（非同期）または`synchronous`（同期）クエリモードを選択可能です。非同期モードではTablestoreへの書き込みがMQTTメッセージのパブリッシュ処理をブロックしませんが、クライアントがTablestore到着前にメッセージを受け取る可能性があります。 | `Async`               |
+| Inflight Window       | 「インフライトクエリ」とは、開始されたがまだ応答やアックを受け取っていないクエリを指します。SinkがTablestoreと通信する際に同時に存在可能な最大インフライトクエリ数を制御します。<br/>**Query Mode**が`async`の場合、このパラメータは特に重要です。同一MQTTクライアントからのメッセージを厳密な順序で処理する必要がある場合は、この値を1に設定してください。 | `100`                 |

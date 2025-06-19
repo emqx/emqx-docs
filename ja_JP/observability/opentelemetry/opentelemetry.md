@@ -1,13 +1,13 @@
-# Integrate with OpenTelemetry
+# OpenTelemetryとの統合
 
-[OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/) is an observability framework and toolkit designed to create and manage telemetry data such as traces, metrics, and logs. Crucially, OpenTelemetry is vendor- and tool-agnostic, meaning that it can be used with a broad variety of Observability backends, including open-source tools like Jaeger and Prometheus, as well as commercial offerings.
+[OpenTelemetry](https://opentelemetry.io/docs/what-is-opentelemetry/)は、トレース、メトリクス、ログなどのテレメトリーデータを生成・管理するためのオブザーバビリティフレームワークおよびツールキットです。重要な点として、OpenTelemetryはベンダーやツールに依存しないため、JaegerやPrometheusなどのオープンソースツールから商用製品まで、幅広いオブザーバビリティバックエンドと連携可能です。
 
-EMQX supports directly pushing telemetry data to the OpenTelemetry Collector via the gRPC OTEL protocol, and then transferring, filtering, or converting the data through the Collector to any backend you want to integrate for storage and visualization, such as Jaeger and [Prometheus](../../observability/prometheus.md). By integrating with OpenTelemetry, EMQX's metric collection, distributed tracing of message publishing, and unified collection and context association of logs can be optimized. This integration can help users achieve visual monitoring and alert notifications for EMQX, tracking the flow of messages between different systems and services. This is very helpful for continuous performance optimization, quicker problem localization, and system monitoring.
+EMQXはgRPC OTELプロトコルを介してOpenTelemetry Collectorへテレメトリーデータを直接プッシュすることをサポートしており、Collectorを通じてデータの転送、フィルタリング、変換を行い、Jaegerや[Prometheus](../../observability/prometheus.md)などの任意のバックエンドに統合して保存・可視化できます。OpenTelemetryとの統合により、EMQXのメトリクス収集、メッセージパブリッシュの分散トレーシング、ログの統合収集およびコンテキスト関連付けが最適化されます。この統合は、EMQXの可視化監視やアラート通知の実現、異なるシステムやサービス間のメッセージフローの追跡に役立ちます。これにより、継続的なパフォーマンス最適化、迅速な問題特定、システム監視が可能となります。
 
 <img src="./assets/emqx-opentelemetry.jpg" alt="emqx-opentelemetry" style="zoom:67%;" />
 
-This section introduces how EMQX integrates the telemetry data with the OpenTelemetry Collector, enabling full built-in OpenTelemetry support for the following observability information:
+本セクションでは、EMQXがOpenTelemetry Collectorとテレメトリーデータを統合し、以下のオブザーバビリティ情報に対して完全な組み込みOpenTelemetryサポートを実現する方法を紹介します。
 
-- [Metrics](./metrics.md)
-- [Traces](./traces.md)
-- [Logs](./logs.md)
+- [メトリクス](./metrics.md)
+- [トレース](./traces.md)
+- [ログ](./logs.md)

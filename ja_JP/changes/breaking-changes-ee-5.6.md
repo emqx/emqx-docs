@@ -1,19 +1,16 @@
-# Incompatible Changes in EMQX 5.6
+# EMQX 5.6 の非互換変更点
 
 ## e5.6.0
 
-- [#12576](https://github.com/emqx/emqx/pull/12576) Starting from 5.6, the "Configuration Manual" document will no longer include the `bridges` config root.
+- [#12576](https://github.com/emqx/emqx/pull/12576) 5.6 以降、「Configuration Manual」ドキュメントには `bridges` 設定ルートが含まれなくなります。
 
-  A `bridge` is now either `action` + `connector` for egress data integration, or `source` + `connector` for ingress data integration.
-  Please note that the `bridges` config (in `cluster.hocon`) and the REST API path `api/v5/bridges` still works, but considered deprecated.
+  `bridge` は現在、データの出口統合用に `action` + `connector`、データの入口統合用に `source` + `connector` のいずれかとなっています。  
+  `bridges` 設定（`cluster.hocon` 内）および REST API パス `api/v5/bridges` は引き続き動作しますが、非推奨と見なされていますのでご注意ください。
 
-- [#12634](https://github.com/emqx/emqx/pull/12634) Triple-quote string values in HOCON config files no longer support escape sequence.
+- [#12634](https://github.com/emqx/emqx/pull/12634) HOCON 設定ファイル内のトリプルクオート文字列値は、エスケープシーケンスをサポートしなくなりました。
 
-  The detailed information can be found in [this pull request](https://github.com/emqx/hocon/pull/290).
-  Here is a summary of the impact on EMQX users:
+  詳細は[こちらのプルリクエスト](https://github.com/emqx/hocon/pull/290)をご参照ください。  
+  EMQX ユーザーへの影響をまとめると以下の通りです：
 
-  - EMQX 5.6 is the first version to generate triple-quote strings in `cluster.hocon`,
-  meaning for generated configs, there is no compatibility issue.
-  - For user hand-crafted configs (such as `emqx.conf`) a thorough review is needed
-  to inspect if escape sequences are used (such as `\n`, `\r`, `\t` and `\\`), if yes,
-  such strings should be changed to regular quotes (one pair of `"`) instead of triple-quotes.
+  - EMQX 5.6 は `cluster.hocon` でトリプルクオート文字列を生成する最初のバージョンであり、生成された設定ファイルについては互換性の問題はありません。  
+  - ユーザーが手動で作成した設定ファイル（例：`emqx.conf`）については、エスケープシーケンス（`\n`、`\r`、`\t`、`\\` など）が使われていないかを十分に確認する必要があります。もし使われている場合は、トリプルクオートではなく通常のダブルクオート（`"` 1組）に変更してください。

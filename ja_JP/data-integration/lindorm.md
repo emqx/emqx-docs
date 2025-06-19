@@ -1,61 +1,61 @@
-# Ingest MQTT into Lindorm
+# LindormへのMQTT取り込み
 
-[Alibaba Cloud Lindorm](https://cn.aliyun.com/product/apsaradb/lindorm?from_alibabacloud=) is a cloud-native multi-model database featuring high throughput, high compression, and scalability. It supports time-series (TSDB), wide table, and vector data models, and is widely used in IoT telemetry, industrial monitoring, and connected vehicle scenarios.
+[Alibaba Cloud Lindorm](https://cn.aliyun.com/product/apsaradb/lindorm?from_alibabacloud=)は、高スループット、高圧縮、スケーラビリティを備えたクラウドネイティブのマルチモデルデータベースです。時系列（TSDB）、ワイドテーブル、ベクターデータモデルをサポートし、IoTテレメトリ、産業監視、コネクテッドカーなどのシナリオで広く利用されています。
 
-While EMQX does not provide a dedicated Lindorm Sink, Lindorm offers MySQL-compatible interfaces. Users can utilize the MySQL Sink in EMQX's data integration to write device data into Lindorm. This page explains how to extract, transform, and store MQTT data using the EMQX data integration with Lindorm to build a stable and efficient IoT data pipeline.
+EMQXは専用のLindorm Sinkを提供していませんが、LindormはMySQL互換のインターフェースを持っています。ユーザーはEMQXのデータインテグレーションのMySQL Sinkを利用して、デバイスデータをLindormに書き込むことが可能です。本ページでは、EMQXのデータインテグレーションを使ってMQTTデータを抽出・変換・保存し、安定かつ効率的なIoTデータパイプラインを構築する方法を説明します。
 
 ## Lindorm
 
-Lindorm’s backend supports multiple data engines. Among them, the TSDB node is optimized for time-series data, offering high compression, high concurrency, and efficient querying. EMQX, as a MQTT messaging platform, leverages its Rule Engine and Data Integration features to efficiently write MQTT messages to Lindorm (typically to TSDB nodes) without complex coding. This enables structured collection, processing, and storage of device telemetry data.
+Lindormのバックエンドは複数のデータエンジンをサポートしています。その中でTSDBノードは時系列データに最適化されており、高圧縮・高同時実行・効率的なクエリを実現します。MQTTメッセージングプラットフォームであるEMQXは、ルールエンジンとデータインテグレーション機能を活用し、複雑なコーディングなしにMQTTメッセージをLindorm（通常はTSDBノード）に効率的に書き込みます。これにより、デバイスのテレメトリデータを構造化して収集・処理・保存できます。
 
 ![lindorm_architecture](./assets/lindorm_architecture.png)
 
-The workflow is as follows:
+ワークフローは以下の通りです：
 
-- **Device connects to EMQX**: IoT devices establish MQTT connections with EMQX.
-- **Device message publish and receive**: Devices publish telemetry and status data to specific topics, which are received and matched by EMQX's Rule Engine.
-- **Rule Engine processes messages**: Rules match messages based on topics and perform actions such as data transformation, filtering, or enriching with context.
-- **Write to Lindorm**: Triggered rules use the MySQL Sink to call Lindorm's MySQL-compatible interface.
-- **Lindorm backend storage & optimization**: Lindorm organizes data into time-series or wide table formats based on schema definitions, handling compression, indexing, and aggregation.
-- **External applications query and analyze**: Business systems or visualization tools (like QuickBI, DataV) perform device status monitoring, metric tracking, and trend analysis via SQL queries.
+- **デバイスがEMQXに接続**：IoTデバイスがEMQXとMQTT接続を確立します。
+- **デバイスメッセージのパブリッシュと受信**：デバイスは特定のトピックにテレメトリや状態データをパブリッシュし、EMQXのルールエンジンが受信・マッチングします。
+- **ルールエンジンによるメッセージ処理**：ルールはトピックに基づいてメッセージをマッチングし、データ変換、フィルタリング、コンテキスト付加などのアクションを実行します。
+- **Lindormへの書き込み**：トリガーされたルールはMySQL Sinkを使い、LindormのMySQL互換インターフェースを呼び出します。
+- **Lindormのバックエンド保存と最適化**：Lindormはスキーマ定義に基づきデータを時系列やワイドテーブル形式に整理し、圧縮、インデックス作成、集約を行います。
+- **外部アプリケーションによるクエリと分析**：業務システムや可視化ツール（QuickBI、DataVなど）がSQLクエリを通じてデバイス状態監視、指標追跡、傾向分析を行います。
 
-## Features and Benefits
+## 特長とメリット
 
-Integrating Lindorm with EMQX offers the following advantages:
+LindormとEMQXの連携により、以下の利点があります：
 
-- **High concurrency write capability**: Lindorm TSDB nodes are designed for high-concurrency scenarios, supporting massive device telemetry ingestion, ideal for industrial monitoring, smart cities, etc.
-- **Message transformation**: Messages can be processed and transformed by EMQX rules before being written to Lindorm, simplifying storage and usage.
-- **Flexible field mapping and rule handling**: EMQX Rule Engine allows dynamic extraction and transformation of message fields with customizable SQL templates for precise data structure control.
-- **Efficient compression & persistent storage**: Lindorm optimizes storage for time-series and structured data, effectively reducing storage costs in high-frequency write scenarios while supporting long-term data retention.
-- **Runtime metrics**: View runtime metrics for each Sink, including total messages, success/failure counts, current rates, etc.
+- **高同時書き込み性能**：LindormのTSDBノードは高同時実行シナリオ向けに設計されており、大量のデバイステレメトリ取り込みに対応。産業監視やスマートシティに最適です。
+- **メッセージ変換**：EMQXのルールでメッセージを処理・変換してからLindormに書き込むため、保存や利用が簡単になります。
+- **柔軟なフィールドマッピングとルール処理**：EMQXルールエンジンはメッセージフィールドの動的抽出・変換を可能にし、カスタマイズ可能なSQLテンプレートで正確なデータ構造制御ができます。
+- **効率的な圧縮と永続化ストレージ**：Lindormは時系列・構造化データの保存を最適化し、高頻度書き込みでもストレージコストを削減しつつ長期保存をサポートします。
+- **ランタイムメトリクス**：各Sinkの総メッセージ数、成功/失敗数、現在のレートなどの実行時メトリクスを確認できます。
 
-Combined with EMQX's rich message transformation and Lindorm's storage/query capabilities, you can build a reliable and scalable IoT data pipeline to meet diverse business needs.
+EMQXの豊富なメッセージ変換機能とLindormの保存・クエリ機能を組み合わせることで、多様なビジネスニーズに応える信頼性とスケーラビリティの高いIoTデータパイプラインを構築できます。
 
-## Before You Start
+## はじめる前に
 
-This section covers the necessary preparations before creating Lindorm Data Integration in EMQX, including Lindorm instance creation, connection setup, and table creation.
+このセクションでは、EMQXでLindormデータインテグレーションを作成する前に必要な準備（Lindormインスタンス作成、接続設定、テーブル作成）について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Familiarity with [Rules](./rules.md).
-- Familiarity with [Data Integration](./data-bridges.md).
+- [ルール](./rules.md)の理解
+- [データインテグレーション](./data-bridges.md)の理解
 
-### Create and Connect a Lindorm Instance
+### Lindormインスタンスの作成と接続
 
-Before integration, ensure you have created a Lindorm instance and configured network access:
+連携前に、Lindormインスタンスを作成しネットワークアクセスを設定してください：
 
-1. Log in to Alibaba Cloud Console and [create a Lindorm instance](https://help.aliyun.com/zh/lindorm/getting-started/create-an-instance).
-2. [Configure whitelist access](https://help.aliyun.com/zh/lindorm/getting-started/configure-a-whitelist) to allow EMQX host IP access.
-3. Depending on EMQX deployment methods, choose the appropriate Lindorm connection method:
-   - If EMQX is deployed on Alibaba Cloud ECS or VPC, use Lindorm's internal VPC access address for better stability and low latency.
-   - If EMQX is deployed in local data centers or other clouds:
-     - Enable public access for Lindorm.
-     - Use the public SQL endpoint (typically port `33060`).
-     - Add EMQX host's public IP to Lindorm's whitelist.
+1. Alibaba Cloudコンソールにログインし、[Lindormインスタンスを作成](https://help.aliyun.com/zh/lindorm/getting-started/create-an-instance)します。
+2. EMQXホストIPのアクセスを許可するために、[ホワイトリスト設定](https://help.aliyun.com/zh/lindorm/getting-started/configure-a-whitelist)を行います。
+3. EMQXのデプロイ方法に応じて、適切なLindorm接続方法を選択します：
+   - EMQXがAlibaba Cloud ECSやVPC上にある場合は、Lindormの内部VPCアクセスアドレスを使用し、安定性と低レイテンシを確保します。
+   - EMQXがオンプレミスや他クラウドにある場合：
+     - Lindormのパブリックアクセスを有効化します。
+     - パブリックSQLエンドポイント（通常ポート`33060`）を使用します。
+     - EMQXホストのパブリックIPをLindormのホワイトリストに追加します。
 
-For details, refer to the [official connection guide](https://help.aliyun.com/zh/lindorm/getting-started/connect-to-an-instance) and [JDBC connection for TSDB engine](https://help.aliyun.com/zh/lindorm/user-guide/use-the-jdbc-driver-for-lindorm-to-connect-to-and-use-lindormtsdb?spm=a2c4g.11186623.0.0.73395a0fPp3qp7#task-2079050).
+詳細は[公式接続ガイド](https://help.aliyun.com/zh/lindorm/getting-started/connect-to-an-instance)および[TSDBエンジンのJDBC接続](https://help.aliyun.com/zh/lindorm/user-guide/use-the-jdbc-driver-for-lindorm-to-connect-to-and-use-lindormtsdb?spm=a2c4g.11186623.0.0.73395a0fPp3qp7#task-2079050)を参照してください。
 
-### Create Database and Table
+### データベースとテーブルの作成
 
 ```sql
 CREATE DATABASE emqx_data;
@@ -68,47 +68,42 @@ CREATE TABLE demo_sensor (
 );
 ```
 
-This table structure is suitable for time-series data, using `device_id` as the tag, `time` as timestamp, and `msg` for business data.
+このテーブル構造は時系列データに適しており、`device_id`をタグ、`time`をタイムスタンプ、`msg`を業務データとして使用します。
 
-## Create a Connector
+## コネクターの作成
 
-Before creating a Lindorm Sink (via MySQL protocol), you need to create a MySQL connector in EMQX to establish connectivity with Lindorm.
+Lindorm Sink（MySQLプロトコル経由）を作成する前に、EMQXでMySQLコネクターを作成しLindormとの接続を確立する必要があります。
 
-1. Navigate to **Integration** -> **Connectors** in the Dashboard, click **Create**.
+1. ダッシュボードの **Integration** -> **Connectors** に移動し、**Create** をクリックします。
 
-2. Select **MySQL** as the connector type, click **Next**.
+2. コネクタータイプで **MySQL** を選択し、**Next** をクリックします。
 
-3. Configure the following:
-   - **Connector Name**: Alphanumeric, e.g., `my_lindorm`.
-
-   - **Server Host**:
+3. 以下を設定します：
+   - **Connector Name**：英数字で例 `my_lindorm`。
+   - **Server Host**：
+     - EMQXがAlibaba Cloud VPCネットワーク（ECSなど）内にある場合は、Lindormインスタンスの内部SQLアドレスを入力します。形式は通常Lindormが提供する内部ドメインで、例：`ld-xxxx-proxy-sql-lindorm.lindorm.rds.aliyuncs.com:33060`。
+     - EMQXがオンプレミスや非Alibaba Cloud環境の場合は、Lindormコンソールでパブリックアクセスを有効にし、割り当てられたパブリックSQLアドレスを入力します。形式は通常：`ld-xxxx-proxy-sql-public.lindorm.rds.aliyuncs.com:33060`。
      
-     - If EMQX is deployed within Alibaba Cloud VPC network (such as ECS instances), fill in the internal SQL address of the Lindorm instance. The format is typically the internal domain provided by Lindorm, for example: `ld-xxxx-proxy-sql-lindorm.lindorm.rds.aliyuncs.com:33060`.
-     - If EMQX is deployed in a local data center or other non-Alibaba Cloud environments, ensure that public access has been enabled in the Lindorm console, and fill in the assigned public SQL address. The format is typically: `ld-xxxx-proxy-sql-public.lindorm.rds.aliyuncs.com:33060`.
-     
-     Ensure that the IP address of the host where EMQX is deployed has been added to the Lindorm access whitelist.
-     
-   - **Database Name**: `emqx_data`.
+     EMQXをデプロイしているホストのIPがLindormのアクセスホワイトリストに追加されていることを確認してください。
+   - **Database Name**：`emqx_data`
+   - **Username**：`root`
+   - **Password**：`public`
 
-   - **Username**: `root`.
+4. 詳細設定（任意）：[高度な設定](#advanced-configurations)を参照。
 
-   - **Password**: `public`.
+5. **Create**をクリックする前に、**Test Connectivity**で接続テストが可能です。
 
-4. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+6. 画面下部の**Create**ボタンを押してコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択し、Sinkを指定したルール作成に進めます。
 
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Lindorm.
+## Lindorm Sinkルールの作成
 
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to Lindorm.
+このセクションでは、トピック`#`のMQTTメッセージを受け取り、Lindormの`demo_sensor`テーブルに書き込むルール作成方法を説明します。
 
-## Create Lindorm Sink Rule
+1. ダッシュボードの **Integration** -> **Rules** に移動します。
 
-This section shows how to create a rule to handle MQTT messages from topic `#` and write them into the `demo_sensor` table in Lindorm.
+2. **Create**をクリックし、ルールIDに`my_rule`を入力します。
 
-1. Go to **Integration** -> **Rules** in Dashboard.
-
-2. Click **Create**, enter Rule ID `my_rule`.
-
-3. Enter the rule ID `my_rule`, and input the rule in the SQL editor. In this example, you can store MQTT messages from the `#` topic into Lindorm. Make sure that the fields selected in the **SELECT** clause include all the variables used in the SQL template. The rule SQL is as follows:
+3. ルールIDを`my_rule`とし、SQLエディターに以下のルールを入力します。例として、トピック`#`のMQTTメッセージをLindormに保存します。**SELECT**句で指定したフィールドはSQLテンプレートで使用する変数をすべて含めてください。
 
    ```sql
    SELECT
@@ -121,21 +116,21 @@ This section shows how to create a rule to handle MQTT messages from topic `#` a
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   初心者の方は**SQL Examples**をクリックし、**Enable Test**でSQLルールを学習・テストできます。
 
    :::
 
-4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Lindorm. 
+4. + **Add Action**ボタンをクリックし、ルールでトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをLindormに送信します。
 
-5. Select `MySQL` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**ドロップダウンから`MySQL`を選択します。**Action**はデフォルトの`Create Action`のままにします。既存のSinkがあれば選択も可能です。ここでは新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+6. Sinkの名前を入力します。英数字の組み合わせで指定してください。
 
-7. Select the `my_lindorm` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**ドロップダウンから先ほど作成した`my_lindorm`を選択します。新規作成も可能です。設定パラメータは[コネクター作成](#コネクターの作成)を参照してください。
 
-8. Configure the **SQL Template** based on the feature to use:
+8. 利用する機能に応じて**SQL Template**を設定します：
 
-   Note: This is a preprocessed SQL, so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
+   注意：これは事前処理済みのSQLなので、フィールドは引用符で囲まず、文末にセミコロンを付けないでください。
 
    ```sql
    INSERT INTO demo_sensor(device_id, time, msg) VALUES (
@@ -145,41 +140,40 @@ This section shows how to create a rule to handle MQTT messages from topic `#` a
    )
    ```
 
-   If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
+   SQLテンプレート内に未定義のプレースホルダー変数がある場合は、**SQL template**上部の**Undefined Vars as Null**スイッチでルールエンジンの動作を切り替えられます：
 
-   - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-
-   - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
+   - **Disabled**（デフォルト）：未定義変数は文字列`undefined`としてデータベースに挿入されます。
+   - **Enabled**：未定義変数は`NULL`として挿入されます。
 
      ::: tip
 
-     If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
+     可能であれば常にこのオプションを有効にしてください。無効化は後方互換性確保のためのみ推奨されます。
 
      :::
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、プライマリSinkが処理に失敗した場合にトリガーされるフォールバックアクションを1つ以上定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
 
-10. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
+10. 詳細設定（任意）：[高度な設定](#advanced-configurations)を参照。
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. **Create**ボタンを押してSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. **Create Rule**画面に戻り、設定内容を確認して**Create**をクリックしルールを生成します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MySQL Sink.
+これでルールが正常に作成されました。**Integration** -> **Rules**ページで新規ルールを確認できます。**Actions(Sink)**タブをクリックすると新しいMySQL Sinkが表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `#`  are sent and saved to MySQL. 
+また、**Integration** -> **Flow Designer**でトポロジーを確認すると、トピック`#`のメッセージがMySQLに送信・保存されていることがわかります。
 
-## Test the Rule
+## ルールのテスト
 
-Publish a message to the `sensor/1` topic using MQTTX:
+MQTTXを使ってトピック`sensor/1`にメッセージをパブリッシュします：
 
 ```bash
 mqttx pub -i emqx_test -t sensor/1 -m '{ "msg": "hello lindorm" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+Sinkの稼働状況を確認すると、新規の受信メッセージ1件と送信メッセージ1件があるはずです。
 
-Use API to query if data are written in Lindorm successfully: 
+APIを使ってLindormにデータが正常に書き込まれたかを確認します：
 
 ```bash
 curl -X POST http://${LINDORM_SERVER}:8242/api/v2/sql?database=emqx_data \
@@ -187,22 +181,18 @@ curl -X POST http://${LINDORM_SERVER}:8242/api/v2/sql?database=emqx_data \
   -d 'SELECT * FROM demo_sensor'
 ```
 
-## Advanced Configurations
+## 高度な設定
 
-Detailed explanation of advanced configuration options for MySQL Connector and Sink (Lindorm):
+MySQLコネクターおよびSink（Lindorm）向けの高度な設定オプションの詳細：
 
-| Field                     | Description                                                  | Default |
-| ------------------------- | ------------------------------------------------------------ | ------- |
-| **Connection Pool Size**  | Number of concurrent connections maintained in the pool for MySQL service communication. Adjust based on system resources and workload. | `8`     |
-| **Start Timeout**         | Maximum wait time (in seconds) for resource readiness after creation. Ensures Lindorm connection is healthy before processing data. | `5s`    |
-| **Buffer Pool Size**      | Number of worker processes managing data flow before sending to Lindorm. Set to `0` for ingress-only scenarios. | `16`    |
-| **Request TTL**           | TTL for buffered requests (in seconds). Requests exceeding this time are considered expired. | `45s`   |
-| **Health Check Interval** | Frequency (in seconds) for automatic Lindorm connection health checks. | `15s`   |
-| **Max Buffer Queue Size** | Maximum byte size each buffer worker can hold before flushing data to Lindorm. | `256MB` |
-| **Max Batch Size**        | Maximum number of records per batch sent to Lindorm. For single-record transfers, set to `1`. | `1`     |
-| **Query Mode**            | Choose between `sync` and `async` modes. Async mode avoids blocking MQTT message publishing but may affect strict ordering. | `async` |
-| **In-flight Window**      | Maximum number of in-flight requests pending response. Set to `1` if strict message order from same client is required. | `100`   |
-
-
-
-------
+| 項目                      | 説明                                                         | デフォルト |
+| ------------------------- | ------------------------------------------------------------ | ---------- |
+| **Connection Pool Size**  | MySQLサービス通信に使用する接続プールの同時接続数。システムリソースや負荷に応じて調整。 | `8`        |
+| **Start Timeout**         | 作成後にリソース準備完了を待つ最大時間（秒）。Lindorm接続の正常性を保証。 | `5s`       |
+| **Buffer Pool Size**      | Lindorm送信前にデータを管理するワーカープロセス数。ingressのみの場合は`0`に設定。 | `16`       |
+| **Request TTL**           | バッファリングされたリクエストのTTL（秒）。超過すると期限切れとみなす。 | `45s`      |
+| **Health Check Interval** | Lindorm接続の自動ヘルスチェック間隔（秒）。                      | `15s`      |
+| **Max Buffer Queue Size** | バッファワーカーがLindormにフラッシュする前に保持可能な最大バイト数。 | `256MB`    |
+| **Max Batch Size**        | Lindormに送信するバッチあたりの最大レコード数。単一レコード転送は`1`。 | `1`        |
+| **Query Mode**            | `sync`または`async`モードを選択。非同期はMQTTメッセージのパブリッシュをブロックしないが、厳密な順序性に影響する可能性あり。 | `async`    |
+| **In-flight Window**      | 応答待ちのリクエスト最大数。同一クライアントからの厳密なメッセージ順序が必要な場合は`1`に設定。 | `100`      |

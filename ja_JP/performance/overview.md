@@ -1,18 +1,15 @@
-# Performance Tuning and Test
+# パフォーマンスチューニングとテスト
 
-This chapter introduces how to run performance tuning and test for EMQX. 
+本章では、EMQXのパフォーマンスチューニングおよびテストの実施方法について紹介します。
 
-- [Performance Tuning](./tune.md)
+- [パフォーマンスチューニング](./tune.md)
 
-  This section introduces how to run performance tuning in Linux, covering topics like the Linus kernel tuning, TCP network tuning, Erlang VM tuning, and EMQX tuning. 
+  本セクションでは、Linux環境でのパフォーマンスチューニング方法を解説します。Linuxカーネルのチューニング、TCPネットワークのチューニング、Erlang VMのチューニング、そしてEMQXのチューニングに関する内容を含みます。
 
-- [Performance Testing with eMQTT-Bench](./benchmark-emqtt-bench.md)
+- [eMQTT-Benchによるパフォーマンステスト](./benchmark-emqtt-bench.md)
 
-  This section introduces how to install and use [emqtt_bench](https://github.com/emqx/emqtt_bench), the concise and powerful MQTT protocol performance testing tool. 
+  本セクションでは、シンプルかつ強力なMQTTプロトコルのパフォーマンステストツールである[emqtt_bench](https://github.com/emqx/emqtt_bench)のインストールおよび使用方法を紹介します。
 
-- [EMQX Performance Reference](./performance-reference.md)
+- [EMQXパフォーマンスリファレンス](./performance-reference.md)
 
-  This section lists the performance change curves of EMQX in several typical scenarios, and reveals the impact of factors such as QoS level and Payload size on the final performance.
-
-
-
+  本セクションでは、いくつかの典型的なシナリオにおけるEMQXのパフォーマンス変化曲線を示し、QoSレベルやペイロードサイズなどの要因が最終的なパフォーマンスに与える影響を明らかにします。

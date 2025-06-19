@@ -1,24 +1,24 @@
-# PSK Authentication
+# PSK認証
 
-Pre-Shared Key (PSK) authentication is a method of authentication that relies on a pre-shared key for identity verification. Using the PSK authentication method, both the client and EMQX must pre-share the same key before establishing a secured connection. The pre-shared key is then used to encrypt and decrypt data in establishing the TLS connection between the client and EMQX and in subsequent communications. With the PSK authentication enabled, the client and EMQX can authenticate each other and establish a secure connection without the need for certificates or certificate authorities. 
+Pre-Shared Key（PSK）認証は、事前に共有されたキーを用いて本人確認を行う認証方式です。PSK認証方式では、クライアントとEMQXの両者がセキュアな接続を確立する前に同じキーを事前共有している必要があります。この事前共有キーは、クライアントとEMQX間のTLS接続の確立およびその後の通信においてデータの暗号化と復号に使用されます。PSK認証を有効にすることで、クライアントとEMQXは証明書や証明書機関を必要とせずに相互認証を行い、安全な接続を確立できます。
 
-This page introduces how to enable PSK authentication in EMQX.
+本ページでは、EMQXでPSK認証を有効にする方法を紹介します。
 
-1. Create a file `data/psk_file.txt` in any directory, containing the identity and secret value of the pre-shared key. 
+1. 任意のディレクトリに `data/psk_file.txt` ファイルを作成し、事前共有キーのIDと秘密値を記述します。
 
    ::: tip
 
-   The secret value can be any string, but its length must correspond to the selected cipher. For example, if the cipher is TLS_PSK_WITH_AES_128_CBC_SHA, the secret must be 128 bits long.
+   秘密値は任意の文字列で構いませんが、長さは選択した暗号スイートに対応している必要があります。例えば、暗号スイートが `TLS_PSK_WITH_AES_128_CBC_SHA` の場合、秘密値は128ビットの長さでなければなりません。
 
    :::
 
    ```bash
-   # One data per line, in the format of PSKIdentity:SharedSecret
+   # 1行につき1データ、フォーマットは PSKIdentity:SharedSecret
    emqx_c:BA0DB2A3448345A3A13A91C2ADA44778
    emqx_a:A6FC9EDF62864125AAE7658BEAE6170C
    ```
 
-2. Add the `psk_authentication` configuration group in the configuration file.
+2. 設定ファイルに `psk_authentication` 設定グループを追加します。
 
    ```bash
    psk_authentication {
@@ -27,14 +27,14 @@ This page introduces how to enable PSK authentication in EMQX.
    }
    ```
    
-3. Configure the SSL listener in the configuration file. Modify the `listeners.ssl.default` group by adding the following options. 
+3. 設定ファイルでSSLリスナーを設定します。`listeners.ssl.default` グループを修正し、以下のオプションを追加してください。
 
-   - `ssl_options.versions`: Remove `tlsv1.3` support, since `tlsv1.3` version configuration suppresses PSK ciphers.
-   - `ssl_options.ciphers`: Configure to use PSK cipher suits.
+   - `ssl_options.versions`：`tlsv1.3` のサポートを削除します。`tlsv1.3` はPSK暗号スイートを抑制するためです。
+   - `ssl_options.ciphers`：PSK暗号スイートを使用するよう設定します。
 
    ::: tip
 
-   If the `RSA-PSK` cipher suites are used, the `RSA` certificate is still required, see [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) for details.
+   `RSA-PSK` 暗号スイートを使用する場合は、`RSA` 証明書が依然として必要です。詳細は [RFC4279](https://www.rfc-editor.org/rfc/rfc4279#section-4) を参照してください。
 
    :::
 
@@ -48,10 +48,3 @@ This page introduces how to enable PSK authentication in EMQX.
      }
    }
    ```
-
-   
-
-
-
-
-

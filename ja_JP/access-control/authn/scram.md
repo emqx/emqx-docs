@@ -1,26 +1,24 @@
-# MQTT 5.0 Enhanced Authentication - SCRAM
+# MQTT 5.0 強化認証 - SCRAM
 
-This authenticator implements [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) authentication and uses the built-in database of EMQX to store client credentials (_users_).
+この認証機構は [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) を実装しており、EMQX の組み込みデータベースを使用してクライアント認証情報（ユーザー）を保存します。
 
-SCRAM is a more complicated mechanism than password verification. It requires exchanging additional MQTT packages during connection. SCRAM authentication does not depend on external data sources, and it is simple and lightweight to use.
+SCRAM はパスワード認証よりも複雑な仕組みであり、接続時に追加の MQTT パケットのやり取りが必要です。SCRAM 認証は外部データソースに依存せず、シンプルかつ軽量に利用できます。
 
 ::: tip
-SCRAM authenticator only supports MQTT 5.0 connection.
+SCRAM 認証機構は MQTT 5.0 接続のみをサポートしています。
 :::
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-1. On the [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation menu.
-2. Click **Create** at the top right corner, then click to select **SCRAM** as **Mechanism**, and **Built-in Database** as **Backend**. This will lead you to the **Configuration** tab.
-3. Configure the following settings for the authentication backend:
-   - **Password Hash**: Select the password hash algorithm: `sha256` or `sha512`.
-   - **Iteration Count**: This parameter defines the number of iterations used in the SCRAM authentication process to hash the password. A higher iteration count increases security by making the hashing process more computationally expensive, thereby slowing down brute force attacks. The default value is `4096`. Adjusting this value can impact performance and security, so it should be configured based on your system's needs.
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Built-in Database authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-4. Click **Create** to finish the settings.
+1. [EMQX ダッシュボード](http://127.0.0.1:18083/#/authentication)の左側ナビゲーションメニューで **アクセス制御** -> **認証** をクリックします。  
+2. 右上の **作成** をクリックし、**Mechanism** に **SCRAM**、**Backend** に **Built-in Database** を選択します。すると **設定** タブに移動します。  
+3. 認証バックエンドの設定を以下のように行います：  
+   - **Password Hash**：パスワードハッシュアルゴリズムを選択します。`sha256` または `sha512`。  
+   - **Iteration Count**：SCRAM 認証でパスワードをハッシュ化する際の反復回数を定義します。反復回数が多いほど計算コストが増え、ブルートフォース攻撃に対する耐性が高まります。デフォルトは `4096` です。パフォーマンスとセキュリティのバランスを考慮して調整してください。  
+   - **Precondition**：[Variform 式](../../configuration/configuration.md#variform-expressions)で、クライアント接続に対してこの組み込みデータベース認証機構を適用するかどうかを制御します。式はクライアントの属性（`username`、`clientid`、`listener` など）に対して評価され、結果が文字列 `"true"` の場合のみ認証機構が呼び出されます。それ以外の場合はスキップされます。詳細は [認証の事前条件](./authn.md#authentication-preconditions) を参照してください。  
+4. **作成** をクリックして設定を完了します。
 
-## Configure with Configuration Items
-
-Sample configuration:
+## 設定ファイルでの設定例
 
 ```hcl
 {
@@ -31,12 +29,12 @@ Sample configuration:
 }
 ```
 
-where,
+項目の説明：
 
-- `algorithm`: password hash algorithm, options: `sha256` and `sha512`
-- `iteration_count` (optional): Iteration-count parameter for SCRAM; Default: `4096`
+- `algorithm`：パスワードハッシュアルゴリズム。`sha256` または `sha512` を指定。  
+- `iteration_count`（省略可）：SCRAM の反復回数。デフォルトは `4096`。
 
-## Authentication Flow
+## 認証フロー
 
-![scram_workflow](./assets/scram_workflow.png)
-
+![scram_workflow](./assets/scram_workflow.png)  
+SCRAM 認証のフロー図

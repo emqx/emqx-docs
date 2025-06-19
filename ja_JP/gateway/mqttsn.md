@@ -1,42 +1,42 @@
-# MQTT-SN Gateway
+# MQTT-SN ゲートウェイ
 
-MQTT-SN (MQTT for Sensor Networks) is a lightweight pub/sub protocol for wireless sensor networks, the EMQX MQTT-SN Gateway allows these devices to connect and communicate with EMQX, bridging the gap between MQTT-SN and the standard MQTT protocol.
+MQTT-SN（MQTT for Sensor Networks）は、ワイヤレスセンサーネットワーク向けの軽量なパブサブプロトコルです。EMQX MQTT-SN ゲートウェイは、これらのデバイスが EMQX に接続して通信できるようにし、MQTT-SN と標準 MQTT プロトコル間の橋渡しを行います。
 
-This page introduces how to configure and use the MQTT-SN Gateway in EMQX.
+本ページでは、EMQX における MQTT-SN ゲートウェイの設定方法と使用方法を紹介します。
 
 ::: tip
 
-The MQTT-SN gateway is based on the [MQTT-SN v1.2](https://www.oasis-open.org/committees/download.php/66091/MQTT-SN_spec_v1.2.pdf).
+MQTT-SN ゲートウェイは [MQTT-SN v1.2](https://www.oasis-open.org/committees/download.php/66091/MQTT-SN_spec_v1.2.pdf) に基づいています。
 
 :::
 
 <!--a brief introduction of the architecture-->
 
-## Enable the MQTT-SN Gateway
+## MQTT-SN ゲートウェイの有効化
 
-In EMQX 5.0, MQTT-SN gateway can be configured and enabled through the Dashboard, REST API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+EMQX 5.0 では、MQTT-SN ゲートウェイはダッシュボード、REST API、および設定ファイル `base.hocon` から設定および有効化できます。本節ではダッシュボードを使った設定例を示し、操作手順を説明します。
 
-On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **MQTT-SN** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize MQTT-SN** page.
+EMQX ダッシュボードの左側ナビゲーションメニューで **Management** -> **Gateways** をクリックします。**Gateways** ページにはサポートされているすべてのゲートウェイが一覧表示されます。**MQTT-SN** を見つけ、**Actions** 列の **Setup** をクリックすると、**Initialize MQTT-SN** ページに遷移します。
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or REST API will affect the whole cluster. If you only want to change the settings with one node, configure in [`base.hocon`](../configuration/configuration.md).
+EMQX をクラスターで運用している場合、ダッシュボードや REST API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) で設定してください。
 
 :::
 
-To simplify the configuration process, EMQX offers default values for all required fields on the **Gateways** page. If you don't need extensive customization, you can enable the MQTT-SN Gateway in just 3 clicks:
+設定を簡略化するため、EMQX は **Gateways** ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合、MQTT-SN ゲートウェイは以下の3クリックで有効化できます。
 
-1. Click **Next** in the **Basic Configuration** tab to accept all the default settings. 
-2. Then you will be directed to the **Listeners** tab, where EMQX has pre-configured a UDP listener on port 1884. Click **Next** again to confirm the setting.
-3. Then click the **Enable** button to activate the MQTT-SN Gateway.
+1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。
+2. 次に **Listeners** タブに遷移し、EMQX はポート1884で UDP リスナーを事前設定しています。ここでも **Next** をクリックして設定を確定します。
+3. 最後に **Enable** ボタンをクリックして MQTT-SN ゲートウェイを有効化します。
 
-Upon completing the gateway activation process, you can return to the **Gateways** page and observe that the MQTT-SN Gateway now displays an **Enabled** status.
+ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、MQTT-SN ゲートウェイのステータスが **Enabled** と表示されていることを確認できます。
 
-<img src="./assets/mqttsn-enabled.png" alt="Enabled MQTT-SN gateway" style="zoom:50%;" />
+<img src="./assets/mqttsn-enabled.png" alt="有効化された MQTT-SN ゲートウェイ" style="zoom:50%;" />
 
-The above configuration can also be configured with REST API:
+上記の設定は REST API でも行えます。
 
-**Example Code:**
+**例:**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
@@ -59,119 +59,119 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/mqttsn' \
 }'
 ```
 
-For a detailed REST API description, see [REST API - Gateway](../admin/api.md)
+詳細な REST API の説明は [REST API - Gateway](../admin/api.md) をご覧ください。
 
-If you have some customization needs, want to add more listeners, or add authentication rules, you can continue to read the [Customize Your MQTT-SN Gateway section](#customize-your-mqtt-sn-gateway).
+カスタマイズが必要で、リスナーの追加や認証ルールの設定を行いたい場合は、[MQTT-SN ゲートウェイのカスタマイズ](#customize-your-mqtt-sn-gateway) セクションをお読みください。
 
-## Work with MQTT-SN Clients
+## MQTT-SN クライアントとの連携
 
-### Client Libraries
+### クライアントライブラリ
 
-After establishing the MQTT-SN gateway, you can use the MQTT-SN client tools to test the connections and ensure everything works as expected. Below are some of the recommended MQTT-SN client tools. 
+MQTT-SN ゲートウェイを構築した後、MQTT-SN クライアントツールを使って接続をテストし、正常に動作しているか確認できます。以下は推奨される MQTT-SN クライアントツールの例です。
 
 - [paho.mqtt-sn.embedded-c](https://github.com/eclipse/paho.mqtt-sn.embedded-c)
 - [mqtt-sn-tools](https://github.com/njh/mqtt-sn-tools)
 
-### Publish/Subscribe
+### パブリッシュ／サブスクライブ
 
-The MQTT-SN protocol already defines the publish/subscribe behavior, e.g:
+MQTT-SN プロトコルはパブリッシュ／サブスクライブの動作を以下のように定義しています。
 
-- The `PUBLISH` message of the MQTT-SN protocol is used as a publishing operation, whose topic and QoS are specified by this message.
-- The `SUBSCRIBE` message of the MQTT-SN protocol is used as a subscribing operation, whose topic and QoS are both specified by this message.
-- The `UNSUBSCRIBE` message of the MQTT-SN protocol is used as an unsubscribe operation, whose topic is specified by this message.
+- MQTT-SN プロトコルの `PUBLISH` メッセージはパブリッシュ操作に使用され、トピックおよび QoS はこのメッセージで指定されます。
+- `SUBSCRIBE` メッセージはサブスクライブ操作に使用され、トピックおよび QoS はこのメッセージで指定されます。
+- `UNSUBSCRIBE` メッセージはサブスクライブ解除操作に使用され、トピックはこのメッセージで指定されます。
 
-## Customize Your MQTT-SN Gateway
+## MQTT-SN ゲートウェイのカスタマイズ
 
-In addition to the default settings, EMQX provides a variety of configuration options to better accommodate your specific business requirements. This section offers an in-depth overview of the various fields available on the **Gateways** page.
+デフォルト設定に加え、EMQX はさまざまな設定オプションを提供し、特定のビジネス要件に柔軟に対応できます。本節では **Gateways** ページで利用可能な各フィールドについて詳しく解説します。
 
-### Basic Configuration
+### 基本設定
 
-In the **Basic Configuration** tab, you can customize your gateway ID, predefine the topic list, and set the MountPoint string for this gateway. See the texts below the screenshot for a comprehensive explanation of each field. 
+**Basic Configuration** タブでは、ゲートウェイ ID のカスタマイズ、あらかじめ定義されたトピックリストの設定、ゲートウェイの MountPoint 文字列の設定が可能です。以下のスクリーンショット下の説明をご参照ください。
 
 ![Basic Configuration](./assets/mqttsn-basic-config.png)
 
-- **Gateway ID**: Set the unique identifier of the gateway, for example, 1. 
+- **Gateway ID**：ゲートウェイの一意の識別子を設定します。例：1。
 
-- **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified, default: `true`, optional values: `true`, `false`.
+- **Enable Broadcast**：ゲートウェイがゲートウェイ広告をクライアントにブロードキャストするかどうかを設定します。指定した Gateway ID を含むメッセージをブロードキャストします。デフォルトは `true`、選択肢は `true` または `false`。
 
-- **Enable QoS3**: Set whether to allow the gateway to support QoS 3 (Exactly-once) message delivery,  this setting is intended for basic clients that only need to send `PUBLISH` messages to the gateway; default: `true`, optional values: `true`, `false`.
+- **Enable QoS3**：ゲートウェイが QoS 3（Exactly-once）メッセージ配信をサポートするかどうかを設定します。この設定は、`PUBLISH` メッセージのみゲートウェイに送信する基本的なクライアント向けです。デフォルトは `true`、選択肢は `true` または `false`。
 
-- **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected MQTT-SN client will be considered disconnected. Default: `30s`.
+- **Idle Timeout**：MQTT-SN クライアントが非アクティブとみなされ切断されるまでの秒数を設定します。デフォルトは `30s`。
 
-- **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
+- **Enable Statistics**：ゲートウェイが統計情報を収集・報告するかどうかを設定します。デフォルトは `true`、選択肢は `true` または `false`。
 
-- **Predefined Topic List**: Set the predefined topic IDs and corresponding topic names. Click **Add** to add a new entry. 
+- **Predefined Topic List**：あらかじめ定義されたトピック ID と対応するトピック名を設定します。**Add** をクリックして新しいエントリを追加できます。
 
-  - **Topic ID**: Set the topic ID, which should be an integer between 1 and 65535.
-  - **Topic**: Set the topic names.<!--, multiple topics can be added here, separated with a `,`-->
+  - **Topic ID**：トピック ID を設定します。1～65535 の整数で指定します。
+  - **Topic**：トピック名を設定します。
 
-- **MountPoint**: Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols, for example, `mqttsn/`.
+- **MountPoint**：パブリッシュやサブスクライブ時にすべてのトピックの前に付加される文字列を設定します。異なるプロトコル間でメッセージルーティングの分離を実現するために使用します。例：`mqttsn/`
 
-  **Note**: This topic prefix is managed by the gateway. MQTT-SN clients do not need to add this prefix explicitly when publishing and subscribing.
+  **注意**：このトピックプレフィックスはゲートウェイが管理します。MQTT-SN クライアントはパブリッシュやサブスクライブ時にこのプレフィックスを明示的に付加する必要はありません。
 
-### Add Listeners 
+### リスナーの追加
 
-By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
+デフォルトでは、名前が **default** の UDP リスナーがポート `1884` で設定されており、1秒あたり最大1,000接続、最大1,024,000同時接続をサポートしています。**Settings** をクリックすると詳細設定が可能で、**Delete** でリスナーを削除できます。**+ Add Listener** をクリックすると新しいリスナーを追加できます。
 
-<img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
+<img src="./assets/mqttsn-listerner.png" alt="MQTT-SN リスナー" style="zoom:50%;" />
 
-Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
+**Add Listener** をクリックすると **Add Listener** ページが開き、以下の設定が可能です。
 
-**Basic settings**
+**基本設定**
 
-- **Name**: Set a unique identifier for the listener.
-- **Type**: Select the protocol type, for MQTT-SN, this can be either **udp** or **dtls**.
-- **Bind**: Set the port number on which the listener accepts incoming connections.
-- **MountPoint** (optional): Set a string that is prefixed to all topics when publishing or subscribing, providing a way to implement message routing isolation between different protocols
+- **Name**：リスナーの一意識別子を設定します。
+- **Type**：プロトコルタイプを選択します。MQTT-SN では **udp** または **dtls** を選択可能です。
+- **Bind**：リスナーが接続を受け付けるポート番号を設定します。
+- **MountPoint**（任意）：パブリッシュやサブスクライブ時にすべてのトピックの前に付加される文字列を設定し、異なるプロトコル間でメッセージルーティングの分離を実現します。
 
-**Listener Settings** 
+**リスナー設定**
 
-- **Acceptor **(for DTLS listeners only): Set the size of the acceptor pool, default: **16**. 
-- **Max Connections**: Set the maximum number of concurrent connections that the listener can handle, default: **1024000**.
-- **Max Connection Rate**: Set the maximum rate of new connections the listener can accept per second, default: **1000**.
+- **Acceptor**（DTLS リスナーのみ）：アクセプタプールのサイズを設定します。デフォルトは **16**。
+- **Max Connections**：リスナーが処理可能な同時接続の最大数を設定します。デフォルトは **1024000**。
+- **Max Connection Rate**：リスナーが1秒あたり受け入れ可能な新規接続の最大レートを設定します。デフォルトは **1000**。
 
-**UDP Settings** 
+**UDP 設定**
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
-- **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
-- **Receive Buffer**: Set the size of the receive buffer,  unit: KB.
-- **Send Buffer**: Set the size of the send buffer,  unit: KB. 
-- **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->
+- **ActiveN**：ソケットの `{active, N}` オプションを設定します。これはソケットが能動的に処理できる受信パケット数です。詳細は [Erlang Documentation - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2) を参照してください。
+- **Buffer**：受信および送信パケットを格納するバッファのサイズを KB 単位で設定します。
+- **Receive Buffer**：受信バッファのサイズを KB 単位で設定します。
+- **Send Buffer**：送信バッファのサイズを KB 単位で設定します。
+- **SO_REUSEADDR**：ローカルでのポート番号再利用を許可するかどうかを設定します。
 
-**DTLS Settings** (for DTLS listeners only)
+**DTLS 設定**（DTLS リスナーのみ）
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+TLS Verify の有効化はトグルスイッチで設定できます。ただし、その前に関連する **TLS Cert**、**TLS Key**、および **CA Cert** 情報を設定する必要があります。ファイルの内容を直接入力するか、**Select File** ボタンでアップロードしてください。詳細は [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md) をご覧ください。
 
-Then you can continue to set:
+続いて以下の設定が可能です。
 
-- **DTLS Versions**: Set the DTLS versions supported, default, **dtlsv1.2** and **dtlsv1**. 
-- **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**. 
-- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
-- **Key Password**: Set the user's password, used only when the private key is password-protected. 
+- **DTLS Versions**：サポートする DTLS バージョンを設定します。デフォルトは **dtlsv1.2** と **dtlsv1**。
+- **Fail If No Peer Cert**：クライアントが空の証明書を送信した場合に接続を拒否するかどうかを設定します。デフォルトは **false**、選択肢は **true** または **false**。
+- **Intermediate Certificate Depth**：ピア証明書に続く有効な認証パスに含まれる、自己発行でない中間証明書の最大数を設定します。デフォルトは **10**。
+- **Key Password**：プライベートキーがパスワード保護されている場合に使用するパスワードを設定します。
 
-### Configure Authentication
+### 認証の設定
 
-Since the connection message of the MQTT-SN protocol only gives the Client ID of the Client, therefore, the MQTT-SN gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
+MQTT-SN プロトコルの接続メッセージはクライアントの Client ID のみを提供するため、MQTT-SN ゲートウェイは [HTTP サーバー認証](../access-control/authn/http.md) のみをサポートしています。
 
-The client information generation rules are as follows:
+クライアント情報の生成ルールは以下の通りです。
 
-- Client ID: using the Client ID field of `CONNECT` message.
-- Username: undefined
-- Password: undefined
+- Client ID：`CONNECT` メッセージの Client ID フィールドを使用します。
+- Username：未定義
+- Password：未定義
 
-This part takes the Dashboard as an example to illustrate how to do the authentication configuration. 
+ここではダッシュボードを例に認証設定の手順を説明します。
 
-On the **Gateways** page, locate **MQTT-SN** and click **Setup** in the **Actions** column and click **Authentication** to enter the **Authentication** tab. 
+**Gateways** ページで **MQTT-SN** を見つけ、**Actions** 列の **Setup** をクリックし、**Authentication** タブに入ります。
 
-Click **Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules. 
+**Create Authentication** をクリックし、**Mechanism** に **Password-Based** を選択、**Backend** に **HTTP Server** を選択します。続いて **Configuration** タブで認証ルールを設定します。
 
 ![mqttsn authentication](./assets/mqttsn-authn-config.png)
 
-For a detailed explanation of each field on the page, you can refer to [HTTP Server Authentication](../access-control/authn/http.md).
+各フィールドの詳細は [HTTP サーバー認証](../access-control/authn/http.md) をご参照ください。
 
-The above configuration can also be performed via REST API.
+上記の設定は REST API でも行えます。
 
-**Example Code**
+**例:**
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
@@ -199,4 +199,3 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
   "enable": true
 }'
 ```
-

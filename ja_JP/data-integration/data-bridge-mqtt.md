@@ -1,123 +1,120 @@
-# Bridge with Other MQTT Services
+# 他の MQTT サービスとのブリッジ
 
-MQTT Broker data integration provides EMQX with functionality to connect to another EMQX cluster or another MQTT service for message bridge, enabling cross-network, cross-service data interaction and communication. This page introduces the working principle of the MQTT message bridge in EMQX and offers practical guidance on creating and verifying message bridges.
+MQTT ブローカーのデータ統合により、EMQX は別の EMQX クラスターや他の MQTT サービスに接続してメッセージブリッジを実現し、ネットワークやサービスを跨いだデータの相互作用および通信を可能にします。本ページでは、EMQX における MQTT メッセージブリッジの動作原理を紹介し、メッセージブリッジの作成と検証に関する実践的なガイドを提供します。
 
-## How It Works
+## 動作原理
 
-During bridging, EMQX establishes an MQTT connection with the target service as a client, achieving bidirectional message transmission through the publish-subscribe model:
+ブリッジング中、EMQX はクライアントとしてターゲットサービスと MQTT 接続を確立し、パブリッシュ・サブスクライブモデルを通じて双方向のメッセージ送受信を実現します。
 
-- Outgoing Messages (Sink): Publishes messages from local topics to specified topics on the remote MQTT service.
-- Incoming Messages (Source): Subscribes to topics on the remote MQTT service and forwards their messages to EMQX locally.
+- 送信メッセージ（Sink）：ローカルのトピックからメッセージをパブリッシュし、リモート MQTT サービスの指定トピックへ送信します。
+- 受信メッセージ（Source）：リモート MQTT サービスのトピックをサブスクライブし、そのメッセージを EMQX ローカルに転送します。
 
-EMQX supports configuring multiple bridging rules on the same connection, each with different topic mappings and message transformation rules, implementing a function similar to message routing. During bridging, you can also process messages through the Rule Engine to filter, enrich, and transform messages before forwarding.
+EMQX は同一接続上で複数のブリッジングルールを設定可能で、それぞれ異なるトピックマッピングやメッセージ変換ルールを持つことで、メッセージルーティングに類似した機能を実装しています。ブリッジング中はルールエンジンを介してメッセージのフィルタリング、拡充、変換処理も行えます。
 
-The diagram below shows a typical architecture of data integration between EMQX and other MQTT services:
+以下の図は、EMQX と他の MQTT サービス間のデータ統合の典型的なアーキテクチャを示しています。
 
 ![EMQX Integration MQTT](./assets/emqx-integration-mqtt.png)
 
-## Features and Benefits
+## 特長とメリット
 
-The MQTT Broker data integration has the following features and benefits:
+MQTT ブローカーのデータ統合は以下の特長とメリットを備えています。
 
-- **Extensive Compatibility**: It uses the standard MQTT protocol, allowing it to bridge to various IoT platforms, including AWS IoT Core, Azure IoT Hubs, and also supports open-source or other industry MQTT brokers and IoT platforms. This enables seamless integration and communication with a variety of devices and platforms.
-- **Bidirectional Data Flow**: It supports bidirectional data flow, enabling the publishing of messages from EMQX locally to remote MQTT services, and also subscribing to messages from MQTT services and publishing them locally. This bidirectional communication capability makes data transfer between different systems more flexible and controllable.
-- **Flexible Topic Mapping**: Based on the MQTT publish-subscribe model, the MQTT broker data integration implements flexible topic mapping. It supports adding prefixes to topics and dynamically constructing topics using the client's contextual information (such as client ID, username, etc.). This flexibility allows for customized processing and routing of messages according to specific needs.
-- **High Performance**: It offers performance optimization options like connection pooling and shared subscriptions to reduce the load on individual bridging clients, achieving lower bridging latency and higher message throughput. These optimization measures enhance the overall system performance and scalability.
-- **Payload Transformation**: It allows for the processing of message payloads by defining SQL rules. This means that during message transmission, operations such as data extraction, filtering, enrichment, and transformation can be performed on the payload. For example, real-time metrics can be extracted from the payload and transformed and processed before the message is delivered to the remote MQTT Broker.
-- **Metrics Monitoring**: The runtime metrics monitoring is provided for each Sink/Source. It allows viewing of total message count, success/failure counts, current rates, etc., helping users to monitor and assess the performance and health of the Sink/Source in real-time.
+- **広範な互換性**：標準 MQTT プロトコルを使用しているため、AWS IoT Core、Azure IoT Hubs をはじめとする各種 IoT プラットフォームや、オープンソースや業界標準の MQTT ブローカー、IoT プラットフォームとのブリッジが可能です。これにより多様なデバイスやプラットフォームとのシームレスな統合と通信を実現します。
+- **双方向データフロー**：双方向のデータフローをサポートし、EMQX からリモート MQTT サービスへのメッセージパブリッシュと、リモート MQTT サービスからのメッセージサブスクライブおよびローカルパブリッシュを可能にします。この双方向通信により、異なるシステム間のデータ転送が柔軟かつ制御可能になります。
+- **柔軟なトピックマッピング**：MQTT のパブリッシュ・サブスクライブモデルに基づき、トピックにプレフィックスを付加したり、クライアントのコンテキスト情報（クライアント ID、ユーザー名など）を用いて動的にトピックを構築する柔軟なトピックマッピングを実装しています。これにより、ニーズに応じたメッセージのカスタム処理やルーティングが可能です。
+- **高性能**：コネクションプーリングや共有サブスクリプションなどのパフォーマンス最適化オプションを提供し、個々のブリッジクライアントの負荷を軽減してブリッジレイテンシの低減とメッセージスループットの向上を実現します。これらの最適化により、システム全体の性能とスケーラビリティが向上します。
+- **ペイロード変換**：SQL ルールを定義してメッセージペイロードの処理が可能です。メッセージ送信時にペイロードの抽出、フィルタリング、拡充、変換などの操作を行えます。例えば、リアルタイムメトリクスをペイロードから抽出し、変換・処理してからリモート MQTT ブローカーに配信できます。
+- **メトリクス監視**：各 Sink/Source ごとにランタイムのメトリクス監視を提供し、総メッセージ数、成功/失敗数、現在のレートなどを確認できます。これにより、Sink/Source のパフォーマンスや状態をリアルタイムに監視・評価できます。
 
-## Prepare MQTT Connection Information
+## MQTT 接続情報の準備
 
-::: tip Prerequisites
+::: tip 前提条件
 
-Make sure you know the following:
+以下を理解していることを確認してください。
 
-- [Rule Engine](./rules.md)
-- [Data Integration](./data-bridges.md)
-
-:::
-
-Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, including:
-
-- **MQTT Service Address**: The address and port of the target MQTT service, for example, `broker.emqx.io:1883`.
-- **Username**: The username required for the connection. If the target service does not require authentication, this can be left blank.
-- **Password**: The password required for the connection. If the target service does not require authentication, this can also be left blank.
-- **Protocol Type**: It is important to determine whether the target service has enabled TLS and whether it is using MQTT over TCP/TLS protocol. Note that the EMQX MQTT bridge currently does not support protocols like MQTT over WebSocket and MQTT over QUIC.
-- **Protocol Version**: The protocol version used by the target MQTT service. EMQX supports MQTT 3.1, 3.1.1, and MQTT 5.0.
-
-The data integration provides good compatibility and support for EMQX or other standard MQTT servers. If you need to connect to other types of MQTT services, you can refer to their relevant documentation to obtain the connection information. Generally, most IoT platforms provide standard MQTT access methods, and you can convert device information into the aforementioned MQTT connection information based on their guidance.
-
-:::tip Note
-
-When EMQX is running in cluster mode or when a connection pool is enabled, using the same client ID to connect multiple nodes to the same MQTT service usually leads to device conflicts. Therefore, the MQTT message bridge currently does not support setting a fixed client ID.
+- [ルールエンジン](./rules.md)
+- [データ統合](./data-bridges.md)
 
 :::
 
-## Create a Connector
+MQTT ブローカーのデータ統合を作成する前に、リモート MQTT サービスの接続情報を取得する必要があります。主な情報は以下の通りです。
 
-This section guides you on how to configure a connection with a remote MQTT server, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example.
+- **MQTT サービスアドレス**：ターゲット MQTT サービスのアドレスとポート、例：`broker.emqx.io:1883`
+- **ユーザー名**：接続に必要なユーザー名。認証不要の場合は空欄で構いません。
+- **パスワード**：接続に必要なパスワード。認証不要の場合は空欄で構いません。
+- **プロトコルタイプ**：ターゲットサービスが TLS を有効にしているか、TCP/TLS 上の MQTT を使用しているかを確認してください。EMQX MQTT ブリッジは現在、MQTT over WebSocket や MQTT over QUIC などのプロトコルには対応していません。
+- **プロトコルバージョン**：ターゲット MQTT サービスが使用するプロトコルバージョン。EMQX は MQTT 3.1、3.1.1、MQTT 5.0 をサポートしています。
 
-1. Go to the **Integration** -> **Connector** page on the Dashboard.
-2. Click **Create** at the top right corner of the page.
-3. Select **MQTT Broker** from the list of connector types and click **Next**.
-4. Enter a **name** for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_mqtt_bridge`.
-5. Configure the connection information:
-   - **MQTT Broker**: Only supports MQTT over TCP/TLS. Set this to `broker.emqx.io:1883`.
-   - **ClientID Prefix**: This can be left blank. In actual use, specifying a client ID prefix can facilitate client management. EMQX will automatically generate client IDs based on the client ID prefix and the size of the connection pool. For more information, see [Connection Pool and Client ID Generation Rules](#connection-pool-and-client-id-generation-rules).
-   - **Username** and **Password**: These can be left blank, as authentication is not required for this server.
+データ統合は EMQX や他の標準 MQTT サーバーに対して高い互換性とサポートを提供します。その他の MQTT サービスに接続する場合は、該当サービスのドキュメントを参照して接続情報を取得してください。一般的に多くの IoT プラットフォームは標準的な MQTT アクセス方法を提供しており、それに基づきデバイス情報を上記の MQTT 接続情報に変換できます。
 
-Leave the other configurations as default and click the **Create** button to complete the creation of the Connector. The Connector can be used for both Sink and Source. Next, you can create data bridge rules based on this Connector.
+:::tip 注意
 
-### Connection Pool and Client ID Generation Rules
+EMQX がクラスター運用中、またはコネクションプールを有効にしている場合、同一クライアント ID を使って複数ノードが同じ MQTT サービスに接続するとデバイス競合が発生しやすくなります。そのため、MQTT メッセージブリッジでは固定クライアント ID の設定は現在サポートしていません。
 
-EMQX enables multiple clients to simultaneously connect to the bridged MQTT service. When creating a Connector, you can set up an MQTT client connection pool and configure its size to indicate the number of client connections in the pool. The connection pool maximizes server resources for greater message throughput and better concurrent performance, which is crucial for handling high-load, high-concurrency scenarios.
+:::
 
-As the MQTT protocol requires clients connected to an MQTT server to have a unique client ID, and since EMQX can be deployed in a cluster, each client in MQTT bridging is assigned a unique client ID. EMQX automatically generates client IDs according to the following pattern:
+## コネクターの作成
+
+ここでは、EMQX の [オンライン MQTT サーバー](https://www.emqx.com/en/mqtt/public-mqtt5-broker) を例に、リモート MQTT サーバーとの接続設定方法を説明します。
+
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
+2. ページ右上の **Create** をクリックします。
+3. コネクタータイプ一覧から **MQTT Broker** を選択し、**Next** をクリックします。
+4. コネクターの **name** を入力します。英数字の組み合わせで、例：`my_mqtt_bridge`。
+5. 接続情報を設定します：
+   - **MQTT Broker**：TCP/TLS 上の MQTT のみサポート。`broker.emqx.io:1883` と設定します。
+   - **ClientID Prefix**：空欄でも構いません。実際の運用ではクライアント ID プレフィックスを指定するとクライアント管理が容易になります。EMQX はクライアント ID プレフィックスとコネクションプールのサイズに基づき自動でクライアント ID を生成します。詳細は [Connection Pool and Client ID Generation Rules](#connection-pool-and-client-id-generation-rules) を参照してください。
+   - **Username** と **Password**：このサーバーは認証不要なので空欄で構いません。
+
+その他の設定はデフォルトのままにし、**Create** ボタンをクリックしてコネクターを作成します。作成したコネクターは Sink と Source の両方に使用可能です。次に、このコネクターを基にデータブリッジルールを作成できます。
+
+### コネクションプールとクライアント ID 生成ルール
+
+EMQX は複数クライアントが同時にブリッジ先 MQTT サービスに接続可能です。コネクター作成時に MQTT クライアントのコネクションプールを設定でき、そのサイズを指定します。コネクションプールはサーバーリソースを最大限活用し、メッセージスループットと同時接続性能を向上させ、高負荷・高同時接続シナリオに対応します。
+
+MQTT プロトコルでは、MQTT サーバーに接続するクライアントは一意のクライアント ID を持つ必要があります。EMQX はクラスター展開が可能なため、MQTT ブリッジの各クライアントには固有のクライアント ID が割り当てられます。EMQX は以下のパターンでクライアント ID を自動生成します。
 
 ```bash
-[Client ID Prefix]:{Connector Name}{8-digit Random String}:{Connection Sequence Number in the Pool}
+[Client ID Prefix]:{Connector Name}{8桁のランダム文字列}:{プール内の接続シーケンス番号}
 ```
 
-For example, if the client ID prefix is `myprefix` and the Connector name is `foo`, an actual client ID might be:
+例えば、クライアント ID プレフィックスが `myprefix`、コネクター名が `foo` の場合、実際のクライアント ID は以下のようになります。
 
 ```bash
 myprefix:foo2bd61c44:1
 ```
 
-Starting from version 5.4.1, EMQX has limited the MQTT client ID length to 23 bytes. If the client ID exceeds this length, it will be replaced with a hashed value. This can result in a poor user experience when the prefix or connector name is too long.
+バージョン 5.4.1 以降、EMQX は MQTT クライアント ID の長さを最大 23 バイトに制限しています。これを超える場合はハッシュ値に置き換えられます。プレフィックスやコネクター名が長すぎるとユーザー体験が悪化する可能性があります。
 
-To address this issue, from version 5.7.1 onwards, EMQX has implemented the following rules:
+この問題に対応し、バージョン 5.7.1 以降では以下のルールを実装しています。
 
-- **No prefix**: Behavior remains unchanged; EMQX will hash the long (> 23 bytes) client ID into a 23-byte space.
-- **With prefix**:
-  - **Prefix up to 19 bytes**: The prefix is preserved, and the remainder of the client ID is hashed into a 4-byte space capping the length within 23 bytes.
-  - **Prefix of 20 bytes or more**: EMQX will use the configured prefix, and no longer attempts to shorten the client ID.
+- **プレフィックスなし**：動作は変わらず、23 バイト超のクライアント ID はハッシュ化されます。
+- **プレフィックスあり**：
+  - **プレフィックスが最大 19 バイト**：プレフィックスは保持され、残り部分は 4 バイトのハッシュに変換され、全体を 23 バイト以内に収めます。
+  - **プレフィックスが 20 バイト以上**：設定されたプレフィックスをそのまま使用し、クライアント ID の短縮は行いません。
 
-### Configure Static Client IDs
+### 静的クライアント ID の設定
 
-In some use cases, you may only have a finite set of client IDs to use in an integration. In this case, it is possible to assign static client ID sets to individual nodes while configuring the connector. To configure static client IDs, provide a list of client IDs for each node in your EMQX cluster during the Connector setup. Below is an example configuration:
+特定のユースケースでは、統合に使用するクライアント ID が限られている場合があります。この場合、各ノードに静的クライアント ID のセットを割り当ててコネクターを設定可能です。コネクター設定時に EMQX クラスターの各ノードごとにクライアント ID のリストを指定します。例は以下の通りです。
 
-| Node            | Client IDs               |
-| :-------------- | ------------------------ |
-| `emqx@10.0.0.1` | `clientid1`, `clientid3` |
-| `emqx@10.0.0.2` | `clientid2`              |
-| `emqx@10.0.0.3` | `clientid4`, `clientid5` |
+| ノード             | クライアント ID                 |
+| :----------------- | ------------------------------ |
+| `emqx@10.0.0.1`    | `clientid1`, `clientid3`       |
+| `emqx@10.0.0.2`    | `clientid2`                    |
+| `emqx@10.0.0.3`    | `clientid4`, `clientid5`       |
 
-Static client IDs can only be configured through the configuration file and are not available for setup through the Dashboard UI. You can define the `static_clientids` parameter for each node individually in configuration files.
+静的クライアント ID は設定ファイル経由でのみ設定可能で、ダッシュボード UI からは設定できません。各ノードの設定ファイルに `static_clientids` パラメータを個別に定義してください。
 
-If static client IDs are configured, only MQTT connections using these client IDs will be started. Any configurations for dynamic client IDs, such as `pool_size` or `clientid_prefix`, will not take effect.
+静的クライアント ID を設定した場合は、これらのクライアント ID を使った MQTT 接続のみが起動され、`pool_size` や `clientid_prefix` などの動的クライアント ID 設定は無効になります。
 
-## Create a Rule with MQTT Broker Sink
+## MQTT Broker Sink を使ったルール作成
 
-This section demonstrates how to create a rule for specifying data to be forwarded to a remote MQTT service.
+ここでは、リモート MQTT サービスに転送するデータを指定するルールの作成方法を説明します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
-
-2. Click **Create** at the top right of the page.
-
-3. Enter the rule ID `my_rule`.
-
-4. In the **SQL Editor**, enter the rule to store MQTT messages from the `t/#` topic to the remote MQTT server. The rule SQL is as follows:
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
+2. ページ右上の **Create** をクリックします。
+3. ルール ID に `my_rule` と入力します。
+4. **SQL Editor** に、`t/#` トピックの MQTT メッセージをリモート MQTT サーバーに保存するルール SQL を入力します。例は以下の通りです。
 
    ```sql
    SELECT
@@ -126,9 +123,9 @@ This section demonstrates how to create a rule for specifying data to be forward
      "t/#"
    ```
 
-   If you're using the MQTTv5 protocol, the publish properties are forwarded to the remote broker as-is, provided that the `pub_props` field is included in the rule SQL. This is the case in the `SELECT * FROM t/#` example shown above.
+   MQTTv5 プロトコルを使用している場合、`pub_props` フィールドをルール SQL に含めると、パブリッシュプロパティがそのままリモートブローカーに転送されます。上記の `SELECT * FROM t/#` はこの例に該当します。
 
-   To dynamically add more user properties, you can include them in the `pub_props` field that the rule outputs. For example, the following rule will add a user property with a key and value taken from the incoming payload:
+   さらにユーザープロパティを動的に追加したい場合は、ルールの出力に含める `pub_props` フィールドに追加可能です。例えば、以下のルールはペイロードから取得したキーと値でユーザープロパティを追加します。
 
    ```sql
    SELECT
@@ -138,53 +135,48 @@ This section demonstrates how to create a rule for specifying data to be forward
      't/#'
    ```
 
-5. Add an action by selecting `MQTT Broker` from the **Action Type** dropdown list. Keep the **Action** dropdown as the default `Create Action` option. This demonstration creates a new Sink and adds it to the rule.
+5. アクションを追加し、**Action Type** ドロップダウンから `MQTT Broker` を選択します。**Action** はデフォルトの `Create Action` のままにします。この例では新しい Sink を作成してルールに追加します。
+6. Sink の名前と説明をフォームに入力します。
+7. **Connector** ドロップダウンから先ほど作成した `my_mqtt_bridge` コネクターを選択します。新規作成する場合は、ドロップダウン横の作成ボタンから [Create a Connector](#create-a-connector) の設定パラメータを使って作成可能です。
+8. Sink の設定を行い、EMQX から外部 MQTT サービスへのメッセージパブリッシュを設定します。
 
-6. Enter the name and description for the Sink in the form below.
+   - **Topic**：外部 MQTT サービスにパブリッシュするトピック。`${var}` プレースホルダーをサポートします。ここでは `pub/${topic}` と入力し、元のトピックに `pub/` プレフィックスを付けて転送します。例えば元のメッセージトピックが `t/1` の場合、外部 MQTT サービスに転送されるトピックは `pub/t/1` になります。
+   - **QoS**：メッセージパブリッシュの QoS。ドロップダウンから `0`、`1`、`2`、`${qos}` を選択可能です。ここでは元メッセージの QoS に従うため `${qos}` を選択します。
+   - **Retain**：メッセージをリテインとしてパブリッシュするかどうか。`true`、`false`、`${flags.retain}` を選択可能で、他のフィールドからリテインフラグを設定するプレースホルダーも使用可能です。ここでは元メッセージのリテインフラグに従うため `${flags.retain}` を選択します。
+   - **Payload**：転送メッセージのペイロード生成テンプレート。デフォルトは空欄でルール出力結果を転送します。ここでは `${payload}` と入力し、ペイロードのみを転送します。
 
-7. Select the `my_mqtt_bridge` connector you just created from the **Connector** dropdown. Alternatively, you can create a new connector by clicking the create button next to the dropdown and using the configuration parameters in [Create a Connector](#create-a-connector).
+9. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義可能です。詳細は [Fallback Actions](./data-bridges.md#fallback-actions) を参照してください。
+10. その他の設定はデフォルト値のままにし、**Create** ボタンをクリックして Sink の作成を完了します。作成後はルール作成ページに戻り、新しい Sink がルールのアクション出力に追加されます。
+11. ルール作成ページの下部にある **Create** ボタンをクリックしてルール作成を完了します。
 
-8. Configure the Sink information for publishing messages from EMQX to the external MQTT service:
+これでルールが正常に作成されました。**Integration** -> **Rules** ページで新規ルールを確認できます。**Actions(Sink)** タブをクリックすると、新しい MQTT Broker Sink が表示されます。
 
-   - **Topic**: The topic to publish to the external MQTT service, supporting `${var}` placeholders. Enter `pub/${topic}` here, meaning the original topic will be prefixed with `pub/` for forwarding. For example, if the original message topic is `t/1`, the topic forwarded to the external MQTT service will be `pub/t/1`.
-   - **QoS**: The QoS for message publishing. Select from the dropdown options: `0`, `1`, `2`, or `${qos}`, or enter a placeholder to set QoS from another field. Here, select `${qos}` to follow the QoS of the original message.
-   - **Retain**: Select `true`, `false`, or `${flags.retain}` to decide whether to publish the message as retained, or enter a placeholder to set the retain flag from other fields. Here, select `${flags.retain}` to follow the retain flag of the original message.
-   - **Payload**: The template used to generate the payload for the forwarded message. Leave blank by default, which means forwarding the rule output result. Here, you can enter `${payload}` to forward only the payload.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示されます。トポロジーは、`t/#` トピックのメッセージがルール `my_rule` によって処理され、リモート MQTT ブローカーに送信される様子を視覚的に表現しています。
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+## MQTT Broker Sink を使ったルールのテスト
 
-10. Use default values for other configurations and click the **Create** button to complete the creation of the Sink. Once created, you will be directed back to the Create Rule page, and the new Sink will be added to the Action Outputs of the rule.
+[MQTTX CLI](https://mqttx.app/zh/cli) を使って、EMQX の `t/#` トピックから外部 MQTT サービスの `pub/${topic}` トピックへメッセージがブリッジされるルールをテストできます。EMQX の `t/1` トピックにメッセージをパブリッシュすると、外部 MQTT サービスの `pub/t/1` トピックに転送されるはずです。
 
-11. On the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
-
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MQTT Broker Sink.
-
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually represents how messages under the topic `t/#` are sent to the remote MQTT Broker after being processed by the rule `my_rule`.
-
-## Test the Rule with MQTT Broker Sink
-
-You can use the [MQTTX CLI](https://mqttx.app/zh/cli) to test the Rule for bridging messages published from the `t/#` topic in EMQX to the `pub/${topic}` topic in the external MQTT service. By publishing a message to `t/1` topic in EMQX, the message should be forwarded to the `pub/t/1` topic in the external MQTT service.
-
-1. Subscribe to the `pub/#` topic in the external MQTT Service:
+1. 外部 MQTT サービスで `pub/#` トピックをサブスクライブします。
 
    ```bash
    mqttx sub -t pub/# -q 1 -h broker.emqx.io -v
    ```
 
-2. Publish a message to the `t/1` topic using MQTTX:
+2. MQTTX で `t/1` トピックにメッセージをパブリッシュします。
 
    ```bash
    mqttx pub -t t/1 -m "hello world" -r
    ```
 
-3. You can subscribe to the `pub/t/1` topic in MQTTX to receive the message, indicating that the message has been successfully forwarded from EMQX to the external MQTT service:
+3. MQTTX で `pub/t/1` トピックをサブスクライブし、メッセージが受信できれば、EMQX から外部 MQTT サービスへのメッセージ転送が成功しています。
 
    ```bash
    [2024-1-31] [16:43:13] › topic: pub/t/1
    payload: hello world
    ```
 
-4. Repeat Step 1, and you should see the retained message from the `pub/t/1` topic in MQTTX:
+4. ステップ1を繰り返すと、MQTTX で `pub/t/1` トピックのリテインメッセージが確認できます。
 
    ```bash
    [2024-1-31] [16:44:29] › topic: pub/t/1
@@ -192,41 +184,34 @@ You can use the [MQTTX CLI](https://mqttx.app/zh/cli) to test the Rule for bridg
    retain: true
    ```
 
-## Create a Rule with MQTT Broker Source
+## MQTT Broker Source を使ったルール作成
 
-This section demonstrates how to create a rule for forwarding data from a remote MQTT service to the local EMQX. You need to create an MQTT Source and a message republish action to achieve a subscription from the remote MQTT service to EMQX and forward the subscribed data.
+ここでは、リモート MQTT サービスからローカル EMQX へデータを転送するルールの作成方法を説明します。MQTT Source とメッセージ再パブリッシュアクションを作成し、リモート MQTT サービスから EMQX へのサブスクライブと転送を実現します。
 
-### Create MQTT Broker Source and Add It to Rule
+### MQTT Broker Source の作成とルールへの追加
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
+2. ページ右上の **Create** をクリックします。
+3. ルール ID に `my_rule_source` と入力します。
+4. ルールのトリガーソース（データ入力）を設定します。ページ右側の **Data Inputs** タブで、デフォルトの **Message** タイプの入力を削除し、**Add Input** をクリックして MQTT Source を作成します。
+5. **Add Input** ポップアップで、**Input Type** ドロップダウンから `MQTT Broker` を選択し、Source ドロップダウンはデフォルトの `Create Source` のままにします。この例では新しい Source を作成してルールに追加します。
+6. Source の名前と説明をフォームに入力します。
+7. 先に作成した `my_mqtt_bridge` コネクターをドロップダウンから選択します。新規作成する場合は、ドロップダウン横の作成ボタンから [Create a Connector](#create-a-connector) の設定パラメータを使って作成可能です。
+8. Source の設定を行い、外部 MQTT サービスから EMQX へのサブスクライブを完了します。
 
-2. Click **Create** in the top right corner of the page.
-
-3. Enter the rule ID `my_rule_source`.
-
-4. Configure the trigger source (data input) for the rule. On the right side of the page, under the **Data Inputs** tab, delete the default **Message** type input and click **Add Input** to create an MQTT Source.
-
-5. In the **Add Input** popup, select `MQTT Broker` from the **Input Type** dropdown, and keep the Source dropdown at the default `Create Source` option. This demonstration creates a new Source and adds it to the rule.
-
-6. Enter a name and description for the Source in the form below.
-
-7. Select the previously created `my_mqtt_bridge` Connector from the dropdown. Alternatively, you can create a new Connector by clicking the create button next to the dropdown box, using the configuration parameters in [Create a Connector](#create-a-connector).
-
-8. Configure the Source information to complete the subscription from the external MQTT service to EMQX:
-
-   - **Topic**: The subscription topic, supporting the use of `+` and `#` wildcards.
+   - **Topic**：サブスクライブするトピック。`+` と `#` のワイルドカードをサポートします。
 
      ::: tip
 
-     When EMQX is running in cluster mode or the Connector is configured with a connection pool, shared subscriptions must be used to avoid duplicate messages.
+     EMQX がクラスター運用中、またはコネクターがコネクションプール設定の場合は、重複メッセージを避けるため共有サブスクリプションを使用してください。
 
      :::
 
-     Here you can enter `$share/1/f/#`, indicating a subscription to all messages matching the `f/#` topic.
+     ここでは `$share/1/f/#` と入力し、`f/#` トピックにマッチするすべてのメッセージをサブスクライブします。
 
-   - **QoS**: The subscription QoS, select `0` or `1` from the dropdown.
+   - **QoS**：サブスクライブの QoS。ドロップダウンから `0` または `1` を選択します。
 
-9. Use the default settings for other configurations and click the **Create** button to complete the Source creation, adding the Source to the rule data input. You will also notice that the rule SQL has changed to:
+9. その他の設定はデフォルトのままにし、**Create** ボタンをクリックして Source 作成を完了します。Source はルールのデータ入力に追加されます。ルール SQL は以下のように変更されます。
 
    ```sql
    SELECT
@@ -235,60 +220,60 @@ This section demonstrates how to create a rule for forwarding data from a remote
      "$bridges/mqtt:my_source"
    ```
 
-   The rule SQL can extract the following fields from the MQTT Source, and you can adjust the SQL for data processing operations. The default SQL is sufficient for this example.
+   ルール SQL は MQTT Source から以下のフィールドを抽出可能で、データ処理に応じて SQL を調整できます。デフォルトの SQL は本例に十分です。
 
-   | Field Name                    | Description                                                  |
+   | フィールド名                  | 説明                                                         |
    | ----------------------------- | ------------------------------------------------------------ |
-   | topic                         | Originating message topic                                    |
-   | server                        | Server address of the connected Source                       |
-   | retain                        | Whether the message is a retained message, value is false    |
-   | qos                           | Message Quality of Service                                   |
-   | pub_props                     | MQTT 5.0 message properties object, including user property pairs, user properties, and other attributes |
-   | pub_props.User-Property-Pairs | Array of user property pairs, each containing a key-value pair, e.g., `{"key":"foo", "value":"bar"}` |
-   | pub_props.User-Property       | User property object, containing a key-value pair, e.g., `{"foo":"bar"}` |
-   | pub_props.*                   | Other included message property key-value pairs, e.g., `Content-Type: JSON` |
-   | payload                       | Message content                                              |
-   | message_received_at           | Message reception timestamp, in milliseconds                 |
-   | id                            | Message ID                                                   |
-   | dup                           | Whether the message is a duplicate                           |
+   | topic                         | 発信元メッセージのトピック                                  |
+   | server                        | 接続された Source のサーバーアドレス                        |
+   | retain                        | メッセージがリテインかどうか。値は false                    |
+   | qos                           | メッセージの QoS（サービス品質）                             |
+   | pub_props                     | MQTT 5.0 メッセージプロパティオブジェクト。ユーザープロパティペアやその他属性を含む |
+   | pub_props.User-Property-Pairs | ユーザープロパティペアの配列。各ペアはキーと値を持つ例：`{"key":"foo", "value":"bar"}` |
+   | pub_props.User-Property       | ユーザープロパティオブジェクト。キーと値を持つ例：`{"foo":"bar"}` |
+   | pub_props.*                   | その他含まれるメッセージプロパティのキーと値。例：`Content-Type: JSON` |
+   | payload                       | メッセージ内容                                               |
+   | message_received_at           | メッセージ受信タイムスタンプ（ミリ秒）                      |
+   | id                            | メッセージ ID                                               |
+   | dup                           | メッセージが重複かどうか                                   |
 
-Now you have completed the creation of the MQTT Source, but the subscribed data will not be directly published to EMQX locally. Next,  you to create a message republish action to forward the messages subscribed by the Source to EMQX locally.
+MQTT Source の作成は完了しましたが、サブスクライブしたデータは直接 EMQX にパブリッシュされません。次に、Source でサブスクライブしたメッセージを EMQX に転送するためのメッセージ再パブリッシュアクションを作成します。
 
-### Create a Republish Action
+### 再パブリッシュアクションの作成
 
-1. Configure the rule action by switching to the **Action Outputs** tab on the right side of the Create Rule page and clicking the **Add Action** button. Select the `Republish` action from the **Type of Action** dropdown list.
-2. Configure the following fields for message republish:
-   - **Topic**: Enter `sub/${topic}`, which means adding a `sub/` prefix to the original topic for forwarding. For example, when the original message topic is `f/1`, the topic forwarded to EMQX will be `sub/f/1`.
-   - **QoS**: Select from `0`, `1`, `2`, or `${qos}`. You can also use placeholders to set QoS from other fields. Here, select `${qos}` to follow the QoS of the original message.
-   - **Retain**: Select `true` or `false` to confirm whether to publish the message as a retained message. You can also use placeholders to set the retain flag from other fields. In this case, you can select `false`.
-     - Since the data source is MQTT Source, the `${flags.retain}` option is not applicable here.
-     - You can also enter `${retain}` to follow the retain flag of the original message, but it only works when the message is retained through the external MQTT service's retention mechanism, not when the original message is published to EMQX locally.
-   - **Payload**: Used to generate the payload of the forwarded message. Leave it blank by default to forward the rule output result. Here, you can enter `${payload}` to only forward the Payload.
+1. ルール作成ページの右側 **Action Outputs** タブに切り替え、**Add Action** ボタンをクリックします。**Type of Action** ドロップダウンから `Republish` アクションを選択します。
+2. メッセージ再パブリッシュの設定を行います。
+   - **Topic**：`sub/${topic}` と入力し、元のトピックに `sub/` プレフィックスを付けて転送します。例えば元のメッセージトピックが `f/1` の場合、EMQX に転送されるトピックは `sub/f/1` になります。
+   - **QoS**：`0`、`1`、`2`、`${qos}` から選択可能。プレースホルダーで他フィールドから設定も可能です。ここでは元メッセージの QoS に従うため `${qos}` を選択します。
+   - **Retain**：`true` または `false` を選択し、メッセージをリテインとしてパブリッシュするか決定します。プレースホルダーで他フィールドから設定も可能です。ここでは `false` を選択します。
+     - データソースが MQTT Source のため、`${flags.retain}` は適用されません。
+     - `${retain}` を指定すると、外部 MQTT サービスのリテイン機構でリテインされたメッセージの場合にのみ有効です。元メッセージが EMQX にパブリッシュされた場合は適用されません。
+   - **Payload**：転送メッセージのペイロード生成に使用。デフォルトは空欄でルール出力結果を転送します。ここでは `${payload}` と入力し、ペイロードのみを転送します。
 
-3. Click the **Add** button to complete the action creation. You will be directed back to the Create Rule page and the new action will be added under the **Action Outputs** tab.
-4. On the Create Rule page, click the **Create** button at the bottom to complete the rule creation.
+3. **Add** ボタンをクリックしてアクション作成を完了します。ルール作成ページに戻り、新しいアクションが **Action Outputs** タブに追加されます。
+4. ルール作成ページ下部の **Create** ボタンをクリックしてルール作成を完了します。
 
-Now you have successfully created the rule. You can go to **Integration** -> **Rules** to see the newly created rule, and on the **Source** tab, you can see the newly created MQTT Source.
+これでルールが正常に作成されました。**Integration** -> **Rules** ページで新規ルールを確認できます。**Source** タブをクリックすると、新しい MQTT Source が表示されます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. From the topology, you can see that the messages from MQTT Source are republished to `sub/${topic}` through the republish action.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーが表示されます。トポロジーから、MQTT Source のメッセージが再パブリッシュアクションを通じて `sub/${topic}` に転送されている様子が確認できます。
 
-## Test the Rule with MQTT Broker Source
+## MQTT Broker Source を使ったルールのテスト
 
-You can use [MQTTX CLI](https://mqttx.app/zh/cli) to test the configured rule for bridging messages from the `f/#` topic in the external MQTT service to the `sub/${topic}` topic in EMQX. By publishing a message to the `f/1` topic in the external MQTT service, it should be forwarded to the `sub/f/1` topic in EMQX
+[MQTTX CLI](https://mqttx.app/zh/cli) を使って、外部 MQTT サービスの `f/#` トピックから EMQX の `sub/${topic}` トピックへメッセージがブリッジされるルールをテストできます。外部 MQTT サービスの `f/1` トピックにメッセージをパブリッシュすると、EMQX の `sub/f/1` トピックに転送されるはずです。
 
-1. Subscribe to the EMQX `sub/#` topic:
+1. EMQX の `sub/#` トピックをサブスクライブします。
 
    ```bash
    mqttx sub -t sub/# -q 1 -v
    ```
 
-2. Use MQTTX to publish a message to the `f/1` topic in the external MQTT service:
+2. MQTTX で外部 MQTT サービスの `f/1` トピックにメッセージをパブリッシュします。
 
    ```bash
    mqttx pub -t f/1 -m "I'm from broker.emqx.io" -r -h broker.emqx.io
    ```
 
-3. You can see the message published to the `sub/f/1` topic in MQTTX, indicating that the message has been successfully forwarded from the external MQTT service to EMQX:
+3. MQTTX で `sub/f/1` トピックにメッセージが届けば、外部 MQTT サービスから EMQX へのメッセージ転送が成功しています。
 
    ```bash
    [2024-1-31] [16:49:22] › topic: sub/f/1

@@ -1,159 +1,156 @@
-# Design for EMQX Clustering
+# EMQXクラスタリングの設計
 
-MQTT is a stateful protocol, which necessitates that the broker maintains state information for each MQTT session, including subscribed topics and incomplete message transmissions. One of the primary challenges in clustering MQTT brokers is ensuring efficient and reliable synchronization and replication of these states across all clustered nodes.
+MQTTはステートフルなプロトコルであり、ブローカーは各MQTTセッションの状態情報（サブスクライブされたトピックや未完了のメッセージ送信など）を保持する必要があります。MQTTブローカーのクラスタリングにおける主な課題の一つは、これらの状態をクラスタ内のすべてのノード間で効率的かつ信頼性高く同期・複製することです。
 
-EMQX is a highly scalable and fault-tolerant MQTT broker capable of operating in a clustered mode with multiple nodes. Clustering EMQX enhances the scalability, availability, reliability, and manageability of IoT messaging systems, making it a recommended approach for larger or mission-critical applications. This page explores the necessity of clustering MQTT brokers and how EMQX achieves this, enabling support for millions of unique wildcard subscribers within a single cluster.
+EMQXは高いスケーラビリティとフォールトトレランスを備えたMQTTブローカーであり、複数ノードによるクラスタモードでの運用が可能です。EMQXのクラスタリングは、IoTメッセージングシステムのスケーラビリティ、可用性、信頼性、管理性を向上させ、大規模またはミッションクリティカルなアプリケーションに推奨される手法です。本ページでは、MQTTブローカーのクラスタリングの必要性とEMQXがどのようにこれを実現し、単一クラスタ内で数百万のユニークなワイルドカードサブスクライバーをサポートできるかを解説します。
 
-For detailed instructions on creating and running an EMQX v5 cluster, refer to [EMQX Cluster](../deploy/cluster/introduction.md).
+EMQX v5クラスタの作成および運用の詳細手順については、[EMQX Cluster](../deploy/cluster/introduction.md)をご参照ください。
 
-## Key Aspects of Clustering
+## クラスタリングの重要な側面
 
-When designing a cluster, there are several key aspects that need to be considered. Often these are the most important factors that determine the success of the cluster. A quick summary is as follows:
+クラスタ設計において考慮すべき重要なポイントはいくつかあります。これらはクラスタの成功を左右する最も重要な要素であることが多いです。簡単にまとめると以下の通りです。
 
-* **Centralized Management**: The cluster should be able to be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console.
+* **集中管理**：クラスタ内のすべてのノードを単一の管理コンソールから監視・制御できるようにし、中央集権的に管理可能であること。
 
-* **Data Consistency**: The cluster ensures that all nodes in the cluster have a consistent view of the routing information. This is achieved by replicating data across all nodes in the cluster.
+* **データの一貫性**：クラスタ内の全ノードがルーティング情報を一貫して保持できるように、データを全ノード間で複製すること。
 
-* **Easy To Scale**: To reduce the complexity of cluster management, it should not be a complex task to add more nodes to the cluster. The cluster should be able to automatically detect the new nodes and add them to the cluster.
+* **スケールの容易さ**：クラスタ管理の複雑さを減らすため、新しいノードの追加が複雑でなく、クラスタが自動的に新規ノードを検知して参加できること。
 
-* **Cluster Rebalance**: With minimal operational overhead, the cluster should be able to reflect on and detect the unbalanced load of each node and reassign the workloads to the nodes with the least load. This ensures that the cluster can continue to function even if one or more nodes fail.
+* **クラスタの負荷再分散**：運用オーバーヘッドを最小限に抑えつつ、各ノードの負荷の偏りを検知し、負荷の少ないノードへワークロードを再割り当てできること。これにより、1台以上のノードが障害を起こしてもクラスタが継続稼働可能となる。
 
-* **Large Cluster Size**: To meet the increasing demands of the system, the cluster can be expanded by adding more nodes to the cluster. This allows the cluster to scale horizontally to meet the increasing demands of the system.
+* **大規模クラスタ対応**：システムの要求増加に応じてノードを追加し、水平スケールでクラスタを拡張できること。
 
-* **Automatic Failover**: If a node fails, the cluster will automatically detect the failure and reassign the workloads to the remaining nodes. This ensures that the cluster can continue to function even if one or more nodes fail.
+* **自動フェイルオーバー**：ノード障害時に自動的に障害を検知し、残りのノードにワークロードを再割り当てできること。
 
-* **Network Partition Tolerance**: The cluster should be able to tolerate network partitions, as the cluster can continue to function even if one or more nodes fail.
+* **ネットワーク分断耐性**：ネットワーク分断が発生してもクラスタが継続稼働可能であること。
 
-In the following sections, we will discuss the key aspects of clustering in details.
+以下のセクションで、これらのクラスタリングの重要な側面について詳しく説明します。
 
-## Centralized Management
+## 集中管理
 
-EMQX can be managed centrally, as all nodes in the cluster can be monitored and controlled from a single management console. This makes it easy to manage a large number of devices and messages. The console is accessible via a web browser and provides a user-friendly interface for managing the cluster. Any `core` type node can serve as the management HTTP API endpoint (we will discuss the different node types in the next section).
+EMQXはクラスタ内のすべてのノードを単一の管理コンソールから監視・制御できるため、集中管理が可能です。これにより、多数のデバイスやメッセージを容易に管理できます。コンソールはウェブブラウザからアクセスでき、クラスタ管理に適したユーザーフレンドリーなインターフェースを提供します。`core`タイプのノードであればどれでも管理用HTTP APIのエンドポイントとして機能します（ノードタイプの詳細は次節で説明します）。
 
-The online configuration management feature allows you to make configuration changes to all nodes the cluster without having to restart the nodes. This is especially useful when you need to make changes to the cluster configuration, such as adding or removing nodes.
+オンライン設定管理機能により、クラスタ内のすべてのノードに対してノードの再起動なしに設定変更を反映できます。ノードの追加や削除などクラスタ設定の変更時に特に有用です。
 
-## Data Consistency
+## データの一貫性
 
-The most important distributed data structure in an MQTT broker cluster is the routing table, which is used to store the routing information of all topics. The routing table is used to determine which nodes should receive a message published to a particular topic. In this section, we will discuss how EMQX ensures that the routing table is consistent across all nodes in the cluster.
+MQTTブローカークラスタにおける最も重要な分散データ構造はルーティングテーブルです。これはすべてのトピックのルーティング情報を保持し、特定のトピックにパブリッシュされたメッセージをどのノードが受け取るべきかを決定します。本節では、EMQXがクラスタ内のすべてのノードでルーティングテーブルの一貫性をどのように保証しているかを説明します。
 
-EQMX cluster makes use of full ACID (Atomicity, Consistency, Isolation, Durability) transactions to ensure that the routing table is consistent across all the `core` nodes in the cluster. and employs asynchronous replication from the `core` nodes to the `replica` nodes to ensure that the routing table is eventually consistent across all nodes in the cluster.
+EMQXクラスタは完全なACID（Atomicity, Consistency, Isolation, Durability）トランザクションを活用し、クラスタ内のすべての`core`ノード間でルーティングテーブルの一貫性を確保します。また、`core`ノードから`replica`ノードへの非同期レプリケーションを用いて、クラスタ全体で最終的に一貫した状態を実現しています。
 
-Let's dive into the details of how EMQX data consistency is achieved.
+以下でEMQXのデータ一貫性の仕組みを詳しく見ていきましょう。
 
-### Data Replication Channels
+### データレプリケーションチャネル
 
-In an EMQX cluster, there are two data replication channels.
+EMQXクラスタには2つのデータレプリケーションチャネルがあります。
 
-- Metadata replication, such as routing information on which (wildcard) topics are being subscribed by which nodes.
+- メタデータのレプリケーション：どの（ワイルドカード）トピックがどのノードにサブスクライブされているかなどのルーティング情報。
 
-* Message delivery, such as when forwarding messages from one node to another.
+- メッセージ配信：ノード間でメッセージを転送する際のチャネル。
 
-The diagram below illustrates the two data replication channels with a pub-sub flow. The dashed lines connecting the nodes indicate metadata replications, while the solid arrow lines represent the message delivery channel.
+下図は2つのデータレプリケーションチャネルとパブサブのフローを示しています。点線はノード間のメタデータレプリケーションを、実線矢印はメッセージ配信チャネルを表します。
 
-<img src="./assets/clustering.png" alt="Data replication channels" style="zoom: 50%;" />
+<img src="./assets/clustering.png" alt="データレプリケーションチャネル" style="zoom: 50%;" />
 
-### How EMQX Nodes Communicate
+### EMQXノード間の通信
 
-EMQX utilizes Erlang/OTP's built-in database, Mnesia, to store MQTT session states. To facilitate database and message replication, the Erlang distribution protocol and a custom distribution protocol are utilized for inter-broker remote procedure calls.
+EMQXはErlang/OTPの組み込みデータベースであるMnesiaを用いてMQTTセッション状態を保存します。データベースおよびメッセージのレプリケーションには、Erlang分散プロトコルとカスタム分散プロトコルを使ったブローカー間のリモートプロシージャコールが利用されます。
 
-The database replication channel is powered by the "Erlang distribution" protocol, enabling each node to function as both a client and server. The default listening port number for this protocol is 4370.
+データベースレプリケーションチャネルは「Erlang分散」プロトコルで動作し、各ノードはクライアント兼サーバとして機能します。このプロトコルのデフォルトリスニングポートは4370です。
 
-In contrast, the message delivery channel employs a connection pool, and each node is configured to listen on port number 5370 by default (5369 when running in a Docker container). This approach differs from the Erlang distribution protocol, which utilizes a single connection.
+一方、メッセージ配信チャネルはコネクションプールを利用し、各ノードはデフォルトでポート5370（Dockerコンテナ内では5369）で待ち受けます。これはErlang分散プロトコルの単一接続とは異なる方式です。
 
-### Routing Table Replication
+### ルーティングテーブルのレプリケーション
 
-A Mnesia cluster is designed using a full mesh topology where each node in the cluster connects to every other node and continuously checks their liveliness.
+Mnesiaクラスタはフルメッシュトポロジーで設計されており、クラスタ内の各ノードは他のすべてのノードに接続し、常に生存確認を行います。
 
-<img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
+<img src="./assets/mnesia-cluster.png" alt="Mnesiaクラスタ" style="zoom: 40%;" />
 
-However, the full mesh topology imposes a practical limit on the cluster size.
-For EMQX versions before 5.0, it is recommended to keep the cluster size under 5 nodes.
-Beyond this, vertical scaling, which involves using more powerful machines, is a preferable option to maintain the cluster's performance and stability.
+しかし、フルメッシュトポロジーはクラスタサイズに実用的な制限を課します。EMQX 5.0未満のバージョンでは、クラスタサイズは5ノード以下に抑えることが推奨されます。それ以上の規模では、より高性能なマシンを用いる垂直スケールがクラスタの性能と安定性を維持するために望ましい選択肢です。
 
-In our benchmark environment, we managed to reach [ten million concurrent connections with EMQX Enterprise 4.3](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report).
+ベンチマーク環境では、[EMQX Enterprise 4.3で1000万同時接続を達成](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report)しています。
 
-While our customers are not required to report their production deployment details, based on the information shared with us, the largest known in-production cluster consists of 7 nodes.
+お客様からの本番環境の詳細報告は必須ではありませんが、共有された情報によると、最大規模の本番クラスタは7ノードで構成されています。
 
-One of the major challenges of managing a large Mnesia cluster is the risk of a split-brain situation, which can occur when a network partition isolates nodes into multiple subclusters, with each subcluster believing it is the only active cluster. This risk is especially pronounced in large clusters, where the N^2 complexity of networking overheads can cause nodes to become less responsive under high load. In addition, head-of-line blocking in the Erlang distribution channel can delay the sending of heartbeat messages, further increasing the risk of a split-brain situation.
+大規模Mnesiaクラスタ管理の大きな課題の一つはスプリットブレイン問題のリスクです。これはネットワーク分断によりノードが複数のサブクラスタに分離され、それぞれが唯一のアクティブクラスタと誤認する状況です。大規模クラスタではネットワークオーバーヘッドがN^2の複雑度となり、高負荷時にノードの応答性が低下しやすくなります。さらに、Erlang分散チャネルのヘッドオブラインブロッキングによりハートビート送信が遅延し、スプリットブレインのリスクが増大します。
 
-In EMQX v5, we have greatly improved the cluster scalability by introducing [Mria](https://github.com/emqx/mria) (an enhanced version of Mnesia with async transaction log replication). Mria uses a new network topology that consists two type of node roles: `core` and `replicant` (sometimes referred to as `replica` for short).
+EMQX v5では、[Mria](https://github.com/emqx/mria)（非同期トランザクションログレプリケーションを備えたMnesiaの拡張版）を導入し、クラスタのスケーラビリティを大幅に向上させました。Mriaは`core`ノードと`replicant`ノード（短縮して`replica`とも呼ばれます）という2種類のノードロールからなる新しいネットワークトポロジーを採用しています。
 
-<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
+<img src="./assets/mria-cluster.png" alt="Mnesiaクラスタ" style="zoom: 40%;" />
 
-In an EMQX v5 cluster, the `core` nodes still form the same full-mesh network as in older versions. The `replicant` nodes, however, only connect to one or more core nodes, but not to each other.
+EMQX v5クラスタでは、`core`ノードは従来通りフルメッシュネットワークを形成します。一方、`replicant`ノードは1つ以上の`core`ノードにのみ接続し、相互には接続しません。
 
-### Core and Replicant Nodes
+### CoreノードとReplicantノード
 
-The behavior of Core nodes is the same as that of Mnesia nodes in 4.x: Core nodes form a cluster in a fully connected manner, and each node can initiate transactions, hold locks, and so on. Therefore, EMQX v5 still requires Core nodes to be as reliable as possible in deployment.
+Coreノードの動作は4.xのMnesiaノードと同様で、フル接続のクラスタを形成し、各ノードがトランザクションの開始やロック保持を行います。したがって、EMQX v5でもCoreノードは信頼性の高い環境でのデプロイが求められます。
 
-Replicant nodes are no longer directly involved in the processing of transactions. But they connect to Core nodes and passively replicate data updates from Core nodes. Replicant nodes are not allowed to perform any write operations. Instead, it is handed over to the Core node for execution. In addition, because Replicants will replicate data from Core nodes, they have a complete local copy of data to achieve the highest efficiency of read operations, which helps to reduce the latency of EMQX routing.
+Replicantノードはトランザクション処理に直接関与せず、Coreノードに接続してデータ更新を受動的に複製します。Replicantノードは書き込み操作を行わず、書き込みはCoreノードに委譲されます。さらに、ReplicantはCoreノードからのデータを完全にローカルに保持するため、読み取り操作の効率が最大化され、EMQXのルーティングレイテンシ低減に寄与します。
 
-Since Replicant nodes do not participate in write operations, the latency of write operations will not be affected when more Replicant nodes join the cluster. This allows the creation of larger EMQX clusters.
+Replicantノードは書き込みに関与しないため、Replicantノードを増やしても書き込み操作のレイテンシには影響しません。これにより、より大規模なEMQXクラスタの構築が可能となります。
 
-For performance reasons, the replication of irrelevant data can be divided into independent data streams, that is, multiple related data tables can be assigned to the same RLOG Shard (replicated log shard), and transactions are sequentially replicated from Core nodes to the Replicant node. But different RLOG Shards are asynchronous.
+パフォーマンス向上のため、関連性の低いデータのレプリケーションは独立したデータストリームに分割されます。複数の関連テーブルは同一のRLOGシャード（レプリケートログシャード）に割り当てられ、トランザクションはCoreノードからReplicantノードへ順次レプリケートされますが、異なるRLOGシャードは非同期に処理されます。
 
-## Easy to Scale
+## スケールの容易さ
 
-EMQX is designed to be easy to scale horizontally.
-You can choose to add/delete nodes to/from the cluster at any time from the CLI, API, or even the Dashboard.
+EMQXは水平スケールが容易にできるよう設計されています。CLI、API、さらにはダッシュボードからいつでもクラスタへのノード追加・削除が可能です。
 
-For example, to add a new node to the cluster it can be as simple as executing a command like this:
+例えば、新しいノードをクラスタに参加させるには、以下のようなコマンドを実行するだけです。
 
 ```bash
 $ emqx ctl cluster join emqx@node1.my.net
 ```
 
-Where `emqx@node1.my.net` is one of the nodes in the cluster.
+ここで`emqx@node1.my.net`はクラスタ内の既存ノードの一つです。
 
-Or you can, from the Dashboard, click a button to invite a new node to join the cluster.
+また、ダッシュボードからボタン操作で新規ノードをクラスタに招待することもできます。
 
-With the help of the rich management interfaces, you can easily script the cluster management and make it part of your DevOps pipeline.
+豊富な管理インターフェースを活用すれば、クラスタ管理をスクリプト化し、DevOpsパイプラインの一部に組み込むことも容易です。
 
-In EMQX v5, the `replica` nodes are designed to be stateless, so they can be placed in an autoscaling group for better DevOps practices.
+EMQX v5では、`replica`ノードはステートレスに設計されており、オートスケーリンググループに配置してより良いDevOps運用が可能です。
 
-## Cluster Rebalance
+## クラスタの負荷再分散
 
-When a node newly joins the cluster, it will start off with an empty state. With a good load balancer, the newly connected clients may have a better chance to connect to the new node. However, the existing clients will still be connected to the old nodes.
+新規ノードがクラスタに参加した際、そのノードは空の状態からスタートします。優れたロードバランサーがあれば、新規接続クライアントは新ノードに接続しやすくなりますが、既存クライアントは依然として旧ノードに接続し続けます。
 
-If the clients reconnect in a relatively short period of time, the cluster can reach balance quickly. If the clients are not reconnecting, the cluster may remain unbalanced for a long time.
+クライアントが短期間に再接続すればクラスタは速やかにバランスを取れますが、再接続がなければクラスタは長期間アンバランスな状態が続く可能性があります。
 
-To address this issue, EMQX (since version 4.4) introduced a new feature called "[Cluster Load Rebalancing](../deploy/cluster/rebalancing.md)". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
+この課題に対処するため、EMQX（4.4以降）は[クラスタ負荷再分散](../deploy/cluster/rebalancing.md)機能を導入しました。この機能により、クラスタは過負荷ノードから低負荷ノードへセッションを自動的に移行し、負荷を再分散できます。
 
-An extreme version of "rebalance" is "evacuation", in which all the sessions are migrated off the given node. This is useful when you want to remove a node from the cluster.
+「再分散」の極端な例として「避難（evacuation）」があり、特定ノードからすべてのセッションを移行します。これはノードをクラスタから除去したい場合に有用です。
 
-## Cluster Size
+## クラスタサイズ
 
-At the scale of millions of concurrent connections, you have no choice but to scale horizontally, because there is simply no single machine that can handle that many connections.
+数百万の同時接続規模では、単一マシンでの処理は不可能なため、水平スケールが必須です。
 
-In EMQX v5, the `core`-`replica` clustering architecture allows us to scale the cluster to a much larger size.
+EMQX v5の`core`-`replica`クラスタリングアーキテクチャにより、より大規模なクラスタ構築が可能となりました。
 
-In our benchmark, we tested 50 million publishers plus 50 million wildcard subscribers in a 23-node cluster. You can read our [blog post](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0) to find more details.
+ベンチマークでは、23ノードクラスタで5000万のパブリッシャーと5000万のワイルドカードサブスクライバーをテストしました。詳細は[ブログ記事](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をご覧ください。
 
-Why wildcards? Because wildcards subscriptions are the gold standard when benchmarking MQTT broker cluster scalability. It challenges the underlying data structures and algorithms to the limit.
+なぜワイルドカードかというと、ワイルドカードサブスクリプションはMQTTブローカークラスタのスケーラビリティを評価するゴールドスタンダードであり、基盤となるデータ構造やアルゴリズムに対して最も厳しい負荷をかけるためです。
 
-## Automatic Failover
+## 自動フェイルオーバー
 
-In the MQTT protocol specification, there is no concept of session affinity. This means that a client can connect to any node in the cluster and still be able to receive messages published to the topics it has subscribed to.
-There is also no service discovery mechanism in MQTT, so the client needs to know the address of the cluster nodes.
-This often requires the client to be configured with a list of all the nodes in the cluster or even better a load balancer that can route the client to the right node.
+MQTTプロトコル仕様にはセッションアフィニティの概念がありません。つまり、クライアントはクラスタ内の任意のノードに接続しても、サブスクライブしたトピックのメッセージを受信可能です。
 
-EMQX is designed to work with a load balancer in front of the cluster. With a health check endpoint, the load balancer can detect the health of the nodes in the cluster and route the client to the right node.
+またMQTTにはサービスディスカバリ機構がないため、クライアントはクラスタノードのアドレスを知っている必要があります。通常、クライアントはクラスタ内のすべてのノードのリスト、あるいは適切なノードへルーティングできるロードバランサーを設定されます。
 
-Using Erlang's node monitoring mechanism, EMQX nodes monitor each other's health status and will automatically remove unhealthy nodes from the cluster.
+EMQXはクラスタ前段にロードバランサーを配置する設計です。ヘルスチェックエンドポイントを用いて、ロードバランサーはクラスタノードの健全性を検知し、クライアントを適切なノードへルーティングします。
 
-## Network Partition Tolerance
+Erlangのノード監視機構により、EMQXノードは互いの健全性を監視し、不健康なノードを自動的にクラスタから除外します。
 
-When a network partition occurs, the cluster may split into multiple isolated subclusters, each believing it is the only active cluster. This is known as the "split-brain" problem.
-A production cluster should be able to recover from a network partition automatically.
+## ネットワーク分断耐性
 
-EMQX's 'autoheal' feature can automatically heal the cluster after a network partition.
-When the feature is enabled, after the network partition has occurred and then recovered, the nodes in the cluster will follow the steps below to heal the cluster.
+ネットワーク分断が発生すると、クラスタは複数の孤立したサブクラスタに分割され、それぞれが唯一のアクティブクラスタと誤認する「スプリットブレイン」問題が発生します。
 
-1. The node reports the partitions to a leader node which has the longest uptime.
-1. The leader node creates a global netsplit view and chooses one node in the majority as the coordinator.
-1. The leader node requests the coordinator to command the minority side to reboot.
-1. Requests all the nodes on the minority side.
+本番クラスタはネットワーク分断から自動的に復旧できる必要があります。
 
-## Summary
+EMQXの「autoheal」機能はネットワーク分断後のクラスタを自動的に修復します。この機能が有効な場合、分断発生後に復旧すると、クラスタ内のノードは以下の手順でクラスタを修復します。
 
-In this article, we have introduced the new clustering architecture in EMQX v5. We have also discussed the key aspects of a production-ready MQTT broker cluster, including scalability, automatic failover, network partition tolerance, and so on. and how EMQX can help you achieve these goals.
+1. ノードは最も長いアップタイムを持つリーダーノードに分断情報を報告します。  
+2. リーダーノードはグローバルなネットスプリットビューを作成し、多数派のノードの中からコーディネーターを選出します。  
+3. リーダーノードはコーディネーターに少数派のノードに再起動を命じるよう要求します。  
+4. 少数派のすべてのノードに対して再起動要求を送ります。
+
+## まとめ
+
+本記事では、EMQX v5の新しいクラスタリングアーキテクチャを紹介しました。また、スケーラビリティ、自動フェイルオーバー、ネットワーク分断耐性など、本番環境に適したMQTTブローカークラスタの重要な側面と、それらを実現するEMQXの仕組みについても解説しました。

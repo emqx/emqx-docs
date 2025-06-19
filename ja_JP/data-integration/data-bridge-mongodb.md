@@ -1,155 +1,154 @@
-# Ingest MQTT Data into MongoDB
+# MongoDBへのMQTTデータ取り込み
 
-[MongoDB](https://www.mongodb.com/), a leading NoSQL database, is renowned for its flexibility in schema design, scalability, and capacity to store large volumes of structured and semi-structured data. By integrating EMQX with MongoDB, users can efficiently ingest MQTT messages and client events directly into MongoDB. This facilitates long-term series data storage and advanced querying capabilities within MongoDB. The integration ensures a single-directional flow, where MQTT messages from EMQX are written into the MongoDB database. This powerful combination is a solid foundation for businesses looking to manage their IoT data effectively.
+[MongoDB](https://www.mongodb.com/)は、スキーマ設計の柔軟性、スケーラビリティ、大量の構造化および半構造化データの保存能力で知られる主要なNoSQLデータベースです。EMQXとMongoDBを統合することで、ユーザーはMQTTメッセージやクライアントイベントをMongoDBに直接効率的に取り込むことができます。これにより、MongoDB内での長期的な時系列データの保存や高度なクエリが可能になります。この統合は一方向のデータフローを保証し、EMQXからのMQTTメッセージがMongoDBデータベースに書き込まれます。この強力な組み合わせは、IoTデータを効果的に管理したい企業にとって堅実な基盤となります。
 
-This page provides a comprehensive introduction to the data integration between EMQX and MongoDB with practical instructions on creating and validating the data integration.
+本ページでは、EMQXとMongoDB間のデータ統合について包括的に紹介し、データ統合の作成と検証に関する実践的な手順を提供します。
 
-## How It Works
+## 動作概要
 
-MongoDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between MQTT-based IoT data and MongoDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to MongoDB for storage and management, eliminating the need for complex coding.
+MongoDBデータ統合は、MQTTベースのIoTデータとMongoDBの強力なデータ保存機能をつなぐためにEMQXに標準搭載された機能です。組み込みの[ルールエンジン](./rules.md)コンポーネントを活用することで、EMQXからMongoDBへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and MongoDB. 
+以下の図は、EMQXとMongoDB間のデータ統合の典型的なアーキテクチャを示しています。
 
-<img src="./assets/mongdb_bridge_architecture.png" alt="mongdb_bridge_architecture" style="zoom:67%;" />
+<img src="./assets/mongdb_bridge_architecture.png" alt="MongoDBブリッジアーキテクチャ" style="zoom:67%;" />
 
-Ingesting MQTT data into MongoDB works as follows:
+MongoDBへのMQTTデータ取り込みの流れは以下の通りです：
 
-1. **Message publication and reception**: IoT devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and publish MQTT messages to specific topics. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to MongoDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data ingestion into MongoDB**: Once the rule engine identifies a message for MongoDB storage, it triggers an action of forwarding the messages to MongoDB. Processed data will be seamlessly written into the collection of the MongoDB database.
-4. **Data storage and utilization**: With the data now stored in MongoDB, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+1. **メッセージのパブリッシュと受信**：接続された車両、IIoTシステム、エネルギー管理プラットフォームなどのIoTデバイスは、MQTTプロトコルを通じてEMQXに正常に接続し、特定のトピックにMQTTメッセージをパブリッシュします。EMQXがこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。
+2. **メッセージデータの処理**：メッセージが到着すると、ルールエンジンを通過し、EMQXで定義されたルールによって処理されます。ルールは事前定義された条件に基づき、MongoDBにルーティングすべきメッセージを判別します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、ペイロードのコンテキスト付加などの変換が適用されます。
+3. **MongoDBへのデータ取り込み**：ルールエンジンがMongoDB保存対象のメッセージを特定すると、メッセージをMongoDBに転送するアクションがトリガーされます。処理済みデータはMongoDBのコレクションにシームレスに書き込まれます。
+4. **データの保存と活用**：データがMongoDBに保存されることで、企業はそのクエリ機能を活用し、様々なユースケースに対応できます。例えば、接続車両の分野では、保存されたデータを使って車両の健康状態を把握したり、リアルタイムの指標に基づいたルート最適化や資産追跡を行えます。IIoT環境では、機械の状態監視、メンテナンス予測、生産スケジュールの最適化に活用されます。
 
-By using this integrated system, businesses in sectors like power and energy can continuously monitor grid health, forecast demand, or identify potential outages before they happen. The value derived from the real-time and historical data not only ensures operational efficiency but can also lead to significant cost savings and enhanced customer experiences.
+この統合システムを利用することで、電力・エネルギー分野の企業はグリッドの健康状態を継続的に監視し、需要予測や潜在的な障害の早期検知が可能になります。リアルタイムおよび履歴データから得られる価値は、運用効率の向上だけでなく、コスト削減や顧客体験の強化にもつながります。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with MongoDB offers a range of features and benefits tailored to ensure effective data handling and storage:
+MongoDBとのデータ統合は、効果的なデータ処理と保存を実現するために以下の特長とメリットを提供します：
 
-- **Streamlined IoT Data Management**
+- **IoTデータ管理の効率化**
 
-  You can ingest, store, process, and analyze your IoT data all in one place, eliminating the need for complicated integrations and tedious data migrations. Say goodbye to data silos and hello to a unified view of your IoT data.
+  IoTデータの取り込み、保存、処理、分析を一元的に行え、複雑な統合や面倒なデータ移行を排除します。データのサイロ化を防ぎ、IoTデータの統合ビューを実現します。
   
-- **Real-time Data Processing**
+- **リアルタイムデータ処理**
 
-  EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to MongoDB. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
+  EMQXはリアルタイムデータストリームの処理に最適化されており、ソースシステムからMongoDBへの効率的かつ信頼性の高いデータ伝送を保証します。即時の洞察やアクションが必要なユースケースに理想的です。
 
-- **Flexible MongoDB Connection Options**
+- **柔軟なMongoDB接続オプション**
 
-  Whether you operate with a single MongoDB instance or leverage the robustness of a replica set, the data integration offers native support to connect with both configurations, providing businesses with the flexibility to adapt as per their infrastructure needs.
+  単一のMongoDBインスタンスでも、レプリカセットの堅牢性を活用する場合でも、両方の構成にネイティブ対応し、インフラ要件に応じた柔軟な接続が可能です。
 
-- **High Performance and Scalability**
+- **高性能かつスケーラブル**
 
-  EMQX's distributed architecture and MongoDB's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets. As your IoT deployments grow, your data storage capabilities can scale with ease.
+  EMQXの分散アーキテクチャとMongoDBのカラム型ストレージフォーマットにより、データ量の増加に伴うスムーズなスケーラビリティを実現。大規模データセットでも一貫したパフォーマンスと応答性を維持します。IoT展開の拡大に合わせてデータ保存能力も容易に拡張可能です。
 
-- **Flexible Data Transformation**
+- **柔軟なデータ変換**
 
-  EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in MongoDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+  EMQXの強力なSQLベースのルールエンジンにより、MongoDBに保存する前にデータを前処理できます。フィルタリング、ルーティング、集約、エンリッチメントなど多様な変換機構をサポートし、ニーズに合わせたデータ整形が可能です。
 
-- **NoSQL**
+- **NoSQLの利点**
 
-  MongoDB's schema-less architecture ensures that diverse MQTT message structures can be easily stored without the need for rigid schemas, accommodating the dynamic nature of IoT data.
+  MongoDBのスキーマレスアーキテクチャにより、多様なMQTTメッセージ構造を厳格なスキーマなしで容易に保存でき、IoTデータの動的な性質に対応します。
 
-- **Reliable Data Storage**
+- **信頼性の高いデータ保存**
 
-  Once the EMQX rule engine processes and routes the message, it is stored in MongoDB with the platform's proven reliability, ensuring data integrity and consistent availability.
+  EMQXルールエンジンがメッセージを処理・ルーティングした後、MongoDBに保存され、プラットフォームの実績ある信頼性によりデータの整合性と継続的な可用性が保証されます。
 
-- **Operational Metrics and Advanced Analytics**
+- **運用指標と高度な分析**
 
-  Glean insights from metrics such as the total message count, egress traffic rate, and more. These metrics, combined with MongoDB's powerful querying, can be utilized to monitor, analyze, and optimize the data flow, empowering users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+  総メッセージ数、送信トラフィック率などの指標を取得可能です。これらの指標とMongoDBの強力なクエリ機能を組み合わせて、データフローの監視、分析、最適化ができ、予測分析や異常検知などに活用できます。
 
-- **Latest MongoDB Version Support**
+- **最新MongoDBバージョン対応**
 
-  The data integration is compatible with and supports the latest versions of MongoDB, ensuring users benefit from the newest features, optimizations, and security updates offered by the database platform.
+  最新のMongoDBバージョンに対応しており、ユーザーはデータベースプラットフォームの最新機能、最適化、セキュリティアップデートを享受できます。
 
-- **Cost-Effective**
+- **コスト効率**
 
-  EMQX and MongoDB both have open-source solutions, meaning they are cost-effective compared to proprietary solutions. This can help reduce the total cost of ownership and improve the return on investment for IoT projects.
+  EMQXとMongoDBは共にオープンソースソリューションであり、プロプライエタリ製品に比べてコスト効率が高いです。これにより、IoTプロジェクトの総所有コスト削減と投資収益率の向上が期待できます。
 
-This MongoDB data integration fortifies your IoT infrastructure, ensuring that vast amounts of data generated by your devices are not just stored but are also ready for future querying and analysis. The ease of setup and operational excellence it brings can greatly enhance the efficiency and reliability of your IoT systems.
+このMongoDBデータ統合は、デバイスが生成する膨大なデータを単に保存するだけでなく、将来のクエリや分析に備えて活用可能な形で保持し、セットアップの容易さと運用の優秀性により、IoTシステムの効率性と信頼性を大幅に向上させます。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the MongoDB data integration in EMQX Dashboard.
+このセクションでは、EMQXダッシュボードでMongoDBデータ統合を作成する前に必要な準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
-- Knowledge about [data integration](./data-bridges.md)
-- Knowledge about [MongoDB](https://www.mongodb.com/)
+- EMQXのデータ統合[ルール](./rules.md)に関する知識
+- [データ統合](./data-bridges.md)に関する知識
+- [MongoDB](https://www.mongodb.com/)に関する知識
 
-### Set Up MongoDB Server
+### MongoDBサーバーのセットアップ
 
-You can use the following commands to install MongoDB via Docker, run the docker image, and create a user.
+以下のコマンドを使用して、Docker経由でMongoDBをインストールし、コンテナを起動し、ユーザーを作成できます。
 
 ```bash
-#  To start the MongoDB docker image and set the password as public
+# MongoDBのDockerイメージを起動し、パスワードをpublicに設定
 docker run -d --name mongodb -p 27017:27017 mongo
 
-# Access the container
+# コンテナにアクセス
 docker exec -it mongodb bash
 
-# Locate the MongoDB server in the container (use `mongo` with 4.x versions)
+# コンテナ内でMongoDBサーバーを起動（4.x系では`mongo`を使用）
 mongosh
 
-# Create a user
+# ユーザー作成
 use admin
 db.createUser({ user: "admin", pwd: "public", roles: [ { role: "root", db: "admin" } ] })
-
 ```
 
-### Create a Database
+### データベースの作成
 
-You can use the following command to create a database and collection in MongoDB.
+以下のコマンドでMongoDB内にデータベースとコレクションを作成できます。
 
 ```bash
-# Create database emqx_data
+# データベースemqx_dataを作成
 use emqx_data
 
-# create collection emqx_messages
+# コレクションemqx_messagesを作成
 db.createCollection('emqx_messages')
 ```
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the MongoDB Sink to the MongoDB Server.
+このセクションでは、MongoDB SinkをMongoDBサーバーに接続するコネクターの作成方法を説明します。
 
-The following steps assume that you run both EMQX and MongoDB on the local machine. If your MongDB is deployed elsewhere, adjust the settings accordingly.
+以下の手順は、EMQXとMongoDBを同一マシン上で実行していることを前提としています。MongoDBが別環境にある場合は、設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **MongoDB** and then click **Next**.
-4. Enter a name for the Connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_mongodb`.
-5. Configure the MongoDB server connection information. Fill in the required fields (marked with an asterisk).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors**をクリックします。
+2. ページ右上の**Create**をクリックします。
+3. **Create Connector**ページで**MongoDB**を選択し、**Next**をクリックします。
+4. コネクターの名前を入力します。名前は英数字の組み合わせで、例：`my_mongodb`。
+5. MongoDBサーバーの接続情報を設定します。必須項目（*印）を入力してください。
 
-   - **MongoDB Mode**: Select the type of MongoDB deployment you are connecting to based on your actual deployment mode. In this demonstration, you can select `single` for example.
-     - `single`: a single standalone MongoDB instance.
-     - `rs`: Replica Set, a group of `mongod` processes that maintain the same data set.
-     - `sharded`: a sharded cluster in MongoDB.
-   - **Server Host**: Enter `127.0.0.1:27017`, or the actual URL if the MongoDB server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Write Mode**: Keep the default value `unsafe`.
-   - **Username**: Enter `admin`.
-   - **Password**: Enter `public`.
-   - **Auth Source**: Enter the aatabase name associated with the user's credentials.
-   - **Use Legacy Protocol**: Determine if MongoDB's legacy communication protocol should be used (MongoDB introduced a new wire protocol in version 3.6, with the legacy protocol retained for backward compatibility.). This setting can be set to `true`, `false`, or `auto`. In `auto` mode (default option), EMQX will automatically determine which protocol to use based on the detected MongoDB version.
-   - **Srv Record**: Disabled by default. Once enabled, it allows EMQX to use DNS SRV records to discover the MongoDB hosts it should connect to, which makes it easier to connect to replica sets or sharded clusters without having to specify each host in the connection string. 
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-6. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-7. **Advanced settings (optional)**:  For details, see [Advanced Configurations](#advanced-configurations).
-8. Before clicking **Create**, you can click **Test Connectivity** to test if the Connector can connect to the MongoDB server.
-9. Click the **Create** button at the bottom to complete the creation of the Connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to MongoDB. For detailed steps, see [Create a Rule and MongoDB Sink](#create-a-rule-and-mongodb-sink).
+   - **MongoDB Mode**：実際のMongoDBの展開形態に応じて接続タイプを選択します。この例では`single`を選択可能です。
+     - `single`：単一のMongoDBインスタンス
+     - `rs`：レプリカセット、同一データセットを維持する複数の`mongod`プロセスのグループ
+     - `sharded`：MongoDBのシャーディングクラスター
+   - **Server Host**：`127.0.0.1:27017`またはMongoDBサーバーがリモートの場合は実際のURLを入力
+   - **Database Name**：`emqx_data`を入力
+   - **Write Mode**：デフォルトの`unsafe`のまま
+   - **Username**：`admin`を入力
+   - **Password**：`public`を入力
+   - **Auth Source**：ユーザー認証に使用するデータベース名を入力
+   - **Use Legacy Protocol**：MongoDBのレガシープロトコルを使用するかどうかを設定（MongoDB 3.6で新しいワイヤープロトコルが導入され、レガシープロトコルは後方互換のために残されています）。`true`、`false`、`auto`のいずれかで、`auto`（デフォルト）ではMongoDBのバージョンに応じて自動判別します。
+   - **Srv Record**：デフォルトで無効。有効にすると、DNSのSRVレコードを使ってMongoDBホストを自動検出し、レプリカセットやシャーディングクラスターへの接続が容易になります。
+   - 暗号化接続を確立したい場合は、**Enable TLS**のトグルスイッチをオンにします。TLS接続の詳細は[外部リソースアクセスのTLS](../network/overview.md/#tls-for-external-resource-access)を参照してください。
+6. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。詳細は[フォールバックアクション](./data-bridges.md#fallback-actions)を参照してください。
+7. **詳細設定（任意）**：詳細は[高度な設定](#advanced-configurations)を参照してください。
+8. **Create**をクリックする前に、**Test Connectivity**を押してコネクターがMongoDBサーバーに接続できるかテストできます。
+9. ページ下部の**Create**ボタンをクリックしてコネクター作成を完了します。ポップアップで**Back to Connector List**または**Create Rule**を選択可能です。ルールとSinkを作成してMongoDBへのデータ転送を指定するには[ルールとMongoDB Sinkの作成](#create-a-rule-with-mongodb-sink)を参照してください。
 
-## Create a Rule with MongoDB Sink
+## MongoDB Sinkを使ったルールの作成
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and saving the processed data to MongoDB via a configured Sink. 
+このセクションでは、ダッシュボードでルールを作成し、ソースMQTTトピック`t/#`からのメッセージを処理し、設定済みのSinkを介してMongoDBに保存する方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
+1. EMQXダッシュボードで**Integration** -> **Rules**をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の**Create**をクリックします。
 
-3. Enter `my_rule` as the rule ID, and set the rules in the **SQL Editor**. If you want to save the MQTT messages under topic `t/#`  to MongoDB, you can use the SQL syntax below. 
+3. ルールIDに`my_rule`を入力し、**SQL Editor**にルールを設定します。トピック`t/#`のMQTTメッセージをMongoDBに保存したい場合、以下のSQL文を使用できます。
 
-   Note: If you want to specify your own SQL syntax, ensure you have included all fields required by the Sink in the `SELECT` part.
+   注：独自のSQL文を指定する場合は、Sinkが必要とするすべてのフィールドを`SELECT`句に含めてください。
 
    ```sql
    SELECT
@@ -158,7 +157,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      "t/#"
    ```
 
-   For example, you can use the SQL syntax below to save `timestamp` as data type and the `payload`  in JSON as JSON strings:
+   例えば、`timestamp`を日付型として、`payload`をJSON文字列として保存するには以下のSQL文を使えます：
 
    ```sql
    SELECT
@@ -169,19 +168,19 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   注：初心者の方は**SQL Examples**をクリックし、**Enable Test**でSQLルールを学習・テストできます。
 
-4. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to MongoDB.
+4. + **Add Action**ボタンをクリックし、ルールにトリガーされるアクションを定義します。このアクションにより、EMQXはルールで処理したデータをMongoDBに送信します。
 
-5. Select `MongoDB` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+5. **Type of Action**ドロップダウンリストから`MongoDB`を選択します。**Action**はデフォルトの`Create Action`のままにします。既に作成済みのSinkがあれば選択可能ですが、この例では新規Sinkを作成します。
 
-6. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+6. Sinkの名前を入力します。名前は英数字の組み合わせにしてください。
 
-7. Select the Connector `my_mongodb` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. **Connector**ドロップダウンから`my_mongodb`を選択します。新規コネクターを作成する場合は隣のボタンをクリックします。設定パラメータの詳細は[コネクターの作成](#create-a-connector)を参照してください。
 
-8. In the **Collection** field, enter the collection where the data will be stored. It supports dynamic setting through the placeholder `${var_name}`. In this example, enter `emqx_messages`.
+8. **Collection**欄にデータを保存するコレクション名を入力します。`${var_name}`のプレースホルダーを使った動的設定も可能です。この例では`emqx_messages`を入力します。
 
-9. Configure the **Payload template** to save `clientid`, `topic`, `qos`,  `timestamp`, and `payload` to MongoDB. This template will be executed via the MongoDB insert command, and the sample code is as follows:
+9. **Payload template**を設定し、`clientid`、`topic`、`qos`、`timestamp`、`payload`をMongoDBに保存します。このテンプレートはMongoDBのinsertコマンドで実行され、サンプルコードは以下の通りです：
 
    ```json
    {
@@ -193,45 +192,43 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    }
    ```
 
-   When configuring the payload template, pay attention to the following:
+   ペイロードテンプレート設定時の注意点：
 
-   - All `keys` need to be wrapped in double quotes `"`;
-   - Auto-derivation of the data type of "value" is not supported:
-     - Characters need to be wrapped with `"`, otherwise, an error will be reported;
-     - Values do not need to be wrapped, otherwise, they will be recognized as characters;
-     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions). 
+   - すべての`key`はダブルクォーテーション`"`で囲む必要があります。
+   - 値のデータ型の自動判別はサポートされていません：
+     - 文字列は`"`で囲む必要があります。囲まないとエラーになります。
+     - 数値は囲まないでください。囲むと文字列として認識されます。
+     - timestamp、日付、時間型は特別な処理をしないと数値または文字列として認識されます。日付や時間として保存するには、ルールSQLの`mongo_date`関数を使ってフィールドを処理してください。詳細は[時間・日付関数](./rule-sql-builtin-functions.md#time-and-date-functions)を参照。
+   - 値がJSONオブジェクトの場合はネスト可能です：
+     - テンプレート内で値を`"`で囲んでネストすることはできません。実行エラーになります。
+     - オブジェクトは自身の構造に従ってネスト保存されます。
+   - オブジェクトをJSON文字列として保存したい場合は、ルールSQLの`json_encode`関数で変換し、テンプレート内の対応する値は`"`で囲まないでください。
 
-   - Nested objects are allowed when the value is a JSON object:
-     - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
-     - Objects will be nested and stored according to their own structure;
+10. 詳細設定（任意）：詳細は[高度な設定](#advanced-configurations)を参照してください。
 
-   - To store objects as JSON characters, use the `json_encode` function in rule SQL for the conversion, and the corresponding **value** in the template is still not allowed to be wrapped with `"`. 
+11. **Create**をクリックする前に、**Test Connectivity**を押してSinkがMongoDBサーバーに接続できるかテストできます。
 
-10. Advanced settings (optional):  For details, see [Advanced Configurations](#advanced-configurations).
+12. **Create**ボタンをクリックしてSink設定を完了します。新しいSinkが**Action Outputs**に追加されます。
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the MongoDB server.
+13. **Create Rule**ページに戻り、設定内容を確認して**Create**をクリックし、ルールを生成します。
 
-12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+これでルールが正常に作成され、**Rule**ページに新しいルールが表示されます。**Actions(Sink)**タブをクリックすると、新しいMongoDB Sinkが確認できます。
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+また、**Integration** -> **Flow Designer**をクリックするとトポロジーが表示され、トピック`t/#`のメッセージがルール`my_rule`で解析されMongoDBに送信・保存されている様子が確認できます。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new MongoDB Sink.
+## ルールのテスト
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to MongoDB after parsing by rule `my_rule`.
+ルールとSinkが期待通りに動作するかテストするために、[MQTTX](https://mqttx.app/)を使ってクライアントをシミュレートし、EMQXにMQTTメッセージをパブリッシュできます。
 
-## Test the Rule
-
-To test if the rule and Sink work as you expected, you can use the [MQTTX](https://mqttx.app/) to simulate a client to publish MQTT messages to EMQX.
-
-1. Use MQTTX  to send a message to topic  `t/1`:
+1. MQTTXでトピック`t/1`にメッセージを送信します：
 
    ```bash
    mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello MongoDB" }'
    ```
 
-2. Check the running status of the Sink, there should be one new **Matched** and one new **Sent Successfully** message.
+2. Sinkの稼働状況を確認し、**Matched**が1件、**Sent Successfully**が1件増えていることを確認します。
 
-3. Check whether the message is written into collection `emqx_messages`:
+3. メッセージがコレクション`emqx_messages`に書き込まれているか確認します：
 
    ```
    > db.emqx_messages.find().pretty()
@@ -247,7 +244,7 @@ To test if the rule and Sink work as you expected, you can use the [MQTTX](https
    }
    ```
 
-   If you use the second SQL syntax in rule configuration, the returned information should be: 
+   ルール設定で2番目のSQL文を使用した場合は、以下のように返されます：
 
    ```
    > db.emqx_messages.find().pretty()
@@ -261,32 +258,31 @@ To test if the rule and Sink work as you expected, you can use the [MQTTX](https
    }
    ```
 
-## Advanced Configurations
+## 高度な設定
 
-This section introduces some of the advanced configuration options available for the EMQX MongoDB Connector and Sink. When configuring the Connector and Sink, expand **Advanced Settings** to tailor the following parameters to meet your specific needs.
+このセクションでは、EMQX MongoDBコネクターおよびSinkの高度な設定オプションを紹介します。コネクターやSinkの設定時に**Advanced Settings**を展開し、以下のパラメータをニーズに合わせて調整できます。
 
-| **Fields**                   | **Descriptions**                                             | **Recommended Value** |
-| ---------------------------- | ------------------------------------------------------------ | --------------------- |
-| **Connect Timeout**          | The time duration EMQX will wait while attempting to establish a connection to MongoDB before timing out. | 30s                   |
-| **Socket Timeout**           | This determines how long EMQX will wait while trying to send or receive data on a socket connection with MongoDB before it times out. | 30s                   |
-| **Max Overflow Workers**     | Specifies the additional number of workers that can be created when all existing workers are occupied. This setting is crucial in times of workload surges to permit more concurrent connections to MongoDB. | 0                     |
-| **Wait Queue Timeout**       | The maximum duration a worker can remain idle while waiting for a connection to MongoDB to become available. | 10s                   |
-| **Heartbeat Period**         | Defines the interval at which the driver checks the state of the MongoDB deployment. This specifies the time between consecutive checks, effectively controlling the frequency of these heartbeat signals to ensure MongoDB's operational status. | 200s                  |
-| **Minimum Heartbeat Period** | Sets the shortest time interval allowed between heartbeats, ensuring that the driver doesn't check the MongoDB state too frequently. This is vital for avoiding unnecessary loads and ensuring efficient communication between EMQX and MongoDB. | 200s                  |
+| **項目**                     | **説明**                                                       | **推奨値**    |
+| ---------------------------- | -------------------------------------------------------------- | ------------ |
+| **Connect Timeout**          | MongoDBへの接続確立を試みる際にEMQXが待機する最大時間。タイムアウトまでの時間。 | 30秒         |
+| **Socket Timeout**           | MongoDBとのソケット接続でデータ送受信を試みる際の最大待機時間。タイムアウトまでの時間。 | 30秒         |
+| **Max Overflow Workers**     | 既存のワーカーがすべて占有されている場合に追加で生成可能なワーカー数。負荷急増時の同時接続数増加に重要。 | 0            |
+| **Wait Queue Timeout**       | MongoDB接続が利用可能になるまでワーカーがアイドル状態で待機できる最大時間。 | 10秒         |
+| **Heartbeat Period**         | ドライバーがMongoDBの状態をチェックする間隔。連続したチェック間の時間を指定し、MongoDBの稼働状況を監視。 | 200秒        |
+| **Minimum Heartbeat Period** | ハートビート間の最短間隔を設定し、MongoDB状態チェックの過剰な頻度を防止。EMQXとMongoDB間の効率的な通信を確保。 | 200秒        |
 
+## 参考情報
 
-## More Information
+以下のリンクからさらに詳しく学べます：
 
-Check out the following links to learn more:
+**ブログ**：
 
-**Blogs**:
+[MQTTとMongoDB：IoTデータ管理のシームレスな連携を実現](https://www.emqx.com/en/blog/mqtt-and-mongodb-crafting-seamless-synergy-for-iot-data-mangement)
 
-[MQTT and MongoDB: Crafting Seamless Synergy for IoT Data Mangement](https://www.emqx.com/en/blog/mqtt-and-mongodb-crafting-seamless-synergy-for-iot-data-mangement)
+**レポート**：
 
-**Reports**:
+[MQTTパフォーマンスベンチマークテスト：EMQX-MongoDB統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-mongodb-integration)
 
-[MQTT Performance Benchmark Testing: EMQX-MongoDB Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-mongodb-integration)
-
-**Videos:**
+**動画**：
 
 https://www.youtube.com/watch?v=c2M-rlkkT5o

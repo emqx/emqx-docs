@@ -1,94 +1,94 @@
-# Integrate with Redis
+# Redisとの統合
 
-This authorizer implements authorization checks by matching publish/subscription requests against lists of rules stored in the Redis database.
+このオーソライザーは、Redisデータベースに保存されたルールのリストとパブリッシュ／サブスクリプション要求を照合することで認可チェックを実装します。
 
-::: tip Prerequisite
+::: tip 前提条件
 
-Knowledge about [basic EMQX authorization concepts](./authz.md)
+[EMQXの基本的な認可概念](./authz.md)の知識が必要です。
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-Users need to provide a query template that returns the following data:
+ユーザーは以下のデータを返すクエリテンプレートを提供する必要があります。
 
-- `topic`: Specifies the topic that the rule applies to, which can use topic filters and [topic placeholders](./authz.md#topic-placeholders).
-- `action`: Specifies the actions that the rule applies to, available options are `publish`, `subscribe`, and `all`.
-- `qos` (Optional) Specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
-- `retain`: (Optional) Specifies whether the rule supports retained messages. Value options are `true`, `false`. The default is to allow retained messages.
+- `topic`：ルールが適用されるトピックを指定します。トピックフィルターや[トピックプレースホルダー](./authz.md#topic-placeholders)を使用できます。
+- `action`：ルールが適用されるアクションを指定します。利用可能な値は `publish`、`subscribe`、`all` です。
+- `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
+- `retain`（オプション）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトは保持メッセージを許可します。
 
-For example, rules can be stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes).
+例えば、ルールは[Redisのハッシュ](https://redis.io/docs/manual/data-types/#hashes)として保存できます。
 
-Adding permission data for user `emqx_u` to subscribe to topic `t/1`:
+ユーザー `emqx_u` にトピック `t/1` のサブスクライブ権限を追加する例：
 
 ```bash
 HSET mqtt_acl:emqx_u t/1 subscribe
 ```
 
-Due to Redis structure limitations, when using the `qos` and `retain` fields, the field other than topic needs to be placed in a JSON string, for example:
+Redisの構造上の制限により、`qos` と `retain` フィールドを使用する場合、トピック以外のフィールドはJSON文字列で格納する必要があります。例えば：
 
-- Adding permission data for user `emqx_u` to subscribe to topic `t/2` with QoS 1 and QoS 2:
+- ユーザー `emqx_u` にトピック `t/2` のQoS 1およびQoS 2でのサブスクライブ権限を追加する例：
 
 ```bash
 HSET mqtt_acl:emqx_u t/2 '{ "action": "subscribe", "qos": [1, 2] }'
 ```
 
-- Adding permission data to deny user `emqx_u` from publishing retained messages to `t/3`:
+- ユーザー `emqx_u` にトピック `t/3` への保持メッセージのパブリッシュを禁止する権限を追加する例：
 
 ```bash
 HSET mqtt_acl:emqx_u t/3 '{ "action": "publish", "retain": false }'
 ```
 
-The corresponding config parameters are:
+対応する設定パラメータは以下の通りです：
 
 ```bash
 cmd = "HGETALL mqtt_acl:${username}"
 ```
 
-Fetched rules are used as permissive ones, i.e., a request is accepted if the topic filter and action match.
+取得したルールは許可ルールとして扱われ、トピックフィルターとアクションが一致すればリクエストは許可されます。
 
 :::tip
-All rules added in Redis Authorizer are **allow** rules, which means Redis Authorizer needs to be used in whitelist mode.
+Redisオーソライザーに追加されたすべてのルールは**許可ルール**であるため、Redisオーソライザーはホワイトリストモードで使用する必要があります。
 :::
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use Redis for user authorization.
+EMQXダッシュボードを使って、Redisをユーザー認可に利用する設定ができます。
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. [EMQXダッシュボード](http://127.0.0.1:18083/#/authentication)の左ナビゲーションツリーで **アクセス制御** -> **認可** をクリックし、**認可** ページに入ります。
 
-2. Click **Create** at the top right corner, then click to select **Redis** as **Backend**. Click **Next**. The **Configuration** tab is shown as below.
+2. 右上の **作成** をクリックし、**バックエンド**として **Redis** を選択します。次に **次へ** をクリックします。以下のように **設定** タブが表示されます。
 
-   <img src="./assets/authz-Redis_ee.png" alt="authz-Redis_ee" style="zoom:67%;" />
+   <img src="./assets/authz-Redis_ee.png" alt="Redis認可設定画面" style="zoom:67%;" />
 
-3. Follow the instructions below to do the configuration.
+3. 以下の指示に従って設定を行います。
 
-   **Connect**: Fill in the information needed to connect Redis.
+   **接続**：Redisへの接続に必要な情報を入力します。
 
-   - **Redis Mode**: Select how Redis is deployed, including **Single**, **Sentinel** and **Cluster**.
-   - **Server**: Specify the server address that EMQX is to connect (`host:port`).
-   - **Database**: Redis database name.
-   - **Password**: Specify user password. 
+   - **Redisモード**：Redisの展開形態を選択します。**Single**、**Sentinel**、**Cluster**があります。
+   - **サーバー**：EMQXが接続するサーバーアドレスを指定します（`host:port`）。
+   - **データベース**：Redisのデータベース名。
+   - **パスワード**：ユーザーパスワードを指定します。
 
-   **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. 
+   **TLS設定**：TLSを有効にする場合はトグルスイッチをオンにします。
 
-   **Connection Configuration**: Set the concurrent connections and waiting time before a connection is timed out.
+   **接続設定**：同時接続数と接続タイムアウトまでの待機時間を設定します。
 
-   - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to Redis. Default: **8**. 
+   - **プールサイズ**（任意）：EMQXノードからRedisへの同時接続数を整数で指定します。デフォルトは **8** です。
 
-   **Authorization configuration**: Fill in the authorization-related settings:
+   **認可設定**：認可に関する設定を入力します。
 
-   - **CMD**: Fill in the query command according to the data schema.
+   - **CMD**：データスキーマに従ったクエリコマンドを入力します。
 
-4. Click **Create** to finish the settings.
+4. **作成** をクリックして設定を完了します。
 
-## Configure with Configuration Items
+## 設定項目による設定
 
-You can configure the EMQX Redis authorizer with EMQX configuration items.
+EMQXの設定項目を使ってRedisオーソライザーを設定できます。
 
-The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.html#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster).-->
+Redisオーソライザーは `redis` タイプで識別されます。オーソライザーはRedisの3種類の展開モードに対応しています。<!--詳細な設定情報は以下を参照してください：[redis_single](../../configuration/configuration-manual.html#authz:redis_single)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel)、[authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
 
-Sample configuration:
+設定例：
 
 :::: tabs type: card
 

@@ -1,88 +1,88 @@
-# Rules
+# ルール
 
-EMQX provides a powerful and efficient built-in data processing feature, the Rule Engine. By leveraging SQL-like syntax, users can effortlessly extract, transform, and enrich data from various sources. Once processed, data can be distributed or integrated to external systems through actions triggered by rules, including built-in actions and Sink/Sources. You can also republish processed data to MQTT clients or devices.
+EMQXは強力かつ効率的な組み込みデータ処理機能であるルールエンジンを提供します。SQLライクな構文を活用することで、ユーザーはさまざまなソースからデータを簡単に抽出、変換、拡充できます。処理されたデータは、ルールによってトリガーされるアクション（組み込みアクションやSink/Sourceを含む）を通じて外部システムに配信または統合できます。また、処理済みデータをMQTTクライアントやデバイスに再パブリッシュすることも可能です。
 
-Rule Engine is a core component of EMQX's data integration capabilities. It provides a flexible business integration solution with the use of data integration, simplifying the business development process, improving user usability, and reducing the coupling between business systems and EMQX. For more detailed information, see [Rule Engine](../data-integration/rules.md).
+ルールエンジンはEMQXのデータ統合機能の中核コンポーネントです。データ統合を活用した柔軟なビジネス統合ソリューションを提供し、ビジネス開発プロセスを簡素化し、ユーザーの利便性を向上させ、ビジネスシステムとEMQX間の結合度を低減します。詳細については[ルールエンジン](../data-integration/rules.md)をご覧ください。
 
-To create and manage the rules, you can access the **Rules** page by clicking **Integration** -> **Rules** from the left menu.
+ルールの作成および管理は、左メニューの**Integration** -> **Rules**をクリックして**Rules**ページにアクセスします。
 
-## Create Rules
+## ルールの作成
 
-To create a Rule, click **Create** on the upper right corner of the Rules page. You can also create a Rule quickly by clicking **Create Rule** from the **Action** column of an existing connector on the Connector page. 
+ルールを作成するには、Rulesページの右上にある**Create**をクリックします。また、Connectorページの既存コネクターの**Action**列にある**Create Rule**をクリックして、ルールを素早く作成することも可能です。
 
-### SQL Editor
+### SQLエディター
 
-The Create Rule page features an SQL editor where you can define rule logic using SQL statements. These statements enable real-time data manipulation, including querying, filtering, transforming, and enriching data exchanged between clients or systems.
+Create RuleページにはSQLエディターがあり、SQL文を使ってルールロジックを定義できます。これにより、クライアントやシステム間で交換されるデータのリアルタイムな操作（クエリ、フィルタリング、変換、拡充）が可能です。
 
-To identify and organize rules, you'll provide a Rule ID and optional Note. A unique Rule ID is automatically generated, but you can also specify your own. The Note field allows for brief descriptions to clarify the rule's purpose.
+ルールを識別・整理するために、ルールIDと任意のノートを入力します。ルールIDは自動で一意に生成されますが、任意で指定することもできます。ノート欄にはルールの目的を明確にする簡単な説明を記入できます。
 
-By clicking the **SQL Examples** below the SQL Editor, you can see some common SQL examples on the right side. You can quickly create rule by referring to one of the following SQL examples:
+SQLエディター下の**SQL Examples**をクリックすると、右側に一般的なSQL例が表示されます。以下のSQL例を参考にして素早くルールを作成できます。
 
-<img src="./assets/rule-sql.png" alt="image" style="zoom:67%;" />
+<img src="./assets/rule-sql.png" alt="画像" style="zoom:67%;" />
 
-The default SQL statement is `SELECT * FROM "t/#"`, which means that when the client publishes a message to the topic `t/#`, the Rule Engine will take out all the data under the current event. 
+デフォルトのSQL文は `SELECT * FROM "t/#"` で、これはクライアントがトピック`t/#`にメッセージをパブリッシュした際に、ルールエンジンがそのイベント下のすべてのデータを取得することを意味します。
 
-The `SELECT` keyword can get all the fields in the message, for example, if you want to get the current message's `Payload`, it can be modified to `SELECT payload from "t/#"`. The data can be processed and transformed using [built-in functions](../data-integration/rule-sql-builtin-functions.md). 
+`SELECT`キーワードはメッセージ内のすべてのフィールドを取得できます。例えば、現在のメッセージの`Payload`だけを取得したい場合は、`SELECT payload from "t/#"`に変更します。データは[組み込み関数](../data-integration/rule-sql-builtin-functions.md)を使って処理・変換可能です。
 
-The `FROM` keyword is followed by one or more data sources. To see possible event topics, the **Try It Out** area below the SQL Editor can view all the optional data source events. Using the `WHERE` keyword, you can add conditional filtering. For more detailed SQL syntax usage, see [SQL syntax and examples](./../data-integration/rule-sql-syntax.md).
+`FROM`キーワードの後には1つ以上のデータソースが続きます。利用可能なイベントトピックを確認するには、SQLエディター下の**Try It Out**エリアでオプションのデータソースイベントを閲覧できます。`WHERE`キーワードを使うと条件付きフィルタリングを追加可能です。詳細なSQL構文の使い方は[SQL構文と例](./../data-integration/rule-sql-syntax.md)をご参照ください。
 
 ### Try It Out
 
-When the SQL statement is completed, you can click the **Try It Out** toggle switch at the bottom of the page to run the Rule test in this area.
+SQL文が完成したら、ページ下部の**Try It Out**トグルスイッチをオンにして、このエリアでルールのテストを実行できます。
 
-For the SQL test, you can select the event or data source from the **Data Source** drop-down box and enter the simulated test data, and click **Run Test** to see the execution output data in the **Output Result** on the right.
+SQLテストでは、**Data Source**ドロップダウンからイベントまたはデータソースを選択し、シミュレーション用のテストデータを入力後、**Run Test**をクリックすると、右側の**Output Result**に実行結果が表示されます。
 
-You can test the output data of the rule through the SQL test every time you change the SQL statement to ensure the correctness of the rule. 
+SQL文を変更するたびにSQLテストでルールの出力データを確認し、ルールの正確性を保証できます。
 
 ::: tip
 
-If the `412` error code prompt appears when executing SQL, it may be due to the mismatch with the test data, and when the data source does not match the SQL statement, the corresponding event or data source will be prompted to be selected. Updated data source events will automatically update the test data to the corresponding data.
+SQL実行時に`412`エラーコードが表示された場合、テストデータとの不一致が原因の可能性があります。データソースがSQL文と一致しない場合、対応するイベントやデータソースの選択を促されます。更新されたデータソースイベントに応じてテストデータも自動で更新されます。
 
 :::
 
-The simulated data source is the same as the real scenario, including some MQTT events. For the message part, you can select different message events to simulate data, including:
+シミュレーション用データソースは実際のシナリオと同様で、一部MQTTイベントを含みます。メッセージ部分では、以下の異なるメッセージイベントを選択してデータをシミュレートできます。
 
-- Message publish (mqtt topic)
-- Message delivered ($events/message/delivered)
-- Message acked ($events/message/acked)
-- Message dropped ($events/message/dropped)
+- メッセージパブリッシュ（mqtt topic）
+- メッセージ配信済み（$events/message/delivered）
+- メッセージアック済み（$events/message/acked）
+- メッセージドロップ（$events/message/dropped）
 
-For other events, you can select different client and session events to simulate data, including:
+その他のイベントでは、以下のクライアントおよびセッションイベントを選択してデータをシミュレート可能です。
 
-- Client connected ($events/client/connected)
-- Client disconnected ($events/client/disconnected)
-- Client connack ($events/client/connack)
-- Client check authorization complete ($events/auth/check_authz_complete)
-- Client check authentication complete ($events/auth/check_authn_complete)
-- Subscribed ($events/session/subscribed)
-- Unsubscribed ($events/session/unsubscribed)
+- クライアント接続済み（$events/client/connected）
+- クライアント切断済み（$events/client/disconnected）
+- クライアントconnack（$events/client/connack）
+- クライアント認可チェック完了（$events/auth/check_authz_complete）
+- クライアント認証チェック完了（$events/auth/check_authn_complete）
+- サブスクライブ済み（$events/session/subscribed）
+- サブスクライブ解除済み（$events/session/unsubscribed）
 
-The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword, and rules support the use of multiple events. For more details about data source and event explanations, see [SQL Data Source and Fields](../data-integration/rule-sql-events-and-fields.md).
+対応するデータソースはSQLエディター内のSQL文と一致している必要があります。メッセージイベントを使ってデータを取得する場合は、`FROM`キーワードの後に対応するイベントトピック（括弧内の内容）をSQL文に記入してください。ルールは複数イベントの利用もサポートします。データソースやイベントの詳細については[SQLデータソースとフィールド](../data-integration/rule-sql-events-and-fields.md)をご覧ください。
 
-You can also test the rule in the testing area. For detailed testing steps, you can see [Test Rule](../data-integration/rule-get-started.md#test-rule) for details.
+テストエリアでルールをテストすることも可能です。詳細なテスト手順は[Test Rule](../data-integration/rule-get-started.md#test-rule)をご参照ください。
 
-<img src="./assets/rule-test.png" alt="image" style="zoom:67%;" />
+<img src="./assets/rule-test.png" alt="画像" style="zoom:67%;" />
 
-### Action Outputs
+### アクション出力
 
-After completing the editing of the SQL statement and the rule debugging, you can get output data that meets your requirements. At this time, you can select the action that needs to be executed after the rule is triggered in the **Action Outputs** tab on the right side of the page. Click the **Add Action** button, and you can select the type of the actions, including 2 built-in actions and various Sink/Source to continue to process the output data of the rule. For more detailed information about creating actions, see [Add Action](../data-integration/rule-get-started.md#add-action).
+SQL文の編集とルールのデバッグが完了し、要件を満たす出力データが得られたら、ページ右側の**Action Outputs**タブでルールトリガー後に実行するアクションを選択できます。**Add Action**ボタンをクリックすると、2つの組み込みアクションおよび各種Sink/Sourceからアクションタイプを選択し、ルールの出力データをさらに処理できます。アクション作成の詳細は[アクションの追加](../data-integration/rule-get-started.md#add-action)をご覧ください。
 
-## View Rules
+## ルールの閲覧
 
-When a rule is created, you can view the basic information of the rule in the rule list, including the rule ID, the source of the rule access data (such as events, topics, and data bridges), the rule notes, enabled status, and creation time. The rules can be set, deleted, enabled, disabled, and other operations. You can also duplicate a rule and modify it in the action bar to improve the reuse of rules.
+ルール作成後は、ルール一覧でルールの基本情報を確認できます。ルールID、ルールがアクセスするデータのソース（イベント、トピック、データブリッジなど）、ルールノート、有効状態、作成日時が表示されます。ルールは設定、削除、有効化、無効化などの操作が可能です。また、ルールの複製と修正もアクションバーから行え、ルールの再利用性を高められます。
 
-The top of the list contains a search bar, we can use rule ID, topic, enabled status, and note to query rules with multiple conditions, which helps users quickly find rules that meet the conditions and view and set them. Note: Rule ID and note support fuzzy query, topic supports wildcard search.
+一覧上部には検索バーがあり、ルールID、トピック、有効状態、ノートを複数条件で検索できます。これにより条件に合うルールを素早く見つけて閲覧・設定できます。なお、ルールIDとノートはあいまい検索、トピックはワイルドカード検索に対応しています。
 
 ![image](./assets/rule-list.png)
 
-## Rule Execution Statistics
+## ルール実行統計
 
-On the rule list page, click the rule ID to quickly enter the rule overview page. The rule overview page contains the basic data statistics of the rule, including the execution statistics of the rule and the execution statistics of the action under the current rule. For example, the number of matched, passed, and failed, the execution rate of the rule, successful and failed executions of the action, etc. Click the `Refresh` button in the upper right corner to view the real-time running data statistics of the current rule.
+ルール一覧ページでルールIDをクリックすると、ルール概要ページに素早く遷移します。ルール概要ページにはルールの基本的なデータ統計が含まれ、ルールの実行統計や当該ルール下のアクション実行統計が表示されます。例えば、マッチ数、通過数、失敗数、ルールの実行率、アクションの成功・失敗実行数などです。右上の`Refresh`ボタンをクリックすると、現在のルールのリアルタイム実行データ統計を確認できます。
 
 ![image](./assets/rule-overview.png)
 
-## Settings
+## 設定
 
-By clicking the **Settings** tab or the **Settings** button in the **Action** colum in the rule list you can enter the Settings page. It contains the basic information of the rule, which displays the same as the rule creation page. On this page, you can modify and debug the rule. For example, you need to modify the execution action under the current rule, modify the rule notes, and re-edit the SQL statement.
+ルール一覧の**Action**列にある**Settings**タブまたは**Settings**ボタンをクリックすると設定ページに入れます。このページはルール作成ページと同様の基本情報を表示し、ルールの修正やデバッグが可能です。例えば、現在のルール下の実行アクションの変更、ルールノートの修正、SQL文の再編集などが行えます。
 
 ![image](./assets/rule-settings.png)

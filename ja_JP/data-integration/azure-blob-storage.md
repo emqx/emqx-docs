@@ -1,85 +1,85 @@
-# Ingest MQTT Data into Azure Blob Storage
-[Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/) is Microsoft's cloud-based object storage solution, designed specifically for handling large volumes of unstructured data. Unstructured data refers to data types that do not follow a specific data model or format, such as text files or binary data. EMQX can efficiently store MQTT messages in Blob Storage containers, providing a versatile solution for storing Internet of Things (IoT) data.
+# Azure Blob Storage に MQTT データを取り込む
+[Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/) は、マイクロソフトのクラウドベースのオブジェクトストレージソリューションで、大量の非構造化データの取り扱いに特化しています。非構造化データとは、特定のデータモデルやフォーマットに従わないデータタイプ（テキストファイルやバイナリデータなど）を指します。EMQX は MQTT メッセージを Blob Storage コンテナに効率的に保存でき、IoT データの保存に柔軟なソリューションを提供します。
 
-This page provides a detailed introduction to the data integration between EMQX and Azure Blob Storage, and offers practical guidance on the rule and Sink creation.
+本ページでは、EMQX と Azure Blob Storage 間のデータ連携について詳しく解説し、ルールおよび Sink の作成方法について実践的なガイドを提供します。
 
-## How It Works
+## 動作の仕組み
 
-Azure Blob Storage data integration in EMQX is a ready-to-use feature that can be easily configured for complex business development. In a typical IoT application, EMQX acts as the IoT platform responsible for device connectivity and message transmission, while Azure Blob Storage serves as the data storage platform, handling message data storage.
+EMQX における Azure Blob Storage データ連携は、すぐに使える機能として提供されており、複雑な業務開発も簡単に設定可能です。典型的な IoT アプリケーションでは、EMQX がデバイス接続およびメッセージ送受信を担う IoT プラットフォームとして機能し、Azure Blob Storage はメッセージデータの保存を担当するデータストレージプラットフォームとなります。
 
 ![azure-blob-storage-architecture](./assets/azure-blob-storage-architecture.png)
 
-EMQX utilizes rules engines and Sinks to forward device events and data to Azure Blob Storage. Applications can read data from Azure Blob Storage for further data applications. The specific workflow is as follows:
+EMQX はルールエンジンと Sink を利用して、デバイスのイベントやデータを Azure Blob Storage に転送します。アプリケーションは Azure Blob Storage からデータを読み取り、さらなるデータ活用を行えます。具体的なワークフローは以下の通りです。
 
-1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
-2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
-3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Azure Blob Storage**: The rule triggers an action to write the message to Storage Container. Using the Azure Blob Storage Sink, users can extract data from processing results and send it to Blob Storage. Messages can be stored in text or binary format, or multiple lines of structured data can be aggregated into a single CSV or JSON Lines file, depending on the message content and the Sink configuration.
+1. **デバイスの EMQX への接続**：IoT デバイスは MQTT プロトコルで正常に接続されるとオンラインイベントをトリガーします。このイベントにはデバイスID、送信元IPアドレスなどのプロパティ情報が含まれます。
+2. **デバイスメッセージのパブリッシュと受信**：デバイスは特定のトピックを通じてテレメトリや状態データをパブリッシュします。EMQX はメッセージを受信し、ルールエンジン内で比較処理を行います。
+3. **ルールエンジンによるメッセージ処理**：組み込みのルールエンジンは、トピックマッチングに基づき特定のソースからのメッセージやイベントを処理します。対応するルールをマッチさせ、データフォーマット変換、特定情報のフィルタリング、コンテキスト情報の付加などの処理を実行します。
+4. **Azure Blob Storage への書き込み**：ルールはメッセージをストレージコンテナに書き込むアクションをトリガーします。Azure Blob Storage Sink を使うことで、処理結果からデータを抽出し Blob Storage に送信できます。メッセージはテキストまたはバイナリ形式で保存可能で、複数行の構造化データはメッセージ内容や Sink の設定に応じて単一の CSV または JSON Lines ファイルにまとめることもできます。
 
-After events and message data are written to Storage Container, you can connect to Azure Blob Storage to read the data for flexible application development, such as:
+イベントやメッセージデータがストレージコンテナに書き込まれた後は、Azure Blob Storage に接続してデータを読み取り、柔軟なアプリケーション開発に活用可能です。例えば：
 
-- Data archiving: Store device messages as objects in Azure Blob Storage for long-term preservation to meet compliance requirements or business needs.
-- Data analysis: Import data from Storage Container into analytics services like Snowflake for predictive maintenance, device efficiency evaluation, and other data analysis services.
+- データアーカイブ：デバイスメッセージを Azure Blob Storage のオブジェクトとして長期保存し、コンプライアンス要件や業務ニーズに対応。
+- データ分析：ストレージコンテナからデータを分析サービス（例：Snowflake）に取り込み、予知保全やデバイス効率評価などの分析を実施。
 
-## Features and Advantages
+## 特長と利点
 
-Using Azure Blob Storage data integration in EMQX can bring the following features and advantages to your business:
+EMQX で Azure Blob Storage データ連携を利用することで、以下の特長と利点が得られます。
 
-- **Message Transformation**: Messages can undergo extensive processing and transformation in EMQX rules before being written to Azure Blob Storage, facilitating subsequent storage and use.
-- **Flexible Data Operations**: With the Azure Blob Storage Sink, specific fields of data can be conveniently written into Azure Blob Storage containers, supporting the dynamic setting of containers and object keys for flexible data storage.
-- **Integrated Business Processes**: The Azure Blob Storage Sink allows device data to be combined with the rich ecosystem applications of Azure Blob Storage, enabling more business scenarios like data analysis and archiving.
-- **Low-Cost Long-Term Storage**: Compared to databases, Azure Blob Storage offers a highly available, reliable, and cost-effective object storage service, suitable for long-term storage needs.
+- **メッセージ変換**：メッセージは EMQX のルール内で高度な処理・変換が可能で、Azure Blob Storage への書き込み前に最適化できます。
+- **柔軟なデータ操作**：Azure Blob Storage Sink により、特定フィールドのデータをコンテナに書き込め、コンテナ名やオブジェクトキーを動的に設定して柔軟に保存できます。
+- **統合された業務プロセス**：Azure Blob Storage Sink を使うことで、デバイスデータを Azure Blob Storage の豊富なエコシステムと連携させ、データ分析やアーカイブなど多様な業務シナリオを実現可能です。
+- **低コストの長期保存**：データベースと比べて、Azure Blob Storage は高可用性かつ信頼性の高いコスト効率の良いオブジェクトストレージサービスであり、長期保存に適しています。
 
-These features enable you to build efficient, reliable, and scalable IoT applications and benefit from business decisions and optimizations.
+これらの特長により、効率的で信頼性が高くスケーラブルな IoT アプリケーションを構築し、ビジネスの意思決定や最適化に役立てられます。
 
-## Before You Start
+## はじめる前に
 
-This section introduces the preparations required before creating an Azure Blob Storage Sink in EMQX.
+このセクションでは、EMQX で Azure Blob Storage Sink を作成する前の準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Understanding of [rules](./rules.md).
-- Understanding of [data integration](./data-bridges.md).
+- [ルール](./rules.md)の理解
+- [データ連携](./data-bridges.md)の理解
 
-### Create a container in Azure Storage
+### Azure Storage にコンテナを作成する
 
-1. To access Azure Storage, you'll need an Azure subscription. If you don't already have a subscription, create a [free account](https://azure.microsoft.com/free/) before you begin.
+1. Azure Storage にアクセスするには Azure サブスクリプションが必要です。まだお持ちでない場合は、[無料アカウント](https://azure.microsoft.com/free/)を作成してください。
 
-2. All access to Azure Storage takes place through a storage account. For this quickstart, create a storage account using the [Azure portal](https://portal.azure.com/), Azure PowerShell, or Azure CLI. For help creating a storage account, see [Create a storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create).
+2. Azure Storage へのすべてのアクセスはストレージアカウントを通じて行われます。このクイックスタートでは、[Azure ポータル](https://portal.azure.com/)、Azure PowerShell、または Azure CLI を使ってストレージアカウントを作成します。ストレージアカウントの作成方法は [Create a storage account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create) を参照してください。
 
-3. To create a container in the Azure portal, navigate to your new storage account in the Azure portal. In the left menu for the storage account, scroll to the Data storage section, then select Containers. Select the + **Container** button, use `iot-data` as a name for your new container, and click **Create** to create the container.
+3. Azure ポータルでコンテナを作成するには、新しく作成したストレージアカウントに移動し、左メニューの「Data storage」セクションまでスクロールして「Containers」を選択します。+ **Container** ボタンをクリックし、新しいコンテナ名に `iot-data` を入力して **Create** をクリックし、コンテナを作成します。
 
    ![azure-storage-container-create](./assets/azure-storage-container-create.png)
 
-4. Navigate to **Security+Networking** -> **Access keys** in the storage account, and copy the **Key**. You will need this key to configure the Sink in EMQX.
+4. ストレージアカウントの **Security+Networking** -> **Access keys** に移動し、**Key** をコピーします。このキーは EMQX で Sink を設定する際に必要です。
 
    ![azure-storage-access-keys](./assets/azure-storage-access-keys.png)
 
-## Create a Connector
+## コネクターを作成する
 
-Before adding the Azure Blob Storage Sink, you need to create the corresponding connector.
+Azure Blob Storage Sink を追加する前に、対応するコネクターを作成する必要があります。
 
-1. Go to the Dashboard **Integration** -> **Connector** page.
-2. Click the **Create** button in the top right corner.
-3. Select **Azure Blob Storage** as the connector type and click next.
-4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-azure`.
-5. Enter the connection information.
-   - **Account Name**: Your Storage Account name
-   - **Account Key**: Your Storage Account key from previous step
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Azure Storage.
-7. Click the **Create** button at the bottom to complete the connector creation.
+1. ダッシュボードの **Integration** -> **Connector** ページに移動します。
+2. 右上の **Create** ボタンをクリックします。
+3. コネクタータイプとして **Azure Blob Storage** を選択し、次へ進みます。
+4. コネクター名を入力します。英数字の大文字・小文字を組み合わせてください。ここでは `my-azure` と入力します。
+5. 接続情報を入力します。
+   - **Account Name**：ストレージアカウント名
+   - **Account Key**：前のステップで取得したストレージアカウントキー
+6. **Create** をクリックする前に、**Test Connectivity** をクリックしてコネクターが Azure Storage に接続できるかテストできます。
+7. 最後に **Create** ボタンをクリックしてコネクターの作成を完了します。
 
-You have now completed the connector creation and will proceed to create a rule and Sink for specifying the data to be written into the Azure Storage service.
+これでコネクター作成が完了しました。次に、Azure Storage に書き込むデータを指定するルールと Sink を作成します。
 
-## Create a Rule with Azure Blob Storage Sink
+## Azure Blob Storage Sink を使ったルールの作成
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the `iot-data` container in Azure Storage through the configured Sink.
+このセクションでは、EMQX で MQTT トピック `t/#` からのメッセージを処理し、処理結果を設定済みの Sink を通じて Azure Storage の `iot-data` コンテナに書き込むルールの作成方法を示します。
 
-1. Go to the Dashboard **Integration** -> **Rules** page.
+1. ダッシュボードの **Integration** -> **Rules** ページに移動します。
 
-2. Click the **Create** button in the top right corner.
+2. 右上の **Create** ボタンをクリックします。
 
-3. Enter the rule ID `my_rule`, and input the following rule SQL in the SQL editor:
+3. ルールID に `my_rule` を入力し、SQLエディターに以下のルールSQLを入力します。
 
    ```sql
    SELECT
@@ -90,103 +90,103 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
+   SQL に不慣れな場合は、**SQL Examples** と **Enable Debug** をクリックしてルールSQLの学習やテストが可能です。
 
    :::
 
-4. Add an action, select `Azure Blob Storage` from the **Action Type** dropdown list, keep the action dropdown as the default `create action` option, or choose a previously created Azure Blob Storage action from the action dropdown. Here, create a new Sink and add it to the rule.
+4. アクションを追加し、**Action Type** ドロップダウンから `Azure Blob Storage` を選択します。アクションドロップダウンはデフォルトの `create action` のままにするか、既存の Azure Blob Storage アクションを選択します。ここでは新しい Sink を作成し、ルールに追加します。
 
-5. Enter the Sink's name and description.
+5. Sink の名前と説明を入力します。
 
-6. Select the `my-azure` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
+6. コネクタードロップダウンから先ほど作成した `my-azure` を選択します。ドロップダウン横の作成ボタンをクリックするとポップアップで新規コネクターを素早く作成可能です。必要な設定パラメータは [Create a Connector](#create-a-connector) を参照してください。
 
-7. Set the **Container** by entering `iot-data`.
+7. **Container** に `iot-data` を入力します。
 
-9. Select the **Upload Method**. The differences between the two methods are as follows:
+9. **Upload Method** を選択します。2つの方法の違いは以下の通りです。
 
-   - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to Azure Storage according to the preset object key and content. This method is suitable for storing binary or large text data. However, it may generate a large number of files.
-   - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to Azure Storage, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
+   - **Direct Upload**：ルールがトリガーされるたびに、事前設定したオブジェクトキーと内容に従ってデータを直接 Azure Storage にアップロードします。バイナリや大きなテキストデータの保存に適していますが、多数のファイルが生成される可能性があります。
+   - **Aggregated Upload**：複数のルールトリガー結果を単一ファイル（CSVなど）にまとめて Azure Storage にアップロードします。構造化データの保存に適し、ファイル数を減らして書き込み効率を向上させます。
 
-   The configuration parameters differ for each method. Please configure according to the selected method:
+   各方法で設定パラメータが異なります。選択した方法に応じて設定してください。
 
    :::: tabs type
 
    ::: tab Direct Upload
 
-   Direct Upload requires configuring the following fields:
+   Direct Upload では以下の項目を設定します。
 
-   - **Blob Name**: Defines the object's location to be uploaded to the container. It supports placeholders in the format of `${var}` and can use `/` to specify storage directories. It's also necessary to set the object's suffix for management and differentiation. Here, enter `msgs/${clientid}_${timestamp}.json`, where `${clientid}` is the client ID and `${timestamp}` is the timestamp of the message. This ensures that each device's messages are written to different objects.
-   - **Object Content**: By default, this is in JSON text format containing all fields. It supports placeholders in the format of `${var}`. Here, enter `${payload}` to use the message body as the object content. The storage format of the object depends on the format of the message body, supporting compressed files, images, or other binary formats.
+   - **Blob Name**：コンテナ内のアップロード先オブジェクトの場所を定義します。`${var}` 形式のプレースホルダーをサポートし、`/` でディレクトリ指定も可能です。管理や識別のためにオブジェクトのサフィックスも設定します。ここでは `msgs/${clientid}_${timestamp}.json` と入力します。`${clientid}` はクライアントID、`${timestamp}` はメッセージのタイムスタンプで、各デバイスのメッセージが異なるオブジェクトに書き込まれます。
+   - **Object Content**：デフォルトはすべてのフィールドを含む JSON テキスト形式です。`${var}` 形式のプレースホルダーをサポートします。ここでは `${payload}` と入力し、メッセージ本文をオブジェクト内容として使用します。オブジェクトの保存形式はメッセージ本文の形式に依存し、圧縮ファイルや画像、その他バイナリ形式もサポートします。
 
    :::
 
    ::: tab Aggregate Upload
 
-   Aggregate Upload requires configuring the following parameters:
+   Aggregate Upload では以下のパラメータを設定します。
 
-   - **Blob Name**: Used to specify the storage path of the object. The following variables can be used:
+   - **Blob Name**：オブジェクトの保存パスを指定します。以下の変数が使用可能です。
 
-     - **`${action}`**: Action name (required).
-     - **`${node}`**: Name of the EMQX node performing the upload (required).
-     - **`${datetime.{format}}`**: Start date and time of the aggregation, with the format specified by the `{format}` string (required):
-       - **`${datetime.rfc3339utc}`**: RFC3339 date and time in UTC format.
-       - **`${datetime.rfc3339}`**: RFC3339 date and time in local time zone format.
-       - **`${datetime.unix}`**: Unix timestamp.
-     - **`${datetime_until.{format}}`**: End date and time of the aggregation, with format options as above.
-     - **`${sequence}`**: Sequence number for aggregated uploads within the same time interval (required).
+     - **`${action}`**：アクション名（必須）
+     - **`${node}`**：アップロードを行う EMQX ノード名（必須）
+     - **`${datetime.{format}}`**：集約開始日時。`{format}` でフォーマット指定（必須）
+       - **`${datetime.rfc3339utc}`**：UTC 形式の RFC3339 日時
+       - **`${datetime.rfc3339}`**：ローカルタイムゾーン形式の RFC3339 日時
+       - **`${datetime.unix}`**：Unix タイムスタンプ
+     - **`${datetime_until.{format}}`**：集約終了日時。フォーマットは上記と同様
+     - **`${sequence}`**：同一時間間隔内の集約アップロードの連番（必須）
 
-     Note that if all placeholders marked as required are not used in the template, these placeholders will be automatically added to the Blob Name as path suffixes to avoid duplication. All other placeholders are considered invalid.
+     必須のプレースホルダーがテンプレートに含まれない場合、自動的にパスのサフィックスとして追加され重複を防ぎます。その他のプレースホルダーは無効とみなされます。
 
-   - **Aggregation Type**: Currently, CSV and JSON Lines are supported.
-      - `CSV`: Data will be written to Azure Storage in comma-separated CSV format.
-      - `JSON Lines`: Data will be written to Azure Storage in [JSON Lines](https://jsonlines.org/) format.
+   - **Aggregation Type**：現在は CSV と JSON Lines をサポート。
+      - `CSV`：カンマ区切りの CSV 形式で Azure Storage に書き込みます。
+      - `JSON Lines`：[JSON Lines](https://jsonlines.org/) 形式で Azure Storage に書き込みます。
 
-   - **Column Order** (applies only when the Aggregation Type is `CSV`): Adjust the order of rule result columns through a dropdown selection. The generated CSV file will first be sorted by the selected columns, with unselected columns sorted alphabetically following the selected columns.
+   - **Column Order**（`CSV` の場合のみ適用）：ドロップダウンでルール結果の列順を調整可能。生成される CSV ファイルは選択列が先に並び、未選択列はアルファベット順で続きます。
 
-   - **Max Records**: When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
+   - **Max Records**：最大レコード数に達すると単一ファイルの集約が完了しアップロードされ、時間間隔がリセットされます。
 
-   - **Time Interval**: When the time interval is reached, even if the maximum number of records has not been reached, the aggregation of a single file will be completed and uploaded, resetting the maximum number of records.
+   - **Time Interval**：時間間隔に達すると最大レコード数に満たなくても単一ファイルの集約が完了しアップロードされ、最大レコード数がリセットされます。
 
    :::
 
    ::::
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。プライマリ Sink がメッセージ処理に失敗した場合にトリガーされます。詳細は [Fallback Actions](./data-bridges.md#fallback-actions) を参照してください。
 
-11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+11. **Advanced Settings** を展開し、必要に応じて詳細設定を行います（任意）。詳細は [Advanced Settings](#advanced-settings) を参照してください。
 
-12. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+12. 残りの設定はデフォルト値のままにし、**Create** ボタンをクリックして Sink 作成を完了します。作成成功後はルール作成画面に戻り、新しい Sink がルールアクションに追加されます。
 
-13. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+13. ルール作成画面に戻り、**Create** ボタンをクリックしてルール作成全体を完了します。
 
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Azure Blob Storage Sink on the **Actions (Sink)** tab.
+これでルールの作成が完了しました。**Rules** ページで新規作成したルールを確認でき、**Actions (Sink)** タブで新しい Azure Blob Storage Sink を確認できます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into Azure Storage container after being parsed by the rule `my_rule`.
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーを視覚的に確認できます。トポロジーは、トピック `t/#` のメッセージがルール `my_rule` によって解析され、Azure Storage コンテナに書き込まれる流れを示します。
 
-## Test the Rule
+## ルールのテスト
 
-This section shows how to test the rule configured with the direct upload method.
+このセクションでは、Direct Upload メソッドで設定したルールのテスト方法を示します。
 
-Use MQTTX to publish a message to the topic `t/1`:
+MQTTX を使い、トピック `t/1` にメッセージをパブリッシュします。
 
 ```bash
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Azure" }'
 ```
 
-After sending a few messages, access the Azure Portal to view the uploaded objects in the `iot-data` container.
+数件メッセージを送信した後、Azure ポータルにアクセスして `iot-data` コンテナ内のアップロード済みオブジェクトを確認します。
 
-Login to the [Azure portal](https://portal.azure.com/), navigate to the storage account, and open the `iot-data` container. You should see the uploaded objects in the container.
+[Azure portal](https://portal.azure.com/) にログインし、ストレージアカウントに移動して `iot-data` コンテナを開くと、アップロードされたオブジェクトが表示されます。
 
-## Advanced Settings
+## 詳細設定
 
-This section delves into the advanced configuration options available for the Azure Blob Storage Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+このセクションでは、Azure Blob Storage Sink の詳細設定オプションについて説明します。ダッシュボードの Sink 設定画面で **Advanced Settings** を展開し、用途に応じて以下のパラメータを調整可能です。
 
-| Field Name                | Description                                                  | Default Value  |
-| ------------------------- | ------------------------------------------------------------ | -------------- |
-| **Buffer Pool Size**      | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and Azure Storage. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`           |
-| **Request TTL**           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Azure Storage, the request is deemed to have expired. |                |
-| **Health Check Interval** | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with Azure Storage. | `15`           |
-| **Max Buffer Queue Size** | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the Azure Blob Storage Sink. The buffer workers temporarily store data before sending it to Azure Storage, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`          |
-| **Query Mode**            | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Azure Storage does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at Azure Storage. | `Asynchronous` |
-| **Batch Size**            | Specifies the maximum size of data batches transmitted from EMQX to Azure Storage in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Azure Storage.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`                   |
-| **Inflight  Window**     | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with Azure Storage. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`          |
+| フィールド名               | 説明                                                                                                         | デフォルト値  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------ |
+| **Buffer Pool Size**      | EMQX と Azure Storage 間のデータフローを管理するバッファワーカープロセスの数を指定します。これらのワーカーはデータを一時的に保存・処理し、ターゲットサービスへの送信を最適化し、スムーズなデータ伝送を保証します。 | `16`         |
+| **Request TTL**           | バッファに入ってからリクエストが有効とみなされる最大時間（秒）を指定します。このタイマーはリクエストがバッファに入った瞬間から開始されます。TTL を超えてバッファに滞留するか、送信後に Azure Storage からの応答やアックがタイムリーに得られない場合、リクエストは期限切れと判断されます。 |              |
+| **Health Check Interval** | Sink が Azure Storage との接続状態を自動的にヘルスチェックする間隔（秒）を指定します。                                               | `15`         |
+| **Max Buffer Queue Size** | Azure Blob Storage Sink の各バッファワーカーがバッファリング可能な最大バイト数を指定します。バッファワーカーはデータを一時保存し、効率的にデータストリームを処理します。システム性能やデータ伝送要件に応じて調整してください。 | `256`        |
+| **Query Mode**            | メッセージ送信を最適化するため、`synchronous`（同期）または `asynchronous`（非同期）リクエストモードを選択可能です。非同期モードでは Azure Storage への書き込みが MQTT メッセージのパブリッシュ処理をブロックしませんが、クライアントがメッセージを受信してから Azure Storage に到達するまで時間差が生じる可能性があります。 | `Asynchronous` |
+| **Batch Size**            | EMQX から Azure Storage へ単一転送操作で送信するデータバッチの最大サイズを指定します。サイズを調整することでデータ転送の効率と性能を微調整できます。<br />「Batch Size」が `1` の場合、データレコードはバッチ化されず個別に送信されます。 | `1`           |
+| **Inflight Window**       | 「インフライトキューリクエスト」とは、開始されたがまだ応答やアックを受け取っていないリクエストを指します。この設定は Sink と Azure Storage 間の通信で同時に存在可能なインフライトキューリクエストの最大数を制御します。<br/>**Request Mode** が `asynchronous` の場合、このパラメータは特に重要です。同一 MQTT クライアントからのメッセージを厳密に順序処理する必要がある場合、この値は `1` に設定してください。 | `100`        |

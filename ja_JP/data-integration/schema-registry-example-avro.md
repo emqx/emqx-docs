@@ -1,26 +1,26 @@
-# Schema Registry Example - Avro
+# スキーマレジストリの例 - Avro
 
-This page demonstrates how the schema registry and rule engine support message encoding and decoding in Avro format.
+このページでは、スキーマレジストリとルールエンジンがAvro形式のメッセージのエンコードおよびデコードをどのようにサポートするかを示します。
 
-## Decoding Scenario
+## デコードシナリオ
 
-A device publishes a binary message encoded using Avro, which needs to be matched by the rule engine and then republished to the topic associated with the `name` field. The format of the topic is `avro_user/${name}`.
+デバイスがAvroでエンコードされたバイナリメッセージをパブリッシュし、そのメッセージをルールエンジンがマッチングして、`name`フィールドに対応するトピックに再パブリッシュする必要があります。トピックの形式は `avro_user/${name}` です。
 
-For example, you need to republish a message with the `name` field equal to `Shawn` to the topic `avro_user/Shawn`.
+例えば、`name`フィールドが`Shawn`のメッセージをトピック`avro_user/Shawn`に再パブリッシュする必要があります。
 
-### Create Schema
+### スキーマの作成
 
-To enable the rule engine to correctly decode or encode Avro messages, you must first register a schema that defines the structure of the Avro message using the Schema Registry.
+ルールエンジンがAvroメッセージを正しくデコードまたはエンコードできるように、まずスキーマレジストリを使ってAvroメッセージの構造を定義するスキーマを登録する必要があります。
 
-1. Go to the Dashboard, select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
+1. ダッシュボードの左側ナビゲーションメニューから **Smart Data Hub** -> **Schema Registry** を選択します。
 
-2. Under the **Internal Schema** tab, click **Create**.
+2. **Internal Schema** タブで **Create** をクリックします。
 
-3. Create an Avro schema using the following parameters:
+3. 以下のパラメータでAvroスキーマを作成します：
 
-   - **Name**: `avro_user`. This name will be used in encoding and decoding functions.
+   - **Name**: `avro_user`。この名前はエンコードおよびデコード関数で使用されます。
 
-   - **Type**: `Avro`.
+   - **Type**: `Avro`
 
    - **Schema**:
 
@@ -36,16 +36,17 @@ To enable the rule engine to correctly decode or encode Avro messages, you must 
      }
      ```
 
-4. Click **Create**.
+4. **Create** をクリックします。
 
 ![](./assets/schema_registry/avro_create1.png)
 
-### Create Rule
-1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
+### ルールの作成
 
-2. On the **Rules** page, click **Create** at the top right corner.
+1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-3. Use the schema you have just created to write the rule SQL statement:
+2. **Rules** ページの右上にある **Create** をクリックします。
+
+3. 先ほど作成したスキーマを使って、以下のルールSQL文を記述します：
 
    ```sql
    SELECT
@@ -56,21 +57,24 @@ To enable the rule engine to correctly decode or encode Avro messages, you must 
      avro_user.name = 'Shawn'
    ```
 
-   The key point here is `schema_decode('avro_user', payload)`:
+   ここでのポイントは `schema_decode('avro_user', payload)` です：
 
-   - The `schema_decode` function decodes the contents of the payload field according to the Schema `avro_user`;
-   - `as avro_user` stores the decoded value in the variable `avro_user`.
+   - `schema_decode` 関数は `avro_user` スキーマに従ってペイロードの内容をデコードします。
+   - `as avro_user` はデコードされた値を変数 `avro_user` に格納します。
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
-5. In the **Topic** field, type `avro_user/${avro_user.name}` as the destination topic.
-6. In the **Payload** field, type message content template: `${avro_user}`.
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-This action sends the decoded message to the topic `avro_user/${avro_user.name}` in JSON format. `${avro_user.name}` is a variable placeholder that will be replaced at runtime with the value of the `name` field from the decoded message.
-### Prepare Device-Side Code
+5. **Topic** フィールドに宛先トピックとして `avro_user/${avro_user.name}` と入力します。
 
-Once the rule is created, you can simulate the data for testing.
+6. **Payload** フィールドにメッセージコンテンツテンプレートとして `${avro_user}` と入力します。
 
-The following code uses the Python language to fill a user message, encode it as binary data, then send it to the `t/1` topic. See [full code](https://gist.github.com/thalesmg/bbda65b400f35f8ab0f719b06cf875f6) for details.
+このアクションにより、デコードされたメッセージがJSON形式でトピック `avro_user/${avro_user.name}` に送信されます。`${avro_user.name}` は変数プレースホルダーで、実行時にデコードされたメッセージの `name` フィールドの値に置き換えられます。
+
+### デバイス側コードの準備
+
+ルールが作成されたら、テスト用にデータをシミュレートできます。
+
+以下のコードはPython言語を使用し、ユーザーメッセージを作成してバイナリデータとしてエンコードし、`t/1` トピックに送信します。詳細は[フルコード](https://gist.github.com/thalesmg/bbda65b400f35f8ab0f719b06cf875f6)を参照してください。
 
 ```python
 def publish_msg(client):
@@ -84,15 +88,19 @@ def publish_msg(client):
     client.publish(topic, payload=message, qos=0, retain=False)
 ```
 
-### Check Rule Execution Results
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
-2) Fill in the connection information for the current EMQX instance.
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
-3. Click **Connect** to connect to the EMQX instance as an MQTT client.
-4. In the **Subscription** area, type `avro_user/#` in the **Topic** field and click **Subscribe**.
+### ルール実行結果の確認
 
-5. Install the Python dependencies and execute the device-side code:
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
+
+2) 現在のEMQXインスタンスの接続情報を入力します。
+   - ローカルでEMQXを実行している場合はデフォルト値を使用できます。
+   - 認証設定などでEMQXのデフォルト設定を変更している場合は、ユーザー名とパスワードを入力する必要があります。
+
+3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
+
+4. **Subscription** エリアの **Topic** フィールドに `avro_user/#` と入力し、**Subscribe** をクリックします。
+
+5. Pythonの依存関係をインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install avro paho-mqtt
@@ -102,27 +110,27 @@ def publish_msg(client):
    publish to topic: t/1, payload: b'\nShawn\x00\xb4\n\x00\x06red'
    ```
 
-6. Check that a message with the topic `avro_user/Shawn` is received on the Websocket side:
+6. WebSocket側でトピック `avro_user/Shawn` のメッセージが受信されていることを確認します：
 
    ```json
    {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
    ```
 
-## Encoding Scenario
+## エンコードシナリオ
 
-A device subscribes to a topic `avro_out` expecting a binary message encoded using Avro. The rule engine is used to encode such message and publish it to the associated topic.
+デバイスがトピック `avro_out` をサブスクライブし、Avroでエンコードされたバイナリメッセージを受信することを期待しています。ルールエンジンはそのようなメッセージをエンコードし、関連トピックにパブリッシュするために使用されます。
 
-### Create Schema
+### スキーマの作成
 
-Use the same schema as described in the [Decoding Scenario](#decoding-scenario).
+[デコードシナリオ](#デコードシナリオ)で説明したのと同じスキーマを使用します。
 
-### Create Rule
+### ルールの作成
 
-1. In the Dashboard, select **Integration** -> **Rules** from the navigation menu.
+1. ダッシュボードのナビゲーションメニューから **Integration** -> **Rules** を選択します。
 
-2. On the **Rules** page, click **Create** at the top right corner.
+2. **Rules** ページの右上にある **Create** をクリックします。
 
-3. Use the schema you have just created to write the rule SQL statement:
+3. 先ほど作成したスキーマを使って、以下のルールSQL文を記述します：
 
    ```sql
    SELECT
@@ -131,25 +139,25 @@ Use the same schema as described in the [Decoding Scenario](#decoding-scenario).
      "avro_in"
    ```
 
-   The key point here is `schema_encode('avro_user', json_decode(payload))`:
+   ここでのポイントは `schema_encode('avro_user', json_decode(payload))` です：
 
-   - The `schema_encode` function encodes the contents of the payload field according to the Schema `avro_user`;
-   - `as avro_user` stores the encoded value in the variable `avro_user`;
-   - `json_decode(payload)` is needed because `payload` is generally a JSON-encoded binary, and `schema_encode` requires a Map as its input.
+   - `schema_encode` 関数は `avro_user` スキーマに従ってペイロードの内容をエンコードします。
+   - `as avro_user` はエンコードされた値を変数 `avro_user` に格納します。
+   - `json_decode(payload)` は、`payload` が一般的にJSONエンコードされたバイナリであるため必要であり、`schema_encode` はMap型の入力を要求します。
 
-4. Click **Add Action**.  Select `Republish` from the drop-down list of the **Action** field.
+4. **Add Action** をクリックし、**Action** フィールドのドロップダウンリストから `Republish` を選択します。
 
-5. In the **Topic** field, type `avro_out` as the destination topic.
+5. **Topic** フィールドに宛先トピックとして `avro_out` と入力します。
 
-6. In the **Payload** field, type message content template: `${avro_user}`.
+6. **Payload** フィールドにメッセージコンテンツテンプレートとして `${avro_user}` と入力します。
 
-This action sends the Avro-encoded message to the topic `avro_out`. `${avro_user}` is a variable placeholder that will be replaced at runtime with the value of the result of `schema_encode` (a binary value).
+このアクションにより、Avroでエンコードされたメッセージがトピック `avro_out` に送信されます。`${avro_user}` は変数プレースホルダーで、実行時に `schema_encode` の結果（バイナリ値）に置き換えられます。
 
-### Prepare Device-Side Code
+### デバイス側コードの準備
 
-Once the rules have been created, you can simulate the data for testing.
+ルールが作成されたら、テスト用にデータをシミュレートできます。
 
-The following code uses the Python language to fill a User message, encode it as binary data, then send it to the `avro_in` topic. See [full code](https://gist.github.com/thalesmg/02046f89e9ceb70b9806dc98e6ed8b55) for details.
+以下のコードはPython言語を使用し、Userメッセージを作成してバイナリデータをデコードし、受信したメッセージを表示します。詳細は[フルコード](https://gist.github.com/thalesmg/02046f89e9ceb70b9806dc98e6ed8b55)を参照してください。
 
 ```python
 def on_message(client, userdata, msg):
@@ -160,24 +168,25 @@ def on_message(client, userdata, msg):
     print(msg.topic+" "+str(decoded_payload))
 ```
 
-### Check Rule Execution Results
+### ルール実行結果の確認
 
-1) In the Dashboard, select **Diagnose** -> **WebSocket Client**.
-2) Fill in the connection information for the current EMQX instance.
-   - If you run EMQX locally, you can use the default value.
-   - If you have changed EMQX's default configuration. For example, the configuration change on authentication can require you to type in a username and password.
+1) ダッシュボードの **Diagnose** -> **WebSocket Client** を選択します。
 
-3. Click **Connect** to connect to the EMQX instance as an MQTT client.
+2) 現在のEMQXインスタンスの接続情報を入力します。
+   - ローカルでEMQXを実行している場合はデフォルト値を使用できます。
+   - 認証設定などでEMQXのデフォルト設定を変更している場合は、ユーザー名とパスワードを入力する必要があります。
 
-4. In the **Publish** area, type `avro_in` in the **Topic** field and type the following message in the **Payload** field:
+3. **Connect** をクリックしてEMQXインスタンスにMQTTクライアントとして接続します。
+
+4. **Publish** エリアの **Topic** フィールドに `avro_in` と入力し、**Payload** フィールドに以下のメッセージを入力します：
 
    ```json
    {"favorite_color":"red","favorite_number":666,"name":"Shawn"}
    ```
 
-5. Click **Publish**.
+5. **Publish** をクリックします。
 
-6. Install the Python dependencies and execute the device-side code:
+6. Pythonの依存関係をインストールし、デバイス側コードを実行します：
 
    ```shell
    $ pip3 install avro paho-mqtt
@@ -187,4 +196,3 @@ def on_message(client, userdata, msg):
    msg payload b'\nShawn\x00\xb4\n\x00\x06red'
    avro_out {'name': 'Shawn', 'favorite_number': 666, 'favorite_color': 'red'}
    ```
-

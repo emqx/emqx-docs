@@ -1,106 +1,106 @@
 # MQTT Durable Sessions
 
-EMQX includes a Durable Sessions feature, which allows MQTT sessions and messages to be persistently stored on disk, providing high-availability replicas to ensure data redundancy and consistency. With session durability, effective failover and recovery mechanisms can be implemented, ensuring service continuity and availability, thereby improving system reliability.
+EMQXにはDurable Sessions機能があり、MQTTセッションおよびメッセージをディスクに永続的に保存することで、高可用性のレプリカを提供し、データの冗長性と一貫性を確保します。セッションの耐久性により、効果的なフェイルオーバーおよびリカバリ機構を実装でき、サービスの継続性と可用性を保証し、システムの信頼性を向上させます。
 
-This page introduces the concepts, principles, and usage of session persistence in EMQX.
+本ページでは、EMQXにおけるセッション永続化の概念、原理、および使用方法について紹介します。
 
 ::: warning Important Notice
 
-This feature is available starting from EMQX v5.7.0. However, it does not yet support the persistence of shared subscription sessions, which is planned to be implemented in future versions.
+この機能はEMQX v5.7.0以降で利用可能です。ただし、共有サブスクリプションセッションの永続化はまだサポートされておらず、今後のバージョンでの実装が予定されています。
 
 :::
 
-## Basic Concepts
+## 基本概念
 
-Before learning the Durable Sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
+EMQXのDurable Sessions機能を理解する前に、EMQXに関するいくつかの基本概念を押さえておくことが重要です。
 
-### Sessions and Durable Storage
+### セッションと耐久ストレージ
 
-**Session**: A session is a lightweight process within EMQX created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
+**セッション**：セッションは、EMQX内でクライアント接続ごとに作成される軽量プロセスです。セッションはMQTT標準によりブローカーに規定された動作を実装しており、初期接続、トピックのサブスクライブおよびサブスクリプション解除、メッセージの配信などを行います。
 
-**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
+**耐久ストレージ**：耐久ストレージはEMQX内部のデータベースです。セッションは自身の状態やトピックに送信されたMQTTメッセージをここに保存できます。耐久ストレージのデータベースエンジンは[RocksDB](https://rocksdb.org/)を使用してデータをディスクに保存し、[Raftアルゴリズム](https://raft.github.io/)を用いてクラスター内でデータの一貫したレプリケーションを実現しています。耐久ストレージと**Durable Sessions**は混同しないように注意が必要です。
 
-### Session Expiry Interval
+### セッション有効期限（Session Expiry Interval）
 
-According to the MQTT standard, client sessions facilitate the management of client connections and states within the MQTT broker. **Expiry Interval** is a property of a session that controls how long the broker keeps the session state after the client connection terminates. This property plays a crucial role in the context of this document.
+MQTT標準に従い、クライアントセッションはMQTTブローカー内でクライアント接続と状態の管理を行います。**有効期限（Expiry Interval）**は、クライアント接続終了後にブローカーがセッション状態を保持する期間を制御するセッションのプロパティです。本ドキュメントの文脈で重要な役割を果たします。
 
-Sessions configured with an expiry interval of 0 exist only during the client's connection to EMQX. When the client disconnects, all session information, including subscriptions and undelivered messages, is immediately discarded. For sessions with a non-zero expiry interval, EMQX keeps them even after the client's connection terminates. They can be resumed if the client reconnects to EMQX within the session expiry interval. Messages sent to the topics while the client was offline are delivered.
+有効期限が0に設定されたセッションは、クライアントがEMQXに接続している間のみ存在します。クライアントが切断されると、サブスクリプションや未配信メッセージを含むすべてのセッション情報は即座に破棄されます。一方、有効期限が0より大きいセッションは、クライアントの接続終了後もEMQXに保持されます。クライアントがセッション有効期限内に再接続すると、セッションを再開でき、オフライン時にトピックに送信されたメッセージが配信されます。
 
-- Clients using the MQTT 5 protocol can explicitly specify session expiry interval using the [Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048) property of `CONNECT` or `DISCONNECT` packets.
+- MQTT 5プロトコルを使用するクライアントは、`CONNECT`または`DISCONNECT`パケットの[Session Expiry Interval](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901048)プロパティで明示的にセッション有効期限を指定できます。
 
-- For the clients using MQTT 3.* protocol, EMQX derives the session expiry interval according to the following rule: if the [Clean Session](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718030) flag is `true`, then the session expiry interval is set to 0. Otherwise, the value of `mqtt.session_expiry_interval` configuration parameter is used.
+- MQTT 3.*プロトコルのクライアントの場合、EMQXは以下のルールでセッション有効期限を決定します。`Clean Session`フラグが`true`の場合、有効期限は0に設定されます。それ以外の場合は`mqtt.session_expiry_interval`設定パラメータの値が使用されます。
 
-## Session Implementations in EMQX
+## EMQXにおけるセッション実装
 
-EMQX provides 2 different client session implementations, each optimized for specific use cases:
+EMQXは用途に応じて最適化された2種類のクライアントセッション実装を提供しています。
 
-- **Regular sessions**: Sessions that keep their state in the memory of a running EMQX node. Their state is lost when the EMQX node restarts.
-- **Durable sessions**: Sessions that back up their state and received messages in the durable storage. They can be resumed after restart of the EMQX node.
+- **レギュラーセッション**：EMQXノードのメモリ上に状態を保持するセッション。ノード再起動時に状態は失われます。
+- **Durableセッション**：状態および受信メッセージを耐久ストレージにバックアップし、EMQXノード再起動後も再開可能なセッション。
 
-The choice of session implementation depends on the session expiry interval and the `durable_sessions.enable` configuration parameter, which can be set globally or per [zone](../configuration/configuration.md#zone-override). The implementation can be selected based on the following criteria:
+セッション実装の選択は、セッション有効期限と`durable_sessions.enable`設定パラメータ（グローバルまたは[ゾーン単位](../configuration/configuration.md#zone-override)で設定可能）に依存します。以下の基準で実装が決定されます。
 
-| `durable_sessions.enable` | Session Expiry Interval = 0 | Session Expiry Interval > 0 |
-| ------------------------- | --------------------------- | --------------------------- |
-| `false`                   | Regular                     | Regular                     |
-| `true`                    | Regular                     | Durable                     |
+| `durable_sessions.enable` | セッション有効期限 = 0 | セッション有効期限 > 0 |
+| ------------------------- | ----------------------- | ----------------------- |
+| `false`                   | レギュラー              | レギュラー              |
+| `true`                    | レギュラー              | Durable                 |
 
-EMQX uses a unique approach to manage message durability, allowing regular and durable sessions to coexist while minimizing storage costs.
+EMQXはメッセージ耐久性管理に独自のアプローチを採用しており、レギュラーセッションとDurableセッションの共存を可能にしつつ、ストレージコストを最小限に抑えています。
 
-### Comparison of the Session Implementations
+### セッション実装の比較
 
-The management strategy for client sessions is a crucial factor in ensuring service stability and reliability. This section provides a comparative analysis of the characteristics of the 2 session implementations. It aims to help developers better understand their respective features and applicable scenarios, enabling more precise deployment decisions.
+クライアントセッションの管理戦略はサービスの安定性と信頼性を確保する上で重要です。本節では2つのセッション実装の特徴を比較し、それぞれの機能や適用シナリオを理解しやすくし、より適切なデプロイ判断を支援します。
 
-#### Regular Sessions
+#### レギュラーセッション
 
-This session implementation is the default and has been used in all EMQX releases before version 5.7. The state of regular sessions is maintained entirely in the RAM of the running EMQX node.
+この実装はデフォルトであり、EMQX 5.7以前のすべてのリリースで使用されてきました。レギュラーセッションの状態は実行中のEMQXノードのRAMに完全に保持されます。
 
-Advantages of regular sessions include:
+レギュラーセッションの利点：
 
-- Very high throughput and low latency.
-- Immediate message dispatch to clients.
+- 非常に高いスループットと低いレイテンシ。
+- クライアントへの即時メッセージ配信。
 
-However, there are some drawbacks:
+欠点：
 
-- Session data is lost when the EMQX node hosting the session stops or restarts.
-- Undelivered messages are stored in the session's memory queue, increasing the memory footprint of EMQX.
-- EMQX imposes a limit on the size of the memory queue to prevent memory exhaustion. New messages are discarded when this limit is reached, potentially losing undelivered messages.
+- セッションデータはセッションをホストするEMQXノードが停止または再起動すると失われる。
+- 未配信メッセージはセッションのメモリキューに保存され、EMQXのメモリ使用量が増加する。
+- メモリ枯渇を防ぐため、EMQXはメモリキューのサイズに制限を設けており、この制限に達すると新規メッセージは破棄され、未配信メッセージが失われる可能性がある。
 
-#### Durable Sessions
+#### Durableセッション
 
-Introduced in EMQX v5.7.0, the durable session implementation stores session state and messages routed to the durable sessions on disk. This feature is disabled by default and can be enabled by setting the `durable_sessions.enable` configuration parameter to be `true`.
+EMQX v5.7.0で導入されたDurableセッションは、セッション状態とDurableセッションにルーティングされたメッセージをディスクに保存します。この機能はデフォルトで無効化されており、`durable_sessions.enable`設定を`true`にすることで有効化できます。
 
-When a durable session subscribes to a topic filter, EMQX marks the topics matching that filter as "durable". This ensures that, in addition to routing MQTT PUBLISH messages from these topics to regular sessions, the broker also saves these messages to durable storage called `messages`. 
+Durableセッションがトピックフィルターをサブスクライブすると、EMQXはそのフィルターにマッチするトピックを「Durable」とマークします。これにより、これらのトピックからレギュラーセッションへのMQTT PUBLISHメッセージのルーティングに加え、ブローカーはこれらのメッセージを`messages`と呼ばれる耐久ストレージに保存します。
 
-It is important to note that message dispatch protocol depends on the durability of the subscriber's session rather than the publisher's.
+メッセージ配信のプロトコルは、パブリッシャーではなくサブスクライバーのセッションの耐久性に依存する点に注意が必要です。
 
-Each durable MQTT message is stored exactly once on each replica, regardless of the number of subscribing durable sessions or their connection status. This ensures efficient message fan-out and minimizes disk writes.
+各Durable MQTTメッセージは、サブスクライブするDurableセッションの数や接続状態に関わらず、各レプリカに一度だけ保存されます。これにより効率的なメッセージファンアウトが可能となり、ディスク書き込みを最小化します。
 
-Durable storage provides robust durability and high availability by consistently replicating session metadata and MQTT messages across multiple nodes within an EMQX cluster. The configurable [replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each message or session, enabling users to customize the balance between durability and performance to meet their specific requirements.
+耐久ストレージは、EMQXクラスター内の複数ノードにセッションメタデータとMQTTメッセージを一貫してレプリケートすることで、高い耐久性と高可用性を提供します。設定可能な[レプリケーションファクター](./managing-replication.md#replication-factor)により、各メッセージやセッションのレプリカ数を指定でき、耐久性とパフォーマンスのバランスをユーザーの要件に合わせて調整可能です。
 
-Advantages of durable sessions include:
+Durableセッションの利点：
 
-- Sessions can be resumed after EMQX nodes are restarted or stopped.
-- MQTT messages are stored in a shared, replicated, durable storage instead of a memory queue, reducing RAM usage for both online and offline sessions.
-- There is no upper limit on the number of undelivered messages, and undelivered messages are never discarded due to memory queue overrun.
+- EMQXノードの再起動や停止後もセッションを再開可能。
+- MQTTメッセージはメモリキューではなく共有かつレプリケートされた耐久ストレージに保存され、オンライン・オフライン両方のセッションでRAM使用量を削減。
+- 未配信メッセージ数に上限がなく、メモリキューのオーバーランによるメッセージ破棄が発生しない。
 
-However, there are some disadvantages:
+欠点：
 
-- Storing messages on disk results in lower overall system throughput.
-- Durable sessions have higher latency compared to regular sessions because both writing and reading MQTT messages are performed in batches. While batching improves throughput, it also increases end-to-end latency (the delay before clients see the published messages).
+- メッセージをディスクに保存するため、システム全体のスループットは低下する。
+- Durableセッションはレギュラーセッションに比べてレイテンシが高い。メッセージの書き込み・読み込みはバッチ処理で行われるため、スループットは向上するが、クライアントがパブリッシュされたメッセージを受信するまでの遅延（エンドツーエンドレイテンシ）が増加する。
 
-## Quick Start with Durable Sessions
+## Durable Sessionsのクイックスタート
 
-This section will help you quickly understand how to use the Durable Sessions feature on EMQX and MQTT clients, and introduce a simple workflow of durable sessions.
+本節では、EMQXおよびMQTTクライアントでDurable Sessions機能を素早く利用する方法を説明し、Durable Sessionsの簡単なワークフローを紹介します。
 
 ::: tip Note
 
-Even if durable sessions are not enabled, following steps 2-4 will still retain the session and messages will be saved in the client queue. The difference lies in whether the session is persistently stored and whether the session can be restored after the node restarts in step 5.
+Durable Sessionsを有効にしていなくても、ステップ2〜4の操作はセッションを保持し、メッセージはクライアントキューに保存されます。違いは、セッションが永続的に保存されるかどうか、およびノード再起動後にセッションが復元可能かどうかです（ステップ5）。
 
 :::
 
-1. Enable the Durable Sessions feature on EMQX.
+1. EMQXでDurable Sessions機能を有効化します。
 
-   By default, EMQX does not enable the durable session. You need to modify the `etc/emqx.conf` file and add the following configuration to enable this feature:
+   デフォルトではDurable Sessionsは無効です。`etc/emqx.conf`ファイルを編集し、以下の設定を追加して機能を有効化してください。
 
    ```bash
    durable_sessions {
@@ -108,43 +108,43 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    }
    ```
 
-   Restart EMQX to apply the configuration.
+   設定を反映するためにEMQXを再起動します。
 
-2. Adjust MQTT client connection parameters to activate session durability.
+2. MQTTクライアントの接続パラメータを調整し、セッション耐久性を有効にします。
 
-   Using [MQTTX CLI](https://mqttx.app/cli) as an example, which defaults to using MQTT 5.0 protocol, add the `--no-clean` option to set `Clean Start = false`, and specify the client ID as `emqx_c`. Connect to EMQX and subscribe to the `t/1` topic:
+   例として[MQTTX CLI](https://mqttx.app/cli)を使用します。MQTT 5.0プロトコルがデフォルトで、`--no-clean`オプションを付けて`Clean Start = false`を設定し、クライアントIDを`emqx_c`に指定してEMQXに接続し、`t/1`トピックをサブスクライブします。
 
    ```bash
    mqttx sub -t t/1 -i emqx_c --no-clean
    ```
 
-3. Disconnect the client, and the session will be retained.
+3. クライアントを切断し、セッションを保持します。
 
-   Disconnect the client from step 2. Open the EMQX Dashboard, go to the **Monitoring** -> **Clients** page, and you still can see the client status as **Disconnected**, indicating that the session has been retained.
+   ステップ2のクライアントを切断します。EMQXダッシュボードの**モニタリング** -> **クライアント**ページを開くと、クライアントの状態が**Disconnected**のまま表示され、セッションが保持されていることがわかります。
 
    ![MQTT persistent session](./assets/session-persistence-list.png)
 
-4. Send messages to the client, and messages will be saved in the client queue.
+4. クライアントにメッセージを送信し、メッセージがクライアントキューに保存されます。
 
-   Using MQTTX CLI again, use the `bench` command to repeatedly publish messages to the `t/1` topic with one client:
+   再度MQTTX CLIを使用し、`bench`コマンドで`1`クライアントから`t/1`トピックに繰り返しメッセージをパブリッシュします。
 
    ```bash
    mqttx bench pub -t t/1 -c 1
    ```
 
-   According to the MQTT protocol, even if the `emqx_c` client is offline, the messages for the `t/1` topic it subscribed to will be saved in the client queue and will be delivered when it reconnects.
+   MQTTプロトコルに従い、`emqx_c`クライアントがオフラインでも、サブスクライブしている` t/1`トピックのメッセージはクライアントキューに保存され、再接続時に配信されます。
 
-5. Restart the EMQX node, the session and messages will be restored from the durable storage.
+5. EMQXノードを再起動し、セッションとメッセージが耐久ストレージから復元されます。
 
-   Restart the EMQX node. Without making any client connection operations, open the EMQX Dashboard and go to the **Monitoring** -> **Clients** page to see the client with status **Disconnected**, indicating that the session has been restored.
+   EMQXノードを再起動します。クライアントの接続操作を行わずにEMQXダッシュボードの**モニタリング** -> **クライアント**ページを開くと、クライアントが**Disconnected**状態で表示され、セッションが復元されていることが確認できます。
 
-   Try connecting to EMQX with the same client ID `emqx_c` and using the `--no-clean` option to set `Clean Start = false`:
+   同じクライアントID `emqx_c` と `--no-clean` オプションを指定して`Clean Start = false`でEMQXに接続を試みます。
 
    ```bash
    mqttx sub -t t/1 -i emqx_c --no-clean
    ```
 
-   The messages received during the offline period will be delivered to the current client:
+   オフライン期間中に受信したメッセージがクライアントに配信されます。
 
    ```bash
    ...
@@ -158,58 +158,58 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
    ::: tip Note
 
-   - You must use the same client ID `emqx_c` and specify the `--no-clean` option to set `Clean Start` to `false`. These two requirements must be met to restore the persistent session.
-   - Since the previous subscription information is already saved in the session, messages will be delivered to the client even if it does not resubscribe to the `t/1` topic upon reconnection.
+   - セッションを復元するには、同じクライアントID `emqx_c` を使用し、`--no-clean`オプションで`Clean Start`を`false`に設定する必要があります。この2つの条件を満たす必要があります。
+   - 以前のサブスクリプション情報はすでにセッションに保存されているため、再接続時に` t/1`トピックを再サブスクライブしなくてもメッセージは配信されます。
 
    :::
 
-## Durable Storage Architecture
+## 耐久ストレージのアーキテクチャ
 
-The database engine powering EMQX's builtin durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
+EMQXの組み込み耐久機能を支えるデータベースエンジンは、ストレージ、シャード、ジェネレーション、ストリームという階層構造でデータを管理しています。
 
-![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
+![EMQX耐久ストレージのシャーディング図](./assets/emqx_ds_sharding.png)
 
-### Storage
+### ストレージ
 
-Storage encapsulates all data of a certain type, such as MQTT messages or MQTT sessions.
+ストレージは、MQTTメッセージやMQTTセッションなど、特定の種類のすべてのデータをカプセル化します。
 
-### Shard
+### シャード
 
-Messages are segregated by clients and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
+メッセージはパブリッシャーのクライアントIDに基づいてクライアントごとに分割され、シャードに格納されます。シャード数はEMQXの初回起動時に[n_shards](./managing-replication.md#number-of-shards)設定パラメータで決定されます。シャードはレプリケーションの単位でもあり、各シャードは`durable_storage.messages.replication_factor`で指定された回数だけ異なるノードに一貫してレプリケートされ、各レプリカに同一のメッセージセットを保持します。
 
-### Generation
+### ジェネレーション
 
-Messages within a shard are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. EMQX cleans up old MQTT messages by deleting old generations in their entirety. The retention period for old MQTT messages is determined by the `durable_sessions.message_retention_period` parameter.
+シャード内のメッセージは特定の時間枠に対応するジェネレーションに分割されます。新しいメッセージは現在のジェネレーションに書き込まれ、過去のジェネレーションは読み取り専用です。EMQXは古いジェネレーションを丸ごと削除することで古いMQTTメッセージをクリーンアップします。古いMQTTメッセージの保持期間は`durable_sessions.message_retention_period`パラメータで決まります。
 
-Generations can organize data differently according to the storage layout specification. Currently, only one layout is supported, optimized for high throughput of wildcard and single-topic subscriptions. Future updates will introduce layouts optimized for different workloads.
+ジェネレーションはストレージレイアウト仕様に応じて異なる方法でデータを整理できます。現在はワイルドカードおよび単一トピックのサブスクリプションに最適化された1つのレイアウトのみがサポートされています。将来的には異なるワークロードに最適化されたレイアウトが追加される予定です。
 
-The storage layout for new generations is configured by the `durable_storage.messages.layout` parameter, with each layout engine defining its own configuration parameters.
+新しいジェネレーションのストレージレイアウトは`durable_storage.messages.layout`パラメータで設定され、各レイアウトエンジンは独自の設定パラメータを持ちます。
 
-### Stream
+### ストリーム
 
-Messages in each shard and generation are split into streams. Streams serve as units of message serialization in EMQX. Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
+各シャードおよびジェネレーション内のメッセージはストリームに分割されます。ストリームはEMQXにおけるメッセージのシリアライズ単位です。ストリームは複数のトピックのメッセージを含むことができます。異なるストレージレイアウトはトピックをストリームにマッピングするための異なる戦略を用います。
 
-Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
+Durableセッションはストリームからバッチ単位でメッセージを取得し、バッチサイズは`durable_sessions.batch_size`パラメータで調整可能です。
 
-## Durable Storages Across Cluster
+## クラスター全体の耐久ストレージ
 
-Each node within an EMQX cluster is assigned a unique *Site ID*, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of the data, especially in scenarios where nodes might undergo name modifications or reconfigurations.
+EMQXクラスター内の各ノードには一意の*サイトID*が割り当てられており、これはErlangノード名（`emqx@...`）とは独立した安定した識別子です。サイトIDは永続的であり、ノードの初回起動時にランダムに生成されます。この安定性により、ノード名の変更や再設定があってもデータの整合性が保たれます。
 
-Administrators can manage and monitor durable storage status across the cluster by using the `emqx_ctl ds info` CLI command to view the status of different sites.
+管理者は`emqx_ctl ds info` CLIコマンドを使用してクラスター全体の耐久ストレージの状態を管理・監視できます。
 
-## Hardware Requirements for Durable Sessions
+## Durable Sessionsのハードウェア要件
 
-When session durability is enabled, EMQX saves the metadata of durable sessions and MQTT messages sent to the durable sessions on disk. Therefore, EMQX must be deployed on a server with sufficiently large storage capacity. To achieve the best throughput, it is recommended to use Solid State Drive (SSD) storage.
+セッション耐久性を有効にすると、EMQXはDurableセッションのメタデータおよびDurableセッションに送信されたMQTTメッセージをディスクに保存します。そのため、十分なストレージ容量を持つサーバーにEMQXをデプロイする必要があります。最高のスループットを得るためには、ソリッドステートドライブ（SSD）の使用を推奨します。
 
-The disk space requirements can be estimated according to the following guidelines:
+ディスク容量の目安は以下の通りです：
 
-- **Message Storage**: The space required for storing messages on each replica is proportional to the rate of incoming messages multiplied by the duration specified by the `durable_sessions.message_retention_period` parameter. This parameter dictates how long messages are retained, influencing the total storage needed.
-- **Session Metadata Storage**: The amount of storage for session metadata is proportional to the number of sessions multiplied by the number of streams to which they are subscribed.
-- **Stream Calculation**: The number of streams is proportional to the number of shards. It also depends (in a non-linear fashion) on the number of topics. EMQX automatically combines topics that have a similar structure into the same stream, ensuring that the number of streams doesn't grow too fast with the number of topics, minimizing the volume of metadata stored per session.
+- **メッセージストレージ**：各レプリカに保存されるメッセージの容量は、受信メッセージのレートと`durable_sessions.message_retention_period`パラメータで指定された保持期間の積に比例します。このパラメータはメッセージの保持期間を決定し、必要なストレージ容量に影響します。
+- **セッションメタデータストレージ**：セッションメタデータの容量は、セッション数とそれらがサブスクライブするストリーム数の積に比例します。
+- **ストリームの計算**：ストリーム数はシャード数に比例し、トピック数にも（非線形に）依存します。EMQXは構造が類似したトピックを自動的に同じストリームにまとめるため、トピック数の増加に伴うストリーム数の増加を抑制し、セッションごとのメタデータ量を最小化します。
 
-## Next Steps
+## 次のステップ
 
-To learn how to configure and manage the Durable Sessions feature, as well as how to initially set up and modify durable sessions in an EMQX cluster, please refer to the following pages:
+Durable Sessions機能の設定および管理方法、EMQXクラスターでのDurable Sessionsの初期設定や変更方法については、以下のページをご参照ください。
 
-- [Configure and Manage Durable Sessions](./management.md)
-- [Manage Data Replication](./managing-replication.md)
+- [Durable Sessionsの設定と管理](./management.md)
+- [データレプリケーションの管理](./managing-replication.md)

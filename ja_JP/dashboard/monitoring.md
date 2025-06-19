@@ -1,10 +1,10 @@
-# Monitoring
+# モニタリング
 
-Monitoring is used to view and manage the information and data of the running EMQX cluster. Expand the **Monitoring** on the Dashboard's left navigation menu, where you will find the following submenus:
+モニタリングは、稼働中のEMQXクラスターの情報やデータを閲覧・管理するために使用します。ダッシュボードの左側ナビゲーションメニューで**モニタリング**を展開すると、以下のサブメニューが表示されます。
 
-- **[Cluster Overview](./dashboard.md)**: Provides a centralized display of connections, subscriptions, node information, and system metrics of the EMQX cluster.
-- **[Clients](./connections/connections.md)**: View detailed information and metrics about client connections and sessions.
-- **[Subscriptions](./subscriptions/overview.md)**: View basic information about subscriptions and topics for clients connected to EMQX.
-- **[Retained Messages](./retained.md)**: View and manage all retained messages currently in the system.
-- **[Delayed Publish](./delay-pub.md)**: View information about messages for delayed publishing and configure Delayed Publish functionality.
-- **Alarms**: View current and historical system alarm information. For detailed information about the Alarms page and its functionalities, see [Alarms](../observability/alarms.md).
+- **[クラスター概要](./dashboard.md)**：EMQXクラスターの接続状況、サブスクリプション、ノード情報、システムメトリクスを一元的に表示します。
+- **[クライアント](./connections/connections.md)**：クライアントの接続およびセッションに関する詳細情報とメトリクスを確認できます。
+- **[サブスクリプション](./subscriptions/overview.md)**：EMQXに接続しているクライアントのサブスクリプションおよびトピックの基本情報を表示します。
+- **[保持メッセージ](./retained.md)**：現在システム内にあるすべての保持メッセージを閲覧および管理します。
+- **[遅延パブリッシュ](./delay-pub.md)**：遅延パブリッシュ対象のメッセージ情報を確認し、遅延パブリッシュ機能の設定を行います。
+- **アラーム**：現在および過去のシステムアラーム情報を表示します。アラームページの詳細および機能については、[アラーム](../observability/alarms.md)をご参照ください。

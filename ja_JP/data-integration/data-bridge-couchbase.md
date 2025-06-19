@@ -1,114 +1,112 @@
-# Ingest MQTT Data into Couchbase
+# MQTTデータをCouchbaseに取り込む
 
-[Couchbase](https://couchbase.com/) is a multipurpose, distributed database that combines the strengths of relational databases, including SQL and ACID transactions, with the versatility of JSON. Built on a foundation that is both highly performant and scalable, Couchbase is widely used across various industries for applications such as user profiles, dynamic product catalogs, generative AI applications, vector search, high-speed caching, and more.
+[Couchbase](https://couchbase.com/) は、SQLやACIDトランザクションなどリレーショナルデータベースの強みと、JSONの柔軟性を兼ね備えた多目的分散データベースです。高いパフォーマンスとスケーラビリティを基盤に構築されており、ユーザープロファイル、動的な製品カタログ、生成AIアプリケーション、ベクター検索、高速キャッシュなど、さまざまな業界で広く利用されています。
 
-## How It Works
+## 動作概要
 
-Couchbase data integration is an out-of-the-box feature in EMQX designed to combine the MQTT's real-time data capturing and transmission capabilities with Couchbase's powerful data processing functionality. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to Couchbase for storage and analysis, eliminating the need for complex coding.
+Couchbaseとのデータ統合は、EMQXに標準搭載された機能で、MQTTのリアルタイムデータ収集・送信能力とCouchbaseの強力なデータ処理機能を組み合わせます。組み込みの[ルールエンジン](./rules.md)コンポーネントにより、EMQXからCouchbaseへのデータ取り込みを簡素化し、複雑なコーディングを不要にします。
 
-The diagram below illustrates a typical architecture of data integration between EMQX and Couchbase.
+下図は、EMQXとCouchbase間の典型的なデータ統合アーキテクチャを示しています。
 
 ![couchbase_architecture](./assets/couchbase_architecture.png)
 
-Ingesting MQTT data into Couchbase works as follows:
+MQTTデータをCouchbaseに取り込む流れは以下の通りです：
 
-1. **Message publication and reception**: Industrial IoT devices establish successful connections to EMQX through the MQTT protocol and publish real-time MQTT data from machines, sensors, and product lines based on their operational states, readings, or triggered events to EMQX. When EMQX receives these messages, it initiates the matching process within its rules engine.  
-3. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to Couchbase. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-4. **Data ingestion into Couchbase**: Once the rule engine identifies a message for Couchbase storage, it triggers an action of forwarding the messages to Couchbase. Processed data will be seamlessly written into the dataset of the Couchbase database.
-5. **Data Storage and Utilization**: With the data now stored in Couchbase, businesses can harness its querying power for various use cases. For example, in the context of dynamic product catalogs, businesses can use Couchbase to efficiently manage and retrieve product information, support real-time inventory updates, and deliver personalized recommendations to customers, enhancing the shopping experience and increasing sales.
+1. **メッセージのパブリッシュと受信**：産業用IoTデバイスはMQTTプロトコルを介してEMQXに接続し、機械やセンサー、製品ラインの稼働状況、計測値、トリガーイベントに基づくリアルタイムMQTTデータをEMQXにパブリッシュします。EMQXはこれらのメッセージを受信すると、ルールエンジン内でマッチング処理を開始します。  
+2. **メッセージデータの処理**：メッセージが到着するとルールエンジンを通過し、EMQXで定義されたルールに基づいて処理されます。ルールは事前定義された条件により、どのメッセージをCouchbaseにルーティングするかを決定します。ペイロード変換が指定されている場合は、データ形式の変換、特定情報のフィルタリング、追加コンテキストによるペイロードの強化などが適用されます。
+3. **Couchbaseへのデータ取り込み**：ルールエンジンがCouchbaseへの保存対象メッセージを特定すると、メッセージをCouchbaseに転送するアクションをトリガーします。処理済みデータはCouchbaseデータセットにシームレスに書き込まれます。
+4. **データの保存と活用**：データがCouchbaseに保存されることで、企業はクエリ機能を活用し、動的製品カタログの管理やリアルタイム在庫更新、パーソナライズされたレコメンデーションの提供など、多様なユースケースに活用できます。これにより購買体験が向上し、売上増加に寄与します。
 
-## Features and Benefits
+## 特長とメリット
 
-The data integration with Couchbase offers a range of features and benefits tailored to ensure efficient data transmission, storage, and utilization:
+Couchbaseとのデータ統合は、効率的なデータ送信、保存、活用を実現するための多彩な特長とメリットを提供します：
 
-- **Real-time Data Streaming**: EMQX is built for handling real-time data streams, ensuring efficient and reliable data transmission from source systems to Couchbase. It enables organizations to capture and analyze data in real-time, making it ideal for use cases requiring immediate insights and actions.
-- **High Performance and Scalability**: EMQX's distributed architecture and Couchbase's columnar storage format enable seamless scalability as data volumes increase. This ensures consistent performance and responsiveness, even with large datasets.
-- **Flexibility in Data Transformation:** EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in Couchbase. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
-- **Easy Deployment and Management:** EMQX provides a user-friendly interface for configuring data sources, pre-processing data rules, and Couchbase storage settings. This simplifies the setup and ongoing management of the data integration process.
-- **Advanced Analytics:** Couchbase's powerful SQL-based query language and support for complex analytical functions empower users to gain valuable insights from IoT data, enabling predictive analytics, anomaly detection, and more.
+- **リアルタイムデータストリーミング**：EMQXはリアルタイムデータストリームの処理に最適化されており、ソースシステムからCouchbaseへの効率的かつ信頼性の高いデータ送信を保証します。即時のインサイトやアクションが必要なユースケースに適しています。
+- **高性能とスケーラビリティ**：EMQXの分散アーキテクチャとCouchbaseのカラム型ストレージ形式により、データ量増加に伴うスムーズなスケーラビリティを実現します。大規模データセットでも一貫したパフォーマンスと応答性を維持します。
+- **柔軟なデータ変換**：EMQXは強力なSQLベースのルールエンジンを提供し、Couchbaseに保存する前にデータを前処理できます。フィルタリング、ルーティング、集約、強化など多様な変換機能により、ニーズに応じたデータ整形が可能です。
+- **簡単なデプロイと管理**：EMQXはデータソース設定、前処理ルール、Couchbase保存設定をユーザーフレンドリーなインターフェースで提供し、データ統合のセットアップと運用管理を簡素化します。
+- **高度な分析機能**：Couchbaseの強力なSQLベースクエリ言語と複雑な分析機能により、IoTデータから価値あるインサイトを得られます。予測分析や異常検知なども可能です。
 
-## Before You Start
+## はじめる前に
 
-This section describes the preparations you need to complete before you start to create the Couchbase data integration in EMQX Dashboard.
+このセクションでは、EMQXダッシュボードでCouchbaseデータ統合を作成する前に必要な準備について説明します。
 
-### Prerequisites
+### 前提条件
 
-- Knowledge about EMQX data integration [rules](./rules.md)
+- EMQXデータ統合の[ルール](./rules.md)についての知識
+- [データ統合](./data-bridges.md)の知識
+- UNIXターミナルとコマンドの基本知識
 
-- Knowledge about [data integration](./data-bridges.md)
+### Couchbaseサーバーの起動
 
-- Basic knowledge of UNIX terminal and commands 
+このセクションでは、[Docker](https://www.docker.com/)を使ってCouchbaseサーバーを起動する方法を紹介します。
 
-### Start a Couchbase Server
-
-This section introduces how to start a Couchbase server using [Docker](https://www.docker.com/). 
-
-1. Start a Couchbase server using the following command.
+1. 以下のコマンドでCouchbaseサーバーを起動します。
 
    ```bash
    docker run -t --name db -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase/server:enterprise-7.2.0
    ```
    
-   When you run the command, Docker downloads and installs Couchbase Server. You should see the following message once Couchbase Server is started in a Docker virtual environment:
+   コマンド実行時にDockerがCouchbase Serverをダウンロード・インストールします。Docker仮想環境でCouchbase Serverが起動すると、以下のメッセージが表示されます：
    
    ```
    Starting Couchbase Server -- Web UI available at http://<ip>:8091
    and logs available in /opt/couchbase/var/lib/couchbase/logs
    ```
    
-2. Open Couchbase Web Console in your browser by visiting `http://localhost:8091`.
+2. ブラウザで `http://localhost:8091` にアクセスし、Couchbase Webコンソールを開きます。
 
-<img src="./assets/couchbase-consoleSetup.png" alt="couchbase-consoleSetup" style="zoom:67%;" />
+<img src="./assets/couchbase-consoleSetup.png" alt="Couchbaseコンソールセットアップ" style="zoom:67%;" />
 
-3. Click **Setup New Cluster** and provide a name for your cluster. For the purpose of getting started, set the full administrator credentials to `admin` and `password`.
+3. **Setup New Cluster** をクリックし、クラスター名を入力します。初期設定として、管理者のユーザー名とパスワードをそれぞれ `admin` と `password` に設定します。
 
-<img src="./assets/couchbase-consoleNewCluster.png" alt="couchbase-consoleNewCluster" style="zoom:67%;" />
+<img src="./assets/couchbase-consoleNewCluster.png" alt="Couchbase新規クラスター作成" style="zoom:67%;" />
 
-4. Accept the Terms and Conditions and click **Finish with Defaults** to complete configuration with default values.
+4. 利用規約に同意し、**Finish with Defaults** をクリックしてデフォルト値で設定を完了します。
 
-5. When you have finished entering your configuration details, click the **Save & Finish** button, at the lower right. This configures the server accordingly, and brings up the Couchbase Web Console Dashboard. Select **Buckets** in the navigation panel on the left side, and click the **ADD BUCKET** button.
+5. 設定入力後、右下の **Save & Finish** ボタンをクリックします。これによりサーバーが設定され、Couchbase Webコンソールのダッシュボードが表示されます。左側のナビゲーションパネルで **Buckets** を選択し、**ADD BUCKET** ボタンをクリックします。
 
-   <img src="./assets/couchbase-consoleBuckets.png" alt="couchbase-consoleBuckets" style="zoom:67%;" />
+   <img src="./assets/couchbase-consoleBuckets.png" alt="Couchbaseバケット一覧" style="zoom:67%;" />
 
-7. Enter a name for the bucket, for example, `emqx`, and click **Create** to create the bucket.
+6. バケット名を入力します（例：`emqx`）し、**Create** をクリックしてバケットを作成します。
 
-8. Create a primary index for the default collection:
+7. デフォルトコレクションに対してプライマリインデックスを作成します：
 
     ```
     docker exec -t db /opt/couchbase/bin/cbq -u admin -p password -engine=http://127.0.0.1:8091/ -script "create primary index on default:emqx_data._default._default;"
     ```
 
-You can find more information about running Couchbase in docker [on the official documentation page](https://docs.couchbase.com/server/current/getting-started/do-a-quick-install.html).
+DockerでのCouchbase実行に関する詳細は、[公式ドキュメントページ](https://docs.couchbase.com/server/current/getting-started/do-a-quick-install.html)をご参照ください。
 
-## Create a Connector
+## コネクターの作成
 
-This section demonstrates how to create a Connector to connect the Sink to the Couchbase server.
+このセクションでは、SinkをCouchbaseサーバーに接続するためのコネクター作成方法を説明します。
 
-The following steps assume that you run both EMQX and Couchbase on the local machine. If you have Couchbase and EMQX running remotely, adjust the settings accordingly.
+以下の手順は、EMQXとCouchbaseをローカルマシンで実行していることを前提としています。リモート環境で実行している場合は、設定を適宜調整してください。
 
-1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-2. Click **Create** in the top right corner of the page.
-3. On the **Create Connector** page, select **Couchbase** and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_couchbase`.
-   - **Server Host**: `127.0.0.1`
-   - **Username**: `admin`
-   - **Password**: `password`
-5. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Couchbase server.
-7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Couchbase. For detailed steps, see [Create a Rule with Couchbase Sink](#create-a-rule-with-couchbase-sink).
+1. EMQXダッシュボードに入り、**Integration** -> **Connectors** をクリックします。
+2. ページ右上の **Create** をクリックします。
+3. **Create Connector** ページで **Couchbase** を選択し、**Next** をクリックします。
+4. **Configuration** ステップで以下の情報を設定します：
+   - **Connector name**：コネクター名を入力します。大文字・小文字の英数字の組み合わせで、例：`my_couchbase`
+   - **Server Host**：`127.0.0.1`
+   - **Username**：`admin`
+   - **Password**：`password`
+5. 詳細設定（任意）：[Advanced Configurations](#advanced-configurations) を参照してください。
+6. **Create** をクリックする前に、**Test Connectivity** をクリックしてCouchbaseサーバーへの接続確認ができます。
+7. ページ下部の **Create** ボタンをクリックしてコネクター作成を完了します。ポップアップダイアログで **Back to Connector List** または **Create Rule** を選択できます。ルールとSinkの作成手順は、[Create a Rule with Couchbase Sink](#create-a-rule-with-couchbase-sink) を参照してください。
 
-## Create a Rule with Couchbase Sink
+## Couchbase Sinkを使ったルールの作成
 
-This section demonstrates how to create a rule in Dashboard for processing messages from the source MQTT topic `t/#`  and forwarding the processed results to Couchbase via a configured Sink. 
+このセクションでは、EMQXダッシュボードで、ソースMQTTトピック `t/#` からのメッセージを処理し、処理結果を設定済みのSink経由でCouchbaseに転送するルールの作成方法を説明します。
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
+1. EMQXダッシュボードで、左ナビゲーションメニューから **Integration** -> **Rules** をクリックします。
 
-2. Click **Create** on the top right corner of the page.
+2. ページ右上の **Create** をクリックします。
 
-3. Enter the rule ID, for example, `my_rule`.
+3. ルールIDを入力します（例：`my_rule`）。
 
-4. Leave the statement in the SQL editor, it will forward the MQTT messages matching the topic pattern `t/#`. 
+4. SQLエディターのステートメントはそのままにしておきます。これはトピックパターン `t/#` にマッチするMQTTメッセージを転送します。
 
    ```sql
    SELECT 
@@ -117,59 +115,58 @@ This section demonstrates how to create a rule in Dashboard for processing messa
      "t/#"
    ```
 
-5. Click the + **Add Action** button to define an action that will be triggered by the rule. With this action, EMQX sends the data processed by the rule to Couchbase. 
+5. + **Add Action** ボタンをクリックし、ルールによってトリガーされるアクションを定義します。このアクションでEMQXはルールで処理したデータをCouchbaseに送信します。
 
-6. Select `Couchbase` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Couchbase Sink if you have created one. This demonstration will create a new Sink.
+6. **Type of Action** ドロップダウンリストから `Couchbase` を選択します。**Action** ドロップダウンはデフォルトの `Create Action` のままにします。既存のCouchbase Sinkがあれば選択可能です。この例では新規Sinkを作成します。
 
-7. Enter a name for the Sink. The name should combine upper/lower case letters and numbers.
+7. Sinkの名前を入力します。大文字・小文字の英数字の組み合わせで指定してください。
 
-8. Select the `my_couchbase` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. **Connector** ドロップダウンから先ほど作成した `my_couchbase` を選択します。新規コネクターを作成する場合はドロップダウン横のボタンをクリックしてください。設定パラメータは[Create a Connector](#create-a-connector)を参照してください。
 
-9. Enter the following command in the SQL template:
+9. SQLテンプレートに以下を入力します：
 
     ```sql
     insert into emqx_data (key, value) values (${.id}, ${.payload})
     ```
 
-    Here, `${.id}` and `${.payload}` represent the MQTT message id and payload, respectively. EMQX will replace them with the corresponding content before forwarding the message.
+    ここで `${.id}` と `${.payload}` はそれぞれMQTTメッセージのIDとペイロードを表し、EMQXが転送前に対応する内容に置き換えます。
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+10. **フォールバックアクション（任意）**：メッセージ配信失敗時の信頼性向上のため、1つ以上のフォールバックアクションを定義できます。これらはプライマリSinkがメッセージ処理に失敗した場合にトリガーされます。詳細は[Fallback Actions](./data-bridges.md#fallback-actions)を参照してください。
 
-11. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
+11. **詳細設定（任意）**：[Advanced Configurations](#advanced-configurations) を参照してください。
 
-12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the Couchbase server.
+12. **Create** をクリックする前に、**Test Connectivity** ボタンでCouchbaseサーバーへの接続確認が可能です。
 
-13. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+13. **Create** ボタンをクリックしてSinkの設定を完了します。**Create Rule** ページに戻ると、**Action Outputs** タブに新しいSinkが表示されます。
 
-14. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+14. **Create Rule** ページで設定内容を確認し、**Create** ボタンをクリックしてルールを生成します。作成したルールはルール一覧に表示され、**status** は接続済みとなります。
 
+これでルールの作成が完了し、**Rule** ページに新しいルールが表示されます。**Actions(Sink)** タブをクリックすると、新しいCouchbase Sinkが確認できます。
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new Couchbase Sink. 
+また、**Integration** -> **Flow Designer** をクリックするとトポロジーを確認でき、トピック `t/#` のメッセージがルール `my_rule` によって解析され、Couchbaseに送信・保存されている様子が見られます。
 
-You can also click **Integration** -> **Flow Designer** to view the topology. You can see that the messages under topic `t/#`  are sent and saved to Couchbase after parsing by the rule `my_rule`. 
+## ルールのテスト
 
-## Test the Rule
+EMQXダッシュボード内蔵のWebSocketクライアントを使って、ルールが期待通り動作するかテストできます。
 
-You can use the built-in WebSocket client in the EMQX dashboard to test if the rule works as expected.
+ダッシュボード左ナビゲーションメニューの **Diagnose** -> **WebSocket Client** をクリックしてWebSocketクライアントを開き、以下の手順でトピック `t/test` にメッセージを送信します：
 
-Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Dashboard to access the WebSocket Client. Follow the steps below to set up a WebSocket client and send a message to the topic `t/test`:
+1. 現在のEMQXインスタンスの接続情報を入力します。ローカルでEMQXを実行している場合は、デフォルト値のままで問題ありません（認証設定を変更している場合はユーザー名・パスワードを入力してください）。
 
-1. Fill in the connection information for the current EMQX instance. If you are running EMQX locally, you can use the default values unless you have changed EMQX's default configuration (for example, you might have configured authentication which may require you to type in a username and password). 
+2. **Connect** をクリックしてクライアントをEMQXに接続します。
 
-2. Click **Connect** to connect the client to the EMQX instance.
-
-3. Scroll down to the publish area and type in the following:
-   * **Topic**: `t/test`
-   * **Payload**: `Hello World Couchbase from EMQX`
-   * **QoS**: 2
+3. 下にスクロールしてパブリッシュエリアに以下を入力します：
+   * **Topic**：`t/test`
+   * **Payload**：`Hello World Couchbase from EMQX`
+   * **QoS**：2
    
-4. Click **Publish** to send the message. An item should have been inserted in the `emqx_data` bucket in the Couchbase server. You can check this by running the following command from a terminal:
+4. **Publish** をクリックしてメッセージを送信します。Couchbaseサーバーの `emqx_data` バケットにアイテムが挿入されているはずです。以下のコマンドをターミナルで実行して確認できます：
 
    ```bash
    docker exec -t db /opt/couchbase/bin/cbq -u admin -p password -engine=http://127.0.0.1:8091/ -script "SELECT * FROM emqx_data._default._default LIMIT 5;"
    ```
 
-5. If everything is working correctly the command above should print something like this (`requestID` and metrics may vary):
+5. 正常に動作していれば、以下のような結果が表示されます（`requestID` やメトリクスは異なる場合があります）：
 
     ```
     {
@@ -193,14 +190,14 @@ Click **Diagnose** -> **WebSocket Client** in the left navigation menu of the Da
    }
    ```
 
-## Advanced Configurations
+## 詳細設定
 
-This section delves deeper into the advanced configuration options available for the EMQX Couchbase Connector. When configuring the Connector in the Dashboard, navigate to **Advanced Settings** to tailor the following parameters to meet your specific needs.
+このセクションでは、EMQX Couchbaseコネクターの詳細設定オプションについて説明します。ダッシュボードでコネクターを設定する際、**Advanced Settings** にて以下のパラメータを用途に応じて調整できます。
 
-| **Fields**                | **Descriptions**                                             | **Recommended Value** |
-| ------------------------- | ------------------------------------------------------------ | --------------------- |
-| **HTTP Pipelining**       | Specifies the number of HTTP requests that can be sent to the server in a continuous sequence without waiting for individual responses. This option takes a positive integer value that represents the maximum number of HTTP requests that will be pipelined. <br />When set to `1`, it indicates a traditional request-response model where each HTTP request will be sent, and then the client will wait for a server response before sending the next request. Higher values enable more efficient use of network resources by allowing multiple requests to be sent in a batch, reducing the round-trip time. | `100`              |
-| **Connection Pool Size**  | Specifies the number of concurrent connections that can be maintained in the connection pool when interfacing with the Couchbase service. This option helps in managing the application's scalability and performance by limiting or increasing the number of active connections between EMQX and Couchbase.<br/>**Note**: Setting an appropriate connection pool size depends on various factors such as system resources, network latency, and the specific workload of your application. Too large a pool size may lead to resource exhaustion, while too small a size may limit throughput.   | `8`                   |
-| **Connect Timeout**       | Specifies the maximum amount of time, in seconds, that the Connector will wait while attempting to establish a connection with the Couchbase server.<br/>**Note**: A carefully chosen timeout setting is crucial for balancing system performance and resource utilization. It is advisable to test the system under various network conditions to find the optimal timeout value for your specific use case. | `15`                  |
-| **Start Timeout**         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource—such as a database instance in Couchbase—is fully operational and ready to handle data transactions. | `5`                   |
-| **Health Check Interval** | Specifies the time interval, in seconds, at which the Connector will perform automated health checks on the connection to Couchbase. | `15`                  |
+| **項目**                   | **説明**                                                                                          | **推奨値**             |
+| -------------------------- | ------------------------------------------------------------------------------------------------ | ---------------------- |
+| **HTTP Pipelining**        | サーバーに対して個別の応答を待たずに連続して送信可能なHTTPリクエストの最大数を指定します。<br />`1`に設定すると、従来のリクエスト-レスポンスモデルとなり、各リクエスト送信後に応答を待ってから次のリクエストを送信します。より大きな値は複数リクエストをバッチ送信し、ネットワークリソースを効率的に活用し、往復時間を短縮します。 | `100`                  |
+| **Connection Pool Size**   | Couchbaseサービスとの接続プールで維持可能な同時接続数を指定します。<br/>システムリソースやネットワークレイテンシ、アプリケーションの負荷に応じて適切な値を設定してください。大きすぎるとリソース枯渇の恐れがあり、小さすぎるとスループットが制限されます。 | `8`                    |
+| **Connect Timeout**        | Couchbaseサーバーへの接続確立を試みる際の最大待機時間（秒）を指定します。<br/>システム性能とリソース利用のバランスを考慮し、ネットワーク状況に応じて最適な値を設定してください。 | `15`                   |
+| **Start Timeout**          | 自動起動したリソースが正常な状態になるまで待機する最大時間（秒）を指定します。これにより、Couchbaseのデータベースインスタンスなど接続先リソースが完全に稼働してから処理を進めることが保証されます。 | `5`                    |
+| **Health Check Interval**  | Couchbaseとの接続状態を自動的に監視するヘルスチェックの実行間隔（秒）を指定します。 | `15`                   |

@@ -1,19 +1,17 @@
 # Design and Implementation
 
-This section introduces the design principles of some key EMQX features, including:
+このセクションでは、EMQXの主要な機能の設計原則について紹介します。内容は以下の通りです。
 
-- [Clustering](./clustering.md)
+- [クラスタリング](./clustering.md)
 
-  EMQX has demonstrated impressive performance on a single node, as evidenced by our benchmark tests which achieved millions of connections.
-  However, to ensure reliability and availability, EMQX must scale out by forming a cluster.
-  This chapter discusses the complexities involved in MQTT broker clustering and how EMQX is specifically designed to overcome these challenges.
+  EMQXは単一ノードでも数百万の接続を達成するベンチマークテストで優れたパフォーマンスを示しています。しかし、信頼性と可用性を確保するためには、クラスターを形成してスケールアウトする必要があります。本章では、MQTTブローカーのクラスタリングに伴う複雑さと、それを克服するためにEMQXがどのように設計されているかを解説します。
 
-- [Inflight Window and Message Queue](./inflight-window-and-message-queue.md)
+- [Inflight Windowとメッセージキュー](./inflight-window-and-message-queue.md)
 
-  To improve message throughput and reduce the impact of network fluctuations, EMQX allows multiple unacknowledged QoS 1 and QoS 2 packets to exist on the network link at the same time. These sent but unconfirmed packets will be stored in the Inflight Window until an acknowledgment is complete. When the length limit of the Inflight Window is reached, these packets will be stored in the Message Queue. This section will introduce the design principles and the relevant configuration items. 
+  メッセージのスループットを向上させ、ネットワークの変動の影響を軽減するために、EMQXは複数の未アックのQoS 1およびQoS 2パケットを同時にネットワークリンク上に存在させることが可能です。送信済みで未確認のパケットは、アックが完了するまでInflight Windowに格納されます。Inflight Windowの長さ制限に達すると、これらのパケットはメッセージキューに保存されます。本節では設計原則と関連する設定項目について紹介します。
 
-- [Message Retransmission](./retransmission.md)
+- [メッセージ再送信](./retransmission.md)
 
-  Message Retransmission is part of the MQTT protocol specification. This section will introduce the basic configuration, protocol specification, and design.
+  メッセージ再送信はMQTTプロトコル仕様の一部です。本節では基本的な設定、プロトコル仕様、および設計について解説します。
 
-More topics will be updated soon, stay tuned.
+今後もさらに多くのトピックを更新予定です。ご期待ください。

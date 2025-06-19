@@ -1,38 +1,38 @@
 ---
-description: This page introduces how to use the official Docker image to install and run EMQX, and how to use Docker Compose to build an EMQX cluster.
+description: このページでは、公式Dockerイメージを使ってEMQXをインストールおよび起動する方法と、Docker Composeを使ってEMQXクラスターを構築する方法を紹介します。
 ---
 
-# Install EMQX Using Docker
-This page introduces how to use the official Docker image to install and run the EMQX Enterprise, and how to use Docker Compose to build an EMQX cluster.
+# Dockerを使ったEMQXのインストール
+このページでは、公式Dockerイメージを使用してEMQX Enterpriseをインストールおよび起動する方法と、Docker Composeを使ってEMQXクラスターを構築する方法を紹介します。
 
-## Use Docker to Run A Single EMQX Node
+## Dockerで単一のEMQXノードを起動する
 
-This section will introduce how to use the Docker image to install the latest version of EMQX. For more information about the EMQX official Docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). 
+このセクションでは、Dockerイメージを使って最新バージョンのEMQXをインストールする方法を紹介します。EMQX公式Dockerイメージの詳細については、[Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise)をご覧ください。
 
-1. To get the Docker image, run: 
+1. Dockerイメージを取得するには、以下を実行します。
 
    ```bash
    docker pull emqx/emqx-enterprise:@EE_VERSION@
    ```
 
-2. To start the Docker container, run:
+2. Dockerコンテナを起動するには、以下を実行します。
 
    ```bash
    docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083  emqx/emqx-enterprise:@EE_VERSION@
    ```
 
-### Docker Deployment Precautions
+### Dockerデプロイ時の注意点
 
-1. If you want to persist data generated in the EMQX Docker container, you need to keep the following directories, so that the data will persist even if the container no longer exists.
+1. EMQX Dockerコンテナ内で生成されたデータを永続化したい場合は、以下のディレクトリを保持する必要があります。これにより、コンテナが存在しなくなってもデータが保持されます。
 
    ```bash
    /opt/emqx/data
    /opt/emqx/log
    ```
    
-   For more details on EMQX directory structure, refer to [EMQX - Files and Directories](./install.md#files-and-directories).
+   EMQXのディレクトリ構造の詳細については、[EMQX - ファイルとディレクトリ](./install.md#files-and-directories)を参照してください。
    
-    Start container and mount directories:
+    コンテナ起動時にディレクトリをマウントする例：
    
    ```bash
    docker run -d --name emqx-enterprise \
@@ -44,23 +44,23 @@ This section will introduce how to use the Docker image to install the latest ve
      emqx/emqx-enterprise:@EE_VERSION@
    ```
    
-2. In Docker environments, `localhost` or `127.0.0.1` refers to the container's own internal network interface, not that of the host machine. To access services running on the host machine, use the host's IP address or use [host networking settings](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
+2. Docker環境では、`localhost`や`127.0.0.1`はコンテナ自身の内部ネットワークインターフェースを指し、ホストマシンのものではありません。ホストマシン上で動作するサービスにアクセスするには、ホストのIPアドレスを使用するか、[ホストネットワーク設定](https://docs.docker.com/network/host/)を利用してください。Docker for MacやDocker for Windowsを使用している場合は、`host.docker.internal`をホストアドレスとして使用できます。
 
-3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
+3. EMQXはデータ保存に`data/mnesia/<node_name>`ディレクトリを使用します。ノード名にはFQDN（完全修飾ドメイン名）などの安定した識別子を選択することが重要です。これにより、ノード名の変更によるデータ損失を防げます。
 
-## Use Docker Compose to Build an EMQX Cluster
+## Docker Composeを使ってEMQXクラスターを構築する
 
-Docker Compose is a tool for defining and running multi-container Docker applications. This section introduces how to use Docker Compose to create a static EMQX cluster.
+Docker Composeは、複数のコンテナからなるDockerアプリケーションを定義・実行するツールです。このセクションでは、Docker Composeを使って静的なEMQXクラスターを作成する方法を紹介します。
 
-Please note that the Docker Compose example file in this section is only applicable to local testing. If you need to deploy a cluster in a production environment, please refer to [Clustering](./cluster/introduction.md).
+なお、このセクションのDocker Composeの例はローカルテスト用です。本番環境でクラスターをデプロイする場合は、[クラスター](./cluster/introduction.md)を参照してください。
 
 :::tip
 
-Docker Compose is already included in Docker Desktop. If your Docker Compose still needs to be installed, you may refer to [Install Docker Compose](https://docs.docker.com/compose/install/) for detailed operating steps.
+Docker ComposeはDocker Desktopに含まれています。もしDocker Composeが未インストールの場合は、[Docker Composeのインストール](https://docs.docker.com/compose/install/)を参照して詳細な手順を確認してください。
 
 :::
 
-1. Create a  `docker-compose.yml` file under any directory with the following content:
+1. 任意のディレクトリに以下の内容で`docker-compose.yml`ファイルを作成します。
 
    ```yml
    version: '3'
@@ -115,13 +115,13 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
        driver: bridge
    ```
 
-2. In the command line tool, switch to the directory where  `docker-compose.yml` is stored, and run the following command to start the EMQX cluster:
+2. コマンドラインツールで`docker-compose.yml`があるディレクトリに移動し、以下のコマンドを実行してEMQXクラスターを起動します。
 
    ```bash
    docker-compose up -d
    ```
 
-3. To check the cluster status, run:
+3. クラスターの状態を確認するには、以下を実行します。
 
    ```bash
    $ docker exec -it emqx1 sh -c "emqx ctl cluster status"
@@ -129,10 +129,10 @@ Docker Compose is already included in Docker Desktop. If your Docker Compose sti
                      stopped_nodes => []}
    ```
 
-## Next Steps
+## 次のステップ
 
-Use an MQTT client to connect EMQX for message publish/subscribe. For more information, see [Publish and Subscribe](../messaging/publish-and-subscribe.md). 
+MQTTクライアントを使ってEMQXに接続し、メッセージのパブリッシュ／サブスクライブを行います。詳細は[パブリッシュとサブスクライブ](../messaging/publish-and-subscribe.md)をご覧ください。
 
-- On how to configure EMQX parameters and other features, see [Configuration](../configuration/configuration.md).
+- EMQXのパラメータ設定やその他機能については、[設定](../configuration/configuration.md)を参照してください。
 
-- On how to build an EMQX cluster with multiple nodes, see  [Clustering](./cluster/introduction.md).
+- 複数ノードによるEMQXクラスターの構築方法については、[クラスター](./cluster/introduction.md)をご覧ください。

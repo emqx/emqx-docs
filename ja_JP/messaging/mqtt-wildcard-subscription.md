@@ -1,25 +1,25 @@
-# Wildcard Subscription
+# ワイルドカードサブスクリプション
 
-MQTT topic name is a UTF-8 encoded string used for message routing. To provide more flexibility, MQTT supports a hierarchical topic namespace. A topic is typically leveled and separated with a slash `/` between the levels such as `chat/room/1`. A [wildcard subscription](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Topic_Names_and) is a subscription with a topic filter containing one or more wildcard characters. This allows the subscription to match more than one topic name. This page introduces the usage of two types of wildcards supported in MQTT and how to subscribe to topics containing wildcard characters in EMQX. 
+MQTTのトピック名は、メッセージルーティングに使用されるUTF-8エンコードされた文字列です。より柔軟な運用を可能にするために、MQTTは階層的なトピックネームスペースをサポートしています。トピックは通常、レベルごとに区切られ、スラッシュ `/` で区切られます（例：`chat/room/1`）。[ワイルドカードサブスクリプション](https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Topic_Names_and)とは、トピックフィルターに1つ以上のワイルドカード文字を含むサブスクリプションのことで、複数のトピック名にマッチさせることができます。本ページでは、MQTTでサポートされている2種類のワイルドカードの使い方と、EMQXでワイルドカードを含むトピックをサブスクライブする方法を紹介します。
 
-::: tip Note
+::: tip 注意
 
-Wildcards can only be used for subscriptions, not for publishing. Additionally, **avoid using wildcard subscriptions on a large number of clients** to prevent potential performance impacts.
+ワイルドカードはサブスクライブ時のみ使用可能で、パブリッシュ時には使用できません。また、**多数のクライアントでワイルドカードサブスクリプションを使用するとパフォーマンスに影響を与える可能性があるため避けてください**。
 
 :::
 
-## Single-Level Wildcard
+## シングルレベルワイルドカード
 
-`+` (U+002B) is a wildcard character that matches only one topic level. The single-level wildcard can be used at any level in the topic filter, including the first and last levels. Where it is used, it must occupy an entire level of the filter. It can be used at more than one level in the topic filter and can be used in conjunction with the multi-level wildcard. Below are some examples of using the single-level wildcard:
+`+`（U+002B）は、トピックの1レベルにのみマッチするワイルドカード文字です。シングルレベルワイルドカードはトピックフィルターの任意のレベルで使用でき、最初や最後のレベルでも可能です。使用する場合、そのレベル全体を占める必要があります。複数のレベルで使用可能で、マルチレベルワイルドカードと組み合わせて使うこともできます。以下はシングルレベルワイルドカードの使用例です。
 
 ```
-"+" is valid
-"sensor/+" is valid
-"sensor/+/temperature" is valid
-"sensor+" is invalid (does not occupy an entire level)
+"+" は有効
+"sensor/+" は有効
+"sensor/+/temperature" は有効
+"sensor+" は無効（レベル全体を占めていない）
 ```
 
-If a client subscribes to the topic `sensor/+/temperature`, it will receive messages from the following topics:
+クライアントが `sensor/+/temperature` をサブスクライブすると、以下のトピックからのメッセージを受信します。
 
 ```awk
 sensor/1/temperature
@@ -28,25 +28,25 @@ sensor/2/temperature
 sensor/n/temperature
 ```
 
-But it will not match the following topics:
+ただし、以下のトピックにはマッチしません。
 
 ```bash
 sensor/temperature
 sensor/bedroom/1/temperature
 ```
 
-## Multi-Level Wildcard
+## マルチレベルワイルドカード
 
-`#` (U+0023) is a wildcard character that matches any number of levels within a topic. When using a multi-level wildcard, it must occupy an entire level and must be the last character of the topic, for example:
+`#`（U+0023）は、トピック内の任意の数のレベルにマッチするワイルドカード文字です。マルチレベルワイルドカードを使用する場合、そのレベル全体を占め、トピックの最後の文字でなければなりません。例：
 
 ```pgsql
-"#" is valid, matches all topics
-"sensor/#" is valid
-"sensor/bedroom#" is invalid (+ or # are only used as a wildcard level)
-"sensor/#/temperature" is invalid (# must be the last level)
+"#" は有効で、すべてのトピックにマッチ
+"sensor/#" は有効
+"sensor/bedroom#" は無効（+ または # はワイルドカードレベルとしてのみ使用可能）
+"sensor/#/temperature" は無効（# は最後のレベルでなければならない）
 ```
 
-If a client subscribes to the topic  `sensor/#`，it will receive messages from the following topics:
+クライアントが `sensor/#` をサブスクライブすると、以下のトピックからのメッセージを受信します。
 
 ```pgsql
 sensor
@@ -54,52 +54,52 @@ sensor/temperature
 sensor/1/temperature
 ```
 
-## Try Wildcard Subscription with MQTTX Client
+## MQTTXクライアントでワイルドカードサブスクリプションを試す
 
-This section demonstrates how to use the MQTTX client to create subscriptions to wildcard topics. In this demonstration, you can create one client connection `Demo` as a publisher to publish messages. Then, you can create another client connection as a subscriber. The subscriber subscribes to the following wildcard topics:
+このセクションでは、MQTTXクライアントを使ってワイルドカードトピックのサブスクリプションを作成する方法を示します。デモとして、1つのクライアント接続 `Demo` をパブリッシャーとしてメッセージをパブリッシュします。もう1つのクライアント接続をサブスクライバーとして作成し、以下のワイルドカードトピックをサブスクライブします。
 
 - `testtopic/+/temperature`
 - `testtopic/#`
 
-:::tip Prerequisites
+:::tip 前提条件
 
-- Knowledge about MQTT [Wildcards](./mqtt-concepts.md#topic-and-wildcards)
-- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
+- MQTTの[ワイルドカード](./mqtt-concepts.md#topic-and-wildcards)に関する知識
+- [MQTTX](./publish-and-subscribe.md)を使った基本的なパブリッシュ・サブスクライブ操作
 
 :::
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQXとMQTTX Desktopを起動し、**New Connection**をクリックしてパブリッシャー用のクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name**に `Demo` と入力します。
+   - **Host**にローカルホスト `127.0.0.1` を入力します（本デモの例として）。
+   - その他の設定はデフォルトのままにして、**Connect**をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT接続の作成方法については、[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop)で詳しく説明しています。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新しい接続の一般設定" style="zoom:35%;" />
 
-2. Click **+** in the **Connections** pane to create another connection as a subscriber. Set **Name** to `Subscriber`.
+2. **Connections**ペインの **+** をクリックし、サブスクライバー用の別の接続を作成します。**Name**を `Subscriber` に設定します。
 
-3. Select `Subscriber` in **Connections** and click **+ New Subscription**. In the pop-up dialogue, input `testtopic/+/temperature` in the **Topic** field. Leave other options as default.
+3. **Connections**で `Subscriber` を選択し、**+ New Subscription**をクリックします。ポップアップダイアログで、**Topic**フィールドに `testtopic/+/temperature` と入力します。その他のオプションはデフォルトのままにします。
 
-   <img src="./assets/wildcard-sub-1.png" alt="wildcard-sub-1" style="zoom: 38%;" />
+   <img src="./assets/wildcard-sub-1.png" alt="ワイルドカードサブスクリプション1" style="zoom: 38%;" />
 
-4. Select `Demo` in **Connections**. Type `testtopic/room1/temperature` in the topic field and type the message payload `28 degree` in the message field. Click the send button. Send another message with the same payload to the topic `testtopic/room2/temperature`.
+4. **Connections**で `Demo` を選択します。トピックフィールドに `testtopic/room1/temperature` と入力し、メッセージフィールドにペイロード `28 degree` を入力します。送信ボタンをクリックします。同じペイロードでトピック `testtopic/room2/temperature` にもメッセージを送信します。
 
-      <img src="./assets/wildcard-sub-2.png" alt="wildcard-sub-2" style="zoom:40%;" />
+      <img src="./assets/wildcard-sub-2.png" alt="ワイルドカードサブスクリプション2" style="zoom:40%;" />
 
-5. Select `Subscriber` in **Connections**. You can see the subscriber receives the two messages with different topics sent by the publisher.
+5. **Connections**で `Subscriber` を選択します。サブスクライバーがパブリッシャーから送信された異なるトピックの2つのメッセージを受信していることが確認できます。
 
-      <img src="./assets/wildcard-sub-3.png" alt="wildcard-sub-3" style="zoom:40%;" />
+      <img src="./assets/wildcard-sub-3.png" alt="ワイルドカードサブスクリプション3" style="zoom:40%;" />
 
-6. Click **+ New Subscription**. In the pop-up dialogue, use the default topic `testtopic/#` in the **Topic** field. Leave other options as default.
+6. **+ New Subscription**をクリックします。ポップアップダイアログで、デフォルトのトピック `testtopic/#` を**Topic**フィールドに使用します。その他のオプションはデフォルトのままにします。
 
-7. Select `Demo` in **Connections**. Type `testtopic/bedroom/room1/temperature` in the topic field and type the message payload `28 degree` in the message field. Click the send button.
+7. **Connections**で `Demo` を選択します。トピックフィールドに `testtopic/bedroom/room1/temperature` と入力し、メッセージフィールドにペイロード `28 degree` を入力します。送信ボタンをクリックします。
 
-8. Select `Subscriber` in **Connections**. You can see the message is sent to the subscription `testtopic/#` only.
+8. **Connections**で `Subscriber` を選択します。メッセージがサブスクリプション `testtopic/#` のみへ送信されていることが確認できます。
 
-      <img src="./assets/wildcard-sub-4.png" alt="wildcard-sub-4" style="zoom:40%;" />
+      <img src="./assets/wildcard-sub-4.png" alt="ワイルドカードサブスクリプション4" style="zoom:40%;" />

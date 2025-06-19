@@ -1,72 +1,72 @@
 # MQTT Retained Message
 
-EMQX implements the retained message feature of MQTT. You can flag one message published under a certain topic as `Retained` and save it as a persistent message on the EMQX. When any new subscribers subscribe to a topic that matches the topic of the retained message, they immediately receive that message, even if it was published before they subscribed to the topic.
+EMQX は MQTT のリテインドメッセージ機能を実装しています。特定のトピックでパブリッシュされたメッセージを `Retained` としてフラグを立て、EMQX 上に永続的なメッセージとして保存できます。新しいサブスクライバーがリテインドメッセージのトピックにサブスクライブすると、そのメッセージがサブスクライブ前にパブリッシュされていても、即座に受信できます。
 
-You can use client tools to connect to EMQX and try this messaging service. This section introduces how to use the [MQTTX Desktop](https://mqttx.app/) and [MQTTX CLI](https://mqttx.app/cli) to simulate clients and see how a retained message is published and received.
+クライアントツールを使って EMQX に接続し、このメッセージングサービスを試すことができます。本節では、[MQTTX Desktop](https://mqttx.app/) と [MQTTX CLI](https://mqttx.app/cli) を使ってクライアントをシミュレートし、リテインドメッセージのパブリッシュと受信の動作を確認する方法を紹介します。
 
-:::tip Prerequisites
+:::tip 前提条件
 
-- Knowledge about MQTT [Retained Message](./mqtt-concepts.md)
-- Basic publishing and subscribing operations using [MQTTX](./publish-and-subscribe.md)
+- MQTT の [Retained Message](./mqtt-concepts.md) に関する知識
+- [MQTTX](./publish-and-subscribe.md) を使った基本的なパブリッシュおよびサブスクライブ操作
 
 :::
 
-## Publish Retained Message with MQTTX Desktop
+## MQTTX Desktop でリテインドメッセージをパブリッシュする
 
-1. Start EMQX and MQTTX Desktop. Click the **New Connection** to create a client connection as a publisher.
+1. EMQX と MQTTX Desktop を起動します。**New Connection** をクリックして、パブリッシャーとしてクライアント接続を作成します。
 
-   - Enter `Demo` in the **Name** field.
-   - Enter the localhost `127.0.0.1` in **Host** to use as an example in this demonstration.
-   - Leave other settings as default and click **Connect**.
+   - **Name** フィールドに `Demo` と入力します。
+   - **Host** に localhost の `127.0.0.1` を入力します（このデモの例として使用）。
+   - 他の設定はデフォルトのままにして、**Connect** をクリックします。
 
    ::: tip
 
-   More detailed instructions on creating an MQTT connection are introduced in [MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop).
+   MQTT 接続の作成方法の詳細は、[MQTTX Desktop](./publish-and-subscribe.md#mqttx-desktop) をご覧ください。
 
    :::
 
-   <img src="./assets/Configure-new-connection-general.png" alt="Configure-new-connection-general" style="zoom:35%;" />
+   <img src="./assets/Configure-new-connection-general.png" alt="新しい接続の設定" style="zoom:35%;" />
 
-3. After the successful connection, type the topic heading `sensor/t1` in the text box and compose the message payload as shown in the screenshot. Click the send button. A message to the topic `sensor/t1` appears in the message dialogue.
+3. 接続に成功したら、テキストボックスにトピック `sensor/t1` を入力し、スクリーンショットのようにメッセージペイロードを作成します。送信ボタンをクリックします。トピック `sensor/t1` へのメッセージがメッセージダイアログに表示されます。
 
-   <img src="./assets/Publish-message-1.png" alt="Publish-message-1" style="zoom:35%;" />
+   <img src="./assets/Publish-message-1.png" alt="メッセージのパブリッシュ 1" style="zoom:35%;" />
 
-4. Publish two retained messages with the topic `sensor/t2`.
+4. トピック `sensor/t2` でリテインドメッセージを2つパブリッシュします。
 
-   - Enter `1` as the first message. Select **Retain**. Click the send button.
-   - Enter `2` as the second message. Click the send button.
+   - 1つ目のメッセージに `1` を入力し、**Retain** を選択して送信ボタンをクリックします。
+   - 2つ目のメッセージに `2` を入力して送信ボタンをクリックします。
 
-   <img src="./assets/Publish-message-2.png" alt="Publish-message-2" style="zoom:35%;" />
+   <img src="./assets/Publish-message-2.png" alt="メッセージのパブリッシュ 2" style="zoom:35%;" />
 
-5. Click the **+** -> **New Connection** in the **Connections** pane to create a subscription `Subscriber` as a client that receives messages. 
+5. **Connections** ペインで **+** -> **New Connection** をクリックし、メッセージを受信するクライアントとしてサブスクライバー `Subscriber` を作成します。
 
-5. Click **+ New Subscription** to subscribe to the topic `sensor/+`. Click the **Confirm** button. 
+5. **+ New Subscription** をクリックし、トピック `sensor/+` をサブスクライブします。**Confirm** ボタンをクリックします。
 
    :::tip
 
-   With the topic set to `sensor/+`, both `sensor/t1` and `sensor/t2` are subscribed. For more information on topics and wildcards, see [Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics).
+   トピックを `sensor/+` に設定すると、`sensor/t1` と `sensor/t2` の両方がサブスクライブされます。トピックとワイルドカードの詳細は、[Understanding MQTT Topics & Wildcards by Case](https://www.emqx.com/en/blog/advanced-features-of-mqtt-topics) をご参照ください。
 
    :::
 
-   You will see that the client `Subscriber` only receives the last retained message but not the first message with the topic `sensor/t1` and the first retained message with the topic `sensor/t2`, because EMQX only stores the latest retained message of each topic. 
+   クライアント `Subscriber` は、トピック `sensor/t1` の最初のメッセージや、トピック `sensor/t2` の最初のリテインドメッセージは受信せず、最新のリテインドメッセージのみ受信することがわかります。これは EMQX が各トピックの最新リテインドメッセージのみを保存するためです。
 
-   <img src="./assets/Receive-retained-message.png" alt="Receive-retained-message" style="zoom:35%;" />
+   <img src="./assets/Receive-retained-message.png" alt="リテインドメッセージの受信" style="zoom:35%;" />
 
-Now you have tried using the MQTTX Client to send a retained message. You can also check the latest retained message stored in the EMQX through the Dashboard, see [View Retained Message in Dashboard](#view-retained-message-in-dashboard).
+これで MQTTX クライアントを使ったリテインドメッセージの送信を試しました。EMQX ダッシュボードから保存されている最新のリテインドメッセージを確認することもできます。詳細は [View Retained Message in Dashboard](#view-retained-message-in-dashboard) をご覧ください。
 
-## Publish Retained Message with MQTTX CLI
+## MQTTX CLI でリテインドメッセージをパブリッシュする
 
-1. Initiate a connection request with one client.
+1. クライアントで接続要求を開始します。
 
-1. Use the following command to publish a retained message. Set the topic to `t/1`, payload to `A retained message from MQTTX CLI`,  and `retain = true`：
+1. 以下のコマンドを使ってリテインドメッセージをパブリッシュします。トピックを `t/1`、ペイロードを `A retained message from MQTTX CLI`、`retain = true` に設定します：
 
    ```bash
    mqttx pub -t 't/1' -m 'A retained message from MQTTX CLI' --retain true -h 'localhost' -p 1883
    ```
 
-3. Initiate another new client connection request to the same broker. Subscribe to the topic `t/1` with the new client. It will receive the retained message.
+3. 同じブローカーに別の新しいクライアント接続要求を開始し、新しいクライアントでトピック `t/1` をサブスクライブします。リテインドメッセージを受信します。
 
-   If you continuously create new clients and let them subscribe to the topic `t/1`, all new clients you created will receive the retained message.
+   新しいクライアントを継続的に作成してトピック `t/1` をサブスクライブさせると、作成したすべての新しいクライアントがリテインドメッセージを受信します。
 
    ```bash
    $ mqttx sub -t 't/1' -h 'localhost' -p 1883 -v
@@ -75,34 +75,36 @@ Now you have tried using the MQTTX Client to send a retained message. You can al
    retain: true
    ```
 
-3. Publish an empty message to clear the retained message:
+3. 空のメッセージをパブリッシュしてリテインドメッセージをクリアします：
 
    ```bash
    mqttx pub -t 't/1' -m '' --retain true -h 'localhost' -p 1883
    ```
 
-4. Initiate a new client connection and subscribe to the topic `t/1`. No retained messages are received, indicating the retained message is cleared.
+4. 新しいクライアント接続を開始し、トピック `t/1` をサブスクライブします。リテインドメッセージが受信されず、リテインドメッセージがクリアされたことを示します。
 
-## View Retained Message in Dashboard
+## ダッシュボードでリテインドメッセージを確認する
 
-When you publish a retained message, EMQX will save this message in the system. you can view this message on the Retained Messages list page. When you subscribe to the topic of this retained message, EMQX will publish this message to the topic, and you can receive this message immediately by subscribing to the topic.
+リテインドメッセージをパブリッシュすると、EMQX はこのメッセージをシステム内に保存します。リテインドメッセージの一覧ページでこのメッセージを確認できます。このリテインドメッセージのトピックにサブスクライブすると、EMQX はこのメッセージをトピックにパブリッシュし、即座に受信できます。
 
-The default expiration time of the retained message is never expired unless you manually delete this message.
+リテインドメッセージのデフォルトの有効期限は無期限で、手動で削除しない限り失効しません。
 
-### Retained Messages List
+### リテインドメッセージ一覧
 
-In the **Monitoring** -> **Retained Messages** page, you can view all the retained messages in the system, including the topic, QoS, publish time, and client ID. The search box allows for filtering through search, and it supports topic wildcards.
+**Monitoring** -> **Retained Messages** ページでは、システム内のすべてのリテインドメッセージをトピック、QoS、パブリッシュ時間、クライアントIDとともに確認できます。検索ボックスで検索によるフィルタリングが可能で、トピックワイルドカードにも対応しています。
 
-The page also provides options to view the payload of a retained message and delete it using the **Show Payload** and **Delete** buttons respectively. You can refresh the list using the **Refresh** button and access the retained message settings page using the **Settings** button.
+また、**Show Payload** ボタンでリテインドメッセージのペイロードを表示し、**Delete** ボタンで削除できます。**Refresh** ボタンで一覧を更新し、**Settings** ボタンからリテインドメッセージの設定ページにアクセスできます。
 
-You can see the following 3 types of retained messages from [system topics](./mqtt-concepts.md) by default:
+デフォルトで以下の3種類のリテインドメッセージが [システムトピック](./mqtt-concepts.md) から確認できます：
 
-- $SYS/brokers/+/sysdescr: System description of the current EMQX node
-- $SYS/brokers/+/version: Version number of the current EMQX node
-- $SYS/brokers - Number and name of all nodes of the current EMQX
+- $SYS/brokers/+/sysdescr: 現在の EMQX ノードのシステム説明
+- $SYS/brokers/+/version: 現在の EMQX ノードのバージョン番号
+- $SYS/brokers: 現在の EMQX のすべてのノードの数と名前
 
-<img src="./assets/retained-messages.png" alt="retained-messages" style="zoom:67%;" />
+<img src="./assets/retained-messages.png" alt="リテインドメッセージ一覧" style="zoom:67%;" />
 
-### Delete Retained Message
+### リテインドメッセージの削除
 
-To delete a retained message in EMQX, you can either publish an empty message to the topic of the retained message in the client or use the EMQX Dashboard. In the Dashboard, you can click the **Delete** button for a specific retained message to remove it. You can also delete all retained messages on the cluster by using the **Clear All** button. Additionally, you can also set the expiration time for retained messages on the Retained Messages configuration page, allowing EMQX to automatically delete them when they expire.
+EMQX でリテインドメッセージを削除するには、クライアントでリテインドメッセージのトピックに空のメッセージをパブリッシュするか、EMQX ダッシュボードを使用します。ダッシュボードでは、特定のリテインドメッセージの **Delete** ボタンをクリックして削除できます。クラスター内のすべてのリテインドメッセージを削除するには、**Clear All** ボタンを使用します。
+
+さらに、リテインドメッセージの有効期限をリテインドメッセージ設定ページで設定でき、有効期限切れにより EMQX が自動的に削除することも可能です。

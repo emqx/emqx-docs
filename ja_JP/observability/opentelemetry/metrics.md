@@ -1,14 +1,14 @@
-# Integrate OpenTelemetry to View Metrics
-EMQX has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization.
+# OpenTelemetryを統合してメトリクスを表示する
+EMQXは、gRPC OTELプロトコルを介してメトリクスを直接OpenTelemetry Collectorにプッシュする機能を標準でサポートしています。Collectorはデータを任意のバックエンドにルーティング、フィルタリング、変換し、保存および可視化が可能です。
 
-This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md).
+本ページでは、EMQXとOpenTelemetryの統合方法をダッシュボードを通じて紹介し、[Prometheus](../../observability/prometheus.md)でEMQXのメトリクスを表示する方法を説明します。
 
-## Prerequisites
+## 前提条件
 
-Before integrating with OpenTelemetry, you need to deploy and configure OpenTelemetry and Prometheus.
+OpenTelemetryとの統合を行う前に、OpenTelemetryとPrometheusをデプロイおよび設定しておく必要があります。
 
-- Deploy [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started).
-- Configure Collector's gRPC receiving port (default 4317) and Prometheus metrics exporting port (8889).
+- [OpenTelemetry Collector](https://opentelemetry.io/docs/collector/getting-started)をデプロイします。
+- CollectorのgRPC受信ポート（デフォルトは4317）とPrometheusメトリクスエクスポートポート（8889）を設定します。
 
 ```yaml
 # otel-collector-config.yaml
@@ -32,8 +32,8 @@ service:
       exporters: [prometheus]
 ```
 
-- Deploy [Prometheus](https://prometheus.io/docs/prometheus/latest/installation).
-- Configure Prometheus to scrape metrics collected by the Collector.
+- [Prometheus](https://prometheus.io/docs/prometheus/latest/installation)をデプロイします。
+- Prometheusを設定し、Collectorが収集したメトリクスをスクレイプするようにします。
 
 ```yaml
 # prometheus.yaml
@@ -41,26 +41,26 @@ scrape_configs:
   - job_name: 'otel-collector'
     scrape_interval: 10s
     static_configs:
-      - targets: ['otel-collector:8889'] # emqx metrics
-      - targets: ['otel-collector:8888'] # collector metrics
+      - targets: ['otel-collector:8889'] # EMQXメトリクス
+      - targets: ['otel-collector:8888'] # Collectorメトリクス
 ```
 
-## Enable OpenTelemetry Metrics in EMQX
+## EMQXでOpenTelemetryメトリクスを有効化する
 
-You can use EMQX Dashboard or a configuration file to configure EMQX's integration with the OpenTelemetry metrics feature. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration for Metrics.
+EMQXのOpenTelemetryメトリクス機能との統合は、EMQXダッシュボードまたは設定ファイルで行えます。ダッシュボードでは、左側のナビゲーションメニューから **Management** -> **Monitoring** をクリックし、**Integration** タブでメトリクスの設定を行います。
 
-Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
+EMQXがローカルで動作している場合、以下の設定をEMQXの `cluster.hocon` ファイルに追加してください。
 
-   ```bash
+```bash
 opentelemetry {
   exporter { endpoint = "http://localhost:4317" }
   metrics {
      interval = "10s"
   }
 }
-   ```
+```
 
-## Visualize EMQX Metrics in Prometheus
+## PrometheusでEMQXメトリクスを可視化する
 
-The EMQX metrics can be viewed in the Prometheus web console (http://otel-collector:9090):
+EMQXのメトリクスは、PrometheusのWebコンソール（http://otel-collector:9090）で確認できます。  
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)

@@ -1,36 +1,36 @@
-# REST API-Based MQTT 5.0 SCRAM Authentication
+# REST APIベースの MQTT 5.0 SCRAM 認証
 
-EMQX supports MQTT 5.0 enhanced authentication using REST API, implementing the [Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism). The SCRAM authenticator utilizes an external web resource to retrieve the necessary authentication data in this implementation. When enabled, and a client initiates a connection request with SCRAM, EMQX uses the provided username to construct an HTTP request to the external service, obtaining the authentication data required for the authentication process.
+EMQX は REST API を利用した MQTT 5.0 の拡張認証をサポートしており、[Salted Challenge Response Authentication Mechanism (SCRAM)](https://en.wikipedia.org/wiki/Salted_Challenge_Response_Authentication_Mechanism) を実装しています。本実装では、SCRAM 認証器が外部のウェブリソースから必要な認証データを取得します。有効化されている場合、クライアントが SCRAM で接続要求を開始すると、EMQX は提供されたユーザー名を使って外部サービスへ HTTP リクエストを構築し、認証プロセスに必要な認証データを取得します。
 
-While SCRAM is inherently a lightweight and simple authentication mechanism, this implementation enhances its functionality by integrating with an external REST API. This allows EMQX to securely and efficiently retrieve authentication data from various external systems, supporting more complex authentication scenarios.
+SCRAM はもともと軽量でシンプルな認証機構ですが、本実装では外部 REST API と連携することで機能を拡張しています。これにより、EMQX は様々な外部システムから安全かつ効率的に認証データを取得でき、より複雑な認証シナリオに対応可能です。
 
-::: tip Prerequisites
+::: tip 前提条件
 
-- Familiarity with [basic EMQX authentication concepts](./authn.md).
-- SCRAM authenticator is only supported for MQTT 5.0 connections.
-- This authenticator is not an implementation of the RFC 7804: [Salted Challenge Response HTTP Authentication Mechanism](https://datatracker.ietf.org/doc/html/rfc7804). 
+- [EMQX の基本的な認証概念](./authn.md)に関する理解があること。
+- SCRAM 認証器は MQTT 5.0 接続のみサポートしています。
+- 本認証器は RFC 7804: [Salted Challenge Response HTTP Authentication Mechanism](https://datatracker.ietf.org/doc/html/rfc7804) の実装ではありません。
 
 :::
 
-## HTTP Request and Response
+## HTTP リクエストとレスポンス
 
-The authentication process is similar to an HTTP API call. EMQX acts as the client, constructing and sending an HTTP request to an external HTTP service. The service responds with the required authentication data corresponding to the `username`.
+認証プロセスは HTTP API コールに似ています。EMQX はクライアントとして動作し、外部 HTTP サービスへ HTTP リクエストを構築・送信します。サービスは `username` に対応する認証データをレスポンスとして返します。
 
-### Response Format Requirements
+### レスポンス形式の要件
 
-To ensure successful authentication, the HTTP response must adhere to the following criteria:
+認証を成功させるために、HTTP レスポンスは以下の条件を満たす必要があります。
 
-- **Content-Type**: The response must be encoded as `application/json`.
-- **Authentication Data**: Must include `stored_key`, `server_key`, and `salt`, all encoded in hexadecimal.
-- **Superuser Indicator**: Use the `is_superuser` field, with possible values `true` or `false`.
-- **Client Attributes**: Optionally, you can specify [client attributes](../../client-attributes/client-attributes.md) using the `client_attrs` field. Both keys and values must be strings.
-- **Access Control List (ACL)**: Optionally include an `acl` field to define the client's permissions. Refer to the [Access Control List](./jwt.md#access-control-list-optional) for more details.
-- **Expiration Time**: Optionally, you can set the `expire_at` field to specify when the client's authentication expires, after which the client must disconnect and re-authenticate. The value should be a Unix timestamp in seconds.
-- **HTTP Status Code**: The HTTP response should return a `200 OK` status code. Any `4xx` or `5xx` status codes will be interpreted as `ignore`, and the authentication chain will proceed without this authenticator.
+- **Content-Type**: レスポンスは `application/json` でエンコードされていること。
+- **認証データ**: `stored_key`、`server_key`、`salt` を含み、すべて16進数でエンコードされていること。
+- **スーパーユーザー指標**: `is_superuser` フィールドを使用し、値は `true` または `false`。
+- **クライアント属性**: 任意で `client_attrs` フィールドに[クライアント属性](../../client-attributes/client-attributes.md)を指定可能。キーと値は文字列である必要があります。
+- **アクセス制御リスト (ACL)**: 任意で `acl` フィールドにクライアントの権限を定義可能です。詳細は[アクセス制御リスト](./jwt.md#access-control-list-optional)を参照してください。
+- **有効期限**: 任意で `expire_at` フィールドを設定可能で、クライアントの認証有効期限を Unix タイムスタンプ（秒単位）で指定します。期限切れ後はクライアントは切断し、再認証が必要です。
+- **HTTP ステータスコード**: HTTP レスポンスは `200 OK` を返す必要があります。`4xx` または `5xx` のステータスコードは `ignore` と解釈され、この認証器をスキップして認証チェーンが続行されます。
 
-### Example HTTP Response
+### HTTP レスポンス例
 
-The following example illustrates the expected structure and content of the HTTP response:
+以下は期待される HTTP レスポンスの構造と内容の例です。
 
 ```json
 HTTP/1.1 200 OK
@@ -41,13 +41,13 @@ Body:
     "stored_key": "008F5E0CC6316BB172F511E93E4756EEA876B5B5125F1CD2FD69A2C30F9A0D73",
     "server_key": "81466E185EC642AFAE1EFA75953735D6C0934D099149AAAB601D59F8F8162580",
     "salt": "6633653634383437393466356532333165656435346432393464366165393137"
-    "is_superuser": true, // options: true | false, default value: false
-    "client_attrs": { // optional 
+    "is_superuser": true, // オプション: true | false、デフォルトは false
+    "client_attrs": { // 任意
         "role": "admin",
         "sn": "10c61f1a1f47"
     }
-    "expire_at": 1654254601, // optional 
-    "acl": // optional 
+    "expire_at": 1654254601, // 任意
+    "acl": // 任意
     [
         {
             "permission": "allow",
@@ -64,48 +64,48 @@ Body:
 }
 ```
 
-## Configure Authenticator with Dashboard
+## ダッシュボードでの認証器設定
 
-You can configure the SCRAM authenticator through the EMQX Dashboard.
+EMQX ダッシュボードから SCRAM 認証器を設定できます。
 
-1. Login to the EMQX Dashboard.
+1. EMQX ダッシュボードにログインします。
 
-2. In the left navigation menu, click **Access Control** -> **Authentication** to open the **Authentication** page.
+2. 左側のナビゲーションメニューで **アクセス制御** -> **認証** をクリックし、**認証** ページを開きます。
 
-3. Click **Create** in the top right corner.
+3. 右上の **作成** をクリックします。
 
-4. Select **SCRAM** as the **Mechanism** and **HTTP Server** as the **Backend**. By clicking **Next**, you will enter the **Configuration** step page, as shown below.
+4. **メカニズム** に **SCRAM** を選択し、**バックエンド** に **HTTP Server** を選択します。**次へ** をクリックすると、以下のような **設定** ステップのページに進みます。
 
    ![authn-scram-http](./assets/authn-scram-restapi.png)
 
-5. Configure the following settings for the backend:
+5. バックエンドの設定を以下のように行います。
 
-   - **Method**: Select the HTTP request method (`GET` or `POST`). 
+   - **Method**: HTTP リクエストメソッドを選択します（`GET` または `POST`）。
 
      ::: tip
 
-     The `POST` method is recommended to avoid exposing sensitive information, such as passwords, in server logs. For untrusted environments, use HTTPS. 
+     `POST` メソッドは、パスワードなどの機密情報がサーバーログに露出するのを避けるため推奨されます。信頼できない環境では HTTPS を使用してください。
 
      :::
 
-   - **URL**: Enter the URL of the HTTP service.
+   - **URL**: HTTP サービスの URL を入力します。
 
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this HTTP Server authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+   - **Precondition**: [Variform 式](../../configuration/configuration.md#variform-expressions)を使い、この HTTP Server 認証器をクライアント接続に適用するか制御します。式はクライアントの属性（`username`、`clientid`、`listener` など）に対して評価され、結果が文字列 `"true"` の場合のみ認証器が呼び出されます。そうでなければスキップされます。詳細は[認証の前提条件](./authn.md#authentication-preconditions)を参照してください。
 
-   - **Headers** (optional): Specify any additional HTTP request headers.
+   - **Headers**（任意）: 追加の HTTP リクエストヘッダーを指定します。
 
-   - **Authentication Configuration**:
+   - **認証設定**:
 
-     - **Password Hash**: Select the password hash algorithm (`sha256` or `sha512`).
-     - **Enable TLS**: Enable TLS by toggling the switch. For more details on enabling TLS, see [TLS for External Resource Access](../../network/overview.md#tls-for-external-resource-access).
-     - **Body**: Define the request template. For `POST` requests, it’s sent as JSON in the request body; for `GET` requests, it’s encoded as a Query String in the URL. Use [placeholders](./authn.md#authentication-placeholders) to map keys and values.
-   
-   - **Advanced Settings**:
+     - **Password Hash**: パスワードハッシュアルゴリズムを選択します（`sha256` または `sha512`）。
+     - **TLS を有効化**: スイッチを切り替えて TLS を有効化します。TLS 有効化の詳細は[外部リソースアクセスの TLS](../../network/overview.md#tls-for-external-resource-access)を参照してください。
+     - **Body**: リクエストテンプレートを定義します。`POST` リクエストの場合は JSON 形式でリクエストボディに送信され、`GET` リクエストの場合は URL のクエリ文字列としてエンコードされます。[プレースホルダー](./authn.md#authentication-placeholders)を使ってキーと値をマッピングしてください。
 
-     - **Connection Pool size** (optional): Set the number (integer value) of concurrent connections from an EMQX node to the HTTP server. Default: `8`.
-     - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Supported units: `milliseconds`, `second`, `minute`, `hour`.
-     - **HTTP Pipelining** (optional): Enter a positive integer to specify the maximum number of HTTP requests that can be sent without waiting for a response. Default: `100`.
-     - **Request Timeout** (optional): Specify the waiting period before EMQX assumes the request is timed out. Supported units: `milliseconds`, `second`, `minute`, `hour`.
-     - **Iteration Count** (optional): Set the SCRAM iteration count. Default: `4096`.
-   
-6. After completing the configuration, click **Create** to finalize the settings.
+   - **詳細設定**:
+
+     - **コネクションプールサイズ**（任意）: EMQX ノードから HTTP サーバーへの同時接続数（整数値）を設定します。デフォルトは `8`。
+     - **接続タイムアウト**（任意）: EMQX が接続タイムアウトと判断するまでの待機時間を指定します。サポートされる単位は `milliseconds`、`second`、`minute`、`hour` です。
+     - **HTTP パイプライニング**（任意）: 応答を待たずに送信可能な最大 HTTP リクエスト数を正の整数で指定します。デフォルトは `100`。
+     - **リクエストタイムアウト**（任意）: EMQX がリクエストタイムアウトと判断するまでの待機時間を指定します。サポートされる単位は `milliseconds`、`second`、`minute`、`hour` です。
+     - **イテレーション回数**（任意）: SCRAM のイテレーション回数を設定します。デフォルトは `4096`。
+
+6. 設定が完了したら、**作成** をクリックして設定を確定します。

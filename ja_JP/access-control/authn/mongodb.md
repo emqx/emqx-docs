@@ -1,22 +1,22 @@
-# Integrate with MongoDB
+# MongoDBとの統合
 
-EMQX supports integrating with MongoDB for password authentication. EMQX MongoDB authenticator currently supports connecting to MongoDB running in three different modes, which are Single, [Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/) and [Sharding](https://www.mongodb.com/docs/manual/sharding/). This page gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
+EMQXはパスワード認証のためにMongoDBとの統合をサポートしています。EMQXのMongoDB認証機能は、現在、Single、[Replica Set](https://www.mongodb.com/docs/manual/reference/replica-configuration/)、および[Sharding](https://www.mongodb.com/docs/manual/sharding/)の3つの異なるモードで稼働するMongoDBへの接続をサポートしています。本ページでは、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
 
 ::: tip
 
-Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
+[EMQX認証の基本概念](../authn/authn.md)についての知識
 
 :::
 
-## Data Schema and Query Statement
+## データスキーマとクエリ文
 
-EMQX MongoDB authenticator supports storing authentication data as MongoDB documents. Users need to provide a query statement template and ensure the following fields are included:
+EMQXのMongoDB認証機能は、認証データをMongoDBのドキュメントとして保存することをサポートしています。ユーザーはクエリ文のテンプレートを提供し、以下のフィールドが含まれていることを確認する必要があります。
 
-- `password_hash`: required; password (in plain text or hashed) stored in the database; this field supports renaming;
-- `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; this field supports renaming;
-- `is_superuser`: optional; flag if the current client is a superuser; default: `false`; this field supports renaming.
+- `password_hash`: 必須。データベースに保存されるパスワード（プレーンテキストまたはハッシュ済み）。このフィールドは名前変更が可能です。
+- `salt`: 任意。`salt = ""` またはこのフィールドを削除すると、ソルト値が追加されないことを示します。このフィールドも名前変更が可能です。
+- `is_superuser`: 任意。現在のクライアントがスーパーユーザーかどうかのフラグ。デフォルトは `false`。このフィールドも名前変更が可能です。
 
-For example, if we want to add a document for a superuser (`is_superuser`: `true`) with username `user123`, password `secret`, suffixed salt `salt_foo123`, and password hash `sha256`, the query statement should be:
+例えば、ユーザー名が `user123`、パスワードが `secret`、サフィックスとしてのソルトが `salt_foo123`、パスワードハッシュが `sha256` のスーパーユーザー（`is_superuser`: `true`）のドキュメントを追加したい場合、クエリ文は以下のようになります。
 
 ```
 > db.mqtt_user.insertOne(
@@ -33,13 +33,13 @@ For example, if we want to add a document for a superuser (`is_superuser`: `true
 }
 ```
 
-:::tip 
+:::tip
 
-When there is a significant number of users in the system, please optimize and index the tables to be queried beforehand to shorten the query response time and reduce the load for EMQX.
+システム内のユーザー数が多い場合は、クエリの応答時間を短縮しEMQXへの負荷を軽減するために、事前にテーブルの最適化とインデックス作成を行ってください。
 
- :::
+:::
 
-For this MongoDB data schema, the corresponding Dashboard configuration parameters are: 
+このMongoDBデータスキーマに対応するダッシュボードの設定パラメータは以下の通りです。
 
 - **Password Hash**: `sha256`
 - **Salt Position**: `suffix`
@@ -49,62 +49,63 @@ For this MongoDB data schema, the corresponding Dashboard configuration paramete
 - **Salt Field**: `salt`
 - **is_superuser Field**： `is_superuser`
 
-## Configure with Dashboard
+## ダッシュボードでの設定
 
-You can use EMQX Dashboard to configure how to use MongoDB for password authentication. 
+EMQXダッシュボードを使用して、MongoDBをパスワード認証に利用する設定が可能です。
 
-1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
-2. On the **Authentication** page, click **Create** in the top right corner.
-3. Click to select **Password-Based** as **Mechanism**, and **MongoDB** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. EMQXダッシュボードの左側ナビゲーションメニューから **Access Control** -> **Authentication** をクリックします。
+2. **Authentication** ページの右上にある **Create** をクリックします。
+3. **Mechanism** に **Password-Based** を選択し、**Backend** に **MongoDB** を選択すると、以下のように **Configuration** タブに遷移します。
 
 ![authn-MongoDB_ee](./assets/authn-MongoDB_ee.png)
 
-4. Follow the instructions below to configure the authentication backend:
+4. 以下の手順に従って認証バックエンドを設定します。
 
-   - Enter the information for connecting to MongoDB:
-     - **MongoDB Mode**: Select how MongoDB is deployed, including `Single`, `Replica Set` and `Sharding`. 
-     - **Server**: Specify the MongoDB server address that EMQX is to connect, if **MongoDB Mode** is set to `Replica Set` or `Sharding`, you will need to input all MondoDB servers (separated with a `,`) that EMQX is to connect.
-     - **Replica Set Name**: Specify the Replica Set name to use; type: strings; only needed if you set **MongoDB Mode** to `Replica Set`.
-     - **Database**: MongoDB database name; Data type: strings.
-     - **Collection**: Name of MongoDB collection where authentication rules are stored; Data type: strings.
-     - **Username**: Specify MongoDB user name. 
-     - **Password**: Specify MongoDB user password. 
-     - **Read Mode** (optional): Only needed if you set **MongoDB Mode** to `Replica Set`; Default: `master`; Options: `master`, `slave_ok`. 
-       - **master**: Indicate each query in a sequence must only read fresh data (from a master/primary server). If the connected server is not a master, the first read will fail, and subsequent operations will be aborted.
-       - **slave_ok**: Allows queries to read stale data from a secondary/slave server or fresh data from a master.
-     - **Write Mode** (optional): Only needed if you set **MongoDB Mode** to `Replica Set`; Options: `unsafe`, `safe`; Default: `safe`.
+   - MongoDBへの接続情報を入力します。
+     - **MongoDB Mode**: MongoDBのデプロイ方法を選択します。`Single`、`Replica Set`、`Sharding` のいずれかです。
+     - **Server**: EMQXが接続するMongoDBサーバーのアドレスを指定します。**MongoDB Mode** が `Replica Set` または `Sharding` の場合は、接続するすべてのMongoDBサーバーをカンマ（`,`）区切りで入力してください。
+     - **Replica Set Name**: Replica Setの名前を指定します。文字列型。**MongoDB Mode** が `Replica Set` の場合のみ必要です。
+     - **Database**: MongoDBのデータベース名。文字列型。
+     - **Collection**: 認証ルールを保存するMongoDBコレクション名。文字列型。
+     - **Username**: MongoDBのユーザー名を指定します。
+     - **Password**: MongoDBのユーザーパスワードを指定します。
+     - **Read Mode**（任意）: **MongoDB Mode** が `Replica Set` の場合のみ必要です。デフォルトは `master`。選択肢は `master`、`slave_ok`。
+       - **master**: 各クエリは最新のデータ（マスター／プライマリサーバー）からのみ読み取ります。接続先がマスターでない場合、最初の読み取りは失敗し、その後の操作は中止されます。
+       - **slave_ok**: セカンダリ／スレーブサーバーからの古いデータまたはマスターからの最新データの読み取りを許可します。
+     - **Write Mode**（任意）: **MongoDB Mode** が `Replica Set` の場合のみ必要です。選択肢は `unsafe`、`safe`。デフォルトは `safe`。
 
-   - Configure settings related to authentication:
-     - **Password Hash Field**: Specify the field name of the password.
-     - **Password Hash**: Select the password hashing algorithm applied to plain-text passwords before results are stored in the database. Available options are `plain`, `md5`, `sha`, `sha256`, `sha512`, `bcrypt`, and `pbkdf2`. Additional configurations depend on the selected algorithm:
-       - For `md5`, `sha`, `sha256` or `sha512`:
-         - **Salt Position**: Determines how salt (random data) is mixed with the password. Options are `suffix`, `prefix`, or `disable`. You can keep the default value unless you migrate user credentials from external storage into the EMQX built-in database.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
-       - For `plain`:
-         - **Salt Position**: should be `disable`.
-       - For `bcrypt`:
-         - **Salt Rounds**: Defines the number of times the hash function is applied, expressed as _2<sup>Salt Rounds</sup>_, also known as the "cost factor". The default value is `10`, with a permissible range of `5` to `10`. A higher value is recommended for enhanced security. Note: Increasing the cost factor by 1 doubles the necessary time for authentication.
-       - For `pbkdf2`:
-         - **Pseudorandom Function**: Selects the hash function that generates the key, such as `sha256`.
-         - **Iteration Count**: Sets the number of times the hash function is executed. The default is `4096`.
-         - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
-         - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential. 
-   - **Salt Field**: Specify the salt field in MongoDB.
-   - **is_superuser Field**: Determine if the user is a super user. 
-   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MongoDB authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
-   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
-   - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported.
-   - **Advanced Settings**: Set the concurrent connections and waiting time before a connection is timed out.
-     - **Connection Pool size** (optional): Specify the number of concurrent connections from an EMQX node to a MongoDB server. Default: `8`. 
-     - **Connect Timeout** (optional): Define the duration to wait before considering a connection as timed out. Supported units: milliseconds, seconds, minutes, hours. Default: `20` second.
+   - 認証に関する設定を行います。
+     - **Password Hash Field**: パスワードのフィールド名を指定します。
+     - **Password Hash**: プレーンテキストパスワードに適用され、データベースに保存される前のパスワードハッシュアルゴリズムを選択します。利用可能なオプションは `plain`、`md5`、`sha`、`sha256`、`sha512`、`bcrypt`、`pbkdf2` です。選択したアルゴリズムに応じて追加設定があります。
+       - `md5`、`sha`、`sha256`、`sha512` の場合:
+         - **Salt Position**: ソルト（ランダムデータ）をパスワードにどのように混ぜるかを決定します。`suffix`、`prefix`、`disable` のいずれかです。外部ストレージからEMQX組み込みデータベースにユーザー認証情報を移行しない限り、デフォルト値のままで問題ありません。
+         - 結果のハッシュは16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
+       - `plain` の場合:
+         - **Salt Position** は `disable` に設定してください。
+       - `bcrypt` の場合:
+         - **Salt Rounds**: ハッシュ関数の適用回数を定義します。2のべき乗で表され、"コストファクター"とも呼ばれます。デフォルトは `10`、許容範囲は `5` から `10` です。セキュリティ向上のためには高い値が推奨されます。注：コストファクターを1増やすと認証に必要な時間が倍増します。
+       - `pbkdf2` の場合:
+         - **Pseudorandom Function**: キー生成に使用するハッシュ関数を選択します（例：`sha256`）。
+         - **Iteration Count**: ハッシュ関数の実行回数を設定します。デフォルトは `4096`。
+         - **Derived Key Length**（任意）: 生成されるキーのバイト長を指定します。空欄の場合は選択した疑似乱数関数により決定されます。
+         - 結果のハッシュは16進数文字列で表され、大文字・小文字を区別せずに保存された認証情報と比較されます。
+     - **Salt Field**: MongoDBのソルトフィールドを指定します。
+     - **is_superuser Field**: ユーザーがスーパーユーザーかどうかを判定します。
+     - **Precondition**: クライアント接続に対してこのMongoDB認証機能を適用するかどうかを制御するための[Variform式](../../configuration/configuration.md#variform-expressions)です。この式はクライアントの属性（`username`、`clientid`、`listener`など）に対して評価され、結果が文字列 `"true"` の場合のみ認証機能が呼び出されます。それ以外の場合はスキップされます。詳細は[認証の前提条件](./authn.md#authentication-preconditions)を参照してください。
+     - **Enable TLS**: TLSを有効にする場合はトグルスイッチをオンにします。TLSの有効化については[ネットワークとTLS](../../network/overview.md)を参照してください。
+     - **Filter**: 認証情報検索に使われるMongoDBセレクターとして解釈されるマップです。[プレースホルダー](./authn.md#authentication-placeholders)がサポートされています。
+     - **Advanced Settings**: 同時接続数や接続タイムアウトまでの待機時間を設定します。
+       - **Connection Pool size**（任意）: EMQXノードからMongoDBサーバーへの同時接続数を指定します。デフォルトは `8`。
+       - **Connect Timeout**（任意）: 接続がタイムアウトとみなされるまでの待機時間を指定します。サポートされる単位はミリ秒、秒、分、時間です。デフォルトは `20` 秒。
 
-5. After you finish the settings, click **Create**.
+5. 設定が完了したら、**Create** をクリックします。
 
-## Configure with Configuration Items
+## 設定ファイルでの設定
 
-You can configure the EMQX MongoDB authenticator with EMQX configuration items. <!--for detailed operating steps, see [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone), [authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster) and [authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set).-->
+EMQXのMongoDB認証機能は、EMQXの設定項目で構成することも可能です。  
+<!-- 詳細な操作手順は [authn-mongodb:standalone](../../configuration/configuration-manual.html#authn-mongodb:standalone)、[authn-mongodb:sharded-cluster](../../configuration/configuration-manual.html#authn-mongodb:sharded-cluster)、および [authn-mongodb:replica-set](../../configuration/configuration-manual.html#authn-mongodb:replica-set) を参照してください。 -->
 
-Below are code examples you may refer to:
+以下は参考となるコード例です。
 
 :::: tabs type:card
 

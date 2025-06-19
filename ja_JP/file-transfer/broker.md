@@ -1,21 +1,21 @@
-# Configure File Transfer Server-Side Settings
+# ファイル転送サーバー側設定の構成
 
-EMQX does not enable the MQTT file transfer feature by default. If you wish to use this feature, you need to enable it in the configuration file.
+EMQXでは、MQTTファイル転送機能はデフォルトで有効になっていません。この機能を利用する場合は、設定ファイルで有効化する必要があります。
 
-This page mainly introduces how to enable the File Transfer feature in EMQX and configure various functionalities of file transfer on the EMQX server side. This includes segment storage and exporting merged files to local disk and S3 buckets. It also covers the configuration of MQTT transfer to optimize the server's handling of file transfers. The following sections introduce how to configure these settings through the configuration file in detail:
+本ページでは主に、EMQXでファイル転送機能を有効化し、サーバー側でのファイル転送に関する各種機能を設定する方法を紹介します。これには、セグメントの保存やマージされたファイルのローカルディスクおよびS3バケットへのエクスポート、さらにファイル転送処理を最適化するためのMQTT転送設定の構成が含まれます。以下のセクションで、設定ファイルを通じた詳細な設定方法を説明します。
 
-- [Enable File Transfer](#enable-file-transfer)
-- [Configure Segment Storage](#configure-segment-storage)
-- [Configure File Export](#configure-file-export)
-- [Configure MQTT Transfer Settings](#configure-mqtt-transfer-settings)
+- [ファイル転送の有効化](#enable-file-transfer)
+- [セグメント保存の設定](#configure-segment-storage)
+- [ファイルエクスポートの設定](#configure-file-export)
+- [MQTT転送設定の構成](#configure-mqtt-transfer-settings)
 
-You can also enable and configure the File Transfer feature through the Dashboard. For detailed information, refer to [Enable and Configure File Transfer via Dashboard](#enable-and-configure-file-transfer-via-dashboard).
+また、Dashboardからもファイル転送機能の有効化および設定が可能です。詳細は[Dashboardによるファイル転送の有効化と設定](#enable-and-configure-file-transfer-via-dashboard)を参照してください。
 
-This page also introduces how to manage exported files through the REST API. For specific details, refer to [Manage Exported Files](#manage-exported-files).
+さらに、REST APIを利用したエクスポート済みファイルの管理方法についても紹介します。詳細は[エクスポート済みファイルの管理](#manage-exported-files)をご覧ください。
 
-## Enable File Transfer
+## ファイル転送の有効化
 
-In EMQX, the file transfer feature is disabled by default, and you need to enable it in the configuration file.
+EMQXではファイル転送機能はデフォルトで無効になっており、設定ファイルで有効化する必要があります。
 
 ```bash
 file_transfer {
@@ -23,83 +23,83 @@ file_transfer {
 }
 ```
 
-With this configuration, EMQX will default to storing segment files in the `data/file_transfer/segments` directory and enable local disk export, exporting merged files to the `data/transfers/exports` directory.
+この設定により、EMQXはデフォルトでセグメントファイルを `data/file_transfer/segments` ディレクトリに保存し、ローカルディスクへのエクスポートを有効化して、マージされたファイルを `data/transfers/exports` ディレクトリに出力します。
 
-If you need to further configure the file transfer feature, you can refer to the following configuration instructions.
+ファイル転送機能をさらに細かく設定する場合は、以下の設定例を参照してください。
 
-## Configure Segment Storage
+## セグメント保存の設定
 
-EMQX supports clients uploading file segments, which are merged into a complete file after receiving all segments. To support this, EMQX needs to temporarily store the segment files and manage them.
+EMQXはクライアントからファイルのセグメントをアップロードさせ、すべてのセグメント受信後に完全なファイルとしてマージします。これをサポートするために、EMQXはセグメントファイルを一時的に保存し管理する必要があります。
 
-Currently, EMQX only supports storing segment files on disk, and you can configure the storage location of the segments.
+現状、EMQXはセグメントファイルの保存先としてディスクのみをサポートしており、セグメントの保存場所を設定可能です。
 
-Once the file upload is complete, the segments will be automatically cleaned up. For files that have not been uploaded successfully within the timeout period, you can configure the validity period of segments and schedule cleaning time to avoid occupying disk space.
+ファイルアップロード完了後はセグメントは自動的にクリーンアップされます。アップロードがタイムアウト期間内に完了しなかったファイルについては、セグメントの有効期間やクリーンアップのスケジュールを設定し、ディスク容量の無駄な占有を防止できます。
 
 ```bash
 file_transfer {
-  # Enable file transfer feature
+  # ファイル転送機能の有効化
   enable = true
 
-  # Segment storage configuration
+  # セグメント保存の設定
   storage.local.segments = {
-    # Segment storage directory, preferably set on high I/O performance disks.
+    # セグメント保存ディレクトリ。I/O性能の高いディスクに設定することが望ましい。
     root = "./data/file_transfer/segments"
 
-    # Scheduled cleaning of expired segment files
+    # 有効期限切れセグメントの定期クリーンアップ設定
     gc {
-      # Cleaning interval
+      # クリーンアップ間隔
       interval = "1h"
 
-      # Maximum valid period for segment storage, segments will be cleared after this period, even if they have not been merged.
-      # The validity period specified by the client must not exceed this value.
+      # セグメント保存の最大有効期間。この期間を過ぎるとマージされていなくてもセグメントは削除される。
+      # クライアントが指定する有効期間はこの値を超えてはならない。
       maximum_segments_ttl = "24h"
     }
   }
 }
 ```
 
-You need to set a reasonable configuration based on the expected file size, concurrent transmissions, and the available disk space.
+想定されるファイルサイズ、同時転送数、利用可能なディスク容量に応じて適切な設定を行ってください。
 
-## Configure File Export
+## ファイルエクスポートの設定
 
-After all segments are transmitted, EMQX supports merging segments into a complete file and exporting the complete file to a local disk or S3 bucket for application integration.
+すべてのセグメント転送完了後、EMQXはセグメントをマージして完全なファイルを生成し、ローカルディスクまたはS3バケットにエクスポートしてアプリケーションと連携できます。
 
 :::tip
 
-If file export is not configured, it defaults to local disk export. EMQX does not support configuring both export methods simultaneously; only one can be used.
+ファイルエクスポートを設定しない場合はデフォルトでローカルディスクへのエクスポートとなります。EMQXは両方のエクスポート方法を同時に設定することはできず、いずれか一方のみ利用可能です。
 
 :::
 
-### File Export to Local Disk
+### ローカルディスクへのファイルエクスポート
 
-Use the following configuration example to save the merged complete file on the local disk. You can configure the storage location and validity period of the exported file.
+以下の設定例は、マージされた完全ファイルをローカルディスクに保存する方法です。エクスポートファイルの保存場所や有効期間を設定できます。
 
 ```bash
 file_transfer {
-  # Enable file transfer feature
+  # ファイル転送機能の有効化
   enable = true
 
-  # Segment storage configuration
+  # セグメント保存の設定
   # ...
 
-  # Enable local disk file export
+  # ローカルディスクへのファイルエクスポートを有効化
   storage.local.exporter.local {
-    # Export file storage directory, preferably set on high I/O performance disks.
+    # エクスポートファイル保存ディレクトリ。I/O性能の高いディスクに設定することが望ましい。
     root = "./data/transfers/exports"
   }
 }
 ```
 
-### File Export to S3 Bucket
+### S3バケットへのファイルエクスポート
 
-Use the following configuration example to save the merged complete file in an S3 bucket.
+以下の設定例は、マージされた完全ファイルをS3バケットに保存する方法です。
 
 ```bash
 file_transfer {
-  # Enable file transfer feature
+  # ファイル転送機能の有効化
   enable = true
 
-  # Segment storage configuration
+  # セグメント保存の設定
   # ...
 
   storage.local.exporter.s3 {
@@ -107,18 +107,20 @@ file_transfer {
     host = "s3.us-east-1.amazonaws.com"
     port = 443
 
-    # Credentials for accessing S3
+    # S3アクセス用認証情報
     access_key_id = "AKIA27EZDDM9XLINWXFE"
     secret_access_key = "******"
 
-    # Export file storage bucket
+    # エクスポートファイル保存バケット
     bucket = "my-bucket"
 
-    # Shared URL expiration time
-    # EMQX generates a temporary shared URL for clients to download files directly from S3. This parameter specifies the expiration time of the file download URL returned by the EMQX API. After expiration, the URL becomes unavailable, although the actual file remains in S3.
+    # 共有URLの有効期限
+    # EMQXはクライアントがS3から直接ファイルをダウンロードできる一時的な共有URLを生成します。
+    # このパラメータはEMQX APIが返すファイルダウンロードURLの有効期限を指定します。
+    # 有効期限切れ後はURLは無効となりますが、実際のファイルはS3に残ります。
     #url_expire_time = "1h"
 
-    # Settings for the underlying HTTP(S) connection with S3, allowing secure file upload and connection pool management.
+    # S3とのHTTP(S)接続に関する設定。安全なファイルアップロードや接続プール管理に利用されます。
     transport_options {
       ssl.enable = true
       connect_timeout = 15s
@@ -127,9 +129,9 @@ file_transfer {
 }
 ```
 
-## Configure MQTT Transfer Settings
+## MQTT転送設定の構成
 
-To optimize file transfer operations and prevent clients from waiting excessively, we can set specific timeouts for different file transfer operations. The following MQTT settings can be configured:
+ファイル転送処理を最適化し、クライアントの待機時間を抑えるために、各種ファイル転送操作に対してタイムアウトを設定できます。以下のMQTT設定を構成可能です。
 
 ```bash
 file_transfer {
@@ -140,111 +142,111 @@ file_transfer {
 }
 ```
 
-- `init_timeout`: Timeout for initialization operation.
-- `store_segment_timeout`: Timeout for storing file segments.
-- `assemble_timeout`: Timeout for file assembly.
+- `init_timeout`：初期化操作のタイムアウト時間
+- `store_segment_timeout`：ファイルセグメント保存のタイムアウト時間
+- `assemble_timeout`：ファイル組み立てのタイムアウト時間
 
-If any of these operations exceed the specified timeout, the MQTT client will receive a PUBACK packet with the `RC_UNSPECIFIED_ERROR` code.
+これらの操作が指定したタイムアウトを超えた場合、MQTTクライアントは `RC_UNSPECIFIED_ERROR` コード付きのPUBACKパケットを受信します。
 
-## Enable and Configure File Transfer via Dashboard
+## Dashboardによるファイル転送の有効化と設定
 
-This section demonstrates how to enable the File Transfer feature and configure its functionalities on the Dashboard.
+このセクションでは、Dashboard上でファイル転送機能を有効化し、各種機能を設定する方法を示します。
 
-Go to the EMQX Dashboard and click **Management** -> **File Transfer**. On the File Transfer page, you can click the **Enable** toggle switch to enable the File Transfer feature. You can refer to the [General Settings](#general-settings) and [Advanced Settings](#advanced-settings) to configure the functionalities. After you complete the configuration, click **Save Changes**.
+EMQX Dashboardにアクセスし、**管理** -> **ファイル転送**をクリックします。ファイル転送ページで、**有効化**トグルスイッチをクリックしてファイル転送機能を有効化できます。[一般設定](#general-settings)および[詳細設定](#advanced-settings)を参照して機能を設定し、設定完了後に**変更を保存**をクリックしてください。
 
-<img src="./assets/file-transfer-enable.png" alt="file-transfer-enable" style="zoom:67%;" />
+<img src="./assets/file-transfer-enable.png" alt="ファイル転送の有効化" style="zoom:67%;" />
 
-### General Settings
+### 一般設定
 
-You can configure the following general settings:
+以下の一般設定を構成できます。
 
-- **Init Timeout**: The maximum amount of time allowed for the `init` command to execute before it times out. For instance, if the system is overloaded and cannot process the `init` command within this timeframe, the operation will time out. In such cases, a PUBACK message with an error code (0x80) is sent to indicate the failure. The default value is `10s`.
-- **Segments Root Directory**: The directory path where temporary segments of uploaded files are stored. It's essential to choose an absolute path, preferably located on a disk with high I/O performance. This ensures efficient handling of file segments, especially under heavy load.
-- **File Storage**: Select the method for exporting the files. The options include `Local Storage` and `S3 Storage`. When `S3 Storage` is selected, additional configurations are required:
-  - **Host**: The endpoint for the S3 service. For example, `s3.us-east-1.amazonaws.com`.
-  - **Port**: The port used to connect to the S3 service, for example, `443`, indicating a secure HTTPS connection.
-  - **Access Key ID** and **Secret Access Key**: Credentials required for accessing the S3 bucket. These should be securely stored.
-  - **Bucket**: The name of the S3 bucket where files are stored, for example, `my-bucket`.
-  - **Enable TLS**: Determine whether to use TLS (Transport Layer Security) for secure file transfers. For more information, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- **Files Root Directory**: Specify the root directory for file storage, which needs to be an absolute path. This directory is used for storing assembled files when `Local Storage` is selected as the file storage method.
+- **初期化タイムアウト**：`init` コマンドの実行がタイムアウトするまでの最大許容時間。例えばシステムが過負荷で `init` コマンドを処理できない場合、この時間を超えるとタイムアウトとなり、エラーコード（0x80）付きのPUBACKメッセージが送信されます。デフォルト値は `10s` です。
+- **セグメントルートディレクトリ**：アップロードされたファイルの一時セグメントを保存するディレクトリパス。絶対パスで指定し、I/O性能の高いディスクに配置することが推奨されます。これにより、特に負荷が高い場合のファイルセグメント処理が効率化されます。
+- **ファイル保存方法**：ファイルのエクスポート方法を選択します。`ローカルストレージ` または `S3ストレージ` が選択可能です。`S3ストレージ` を選択した場合は追加設定が必要です：
+  - **ホスト**：S3サービスのエンドポイント。例：`s3.us-east-1.amazonaws.com`
+  - **ポート**：S3サービス接続に使用するポート。例：`443`（HTTPSの安全な接続）
+  - **アクセスキーID** と **シークレットアクセスキー**：S3バケットへのアクセスに必要な認証情報。安全に管理してください。
+  - **バケット**：ファイルを保存するS3バケット名。例：`my-bucket`
+  - **TLSの有効化**：安全なファイル転送のためTLS（Transport Layer Security）を使用するかどうか。詳細は[外部リソースアクセスのTLS](../network/overview.md#tls-for-external-resource-access)を参照してください。
+- **ファイルルートディレクトリ**：ファイル保存のルートディレクトリを絶対パスで指定します。`ローカルストレージ`をファイル保存方法に選択した場合に、組み立て済みファイルの保存先として使用されます。
 
-### Advanced Settings
+### 詳細設定
 
-Based on the file storage methods you have configured in the general settings, there are different advanced settings for configuration.
+一般設定で構成したファイル保存方法に応じて、異なる詳細設定を行えます。
 
-#### Local Storage
+#### ローカルストレージ
 
-If you select to export the files to the local storage, you can configure the following advanced settings.
+ファイルをローカルストレージにエクスポートする場合、以下の詳細設定を構成できます。
 
-| Field Names           | Descriptions                                                 | Recommended Values |
-| --------------------- | ------------------------------------------------------------ | ------------------ |
-| Store Segment Timeout | Specifies the maximum time allowed for storing a file segment using the `segment` command. If this time is exceeded (e.g., due to system overload), a PUBACK message with an error code (0x80) is sent, indicating a timeout. | `5` minute         |
-| Assemble Timeout      | Defines the maximum duration allowed for the `fin` command to complete the file assembly process. If it times out, a PUBACK message with error code (0x80) will be sent. This setting is crucial in scenarios where system resources are constrained, leading to delays in file assembly. | `5 ` minute        |
-| Storage GC Interval   | Sets the interval for the garbage collection process to run in the file storage system. This process helps in managing storage space by removing unnecessary data. | `1` hour           |
-| Maximum Segments TTL  | Sets the maximum time-to-live (TTL) for stored segments. Segments older than this TTL will be automatically cleaned up, regardless of whether they have been merged into a complete file or if a longer TTL was specified during the file transfer. | `24` hour          |
-| Minimum Segments TTL  | Indicates the minimum TTL for segments. Segments will not be removed before this TTL expires, even if they have already been merged into a complete file or if a shorter TTL was specified during the file transfer. This ensures that segments are available for a minimum duration for any post-processing or redundancy requirements. | `5` minute         |
+| フィールド名             | 説明                                                         | 推奨値           |
+| ------------------------ | ------------------------------------------------------------ | ---------------- |
+| セグメント保存タイムアウト | `segment` コマンドでファイルセグメントを保存する最大許容時間。これを超えると（例：システム過負荷時）エラーコード（0x80）付きPUBACKメッセージが送信され、タイムアウトとなる。 | 5分              |
+| 組み立てタイムアウト       | `fin` コマンドでファイル組み立て処理を完了する最大許容時間。タイムアウト時はエラーコード（0x80）付きPUBACKメッセージが送信される。システムリソース不足による遅延時に重要。 | 5分              |
+| ストレージGC間隔          | ファイル保存システムのガベージコレクション（不要データ削除）を実行する間隔。 | 1時間            |
+| 最大セグメントTTL         | 保存されたセグメントの最大有効期間。これを超えたセグメントは自動的に削除される。マージ済みか否かや転送時に指定されたTTLに関わらず適用される。 | 24時間           |
+| 最小セグメントTTL         | セグメントの最小有効期間。マージ済みであっても、転送時に短いTTLが指定されていても、この期間までは削除されない。後処理や冗長性確保のために最低限の保持期間を保証。 | 5分              |
 
-#### S3 Storage
+#### S3ストレージ
 
-If you select to export the files to the S3 storage, you can also configure the following advanced settings excepts for those the same as in the [Local Storage](#local-storage).
+ファイルをS3ストレージにエクスポートする場合、[ローカルストレージ](#ローカルストレージ)と同様の設定のほか、以下の詳細設定も構成できます。
 
-| Field Names       | Descriptions                                                 | Recommended Values |
-| ----------------- | ------------------------------------------------------------ | ------------------ |
-| URL Expire Time   | Determines the duration for which the generated URL for accessing the uploaded file on S3 is valid. Once expired, the URL can no longer be used to access the file. | -                  |
-| Minimum Part Size | Specifies the minimum size of each part when a file is uploaded in multiple parts to S3. Smaller part sizes can increase the upload frequency but might be useful for handling large files in environments with less stable connections. | `5 MB`             |
-| Maximum Part Size | Defines the maximum size limit for each part in a multi-part upload to S3. Larger parts mean fewer upload operations, which can be efficient for high-bandwidth environments but might consume more memory. | `5 MB`             |
-| ACL               | Access Control List (ACL) specifies the permissions for the uploaded objects to the S3 bucket. Different ACL options offer varying levels of access control:<br />`private`: Only the owner has full access.<br />`public_read`: Everyone has read access.<br />`public_read_write`: Everyone has read and write access.<br />`authenticated_read`: Only authenticated users have read access.<br />`bucket_owner_read`: Bucket owner has read access.<br />`bucket_owner_full_control`: Bucket owner has full control. | -                  |
-| IPV6 Probe        | Determines whether to check for IPv6 connectivity. Enabling this can be beneficial if your network supports IPv6, ensuring compatibility and potentially better performance. | Enabled            |
-| Connect Timeout   | The maximum time allowed for establishing a connection to the S3 server. If the connection takes longer than this duration, it times out. This setting ensures timely responses from the server. | -                  |
-| Pool Type         | Specifies the type of connection pool used for managing S3 connections:<br />`random`: Randomly selects a connection.<br />`hash`: Uses a hash function to select a connection. This choice can affect the performance and reliability of connections to S3. | `random`           |
-| Pool Size         | Defines the size of the connection pool for S3 connections. A larger pool can handle more concurrent connections but consumes more resources. | `8`                |
-| HTTP Pipelining   | Specify the number of HTTP requests to be sent without waiting for each response. This can improve throughput but may increase complexity. | `100`              |
-| HTTP Headers      | Allows the addition of custom HTTP headers for S3 requests. This can be used to pass additional information or control parameters to the S3 service. Click **Add** to specify Key-Value pairs. | -                  |
-| Max Reries        | Specifies the maximum number of retry attempts for an S3 request in case of errors. Increasing this value can improve reliability at the cost of potential delays. | -                  |
-| Request Timeout   | The maximum time allowed for an S3 request to complete. If a request takes longer, it times out. | -                  |
+| フィールド名           | 説明                                                         | 推奨値           |
+| ---------------------- | ------------------------------------------------------------ | ---------------- |
+| URL有効期限           | S3にアップロードされたファイルにアクセスするために生成されるURLの有効期間。期限切れ後はURLからアクセスできなくなる。 | -                |
+| 最小パートサイズ       | マルチパートアップロード時の各パートの最小サイズ。小さいとアップロード回数が増えるが、不安定な環境で大きなファイルを扱う際に有効。 | 5 MB             |
+| 最大パートサイズ       | マルチパートアップロード時の各パートの最大サイズ。大きいとアップロード回数は減るが、メモリ消費が増える。 | 5 MB             |
+| ACL                    | アップロードオブジェクトのアクセス制御リスト。以下のオプションがある：<br />`private`：所有者のみフルアクセス<br />`public_read`：全員が読み取り可能<br />`public_read_write`：全員が読み書き可能<br />`authenticated_read`：認証ユーザーのみ読み取り可能<br />`bucket_owner_read`：バケット所有者が読み取り可能<br />`bucket_owner_full_control`：バケット所有者がフルコントロール可能 | -                |
+| IPV6プローブ           | IPv6接続の確認を行うかどうか。ネットワークがIPv6対応の場合、有効化すると互換性やパフォーマンス向上が期待できる。 | 有効             |
+| 接続タイムアウト       | S3サーバーへの接続確立にかける最大時間。これを超えるとタイムアウトとなり、応答遅延を防止する。 | -                |
+| プールタイプ           | S3接続の管理に用いるコネクションプールの種類。<br />`random`：ランダム選択<br />`hash`：ハッシュ関数による選択。接続の性能や信頼性に影響。 | `random`         |
+| プールサイズ           | S3接続用コネクションプールのサイズ。大きいほど同時接続数は増えるがリソース消費も増加。 | 8                |
+| HTTPパイプライニング   | 応答を待たずに送信するHTTPリクエスト数。スループット向上に寄与するが複雑さも増す。 | 100              |
+| HTTPヘッダー           | S3リクエストに追加するカスタムHTTPヘッダー。キー・バリュー形式で指定可能。**追加**ボタンで設定。 | -                |
+| 最大リトライ回数       | エラー発生時のS3リクエスト再試行の最大回数。増やすと信頼性向上だが遅延も増加。 | -                |
+| リクエストタイムアウト | S3リクエストの最大許容時間。超過するとタイムアウトとなる。 | -                |
 
-## Manage Exported Files
+## エクスポート済みファイルの管理
 
-You can manage exported files, such as listing files to browse detailed information, moving, deleting, or downloading files. You can perform these management operations via the REST API or manually. Future versions will add a Dashboard interface for managing exported files.
+エクスポート済みファイルの一覧表示や詳細情報の閲覧、移動、削除、ダウンロードなどの管理操作が可能です。これらの管理はREST APIまたは手動で行えます。将来的にはDashboard上での管理インターフェースも追加予定です。
 
-### Manage Exported Files via REST API
+### REST APIによるエクスポート済みファイル管理
 
-EMQX provides REST APIs for managing exported files, and you can use the [MQTT File Transfer Management API](https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html#tag/File-Transfer) for management, enabling file browsing and downloading.
+EMQXはエクスポート済みファイル管理用のREST APIを提供しており、[MQTTファイル転送管理API](https://docs.emqx.com/en/enterprise/v5.3/admin/api-docs.html#tag/File-Transfer)を利用してファイルの閲覧やダウンロードが可能です。
 
-### Manually Manage Disk Exported Files
+### ローカルディスクエクスポートファイルの手動管理
 
-If you need to manage exported files directly on the disk, such as moving files, or using your FTP or HTTP service for download, you can refer to the following instructions for file storage locations.
+ディスク上のエクスポート済みファイルを直接管理する場合（ファイル移動やFTP/HTTPサービスによるダウンロードなど）、以下のファイル保存場所のルールを参照してください。
 
-To address file name conflicts and excessive numbers of files in a single directory, EMQX uses a bucket storage scheme for saving exported files. The working principle of the scheme is as follows:
+ファイル名の衝突や単一ディレクトリ内のファイル数過多を避けるため、EMQXはバケットストレージ方式でエクスポートファイルを保存します。仕組みは以下の通りです。
 
-- First, calculate the sha256 hash value of the file ID and client ID, e.g., `ABCDEFG012345...`.
-- Store the file in a 6-level directory structure, each defined as follows:
-  1. The first two bytes of the hash as the first-level directory name;
-  2. The next two bytes as the second-level directory name;
-  3. The remaining hash as the third-level directory name;
-  4. Escaped client ID;
-  5. Escaped file ID;
-  6. The file name from the metadata as the last layer.
+- まず、ファイルIDとクライアントIDのsha256ハッシュ値を計算（例：`ABCDEFG012345...`）
+- 6階層のディレクトリ構造で保存：
+  1. ハッシュの最初の2バイトを1階層目のディレクトリ名に
+  2. 次の2バイトを2階層目のディレクトリ名に
+  3. 残りのハッシュを3階層目のディレクトリ名に
+  4. エスケープ済みクライアントID
+  5. エスケープ済みファイルID
+  6. メタデータのファイル名を最下層に
 
-For example, an exported file might be stored in a directory structure like this:  `AB/CD/EFGH.../{clientid}/{file_id}/{filename}`.
+例：エクスポートファイルは `AB/CD/EFGH.../{clientid}/{file_id}/{filename}` のようなディレクトリ構造に保存されます。
 
-### Manually Manage S3 Bucket Exported Files
+### S3バケットエクスポートファイルの手動管理
 
-For S3 buckets, you can use S3 client tools or S3's REST API for management, enabling file deletion, download, etc. You can refer to the following instructions for file storage locations.
+S3バケットの場合は、S3クライアントツールやS3のREST APIを利用してファイルの削除やダウンロードなどの管理が可能です。ファイル保存場所のルールは以下の通りです。
 
-Unlike the bucket storage scheme used by the local exporter, files exported using the S3 exporter are stored in a simpler 3-level hierarchical structure:
+ローカルエクスポーターのバケットストレージ方式とは異なり、S3エクスポーターでエクスポートされたファイルはよりシンプルな3階層構造で保存されます。
 
-1. Escaped client ID;
-2. Escaped file ID;
-3. File name.
+1. エスケープ済みクライアントID
+2. エスケープ済みファイルID
+3. ファイル名
 
-For example, an exported file might be stored in a directory structure like this:  `{clientid}/{file_id}/{filename}`.
+例：エクスポートファイルは `{clientid}/{file_id}/{filename}` のようなディレクトリ構造に保存されます。
 
 ::: tip
 
-For more about using S3 client tools or REST API, refer to the following resources:
+S3クライアントツールやREST APIの利用方法については以下を参照してください。
 
-- [Amazon S3](https://aws.amazon.com/s3/?nc1=h_ls) and its [User Guide](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html)
-- [MinIO Object Storage System](https://min.io/)
+- [Amazon S3](https://aws.amazon.com/s3/?nc1=h_ls) および [ユーザーガイド](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html)
+- [MinIO オブジェクトストレージシステム](https://min.io/)
 
 :::

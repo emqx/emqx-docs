@@ -1,130 +1,130 @@
-# Authentication
+# 認証
 
-EMQX Dashboard provides out-of-the-box authentication and user management capabilities. Users can quickly configure client authentication mechanisms through the user interface without writing code or manually editing configuration files. This allows integration with various data sources and authentication services to achieve secure configurations across different levels and scenarios, ensuring higher development efficiency with enhanced security guarantees. On the **Authentication** page, you can quickly create and manage various authentication resources.
+EMQX ダッシュボードは、標準で認証およびユーザー管理機能を提供しています。ユーザーはコードを書くことや設定ファイルを手動で編集することなく、ユーザーインターフェースを通じてクライアント認証の仕組みを迅速に設定できます。これにより、さまざまなデータソースや認証サービスと連携して、異なるレベルやシナリオで安全な設定を実現し、開発効率を高めつつセキュリティを強化できます。**認証**ページでは、多様な認証リソースを素早く作成・管理できます。
 
 :::tip
-After configuring authentication backends, you must set up corresponding authentication information for devices or MQTT clients to securely connect to EMQX.
+認証バックエンドを設定した後は、デバイスや MQTT クライアントが EMQX に安全に接続できるように、対応する認証情報を設定する必要があります。
 :::
 
-## Create Authentication
+## 認証の作成
 
-Click the **Create** button to go to the **Create Authentication** page. To create an authentication, you need to select a mechanism and then select a backend to store or obtain authentication data (except JWT authentication). The data can be obtained from these backends, including databases or HTTP servers. Finally, you need to configure the connection information to connect to the backends.
+**Create** ボタンをクリックすると、**Create Authentication** ページに移動します。認証を作成するには、まず認証メカニズムを選択し、その後認証データを保存または取得するバックエンドを選択します（JWT 認証を除く）。バックエンドはデータベースや HTTP サーバーなどからデータを取得できます。最後に、バックエンドに接続するための接続情報を設定します。
 
-### Mechanism
+### メカニズム
 
-You can select from the following mechanisms provided by EMQX:
+EMQX が提供する以下のメカニズムから選択できます。
 
-1. Password-Based, using the client ID or username and password.
-2. JWT, where the client can carry a JWT Token in the username or password.
-3. SCRAM, enhanced authentication in MQTT 5.0, which enables two-way authentication between client and server.
+1. パスワードベース：クライアントIDまたはユーザー名とパスワードを使用。
+2. JWT：クライアントがユーザー名またはパスワードに JWT トークンを含める方式。
+3. SCRAM：MQTT 5.0 の強化認証で、クライアントとサーバー間の双方向認証を可能にします。
 
-<img src="./assets/create-authn.png" alt="image" style="zoom:50%;" />
+<img src="./assets/create-authn.png" alt="画像" style="zoom:50%;" />
 
-### Backend
+### バックエンド
 
-In this step, you can select a backend based on the mechanism selected in last step.
+このステップでは、前のステップで選択したメカニズムに基づいてバックエンドを選択します。
 
-::: tip
+:::tip
 
-A backend that has been used for authentication cannot be reselected.
+一度認証に使用したバックエンドは再選択できません。
 
 :::
 
-For a comprehensive introduction to backends, refer to [EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticator).
+バックエンドの詳細については、[EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticator) を参照してください。
 
-#### Password-Based
+#### パスワードベース
 
-When the `Password-Based` is selected, the user can choose either the database that stores the data or the HTTP server that provides the data, which contains two types of databases.
+`Password-Based` を選択した場合、データを保存するデータベースか、データを提供する HTTP サーバーのいずれかを選べます。データベースは以下の2種類があります。
 
-- The built-in database of EMQX, i.e., the `Built-in Database`.
-- External database, which supports selecting and connecting to some mainstream databases, including: `MySQL`, `PostgreSQL`, `MongoDB`, `Redis`, etc.
+- EMQX の組み込みデータベース、すなわち `Built-in Database`
+- 外部データベース。`MySQL`、`PostgreSQL`、`MongoDB`、`Redis` などの主要なデータベースを選択・接続可能です。
 
-You can also directly use HTTP services that can provide authentication data, i.e., the `HTTP Server`.
+また、認証データを提供できる HTTP サービス、すなわち `HTTP Server` を直接利用することもできます。
 
 #### JWT
 
-If JWT is selected, there will be no need to select a backend.
+JWT を選択した場合、バックエンドの選択は不要です。
 
 #### SCRAM
 
-The enhanced authentication feature in MQTT 5.0, if selected, currently only provides the ability to use the `Built-in Database`, which uses EMQX's built-in database (Mnesia) to store data.
+MQTT 5.0 の強化認証機能で、選択すると現在は `Built-in Database` のみ利用可能です。これは EMQX の組み込みデータベース（Mnesia）を使用します。
 
-Enhanced authentication enables two-way authentication of the client and server, where the server can verify that the connected client is the real client and the client can verify that the connected server is the real server, thus providing higher security.
+強化認証はクライアントとサーバーの双方向認証を実現し、接続されたクライアントが正当なものであることをサーバーが検証し、クライアントも接続されたサーバーが正当なものであることを検証できるため、より高いセキュリティを提供します。
 
-For more details about MQTT 5.0 Enhanced Authentication, refer to [SCRAM Authentication](../access-control/authn/scram.md) and [MQTT 5.0 Enhanced Authentication - Kerberos](../access-control/authn/kerberos.md).
+MQTT 5.0 強化認証の詳細は、[SCRAM Authentication](../access-control/authn/scram.md) および [MQTT 5.0 Enhanced Authentication - Kerberos](../access-control/authn/kerberos.md) を参照してください。
 
-### Configuration
+### 設定
 
-The final step is to configure the selected backend. Each backend has some connection and usage configuration that needs to be configured by the user. After completing the configuration, just click **Create**. 
+最後のステップでは、選択したバックエンドの設定を行います。各バックエンドには接続や利用に関する設定項目があり、ユーザーがこれを設定します。設定が完了したら、**Create** をクリックしてください。
 
-#### Built-in Database
+#### 組み込みデータベース
 
-For example, if you use the `Built-in Database`, you need to choose whether to use the Username or the Client ID, seting the encryption method of the password, etc. If you use the enhanced authentication of MQTT 5.0 and use the built-in database, you only need to configure the encryption method.
+例として `Built-in Database` を使用する場合、ユーザー名かクライアントIDのどちらを使うか選択し、パスワードの暗号化方式を設定します。MQTT 5.0 の強化認証で組み込みデータベースを使う場合は、暗号化方式のみ設定すればよいです。
 
-For more details about Built-in Database, refer to [Use Built-in Database](../access-control/authn/mnesia.md).
+組み込みデータベースの詳細は、[Use Built-in Database](../access-control/authn/mnesia.md) を参照してください。
 
-#### External Database
+#### 外部データベース
 
-If you use an external database, you need to configure the server address of the database, the database name, username and password, the authentication configuration, and the SQL statements or other query statements on how to get data from the database.
+外部データベースを使用する場合は、データベースのサーバーアドレス、データベース名、ユーザー名とパスワード、認証設定、そしてデータベースからデータを取得するための SQL 文やその他のクエリ文を設定する必要があります。
 
-For more details about MySQL or other external databases, refer to [Integrate with MySQL](../access-control/authn/mysql.md) or configuration documents for other databases.
+MySQL やその他外部データベースの詳細は、[Integrate with MySQL](../access-control/authn/mysql.md) や各データベースの設定ドキュメントを参照してください。
 
-#### HTTP Server
+#### HTTP サーバー
 
-To use HTTP Server, you need to configure the request method of the HTTP service, POST or GET. The request URL, note that the URL needs to fill in the protocol is http or https. Then there is the configuration of the HTTP request Headers. The authentication information is entered into the `Body` field, e.g. `username` and `password` are filled in the JSON data.
+HTTP サーバーを使用する場合は、HTTP サービスのリクエストメソッド（POST または GET）、リクエスト URL（http または https プロトコルを含める必要があります）、HTTP リクエストヘッダーの設定を行います。認証情報は `Body` フィールドに入力します。例として、`username` と `password` を JSON データで記述します。
 
-For more details about HTTP Server, refer to [Use HTTP Service](../access-control/authn/http.md).
+HTTP サーバーの詳細は、[Use HTTP Service](../access-control/authn/http.md) を参照してください。
 
-#### JWT & JWKS
+#### JWT と JWKS
 
-To use JWT, you can configure JWT directly without selecting a backend, and set whether the Token required for JWT comes from `username` or `password` of the client. This way the client only needs to enter the Token into the corresponding field when connecting, and JWT authentication can be performed. Then set `Secret` or `Public Key` depending on the encryption method, set `Secret` to Base64 encoding or not, and finally enter the information that needs to be verified in `Payload` to complete the configuration of JWT authentication.
+JWT を使用する場合は、バックエンドを選択せずに直接 JWT を設定できます。JWT のトークンがクライアントの `username` か `password` のどちらから取得されるかを設定します。これにより、クライアントは接続時に対応するフィールドにトークンを入力するだけで JWT 認証が行えます。次に、暗号化方式に応じて `Secret` または `Public Key` を設定し、`Secret` の Base64 エンコード有無を指定します。最後に、検証対象の情報を `Payload` に入力して JWT 認証の設定を完了します。
 
-You can get the latest JWKS from the `JWKS Endpoint` periodically, which is essentially a set of public keys that will be used to verify any JWT issued by the authorization server and signed using RSA or ECDSA algorithms, and configure the refresh interval (in seconds) for the JWKS. Finally, configure the `Payload` entry to complete the JWKS configuration.
+`JWKS Endpoint` から最新の JWKS を定期的に取得できます。これは認可サーバーが発行し、RSA または ECDSA アルゴリズムで署名された JWT を検証するための公開鍵のセットです。JWKS の更新間隔（秒単位）も設定可能です。最後に `Payload` を設定して JWKS の設定を完了します。
 
-For more details about JWT, refer to [JWT Authentication](../access-control/authn/jwt.md).
+JWT の詳細は、[JWT Authentication](../access-control/authn/jwt.md) を参照してください。
 
-## Authenticator List
+## 認証器一覧
 
-After successfully creating an authenticator, you can view and manage it in the authenticator list.
+認証器を作成すると、認証器一覧で確認・管理できます。
 
-In the list, you can see the backend and mechanism of each authenticator, and the status of the backend. For example, if the external database deployment fails to connect, the status will indicate `Disconnected`. Hovering over this field provides further details on the connection status of all nodes in the EMQX cluster linked to this data source. You can quickly enable or disable the authentication configuration by toggling the **Enable** switch.
+一覧では各認証器のバックエンドとメカニズム、バックエンドの状態を確認できます。例えば外部データベースの接続に失敗した場合、状態は `Disconnected` と表示されます。このフィールドにマウスを合わせると、EMQX クラスター内のすべてのノードの接続状態の詳細が表示されます。**Enable** スイッチを切り替えることで、認証設定の有効化・無効化を素早く行えます。
 
-Each entry in the authenticator list can be reordered by dragging with the mouse or by adjusting the sequence in the **Actions** column. The order in the authenticator list is significant because EMQX supports multiple authenticators that operate sequentially in the authentication chain. If the current authenticator fails to retrieve matching authentication information, the process continues with the next authenticator in the chain.
+認証器一覧の各エントリは、マウスドラッグや **Actions** 列の順序調整で並び替え可能です。認証器の順序は重要で、EMQX は複数の認証器を認証チェーンとして順次処理します。現在の認証器で認証情報が見つからない場合は、次の認証器に処理が移ります。
 
-In the **Actions** column, you can also click to configure or delete an authenticator.
+**Actions** 列では、認証器の設定変更や削除も可能です。
 
-<img src="./assets/authn-list.png" alt="image" style="zoom:50%;" />
+<img src="./assets/authn-list.png" alt="画像" style="zoom:50%;" />
 
-:::tip Note
-Disabled authentication will not authenticate any client, which means all clients can connect to EMQX. Please proceed with caution.
+:::tip 注意
+認証を無効にすると、すべてのクライアントが認証なしで EMQX に接続可能になります。十分に注意して操作してください。
 :::
 
-## User Management
+## ユーザー管理
 
-For users using the built-in database, clicking **User Management** on the Authenticator List page allows you to manage authentication information. You can add or delete usernames and passwords, and also batch-create authentication-related user information by downloading a template, filling in the relevant authentication details, and clicking **Import**.
+組み込みデータベースを使用しているユーザーは、認証器一覧ページの **User Management** をクリックして認証情報を管理できます。ユーザー名とパスワードの追加・削除が可能で、テンプレートをダウンロードして認証情報を記入し、**Import** をクリックすることで認証関連のユーザー情報を一括作成できます。
 
-<img src="./assets/authn-users.png" alt="image" style="zoom:50%;" />
+<img src="./assets/authn-users.png" alt="画像" style="zoom:50%;" />
 
-## Overview
+## 概要
 
-You can click the authenticator name in the **Mechanism and Backend** list on the list page to go to the Overview page. This page provides some metrics of the authenticators in the EMQX cluster, such as the number of successes and failures of authentication, the number of mismatches and the rate of authentication currently being connected.
+一覧ページの **Mechanism and Backend** リストで認証器名をクリックすると、概要ページに移動します。このページでは EMQX クラスター内の認証器のメトリクス情報を確認できます。認証成功数や失敗数、不一致数、現在接続中の認証率などが表示されます。
 
-You can monitor the metrics data under each node from the list at the bottom of the page.
+ページ下部のリストから各ノードのメトリクスデータを監視できます。
 
-<img src="./assets/authn-overview.png" alt="image" style="zoom:50%;" />
+<img src="./assets/authn-overview.png" alt="画像" style="zoom:50%;" />
 
-## Settings
+## 設定
 
-Click **Settings** in the list page to modify the authentication configuration.
+一覧ページの **Settings** をクリックすると、認証設定の変更が可能です。
 
-In the settings page, you can modify the current authenticator configuration, such as when some connection information of the external database changes, when you need to modify the `UserID Type` of the built-in database as username or client ID, or modify the encryption method of the password, etc.
+設定ページでは、外部データベースの接続情報が変更された場合や、組み込みデータベースの `UserID Type` をユーザー名またはクライアントIDに変更したい場合、パスワードの暗号化方式を変更したい場合などに現在の認証器設定を修正できます。
 
-:::tip Note
-When using the built-in database, updating the **Password Hash** or **Salt Position** will cause the added authentication data to be unavailable, please proceed with caution.
+:::tip 注意
+組み込みデータベース使用時に **Password Hash** や **Salt Position** を更新すると、既存の認証データが利用できなくなる可能性があります。十分に注意してください。
 :::
 
-<img src="./assets/authn-settings.png" alt="image" style="zoom:50%;" />
+<img src="./assets/authn-settings.png" alt="画像" style="zoom:50%;" />
 
-## More Information
+## 詳細情報
 
-For more details about authentication, refer to [Authentication](../access-control/authn/authn.md).
+認証の詳細については、[Authentication](../access-control/authn/authn.md) を参照してください。

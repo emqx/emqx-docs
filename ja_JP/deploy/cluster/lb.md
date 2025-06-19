@@ -1,48 +1,45 @@
-# Configure Load Balancer
+# ロードバランサーの設定
 
-Load Balancer (LB) balances the load among multiple network components and optimizes resource usage to avoid system malfunctions caused by overload. LB is not a mandatory component in EMQX, but it can bring some obvious system benefits, for example:
+ロードバランサー（LB）は複数のネットワークコンポーネント間で負荷を分散し、リソースの最適化を行うことで、過負荷によるシステム障害を回避します。LBはEMQXにおいて必須のコンポーネントではありませんが、以下のような明確なシステム上の利点をもたらします。
 
-- Balance the load of EMQX to avoid single node overload;
-- Simplify client configuration, the client only needs to connect to the LB and need not worry about the scaling within the cluster;
-- Reduce the load of EMQX clusters by TLS/SSL termination;
-- Improve cluster security, with LB configured at the front end of the cluster, unwanted traffic can be blocked to protect the EMQX cluster from malicious attacks. 
+- EMQXの負荷を分散し、単一ノードの過負荷を防止する  
+- クライアント設定を簡素化し、クライアントはLBにのみ接続すればよく、クラスター内のスケーリングを意識する必要がない  
+- TLS/SSL終端によりEMQXクラスターの負荷を軽減する  
+- クラスターの前段にLBを配置することで不要なトラフィックを遮断し、悪意ある攻撃からEMQXクラスターを保護しセキュリティを向上させる  
 
-This section introduces how to configure LB in EMQX. 
+本節では、EMQXにおけるLBの設定方法を紹介します。
 
-## Deployment Architecture
+## デプロイメントアーキテクチャ
 
-This section introduces three different load balancer deployment architectures.
+ここでは、3種類のロードバランサーのデプロイメントアーキテクチャを紹介します。
 
-### TCP Load Balancer
+### TCPロードバランサー
 
-For an EMQX cluster configured with LB, the LB handles the incoming TCP traffic and then distributes the received MQTT connection requests and messages to different EMQX nodes. The typical deployment architecture is as follows:
+LBを設定したEMQXクラスターでは、LBが受信したTCPトラフィックを処理し、MQTT接続要求やメッセージを異なるEMQXノードに振り分けます。典型的なデプロイメントアーキテクチャは以下の通りです。
 
+<img src="./assets/lb_2.png" alt="TLS終端" style="zoom:45%;" />
 
-<img src="./assets/lb_2.png" alt="TLS termination" style="zoom:45%;" />
+### TLS終端とロードバランサー
 
-### TLS Termination and Load Balancer
-
-If SSL/TLS is enabled, it is recommended to terminate the SSL/TLS connection at LB, that is, to use SSL/TLS to secure the connection between clients and LB and then use TCP connection between LB and EMQX nodes, maximizing the performance of the EMQX cluster. The architecture is as follows:
-
-
+SSL/TLSが有効な場合は、LBでSSL/TLS接続を終端することを推奨します。つまり、クライアントとLB間はSSL/TLSで保護し、LBとEMQXノード間はTCP接続を用いることで、EMQXクラスターのパフォーマンスを最大化します。アーキテクチャは以下の通りです。
 
 <img src="./assets/lb_3.png" alt="image" style="zoom:50%;" />
 
-### Hybrid Deployment
+### ハイブリッドデプロイメント
 
-If you want to use a cloud service provider's LB as the connection and load balancing layer but it does not support TLS termination or lacks certain TLS features (such as proxy protocol), you can select a hybrid deployment architecture: deploy HAProxy or NGINX in front of EMQX to terminate SSL/TLS connections.
+クラウドサービスプロバイダーのLBを接続および負荷分散層として利用したいが、TLS終端をサポートしていない、またはプロキシプロトコルなどのTLS機能が不足している場合は、ハイブリッドデプロイメントを選択できます。EMQXの前段にHAProxyやNGINXを配置し、SSL/TLS接続を終端します。
 
-Compared to directly using EMQX to handle TLS connections, this approach can get greater performance benefits. The deployment architecture is as follows:
+EMQXで直接TLS接続を処理するよりも高いパフォーマンスを得られる場合があります。デプロイメントアーキテクチャは以下の通りです。
 
-<img src="./assets/lb_6.png" alt="EMQX Load Balancing Hybrid Deployment" style="zoom:80%;" />
+<img src="./assets/lb_6.png" alt="EMQXロードバランシングハイブリッドデプロイメント" style="zoom:80%;" />
 
-In addition to load balancing deployment clusters, you can also use DNS round-robin to connect directly to the EMQX cluster, which involves adding all nodes to the DNS round-robin list. Devices access the cluster via domain names or IP address lists. However, it is generally not recommended to use DNS round-robin for production environments.
+負荷分散デプロイメントクラスターのほかに、DNSラウンドロビンでEMQXクラスターに直接接続する方法もあります。これはすべてのノードをDNSラウンドロビンリストに追加し、デバイスがドメイン名またはIPアドレスリスト経由でクラスターにアクセスする方法です。ただし、本番環境でのDNSラウンドロビンの利用は一般的に推奨されません。
 
-## Obtain Real IP and TLS Certificate Information
+## 実際のIPおよびTLS証明書情報の取得
 
-After deploying LB, EMQX typically needs to obtain the actual source IP of the client or TLS certificate information. You will need to enable [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol) configuration on the LB or enable relevant configurations to retrieve the real IP.
+LBを導入した後、EMQXは通常クライアントの実際の送信元IPやTLS証明書情報を取得する必要があります。そのためには、LBで[Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol)の設定を有効にするか、実IPを取得するための関連設定を有効にしてください。
 
-If Proxy Protocol is enabled on the LB, the `proxy_protocol` configuration option must also be enabled on the corresponding listener in EMQX. For example, for a TCP 1883 listener, you can add the following in configuration file:
+LBでProxy Protocolを有効にした場合、EMQXの該当リスナーでも`proxy_protocol`設定を有効にする必要があります。例えば、TCP 1883リスナーの場合、設定ファイルに以下を追加します。
 
 ```bash
 listeners.tcp.default {
@@ -53,33 +50,32 @@ listeners.tcp.default {
 }
 ```
 
-For information on enabling Proxy Protocol on your LB, refer to the respective documentation for your LB. Some LB products do not support Proxy Protocol but still allow the backend service to obtain the actual client IP. Configure accordingly based on the specific requirements of your LB and cloud service provider.
+LBでProxy Protocolを有効にする方法については、各LBのドキュメントを参照してください。Proxy ProtocolをサポートしないLB製品でも、バックエンドサービスが実際のクライアントIPを取得できる場合があります。LBやクラウドサービスプロバイダーの仕様に応じて適切に設定してください。
 
-### Client TLS Certificate Information
+### クライアントTLS証明書情報
 
-Only Proxy Protocol v2 supports forwarding client certificate information, such as Common Name (CN) and Subject. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
+クライアント証明書情報（Common Name（CN）やSubjectなど）を転送できるのはProxy Protocol v2のみです。ロードバランサーがクライアント証明書情報をTCPリスナーに送信する場合は、Proxy Protocol v2を使用していることを確認してください。
 
-## Select an LB Product
+## LB製品の選択
 
-Many LB products are currently available, including open-source and commercial editions, and public cloud providers also have their load-balancing services.
+現在、多くのLB製品が存在し、オープンソース版や商用版、またパブリッククラウドプロバイダーのロードバランシングサービスも利用可能です。
 
-LB products for the public cloud:
+パブリッククラウド向けLB製品：
 
-| Cloud provider                            | SSL Termination | Support Proxy Protocol | LB Product                                                  |
-| ----------------------------------------- | --------------- | ---------------------- | ----------------------------------------------------------- |
-| [AWS](https://aws.amazon.com)             | Yes             | Yes                    | <https://aws.amazon.com/elasticloadbalancing/?nc1=h_ls>     |
-| [Azure](https://azure.microsoft.com)      | Unknown         | Unknown                | <https://azure.microsoft.com/en-us/products/load-balancer/> |
-| [Google Cloud](https://cloud.google.com/) | Yes             | Yes                    | <https://cloud.google.com/load-balancing>                   |
+| クラウドプロバイダー                      | SSL終端対応 | Proxy Protocol対応 | LB製品                                                    |
+| ----------------------------------------- | ----------- | ------------------ | --------------------------------------------------------- |
+| [AWS](https://aws.amazon.com)             | 対応        | 対応               | <https://aws.amazon.com/elasticloadbalancing/?nc1=h_ls>   |
+| [Azure](https://azure.microsoft.com)      | 不明        | 不明               | <https://azure.microsoft.com/en-us/products/load-balancer/> |
+| [Google Cloud](https://cloud.google.com/) | 対応        | 対応               | <https://cloud.google.com/load-balancing>                 |
 
- LB products for private cloud:
+プライベートクラウド向けLB製品：
 
-| Open-Source LB                     | SSL Termination | Support Proxy Protocol | DOC/URL                                                 |
-| ---------------------------------- | --------------- | ---------------------- | ------------------------------------------------------- |
-| [HAProxy](https://www.haproxy.org) | Yes             | Yes                    | <https://www.haproxy.com/solutions/load-balancing.html> |
-| [NGINX](https://www.nginx.com)     | Yes             | Yes                    | <https://www.nginx.com/solutions/load-balancing/>       |
+| オープンソースLB                     | SSL終端対応 | Proxy Protocol対応 | ドキュメント/URL                                         |
+| ---------------------------------- | ----------- | ------------------ | ------------------------------------------------------- |
+| [HAProxy](https://www.haproxy.org) | 対応        | 対応               | <https://www.haproxy.com/solutions/load-balancing.html> |
+| [NGINX](https://www.nginx.com)     | 対応        | 対応               | <https://www.nginx.com/solutions/load-balancing/>       |
 
-The following two pages will use a privately deployed LB server as an example to introduce how to configure and load balance an EMQX cluster:
+以下の2ページでは、プライベートにデプロイしたLBサーバーを例に、EMQXクラスターの設定およびロードバランシング方法を紹介します。
 
-- [Load Balance EMQX Cluster with NGINX](./lb-nginx.md)
-- [Load Balance EMQX Cluster with HAProxy](./lb-haproxy.md)
-
+- [NGINXによるEMQXクラスターのロードバランス](./lb-nginx.md)  
+- [HAProxyによるEMQXクラスターのロードバランス](./lb-haproxy.md)

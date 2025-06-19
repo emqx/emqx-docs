@@ -1,41 +1,41 @@
 # OCSP Stapling
 
-OCSP (Online Certificate Status Protocol ) is an Internet protocol used to obtain the revocation status of SSL/TLS certificates, ensuring secure communication. EMQX, as a prominent MQTT broker in IoT applications, places a strong emphasis on security. From EMQX Enterprise v5.0.3 onwards, EMQX supports OCSP Stapling for MQTT SSL listeners to bolster security.
+OCSP（Online Certificate Status Protocol）は、SSL/TLS証明書の失効状況を取得するためのインターネットプロトコルであり、安全な通信を確保します。EMQXはIoTアプリケーションにおける主要なMQTTブローカーとして、セキュリティを重視しています。EMQX Enterprise v5.0.3以降では、MQTTのSSLリスナーに対してOCSP Staplingをサポートし、セキュリティを強化しています。
 
-Note: Secure WebSocket for QUIC listeners is currently not supported.
+注意：QUICリスナーのSecure WebSocketは現時点でサポートされていません。
 
-To enable OCSP stapling in a listener, activate the respective option within the listener's settings and provide the necessary OCSP Issuer certificate and OCSP Responder URL. EMQX then fetches and caches the OCSP response for its own server certificate, ensuring a secure and efficient SSL/TLS connection.
+リスナーでOCSP Staplingを有効にするには、リスナーの設定内で該当オプションを有効化し、必要なOCSP発行者証明書およびOCSPレスポンダーのURLを指定します。EMQXは自身のサーバー証明書に対するOCSPレスポンスを取得してキャッシュし、安全かつ効率的なSSL/TLS接続を実現します。
 
-EMQX supports enabling OCSP for SSL listeners via both the Dashboard and configuration files.
+EMQXはDashboardおよび設定ファイルの両方からSSLリスナーに対してOCSPを有効化することが可能です。
 
-::: tip Prerequisites
+::: tip 前提条件
 
-OCSP Issuer Certificate should be ready before the configuration.
+OCSP発行者証明書は設定前に準備しておいてください。
 
 :::
 
-## Configure with Dashboard
+## Dashboardでの設定
 
-In the EMQX Dashboard, navigate to **Management** -> **Listeners** to access the **Listener** page. To enable the OCSP feature for the default SSL listener, click its name to open the **Edit Listener** page. Scroll to the bottom of the dialog that appears on the right and find the **Enable OCSP Stapling** toggle switch.
+EMQX Dashboardで、**Management** -> **Listeners** に移動し、**Listener**ページを開きます。デフォルトのSSLリスナーに対してOCSP機能を有効にするには、その名前をクリックして**Edit Listener**ページを開きます。右側に表示されるダイアログの下部までスクロールし、**Enable OCSP Stapling**のトグルスイッチを見つけてください。
 
 <img src="./assets/OCSP.png" alt="OCSP" style="zoom:50%;" />
 
-Configure the fields as follows:
+以下の項目を設定します：
 
-- **OCSP Responder URL**: Enter the URL of the OCSP responder service. You can find this URL in the SSL/TLS certificate's Authority Information Access (AIA) extension.
-- **OCSP Issuser Certificate**: Set the certificate of the Certificate Authority (CA) that issued your SSL/TLS certificate. EMQX uses this certificate to verify the OCSP response's authenticity.
-- **OCSP Refresh Interval**: Set the time interval for EMQX to fetch a new OCSP response. Default: 5 minutes.
-- **OCSP Refresh HTTP Timeout**: Set the timeout period before EMQX considers the OCSP request failed. Default: 15 seconds.
+- **OCSP Responder URL**：OCSPレスポンダーサービスのURLを入力します。このURLはSSL/TLS証明書のAuthority Information Access（AIA）拡張に記載されています。
+- **OCSP Issuser Certificate**：SSL/TLS証明書を発行した認証局（CA）の証明書を設定します。EMQXはこの証明書を用いてOCSPレスポンスの正当性を検証します。
+- **OCSP Refresh Interval**：EMQXが新しいOCSPレスポンスを取得する間隔を設定します。デフォルトは5分です。
+- **OCSP Refresh HTTP Timeout**：EMQXがOCSPリクエストを失敗とみなすまでのタイムアウト時間を設定します。デフォルトは15秒です。
 
-Click **Update** to confirm the changes.
+設定後、**Update**をクリックして変更を確定してください。
 
-## Configure with Configuration File
+## 設定ファイルでの設定
 
-EMQX also provides the option to enable OCSP Stapling through configuration files `base.hocon`.
+EMQXでは、設定ファイル`base.hocon`を通じてOCSP Staplingを有効にすることも可能です。
 
-To activate this feature, simply append the relative configuration items to the end of the configuration file. Restart EMQX for changes to take effect.
+この機能を有効化するには、設定ファイルの末尾に該当する設定項目を追加してください。変更を反映させるためにEMQXを再起動する必要があります。
 
-**Example Code**:
+**設定例**：
 
 ```hcl
 listeners.ssl.default {
@@ -55,4 +55,4 @@ listeners.ssl.default {
 }
 ```
 
-Be sure to change the certificate/private key paths above with your corresponding files and set your OCSP Responder URL accordingly.
+上記の証明書および秘密鍵のパスは、ご自身の環境に合わせて変更し、OCSPレスポンダーのURLも適切に設定してください。
