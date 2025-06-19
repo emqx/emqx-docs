@@ -89,6 +89,9 @@ jobs:
       with:
         node-version-file: 'frontend/.nvmrc'
 
+    - name: enable corepack
+      run: corepack enable
+
     - name: use pnpm
       uses: pnpm/action-setup@v2
       with:
@@ -105,25 +108,29 @@ jobs:
       run: |
         cd docs-files
         source current-version.env
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@CE_MINOR_VERSION@/'"$CE_MINOR_VERSION"'/g' {} +
-        find ./en_US ./zh_CN -type f -name "*.md" -exec sed -i 's/@EE_MINOR_VERSION@/'"$EE_MINOR_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@CE_VERSION@/'"$CE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@EE_VERSION@/'"$EE_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@CE_MINOR_VERSION@/'"$CE_MINOR_VERSION"'/g' {} +
+        find ./en_US ./zh_CN ./ja_JP -type f -name "*.md" -exec sed -i 's/@EE_MINOR_VERSION@/'"$EE_MINOR_VERSION"'/g' {} +
 
     - name: move files
       run: |
         rm frontend/docs/en/index.md || true
         rm frontend/docs/zh/index.md || true
+        rm frontend/docs/ja/index.md || true
         rm frontend/docs/*.md || true
         rm frontend/README.md || true
         mkdir -p frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        mkdir -p frontend/docs/ja/${DOCS_TYPE}/${VERSION}/
         mkdir -p frontend/docs/public/api/
         mkdir -p frontend/redoc/
         cp -r docs-files/en_US/* frontend/docs/en/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/zh_CN/* frontend/docs/zh/${DOCS_TYPE}/${VERSION}/
+        cp -r docs-files/ja_JP/* frontend/docs/ja/${DOCS_TYPE}/${VERSION}/
         cp -r docs-files/redocly/*.json frontend/redoc/ || true
         cp docs-files/directory.json frontend/docs/.vitepress/config/directory.json
+        cp docs-files/directory.json frontend/docs/public/api/${DOCS_TYPE}_directory.json
 
     - name: generate version config
       run: |
@@ -136,6 +143,15 @@ jobs:
       run: |
         echo "HOCON=true" >> $GITHUB_ENV
         cp -r docs-files/hocon/*.json frontend/docs/public/api/
+        for file in frontend/docs/public/api/hocon-ce-*-en.json; do
+          version=$(echo $file | sed -E 's_.*/hocon-ce-(.*)-en.json_\1_g')
+          cp $file frontend/docs/public/api/hocon-ce-${version}-ja.json
+        done
+        for file in frontend/docs/public/api/hocon-ee-*-en.json; do
+          version=$(echo $file | sed -E 's_.*/hocon-ee-(.*)-en.json_\1_g')
+          cp $file frontend/docs/public/api/hocon-ee-${version}-ja.json
+        done
+
         hocon_products=(enterprise)
         for hocon_product in "${hocon_products[@]}"; do
           online_versions=$(curl -s https://docs.emqx.com/api/${hocon_product}_hocon_versions.json)
@@ -147,9 +163,9 @@ jobs:
           fi
 
           if [[ $hocon_product == "emqx" ]]; then
-            local_versions=$(ls frontend/docs/public/api/hocon-ce-*-*on | sed -E 's_.*/hocon-ce-(.*)-(en|zh).json_\1_g' | uniq)
+            local_versions=$(ls frontend/docs/public/api/hocon-ce-*-*on | sed -E 's_.*/hocon-ce-(.*)-(en|zh|ja).json_\1_g' | uniq)
           else
-            local_versions=$(ls frontend/docs/public/api/hocon-ee-*-*on | sed -E 's_.*/hocon-ee-(.*)-(en|zh).json_\1_g' | uniq)
+            local_versions=$(ls frontend/docs/public/api/hocon-ee-*-*on | sed -E 's_.*/hocon-ee-(.*)-(en|zh|ja).json_\1_g' | uniq)
           fi
 
           all_versions=$(echo -e "$online_versions\n$local_versions" | sort -u | awk NF | uniq)
@@ -161,7 +177,7 @@ jobs:
     - name: build docs
       run: |
         cd frontend
-        export NODE_OPTIONS=--max_old_space_size=4096
+        export NODE_OPTIONS=--max_old_space_size=8192
         pnpm install
         pnpm build
 
@@ -169,24 +185,21 @@ jobs:
       if: matrix.version != 'latest'
       run: |
         cd frontend
-        npm i -g @redocly/cli@latest
-        LANGS=(zh en)
-        for lang in "${LANGS[@]}"; do
-          redocly build-docs redoc/ce-${lang}.json -t redoc/template-emqx.hbs -o docs/.vitepress/dist/${lang}/emqx/${VERSION}/admin/api-docs.html \
-            --config=redoc/redocly.yaml \
-            --templateOptions.title "EMQX ${VERSION} API Documentation" \
-            --templateOptions.description "EMQX ${VERSION} API Documentation" \
-            --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle "EMQX ${VERSION} Docs" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+        LANGS=(zh en ja)
+        if [ ! -f "redoc/ee-ja.json" ]; then
+          cp redoc/ee-en.json redoc/ee-ja.json
+        fi
 
-          redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs -o docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
+        for lang in "${LANGS[@]}"; do
+          pnpm redocly build-docs redoc/ee-${lang}.json -t redoc/template-emqx-enterprise.hbs \
+            --output docs/.vitepress/dist/${lang}/enterprise/${VERSION}/admin/api-docs.html \
             --config=redoc/redocly.yaml \
             --templateOptions.title "EMQX Enterprise ${VERSION} API Documentation" \
+            --templateOptions.headerTitle "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.description "EMQX Enterprise ${VERSION} API Documentation" \
             --templateOptions.version "${VERSION}" \
-            --templateOptions.headerTitle "EMQX Enterprise ${VERSION} Docs" \
-            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi)
+            $(if [ "${lang}" == "zh" ]; then echo "--templateOptions.langZH \"zh\""; fi) \
+            $(if [ "${lang}" == "ja" ]; then echo "--templateOptions.langJA \"ja\""; fi)
         done
 
     - name: set aws credentials
