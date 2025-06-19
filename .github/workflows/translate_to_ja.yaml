@@ -7,6 +7,7 @@ on:
       - release-5.10
     paths:
       - 'en_US/**'
+  workflow_dispatch:
 
 concurrency:
   group: translate-ja-${{ github.ref }}
@@ -21,6 +22,17 @@ jobs:
       pull-requests: write
     if: github.repository_owner == 'emqx'
     steps:
+      - name: Check branch for manual runs
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          current_branch="${GITHUB_REF#refs/heads/}"
+          if [[ "$current_branch" != "release-5.9" && "$current_branch" != "release-5.10" ]]; then
+            echo "Error: Manual runs are only allowed on release-5.9 or release-5.10 branches"
+            echo "Current branch: $current_branch"
+            exit 1
+          fi
+          echo "Manual run approved on branch: $current_branch"
+
       - name: Generate GitHub App token
         id: app-token
         uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
@@ -110,7 +122,7 @@ jobs:
               python3 .github/scripts/translate_to_ja.py "$file"
             fi
           done < modified_files.txt
-          python3 .github/scripts/translate_to_ja.py dir.yaml
+          python3 .github/scripts/translate_to_ja.py ./dir.yaml
 
       - name: Update last translation commit hash
         if: steps.modified-files.outputs.has_changes == 'true'
