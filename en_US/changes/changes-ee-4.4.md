@@ -8,13 +8,14 @@
 
 - Smoother global garbage collection.
 
-  EMQX periodically performs garbage collection on all processes (controlled by the `node.global_gc_interval` configuration, defaulting to 15 minutes) to prevent excessive memory usage caused by the default garbage collection strategy failing to reclaim off-heap binary memory in extreme cases. However, this can lead to noticeable periodic spikes in CPU usage. The new global garbage collection mechanism performs garbage collection on processes in batches during each cycle, reducing fluctuations in CPU usage. This optimization only takes effect when `node.global_gc_interval` is set to more than one minute.
+  EMQX periodically performs garbage collection on all processes, with the interval controlled by the `node.global_gc_interval` setting (default: 15 minutes). This mechanism helps prevent situations where the Erlang VM's default garbage collection fails to reclaim off-heap binary memory in time under extreme conditions. However, this can cause noticeable periodic spikes in CPU usage. 
+  
+  The new global garbage collection mechanism performs garbage collection on processes in batches during each cycle, reducing fluctuations in CPU usage. This optimization only takes effect when `node.global_gc_interval` is set to more than one minute.
 
 ### Bug Fixes
 
-- Fixed an issue where some connections would be disconnected when hot upgrading from older versions to 4.4.28 or 4.4.29.
+- Fixed an issue where some connections would be disconnected when hot upgrading from older versions to 4.4.28 or 4.4.29. The number of disconnected clients is positively correlated with the message rate on the current node.
 
-  During the hot upgrade process from older versions to 4.4.28 or 4.4.29, some client connections might be disconnected. The number of disconnected clients is positively correlated with the message rate on the current node.
 
 ## e4.4.29
 
