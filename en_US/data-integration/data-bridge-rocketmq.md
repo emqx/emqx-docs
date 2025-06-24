@@ -152,7 +152,7 @@ The following steps assume that you run both EMQX and RocketMQ on the local mach
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_rocketmq`.
    - **Servers**: Enter `127.0.0.1:9876`.
-   - **Namespace**: Leave this field empty unless your RocketMQ service is configured with a namespace. For RocketMQ services hosted on Alibaba Cloud, the namespace corresponds to the instance ID.
+   - **Namespace**: Leave this field empty unless your RocketMQ service is configured with a namespace.
    - **AccessKey**, **SecretKey,** and **Secret Token**: Leave these fields empty or fill them according to your specific RocketMQ service configurations.
    - Leave others as default.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
