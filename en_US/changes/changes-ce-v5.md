@@ -1,5 +1,11 @@
 # EMQX Open Source Version 5
 
+## 5.8.7
+
+### Bug Fixes
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fix a potential resource leak in MQTT bridge when the bridge fails to start. Previously, the topic index table was not properly cleaned up when the bridge failed to start.
+
 ## 5.8.6
 
 *Release Date: 2025-03-25*
