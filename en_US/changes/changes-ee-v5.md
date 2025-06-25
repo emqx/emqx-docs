@@ -1,5 +1,59 @@
 # EMQX Enterprise Version 5
 
+## 5.9.1
+
+### Enhancements
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) Add HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
+
+- [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Added support for specifying private key file path for Snowflake Connector instead of using password.
+
+  Users should either use password, private key, or neither (set parameters in `/etc/odbc.ini`).
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) Instrument the DS Raft backend with basic metrics to provide insights into cluster status, database overview, shard replication and replica transitions.
+
+### Bug Fixes
+
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in WriteSyntax was left blank and there was no timestamp field in the rule.
+  Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fix badarg error when exporting opentelemetry metrics.
+
+- [#15274](https://github.com/emqx/emqx/pull/15274) Now, any health check failure for Postgres, Matrix and TimescaleDB Connectors will trigger a full reconnection.  Prior to this change, there were situations where the connection would become unusable and attempts to use it would hang, potentially leading to out of memory issues.
+
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the dashboard would inadvertently change the password to `******`.
+
+- [#15216](https://github.com/emqx/emqx/pull/15216) Fix a crash of `emqx_telemetry` process when there are plugins activated.
+
+- [#15190](https://github.com/emqx/emqx/pull/15190) Support setting hard-coded QoS and topic in message transformation.
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed incorrect error message format when blacklist creation fails.
+
+- [#15180](https://github.com/emqx/emqx/pull/15180) Reduced the risk of channel registration deadlocks.
+
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) Now, after a CRL Distribution Point URL fails to be refreshed after a number of consecutive attempts (60 s by default), it'll be evicted and stop being refreshed, instead of flooding logs.
+
+- [#15154](https://github.com/emqx/emqx/pull/15154) Fixed a rare race condition in Actions that run in aggregated mode (S3, Azure Blob Storage, Snowflake) that could result in crash logs similar to the following:
+
+  ```
+  ** Reason for termination ==
+  ** {function_clause,[{emqx_connector_aggregator,handle_close_buffer,[...], ...
+  ```
+
+- [#15147](https://github.com/emqx/emqx/pull/15147) When running Rule tests with simulated input data, some Actions would not emit trace events after rendering requests.  This has been fixed.
+
+  Affected Actions:
+  - Couchbase
+  - Snowflake
+  - IoTDB (Thrift driver)
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fix a potential resource leak in MQTT bridge when the bridge fails to start. Previously, the topic index table was not properly cleaned up when the bridge failed to start.
+
 ## 5.9.0
 
 *Release Date: 2025-05-02*

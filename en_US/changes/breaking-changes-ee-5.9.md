@@ -1,5 +1,9 @@
 # Incompatible Changes in EMQX 5.9
 
+## e5.9.1
+
+- [#15156](https://github.com/emqx/emqx/pull/15156) Schema validation was added to `dashboard.sso.oidc.issuer` field.  Now, this value is checked to be a valid URL.
+
 ## 5.9.0
 
 - [#14865](https://github.com/emqx/emqx/pull/14865) Dropped old LDAP authentication config layout (deprecated since v5.4).
