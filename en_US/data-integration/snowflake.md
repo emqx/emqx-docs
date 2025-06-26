@@ -58,10 +58,6 @@ This script is for testing only, not a recommendation on how to set up the ODBC 
 
 :::
 
-**Prepare the Driver Installation Package**
-
-First, download the Snowflake ODBC `.deb` installation package (e.g., `snowflake-odbc-3.4.1.x86_64.deb`) and place it in the current directory where the script will be executed.
-
 **Run the Installation Script**
 
 Copy the `scripts/install-snowflake-driver.sh` script to your local machine. Run `chmod a+x` to make the script executable, and run it with `sudo`:
@@ -71,7 +67,7 @@ chmod a+x scripts/install-snowflake-driver.sh
 sudo ./scripts/install-snowflake-driver.sh
 ```
 
-The script will automatically install the driver and update the following system configuration files:
+The script automatically downloads the Snowflake ODBC `.deb` installation package (e.g., `snowflake-odbc-3.4.1.x86_64.deb`) to the current working directory. It then installs the driver and updates the following system configuration files:
 
 - `/etc/odbc.ini`: Adds the Snowflake data source configuration
 - `/etc/odbcinst.ini`: Registers the Snowflake driver path

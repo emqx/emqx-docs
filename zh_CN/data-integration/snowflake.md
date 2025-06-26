@@ -58,10 +58,6 @@ EMQX 提供了一个[安装脚本](https://github.com/emqx/emqx/blob/master/scri
 
 :::
 
-**准备驱动安装包**
-
-请先下载 Snowflake ODBC 驱动 `.deb` 安装包（如 `snowflake-odbc-3.4.1.x86_64.deb`），并放置在运行脚本的当前目录下。
-
 **执行安装脚本**
 
 将 `scripts/install-snowflake-driver.sh` 脚本复制到本地保存，同时添加执行权限并 sudo 执行脚本：
@@ -71,7 +67,7 @@ chmod a+x scripts/install-snowflake-driver.sh
 sudo ./scripts/install-snowflake-driver.sh
 ```
 
-脚本将自动完成驱动安装，并更新以下系统配置文件：
+脚本将自动将 Snowflake ODBC 驱动 `.deb` 安装包 (如 `snowflake-odbc-3.4.1.x86_64.deb`) 下载到运行脚本的当前目录、完成驱动安装，并更新以下系统配置文件：
 
 - `/etc/odbc.ini`：添加 Snowflake 数据源配置
 - `/etc/odbcinst.ini`：注册 Snowflake 驱动路径
