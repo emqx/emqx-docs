@@ -147,7 +147,7 @@ Linux環境では、`host.docker.internal`を実際のIPアドレスに変更し
 4. **Configuration**ステップで以下を設定します：
    - **Connector name**：コネクター名を入力します。英数字の組み合わせで、例：`my_rocketmq`
    - **Servers**：`127.0.0.1:9876`を入力
-   - **Namespace**：RocketMQサービスにネームスペースが設定されていなければ空欄のまま。Alibaba CloudホストのRocketMQの場合はインスタンスIDに対応
+   - **Namespace**：RocketMQサービスにネームスペースが設定されていなければ空欄のまま。
    - **AccessKey**、**SecretKey**、**Secret Token**：サービス構成に応じて空欄または入力
    - その他はデフォルトのまま
 5. 詳細設定（任意）：[Sinkの機能](./data-bridges.md#features-of-sink)を参照
