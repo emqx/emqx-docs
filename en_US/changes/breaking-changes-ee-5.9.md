@@ -2,7 +2,7 @@
 
 ## e5.9.1
 
-- [#15156](https://github.com/emqx/emqx/pull/15156) Schema validation was added to `dashboard.sso.oidc.issuer` field.  Now, this value is checked to be a valid URL.
+- [#15156](https://github.com/emqx/emqx/pull/15156) Schema validation was added to `dashboard.sso.oidc.issuer` field.  Now, this value is checked to ensure it is a valid URL.
 
 ## 5.9.0
 
