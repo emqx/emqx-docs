@@ -14,6 +14,8 @@ The configuration and management of Cluster Linking are designed to be simple an
 
 To get started with the Cluster Linking, see [Quick Start with Cluster Linking](../cluster-linking/quick-start.md).
 
+<img src="./assets/cluster_linking_feature.png" alt="cluster_linking_feature" style="zoom:80%;" />
+
 ## Namespace
 
 Namespaces provide logical multi-tenancy within a single EMQX cluster, enabling you to isolate clients, topics, quotas, and configurations per tenant without creating separate clusters. Each namespace is identified using a special client attribute (`tns`), which can be derived from metadata like username or Server Name Indication (SNI), a flexible method that ensures accurate tenant attribution at connection time.

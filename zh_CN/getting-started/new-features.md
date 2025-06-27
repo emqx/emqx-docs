@@ -10,6 +10,8 @@
 
 开始使用集群连接，请参阅： [集群连接快速开始](../cluster-linking/quick-start.md)。
 
+<img src="./assets/cluster_linking_feature.png" alt="cluster_linking_feature" style="zoom:80%;" />
+
 ## 命名空间
 
 命名空间允许在单一 EMQX 集群内实现逻辑级别的多租户隔离，每个租户可拥有独立的客户端、话题、配额和配置。每个命名空间通过 `tns` 客户属性标识，可从用户名或 TLS SNI 等元数据提取，实现连接级别的租户识别。
