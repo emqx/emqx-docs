@@ -1,5 +1,22 @@
 # EMQX 企业版 v5 版本
 
+## 5.8.7
+
+*发布日期：2025-07-03*
+
+### 增强
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) 为 OpenTelemetry 的 gRPC（基于 HTTP/2）集成添加了自定义 HTTP 请求头的支持。此增强功能提升了对需要 HTTP 认证的 Collector 的兼容性。
+
+### 修复
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) 修复了 MQTT 桥接中可能存在的资源泄漏问题。当桥接启动失败时，主题索引表未被正确清理。此修复确保在启动失败时正确删除索引表，以防止资源泄漏。
+- [#15331](https://github.com/emqx/emqx/pull/15331) 修复了 InfluxDB 动作中的一个问题：当 `WriteSyntax` 中的 `timestamp` 留空，且规则中未提供时间戳字段时，行协议转换会失败。现在，系统将使用当前时间的毫秒值作为默认时间戳，并强制采用毫秒精度。
+- [#15274](https://github.com/emqx/emqx/pull/15274) 在 Postgres、Matrix 和 TimescaleDB 连接器中，当健康检查失败时将触发完整重连，从而提升连接器的稳定性。此前，连接在健康检查失败后可能进入异常状态，导致操作阻塞，甚至引发内存溢出问题。
+- [#15224](https://github.com/emqx/emqx/pull/15224) 修复了通过 Dashboard 更新外部 Schema Registry 时，密码被意外覆盖为 `******` 的问题。现在在更新过程中，密码能够被正确保留。
+- [#14989](https://github.com/emqx/emqx/pull/14989) 优化了 Kinesis 连接器和动作，在启动和健康检查过程中显著减少了对 AWS API 的调用次数。此改进有助于避免超出 AWS Kinesis 的 API 限速（如 `ListStreams` 和 `DescribeStream`），此前在使用较大连接池或多个连接器时，频繁触发限速导致健康检查频繁失败。
+- [#15299](https://github.com/emqx/emqx/pull/15299) 修复了导出 OpenTelemetry 指标时出现的 `badarg` 错误。
+
 ## 5.8.6
 
 *发布日期：2025-03-25*

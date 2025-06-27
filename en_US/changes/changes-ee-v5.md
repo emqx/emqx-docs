@@ -2,24 +2,21 @@
 
 ## 5.8.7
 
+*Release Date: 2025-07-03*
+
 ### Enhancements
 
-- [#15364](https://github.com/emqx/emqx/pull/15364) Add HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added support for custom HTTP headers in the OpenTelemetry gRPC (over HTTP/2) integration. This enhancement enables compatibility with collectors that require HTTP authentication.
 
 ### Bug Fixes
 
-- [#15383](https://github.com/emqx/emqx/pull/15383) Fix a potential resource leak in MQTT bridge when the bridge fails to start. Previously, the topic index table was not properly cleaned up when the bridge failed to start.
-
-- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed the issue in influxdb action where the line protocol conversion failed when the `timestamp` in WriteSyntax was left blank and there was no timestamp field in the rule.
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule.
   Now the system's current millisecond value is used instead, and millisecond precision is enforced.
-
-- [#15299](https://github.com/emqx/emqx/pull/15299) Fix badarg error when exporting opentelemetry metrics.
-
-- [#15274](https://github.com/emqx/emqx/pull/15274) Now, any health check failure for Postgres, Matrix and TimescaleDB Connectors will trigger a full reconnection.  Prior to this change, there were situations where the connection would become unusable and attempts to use it would hang, potentially leading to out of memory issues.
-
-- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the dashboard would inadvertently change the password to `******`.
-
-- [#14989](https://github.com/emqx/emqx/pull/14989) Reduced the number of API calls that Kinesis Connection and Action do when (re)starting and during health checks.
+- [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
+- [#14989](https://github.com/emqx/emqx/pull/14989) Optimized the Kinesis Connector and Action to significantly reduce the number of AWS API calls during startup and health checks. This change helps prevent exceeding AWS Kinesis API rate limits (e.g., `ListStreams` and `DescribeStream`), which previously led to frequent health check failures when using larger connection pools or multiple connectors.
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
 
 ## 5.8.6
 

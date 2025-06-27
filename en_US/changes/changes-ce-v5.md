@@ -2,9 +2,11 @@
 
 ## 5.8.7
 
+*Release Date: 2025-07-03*
+
 ### Bug Fixes
 
-- [#15383](https://github.com/emqx/emqx/pull/15383) Fix a potential resource leak in MQTT bridge when the bridge fails to start. Previously, the topic index table was not properly cleaned up when the bridge failed to start.
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
 
 ## 5.8.6
 
