@@ -2,7 +2,7 @@
 
 ## 5.9.1
 
-*Release Date: 2025-07-03*
+*Release Date: 2025-07-02*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.9.1.
 
@@ -51,14 +51,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Smart Data Hub
 
 - [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
+- [#15190](https://github.com/emqx/emqx/pull/15190) Enhanced Message Transformation by allowing hard-coded values for QoS and topic.
 
 #### Telemetry
 
 - [#15216](https://github.com/emqx/emqx/pull/15216) Fixed a crash in the `emqx_telemetry` process that could occur when plugins were activated.
-
-#### Smart Data Hub
-
-- [#15190](https://github.com/emqx/emqx/pull/15190) Enhanced Message Transformation by allowing hard-coded values for QoS and topic.
 
 #### Access Control
 

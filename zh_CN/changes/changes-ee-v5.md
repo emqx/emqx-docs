@@ -1,5 +1,72 @@
 # EMQX 企业版 v5 版本
 
+## 5.9.1
+
+*发布日期 2025-07-02*
+
+升级前请查看已知问题列表和不兼容变更列表。
+
+### 增强
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) 支持在 OpenTelemetry 的 gRPC（基于 HTTP/2）集成中自定义 HTTP 请求头。此增强功能提升了对需要 HTTP 认证的 Collector 的兼容性。
+
+- [#15160](https://github.com/emqx/emqx/pull/15160) 新增多租户管理接口 `DELETE /mt/bulk_delete_ns`，支持批量删除命名空间。
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) 新增 `emqx ctl conf remove x.y.z` 命令，用于从现有配置中移除配置键路径 `x.y.z`。
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Snowflake Connector 支持通过指定私钥文件路径替代使用密码。用户可以选择使用密码、私钥二选一，或均不使用（在 `/etc/odbc.ini` 中配置参数）。
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) 为 DS Raft 后端添加基础指标采集，用于展示集群状态、数据库概览、分片复制及副本转换的监控数据。
+
+### 修复
+
+#### 数据集成
+
+- [#15331](https://github.com/emqx/emqx/pull/15331) 修复了 InfluxDB 动作中的一个问题：当 `WriteSyntax` 中的 `timestamp` 留空，且规则中未提供时间戳字段时，行协议转换会失败。现在将默认使用系统当前的毫秒时间，并强制使用毫秒精度。
+  
+- [#15299](https://github.com/emqx/emqx/pull/15299) 修复了导出 OpenTelemetry 指标时出现的 `badarg` 错误。
+
+- [#15274](https://github.com/emqx/emqx/pull/15274) 在 Postgres、Matrix 和 TimescaleDB 连接器中，当健康检查失败时将触发完整重连，从而提升连接器的稳定性。此前，连接在健康检查失败后可能进入异常状态，导致操作阻塞，甚至引发内存溢出问题。
+
+- [#15154](https://github.com/emqx/emqx/pull/15154) 修复了聚合模式下运行的动作（例如 S3、Azure Blob Storage、Snowflake）中一个罕见的竞争条件问题，可能会导致类似如下错误的崩溃：
+
+  ```
+  ** Reason for termination ==
+  ** {function_clause,[{emqx_connector_aggregator,handle_close_buffer,[...], ...
+  ```
+
+- [#15147](https://github.com/emqx/emqx/pull/15147) 修复了某些动作在使用模拟输入数据进行规则测试时，即使已经生成了请求，也未能正确触发追踪事件的问题。
+
+  受影响的动作包括：
+
+  - Couchbase
+  - Snowflake
+  - IoTDB (Thrift 驱动)
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) 修复了 MQTT 桥接中可能存在的资源泄漏问题。当桥接启动失败时，主题索引表未被正确清理。此修复确保在启动失败时正确删除索引表，以防止资源泄漏。
+
+#### 数据智能中心
+
+- [#15224](https://github.com/emqx/emqx/pull/15224) 修复了通过 Dashboard 更新外部 Schema Registry 时，密码被意外覆盖为 `******` 的问题。现在在更新过程中，密码能够被正确保留。
+- [#15190](https://github.com/emqx/emqx/pull/15190) 增强了消息转换功能，支持为 QoS 和主题设置硬编码值。
+
+#### 遥测
+
+- [#15216](https://github.com/emqx/emqx/pull/15216) 修复了在插件启用时，`emqx_telemetry` 进程可能崩溃的问题。
+
+#### 访问控制
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) 修复了创建黑名单失败时返回的错误信息格式问题。
+
+#### 集群
+
+- [#15180](https://github.com/emqx/emqx/pull/15180) 通过修复 `ekka_locker` 模块中对 `badrpc` 错误的不当处理，降低了通道注册过程中的死锁风险。此前的错误处理可能导致锁操作误判，从而引发集群状态异常甚至死锁。
+
+#### 网络安全
+
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) 优化了对证书吊销列表（CRL）分发点 URL 的处理：在多次刷新失败后将停止重试（默认 60 秒），以避免因 URL 不可达而产生大量错误日志，从而提升系统稳定性。
+
 ## 5.9.0
 
 *发布日期：2025-05-02*
