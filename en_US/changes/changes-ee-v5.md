@@ -2,7 +2,7 @@
 
 ## 5.8.7
 
-*Release Date: 2025-07-03*
+*Release Date: 2025-07-02*
 
 ### Enhancements
 
