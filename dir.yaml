@@ -813,6 +813,7 @@
       path: gateway/gateway
       collapsed: true
       children:
+        - gateway/nats
         - gateway/stomp
         - gateway/mqttsn
         - gateway/coap
@@ -827,7 +828,6 @@
           children:
             - gateway/jt808_data_exchange
         - gateway/gbt32960
-        - gateway/nats
     - client-attributes/client-attributes
 
 - title_en: Tutorials
