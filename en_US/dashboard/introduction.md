@@ -32,7 +32,7 @@ Support for custom plug-in integration, Extend EMQX connectivity protocols throu
 
 In addition to debugging through online MQTT over WebSocket client connections and publishing subscriptions, we also support diagnosing and finding issues using things like slow subscriptions and online logs tracing and alarms.
 
-## Running
+## Launch Dashboard
 
 EMQX Dashboard is a web application that listens to port `18083` by default. After installing EMQX successfully, you can access and use EMQX Dashboard by opening <http://localhost:18083/> (replace localhost with the actual IP address if deployed on a non-local machine) through your browser.
 
@@ -45,6 +45,54 @@ EMQX can still be used normally without Dashboard enabled, Dashboard just provid
 For users who have installed EMQX for the first time, you can use the default username `admin` and default password `public` to login web page after opening the Dashboard in your browser.
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password, and will force you to change the default password, which is good for the security of accessing Dashboard, note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
+
+### Token-Based Login via URL
+
+Starting from EMQX 5.6.0, the Dashboard supports a token-based login method that allows users to log in directly by embedding authentication information in the URL.
+
+This feature is particularly useful for seamless redirection and integration scenarios where a user should be logged in automatically without entering credentials manually.
+
+#### How To Use This Login Method
+
+1. Call the `/login` API to obtain the login token and related information.
+
+2. Manually add the username used during login (not included in the `/login` response).
+
+3. Combine the data into a JSON structure:
+
+   ```json
+   {
+     "license": {
+       "edition": "ee"
+     },
+     "role": "administrator",
+     "token": "xxx.jwt.token",
+     "version": "5.5.0-g0fef19f8",
+     "username": "admin"
+   }
+   ```
+
+4. Convert the JSON string to Base64.
+
+5. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL.
+
+#### Example URL
+
+For versions **before 5.6.0**:
+
+```bash
+http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+```
+
+Redirects to the default cluster overview page.
+
+For **version 5.6.0 and later**, you can also specify a target page:
+
+```bash
+http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+```
+
+This method provides a smooth, pre-authenticated user experience for accessing the EMQX Dashboard. Make sure to handle the token securely and ensure it has appropriate expiration and scope limits.
 
 ## Reset password
 
