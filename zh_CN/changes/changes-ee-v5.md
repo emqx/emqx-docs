@@ -6,7 +6,7 @@
 
 ### 增强
 
-- [#15364](https://github.com/emqx/emqx/pull/15364) 为 OpenTelemetry 的 gRPC（基于 HTTP/2）集成添加了自定义 HTTP 请求头的支持。此增强功能提升了对需要 HTTP 认证的 Collector 的兼容性。
+- [#15364](https://github.com/emqx/emqx/pull/15364) 支持在 OpenTelemetry 的 gRPC（基于 HTTP/2）集成中自定义 HTTP 请求头。此增强功能提升了对需要 HTTP 认证的 Collector 的兼容性。
 
 ### 修复
 
