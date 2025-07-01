@@ -74,7 +74,7 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 3. 将数据整理成如下 JSON 结构：
 
-   ```
+   ```json
    {
      "license": {
        "edition": "ee"
@@ -86,8 +86,6 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
    }
    ```
 
-   
-
 4. 将 JSON 字符串进行 Base64 编码。
 
 5. 将编码后的字符串通过 `login_meta` 参数附加到 Dashboard 的访问 URL 中。
@@ -96,7 +94,7 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 **5.6.0 以下版本**：
 
-```
+```bash
 http://localhost:18083?login_meta=BASE64_ENCODED_STRING
 ```
 
@@ -104,7 +102,7 @@ http://localhost:18083?login_meta=BASE64_ENCODED_STRING
 
 **5.6.0 及以上版本**，可指定跳转页面：
 
-```
+```bash
 http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
 ```
 

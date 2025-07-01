@@ -72,7 +72,7 @@ This feature is particularly useful for seamless redirection and integration sce
 
 3. Combine the data into a JSON structure:
 
-   ```
+   ```json
    {
      "license": {
        "edition": "ee"
@@ -92,7 +92,7 @@ This feature is particularly useful for seamless redirection and integration sce
 
 For versions **before 5.6.0**:
 
-```
+```bash
 http://localhost:18083?login_meta=BASE64_ENCODED_STRING
 ```
 
@@ -100,7 +100,7 @@ Redirects to the default cluster overview page.
 
 For **version 5.6.0 and later**, you can also specify a target page:
 
-```
+```bash
 http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
 ```
 
