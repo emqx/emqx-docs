@@ -41,7 +41,7 @@ The Schema Registry now supports both internal schemas (like JSON, Avro, and Pro
 
 ### Message Transformation
 
-[Message Transformation](../data-integration/message-transformation.md) allows users to define transformation pipelines that decode, modify, and re-encode messages before delivery or further processing. The system supports nested transformations, multiple encoders/decoders, and dynamic value assignments using Variform expressions.
+[Message Transformation](../data-integration/message-transformation.md) allows users to define transformation pipelines that decode, modify, and re-encode messages before delivery or further processing. The system supports nested transformations, multiple encoders/decoders, and dynamic value assignments using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
 ## LLM-Based MQTT Data Processing
 
@@ -54,8 +54,8 @@ Recent versions of EMQX have significantly enhanced the data integration capabil
 New data integrations supported in recent versions include, but are not limited to, the following:
 
 - **[Amazon S3 Tables](../data-integration/s3-tables.md)**: Transforms MQTT data into Iceberg-formatted tables and streams them directly into S3. It eliminates the need for traditional databases while retaining SQL-like querying capabilities.
-- **[Apache Doris](../data-integration/apache-doris.md)**: Processes the MQTT messages, maps them into structured SQL, and writes to Doris via HTTP or JDBC. You can query your IoT data in real time using standard SQL and build live dashboards with BI tools like Grafana.
-- **[Snowflake](../data-integration/snowflake.md)**: Writes the processed data to Snowflake Stage and loads it into a Snowflake table. Safely store IoT data in Snowflake for long-term archival and leverage Snowflake's data warehousing and analytics capabilities to perform real-time or batch analysis.
+- **[Apache Doris](../data-integration/apache-doris.md)**: Processes the MQTT messages, maps them into structured data, and writes to Doris via HTTP or JDBC. You can query your IoT data in real time using standard SQL and build live dashboards with BI tools like Grafana.
+- **[Snowflake](../data-integration/snowflake.md)**: Writes the processed data to the Snowflake Stage and loads it into a Snowflake table. Safely store IoT data in Snowflake for long-term archival and leverage Snowflake's data warehousing and analytics capabilities to perform real-time or batch analysis.
 
 ### Fallback Actions
 
@@ -87,10 +87,10 @@ EMQX now supports OpenTelemetry, making it easier to monitor and troubleshoot yo
 
 **Key Features:**
 
-- **Metrics**: Export real-time metrics to OpenTelemetry Collector, then view them in tools like Prometheus and Grafana.
-- **Logs**: Send structured logs with rich context (like trace IDs) to your log system for easier debugging.
-- **Tracing**: Trace MQTT messages end-to-end from publisher to subscriber, across cluster nodes. Useful for finding delays or failures.
-- **End-to-End Tracing Mode**: Track full message paths and client actions. Filter by client ID, topic, or QoS. Control sampling and export rate to manage system load.
+- **Metrics**: Exports real-time metrics to OpenTelemetry Collector, then view them in tools like Prometheus and Grafana.
+- **Logs**: Sends structured logs with rich context (like trace IDs) to your log system for easier debugging.
+- **Tracing**: Enables distributed tracing of MQTT message flows across EMQX nodes. Useful for finding delays, routing issues, or node-specific performance bottlenecks.
+- **End-to-End Tracing Mode**: Tracks full message paths and client actions. Filter by client ID, topic, or QoS. Control sampling and export rate to manage system load.
 
 OpenTelemetry helps you get full visibility into EMQX performance and message flows using open, standard tools. Refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md) for details.
 
@@ -106,7 +106,7 @@ EMQX 5.10.0 introduces a native NATS protocol gateway, enabling bi-directional m
 - **Transport Support**: Works over TCP, TLS, WebSocket, and secure WebSocket (WSS).
 - **Authentication**: Supports multiple backends, including database, HTTP, JWT, and LDAP.
 
-With this gateway, EMQX bridges MQTT with modern cloud-native environments where NATS is used, expanding integration possibilities in hybrid messaging systems. Refer to [NATS Protocol Gateway](../gateway/nats.md) for details.
+With this gateway, EMQX bridges MQTT with modern cloud-native environments where NATS is used, expanding integration possibilities in hybrid messaging systems. Refer to the [NATS Protocol Gateway](../gateway/nats.md) for details.
 
 ## More Features
 
