@@ -40,32 +40,32 @@
 
 3. 设置以下配置项：
    - **监控平台**：选择 `OpenTelemetry`。
-   
+
    - **功能选择**：选择 `Traces`。
-   
+
    - **服务地址**：设置追踪数据导出地址，默认为 `http://localhost:4317`。
-   
+
    - **请求头**：为追踪数据的导出请求添加自定义 HTTP 请求头。当 OpenTelemetry Collector 需要身份认证或特定请求头（如 API 密钥或令牌）时，可使用此功能。每个请求头应以键值对的形式配置。
-   
+
      如果 OpenTelemetry Collector 配置了基本认证（Basic Authentication），则需添加 `authorization` 请求头，其值格式为：`Basic <base64编码的用户名:密码>`。例如：
-   
+
      ```
      键：authorization
      值：Basic dXNlcjpwYXNzd29yZA==
      ```
-   
+
      该选项增强了对基于 HTTP 认证 Collector 的兼容性。
-   
+
    - **启用 TLS**：根据需要启用 TLS 加密通信，通常用于生产环境中的安全要求。
-   
+
    - **追踪模式**：选择 `End-to-End` 以启用端到端追踪功能。
-   
+
    - **集群标识符**：添加到跨度属性中的属性值，帮助识别数据是来自哪个 EMQX 集群。属性键将是 `cluster.id`。通常，设置一个简单且易于识别的名称或使用集群名称来标识不同的 EMQX 集群。默认为 `emqxcl`。
-   
+
    - **追踪导出间隔**：设置追踪数据导出的时间间隔，默认为 `5` 秒。
-   
+
    - **最大队列长度**：设置追踪数据队列的最大长度，默认为 `2048` 条。
-   
+
 4. 点击**追踪高级配置**，根据需要进行高级设置。参考[通过配置文件配置端对端追踪](#通过配置文件配置端对端追踪)中的配置示例。
 
    - **追踪配置**：用于设置其他追踪选项，包括是否追踪特定事件（如客户端连接、消息传输等）。
@@ -87,38 +87,42 @@
 
 ```bash
 opentelemetry {
-  exporter { endpoint = "http://localhost:4317" }
+  exporter {
+    endpoint = "http://localhost:4317"
+    headers {
+      authorization = ""Basic dXNlcjpwYXNzd29yZA=="
+    }
+  }
   traces {
-   enable = true
-   # 端到端追踪模式
-   trace_mode = e2e
-   # 端到端追踪选项
-   e2e_tracing_options {
-     ## 是否追踪客户端连接/断开事件
-     client_connect_disconnect = true
-     ## 是否追踪客户端消息事件
-     client_messaging = true
-     ## 是否追踪客户端订阅/取消订阅事件
-     client_subscribe_unsubscribe = true
-     ## 客户端ID 白名单最大长度
-     clientid_match_rules_max = 30
-     ## 主题过滤器白名单最大长度
-     topic_match_rules_max = 30
-     ## 集群标识符
-     cluster_identifier = emqxcl
-     ## 消息追踪等级（QoS）
-     msg_trace_level = 2
-     ## 采样率，即除白名单以外追踪事件的采样率
-     ## Note: 仅当追踪事件开启时才根据采样率进行采样
-     sample_ratio = "100%"
-     ## 跟随 traceparent
-     ## 端到端追踪是否跟随客户端传入的 traceparent
-     follow_traceparent
+    enable = true
+    # 端到端追踪模式
+    trace_mode = e2e
+    # 端到端追踪选项
+    e2e_tracing_options {
+      ## 是否追踪客户端连接/断开事件
+      client_connect_disconnect = true
+      ## 是否追踪客户端消息事件
+      client_messaging = true
+      ## 是否追踪客户端订阅/取消订阅事件
+      client_subscribe_unsubscribe = true
+      ## 客户端ID 白名单最大长度
+      clientid_match_rules_max = 30
+      ## 主题过滤器白名单最大长度
+      topic_match_rules_max = 30
+      ## 集群标识符
+      cluster_identifier = emqxcl
+      ## 消息追踪等级（QoS）
+      msg_trace_level = 2
+      ## 采样率，即除白名单以外追踪事件的采样率
+      ## Note: 仅当追踪事件开启时才根据采样率进行采样
+      sample_ratio = "100%"
+      ## 跟随 traceparent
+      ## 端到端追踪是否跟随客户端传入的 traceparent
+      follow_traceparent
     }
   }
   max_queue_size = 50000
   scheduled_delay = 1000
- }
 }
 ```
 

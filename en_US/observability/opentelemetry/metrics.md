@@ -58,12 +58,17 @@ You can use EMQX Dashboard or configuration file to configure EMQX's integration
 Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
 
    ```bash
-opentelemetry {
-  exporter { endpoint = "http://localhost:4317" }
-  metrics {
-     interval = "10s"
-  }
-}
+   opentelemetry {
+     exporter {
+       endpoint = "http://localhost:4317"
+       headers {
+         authorization = ""Basic dXNlcjpwYXNzd29yZA=="
+       }
+     }
+     metrics {
+        interval = "10s"
+     }
+   }
    ```
 
 ## Visualize EMQX Metrics in Prometheus

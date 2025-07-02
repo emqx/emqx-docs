@@ -59,7 +59,12 @@ scrape_configs:
 
    ```bash
    opentelemetry {
-     exporter { endpoint = "http://localhost:4317" }
+     exporter {
+       endpoint = "http://localhost:4317"
+       headers {
+         authorization = ""Basic dXNlcjpwYXNzd29yZA=="
+       }
+     }
      metrics {
         interval = "10s"
      }
