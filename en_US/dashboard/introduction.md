@@ -78,7 +78,7 @@ This feature is particularly useful for seamless redirection and integration sce
    }
    ```
 
-3. Convert the JSON string to Base64.
+3. Convert the JSON string to Base64. Below is an example on how to get base64-encoded authentication string in one call:
 
    ```
    curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
