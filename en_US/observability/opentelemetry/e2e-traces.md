@@ -27,13 +27,14 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 3. Configure the following settings:
    - **Monitoring platform**: Select `OpenTelemetry`.
    - **Feature Selection**: Select `Traces`.
-   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`. `http://localhost:4317`.
+   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`.
+   - **Headers**: Add custom HTTP headers to the trace export request. This is useful when the OpenTelemetry collector requires authentication or other custom headers, such as API keys or tokens. Each header should be provided as a key-value pair. This option enhances compatibility with collectors that enforce HTTP-based authentication.
    - **Enable TLS**: Enable TLS encryption for secure communication as needed, typically for security requirements in production environments.
    - **Trace Mode**: Select `End-to-End` to enable end-to-end tracing functionality.
    - **Cluster Identifier**: Add a property value to the span attributes to help identify which EMQX cluster the data comes from. The property key will be `cluster.id`. Typically, set a simple and easily identifiable name or use the cluster name to differentiate between EMQX clusters. The default is `emqxcl`.
    - **Traces Export Interval**: Set the time interval for exporting trace data, with a default of `5` seconds.
    - **Max Queue Size**: Set the maximum size of the trace data queue. The default is `2048` entries.
-
+   
 4. Click **Trace Advanced Configuration** to configure advanced settings if necessary.
 
    - **Trace Configuration**: Used to set additional trace options, including whether to trace specific events (such as client connections, message transmissions, rule-engine executions, etc.).
@@ -45,7 +46,7 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 
 5. Click **Save Changes** to save the configuration.
 
-<img src="./assets/e2e-dashboard-conf-page-en.png" alt="Otel-E2E-Trace-dashboard-page" style="zoom:67%;" />
+<img src="./assets/e2e-dashboard-conf-en.png" alt="Otel-E2E-Trace-dashboard-page" style="zoom:67%;" />
 
 ### Configure End-to-End Tracing via Configuration File
 
