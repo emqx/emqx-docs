@@ -23,16 +23,35 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 ### Configure End-to-End Tracing via Dashboard
 
 1. Click **Management** -> **Monitoring** from the Dashboard menu on the left.
+
 2. Select the **Integration** tab on the Monitoring page.
+
 3. Configure the following settings:
    - **Monitoring platform**: Select `OpenTelemetry`.
+   
    - **Feature Selection**: Select `Traces`.
+   
    - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`.
-   - **Headers**: Add custom HTTP headers to the trace export request. This is useful when the OpenTelemetry collector requires authentication or other custom headers, such as API keys or tokens. Each header should be provided as a key-value pair. This option enhances compatibility with collectors that enforce HTTP-based authentication.
+   
+   - **Headers**: Add custom HTTP headers to the trace export request. This is useful when the OpenTelemetry collector requires authentication or other custom headers, such as API keys or tokens. Each header should be provided as a key-value pair. 
+   
+     If the OpenTelemetry Collector uses Basic Authentication, you need to add an `authorization` header with the value in the format: `Basic <base64-encoded username:password>`. For example:
+   
+     ```
+     Key: authorization
+     Value: Basic dXNlcjpwYXNzd29yZA==
+     ```
+   
+     This option enhances compatibility with collectors that enforce HTTP-based authentication.
+   
    - **Enable TLS**: Enable TLS encryption for secure communication as needed, typically for security requirements in production environments.
+   
    - **Trace Mode**: Select `End-to-End` to enable end-to-end tracing functionality.
+   
    - **Cluster Identifier**: Add a property value to the span attributes to help identify which EMQX cluster the data comes from. The property key will be `cluster.id`. Typically, set a simple and easily identifiable name or use the cluster name to differentiate between EMQX clusters. The default is `emqxcl`.
+   
    - **Traces Export Interval**: Set the time interval for exporting trace data, with a default of `5` seconds.
+   
    - **Max Queue Size**: Set the maximum size of the trace data queue. The default is `2048` entries.
    
 4. Click **Trace Advanced Configuration** to configure advanced settings if necessary.
