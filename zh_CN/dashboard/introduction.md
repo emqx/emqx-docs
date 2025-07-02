@@ -58,9 +58,15 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 1. 调用 `/login` 接口，获取登录返回的 token 及相关信息。
 
-2. 手动添加登录时使用的用户名（该字段不包含在接口返回中）。
+   ```
+   curl -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}'
+   {"license":{"edition":"ee"},"role":"administrator","token":"xxx.yyy.zzz","version":"5.6.1"}
+   ```
 
-3. 将数据整理成如下 JSON 结构：
+2. 将数据整理成如下 JSON 结构，手动添加登录时使用的用户名（该字段不包含在接口返回中）。
 
    ```json
    {
@@ -74,9 +80,16 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
    }
    ```
 
-4. 将 JSON 字符串进行 Base64 编码。
+3. 将 JSON 字符串进行 Base64 编码。
 
-5. 将编码后的字符串通过 `login_meta` 参数附加到 Dashboard 的访问 URL 中。
+   ```
+   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+   ```
+
+4. 将编码后的字符串通过 `login_meta` 参数附加到 Dashboard 的访问 URL 中。
 
 #### 示例 URL
 

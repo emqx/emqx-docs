@@ -56,9 +56,15 @@ This feature is particularly useful for seamless redirection and integration sce
 
 1. Call the `/login` API to obtain the login token and related information.
 
-2. Manually add the username used during login (not included in the `/login` response).
+   ```
+   curl -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}'
+   {"license":{"edition":"ee"},"role":"administrator","token":"xxx.yyy.zzz","version":"5.6.1"}
+   ```
 
-3. Combine the data into a JSON structure:
+2. Combine the data into a JSON structure. Manually add the username used during login (not included in the `/login` response).
 
    ```json
    {
@@ -67,14 +73,21 @@ This feature is particularly useful for seamless redirection and integration sce
      },
      "role": "administrator",
      "token": "xxx.jwt.token",
-     "version": "5.5.0-g0fef19f8",
+     "version": "5.6.1-g0fef19f8",
      "username": "admin"
    }
    ```
 
-4. Convert the JSON string to Base64.
+3. Convert the JSON string to Base64.
 
-5. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL.
+   ```
+   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+   ```
+
+4. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL.
 
 #### Example URL
 
