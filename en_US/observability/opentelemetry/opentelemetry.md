@@ -9,6 +9,9 @@ EMQX supports directly pushing telemetry data to the OpenTelemetry Collector via
 This section introduces how EMQX integrates the telemetry data with the OpenTelemetry Collector, enabling full built-in OpenTelemetry support for the following observability information:
 
 - [Metrics](./metrics.md)
-- [Traces](./traces.md)
 - [Logs](./logs.md)
+- [Traces](./traces.md)
+
+In addition, starting from EMQX version 5.8.3, end-to-end tracing based on OpenTelemetry is also supported:
+
 - [End-to-End Traces](./e2e-traces.md)
