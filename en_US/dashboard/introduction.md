@@ -54,31 +54,9 @@ This feature is particularly useful for seamless redirection and integration sce
 
 #### How To Use This Login Method
 
-1. Call the `/login` API to obtain the login token and related information.
+1. Use the `/login` endpoint to obtain an authentication token. Since the response does not include the username, you will need to manually add it before encoding the full JSON payload.
 
-   ```
-   curl -X POST "http://127.0.0.1:18083/api/v5/login" \
-     -H 'accept: application/json' \
-     -H 'Content-Type: application/json' \
-     -d '{"username": "admin","password": "public"}'
-   {"license":{"edition":"ee"},"role":"administrator","token":"xxx.yyy.zzz","version":"5.6.1"}
-   ```
-
-2. Combine the data into a JSON structure. Manually add the username used during login (not included in the `/login` response).
-
-   ```json
-   {
-     "license": {
-       "edition": "ee"
-     },
-     "role": "administrator",
-     "token": "xxx.jwt.token",
-     "version": "5.6.1-g0fef19f8",
-     "username": "admin"
-   }
-   ```
-
-3. Convert the JSON string to Base64. Below is an example on how to get base64-encoded authentication string in one call:
+   You can perform all steps, including requesting the token, injecting the username, and encoding the result in Base64, in a single command, as shown below:
 
    ```
    curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
@@ -87,23 +65,23 @@ This feature is particularly useful for seamless redirection and integration sce
      -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
    ```
 
-4. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL.
+2. Construct the login URL. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL. For example:
 
-#### Example URL
+   For EMQX versions **before 5.6.0**:
 
-For versions **before 5.6.0**:
+   ```bash
+   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+   ```
 
-```bash
-http://localhost:18083?login_meta=BASE64_ENCODED_STRING
-```
+   This redirects to the default cluster overview page.
 
-Redirects to the default cluster overview page.
+   For EMQX **version 5.6.0 and later**:
 
-For **version 5.6.0 and later**, you can also specify a target page:
+   ```bash
+   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+   ```
 
-```bash
-http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
-```
+   This allows specifying the target page after login.
 
 This method provides a smooth, pre-authenticated user experience for accessing the EMQX Dashboard. Make sure to handle the token securely and ensure it has appropriate expiration and scope limits.
 
