@@ -27,8 +27,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule.
   Now the system's current millisecond value is used instead, and millisecond precision is enforced.
 
-- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
-
 - [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
 
 - [#15154](https://github.com/emqx/emqx/pull/15154) Fixed a rare race condition in Actions running in aggregated mode (e.g., S3, Azure Blob Storage, Snowflake) that could lead to a crash with errors like:
@@ -52,6 +50,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
 - [#15190](https://github.com/emqx/emqx/pull/15190) Enhanced Message Transformation by allowing hard-coded values for QoS and topic.
+
+#### Observability
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
 
 #### Telemetry
 

@@ -24,8 +24,6 @@
 
 - [#15331](https://github.com/emqx/emqx/pull/15331) 修复了 InfluxDB 动作中的一个问题：当 `WriteSyntax` 中的 `timestamp` 留空，且规则中未提供时间戳字段时，行协议转换会失败。现在将默认使用系统当前的毫秒时间，并强制使用毫秒精度。
   
-- [#15299](https://github.com/emqx/emqx/pull/15299) 修复了导出 OpenTelemetry 指标时出现的 `badarg` 错误。
-
 - [#15274](https://github.com/emqx/emqx/pull/15274) 在 Postgres、Matrix 和 TimescaleDB 连接器中，当健康检查失败时将触发完整重连，从而提升连接器的稳定性。此前，连接在健康检查失败后可能进入异常状态，导致操作阻塞，甚至引发内存溢出问题。
 
 - [#15154](https://github.com/emqx/emqx/pull/15154) 修复了聚合模式下运行的动作（例如 S3、Azure Blob Storage、Snowflake）中一个罕见的竞争条件问题，可能会导致类似如下错误的崩溃：
@@ -49,6 +47,10 @@
 
 - [#15224](https://github.com/emqx/emqx/pull/15224) 修复了通过 Dashboard 更新外部 Schema Registry 时，密码被意外覆盖为 `******` 的问题。现在在更新过程中，密码能够被正确保留。
 - [#15190](https://github.com/emqx/emqx/pull/15190) 增强了消息转换功能，支持为 QoS 和主题设置硬编码值。
+
+#### 可观测性
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) 修复了导出 OpenTelemetry 指标时出现的 `badarg` 错误。
 
 #### 遥测
 
