@@ -17,3 +17,8 @@ This section introduces how EMQX integrates the telemetry data with the OpenTele
 - [Metrics](./metrics.md)
 - [Traces](./traces.md)
 - [Logs](./logs.md)
+
+In addition, starting from EMQX version 5.8.3, end-to-end tracing based on OpenTelemetry is also supported:
+
+- [End-to-End Traces](./e2e-traces.md)
+
