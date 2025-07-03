@@ -57,7 +57,7 @@ EMQX 通过以下方式与世界各地的 EMQX 开发者及用户共同交流学
 
 其他信息渠道：
 
-- [Twitter](https://twitter.com/EMQTech)
+- [X](https://x.com/EMQTech)
 - [Bilibili](https://space.bilibili.com/522222081)
 - [LinkedIn](https://www.linkedin.com/company/emqtech)
 - [Discord](https://discord.com/invite/xYGf3fQnES)
