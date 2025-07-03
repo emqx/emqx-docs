@@ -68,45 +68,36 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 使用此登录方式的步骤如下：
 
-1. 调用 `/login` 接口，获取登录返回的 token 及相关信息。
+1. 使用 `/login` 接口获取身份验证 token。由于返回结果中不包含用户名，你需要手动将用户名添加到 JSON 数据中，再进行编码。
 
-2. 手动添加登录时使用的用户名（该字段不包含在接口返回中）。
+   你可以通过以下命令一步完成所有操作，包括请求 token、添加用户名，以及将结果进行 Base64 编码：
 
-3. 将数据整理成如下 JSON 结构：
-
-   ```json
-   {
-     "license": {
-       "edition": "ee"
-     },
-     "role": "administrator",
-     "token": "xxx.jwt.token",
-     "version": "5.5.0-g0fef19f8",
-     "username": "admin"
-   }
+   ```
+   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
    ```
 
-4. 将 JSON 字符串进行 Base64 编码。
+2. 构造登录 URL。将编码后的字符串嵌入到 Dashboard URL 的 `login_meta` 查询参数中。例如：
 
-5. 将编码后的字符串通过 `login_meta` 参数附加到 Dashboard 的访问 URL 中。
+   对于 **EMQX 5.6.0 之前的版本**：
 
-#### 示例 URL
+   ```bash
+   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+   ```
 
-**5.6.0 以下版本**：
+   该方式会跳转至默认的集群概览页面。
 
-```bash
-http://localhost:18083?login_meta=BASE64_ENCODED_STRING
-```
+   对于 **EMQX 5.6.0 及以上版本**：
 
-将默认跳转至集群总览页面。
+   ```bash
+   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+   ```
 
-**5.6.0 及以上版本**，可指定跳转页面：
+   该方式支持在登录后跳转到指定页面。
 
-```bash
-http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
-```
-
-通过该方式，可以为用户提供无需手动登录的便捷访问体验。请确保妥善管理 token 的安全性，建议设置合理的过期时间和访问权限范围。
+通过这种方式，可以为用户提供无需手动登录的便捷访问体验。请确保妥善管理 token 的安全性，建议设置合理的过期时间和访问权限范围。
 
 ### 忘记密码
 
