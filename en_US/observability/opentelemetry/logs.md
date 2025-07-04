@@ -67,7 +67,12 @@ Before enabling EMQX OpenTelemetry logging, you need to deploy and configure Ope
 
    ```bash
    opentelemetry {
-     exporter {endpoint = "http://localhost:4317"}
+     exporter {
+       endpoint = "http://localhost:4317"
+       headers {
+         authorization = ""Basic dXNlcjpwYXNzd29yZA=="
+       }
+     }
      logs {enable = true, level = warning}
    }
    ```

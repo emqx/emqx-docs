@@ -50,17 +50,70 @@ For more information, refer to the official [ODBC Driver](https://docs.snowflake
 
 #### Linux
 
-Run the following script to install the Snowflake ODBC driver and configure the `odbc.ini` file:
-
-```
-scripts/install-snowflake-driver.sh
-```
+EMQX provides an [installation script](https://github.com/emqx/emqx/blob/master/scripts/install-snowflake-driver.sh) designed specifically for the quick deployment of the Snowflake ODBC driver on Debian-based systems (such as Ubuntu), along with the required system configuration.
 
 ::: tip Note
 
 This script is for testing only, not a recommendation on how to set up the ODBC driver in production environments. You can refer to the official [installation instructions for Linux](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux).
 
 :::
+
+**Run the Installation Script**
+
+Copy the `scripts/install-snowflake-driver.sh` script to your local machine. Run `chmod a+x` to make the script executable, and run it with `sudo`:
+
+```bash
+chmod a+x scripts/install-snowflake-driver.sh
+sudo ./scripts/install-snowflake-driver.sh
+```
+
+The script automatically downloads the Snowflake ODBC `.deb` installation package (e.g., `snowflake-odbc-3.4.1.x86_64.deb`) to the current working directory. It then installs the driver and updates the following system configuration files:
+
+- `/etc/odbc.ini`: Adds the Snowflake data source configuration
+- `/etc/odbcinst.ini`: Registers the Snowflake driver path
+
+**Sample Configuration**
+
+Run the following command to view the configurations in the `/etc/odbc.ini` file:
+
+```
+emqx@emqx-0:~$ cat /etc/odbc.ini 
+
+[snowflake]
+Description=SnowflakeDB
+Driver=SnowflakeDSIIDriver
+Locale=en-US
+PORT=443
+SSL=on
+
+[ODBC Data Sources]
+snowflake = SnowflakeDSIIDriver
+```
+
+Run the following command to view the configurations in the  `/etc/odbcinst.ini` file:
+
+```
+emqx@emqx-0:~$ cat /etc/odbcinst.ini 
+
+[ODBC Driver 18 for SQL Server]
+Description=Microsoft ODBC Driver 18 for SQL Server
+Driver=/opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.5.so.1.1
+UsageCount=1
+
+[ODBC Driver 17 for SQL Server]
+Description=Microsoft ODBC Driver 17 for SQL Server
+Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.10.so.6.1
+UsageCount=1
+
+[SnowflakeDSIIDriver]
+APILevel=1
+ConnectFunctions=YYY
+Description=Snowflake DSII
+Driver=/usr/lib/snowflake/odbc/lib/libSnowflake.so
+DriverODBCVer=03.52
+SQLLevel=1
+UsageCount=1
+```
 
 #### macOS
 
@@ -108,7 +161,7 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
 
 ### Create a User Account and Database
 
-Once the Snowflake ODBC driver is installed, you need to set up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the connector and Sink in EMQX:
+Once the Snowflake ODBC driver is installed, you need to set up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the Connector and Sink in EMQX:
 
 | Field                  | Value                                            |
 | ---------------------- | ------------------------------------------------ |

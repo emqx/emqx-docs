@@ -23,15 +23,35 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 ### Configure End-to-End Tracing via Dashboard
 
 1. Click **Management** -> **Monitoring** from the Dashboard menu on the left.
+
 2. Select the **Integration** tab on the Monitoring page.
+
 3. Configure the following settings:
    - **Monitoring platform**: Select `OpenTelemetry`.
+
    - **Feature Selection**: Select `Traces`.
-   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`. `http://localhost:4317`.
+
+   - **Endpoint**: Set the trace data export address, which defaults to `http://localhost:4317`.
+
+   - **Headers**: Add custom HTTP headers to the trace export request. This is useful when the OpenTelemetry collector requires authentication or other custom headers, such as API keys or tokens. Each header should be provided as a key-value pair.
+
+     If the OpenTelemetry Collector uses Basic Authentication, you need to add an `authorization` header with the value in the format: `Basic <base64-encoded username:password>`. For example:
+
+     ```
+     Key: authorization
+     Value: Basic dXNlcjpwYXNzd29yZA==
+     ```
+
+     This option enhances compatibility with collectors that enforce HTTP-based authentication.
+
    - **Enable TLS**: Enable TLS encryption for secure communication as needed, typically for security requirements in production environments.
+
    - **Trace Mode**: Select `End-to-End` to enable end-to-end tracing functionality.
+
    - **Cluster Identifier**: Add a property value to the span attributes to help identify which EMQX cluster the data comes from. The property key will be `cluster.id`. Typically, set a simple and easily identifiable name or use the cluster name to differentiate between EMQX clusters. The default is `emqxcl`.
+
    - **Traces Export Interval**: Set the time interval for exporting trace data, with a default of `5` seconds.
+
    - **Max Queue Size**: Set the maximum size of the trace data queue. The default is `2048` entries.
 
 4. Click **Trace Advanced Configuration** to configure advanced settings if necessary.
@@ -45,7 +65,7 @@ This section guides you through enabling OpenTelemetry-based end-to-end tracing 
 
 5. Click **Save Changes** to save the configuration.
 
-<img src="./assets/e2e-dashboard-conf-page-en.png" alt="Otel-E2E-Trace-dashboard-page" style="zoom:67%;" />
+<img src="./assets/e2e-dashboard-conf-en.png" alt="Otel-E2E-Trace-dashboard-page" style="zoom:67%;" />
 
 ### Configure End-to-End Tracing via Configuration File
 
@@ -55,40 +75,42 @@ For more details on configuration options, refer to the OpenTelemetry subsection
 
 ```bash
 opentelemetry {
-  exporter { endpoint = "http://localhost:4317" }
+  exporter {
+    endpoint = "http://localhost:4317"
+    headers {
+      authorization = ""Basic dXNlcjpwYXNzd29yZA=="
+    }
+  }
   traces {
-   enable = true
-   # End-to-end tracing mode
-   trace_mode = e2e
-   # End-to-end tracing options
-   e2e_tracing_options {
-     ## Trace client connection/disconnection events
-     client_connect_disconnect = true
-     ## Trace client subscription/unsubscription events
-     client_subscribe_unsubscribe = true
-     ## Trace client messaging events
-     client_messaging = true
-     ## Trace Rule-Engine Executions
-     trace_rule_engine = true
-     ## Maximum whitelist length for client IDs
-     clientid_match_rules_max = 30
-     ## Maximum whitelist length for topic filters
-     topic_match_rules_max = 30
-     ## Cluster identifier
-     cluster_identifier = emqxcl
-     ## Message trace level (QoS)
-     msg_trace_level = 2
-     ## Sampling rate for events not in the whitelist
-     ## Note: Sampling applies only when tracing is enabled
-     sample_ratio = "100%"
-     ## Follow traceparent
-     ## Whether end-to-end tracing follows the `traceparent` passed in by the client
-     follow_traceparent
+    enable = true
+    # End-to-end tracing mode
+    trace_mode = e2e
+    # End-to-end tracing options
+    e2e_tracing_options {
+      ## Trace client connection/disconnection events
+      client_connect_disconnect = true
+      ## Trace client messaging events
+      client_messaging = true
+      ## Trace client subscription/unsubscription events
+      client_subscribe_unsubscribe = true
+      ## Maximum whitelist length for client IDs
+      clientid_match_rules_max = 30
+      ## Maximum whitelist length for topic filters
+      topic_match_rules_max = 30
+      ## Cluster identifier
+      cluster_identifier = emqxcl
+      ## Message trace level (QoS)
+      msg_trace_level = 2
+      ## Sampling rate for events not in the whitelist
+      ## Note: Sampling applies only when tracing is enabled
+      sample_ratio = "100%"
+      ## Follow traceparent
+      ## Whether end-to-end tracing follows the `traceparent` passed in by the client
+      follow_traceparent
     }
   }
   max_queue_size = 50000
   scheduled_delay = 1000
- }
 }
 ```
 

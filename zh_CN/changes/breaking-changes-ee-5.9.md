@@ -1,5 +1,9 @@
 # EMQX 5.9 中的不兼容变更
 
+## 5.9.1
+
+- [#15156](https://github.com/emqx/emqx/pull/15156) 为 `dashboard.sso.oidc.issuer` 字段新增了严格的 schema 校验。该字段现在必须为合法的 URL。此前，即使配置无效，API 也可能错误地接受，但会导致 EMQX 无法重启，甚至触发崩溃（`erl_crash.dump`）。
+
 ## 5.9.0
 
 - [#14865](https://github.com/emqx/emqx/pull/14865) 删除了旧的 LDAP 认证配置布局（自 v5.4 起已废弃）。将 `password_attribute` 和 `is_superuser_attribute` 移动到 `method` 块下：
@@ -10,7 +14,7 @@
     password_attribute = "userPassword"
     is_superuser_attribute = "isSuperuser"
   }
-    ```
+  ```
   
 - [#14765](https://github.com/emqx/emqx/pull/14765) 
 
