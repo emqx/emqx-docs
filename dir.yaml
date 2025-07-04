@@ -818,7 +818,10 @@
         - gateway/coap
         - gateway/lwm2m
         - gateway/exproto
-        - gateway/ocpp
+        - title_en: OCPP Gateway
+          title_cn: OCPP 网关
+          title_ja: OCPP ゲートウェイ
+          path: gateway/ocpp
         - title_en: JT/T 808 Gateway
           title_cn: JT/T 808 协议网关
           title_ja: JT/T 808 ゲートウェイ
@@ -826,8 +829,12 @@
           collapsed: true
           children:
             - gateway/jt808_data_exchange
-        - gateway/gbt32960
         - gateway/nats
+        - title_en: GB/T 32960 Gateway
+          title_cn: GB/T 32960 协议网关
+          title_ja: GB/T 32960 ゲートウェイ
+          path: gateway/gbt32960
+        #- gateway/tcp
     - client-attributes/client-attributes
 
 - title_en: Tutorials
