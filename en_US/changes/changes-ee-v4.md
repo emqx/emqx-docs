@@ -1,5 +1,39 @@
 # EMQX Enterprise Version 4
 
+## e4.4.31
+
+*Release Date: 2025-07-10*
+
+### Enhancements
+
+- Improved performance of the Username Quota module.
+
+  When the Username Quota feature is enabled in a multi-node cluster, EMQX nodes need to frequently synchronize username state (i.e., mappings between usernames and client IDs) with other nodes, which can cause performance overhead. This version introduces batch synchronization, reducing CPU usage.
+
+- Added “Refresh Username Interval” configuration option.
+
+  To prevent inconsistencies in the username quota table across nodes under certain extreme conditions, this version adds a scheduled refresh mechanism. EMQX will periodically fetch username status from other nodes to update the local quota table. The default interval is 15 minutes, and the minimum configurable value is 30 seconds.
+
+- Added “Send Undefined Properties” option to the Republish action.
+
+  This option controls whether undefined MQTT properties and user properties are included in republished messages. When enabled, such properties are added with the string `"undefined"` as their value. When disabled, they will be omitted from the message.
+
+- Improved HTTP API stability under high-latency network conditions.
+
+  Parts of the HTTP API implementation that relied on RPC have been refactored to use `gen_rpc`, avoiding contention for Erlang’s distributed RPC channels and reducing the risk of blocking.
+
+### Bug Fixes
+
+- Fixed inconsistent routing tables or client global registries after cluster healing.
+
+  In cases where a network partition causes the cluster to split into overlapping subgroups, simply restarting the minority partition might not fully restore consistency. This could lead to issues such as messages not being routed to subscribers on other nodes, or failure to kick out clients via the HTTP API.
+
+  This version adjusts the cluster healing logic by ensuring that all nodes in both the minority partition and the overlapping group are restarted, ensuring consistency is restored across the cluster.
+
+- Fixed ETS memory leak caused by exceptions in HTTP API calls.
+
+  Resolved an issue where exceptions during certain HTTP API calls could result in memory leaks in ETS tables.
+
 ## e4.4.30
 
 *Release Date: 2025-06-20*
