@@ -45,6 +45,14 @@ FROM
 
      :::
 
+   - **Send Undefined Properties**: Controls how undefined MQTT properties and user properties are handled during message forwarding. When enabled, any undefined property (i.e., a property referenced by a placeholder in the template or rule SQL but not actually present in the message) will be included in the forwarded message with the string `"undefined"` as its value. When disabled, such properties will be omitted from the republished MQTT message.
+
+     ::: tip Note
+
+     This option helps distinguish between empty values and missing fields. Enabling it ensures all expected properties are present in the outgoing message, which can be important for downstream systems that require consistent property keys.
+
+     :::
+
    Once the configuration is complete, click the **Confirm** button. You will see that the action has been added.
 
 4. Return to the Create Rule page and click the **Create** button at the bottom of the page.
