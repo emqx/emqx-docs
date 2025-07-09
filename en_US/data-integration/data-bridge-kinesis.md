@@ -139,7 +139,7 @@ This section demonstrates how to create a rule for processing messages from the 
 
 11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-12. **Advanced settings (optional)**: Choose whether to use buffer queue and batch mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+12. **Advanced settings (optional)**: configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
 13. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis Data Streams service.
 
