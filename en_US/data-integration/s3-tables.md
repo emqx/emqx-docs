@@ -26,7 +26,7 @@ The workflow proceeds as follows:
 4. **Writing to Amazon S3 Tables**: The rule triggers the S3 Tables Sink action, which batches the transformed data and sends it to Amazon S3 Tables using the Iceberg-compatible write API. Data is persisted as Parquet files under Iceberg table partitions.
 5. **Query and Analytics**: Once ingested, data can be queried with Amazon Athena, joined with other datasets, or analyzed using Redshift Spectrum, Amazon EMR, or third-party analytics engines such as Presto and Trino.
 
-## Features and Advantages
+## Features and Benefits
 
 Using Amazon S3 Tables data integration in EMQX can bring the following features and advantages to your business:
 

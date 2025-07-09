@@ -21,7 +21,7 @@ After events and message data are written to Storage Container, you can connect 
 - Data archiving: Store device messages as objects in Azure Blob Storage for long-term preservation to meet compliance requirements or business needs.
 - Data analysis: Import data from Storage Container into analytics services like Snowflake for predictive maintenance, device efficiency evaluation, and other data analysis services.
 
-## Features and Advantages
+## Features and Benefits
 
 Using Azure Blob Storage data integration in EMQX can bring the following features and advantages to your business:
 

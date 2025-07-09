@@ -16,6 +16,13 @@ EMQX forwards MQTT data to BigQuery through the rule engine and Sink. Taking the
 
 ## Features and Benefits
 
+Integrating EMQX with BigQuery offers a robust, scalable, and real-time data pipeline for MQTT data. The following features and benefits help simplify IoT analytics and data-driven decision-making:
+
+- **Real-time Data Ingestion**: Seamlessly stream MQTT messages from EMQX into BigQuery with low latency. Supports time-sensitive applications that require immediate processing and analysis of IoT data.
+- **Flexible Data Mapping**: Customize how MQTT topics and message payloads are mapped to BigQuery tables and fields.
+- **Scalable and Serverless Analytics**: Leverage BigQuery’s fully managed, serverless architecture to analyze IoT data at scale.
+- **Easy Integration with Google Cloud Ecosystem**: Native compatibility with Google Cloud services like Data Studio, Looker, and AI Platform for visualization and machine learning. Simplifies building end-to-end pipelines from data collection to insight generation.
+
 
 ## Before You Start
 
@@ -30,7 +37,7 @@ This section describes the preparations you need to complete before you start to
 
 You need to create a service account and a service account key to use the BigQuery service.
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has permission to read and write the datasets and tables used in your Actions (e.g. "BigQuery Data Editor" for the datasets/tables involved, or at least read/write over their data).
+1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your Google Cloud Platform (GCP) account.  Ensure that the Service Account has permission to read and write the datasets and tables used in your Actions (e.g. "BigQuery Data Editor" for the datasets/tables involved, or at least read/write over their data).
 
 2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
 
@@ -44,27 +51,49 @@ You need to create a service account and a service account key to use the BigQue
 
 ### Create and Manage Datasets and Tables in GCP
 
-Before configuring the BigQuery data integration on EMQX, you need to create a topic and be familiar with the basic management operation in GCP.
+Before configuring the BigQuery data integration on EMQX, you must create the required datasets and tables in GCP.
 
-1. In the Google Cloud console, go to the **BigQuery** -> **Studio** page. For detailed instructions, see [Load and query data](https://cloud.google.com/bigquery/docs/quickstarts/load-data-console) tutorial for some hints on getting started.
+1. In the Google Cloud console, go to the **BigQuery** -> **Studio** page. For detailed instructions, see [Load and query data](https://cloud.google.com/bigquery/docs/quickstarts/load-data-console) quickstart guide.
 
    ::: tip
 
-   The Service Account must have permission to write to the table in the dataset.
+   The Service Account you plan to use must have write permissions for the target table in the dataset.
 
    :::
 
-2. In the **Explorer** pane, click the kebab icon (⋮), then Create Dataset.  Define a name for your dataset.  Click Create Dataset.
+2. In the **Explorer** pane, click the kebab icon (⋮), then select **Create dataset**. Define a name for your dataset and click **Create dataset**.
 
-3. In the **Explorer** pane, click the recently created dataset, then (+) Create Table.  Set the source as "Empty Table", define a name for it, define a schema for it (for example, choosing to edit it as text, `clientid:string,payload:bytes,topic:string,publish_received_at:timestamp`).  Click Create Table.
+3. After the dataset is created, click on it in the **Explorer** pane, then click **(+) Create table**.
 
-3. Click the dataset, then click Share.  Add your Service Account Email as the principal, and assign it an a role that has read and write access to the table, and read access for the dataset.  For example, the principal may have "BigQuery Data Viewer" on the dataset, and "Editor" on the table that will be used.
+   - Set the source as "Empty Table".
 
-4. Click the table, then Query.  You can query its data by using SQL statements.
+   - Provide a table name. 
 
-```
-SELECT * FROM `my_project.my_dataset.my_tab` LIMIT 1000
-```
+   - Define the table schema. For example, click the **Edit as text** toggle, and paste the following schema definition into the text field.
+
+     ```
+     clientid:string,payload:bytes,topic:string,publish_received_at:timestamp
+     ```
+
+   - Click **Create table** to complete the setup.
+
+4. Configure permissions to allow EMQX to write data:
+
+   - Select the dataset and click **Share**.  
+   - Add your Service Account email as a principal.
+   - Assign appropiate roles, such as:
+     - "BigQuery Data Viewer" (read access) for the dataset
+     - "Editor" (read and write access) for the table
+
+5. Once the table is created, you can verify it by running a query:
+
+   - Click the table, then click **Query**.
+
+   - Run a simple SQL statement to check that the table is accessible:
+
+     ```sql
+     SELECT * FROM `my_project.my_dataset.my_tab` LIMIT 1000
+     ```
 
 ## Create a BigQuery Producer Connector
 
@@ -119,7 +148,7 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-13. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+13. **Advanced settings (optional)**: Configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
 14. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the BigQuery server.
 
@@ -141,4 +170,20 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 2. Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
-3. Go to GCP **BigQuery** -> **Studio**, click your table, then Query, and run a query. You should see the message.
+3. Go to GCP **BigQuery** -> **Studio**, click your table, then click **Query**. Run a query and you should see the message.
+
+## Advanced Settings
+
+This section delves into the advanced configuration options available for the BigQuery Producer Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+
+| Field Name                       | Description                                                  | Default Value |
+| -------------------------------- | ------------------------------------------------------------ | ------------- |
+| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and BigQuery. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`          |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from BigQuery, the request is deemed to have expired. | `45` second   |
+| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with BigQuery. | `15` second   |
+| **Health Check Interval Jitter** | Adds a randomized delay (jitter) to the base health check interval to reduce the likelihood of simultaneous health check requests from multiple nodes in a cluster. This helps avoid exceeding the rate limits imposed by AWS BigQuery APIs and reduces the chance of false alerts due to temporary throttling. The actual interval for each health check is calculated as: `interval + random(0..jitter)`. | `15` second   |
+| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with BigQuery. | `60` second   |
+| **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the BigQuery Sink. The buffer workers temporarily store data before sending it to BigQuery, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`         |
+| **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to BigQuery does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at BigQuery. | `Async`       |
+| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to BigQuery in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and BigQuery. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`           |
+| **Inflight Window**              | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with BigQuery. When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`         |
