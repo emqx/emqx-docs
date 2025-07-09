@@ -22,6 +22,10 @@
 
   Parts of the HTTP API implementation that relied on RPC have been refactored to use `gen_rpc`, avoiding contention for Erlang’s distributed RPC channels and reducing the risk of blocking.
 
+- Optimized the query performance of the built-in database authentication (`auth_mnesia`).
+
+  Previously, the query performance of the built-in authentication database would degrade as the number of records increased, leading to high CPU consumption during periods of high-frequency or concurrent client logins. After the optimization, query performance is no longer affected by the number of records, resulting in improved authentication efficiency and overall system stability.
+
 ### Bug Fixes
 
 - Fixed inconsistent routing tables or client global registries after cluster healing.
