@@ -126,6 +126,7 @@ D1 -->|发布消息| E[客户端]
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)
+- [BigQuery](./bigquery.md)
 
 ## Sink 的特性
 
