@@ -8,7 +8,7 @@ This page provides a comprehensive introduction to the data integration between 
 
 BigQuery data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
 
-EMQX forwards MQTT data to BigQuery through the rule engine and Sink. Taking the example of a BigQuery producer role, the complete process is as follows:
+EMQX forwards MQTT data to BigQuery through the rule engine and Sink. The complete process is as follows:
 
 1. **IoT Devices Publish Messages**: Devices publish telemetry and status data through specific topics, triggering the rule engine.
 2. **Rule Engine Processes Messages**: Using the built-in rule engine, MQTT messages from specific sources are processed based on topic matching. The rule engine matches corresponding rules and processes messages, such as converting data formats, filtering specific information, or enriching messages with contextual information.
@@ -35,15 +35,17 @@ This section describes the preparations you need to complete before you start to
 
 ### Create Service Account Key in GCP
 
-You need to create a service account and a service account key to use the BigQuery service.
+To allow EMQX to connect with BigQuery, you need to create a Service Account in Google Cloud and generate a key in JSON format.
 
-1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your Google Cloud Platform (GCP) account.  Ensure that the Service Account has permission to read and write the datasets and tables used in your Actions (e.g. "BigQuery Data Editor" for the datasets/tables involved, or at least read/write over their data).
+1. Create a [Service Account](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount) in your GCP account.  Ensure that the Service Account has the necessary permissions to access the datasets and tables you will use. For example, by granting the "BigQuery Data Editor" role to read and write the required datasets or tables, or at least ensuring it has read/write access to their data.
 
-2. Click the email address for the service account you created. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
+2. Click the email address for the service account you created.
+
+3. Click the **Key** tab. In the **Add key** drop-down list, select **Create new key** to create a Service Account key for that account and download it in JSON format.
 
    ::: tip
 
-   Store the Service Account key securely for later use.
+   Keep the downloaded Service Account key file secure, as it will be used later to authenticate EMQX with BigQuery.
 
    :::
 
@@ -95,18 +97,18 @@ Before configuring the BigQuery data integration on EMQX, you must create the re
      SELECT * FROM `my_project.my_dataset.my_tab` LIMIT 1000
      ```
 
-## Create a BigQuery Producer Connector
+## Create a BigQuery Connector
 
-Before adding a BigQuery Producer Sink action, you need to create a BigQuery Producer connector to establish a connection between EMQX and BigQuery.
+Before adding a BigQuery Producer Sink action, you need to create a BigQuery connector to establish a connection between EMQX and BigQuery.
 
 1. Go to the EMQX Dashboard and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page, select **BigQuery** on the connector selection page, and click **Next**.
-3. Enter a name and description, such as `my_producer`. The name is used to associate the BigQuery Producer Sink with the connector and must be unique within the cluster.
+3. Enter a name and description, such as `my_bigquery`. The name is used to associate the BigQuery Sink with the connector and must be unique within the cluster.
 4. In **GCP Service Account Credentials**, upload the Service Account credentials in JSON format you exported in [Create Service Account Key in GCP](#create-service-account-key-in-gcp).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the BigQuery server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Producer Sink](#create-a-rule-with-bigquery-producer-sink).
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with Sink to specify the data to be forwarded to BigQuery. For detailed steps, see [Create a Rule with BigQuery Sink](#create-a-rule-with-bigquery-sink).
 
-## Create a Rule with BigQuery Producer Sink
+## Create a Rule with BigQuery Sink
 
 This section demonstrates how to create a rule to specify the data to be saved into BigQuery.
 
@@ -130,19 +132,25 @@ This section demonstrates how to create a rule to specify the data to be saved i
      "t/bq"
    ```
 
-   ::: tip
+   ::: tip Note
+
    Be sure to select only the fields that are columns in your BigQuery table, otherwise BigQuery will not recognize unknown fields.
+
    :::
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   ::: tip
 
-5. Click the **+ Add Action** button to define an action that will be triggered by the rule. Select `BigQuery` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to BigQuery.
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
-6. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a BigQuery Producer Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
+   :::
+
+5. Click the **Add Action** button to define an action that will be triggered by the rule. Select `BigQuery` from the **Type of Action** dropdown list so that EMQX will send the data processed by the rule to BigQuery.
+
+6. Keep the **Action** dropdown box with the value `Create Action`. Or, you also can select a BigQuery Sink previously created. In this demonstration, you create a new Sink and add it to the rule.
 
 7. In the **Name** field, enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
 
-8. Select the `my_producer` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+8. Select the `my_bigquery` just created from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
 9. In **Dataset** and **Table**, enter the dataset and table names you created in [Create and Manage Datasets and Tables in GCP](#create-and-manage-datasets-and-tables-in-gcp), respectively.
 
@@ -156,11 +164,11 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 16. Back on the **Create Rule** page, click **Create** to create the rule.
 
-You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
+You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new BigQuery Sink.
 
 You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `t/bq` are sent and saved to BigQuery after parsing by rule `my_rule`.
 
-## Test the Producer Rule
+## Test the Rule
 
 1. Use MQTTX to send messages on the topic `t/bq`.
 
@@ -176,14 +184,14 @@ You can also click **Integration** -> **Flow Designer** to view the topology and
 
 This section delves into the advanced configuration options available for the BigQuery Producer Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
 
-| Field Name                       | Description                                                  | Default Value |
-| -------------------------------- | ------------------------------------------------------------ | ------------- |
-| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and BigQuery. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`          |
-| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from BigQuery, the request is deemed to have expired. | `45` second   |
-| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with BigQuery. | `15` second   |
-| **Health Check Interval Jitter** | Adds a randomized delay (jitter) to the base health check interval to reduce the likelihood of simultaneous health check requests from multiple nodes in a cluster. This helps avoid exceeding the rate limits imposed by AWS BigQuery APIs and reduces the chance of false alerts due to temporary throttling. The actual interval for each health check is calculated as: `interval + random(0..jitter)`. | `15` second   |
-| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with BigQuery. | `60` second   |
-| **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the BigQuery Sink. The buffer workers temporarily store data before sending it to BigQuery, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`         |
-| **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to BigQuery does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at BigQuery. | `Async`       |
-| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to BigQuery in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and BigQuery. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`           |
-| **Inflight Window**              | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with BigQuery. When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`         |
+| Field Name                       | Description                                                  | Default Value   |
+| -------------------------------- | ------------------------------------------------------------ | --------------- |
+| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and BigQuery. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`            |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from BigQuery, the request is deemed to have expired. | `45` second     |
+| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with BigQuery. | `15` second     |
+| **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. This helps avoid burst traffic, reduces the risk of triggering downstream rate limits (e.g., API throttling), and improves system stability. When multiple Actions or Sources share the same Connector, enabling jitter ensures their health checks are initiated at slightly different times. | `0` millisecond |
+| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with BigQuery. | `60` second     |
+| **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the BigQuery Sink. The buffer workers temporarily store data before sending it to BigQuery, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`           |
+| **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to BigQuery does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at BigQuery. | `Async`         |
+| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to BigQuery in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and BigQuery. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1000`          |
+| **Inflight Window**              | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with BigQuery. When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`           |
