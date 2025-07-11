@@ -44,18 +44,18 @@ This section introduces the preparations required before creating a Snowflake Si
 
 ### Choose Upload Mode
 
-EMQX supports two modes for sending data to Snowflake:
-
-| Mode         | Description                                                  | Requires ODBC |
-| ------------ | ------------------------------------------------------------ | ------------- |
-| `aggregated` | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
-| `streaming`  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | No            |
-
 ::: tip
 
 Choose the mode first, as it determines how you configure both EMQX and your Snowflake environment.
 
 :::
+
+EMQX supports two modes for sending data to Snowflake:
+
+| Mode       | Description                                                  | Requires ODBC |
+| ---------- | ------------------------------------------------------------ | ------------- |
+| Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
+| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | No            |
 
 ### Initialize Snowflake ODBC driver
 
@@ -417,14 +417,13 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
      `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
-
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-
+   
    :::
-
+   
    ::::
-
+   
 6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
 
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
@@ -487,7 +486,9 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
    - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely. Note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
-   - **Proxy**: Optional HTTP proxy for ODBC. Only HTTP proxies are currently supported (no HTTPS).
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
 
    Additional aggregation options:
 
@@ -518,7 +519,10 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
 
    - **Private Key Password**: Optional, only if your key is encrypted.
 
-   - **Proxy**: Optional HTTP proxy. Only HTTP proxies are currently supported (no HTTPS).
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
 
    :::
 

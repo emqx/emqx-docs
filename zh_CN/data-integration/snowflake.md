@@ -15,7 +15,7 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 1. **设备连接到 EMQX**：物联网设备通过 MQTT 协议成功连接时，会触发在线事件。该事件包括设备 ID、源 IP 地址以及其他属性信息。
 2. **设备消息发布与接收**：设备通过特定主题发布遥测和状态数据。EMQX 接收这些消息，并通过规则引擎进行匹配。
 3. **规则引擎处理消息**：内置的规则引擎根据主题匹配处理来自特定来源的消息和事件。它匹配相应的规则并处理消息和事件，如数据格式转换、过滤特定信息或用上下文信息丰富消息。
-4. **写入 Snowflake**：规则触发动作，将消息写入 Snowflake Stage，并加载到 Snowflake 表中。
+4. **写入 Snowflake**：规则触发一个动作，将消息数据写入 Snowflake。写入方式可以是将消息批量写入文件后，通过存储区 (Stage) 和 Pipe 加载到表中（聚合模式），也可以是通过 Snowpipe Streaming API 实时流式写入（流式模式）。
 
 当事件和消息数据写入 Snowflake 后，可用于各种业务和技术用途，包括：
 
@@ -39,10 +39,31 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
 ### 前置条件
 
-- 了解[规则](./rules.md)。
-- 了解[数据集成](./data-bridges.md)。
+- 了解[规则](./rules.md)和[数据集成](./data-bridges.md)。
+- 拥有一个具备管理员权限的 Snowflake 账号。
+
+### 选择上传模式
+
+::: tip
+
+请先选择上传模式，因为它将决定你在 EMQX 和 Snowflake 中的配置方式。
+
+:::
+
+EMQX 支持两种将数据发送到 Snowflake 的方式：
+
+| 上传模式 | 描述                                                         | 是否需要 ODBC |
+| -------- | ------------------------------------------------------------ | ------------- |
+| 聚合     | EMQX 将 MQTT 消息缓存在本地文件中，并上传至 Snowflake 的 Stage。然后由配置了 `COPY INTO` 语句的管道 (Pipe) 自动将这些文件加载到目标表中。更多详情可参考 [Snowflake Snowpipe 文档](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)。 | 是            |
+| 流式     | 通过 Snowpipe Streaming API（仅支持 AWS）将数据实时发送至 Snowflake 表，逐行写入。 | 否            |
 
 ### 初始化 Snowflake ODBC 驱动程序
+
+::: tip 提示
+
+仅当你选择聚合模式时，才需要阅读本节内容。如果你使用的是流式模式，请跳过此部分。
+
+:::
 
 为了使 EMQX 能够与 Snowflake 进行通信并高效传输数据，必须安装并配置 Snowflake 的开放数据库连接（ODBC）驱动程序。它充当数据传输的桥梁，确保数据格式化、身份验证及传输的正确性。
 
@@ -106,44 +127,100 @@ scripts/install-snowflake-driver.sh
      EOF
      ```
 
-### 创建用户账户和数据库
+### 创建用户账户设置 Snowflake 资源
 
-安装 Snowflake ODBC 驱动程序后，您需要设置一个用户账户、数据库及相关资源来进行数据摄取。 以下字段将会被用于在 EMQX 中配置连接器和 Sink：
+无论使用哪种上传模式，你都需要先配置 Snowflake 环境，包括创建用户账户、数据库以及相关的数据接入资源。以下信息在后续配置 EMQX 的 Connector 和 Sink 时将被使用：
 
-| 字段             | 值                                               |
-| ---------------- | ------------------------------------------------ |
-| 数据源名称 (DSN) | `snowflake`                                      |
-| 用户名           | `snowpipeuser`                                   |
-| 密码             | `Snowpipeuser99`                                 |
-| 数据库名称       | `testdatabase`                                   |
-| 模式             | `public`                                         |
-| 存储区           | `emqx`                                           |
-| 管道             | `emqx`                                           |
-| 管道用户         | `snowpipeuser`                                   |
-| 私钥             | `file://<path to snowflake_rsa_key.private.pem>` |
+| 字段名             | 值                                               | 描述                                                         |
+| ------------------ | ------------------------------------------------ | ------------------------------------------------------------ |
+| 数据源名称 (DSN)   | `snowflake`（仅适用于聚合模式）                  | 在 `/etc/odbc.ini` 中配置的 ODBC 数据源，用于聚合模式上传。  |
+| 用户名             | `snowpipeuser`                                   | 用于连接认证的 Snowflake 用户，在两种模式下都需具备相应权限。 |
+| 密码               | `Snowpipeuser99`                                 | 若使用密钥对认证，则该字段为可选。                           |
+| 数据库名称         | `testdatabase`                                   | 存储目标表的 Snowflake 数据库。                              |
+| 模式 (Schema)      | `public`                                         | 包含目标表和管道的数据库模式。                               |
+| 存储区（聚合模式） | `emqx`                                           | Snowflake 中用于临时存放上传文件的 Stage。                   |
+| 管道（聚合模式）   | `emqx`                                           | 从存储区加载数据至目标表的管道。                             |
+| 管道（流式模式）   | `emqxstreaming`                                  | 通过 `DATA_SOURCE(TYPE => 'STREAMING')` 创建的流式管道。     |
+| 私钥文件路径       | `file://<path to snowflake_rsa_key.private.pem>` | 用于 API 认证的 RSA 私钥路径。                               |
 
-#### 生成 RSA 密钥对
+#### 生成 RSA 密钥对（聚合模式可选）
 
-为了安全地连接 Snowflake，使用以下命令生成用于认证的 RSA 密钥对：
+Snowflake 支持多种认证方式。在 EMQX 中，应根据所选上传模式和连接配置选择合适的认证方式：
+
+| 上传模式      | 支持的认证方式                                               | 是否必须使用密钥对 |
+| ------------- | ------------------------------------------------------------ | ------------------ |
+| 流式（HTTPS） | RSA 密钥对 + JWT（唯一支持方式）                             | 是                 |
+| 聚合（ODBC）  | 用户名/密码（通过 DSN 或直接在 EMQX 中配置）<br />RSA 密钥对 + JWT（可选，仅在 EMQX 中配置） | 否（可选）         |
+
+密钥对认证是流式模式下的唯一认证方式，在该模式中，EMQX 使用私钥签发 JWT，用于安全地向 Snowflake Streaming API 认证。
+
+在聚合模式下，你可以选择用户名/密码或 RSA 密钥对中的任一种方式进行认证。具体方法包括：
+
+- 在 EMQX 控制台的 Connector 配置中填写用户名和密码；
+- 或填写私钥路径（使用密钥对认证时）；
+- 或者，如果 EMQX 中未配置认证信息，确保系统的 ODBC DSN 文件（如 `/etc/odbc.ini` 或 macOS 上的 `~/.odbc.ini`）中配置了相应的凭证。
+
+::: tip
+
+认证方式二选一：使用密码或私钥，不要同时使用。
+
+如果在 EMQX 中都未配置，则将自动使用 `/etc/odbc.ini` 中的认证信息。
+
+:::
+
+**示例：使用用户名/密码的 ODBC 配置（Linux `/etc/odbc.ini`）**
+
+```ini
+[snowflake]
+Driver=SnowflakeDSIIDriver
+Server=<account>.snowflakecomputing.com
+UID=snowpipeuser
+PWD=Snowpipeuser99
+Database=testdatabase
+Schema=public
+Warehouse=compute_wh
+Role=snowpipe
+```
+
+> 采用此方式时，EMQX 可通过配置中的 `DSN`（如 `snowflake`）间接使用认证信息，而无需显式写入用户名和密码。
+
+**如果你使用密钥对认证**
+
+若你选择或必须使用 RSA 密钥对认证（如在流式模式中），可使用以下命令生成密钥：
 
 ```bash
+# 生成私钥
 openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_rsa_key.private.pem -nocrypt
+
+# 生成公钥
 openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.public.pem
 ```
 
-更多信息请参考 [Key-pair authentication and key-pair rotation](https://docs.snowflake.com/en/user-guide/key-pair-auth)。
+当 EMQX 使用密钥对认证时（在聚合和流式模式中均支持）：
+
+- EMQX 使用 RSA 私钥签发 JWT 作为安全、可验证的身份凭证；
+- Snowflake 使用预先上传的公钥验证该签名的合法性。
+
+如需了解更多信息，请参考官方文档：[Key-pair authentication and key-pair rotation](https://docs.snowflake.com/en/user-guide/key-pair-auth)。
 
 #### 使用 SQL 设置 Snowflake 资源
 
-在设置 ODBC 驱动并生成 RSA 密钥对后，可以通过 SQL 命令在 Snowflake 中创建所需的数据库、表、存储区和管道。
+生成 RSA 密钥对后，你需要使用 SQL 命令为聚合或流式模式设置必要的 Snowflake 对象，包括：
+
+- 创建数据库和数据表
+- 创建存储区和管道（用于聚合模式）
+- 创建流式管道（用于流式模式）
+- 创建用户和角色，并授予访问权限
 
 1. 在 Snowflake 控制台中，打开 SQL 工作表并执行以下 SQL 命令来创建数据库、表、存储区和管道：
 
    ```sql
    USE ROLE accountadmin;
    
+   -- 创建用于存储数据的数据库（如果不存在）
    CREATE DATABASE IF NOT EXISTS testdatabase;
    
+   -- 创建用于接收 MQTT 数据的表
    CREATE OR REPLACE TABLE testdatabase.public.emqx (
        clientid STRING,
        topic STRING,
@@ -151,23 +228,39 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
        publish_received_at TIMESTAMP_LTZ
    );
    
+   -- 创建用于聚合模式的存储区，用于上传文件
    CREATE STAGE IF NOT EXISTS testdatabase.public.emqx
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
    
+   -- 创建用于聚合模式的管道，从存储区中复制数据
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+   
+   -- 创建用于流式模式的管道，直接摄取数据
+   CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
+   COPY INTO testdatabase.public.emqx FROM (
+     SELECT $1:clientid, $1:topic, $1:payload, $1:publish_received_at
+     FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   )
+   MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+   
    ```
 
-2. 创建新用户并为该用户设置 RSA 公钥：
+   - `COPY INTO` 语句确保 Snowflake 能自动将存储区或 Streaming 中的数据加载到目标表。
+   - 流式管道中的 `$1:字段名` 语法用于从 EMQX 发送的 JSON 数据中提取字段。
+
+2. 创建一个专用于 EMQX 认证的用户（如 `snowpipeuser`），并绑定 RSA 公钥：
 
    ```sql
+   -- 创建用户账号
    CREATE USER IF NOT EXISTS snowpipeuser
        PASSWORD = 'Snowpipeuser99'
        MUST_CHANGE_PASSWORD = FALSE;
    
+   -- 将 RSA 公钥绑定到该用户
    ALTER USER snowpipeuser SET RSA_PUBLIC_KEY = '
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_1>
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_2>
@@ -182,23 +275,38 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    :::
 
-3. 创建并分配管理 Snowflake 资源的角色给用户：
+   上述密钥将上传至 Snowflake 并绑定到指定用户。
+
+3. 创建并分配所需角色，赋予该用户访问 Snowflake 资源的权限：
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
    
+   -- 授权数据库和表的使用与读写权限
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
+   
+   -- 聚合模式需要访问存储区和管道
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
+   
+   -- 流式模式需要访问流式管道
+   GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
+   
+   -- 将角色授予用户，并设置为默认角色
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
    ```
 
 ## 创建连接器
 
-在添加 Snowflake Sink 之前，您需要在 EMQX 中创建相应的连接器，以建立与 Snowflake 的连接。
+在配置 Snowflake Sink 之前，你需要先在 EMQX 中创建一个连接器，以建立与 Snowflake 环境的连接。连接器支持两种通信模式：
+
+- **聚合模式**：通过 ODBC（使用 DSN）连接到 Snowflake 存储区。
+- **流式模式**：通过 HTTPS 和 Snowpipe Streaming REST API（仅支持 AWS）进行连接。
+
+> 表单中所需的字段取决于你在 Sink 中选择的上传模式（`聚合上传` 或 `流式`）。
 
 1. 进入 Dashboard **集成** -> **连接器** 页面。
 
@@ -209,36 +317,58 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 4. 输入连接器名称，由大小写字母和数字组成。这里输入 `my-snowflake`。
 
 5. 输入连接信息：
+
+   :::: tabs type
+
+   ::: tab 聚合模式（基于 ODBC）
+
    - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
-   
+
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
-   
+
    - **数据源名称**：输入 `snowflake`，与您在 ODBC 驱动设置中配置的 `.odbc.ini` 文件中的 DSN 名称相对应。
-   
+
    - **用户名**：输入 `snowpipeuser`，这是之前设置过程中定义的用户名。
-   
+
    - **密码**：输入用于通过用户名和密码进行 ODBC 连接认证。此字段为可选项，用户可以选择：
-   
+
      - 在此处填写密码，例如： `Snowpipeuser99`，这是之前设置过程中定义的密码。
      - 或在系统的 `/etc/odbc.ini` 文件中配置；
      - 如果使用密钥对认证（Key-pair authentication），则无需提供密码。
-   
+
      ::: tip
-   
+
      使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
-   
+
      :::
-   
+
    - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径必须在集群的所有节点上保持一致。路径必须以 `file://` 开头，例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。
-   
+
    - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
-   
+
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
-   
+
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-   
-6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。
+
+   :::
+
+   ::: 流式模式 (Snowpipe Streaming API)
+
+   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
+   - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
+   - **用户名**：注册了 RSA 公钥的 Snowflake 用户（如之前设置的 `snowpipeuser`）。
+   - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径必须在集群的所有节点上保持一致。路径必须以 `file://` 开头，例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。
+   - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
+   - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
+     - **代理主机**：代理服务器的主机名或 IP 地址。
+     - **代理端口**：代理服务器使用的端口号。
+
+   :::
+
+   ::::
+
+6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
 
@@ -250,7 +380,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 ## 使用 Snowflake Sink 创建规则
 
-本节演示如何在 EMQX 中创建一个规则，将源 MQTT 主题 `t/#` 中的消息处理后通过配置的 Sink 写入 Snowflake。
+本节将演示如何在 EMQX 中创建规则以处理消息（例如，来自源 MQTT 主题 `t/#`），并通过配置好的 Sink 将处理结果写入 Snowflake。EMQX 支持流式和聚合两种上传模式。
 
 1. 进入 Dashboard **集成** -> **规则** 页面。
 
@@ -286,34 +416,61 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 6. 从连接器下拉列表中选择之前创建的 `my-snowflake` 连接器。您也可以点击下拉列表旁的创建按钮，在弹出的对话框中快速创建新的连接器。所需的配置参数请参考[创建连接器](#创建连接器)。
 
-7. 配置以下设置：
+7. 选择**上传方式**并配置相关参数。默认选择为 `聚合上传`。根据所选上传模式配置以下选项。
+
+   :::: tabs type
+
+   ::: tab 聚合上传
+
+   此方式将多个规则触发的结果分组到单个文件（例如 CSV 文件）中，并上传到 Snowflake，从而减少文件数量并提高写入效率。
 
    - **数据库名字**：输入 `testdatabase`，这是为存储 EMQX 数据而创建的 Snowflake 数据库。
-   - **模式**：输入 `public`，这是 `testdatabase` 中的数据表所在的 schema。
-   - **存储区**：输入 `emqx`，这是在 Snowflake 中创建的用于临时存储数据的 stage。
-   - **管道**：输入 `emqx`，这是用于将数据从 stage 自动加载到表中的管道。
+   - **模式**：输入 `public`，这是 `testdatabase` 中的数据表所在的模式 (Schema) 名称。
+   - **存储区**：输入 `emqx`，这是在 Snowflake 中预先创建的用于临时存储数据的存储区 (Stage) 名称。
+   - **管道**：输入 `emqx`，这是用于将数据从存储区自动加载到表中的管道。
    - **管道用户**：输入 `snowpipeuser`，这是具有管理该管道权限的 Snowflake 用户。
    - **私钥**：输入私钥的路径，例如 `file://<path to snowflake_rsa_key.private.pem>`，或输入 RSA 私钥文件的内容。这是用于安全身份验证的密钥，必要时确保能够安全访问 Snowflake 管道。请注意，当使用文件路径时，它必须在所有集群节点上保持一致，并且可由 EMQX 应用用户读取。
+   - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
+     - **代理主机**：代理服务器的主机名或 IP 地址。
+     - **代理端口**：代理服务器使用的端口号。
 
-8. 选择**上传方式**：目前仅支持 `聚合上传`。此方法将多个规则触发的结果分组到单个文件（例如 CSV 文件）中，并上传到 Snowflake，从而减少文件数量并提高写入效率。
+   配置其他聚合参数：
 
-9. 选择**增强类型**：目前仅支持 `csv`。数据将以逗号分隔的 CSV 格式存储到 Snowflake。
-
+   - **增强类型**：目前仅支持 `csv`。数据将以逗号分隔的 CSV 格式存储到 Snowflake。
    - **列排序**：从下拉列表中选择列的顺序，生成的 CSV 文件将首先按选定的列排序，未选定的列将按字母顺序排序。
    - **最大记录数**：设置触发聚合前的最大记录数。例如，您可以设置为 `1000`，在收集 1000 条记录后触发上传。当达到最大记录数时，单个文件的聚合将完成并上传，重置时间间隔。
    - **时间间隔**：设置触发聚合的时间间隔（秒）。例如，如果设置为 `60`，即使未达到最大记录数，也将在 60 秒后上传数据，并重置记录数。
 
-10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+   :::
 
-11. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
+   ::: tab 流式
 
-12. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
+   此模式使用 Snowpipe Streaming API 实现实时写入。
 
-13. 返回规则创建页面，点击**创建**按钮完成整个规则创建过程。
+   - **数据库名字**：输入 `testdatabase`，这是为存储 EMQX 数据而创建的 Snowflake 数据库。
+   - **模式**：输入 `public`，这是 `testdatabase` 中的数据表所在的模式 (Schema) 名称。
+   - **管道**：输入 `emqxstreaming`，该名称需与在 Snowflake 中创建的流式管道名称完全一致。
+   - **管道用户**：输入 `snowpipeuser`，该用户需具备操作该流式 Pipe 的权限。
+   - **私钥**：输入私钥的路径，例如 `file://<path to snowflake_rsa_key.private.pem>`，或输入 RSA 私钥文件的内容。这是用于安全身份验证的密钥，必要时确保能够安全访问 Snowflake 管道。请注意，当使用文件路径时，它必须在所有集群节点上保持一致，并且可由 EMQX 应用用户读取。
+   - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
+     - **代理主机**：代理服务器的主机名或 IP 地址。
+     - **代理端口**：代理服务器使用的端口号。
 
-现在，您已成功创建了规则。您可以在**规则**页面看到新创建的规则，并在 **动作 (Sink)** 标签页中查看新创建的 Snowflake Sink。
+   :::
 
-您还可以点击 **集成** -> **Flow 设计器** 来查看拓扑图，拓扑图可视化显示了主题 `t/#` 下的消息在经过规则 `my_rule` 解析后如何写入 Snowflake。
+   ::::
+
+8. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+
+9. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
+
+10. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
+
+11. 返回规则创建页面，点击**创建**按钮完成整个规则创建过程。
+
+现在，您已成功创建了规则。您可以在**规则**页面看到新创建的规则，并在**动作 (Sink)** 标签页中查看新创建的 Snowflake Sink。
+
+您还可以点击**集成** -> **Flow 设计器**来查看拓扑图，拓扑图可视化显示了主题 `t/#` 下的消息在经过规则 `my_rule` 解析后如何写入 Snowflake。
 
 ## 测试规则
 
