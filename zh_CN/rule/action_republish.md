@@ -7,7 +7,7 @@
 ## 创建规则和动作
 
 1. 点击 Dashboard 左侧导航菜单中的**规则引擎** -> **规则**。
-2. 点击页面上的**创建** 按钮，在 **SQL 输入**中输入以下 SQL示例：
+2. 点击页面上的**创建**按钮，在 **SQL 输入**中输入以下 SQL示例：
 
 ```SQL
 SELECT
@@ -35,13 +35,21 @@ FROM
 
    - **消息内容模板**：转发消息的报文内容，类型为 String，可以使用占位符变量，例如 `${payload}`，在规则 SQL 配合使用的情况下，表示使用原消息的 Payload 内容。自定义业务规则 SQL，可以使用其他的变量来代替。
 
-   - **MQTT Properties**：通过添加预定义的键值配置转发的消息的 MQTT 属性，可选的键包括 `Payload-Format-Indicator`、`Message-Expiry-Interval`、`Content-Type`、`Response-Topic`、`Correlation-Data`、`Subscription-Identifier`、`Topic-Alias` 等，用于表示 Payload 格式、消息过期时间、内容 MIME 类型、请求响应主题、消息关联等信息。详见 [MQTT 5.0](https://www.emqx.com/zh/blog/mqtt5-new-features-properties-and-loads) 规范中的定义。
+   - **MQTT 属性**：通过添加预定义的键值配置转发的消息的 MQTT 属性，可选的键包括 `Payload-Format-Indicator`、`Message-Expiry-Interval`、`Content-Type`、`Response-Topic`、`Correlation-Data`、`Subscription-Identifier`、`Topic-Alias` 等，用于表示 Payload 格式、消息过期时间、内容 MIME 类型、请求响应主题、消息关联等信息。详见 [MQTT 5.0](https://www.emqx.com/zh/blog/mqtt5-new-features-properties-and-loads) 规范中的定义。
 
-   - **User Properties**：通过添加自定义的键值配置转发消息的[用户属性](https://www.emqx.com/zh/blog/mqtt5-user-properties)，用于表示自定义的消息元数据。
+   - **用户属性**：通过添加自定义的键值配置转发消息的[用户属性](https://www.emqx.com/zh/blog/mqtt5-user-properties)，用于表示自定义的消息元数据。
 
      ::: tip
 
      MQTT 属性和用户属性为 MQTT 为 MQTT 提供了比主题和 Payload 更丰富的消息描述，可以传递更多的语义信息，从而扩展 MQTT 的应用场景。
+
+     :::
+
+   - **发送未定义属性**：控制在消息转发过程中如何处理未定义的 MQTT 属性和用户属性。启用时，模板或规则 SQL 中引用但原始消息中不存在的属性将以字符串 `"undefined"` 作为其值添加到转发消息中；禁用时，此类属性将不会包含在重发布的 MQTT 消息中。
+
+     ::: tip 提示
+
+     该选项有助于区分字段值为空和字段缺失的情况。启用后可以确保所有预期的属性键都包含在转发消息中，这对于依赖字段一致性的下游系统尤为重要。
 
      :::
 
