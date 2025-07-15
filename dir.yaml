@@ -389,6 +389,7 @@
       children:
         - flow-designer/openai-node-quick-start
         - flow-designer/anthropic-node-quick-start
+        - flow-designer/gemini-node-quick-start
 - title_en: Data Integration
   title_cn: 数据集成
   title_ja: データ統合
