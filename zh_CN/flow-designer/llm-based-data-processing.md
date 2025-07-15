@@ -122,6 +122,6 @@ EMQX 5.10.0 当前支持以下 LLM 服务：
 
 以下两个示例演示如何快速创建并测试基于 LLM 的处理流程：
 
-- [使用OpenAI 节点创建 Flow](./openai-node-quick-start.md)：使用 GPT 模型处理或摘要 MQTT 消息。
+- [使用 OpenAI 节点创建 Flow](./openai-node-quick-start.md)：使用 GPT 模型处理或摘要 MQTT 消息。
 - [使用 Anthropic 节点创建 Flow](./anthropic-node-quick-start.md)：使用 Claude 模型处理 MQTT 消息中的数值字段。
 

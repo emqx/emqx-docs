@@ -1,6 +1,6 @@
 # LLM-Based MQTT Data Processing
 
-Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT and Anthropic Claude. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
+Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT, Anthropic Claude, and Gemini. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
 
 ## Feature Overview
 
@@ -34,7 +34,7 @@ graph LR
 
 1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
 2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.
-3. The **OpenAI** or **Anthropic** node uses the `ai_completion` function behind the scenes to:
+3. The **AI Completion Node** (OpenAI, Anthropic, or Gemini) uses the `ai_completion` function behind the scenes to:
 
      - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
      - Send the selected input (e.g., `payload`) to the LLM.
@@ -53,6 +53,13 @@ EMQX 5.10.0 supports the following providers:
 
 - **OpenAI**: GPT-3.5, GPT-4, GPT-4o, etc.
 - **Anthropic**: Claude 3 models
+- **Gemini**: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro, etc.
+
+::: tip Compatibility Note
+
+In addition to the officially listed providers, EMQX also supports any LLM service that is API-compatible with the OpenAI protocol.
+
+:::
 
 ## Configure LLM-Based Processing Nodes
 
@@ -78,12 +85,18 @@ To use an OpenAI node:
 
    - **Base URL**: Enter an optional custom endpoint. Leave empty to use OpenAI’s default endpoint.
 
-   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
-
      ::: tip
 
-     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+     You can use this field to connect to other OpenAI-compatible services by entering the provider’s API base URL and your API key.
 
+     :::
+
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+   
+     ::: tip
+   
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+   
      :::
 
 
@@ -116,6 +129,37 @@ To use an Anthropic node:
    - **Output Result Alias**: 
 
    - Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+
+     ::: tip
+
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+
+     :::
+
+
+4. Click **Save** to apply your configuration.
+
+### Configure a Gemini Node
+
+To use a Gemini node:
+
+1. Drag the **Gemini** node from the **Processing** panel.
+
+2. Connect it to a source or preprocessing node.
+
+3. Configure the following fields:
+
+   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+
+   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+
+   - **Model**: Select the LLM provider, e.g., `gemini-2.0-flash`, `gemini-2.5-pro`.
+
+   - **API Key**: Enter your OpenAI API key.
+
+   - **Base URL**: Enter an optional custom endpoint. Leave empty to use Gemini’s default endpoint.
+
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
 
      ::: tip
 
