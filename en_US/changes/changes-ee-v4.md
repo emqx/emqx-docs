@@ -2,7 +2,7 @@
 
 ## e4.4.31
 
-*Release Date: 2025-07-10*
+*Release Date: 2025-07-15*
 
 ### Enhancements
 
@@ -37,6 +37,10 @@
 - Fixed ETS memory leak caused by exceptions in HTTP API calls.
 
   Resolved an issue where exceptions during certain HTTP API calls could result in memory leaks in ETS tables.
+
+- Fixed an issue where listeners could not be added to gateway modules via the Dashboard.
+
+  Previously, after creating a protocol gateway module, adding a listener through the module update interface had no effect. Affected protocols included CoAP, GB/T 32960, JT/T 808, LwM2M, MQTT-SN, STOMP, and TCP.
 
 ## e4.4.30
 
