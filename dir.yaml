@@ -436,6 +436,10 @@
       title_cn: Azure Event Hubs
       title_ja: Azure Event Hubs
       path: data-integration/data-bridge-azure-event-hub
+    - title_en: BigQuery
+      title_cn: BigQuery
+      title_ja: BigQuery
+      path: data-integration/bigquery
     - title_en: Cassandra
       title_cn: Cassandra
       title_ja: Cassandra
