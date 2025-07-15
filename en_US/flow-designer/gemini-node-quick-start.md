@@ -1,8 +1,8 @@
 # Quick Start: Create a Flow Using Gemini Node
 
-This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node.
+This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node. 
 
-This demonstration shows you how to build a Flow that integrates with the Gemini LLM to process MQTT device messages using dynamic input context (e.g., client ID and payload type). The workflow receives command-type messages from devices and uses an LLM to generate a formatted response that devices can understand. The result is republished to a client-specific topic for further handling.
+This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages using dynamic input context, such as `clientid` and `payload.type`, by constructing a natural language prompt from multiple parameters. It breaks the limitation of single-field LLM input, enabling more flexible and context-aware AI processing. The workflow receives command-type messages from devices, generates a formatted response via the LLM, and republishes the result to a client-specific topic for further handling.
 
 ## Scenario Description
 

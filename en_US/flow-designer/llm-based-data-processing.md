@@ -176,4 +176,5 @@ The following two examples demonstrate how to quickly build and test Flows using
 
 - [Create a Flow Using OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
 - [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
+- [Create a Flow Using Gemini Node](./gemini-node-quick-start): Use Gemini models to dynamically generate responses by combining both the MQTT client ID and message payload as input.
 
