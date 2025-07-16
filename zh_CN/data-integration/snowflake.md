@@ -13,9 +13,18 @@ EMQX 中的 Snowflake 数据集成是一项开箱即用的功能，可以轻松�
 EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。最终用户和应用程序可以访问 Snowflake 表中的数据。具体工作流程如下：
 
 1. **设备连接到 EMQX**：物联网设备通过 MQTT 协议成功连接时，会触发在线事件。该事件包括设备 ID、源 IP 地址以及其他属性信息。
+
 2. **设备消息发布与接收**：设备通过特定主题发布遥测和状态数据。EMQX 接收这些消息，并通过规则引擎进行匹配。
+
 3. **规则引擎处理消息**：内置的规则引擎根据主题匹配处理来自特定来源的消息和事件。它匹配相应的规则并处理消息和事件，如数据格式转换、过滤特定信息或用上下文信息丰富消息。
+
 4. **写入 Snowflake**：规则触发一个动作，将消息数据写入 Snowflake。写入方式可以是将消息批量写入文件后，通过存储区 (Stage) 和 Pipe 加载到表中（聚合模式），也可以是通过 Snowpipe Streaming API 实时流式写入（流式模式）。
+
+   ::: tip Note
+
+   Snowpipe Streaming 当前是 Snowflake 的[预览功能](https://docs.snowflake.com/en/release-notes/preview-features)，仅适用于部署在 AWS 上的账户。
+
+   ::: 
 
 当事件和消息数据写入 Snowflake 后，可用于各种业务和技术用途，包括：
 
@@ -55,15 +64,9 @@ EMQX 支持两种将数据发送到 Snowflake 的方式：
 | 上传模式 | 描述                                                         | 是否需要 ODBC |
 | -------- | ------------------------------------------------------------ | ------------- |
 | 聚合     | EMQX 将 MQTT 消息缓存在本地文件中，并上传至 Snowflake 的 Stage。然后由配置了 `COPY INTO` 语句的管道 (Pipe) 自动将这些文件加载到目标表中。更多详情可参考 [Snowflake Snowpipe 文档](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)。 | 是            |
-| 流式     | 通过 Snowpipe Streaming API（仅支持 AWS）将数据实时发送至 Snowflake 表，逐行写入。 | 否            |
+| 流式     | 通过 Snowpipe Streaming API（仅支持 AWS）将数据实时发送至 Snowflake 表，逐行写入。 | 是            |
 
 ### 初始化 Snowflake ODBC 驱动程序
-
-::: tip 提示
-
-仅当你选择聚合模式时，才需要阅读本节内容。如果你使用的是流式模式，请跳过此部分。
-
-:::
 
 为了使 EMQX 能够与 Snowflake 进行通信并高效传输数据，必须安装并配置 Snowflake 的开放数据库连接（ODBC）驱动程序。它充当数据传输的桥梁，确保数据格式化、身份验证及传输的正确性。
 
@@ -241,10 +244,20 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    
    -- 创建用于流式模式的管道，直接摄取数据
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
-   COPY INTO testdatabase.public.emqx FROM (
-     SELECT $1:clientid, $1:topic, $1:payload, $1:publish_received_at
-     FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   COPY INTO testdatabase.public.emqx (
+       clientid,
+       topic,
+       payload,
+       publish_received_at
    )
+   FROM (
+       SELECT
+           $1:clientid::STRING,
+           $1:topic::STRING,
+           $1:payload::STRING,
+           $1:publish_received_at::TIMESTAMP_LTZ
+       FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   );
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
    
    ```

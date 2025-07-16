@@ -13,9 +13,18 @@ Snowflake data integration in EMQX is a ready-to-use feature that can be easily 
 EMQX utilizes the rule engine and Sink to forward device events and data to Snowflake. End users and applications can then access data in Snowflake tables. The specific workflow is as follows:
 
 1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other identifying properties.
+
 2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rule engine.
+
 3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
+
 4. **Writing to Snowflake**: The rule triggers an action that writes message data to Snowflake, either by batching messages into files and loading them via Stage and Pipe (aggregated mode), or by streaming them directly using the Snowpipe Streaming API (streaming mode).
+
+   ::: tip Note
+
+   Snowpipe Streaming is currently a [preview feature](https://docs.snowflake.com/en/release-notes/preview-features) in Snowflake. It is available only for accounts hosted on AWS.
+
+   ::: 
 
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
@@ -55,15 +64,9 @@ EMQX supports two modes for sending data to Snowflake:
 | Mode       | Description                                                  | Requires ODBC |
 | ---------- | ------------------------------------------------------------ | ------------- |
 | Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
-| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | No            |
+| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | Yes           |
 
 ### Initialize Snowflake ODBC driver
-
-::: tip Note
-
-This section is only required if you choose `aggregated` mode. If you're using `streaming` mode, skip this section.
-
-:::
 
 To enable EMQX to communicate with Snowflake and efficiently transfer data, it is necessary to install and configure the Snowflake Open Database Connectivity (ODBC) driver. This driver enables EMQX to write data to a Snowflake stage. It acts as the communication bridge, ensuring that data is properly formatted, authenticated, and transferred.
 
@@ -295,10 +298,20 @@ This includes:
    
    -- Create a pipe for streaming mode (direct ingestion)
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
-   COPY INTO testdatabase.public.emqx FROM (
-     SELECT $1:clientid, $1:topic, $1:payload, $1:publish_received_at
-     FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   COPY INTO testdatabase.public.emqx (
+       clientid,
+       topic,
+       payload,
+       publish_received_at
    )
+   FROM (
+       SELECT
+           $1:clientid::STRING,
+           $1:topic::STRING,
+           $1:payload::STRING,
+           $1:publish_received_at::TIMESTAMP_LTZ
+       FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   );
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
    
    ```
@@ -516,6 +529,8 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
      ```
      file:///etc/emqx/certs/snowflake_rsa_key.private.pem
      ```
+
+     Note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
 
    - **Private Key Password**: Optional, only if your key is encrypted.
 
