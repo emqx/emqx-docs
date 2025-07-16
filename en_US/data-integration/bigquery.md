@@ -2,11 +2,13 @@
 
 [BigQuery](https://cloud.google.com/bigquery?hl=en) is an enterprise data warehouse for large amounts of relational structured data. It is optimized for large-scale, ad-hoc SQL-based analysis and reporting, which makes it best suited for gaining organizational insights. EMQX supports seamless integration with BigQuery for real-time extraction, processing, and analysis of MQTT data.
 
-This page provides a comprehensive introduction to the data integration between EMQX and BigQuery with practical instructions on creating and validating the data integration.
+This page provides a comprehensive introduction to the data integration between EMQX and BigQuery, with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
 BigQuery data integration is an out-of-the-box feature of EMQX designed to help users seamlessly integrate MQTT data streams with Google Cloud and leverage its rich services and capabilities for IoT application development.
+
+![bigquery_architecture](./assets/bigquery_architecture.png)
 
 EMQX forwards MQTT data to BigQuery through the rule engine and Sink. The complete process is as follows:
 
@@ -83,7 +85,7 @@ Before configuring the BigQuery data integration on EMQX, you must create the re
 
    - Select the dataset and click **Share**.  
    - Add your Service Account email as a principal.
-   - Assign appropiate roles, such as:
+   - Assign appropriate roles, such as:
      - "BigQuery Data Viewer" (read access) for the dataset
      - "Editor" (read and write access) for the table
 
@@ -166,7 +168,7 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new BigQuery Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `t/bq` are sent and saved to BigQuery after parsing by rule `my_rule`.
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/bq` are sent and saved to BigQuery after parsing by rule `my_rule`.
 
 ## Test the Rule
 
@@ -187,10 +189,10 @@ This section delves into the advanced configuration options available for the Bi
 | Field Name                       | Description                                                  | Default Value   |
 | -------------------------------- | ------------------------------------------------------------ | --------------- |
 | **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and BigQuery. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`            |
-| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from BigQuery, the request is deemed to have expired. | `45` second     |
-| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with BigQuery. | `15` second     |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from BigQuery, the request is deemed to have expired. | `45` seconds    |
+| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with BigQuery. | `15` seconds    |
 | **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. This helps avoid burst traffic, reduces the risk of triggering downstream rate limits (e.g., API throttling), and improves system stability. When multiple Actions or Sources share the same Connector, enabling jitter ensures their health checks are initiated at slightly different times. | `0` millisecond |
-| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with BigQuery. | `60` second     |
+| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with BigQuery. | `60` seconds    |
 | **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the BigQuery Sink. The buffer workers temporarily store data before sending it to BigQuery, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`           |
 | **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to BigQuery does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at BigQuery. | `Async`         |
 | **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to BigQuery in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and BigQuery. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1000`          |

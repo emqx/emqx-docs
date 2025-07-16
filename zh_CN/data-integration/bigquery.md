@@ -8,6 +8,8 @@
 
 BigQuery 数据集成是 EMQX 提供的开箱即用功能，旨在帮助用户将 MQTT 数据流无缝集成到 Google Cloud 中，并利用其丰富的服务和能力来构建物联网应用。
 
+![bigquery_architecture](./assets/bigquery_architecture.png)
+
 EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程如下：
 
 1. **物联网设备发布消息**：设备通过特定的主题发布遥测数据和状态信息，从而触发规则引擎。
@@ -35,7 +37,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
 
 ### 创建服务账户凭证
 
-为了使 EMQX 能够连接到 BigQuery 服务，您需要在 Google Cloud 中创建一个服务账号，并生成一个 JSON 格式的密钥。
+为了使 EMQX 能够连接到 BigQuery 服务，您需要在 Google Cloud 中创建一个服务账户，并生成一个 JSON 格式的密钥。
 
 1. 在您的 GCP 账户中创建一个[服务账户](https://developers.google.com/identity/protocols/oauth2/service-account#creatinganaccount)。确保该服务账号拥有访问所需数据集和数据表的权限。例如，您可以授予其 “BigQuery Data Editor” 角色，以便对相关数据集或数据表进行读写操作，或者至少确保其具备读取和写入数据的权限。
 
@@ -173,7 +175,7 @@ EMQX 通过规则引擎和 Sink 将 MQTT 数据转发至 BigQuery，完整流程
    mqttx pub -i emqx_c -t t/bq -m '{ "msg": "hello BigQuery" }'
    ```
 
-2. 检查 Sink 的运行状态，应该会看到一条新的传入消息和一条新的传出消息。
+2. 检查 Sink 的运行状态，此时应能看到一条新的传入消息和一条新的传出消息。
 
 3. 登录 GCP 控制台，进入 **BigQuery** -> **Studio**，点击您的数据表，然后点击**查询** 并执行查询语句，您应该可以看到刚发送的消息。
 
