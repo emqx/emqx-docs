@@ -23,7 +23,7 @@ Once energy storage data is written to Datalayers, you can flexibly use the [lin
 - Connect to visualization tools like Grafana to generate charts and display energy storage data.
 - Connect to business systems to monitor and alert on the status of energy storage devices.
 
-## Features and Advantages
+## Features and Benefits
 
 Datalayers data integration offers the following features and advantages:
 
