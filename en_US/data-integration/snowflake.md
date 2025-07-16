@@ -409,8 +409,8 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
 
      :::
 
-   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example:
-      `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be consistent across all nodes of the cluster. For example:
+      `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
 
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
 
@@ -426,8 +426,8 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Username**: Snowflake user with a registered RSA public key (e.g. `snowpipeuser`, as defined during the previous setup process).
-   - **Private Key Path**: The absolute file path to the private RSA key. EMQX uses this key to sign JWT tokens to authenticate itself with the Snowflake API. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example:
-     `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Path**: The absolute file path to the private RSA key. EMQX uses this key to sign JWT tokens to authenticate itself with the Snowflake API. This path must be consistent across all nodes of the cluster. For example:
+     `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
@@ -498,7 +498,10 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
    - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely. Note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
+   - **Private Key**: The RSA private key used by the pipe user to securely access the Snowflake pipe. You can provide the key in one of two formats:
+     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
+     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
@@ -524,14 +527,10 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
 
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with privileges to operate the streaming pipe.
 
-   - **Private Key**: Full path or actual key content of the RSA private key used to sign JWTs for Snowflake Streaming API authentication, e.g.:
-
-     ```
-     file:///etc/emqx/certs/snowflake_rsa_key.private.pem
-     ```
-
-     Note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
-
+   - **Private Key**: The RSA private key used by the pipe user to sign JWTs for Snowflake Streaming API authentication. You can provide the key in one of two formats:
+     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
+     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+     
    - **Private Key Password**: Optional, only if your key is encrypted.
 
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
