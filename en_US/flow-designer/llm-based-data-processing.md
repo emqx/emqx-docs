@@ -14,7 +14,7 @@ Invoking an LLM and processing data takes time. The entire process may take seve
 
 ### Key Concepts
 
-- **LLM Provider**: A named configuration for an AI service (OpenAI / Anthropic).
+- **LLM Provider**: A named configuration for an AI service (OpenAI, Anthropic, or Gemini).
 - **Completion Profile**: A reusable bundle of LLM model parameters (model ID, system prompt, token limits, etc.).
 - **AI Completion Node**: A flow component that sends input to the LLM and stores its result as a user-defined alias.
 - `ai_completion`: A Rule SQL function that sends text/binary data to an LLM and returns its response.
@@ -126,9 +126,7 @@ To use an Anthropic node:
 
    - **Base URL**: Enter an optional custom endpoint. Leave empty to use Anthropic’s default endpoint.
 
-   - **Output Result Alias**: 
-
-   - Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
 
      ::: tip
 
@@ -155,7 +153,7 @@ To use a Gemini node:
 
    - **Model**: Select the LLM provider, e.g., `gemini-2.0-flash`, `gemini-2.5-pro`.
 
-   - **API Key**: Enter your OpenAI API key.
+   - **API Key**: Enter your Gemini API key.
 
    - **Base URL**: Enter an optional custom endpoint. Leave empty to use Gemini’s default endpoint.
 
