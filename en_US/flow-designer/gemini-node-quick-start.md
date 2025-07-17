@@ -2,28 +2,28 @@
 
 This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node. 
 
-This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages using dynamic input context, such as `clientid` and `payload.type`, by constructing a natural language prompt from multiple parameters. It breaks the limitation of single-field LLM input, enabling more flexible and context-aware AI processing. The workflow receives command-type messages from devices, generates a formatted response via the LLM, and republishes the result to a client-specific topic for further handling.
+This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages containing a free-text `prompt` while preserving the `clientid` for routing. A single Data Processing node pulls out both `payload.prompt` and `clientid`. The Gemini node generates a reply based on that prompt, and the Republish node sends the AI’s reply to the per-client topic `device/${clientid}/reply`, ensuring each device receives its own customized advice.
 
 ## Scenario Description
 
-Assume a device reports a command request to the MQTT topic `commands/inbox/<clientid>`. Each message includes a command type, such as `restart`, in JSON format. The EMQX Flow will perform the following steps:
+In a smart agriculture deployment, each greenhouse is equipped with soil sensors that periodically publish JSON messages to the topic `devices/<greenhouse_id>`. Each message’s `prompt` field contains key environmental readings in plain text. The Flow will:
 
-- **Data Processing**: Build a prompt that includes the client ID and requested command type contained in the message payload.
-- **LLM-Based Processing**: Use a Gemini-compatible model to generate an action instruction based on the request.
-- **Message Republish**: Publish the AI-generated result to a topic such as `device/<clientid>/command`.
+- **Data Processing**: Extract the sensor readings from the `prompt` field and expose the `clientid` (i.e., `greenhouse_id`) for downstream use.
+- **LLM-Based Processing**: Send the readings to Gemini to generate an actionable irrigation recommendation.
+- **Message Republish**: Publish the AI-generated advice back to the per-greenhouse control topic `device/<greenhouse_id>/reply`.
 
-**Sample message:**
+**Sample incoming message (to `devices/gh_1`):**
 
 ```json
 {
-  "type": "restart"
+  "prompt": "Soil moisture is 18%. Air temperature is 28°C. Humidity is 65%."
 }
 ```
 
-**Expected output (AI-generated):**
+**Expected republished output (to `device/gh_1/reply`):**
 
-```css
-action:restart;client:clientid
+```
+Irrigate Zone 1 with 15 liters of water for 20 minutes.
 ```
 
 ## Create the Flow
@@ -39,89 +39,35 @@ Make sure you have a valid Gemini API Key.
 2. Add a **Messages** node.
 
    - Drag a **Messages** node from the Source panel.
-   - Set the topic to `commands/inbox/+`.
+   - Set the topic to `devices/+`.
    - Click **Save**.
 
 3. Add a **Data Processing** node.
 
    - Drag a **Data Processing** node from the **Processing** section.
-
-   - Fill in the transformation form with the following configurations. These transformations construct a readable natural language prompt that includes the MQTT client ID and the requested action type that will be contained in the message payload. This prompt will be sent to the Gemini LLM for processing.
+   - Fill in the form with the following configurations. This setting exposes `clientid` for later use to ensure that it is accessible in downstream nodes (e.g., for `${clientid}` in republish topics).
      
-     - Concatenate `Client ` and `clientid` into a base string. Creates the beginning of the prompt by identifying the client.
-       - **Field**: `clientid`
-       - **Transform**: Select `String Functions` -> `concat`
-       - **Alias**: `base`
-       - **String1**: `Client ` (include a space after the word)
-       - **String2**: `clientid`
-     - Concatenate `base` and `requested ` into `base2`. Adds the verb to indicate the action being requested.
-       - **Field**: `base`
-       - **Transform**: `concat`
-       - **Alias**: `base2`
-       - **String1**: `base`
-       - **String2**:  `  requested  ` (include a space before and after the word)
-     
-     - Concatenate `base2` and `payload.type` into `prompt`. Completes the full sentence for the LLM prompt.
-     
-       - **Field**: `base2`
-     
-       - **Transform**: `concat`
-     
-       - **Alias**: `prompt`
-     
-       - **String1**: `base2`
-     
-       - **String2**: `payload.type`
-     
-       ::: tip Example prompt result
-     
-       If a client with ID `device123` sends a message with payload `{ "type": "restart" }`, the resulting prompt will be:
-     
-       ```
-       Client device123 requested restart
-       ```
-     
-       :::
-     
-     - Expose `clientid` for later use to ensures that it is accessible in downstream nodes (e.g., for `${clientid}` in republish topics).
-     
-       - **Field**: `clientid`
-     
-       - **Transform**: Leave empty
-     
-       - **Alias**: `clientid`
-     
-   - Click **Switch to SQL**. You should see a SQL expression similar to:
-
-     ```sql
-     concat('Client ', clientid) as base, concat(base, ' requested ') as base2, concat(base2, payload.type) as prompt, clientid as clientid
-     ```
-
-     ::: tip
-
-     The `clientid` and `payload.type` should not be wrapped in quotes or treated as string literals.
-     They are field references, and quoting them would cause the rule to treat them as plain text instead of extracting their actual values from the message.
-
-     :::
-
+     - **Field**: `clientid`
+     - **Transform**: Leave empty
+     - **Alias**: `clientid`
    - Click **Save**.
-
+   
 4. Add a **Gemini** node.
 
    - Drag a **Gemini** node from the Processing section and connect it to the Data Processing node.
 
    - Configure the node:
 
-     - **Input**: Enter `prompt`.
+     - **Input**: Enter `payload.prompt`.
 
      - **System Message**: Enter the following message:
 
        ```
-       You are a device command formatter. Generate a short command in this format:
-       action:<type>;client:<clientid>
-       Only return a single line, no Markdown or extra formatting.
+       You are an expert agricultural AI assistant.  
+       Based on soil moisture, air temperature, and humidity readings provided in the user prompt, generate a concise irrigation recommendation specifying the zone, amount of water (in liters), and duration.  
+       Only return a single sentence with the recommendation—no extra commentary.
        ```
-
+       
      - **Model**: Here you can keep the default model `gemini-2.0-flash`.
 
      - **API Key**: Enter your Gemini API key.
@@ -135,7 +81,7 @@ Make sure you have a valid Gemini API Key.
 5. Add a **Republish** node.
 
    - Drag a **Republish** node from the Sink section and connect it to the Gemini node.
-   - Set the topic to `device/${clientid}/command`.
+   - Set the topic to `device/${clientid}/reply`.
    - Set the payload to `${ai_reply}`.
    - Click **Save**.
 
@@ -154,7 +100,7 @@ Make sure you have a valid Gemini API Key.
    To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
 
    - Connect to your EMQX server.
-   - Subscribe to the topic, for example `device/c_emqx/command`.
+   - Subscribe to the topic, for example `device/gh_1/reply`.
 
 2. Start Testing.
 
@@ -162,11 +108,11 @@ Make sure you have a valid Gemini API Key.
 
    - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
 
-   - Click **Input Simulated Data** and publish this message to topic `commands/inbox/c_emqx` by clicking **Submit Test**:
+   - Click **Input Simulated Data** and publish the following message to topic `device/gh_1` by clicking **Submit Test**:
 
      ```json
      {
-       "type": "restart"
+       "prompt": "Soil moisture is 18%. Air temperature is 28°C. Humidity is 65%."
      }
      ```
    
@@ -178,7 +124,7 @@ Make sure you have a valid Gemini API Key.
 
    - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
 
-     > “action:restart;client:c_emqx”
+     > “Irrigate Zone 1 with 15 liters of water for 20 minutes.”
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
 
