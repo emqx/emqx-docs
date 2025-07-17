@@ -2,7 +2,7 @@
 
 This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node. 
 
-This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages containing a free-text `prompt` while preserving the `clientid` for routing. A single Data Processing node pulls out both `payload.prompt` and `clientid`. The Gemini node generates a reply based on that prompt, and the Republish node sends the AI’s reply to the per-client topic `device/${clientid}/reply`, ensuring each device receives its own customized advice.
+This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages containing a free-text `prompt` while preserving the `clientid` for routing. The Gemini node generates a reply based on that prompt, and the Republish node sends the AI’s reply to the per-client topic `device/${clientid}/reply`, ensuring each device receives its own customized advice.
 
 ## Scenario Description
 
@@ -54,13 +54,13 @@ Make sure you have a valid Gemini API Key.
    
 4. Add a **Gemini** node.
 
-   - Drag a **Gemini** node from the Processing section and connect it to the Data Processing node.
+   - Drag a **Gemini** node from the Processing section.
 
    - Configure the node:
 
      - **Input**: Enter `payload.prompt`.
 
-     - **System Message**: Enter the following message:
+     - **System Message**: Enter the following prompt:
 
        ```
        You are an expert smart-city AI assistant.
@@ -80,7 +80,7 @@ Make sure you have a valid Gemini API Key.
 
 5. Add a **Republish** node.
 
-   - Drag a **Republish** node from the Sink section and connect it to the Gemini node.
+   - Drag a **Republish** node from the Sink section.
    - Set the topic to `device/${clientid}/reply`.
    - Set the payload to `${ai_reply}`.
    - Click **Save**.
