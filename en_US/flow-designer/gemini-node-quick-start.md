@@ -6,24 +6,24 @@ This example demonstrates how to build a Flow that integrates with the Gemini LL
 
 ## Scenario Description
 
-In a smart agriculture deployment, each greenhouse is equipped with soil sensors that periodically publish JSON messages to the topic `devices/<greenhouse_id>`. Each message’s `prompt` field contains key environmental readings in plain text. The Flow will:
+In a smart city deployment, each district is equipped with environmental sensors that periodically publish JSON messages to the topic `devices/<district_id>`. Each message’s `prompt` field contains key readings in plain text, such as the air quality index and noise level. The Flow will:
 
-- **Data Processing**: Extract the sensor readings from the `prompt` field and expose the `clientid` (i.e., `greenhouse_id`) for downstream use.
-- **LLM-Based Processing**: Send the readings to Gemini to generate an actionable irrigation recommendation.
-- **Message Republish**: Publish the AI-generated advice back to the per-greenhouse control topic `device/<greenhouse_id>/reply`.
+- **Data Processing**: Extract the environmental readings from the `prompt` field and expose the `clientid` (i.e., `district_id`) for downstream use.
+- **LLM-Based Processing**: Send the readings to Gemini to generate an actionable public-safety or traffic-management recommendation (e.g., restrict traffic, adjust street-light levels).
+- **Message Republish**: Publish the AI-generated advice to the per-district control topic `device/<district_id>/reply`.
 
-**Sample incoming message (to `devices/gh_1`):**
+**Sample incoming message (to `devices/district_1`):**
 
 ```json
 {
-  "prompt": "Soil moisture is 18%. Air temperature is 28°C. Humidity is 65%."
+  "prompt": "Air Quality Index is 150. Noise level is 72 dB."
 }
 ```
 
-**Expected republished output (to `device/gh_1/reply`):**
+**Expected republished output (to `device/district_1/reply`):**
 
 ```
-Irrigate Zone 1 with 15 liters of water for 20 minutes.
+AQI is high—implement traffic restrictions in district_1 and increase pedestrian patrols.
 ```
 
 ## Create the Flow
@@ -63,9 +63,9 @@ Make sure you have a valid Gemini API Key.
      - **System Message**: Enter the following message:
 
        ```
-       You are an expert agricultural AI assistant.  
-       Based on soil moisture, air temperature, and humidity readings provided in the user prompt, generate a concise irrigation recommendation specifying the zone, amount of water (in liters), and duration.  
-       Only return a single sentence with the recommendation—no extra commentary.
+       You are an expert smart-city AI assistant.
+       Based on the Air Quality Index and noise level provided in the user prompt, generate a concise public-safety or traffic-management recommendation for the specified district.
+       Only return a single sentence with the action steps—no extra commentary.
        ```
        
      - **Model**: Here you can keep the default model `gemini-2.0-flash`.
@@ -100,7 +100,7 @@ Make sure you have a valid Gemini API Key.
    To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
 
    - Connect to your EMQX server.
-   - Subscribe to the topic, for example `device/gh_1/reply`.
+   - Subscribe to the topic, for example `device/district_1/reply`.
 
 2. Start Testing.
 
@@ -108,11 +108,11 @@ Make sure you have a valid Gemini API Key.
 
    - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
 
-   - Click **Input Simulated Data** and publish the following message to topic `device/gh_1` by clicking **Submit Test**:
+   - Click **Input Simulated Data** and publish the following message to topic `devices/district_1` by clicking **Submit Test**:
 
      ```json
      {
-       "prompt": "Soil moisture is 18%. Air temperature is 28°C. Humidity is 65%."
+       "prompt": "Air Quality Index is 150. Noise level is 72 dB."
      }
      ```
    
@@ -124,7 +124,7 @@ Make sure you have a valid Gemini API Key.
 
    - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
 
-     > “Irrigate Zone 1 with 15 liters of water for 20 minutes.”
+     > “Reduce traffic volume in the district to mitigate air pollution and noise levels.”
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
 
