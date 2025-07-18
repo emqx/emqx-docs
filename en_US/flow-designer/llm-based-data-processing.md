@@ -1,6 +1,6 @@
 # LLM-Based MQTT Data Processing
 
-Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT, Anthropic Claude, and Gemini. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
+Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT, Anthropic Claude, and Google Gemini. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
 
 ## Feature Overview
 
@@ -51,13 +51,13 @@ graph LR
 
 EMQX 5.10.0 supports the following providers:
 
-- **OpenAI**: GPT-3.5, GPT-4, GPT-4o, etc.
-- **Anthropic**: Claude 3 models
+- **OpenAI**: GPT-4.1, o4-mini, etc.
+- **Anthropic**: claude-3-5-haiku, claude-3-7-sonnet, claude-sonnet-4, etc.
 - **Gemini**: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro, etc.
 
 ::: tip Compatibility Note
 
-In addition to the officially listed providers, EMQX also supports any LLM service that is API-compatible with the OpenAI protocol.
+In addition to the officially listed providers, EMQX also supports any LLM service that is API-compatible with the OpenAI Platform.
 
 :::
 
