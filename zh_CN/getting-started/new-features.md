@@ -1,6 +1,6 @@
 # 全新功能
 
-本页重点展示当前版本支持的主要新功能，未覆盖 EMQX 提供的全部功能。
+本页重点展示当前版本支持的主要新功能，不涵盖 EMQX 提供的全部功能。
 
 ## 集群连接
 
@@ -29,15 +29,15 @@
 
 ### Schema Registry
 
-支持内部格式（JSON、Avro、Protobuf），也支持通过 HTTP 外部服务引入自定义架构。借助 `schema_encode` 和 `schema_decode` 函数，可实现 HTTP 架构扩展。
+Schema Registry 现已支持内部格式（如 JSON、Avro 和 Protobuf）以及通过 HTTP 服务接入的外部 Schema。对于未被原生支持的数据格式，EMQX 可通过 `schema_encode` 和 `schema_decode` 函数将 Schema 编解码操作委托给[外部 HTTP 服务](../data-integration/schema-registry-example-external-http.md)。
 
 ### Schema 验证
 
-确保仅处理符合预定义格式的消息，支持 JSON Schema、Protobuf、Avro 及规则引擎 SQL 验证。验证失败后可自动丢弃消息、中断连接或触发相应事件。
+Schema 验证可确保只有符合预定义格式的消息可以被处理或投递。EMQX 支持使用 JSON Schema、Protobuf、Avro 以及规则引擎的 SQL 语法进行格式校验。根据校验结果，用户可配置消息丢弃、断开客户端连接或触发规则引擎等动作。
 
 ### 消息转换
 
-支持定义转换管线，先解码、修改再重新编码消息，最终投递或继续处理。可嵌套使用多种编码/解码器，支持 [Variform 表达式](../configuration/configuration.md#variform-表达式)赋值。
+消息转换功能允许用户定义消息转换管道，在消息投递或进一步处理前进行解码、修改和重新编码。系统支持嵌套转换、多个编码器/解码器，并可通过 [Variform 表达式](../configuration/configuration.md#variform-表达式)动态赋值字段内容。
 
 ## 大语言模型驱动的 MQTT 数据处理
 
