@@ -2326,6 +2326,7 @@
             "type": "boolean"
           },
           "max_retries": {
+            "default": 2,
             "description": "Max retry times if error on sending request.",
             "minimum": 0,
             "type": "integer"
@@ -27842,6 +27843,12 @@
             "example": "http://127.0.0.1",
             "type": "string"
           },
+          "headers": {
+            "default": {},
+            "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
+            "example": {},
+            "type": "object"
+          },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -31075,31 +31082,13 @@
             "oneOf": [
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
+                  "doris"
                 ],
                 "type": "string"
               },
@@ -31111,25 +31100,61 @@
               },
               {
                 "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "influxdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "matrix"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -31147,6 +31172,18 @@
               },
               {
                 "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "iotdb"
                 ],
                 "type": "string"
@@ -31159,91 +31196,13 @@
               },
               {
                 "enum": [
-                  "snowflake"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -31255,7 +31214,61 @@
               },
               {
                 "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -31267,13 +31280,19 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -31285,25 +31304,13 @@
               },
               {
                 "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "rocketmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
+                  "tablestore"
                 ],
                 "type": "string"
               }
@@ -39976,7 +39983,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "4F41C3BC478D5151",
+            "example": "77E936D3DF24B84A",
             "type": "string"
           },
           "status": {
@@ -63232,7 +63239,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.0-M1.202507-beta.1"
+    "version": "6.0.0-M1.202507-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -75953,37 +75960,37 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "gcp_pubsub_producer",
-                      "azure_event_hub_producer",
+                      "sqlserver",
                       "greptimedb",
                       "mongodb",
-                      "confluent_producer",
+                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "iotdb",
+                      "azure_event_hub_producer",
                       "pulsar",
                       "syskeeper_forwarder",
                       "hstreamdb",
-                      "kafka_producer",
-                      "sqlserver",
                       "influxdb",
-                      "doris",
-                      "kinesis",
-                      "s3tables",
+                      "confluent_producer",
                       "opents",
-                      "redis",
-                      "s3",
                       "datalayers",
+                      "s3tables",
+                      "kinesis",
+                      "s3",
+                      "redis",
+                      "doris",
                       "mqtt",
-                      "azure_blob_storage",
-                      "couchbase",
                       "tablestore",
-                      "timescale",
+                      "azure_blob_storage",
                       "oracle",
-                      "snowflake",
                       "clickhouse",
+                      "snowflake",
+                      "timescale",
+                      "couchbase",
                       "tdengine",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -75998,37 +76005,37 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "gcp_pubsub_producer",
-                      "azure_event_hub_producer",
+                      "sqlserver",
                       "greptimedb",
                       "mongodb",
-                      "confluent_producer",
+                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "iotdb",
+                      "azure_event_hub_producer",
                       "pulsar",
                       "syskeeper_forwarder",
                       "hstreamdb",
-                      "kafka_producer",
-                      "sqlserver",
                       "influxdb",
-                      "doris",
-                      "kinesis",
-                      "s3tables",
+                      "confluent_producer",
                       "opents",
-                      "redis",
-                      "s3",
                       "datalayers",
+                      "s3tables",
+                      "kinesis",
+                      "s3",
+                      "redis",
+                      "doris",
                       "mqtt",
-                      "azure_blob_storage",
-                      "couchbase",
                       "tablestore",
-                      "timescale",
+                      "azure_blob_storage",
                       "oracle",
-                      "snowflake",
                       "clickhouse",
+                      "snowflake",
+                      "timescale",
+                      "couchbase",
                       "tdengine",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
+                      "elasticsearch",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -86275,7 +86282,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "4F41C3BC478D5151",
+            "example": "77E936D3DF24B84A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94569,7 +94576,7 @@
           },
           {
             "description": "Site ID",
-            "example": "4F41C3BC478D5151",
+            "example": "77E936D3DF24B84A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -94654,7 +94661,7 @@
           },
           {
             "description": "Site ID",
-            "example": "4F41C3BC478D5151",
+            "example": "77E936D3DF24B84A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -125855,6 +125862,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
@@ -125913,6 +125921,7 @@
               "example": {
                 "exporter": {
                   "endpoint": "http://localhost:4317",
+                  "headers": {},
                   "ssl_options": {}
                 },
                 "logs": {
@@ -125955,6 +125964,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
