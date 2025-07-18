@@ -1,143 +1,81 @@
 # 全新功能
 
-本章节描述了 EMQX 企业版 5.0 之后版本引入的全新功能。
+本页重点展示当前版本支持的主要新功能，未覆盖 EMQX 提供的全部功能。
 
-## Mria 集群架构
+## 集群连接
 
-支持全新的 Mria 集群架构，在此架构下 EMQX 水平扩展性得到指数级提升，单个集群可以轻松支持 [1 亿 MQTT 连接](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)，这使得 EMQX 5.0 成为目前全球最具扩展性的 MQTT Broker。
+集群连接可以实现地理分散的 EMQX 集群之间安全、高效、透明的消息共享。与传统 MQTT 桥接需转发全部消息并使用主题前缀防止循环相比，集群连接仅传输有订阅需求的消息，节省带宽、降低延迟、提升扩展性。
 
-<img src="./assets/100m-benckmark.png" alt="100M benchmark" style="zoom:33%;" />
+集群连接的配置与管理操作简便，可通过 EMQX Dashboard、配置文件或 REST API 创建、修改和监控连接，且提供实时状态指示和链路统计信息。
 
-在构建满足用户业务需求的更大规模集群的同时，Mria 架构还能够降低大规模部署下的脑裂风险以及脑裂后的影响，以提供更加稳定可靠的物联网数据接入服务。
+开始使用集群连接，请参阅： [集群连接快速开始](../cluster-linking/quick-start.md)。
 
-立即开始[创建与管理集群](../deploy/cluster/create-cluster.md)。
+## Schema 验证
 
-## 无停机滚动升级
+[Schema 验证](../data-integration/schema-validation.md)功能可确保仅符合预定义格式的消息被处理或投递。EMQX 支持使用 JSON Schema、Protobuf、Avro 及规则引擎 SQL 语法进行格式校验。针对校验失败的消息，用户可以配置自动丢弃、断开客户端连接或触发规则引擎等动作。
 
-从 EMQX 5.1 开始，系统现在支持集群的无缝滚动升级，让您无需任何服务中断就能过渡到新版本，增强了整体系统的可用性和可靠性。
+## 消息转换
 
-## MQTT over QUIC 支持
+[消息转换](../data-integration/message-transformation.md)允许用户定义消息转换管道，在投递前对消息进行解码、修改和重新编码。系统支持嵌套转换、多个编码器/解码器，并可通过 [Variform 表达式](../configuration/configuration.md#variform-表达式)实现动态字段赋值。
 
-EMQX 5.0 引入了QUIC 支持（MQTT over QUIC）作为一项实验性功能，并设计了独特的消息传递机制和管理方法。在 EMQX 5.1 中，我们增加了 [QUIC多流](https://www.emqx.com/zh/blog/emqx-newsletter-202302)支持，并且从现在开始将此功能视为“常规可用”。
+## 数据集成功能扩展
 
-作为下一代互联网协议 HTTP/3的底层传输协议，[QUIC](https://datatracker.ietf.org/doc/html/rfc9000) 相对于 TCP/TLS 协议，可以为现代移动互联网提供更低的连接开销和消息延迟。因此，EMQX 尝试使用 QUIC 替代 MQTT 的传输层，从而产生了MQTT over QUIC。
+近期版本的 EMQX 显著增强了数据集成功能，新增了多种数据集成类型，包括但不限于：
 
-为了评估 MQTT over QUIC 并验证它如何改善网络连接，请阅读[使用 MQTT over QUIC](../mqtt-over-quic/getting-started.md)。
+- **[Snowflake](../data-integration/snowflake.md)**：将处理后的数据写入 Snowflake Stage 并加载至 Snowflake 表中。可安全地进行长期归档，并利用其数据仓库与分析能力实现实时或批量分析。
+- **[Azure Blob Storage](../data-integration/azure-blob-storage.md)**：与 Microsoft Azure 的可扩展对象存储服务集成，支持结构化与非结构化数据的持久化存储，适用于大规模 IoT 数据归档，功能类似于 AWS S3。
+- **[Datalayers](../data-integration/data-bridge-datalayers.md)**：Datalayers 是面向工业物联网、车联网与能源行业的边云协同分布式数据库平台。通过与 EMQX 的集成，用户可将实时数据写入 Datalayers，实现时序存储、键值缓存及边缘计算分析。
 
-## 基于 MQTT 的文件传输
+## 安全性增强
 
-::: tip
+EMQX 在近期版本中新增了多种认证与授权机制，提供更灵活、细粒度的访问控制能力。新增支持的功能包括：
 
-MQTT 文件传输是 EMQX 企业版功能。
+- **[使用 LDAP 进行密码认证](../access-control/authn/ldap.md)**：通过外部 LDAP 目录验证用户，支持企业级用户管理。
+- **[基于 REST API 的 MQTT 5.0 SCRAM 认证](../access-control/authn/scram_restapi.md)**：支持符合 MQTT 5.0 标准的 SCRAM 认证方式，基于 RESTful API 实现。
+- **[Kerberos 认证](../access-control/authn/kerberos.md)**：集成 Kerberos 单点登录系统，实现安全的集中式用户认证。
+- **[Client-Info 认证](../access-control/authn/cinfo.md)**：基于客户端元信息（如 IP 地址、设备 ID 或用户名）实现灵活的访问控制。
 
-:::
+## OpenTelemetry 集成：指标、日志与追踪
 
-EMQX 5.1 引入了 MQTT 文件传输功能，支持通过 MQTT 协议传输文件。
+EMQX 现已全面支持 OpenTelemetry，使用户可以更轻松地监控和排查 MQTT 系统中的问题。
 
-该功能基于标准的 MQTT 协议扩展实现，无需改造现有的客户端与应用即可进行集成。客户端可以通过 MQTT 协议向特定主题传输文件分片，传输完成后服务端会对分片进行合并，并保存到本地磁盘或导出到兼容 S3 协议的对象存储中。
+**主要功能：**
 
-相比于 HTTP/FTP 协议，MQTT 具有低带宽消耗和资源占用少的特点，能够快速且高效的进行文件传输。统一的物联网数据通道也简化了系统架构，减少应用的复杂性和维护成本。
+- **指标监控**：将实时指标数据导出至 OpenTelemetry Collector，并可通过 Prometheus、Grafana 等工具进行可视化。
+- **日志采集**：发送结构化日志，包含丰富上下文信息（如 Trace ID），方便调试与故障定位。
+- **追踪**：支持在 EMQX 节点间对 MQTT 消息流进行分布式追踪，有助于发现延迟、路由问题或特定节点的性能瓶颈。
+- **端到端追踪模式**：可完整追踪消息路径和客户端操作，支持按客户端 ID、主题或 QoS 等维度过滤，用户可自定义采样率与导出频率以平衡系统负载。
 
-立即开始使用[基于 MQTT 的文件传输](../file-transfer/introduction.md)。
+借助 OpenTelemetry，您可以通过开放的标准工具全面掌握 EMQX 的性能与消息流动情况。详细信息请参阅 [OpenTelemetry 集成](../observability/opentelemetry/opentelemetry.md)。
 
-## 备份与恢复
+## 新增协议网关
 
-EMQX 5.1 新增了一组用于备份与恢复的命令行工具，能够将内置数据库中的数据以及配置文件导出为一个压缩包，也能够将备份的数据和配置文件恢复到新的集群中。
+EMQX 在 5.2 至 5.8 版本中新增了多种行业协议网关，支持交通、能源与电动汽车等垂直领域的系统接入，帮助用户将行业标准协议的数据快速接入基于 MQTT 的平台。
 
-创建备份：
+- **[OCPP 协议网关](../gateway/ocpp.md)**：支持 OCPP 1.6 协议，EMQX 可直接连接电动汽车充电桩，将 OCPP 消息转换为 MQTT 消息，实现统一通信管理。
+- **[JT/T 808 协议网关](../gateway/jt808.md)**：支持 JT/T 808 车载终端通信协议，EMQX 可接收来自 GPS 终端与车载设备的二进制消息，并以十六进制编码形式通过 MQTT 发布供下游系统解析。
+- **[GB/T 32960 协议网关](../gateway/gbt32960.md)**：基于 GB/T 32960 协议，使 EMQX 能够接收、解码并通过 MQTT 转发来自新能源汽车的结构化诊断与遥测数据。
 
-```bash
-$ ./bin/emqx ctl data export
-...
-Data has been successfully exported to data/backup/emqx-export-2023-06-21-14-07-31.592.tar.gz.
-```
+这些网关简化了行业协议到 MQTT 的接入流程，广泛应用于智能充电、车队监控与新能源汽车数据上报等场景。
 
-恢复备份：
+## Dashboard 优化
 
-```bash
-./bin/emqx ctl data import <File>
-```
+自 5.8 版本起，EMQX Dashboard 引入了更直观、功能更强的管理界面，提升了日常运维与监控体验。
 
-更多信息，请见[备份与恢复](../operations/backup-restore.md)。
+**易用性提升**
 
-## 全新物联网数据集成
+- 为规则引擎的动作 与 Source 页面新增分页、搜索与状态筛选功能，方便大规模集成管理。
+- 增加“一键重置集群指标”功能，便于快速诊断并观察集群状态变化。
 
-EMQX 5.x 的规则引擎在原有 SQL 的基础上集成了 [jq](https://stedolan.github.io/jq/)，支持更多复杂格式 JSON 数据的处理。更多信息详见：[jq 函数](../data-integration/rule-sql-jq.md)。
+**指标展示增强**
 
-EMQX 开源版支持将数据发送到 Webhook，或与外部 MQTT 服务建立双向桥接。
+- 对 `/api/v5/monitor` 接口进行优化，使用并发 RPC 拉取全集群指标，避免在大规模部署下出现超时。
+- 在首页新增核心指标（如消息速率），方便快速获取关键数据。
 
-EMQX 企业版支持双向数据集成，您可以实时地将物联网数据实时处理并发送到 40 多个云服务和企业系统，或者从其中获取数据，经处理后下发到指定 MQTT 主题中。同时，EMQX 5.0 还提供了数据集成可视化查看能力（Flows）。通过 Dashboard 页面，您可以清晰看到设备与云端之间的物联网数据处理和流转步骤。
+**监控工具集成**
 
-关于 EMQX 支持的桥接类型以及如何配置，可阅读[数据集成](../data-integration/data-bridges.md)。
+- 提供 Webhook 集成功能，用于发送告警事件，便于实现自动化监控与异常响应。参见 [Webhook 告警集成配置](../observability/alarms.md#通过-webhook-集成发送告警事件通知)。
 
-## 灵活多样认证授权
+## 更多功能
 
-改进了认证授权流程，并提供了灵活的使用与配置方式。通过简单配置，无需编写代码即可对接各类数据源与认证服务，为您的物联网应用开启安全防护。
-
-EMQX 5.1 认证授权包括以下特性：
-
-- 支持在 Dashboard 完成整个集群的认证授权配置。
-- 支持通过 Dashboard 管理认证凭证与授权数据。
-- 支持调整认证器与授权检查器顺序。
-- 提供执行速度与次数统计指标，实现认证授权可观测性。
-- 允许监听器单独配置认证，更灵活的接入能力。
-
-关于如何在 EMQX 进行认证和授权配置，可阅读[认证](../access-control/authn/authn.md)和[授权](../access-control/authz/authz.md)章节。
-
-## 全新 EMQX Dashboard
-
-EMQX 5.1 重新设计了 EMQX Dashboard，在提升视觉体验的同时，也极大提升了 EMQX 的易用性。
-
-全新 Dashboard 包括以下更新：
-
-- 新的 UI/UX 设计，丰富的样式与易于上手的使用交互。
-- 优化菜单结构，快速直达访问内容。
-- 更丰富的可视化系统，数据和状态一目了然。
-- 开箱即用的认证授权配置与管理功能。
-- 强大数据集成能力，[Flows](../flow-designer/introduction.md) 可视化编排让用户能够清晰地看到从设备或客户端流出的数据通过规则引擎处理后的流向。
-- 在线配置更新，在 Dashboard 上实现配置热更新。
-
-## 过载保护、速率限制器和桥接缓存队列
-
-新增的**速率限制器**通过提供更精确和分层的速率控制选项来增强客户端接入和消息速率控制能力。它通过在客户端、监听器或节点级别限制客户端行为，确保系统在预期的工作负载下运行。过载保护和速率限制功能的结合，可以防止客户端过载或接收过多的请求流量，确保系统的稳定运行。
-
-5.1 版本还为所有 Sink 添加了一个通用的缓冲队列，允许在压力情况下缓冲生成的消息。当外部资源不可用时（例如网络波动或服务停机），可以将这个缓冲区配置为将消息存储在内存或磁盘缓存中。缓冲的消息将在服务恢复后发送。然而，缓冲区中的请求可能会过期，这与版本4相比是一个很大的区别。如果缓冲数据的量超过了限制，将按照先进先出（FIFO）规则将其丢弃。
-
-## 云原生与 EMQX Operator
-
-水平扩展和弹性集群是云原生应用必须支持的特性。
-
-[EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) 可以充分利用 EMQX 5.x 的 Replicant 节点。您可以使用 Kubernetes 部署（Deployment）部署一个无状态的 EMQX 节点，然后构建支持大规模 MQTT 连接和消息吞吐量的 EMQX 集群。
-
-## 全新网关框架
-
-网关能够实现多协议的接入和设备管理，EMQX 5.1重构了多协议接入的底层架构，使得各个网关功能定义更为清晰：
-
-- **统一的统计和监控指标：** EMQX 5.0 提供了网关/客户端级别的统计指标，例如发送和接收的字节数、消息数量等。
-- **独立的连接和会话管理：** 与 EMQX 4.x 不同，网关客户端也在 MQTT 客户端列表下进行管理，EMQX 5.0 为每个网关创建了独立的网关页面，一个客户端 ID 可以在多个网关之间重用。
-- **独立的客户端身份验证：** 与 EMQX 4.x 不同，网关身份验证也是在 MQTT 客户端下进行管理，EMQX 5.0 支持为每个网关配置独特的身份验证机制。
-- **清晰的规范，易于扩展：** 该框架提供了一套标准的概念和接口，使得自定义网关更加容易。
-
-EMQX 5.0 网关实现多种协议的接入和统一管理，MQTT 之外的协议也能够充分享受 EMQX 强大的数据集成、安全可靠的认证授权，以及极高的水平扩展能力等诸多特性。
-
-## 更多功能更新
-
-### 全新极简配置
-
-配置文件更换为简洁易读的 HOCON 格式配置文件，`emqx.conf` 配置文件默认仅包含常用的配置项，以提高配置文件可读性和可维护性。
-
-### 改进的 REST API
-
-提供符合 OpenAPI 3.0 规范的 REST API，以及清晰且丰富的 API 文档，为您带来更好的使用体验。
-
-### 快速排查故障
-
-提供更多的诊断工具如慢订阅、在线追踪帮助用户快速排查生产环境中的问题。
-
-### 结构化日志
-
-提供更友好的结构化日志以及 JSON 格式日志支持，错误日志包含唯一的 `msg` 方便定位问题原因。
-
-### 更灵活的拓展机制
-
-引入全新的插件架构，能够以独立插件包的形式编译、分发、安装拓展插件；支持配置多个多语言钩子扩展 exhook，并提供完善的状态与指标监控。
+除了上述功能，EMQX 最近的版本还包含诸多增强和优化。完整详情请参阅：[版本更新日志](https://github.com/emqx/emqx-docs/blob/6f1b5b885bb9a82475d567433a0b477a0ef34d0b/zh_CN/changes/changes-ee-v5.md)。
