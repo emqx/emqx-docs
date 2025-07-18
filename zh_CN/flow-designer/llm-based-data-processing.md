@@ -167,5 +167,5 @@ EMQX 5.10.0 当前支持以下 LLM 服务：
 
 - [使用 OpenAI 节点创建 Flow](./openai-node-quick-start.md)：使用 GPT 模型处理或摘要 MQTT 消息。
 - [使用 Anthropic 节点创建 Flow](./anthropic-node-quick-start.md)：使用 Claude 模型处理 MQTT 消息中的数值字段。
-- [使用 Gemini 节点创建 Flow](./gemini-node-quick-start.md)：将 MQTT 客户端 ID 与消息 payload 组合为输入，使用 Gemini 模型动态生成响应内容。
+- [使用 Gemini 节点创建 Flow](./gemini-node-quick-start.md)：使用 Gemini 模型根据 MQTT 消息中的提示词生成上下文相关的回复，并利用 MQTT 客户端 ID 将结果路由到对应的客户端主题。
 
