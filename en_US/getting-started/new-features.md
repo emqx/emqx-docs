@@ -25,7 +25,7 @@ Namespaces support two creation modes:
 - **Explicit**: Administrators define namespaces manually via the Dashboard or REST API.
 - **Automatic**: EMQX generates namespaces dynamically by extracting the `tns` attribute from incoming client connections.
 
-Currently, namespaces support tenant-level rate limiting configuration, allowing resource allocation and usage control per tenant. To learn more details about this feature and how to create and configure the Namespaces, see the [Namespace](../multi-tenancy/namespace-overview.md) section.
+Currently, namespaces support tenant-level rate limiting configuration, allowing resource allocation and usage control per tenant. To learn more details about this feature and how to create and configure the namespaces, see the [Namespace](../multi-tenancy/namespace-overview.md) section.
 
 ## Smart Data Hub
 
