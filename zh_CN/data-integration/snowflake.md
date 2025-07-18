@@ -370,17 +370,16 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
-   - **用户名**：注册了 RSA 公钥的 Snowflake 用户（如之前设置的 `snowpipeuser`）。
    - **私钥路径**： RSA 私钥的绝对文件路径。EMQX 使用此密钥签发 JWT 令牌，用于向 Snowflake API 进行身份认证。此路径必须在集群的所有节点上保持一致。例如：`/etc/emqx/certs/snowflake_rsa_key.private.pem`。
    - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-
+   
    :::
-
+   
    ::::
-
+   
 6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。

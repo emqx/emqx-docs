@@ -425,7 +425,6 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
 
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
-   - **Username**: Snowflake user with a registered RSA public key (e.g. `snowpipeuser`, as defined during the previous setup process).
    - **Private Key Path**: The absolute file path to the private RSA key. EMQX uses this key to sign JWT tokens to authenticate itself with the Snowflake API. This path must be consistent across all nodes of the cluster. For example:
      `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
