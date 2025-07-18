@@ -14,7 +14,7 @@ The configuration and management of Cluster Linking are designed to be simple an
 
 To get started with the Cluster Linking, see [Quick Start with Cluster Linking](../cluster-linking/quick-start.md).
 
-[![cluster_linking_feature](https://github.com/emqx/emqx-docs/raw/6f1b5b885bb9a82475d567433a0b477a0ef34d0b/en_US/getting-started/assets/cluster_linking_feature.png)](https://github.com/emqx/emqx-docs/blob/6f1b5b885bb9a82475d567433a0b477a0ef34d0b/en_US/getting-started/assets/cluster_linking_feature.png)
+![cluster_linking_feature](./assets/cluster_linking_feature.png)
 
 ## Schema Validation
 
