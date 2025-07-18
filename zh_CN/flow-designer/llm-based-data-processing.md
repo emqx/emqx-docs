@@ -1,6 +1,6 @@
 # 基于 LLM 的 MQTT 数据处理
 
-从 EMQX 5.10.0 开始，Flow 设计器支持集成大型语言模型（LLM），如 OpenAI GPT，Anthropic Claude 和 Gemini。借助该功能，用户可以通过自然语言提示构建智能的数据处理流程，实现日志摘要、传感器数据分类、消息增强或实时洞察等任务。
+从 EMQX 5.10.0 开始，Flow 设计器支持集成大型语言模型（LLM），如 OpenAI GPT，Anthropic Claude 和 Google Gemini。借助该功能，用户可以通过自然语言提示构建智能的数据处理流程，实现日志摘要、传感器数据分类、消息增强或实时洞察等任务。
 
 ## 功能概览
 
@@ -47,13 +47,13 @@ graph LR
 
 EMQX 5.10.0 当前支持以下 LLM 服务：
 
-- **OpenAI**：支持 GPT-3.5、GPT-4、GPT-4o 等模型
-- **Anthropic**：支持 Claude 3 系列模型
+- **OpenAI**：支持 GPT-4.1、4o-mini 等模型
+- **Anthropic**：支持 claude-3-5-haiku、claude-3-7-sonnet、claude-sonnet-4 等模型
 - **Gemini**：支持 gemini-2.0-flash、gemini-2.5-flash、gemini-2.5-pro 等模型
 
 ::: tip 兼容性说明
 
-除了上述官方列出的提供商，EMQX 还支持任何与 OpenAI 协议兼容的 LLM 服务。
+除了上述官方列出的提供商，EMQX 还支持任何与 OpenAI 平台兼容的 LLM 服务。
 
 :::
 
