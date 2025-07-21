@@ -1753,9 +1753,9 @@ The maximum number of topics that a single client is allowed to subscribe to. `0
 
 #### Description
 
-Allow EMQX Broker to force the QoS level of the message upgrading to the subscribed QoS level when publishing the message.
-
-
+Whether to upgrade the QoS level when delivering messages to subscribers.
+- `off` means "downgrade": delivers using the lower QoS level between the PUBLISH message and the subscription.
+- `on` means "upgrade": delivers using the higher QoS level between the PUBLISH message and the subscription.
 
 ### zone.external.max_inflight
 

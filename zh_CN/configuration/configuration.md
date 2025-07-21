@@ -1715,7 +1715,9 @@ Keepalive 退避指数。EMQX 如果在 `Keepalive * backoff * 2` 的时间内�
 
 #### 说明
 
-允许 EMQX 在投递消息时，强制升级消息的 QoS 等级为订阅的 QoS 等级。
+在给订阅者投递消息时，是否升级 QoS 等级。
+- `off` 即“降级”：使用 PUBLISH 消息和订阅中较低的 QoS 等级投递。
+- `on` 即“升级”：使用 PUBLISH 消息和订阅中较高的 QoS 等级投递。
 
 <br />
 
