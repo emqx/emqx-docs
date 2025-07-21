@@ -331,7 +331,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 5. 输入连接信息：
 
-   :::: tabs type
+   :::: tabs
 
    ::: tab 聚合模式（基于 ODBC）
 
@@ -346,28 +346,30 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **密码**：输入用于通过用户名和密码进行 ODBC 连接认证。此字段为可选项，用户可以选择：
 
      - 在此处填写密码，例如： `Snowpipeuser99`，这是之前设置过程中定义的密码。
+   
      - 或在系统的 `/etc/odbc.ini` 文件中配置；
+
      - 如果使用密钥对认证（Key-pair authentication），则无需提供密码。
 
-     ::: tip
+       ::: tip
 
-     使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
+       使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
 
-     :::
+       :::
 
    - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径在集群的所有节点上必须保持一致。例如：`/etc/emqx/certs/snowflake_rsa_key.private.pem`。
 
    - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
 
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
-
+   
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
 
    :::
 
-   ::: 流式模式 (Snowpipe Streaming API)
-
+   ::: tab 流式模式 (Snowpipe Streaming API)
+   
    - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
    - **用户名**：（可选）如果您在 `odbc.ini` 中已配置，在此输入绑定了 RSA 公钥的 Snowflake 用户名（如 `snowpipeuser`）。
@@ -431,7 +433,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 7. 选择**上传方式**并配置相关参数。默认选择为 `聚合上传`。根据所选上传模式配置以下选项。
 
-   :::: tabs type
+   :::: tabs
 
    ::: tab 聚合上传
 
