@@ -139,7 +139,7 @@ This section demonstrates how to create a rule for processing messages from the 
 
 11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-12. **Advanced settings (optional)**: Choose whether to use buffer queue and batch mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+12. **Advanced settings (optional)**: Configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
 13. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Amazon Kinesis Data Streams service.
 
@@ -202,3 +202,19 @@ If you use LocalStack, follow the steps below to check the received data.
    echo 'eyAibXNnIjogImhlbGxvIEFtYXpvbiBLaW5lc2lzIiB9' | base64 -d
    { "msg": "hello Amazon Kinesis" }
    ```
+
+## Advanced Settings
+
+This section delves into the advanced configuration options available for the Amazon Kinesis Sink. In the Dashboard, when configuring the Sink, you can expand **Advanced Settings** to adjust the following parameters based on your specific needs.
+
+| Field Name                       | Description                                                  | Default Value |
+| -------------------------------- | ------------------------------------------------------------ | ------------- |
+| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and Kinesis. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`          |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Kinesis, the request is deemed to have expired. | `45` second   |
+| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with Kinesis. | `15` second   |
+| **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. When multiple Actions or Sources share the same Connector, enabling jitter ensures their health checks are initiated at slightly different times. | `15` second   |
+| **Health Check Timeout**         | Specifies the timeout duration for the connector to perform automatic health checks on its connection with Kinesis. | `60` second   |
+| **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the Kinesis Sink. The buffer workers temporarily store data before sending it to Kinesis, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256`         |
+| **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Kinesis does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at Kinesis. | `Async`       |
+| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to Kinesis in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Kinesis.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `1`           |
+| **Inflight  Window**             | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with Kinesis. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`         |
