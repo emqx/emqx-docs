@@ -2,20 +2,29 @@
 
 [Snowflake](https://www.snowflake.com/en/) is a cloud-based data platform that provides a highly scalable and flexible solution for data warehousing, analytics, and secure data sharing. Known for its ability to handle structured and semi-structured data, Snowflake is designed to store vast amounts of data while providing fast query performance and seamless integration with various tools and services.
 
-This page provides a detailed introduction to the data integration between EMQX and Snowflake, and offers practical guidance on the rule and Sink creation.
+This page provides a detailed introduction to the data integration between EMQX and Snowflake, and provides practical guidance on creating a rule and Sink.
 
 ## How It Works
 
-Snowflake data integration in EMQX is a ready-to-use feature that can be easily configured for complex business development. In a typical IoT application, EMQX acts as the IoT platform responsible for device connectivity and message transmission, while Snowflake serves as the data storage and processing platform, handling the ingestion, storage, and analysis of this message data.
+Snowflake data integration in EMQX is a ready-to-use feature that can be easily configured to support complex IoT business workflows. In a typical IoT application, EMQX acts as the IoT platform responsible for device connectivity and message transmission, while Snowflake serves as the data storage and processing platform, handling the ingestion, storage, and analysis of this message data.
 
 ![snowflake-architecture](./assets/snowflake-architecture.png)
 
-EMQX utilizes rules engines and Sinks to forward device events and data to Snowflake. End users and applications can then access data in Snowflake tables. The specific workflow is as follows:
+EMQX utilizes the rule engine and Sink to forward device events and data to Snowflake. End users and applications can then access data in Snowflake tables. The specific workflow is as follows:
 
-1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
-2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
+1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other identifying properties.
+
+2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rule engine.
+
 3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Snowflake**: The rule triggers an action to write messages to Snowflake Stage, and load it into a Snowflake table.
+
+4. **Writing to Snowflake**: The rule triggers an action that writes message data to Snowflake, either by batching messages into files and loading them via Stage and Pipe (aggregated mode), or by streaming them directly using the Snowpipe Streaming API (streaming mode).
+
+   ::: tip Note
+
+   Snowpipe Streaming is currently a [preview feature](https://docs.snowflake.com/en/release-notes/preview-features) in Snowflake. It is available only for accounts hosted on AWS.
+
+   ::: 
 
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
@@ -39,12 +48,27 @@ This section introduces the preparations required before creating a Snowflake Si
 
 ### Prerequisites
 
-- Understanding of [rules](./rules.md).
-- Understanding of [data integration](./data-bridges.md).
+- Understanding of EMQX [rules](./rules.md) and [data integration](./data-bridges.md) concepts.
+- A working Snowflake account with admin privileges.
+
+### Choose Upload Mode
+
+::: tip
+
+Choose the mode first, as it determines how you configure both EMQX and your Snowflake environment.
+
+:::
+
+EMQX supports two modes for sending data to Snowflake:
+
+| Mode       | Description                                                  | Requires ODBC |
+| ---------- | ------------------------------------------------------------ | ------------- |
+| Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
+| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | Yes           |
 
 ### Initialize Snowflake ODBC driver
 
-To enable EMQX to communicate with Snowflake and efficiently transfer data, it is necessary to install and configure the Snowflake Open Database Connectivity (ODBC) driver. It acts as the communication bridge, ensuring that data is properly formatted, authenticated, and transferred.
+To enable EMQX to communicate with Snowflake and efficiently transfer data, it is necessary to install and configure the Snowflake Open Database Connectivity (ODBC) driver. This driver enables EMQX to write data to a Snowflake stage. It acts as the communication bridge, ensuring that data is properly formatted, authenticated, and transferred.
 
 For more information, refer to the official [ODBC Driver](https://docs.snowflake.com/en/developer-guide/odbc/odbc) page and the [license agreement](https://sfc-repo.snowflakecomputing.com/odbc/Snowflake_ODBC_Driver_License_Agreement.pdf).
 
@@ -159,44 +183,101 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
      EOF
      ```
 
-### Create a User Account and Database
+### Create a User Account and Set Up Snowflake Resources
 
-Once the Snowflake ODBC driver is installed, you need to set up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the Connector and Sink in EMQX:
+Regardless of upload mode, you must configure your Snowflake environment, such as setting up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the Connector and Sink in EMQX:
 
-| Field                  | Value                                            |
-| ---------------------- | ------------------------------------------------ |
-| Data Source Name (DSN) | `snowflake`                                      |
-| Username               | `snowpipeuser`                                   |
-| Password               | `Snowpipeuser99`                                 |
-| Database Name          | `testdatabase`                                   |
-| Schema                 | `public`                                         |
-| Stage                  | `emqx`                                           |
-| Pipe                   | `emqx`                                           |
-| Pipe User              | `snowpipeuser`                                   |
-| Private Key            | `file://<path to snowflake_rsa_key.private.pem>` |
+| Field                  | Value                                            | Description                                                  |
+| ---------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| Data Source Name (DSN) | `snowflake` (aggregated only)                    | ODBC DSN configured in `/etc/odbc.ini`, used for aggregated uploads. |
+| Username               | `snowpipeuser`                                   | Snowflake user used to authenticate connections. Must have appropriate privileges for either mode. |
+| Password               | `Snowpipeuser99`                                 | Optional if using key-pair authentication.                   |
+| Database Name          | `testdatabase`                                   | Snowflake database where the target table is located.        |
+| Schema                 | `public`                                         | Schema within the database containing your table and pipe.   |
+| Stage (aggregated)     | `emqx`                                           | Snowflake stage used to hold files before ingestion.         |
+| Pipe (aggregated)      | `emqx`                                           | Pipe that loads data from the stage into the target table.   |
+| Pipe (streaming)       | `emqxstreaming`                                  | Pipe created using `DATA_SOURCE(TYPE => 'STREAMING')` to ingest data via Snowpipe Streaming API. |
+| Private Key            | `file://<path to snowflake_rsa_key.private.pem>` | RSA private key used to sign JWTs for API authentication.    |
 
-#### Generate RSA Key Pair
+#### Generate RSA Key Pair (Optional for Aggregated Mode)
 
-To securely connect to Snowflake, generate an RSA key pair for authentication using the following commands:
+Snowflake supports multiple authentication methods. In EMQX, your choice of method depends on the upload mode and how you configure the connection:
+
+| Upload Mode       | Authentication Options                                       | Key Pair Required |
+| ----------------- | ------------------------------------------------------------ | ----------------- |
+| Streaming (HTTPS) | RSA key pair + JWT (only supported method)                   | Yes               |
+| Aggregated (ODBC) | Username/password (via DSN or EMQX)<br />RSA key pair + JWT (optional, configured in EMQX only) | Optional          |
+
+Key pair authentication is mandatory only for streaming mode, where EMQX signs JWTs to securely authenticate to Snowflake's Streaming API.
+
+For the aggregated mode, either username/password or RSA key pair can be used for authentication. You can provide credentials in one of the following ways:
+
+- Enter the username and password directly in the EMQX Connector configuration on the Dashboard.
+- Provide the path to a private RSA key (if using key-pair authentication).
+- Or, if neither is specified in EMQX, ensure that credentials are correctly configured in your system’s ODBC DSN, such as `/etc/odbc.ini` (Linux) or `~/.odbc.ini` (macOS).
+
+::: tip
+
+Use either Password or Private Key for authentication, not both.
+
+If neither is configured in EMQX, the Connector will fall back to using credentials from `/etc/odbc.ini`.
+:::
+
+**Example (`/etc/odbc.ini` with username/password)**
+
+```ini
+[snowflake]
+Driver=SnowflakeDSIIDriver
+Server=<account>.snowflakecomputing.com
+UID=snowpipeuser
+PWD=Snowpipeuser99
+Database=testdatabase
+Schema=public
+Warehouse=compute_wh
+Role=snowpipe
+```
+
+> This approach allows EMQX to refer to the `DSN` (`snowflake`) in its configuration without directly including credentials.
+
+**If You Use Key Pair Authentication**
+
+If you choose or are required to use RSA key pair authentication (e.g. for `streaming` mode), use the commands below to generate and configure the keys:
 
 ```bash
+# Generate private key
 openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out snowflake_rsa_key.private.pem -nocrypt
+
+# Generate public key
 openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.public.pem
 ```
+
+When EMQX uses key-pair authentication (supported in both aggregated and streaming modes):
+
+- EMQX uses the private RSA key to sign a JWT, which serves as a secure, verifiable identity token.
+- Snowflake verifies the token’s signature using the public key.
 
 For more information, refer to [Key-pair authentication and key-pair rotation](https://docs.snowflake.com/en/user-guide/key-pair-auth).
 
 #### Set Up Snowflake Resources Using SQL
 
-Once the ODBC driver is set up and the RSA key pair is generated, you can set up the Snowflake resources. This involves creating the necessary database, table, stage, and pipe in Snowflake using SQL commands.
+After generating the RSA key pair, you’ll set up the necessary Snowflake objects for either `aggregated` or `streaming` ingestion using SQL commands.
+
+This includes:
+
+- Creating a database and table
+- Creating a stage and pipe (for `aggregated`)
+- Creating a streaming pipe (for `streaming`)
+- Creating a user and role, and granting access
 
 1. In the Snowflake console, open the SQL Worksheet and execute the following SQL commands to create the database, table, stage, and pipe:
 
    ```sql
    USE ROLE accountadmin;
    
+   -- Create a database to store your data (if not exists)
    CREATE DATABASE IF NOT EXISTS testdatabase;
    
+   -- Create a table to receive MQTT data
    CREATE OR REPLACE TABLE testdatabase.public.emqx (
        clientid STRING,
        topic STRING,
@@ -204,23 +285,49 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
        publish_received_at TIMESTAMP_LTZ
    );
    
+   -- Create a Snowflake stage for uploading files (aggregated mode only)
    CREATE STAGE IF NOT EXISTS testdatabase.public.emqx
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
    
+   -- Create a pipe for aggregated mode that copies from the stage
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+   
+   -- Create a pipe for streaming mode (direct ingestion)
+   CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
+   COPY INTO testdatabase.public.emqx (
+       clientid,
+       topic,
+       payload,
+       publish_received_at
+   )
+   FROM (
+       SELECT
+           $1:clientid::STRING,
+           $1:topic::STRING,
+           $1:payload::STRING,
+           $1:publish_received_at::TIMESTAMP_LTZ
+       FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
+   );
+   MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
+   
    ```
 
-2. Create a new user and set the RSA public key for that user:
+   - The `COPY INTO` inside the pipe ensures Snowflake automatically loads staged or streamed data into your table.
+   - The `$1:field` syntax in streaming pipes extracts fields from JSON payloads ingested via EMQX.
+
+2. Create a dedicated user (e.g., `snowpipeuser`) for EMQX to authenticate with, and bind the RSA public key for that user:
 
    ```sql
+   -- Create the user account
    CREATE USER IF NOT EXISTS snowpipeuser
        PASSWORD = 'Snowpipeuser99'
        MUST_CHANGE_PASSWORD = FALSE;
    
+   -- Bind the RSA public key to the user
    ALTER USER snowpipeuser SET RSA_PUBLIC_KEY = '
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_1>
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_2>
@@ -235,23 +342,38 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
 
    :::
 
+   This key is uploaded to the Snowflake user and stored inside Snowflake.
+
 3. Create and assign the required role to the user for managing the Snowflake resources:
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
    
+   -- Grant usage and read/write permissions
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
+   
+   -- Aggregated mode requires access to stage and pipe
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
+   
+   -- Streaming mode requires permissions on the streaming pipe
+   GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
+   
+   -- Link role to the user and set it as default
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
    ```
 
 ## Create a Connector
 
-Before adding the Snowflake Sink, you need to create the corresponding connector in EMQX to establish the connection with Snowflake.
+Before configuring the Snowflake Sink, you must create a connector in EMQX to establish the connection with your Snowflake environment. The connector supports two modes of communication:
+
+- **Aggregated mode**: Uses ODBC (via DSN) to connect through a stage.
+- **Streaming mode**: Uses HTTPS and the Snowpipe Streaming REST API (AWS-only).
+
+> The required fields in the form depend on which upload mode (`aggregated` or `streaming`) you plan to use in the Sink.
 
 1. Go to the Dashboard **Integration** -> **Connector** page.
 
@@ -262,49 +384,72 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
 
 5. Enter the connection information.
+
+   :::: tabs type
+
+   ::: tab Aggregated Mode (ODBC-based)
+
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
-   
+
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
-   
+
    - **Data Source Name (DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
-   
+
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
-   
+
    - **Password**: The password for authenticating with Snowflake via ODBC using username/password authentication. This field is optional:
-   
+
      - You may enter the password here, e.g., `Snowpipeuser99`, as defined during the previous setup process;
      - Or configure it in `/etc/odbc.ini`;
      - If using key-pair authentication instead, leave this field blank.
-   
+
      ::: tip
-   
+
      Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
-   
+
      :::
-   
-   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example:
-      `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
-   
+
+   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be consistent across all nodes of the cluster. For example:
+      `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
+
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
-   
+
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
-   
+
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
+
+   :::
+
+   ::: tab Streaming Mode (Snowpipe Streaming API)
+
+   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
+   - **Username**: (Optional) Enter the Snowflake user with a registered RSA public key if you configured it in `odbc.ini` (e.g. `snowpipeuser`). 
+   - **Private Key Path**: The absolute file path to the private RSA key. EMQX uses this key to sign JWT tokens to authenticate itself with the Snowflake API. This path must be consistent across all nodes of the cluster. For example:
+     `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
    
-6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   :::
+   
+   ::::
+   
+6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
 
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
 
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
 
-7. Click the **Create** button at the bottom to complete the connector creation.
+9. Click the **Create** button at the bottom to complete the connector creation.
 
 You have now completed the connector creation and can proceed to create a rule and Sink to specify how the data will be written into Snowflake.
 
 ## Create a Rule with Snowflake Sink
 
-This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#` and write the processed results to the Snowflake through the configured Sink.
+This section demonstrates how to create a rule in EMQX to process messages (e.g., from the source MQTT topic `t/#`) and write the processed results to Snowflake through the configured Sink. EMQX supports both streaming and aggregated upload modes.
 
 1. Go to the Dashboard **Integration** -> **Rules** page.
 
@@ -340,32 +485,70 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 6. Select the `my-snowflake` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Connector](#create-a-connector).
 
-7. Configure the following settings:
+7. Select the **Upload Mode** and configure upload settings: The `Aggregated Upload` is by default selected. Configure the settings based on the selected upload mode.
+
+   :::: tabs type
+
+   ::: tab Aggregated Upload
+
+   This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
 
    - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
    - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
    - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
    - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
    - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: Enter the path to the private RSA key, for example, `file://<path to snowflake_rsa_key.private.pem>`, or the content of RSA private key file. This is the key used for secure authentication, necessary for accessing the Snowflake pipe securely.  note that when using a file path, it must be consistent across all cluster nodes and accessible by the EMQX application user.
+   - **Private Key**: The RSA private key used by the pipe user to securely access the Snowflake pipe. You can provide the key in one of two formats:
+     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
+     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
 
-8. Select the **Upload Mode**: Currently, only `Aggregated Upload` is supported. This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
 
-9. Select **Aggregation Type**: Currently, only `csv` is supported. Data will be staged to Snowflake in comma-separated CSV format.
+   Additional aggregation options:
 
+   - **Aggregation Type**: Currently, only `csv` is supported. Data will be staged to Snowflake in comma-separated CSV format.
    - **Column Order**: Select the order of the columns from the dropdown list based on your desired arrangement. The generated CSV file will be sorted first by the selected columns, with unselected columns sorted alphabetically afterward.
-
    - **Max Records**: Set the maximum number of records before aggregation is triggered. For example, you can set it to `1000` to upload after collecting 1000 records. When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
-
    - **Time Interval**: Set the time interval (in seconds) at which aggregation occurs. For example, if set to `60`, data will be uploaded every 60 seconds even if the maximum number of records hasn’t been reached, resetting the maximum number of records.
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+   :::
 
-11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+   ::: tab Streaming
 
-12. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+   This mode enables real-time ingestion using the Snowpipe Streaming API.
 
-13. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+   - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
+
+   - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
+
+   - **Pipe**: Enter `emqxstreaming`, the name of the Snowflake Streaming pipe created using a SQL statement. The name must match exactly as defined in Snowflake.
+
+   - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with privileges to operate the streaming pipe.
+
+   - **Private Key**: The RSA private key used by the pipe user to sign JWTs for Snowflake Streaming API authentication. You can provide the key in one of two formats:
+     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
+     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+     
+   - **Private Key Password**: Optional, only if your key is encrypted.
+
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
+
+   :::
+
+   ::::
+
+8. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+
+9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+
+10. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+
+11. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
 
@@ -416,3 +599,4 @@ This section delves into the advanced configuration options available for the Sn
 | **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Snowflake does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at Snowflake. | `Asynchronous`  |
 | **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to Snowflake in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Snowflake.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `100`           |
 | **Inflight  Window**             | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with Snowflake. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`           |
+
