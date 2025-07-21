@@ -66,13 +66,13 @@ EMQX supports two modes for sending data to Snowflake:
 | Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
 | Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | Yes           |
 
-### Initialize Snowflake ODBC driver
+### Initialize Snowflake ODBC Driver
 
 To enable EMQX to communicate with Snowflake and efficiently transfer data, it is necessary to install and configure the Snowflake Open Database Connectivity (ODBC) driver. This driver enables EMQX to write data to a Snowflake stage. It acts as the communication bridge, ensuring that data is properly formatted, authenticated, and transferred.
 
 For more information, refer to the official [ODBC Driver](https://docs.snowflake.com/en/developer-guide/odbc/odbc) page and the [license agreement](https://sfc-repo.snowflakecomputing.com/odbc/Snowflake_ODBC_Driver_License_Agreement.pdf).
 
-#### Linux
+#### Initialize Snowflake ODBC Driver on Linux
 
 EMQX provides an [installation script](https://github.com/emqx/emqx/blob/master/scripts/install-snowflake-driver.sh) designed specifically for the quick deployment of the Snowflake ODBC driver on Debian-based systems (such as Ubuntu), along with the required system configuration.
 
@@ -139,7 +139,7 @@ SQLLevel=1
 UsageCount=1
 ```
 
-#### macOS
+#### Initialize Snowflake ODBC Driver on macOS
 
 To install and configure the Snowflake ODBC driver on macOS, follow these steps:
 
@@ -385,7 +385,7 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
 
 5. Enter the connection information.
 
-   :::: tabs type
+   :::: tabs
 
    ::: tab Aggregated Mode (ODBC-based)
 
@@ -400,29 +400,31 @@ Before configuring the Snowflake Sink, you must create a connector in EMQX to es
    - **Password**: The password for authenticating with Snowflake via ODBC using username/password authentication. This field is optional:
 
      - You may enter the password here, e.g., `Snowpipeuser99`, as defined during the previous setup process;
+   
      - Or configure it in `/etc/odbc.ini`;
+
      - If using key-pair authentication instead, leave this field blank.
 
-     ::: tip
+       ::: tip
 
-     Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
+       Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
 
-     :::
-
+       :::
+   
    - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be consistent across all nodes of the cluster. For example:
       `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
 
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
 
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
-
+   
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
 
    :::
 
    ::: tab Streaming Mode (Snowpipe Streaming API)
-
+   
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Username**: (Optional) Enter the Snowflake user with a registered RSA public key if you configured it in `odbc.ini` (e.g. `snowpipeuser`). 
@@ -487,7 +489,7 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
 
 7. Select the **Upload Mode** and configure upload settings: The `Aggregated Upload` is by default selected. Configure the settings based on the selected upload mode.
 
-   :::: tabs type
+   :::: tabs
 
    ::: tab Aggregated Upload
 
@@ -534,14 +536,13 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
    - **Private Key Password**: Optional, only if your key is encrypted.
 
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
-
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-
+   
    :::
-
+   
    ::::
-
+   
 8. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
 9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
@@ -590,11 +591,11 @@ This section delves into the advanced configuration options available for the Sn
 
 | Field Name                       | Description                                                  | Default Value   |
 | -------------------------------- | ------------------------------------------------------------ | --------------- |
-| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and Snowflake. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16` second     |
-| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Snowflake, the request is deemed to have expired. | `45` second     |
-| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with Snowflake. | `15` second     |
+| **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and Snowflake. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16` seconds    |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Snowflake, the request is deemed to have expired. | `45` seconds    |
+| **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with Snowflake. | `15` seconds    |
 | **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. When multiple Actions or Sources share the same Connector, enabling jitter ensures their health checks are initiated at slightly different times. | `0` millisecond |
-| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables. | `60` second     |
+| **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables. | `60` seconds    |
 | **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the Snowflake Sink. The buffer workers temporarily store data before sending it to Snowflake, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256` MB        |
 | **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Snowflake does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at Snowflake. | `Asynchronous`  |
 | **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to Snowflake in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Snowflake.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `100`           |
