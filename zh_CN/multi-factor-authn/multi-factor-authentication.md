@@ -49,6 +49,14 @@ dashboard.default_mfa = {mechanism: totp}
 
 启用后，用户将在下次登录时需要完成 MFA 设置过程。
 
+::: tip 提示
+
+如果您通过 Dashboard 为自己的账户启用 MFA，系统会在当前会话中立即提示您完成 MFA 设置（参见[首次设置](#首次设置)）。
+
+如果管理员为其他用户启用 MFA，MFA 绑定步骤将延后至该用户下次登录时进行。
+
+:::
+
 ### 重置 TOTP 密钥
 
 如果用户需要重置其 TOTP 设置（例如，如果身份验证应用程序被卸载或密钥被泄露），管理员可以通过 **MFA 设置**对话框重置该用户的 TOTP 密钥。
@@ -67,7 +75,7 @@ dashboard.default_mfa = {mechanism: totp}
 
 ::: tip
 
-在 `/users/{username}/mfa` 端点上使用 POST 和 DELETE 方法时，仅管理员或当前身份验证令牌（即“Bearer token”）的所有者可以使用此接口。也就是说，具有“查看者”角色的用户无法修改其他用户的 MFA 设置。只有与当前身份验证令牌关联的用户（“Bearer token”拥有者）才能修改自己的 MFA 设置。
+在 `/users/{username}/mfa` 端点上使用 POST 和 DELETE 方法时，仅管理员或当前身份验证令牌（即 “Bearer token”）的所有者可以使用此接口。也就是说，具有“查看者”角色的用户无法修改其他用户的 MFA 设置。只有与当前身份验证令牌关联的用户（“Bearer token” 拥有者）才能修改自己的 MFA 设置。
 
 有关基于角色的访问控制（RBAC）的更多信息，请参见[用户](../admin/api.md#角色与权限)。
 
@@ -93,7 +101,7 @@ dashboard.default_mfa = {mechanism: totp}
 
 ### 首次设置
 
-在首次登录并启用 MFA 后，您需要设置身份验证应用程序。
+在启用 MFA 后的首次登录时，您需要设置身份验证应用程序。
 
 1. **输入您的用户名和密码**： 在登录页面，按通常方式输入您的用户名和密码。
 
