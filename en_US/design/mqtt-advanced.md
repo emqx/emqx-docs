@@ -56,7 +56,7 @@ Read more: [MQTT Shared Subscriptions: Practical Guidelines and Use Cases | MQTT
 
 ## Subscription Options
 
-MQTT Subscription Options empower clients to customize how they receive messages. MQTT 5.0 introduces four key options: QoS, No Local, Retain As Published, and Retain Handling, to enhance flexibility and control. These options allow users to manage message quality, avoid message loops in bridging, preserve the Retain flag, and decide when to receive retained messages.
+MQTT Subscription Options empower clients to customize how they receive messages. MQTT 5.0 introduces four key options to enhance flexibility and control: QoS, No Local, Retain As Published, and Retain Handling. These options allow users to manage message quality, avoid message loops in bridging, preserve the Retain flag, and decide when to receive retained messages.
 
 EMQX fully supports all MQTT 5.0 subscription options, enabling fine-grained control over message delivery behavior. For example, it helps users prevent message storms in bridge setups with No Local, and ensures consistent retained message handling across brokers with Retain As Published.
 
