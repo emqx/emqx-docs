@@ -202,6 +202,78 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15216](https://github.com/emqx/emqx/pull/15216) Fixed a crash of `emqx_telemetry` process when there are plugins activated.
 
+## 5.9.1
+
+*Release Date: 2025-07-02*
+
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.9.1.
+
+### Enhancements
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added support for custom HTTP headers in the OpenTelemetry gRPC (over HTTP/2) integration. This enhancement enables compatibility with collectors that require HTTP authentication.
+
+- [#15160](https://github.com/emqx/emqx/pull/15160) Added the `DELETE /mt/bulk_delete_ns` API for multi-tenancy management, which allows deleting namespaces in bulk.
+
+- [#15158](https://github.com/emqx/emqx/pull/15158) Added new `emqx ctl conf remove x.y.z` command, which removes the configuration key path `x.y.z` from the existing configuration.
+
+- [#15157](https://github.com/emqx/emqx/pull/15157) Added support for specifying private key file path for Snowflake Connector instead of using password.
+
+  Users should either use password, private key, or neither (set parameters in `/etc/odbc.ini`).
+
+- [#15043](https://github.com/emqx/emqx/pull/15043) Instrument the DS Raft backend with basic metrics to provide insights into cluster status, database overview, shard replication, and replica transitions.
+
+### Bug Fixes
+
+#### Data Integration
+
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule.
+  Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+
+- [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
+
+- [#15154](https://github.com/emqx/emqx/pull/15154) Fixed a rare race condition in Actions running in aggregated mode (e.g., S3, Azure Blob Storage, Snowflake) that could lead to a crash with errors like:
+
+  ```
+  ** Reason for termination ==
+  ** {function_clause,[{emqx_connector_aggregator,handle_close_buffer,[...], ...
+  ```
+
+- [#15147](https://github.com/emqx/emqx/pull/15147) Fixed an issue where some Actions failed to emit trace events during rule testing with simulated input data, even after request rendering.
+
+  Affected Actions:
+
+  - Couchbase
+  - Snowflake
+  - IoTDB (Thrift driver)
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
+
+#### Smart Data Hub
+
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
+- [#15190](https://github.com/emqx/emqx/pull/15190) Enhanced Message Transformation by allowing hard-coded values for QoS and topic.
+
+#### Observability
+
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
+
+#### Telemetry
+
+- [#15216](https://github.com/emqx/emqx/pull/15216) Fixed a crash in the `emqx_telemetry` process that could occur when plugins were activated.
+
+#### Access Control
+
+- [#15184](https://github.com/emqx/emqx/pull/15184) Fixed the formatting of error messages returned when creating a blacklist fails.
+
+#### Clustering
+
+- [#15180](https://github.com/emqx/emqx/pull/15180) Reduced the risk of deadlocks during channel registration by fixing improper handling of `badrpc` errors in the `ekka_locker` module. These errors previously led to false positives in lock operations, potentially causing inconsistent cluster state and deadlocks.
+
+#### Security
+
+
+- [#15159](https://github.com/emqx/emqx/pull/15159) Improved handling of Certificate Revocation List (CRL) Distribution Point URLs by stopping their refresh after repeated failures (default: 60 seconds). This prevents excessive error logs from unreachable URLs and improves overall system stability.
+
 ## 5.9.0
 
 *Release Date: 2025-05-02*
@@ -635,6 +707,41 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### MQTT over QUIC
 
 - [#14775](https://github.com/emqx/emqx/pull/14775) QUIC Listener: Fixed issue where zone configurations are not applied after a config reload.
+
+## 5.8.7
+
+*Release Date: 2025-07-02*
+
+### Enhancements
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added support for custom HTTP headers in the OpenTelemetry gRPC (over HTTP/2) integration. This enhancement enables compatibility with collectors that require HTTP authentication.
+
+### Bug Fixes
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+- [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
+- [#14989](https://github.com/emqx/emqx/pull/14989) Optimized the Kinesis Connector and Action to significantly reduce the number of AWS API calls during startup and health checks. This change helps prevent exceeding AWS Kinesis API rate limits (e.g., `ListStreams` and `DescribeStream`), which previously led to frequent health check failures when using larger connection pools or multiple connectors.
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
+
+## 5.8.7
+
+*Release Date: 2025-07-02*
+
+### Enhancements
+
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added support for custom HTTP headers in the OpenTelemetry gRPC (over HTTP/2) integration. This enhancement enables compatibility with collectors that require HTTP authentication.
+
+### Bug Fixes
+
+- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
+- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule.
+  Now the system's current millisecond value is used instead, and millisecond precision is enforced.
+- [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
+- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
+- [#14989](https://github.com/emqx/emqx/pull/14989) Optimized the Kinesis Connector and Action to significantly reduce the number of AWS API calls during startup and health checks. This change helps prevent exceeding AWS Kinesis API rate limits (e.g., `ListStreams` and `DescribeStream`), which previously led to frequent health check failures when using larger connection pools or multiple connectors.
+- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
 
 ## 5.8.6
 

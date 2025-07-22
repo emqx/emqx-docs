@@ -58,6 +58,45 @@ For users who have installed EMQX for the first time, you can use the default us
 
 After logging in for the first time, the system will automatically detect that you are logging in with the default username and password. It will force you to change the default password, which is good for the security of accessing the Dashboard. Note that the changed password cannot be the same as the original password, and it is not recommended to use `public` as the login password again.
 
+### Token-Based Login via URL
+
+Starting from EMQX 5.6.0, the Dashboard supports a token-based login method that allows users to log in directly by embedding authentication information in the URL.
+
+This feature is particularly useful for seamless redirection and integration scenarios where a user should be logged in automatically without entering credentials manually.
+
+#### How To Use This Login Method
+
+1. Use the `/login` endpoint to obtain an authentication token. Since the response does not include the username, you will need to manually add it before encoding the full JSON payload.
+
+   You can perform all steps, including requesting the token, injecting the username, and encoding the result in Base64, in a single command, as shown below:
+
+   ```
+   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+   ```
+
+2. Construct the login URL. Embed the encoded string in the `login_meta` query parameter of the Dashboard URL. For example:
+
+   For EMQX versions **before 5.6.0**:
+
+   ```bash
+   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+   ```
+
+   This redirects to the default cluster overview page.
+
+   For EMQX **version 5.6.0 and later**:
+
+   ```bash
+   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+   ```
+
+   This allows specifying the target page after login.
+
+This method provides a smooth, pre-authenticated user experience for accessing the EMQX Dashboard. Make sure to handle the token securely and ensure it has appropriate expiration and scope limits.
+
 ### Reset Password
 
 You can reset your Dashboard login password via the `admins` command. For details, see [CLI - admins](../admin/cli.md#admins).

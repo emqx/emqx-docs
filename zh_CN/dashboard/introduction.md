@@ -58,6 +58,47 @@ EMQX Dashboard 是一个 Web 应用程序，默认监听 `18083` 端口。下载
 
 首次登录后，系统会自动检测到您正在使用默认用户名和密码登录，并会强制要求修改默认密码，这有利于访问 Dashboard 的安全性提升，注意修改的密码不能与原密码相同，且不建议再次使用 `public` 做为登录密码。
 
+### 通过 URL Token 登录 Dashboard
+
+从 EMQX 5.6.0 开始，Dashboard 支持通过在 URL 中携带登录信息的方式进行免登录访问。
+
+此功能适用于需要无缝跳转或集成场景，可在无需用户手动输入凭据的情况下，自动登录 Dashboard。
+
+#### 使用方法
+
+使用此登录方式的步骤如下：
+
+1. 使用 `/login` 接口获取身份验证 token。由于返回结果中不包含用户名，你需要手动将用户名添加到 JSON 数据中，再进行编码。
+
+   你可以通过以下命令一步完成所有操作，包括请求 token、添加用户名，以及将结果进行 Base64 编码：
+
+   ```
+   curl -s -X POST "http://127.0.0.1:18083/api/v5/login" \
+     -H 'accept: application/json' \
+     -H 'Content-Type: application/json' \
+     -d '{"username": "admin","password": "public"}' | jq '.username = "admin"' | base64
+   ```
+
+2. 构造登录 URL。将编码后的字符串嵌入到 Dashboard URL 的 `login_meta` 查询参数中。例如：
+
+   对于 **EMQX 5.6.0 之前的版本**：
+
+   ```bash
+   http://localhost:18083?login_meta=BASE64_ENCODED_STRING
+   ```
+
+   该方式会跳转至默认的集群概览页面。
+
+   对于 **EMQX 5.6.0 及以上版本**：
+
+   ```bash
+   http://localhost:18083/#/dashboard/overview?login_meta=BASE64_ENCODED_STRING
+   ```
+
+   该方式支持在登录后跳转到指定页面。
+
+通过 URL 携带 token 登录的方式，可以为用户提供无需手动登录的便捷访问体验。请确保妥善管理 token 的安全性，建议设置合理的过期时间和访问权限范围。
+
 ### 忘记密码
 
 如果您忘记了 Dashboard 登录密码，可以通过 CLI 的 `admins` 命令进行重置，详情请参考 [命令行 - admins](../admin/cli.md#admins)：

@@ -63,26 +63,111 @@ If you want to configure authorization check rules for multiple clients or users
 
 Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
 
-Each rule is applied to:
-* a particular client identified by clientid
-  *  `/api/v5/authorization/sources/built_in_database/clientid`
-* a particular client identified by username
-  * `/api/v5/authorization/sources/built_in_database/username` 
+To manage authorization rules via API for the Built-in Database backend, follow these steps:
 
-* all clients
-  *  `/api/v5/authorization/sources/built_in_database/all` 
+#### Step 1: Obtain Authentication Token
 
+You need to authenticate with the EMQX Dashboard to obtain a token for API access:
 
-Below is a quick example of how to create rules for a client (`client1`):
+```bash
+export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \
+  -H 'Accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "admin","password": "public"}' | jq -r ".token")
+```
+
+#### Step 2: Create the Built-in Database Authorization Source
 
 ```bash
 curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+  'http://localhost:18083/api/v5/authorization/sources' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
   -H 'Content-Type: application/json' \
-  -d '[
-  {
-    "clientid": "client1",
+  -d '{
+        "enable": true,
+        "max_rules": 100,
+        "type": "built_in_database"
+  }'
+```
+
+#### Step 3: Create Authorization Rules
+
+You can create rules for:
+
+- **A specific client by client ID**:
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/clients' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "clientid": "client1",
+      "rules": [
+        {
+          "action": "publish",
+          "permission": "allow",
+          "topic": "test/topic/1"
+        },
+        {
+          "action": "subscribe",
+          "permission": "allow",
+          "topic": "test/topic/2"
+        },
+        {
+          "action": "all",
+          "permission": "deny",
+          "topic": "eq test/#"
+        }
+      ]
+    }
+  ]'
+  ```
+
+- **A specific client by username**:
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "username": "user1",
+      "rules": [
+        {
+          "action": "publish",
+          "permission": "allow",
+          "topic": "test/topic/1"
+        },
+        {
+          "action": "subscribe",
+          "permission": "allow",
+          "topic": "test/topic/2"
+        },
+        {
+          "action": "all",
+          "permission": "deny",
+          "topic": "eq test/#"
+        }
+      ]
+    }
+  ]'
+  ```
+
+- **All clients globally**:
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '{
     "rules": [
       {
         "action": "publish",
@@ -100,14 +185,14 @@ curl -X 'POST' \
         "topic": "eq test/#"
       }
     ]
-  }
-]'
-```
+  }'
+  ```
 
-Each rule contains:
-* `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
-* `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
-* `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. The default is all QoS levels.
-* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+Each rule includes:
+
+- `permission`: Whether to allow or deny the operation; values: `allow`, `deny`.
+- `action`: Operation type; values: `publish`, `subscribe`, or `all`.
+- `topic`: Topic filter; supports [topic placeholders](./authz.md#topic-placeholders).
+- `qos`: *(Optional)* An array of QoS levels this rule applies to, e.g., `[0, 1]`. Defaults to all QoS levels.
+- `retain`: *(Optional)* Whether the rule applies to retained messages; values: `true`, `false`. Defaults to allow retained messages.
 
