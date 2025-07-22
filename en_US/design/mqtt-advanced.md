@@ -6,7 +6,7 @@ MQTT Retained Messages enable brokers to store the most recent message for each 
 
 EMQX offers full support for retained messages in compliance with MQTT 5.0. It allows users to view, manage, and delete retained messages through an intuitive Dashboard or via management APIs. Users can configure storage modes (memory or disk), message expiration intervals, and maximum retained entries to align with system reliability and persistence requirements. 
 
-To try it out, simply run `docker run -d --name emqx ...` and access the built-in Dashboard to manage retained messages effortlessly. For more advanced use cases, EMQX also supports MQTT features such as session persistence, wildcard subscriptions, and message expiry, making it an ideal platform for building robust MQTT-based applications.
+To try it out, simply run `docker run -d --name emqx -p 18083:18083 -p 1883:1883 emqx/emqx-enterprise` and access the built-in Dashboard to manage retained messages effortlessly. For more advanced use cases, EMQX also supports MQTT features such as session persistence, wildcard subscriptions, and message expiry, making it an ideal platform for building robust MQTT-based applications.
 
 **Read more:** [MQTT Retained Messages: Beginner's Guide with Example](https://www.emqx.com/en/blog/mqtt5-features-retain-message#mqtt-retained-messages-in-emqx) 
 
@@ -56,7 +56,7 @@ Read more: [MQTT Shared Subscriptions: Practical Guidelines and Use Cases | MQTT
 
 ## Subscription Options
 
-MQTT Subscription Options empower clients to customize how they receive messages. MQTT 5.0 introduces four key options—QoS, No Local, Retain As Published, and Retain Handling—to enhance flexibility and control. These options allow users to manage message quality, avoid message loops in bridging, preserve the Retain flag, and decide when to receive retained messages.
+MQTT Subscription Options empower clients to customize how they receive messages. MQTT 5.0 introduces four key options to enhance flexibility and control: QoS, No Local, Retain As Published, and Retain Handling. These options allow users to manage message quality, avoid message loops in bridging, preserve the Retain flag, and decide when to receive retained messages.
 
 EMQX fully supports all MQTT 5.0 subscription options, enabling fine-grained control over message delivery behavior. For example, it helps users prevent message storms in bridge setups with No Local, and ensures consistent retained message handling across brokers with Retain As Published.
 
