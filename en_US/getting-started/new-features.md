@@ -18,7 +18,7 @@ To get started with the Cluster Linking, see [Quick Start with Cluster Linking](
 
 ## Schema Validation
 
-[Schema validation](../data-integration/schema-validation.md) ensures that only messages conforming to predefined formats are processed or delivered. EMQX supports JSON Schema, Protobuf, Avro, and rule engine SQL syntax for validation. Based on the outcome, users can configure actions such as dropping messages, disconnecting clients, or triggering rule engine events for failed validations.
+[Schema Validation](../data-integration/schema-validation.md) ensures that only messages conforming to predefined formats are processed or delivered. EMQX supports JSON Schema, Protobuf, Avro, and rule engine SQL syntax for validation. Based on the outcome, users can configure actions such as dropping messages, disconnecting clients, or triggering rule engine events for failed validations.
 
 ## Message Transformation
 
