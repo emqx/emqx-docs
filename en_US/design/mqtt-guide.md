@@ -1,6 +1,6 @@
-# The Ultimate MQTT Tutorial Guide
+# MQTT Guide
 
-Welcome to EMQX's comprehensive MQTT Tutorial Guide. Whether you're a beginner just getting started or a developer seeking deeper insights, this guide provides a clear, step-by-step journey through MQTT basic and advanced features, drawing from EMQX’s most valuable blog content. For each topic, you’ll find a link to the full article for in-depth exploration.
+Welcome to EMQX's comprehensive MQTT Guide. Whether you're a beginner just getting started or a developer seeking deeper insights, this guide provides a clear, step-by-step journey through MQTT basic and advanced features, drawing from EMQX’s most valuable blog content. For each topic, you’ll find a link to the full article for in-depth exploration.
 
 ## MQTT Basics
 
