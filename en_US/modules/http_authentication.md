@@ -154,7 +154,7 @@ To enable HTTP-based authentication and access control in the EMQX Dashboard, yo
 
    ![image-20200927213049265](./assets/modules.png)
 
-4. From the list of available modules, select **HTTP Authentication/ACL**.
+4. From the list of available modules, select **HTTP AUTH/ACL**.
 
    ![image-20200927213049265](./assets/auth_http2.png)
 
