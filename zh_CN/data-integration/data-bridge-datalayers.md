@@ -72,6 +72,22 @@ Datalayers 数据集成具有以下特性与优势：
      create database mqtt
      ```
 
+3. 使用 Arrow Flight SQL Driver 需要创建表。
+
+    ```sql
+    CREATE TABLE IF NOT EXISTS `t_mqtt_msg` (
+        time TIMESTAMP(3) NOT NULL,
+        msgid STRING NOT NULL,
+        sender STRING NOT NULL,
+        topic STRING NOT NULL,
+        qos INT8 NOT NULL,
+        payload STRING,
+        arrived TIMESTAMP(3) NOT NULL,
+        timestamp key(time)
+    ) PARTITION BY HASH (msgid, sender) PARTITIONS 1
+    ENGINE=TimeSeries with (ttl='14d');
+    ```
+
 ## 创建连接器
 
 本节演示了如何创建一个用于将 Sink 连接到 Datalayers 服务器的连接器。
@@ -93,7 +109,9 @@ Datalayers 数据集成具有以下特性与优势：
 
 ## 创建 Datalayers Sink 规则
 
-本节演示了如何在 EMQX 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果发送到 Datalayers。
+### 使用 Influx 行协议
+
+本节演示了如何在 EMQX 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果通过 Influx 行协议发送到 Datalayers。
 
 1. 点击 Dashboard 左侧导航菜单中的**数据集成** -> **规则**。
 
@@ -164,6 +182,73 @@ Datalayers 数据集成具有以下特性与优势：
 现在您已成功创建规则，您可以在**规则**页面上看到新的规则。点击**动作(Sink)**标签，您可以看到新的 Datalayers Sink。
 
 您还可以点击**集成** -> **Flow 设计器**查看拓扑。可以看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Datalayers 进行存储。
+
+
+### 使用 Arrow Flight SQL 驱动
+
+本节演示了如何在 EMQX 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的结果通过 Arrow Flight 驱动发送到 Datalayers。
+
+::: warning
+
+Arrow Flight 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。此功能目前仍为实验性功能。
+
+:::
+
+1. 点击 Dashboard 左侧导航菜单中的**数据集成** -> **规则**。
+
+2. 在规则页面点击右上角的**创建**按钮。
+
+3. 输入规则 ID `my_rule`。
+
+4. 在 SQL 编辑器中输入规则，例如将 `t/#` 主题的 MQTT 消息存储至 Datalayers，可以输入以下 SQL 语句：
+
+   ::: tip 注意
+
+   如果您希望指定自己的 SQL 规则，必须确保规则选择出来的字段（SELECT 部分）包含之后在 Sink 中指定的 Datalayers SQL 模板中包含的所有变量。
+
+   :::
+
+   ```sql
+   SELECT
+     *
+   FROM
+     "t/#"
+   ```
+
+   ::: tip
+
+   如果您初次使用 SQL，可以点击 **SQL 示例** 和**启用调试**来学习和测试规则 SQL 的结果。
+
+   :::
+
+5. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据转发到 Datalayers。
+
+6. 在**动作**下拉框中选择 `Datalayers`，将 **动作** 下拉框保留为默认的 `创建动作` 。您也可以选择一个之前已经创建好的 Datalayers Sink。本次演示将创建一个新的 Sink。
+
+7. 为 Sink 输入一个名称。名称应结合使用大写/小写字母和数字。
+
+8. 从**连接器**下拉框中选择之前创建的 `my_datalayers`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
+
+9. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
+
+   ```sql
+   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, retain, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${retain}, ${payload}, ${timestamp})
+   ```
+
+10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+
+11. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
+
+12. 在点击**创建**之前，您可以点击**测试连接**，以测试 Sink 是否能够连接到 Datalayers 服务器。
+
+13. 点击**创建**完成 Sink 的创建。回到**创建规则**页面，您将看到新的 Sink 出现在**动作输出**页签下。
+
+14. 在**创建规则**页面，验证配置的信息。点击**创建**按钮生成规则。
+
+现在您已成功创建规则，您可以在**规则**页面上看到新的规则。点击**动作(Sink)**标签，您可以看到新的 Datalayers Sink。
+
+您还可以点击**集成** -> **Flow 设计器**查看拓扑。可以看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Datalayers 进行存储。
+
 
 ### 批量设置
 
