@@ -33,7 +33,10 @@ clientid=%c,username=%u,password=%P
 ```
 
 - 当使用 **GET** 方法时，参数将作为查询字符串附加在 URL 上；
-- 当使用 **POST**（或 **PUT**）方法时，参数将通过请求体以 `application/x-www-form-urlencoded` 格式发送。
+- 当使用 **POST**方法时，参数将通过请求体按 ”HTTP 请求类型“选项中配置的格式发送。
+  - 若 "HTTP 请求类型" 配置为: `application/x-www-form-urlencoded`，参数将以 `application/x-www-form-urlencoded` 格式通过请求体传递。
+  - 若 "HTTP 请求类型" 配置为: `application/json`，参数将以 JSON 格式通过请求体传递。
+
 
 ## HTTP 访问控制原理
 
@@ -86,7 +89,9 @@ access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 ```
 
 - 使用 **GET** 方法时，参数将作为 URL 查询字符串传递；
-- 使用 **POST** 方法（推荐）时，参数将以 `application/x-www-form-urlencoded` 格式通过请求体传递。
+- 当使用 **POST**方法时，参数将通过请求体按 ”HTTP 请求类型“选项中配置的格式发送。
+  - 若 "HTTP 请求类型" 配置为: `application/x-www-form-urlencoded`，参数将以 `application/x-www-form-urlencoded` 格式通过请求体传递。
+  - 若 "HTTP 请求类型" 配置为: `application/json`，参数将以 JSON 格式通过请求体传递。
 
 ### 支持的占位符
 
@@ -108,7 +113,7 @@ access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 
 ::: tip 提示
 
-虽然支持 GET 请求，但推荐使用 **POST** 或 **PUT**，以避免明文密码等敏感信息暴露在 URL 或服务器日志中。
+虽然支持 GET 请求，但推荐使用 **POST**，以避免明文密码等敏感信息暴露在 URL 或服务器日志中。
 
 :::
 

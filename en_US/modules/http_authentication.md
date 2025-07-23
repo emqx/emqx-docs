@@ -33,7 +33,10 @@ clientid=%c,username=%u,password=%P
 ```
 
 - For **GET** requests, parameters are appended to the URL as query strings.
-- For **POST** (or **PUT**) requests, parameters are included in the request body using the `application/x-www-form-urlencoded` format.
+- For **POST** requests, parameters are included in the request body based on the configured `HTTP Request Content Type`:
+  - When configured to `application/x-www-form-urlencoded`: Parameters are sent as URL-encoded form data.
+  - When configured to `application/json`: Parameters are sent as a JSON object.
+
 
 ## HTTP Access Control Principle
 
@@ -87,7 +90,9 @@ access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 ```
 
 - For **GET** requests, parameters are included as URL query strings.
-- For **POST** (recommended), parameters are sent in the request body using the `application/x-www-form-urlencoded` format.
+- For **POST** requests, parameters are included in the request body based on the configured `HTTP Request Content Type`:
+  - When configured to `application/x-www-form-urlencoded`: Parameters are sent as URL-encoded form data.
+  - When configured to `application/json`: Parameters are sent as a JSON object.
 
 ### Supported Placeholders
 
@@ -107,9 +112,9 @@ The following placeholders can be used in both authentication and access control
 | `%C`        | Common Name (CN) from the client’s TLS certificate (valid only for TLS connections) |
 | `%d`        | Subject from the client’s TLS certificate (valid only for TLS connections) |
 
-::: tip
+::: tip Note
 
-Although GET is supported, it is recommended to use **POST** or **PUT** to avoid exposing sensitive data such as passwords in server logs or URLs.
+Although GET is supported, it is recommended to use **POST** to avoid exposing sensitive data such as passwords in server logs or URLs.
 
 :::
 
