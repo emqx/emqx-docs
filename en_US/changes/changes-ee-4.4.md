@@ -1,5 +1,29 @@
 # Releases
 
+## e4.4.32
+
+*Release Date: 2025-07-25*
+
+## Enhancements
+
+- Support for placeholders in HTTP headers in the HTTP AUTH/ACL module.
+
+  The HTTP AUTH/ACL module now supports using placeholders (such as `%u`, `%c`, etc.) in the values of HTTP request headers, allowing dynamic insertion of client information.
+
+- Optimized default Erlang VM parameters.
+
+  - `+sbwt none +sbwtdcpu none +sbwtdio none`: Disables scheduler busy-waiting to reduce CPU consumption.
+  - `+sbt db`: Configures scheduler threads to use the default binding strategy to CPU cores.
+  - `+zdbbl 32768`: Increases the buffer size for distributed channels.
+
+- Periodic global garbage collection (GC) is disabled by default.
+
+  The default value of the `node.global_gc_interval` configuration is now set to `Disabled`.
+
+## Bug Fixes
+
+- Fixed an issue where Kafka resources failed to authenticate using the "SCRAM_SHA_256" method.
+
 ## e4.4.31
 
 *Release Date: 2025-07-15*
