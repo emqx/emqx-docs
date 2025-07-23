@@ -12,11 +12,11 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 MongoDB authorizer supports storing authorization rules as MongoDB documents. Users need to provide a query template to make sure that the result contains the following fields:
 
-* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
-* `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
-* `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
-* `qos` (Optional) value specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
-* `retain` (Optional) value specifies whether the current rule supports retained messages. Value options are `0`, `1,` or `true`, `false`. The default is to allow retained messages.
+* `permission`: Specifies the applied action if the rule matches. Available values are `deny` or `allow`.
+* `action`: Specifies the request for which the rule is relevant. Possible values are `publish`, `subscribe`, or `all`.
+* `topic` / `topics`: Specifies one or a list of topics the rule applies to. Supports topic filters and [topic placeholders](./authz.md#topic-placeholders).
+* `qos` (optional): Specifies the QoS levels that the current rule applies to. Value options are `0`, `1`, `2`. It can also be a number array to specify multiple QoS levels. The default is all QoS levels.
+* `retain` (optional): Indicates whether the rule allows publishing retained messages. Value options are `0`, `1,` or `true`, `false`. By default, retained messages are allowed.
 
 Deny client with username `emqx_u` to publish to topic `t/1` with QoS 1:
 
@@ -50,7 +50,7 @@ When there is a significant number of users in the system, optimize and index th
 
 For this MongoDB data schema, the corresponding Dashboard configuration parameter is **Filter**: `{ username = "${username}" }`.
 
-## Configurate with Dashboard
+## Configure with Dashboard
 
 You can use EMQX Dashboard to configure how to use MongoDB for user authorization.
 
