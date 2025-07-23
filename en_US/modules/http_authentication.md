@@ -1,87 +1,59 @@
 # HTTP Authentication/ACL
 
-HTTP Authentication/ACL uses an external self-built HTTP application authentication data source, and judges the authentication result based on the data returned by the HTTP API, which can implement complex authentication logic and complex ACL verification logic.
+The HTTP Authentication/ACL feature in EMQX allows you to integrate with an external, self-hosted HTTP service to perform client authentication and access control. By evaluating the data returned from your HTTP API, EMQX can implement complex authentication logic and Access Control List (ACL) policies.
 
-## Create module
+This guide explains how HTTP authentication and access control work in EMQX, providing instructions for adding the HTTP AUTH/ACL module through the EMQX Dashboard.
 
-Open [EMQX Dashboard](http://127.0.0.1:18083/#/modules), click the "Modules" tab on the left, and choose to add:
+## HTTP Authentication Principle
 
-![image-20200927213049265](./assets/modules.png)
+When a client attempts to connect, EMQX gathers relevant client information and sends an HTTP request to a user-defined authentication service. The outcome of the authentication is determined by the HTTP response status code returned by that service:
 
-Select HTTP Authentication/ACL module
+- **Authentication failed**: The API returns any status code other than `200`.
+- **Authentication successful**: The API returns a `200` status code.
+- **Authentication ignored**: The API returns a `200` status code, and the response body is `ignore`.
 
-![image-20200927213049265](./assets/auth_http2.png)
+This mechanism allows EMQX to delegate complex identity verification logic to an external system, such as a custom web application or authentication API.
 
-Configure related parameters
+### Authentication Request
 
-![image-20200927213049265](./assets/auth_http3.png)
+To authenticate a client, EMQX sends an HTTP request to the configured authentication endpoint, including client credentials and metadata. The parameters in the request are automatically populated with real-time client information.
 
-After clicking add, the module is added
-
-![image-20200927213049265](./assets/auth_http4.png)
-
-
-## HTTP authentication principle
-
-EMQX uses the relevant information of the current client as parameters in the device connection event, initiates a request for query permissions to the user-defined authentication service, and processes the authentication request through the returned HTTP **response status code** (HTTP statusCode).
-
- -Authentication failed: The API returns status codes other than 200
- -Successful authentication: API returns 200 status code
- -Ignore authentication: API returns 200 status code and response body is `ignore`
-
-
-## Authentication request
-
-When performing identity authentication, EMQX will use the current client information to fill in and initiate the authentication query request configured by the user, and query the authentication data of the client on the HTTP server.
+**Example Configuration**
 
 ```bash
-
-## Authentication request address
+## Authentication request URL
 http://127.0.0.1:8991/mqtt/auth
 
 ## HTTP request method
-## Value: POST | GET
+## Options: POST | GET
 POST
 
 ## Request parameters
 clientid=%c,username=%u,password=%P
 ```
 
-When the HTTP request method is GET, the request parameters will be passed in the form of URL query string; POST request will submit the request parameters in the form of ordinary form (content-type is x-www-form-urlencoded).
+- For **GET** requests, parameters are appended to the URL as query strings.
+- For **POST** (or **PUT**) requests, parameters are included in the request body using the `application/x-www-form-urlencoded` format.
 
-You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
+## HTTP Access Control Principle
 
--%u: username
--%c: Client ID
--%a: Client IP address
--%r: Client access protocol
--%P: Plain text password
--%p: client port
--%C: TLS certificate common name (domain name or subdomain name of the certificate), valid only when TLS connection
--%d: TLS certificate subject, only valid when TLS connection
+When a connected client attempts to publish to a topic or subscribe to one, EMQX uses the client’s connection and request data to initiate an HTTP request to a user-defined ACL service. The service evaluates whether the operation is allowed and returns an appropriate HTTP response.
 
-::: tip
-It is recommended to use the POST and PUT methods. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
-:::
+EMQX determines the result of the ACL check based on the HTTP response status code and the response body:
 
+- **Authorization denied**: The API returns a status code other than `200`.
+- **Authorization granted**: The API returns a `200` status code.
+- **Authorization ignored**: The API returns a `200` status code and the response body is `ignore`.
 
-## HTTP access control principle
+This allows EMQX to delegate publish/subscribe permissions to an external access control system.
 
-EMQX uses current client-related information as parameters in device publishing and subscription events to initiate a request for permissions to a user-defined authentication service, and process ACL authorization requests through the returned HTTP **response status code** (HTTP statusCode).
+### Superuser Request
 
- -No permission: The API returns status codes other than 200
- -Authorization is successful: API returns 200 status code
- -Ignore authorization: API returns 200 status code and response body is `ignore`
+Before performing ACL checks, EMQX can check whether the client is a superuser.
 
-## HTTP request information
+If a superuser request URL is configured, EMQX will send an HTTP request to the specified endpoint to determine whether the client has superuser privileges. If the client is verified as a super user, all subsequent ACL checks are skipped and full access is granted.
 
-HTTP API basic request information, configuration certificate, request header and retry rules.
-
-When publishing and subscribing authentication, EMQX will use the current client information to fill in and initiate the ACL authorization query request configured by the user, and query the authorization data of the client on the HTTP server.
-
-## superuser request
-
-First check whether the client is a super user. If the client is a super user, the ACL query will be skipped.
+**Example Configuration**:
 
 ```bash
 # etc/plugins/emqx_auth_http.conf
@@ -97,36 +69,101 @@ POST
 clientid=%c,username=%u
 ```
 
-## ACL Access Control Request
+### Access Control Request
+
+If the client is not a superuser, EMQX proceeds to perform an ACL check by sending a request to the configured access control endpoint. This request includes detailed information about the client's operation (publish or subscribe) and metadata.
 
 ```bash
-
-## Access control request address
+## ACL request URL
 http://127.0.0.1:8991/mqtt/acl
 
 ## HTTP request method
-## Value: POST | GET
+## Options: POST | GET
 POST
 
-## Access control request parameters
+## Request parameters
 access=%A,username=%u,clientid=%c,ipaddr=%a,topic=%t,mountpoint=%m
 
 ```
 
-## Request description
+- For **GET** requests, parameters are included as URL query strings.
+- For **POST** (recommended), parameters are sent in the request body using the `application/x-www-form-urlencoded` format.
 
-When the HTTP request method is GET, the request parameters will be passed in the form of a URL query string; POST and PUT requests will submit the request parameters in the form of ordinary forms (content-type is x-www-form-urlencoded).
+### Supported Placeholders
 
-You can use the following placeholders in the authentication request. EMQX will automatically fill in the client information when requesting:
+The following placeholders can be used in both authentication and access control (ACL) HTTP request parameters. EMQX automatically replaces them with actual values from the connecting client:
 
--%A: Operation type, '1' subscription; '2' release
--%u: client user name
--%c: Client ID
--%a: Client IP address
--%r: Client access protocol
--%m: Mountpoint
--%t: Subject
+| Placeholder | Description                                                  |
+| ----------- | ------------------------------------------------------------ |
+| `%A`        | Operation type: `1` for subscribe, `2` for publish           |
+| `%u`        | Username of the client                                       |
+| `%P`        | Plaintext password provided by the client                    |
+| `%c`        | Client ID                                                    |
+| `%a`        | Client IP address                                            |
+| `%p`        | Client source port                                           |
+| `%r`        | Protocol used by the client (e.g., `MQTT`, `MQTT over WebSocket`) |
+| `%m`        | Mountpoint                                                   |
+| `%t`        | Topic name (relevant in publish/subscribe actions)           |
+| `%C`        | Common Name (CN) from the client’s TLS certificate (valid only for TLS connections) |
+| `%d`        | Subject from the client’s TLS certificate (valid only for TLS connections) |
 
 ::: tip
-It is recommended to use the POST method. When using the GET method, the plaintext password may be recorded in the server log during the transmission along with the URL.
+
+Although GET is supported, it is recommended to use **POST** or **PUT** to avoid exposing sensitive data such as passwords in server logs or URLs.
+
 :::
+
+### HTTP Request Configuration
+
+In addition to the endpoint and parameters, you can customize how EMQX sends HTTP requests for both authentication and authorization operations:
+
+- **Request headers**: You can add custom HTTP headers to be included in each request. The header value supports placeholders, such as %u, %c, and %a, which will be dynamically replaced with client information at runtime.
+
+  Examples:
+
+  - Set a fixed `Host` header:
+
+    > **Key**: `Host`
+    >  **Value**: `example.com`
+
+  - Specify a custom content type:
+
+    > **Key**: `content-type`
+    >  **Value**: `application/json`
+
+  - Pass the client ID in a custom header:
+
+    > **Key**: `X-Client-ID`
+    >  **Value**: `%c`
+
+- **Certificates**: Configure TLS client certificates for secure HTTPS communication.
+
+- **Retry policy**: Define how EMQX retries failed requests (e.g., on timeout or server error).
+
+These options provide flexibility to securely integrate with your backend authentication service, regardless of its security model or infrastructure.
+
+## Add HTTP AUTH/ACL Module in Dashboard
+
+To enable HTTP-based authentication and access control in the EMQX Dashboard, you can add the HTTP AUTH/ACL module:
+
+1. Open the EMQX Dashboard in your browser.
+
+2. In the left-hand navigation panel, click **Modules**. 
+
+3. Click **Add Module** to create a new module.
+
+   ![image-20200927213049265](./assets/modules.png)
+
+4. From the list of available modules, select **HTTP Authentication/ACL**.
+
+   ![image-20200927213049265](./assets/auth_http2.png)
+
+5. Fill in the required configuration parameters, including request URLs, methods, headers, and any placeholder values.
+
+   ![image-20200927213049265](./assets/auth_http3.png)
+
+6. Click **Add** to save the configuration and enable the module.
+
+   ![image-20200927213049265](./assets/auth_http4.png)
+
+Once added, the module will start processing authentication and authorization requests based on your HTTP service configuration.
