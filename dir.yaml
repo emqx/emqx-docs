@@ -880,11 +880,11 @@
       children:
         - title_en: MQTT Basics
           title_cn: MQTT Basics
-          lang: en
+          title_ja: MQTT Basics
           path: design/mqtt-basics
         - title_en: MQTT Advanced
           title_cn: MQTT Advanced
-          lang: en
+          title_ja: MQTT Advanced
           path: design/mqtt-advanced
     - title_en: MQTT 教程
       title_cn: MQTT 教程
