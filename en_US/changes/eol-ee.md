@@ -1,83 +1,88 @@
-# EMQX Version Lifecycle and Support Policy
+# EMQX Version Lifecycle and End-of-Life (EOL) Dates
 
-## Background and Challenges
+EMQX serves a wide range of users, from fast-moving SaaS platforms to large enterprise deployments. To meet these diverse needs, EMQX has adopted a multi-tiered release and support policy that balances innovation, stability, and long-term maintenance.
 
-EMQX is committed to delivering a powerful, reliable, and feature-rich MQTT platform. We recognize that our diverse user base (especially now, under the BSL license, we have distinct audiences) has varying needs:
+This lifecycle policy is designed to:
 
-1.  **EMQX Cloud** requires rapid iteration to deliver new capabilities and improvements to SaaS customers.
-2.  Some **customers** frequently require access to specific, often newly developed, features to validate EMQX's suitability for their needs during PoC stages. The ability to deliver these features quickly, even before they are in a general public release, can be critical to securing new business.
-3.  Some **on-premise users** desire the latest features and improvements in a timely but predictable manner.
-4.  Some **Enterprise customers** prioritize maximum stability, predictability, and long-term support for their mission-critical deployments.
+- **Support rapid innovation** in [EMQX Cloud](../faq/concept.md#which-products-do-we-offer) through frequent internal updates.
+- **Deliver new features** to on-premise users on a predictable, quarterly schedule.
+- **Provide long-term stability** to enterprise customers through designated **Long-Term Support (LTS)** versions.
+- **Ensure clear and predictable timelines** for version support and **End-of-Life (EOL)**.
 
-A single release cadence struggles to meet these varied requirements effectively. A very frequent public release cycle can be perceived as immature by enterprises, while a slow cycle frustrates Cloud and feature-driven users.
-
-## Goals
-
-To address this, EMQX is implementing a refined, multi-tier versioning, release, and End-of-Life (EOL) policy. The goals are to:
-
-*   **Accelerate Innovation:** Enable monthly updates and validation via Internal Releases, primarily benefiting EMQX Cloud.
-*   **Provide Balanced On-Premise Updates:** Offer well-vetted new features to on-premise users quarterly via public Feature Releases.
-*   **Ensure Enterprise Stability:** Deliver annual Long-Term Support (LTS) releases for enterprises requiring maximum stability and extended support.
-*   **Enhance Predictability & Confidence:** Offer clear, predictable release cadences and support lifecycles for each tier.
-*   **Clarify BSL Implications:** Align our Business Source License (BSL) model with these commitments for community users and commercial customers.
-
-This revised policy is designed to create a transparent and sustainable framework that supports rapid innovation for EMQX Cloud while ensuring robust, predictable options for on-premise deployments.
+By offering three distinct release tiers (Internal, Feature, and LTS), EMQX empowers users to choose the version cadence that best fits their operational needs, whether they value rapid access to the latest capabilities or require long-term platform stability.
 
 ## Release Tiers and Cadence
 
-The EMQX team strives to provide a robust, reliable, and feature-rich MQTT platform for our users and customers. To balance rapid innovation with enterprise-grade stability requirements, EMQX adopts a three-tier release model:
+To balance rapid innovation with enterprise-grade stability, EMQX follows a three-tier release model:
 
-*   **Internal Releases:**
-    *   **Frequency:** Monthly.
-    *   **Purpose:** Rapidly introduce and validate new features and improvements within EMQX-controlled environments (including EMQX Cloud, internal dogfooding, and potentially public EMQX cluster staging) and to deliver specific new features to selected customers. Serves as a proving ground for functionality that may later be included in public Feature Releases.
-    *   **Audience:** Primarily internal EMQX teams, EMQX Cloud, and prospects.
-    *   **Quality Assurance:** Despite not being directly downloadable by on-premise customers, Internal Releases power the public EMQX Cloud service. Therefore, they undergo rigorous quality assurance, including full QA testing, and must be production-ready for the cloud environment. They are **not** experimental or unstable builds.
-    *   **Support:** Maintained directly by the EMQX team for the Cloud environment. Not for direct on-premise customer consumption.
-*   **Feature Releases (Public):**
-    *   **Frequency:** Quarterly (typically targeting March, June, September, December).
-    *   **Purpose:** Consolidate mature, validated features from the preceding Internal Release cycles into a publicly available version for on-premise deployments.
-    *   **Audience:** On-premise users and customers who want access to the latest stable features.
-    *   **Support:** Supported for **18 months** from their initial release date.
-*   **Long-Term Support (LTS) Releases (Public):**
-    *   **Frequency:** Annually (typically the June Feature Release is designated as LTS).
-    *   **Purpose:** Provide a highly stable, extensively validated version with an extended support lifecycle.
-    *   **Audience:** Enterprise customers with mission-critical deployments requiring maximum stability and long planning horizons.
-    *   **Support:** Supported for **3 years** from their initial release date. (4.4.x is a special case with a 5-year support cycle.)
+### Internal Releases
 
-This tiered approach allows features to mature through internal validation before wider public availability, ensuring higher quality for all on-premise releases.
+*   **Frequency:** Monthly.
+*   **Audience:** Internal EMQX teams, EMQX Cloud, and prospects.
+*   **Purpose:** Quickly deliver and validate new features in EMQX-controlled environments (e.g., EMQX Cloud, internal testing, and limited public staging). Internal Releases also provide early access to selected customers and serve as a foundation for future public Feature Releases.
+*   **Quality Assurance:** Although not publicly downloadable, Internal Releases power EMQX Cloud and undergo full QA to ensure they are production-ready. They are **not** experimental or unstable.
+*   **Support:** Maintained directly by the EMQX team for the Cloud environment. Not for direct on-premise customer consumption.
 
-### Current LTS Versions
+### Feature Releases (Public)
+
+*   **Frequency:** Quarterly (typically in March, June, September, December).
+*   **Audience:** On-premise users seeking timely access to the latest stable features.
+*   **Purpose:** Package and deliver validated features from recent Internal Releases for general on-premise use.
+*   **Support Duration:** 18 months from the initial release date.
+
+### Long-Term Support (LTS) Releases (Public)
+
+*   **Frequency:** Annually (typically the June Feature Release is designated as LTS).
+*   **Audience:** Enterprise users with mission-critical deployments requiring maximum stability and long-term planning.
+*   **Purpose:** Provide a highly stable, extensively validated version with an extended support lifecycle.
+*   **Support Duration:** 3 years from the initial release (with 4.4.x as a special case supported for 5 years).
+
+This tiered release model allows features to mature through internal validation before public release, ensuring greater stability and quality for on-premise deployments.
+
+## Current LTS Versions
 
 *   **4.4.x** (Initial release date: Dec 21, 2021, EOL date: Dec 20, 2026)
 *   **5.8.x** (Initial release date: Aug 28, 2024, EOL Date: Aug 27, 2027)
 
 ## Version Numbering and Naming Conventions
 
-EMQX follows Semantic Versioning as a base, with specific conventions for each tier.
+EMQX uses Semantic Versioning (`MAJOR.MINOR.PATCH`, e.g., `5.8.1`) as the foundation, with specific conventions for different release tiers.
 
-**MAJOR.MINOR.PATCH** e.g. 5.8.1
+### Major Releases (e.g., `4.0.0`, `5.0.0`, `6.0.0`)
 
-*   **Major Releases - Public (e.g., 4.0.0, 5.0.0, 6.0.0):**
-    *   Introduce significant updates, potentially including non-backward-compatible changes.
-    *   Direct in-place upgrades between major versions are generally not supported. Migration typically involves setting up a new deployment and manually replicating configurations/data. Consult specific major version migration guides.
-*   **Internal Releases (e.g., 5.9.0-M3-202506):**
-    *   **Numbering & Suffix:** X.Y.Z-M[1-3].YYYYMM (e.g., 5.9.0-M2.202505, 5.9.1-M3.202506). The X.Y often aligns with the upcoming or current public Feature Release minor version being developed. Z can increment with internal iterations. Ad-hoc fixes may apply.
-*   **Feature Releases (Public Minor Releases):**
-    *   Deliver new features, improvements, and bug fixes. These versions are backward-compatible (API and functionality) with previous minor releases within the same major version series and support rolling cluster upgrades.
-    *   **Numbering:** X.Y.0 (e.g., 5.7.0, 5.9.0, 5.10.0). The Y (minor version) increments with each quarterly release.
-    *   **Naming:** EMQX Enterprise X.Y.0.
-*   **LTS Releases (Public Minor Releases):**
-    *   A specific minor version designated as LTS. Its initial release (X.Y.0) will contain the latest stable feature set at that time.
-    *   **Numbering & Suffix:** X.Y.0 (e.g., 5.8.0). Based on a designated annual Feature Release.
-    *   **Naming:** EMQX Enterprise X.Y.0. LTS status is reflected in the documentation and on the official website's download page.
-*   **Patch Releases - Public:**
-    *   Contains only critical bug fixes and security patches.
-    *   Do not introduce any new features or breaking changes into the version line they are patching.
-    *   Patch releases are issued for:
-        *   **Feature Releases:** Each Feature Minor Release line that is within its 18-month support lifecycle (start from the initial release of the corresponding minor version, i.e., X.Y.0) will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line.**
-        *   **LTS Releases:** Each active LTS Release line will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line** throughout its 3-year support period.
+*   Introduce significant updates, potentially including non-backward-compatible changes.
+*   Direct in-place upgrades between major versions are generally not supported. Migration typically involves setting up a new deployment and manually replicating configurations/data. Refer to specific major version migration guides.
 
-## Maintenance policies
+### Internal Releases (e.g., `5.9.0-M3-202506`)
+
+*   **Format:** `X.Y.Z-M[1-3].YYYYMM` (e.g., `5.9.0-M2.202505`, `5.9.1-M3.202506`). 
+*   `X.Y` often aligns with the upcoming or current public Feature Release minor version being developed. 
+*   `Z` can increment with internal iterations. Ad-hoc fixes may apply.
+
+### Feature Releases (e.g., `5.7.0`, `5.9.0`, `5.10.0`)
+
+*   Public minor releases that deliver new features, improvements, and bug fixes quarterly. 
+*   Backward-compatible (API and functionality) with previous minor releases within the same major version (e.g., `5.x`) and support rolling cluster upgrades.
+*   **Format:** `X.Y.0`. 
+*   `Y` (minor version) increments with each quarterly release.
+*   **Naming:** EMQX Enterprise X.Y.0.
+
+### LTS Releases (e.g., `5.8.0`)
+
+*   A designated annual Feature Release promoted to Long-Term-Support status. The initial LTS release (`X.Y.0`) includes the latest stable and fully validated feature set available at the time of its release.
+*   **Format:** `X.Y.0`.
+*   **Naming:** `EMQX Enterprise X.Y.0`.
+*   LTS status is clearly indicated in documentation and on the official download page.
+
+### Patch Releases (e.g., `5.8.1`, `5.9.2`)
+
+*   Contains only critical bug fixes and security patches.
+*   No new features or breaking changes are introduced.
+*   Issued for:
+    *   **Feature Releases:** Each Feature Minor Release line that is within its 18-month support lifecycle (starting from the initial release of the corresponding minor version, i.e., X.Y.0) will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line.**
+    *   **LTS Releases:** Each active LTS Release line will receive patches for critical bug fixes and security vulnerabilities **that are applicable to (i.e., affect) that specific release line** throughout its 3-year support period.
+
+## Maintenance Policies
 
 EMQX releases receive different maintenance based on their type and lifecycle stage:
 
@@ -96,17 +101,6 @@ EMQX releases receive different maintenance based on their type and lifecycle st
 *   **Patch Release:**
     *   Such as 5.10.1, 5.10.2, contain only bug fixes and security patches. No new features are introduced.
     *   In rare cases, to support migration to newer versions, the maintenance team may, at its discretion, consider adding minimal, essential non-disruptive changes to versions in maintenance mode.
-
-## BSL (Business Source License) and Version Support
-
-*   **Community Users:**
-    *   Community users can use all EMQX versions (including those based on LTS branches) under the BSL terms.
-    *   Usage by community users is **"as is," without any warranty, express or implied.**
-    *   The BSL ensures that the code transitions to a full open-source license (e.g., Apache 2.0) after a "Change Date". This means the community will eventually receive a fully open-source software version that has benefited from long-term maintenance (especially LTS versions).
-    *   Prior to the "Change Date," community users benefit from patch releases (primarily bug fixes and security updates) made available for BSL versions.
-*   **Enterprise Customers:**
-    *   EMQX Enterprise customers, through their commercial license and subscription, receive access to premium features and **official commercial support, including any applicable warranties as per their contractual agreement.**
-    *   The 5-year support commitment for LTS versions is a key component of the Enterprise offering, ensuring customers receive long-term, guaranteed support for their production environments, even if the corresponding code branch has transitioned to an open-source license under BSL terms.
 
 ## Maintenance table (Public Releases)
 
