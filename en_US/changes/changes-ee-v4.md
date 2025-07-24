@@ -1,5 +1,71 @@
 # EMQX Enterprise Version 4
 
+## e4.4.32
+
+*Release Date: 2025-07-25*
+
+### Enhancements
+
+- Support for placeholders in HTTP headers in the HTTP AUTH/ACL module.
+
+  The HTTP AUTH/ACL module now supports using placeholders (such as `%u`, `%c`, etc.) in the values of HTTP request headers, allowing dynamic insertion of client information.
+
+- Optimized default Erlang VM parameters.
+
+  - `+sbwt none +sbwtdcpu none +sbwtdio none`: Disables scheduler busy-waiting to reduce CPU consumption.
+  - `+sbt db`: Configures scheduler threads to use the default binding strategy to CPU cores.
+  - `+zdbbl 32768`: Increases the buffer size for distributed channels.
+
+- Periodic global garbage collection (GC) is disabled by default.
+
+  The default value of the `node.global_gc_interval` configuration is now set to `Disabled`.
+
+### Bug Fixes
+
+- Fixed an issue where Kafka resources failed to authenticate using the "SCRAM_SHA_256" method.
+
+## e4.4.31
+
+*Release Date: 2025-07-15*
+
+### Enhancements
+
+- Improved performance of the Username Quota module.
+
+  When the Username Quota feature is enabled in a multi-node cluster, EMQX nodes need to frequently synchronize username state (i.e., mappings between usernames and client IDs) with other nodes, which can cause performance overhead. This version introduces batch synchronization, reducing CPU usage.
+
+- Added “Refresh Username Interval” configuration option.
+
+  To prevent inconsistencies in the username quota table across nodes under certain extreme conditions, this version adds a scheduled refresh mechanism. EMQX will periodically fetch username status from other nodes to update the local quota table. The default interval is 15 minutes, and the minimum configurable value is 30 seconds.
+
+- Added “Send Undefined Properties” option to the Republish action.
+
+  This option controls whether undefined MQTT properties and user properties are included in republished messages. When enabled, such properties are added with the string `"undefined"` as their value. When disabled, they will be omitted from the message.
+
+- Improved HTTP API stability under high-latency network conditions.
+
+  Parts of the HTTP API implementation that relied on RPC have been refactored to use `gen_rpc`, avoiding contention for Erlang’s distributed RPC channels and reducing the risk of blocking.
+
+- Optimized the query performance of the built-in database authentication (`auth_mnesia`).
+
+  Previously, the query performance of the built-in authentication database would degrade as the number of records increased, leading to high CPU consumption during periods of high-frequency or concurrent client logins. After the optimization, query performance is no longer affected by the number of records, resulting in improved authentication efficiency and overall system stability.
+
+### Bug Fixes
+
+- Fixed inconsistent routing tables or client global registries after cluster healing.
+
+  In cases where a network partition causes the cluster to split into overlapping subgroups, simply restarting the minority partition might not fully restore consistency. This could lead to issues such as messages not being routed to subscribers on other nodes, or failure to kick out clients via the HTTP API.
+
+  This version adjusts the cluster healing logic by ensuring that all nodes in both the minority partition and the overlapping group are restarted, ensuring consistency is restored across the cluster.
+
+- Fixed ETS memory leak caused by exceptions in HTTP API calls.
+
+  Resolved an issue where exceptions during certain HTTP API calls could result in memory leaks in ETS tables.
+
+- Fixed an issue where listeners could not be added to gateway modules via the Dashboard.
+
+  Previously, after creating a protocol gateway module, adding a listener through the module update interface had no effect. Affected protocols included CoAP, GB/T 32960, JT/T 808, LwM2M, MQTT-SN, STOMP, and TCP.
+
 ## e4.4.30
 
 *Release Date: 2025-06-20*
