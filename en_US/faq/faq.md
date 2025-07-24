@@ -445,8 +445,6 @@ Client disconnect link error code list:
 
 EMQX supports deployment on Linux, MacOS, ARM system, however it is recommended to deploy the product on one of the supported Linux distributions, such as CentOS, Ubuntu and Debian.
 
-Only EMQX Broker supports Windows and we don't suggestion deployment on Windows.
-
 ## How to estimate resource usage of EMQX?
 
 The following factors will have an impact on EMQX resource consumption, mainly on CPU and memory usage.

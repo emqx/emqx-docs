@@ -403,11 +403,7 @@ Root: /usr/lib/emqx
 
 ## EMQX 推荐部署的操作系统是什么？
 
-EMQX 支持跨平台部署在 Linux、Windows、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
-
-## EMQX 支持 Windows 操作系统吗？
-
-仅在开源版支持，推荐用于测试而非生产部署，参考 [Windows 安装 EMQX](../deploy/install-windows.md)。
+EMQX 支持跨平台部署在 Linux、MacOS、ARM 嵌入系统，生产系推荐在 CentOS、Ubuntu、Debian 等 Linux 发行版上部署。
 
 {% endemqxce %}
 
