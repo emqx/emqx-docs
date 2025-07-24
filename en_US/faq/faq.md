@@ -183,24 +183,6 @@ $ brew install openssl@1.1
 
 After the installation is complete, you can start EMQX normally.
 
-{% emqxce %}
-
-## MSVCR120.dll is missing from Windows
-
-### Phenomenon
-
-When Windows executes `./bin/emqx console`, an error window pops up:
-
-```bash
-This program cannot be started because MSVCR120.dll is missing from the computer. Please try to reinstall the program to resolve this issue.
-```
-
-### Solution
-
-Install [Microsoft Visual C++ RedistributablePackage](https://www.microsoft.com/en-us/download/search.aspx?q=redistributable+package.)
-
-{% endemqxce %}
-
 ## SSL Connection Error
 
 ### Phenomenon
