@@ -71,10 +71,6 @@
       title_cn: Kubernetes
       lang: cn
       path: "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
-    - title_en: Windows
-      title_cn: Windows
-      path: deploy/install-windows
-      edition: ce
     - title_en: Install from Source Code
       title_cn: 源码编译安装
       path: deploy/install-source
