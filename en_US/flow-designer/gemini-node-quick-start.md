@@ -2,28 +2,32 @@
 
 This section demonstrates how to quickly create and test an LLM-based Flow in the Flow Designer through a practical use case using the Gemini Node. 
 
-This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages containing a free-text `prompt` while preserving the `clientid` for routing. The Gemini node generates a reply based on that prompt, and the Republish node sends the AI’s reply to the per-client topic `device/${clientid}/reply`, ensuring each device receives its own customized advice.
+This example demonstrates how to build a Flow that integrates with the Gemini LLM to process MQTT device messages containing structured sensor data while preserving the `clientid` for routing. The Gemini node generates a reply based on the message payload, and the Republish node sends the AI’s reply to the per-client topic `devices/${clientid}/reply`, ensuring each device receives its own customized reply.
 
 ## Scenario Description
 
-In a smart city deployment, each district is equipped with environmental sensors that periodically publish JSON messages to the topic `devices/<district_id>`. Each message’s `prompt` field contains key readings in plain text, such as the air quality index and noise level. The Flow will:
+In an industrial monitoring scenario, each device periodically publishes structured sensor data in JSON format to the topic `devices/<device_id>`. Traditional rule-based alerts (e.g., threshold for temperature) may miss hidden patterns or combinations of abnormal indicators.
 
-- **Data Processing**: Extract the environmental readings from the `prompt` field and expose the `clientid` (i.e., `district_id`) for downstream use.
-- **LLM-Based Processing**: Send the readings to Gemini to generate an actionable public-safety or traffic-management recommendation (e.g., restrict traffic, adjust street-light levels).
-- **Message Republish**: Publish the AI-generated advice to the per-district control topic `device/<district_id>/reply`.
+This Flow leverages Gemini to analyze the overall context of multiple fields, such as vibration, temperature, and pressure, and detect complex anomalies that suggest potential mechanical failures. For example, when vibration and temperature are both elevated, Gemini can infer a more severe risk (e.g., bearing overload) and output a precise, explainable alert.
 
-**Sample incoming message (to `devices/district_1`):**
+- **Data Processing**: Extract the device readings from the payload and expose the `clientid` (i.e., `device_1`) for downstream use.
+- **LLM-Based Processing**: Send the full payload to Gemini for comprehensive analysis across all fields.
+- **Message Republish**: Publish the AI-generated alert to the per-client topic `devices/<district_id>/reply`.
+
+**Sample incoming message (to `devices/device_1`):**
 
 ```json
 {
-  "prompt": "Air Quality Index is 150. Noise level is 72 dB."
+  "vibration": 9.5,
+  "temperature": 85,
+  "pressure": 1.2
 }
 ```
 
-**Expected republished output (to `device/district_1/reply`):**
+**Expected republished output (to `devices/device_1/reply`):**
 
 ```
-AQI is high—implement traffic restrictions in district_1 and increase pedestrian patrols.
+Critial Alert: Simultaneous severe vibration and high temperature detected, indicating an immediate critical equipment malfunction risk.
 ```
 
 ## Create the Flow
@@ -58,14 +62,15 @@ Make sure you have a valid Gemini API Key.
 
    - Configure the node:
 
-     - **Input**: Enter `payload.prompt`.
+     - **Input**: Enter `payload`.
 
      - **System Message**: Enter the following prompt:
 
        ```
-       You are an expert smart-city AI assistant.
-       Based on the Air Quality Index and noise level provided in the user prompt, generate a concise public-safety or traffic-management recommendation for the specified district.
-       Only return a single sentence with the action steps—no extra commentary.
+       You are an industrial anomaly detection assistant.
+       Analyze the incoming sensor data (vibration, temperature, pressure) as a whole.
+       If multiple indicators exceed risk thresholds at the same time, for example, if vibration > 8 and temperature > 80 in the same reading, the combined risk is significantly higher than a single abnormal value. In such cases, generate a precise, high-priority alert.
+       Only return a single alert sentence—no extra explanation.
        ```
        
      - **Model**: Here you can keep the default model `gemini-2.0-flash`.
@@ -81,7 +86,7 @@ Make sure you have a valid Gemini API Key.
 5. Add a **Republish** node.
 
    - Drag a **Republish** node from the Sink section.
-   - Set the topic to `device/${clientid}/reply`.
+   - Set the topic to `devices/${clientid}/reply`.
    - Set the payload to `${ai_reply}`.
    - Click **Save**.
 
@@ -100,7 +105,7 @@ Make sure you have a valid Gemini API Key.
    To quickly test the flow, you can use the **Diagnostic Tools** -> **WebSocket Client** on the Dashboard to simulate an MQTT client. Alternatively, you can also use the [MQTTX](https://mqttx.app/) tool or a real MQTT client:
 
    - Connect to your EMQX server.
-   - Subscribe to the topic, for example `device/district_1/reply`.
+   - Subscribe to the topic, for example `devices/device_1/reply`.
 
 2. Start Testing.
 
@@ -108,11 +113,13 @@ Make sure you have a valid Gemini API Key.
 
    - Click **Edit**, then click **Start Test** to open the test panel at the bottom.
 
-   - Click **Input Simulated Data** and publish the following message to topic `devices/district_1` by clicking **Submit Test**:
+   - Click **Input Simulated Data** and publish the following message to topic `devices/device_1` by clicking **Submit Test**:
 
      ```json
      {
-       "prompt": "Air Quality Index is 150. Noise level is 72 dB."
+       "vibration": 9.5,
+       "temperature": 85,
+       "pressure": 1.2
      }
      ```
    
@@ -124,7 +131,7 @@ Make sure you have a valid Gemini API Key.
 
    - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
 
-     > “Reduce traffic volume in the district to mitigate air pollution and noise levels.”
+     > “High-priority alert: Critical combined anomaly detected: Simultaneous extreme vibration (9.5) and high temperature (85) indicate severe system distress.”
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
 
