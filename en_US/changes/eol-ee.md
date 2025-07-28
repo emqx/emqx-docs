@@ -102,13 +102,13 @@ EMQX releases receive different maintenance based on their type and lifecycle st
     *   Such as 5.10.1, 5.10.2, contain only bug fixes and security patches. No new features are introduced.
     *   In rare cases, to support migration to newer versions, the maintenance team may, at its discretion, consider adding minimal, essential non-disruptive changes to versions in maintenance mode.
 
-## Maintenance table (Public Releases)
+## Maintenance Schedule for Public Releases
 
-This table focuses on public Feature and LTS releases. Internal releases are managed separately.
+This section provides the maintenance and End-of-Life (EOL) timelines for public Feature and LTS releases. Internal releases are maintained separately and are not listed here.
 
-The following table outlines release dates, support types, lifecycles, and estimated End-of-Life (EOL) dates for EMQX major versions. This table will be updated periodically.
+The following table outlines release dates, support types, lifecycles, and estimated EOL dates for major EMQX versions. It is updated periodically to reflect the latest status.
 
-| Version | Release Date | Support Type | Lifetime | EOL Date | Notes |
+| Version | Release Date | Support Type | Support Duration | EOL Date | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **3.4.x** | 2019-12-02 | Feature Release | 18 months | 2021-06-30 | EOLed |
 | **4.0.x** | 2020-01-18 | Feature Release | 18 months | 2021-07-17 | EOLed |
@@ -127,12 +127,14 @@ The following table outlines release dates, support types, lifecycles, and estim
 | **5.8.x LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Latest Active LTS Version** |
 | **5.9.x** | 2025-05-02 | Feature Release | 18 months | 2026-11-01 | Latest Feature Release |
 | **5.10.x** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 | Next Feature Release |
-| **6.0.0** | 2025-??-?? | | 18 months | 202?-??-?? | Next Major Release |
+| **6.0.0** | 2025-TBD | Major Release | 18 months | TBD | Next Major Release |
 
 ## Upgrade Path Recommendations
 
-*   In general, we encourage users and customers to plan regular upgrades to take advantage of new features, performance improvements, and the latest security patches.
-*   **EMQX Cloud:** Managed by the EMQX team; users benefit from monthly updates seamlessly.
-*   **On-Premise Feature Releases:** Users can upgrade from one quarterly Feature Release to a subsequent one to access new features. It is recommended to stay on a Feature Release that is actively receiving patches (i.e., within its 18-month lifecycle).
-*   **On-Premise LTS Releases:** Customers can plan migrations from their current LTS version to a newer LTS version, typically allowing for overlap to ensure continuous long-term support. Upgrades from a Feature Release to an LTS Release are also supported.
-*   Detailed upgrade guides and compatibility notes will be provided with each release.
+To ensure access to the latest features, performance improvements, and security updates, we recommend users follow a regular upgrade strategy based on their deployment type:
+
+*   **EMQX Cloud:** Fully managed by the EMQX team; users benefit from monthly updates seamlessly.
+*   **On-Premise Feature Releases:** Users can upgrade from one quarterly Feature Release to the next to access new features. It is recommended to stay on a Feature Release that is actively supported (within its 18-month lifecycle).
+*   **On-Premise LTS Releases:** Enterprise users can plan migrations from their current LTS version to the next, with sufficient overlap to ensure uninterrupted long-term support. Upgrades from a Feature Release to an LTS Release are also supported.
+
+Each release includes detailed upgrade guides and compatibility notes to assist with planning and execution.
