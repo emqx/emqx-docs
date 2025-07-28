@@ -53,7 +53,7 @@ EMQX uses Semantic Versioning (`MAJOR.MINOR.PATCH`, e.g., `5.8.1`) as the founda
 *   Introduce significant updates, potentially including non-backward-compatible changes.
 *   Direct in-place upgrades between major versions are generally not supported. Migration typically involves setting up a new deployment and manually replicating configurations/data. Refer to specific major version migration guides.
 
-### Internal Releases (e.g., `5.9.0-M3-202506`)
+### Internal Releases (e.g., `5.9.0-M3.202506`)
 
 *   **Format:** `X.Y.Z-M[1-3].YYYYMM` (e.g., `5.9.0-M2.202505`, `5.9.1-M3.202506`). 
 *   `X.Y` often aligns with the upcoming or current public Feature Release minor version being developed. 
