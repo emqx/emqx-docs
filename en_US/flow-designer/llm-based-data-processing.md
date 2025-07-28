@@ -133,3 +133,6 @@ The following two examples demonstrate how to quickly build and test Flows using
 - [Create a Flow Using OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
 - [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
 
+## More Information
+
+To explore the LLM‑powered MQTT data processing capabilities, see the blog post: [Real-Time AI for IoT: Introducing LLM Integration in EMQX 5.10](https://www.emqx.com/en/blog/introducing-llm-integration-in-emqx-5-10).
