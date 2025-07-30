@@ -13,7 +13,7 @@ Limiters can operate at the listener level. EMQX uses the following types of lim
 | messages_rate  | Max Message Publishing Rate (Per Client)          | The number of messages published per second by a single client | Pause receiving client messages |
 | messages_burst | Max Message Publishing Burst (Per Client)         | Number of messages that can be sent in a burst by a single client, on top of regular `Messages Publish Rate` | Pause receiving client messages |
 | max_conn_rate  | Max Connection Rate (Listener)                    | The number of connections per second for the current listener | Pause receiving new connections |
-| max_conn_rate  | Max Connection Burst (Listener)                   | The maximum number of connections that the listener can accept in bursts | Pause receiving new connections |
+| max_conn_burst | Max Connection Burst (Listener)                   | The maximum number of connections that the listener can accept in bursts | Pause receiving new connections |
 
 ### Configure Listener-Level Limiters
 
