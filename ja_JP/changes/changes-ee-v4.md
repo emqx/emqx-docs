@@ -1,5 +1,223 @@
 # EMQX Enterprise Version 4
 
+## e4.4.32
+
+*Release Date: 2025-07-30*
+
+### Enhancements
+
+- Support for placeholders in HTTP headers in the HTTP AUTH/ACL module.
+
+  The HTTP AUTH/ACL module now supports using placeholders (such as `%u`, `%c`, etc.) in the values of HTTP request headers, allowing dynamic insertion of client information.
+
+- Optimized default Erlang VM parameters.
+
+  - `+sbwt none +sbwtdcpu none +sbwtdio none`: Disables scheduler busy-waiting to reduce CPU consumption.
+  - `+sbt db`: Configures scheduler threads to use the default binding strategy to CPU cores.
+  - `+zdbbl 32768`: Increases the buffer size for distributed channels.
+
+- Periodic global garbage collection (GC) is disabled by default.
+
+  The default value of the `node.global_gc_interval` configuration is now set to `Disabled`.
+
+### Bug Fixes
+
+- Fixed an issue where Kafka resources failed to authenticate using the "SCRAM_SHA_256" method.
+
+## e4.4.31
+
+*Release Date: 2025-07-15*
+
+### Enhancements
+
+- Improved performance of the Username Quota module.
+
+  When the Username Quota feature is enabled in a multi-node cluster, EMQX nodes need to frequently synchronize username state (i.e., mappings between usernames and client IDs) with other nodes, which can cause performance overhead. This version introduces batch synchronization, reducing CPU usage.
+
+- Added “Refresh Username Interval” configuration option.
+
+  To prevent inconsistencies in the username quota table across nodes under certain extreme conditions, this version adds a scheduled refresh mechanism. EMQX will periodically fetch username status from other nodes to update the local quota table. The default interval is 15 minutes, and the minimum configurable value is 30 seconds.
+
+- Added “Send Undefined Properties” option to the Republish action.
+
+  This option controls whether undefined MQTT properties and user properties are included in republished messages. When enabled, such properties are added with the string `"undefined"` as their value. When disabled, they will be omitted from the message.
+
+- Improved HTTP API stability under high-latency network conditions.
+
+  Parts of the HTTP API implementation that relied on RPC have been refactored to use `gen_rpc`, avoiding contention for Erlang’s distributed RPC channels and reducing the risk of blocking.
+
+- Optimized the query performance of the built-in database authentication (`auth_mnesia`).
+
+  Previously, the query performance of the built-in authentication database would degrade as the number of records increased, leading to high CPU consumption during periods of high-frequency or concurrent client logins. After the optimization, query performance is no longer affected by the number of records, resulting in improved authentication efficiency and overall system stability.
+
+### Bug Fixes
+
+- Fixed inconsistent routing tables or client global registries after cluster healing.
+
+  In cases where a network partition causes the cluster to split into overlapping subgroups, simply restarting the minority partition might not fully restore consistency. This could lead to issues such as messages not being routed to subscribers on other nodes, or failure to kick out clients via the HTTP API.
+
+  This version adjusts the cluster healing logic by ensuring that all nodes in both the minority partition and the overlapping group are restarted, ensuring consistency is restored across the cluster.
+
+- Fixed ETS memory leak caused by exceptions in HTTP API calls.
+
+  Resolved an issue where exceptions during certain HTTP API calls could result in memory leaks in ETS tables.
+
+- Fixed an issue where listeners could not be added to gateway modules via the Dashboard.
+
+  Previously, after creating a protocol gateway module, adding a listener through the module update interface had no effect. Affected protocols included CoAP, GB/T 32960, JT/T 808, LwM2M, MQTT-SN, STOMP, and TCP.
+
+## e4.4.30
+
+*Release Date: 2025-06-20*
+
+### Enhancements
+
+- Smoother global garbage collection.
+
+  EMQX periodically performs garbage collection on all processes, with the interval controlled by the `node.global_gc_interval` setting (default: 15 minutes). This mechanism helps prevent situations where the Erlang VM's default garbage collection fails to reclaim off-heap binary memory in time under extreme conditions. However, this can cause noticeable periodic spikes in CPU usage. 
+  
+  The new global garbage collection mechanism performs garbage collection on processes in batches during each cycle, reducing fluctuations in CPU usage. This optimization only takes effect when `node.global_gc_interval` is set to more than one minute.
+
+### Bug Fixes
+
+- Fixed an issue where some connections would be disconnected when hot upgrading from older versions to 4.4.28 or 4.4.29. The number of disconnected clients is positively correlated with the message rate on the current node.
+
+
+## e4.4.29
+
+*Release Date: 2025-03-07*
+
+### Enhancements
+
+- Optimized License check performance.
+
+  This optimization reduces the performance overhead of checking the total number of connections against the License when clients establish connections by minimizing inter-node RPC calls.
+
+- Improved connection management during mass client reconnections to prevent connection rejections due to License limits.
+
+  After this optimization, even if the current connection count exceeds the License limit, EMQX will still allow clients with an already established ClientID to reconnect.
+
+- Enhanced Wolff to support Kafka topics being rebuilt with fewer partitions.
+
+  Previously, Wolff (EMQX’s Kafka driver) only supported increasing the number of partitions in a Kafka topic (scaling up) but did not support reducing partitions (scaling down).
+
+  Since Kafka does not allow direct partition reduction, users typically need to create a new topic and migrate data, or delete the old topic and create a new one with the same name if data loss is acceptable. Before this improvement, Wolff could not handle such cases correctly, potentially causing some producers to fail to reconnect.
+
+- Unified default values for the `acceptors` and `max_connections` settings across all listeners.
+
+  After the improvement, the default value for the `acceptors` setting is unified to 16 across all listener types, and the default value for `max_connections` is 1,024,000.
+
+- Expanded configuration options for the Trace module.
+
+  The Trace module now supports three new options:
+
+  - **Line Max Size:** Controls the maximum number of characters per line in the log file (default: `2048`).
+  - **File Max Size:** Sets the maximum size of a log file (default: `1GB`).
+  - **Client Process Max Heap Size:** The default value is `512MB`, which helps prevent client connection processes from being terminated due to low default memory limits (64MB on 64-bit systems) when log tracing is enabled.
+
+- Added a Warning log when a client process is terminated.
+
+  Previously, when a client process was terminated due to memory constraints, the only available log was an Erlang/OTP error message, which did not specify which client was affected:
+
+  ```
+  [error] Process: <0.3540.0> on node 'emqx@127.0.0.1', Context: maximum heap size reached, Max Heap Size:      167772160, Total Heap Size: 200934817, Kill: true, ...
+  ```
+
+  Now, EMQX adds a Warning log alongside this message to help users identify the affected client:
+
+  ```
+  [warning] [CM] Clean down, clientid: abcd_bench_pub_1, pid: <0.3540.0>, reason: killed
+  ```
+
+### Bug Fixes
+
+- Fixed an issue where EMQX deployed in containers could not update the `acceptors` and `max_connections` settings using the hot configuration feature.
+
+- Fixed an issue where EMQX might fail to reconnect to Redis after a master-slave switch in Redis Cluster mode.
+
+  Previously, if EMQX could not connect to the new Redis master node after a failover due to network issues, `eredis_cluster` (EMQX’s Redis Cluster driver) would enter an abnormal state, preventing it from reconnecting to Redis properly.
+
+- Fixed an occasional unresponsiveness issue when downloading log tracing files from the Dashboard.
+
+- Fixed a packet parsing issue in the Pulsar driver.
+
+## e4.4.28
+
+*Release Date: 2025-01-23*
+
+### Enhancements
+
+- Improved the self-healing capability of the EMQX cluster.
+
+  Previously, EMQX could only self-heal simple split-brain scenarios, but not others:
+
+  - When one node can maintain contact with all other nodes, it is used as the base node, and other nodes are restarted to restore the cluster.
+  - When the split-brain forms two sub-clusters, the sub-cluster with fewer nodes is restarted to restore the cluster.
+
+  After the improvement, even if the split-brain becomes multiple complex and asymmetric clusters, EMQX can still self-heal.
+
+- Optimized the performance of handling wildcard subscriptions and un-subscriptions in EMQX.
+
+  This improvement changes the prefix tree table from a `mnesia` table that needs to be replicated between nodes to an `ETS` table, eliminating the time spent synchronizing prefix tree information between nodes. After the improvement, EMQX's subscription handling is **asynchronous**:
+
+  1. First, EMQX updates the prefix tree and routing records locally and replies with SUBACK.
+  2. The routing information is asynchronously updated to other nodes, which then update their own prefix trees.
+
+  This optimization will significantly improve the performance of handling subscriptions and un-subscriptions in EMQX, especially when there are many nodes and high network latency between nodes.
+
+  Note that if there are older versions of EMQX nodes in the cluster, wildcard subscriptions added on the older nodes can be correctly established on the new version nodes, but not vice versa. This means that during a rolling upgrade, wildcard subscriptions made on newly upgraded nodes may not receive messages from older nodes. This issue is automatically resolved once all nodes are upgraded. After a node is upgraded, the prefix tree will be rebuilt through the routing table, so routing information will not be lost during the rolling upgrade.
+
+- Optimized the matching performance of the rule engine.
+
+  This optimization improves the matching performance of the rule engine by caching the topic prefix tree and removing excessive topic splitting operations. This optimization is more significant in scenarios with many rules.
+
+- Added a "Buffer Max Linger Time" option to the Kafka action.
+
+  This option controls the maximum wait time for the producer to collect messages for each partition before writing them to the buffer in batches. The default value of `0ms` means no waiting. For non-memory buffering modes, it is recommended to set at least `5ms` to reduce IOPS.
+
+- Changed the handling of alarms to asynchronous mode.
+
+  Previously, alarms were handled synchronously, and a large number of `conn_congestion` alarms could affect the MQTT connection process. Now, alarms are handled asynchronously, and overload protection has been added. When the alarm system is overloaded, alarms will enter a "silent period" of one minute, during which any alarms will be discarded.
+
+- Added monitoring and alarming for process message queue length.
+
+  Two new configuration items `vm_mon.process_long_msgq` and `vm_mon.process_alarm_top_n` have been added to control the monitoring and alarming of process message queue length.
+
+  - `vm_mon.process_long_msgq`: Triggers an alarm when the mailbox of a process in EMQX exceeds this length, with a default value of `80`.
+  - `vm_mon.process_alarm_top_n`: When an alarm is triggered, include the information of the top N processes with the longest non-zero message queues in the alarm. The default value is `5`.
+
+- Optimized the logging of CONNECT packet parsing failures.
+
+  After the improvement, if an MQTT connection is disconnected due to a failure in parsing the CONNECT variable header, `esockd` will no longer log such errors, and the disconnection reason will be marked as: `malformed_connect_variable_header`:
+
+  ```
+  [error] supervisor: 'esockd_connection_sup - <0.5949.0>', errorContext: connection_shutdown, reason: {badmatch,<<>>}, offender: [{pid,<0.13949.4720>}, ...]
+  ```
+
+- Changed the log to "Always Asynchronous" mode.
+
+  Previously, the default value of the `log.sync_mode_qlen` configuration was 100, meaning that when the log queue length exceeded 100, the log would switch to synchronous mode. This has been changed to 3000, consistent with the default value of `log.drop_mode_qlen`, so that the log handler always works in asynchronous mode and starts discarding logs when the queue length exceeds 3000.
+
+- Optimized the performance of slow subscriptions.
+
+  This optimization slightly reduces the performance overhead of the slow subscription feature by avoiding calling `ets:info(emqx_slow_subs_topk, size)`.
+
+- Reduced the time spent updating listeners through hot configuration.
+
+  Previously, when updating listener configurations through hot configuration, EMQX would sequentially update and restart listeners on each node, which could take a long time when there were many connections. Now, by using `erpc:multicall/4`, EMQX will update listeners on each node in parallel, reducing the time spent.
+
+- Avoid blocking `ecpool_sup` by slow-starting `ecpool_worker`.
+
+### Bug Fixes
+
+- Fixed an issue where the username of a persistent session would disappear from the username quota page.
+
+  Before the fix, the username of a persistent session's MQTT client would disappear from the username quota page after reconnecting.
+
+- Fixed a performance degradation issue caused by log throttling.
+
+  Before the fix, due to issues in the log throttling feature, enabling log tracing would significantly increase EMQX's resource consumption.
+
 ## 4.4.27
 
 *Release Date: 2024-11-28*
