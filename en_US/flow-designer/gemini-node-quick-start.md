@@ -131,7 +131,7 @@ Make sure you have a valid Gemini API Key.
 
    - Return to the **WebSocket Client** page and you should receive an AI-generated summary like:
 
-     > “High-priority alert: Critical combined anomaly detected: Simultaneous extreme vibration (9.5) and high temperature (85) indicate severe system distress.”
+     > “High-priority alert: Simultaneous high vibration and high temperature detected.”
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
 
