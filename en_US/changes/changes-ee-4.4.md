@@ -2,7 +2,7 @@
 
 ## e4.4.32
 
-*Release Date: 2025-07-25*
+*Release Date: 2025-07-30*
 
 ## Enhancements
 
