@@ -118,7 +118,6 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 **メッセージキュー**
 
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
