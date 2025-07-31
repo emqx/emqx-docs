@@ -785,12 +785,6 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
-    <td><b>HStreamDB</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-  </tr>
-  <tr>
     <td><b>InfluxDB</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -871,6 +865,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -1473,4 +1468,3 @@
 </tbody>
 </table>
 </div>
-

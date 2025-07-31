@@ -113,7 +113,6 @@ D1 -->|发布消息| E[客户端]
 **消息队列**
 
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)

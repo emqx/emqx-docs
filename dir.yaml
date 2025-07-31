@@ -481,10 +481,6 @@
       title_cn: GreptimeDB
       title_ja: GreptimeDB
       path: data-integration/data-bridge-greptimedb
-    - title_en: HStreamDB
-      title_cn: HStreamDB
-      title_ja: HStreamDB
-      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       title_ja: HTTP サーバー
