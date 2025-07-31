@@ -4,7 +4,7 @@
 
 *Release Date: 2025-07-30*
 
-## Enhancements
+### Enhancements
 
 - Support for placeholders in HTTP headers in the HTTP AUTH/ACL module.
 
@@ -20,7 +20,7 @@
 
   The default value of the `node.global_gc_interval` configuration is now set to `Disabled`.
 
-## Bug Fixes
+### Bug Fixes
 
 - Fixed an issue where Kafka resources failed to authenticate using the "SCRAM_SHA_256" method.
 
