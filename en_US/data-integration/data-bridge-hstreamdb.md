@@ -16,6 +16,12 @@ HSreamDB data integration is only supported in EMQX 5.2.0 and above.
 
 :::
 
+::: tip
+
+HStreamDB data integration will be removed in EMQX 6.0.
+
+:::
+
 ## How It Works
 
 HStreamDB data integration is an out-of-the-box feature of EMQX that combines EMQX's device connectivity and message transmission capabilities with HStreamDB's robust data storage and processing capabilities. With the built-in rule engine component, the data streaming and processing process is simplified between the two platforms.
