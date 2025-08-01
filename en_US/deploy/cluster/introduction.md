@@ -16,7 +16,7 @@ This chapter provides a comprehensive overview of EMQX clustering and how to app
 - How to [secure communication between nodes](./security.md)
 - How to [implement load balancing](./lb.md)
 - How to [rebalance cluster load and evacuate nodes](./rebalancing.md)
-- How to [monitor and maintain cluster stability](./performance.md)
+- How to [perform system tuning and performance testing](../../performance/overview.md)
 
 Whether you're building a highly available MQTT platform or preparing for production scale, this guide will help you get started with confidence.
 
