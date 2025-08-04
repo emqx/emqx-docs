@@ -116,7 +116,7 @@ topic3 -> node2, node4
 
 #### 主题树（由核心节点复制）
 
-主题树是一种分层结构，用于匹配发布的主题与订阅模式（包括 [MQTT 通配符](../../design/mqtt-basics.md#mqtt-topics-and-wildcards) `+` 和 `#`）。它帮助 EMQX 高效处理复杂的主题过滤逻辑。
+主题树是一种分层结构，用于匹配发布的主题与订阅模式（包括 [MQTT 通配符](../../messaging/mqtt-wildcard-subscription.md) `+` 和 `#`）。它帮助 EMQX 高效处理复杂的主题过滤逻辑。
 
 与路由表类似，主题树由核心节点构建并同步至所有副本节点。当客户端（如 `client1`）订阅 `t/+/x` 时，该订阅模式将被添加至主题树，并在全集群中同步更新。
 
