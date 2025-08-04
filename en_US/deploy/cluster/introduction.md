@@ -11,6 +11,7 @@ This architecture is ideal for large-scale, mission-critical IoT and messaging p
 This chapter provides a comprehensive overview of EMQX clustering and how to apply it in real-world deployments. You'll learn about:
 
 - The [benefits of clustering](#why-use-emqx-clustering)
+- The [working principle of EMQX Clustering](#how-clustering-in-emqx-works)
 - The [Mria and RLOG architecture](./mria-introduction.md)
 - How to [create a cluster manually or automatically](./create-cluster.md)
 - How to [secure communication between nodes](./security.md)
@@ -28,11 +29,11 @@ EMQX clustering is designed for large-scale and mission-critical applications th
 - **High Availability**: The distributed architecture ensures no single point of failure. If one or more nodes go offline, the system continues operating seamlessly.
 - **Load Balancing**: MQTT traffic and client sessions can be distributed across nodes, helping to prevent bottlenecks and maximize hardware utilization.
 - **Centralized Management**: All nodes can be managed and monitored from a single Dashboard or API endpoint, simplifying operations and maintenance.
-- **Data Consistency and Security**: Session and routing state are automatically replicated across nodes, ensuring consistency and preserving secure communication across the cluster.
+- **Data Consistency and Security**: Session and routing states are automatically replicated across nodes, ensuring consistency and preserving secure communication across the cluster.
 
 ## How Clustering in EMQX Works
 
-An EMQX cluster is made up of multiple broker nodes that work together to route messages, manage MQTT sessions, and deliver high availability and scalability. Each node communicates with others to share client subscriptions and routing information, ensuring that messages reach all relevant subscribers regardless of which node they are connected to.
+An EMQX cluster consists of multiple nodes, each running an instance of EMQX. These nodes work together to route messages, manage MQTT sessions, and ensure high availability and scalability. Each node communicates with others to share client subscriptions and routing information, ensuring that messages reach all relevant subscribers regardless of which node they are connected to.
 
 This distributed design allows EMQX to support mission-critical messaging systems with minimal downtime and flexible expansion.
 
@@ -50,7 +51,7 @@ However, this model had the following limitations:
 - Risk of instability in clusters larger than 5 nodes
 - Limited scalability, typically addressed via vertical scaling
 
-> EMQX 4.3 achieved 10 million concurrent connections in benchmark tests, but this required heavy tuning and high-performance hardware. See the [performance report](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report) for details.
+> EMQX 4.3 achieved 10 million concurrent connections in benchmark tests; however, this required extensive tuning and high-performance hardware. See the [performance report](https://www.emqx.com/en/resources/emqx-v-4-3-0-ten-million-connections-performance-test-report) for details.
 
 #### EMQX 5.0 and Later: Mria + RLOG
 
@@ -78,11 +79,7 @@ To support this architecture, EMQX relies on Erlang/OTP and a set of internal da
 
 ### Erlang/OTP Foundation
 
-EMQX is built on Erlang/OTP, a runtime and framework originally designed for building distributed telecom systems. In Erlang, each runtime instance is called a **node**, identified by a name in the format `<name>@<host>`, such as:
-
-```
-emqx1@192.168.0.10
-```
+EMQX is built on [Erlang/OTP](https://www.erlang.org/), a runtime and framework originally designed for building distributed telecom systems. In Erlang, each runtime instance is called a **node**, identified by a name in the format `<name>@<host>`, such as: `emqx1@192.168.0.10`.
 
 Erlang nodes connect via TCP and use lightweight message passing to communicate. This forms the basis for EMQX clustering. Each node must use the same cookie for authentication. Once a connection is established and authenticated, a node can join the EMQX cluster automatically. In EMQX 5.x and later, the node's role (Core or Replicant) determines how it participates in data replication and routing.
 
@@ -141,14 +138,28 @@ After these subscriptions are in place, EMQX constructs the following topic tree
 
 <img src="./assets/cluster_2.png" alt="image" style="zoom:67%;" />
 
-#### Example Message Flow
+#### Message Delivery Flow
 
-When a message is published:
+When an MQTT client publishes a message, the node (Core or a Replicant) it is connected to uses the topic tree to match the message topic against all subscription patterns. It then consults the routing table to determine which nodes have matching subscribers and forwards the message accordingly (possibly to multiple nodes). Each receiving node then looks up its local subscription table and delivers the message to the appropriate subscribers.
 
-- The publishing node (Core or Replicant) uses the replicated topic tree to match the topic against subscription patterns.
-- It uses the routing table to identify which nodes have interested subscribers.
-- The message is forwarded only to those nodes.
-- Each receiving node checks its local subscription table and delivers the message to its clients.
+For example, when **Client 1** publishes a message to the topic `t/a`, the routing and delivery process across nodes is as follows:
+
+1. **Client 1** connects to **Node 1** and publishes a message with topic `t/a`.
+
+2. **Node 1** checks the topic tree and finds that `t/a` matches the existing subscription patterns `t/a` and `t/#`.
+
+3. **Node 1** looks up the routing table and determines:
+
+   - **Node 2** has clients subscribed to `t/#`,
+   - **Node 3** has clients subscribed to `t/a`,
+
+   So it forwards the message to both **Node 2** and **Node 3**.
+
+4. **Node 2** receives the message, checks its local subscription table, and delivers the message to the client subscribed to `t/#`.
+
+5. **Node 3** receives the message, checks its local subscription table, and delivers the message to the client subscribed to `t/a`.
+
+6. The message delivery process is complete.
 
 To better understand how clustering in EMQX works, you can continue to read the [Design for EMQX Clustering](../../design/clustering.md).
 
@@ -184,9 +195,9 @@ With this feature enabled, EMQX continuously monitors the connectivity between n
 
 ### Cluster Node Autoclean
 
-The cluster node autoclean feature automatically removes the disconnected nodes from the cluster after the configured time interval. This feature helps to ensure that the cluster is running efficiently and prevents performance degradation over time.
+The cluster node autoclean feature automatically removes the disconnected nodes from the cluster after the configured time interval. This feature ensures that the cluster is running efficiently and prevents performance degradation over time.
 
-This feature is enabled by default and controlled by the `cluster.autoclean` setting (default: 24h).
+This feature is enabled by default and controlled by the `cluster.autoclean` setting (default: `24h`).
 
 ```bash
 cluster.autoclean = 24h
@@ -201,10 +212,18 @@ To enable this feature:
 - **MQTT 3.x clients**: set `clean_start = false`
 - **MQTT 5.0 clients**: set `clean_start = false` and `session_expiry_interval > 0`
 
-With these settings, EMQX keeps the previous session data associated with the Client ID when the client disconnects. Upon reconnection, EMQX resumes the previous sessions, delivers any messages that were queued during the client's disconnection, and maintains the client's subscriptions.
+With these settings, EMQX keeps the previous session data associated with the Client ID when the client disconnects. Upon reconnection, EMQX resumes the previous sessions, delivers any messages queued during the client's disconnection, and maintains the client's subscriptions.
 
 ## Network Requirements
 
 To ensure optimal performance, the network latency for operating EMQX clusters should be less than 10 milliseconds. The cluster will not be available if the latency is higher than 100 ms.
 
 The Core nodes should be under the same private network. In Mria+RLOG mode, it is also recommended to deploy the replicant nodes in the same private network.
+
+## Next Step: Create an EMQX Cluster
+
+You can continue with the following sections to learn how to create an EMQX cluster:
+
+- [Deployment Architecture and Cluster Requirements](./mria-introduction.md)
+- [Create a Cluster](./create-cluster.md)
+- [Cluster Security](./security.md)
