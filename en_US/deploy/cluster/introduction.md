@@ -224,6 +224,6 @@ The Core nodes should be under the same private network. In Mria+RLOG mode, it i
 
 You can continue with the following sections to learn how to create an EMQX cluster:
 
-- [Deployment Architecture and Cluster Requirements](./mria-introduction.md)
+- [Cluster Architecture](./mria-introduction.md)
 - [Create a Cluster](./create-cluster.md)
 - [Cluster Security](./security.md)

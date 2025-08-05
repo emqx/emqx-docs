@@ -507,3 +507,28 @@ $ ./bin/emqx ctl cluster status
 - TCP IPv6：`inet6_tcp`
 
 要启用 SSL，您首先需要将 `cluster.proto_dist` 设置为 `inet_tls`，然后在 `etc` 文件夹中配置 `ssl_dist.conf` 文件并指定 TLS 证书。详情参见 [使用 TLS 进行 Erlang 分布式处理](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html)。
+
+## 本地测试：伪分布式集群
+
+EMQX 支持伪分布式集群功能，适用于测试和开发场景。所谓“伪分布式集群”，是指在同一台机器上运行多个 EMQX 实例，并将每个实例配置为集群中的一个节点。
+
+启动第一个节点后，可使用以下命令启动第二个节点，并手动将其加入集群。为避免端口冲突，需要调整各类监听端口：
+
+```bash
+EMQX_NODE__NAME='emqx2@127.0.0.1' \
+EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
+EMQX_STATSD__SERVER='127.0.0.1:8124' \
+EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
+EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
+EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
+EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
+EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
+EMQX_NODE__DATA_DIR="./data2" \
+./bin/emqx start
+
+./bin/emqx ctl cluster join emqx1@127.0.0.1
+```
+
+上述示例展示的是如何手动创建集群。如需了解如何自动创建集群，可参阅[自动集群](#自动集群)一节。
+
+需要注意的是，Dashboard 的设计默认集群中所有节点使用相同的端口号。若在同一台计算机上使用不同端口，可能会导致 Dashboard 页面显示异常，因此不建议在生产环境中使用此方式。
