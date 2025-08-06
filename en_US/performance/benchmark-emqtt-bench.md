@@ -6,43 +6,26 @@ After you deploy the EMQX either in a single mode or in an EMQX cluster, you can
 
 There are three options for installing the eMQTT-Bench:
 
-- Run the docker image
+- Run the Docker image
 - Download and install the binary package
 - Build from the source code
 
 ### Docker Image
 
-You can install the benchmark tool by running the `emqtt-bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
+You can install the benchmark tool by running the `emqtt-bench` Docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-Note that the docker image name uses hyphen '-', while the binary script name uses with underscore '_'.
+Note that the Docker image name uses hyphen '-', while the binary script name uses underscore '_'.
 
 ### Binary Package
 
-You can download the released binary packages and install the `emqtt-bench` on the following platforms:
+You can download the released binary packages from the [official download site](https://www.emqx.com/en/downloads-and-install/enterprise) and install the `emqtt-bench` on the supported platforms.
 
-- Amazon Linux 2
-- Amazon Linux 2023
-- CentOS 7
-- Rocky Linux 8
-- Rocky Linux 9
-- Debian 9
-- Debian 10
-- Debian 11
-- Debian 12
-- Ubuntu 16.04
-- Ubuntu 18.04
-- Ubuntu 20.04
-- Ubuntu 22.04
-- MacOS 11 (Intel)
-- MacOS 12 (Intel)
-- MacOS 12 (Apple Silicon)
-
-For detailed information on each release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
+For detailed information on each `emqtt-bench` release, see [Releases](https://github.com/emqx/emqtt-bench/releases).
 
 For example, here is how to install `emqtt-bench` on Ubuntu 20.04:
 
@@ -58,7 +41,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### Build from Source
 
-The eMQTT-Bench is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 22.3 and above version to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
+The eMQTT-Bench is written in Erlang and requires [Erlang/OTP](https://www.erlang.org/) 22.3 or above to build it. The installation process of Erlang/OTP is skipped. For details, please refer to the online installation tutorials.
 
 After the Erlang environment is installed, download the latest code of `emqtt-bench` and compile it:
 

@@ -12,7 +12,7 @@
 
 ### 运行 Docker 镜像
 
-你可以通过运行`emqtt-bench`镜像来安装测试工具。`emqtt-bench` docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
+你可以通过运行`emqtt-bench`镜像来安装测试工具。`emqtt-bench` Docker 镜像已推送到 [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags), 且每个新版本都会更新`:latest`标签：
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
@@ -23,24 +23,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 用二进制包安装
 
-你可以下载`emqtt-bench`的二进制包并在以下平台上安装测试工具：
-
-- Amazon Linux 2
-- Amazon Linux 2023
-- CentOS 7
-- Rocky Linux 8
-- Rocky Linux 9
-- Debian 9
-- Debian 10
-- Debian 11
-- Debian 12
-- Ubuntu 16.04
-- Ubuntu 18.04
-- Ubuntu 20.04
-- Ubuntu 22.04
-- MacOS 11 (Intel)
-- MacOS 12 (Intel)
-- MacOS 12 (Apple Silicon)
+你可以从[官方下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)下载已发布的 EMQX 安装包，并在支持的平台上安装 `emqtt-bench` 测试工具。
 
 前往 [Releases](https://github.com/emqx/emqtt-bench/releases) 页面查看具体的`emqtt-bench`发布版本信息。
 
@@ -185,7 +168,7 @@ Usage: emqtt_bench pub | sub | conn [--help]
 
 ### 调优
 
-客户端的压力机和服务端的机器都需要执行系统参数的调优，参见：[系统调优](../performance/tune.md)
+客户端的压力机和服务端的机器都需要执行系统参数的调优，参见：[系统调优](../performance/tune.md)。
 
 ### 连接量测试
 
