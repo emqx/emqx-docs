@@ -96,9 +96,7 @@ You can use EMQX Dashboard to configure how to use MySQL for password authentica
             - **Derived Key Length** (optional): Specifies the length in bytes of the generated key. If left blank, the length will default to that determined by the selected pseudorandom function.
             - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential.
    
-   
-   
-      - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MySQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+      - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MySQL authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
    
    
       - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
@@ -111,7 +109,6 @@ You can use EMQX Dashboard to configure how to use MySQL for password authentica
         - **Connection Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to MySQL. Default: `8`. 
           - **Query Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour. Default: `5` second.
    
-
 5. After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
