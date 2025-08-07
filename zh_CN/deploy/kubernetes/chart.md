@@ -2,12 +2,12 @@
 
 此 Chart 用于在 Kubernetes 集群上通过 Helm 包管理器来部署 EMQX。
 
-# 前提条件
+## 前提条件
 
 + Kubernetes 1.6+
 + Helm
 
-# 安装 Chart
+## 安装 Chart
 
 使用 `my-emqx` 的发布名称安装此 Chart：
 
@@ -25,7 +25,7 @@
   ```
   > 如果你想安装一个不稳定版本，你需要在执行 `helm install` 命令时添加 `--devel` 参数。
 
-# 卸载 Chart
+## 卸载 Chart
 
 卸载/删除 `my-emqx` 部署：
 
@@ -33,7 +33,7 @@
 $ helm del  my-emqx
 ```
 
-# 配置
+## 配置
 
 下表列出了 EMQX Chart 的可配置参数及其默认值。
 

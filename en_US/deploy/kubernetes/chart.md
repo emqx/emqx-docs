@@ -2,12 +2,12 @@
 
 This chart bootstraps an emqx deployment on a Kubernetes cluster using the Helm package manager.
 
-# Prerequisites
+## Prerequisites
 
 + Kubernetes 1.6+
 + Helm
 
-# Installing the Chart
+## Installing the Chart
 
 To install the chart with the release name `my-emqx`:
 
@@ -25,7 +25,7 @@ To install the chart with the release name `my-emqx`:
   ```
   > If you want to install an unstable version, you need to add `--devel` when you execute the `helm install` command.
 
-# Uninstalling the Chart
+## Uninstalling the Chart
 
 To uninstall/delete the `my-emqx` deployment:
 
@@ -33,7 +33,7 @@ To uninstall/delete the `my-emqx` deployment:
 $ helm del  my-emqx
 ```
 
-# Configuration
+## Configuration
 
 The following table lists the configurable parameters of the emqx chart and their default values.
 
