@@ -6,7 +6,7 @@ In this section, we will walk you through the steps required to efficiently set 
 
 Before deploying EMQX Operator, please confirm that the following components have been ready:
 
-- A running [Kubernetes cluster](https://kubernetes.io/docs/concepts/overview/), for a version of Kubernetes, please check [How to selector Kubernetes version](../index.md#how-to-selector-kubernetes-version)
+- A running [Kubernetes cluster](https://kubernetes.io/docs/concepts/overview/), for a version of Kubernetes, please check [How to selector Kubernetes version](./operator.md#how-to-selector-kubernetes-version)
 
 - A [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) tool that can access the Kubernetes cluster. You can check the status of the Kubernetes cluster using `kubectl cluster-info` command.
 
@@ -74,7 +74,7 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
    metadata:
       name: emqx-ee
    spec:
-     image: emqx/emqx-enterprise:5.10
+     image: emqx/emqx-enterprise:@EE_VERSION@
      config:
        data: |
          license {
@@ -82,15 +82,15 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
          }
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./reference/v2beta1-reference.md).
+   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
 
 2. Wait the EMQX cluster is running.
 
    ```bash
    $ kubectl get emqx
 
-   NAME      IMAGE                        STATUS    AGE
-   emqx-ee   emqx/emqx-enterprise:5.10.0   Running   2m55s
+   NAME      IMAGE                              STATUS    AGE
+   emqx-ee   emqx/emqx-enterprise:@EE_VERSION@  Running   2m55s
    ```
 
    Make sure the `STATUS` is `Running`, it maybe takes some time to wait for the EMQX cluster to be ready.
@@ -106,83 +106,29 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
    metadata:
       name: emqx
    spec:
-      image: emqx/emqx:latest
+      image: emqx/emqx:@CE_VERSION@
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./reference/v2beta1-reference.md).
+   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
 
 2. Wait the EMQX cluster is running.
 
    ```bash
    $ kubectl get emqx
 
-   NAME   IMAGE              STATUS    AGE
-   emqx   emqx/emqx:latest   Running   2m55s
-   ```
-
-   Make sure the `STATUS` is `Running`, it maybe takes some time to wait for the EMQX cluster to be ready.
-:::
-
-::: tab EMQX Enterprise 4
-1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
-
-    ```yaml
-    apiVersion: apps.emqx.io/v1beta4
-    kind: EmqxEnterprise
-    metadata:
-       name: emqx-ee
-    spec:
-       template:
-         spec:
-           emqxContainer:
-             image:
-               repository: emqx/emqx-ee
-               version: 4.4.30
-    ```
-
-    For more details please check the [reference document](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/reference/v1beta4-reference.md).
-
-2. Wait the EMQX cluster is running
-
-   ```bash
-   $ kubectl get emqxenterprises
-
-   NAME      STATUS   AGE
-   emqx-ee   Running  8m33s
-   ```
-
-   Make sure the `STATUS` is `Running`, it maybe takes some time to wait for the EMQX cluster to be ready.
-:::
-
-::: tab EMQX Open Source 4
-1. Save the following content as a YAML file and deploy it with the `kubectl apply`.
-
-   ```yaml
-   apiVersion: apps.emqx.io/v1beta4
-   kind: EmqxBroker
-   metadata:
-      name: emqx
-   spec:
-      template:
-        spec:
-          emqxContainer:
-            image:
-              repository: emqx
-              version: "4.4.18"
-   ```
-
-   For more details please check the [reference document](https://github.com/emqx/emqx-operator/blob/main/docs/en_US/reference/v1beta4-reference.md).
-
-2. Wait the EMQX cluster is running.
-
-   ```bash
-   $ kubectl get emqxbrokers
-
-   NAME   STATUS   AGE
-   emqx   Running  8m33s
+   NAME   IMAGE                   STATUS    AGE
+   emqx   emqx/emqx:@CE_VERSION@  Running   2m55s
    ```
 
    Make sure the `STATUS` is `Running`, it maybe takes some time to wait for the EMQX cluster to be ready.
 :::
 
 ::::
+
+## Deploy on Public Cloud
+
+Check out the following guides to deploy EMQX on public cloud platforms using the EMQX Operator:
+
+- [Amazon Elastic Kubernetes Service (EKS)](./aws-eks.md)
+- [Google Cloud GKE](./gcp-gke.md)
+- [Azure Kubernetes Service (AKS)](./azure-aks.md)

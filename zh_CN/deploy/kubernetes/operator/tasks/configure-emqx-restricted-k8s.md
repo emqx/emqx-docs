@@ -104,7 +104,7 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
 
 ## Configure EMQX Cluster
 
-`apps.emqx.io/v2beta1 EMQX` supports configuring the Core node of the EMQX cluster through the `.spec.coreTemplate` field, and configuring the Replicant node of the EMQX cluster using the `.spec.replicantTemplate` field. For more information, please refer to: [API Reference](../reference/v2beta1-reference.md#emqxspec).
+`apps.emqx.io/v2beta1 EMQX` supports configuring the Core node of the EMQX cluster through the `.spec.coreTemplate` field, and configuring the Replicant node of the EMQX cluster using the `.spec.replicantTemplate` field. For more information, please refer to: [API Reference](../api-reference.md#emqxspec).
 
 + Save the following content as a YAML file and deploy it with the `kubectl apply` command
 

@@ -13,21 +13,11 @@ The value of rebalancing mainly has the following two points:
 - **Improve system scalability**: Due to the persistent nature of MQTT connections, connections to the original nodes will not automatically migrate to the new nodes when the cluster scales. To address this, you can use the load rebalancing feature to smoothly transfer connections from overloaded nodes to newly-added ones. This process ensures a more balanced distribution of load across the entire cluster and enhances throughput, response speed, and resource utilization rate.
 - **Reduce O&M costs**: For clusters with unevenly distributed loads, where some nodes are overloaded while others remain idle, you can use the load rebalancing feature to automatically adjust the load within the cluster. This helps achieve a more balanced distribution of work and reduces operation and maintenance costs.
 
-For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](https://docs.emqx.com/en/enterprise/v5.1/deploy/cluster/rebalancing.html#%E9%9B%86%E7%BE%A4%E8%B4%9F%E8%BD%BD%E9%87%8D%E5%B9%B3%E8%A1%A1)
-
-:::tip
-
-The cluster load rebalancing requirements EMQX Enterprise must be greater than or equal to 4.4.12
-
-:::
+For EMQX cluster load rebalancing, please refer to the document: [Rebalancing](../../../cluster/rebalancing.md)
 
 ## How to Use Load Rebalancing
 
 The corresponding CRD of the cluster rebalancing in EMQX Operator is `Rebalance`, and its example is as follows:
-
-:::: tabs type:card
-
-::: tab EMQX Enterprise 5.x
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -47,37 +37,7 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-> For Rebalance configuration, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
-
-:::
-
-::: tab EMQX Enterprise 4.x
-
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: Rebalance
-metadata:
-  name: rebalance-sample
-spec:
-  instanceName: emqx-ee
-  instanceKind: EmqxEnterprise
-  rebalanceStrategy:
-    connEvictRate: 10
-    sessEvictRate: 10
-    waitTakeover: 10
-    waitHealthCheck: 10
-    absConnThreshold: 100
-    absSessThreshold: 100
-    relConnThreshold: "1.1"
-    relSessThreshold: "1.1"
-```
-
-> For Rebalance configuration, please refer to the document: [Rebalance reference](../reference/v1beta4-reference.md#rebalancestrategy).
-
-
-:::
-
-::::
+> For Rebalance configuration, please refer to the document: [Rebalance reference](../api-reference.md#rebalancestrategy).
 
 ## Test Load Rebalancing
 
@@ -137,7 +97,7 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
      "connection_eviction_rate": 10
 }
 ```
-> For a detailed description of the rebalanceStates field, please refer to the document: [rebalanceStates reference](../reference/v1beta4-reference.md#rebalancestate).
+> For a detailed description of the rebalanceStates field, please refer to the document: [rebalanceStates reference](../api-reference.md#rebalancestate).
 
 Wait for the Rebalance task to complete:
 

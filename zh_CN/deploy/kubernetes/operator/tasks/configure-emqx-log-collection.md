@@ -564,7 +564,7 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
 
 ## 部署 EMQX 集群
 
-部署 EMQX 集群可以参考文档 [部署 EMQX](../getting-started/getting-started.md)
+部署 EMQX 集群可以参考文档 [部署 EMQX](../getting-started.md)
 
 ## 验证日志采集
 

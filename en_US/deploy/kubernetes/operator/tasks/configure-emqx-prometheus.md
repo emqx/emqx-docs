@@ -10,12 +10,9 @@ Grafana' deployment documentation can refer to [Grafana](https://grafana.com/doc
 
 ## Deploy EMQX Cluster
 
-Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](../index.md):
+Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](../operator.md):
 
-:::: tabs type:card
-::: tab v2beta1
-
-EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, please refer to the document: [Integrate with Prometheus](https://www.emqx.io/docs/en/v5.1/observability/prometheus.html)
+EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, please refer to the document: [Integrate with Prometheus](../../../../observability/prometheus.md)
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -23,7 +20,7 @@ kind: EMQX
 metadata:
   name: emqx
 spec:
-  image: emqx/emqx-enterprise:5.10
+  image: emqx/emqx-enterprise:@EE_VERSION@
   config:
     data: |
       license {
@@ -41,81 +38,18 @@ emqx.apps.emqx.io/emqx created
 
 Check the status of the EMQX cluster and make sure that `STATUS` is `Running`, which may take some time to wait for the EMQX cluster to be ready.
 
-```bash
-$ kubectl get emqx emqx
-
-NAME   IMAGE                         STATUS    AGE
-emqx   emqx/emqx-enterprise:5.10.0   Running   10m
-```
-
-:::
-::: tab v1beta4
-
-EMQX supports exposing indicators through the http interface. For all statistical indicators under the cluster, you can refer to the document: [HTTP API](https://www.emqx.io/docs/en/v4.4/advanced/http-api.html#%E7%BB%9F%E8%AE%A1%E6%8C%87%E6%A0%87)
-
-```yaml
-apiVersion: apps.emqx.io/v1beta4
-kind: EmqxEnterprise
-metadata:
-  name: emqx-ee
-spec:
-  template:
-    spec:
-      emqxContainer:
-        image:
-          repository: emqx/emqx-ee
-          version: 4.4.30
-        ports:
-          # prometheus monitor requires the pod must name the target port
-          - name: dashboard
-            containerPort: 18083
-```
-
-Save the above content as `emqx.yaml` and execute the following command to deploy the EMQX cluster:
-
-```bash
-$ kubectl apply -f emqx.yaml
-
-emqxenterprise.apps.emqx.io/emqx-ee created
-```
-
-Check the status of the EMQX cluster and make sure that `STATUS` is `Running`, which may take some time to wait for the EMQX cluster to be ready.
-
-```bash
-$ kubectl get emqxenterprises
-
-NAME      STATUS   AGE
-emqx-ee   Running  8m33s
-```
-
-If you are deploying EMQX 4.4 open-source, you need to enable plugin `emqx_prometheus` by `EmqxPlugin` CRD:
-
-```shell
-cat << "EOF" | kubectl apply -f -
-apiVersion: apps.emqx.io/v1beta4
-kind: EmqxPlugin
-metadata:
-  name: emqx-prometheus
-spec:
-  selector:
-    # EMQX pod labels
-    ${replace_with_your_emqx_pod_label} : label_value
-  pluginName: emqx_prometheus
-```
-
-:::
-::::
+  ```bash
+  $ kubectl get emqx emqx
+  NAME   IMAGE                              STATUS    AGE
+  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+  ```
 
 ## Create API secret
-emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an API secret.
-
-Note that it is different to create a secret between EMQX 5 and EMQX 4.4 on the dashboard.
-* **EMQX 5** create a new [API KEY](https://www.emqx.io/docs/en/v5.1/dashboard/system.html#api-keys).
-* **EMQX 4.4** create a new `User` instead of `Application`
+emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an [API Key](../../../../dashboard/system.md#api-keys).
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 
-The `emqx-exporter` is designed to expose partial metrics that are not included in the EMQX Prometheus API. It is compatible with EMQX 4.4 and EMQX 5, both open-source and enterprise.
+The `emqx-exporter` is designed to expose partial metrics that are not included in the EMQX Prometheus API.
 
 ```yaml
 apiVersion: v1
@@ -194,9 +128,6 @@ emqx-exporter-856564c95-j4q5v   Running  8m33s
 ## Configure Prometheus Monitor
 Prometheus-operator uses [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#podmonitor) and [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#servicemonitor) CRD to define how to monitor a set of pods or services dynamically.
 
-:::: tabs type:card
-::: tab v2beta1
-
 ```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -274,93 +205,6 @@ spec:
 
 <p> `path` indicates the path of the indicator collection interface. In EMQX 5, the path is: `/api/v5/prometheus/stats`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx`.</p>
 <p> The value of targetLabel `cluster` represents the name of current cluster, make sure its uniqueness. </p>
-
-:::
-::: tab v1beta4
-
-```yaml
-apiVersion: monitoring.coreos.com/v1
-kind: PodMonitor
-metadata:
-  name: emqx
-  labels:
-    app.kubernetes.io/name: emqx
-spec:
-  podMetricsEndpoints:
-  - interval: 5s
-    params:
-      type:
-        - prometheus
-    path: /api/v4/emqx_prometheus
-    # the name of emqx dashboard containerPort
-    port: dashboard
-    relabelings:
-      - action: replace
-        # user-defined cluster name, requires unique
-        replacement: emqx4
-        targetLabel: cluster
-      - action: replace
-        # fix value, don't modify
-        replacement: emqx
-        targetLabel: from
-      - action: replace
-        # fix value, don't modify
-        sourceLabels: ['pod']
-        targetLabel: "instance"
-  selector:
-    matchLabels:
-      # the label is the same as the label of emqx pod
-      apps.emqx.io/instance: emqx
-      apps.emqx.io/managed-by: emqx-operator
-  namespaceSelector:
-    matchNames:
-      # modify the namespace if your EMQX cluster deployed in other namespace
-      #- default
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: emqx-exporter
-  labels:
-    app: emqx-exporter
-spec:
-  selector:
-    matchLabels:
-      # the label in emqx exporter svc
-      app: emqx-exporter
-  endpoints:
-    - port: metrics
-      interval: 5s
-      path: /metrics
-      relabelings:
-        - action: replace
-          # user-defined cluster name, requires unique
-          replacement: emqx4
-          targetLabel: cluster
-        - action: replace
-          # fix value, don't modify
-          replacement: exporter
-          targetLabel: from
-        - action: replace
-          # fix value, don't modify
-          sourceLabels: ['pod']
-          regex: '(.*)-.*-.*'
-          replacement: $1
-          targetLabel: "instance"
-        - action: labeldrop
-          # fix value, don't modify
-          regex: 'pod'
-  namespaceSelector:
-    matchNames:
-      # modify the namespace if your exporter deployed in other namespace
-      #- default
-```
-
-> `path` indicates the path of the indicator collection interface. In EMQX 4, the path is: `/api/v4/emqx_prometheus`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx-ee`.
-> The value of targetLabel `cluster` represents the name of current cluster, make sure its uniqueness.
-
-:::
-::::
 
 Save the above content as `monitor.yaml` and execute the following command:
 

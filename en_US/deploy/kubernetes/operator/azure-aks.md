@@ -12,15 +12,12 @@ Before you begin, you must have the following:
   - To connect to an AKS cluster using CloudShell, use Azure CloudShell to connect to the AKS cluster and manage the cluster using kubectl. Refer to the [Manage an AKS cluster in Azure CloudShell](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli) documentation for detailed instructions on how to connect to Azure CloudShell and use kubectl.
 
 
-- To install EMQX Operator, please refer to [Install EMQX Operator](../getting-started/getting-started.md)
+- To install EMQX Operator, please refer to [Install EMQX Operator](./getting-started.md)
 
 
 ## Quickly deploying an EMQX cluster
 
-Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](../index.md):
-
-:::: tabs type:card
-::: tab apps.emqx.io/v2beta1
+Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](./operator.md):
 
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
@@ -28,7 +25,7 @@ kind: EMQX
 metadata:
   name: emqx
 spec:
-  image: "emqx/emqx-enterprise:5.10"
+  image: emqx/emqx-enterprise:@EE_VERSION@
   config:
     data: |
       license {
@@ -56,11 +53,11 @@ spec:
 
 Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster using the `kubectl get` command. Please ensure that the STATUS is `Running` which may take some time.
 
-```shell
-$ kubectl get emqx
-NAME   IMAGE                         STATUS    AGE
-emqx   emqx/emqx-enterprise:5.10.0   Running   118s
-```
+  ```bash
+  $ kubectl get emqx emqx
+  NAME   IMAGE                              STATUS    AGE
+  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+  ```
 
 Get the External IP of the EMQX cluster and access the EMQX console.
 
@@ -74,85 +71,15 @@ $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].i
 
 Access the EMQX console by opening a web browser and visiting http://20.245.230.91:18083. Login using the default username and password `admin/public`.
 
-:::
-::: tab apps.emqx.io/v1beta4
+## Connecting to EMQX cluster to publish/subscribe messages using MQTTX CLI
 
-Save the following content as a YAML file and deploy it using the `kubectl apply` command.
-
-```yaml
-apiVersion: apps.emqx.io/v1beta4
-kind: EmqxEnterprise
-metadata:
-  name: emqx-ee
-spec:
-  persistent:
-    metadata:
-      name: emqx-ee
-    spec:
-      ## more information about storage classes: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
-      storageClassName: default
-      resources:
-        requests:
-          storage: 10Gi
-      accessModes:
-        - ReadWriteOnce
-  template:
-    spec:
-      emqxContainer:
-        image:
-          repository: emqx/emqx-ee
-          version: 4.4.15
-  serviceTemplate:
-    spec:
-      ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
-      type: LoadBalancer
-
-```
-
-Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster using the `kubectl get` command. Please ensure that the STATUS is `Running` which may take some time.
-
-```shell
-$ kubectl get emqxenterprises
-NAME      STATUS   AGE
-emqx-ee   Running  8m33s
-```
-
-Get the External IP of the EMQX cluster and access the EMQX console.
-
-```shell
-$ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-20.245.123.100
-```
-
-Access the EMQX console by opening a web browser and visiting http://20.245.123.100:18083. Login using the default username and password `admin/public`.
-
-
-:::
-::::
-
-## Connecting to EMQX cluster to publish/subscribe messages using MQTT X CLI
-
-[MQTT X CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool designed to help developers develop and debug MQTT services and applications faster without the need for a GUI.
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool designed to help developers develop and debug MQTT services and applications faster without the need for a GUI.
 
 - Retrieve External IP of the EMQX cluster
 
-:::: tabs type:card
-::: tab apps.emqx.io/v2beta1
-
 ```shell
-external_ip=$(kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip')
+external_ip=$(kubectl get svc emqx -o json | jq '.status.loadBalancer.ingress[0].ip')
 ```
-
-:::
-::: tab apps.emqx.io/v1beta4
-
-```shell
-external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-```
-
-:::
-::::
 
 - Subscribe to messages
 

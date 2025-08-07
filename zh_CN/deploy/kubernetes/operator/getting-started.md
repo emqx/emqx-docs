@@ -6,7 +6,7 @@
 
 在部署 EMQX Operator 之前，请确认以下组件已经准备就绪：
 
-- 一个正在运行的 [Kubernetes 集群](https://kubernetes.io/docs/concepts/overview/)，关于 Kubernetes 的版本，请查看[如何选择 Kubernetes 版本](../index.md)
+- 一个正在运行的 [Kubernetes 集群](https://kubernetes.io/docs/concepts/overview/)，关于 Kubernetes 的版本，请查看[如何选择 Kubernetes 版本](./operator.md)
 
 - 一个可以访问 Kubernetes 集群的 [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) 工具。您可以使用 `kubectl cluster-info` 命令检查 Kubernetes 集群的状态。
 
@@ -80,7 +80,7 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./api-reference.md)
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 
@@ -111,7 +111,7 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./api-reference.md)
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 
@@ -123,78 +123,15 @@
    ```
 :::
 
-::: tab EMQX Enterprise 4
-1. 将下面的 YAML 配置文件保存为 `emqx.yaml`。
-
-   ```yaml
-   apiVersion: apps.emqx.io/v1beta4
-   kind: EmqxEnterprise
-   metadata:
-      name: emqx-ee
-   spec:
-      template:
-        spec:
-          emqxContainer:
-            image:
-              repository: emqx/emqx-ee
-              version: 4.4.19
-   ```
-
-   并使用 `kubectl apply` 命令来部署 EMQX。
-
-   ```bash
-   $ kubectl apply -f emqx.yaml
-   ```
-
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](../reference/v1beta4-reference.md)
-
-2. 等待 EMQX 集群就绪。
-
-   ```bash
-   $ kubectl get emqxenterprises
-
-   NAME      STATUS   AGE
-   emqx-ee   Running  8m33s
-   ```
-
-  请确保 `STATUS` 为 `Running`，这可能需要一些时间等待 EMQX 集群准备就绪。
-:::
-
-::: tab EMQX Open Source 4
-1. 将下面的 YAML 配置文件保存为 `emqx.yaml`。
-
-   ```yaml
-   apiVersion: apps.emqx.io/v1beta4
-   kind: EmqxBroker
-   metadata:
-      name: emqx
-   spec:
-      template:
-        spec:
-          emqxContainer:
-            image:
-              repository: emqx
-              version: 4.4.19
-   ```
-
-   并使用 `kubectl apply` 命令来部署 EMQX。
-
-   ```bash
-   $ kubectl apply -f emqx.yaml
-   ```
-
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v1beta4-reference.md)
-
-2. 等待 EMQX 集群就绪。
-
-   ```bash
-   $ kubectl get emqxbrokers
-
-   NAME   STATUS   AGE
-   emqx   Running  8m33s
-   ```
-
-  请确保 `STATUS` 为 `Running`，这可能需要一些时间等待 EMQX 集群准备就绪。
-:::
-
 ::::
+
+## 在公有云中部署 EMQX
+
+查看以下指南，使用 EMQX Operator 在公共云平台上部署 EMQX：
+
+- [在阿里云中部署 EMQX (AKS)](./alibaba-cloud.md)
+- [在华为云中部署 EMQX (CCE)](./huawei-cloud.md)
+- [在腾讯云中部署 EMQX (TKE)](./tencent-cloud.md)
+- [在 AWS 中部署 EMQX](./aws-eks.md)
+- [在 GCP 中部署 EMQX](./gcp-gke.md)
+- [在 Azure 中部署 EMQX](./azure-aks.md)

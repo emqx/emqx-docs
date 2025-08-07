@@ -1,4 +1,4 @@
-# Introduction
+# Helm Chart
 
 This chart bootstraps an emqx deployment on a Kubernetes cluster using the Helm package manager.
 

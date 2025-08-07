@@ -6,10 +6,7 @@
 
 ## 配置 EMQX 集群
 
-下面是 EMQX Custom Resource 的相关配置，你可以根据希望部署的 EMQX 的版本来选择对应的 APIVersion，具体的兼容性关系，请参考 [EMQX Operator 兼容性](../index.md):
-
-:::: tabs type:card
-::: tab apps.emqx.io/v2beta1
+下面是 EMQX Custom Resource 的相关配置，你可以根据希望部署的 EMQX 的版本来选择对应的 APIVersion，具体的兼容性关系，请参考 [EMQX Operator 兼容性](../operator.md):
 
 `apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.config.data` 来配置 EMQX 集群日志等级，EMQX 配置可以参考文档：[配置手册](https://www.emqx.io/docs/zh/v5.1/configuration/configuration-manual.html#%E8%8A%82%E7%82%B9%E8%AE%BE%E7%BD%AE)。
 
@@ -23,7 +20,7 @@
   metadata:
     name: emqx
   spec:
-    image: emqx5.0
+    image: emqx/emqx-enterprise:@EE_VERSION@
     config:
       data: |
         log.console.level = debug
@@ -40,9 +37,9 @@
 + 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
 
   ```bash
-  $ kubectl get emqx
-  NAME   IMAGE              STATUS    AGE
-  emqx   emqx/emqx:latest   Running   10m
+  $ kubectl get emqx emqx
+  NAME   IMAGE                              STATUS    AGE
+  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
   ```
 
 + 获取 EMQX 集群的 Dashboard External IP，访问 EMQX 控制台
@@ -55,77 +52,17 @@
 
   通过浏览器访问 `http://192.168.1.200:18083` ，使用默认的用户名和密码 `admin/public` 登录 EMQX 控制台。
 
-:::
-::: tab apps.emqx.io/v1beta4
-
-`apps.emqx.io/v1beta4 EmqxEnterprise` 支持通过 `.spec.template.spec.emqxContainer.emqxConfig` 字段配置 EMQX 集群日志等级。emqxConfig 字段的具体描述可以参考：[emqxConfig](../reference/v1beta4-reference.md#emqxtemplatespec)。
-
-+ 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
-
-  ```yaml
-  apiVersion: apps.emqx.io/v1beta4
-  kind: EmqxEnterprise
-  metadata:
-    name: emqx-ee
-  spec:
-    template:
-      spec:
-        emqxContainer:
-          image:
-            repository: emqx/emqx-ee
-            version: 4.4.14
-          emqxConfig:
-            log.level: debug
-    serviceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
-
-  > `.spec.template.spec.emqxContainer.emqxConfig` 字段配置 EMQX 集群日志等级为 `debug`。
-
-+ 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
-
-  ```bash
-  $ kubectl get emqxenterprises
-  NAME      STATUS   AGE
-  emqx-ee   Running  8m33s
-  ```
-
-+ 获取 EMQX 集群的 External IP，访问 EMQX 控制台
-
-  ```bash
-  $ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-  192.168.1.200
-  ```
-
-  通过浏览器访问 `http://192.168.1.200:18083`，使用默认的用户名和密码 `admin/public` 登录 EMQX 控制台。
-
-:::
-::::
-
 ## 验证日志等级
 
-[MQTT X CLI](https://mqttx.app/zh/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发者在不需要使用图形化界面的基础上，也能更快的开发和调试 MQTT 服务与应用。
+[MQTTX CLI](https://mqttx.app/zh/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发者在不需要使用图形化界面的基础上，也能更快的开发和调试 MQTT 服务与应用。
 
 + 获取 EMQX 集群的 External IP
-
-  :::: tabs type:card
-  ::: tab apps.emqx.io/v2beta1
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
-  :::
-  ::: tab apps.emqx.io/v1beta4
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
-  :::
-  ::::
-
-+ 使用 MQTT X CLI 连接 EMQX 集群
++ 使用 MQTTX CLI 连接 EMQX 集群
 
   ```bash
   $ mqttx conn -h ${external_ip} -p 1883

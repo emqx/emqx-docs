@@ -14,14 +14,11 @@ Before you begin, you must have the following:
 
 - Install the Amazon EBS CSI driver on the cluster, for details, please refer to: [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
 
-- Install EMQX Operator: For details, please refer to: [Install EMQX Operator](../getting-started/getting-started.md)
+- Install EMQX Operator: For details, please refer to: [Install EMQX Operator](./getting-started.md)
 
 ## Quickly Deploy An EMQX Cluster
 
-The following is the relevant configuration of EMQX custom resources. You can select the corresponding APIVersion according to the EMQX version you want to deploy. For the specific compatibility relationship, please refer to [Compatibility list between EMQX and EMQX Operator](../index.md)
-
-:::: tabs type:card
-::: tab apps.emqx.io/v2beta1
+The following is the relevant configuration of EMQX custom resources.
 
 + Save the following content as a YAML file and deploy it via the `kubectl apply` command
 
@@ -40,7 +37,7 @@ The following is the relevant configuration of EMQX custom resources. You can se
   metadata:
     name: emqx
   spec:
-    image: emqx/emqx-enterprise:5.10
+    image: emqx/emqx-enterprise:@EE_VERSION@
     config:
       data: |
         license {
@@ -83,9 +80,9 @@ The following is the relevant configuration of EMQX custom resources. You can se
 + Wait for EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure that `STATUS` is `Running`, this may take some time
 
   ```bash
-  $ kubectl get emqx
-  NAME   IMAGE                         STATUS    AGE
-  emqx   emqx/emqx-enterprise:5.10.0   Running   18m
+  $ kubectl get emqx emqx
+  NAME   IMAGE                              STATUS    AGE
+  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
   ```
 
 + Obtain Dashboard External IP of EMQX cluster and access EMQX console
@@ -100,106 +97,15 @@ The following is the relevant configuration of EMQX custom resources. You can se
 
   Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
 
-:::
-::: tab apps.emqx.io/v1beta4
-
-+ Save the following content as a YAML file and deploy it via the `kubectl apply` command
-
-  ```yaml
-  # Configure EBS StorageClass with WaitForFirstConsumer binding mode
-  # This ensures volumes are created in the same AZ as the pods that will use them
-  apiVersion: storage.k8s.io/v1
-  kind: StorageClass
-  metadata:
-    name: ebs-sc
-  provisioner: ebs.csi.aws.com
-  volumeBindingMode: WaitForFirstConsumer
-  ---
-  apiVersion: apps.emqx.io/v1beta4
-  kind: EmqxEnterprise
-  metadata:
-    name: emqx-ee
-  spec:
-    ## EMQX custom resources do not support updating this field at runtime
-    persistent:
-      metadata:
-        name: emqx-ee
-      spec:
-        storageClassName: ebs-sc
-        resources:
-          requests:
-            storage: 10Gi
-        accessModes:
-          - ReadWriteOnce
-    template:
-      spec:
-        ## If persistence is enabled, you need to configure podSecurityContext.
-        ## For details, please refer to the discussion: https://github.com/emqx/emqx-operator/discussions/716
-        podSecurityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
-          fsGroup: 1000
-          fsGroupChangePolicy: Always
-          supplementalGroups:
-            - 1000
-        emqxContainer:
-          image:
-            repository: emqx/emqx-ee
-            version: 4.4.14
-    serviceTemplate:
-      metadata:
-        ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/annotations/
-        annotations:
-          ## Specifies whether the NLB is Internet-facing or internal. If not specified, defaults to internal.
-          service.beta.kubernetes.io/aws-load-balancer-type: external
-          service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-      spec:
-        type: LoadBalancer
-        ## More content: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
-        loadBalancerClass: service.k8s.aws/nlb
-  ```
-
-+ Wait for EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure that `STATUS` is `Running`, this may take some time
-
-  ```bash
-  $ kubectl get emqxenterprises
-  NAME      STATUS   AGE
-  emqx-ee   Running  26m
-  ```
-
-+ Obtain External IP of EMQX cluster and access EMQX console
-
-  ```bash
-  $ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-  192.168.1.200
-  ```
-
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
-
-:::
-::::
-
 ## Use MQTTX application To Publish/Subscribe Messages
 
 [MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers to more Quickly develop and debug MQTT services and applications.
 
 + Obtain External IP of EMQX cluster
 
-  :::: tabs type:card
-  ::: tab apps.emqx.io/v2beta1
-
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
-  :::
-  ::: tab apps.emqx.io/v1beta4
-
-  ```bash
-  external_ip=$(kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
-  :::
-  ::::
 
 + Subscribe to news
 

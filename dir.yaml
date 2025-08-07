@@ -121,6 +121,7 @@
                     - deploy/kubernetes/operator/tasks/configure-emqx-service
                     - deploy/kubernetes/operator/tasks/configure-emqx-tls
                 - deploy/kubernetes/operator/api-reference
+            - deploy/kubernetes/chart
 
         - title_en: Work with License
           title_cn: 配置 License

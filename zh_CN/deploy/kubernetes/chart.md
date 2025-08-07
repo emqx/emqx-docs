@@ -1,4 +1,4 @@
-# 简介
+# Helm Chart
 
 此 Chart 用于在 Kubernetes 集群上通过 Helm 包管理器来部署 EMQX。
 

@@ -14,22 +14,12 @@
 
 - **降低运维成本**：如果系统中某些节点负载过高或过低，需要对这些节点进行手动调整，而通过重平衡，可以自动调整节点的负载，降低运维成本。
 
-关于 EMQX 集群负载重平衡可以参考文档：[重平衡](https://docs.emqx.com/zh/enterprise/v5.1/deploy/cluster/rebalancing.html#%E9%9B%86%E7%BE%A4%E8%B4%9F%E8%BD%BD%E9%87%8D%E5%B9%B3%E8%A1%A1)
-
-:::tip
-
-集群负载重平衡要求 EMQX 企业版必须大于等于 4.4.12
-
-:::
+关于 EMQX 集群负载重平衡可以参考文档：[重平衡](../../../cluster/rebalancing.md)
 
 - 如何使用重平衡
 
 集群重平衡在 EMQX Operator 里面对应的 CRD 为 `Rebalance`，其示例如下所示：
 
-:::: tabs type:card
-
-::: tab EMQX Enterprise 5.x
-
 ```yaml
 apiVersion: apps.emqx.io/v2beta1
 kind: Rebalance
@@ -48,38 +38,7 @@ spec:
     relSessThreshold: "1.1"
 ```
 
-> 关于 Rebalance 配置可以参考文档：[Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy)。
-
-:::
-
-::: tab EMQX Enterprise 4.x
-
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: Rebalance
-metadata:
-  name: rebalance-sample
-spec:
-  instanceName: emqx-ee
-  instanceKind: EmqxEnterprise
-  rebalanceStrategy:
-    connEvictRate: 10
-    sessEvictRate: 10
-    waitTakeover: 10
-    waitHealthCheck: 10
-    absConnThreshold: 100
-    absSessThreshold: 100
-    relConnThreshold: "1.1"
-    relSessThreshold: "1.1"
-```
-
-> 关于 Rebalance 配置可以参考文档：[Rebalance reference](../reference/v1beta4-reference.md#rebalancestrategy)。
-
-:::
-
-::::
-
-
+> 关于 Rebalance 配置可以参考文档：[Rebalance reference](../api-reference.md#rebalancestrategy)。
 
 ## 测试集群负载重平衡
 
@@ -140,7 +99,7 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
 }
 ```
 
-> 关于 rebalanceStates 字段的详细描述可以参考文档：[rebalanceStates reference](../reference/v1beta4-reference.md#rebalancestate)。
+> 关于 rebalanceStates 字段的详细描述可以参考文档：[rebalanceStates reference](../api-reference.md#rebalancestate)。
 
 等待 Rebalance 任务完成:
 
