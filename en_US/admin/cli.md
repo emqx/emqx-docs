@@ -102,9 +102,9 @@ Loaded 'Mod' module on []: ok
 
 ## conf cluster_sync
 
-This command is mostly for troubleshooting when there is something wrong with cluster-calls used to sync configuration changes between the nodes in the cluster. 
+This command is mostly for troubleshooting when there is something wrong with cluster-calls used to sync configuration changes between the nodes in the cluster.
 
-::: tip 
+::: tip
 
 In EMQX 5.0.x, this command was named `cluster_call`. This old command is still available in EMQX 5.1 but it is not displayed in the help information.
 
@@ -704,7 +704,7 @@ This command is like the `trace` command, but applies on all nodes in the cluste
 
 ## traces
 
-This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. 
+This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster.
 
 | Command                                                 | Description                       |
 | ------------------------------------------------------- | --------------------------------- |
@@ -787,6 +787,7 @@ tcp:default
   running         : true
   current_conn    : 12
   max_conns       : 5000000
+  shutdown_count  : [{takenover,2},{discarded,1}]
 ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
@@ -802,6 +803,33 @@ wss:default
   current_conn    : 0
   max_conns       : 5000000
 ```
+
+#### Common shutdown reasons
+
+| Reason                        | Description                                                                                           |
+|-------------------------------|-------------------------------------------------------------------------------------------------------|
+| `banned`                      | The client is blacklisted due to ACL violations, rate limiting, or IP restrictions.                   |
+| `closed`                      | The connection was closed either by the server or the client.                                         |
+| `discarded`                   | A client with the same clientid connected with `clean_start = true` while the old session was alive.  |
+| `takenover`                   | A client with the same clientid connected with `clean_start = false` while the old session was alive. |
+| `einval`                      | Invalid argument or socket error, typically indicating a network or client SDK issue.                 |
+| `frame_too_large`             | The MQTT packet exceeds the maximum allowed frame size.                                               |
+| `idle_timeout`                | The connection was idle beyond the configured timeout period.                                         |
+| `invalid_proto_name`          | The protocol name in the `CONNECT` packet is invalid or not `"MQTT"`.                                 |
+| `invalid_topic`               | The client used an invalid topic (e.g., containing illegal characters or forbidden by the broker).    |
+| `keepalive_timeout`           | The client failed to send any packets within the keepalive interval.                                  |
+| `malformed_packet`            | The MQTT packet is corrupted or does not conform to the MQTT specification.                           |
+| `not_authorized`              | The client attempted an unauthorized action, rejected by ACL.                                         |
+| `ssl_closed`                  | The SSL/TLS connection was closed by the peer.                                                        |
+| `ssl_error`                   | A SSL/TLS handshake or data transmission error occurred.                                              |
+| `ssl_upgrade_timeout`         | Timeout during SSL/TLS upgrade or handshake.                                                          |
+| `unexpected_packet`           | The client sent a packet that was unexpected in the current connection state.                         |
+| `zero_remaining_len`          | The packet has a zero remaining length field, which is invalid in most contexts.                      |
+| `bad_username_or_password`    | The client's credentials failed authentication.                                                       |
+| `client_identifier_not_valid` | The client ID is invalid or disallowed.                                                               |
+| `protocol_error`              | A generic MQTT protocol violation.                                                                    |
+| `tcp_closed`                  | The TCP connection was closed by the client or network layer.                                         |
+| `timeout`                     | A general timeout occurred (e.g., during authentication, SSL handshake, etc.).                        |
 
 ### listeners stop \<Identifier\>
 
@@ -832,7 +860,7 @@ Restarted tcp:default listener successfully.
 Restarting a listener causes all the connected clients to disconnect.
 :::
 
-### listeners enable \<Identifier\> <true/false> 
+### listeners enable \<Identifier\> <true/false>
 
 ```bash
 $ emqx ctl listeners enable tcp:default true
