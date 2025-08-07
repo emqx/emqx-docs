@@ -76,15 +76,52 @@
         - title_en: macOS
           title_cn: macOS
           path: deploy/install-macOS
+
         - title_en: Kubernetes
           title_cn: Kubernetes
-          lang: en
-          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
-        - title_en: Kubernetes
-          title_cn: Kubernetes
-          lang: cn
-          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
-          # - deploy/install-marketplace
+          path: deploy/kubernetes/kubernetes
+          collapsed: true
+          children:
+            - title_en: EMQX Operator
+              title_cn: EMQX Operator
+              path: deploy/kubernetes/operator/operator
+              collapsed: true
+              children:
+                - deploy/kubernetes/operator/getting-started
+                - title_en: 在阿里云上部署 EMQX 集群
+                  title_cn: 在阿里云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/alibaba-cloud
+                - title_en: 在华为云上部署 EMQX 集群
+                  title_cn: 在华为云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/huawei-cloud
+                - title_en: 在腾讯云上部署 EMQX 集群
+                  title_cn: 在腾讯云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/tencent-cloud
+                - deploy/kubernetes/operator/aws-eks
+                - deploy/kubernetes/operator/gcp-gke
+                - deploy/kubernetes/operator/azure-aks
+                - title_en: Managing EMQX Cluster
+                  title_cn: 管理 EMQX 集群
+                  path: deploy/kubernetes/operator/tasks/overview
+                  collapsed: true
+                  children:
+                    - deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
+                    - deploy/kubernetes/operator/tasks/configure-emqx-config
+                    - deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+                    - deploy/kubernetes/operator/tasks/configure-emqx-license
+                    - deploy/kubernetes/operator/tasks/configure-emqx-log-collection
+                    - deploy/kubernetes/operator/tasks/configure-emqx-log-level
+                    - deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - deploy/kubernetes/operator/tasks/configure-emqx-prometheus
+                    - deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+                    - deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
+                    - deploy/kubernetes/operator/tasks/configure-emqx-service
+                    - deploy/kubernetes/operator/tasks/configure-emqx-tls
+                - deploy/kubernetes/operator/api-reference
+
         - title_en: Work with License
           title_cn: 配置 License
           path: deploy/license
