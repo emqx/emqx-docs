@@ -44,9 +44,9 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           pattern: "emqx*-schema-dump"
           repository: ${{ env.REPOSITORY }}
@@ -54,7 +54,7 @@ jobs:
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
           merge-multiple: true
 
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         if: github.event.inputs.docker_pull == false
         with:
           name: "emqx-docker"
@@ -62,7 +62,7 @@ jobs:
           run-id: ${{ env.RUN_ID }}
           github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
 
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         if: github.event.inputs.docker_pull == false
         with:
           name: "emqx-enterprise-docker"
@@ -136,7 +136,7 @@ jobs:
           done
           gh pr create --title "update api and cfg manual ${VERSION}" --body '' --base ${BASE_BRANCH} --head ${NEW_BRANCH} --label update-api-cfg --repo ${{ github.repository }}
 
-      - uses: actions/upload-artifact@89ef406dd8d7e03cfd12d9e0a4a378f454709029 # v4.3.5
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: "swagger"
           path: |
