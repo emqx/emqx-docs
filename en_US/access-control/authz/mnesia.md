@@ -53,7 +53,7 @@ You can create authorization rules through the Dashboard or API.
 
 On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
 
-![authz-config-built-in-rules_ee](./assets/authz-mnesia-rule.png)
+![authz-mnesia-rule](./assets/authz-mnesia-rule.png)
 
 You can set authorization checks based on the client ID, username, or topic as needed.
 
