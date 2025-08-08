@@ -12,7 +12,7 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 2. 点击右上角的**创建**按钮，在**数据源**中选择**内置数据库**，然后点击 **下一步**。
 
-   <img src="./assets/authz-mnesia.png" alt="authz-mnesia_ee" style="zoom:60%;" />
+   <img src="./assets/authz-mnesia.png" alt="authz-mnesia" style="zoom:60%;" />
 
 3. 在**配置参数**步骤中，设置**最大规则数**（默认值为 `100`），该参数用于限制每个客户端或用户允许配置的最大权限规则数量。
 
