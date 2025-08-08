@@ -102,6 +102,26 @@ EMQX releases receive different maintenance based on their type and lifecycle st
     *   Such as 5.10.1, 5.10.2, contain only bug fixes and security patches. No new features are introduced.
     *   In rare cases, to support migration to newer versions, the maintenance team may, at its discretion, consider adding minimal, essential non-disruptive changes to versions in maintenance mode.
 
+## Business Source License (BSL) and Version Support
+
+::: tip Note
+
+EMQX versions beginning with 5.9.0 are licensed under the Business Source License (BSL) 1.1. For more details, see the [official announcement](https://www.emqx.com/en/news/emqx-adopts-business-source-license).
+
+:::
+
+### Community Users
+
+- Community users can use all EMQX versions, including those from LTS branches, under the BSL terms.
+- The software is provided without any guarantees. You use it at your own risk, and EMQX assumes no responsibility for any issues or damages that may result from its use.
+- Under BSL, EMQX source code will transition to a fully open-source license (e.g., Apache 2.0) after a specified Change Date. This ensures that the community eventually gains access to a fully open version that includes the results of long-term maintenance.
+- Before the Change Date, community users may still receive patch releases (including bug fixes and security updates) that apply to the relevant BSL versions.
+
+### Enterprise Customers
+
+- Customers with a commercial license and subscription receive access to premium features and official support, including service-level guarantees as defined in their agreements.
+- A 5-year support commitment is provided for LTS versions as part of the Enterprise offering. This ensures continued maintenance and support for mission-critical deployments, even if the code branch later transitions to an open-source license under BSL terms.
+
 ## Maintenance Schedule for Public Releases
 
 This section provides the maintenance and End-of-Life (EOL) timelines for public Feature and LTS releases. Internal releases are maintained separately and are not listed here.
