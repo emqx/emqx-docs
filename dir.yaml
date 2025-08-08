@@ -981,6 +981,7 @@
   collapsed: true
   path: changes/all-changes-ee
   children:
+    - changes/changes-ee-v6
     - changes/changes-ee-v5
     - changes/changes-ee-v4
     - title_en: Known Issues
@@ -996,6 +997,7 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+        - changes/breaking-changes-6.0
         - changes/breaking-changes-5.10
         - changes/breaking-changes-ee-5.9
         - changes/breaking-changes-ee-5.8

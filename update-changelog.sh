@@ -13,15 +13,18 @@ process_changes() {
 
   [ ! -d $DEV_CHANGES_DIR/$source_edition ] && return
 
+  local major_minor=$(echo $EMQX_VERSION | cut -d. -f1,2)
+  local major=$(echo $EMQX_VERSION | cut -d. -f1)
+
   # Add a section for the new version if it doesn't exist along with the Enhancements and Bug Fixes sections
-  if ! grep -q "^## $EMQX_VERSION" en_US/changes/changes-$target_edition-v5.md; then
-    sed -i "3i ## $EMQX_VERSION\n" en_US/changes/changes-$target_edition-v5.md
-    sed -i "5i ### Enhancements\n" en_US/changes/changes-$target_edition-v5.md
-    sed -i "7i ### Bug Fixes\n" en_US/changes/changes-$target_edition-v5.md
+  if ! grep -q "^## $EMQX_VERSION" en_US/changes/changes-$target_edition-v$major.md; then
+    sed -i "3i ## $EMQX_VERSION\n" en_US/changes/changes-$target_edition-v$major.md
+    sed -i "5i ### Enhancements\n" en_US/changes/changes-$target_edition-v$major.md
+    sed -i "7i ### Bug Fixes\n" en_US/changes/changes-$target_edition-v$major.md
   fi
 
   # Get the line number of the Enhancements section
-  enhancements_ln=$(grep -n '^### Enhancements' en_US/changes/changes-$target_edition-v5.md | head -n 1 | cut -d: -f1)
+  enhancements_ln=$(grep -n '^### Enhancements' "en_US/changes/changes-${target_edition}-v${major}.md" | head -n 1 | cut -d: -f1)
   # Increment the line number to leave a blank line before the first enhancement
   enhancements_ln=$((enhancements_ln + 1))
 
@@ -29,7 +32,7 @@ process_changes() {
 
   for f in $DEV_CHANGES_DIR/$source_edition/fix-*.md $DEV_CHANGES_DIR/$source_edition/feat-*.md; do
     pr_num="$(echo "${f}" | sed -E 's/.*-([0-9]+)\.[a-z]+\.md$/\1/')"
-    if ! grep -q "^- \[#$pr_num\]" en_US/changes/changes-$target_edition-v5.md; then
+    if ! grep -q "^- \[#$pr_num\]" en_US/changes/changes-$target_edition-v$major.md; then
       if [ $pr_num -lt 10000 ]; then
         repo='emqx-platform'
       else
@@ -43,13 +46,13 @@ process_changes() {
       } > /tmp/$pr_num.md
 
       if [[ "$f" =~ ^$DEV_CHANGES_DIR/$source_edition/feat-.*\.md ]]; then
-        sed -i "${enhancements_ln}r /tmp/$pr_num.md" en_US/changes/changes-$target_edition-v5.md
+        sed -i "${enhancements_ln}r /tmp/$pr_num.md" en_US/changes/changes-$target_edition-v$major.md
       elif [[ "$f" =~ ^$DEV_CHANGES_DIR/$source_edition/fix-.*\.md ]]; then
         # Get the line number of the Bug Fixes section
-        bugfixes_ln=$(grep -n 'Bug Fixes' en_US/changes/changes-$target_edition-v5.md | head -n 1 | cut -d: -f1)
+        bugfixes_ln=$(grep -n 'Bug Fixes' en_US/changes/changes-$target_edition-v$major.md | head -n 1 | cut -d: -f1)
         # Increment the line number to leave a blank line before the first bug fix
         bugfixes_ln=$((bugfixes_ln + 1))
-        sed -i "${bugfixes_ln}r /tmp/$pr_num.md" en_US/changes/changes-$target_edition-v5.md
+        sed -i "${bugfixes_ln}r /tmp/$pr_num.md" en_US/changes/changes-$target_edition-v$major.md
       fi
     fi
   done
@@ -58,8 +61,6 @@ process_changes() {
   num_files=$(find $DEV_CHANGES_DIR/$source_edition -type f -name 'breaking-*.md' | wc -l)
   # exit the function if no breaking changes files are found
   [ $num_files -eq 0 ] && return
-
-  major_minor=$(echo $EMQX_VERSION | cut -d. -f1,2)
 
   # create en_US/changes/breaking-changes-$source_edition-$major_minor.md if it does not exist
   if [ ! -f en_US/changes/breaking-changes-$target_edition-$major_minor.md ]; then
