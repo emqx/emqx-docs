@@ -443,6 +443,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -533,6 +539,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -3318,6 +3330,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -4324,6 +4342,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -5218,6 +5242,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -8140,6 +8170,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -8414,6 +8450,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -8640,7 +8682,7 @@
             "type": "string"
           },
           "name": {
-            "description": "The name of the node that triggered this alarm.",
+            "description": "Alarm name, used to distinguish different alarms.",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -9824,6 +9866,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -13545,6 +13593,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -15382,6 +15436,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -16081,6 +16141,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -17681,6 +17747,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -19714,6 +19786,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "15s",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -20161,6 +20239,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -20888,6 +20972,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -21394,6 +21484,16 @@
             "default": "insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})",
             "description": "CQL Template",
             "format": "sql",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "Alarm name, used to distinguish different alarms.",
+            "example": "high_system_memory_usage",
             "type": "string"
           }
         },
@@ -22298,6 +22398,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -25446,6 +25552,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -26803,6 +26915,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -27326,6 +27444,12 @@
             "description": "The target URL to which the exporter is going to send Open Telemetry signal data.",
             "example": "http://127.0.0.1",
             "type": "string"
+          },
+          "headers": {
+            "default": {},
+            "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
+            "example": {},
+            "type": "object"
           },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -28280,6 +28404,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -30525,49 +30655,49 @@
             "oneOf": [
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               },
@@ -30585,43 +30715,13 @@
               },
               {
                 "enum": [
-                  "mysql"
+                  "pulsar"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -30633,43 +30733,19 @@
               },
               {
                 "enum": [
-                  "hstreamdb"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "cassandra"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -30687,13 +30763,7 @@
               },
               {
                 "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
+                  "matrix"
                 ],
                 "type": "string"
               },
@@ -30705,19 +30775,13 @@
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -30735,19 +30799,85 @@
               },
               {
                 "enum": [
-                  "mqtt"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
                 ],
                 "type": "string"
               }
@@ -31131,6 +31261,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -31929,7 +32065,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -32687,6 +32823,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -35425,6 +35567,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -37228,6 +37376,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -39265,7 +39419,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "140950DD1907879A",
+            "example": "C00E6E22F2C2AB00",
             "type": "string"
           },
           "status": {
@@ -44257,6 +44411,20 @@
       },
       "action_s3tables.aggregation": {
         "properties": {
+          "container": {
+            "default": {
+              "type": "avro"
+            },
+            "description": "Options for configuring the data file format to be used.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/action_s3tables.container_parquet"
+              },
+              {
+                "$ref": "#/components/schemas/action_s3tables.container_avro"
+              }
+            ]
+          },
           "max_records": {
             "default": 100000,
             "description": "Number of records (events) allowed per each aggregated file. Each aggregated upload will contain no more than that number of events, but may contain less.",
@@ -45313,6 +45481,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -46653,6 +46827,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -51620,6 +51800,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -52547,6 +52733,21 @@
       },
       "authn.ldap": {
         "properties": {
+          "acl_rule_attribute": {
+            "description": "Indicates which attribute is used to represent the JSON-encoded ACL rules.",
+            "example": "mqttAclRule",
+            "type": "string"
+          },
+          "acl_ttl_attribute": {
+            "description": "Indicates which attribute is used to represent the ACL TTL.",
+            "example": "mqttAclTtl",
+            "type": "string"
+          },
+          "all_attribute": {
+            "description": "Indicates which attribute is used to represent the both allowed topics list of  `publish` and `subscribe`.",
+            "example": "mqttPubSubTopic",
+            "type": "string"
+          },
           "backend": {
             "description": "Backend type.",
             "enum": [
@@ -52605,6 +52806,11 @@
             "description": "A Variform expression to evaluate with a set of pre-bound variables derived from the client information.<br/><br/>Supported variables:<br/>- `username`: The username of the client<br/>- `password`: The password of the client<br/>- `clientid`: The client ID of the client<br/>- `client_attrs.*`: The client attributes of the client<br/>- `cert_common_name`: The subject field from the client's TLS certificate<br/>- `cert_subject`: The common name (CN) from the client's TLS certificate<br/>- `peersni`: The SNI (Server Name Indication) sent by TLS client<br/>- `listener`: The listener ID (e.g. `tcp:default`)<br/>- `zone`: The associated config zone.<br/><br/>The expression must evaluate to a string value of 'true' for this authenticator to be invoked.<br/>If the expression evaluates to any other value, this authenticator will be skipped.<br/><br/>Examples:<br/>- Only invoke if the client is connected from listener `ssl:letsencryt`:<br/>  `str_eq(listener, 'ssl:letsencryt')`<br/>- Skip if username is empty:<br/>  `not(is_empty_val(username))`<br/>- Only invoke if password exists and zone is 'zone1':<br/>  `iif(is_empty_val(password), false, str_eq(zone, 'zone1'))`<br/><br/>Find more information about Variform expressions in EMQX doc.",
             "type": "string"
           },
+          "publish_attribute": {
+            "description": "Indicates which attribute is used to represent the allowed topics list of the `publish`.",
+            "example": "mqttPublishTopic",
+            "type": "string"
+          },
           "query_timeout": {
             "default": "5s",
             "description": "Timeout for the LDAP query.",
@@ -52627,6 +52833,11 @@
               "enable": false
             },
             "description": "SSL connection settings."
+          },
+          "subscribe_attribute": {
+            "description": "Indicates which attribute is used to represent the allowed topics list of the `subscribe`.",
+            "example": "mqttSubscriptionTopic",
+            "type": "string"
           },
           "username": {
             "description": "The username associated with the bridge in the external database used for authentication or identification purposes.",
@@ -53193,6 +53404,11 @@
       },
       "authz.ldap": {
         "properties": {
+          "acl_rule_attribute": {
+            "default": "mqttAclRule",
+            "description": "Indicates which attribute is used to represent the JSON-encoded ACL rules.",
+            "type": "string"
+          },
           "all_attribute": {
             "default": "mqttPubSubTopic",
             "description": "Indicates which attribute is used to represent the both allowed topics list of  `publish` and `subscribe`.",
@@ -53821,6 +54037,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -55103,6 +55325,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -55162,6 +55390,24 @@
             "maximum": 1024,
             "minimum": 1,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "action_s3tables.container_parquet": {
+        "properties": {
+          "max_row_group_bytes": {
+            "default": "128MB",
+            "description": "The size above which row groups are flushed.  The actual triggering of row group flushes uses estimates of the buffered data sizes, since the actual output may differ in size from the raw input data size.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "type": {
+            "description": "Use Parquet for encoding data files.",
+            "enum": [
+              "parquet"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -56399,6 +56645,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -56838,6 +57090,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -57181,6 +57439,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "Health check timeout.  If a health check call takes more than this time to return a result, the resource is deemed disconnected.",
@@ -57419,6 +57683,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -59226,7 +59496,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -60892,6 +61162,18 @@
         ],
         "type": "object"
       },
+      "action_s3tables.container_avro": {
+        "properties": {
+          "type": {
+            "description": "Use Avro for encoding data files.",
+            "enum": [
+              "avro"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "rocketmq.post": {
         "properties": {
           "access_key": {
@@ -61492,6 +61774,12 @@
           "health_check_interval": {
             "default": "30s",
             "description": "Health check interval.",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
             "example": "32s",
             "type": "string"
           },
@@ -62213,7 +62501,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.0"
+    "version": "5.10.1-beta.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -66046,7 +66334,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -66060,7 +66348,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "Failed to test bridge configuration.",
                       "type": "string"
                     }
                   },
@@ -67468,7 +67756,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List bridges",
+        "summary": "List Actions",
         "tags": [
           "Actions"
         ]
@@ -69834,7 +70122,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge already exists",
                       "type": "string"
                     }
                   },
@@ -69853,7 +70140,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create bridge",
+        "summary": "Create Action",
         "tags": [
           "Actions"
         ]
@@ -69959,7 +70246,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List available source types",
+        "summary": "List Available Source Types",
         "tags": [
           "Sources"
         ]
@@ -70499,7 +70786,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Summarize actions",
+        "summary": "Summarize Actions",
         "tags": [
           "Actions"
         ]
@@ -70918,7 +71205,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Bridge deleted"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -70932,11 +71219,10 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this bridge",
+                      "description": "Cannot delete bridge while active rules are defined for this bridge.",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
                       "items": {
                         "type": "string"
                       },
@@ -70961,7 +71247,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -70983,7 +71269,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service is temporarily not available.",
                       "type": "string"
                     }
                   },
@@ -72081,7 +72367,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -74169,7 +74455,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update bridge failed",
+                      "description": "Failed to update bridge configuration.",
                       "type": "string"
                     }
                   },
@@ -74191,7 +74477,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -74841,40 +75127,40 @@
               "application/json": {
                 "examples": {
                   "types": {
-                    "summary": "Action types",
+                    "summary": "Action Types",
                     "value": [
                       "http",
+                      "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "rocketmq",
-                      "syskeeper_forwarder",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "iotdb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
                       "kafka_producer",
                       "greptimedb",
-                      "hstreamdb",
-                      "confluent_producer",
-                      "sqlserver",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "iotdb",
                       "pulsar",
-                      "gcp_pubsub_producer",
+                      "hstreamdb",
                       "influxdb",
+                      "confluent_producer",
+                      "s3tables",
                       "opents",
-                      "redis",
                       "datalayers",
                       "s3",
-                      "s3tables",
                       "doris",
                       "kinesis",
+                      "redis",
                       "mqtt",
-                      "tdengine",
-                      "snowflake",
+                      "tablestore",
                       "couchbase",
                       "oracle",
-                      "timescale",
+                      "snowflake",
                       "clickhouse",
+                      "timescale",
+                      "tdengine",
                       "azure_blob_storage",
-                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -74888,37 +75174,37 @@
                   "items": {
                     "enum": [
                       "http",
+                      "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "rocketmq",
-                      "syskeeper_forwarder",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "iotdb",
+                      "sqlserver",
+                      "gcp_pubsub_producer",
                       "kafka_producer",
                       "greptimedb",
-                      "hstreamdb",
-                      "confluent_producer",
-                      "sqlserver",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
+                      "iotdb",
                       "pulsar",
-                      "gcp_pubsub_producer",
+                      "hstreamdb",
                       "influxdb",
+                      "confluent_producer",
+                      "s3tables",
                       "opents",
-                      "redis",
                       "datalayers",
                       "s3",
-                      "s3tables",
                       "doris",
                       "kinesis",
+                      "redis",
                       "mqtt",
-                      "tdengine",
-                      "snowflake",
+                      "tablestore",
                       "couchbase",
                       "oracle",
-                      "timescale",
+                      "snowflake",
                       "clickhouse",
+                      "timescale",
+                      "tdengine",
                       "azure_blob_storage",
-                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -74943,7 +75229,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List available action types",
+        "summary": "List Available Action Types",
         "tags": [
           "Actions"
         ]
@@ -75167,7 +75453,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -75186,7 +75472,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get source metrics",
+        "summary": "Get Source Metrics",
         "tags": [
           "Sources"
         ]
@@ -75313,7 +75599,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Summarize sources",
+        "summary": "Summarize Sources",
         "tags": [
           "Sources"
         ]
@@ -75780,7 +76066,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -75794,7 +76080,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -75816,7 +76102,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -75838,7 +76124,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "This operation is not supported.",
                       "type": "string"
                     }
                   },
@@ -75860,7 +76146,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -75879,7 +76165,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge",
+        "summary": "Manually Start a Source",
         "tags": [
           "Sources"
         ]
@@ -78232,7 +78518,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "OK"
           },
           "404": {
             "content": {
@@ -78246,7 +78532,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -78268,7 +78554,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -78287,7 +78573,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable bridge",
+        "summary": "Enable or Disable Action",
         "tags": [
           "Actions"
         ]
@@ -78581,7 +78867,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -78595,7 +78881,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -78617,7 +78903,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -78639,7 +78925,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
                       "type": "string"
                     }
                   },
@@ -78661,7 +78946,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service is temporarily not available.",
                       "type": "string"
                     }
                   },
@@ -78780,7 +79065,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -78794,7 +79079,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -78816,7 +79101,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -78838,7 +79123,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "This operation is not supported.",
                       "type": "string"
                     }
                   },
@@ -78860,7 +79145,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -78879,7 +79164,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge",
+        "summary": "Manually Start an Action",
         "tags": [
           "Actions"
         ]
@@ -83011,7 +83296,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "OK"
           },
           "404": {
             "content": {
@@ -83025,7 +83310,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Action not found",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -83044,7 +83329,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Reset action metrics",
+        "summary": "Reset Action Metrics",
         "tags": [
           "Actions"
         ]
@@ -85144,7 +85429,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "140950DD1907879A",
+            "example": "C00E6E22F2C2AB00",
             "in": "path",
             "name": "site",
             "required": true,
@@ -88241,7 +88526,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -88255,7 +88540,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -88277,7 +88562,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -88299,7 +88584,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "This operation is not supported.",
                       "type": "string"
                     }
                   },
@@ -88321,7 +88606,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -88340,7 +88625,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge on a given node",
+        "summary": "Manually Start an Action on a Given Node",
         "tags": [
           "Actions"
         ]
@@ -88913,7 +89198,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Bridge deleted"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -88927,11 +89212,11 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this bridge",
+                      "description": "Cannot delete action while active rules are defined for this action.",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
+                      "description": "The IDs of rules that depend on this action.",
                       "items": {
                         "type": "string"
                       },
@@ -88956,7 +89241,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -88978,7 +89263,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -88997,7 +89282,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete bridge",
+        "summary": "Delete Action",
         "tags": [
           "Actions"
         ]
@@ -90331,7 +90616,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -90350,7 +90635,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get bridge",
+        "summary": "Get Action",
         "tags": [
           "Actions"
         ]
@@ -92649,7 +92934,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update bridge failed",
+                      "description": "Failed to update action configuration.",
                       "type": "string"
                     }
                   },
@@ -92671,7 +92956,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -92693,7 +92978,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -92712,7 +92997,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update bridge",
+        "summary": "Update Action",
         "tags": [
           "Actions"
         ]
@@ -93311,7 +93596,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Action not found",
+                      "description": "Action not found.",
                       "type": "string"
                     }
                   },
@@ -93330,7 +93615,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get action metrics",
+        "summary": "Get Action Metrics",
         "tags": [
           "Actions"
         ]
@@ -93352,7 +93637,7 @@
           },
           {
             "description": "Site ID",
-            "example": "140950DD1907879A",
+            "example": "C00E6E22F2C2AB00",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93437,7 +93722,7 @@
           },
           {
             "description": "Site ID",
-            "example": "140950DD1907879A",
+            "example": "C00E6E22F2C2AB00",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95170,7 +95455,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List sources",
+        "summary": "List Sources",
         "tags": [
           "Sources"
         ]
@@ -95394,7 +95679,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source already exists",
+                      "description": "Source already exists.",
                       "type": "string"
                     }
                   },
@@ -95413,7 +95698,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create source",
+        "summary": "Create Source",
         "tags": [
           "Sources"
         ]
@@ -98487,7 +98772,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge already exists",
+                      "description": "Bridge already exists.",
                       "type": "string"
                     }
                   },
@@ -100285,7 +100570,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -101592,7 +101877,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Source deleted"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -101606,11 +101891,11 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this source",
+                      "description": "Cannot delete action while active rules are defined for this action.",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
+                      "description": "The IDs of rules that depend on this action.",
                       "items": {
                         "type": "string"
                       },
@@ -101635,7 +101920,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -101657,7 +101942,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -101676,7 +101961,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete source",
+        "summary": "Delete Source",
         "tags": [
           "Sources"
         ]
@@ -101822,7 +102107,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -101841,7 +102126,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get source",
+        "summary": "Get Source",
         "tags": [
           "Sources"
         ]
@@ -102068,7 +102353,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update source failed",
+                      "description": "Failed to update source configuration.",
                       "type": "string"
                     }
                   },
@@ -102090,7 +102375,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -102112,7 +102397,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -102131,7 +102416,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update source",
+        "summary": "Update Source",
         "tags": [
           "Sources"
         ]
@@ -104935,7 +105220,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -104949,7 +105234,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -104971,7 +105256,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -104993,7 +105278,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "This operation is not supported.",
                       "type": "string"
                     }
                   },
@@ -105015,7 +105300,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -105034,7 +105319,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge on a given node",
+        "summary": "Manually Start a Source on a Given Node",
         "tags": [
           "Sources"
         ]
@@ -105191,7 +105476,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "OK"
           },
           "404": {
             "content": {
@@ -105205,7 +105490,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -110034,7 +110319,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "OK"
           },
           "404": {
             "content": {
@@ -110048,7 +110333,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -110067,7 +110352,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Reset source metrics",
+        "summary": "Reset Source Metrics",
         "tags": [
           "Sources"
         ]
@@ -111002,7 +111287,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -111016,7 +111301,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "Failed to test source configuration.",
                       "type": "string"
                     }
                   },
@@ -111035,7 +111320,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Test creating bridge",
+        "summary": "Test Creating Source",
         "tags": [
           "Sources"
         ]
@@ -113055,6 +113340,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "Force deactivate an alarm. This operation will forcefully deactivate an active alarm.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The alarm has been successfully deactivated."
+          },
+          "400": {
+            "description": "The alarm does not exist or has already been deactivated."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "Reset metrics for a particular validation",
@@ -114128,7 +114447,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -114142,7 +114461,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "Operation failed due to problem with the external resource.",
                       "type": "string"
                     }
                   },
@@ -114164,7 +114483,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -114186,7 +114505,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
                       "type": "string"
                     }
                   },
@@ -114208,7 +114526,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service is temporarily not available.",
                       "type": "string"
                     }
                   },
@@ -115919,7 +116237,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -115933,7 +116251,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "Failed to test action configuration.",
                       "type": "string"
                     }
                   },
@@ -115952,7 +116270,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Test creating bridge",
+        "summary": "Test Creating Action",
         "tags": [
           "Actions"
         ]
@@ -116211,7 +116529,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "OK"
           },
           "404": {
             "content": {
@@ -116225,7 +116543,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Source not found.",
                       "type": "string"
                     }
                   },
@@ -116247,7 +116565,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service unavailable.",
                       "type": "string"
                     }
                   },
@@ -116266,7 +116584,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable bridge",
+        "summary": "Enable or Disable Source",
         "tags": [
           "Sources"
         ]
@@ -116877,7 +117195,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "OK"
           },
           "400": {
             "content": {
@@ -116891,7 +117209,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge already exists as non Bridge V1 compatible action",
+                      "description": "Bridge already exists as non v1 compatible action or source.",
                       "type": "string"
                     }
                   },
@@ -116913,7 +117231,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "Bridge not found. Or invalid operation",
                       "type": "string"
                     }
                   },
@@ -116935,7 +117253,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "Service is temporarily not available.",
                       "type": "string"
                     }
                   },
@@ -124451,6 +124769,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
@@ -124509,6 +124828,7 @@
               "example": {
                 "exporter": {
                   "endpoint": "http://localhost:4317",
+                  "headers": {},
                   "ssl_options": {}
                 },
                 "logs": {
@@ -124551,6 +124871,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
