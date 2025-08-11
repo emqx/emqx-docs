@@ -1,5 +1,64 @@
 # EMQX Enterprise Version 5
 
+## 5.10.1
+
+### Enhancements
+
+- [#15585](https://github.com/emqx/emqx/pull/15585) Updated our `brod` client to version 4.4.4. This expands the supported Kafka API ranges, in particular due to the `JoinGroups` API `v0`-`v1` being deprecated.
+
+- [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcoud` library to `3.8.3.0`.  This allows one to setup a S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
+
+- [#15399](https://github.com/emqx/emqx/pull/15399) Now, `node_dump` will export the current system configuration in HOCON format with redacted secrets.
+
+- [#15387](https://github.com/emqx/emqx/pull/15387) Improved Kinesis Producer Connector and Action health checks to mitigate the occurrence of rate limiting when calling `ListStreams` and `DescribeStream` APIs.  Now, we limit the the calls per Connector to such APIs to 5/s and 10/s, respectively.  If a Connector or Action cannot call their health check API before timing out, they will simply maintain their current status.  If they receive a throttling response (e.g.: `LimitExceededException`), they will also maintain their current status.
+
+  Introduced a new `resource_opts.health_check_interval_jitter` configuration to add an uniform random delay to `resource_opts.health_check_interval`, so that multiple Actions under the same Connector will seldom run their health checks simultaneously.
+
+- [#15360](https://github.com/emqx/emqx/pull/15360) Added support for writing data files in Parquet format for S3Tables Action.
+
+- [#15349](https://github.com/emqx/emqx/pull/15349) Optimize external resource management for authentication and authorization. Previously, EMQX could remain connected to a resource configured for a disabled authentication or authorization provider.
+
+- [#15294](https://github.com/emqx/emqx/pull/15294) Enhance LDAP authentication and authorization.
+  LDAP authorization now supports extended ACL rules in JSON format.
+  LDAP authenticaton now can fetch ACL rules from LDAP. These rules are cached in the client's metadata, so authorization is performed without additional LDAP queries.
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+
+### Bug Fixes
+
+- [#15616](https://github.com/emqx/emqx/pull/15616) Consider Kafka connection healthy if `topic_authorization_failed` is received for the default probing topic.
+
+- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected' and the connection was not re-established.
+
+- [#15581](https://github.com/emqx/emqx/pull/15581) Upgrade OTP version from 26.2.5.2 to 26.2.5.14
+
+  This upgrade includes two TLS-related fixes relevant to EMQX:
+
+  - Fixed a crash in TLS connections caused by a race condition during certificate renewal.
+  - Added support for RSA certificates signed with PSS parameters. Previously TLS handshake may fail with `invalid_signature`.
+
+
+- [#15580](https://github.com/emqx/emqx/pull/15580) Add emqxLicenseSecretRef variable to EMQX Enterprise helm chart, allowing users to specify a Kubernetes secret containing the EMQX license key. This fixes the issue with defunct emqxLicenseSecretName variable.
+
+- [#15553](https://github.com/emqx/emqx/pull/15553) Fixes an issue with helm chart when all nodes except one will be crashing if the chart is deployed with default values.
+
+- [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections, introduced by recent WebSocket performance improvements. These had no impact on broker capacity, but produced log entries like the following:
+  * `error: {function_clause,[{gen_tcp,send,[closed,[]],[{file,“gen_tcp.erl”},{line,966}]},{cowboy_websocket_linger,commands,3,[{file,“cowboy_websocket_linger.erl”},{line,665}]},...`
+  * `message: {tcp,#Port<0.364>,<<136,130,...>>}, msg: emqx_session_mem_unknown_message`
+
+- [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients, which were prone to crashes under high disconnect volume, resulting in potential inconsistencies in the global broker state.
+
+- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a very rare race condition in which Action metrics could end up in an inconsistent state.
+
+- [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a function clause error when parsing a malformed `User-Property` pair where the pair length is wrong (too short).
+
+- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed NATS gateway crash when clientinfo override templates contain undefined packet fields by returning empty binary instead of undefined atom.
+
+
+- [#15639](https://github.com/emqx/emqx/pull/15639) Fix incorrect counting of the packets.subscribe.auth_error metric.
+
+- [#15547](https://github.com/emqx/emqx/pull/15547) Fixed error when an HTTP request with a large body is sent.
+
 ## 5.10.0
 
 *Release Date: 2025-06-10*
