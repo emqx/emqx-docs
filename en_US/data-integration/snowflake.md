@@ -422,76 +422,6 @@ If you plan to use the aggregated upload mode in your Snowflake Sink, you need t
 
 You have now completed the connector creation and can proceed to create a rule and Sink to specify how the data will be written into Snowflake.
 
-## Create a Rule with Snowflake Sink for Aggregated Mode
-
-This section demonstrates how to create a rule in EMQX to process messages (e.g., from the source MQTT topic `t/#`) and write the processed results to Snowflake through the configured Sink using the aggregated upload mode. This method groups the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, reducing the number of files and improving write efficiency.
-
-1. Go to the Dashboard **Integration** -> **Rules** page.
-
-2. Click the **Create** button in the top right corner.
-
-3. Enter the rule ID `my_rule`, and input the following rule SQL in the SQL editor:
-
-   ```sql
-   SELECT
-     clientid,
-     unix_ts_to_rfc3339(publish_received_at, 'millisecond') as publish_received_at,
-     topic,
-     payload
-   FROM
-       "t/#"
-   ```
-
-   ::: tip
-
-   If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the rule SQL results.
-
-   :::
-   ::: tip
-
-   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
-
-   :::
-
-
-4. Add an action, select `Snowflake` from the **Action Type** dropdown list, keep the **Action** dropdown as the default `Create Action` option, or choose a previously created Snowflake action from the action dropdown. Here, create a new Sink and add it to the rule.
-
-5. Enter the Sink's name (for example, `snowflake_sink`) and a brief description.
-
-6. Select the `my-snowflake` connector created earlier from the **Connectors** dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Snowflake Connector for Aggregated Mode](#create-a-snowflake-connector-for-aggregated-mode).
-
-7. Configure the settings for the aggregated upload mode.
-
-   - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
-   - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
-   - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
-   - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
-   - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
-   - **Private Key**: The RSA private key used by the pipe user to securely access the Snowflake pipe. You can provide the key in one of two formats:
-     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
-     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
-   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
-
-   - **Aggregation Upload Format**: Currently, only `csv` is supported. Data will be staged to Snowflake in comma-separated CSV format.
-   - **Column Order**: Select the order of the columns from the dropdown list based on your desired arrangement. The generated CSV file will be sorted first by the selected columns, with unselected columns sorted alphabetically afterward.
-   - **Max Records**: Set the maximum number of records before aggregation is triggered. For example, you can set it to `1000` to upload after collecting 1000 records. When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
-   - **Time Interval**: Set the time interval (in seconds) at which aggregation occurs. For example, if set to `60`, data will be uploaded every 60 seconds even if the maximum number of records hasn’t been reached, resetting the maximum number of records.
-   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
-     - **Proxy Host**: The hostname or IP address of the proxy server.
-     - **Proxy Port**: The port number used by the proxy server.
-
-8. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-
-9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
-
-10. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
-
-11. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
-
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
-
-You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into the Snowflake after being parsed by the rule `my_rule`.
-
 ## Create a Snowflake Streaming Connector
 
 If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API (AWS-only).
@@ -526,9 +456,9 @@ If you plan to use the streaming upload mode in your Snowflake Sink, you need to
 
 You have now completed the connector creation and can proceed to create a rule and Sink to specify how the data will be written into Snowflake.
 
-## Create a Rule with Snowflake Sink for Streaming Mode
+## Create a Rule with Snowflake Sink
 
-This section demonstrates how to create a rule in EMQX to process messages (e.g., from the source MQTT topic `t/#`) and write the processed results to Snowflake through the configured Sink using the streaming mode. This mode enables real-time ingestion using the Snowpipe Streaming API.
+This section demonstrates how to create a rule in EMQX to process messages (e.g., from the source MQTT topic `t/#`) and write the processed results to Snowflake through a configured Sink.
 
 1. Go to the Dashboard **Integration** -> **Rules** page.
 
@@ -558,39 +488,73 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
    :::
 
 
-4. Add an action, select `Snowflake Streaming` from the **Action Type** dropdown list, keep the **Action** dropdown as the default `Create Action` option, or choose a previously created Snowflake action from the action dropdown. Here, create a new Sink and add it to the rule.
-
-5. Enter the Sink's name (for example, `snowflake_sink_streaming`) and a brief description.
-
-6. Select the `my-snowflake-streaming` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Snowflake Streaming Connector](#create-a-snowflake-streaming-connector).
-
-7. Configure the settings for the streaming upload mode.
-
-   - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
-
-   - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
-
-   - **Pipe**: Enter `emqxstreaming`, the name of the Snowflake Streaming pipe created using a SQL statement. The name must match exactly as defined in Snowflake.
-
-   - **HTTP Pipelining**: The maximum number of HTTP requests that can be sent without waiting for responses. Default: `100`.
-   
-   - **Connect Timeout**: The time limit for establishing a connection to Snowflake before the attempt is aborted. Default: `15` seconds.
-     
-   - **Connection Pool Size**: The maximum number of concurrent connections EMQX can maintain to Snowflake for this Sink. Default: `8`.
-   
-   - **Max Inactive**: The maximum amount of time an idle connection can remain open before being closed. Default: `10` seconds.
-   
-8. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-
-9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
-
-10. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
-
-11. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+4. Add action to the rule by configuring a Sink.
+   - If you want to write the rule processing results to Snowflake using the aggregated upload mode, refer to [Add Snowflake Sink with Aggregated Upload Mode](#add-snowflake-sink-with-aggregated-upload-mode).
+   - If you want to write the rule processing results to Snowflake using the streaming upload mode, refer to [Add Snowflake Sink with Streaming Upload Mode](#add-snowflake-sink-with-aggregated-upload-mode).
+5. After the action is added, you will see the newly added Sink appear under the **Action Outputs** section. Click the **Save** button on the **Create Rule** page to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
 
 You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into the Snowflake after being parsed by the rule `my_rule`.
+
+### Add Snowflake Sink with Aggregated Upload Mode
+
+This section demonstrates how to add a Sink to the rule to write the processed results to Snowflake using the aggregated upload mode. This mode consolidates the results of multiple rule triggers into a single file (e.g., a CSV file) and uploads it to Snowflake, thereby reducing the number of files and enhancing write efficiency.
+
+
+1. On the **Create Rule** page, click **Add Action** under the **Action Outputs** section to add an action to the rule.
+
+2. Select `Snowflake` from the **Action Type** dropdown list, keep the **Action** dropdown as the default `Create Action` option, or choose a previously created Snowflake action from the action dropdown. Here, create a new Sink and add it to the rule.
+
+3. Enter the Sink's name (for example, `snowflake_sink`) and a brief description.
+
+4. Select the `my-snowflake` connector created earlier from the **Connectors** dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Snowflake Connector for Aggregated Mode](#create-a-snowflake-connector-for-aggregated-mode).
+
+5. Configure the settings for the aggregated upload mode.
+
+   - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
+   - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
+   - **Stage**: Enter `emqx`, the stage created in Snowflake for holding the data before loading it into the table.
+   - **Pipe**: Enter `emqx`, the pipe automating the loading process from the stage to the table.
+   - **Pipe User**: Enter `snowpipeuser`, the Snowflake user with the appropriate permissions to manage the pipe.
+   - **Private Key**: The RSA private key used by the pipe user to securely access the Snowflake pipe. You can provide the key in one of two formats:
+     - **Plain Text**: Paste the full PEM-formatted private key content directly as a string.
+     - **File Path**: Specify the path to the private key file, starting with `file://`. The file path must be consistent across all nodes in the cluster and accessible by the EMQX application user. For example, `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
+
+   - **Aggregation Upload Format**: Currently, only `csv` is supported. Data will be staged to Snowflake in comma-separated CSV format.
+   - **Column Order**: Select the order of the columns from the dropdown list based on your desired arrangement. The generated CSV file will be sorted first by the selected columns, with unselected columns sorted alphabetically afterward.
+   - **Max Records**: Set the maximum number of records before aggregation is triggered. For example, you can set it to `1000` to upload after collecting 1000 records. When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
+   - **Time Interval**: Set the time interval (in seconds) at which aggregation occurs. For example, if set to `60`, data will be uploaded every 60 seconds even if the maximum number of records hasn’t been reached, resetting the maximum number of records.
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
+
+6. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+
+7. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+
+8. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+
+### Add Snowflake Sink with Streaming Upload Mode
+
+This section demonstrates how to add a Sink to the rule to write the processed results to Snowflake using the Streaming upload mode. This mode enables real-time ingestion using the Snowpipe Streaming API.
+
+1. On the **Create Rule** page, click **Add Action** under the **Action Outputs** section to add an action to the rule.
+2. Select `Snowflake Streaming` from the **Action Type** dropdown list, keep the **Action** dropdown as the default `Create Action` option, or choose a previously created Snowflake action from the action dropdown. Here, create a new Sink and add it to the rule.
+3. Enter the Sink's name (for example, `snowflake_sink_streaming`) and a brief description.
+4. Select the `my-snowflake-streaming` connector created earlier from the connector dropdown. You can also click the create button next to the dropdown to quickly create a new connector in the pop-up box. The required configuration parameters can be found in [Create a Snowflake Streaming Connector](#create-a-snowflake-streaming-connector).
+5. Configure the settings for the streaming upload mode.
+   - **Database Name**: Enter `testdatabase`. This is the Snowflake database that was created for storing EMQX data.
+   - **Schema**: Enter `public`, the schema within the `testdatabase` where the data table is located.
+   - **Pipe**: Enter `emqxstreaming`, the name of the Snowflake Streaming pipe created using a SQL statement. The name must match exactly as defined in Snowflake.
+   - **HTTP Pipelining**: The maximum number of HTTP requests that can be sent without waiting for responses. Default: `100`.
+   - **Connect Timeout**: The time limit for establishing a connection to Snowflake before the attempt is aborted. Default: `15` seconds.
+   - **Connection Pool Size**: The maximum number of concurrent connections EMQX can maintain to Snowflake for this Sink. Default: `8`.
+   - **Max Inactive**: The maximum amount of time an idle connection can remain open before being closed. Default: `10` seconds.
+6. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+7. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+8. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
 
 ## Test the Rule
 

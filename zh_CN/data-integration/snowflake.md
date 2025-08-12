@@ -312,14 +312,9 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
    ```
 
-## 创建连接器
+## 创建 Snowflake 连接器（聚合模式）
 
-在配置 Snowflake Sink 之前，你需要先在 EMQX 中创建一个连接器，以建立与 Snowflake 环境的连接。连接器支持两种通信模式：
-
-- **聚合模式**：通过 ODBC（使用 DSN）连接到 Snowflake 存储区。
-- **流式模式**：通过 HTTPS 和 Snowpipe Streaming REST API（仅支持 AWS）进行连接。
-
-> 表单中所需的字段取决于你在 Sink 中选择的上传模式（`聚合上传` 或 `流式`）。
+如果您计划在 Snowflake Sink 中使用聚合上传模式，则需要创建一个 Snowflake 连接器，以建立与 Snowflake 环境的连接。该连接器通过 ODBC（使用 DSN）连接到 Snowflake 的存储区（Stage）。
 
 1. 进入 Dashboard **集成** -> **连接器**页面。
 
@@ -331,13 +326,9 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 5. 输入连接信息：
 
-   :::: tabs
-
-   ::: tab 聚合模式（基于 ODBC）
+   - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
 
    - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
-
-   - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
 
    - **数据源名称**：输入 `snowflake`，与您在 ODBC 驱动设置中配置的 `.odbc.ini` 文件中的 DSN 名称相对应。
 
@@ -346,11 +337,11 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **密码**：输入用于通过用户名和密码进行 ODBC 连接认证。此字段为可选项，用户可以选择：
 
      - 在此处填写密码，例如： `Snowpipeuser99`，这是之前设置过程中定义的密码。
-   
+
      - 或在系统的 `/etc/odbc.ini` 文件中配置；
 
      - 如果使用密钥对认证（Key-pair authentication），则无需提供密码。
-
+   
        ::: tip
 
        使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
@@ -362,27 +353,43 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
 
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
-   
+
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-
-   :::
-
-   ::: tab 流式模式 (Snowpipe Streaming API)
    
-   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
+6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
+
+7. 高级配置（可选），请参考[高级设置](#高级设置)。
+
+8. 在点击**创建**之前，可以点击**测试连接**来测试连接器是否能够连接到 Snowflake。
+
+9. 点击页面底部的**创建**按钮，完成连接器创建。
+
+现在，您已经成功创建了连接器，可以继续创建规则，以指定如何将数据写入 Snowflake。
+
+## 创建 Snowflake Streaming 连接器
+
+如果您计划在 Snowflake Sink 中使用流式上传模式，则需要创建一个 Snowflake Streaming 连接器，以建立与 Snowflake 环境的连接。该连接器通过 HTTPS 和 Snowpipe Streaming REST API（仅支持 AWS）进行连接。
+
+1. 进入 Dashboard **集成** -> **连接器**页面。
+
+2. 点击右上角的**创建**按钮。
+
+3. 选择 **Snowflake** 作为连接器类型，然后点击下一步。
+
+4. 输入连接器名称，由大小写字母和数字组成。这里输入 `my-snowflake-streaming`。
+
+5. 输入连接信息：
+
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
+   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
    - **用户名**：（可选）如果您在 `odbc.ini` 中已配置，在此输入绑定了 RSA 公钥的 Snowflake 用户名（如 `snowpipeuser`）。
    - **私钥路径**： RSA 私钥的绝对文件路径。EMQX 使用此密钥签发 JWT 令牌，用于向 Snowflake API 进行身份认证。此路径必须在集群的所有节点上保持一致。例如：`/etc/emqx/certs/snowflake_rsa_key.private.pem`。
    - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-   
-   :::
-   
-   ::::
-   
+
 6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
@@ -391,11 +398,11 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 9. 点击页面底部的**创建**按钮，完成连接器创建。
 
-现在，您已经成功创建了连接器，可以继续创建规则和 Sink，以指定如何将数据写入 Snowflake。
+现在，您已经成功创建了连接器，可以继续创建规则，以指定如何将数据写入 Snowflake。
 
-## 使用 Snowflake Sink 创建规则
+## 创建 Snowflake Sink 规则
 
-本节将演示如何在 EMQX 中创建规则以处理消息（例如，来自源 MQTT 主题 `t/#`），并通过配置好的 Sink 将处理结果写入 Snowflake。EMQX 支持流式和聚合两种上传模式。
+本节演示如何在 EMQX 中创建规则，以处理消息（例如，来自源 MQTT 主题 `t/#`），并通过已配置的 Sink 将规则处理结果写入 Snowflake。
 
 1. 进入 Dashboard **集成** -> **规则**页面。
 
@@ -425,19 +432,28 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    :::
 
-4. 点击**添加动作**按钮，从**动作类型**下拉列表中选择 `Snowflake`，将动作下拉选项保留为默认的 `创建动作`，或从下拉列表中选择之前创建的 Snowflake 动作。此示例将创建一个新的 Sink 并将其添加到规则中。
+4. 为规则添加动作输出。
 
-5. 输入 Sink 的名称（例如 `snowflake_sink`）和简短描述。
+   - 如果您想要使用聚合上传模式将规则处理结果写入 Snowflake，参考[添加使用聚合上传模式的 Snowflake Sink](#添加使用聚合上传模式的-snowflake-sink)。
+   - 如果您想要使用流式上传模式将规则处理结果写入 Snowflake，参考[添加使用流式上传模式的 Snowflake Sink](#添加使用流式上传模式的-snowflake-sink)。
 
-6. 从连接器下拉列表中选择之前创建的 `my-snowflake` 连接器。您也可以点击下拉列表旁的创建按钮，在弹出的对话框中快速创建新的连接器。所需的配置参数请参考[创建连接器](#创建连接器)。
+5. 动作添加完成后，您可以看到新添加的 Sink 出现在**动作输出**栏下。点击**创建规则**页面上的**保存**按钮完成整个规则创建过程。
 
-7. 选择**上传方式**并配置相关参数。默认选择为 `聚合上传`。根据所选上传模式配置以下选项。
+现在，您已成功创建了规则。您可以在**规则**页面看到新创建的规则，并在**动作 (Sink)** 标签页中查看新创建的 Snowflake Sink。
 
-   :::: tabs
+您还可以点击**集成** -> **Flow 设计器**来查看拓扑图，拓扑图可视化显示了主题 `t/#` 下的消息在经过规则 `my_rule` 解析后如何写入 Snowflake。
 
-   ::: tab 聚合上传
+### 添加使用聚合上传模式的 Snowflake Sink
 
-   此方式将多个规则触发的结果分组到单个文件（例如 CSV 文件）中，并上传到 Snowflake，从而减少文件数量并提高写入效率。
+本节演示了为规则添加一个使用聚合上传模式的 Sink，将规则处理结果写入 Snowflake。该模式会将多次规则触发的结果合并到一个文件（例如 CSV 文件）中，再上传至 Snowflake，从而减少文件数量并提升写入效率。
+
+1. 在**创建规则**页面右侧点击**添加动作**按钮，从**动作类型**下拉列表中选择 `Snowflake`，将**动作**下拉选项保留为默认的`创建动作`，或从下拉列表中选择之前创建的 Snowflake 动作。此示例将创建一个新的 Sink 并将其添加到规则中。
+
+2. 输入 Sink 的名称（例如 `snowflake_sink`）和简短描述。
+
+3. 从连接器下拉列表中选择之前创建的 `my-snowflake` 连接器。您也可以点击下拉列表旁的创建按钮，在弹出的对话框中快速创建新的连接器。所需的配置参数请参考[创建 Snowflake 连接器（聚合模式）](#创建-snowflake-连接器聚合模式)。
+
+4. 配置以下 Sink 选项：
 
    - **数据库名字**：输入 `testdatabase`，这是为存储 EMQX 数据而创建的 Snowflake 数据库。
    - **模式**：输入 `public`，这是 `testdatabase` 中的数据表所在的模式 (Schema) 名称。
@@ -447,49 +463,42 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **私钥**：管道用户用于安全访问 Snowflake 管道的 RSA 私钥。您可以通过以下两种方式之一提供该密钥：
      - **明文内容**：直接粘贴完整的 PEM 格式私钥内容，作为字符串填写。
      - **文件路径**：指定私钥文件的路径，路径需以 `file://` 开头。例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。该路径在集群所有节点上必须保持一致，并确保 EMQX 应用用户具备读取权限。
+   - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
+
+   - **聚合上传文件格式**：目前仅支持 `csv`。数据将以逗号分隔的 CSV 格式存储到 Snowflake。
+   - **列排序**：从下拉列表中选择列的顺序，生成的 CSV 文件将首先按选定的列排序，未选定的列将按字母顺序排序。
+   - **最大记录数**：设置触发聚合前的最大记录数。例如，您可以设置为 `1000`，在收集 1000 条记录后触发上传。当达到最大记录数时，单个文件的聚合将完成并上传，重置时间间隔。
+   - **时间间隔**：设置触发聚合的时间间隔（秒）。例如，如果设置为 `60`，即使未达到最大记录数，也将在 60 秒后上传数据，并重置记录数。
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
 
-   配置其他聚合参数：
+5. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
-   - **聚合类型**：目前仅支持 `csv`。数据将以逗号分隔的 CSV 格式存储到 Snowflake。
-   - **列排序**：从下拉列表中选择列的顺序，生成的 CSV 文件将首先按选定的列排序，未选定的列将按字母顺序排序。
-   - **最大记录数**：设置触发聚合前的最大记录数。例如，您可以设置为 `1000`，在收集 1000 条记录后触发上传。当达到最大记录数时，单个文件的聚合将完成并上传，重置时间间隔。
-   - **时间间隔**：设置触发聚合的时间间隔（秒）。例如，如果设置为 `60`，即使未达到最大记录数，也将在 60 秒后上传数据，并重置记录数。
+6. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
 
-   :::
+7. 点击**添加**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
 
-   ::: tab 流式
+### 添加使用流式上传模式的 Snowflake Sink
 
-   此模式使用 Snowpipe Streaming API 实现实时写入。
+本节演示了为规则添加一个使用流式上传模式的 Sink，将规则处理结果写入 Snowflake。此模式使用 Snowpipe Streaming API 实现实时写入。
+
+1. 在**创建规则**页面右侧点击**添加动作**按钮，从**动作类型**下拉列表中选择 `Snowflake-Streaming`，将**动作**下拉选项保留为默认的`创建动作`，或从下拉列表中选择之前创建的 Snowflake 动作。此示例将创建一个新的 Sink 并将其添加到规则中。
+2. 输入 Sink 的名称（例如 `snowflake_sink_streaming`）和简短描述。
+3. 从连接器下拉列表中选择之前创建的 `my-snowflake-streaming` 连接器。您也可以点击下拉列表旁的创建按钮，在弹出的对话框中快速创建新的连接器。所需的配置参数请参考[创建 Snowflake Streaming 连接器](#创建-snowflake-streaming-连接器)。
+4. 配置以下 Sink 选项：
 
    - **数据库名字**：输入 `testdatabase`，这是为存储 EMQX 数据而创建的 Snowflake 数据库。
    - **模式**：输入 `public`，这是 `testdatabase` 中的数据表所在的模式 (Schema) 名称。
    - **管道**：输入 `emqxstreaming`，该名称需与在 Snowflake 中创建的流式管道名称完全一致。
-   - **管道用户**：输入 `snowpipeuser`，该用户需具备操作该流式 Pipe 的权限。
-   - **私钥**：管道用户用于签署 JWT，以进行 Snowflake Streaming API 认证的 RSA 私钥。您可以通过以下两种格式之一提供该密钥：
-     - **明文内容**：直接粘贴完整的 PEM 格式私钥内容作为字符串填写。
-     - **文件路径**：指定私钥文件的路径，路径需以 `file://` 开头。例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。该路径必须在集群的所有节点上一致，并确保 EMQX 应用用户具备读取权限。
-   - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
-     - **代理主机**：代理服务器的主机名或 IP 地址。
-     - **代理端口**：代理服务器使用的端口号。
+   - **HTTP 流水线**：在等待响应之前可以发送的最大 HTTP 请求数。默认值：`100`。
+   - **连接超时**：建立与 Snowflake 的连接的最长等待时间，超过此时间将中止连接尝试。默认值：`15` 秒。
+   - **连接池大小**：EMQX 为此 Sink 与 Snowflake 保持的最大并发连接数。默认值：`8`。
+   - **最大空闲时间**：空闲连接在被关闭前允许保持打开状态的最长时间。默认值：`10` 秒。
 
-   :::
-
-   ::::
-
-8. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
-
-9. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
-
-10. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
-
-11. 返回规则创建页面，点击**创建**按钮完成整个规则创建过程。
-
-现在，您已成功创建了规则。您可以在**规则**页面看到新创建的规则，并在**动作 (Sink)** 标签页中查看新创建的 Snowflake Sink。
-
-您还可以点击**集成** -> **Flow 设计器**来查看拓扑图，拓扑图可视化显示了主题 `t/#` 下的消息在经过规则 `my_rule` 解析后如何写入 Snowflake。
+5. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+6. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
+7. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
 
 ## 测试规则
 
