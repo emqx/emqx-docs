@@ -49,7 +49,35 @@ This section describes the preparations you need to complete before you start to
 
 ### Set up AlloyDB
 
-<!--To add inputs-->
+Read the [official AlloyDB tutorial](https://cloud.google.com/alloydb/docs/quickstart/create-and-connect) to setup your database and table.
+
+For this tutorial, we'll assume that your database is called `emqx_data` and you have created the tables below.
+
+Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message.
+
+```sql
+CREATE TABLE t_mqtt_msg (
+  id SERIAL primary key,
+  msgid character varying(64),
+  sender character varying(64),
+  topic character varying(255),
+  qos integer,
+  retain integer,
+  payload text,
+  arrived timestamp without time zone
+);
+```
+
+Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event.
+
+```sql
+CREATE TABLE emqx_client_events (
+  id SERIAL primary key,
+  clientid VARCHAR(255),
+  event VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
 ## Create a Connector
 
@@ -89,7 +117,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    ::: tip
 
-   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
 
    :::
 
@@ -124,7 +152,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule. 
+13. Back on the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule.
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created AlloyDB Sink in the **Action (Sink)** tab.
 
