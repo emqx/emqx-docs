@@ -101,10 +101,10 @@ CREATE TABLE emqx_client_events (
 
 ## Create a Connector
 
-Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
+Before adding the PostgreSQL Sink, you need to create the PostgreSQL connector. It assumes that you run both EMQX and PostgreSQL on the local machine. If you have PostgreSQL and EMQX running remotely, adjust the settings accordingly.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
+2. Click **Create** in the top right corner of the page.
 3. In the **Create Connector** page, click to select **PostgreSQL**, and then click **Next**.
 4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_psql`.
 5. Enter the connection information:
@@ -113,7 +113,7 @@ Before add PostgreSQL Sink, you need to create the PostgreSQL connector. It assu
    - **Database Name**: Enter `emqx_data`.
    - **Username**: Enter `postgres`.
    - **Password**: Enter `public`.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connections, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the PostgreSQL server.
 8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to PostgreSQL and record client events. For detailed steps, see [Create a Rule with PostgreSQL Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with PostgreSQL Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
