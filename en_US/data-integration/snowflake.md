@@ -490,7 +490,7 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
 
 4. Add action to the rule by configuring a Sink.
    - If you want to write the rule processing results to Snowflake using the aggregated upload mode, refer to [Add Snowflake Sink with Aggregated Upload Mode](#add-snowflake-sink-with-aggregated-upload-mode).
-   - If you want to write the rule processing results to Snowflake using the streaming upload mode, refer to [Add Snowflake Sink with Streaming Upload Mode](#add-snowflake-sink-with-aggregated-upload-mode).
+   - If you want to write the rule processing results to Snowflake using the streaming upload mode, refer to [Add Snowflake Sink with Streaming Upload Mode](#add-snowflake-sink-with-streaming-upload-mode).
 5. After the action is added, you will see the newly added Sink appear under the **Action Outputs** section. Click the **Save** button on the **Create Rule** page to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
