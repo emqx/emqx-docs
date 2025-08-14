@@ -2,7 +2,7 @@
 
 [AlloyDB for PostgreSQL](https://cloud.google.com/products/alloydb?hl=en) is Google Cloud’s fully managed, PostgreSQL‑compatible database service engineered for demanding enterprise workloads. EMQX supports seamless integration with AlloyDB, enabling real-time ingestion and storage of MQTT data from IoT devices. Leveraging EMQX’s efficient message routing alongside AlloyDB’s high-throughput transactional capabilities and real-time analytics via its Hybrid Transactional/Analytical Processing (HTAP) engine, you get a powerful pipeline for capturing device status, logging events, and performing insightful analytics.
 
-This page provides a comprehensive guide to configuring EMQX rules and setting up AlloyDB Sinks for streamlined real-time integration with AlloyDB.
+This page provides a comprehensive introduction to the data integration between EMQX and AlloyDB, with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -40,63 +40,97 @@ The data integration with AlloyDB can bring the following features and advantage
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the AlloyDB Database sinks, including how to set up the AlloyDB server and create data tables.
+This section describes the preparations you need to complete before you start to create the AlloyDB integration, including how to create an AlloyDB instance and create a database and data tables.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [Data Integration](./data-bridges.md)
 
-### Set up AlloyDB
+### Create Database and Tables in AlloyDB
 
-Read the [official AlloyDB tutorial](https://cloud.google.com/alloydb/docs/quickstart/create-and-connect) to setup your database and table.
+Before creating an AlloyDB connector in EMQX, ensure that an AlloyDB instance is available and that the required database and tables are created to store your IoT data.
 
-For this tutorial, we'll assume that your database is called `emqx_data` and you have created the tables below.
+Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/docs/quickstart/create-and-connect) to:
 
-Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message.
+1. Create an AlloyDB instance. 
 
-```sql
-CREATE TABLE t_mqtt_msg (
-  id SERIAL primary key,
-  msgid character varying(64),
-  sender character varying(64),
-  topic character varying(255),
-  qos integer,
-  retain integer,
-  payload text,
-  arrived timestamp without time zone
-);
-```
+   - During this setup, define the database credentials for this example as follows:
 
-Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event.
+     - **Username**: `emqx_user` (must have privileges to connect, insert, update, and select data)
 
-```sql
-CREATE TABLE emqx_client_events (
-  id SERIAL primary key,
-  clientid VARCHAR(255),
-  event VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+     - **Password**: `your_password_here`
 
-## Create a Connector
+   - You can create this user during instance provisioning or later via SQL, Google Cloud Console, or the `gcloud` CLI.
 
-Before add AlloyDB Sink, you need to create the AlloyDB connector. It assumes that you run both EMQX and AlloyDB on the local machine. If you have AlloyDB and EMQX running remotely, adjust the settings accordingly.
+2. Create a database inside the instance. For this example, the database name is `emqx_data`.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Connector** page, click to select **AlloyDB**, and then click **Next**.
-4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_alloydb`.
+3. Connect to the database using a PostgreSQL-compatible client such as `psql` to connect with the credentials above.
+
+4. Create two tables for storing MQTT messages and client event data in the database `emqx_data`.
+
+   - Use the following SQL statements to create the `t_mqtt_msg` table for storing MQTT messages with metadata such as client ID, topic, QoS, payload, and arrival time:
+
+     ```sql
+     CREATE TABLE t_mqtt_msg (
+       id SERIAL primary key,
+       msgid character varying(64),
+       sender character varying(64),
+       topic character varying(255),
+       qos integer,
+       retain integer,
+       payload text,
+       arrived timestamp without time zone
+     );
+     ```
+
+   - Use the following SQL statements to create the data table `emqx_client_events` for storing client lifecycle events, such as connect and disconnect, with timestamps:
+
+     ```sql
+     CREATE TABLE emqx_client_events (
+       id SERIAL primary key,
+       clientid VARCHAR(255),
+       event VARCHAR(255),
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     );
+     ```
+
+
+## Create an AlloyDB Connector
+
+Before adding an AlloyDB Sink, create an AlloyDB Connector in EMQX. The connector defines how EMQX connects to the AlloyDB instance in Google Cloud.
+
+1. In the EMQX Dashboard, go to **Integration** -> **Connector**.
+
+2. Click **Create** in the upper right corner of the page.
+
+3. On the **Create Connector** page, select **AlloyDB**, and then click **Next**.
+
+4. Enter a name for the connector. Names must start with a letter or number and may contain letters, numbers, hyphens, or underscores, for example, `my_alloydb`.
+
 5. Enter the connection information:
 
-   - **Server Host**: Enter ``, or the actual hostname if the AlloyDB server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Username**: Enter ``.
-   - **Password**: Enter ``.
+   - **Server Host**: The hostname or IP address of your AlloyDB instance in Google Cloud.
+   - **Database Name**: The name of the target database in AlloyDB where EMQX will write data. In this example, it is `emqx_data`.
+   - **Username**: The database username in AlloyDB used for authentication and identification. In this example, it is `emqx_user`.
+   - **Password**: The password for `emqx_user`.
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
-7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the AlloyDB server.
-8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to AlloyDB and record client events. For detailed steps, see [Create a Rule with AlloyDB Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with AlloyDB Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
+
+6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+
+7. Click **Test Connectivity** to verify that EMQX can successfully connect to the AlloyDB instance using the provided settings.
+
+8. Click **Create** to save the connector.
+
+9. After creation, you can either:
+
+   - Click **Back to Connector List** to view all connectors, or
+   - Click **Create Rule** to immediately create a rule that uses this connector to forward data to AlloyDB.
+
+   For detailed examples, see:
+
+   - [Create a Rule with AlloyDB Sink for Message Storage](#create-a-rule-with-alloydb-sink-for-message-storage)
+   - [Create a Rule with AlloyDB Sink for Events Recording](#create-a-rule-with-alloydb-for-events-recording).
 
 ## Create a Rule with AlloyDB Sink for Message Storage
 
@@ -127,7 +161,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter the name and description of the Sink in the form below.
 
-7. From the **Connector** dropdown box, select the `my_alloydb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. From the **Connector** dropdown box, select the `my_alloydb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create an AlloyDB Connector](#create-an-alloydb-connector).
 
 8. Configure the **SQL Template**. Use the SQL statements below to insert data.
 
@@ -148,7 +182,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 10. **Advanced settings (optional)**: For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the AlloyDB server.
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the AlloyDB instance.
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 

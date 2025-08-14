@@ -2,7 +2,7 @@
 
 [Amazon Redshift](https://aws.amazon.com/redshift/?nc1=h_ls) is a fully managed, petabyte-scale cloud data warehouse designed for high-performance analytics. It is based on PostgreSQL and optimized for Online Analytical Processing (OLAP), enabling you to run complex queries and perform large-scale data analysis with exceptional speed. EMQX integrates directly with Amazon Redshift to ingest and store MQTT telemetry from IoT devices in near real time.
 
-This page provides a comprehensive guide to configuring EMQX rules and setting up Redshift Sinks for streamlined real-time integration with Redshift.
+This page provides a comprehensive introduction to the data integration between EMQX and Redshift, with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -40,63 +40,92 @@ The data integration with Redshift can bring the following features and advantag
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the Redshift Database sinks, including how to set up the Redshift server and create data tables.
+This section describes the preparations you need to complete before you start to create the Redshift integration, including how to create a Redshift cluster and create a database and data tables.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [Data Integration](./data-bridges.md)
 
-### Set up Redshift
+### Create Database and Tables in Amazon Redshift
 
-See the [official Redshift documentation](https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html) on how to setup your environment.
+Before setting up a Redshift connector in EMQX, ensure your Amazon Redshift cluster (or Serverless workgroup) is running, and the schema is prepared to store IoT data.
 
-Once your cluster or workgroup is deployed, use any Postgres client to [connect to the created endpoint](https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-syntax.html) and create the `emqx_data` database and tables below.
+1. Deploy a Redshift cluster or workgroup. Follow the [Amazon Redshift cluster creation guide](https://docs.aws.amazon.com/redshift/latest/mgmt/create-cluster.html) to launch your environment.
 
-Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message.
+2. Configure database user credentials. When creating the initial cluster, specify admin credentials for the primary user (often `adminuser`). Alternatively, create a dedicated database user for EMQX using Redshift SQL. This user must have permission to connect, create tables, and read/write data. 
 
-```sql
-CREATE TABLE t_mqtt_msg (
-  id SERIAL primary key,
-  msgid character varying(64),
-  sender character varying(64),
-  topic character varying(255),
-  qos integer,
-  retain integer,
-  payload text,
-  arrived timestamp without time zone
-);
-```
+   For detailed steps, see the [Redshift getting started guide](https://docs.aws.amazon.com/redshift/latest/gsg/t_adding_redshift_user_cmd.html) and [Users guide](https://docs.aws.amazon.com/redshift/latest/dg/r_Users.html). For example:
 
-Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event.
+   ```sql
+   CREATE USER emqx_user PASSWORD 'YourStrongPassword1';
+   ```
 
-```sql
-CREATE TABLE emqx_client_events (
-  id SERIAL primary key,
-  clientid VARCHAR(255),
-  event VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+   Keep the **Username** (`emqx_user`) and **Password** for configuring the connector in EMQX later.
 
-## Create a Connector
+4. Use any PostgreSQL-compatible client (such as `psql`, SQL Workbench/J, or DBeaver) to [connect to your Redshift endpoint](https://docs.aws.amazon.com/redshift/latest/mgmt/cluster-syntax.html) using the hostname, port, an existing database name (e.g., the default `dev`), username, and password you configured.
 
-Before add Redshift Sink, you need to create the Redshift connector. It assumes that you run both EMQX and Redshift on the local machine. If you have Redshift and EMQX running remotely, adjust the settings accordingly.
+5. Once connected, create the target `emqx_data` database, which serve as the destination for incoming IoT data from EMQX.
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Connector** page, click to select `Redshift`, and then click **Next**.
-4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_redshift`.
-5. Enter the connection information:
+   ```sql
+   CREATE DATABASE emqx_data;
+   ```
 
-   - **Server Host**: Enter ``, or the actual hostname if the Redshift server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Username**: Enter ``.
-   - **Password**: Enter ``.
-   - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
-7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Redshift server.
-8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to Redshift and record client events. For detailed steps, see [Create a Rule with Redshift Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with Redshift Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
+6. Connect to the `emqx_data` database and create two tables for storing MQTT messages and client event data.
+
+   - Use the following SQL statements to create data table `t_mqtt_msg` for storing the client ID, topic, payload, and creating time of every message:
+   
+     ```sql
+     CREATE TABLE t_mqtt_msg (
+       msgid character varying(64),
+       sender character varying(64),
+       topic character varying(255),
+       qos integer,
+       retain integer,
+       payload text,
+       arrived timestamp without time zone
+     );
+     ```
+   
+   - Use the following SQL statements to create the `emqx_client_events` table for storing client lifecycle events, such as connect and disconnect, with timestamps:
+   
+     ```sql
+     CREATE TABLE emqx_client_events (
+       clientid VARCHAR(255),
+       event VARCHAR(255),
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     );
+     ```
+
+## Create a Redshift Connector
+
+Before adding a Redshift Sink, you must create a Redshift connector in EMQX. The connector defines how EMQX connects to your Amazon Redshift cluster or Serverless workgroup.
+
+1. In the EMQX Dashboard, navigate to **Integration** -> **Connector**.
+2. Click **Create** in the upper right corner of the page.
+3. On the **Create Connector** page, click to select **Redshift**, and then click **Next**.
+4. Enter a name for the connector. The name must start with a letter or number and can contain letters, numbers, hyphens, or underscores. For example: `my_redshift`.
+5. Fill in the fields with your Redshift connection details:
+
+   - **Server Host**: The hostname of your Redshift endpoint (e.g., `redshift-cluster-1.abc123xyz.us-east-1.redshift.amazonaws.com`). You can find this in the **Clusters** or **Workgroups** page of the AWS Redshift console.
+   - **Database Name**: The target database to store EMQX data. For this example: `emqx_data`.
+   - **Username**: The database username with sufficient privileges to insert data. For this example: `emqx_user`.
+   - **Password**: The password for `emqx_user`.
+   - **Enable TLS**: Toggle on if your Redshift connection requires SSL/TLS encryption (recommended for all cloud connections). See [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
+6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+7. Click **Test Connectivity** to verify that EMQX can successfully connect to the Redshift cluster using the provided settings.
+
+8. Click **Create** to save the connector.
+
+9. After creation, you can either:
+
+   - Click **Back to Connector List** to view all connectors, or
+   - Click **Create Rule** to immediately create a rule that uses this connector to forward data to Redshift.
+
+   For detailed examples, see:
+
+   - [Create a Rule with Redshift Sink for Message Storage](#create-a-rule-with-redshift-sink-for-message-storage)
+   - [Create a Rule with Redshift Sink for Events Recording](#create-a-rule-with-redshift-for-events-recording).
 
 ## Create a Rule with Redshift Sink for Message Storage
 
@@ -127,7 +156,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter the name and description of the Sink in the form below.
 
-7. From the **Connector** dropdown box, select the `my_redshift` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. From the **Connector** dropdown box, select the `my_redshift` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Redsfgut Connector](#create-a-redshift-connector).
 
 8. Configure the **SQL Template**. Use the SQL statements below to insert data.
 

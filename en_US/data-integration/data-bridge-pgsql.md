@@ -106,7 +106,7 @@ Before adding the PostgreSQL Sink, you need to create the PostgreSQL connector. 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
 2. Click **Create** in the top right corner of the page.
 3. In the **Create Connector** page, click to select **PostgreSQL**, and then click **Next**.
-4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_psql`.
+4. Enter a name for the connector. The name should be a combination of upper/lower case letters and numbers, for example, `my_psql`.
 5. Enter the connection information:
 
    - **Server Host**: Enter `127.0.0.1:5432`, or the actual hostname if the PostgreSQL server is running remotely.

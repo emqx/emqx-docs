@@ -1,8 +1,8 @@
 # Ingest MQTT Data into CockroachDB
 
-[CockroachDB Cloud](https://www.cockroachlabs.com/product/cloud/) is a fully managed, Postgres-compatible database built for global, cloud-native applications requiring unmatched resilience, scalability, and SQL-compatibility. EMQX integrates smoothly with CockroachDB to capture and store MQTT data from IoT devices in real time. Together, they enable fast, reliable ingestion across global deployments, ensure consistent data with Raft-based replication, and support low-latency reads for both operations and analytics.
+[CockroachDB](https://www.cockroachlabs.com/product/overview/) is a distributed, PostgreSQL-compatible database available as a fully managed cloud service (CockroachDB Cloud) or as a self-hosted deployment. It is designed for global applications requiring high resilience, horizontal scalability, and full SQL compatibility. EMQX integrates smoothly with CockroachDB to capture and store MQTT data from IoT devices in real time. Together, they enable fast, reliable ingestion across global deployments, ensure consistent data with Raft-based replication, and support low-latency reads for both operations and analytics.
 
-This page provides a comprehensive guide to configuring EMQX rules and setting up CockroachDB Sinks for streamlined real-time integration with CockroachDB.
+This page provides a comprehensive introduction to the data integration between EMQX and CockroachDB, with practical instructions on creating and validating the data integration.
 
 ## How It Works
 
@@ -42,61 +42,93 @@ The data integration with CockroachDB can bring the following features and advan
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start to create the CockroachDB Database sinks, including how to set up the CockroachDB server and create data tables.
+This section describes the preparations you need to complete before you start to create the CockroachDB integration, including how to deploy a CockroachDB deployment and create a database and data tables.
 
 ### Prerequisites
 
 - Knowledge about EMQX data integration [rules](./rules.md)
 - Knowledge about [Data Integration](./data-bridges.md)
 
-### Set up CockroachDB
+### Create Database and Tables in CockroachDB
 
-See the [official CockroachDB documentation](https://www.cockroachlabs.com/docs/stable/install-cockroachdb-linux.html) on how to setup your CockroachDB database.  After it's set up, [create the `emqx_data` database](https://www.cockroachlabs.com/docs/v25.3/schema-design-database.html) and the tables below.
+Before creating a CockroachDB connector in EMQX, ensure that a CockroachDB cluster is running and that the necessary database and tables are prepared to store IoT data.
 
-Use the following SQL statements to create data table `t_mqtt_msg` in PostgreSQL database for storing the client ID, topic, payload, and creating time of every message.
+1. Create a CockroachDB cluster.
 
-```sql
-CREATE TABLE t_mqtt_msg (
-  id SERIAL primary key,
-  msgid character varying(64),
-  sender character varying(64),
-  topic character varying(255),
-  qos integer,
-  retain integer,
-  payload text,
-  arrived timestamp without time zone
-);
-```
+   - For CockroachDB Cloud, follow the [CockroachDB Cloud documentation](https://www.cockroachlabs.com/docs/cockroachcloud) to provision a cluster.
+   - For self-hosted deployments, follow the [installation guide](https://www.cockroachlabs.com/docs/stable/install-cockroachdb-linux.html).
 
-Use the following SQL statements to create data table `emqx_client_events` in PostgreSQL database for storing the client ID, event type, and creating time of every event.
+2. Create a dedicated SQL user for EMQX by following the [CockroachDB user management guide](https://www.cockroachlabs.com/docs/cockroachcloud/managing-access#manage-sql-users-on-a-cluster). For this example, the SQL user is named `emqx_user`, which will later be used when configuring the CockroachDB connector. This user must have privileges to:
 
-```sql
-CREATE TABLE emqx_client_events (
-  id SERIAL primary key,
-  clientid VARCHAR(255),
-  event VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-```
+   - Connect to the target database
 
-## Create a Connector
+   - Create tables
 
-Before add CockroachDB Sink, you need to create the CockroachDB connector. It assumes that you run both EMQX and CockroachDB on the local machine. If you have CockroachDB and EMQX running remotely, adjust the settings accordingly.
+   - Read and write to the EMQX data tables
+     
 
-1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
-2. Click **Create** on the top right corner of the page.
-3. In the **Create Connector** page, click to select `CockroachDB`, and then click **Next**.
-4. Enter a name for the sink. The name should be a combination of upper/lower case letters and numbers, for example, `my_cockroachdb`.
+3. Create a database by following the instructions on [Create a Database](https://www.cockroachlabs.com/docs/cockroachcloud/managing-access#manage-sql-users-on-a-cluster). For this example, the database name is `emqx_data`.
+
+4. Connect to the `emqx_data` database and create two tables for storing MQTT messages and client event data. Follow the instructions on [Create a Table](https://www.cockroachlabs.com/docs/v25.3/schema-design-table#create-a-table).
+
+   - Use the following SQL statements to create the `t_mqtt_msg` table for storing MQTT messages with metadata such as client ID, topic, QoS, payload, and arrival time:
+
+     ```sql
+     CREATE TABLE t_mqtt_msg (
+       id SERIAL primary key,
+       msgid character varying(64),
+       sender character varying(64),
+       topic character varying(255),
+       qos integer,
+       retain integer,
+       payload text,
+       arrived timestamp without time zone
+     );
+     ```
+
+   - Use the following SQL statements to create the `emqx_client_events` table for storing client lifecycle events, such as connect and disconnect, with timestamps:
+
+     ```sql
+     CREATE TABLE emqx_client_events (
+       id SERIAL primary key,
+       clientid VARCHAR(255),
+       event VARCHAR(255),
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     );
+     ```
+
+
+## Create a CockroachDB Connector
+
+Before adding a CockroachDB Sink, you must create a CockroachDB connector in EMQX. The connector defines how EMQX connects to your CockroachDB cluster, whether it is self-hosted or deployed in CockroachDB Cloud.
+
+1. In the EMQX Dashboard, go to **Integration** -> **Connector**.
+2. Click **Create** in the upper right corner of the page.
+3. In the **Create Connector** page, click to select **CockroachDB**, and then click **Next**.
+4. Enter a name for the connector. The name must start with a letter or number and can contain letters, numbers, hyphens, or underscores. For example: `my_cockroachdb`.
 5. Enter the connection information:
 
-   - **Server Host**: Enter ``, or the actual hostname if the CockroachDB server is running remotely.
-   - **Database Name**: Enter `emqx_data`.
-   - **Username**: Enter ``.
-   - **Password**: Enter ``.
+   - **Server Host**: The hostname or IP address of your CockroachDB instance.
+     - **CockroachDB Cloud**: Use the host value from the connection string provided in the CockroachDB Cloud Console (e.g., `free-tier.gcp-us-central1.cockroachlabs.cloud`).
+     - **Self-hosted**: Use the address where CockroachDB is running (e.g., `127.0.0.1` for local, or your server’s public/private IP).
+   - **Database Name**: The name of the target database where EMQX will store data. In this example: `emqx_data`.
+   - **Username**: The SQL username in cockroachDB used for authentication and identification. In this example, it is `emqx_user`.
+   - **Password**: The password for `emqx_user`.
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-6. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
-7. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the CockroachDB server.
-8. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to CockroachDB and record client events. For detailed steps, see [Create a Rule with CockroachDB Sink for Message Storage](#create-a-rule-with-postgresql-sink-for-message-storage) and [Create a Rule with CockroachDB Sink for Events Recording](#create-a-rule-with-postgresql-for-events-recording).
+6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+7. Click **Test Connectivity** to verify that EMQX can successfully connect to the CockroachDB cluster using the provided settings.
+
+8. Click **Create** to save the connector.
+
+9. After creation, you can either:
+
+   - Click **Back to Connector List** to view all connectors, or
+   - Click **Create Rule** to immediately create a rule that uses this connector to forward data to CockroachDB.
+
+   For detailed examples, see:
+
+   - [Create a Rule with CockroachDB Sink for Message Storage](#create-a-rule-with-cockroachdb-sink-for-message-storage)
+   - [Create a Rule with CockroachDB Sink for Events Recording](#create-a-rule-with-cockroachdb-for-events-recording).
 
 ## Create a Rule with CockroachDB Sink for Message Storage
 
@@ -127,7 +159,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter the name and description of the Sink in the form below.
 
-7. From the **Connector** dropdown box, select the `my_cockroachdb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+7. From the **Connector** dropdown box, select the `my_cockroachdb` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a CockroachDB Connector](#create-a-cockroachdb-connector).
 
 8. Configure the **SQL Template**. Use the SQL statements below to insert data.
 
@@ -148,7 +180,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 10. **Advanced settings (optional)**: For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the CockroachDB server.
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the CockroachDB cluster.
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
