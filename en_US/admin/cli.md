@@ -812,9 +812,9 @@ wss:default
 | `closed`                      | The connection was closed either by the server or the client.                                         |
 | `discarded`                   | A client with the same clientid connected with `clean_start = true` while the old session was alive.  |
 | `takenover`                   | A client with the same clientid connected with `clean_start = false` while the old session was alive. |
-| `einval`                      | Invalid argument or socket error, typically indicating a network or client SDK issue.                 |
+| `einval`                      | Invalid argument or socket error, happens when EMQX tries to write data to a socket which is closed already by the system (a race condition between socket state change notification and data write).                 |
 | `frame_too_large`             | The MQTT packet exceeds the maximum allowed frame size.                                               |
-| `idle_timeout`                | The connection was idle beyond the configured timeout period.                                         |
+| `idle_timeout`                | The `CONNECT` packet is not received for too long after the configured timeout after connection is established.                                         |
 | `invalid_proto_name`          | The protocol name in the `CONNECT` packet is invalid or not `"MQTT"`.                                 |
 | `invalid_topic`               | The client used an invalid topic (e.g., containing illegal characters or forbidden by the broker).    |
 | `keepalive_timeout`           | The client failed to send any packets within the keepalive interval.                                  |
@@ -822,14 +822,14 @@ wss:default
 | `not_authorized`              | The client attempted an unauthorized action, rejected by ACL.                                         |
 | `ssl_closed`                  | The SSL/TLS connection was closed by the peer.                                                        |
 | `ssl_error`                   | A SSL/TLS handshake or data transmission error occurred.                                              |
-| `ssl_upgrade_timeout`         | Timeout during SSL/TLS upgrade or handshake.                                                          |
+| `ssl_upgrade_timeout`         | Timeout during SSL/TLS handshake.                                                          |
 | `unexpected_packet`           | The client sent a packet that was unexpected in the current connection state.                         |
 | `zero_remaining_len`          | The packet has a zero remaining length field, which is invalid in most contexts.                      |
 | `bad_username_or_password`    | The client's credentials failed authentication.                                                       |
-| `client_identifier_not_valid` | The client ID is invalid or disallowed.                                                               |
+| `client_identifier_not_valid` | The client ID is being registered by another connection.                                                               |
 | `protocol_error`              | A generic MQTT protocol violation.                                                                    |
 | `tcp_closed`                  | The TCP connection was closed by the client or network layer.                                         |
-| `timeout`                     | A general timeout occurred (e.g., during authentication, SSL handshake, etc.).                        |
+| `timeout`                     | A general timeout occurred (e.g., during authentication, etc.).                        |
 
 ### listeners stop \<Identifier\>
 
