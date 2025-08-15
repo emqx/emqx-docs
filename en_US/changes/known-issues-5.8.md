@@ -1,5 +1,11 @@
 # Known Issues in EMQX 5.8
 
+## e5.8.7
+
+- **The built-in authentication data for gateways is incorrectly cleared when a node is stopped or shuts down normally (since 5.0.0 will be fixed in 5.8.8).**
+
+  This bug is triggered when a node in cluster is normally shut down, causing all authentication data to be cleared from any gateway using the built-in database.
+
 ## e5.8.6
 
 - **Occasional RPC errors in logs due to failed attempts to contact nodes that had left the cluster (since 5.8.5, will be fixed in 5.9.0)**
