@@ -1,5 +1,18 @@
 # Known Issues in EMQX 5.8
 
+## e5.8.8
+
+- **Disabling Message Transformation / Schema Validation after deleting a previous item in the order does not take effect (since 5.8.0, will be fixed in 5.8.8)**.
+
+  If one deleted a Message Transformation / Schema Validation, and then disabled one of the items that followed the deleted one, it would remain enabled.
+
+  > **Workaround:**
+  > Run the following command on one of EMQX hosts.
+  >
+  > ```
+  > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
+  > ```
+
 ## e5.8.6
 
 - **Occasional RPC errors in logs due to failed attempts to contact nodes that had left the cluster (since 5.8.5, will be fixed in 5.9.0)**
@@ -68,13 +81,13 @@
   ABCDEF1111111111 'emqx@emqxc1-core0.local' (!) UNIDENTIFIED
   ABCDEF2222222222 'emqx@emqxc2-core0.local' up
   <...>
-  
+
   Shard            Replicas
   messages/0       (!) ABCDEF1111111111
   messages/1       (!) ABCDEF1111111111
   <...>
   messages/9       (!) ABCDEF1111111111
-  
+
   Shard             Transitions
   messages/0        +ABCDEF2222222222 -ABCDEF1111111111
   messages/1        +ABCDEF2222222222 -ABCDEF1111111111
