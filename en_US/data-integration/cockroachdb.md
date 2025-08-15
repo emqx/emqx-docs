@@ -14,7 +14,7 @@ The diagram below illustrates a typical architecture of data integration between
 
 <!-- To be updated-->
 
-![EMQX Integration CockroachDB](./assets/emqx-integration-postgesql.png)
+![EMQX Integration CockroachDB](./assets/cockroachdb_architecture.png)
 
 Ingesting MQTT data into CockroachDB works as follows:
 
@@ -184,7 +184,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule.
+13. On the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule.
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created CockroachDB Sink in the **Action (Sink)** tab.
 

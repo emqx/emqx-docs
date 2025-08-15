@@ -6,13 +6,13 @@ This page provides a comprehensive introduction to the data integration between 
 
 ## How It Works
 
-AlloyDB data integration in EMQX is a built-in feature that ingests MQTT-based IoT data streams directly into AlloyDB's high-performance, PostgreSQL-compatible database. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to AlloyDB for storage and analysis, eliminating the need for complex coding.
+AlloyDB data integration in EMQX is a built-in feature that ingests MQTT-based IoT data streams directly into AlloyDB's high-performance, PostgreSQL-compatible database. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to AlloyDB for storage and analysis, eliminating the need for complex coding. Through the AlloyDB Sink, MQTT messages and client events can be stored in AlloyDB. Events can also trigger update or delete operations on data in AlloyDB, enabling the recording of information such as device online status and connection history.
 
 The diagram below illustrates a typical architecture of data integration between EMQX and AlloyDB:
 
 <!--To be updated-->
 
-![EMQX Integration AlloyDB](./assets/emqx-integration-postgesql.png)
+![EMQX Integration AlloyDB](./assets/alloydb_architecture.png)
 
 Ingesting MQTT data into AlloyDB works as follows:
 
@@ -55,7 +55,7 @@ Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/
 
 1. Create an AlloyDB instance. 
 
-   - During this setup, define the database credentials for this example as follows:
+   - During this setup, define the database user credentials for this example as follows:
 
      - **Username**: `emqx_user` (must have privileges to connect, insert, update, and select data)
 
@@ -116,7 +116,7 @@ Before adding an AlloyDB Sink, create an AlloyDB Connector in EMQX. The connecto
    - **Password**: The password for `emqx_user`.
    - **Enable TLS**: If you want to establish an encrypted connection, click the toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 
-6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+6. Advanced settings (optional): Configure additional connection properties such as connection pool size, idle timeout, and request timeout.
 
 7. Click **Test Connectivity** to verify that EMQX can successfully connect to the AlloyDB instance using the provided settings.
 
@@ -186,7 +186,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-13. Back on the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule.
+13. On the **Create Rule** page, verify the configured information and click the **Save** button to generate the rule.
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created AlloyDB Sink in the **Action (Sink)** tab.
 

@@ -104,6 +104,9 @@ EMQX supports data integrations with the following types of data systems:
 - [PostgreSQL](./data-bridge-pgsql.md)
 - [Lindorm](./lindorm)
 - [Doris](./apache-doris)
+- [AlloyDB](./alloydb.md)
+- [CockroachDB](./cockroachdb.md)
+- [Redshift](./redshift.md)
 
 **NoSQL**
 
