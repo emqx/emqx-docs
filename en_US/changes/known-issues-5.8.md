@@ -13,6 +13,8 @@
   > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
   > ```
 
+- **External Schema Registries are not loaded when a node is restarted (since 5.8.1, will be fixed in 5.8.8)**.
+
 ## e5.8.6
 
 - **Occasional RPC errors in logs due to failed attempts to contact nodes that had left the cluster (since 5.8.5, will be fixed in 5.9.0)**
