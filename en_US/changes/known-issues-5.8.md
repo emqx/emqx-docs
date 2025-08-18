@@ -2,18 +2,18 @@
 
 ## e5.8.8
 
-- **Disabling Message Transformation / Schema Validation after deleting a previous item in the order does not take effect (since 5.8.0, will be fixed in 5.8.8)**.
+- **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item (since 5.8.0, will be fixed in 5.8.8)**.
 
-  If one deleted a Message Transformation / Schema Validation, and then disabled one of the items that followed the deleted one, it would remain enabled.
+  If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled.
 
   > **Workaround:**
-  > Run the following command on one of EMQX hosts.
+  > Run the following command on any EMQX node.
   >
   > ```
   > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
   > ```
 
-- **External Schema Registries are not loaded when a node is restarted (since 5.8.1, will be fixed in 5.8.8)**.
+- **External Schema Registries are not loaded after a node restart (since 5.8.1, will be fixed in 5.8.8)**.
 
 ## e5.8.6
 
@@ -83,13 +83,13 @@
   ABCDEF1111111111 'emqx@emqxc1-core0.local' (!) UNIDENTIFIED
   ABCDEF2222222222 'emqx@emqxc2-core0.local' up
   <...>
-
+  
   Shard            Replicas
   messages/0       (!) ABCDEF1111111111
   messages/1       (!) ABCDEF1111111111
   <...>
   messages/9       (!) ABCDEF1111111111
-
+  
   Shard             Transitions
   messages/0        +ABCDEF2222222222 -ABCDEF1111111111
   messages/1        +ABCDEF2222222222 -ABCDEF1111111111
