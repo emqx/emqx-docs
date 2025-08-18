@@ -219,7 +219,7 @@ Use MQTTX to send a message to topic `t/1` to trigger an online/offline event.
 mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello PostgreSQL" }'
 ```
 
-Check the running status of the two sinks. For the message storage Sink, there should be 1 new incoming and 1 new outgoing message. For the events recording Sink, there 2 events records.
+Check the running status of the two sinks. For the message storage Sink, there should be one new incoming and one new outgoing message. For the events recording Sink, there are two event records.
 
 Check whether the data is written into the `t_mqtt_msg` data table.
 
