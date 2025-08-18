@@ -10,8 +10,6 @@ AlloyDB data integration in EMQX is a built-in feature that ingests MQTT-based I
 
 The diagram below illustrates a typical architecture of data integration between EMQX and AlloyDB:
 
-
-
 ![EMQX Integration AlloyDB](./assets/alloydb_architecture.png)
 
 Ingesting MQTT data into AlloyDB works as follows:

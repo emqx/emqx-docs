@@ -10,7 +10,7 @@ Redshift data integration in EMQX is a built-in feature that ingests MQTT-based 
 
 The diagram below illustrates a typical architecture of data integration between EMQX and Redshift:
 
-![EMQX Integration Redshift](./assets/redshift_architecture.png)
+![redshift_architecture](./assets/redshift_architecture.png)
 
 Ingesting MQTT data into Redshift works as follows:
 
