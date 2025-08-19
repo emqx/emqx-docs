@@ -163,7 +163,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 6. Enter the name and description of the Sink in the form below.
 
-7. From the **Connector** dropdown box, select the `my_redshift` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Redsfgut Connector](#create-a-redshift-connector).
+7. From the **Connector** dropdown box, select the `my_redshift` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Redshift Connector](#create-a-redshift-connector).
 
 8. Configure the **SQL Template**. Use the SQL statements below to insert data.
 
