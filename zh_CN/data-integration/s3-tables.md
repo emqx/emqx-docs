@@ -8,7 +8,7 @@ EMQX 现已支持与 Amazon S3 表类数据存储服务的无缝集成，可高�
 
 ## 工作原理
 
-EMQX 的 Amazaon S3 Tables 数据集成是一个开箱即用的功能。EMQX 通过规则引擎和 S3 Tables Sink 将实时 MQTT 数据结构化写入 Iceberg 表（存放于 S3 表存储桶），用于长期存储与后续分析。
+EMQX 的 Amazon S3 Tables 数据集成是一个开箱即用的功能。EMQX 通过规则引擎和 S3 Tables Sink 将实时 MQTT 数据结构化写入 Iceberg 表（存放于 S3 表存储桶），用于长期存储与后续分析。
 
 在典型的 IoT 应用场景中：
 
