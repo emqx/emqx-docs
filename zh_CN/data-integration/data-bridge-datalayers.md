@@ -156,7 +156,7 @@ Datalayers 数据集成具有以下特性与优势：
 
      ::: tip
 
-     使用 Arrow Flgiht SQL 协议连接 Datalayers 时，由于依赖库限制，不能跳过证书校验（即不支持 `verify_none` 模式）。请确保 Datalayers gRPC 服务端证书合法，Common Name 与服务器地址匹配。
+     使用 Arrow Flight SQL 协议连接 Datalayers 时，由于依赖库限制，不能跳过证书校验（即不支持 `verify_none` 模式）。请确保 Datalayers gRPC 服务端证书合法，Common Name 与服务器地址匹配。
      :::
 
 6. 若选择的是 `Arrow Flight` 驱动，还需设置是否**启用预处理语句**，用于控制是否允许 Sink 使用 SQL 模板方式写入数据；默认为开启。
