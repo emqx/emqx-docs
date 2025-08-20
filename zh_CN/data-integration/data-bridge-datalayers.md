@@ -101,9 +101,19 @@ Datalayers 数据集成具有以下特性与优势：
 
    - 输入连接器名称，要求是大小写英文字母和数字的组合，例如：`my_datalayers`。
    - 输入 Datalayers 服务器连接信息：
-     - 服务器地址填写 `127.0.0.1:8361`。
+     - 选择驱动类型为 `InfluxDB 行协议` 或 `Arrow Flgiht` 。
+     - 服务器地址填写 `127.0.0.1:8361`。注意若使用 `Arrow Flgiht` 驱动需要使用 gRPC 协议连接 Datalayers ，Datalayers 的 gRPC 默认监听端口为 8360。
      - 按照[安装和设置 Datalayers](#安装和设置-datalayers) 中的设定完成**数据库**、**用户名**及**密码**设置。
    - 设置是否启用TLS。有关 TLS 连接选项的详细信息，请参阅[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
+
+   ::: warning
+   Arrow Flight Driver 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。此功能目前仍为实验性功能。
+   :::
+
+   ::: tip
+   使用 Arrow Flgiht SQL 协议连接 Datalayers 时。由于依赖库限制，不提供 `verify_none` 选项。请确保服务端证书的 Common Name 合法。
+   :::
+
 5. 在点击**创建**之前，您可以点击**测试连接**，以测试连接器是否能够连接到 Datalayers 服务器。
 6. 点击最下方的**创建**按钮完成连接器的创建。在弹出对话框中，您可以点击**返回连接器列表**或点击**创建规则** 继续创建规则和 Sink，以指定要转发到 Datalayers 的数据。具体步骤请参见[创建 Datalayers Sink 规则](#创建-datalayers-sink-规则)。
 
@@ -190,7 +200,7 @@ Datalayers 数据集成具有以下特性与优势：
 
 ::: warning
 
-Arrow Flight 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。此功能目前仍为实验性功能。
+Arrow Flight Driver 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。此功能目前仍为实验性功能。
 
 :::
 
@@ -232,9 +242,7 @@ Arrow Flight 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。�
 9. 配置 SQL 模板，使用如下 SQL 完成数据插入，此处为[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
 
    ```sql
-   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, retain, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${retain}, ${payload}, ${timestamp})
-   ```
-
+insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
 10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
 11. 展开**高级设置**，根据需要配置高级设置选项（可选），详细请参考[高级设置](#高级设置)。
@@ -249,9 +257,7 @@ Arrow Flight 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。�
 
 您还可以点击**集成** -> **Flow 设计器**查看拓扑。可以看到 `t/#` 主题的消息经过名为 `my_rule` 的规则处理，处理结果交由 Datalayers 进行存储。
 
-
-### 批量设置
-
+### 使用 InfluxDB 行协议写入并进行批量设置
 在 Datalayers 中，一个数据条目通常包含数百个字段（Fields），这使得数据格式的设置变得具有挑战性。为了解决这个问题，EMQX 提供了批量设置字段的功能。
 
 当通过 JSON 设置数据格式时，您可以使用批量设置功能，从 CSV 文件中导入字段的键值对。
@@ -260,10 +266,10 @@ Arrow Flight 由 Rust 编写，并通过 Erlang Nif 绑定到 Erlang 语言。�
 
 2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入 Fields 键值对，默认的模板文件内容如下：
 
-   | Field  | Value              | Remarks (Optional)                                    |
-   | ------ | ------------------ | ----------------------------------------------------- |
-   | temp   | ${payload.temp}    |                                                       |
-   | hum    | ${payload.hum}     |                                                       |
+   | Field  | Value              | Remarks (Optional)                                      |
+   |--------|--------------------|---------------------------------------------------------|
+   | temp   | ${payload.temp}    |                                                         |
+   | hum    | ${payload.hum}     |                                                         |
    | precip | ${payload.precip}i | 在字段值后追加 i，Datalayers 则将该数值存储为整数类型。 |
 
      - **Field**: 字段键，支持常量或 ${var} 格式的占位符。
@@ -289,17 +295,25 @@ mqttx pub -i emqx_c -t t/1 -m '{ "temp": "23.5", "hum": "62", "precip": 2}'
 
 1. 进入 Datalayers 控制台：
 
-```bash
-docker exec -it datalayers bash
-dlsql -u admin -p public
-```
+  ```bash
+  docker exec -it datalayers bash
+  dlsql -u admin -p public
+  ```
 
 2. 执行 SQL 查询数据：
 
-```sql
-use mqtt
-select * from devices
-```
+  - 使用以上的 InfluxDB 行协议写入设置，表名为 Line Protocol 的 measurement
+  ```sql
+  use mqtt
+  select * from devices
+  ```
+
+  - 使用 Arrow Flight 写入，表名为提前创建好的 `t_mqtt_msg`
+
+  ```sql
+  use mqtt
+  select * from t_mqtt_msg
+  ```
 
 ## 高级设置
 
