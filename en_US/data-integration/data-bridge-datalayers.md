@@ -326,11 +326,10 @@ The Arrow Flight SQL driver is currently experimental. Use with caution in produ
 
    For example:
 
+   ```sql
+   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
-   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived)
-   values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
-   ```
-
+   
 6. **Fallback Actions** (Optional): To enhance reliability, you can configure one or more fallback actions. These will be triggered if the Sink fails to process a message. For more information, refer to [Fallback Actions](./data-bridges.md#fallback-actions).
 
 7. Expand **Advanced Settings** to configure additional options as needed. See [Advanced Settings](#advanced-settings) for more details.
@@ -365,14 +364,14 @@ After configuring the rule and Sink, you can verify whether data is successfully
    Then, run SQL queries based on the data write method you used:
 
    - If using InfluxDB Line Protocol, the table name defaults to the `measurement` specified in the Sink configuration (e.g., `devices`):
-      
+     
      ```sql
      use mqtt
      select * from devices
      ```
      
    - If using Arrow Flight SQL, query the target table that was created beforehand (e.g., `t_mqtt_msg`):
-      
+     
      ```sql
      use mqtt
      select * from t_mqtt_msg
