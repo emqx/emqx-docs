@@ -71,6 +71,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#14902](https://github.com/emqx/emqx/pull/14902) Improved error handling in the SQL Server action for connection failures by treating `IMC0x` SQLSTATE errors as recoverable. This prevents message loss when the external MSSQL service is temporarily unavailable and ensures messages are properly cached for retry.
   Also enhances connection health checks to correctly detect broken connections and initiate connector reconnection attempts, improving the reliability of the SQL Server connector in unstable network environments.
 
+- [#14833](https://github.com/emqx/emqx/pull/14833) Kafka producer now smoothly handles Kafka topic re-creation with fewer partitions. Previously, the lost partition producers may linger behind to retry and write large amount of error logs.
 
 #### Observability
 
