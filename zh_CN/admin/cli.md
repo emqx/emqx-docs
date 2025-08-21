@@ -782,6 +782,7 @@ tcp:default
   running         : true
   current_conn    : 12
   max_conns       : 5000000
+  shutdown_count  : [{takenover,2},{discarded,1}]
 ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
@@ -797,6 +798,46 @@ wss:default
   current_conn    : 0
   max_conns       : 5000000
 ```
+
+#### 常见连接关闭原因
+
+对于 TCP 监听器，EMQX 会报告一个 `shutdown_count` 字段，用于统计客户端断开连接的次数，并按原因分类。该字段有助于分析客户端为何被断开连接。
+
+```
+shutdown_count  : [{takenover,2},{discarded,1}]
+```
+
+上述示例中：
+
+- 有 2 个客户端因为新的会话接管了相同的 `clientid` 而被断开连接（`takenover`）。
+- 有 1 个客户端因为被新的 clean session 替换而被丢弃（`discarded`）。
+
+以下是 `shutdown_count` 字段中可能出现的一些常见断开原因：
+
+| 原因                          | 描述                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| `banned`                      | 客户端因违反 ACL 规则、触发限流或 IP 被限制而被拉入黑名单并断开连接。 |
+| `closed`                      | 连接被服务器或客户端主动关闭。                               |
+| `discarded`                   | 新客户端使用相同的 `clientid` 且设置了 `clean_start = true`，在旧会话仍然活跃的情况下连接，导致旧会话被丢弃。 |
+| `takenover`                   | 新客户端使用相同的 `clientid` 且设置了 `clean_start = false`，在旧会话仍然活跃的情况下连接，导致旧会话被接管。 |
+| `einval`                      | 出现无效参数或 socket 错误，通常是因为尝试向已被系统关闭的 socket 写入数据（可能是 socket 状态变更通知与数据写入之间的竞争条件所致）。 |
+| `frame_too_large`             | 收到的 MQTT 报文超过了允许的最大帧大小。                     |
+| `idle_timeout`                | TCP/SSL 连接建立后，在配置的超时时间内未收到 `CONNECT` 报文。 |
+| `invalid_proto_name`          | `CONNECT` 报文中的协议名称无效或不是 `"MQTT"`。              |
+| `invalid_topic`               | 客户端使用了无效或被禁止的主题（如包含非法字符或被 Broker 限制）。 |
+| `keepalive_timeout`           | 客户端在 Keep Alive 时间间隔内未发送任何报文。               |
+| `malformed_packet`            | MQTT 报文损坏或不符合 MQTT 协议规范。                        |
+| `not_authorized`              | 客户端尝试执行未被授权的操作，被 ACL 拒绝。                  |
+| `ssl_closed`                  | SSL/TLS 连接被对端关闭。                                     |
+| `ssl_error`                   | SSL/TLS 握手或数据传输过程中发生错误。                       |
+| `ssl_upgrade_timeout`         | SSL/TLS 握手未在允许时间内完成。                             |
+| `unexpected_packet`           | 客户端在当前连接状态下发送了不应出现的报文。                 |
+| `zero_remaining_len`          | MQTT 报文的剩余长度字段为 0，在大多数场景下是非法的。        |
+| `bad_username_or_password`    | 客户端身份认证失败，用户名或密码错误。                       |
+| `client_identifier_not_valid` | 提供的 `clientid` 无效，或已被其他连接使用。                 |
+| `protocol_error`              | 出现通用的 MQTT 协议错误。                                   |
+| `tcp_closed`                  | TCP 连接被客户端或网络层关闭。                               |
+| `timeout`                     | 发生通用超时错误（如在认证或握手过程中）。                   |
 
 ### listeners stop \<Identifier\>
 
