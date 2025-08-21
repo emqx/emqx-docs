@@ -427,31 +427,22 @@ You have now completed the connector creation and can proceed to create a rule a
 If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API (AWS-only).
 
 1. Go to the Dashboard **Integration** -> **Connector** page.
-
 2. Click the **Create** button in the top right corner.
-
 3. Select **Snowflake Streaming** as the connector type and click next.
-
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake-streaming`.
-
 5. Enter the connection information.
 
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Pipe User**: The name of a Snowflake user account that has a role with permissions to operate the target Pipe, for example, `snowpipeuser`. The role must have at least the `OPERATE` and `MONITOR` privileges.
-   - **Private Key Path**: The absolute file path to the private RSA key. EMQX uses this key to sign JWT tokens to authenticate itself with the Snowflake API. This path must be consistent across all nodes of the cluster. For example:
-     `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Path**: The RSA private key used by EMQX to sign JWT tokens to authenticate itself with the Snowflake API. You can paste the full PEM-formatted private key content directly as a string or specify the path to the private key file, starting with `file://`. For example: `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-
 6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
-
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
-
 8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
-
 9. Click the **Create** button at the bottom to complete the connector creation.
 
 You have now completed the connector creation and can proceed to create a rule and Sink to specify how the data will be written into Snowflake.
