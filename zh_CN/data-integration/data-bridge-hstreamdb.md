@@ -18,7 +18,7 @@ HStreamDB 数据集成是 EMQX 企业版功能。
 
 ::: tip
 
-HStreamDB Sink 功能将在 EMQX 6.0 中移除。
+HStreamDB 数据集成功能将在 EMQX 6.0 中移除。
 
 :::
 
