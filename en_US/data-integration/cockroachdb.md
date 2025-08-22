@@ -84,7 +84,7 @@ Before creating a CockroachDB connector in EMQX, ensure that a CockroachDB clust
      );
      ```
 
-   - Use the following SQL statements to create the `emqx_client_events` table for storing client lifecycle events, such as connect and disconnect, with timestamps:
+   - Use the following SQL statements to create the `emqx_client_events` table for storing client online/offline events with timestamps:
 
      ```sql
      CREATE TABLE emqx_client_events (
@@ -126,7 +126,7 @@ Before adding a CockroachDB Sink, you must create a CockroachDB connector in EMQ
    For detailed examples, see:
 
    - [Create a Rule with CockroachDB Sink for Message Storage](#create-a-rule-with-cockroachdb-sink-for-message-storage)
-   - [Create a Rule with CockroachDB Sink for Events Recording](#create-a-rule-with-cockroachdb-for-events-recording).
+   - [Create a Rule with CockroachDB Sink for Events Recording](#create-a-rule-with-cockroachdb-sink-for-events-recording)
 
 ## Create a Rule with CockroachDB Sink for Message Storage
 
@@ -188,7 +188,7 @@ Now that you have successfully created the rule, you can click **Integration** -
 
 You can also click **Integration** -> **Flow Designer** to see the topology, through which you can visualize that the messages under topic `t/#` are being written to CockroachDB after being parsed by the rule `my_rule`.
 
-## Create a Rule with CockroachDB for Events Recording
+## Create a Rule with CockroachDB Sink for Events Recording
 
 This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the CockroachDB table `emqx_client_events` via a configured Sink.
 

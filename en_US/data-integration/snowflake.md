@@ -451,6 +451,8 @@ You have now completed the connector creation and can proceed to create a rule a
 
 This section demonstrates how to create a rule in EMQX to process messages (e.g., from the source MQTT topic `t/#`) and write the processed results to Snowflake through a configured Sink.
 
+### Create a Rule with Defined SQL
+
 1. Go to the Dashboard **Integration** -> **Rules** page.
 
 2. Click the **Create** button in the top right corner.

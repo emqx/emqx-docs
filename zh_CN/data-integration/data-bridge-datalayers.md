@@ -199,7 +199,7 @@ Datalayers 数据集成具有以下特性与优势：
 5. 为规则添加带有 Datalayers Sink，用于将规则处理结果写入 Datalayers。
 
    - 若使用 InfluxDB 行协议方式写入，参考：[添加 InfluxDB 行协议 Sink](#添加-influxdb-行协议-sink)。
-   - 若使用 Arrow Flight SQL 驱动写入，参考：[添加 Arrow Flight SQL Sink](#添加-arrow-flight-sql--sink)。
+   - 若使用 Arrow Flight SQL 驱动写入，参考：[添加 Arrow Flight SQL Sink](#添加-arrow-flight-sql-sink)。
 
 6. 在**创建规则**页面，验证配置的信息。点击**保存**按钮生成规则。
 

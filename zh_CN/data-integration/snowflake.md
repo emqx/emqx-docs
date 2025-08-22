@@ -400,9 +400,11 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 现在，您已经成功创建了连接器，可以继续创建规则，以指定如何将数据写入 Snowflake。
 
-## 创建 Snowflake Sink 规则
+## 创建 Snowflake 规则
 
-本节演示如何在 EMQX 中创建规则，以处理消息（例如，来自源 MQTT 主题 `t/#`），并通过已配置的 Sink 将规则处理结果写入 Snowflake。
+本节演示如何在 EMQX 中创建规则，以处理消息（例如，来自源 MQTT 主题 `t/#`），并通过配置的 Sink 将规则处理结果写入 Snowflake。
+
+### 创建规则并配置规则处理 SQL
 
 1. 进入 Dashboard **集成** -> **规则**页面。
 
