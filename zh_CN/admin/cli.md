@@ -834,7 +834,7 @@ shutdown_count  : [{takenover,2},{discarded,1}]
 | `unexpected_packet`           | 客户端在当前连接状态下发送了不应出现的报文。                 |
 | `zero_remaining_len`          | MQTT 报文的剩余长度字段为 0，在大多数场景下是非法的。        |
 | `bad_username_or_password`    | 客户端身份认证失败，用户名或密码错误。                       |
-| `client_identifier_not_valid` | 提供的 `clientid` 无效，或已被其他连接使用。                 |
+| `client_identifier_not_valid` | 提供的 `clientid` 无效，或被另一个正在登录的客户端锁定。                 |
 | `protocol_error`              | 出现通用的 MQTT 协议错误。                                   |
 | `tcp_closed`                  | TCP 连接被客户端或网络层关闭。                               |
 | `timeout`                     | 发生通用超时错误（如在认证或握手过程中）。                   |
