@@ -170,7 +170,7 @@ The steps below assume that both EMQX and Datalayers are running locally. If you
 
 6. Before clicking **Create**, you can click **Test Connectivity** to test whether the connector can connect to the Datalayers server.
 
-8. Click the **Create** button at the bottom to complete the connector creation. In the pop-up dialog, you can click **Back to Connector List** or proceed to **Create Rule** to define a rule and Sink for writing data to Datalayers. For detailed steps, see [Create a Datalayers Rule](#create-a-datalayers-rule).
+7. Click the **Create** button at the bottom to complete the connector creation. In the pop-up dialog, you can click **Back to Connector List** or proceed to **Create Rule** to define a rule and Sink for writing data to Datalayers. For detailed steps, see [Create a Datalayers Rule](#create-a-datalayers-rule).
 
 ## Create a Datalayers Rule
 
