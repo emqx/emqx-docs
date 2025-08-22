@@ -839,7 +839,7 @@ Below is a list of common shutdown reasons that may appear in this field.
 | `unexpected_packet`           | The client sent a packet that was unexpected in the current connection state. |
 | `zero_remaining_len`          | The packet has a zero remaining length field, which is invalid in most contexts. |
 | `bad_username_or_password`    | Authentication failed due to incorrect username or password. |
-| `client_identifier_not_valid` | The provided `clientid` is invalid or is already in use by another connection. |
+| `client_identifier_not_valid` | The provided `clientid` is invalid or locked by another client during login. |
 | `protocol_error`              | A generic MQTT protocol violation occurred.                  |
 | `tcp_closed`                  | The TCP connection was closed by the client or due to a network issue. |
 | `timeout`                     | A general timeout occurred (e.g., during authentication, etc.). |
