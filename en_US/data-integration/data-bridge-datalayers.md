@@ -125,15 +125,12 @@ This section demonstrates how to create a connector in EMQX to connect the Sink 
 The steps below assume that both EMQX and Datalayers are running locally. If you have deployed them in separate or remote environments, make sure to update the connection settings accordingly.
 
 1. Go to the EMQX Dashboard, click **Integration** -> **Connectors**.
+
 2. Click **Create** in the top right corner of the page.
+
 3. On the **Create Connector** page, select **Datalayers**, and then click **Next**.
-4. In the **Configuration** step, configure the following information:
-   - Enter the connector name, using a combination of uppercase/lowercase letters and numbers, for example: `my_datalayers`.
-   - Enter the connection information for the Datalayers server:
-     - Server address: `127.0.0.1:8361`.
-     - Complete the **Username**, **Password**, and **Database** settings as configured in [Install and Set Up Datalayers](#install-and-set-up-datalayers).
-   - Set whether to enable TLS. For detailed information about TLS connection options, refer to [Enable TLS Encryption to Access External Resources](../network/overview.md#tls-for-external-resource-access).
-5. On the **Configuration** step, fill in the connector details:
+
+5. On the **Configuration** page, fill in the connector details:
 
    - **Connector Name**: Must begin with a letter or number. Only letters, numbers, hyphens, and underscores are allowed. For example: `my_datalayers`.
    - **Description** (Optional): Add a description to help identify the connector later.
@@ -168,9 +165,12 @@ The steps below assume that both EMQX and Datalayers are running locally. If you
      When using the Arrow Flight SQL protocol, certificate validation cannot be skipped (i.e., `verify_none` is not supported due to library constraints). Ensure the gRPC server’s certificate has a valid Common Name (CN) that matches the server host.
 
      :::
-6. If `Arrow Flight` is selected as the driver, an additional option **Enable Prepared Statements** will appear. This determines whether the Sink can use SQL templates for data insertion. It is enabled by default.
-7. Before clicking **Create**, you can click **Test Connectivity** to test whether the connector can connect to the Datalayers server.
-8. Click the **Create** button at the bottom to complete the connector creation. In the pop-up dialog, you can click **Back to Connector List** or proceed to **Create Rule** to define a rule and Sink for writing data to Datalayers. For detailed steps, see [Create a Datalayers Rule](#create-a-datalayers-rule).
+   
+5. If `Arrow Flight` is selected as the driver, an additional option **Enable Prepared Statements** will appear. This determines whether the Sink can use SQL templates for data insertion. It is enabled by default.
+
+6. Before clicking **Create**, you can click **Test Connectivity** to test whether the connector can connect to the Datalayers server.
+
+7. Click the **Create** button at the bottom to complete the connector creation. In the pop-up dialog, you can click **Back to Connector List** or proceed to **Create Rule** to define a rule and Sink for writing data to Datalayers. For detailed steps, see [Create a Datalayers Rule](#create-a-datalayers-rule).
 
 ## Create a Datalayers Rule
 
@@ -207,8 +207,8 @@ This section demonstrates how to create a rule in EMQX to process MQTT messages 
 
 5. Add a Datalayers Sink to the rule to write the processed results into Datalayers.
 
-   - If you are using **InfluxDB Line Protocol**, refer to: [Add InfluxDB Line Protocol Sink](#add-influxdb-line-protocol-sink).
-   - If you are using the **Arrow Flight SQL driver**, refer to: [Add Arrow Flight SQL Sink](#add-arrow-flight-sql-sink).
+   - If you are using **InfluxDB Line Protocol**, refer to: [Add an InfluxDB Line Protocol Sink](#add-an-influxdb-line-protocol-sink).
+   - If you are using the **Arrow Flight SQL driver**, refer to: [Add an Arrow Flight SQL Sink](#add-an-arrow-flight-sql-sink).
 
 6. On the **Create Rule** page, review your configuration and click **Save** to create the rule.
 
@@ -236,7 +236,7 @@ This section demonstrates how to add a Sink to a rule that uses the InfluxDB Lin
 
      You must specify the **Measurement**, **Fields**, **Timestamp**, and **Tags**. Keys and values support either constants or variable placeholders (e.g., `${payload.temp}`). Refer to the [InfluxDB Line Protocol](https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html) for formatting rules.
 
-     The **Fields** section also supports batch configuration using a CSV file. See [Use CSV to Batch Configure Fields](#use-csv-tobatch-configure-fields).
+     The **Fields** section also supports batch configuration using a CSV file. See [Use CSV to Batch Configure Fields](#use-csv-to-batch-configure-fields).
 
    - **Line Protocol**: 
 

@@ -82,7 +82,7 @@ CockroachDB 采用无共享（shared-nothing）的分布式架构，利用基于
      );
      ```
 
-   - 使用以下 SQL 创建 `emqx_client_events` 表，用于存储客户端生命周期事件（如连接和断开）及其时间戳：
+   - 使用以下 SQL 创建 `emqx_client_events` 表，用于存储客户端上下线事件及其时间戳：
 
      ```sql
      CREATE TABLE emqx_client_events (

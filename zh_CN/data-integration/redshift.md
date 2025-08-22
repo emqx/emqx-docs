@@ -93,7 +93,7 @@ EMQX 中的 Redshift 数据集成是一项开箱即用的功能，可以将基�
      );
      ```
 
-   - 使用以下 SQL 语句创建 `emqx_client_events` 表，用于存储客户端生命周期事件（如连接与断开）及其时间戳：
+   - 使用以下 SQL 语句创建 `emqx_client_events` 表，用于存储客户端上下线事件及其时间戳：
 
      ```sql
      CREATE TABLE emqx_client_events (
@@ -142,7 +142,7 @@ EMQX 中的 Redshift 数据集成是一项开箱即用的功能，可以将基�
 
 ## 创建 Redshift 消息存储规则
 
-本节演示如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过已配置的 Sink 将处理后的数据保存到 Redshift 表 `t_mqtt_msg` 中。
+本节演示如何在 Dashboard 中创建一条规则，用于处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理后的数据保存到 Redshift 表 `t_mqtt_msg` 中。
 
 1. 在 Dashboard 中，进入**集成** -> **规则**页面。
 

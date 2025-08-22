@@ -84,7 +84,7 @@ Follow the [official AlloyDB quickstart guide](https://cloud.google.com/alloydb/
      );
      ```
 
-   - Use the following SQL statements to create the data table `emqx_client_events` for storing client lifecycle events, such as connect and disconnect, with timestamps:
+   - Use the following SQL statements to create the data table `emqx_client_events` for storing client online/offline events with timestamps:
 
      ```sql
      CREATE TABLE emqx_client_events (
@@ -130,7 +130,7 @@ Before adding an AlloyDB Sink, create an AlloyDB Connector in EMQX. The connecto
    For detailed examples, see:
 
    - [Create a Rule with AlloyDB Sink for Message Storage](#create-a-rule-with-alloydb-sink-for-message-storage)
-   - [Create a Rule with AlloyDB Sink for Events Recording](#create-a-rule-with-alloydb-for-events-recording).
+   - [Create a Rule with AlloyDB Sink for Events Recording](#create-a-rule-with-alloydb-sink-for-events-recording)
 
 ## Create a Rule with AlloyDB Sink for Message Storage
 
@@ -192,7 +192,7 @@ Now that you have successfully created the rule, you can click **Integration** -
 
 You can also click **Integration** -> **Flow Designer** to see the topology, through which you can visualize that the messages under topic `t/#` are being written to AlloyDB after being parsed by the rule `my_rule`.
 
-## Create a Rule with AlloyDB for Events Recording
+## Create a Rule with AlloyDB Sink for Events Recording
 
 This section demonstrates how to create a rule for recording the clients' online/offline status and storing the events data to the AlloyDB table `emqx_client_events` via a configured Sink.
 

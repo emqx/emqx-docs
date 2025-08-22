@@ -61,7 +61,7 @@ If you're new to AWS S3 Tables, review the following key terms:
 - **Database (Namespace)**: A logical group of tables under a catalog.
 - **Iceberg Table**: A high-performance, transactional table format for data lakes. It supports schema evolution, partition pruning, and time travel queries.
 
-### Deployment Prerequisites and Credential Sources
+### Deployment Environment and Credential Sources
 
 The S3 Tables connector supports two ways to obtain credentials. Choose based on your EMQX deployment environment:
 
