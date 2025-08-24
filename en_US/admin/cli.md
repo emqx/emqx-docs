@@ -102,9 +102,9 @@ Loaded 'Mod' module on []: ok
 
 ## conf cluster_sync
 
-This command is mostly for troubleshooting when there is something wrong with cluster-calls used to sync configuration changes between the nodes in the cluster. 
+This command is mostly for troubleshooting when there is something wrong with cluster-calls used to sync configuration changes between the nodes in the cluster.
 
-::: tip 
+::: tip
 
 In EMQX 5.0.x, this command was named `cluster_call`. This old command is still available in EMQX 5.1 but it is not displayed in the help information.
 
@@ -274,6 +274,62 @@ $ emqx ctl cluster status --json
   ]
 }
 ```
+
+### cluster core rebalance
+
+Cluster core rebalance feature allows balancing load in a core/replicant cluster.
+
+It provides a semi-automatic way to evenly distribute ownership over replicants among the core nodes, which may be necessary after bringing a new core node into the cluster or restart of a core node.
+
+::: tip
+Core node rebalance procedure may introduce traffic disturbance.
+During the procedure clients attached to the replicants may experience increased latency and loss of messages may be observed.
+:::
+
+Rebalance is performed in three stages: plan, check and execute. Each stage is triggered by a CLI command. All commands should be executed on a core node.
+
+#### cluster core rebalance plan
+
+This command collects statistics about the number of replicants attached to the cores and derives a plan for evening out this number.
+
+```bash
+$ bin/emqx ctl cluster core rebalance plan
+{ok,...}
+```
+
+This command doesn't perform any actions on its own and can be used for a dry run.
+A rebalance plan that was not confirmed will automatically expire in one minute.
+
+#### cluster core rebalance status
+
+This command displays status of the rebalance, planned or ongoing.
+
+*Output*:
+
+1. `not_started` is printed if `cluster core rebalance plan` was not previously executed or rebalance was aborted.
+1. If plan stage detected an imbalance, then the output will contain `wait_confirmation` status and a list of actions that will be taken to reach the balance.
+```
+{wait_confirmation,[{kick,emqx_telemetry_shard,'emqx@n2.local',
+                          [<93747.6968.0>]},
+                    {kick,emqx_dashboard_shard,'emqx@n2.local',
+                          [<93747.6969.0>]},
+                    {kick,emqx_ds_builtin_metadata_shard,'emqx@n2.local',
+                          [<93747.7110.0>]}]}
+```
+1. If the rebalance is ongoing, status will change to `running` and list of remaining actions will be printed.
+1. If rebalance is complete, status will change to `complete` and list of remaining actions will become empty:
+
+```
+{complete,[]}
+```
+
+#### cluster core rebalance confirm
+
+This command puts the planned rebalance into action by executing the scheduled commands with a cooldown interval.
+
+#### cluster core rebalance abort
+
+This command aborts the ongoing rebalance.
 
 ## clients
 
@@ -704,7 +760,7 @@ This command is like the `trace` command, but applies on all nodes in the cluste
 
 ## traces
 
-This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. 
+This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster.
 
 | Command                                                 | Description                       |
 | ------------------------------------------------------- | --------------------------------- |
@@ -832,7 +888,7 @@ Restarted tcp:default listener successfully.
 Restarting a listener causes all the connected clients to disconnect.
 :::
 
-### listeners enable \<Identifier\> <true/false> 
+### listeners enable \<Identifier\> <true/false>
 
 ```bash
 $ emqx ctl listeners enable tcp:default true
