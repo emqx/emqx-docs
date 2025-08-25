@@ -67,7 +67,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Seamless connection of devices and application data<br>(Coming soon)</td>
+    <td> Seamless connection of devices and application data<br></td>
   </tr>
   <tr>
     <td><b>Event History</b></td>
@@ -192,6 +192,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Scalability and Performance
 
@@ -555,7 +556,7 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>GBT32960</b></td>
+    <td><b>GB/T 32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -565,6 +566,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Security
 
@@ -1073,9 +1075,26 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">Client events</a>, event-driven business development</td>
   </tr>
+  <tr>
+    <td><b>Schema Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>Message Transformation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
 </tbody>
 </table>
 </div>
+
 
 ## Extensibility
 

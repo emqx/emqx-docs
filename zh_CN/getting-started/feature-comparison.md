@@ -67,7 +67,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> 设备和应用数据的无缝连接<br>（即将发布）</td>
+    <td> 设备和应用数据的无缝连接</td>
   </tr>
   <tr>
     <td><b>事件历史</b></td>
@@ -192,6 +192,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 
@@ -562,7 +563,7 @@
     <td> </td>
   </tr>
   <tr>
-    <td><b>GBT32960</b></td>
+    <td><b>GB/T 32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -572,6 +573,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 ## 安全
@@ -1088,9 +1090,26 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/zh/emqx/latest/data-integration/rule-sql-events-and-fields.html#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%8B%E4%BB%B6">客户端事件</a>，事件驱动的业务开发</td>
   </tr>
+    <tr>
+    <td><b>Schema 验证</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>消息转换</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
   </tbody>
 </table>
 </div>
+
 
 
 
