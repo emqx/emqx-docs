@@ -443,6 +443,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -533,6 +539,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -968,7 +980,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -3318,6 +3330,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -4324,6 +4342,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -5218,6 +5242,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -6480,7 +6510,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6726,7 +6756,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -7365,7 +7395,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -7899,7 +7929,7 @@
             "type": "array"
           },
           "number": {
-            "description": "运行此监听器的节点数量。",
+            "description": "此监听器正在运行的节点数量。",
             "minimum": 1,
             "type": "integer"
           },
@@ -8137,6 +8167,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -8414,6 +8450,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -8640,7 +8682,7 @@
             "type": "string"
           },
           "name": {
-            "description": "触发此告警的节点名称。",
+            "description": "告警名称，用于区分不同的告警。",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -9824,6 +9866,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -13545,6 +13593,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -15382,6 +15436,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -16081,6 +16141,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -17684,6 +17750,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -17751,7 +17823,7 @@
               "log",
               "publish"
             ],
-            "description": "警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
+            "description": "告警激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
             "example": [
               "log",
               "publish"
@@ -19714,6 +19786,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "15s",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -20161,6 +20239,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -20772,7 +20856,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -20885,6 +20969,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -21394,6 +21484,16 @@
             "default": "insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})",
             "description": "CQL 模板",
             "format": "sql",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "告警名称，用于区分不同的告警。",
+            "example": "high_system_memory_usage",
             "type": "string"
           }
         },
@@ -22301,6 +22401,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -22592,13 +22698,13 @@
           },
           "cpu_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在发出相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
           "cpu_low_watermark": {
             "default": "60%",
-            "description": "在解除相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在解除相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -22620,7 +22726,7 @@
           },
           "procmem_high_watermark": {
             "default": "5%",
-            "description": "在发出相应警报之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
+            "description": "在发出相应告警之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -23500,7 +23606,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "共享订阅的分发策略。<br/> - random：随机选择一个订阅者进行分发；<br/> - round_robin：从单个发布者处的消息依次分发给订阅者；<br/> - round_robin_per_group：所有消息依次分发给订阅者；<br/> - local：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/> - sticky：持续将消息分发给最初选择的订阅者，直到他们的会话结束；<br/> - hash_clientid：哈希发布者的客户端 ID 以选择订阅者；<br/> - hash_topic：哈希发布主题以选择订阅者。",
+            "description": "共享订阅的分发策略。<br/>EMQX 将 **分发状态**（如随机种子、轮询位置和粘性订阅者选择）作为 **发布客户端连接状态** 的一部分进行维护。<br/>如果发布客户端断开连接并重新连接，则此状态会丢失，必须重新初始化。<br/><br/>- `random`：随机选择一个订阅者进行分发；<br/>- `round_robin`：共享订阅组中的客户端将依次消费消息，每个发布者独立记录循环进度，因此来自**不同发布者**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `round_robin_per_group`：共享订阅组中的客户端将依次消费消息，每个节点独立记录循环进度，因此来自**不同节点**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `local`：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/>- `sticky`：持续将消息分发给最初选择的订阅者，直到他们的会话结束。初始选择基于 `mqtt_shared_subscription_initial_sticky_pick`；<br/>- `hash_clientid`：哈希发布者的客户端 ID 以选择订阅者；<br/>- `hash_topic`：哈希发布主题以选择订阅者。",
             "enum": [
               "random",
               "round_robin",
@@ -24128,7 +24234,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -24873,7 +24979,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -25443,6 +25549,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -26803,6 +26915,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -27327,6 +27445,12 @@
             "example": "http://127.0.0.1",
             "type": "string"
           },
+          "headers": {
+            "default": {},
+            "description": "与 OpenTelemetry 信号数据一起发送的 HTTP 头。<br/>头是一个以头名称为键的映射。",
+            "example": {},
+            "type": "object"
+          },
           "ssl_options": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -27642,7 +27766,7 @@
             "type": "string"
           },
           "private_key_password": {
-            "description": "用于解密私钥的密码。如果私钥未加密，则不设置此值。",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28280,6 +28404,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -30525,67 +30655,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
+                  "dynamo"
                 ],
                 "type": "string"
               },
@@ -30597,109 +30667,7 @@
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
                 ],
                 "type": "string"
               },
@@ -30711,31 +30679,31 @@
               },
               {
                 "enum": [
-                  "redis"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "matrix"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "tdengine"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mqtt"
+                  "couchbase"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -30747,7 +30715,169 @@
               },
               {
                 "enum": [
-                  "tdengine"
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
                 ],
                 "type": "string"
               }
@@ -31134,6 +31264,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -31223,7 +31359,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "messages_burst": {
@@ -31524,7 +31660,7 @@
       "emqx_mgmt_api_metrics.aggregated_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "消息转换失败的数量",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31539,17 +31675,17 @@
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "过载保护延迟的数量",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "客户端取消订阅次数",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "由于达到接收最大值而丢弃的消息数量",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31559,7 +31695,7 @@
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "授权命中缓存次数",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31604,27 +31740,27 @@
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "消息验证失败的数量",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "由于超出配额而丢弃的消息数量",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "客户端认证次数",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "在转发到订阅过程之前丢弃的消息数量",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时丢弃的 QoS 0 消息数量",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31639,7 +31775,7 @@
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "接收到的订阅失败的 SUBSCRIBE 数据包数量",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31649,7 +31785,7 @@
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "过载保护关闭新传入连接的数量",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31659,12 +31795,12 @@
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "由于匿名而成功的客户端认证次数",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "客户端认证成功次数",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31674,27 +31810,27 @@
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "发送时丢弃的消息总数",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "客户端断开连接次数",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "转发到订阅过程的消息数量",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "授权规则检查次数",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "消息转换成功的数量",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31704,17 +31840,17 @@
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "接收到的取消订阅失败的 UNSUBSCRIBE 数据包数量",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "授权允许次数",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "过载保护垃圾收集的数量",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31724,7 +31860,7 @@
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "由于发送时 No Local 订阅选项而丢弃的消息数量",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31754,12 +31890,12 @@
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "接收到的 PUBLISH 数据包中占用的标识符数量",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "接收的字节数",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31779,7 +31915,7 @@
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "接收到的 PUBCOMP 数据包中占用的标识符数量",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31844,12 +31980,12 @@
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "授权缓存未命中次数",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "由于等待 PUBREL 超时而丢弃的消息数量",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31859,7 +31995,7 @@
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "由于消息过期而在发送时丢弃的消息数量",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31869,12 +32005,12 @@
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "过载保护休眠的数量",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "客户端连接次数",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31889,12 +32025,12 @@
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "客户端认证失败次数",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "匿名登录的客户端数量",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31909,27 +32045,27 @@
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "由于长度超过限制而在发送时丢弃的消息数量",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "此连接上发送的字节数",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "过载保护延迟超时的数量",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "授权拒绝次数",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "接收到的 SUBACK 数据包中授权检查失败的数量",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31939,7 +32075,7 @@
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "由于没有订阅者而丢弃的消息数量",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31954,12 +32090,12 @@
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "接收到的 PUBACK 数据包中占用的标识符数量",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "由于消息队列已满而在发送时丢弃的消息数量",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31969,7 +32105,7 @@
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "消息验证成功的数量",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -31979,7 +32115,7 @@
             "type": "integer"
           },
           "packets.pubrec.inuse": {
-            "description": "接收到的 PUBREC 数据包中占用的标识符数量",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -31994,12 +32130,12 @@
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "客户端订阅次数",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "未接收到的 PUBCOMP 数据包数量",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -32690,6 +32826,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -33204,7 +33346,7 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "用于解密私钥的密码。如果私钥未加密，则不设置此值。",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -35231,7 +35373,7 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "用于解密私钥的密码。如果私钥未加密，则不设置此值。",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -35422,6 +35564,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -37228,6 +37376,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -39265,7 +39419,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "1EDF1E1521336DE4",
+            "example": "9355000B1EE6A3ED",
             "type": "string"
           },
           "status": {
@@ -39626,7 +39780,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -39794,7 +39948,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -42306,7 +42460,7 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "用于解密私钥的密码。如果私钥未加密，则不设置此值。",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -43734,7 +43888,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -44257,6 +44411,20 @@
       },
       "action_s3tables.aggregation": {
         "properties": {
+          "container": {
+            "default": {
+              "type": "avro"
+            },
+            "description": "用于配置数据文件格式的选项。",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/action_s3tables.container_parquet"
+              },
+              {
+                "$ref": "#/components/schemas/action_s3tables.container_avro"
+              }
+            ]
+          },
           "max_records": {
             "default": 100000,
             "description": "每个聚合文件允许的记录（事件）数量。每次聚合上传将包含不超过该数量的事件，但可能包含更少。",
@@ -45313,6 +45481,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -46653,6 +46827,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -50193,7 +50373,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -51620,6 +51800,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -52214,7 +52400,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -52470,7 +52656,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -52547,6 +52733,21 @@
       },
       "authn.ldap": {
         "properties": {
+          "acl_rule_attribute": {
+            "description": "指示使用哪个属性来表示 JSON 编码的 ACL 规则。",
+            "example": "mqttAclRule",
+            "type": "string"
+          },
+          "acl_ttl_attribute": {
+            "description": "指示使用哪个属性来表示 ACL TTL。",
+            "example": "mqttAclTtl",
+            "type": "string"
+          },
+          "all_attribute": {
+            "description": "表示使用哪个属性来表示允许`发布`和`订阅`的主题列表。",
+            "example": "mqttPubSubTopic",
+            "type": "string"
+          },
           "backend": {
             "description": "后端类型。",
             "enum": [
@@ -52605,6 +52806,11 @@
             "description": "一个 Variform 表达式，用于评估一组从客户端信息派生的预绑定变量。<br/><br/>支持的变量：<br/>- `username`：客户端的用户名<br/>- `password`：客户端的密码<br/>- `clientid`：客户端的 ID<br/>- `client_attrs.*`：客户端的属性<br/>- `cert_common_name`：客户端 TLS 证书的主题字段<br/>- `cert_subject`：客户端 TLS 证书的通用名称（CN）<br/>- `peersni`：TLS 客户端发送的 SNI（服务器名称指示）<br/>- `listener`：监听器 ID（例如 `tcp:default`）<br/>- `zone`：关联的配置区域。<br/><br/>表达式必须评估为字符串值 'true'，此认证器才会被调用。<br/>如果表达式评估为其他值，则跳过此认证器。<br/><br/>示例：<br/>- 仅在客户端从监听器 `ssl:letsencryt` 连接时调用：<br/>  `str_eq(listener, 'ssl:letsencryt')`<br/>- 如果用户名为空则跳过：<br/>  `not(is_empty_val(username))`<br/>- 仅在密码存在且区域为 'zone1' 时调用：<br/>  `iif(is_empty_val(password), false, str_eq(zone, 'zone1'))`<br/><br/>在 EMQX 文档中查找有关 Variform 表达式的更多信息。",
             "type": "string"
           },
+          "publish_attribute": {
+            "description": "表示使用哪个属性来表示允许`发布`的主题列表。",
+            "example": "mqttPublishTopic",
+            "type": "string"
+          },
           "query_timeout": {
             "default": "5s",
             "description": "LDAP 查询的超时时间。",
@@ -52627,6 +52833,11 @@
               "enable": false
             },
             "description": "启用 SSL 连接。"
+          },
+          "subscribe_attribute": {
+            "description": "表示使用哪个属性来表示允许`订阅`的主题列表。",
+            "example": "mqttSubscriptionTopic",
+            "type": "string"
           },
           "username": {
             "description": "内部数据库的用户名。",
@@ -53193,6 +53404,11 @@
       },
       "authz.ldap": {
         "properties": {
+          "acl_rule_attribute": {
+            "default": "mqttAclRule",
+            "description": "指示使用哪个属性来表示 JSON 编码的 ACL 规则。",
+            "type": "string"
+          },
           "all_attribute": {
             "default": "mqttPubSubTopic",
             "description": "表示使用哪个属性来表示允许`发布`和`订阅`的主题列表。",
@@ -53821,6 +54037,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -54949,13 +55171,13 @@
           },
           "process_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在发出相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           },
           "process_low_watermark": {
             "default": "60%",
-            "description": "在清除相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在清除相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           }
@@ -55103,6 +55325,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -55162,6 +55390,24 @@
             "maximum": 1024,
             "minimum": 1,
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "action_s3tables.container_parquet": {
+        "properties": {
+          "max_row_group_bytes": {
+            "default": "128MB",
+            "description": "超过该大小时刷新行组。行组刷新的实际触发使用缓冲数据大小的估计值，因为实际输出可能与原始输入数据大小不同。",
+            "example": "32MB",
+            "type": "string"
+          },
+          "type": {
+            "description": "使用 Parquet 编码数据文件。",
+            "enum": [
+              "parquet"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -55229,7 +55475,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -56399,6 +56645,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -56838,6 +57090,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -57181,6 +57439,12 @@
             "example": "32s",
             "type": "string"
           },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
+            "example": "32s",
+            "type": "string"
+          },
           "health_check_timeout": {
             "default": "60s",
             "description": "健康检查超时。如果健康检查调用返回结果的时间超过此时间，则资源被视为断开连接。",
@@ -57419,6 +57683,12 @@
           "health_check_interval": {
             "default": "15s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -58821,7 +59091,7 @@
       "emqx_mgmt_api_metrics.node_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "消息转换失败的数量",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -58836,17 +59106,17 @@
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "过载保护延迟的数量",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "客户端取消订阅次数",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "由于达到接收最大值而丢弃的消息数量",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -58856,7 +59126,7 @@
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "授权命中缓存次数",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -58901,27 +59171,27 @@
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "消息验证失败的数量",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "由于超出配额而丢弃的消息数量",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "客户端认证次数",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "在转发到订阅过程之前丢弃的消息数量",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时丢弃的 QoS 0 消息数量",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -58936,7 +59206,7 @@
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "接收到的订阅失败的 SUBSCRIBE 数据包数量",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -58946,7 +59216,7 @@
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "过载保护关闭新传入连接的数量",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -58956,12 +59226,12 @@
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "由于匿名而成功的客户端认证次数",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "客户端认证成功次数",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -58971,27 +59241,27 @@
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "发送时丢弃的消息总数",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "客户端断开连接次数",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "转发到订阅过程的消息数量",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "授权规则检查次数",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "消息转换成功的数量",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -59001,17 +59271,17 @@
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "接收到的取消订阅失败的 UNSUBSCRIBE 数据包数量",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "授权允许次数",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "过载保护垃圾收集的数量",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -59021,7 +59291,7 @@
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "由于发送时 No Local 订阅选项而丢弃的消息数量",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59051,12 +59321,12 @@
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "接收到的 PUBLISH 数据包中占用的标识符数量",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "接收的字节数",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
@@ -59076,7 +59346,7 @@
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "接收到的 PUBCOMP 数据包中占用的标识符数量",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59141,12 +59411,12 @@
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "授权缓存未命中次数",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "由于等待 PUBREL 超时而丢弃的消息数量",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59156,7 +59426,7 @@
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "由于消息过期而在发送时丢弃的消息数量",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59166,12 +59436,12 @@
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "过载保护休眠的数量",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "客户端连接次数",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -59186,12 +59456,12 @@
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "客户端认证失败次数",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "匿名登录的客户端数量",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59206,27 +59476,27 @@
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "由于长度超过限制而在发送时丢弃的消息数量",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "此连接上发送的字节数",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "过载保护延迟超时的数量",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "授权拒绝次数",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "接收到的 SUBACK 数据包中授权检查失败的数量",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59236,7 +59506,7 @@
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "由于没有订阅者而丢弃的消息数量",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59251,12 +59521,12 @@
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "接收到的 PUBACK 数据包中占用的标识符数量",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "由于消息队列已满而在发送时丢弃的消息数量",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59266,7 +59536,7 @@
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "消息验证成功的数量",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -59280,7 +59550,7 @@
             "type": "string"
           },
           "packets.pubrec.inuse": {
-            "description": "接收到的 PUBREC 数据包中占用的标识符数量",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -59295,12 +59565,12 @@
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "客户端订阅次数",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "未接收到的 PUBCOMP 数据包数量",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -60664,7 +60934,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -60890,6 +61160,18 @@
         "required": [
           "routing_key"
         ],
+        "type": "object"
+      },
+      "action_s3tables.container_avro": {
+        "properties": {
+          "type": {
+            "description": "使用 Avro 编码数据文件。",
+            "enum": [
+              "avro"
+            ],
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "rocketmq.post": {
@@ -61492,6 +61774,12 @@
           "health_check_interval": {
             "default": "30s",
             "description": "健康检查间隔。",
+            "example": "32s",
+            "type": "string"
+          },
+          "health_check_interval_jitter": {
+            "default": "0ms",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -62213,7 +62501,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.0"
+    "version": "5.10.1-beta.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -66046,7 +66334,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -66060,7 +66348,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "测试桥接配置失败。",
                       "type": "string"
                     }
                   },
@@ -67468,7 +67756,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List bridges",
+        "summary": "List Actions",
         "tags": [
           "Actions"
         ]
@@ -69834,7 +70122,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge already exists",
                       "type": "string"
                     }
                   },
@@ -69853,7 +70140,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create bridge",
+        "summary": "Create Action",
         "tags": [
           "Actions"
         ]
@@ -69928,8 +70215,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -69938,8 +70225,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -69959,7 +70246,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List available source types",
+        "summary": "List Available Source Types",
         "tags": [
           "Sources"
         ]
@@ -70499,7 +70786,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Summarize actions",
+        "summary": "Summarize Actions",
         "tags": [
           "Actions"
         ]
@@ -70918,7 +71205,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Bridge deleted"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -70932,11 +71219,10 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this bridge",
+                      "description": "无法删除桥接，因为该桥接定义了活动规则。",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
                       "items": {
                         "type": "string"
                       },
@@ -70961,7 +71247,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -70983,7 +71269,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务暂时不可用。",
                       "type": "string"
                     }
                   },
@@ -72081,7 +72367,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -74169,7 +74455,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update bridge failed",
+                      "description": "更新桥接配置失败。",
                       "type": "string"
                     }
                   },
@@ -74191,7 +74477,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -74841,45 +75127,45 @@
               "application/json": {
                 "examples": {
                   "types": {
-                    "summary": "Action types",
+                    "summary": "Action Types",
                     "value": [
                       "http",
-                      "cassandra",
-                      "rabbitmq",
                       "rocketmq",
+                      "rabbitmq",
+                      "cassandra",
                       "syskeeper_forwarder",
-                      "mongodb",
-                      "iotdb",
-                      "greptimedb",
-                      "hstreamdb",
-                      "confluent_producer",
                       "azure_event_hub_producer",
+                      "greptimedb",
                       "gcp_pubsub_producer",
-                      "sqlserver",
-                      "pulsar",
+                      "mongodb",
                       "kafka_producer",
+                      "confluent_producer",
+                      "iotdb",
+                      "pulsar",
+                      "sqlserver",
+                      "hstreamdb",
                       "influxdb",
-                      "redis",
-                      "datalayers",
-                      "opents",
-                      "s3tables",
-                      "doris",
-                      "kinesis",
                       "s3",
+                      "redis",
+                      "kinesis",
+                      "s3tables",
+                      "opents",
+                      "datalayers",
+                      "doris",
                       "mqtt",
+                      "oracle",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "snowflake",
+                      "tablestore",
+                      "couchbase",
                       "tdengine",
                       "timescale",
-                      "snowflake",
-                      "couchbase",
-                      "oracle",
-                      "clickhouse",
-                      "azure_blob_storage",
-                      "tablestore",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -74888,42 +75174,42 @@
                   "items": {
                     "enum": [
                       "http",
-                      "cassandra",
-                      "rabbitmq",
                       "rocketmq",
+                      "rabbitmq",
+                      "cassandra",
                       "syskeeper_forwarder",
-                      "mongodb",
-                      "iotdb",
-                      "greptimedb",
-                      "hstreamdb",
-                      "confluent_producer",
                       "azure_event_hub_producer",
+                      "greptimedb",
                       "gcp_pubsub_producer",
-                      "sqlserver",
-                      "pulsar",
+                      "mongodb",
                       "kafka_producer",
+                      "confluent_producer",
+                      "iotdb",
+                      "pulsar",
+                      "sqlserver",
+                      "hstreamdb",
                       "influxdb",
-                      "redis",
-                      "datalayers",
-                      "opents",
-                      "s3tables",
-                      "doris",
-                      "kinesis",
                       "s3",
+                      "redis",
+                      "kinesis",
+                      "s3tables",
+                      "opents",
+                      "datalayers",
+                      "doris",
                       "mqtt",
+                      "oracle",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "snowflake",
+                      "tablestore",
+                      "couchbase",
                       "tdengine",
                       "timescale",
-                      "snowflake",
-                      "couchbase",
-                      "oracle",
-                      "clickhouse",
-                      "azure_blob_storage",
-                      "tablestore",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -74943,7 +75229,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List available action types",
+        "summary": "List Available Action Types",
         "tags": [
           "Actions"
         ]
@@ -75167,7 +75453,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -75186,7 +75472,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get source metrics",
+        "summary": "Get Source Metrics",
         "tags": [
           "Sources"
         ]
@@ -75313,7 +75599,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Summarize sources",
+        "summary": "Summarize Sources",
         "tags": [
           "Sources"
         ]
@@ -75780,7 +76066,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -75794,7 +76080,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -75816,7 +76102,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -75838,7 +76124,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "不支持此操作。",
                       "type": "string"
                     }
                   },
@@ -75860,7 +76146,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -75879,7 +76165,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge",
+        "summary": "Manually Start a Source",
         "tags": [
           "Sources"
         ]
@@ -78232,7 +78518,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "正常"
           },
           "404": {
             "content": {
@@ -78246,7 +78532,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -78268,7 +78554,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -78287,7 +78573,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable bridge",
+        "summary": "Enable or Disable Action",
         "tags": [
           "Actions"
         ]
@@ -78581,7 +78867,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -78595,7 +78881,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -78617,7 +78903,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -78639,7 +78925,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
                       "type": "string"
                     }
                   },
@@ -78661,7 +78946,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务暂时不可用。",
                       "type": "string"
                     }
                   },
@@ -78780,7 +79065,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -78794,7 +79079,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -78816,7 +79101,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -78838,7 +79123,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "不支持此操作。",
                       "type": "string"
                     }
                   },
@@ -78860,7 +79145,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -78879,7 +79164,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge",
+        "summary": "Manually Start an Action",
         "tags": [
           "Actions"
         ]
@@ -83011,7 +83296,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "正常"
           },
           "404": {
             "content": {
@@ -83025,7 +83310,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Action not found",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -83044,7 +83329,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Reset action metrics",
+        "summary": "Reset Action Metrics",
         "tags": [
           "Actions"
         ]
@@ -85144,7 +85429,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "1EDF1E1521336DE4",
+            "example": "9355000B1EE6A3ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -88241,7 +88526,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -88255,7 +88540,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -88277,7 +88562,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -88299,7 +88584,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "不支持此操作。",
                       "type": "string"
                     }
                   },
@@ -88321,7 +88606,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -88340,7 +88625,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge on a given node",
+        "summary": "Manually Start an Action on a Given Node",
         "tags": [
           "Actions"
         ]
@@ -88913,7 +89198,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Bridge deleted"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -88927,11 +89212,11 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this bridge",
+                      "description": "无法删除动作，因为该动作定义了活动规则。",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
+                      "description": "依赖于此动作的规则 ID。",
                       "items": {
                         "type": "string"
                       },
@@ -88956,7 +89241,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -88978,7 +89263,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -88997,7 +89282,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete bridge",
+        "summary": "Delete Action",
         "tags": [
           "Actions"
         ]
@@ -90331,7 +90616,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -90350,7 +90635,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get bridge",
+        "summary": "Get Action",
         "tags": [
           "Actions"
         ]
@@ -92649,7 +92934,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update bridge failed",
+                      "description": "更新动作配置失败。",
                       "type": "string"
                     }
                   },
@@ -92671,7 +92956,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -92693,7 +92978,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -92712,7 +92997,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update bridge",
+        "summary": "Update Action",
         "tags": [
           "Actions"
         ]
@@ -93311,7 +93596,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Action not found",
+                      "description": "未找到动作。",
                       "type": "string"
                     }
                   },
@@ -93330,7 +93615,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get action metrics",
+        "summary": "Get Action Metrics",
         "tags": [
           "Actions"
         ]
@@ -93352,7 +93637,7 @@
           },
           {
             "description": "Site ID",
-            "example": "1EDF1E1521336DE4",
+            "example": "9355000B1EE6A3ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93437,7 +93722,7 @@
           },
           {
             "description": "Site ID",
-            "example": "1EDF1E1521336DE4",
+            "example": "9355000B1EE6A3ED",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95170,7 +95455,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List sources",
+        "summary": "List Sources",
         "tags": [
           "Sources"
         ]
@@ -95394,7 +95679,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source already exists",
+                      "description": "来源已存在。",
                       "type": "string"
                     }
                   },
@@ -95413,7 +95698,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Create source",
+        "summary": "Create Source",
         "tags": [
           "Sources"
         ]
@@ -98487,7 +98772,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge already exists",
+                      "description": "桥接已存在。",
                       "type": "string"
                     }
                   },
@@ -100285,7 +100570,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -101592,7 +101877,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Source deleted"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -101606,11 +101891,11 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot delete bridge while active rules are defined for this source",
+                      "description": "无法删除动作，因为该动作定义了活动规则。",
                       "type": "string"
                     },
                     "rules": {
-                      "description": "Dependent Rule IDs",
+                      "description": "依赖于此动作的规则 ID。",
                       "items": {
                         "type": "string"
                       },
@@ -101635,7 +101920,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -101657,7 +101942,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -101676,7 +101961,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Delete source",
+        "summary": "Delete Source",
         "tags": [
           "Sources"
         ]
@@ -101822,7 +102107,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -101841,7 +102126,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get source",
+        "summary": "Get Source",
         "tags": [
           "Sources"
         ]
@@ -102068,7 +102353,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Update source failed",
+                      "description": "更新来源配置失败。",
                       "type": "string"
                     }
                   },
@@ -102090,7 +102375,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -102112,7 +102397,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -102131,7 +102416,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update source",
+        "summary": "Update Source",
         "tags": [
           "Sources"
         ]
@@ -104935,7 +105220,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -104949,7 +105234,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service or bridge not enabled",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -104971,7 +105256,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge or node not found or invalid operation",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -104993,7 +105278,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
+                      "description": "不支持此操作。",
                       "type": "string"
                     }
                   },
@@ -105015,7 +105300,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -105034,7 +105319,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Manually start a bridge on a given node",
+        "summary": "Manually Start a Source on a Given Node",
         "tags": [
           "Sources"
         ]
@@ -105191,7 +105476,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "正常"
           },
           "404": {
             "content": {
@@ -105205,7 +105490,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -110034,7 +110319,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Reset success"
+            "description": "正常"
           },
           "404": {
             "content": {
@@ -110048,7 +110333,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Source not found",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -110067,7 +110352,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Reset source metrics",
+        "summary": "Reset Source Metrics",
         "tags": [
           "Sources"
         ]
@@ -111002,7 +111287,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -111016,7 +111301,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "测试来源配置失败。",
                       "type": "string"
                     }
                   },
@@ -111035,7 +111320,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Test creating bridge",
+        "summary": "Test Creating Source",
         "tags": [
           "Sources"
         ]
@@ -113055,6 +113340,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "强制停用告警。此操作将强制关闭一个告警。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "告警已成功停用。"
+          },
+          "400": {
+            "description": "告警不存在或已被停用。"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "重置某个特定验证规则的指标。",
@@ -114128,7 +114447,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Operation success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -114142,7 +114461,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Problem with configuration of external service",
+                      "description": "由于外部资源问题，操作失败。",
                       "type": "string"
                     }
                   },
@@ -114164,7 +114483,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -114186,7 +114505,6 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Not Implemented",
                       "type": "string"
                     }
                   },
@@ -114208,7 +114526,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务暂时不可用。",
                       "type": "string"
                     }
                   },
@@ -115919,7 +116237,7 @@
         },
         "responses": {
           "204": {
-            "description": "Test bridge OK"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -115933,7 +116251,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge test failed",
+                      "description": "测试动作配置失败。",
                       "type": "string"
                     }
                   },
@@ -115952,7 +116270,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Test creating bridge",
+        "summary": "Test Creating Action",
         "tags": [
           "Actions"
         ]
@@ -116211,7 +116529,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "正常"
           },
           "404": {
             "content": {
@@ -116225,7 +116543,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到来源。",
                       "type": "string"
                     }
                   },
@@ -116247,7 +116565,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用。",
                       "type": "string"
                     }
                   },
@@ -116266,7 +116584,7 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable bridge",
+        "summary": "Enable or Disable Source",
         "tags": [
           "Sources"
         ]
@@ -116877,7 +117195,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Success"
+            "description": "正常"
           },
           "400": {
             "content": {
@@ -116891,7 +117209,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "bridge already exists as non Bridge V1 compatible action",
+                      "description": "桥接已作为非 v1 兼容动作或来源存在。",
                       "type": "string"
                     }
                   },
@@ -116913,7 +117231,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bridge not found or invalid operation",
+                      "description": "未找到桥接。或无效操作",
                       "type": "string"
                     }
                   },
@@ -116935,7 +117253,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务暂时不可用。",
                       "type": "string"
                     }
                   },
@@ -124451,6 +124769,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
@@ -124464,11 +124783,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
@@ -124509,6 +124829,7 @@
               "example": {
                 "exporter": {
                   "endpoint": "http://localhost:4317",
+                  "headers": {},
                   "ssl_options": {}
                 },
                 "logs": {
@@ -124522,11 +124843,12 @@
                   "enable": true,
                   "filter": {
                     "e2e_tracing_options": {
-                      "attribute_meta_value": "emqxcl",
                       "client_connect_disconnect": true,
-                      "client_publish": true,
+                      "client_messaging": true,
                       "client_subscribe_unsubscribe": true,
                       "clientid_match_rules_max": 30,
+                      "cluster_identifier": "emqxcl",
+                      "follow_traceparent": true,
                       "msg_trace_level": 0,
                       "sample_ratio": "10%",
                       "topic_match_rules_max": 30
@@ -124551,6 +124873,7 @@
                 "example": {
                   "exporter": {
                     "endpoint": "http://localhost:4317",
+                    "headers": {},
                     "ssl_options": {}
                   },
                   "logs": {
@@ -124564,11 +124887,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
