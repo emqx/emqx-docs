@@ -67,7 +67,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Seamless connection of devices and application data<br></td>
+    <td> Seamless connection of devices and application data</td>
   </tr>
   <tr>
     <td><b>Event History</b></td>
