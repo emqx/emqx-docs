@@ -286,9 +286,9 @@ Suppose you have two nodes, `emqx@node1.emqx.com` and `emqx@node2.emqx.com`. You
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
-Now you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster.
+Now that you have successfully created a cluster with two nodes, you can read the [Query Cluster Status](#query-cluster-status), [Manage Cluster Nodes](#manage-cluster-nodes), and [Configure Network Protocols](#configure-network-protocols) sections on how to monitor the cluster status and how to manage the cluster.
 
-Starting from EMQX v5.9.0, you can also invite and manage nodes via the EMQX Dashboard. For detailed information, refer to [Cluster](../../dashboard/cluster_settings.md#cluster).
+Starting from EMQX v5.9.0, you can also invite and manage nodes via the Dashboard, which offers a more intuitive and user-friendly experience. For detailed information, see [Cluster Settings](../../dashboard/cluster_settings.md#cluster).
 
 ## Auto Clustering
 

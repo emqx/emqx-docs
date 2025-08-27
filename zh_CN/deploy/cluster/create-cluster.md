@@ -268,7 +268,7 @@ Cluster status: #{running_nodes =>
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
-从 EMQX v5.9.0 开始，你还可以通过 Dashboard 邀请节点创建集群，详情参考[集群](../../dashboard/cluster_settings.md#集群)。
+从 EMQX v5.9.0 起，您也可以通过 Dashboard 创建集群，更加直观易用，适用于不熟悉命令行的用户。详见：[集群设置](../../dashboard/cluster_settings.md#集群)。
 
 ## 自动集群
 
