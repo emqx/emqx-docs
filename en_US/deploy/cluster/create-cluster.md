@@ -112,7 +112,7 @@ If you plan to run EMQX on Docker environments across multiple physical machines
 
 :::: tabs type:card
 
-::: tab Manual Clustering Example
+::: tab Manual Clustering (Command)
 
 1. Create a Docker network for node-to-node communication. Containers in the same network can access each other through container names or network aliases:
 
@@ -156,7 +156,29 @@ If you plan to run EMQX on Docker environments across multiple physical machines
 
 :::
 
-::: tab Automatic Clustering Example (static method)
+::: tab Manual Clustering (Dashboard)
+
+Starting from EMQX v5.9.0, you can create a cluster directly in the Dashboard:
+
+1. Make sure all nodes are running, with proper `name@host`, identical cookies, and can reach each other over the network.
+
+2. Access the **Dashboard** of any node.
+
+3. Go to **Management > MQTT Settings > Cluster**.
+
+4. (Optional) In the **Cluster Description** field, you can add a description to identify the purpose or environment of this cluster, and click **Save**.
+
+   > This feature is available starting from EMQX v6.0.0.
+
+5. Click **Invite**, enter the node name (e.g., `emqx@node2.emqx.com`), and confirm.
+
+6. The invited node will join the cluster after syncing the state.
+
+For more details, see the Dashboard [Cluster Settings](../../dashboard/cluster_settings.md#cluster).
+
+:::
+
+::: tab Automatic Clustering (static method)
 
 1. Create a Docker network for node-to-node communication. Containers in the same network can access each other through container names or network aliases:
 

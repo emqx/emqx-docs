@@ -52,15 +52,15 @@ You can configure settings for the following fields in the **Force Shutdown** ta
 
 The **Cluster** configuration page allows you to manage EMQX cluster nodes, including viewing details, inviting new nodes, and removing existing ones.
 
+Starting from EMQX v6.0.0, you can now add a **Cluster Description** to help identify the purpose or environment of the cluster. Enter a meaningful description in the input field and click **Save** to apply.
+
 To view node details, click the node name. You will be redirected to the **Cluster View** page for detailed information.
 
 To invite a node, click **Invite**, enter the node's IP address or hostname in the **Node Name** field, and click **Confirm**.
 
 To remove a node, click **Remove**. A confirmation dialog will appear before the node is removed from the cluster.
 
-![cluster-node](./assets/cluster-node.png)
-
-EMQX also supports creating and managing clusters using Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md)
+EMQX also supports creating and managing clusters using the Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md).
 
 ## Namespace
 
