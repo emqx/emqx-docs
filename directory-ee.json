@@ -1,0 +1,3806 @@
+{
+  "en": [
+    {
+      "title": "EMQX Overview",
+      "path": "./",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "What's New",
+          "path": "getting-started/new-features"
+        },
+        {
+          "title": "Feature Comparison",
+          "path": "getting-started/feature-comparison"
+        },
+        {
+          "title": "Get Started",
+          "path": "getting-started/getting-started"
+        },
+        {
+          "title": "Operating Limitations",
+          "path": "getting-started/restrictions"
+        },
+        {
+          "title": "FAQ",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Concept FAQs",
+              "path": "faq/concept"
+            },
+            {
+              "title": "Deployment FAQs",
+              "path": "faq/deployment"
+            },
+            {
+              "title": "Feature FAQs",
+              "path": "faq/feature"
+            },
+            {
+              "title": "Usage FAQs",
+              "path": "faq/faq"
+            }
+          ]
+        },
+        {
+          "title": "Technical Support",
+          "path": "support/technical-support"
+        }
+      ]
+    },
+    {
+      "title": "Installation and Deployment",
+      "path": "deploy/install",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Installation Guide",
+          "path": "deploy/install-enterprise",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Docker",
+              "path": "deploy/install-docker"
+            },
+            {
+              "title": "Debian",
+              "path": "deploy/install-debian"
+            },
+            {
+              "title": "Ubuntu",
+              "path": "deploy/install-ubuntu"
+            },
+            {
+              "title": "CentOS/RHEL",
+              "path": "deploy/install-rhel"
+            },
+            {
+              "title": "macOS",
+              "path": "deploy/install-macOS"
+            },
+            {
+              "title": "Kubernetes",
+              "path": "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+            },
+            {
+              "title": "Work with License",
+              "path": "deploy/license"
+            }
+          ]
+        },
+        {
+          "title": "Upgrade Guide",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Rolling Upgrade",
+              "path": "deploy/rolling-upgrades"
+            },
+            {
+              "title": "Upgrade EMQX Cluster from 4.4 to 5.x",
+              "path": "deploy/upgrade-cluster"
+            },
+            {
+              "title": "Upgrade EMQX on Kubernetes",
+              "path": "https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Developer Guide",
+      "path": "connect-emqx/developer-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Publish/Subscribe",
+          "path": "messaging/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "MQTT Core Concepts",
+              "path": "messaging/mqtt-concepts"
+            },
+            {
+              "title": "Test with MQTT Clients",
+              "path": "messaging/publish-and-subscribe"
+            },
+            {
+              "title": "MQTT Shared Subscription",
+              "path": "messaging/mqtt-shared-subscription"
+            },
+            {
+              "title": "MQTT Retained Message",
+              "path": "messaging/mqtt-retained-message"
+            },
+            {
+              "title": "MQTT Will Message",
+              "path": "messaging/mqtt-will-message"
+            },
+            {
+              "title": "Exclusive Subscription",
+              "path": "messaging/mqtt-exclusive-subscription"
+            },
+            {
+              "title": "Delayed Publish",
+              "path": "messaging/mqtt-delayed-publish"
+            },
+            {
+              "title": "Auto Subscribe",
+              "path": "messaging/mqtt-auto-subscription"
+            },
+            {
+              "title": "Topic Rewrite",
+              "path": "messaging/mqtt-topic-rewrite"
+            },
+            {
+              "title": "Wildcard Subscription",
+              "path": "messaging/mqtt-wildcard-subscription"
+            }
+          ]
+        },
+        {
+          "title": "MQTT Durable Sessions",
+          "path": "durability/durability_introduction"
+        },
+        {
+          "title": "Client SDK",
+          "path": "connect-emqx/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Connect via C SDK",
+              "path": "connect-emqx/c"
+            },
+            {
+              "title": "Connect via Java SDK",
+              "path": "connect-emqx/java"
+            },
+            {
+              "title": "Connect via Go SDK",
+              "path": "connect-emqx/go"
+            },
+            {
+              "title": "Connect via Python SDK",
+              "path": "connect-emqx/python"
+            },
+            {
+              "title": "Connect via JavaScript SDK",
+              "path": "connect-emqx/javascript"
+            }
+          ]
+        },
+        {
+          "title": "REST API",
+          "path": "admin/api",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX Enterprise API Docs",
+              "path": "https://docs.emqx.com/en/enterprise/v5.10/admin/api-docs.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "EMQX Clustering",
+      "path": "deploy/cluster/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Architecture",
+          "path": "deploy/cluster/mria-introduction"
+        },
+        {
+          "title": "Create and Manage Cluster",
+          "path": "deploy/cluster/create-cluster"
+        },
+        {
+          "title": "Cluster Security",
+          "path": "deploy/cluster/security"
+        },
+        {
+          "title": "Configure Load Balancer",
+          "path": "deploy/cluster/lb",
+          "children": [
+            {
+              "title": "Load Balance EMQX Cluster with NGINX",
+              "path": "deploy/cluster/lb-nginx"
+            },
+            {
+              "title": "Load Balance EMQX Cluster with HAProxy",
+              "path": "deploy/cluster/lb-haproxy"
+            }
+          ]
+        },
+        {
+          "title": "Node Evacuation and Cluster Load Rebalancing",
+          "path": "deploy/cluster/rebalancing"
+        },
+        {
+          "title": "Performance and Tuning",
+          "path": "performance/overview",
+          "children": [
+            {
+              "title": "Performance Tuning (Linux)",
+              "path": "performance/tune"
+            },
+            {
+              "title": "Performance Test with eMQTT-Bench",
+              "path": "performance/benchmark-emqtt-bench"
+            },
+            {
+              "title": "Test Scenarios and Results for Reference",
+              "path": "performance/performance-reference"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Security Guide",
+      "path": "access-control/security-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Network and TLS",
+          "path": "network/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Enable SSL/TLS Connection",
+              "path": "network/emqx-mqtt-tls"
+            },
+            {
+              "title": "Client TLS Connection Code Examples",
+              "path": "network/mqtt-client-tls"
+            },
+            {
+              "title": "Obtain SSL/TLS Certificates",
+              "path": "network/tls-certificate"
+            },
+            {
+              "title": "CRL Check",
+              "path": "network/crl"
+            },
+            {
+              "title": "OCSP Stapling",
+              "path": "network/ocsp"
+            }
+          ]
+        },
+        {
+          "title": "Authentication",
+          "path": "access-control/authn/authn",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "X.509 Certificate Authentication",
+              "path": "access-control/authn/x509"
+            },
+            {
+              "title": "JWT Authentication",
+              "path": "access-control/authn/jwt"
+            },
+            {
+              "title": "Password-Based Authentication",
+              "path": "access-control/authn/pwoverview",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "Use Built-in Database",
+                  "path": "access-control/authn/mnesia"
+                },
+                {
+                  "title": "Integrate with MySQL",
+                  "path": "access-control/authn/mysql"
+                },
+                {
+                  "title": "Integrate with MongoDB",
+                  "path": "access-control/authn/mongodb"
+                },
+                {
+                  "title": "Integrate with PostgreSQL",
+                  "path": "access-control/authn/postgresql"
+                },
+                {
+                  "title": "Integrate with Redis",
+                  "path": "access-control/authn/redis"
+                },
+                {
+                  "title": "Integrate with LDAP",
+                  "path": "access-control/authn/ldap"
+                },
+                {
+                  "title": "Use HTTP Service",
+                  "path": "access-control/authn/http"
+                }
+              ]
+            },
+            {
+              "title": "MQTT 5.0 Enhanced Authentication - SCRAM",
+              "path": "access-control/authn/scram"
+            },
+            {
+              "title": "REST API-Based MQTT 5.0 SCRAM Authentication",
+              "path": "access-control/authn/scram_restapi"
+            },
+            {
+              "title": "MQTT 5.0 Enhanced Authentication - Kerberos",
+              "path": "access-control/authn/kerberos"
+            },
+            {
+              "title": "Client-Info Authentication",
+              "path": "access-control/authn/cinfo"
+            },
+            {
+              "title": "PSK Authentication",
+              "path": "network/psk-authentication"
+            },
+            {
+              "title": "Use HTTP API to Manage User Data",
+              "path": "access-control/authn/user_management"
+            },
+            {
+              "title": "Access Control List",
+              "path": "access-control/authn/acl"
+            }
+          ]
+        },
+        {
+          "title": "Authorization",
+          "path": "access-control/authz/authz",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Use ACL File",
+              "path": "access-control/authz/file"
+            },
+            {
+              "title": "Use Built-in Database",
+              "path": "access-control/authz/mnesia"
+            },
+            {
+              "title": "Integrate with MySQL",
+              "path": "access-control/authz/mysql"
+            },
+            {
+              "title": "Integrate with MongoDB",
+              "path": "access-control/authz/mongodb"
+            },
+            {
+              "title": "Integrate with PostgreSQL",
+              "path": "access-control/authz/postgresql"
+            },
+            {
+              "title": "Integrate with Redis",
+              "path": "access-control/authz/redis"
+            },
+            {
+              "title": "Integrate with LDAP",
+              "path": "access-control/authz/ldap"
+            },
+            {
+              "title": "Use HTTP Service",
+              "path": "access-control/authz/http"
+            }
+          ]
+        },
+        {
+          "title": "Banned Clients",
+          "path": "access-control/blacklist"
+        },
+        {
+          "title": "Flapping Detect",
+          "path": "access-control/flapping-detect"
+        }
+      ]
+    },
+    {
+      "title": "Rule Engine",
+      "path": "data-integration/rules",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Create Rules",
+          "path": "data-integration/rule-get-started"
+        },
+        {
+          "title": "Rule SQL Reference",
+          "path": "data-integration/rule-sql-syntax"
+        },
+        {
+          "title": "Data Sources and Fields",
+          "path": "data-integration/rule-sql-events-and-fields"
+        },
+        {
+          "title": "Built-in SQL Functions",
+          "path": "data-integration/rule-sql-builtin-functions"
+        },
+        {
+          "title": "jq Functions",
+          "path": "data-integration/rule-sql-jq"
+        },
+        {
+          "title": "Smart Data Hub",
+          "path": "data-integration/smart-data-hub",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Schema Registry",
+              "path": "data-integration/schema-registry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "Schema Registry Example - Avro",
+                  "path": "data-integration/schema-registry-example-avro"
+                },
+                {
+                  "title": "Schema Registry Example - Protobuf",
+                  "path": "data-integration/schema-registry-example-protobuf"
+                },
+                {
+                  "title": "Schema Registry Example - External HTTP Server",
+                  "path": "data-integration/schema-registry-example-external-http"
+                },
+                {
+                  "title": "Sparkplug B",
+                  "path": "data-integration/sparkplug"
+                }
+              ]
+            },
+            {
+              "title": "Schema Validation",
+              "path": "data-integration/schema-validation"
+            },
+            {
+              "title": "Message Transformation",
+              "path": "data-integration/message-transformation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Flow Designer",
+      "path": "flow-designer/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "LLM-Based MQTT Data Processing",
+          "path": "flow-designer/llm-based-data-processing",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Quick Start: Create a Flow Using OpenAI Node",
+              "path": "flow-designer/openai-node-quick-start"
+            },
+            {
+              "title": "Quick Start: Create a Flow Using Anthropic Node",
+              "path": "flow-designer/anthropic-node-quick-start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Data Integration",
+      "path": "data-integration/data-bridges",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Connector",
+          "path": "data-integration/connector"
+        },
+        {
+          "title": "Webhook",
+          "path": "data-integration/webhook"
+        },
+        {
+          "title": "Apache Doris",
+          "path": "data-integration/apache-doris"
+        },
+        {
+          "title": "Apache Kafka",
+          "path": "data-integration/data-bridge-kafka"
+        },
+        {
+          "title": "Apache IoTDB",
+          "path": "data-integration/data-bridge-iotdb"
+        },
+        {
+          "title": "Apache Pulsar",
+          "path": "data-integration/data-bridge-pulsar"
+        },
+        {
+          "title": "AWS Kinesis",
+          "path": "data-integration/data-bridge-kinesis"
+        },
+        {
+          "title": "AWS S3",
+          "path": "data-integration/s3"
+        },
+        {
+          "title": "AWS S3 Tables",
+          "path": "data-integration/s3-tables"
+        },
+        {
+          "title": "Azure Blob Storage",
+          "path": "data-integration/azure-blob-storage"
+        },
+        {
+          "title": "Azure Event Hubs",
+          "path": "data-integration/data-bridge-azure-event-hub"
+        },
+        {
+          "title": "Cassandra",
+          "path": "data-integration/data-bridge-cassa"
+        },
+        {
+          "title": "ClickHouse",
+          "path": "data-integration/data-bridge-clickhouse"
+        },
+        {
+          "title": "Confluent",
+          "path": "data-integration/confluent-sink"
+        },
+        {
+          "title": "Couchbase",
+          "path": "data-integration/data-bridge-couchbase"
+        },
+        {
+          "title": "Datalayers",
+          "path": "data-integration/data-bridge-datalayers"
+        },
+        {
+          "title": "Disk Log",
+          "path": "data-integration/disk-log"
+        },
+        {
+          "title": "DynamoDB",
+          "path": "data-integration/data-bridge-dynamo"
+        },
+        {
+          "title": "Elasticsearch",
+          "path": "data-integration/elasticsearch"
+        },
+        {
+          "title": "GCP PubSub",
+          "path": "data-integration/data-bridge-gcp-pubsub"
+        },
+        {
+          "title": "GreptimeDB",
+          "path": "data-integration/data-bridge-greptimedb"
+        },
+        {
+          "title": "HStreamDB",
+          "path": "data-integration/data-bridge-hstreamdb"
+        },
+        {
+          "title": "HTTP Server",
+          "path": "data-integration/data-bridge-webhook"
+        },
+        {
+          "title": "InfluxDB",
+          "path": "data-integration/data-bridge-influxdb"
+        },
+        {
+          "title": "Lindorm",
+          "path": "data-integration/lindorm"
+        },
+        {
+          "title": "Microsoft SQL Server",
+          "path": "data-integration/data-bridge-sqlserver"
+        },
+        {
+          "title": "MongoDB",
+          "path": "data-integration/data-bridge-mongodb"
+        },
+        {
+          "title": "MQTT",
+          "path": "data-integration/data-bridge-mqtt"
+        },
+        {
+          "title": "MySQL",
+          "path": "data-integration/data-bridge-mysql"
+        },
+        {
+          "title": "OpenTSDB",
+          "path": "data-integration/data-bridge-opents"
+        },
+        {
+          "title": "Oracle Database",
+          "path": "data-integration/data-bridge-oracle"
+        },
+        {
+          "title": "PostgreSQL",
+          "path": "data-integration/data-bridge-pgsql"
+        },
+        {
+          "title": "RabbitMQ",
+          "path": "data-integration/data-bridge-rabbitmq"
+        },
+        {
+          "title": "Redis",
+          "path": "data-integration/data-bridge-redis"
+        },
+        {
+          "title": "RocketMQ",
+          "path": "data-integration/data-bridge-rocketmq"
+        },
+        {
+          "title": "Snowflake",
+          "path": "data-integration/snowflake"
+        },
+        {
+          "title": "SysKeeper",
+          "path": "data-integration/syskeeper"
+        },
+        {
+          "title": "Tablestore",
+          "path": "data-integration/tablestore"
+        },
+        {
+          "title": "TDengine",
+          "path": "data-integration/data-bridge-tdengine"
+        },
+        {
+          "title": "TimescaleDB",
+          "path": "data-integration/data-bridge-timescale"
+        }
+      ]
+    },
+    {
+      "title": "Administration Guide",
+      "path": "admin/admin-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Configuration Files",
+          "path": "configuration/configuration",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Cluster",
+              "path": "configuration/cluster"
+            },
+            {
+              "title": "Listener",
+              "path": "configuration/listener"
+            },
+            {
+              "title": "MQTT",
+              "path": "configuration/mqtt"
+            },
+            {
+              "title": "Flapping Detection",
+              "path": "configuration/flapping"
+            },
+            {
+              "title": "Limiter",
+              "path": "configuration/limiter"
+            },
+            {
+              "title": "Logs",
+              "path": "configuration/logs"
+            },
+            {
+              "title": "Prometheus",
+              "path": "configuration/prometheus"
+            },
+            {
+              "title": "Dashboard",
+              "path": "configuration/dashboard"
+            },
+            {
+              "title": "License",
+              "path": "configuration/license"
+            }
+          ]
+        },
+        {
+          "title": "EMQX Enterprise Configuration Manual",
+          "path": "https://docs.emqx.com/en/enterprise/v5.10.0/hocon/"
+        },
+        {
+          "title": "Command Line Interface",
+          "path": "admin/cli"
+        },
+        {
+          "title": "MQTT Durable Sessions",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Configure and Manage Durable Sessions",
+              "path": "durability/management"
+            },
+            {
+              "title": "Manage Data Replicas",
+              "path": "durability/managing-replication"
+            }
+          ]
+        },
+        {
+          "title": "EMQX Dashboard",
+          "path": "dashboard/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Dashboard Home Page",
+              "path": "dashboard/dashboard"
+            },
+            {
+              "title": "Monitoring",
+              "path": "dashboard/monitoring",
+              "children": [
+                {
+                  "title": "Clients",
+                  "path": "dashboard/connections/connections"
+                },
+                {
+                  "title": "Subscription Management",
+                  "path": "dashboard/subscriptions/overview"
+                },
+                {
+                  "title": "Retained Messages",
+                  "path": "dashboard/retained"
+                },
+                {
+                  "title": "Delayed Publish",
+                  "path": "dashboard/delay-pub"
+                }
+              ]
+            },
+            {
+              "title": "Access Control",
+              "path": "dashboard/acloverview",
+              "children": [
+                {
+                  "title": "Authentication",
+                  "path": "dashboard/authn"
+                },
+                {
+                  "title": "Authorization",
+                  "path": "dashboard/authz"
+                }
+              ]
+            },
+            {
+              "title": "Integration",
+              "path": "dashboard/bridgeoverview",
+              "children": [
+                {
+                  "title": "Rules",
+                  "path": "dashboard/rules"
+                }
+              ]
+            },
+            {
+              "title": "Smart Data Hub",
+              "path": "dashboard/data-hub"
+            },
+            {
+              "title": "Management",
+              "path": "dashboard/configuration",
+              "children": [
+                {
+                  "title": "Cluster Settings",
+                  "path": "dashboard/cluster_settings"
+                },
+                {
+                  "title": "Advanced MQTT",
+                  "path": "dashboard/advanced_mqtt"
+                },
+                {
+                  "title": "Extensions",
+                  "path": "dashboard/extensions"
+                }
+              ]
+            },
+            {
+              "title": "Diagnose",
+              "path": "dashboard/diagnose"
+            },
+            {
+              "title": "System",
+              "path": "dashboard/system"
+            }
+          ]
+        },
+        {
+          "title": "Single Sign-On (SSO)",
+          "path": "dashboard/sso",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Configure OpenLDAP and Microsoft Entra ID SSO",
+              "path": "dashboard/sso-ldap"
+            },
+            {
+              "title": "Configure SAML-Based SSO",
+              "path": "dashboard/sso-saml"
+            },
+            {
+              "title": "Configure OIDC-Based SSO",
+              "path": "dashboard/sso-oidc"
+            }
+          ]
+        },
+        {
+          "title": "Multi-Factor Authentication (MFA)",
+          "path": "multi-factor-authn/multi-factor-authentication"
+        },
+        {
+          "title": "Audit Log",
+          "path": "dashboard/audit-log"
+        },
+        {
+          "title": "Rate Limit",
+          "path": "rate-limit/rate-limit"
+        },
+        {
+          "title": "Namespace",
+          "path": "multi-tenancy/namespace-overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Create Namespaces",
+              "path": "multi-tenancy/create-namespace"
+            },
+            {
+              "title": "Configure and Manage Namespaces",
+              "path": "multi-tenancy/configure-manage-namespace"
+            },
+            {
+              "title": "Quick Start: Experience Namespaces",
+              "path": "multi-tenancy/namespace-quick-start"
+            }
+          ]
+        },
+        {
+          "title": "Logs and Observability",
+          "path": "observability/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Statistics and Metrics",
+              "path": "observability/metrics-and-stats"
+            },
+            {
+              "title": "Alarm",
+              "path": "observability/alarms"
+            },
+            {
+              "title": "Logs",
+              "path": "observability/log"
+            },
+            {
+              "title": "Topic Metrics",
+              "path": "observability/topic-metrics"
+            },
+            {
+              "title": "Slow Subscriptions",
+              "path": "observability/slow-subscribers-statistics"
+            },
+            {
+              "title": "Log Trace",
+              "path": "observability/tracer"
+            },
+            {
+              "title": "System Topic",
+              "path": "observability/mqtt-system-topics"
+            },
+            {
+              "title": "Integrate with Prometheus",
+              "path": "observability/prometheus"
+            },
+            {
+              "title": "Integrate with Datadog",
+              "path": "observability/datadog"
+            },
+            {
+              "title": "Integrate with OpenTelemetry",
+              "path": "observability/opentelemetry/opentelemetry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "Metrics",
+                  "path": "observability/opentelemetry/metrics"
+                },
+                {
+                  "title": "Logs",
+                  "path": "observability/opentelemetry/logs"
+                },
+                {
+                  "title": "Traces",
+                  "path": "observability/opentelemetry/traces"
+                },
+                {
+                  "title": "End-to-end Traces",
+                  "path": "observability/opentelemetry/e2e-traces"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Backup and Restore",
+          "path": "operations/backup-restore"
+        },
+        {
+          "title": "Plugin and Extension",
+          "path": "extensions/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Hooks",
+              "path": "extensions/hooks"
+            },
+            {
+              "title": "Plugins",
+              "path": "extensions/plugins",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "Develop EMQX Plugins",
+                  "path": "extensions/plugin-development"
+                },
+                {
+                  "title": "Customize Plugin Logic",
+                  "path": "extensions/plugin-example"
+                },
+                {
+                  "title": "Manage Plugins",
+                  "path": "extensions/plugin-management"
+                }
+              ]
+            },
+            {
+              "title": "gRPC Hook Extension",
+              "path": "extensions/exhook"
+            }
+          ]
+        },
+        {
+          "title": "Telemetry",
+          "path": "telemetry/telemetry"
+        }
+      ]
+    },
+    {
+      "title": "Advanced Features",
+      "path": "mqtt-over-quic/advanced-feature",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT over QUIC",
+          "path": "mqtt-over-quic/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Features and Benefits",
+              "path": "mqtt-over-quic/features-mqtt-over-quic"
+            },
+            {
+              "title": "Use MQTT over QUIC",
+              "path": "mqtt-over-quic/getting-started"
+            }
+          ]
+        },
+        {
+          "title": "Cluster Linking",
+          "path": "cluster-linking/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Quick Start with Cluster Linking",
+              "path": "cluster-linking/quick-start"
+            },
+            {
+              "title": "Configure Cluster Linking",
+              "path": "cluster-linking/configuration"
+            }
+          ]
+        },
+        {
+          "title": "File Transfer over MQTT",
+          "path": "file-transfer/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Quick Start with MQTT File Transfer",
+              "path": "file-transfer/quick-start"
+            },
+            {
+              "title": "Configure File Transfer Server-Side Settings",
+              "path": "file-transfer/broker"
+            },
+            {
+              "title": "File Transfer Clients Development",
+              "path": "file-transfer/client"
+            }
+          ]
+        },
+        {
+          "title": "Multi-Protocol Gateway",
+          "path": "gateway/gateway",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "STOMP Gateway",
+              "path": "gateway/stomp"
+            },
+            {
+              "title": "MQTT-SN Gateway",
+              "path": "gateway/mqttsn"
+            },
+            {
+              "title": "CoAP Gateway",
+              "path": "gateway/coap"
+            },
+            {
+              "title": "LwM2M Gateway",
+              "path": "gateway/lwm2m"
+            },
+            {
+              "title": "ExProto Gateway",
+              "path": "gateway/exproto"
+            },
+            {
+              "title": "OCPP Gateway",
+              "path": "gateway/ocpp"
+            },
+            {
+              "title": "JT/T 808 Gateway",
+              "path": "gateway/jt808",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "JT/T 808 Gateway Data Exchange Format",
+                  "path": "gateway/jt808_data_exchange"
+                }
+              ]
+            },
+            {
+              "title": "NATS Protocol Gateway",
+              "path": "gateway/nats"
+            },
+            {
+              "title": "GB/T 32960 Gateway",
+              "path": "gateway/gbt32960"
+            }
+          ]
+        },
+        {
+          "title": "MQTT Client Attributes",
+          "path": "client-attributes/client-attributes"
+        }
+      ]
+    },
+    {
+      "title": "Tutorials",
+      "path": "tutorial/tutorial",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT Programming",
+          "path": "tutorial/mqtt-programming"
+        }
+      ]
+    },
+    {
+      "title": "EMQX Essentials",
+      "path": "design/emqx-essentials",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT Guide",
+          "path": "design/mqtt-guide",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "MQTT Basics",
+              "path": "design/mqtt-basics"
+            },
+            {
+              "title": "MQTT Advanced",
+              "path": "design/mqtt-advanced"
+            }
+          ]
+        },
+        {
+          "title": "Design and Implementation",
+          "path": "design/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Design for EMQX Clustering",
+              "path": "design/clustering"
+            },
+            {
+              "title": "In-flight and Message Queue",
+              "path": "design/inflight-window-and-message-queue"
+            },
+            {
+              "title": "Message Retransmission",
+              "path": "design/retransmission"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Reference",
+      "path": "introduction/reference",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT 5.0 Specification",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+        },
+        {
+          "title": "MQTT 3.1.1 Specification",
+          "path": "http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+        },
+        {
+          "title": "MQTT Glossary",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003"
+        },
+        {
+          "title": "MQTT 5.0 Features",
+          "path": "https://www.emqx.com/en/blog/introduction-to-mqtt-5"
+        },
+        {
+          "title": "MQTT Reason Code",
+          "path": "https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack"
+        }
+      ]
+    },
+    {
+      "title": "EMQX Enterprise Release Notes",
+      "path": "changes/all-changes-ee",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "EMQX Enterprise Version 5",
+          "path": "changes/changes-ee-v5"
+        },
+        {
+          "title": "EMQX Enterprise Version 4",
+          "path": "changes/changes-ee-v4"
+        },
+        {
+          "title": "Known Issues",
+          "children": [
+            {
+              "title": "Known Issues in EMQX 5.9",
+              "path": "changes/known-issues-5.9"
+            },
+            {
+              "title": "Known Issues in EMQX 5.8",
+              "path": "changes/known-issues-5.8"
+            },
+            {
+              "title": "Known Issues in EMQX 5.3",
+              "path": "changes/known-issues-5.3"
+            },
+            {
+              "title": "Known Issues in EMQX 5.1",
+              "path": "changes/known-issues-5.1"
+            }
+          ]
+        },
+        {
+          "title": "Incompatible Changes",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Incompatible Changes in EMQX 5.10",
+              "path": "changes/breaking-changes-5.10"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.9",
+              "path": "changes/breaking-changes-ee-5.9"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.8",
+              "path": "changes/breaking-changes-ee-5.8"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.7",
+              "path": "changes/breaking-changes-ee-5.7"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.6",
+              "path": "changes/breaking-changes-ee-5.6"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.5",
+              "path": "changes/breaking-changes-ee-5.5"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.4",
+              "path": "changes/breaking-changes-ee-5.4"
+            }
+          ]
+        },
+        {
+          "title": "Incompatible Changes between EMQX 4.4 and EMQX 5.1",
+          "path": "changes/breaking-changes-5.1.0",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Authentication / Authorization Incompatibility Between EMQX 4.4 and EMQX 5.1",
+              "path": "changes/auth-4.4-to-5.1-compatibility"
+            },
+            {
+              "title": "Data Integration Incompatibility Between EMQX 5.1 and EMQX 4.4",
+              "path": "changes/data-integration-4.4-to-5.1-incompatibility"
+            },
+            {
+              "title": "Gateway Incompatibility Between EMQX 4.4 and EMQX 5.1",
+              "path": "changes/gateway-4.4-to-5.1-incompatibility"
+            }
+          ]
+        },
+        {
+          "title": "End of Life Dates",
+          "path": "changes/eol-ee"
+        }
+      ]
+    }
+  ],
+  "cn": [
+    {
+      "title": "EMQX 概览",
+      "path": "./",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "全新功能",
+          "path": "getting-started/new-features"
+        },
+        {
+          "title": "功能对比",
+          "path": "getting-started/feature-comparison"
+        },
+        {
+          "title": "快速开始",
+          "path": "getting-started/getting-started"
+        },
+        {
+          "title": "使用限制",
+          "path": "getting-started/restrictions"
+        },
+        {
+          "title": "常见问题解答",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "概念问题",
+              "path": "faq/concept"
+            },
+            {
+              "title": "部署问题",
+              "path": "faq/deployment"
+            },
+            {
+              "title": "功能问题",
+              "path": "faq/feature"
+            },
+            {
+              "title": "使用问题",
+              "path": "faq/faq"
+            }
+          ]
+        },
+        {
+          "title": "技术支持",
+          "path": "support/technical-support"
+        }
+      ]
+    },
+    {
+      "title": "安装部署",
+      "path": "deploy/install",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "安装指南",
+          "path": "deploy/install-enterprise",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Docker",
+              "path": "deploy/install-docker"
+            },
+            {
+              "title": "Debian",
+              "path": "deploy/install-debian"
+            },
+            {
+              "title": "Ubuntu",
+              "path": "deploy/install-ubuntu"
+            },
+            {
+              "title": "CentOS/RHEL",
+              "path": "deploy/install-rhel"
+            },
+            {
+              "title": "macOS",
+              "path": "deploy/install-macOS"
+            },
+            {
+              "title": "Kubernetes",
+              "path": "https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html"
+            },
+            {
+              "title": "配置 License",
+              "path": "deploy/license"
+            }
+          ]
+        },
+        {
+          "title": "升级指南",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "滚动升级",
+              "path": "deploy/rolling-upgrades"
+            },
+            {
+              "title": "将 EMQX 集群从版本 4.4 升级到 5.x",
+              "path": "deploy/upgrade-cluster"
+            },
+            {
+              "title": "在 Kubernetes 中升级 EMQX",
+              "path": "https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "开发者指南",
+      "path": "connect-emqx/developer-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "发布订阅",
+          "path": "messaging/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "MQTT 核心概念",
+              "path": "messaging/mqtt-concepts"
+            },
+            {
+              "title": "MQTT 客户端工具演示",
+              "path": "messaging/publish-and-subscribe"
+            },
+            {
+              "title": "共享订阅",
+              "path": "messaging/mqtt-shared-subscription"
+            },
+            {
+              "title": "保留消息",
+              "path": "messaging/mqtt-retained-message"
+            },
+            {
+              "title": "遗嘱消息",
+              "path": "messaging/mqtt-will-message"
+            },
+            {
+              "title": "排它订阅",
+              "path": "messaging/mqtt-exclusive-subscription"
+            },
+            {
+              "title": "延迟发布",
+              "path": "messaging/mqtt-delayed-publish"
+            },
+            {
+              "title": "自动订阅",
+              "path": "messaging/mqtt-auto-subscription"
+            },
+            {
+              "title": "主题重写",
+              "path": "messaging/mqtt-topic-rewrite"
+            },
+            {
+              "title": "通配符订阅",
+              "path": "messaging/mqtt-wildcard-subscription"
+            }
+          ]
+        },
+        {
+          "title": "MQTT 会话持久化",
+          "path": "durability/durability_introduction"
+        },
+        {
+          "title": "客户端 SDK",
+          "path": "connect-emqx/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "使用 C SDK 连接",
+              "path": "connect-emqx/c"
+            },
+            {
+              "title": "使用 Java SDK 连接",
+              "path": "connect-emqx/java"
+            },
+            {
+              "title": "使用 Go SDK 连接",
+              "path": "connect-emqx/go"
+            },
+            {
+              "title": "使用 Python SDK 连接",
+              "path": "connect-emqx/python"
+            },
+            {
+              "title": "使用 JavaScript SDK 连接",
+              "path": "connect-emqx/javascript"
+            },
+            {
+              "title": "MQTT 微信小程序示例",
+              "path": "connect-emqx/wechat-miniprogram"
+            }
+          ]
+        },
+        {
+          "title": "REST API",
+          "path": "admin/api",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX 企业版 API 文档",
+              "path": "https://docs.emqx.com/zh/enterprise/v5.10/admin/api-docs.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "构建集群",
+      "path": "deploy/cluster/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "部署架构与集群要求",
+          "path": "deploy/cluster/mria-introduction"
+        },
+        {
+          "title": "创建与管理集群",
+          "path": "deploy/cluster/create-cluster"
+        },
+        {
+          "title": "集群安全",
+          "path": "deploy/cluster/security"
+        },
+        {
+          "title": "集群负载均衡",
+          "path": "deploy/cluster/lb",
+          "children": [
+            {
+              "title": "用 NGINX 负载均衡 EMQX 集群",
+              "path": "deploy/cluster/lb-nginx"
+            },
+            {
+              "title": "用 HAProxy 负载均衡 EMQX 集群",
+              "path": "deploy/cluster/lb-haproxy"
+            }
+          ]
+        },
+        {
+          "title": "节点疏散与集群负载重平衡",
+          "path": "deploy/cluster/rebalancing"
+        },
+        {
+          "title": "性能与调优",
+          "path": "performance/overview",
+          "children": [
+            {
+              "title": "系统调优",
+              "path": "performance/tune"
+            },
+            {
+              "title": "使用 eMQTT-Bench 进行性能测试",
+              "path": "performance/benchmark-emqtt-bench"
+            },
+            {
+              "title": "EMQX 性能参考",
+              "path": "performance/performance-reference"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "安全指南",
+      "path": "access-control/security-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "网络与 TLS",
+          "path": "network/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "开启 SSL/TLS 连接",
+              "path": "network/emqx-mqtt-tls"
+            },
+            {
+              "title": "客户端 TLS 接入示例",
+              "path": "network/mqtt-client-tls"
+            },
+            {
+              "title": "获取 SSL/TLS 证书",
+              "path": "network/tls-certificate"
+            },
+            {
+              "title": "CRL 检查",
+              "path": "network/crl"
+            },
+            {
+              "title": "OCSP Stapling",
+              "path": "network/ocsp"
+            },
+            {
+              "title": "国密 SSL",
+              "path": "network/gmssl"
+            }
+          ]
+        },
+        {
+          "title": "认证",
+          "path": "access-control/authn/authn",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "X.509 证书认证",
+              "path": "access-control/authn/x509"
+            },
+            {
+              "title": "JWT 认证",
+              "path": "access-control/authn/jwt"
+            },
+            {
+              "title": "密码认证",
+              "path": "access-control/authn/pwoverview",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "使用内置数据库进行密码认证",
+                  "path": "access-control/authn/mnesia"
+                },
+                {
+                  "title": "使用 MySQL 进行密码认证",
+                  "path": "access-control/authn/mysql"
+                },
+                {
+                  "title": "使用 MongoDB 进行密码认证",
+                  "path": "access-control/authn/mongodb"
+                },
+                {
+                  "title": "使用 PostgreSQL 进行密码认证",
+                  "path": "access-control/authn/postgresql"
+                },
+                {
+                  "title": "使用 Redis 进行密码认证",
+                  "path": "access-control/authn/redis"
+                },
+                {
+                  "title": "使用 LDAP 进行密码认证",
+                  "path": "access-control/authn/ldap"
+                },
+                {
+                  "title": "使用 HTTP 服务进行密码认证",
+                  "path": "access-control/authn/http"
+                }
+              ]
+            },
+            {
+              "title": "MQTT 5.0 增强认证 - SCRAM",
+              "path": "access-control/authn/scram"
+            },
+            {
+              "title": "基于 REST API 的 MQTT 5.0 SCRAM 认证",
+              "path": "access-control/authn/scram_restapi"
+            },
+            {
+              "title": "MQTT 5.0 增强认证 - Kerberos",
+              "path": "access-control/authn/kerberos"
+            },
+            {
+              "title": "Client-Info 认证",
+              "path": "access-control/authn/cinfo"
+            },
+            {
+              "title": "PSK 认证",
+              "path": "network/psk-authentication"
+            },
+            {
+              "title": "通过 HTTP API 管理认证数据",
+              "path": "access-control/authn/user_management"
+            },
+            {
+              "title": "权限列表",
+              "path": "access-control/authn/acl"
+            }
+          ]
+        },
+        {
+          "title": "授权",
+          "path": "access-control/authz/authz",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "ACL 文件",
+              "path": "access-control/authz/file"
+            },
+            {
+              "title": "内置数据库",
+              "path": "access-control/authz/mnesia"
+            },
+            {
+              "title": "基于 MySQL 进行授权",
+              "path": "access-control/authz/mysql"
+            },
+            {
+              "title": "基于 MongoDB 进行授权",
+              "path": "access-control/authz/mongodb"
+            },
+            {
+              "title": "基于 PostgreSQL 进行授权",
+              "path": "access-control/authz/postgresql"
+            },
+            {
+              "title": "基于 Redis 进行授权",
+              "path": "access-control/authz/redis"
+            },
+            {
+              "title": "基于 LDAP 进行授权",
+              "path": "access-control/authz/ldap"
+            },
+            {
+              "title": "基于 HTTP 应用进行授权",
+              "path": "access-control/authz/http"
+            }
+          ]
+        },
+        {
+          "title": "黑名单",
+          "path": "access-control/blacklist"
+        },
+        {
+          "title": "连接抖动检测",
+          "path": "access-control/flapping-detect"
+        }
+      ]
+    },
+    {
+      "title": "规则引擎",
+      "path": "data-integration/rules",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "创建规则",
+          "path": "data-integration/rule-get-started"
+        },
+        {
+          "title": "SQL 语法与示例",
+          "path": "data-integration/rule-sql-syntax"
+        },
+        {
+          "title": "SQL 数据源和字段",
+          "path": "data-integration/rule-sql-events-and-fields"
+        },
+        {
+          "title": "内置 SQL 函数",
+          "path": "data-integration/rule-sql-builtin-functions"
+        },
+        {
+          "title": "jq 函数",
+          "path": "data-integration/rule-sql-jq"
+        },
+        {
+          "title": "数据智能中心",
+          "path": "data-integration/smart-data-hub",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Schema Registry",
+              "path": "data-integration/schema-registry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "编解码举例 - Avro",
+                  "path": "data-integration/schema-registry-example-avro"
+                },
+                {
+                  "title": "编解码举例 - Protobuf",
+                  "path": "data-integration/schema-registry-example-protobuf"
+                },
+                {
+                  "title": "编解码举例 - 外部 HTTP",
+                  "path": "data-integration/schema-registry-example-external-http"
+                },
+                {
+                  "title": "Sparkplug B",
+                  "path": "data-integration/sparkplug"
+                }
+              ]
+            },
+            {
+              "title": "Schema 验证",
+              "path": "data-integration/schema-validation"
+            },
+            {
+              "title": "消息转换",
+              "path": "data-integration/message-transformation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Flow 设计器",
+      "path": "flow-designer/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "基于 LLM 的 MQTT 数据处理",
+          "path": "flow-designer/llm-based-data-processing",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "快速开始：使用 OpenAI 节点创建 Flow",
+              "path": "flow-designer/openai-node-quick-start"
+            },
+            {
+              "title": "快速开始：使用 Anthropic 节点创建 Flow",
+              "path": "flow-designer/anthropic-node-quick-start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "数据集成",
+      "path": "data-integration/data-bridges",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "连接器",
+          "path": "data-integration/connector"
+        },
+        {
+          "title": "Webhook",
+          "path": "data-integration/webhook"
+        },
+        {
+          "title": "Apache Doris",
+          "path": "data-integration/apache-doris"
+        },
+        {
+          "title": "Apache Kafka",
+          "path": "data-integration/data-bridge-kafka"
+        },
+        {
+          "title": "Apache IoTDB",
+          "path": "data-integration/data-bridge-iotdb"
+        },
+        {
+          "title": "Apache Pulsar",
+          "path": "data-integration/data-bridge-pulsar"
+        },
+        {
+          "title": "AWS Kinesis",
+          "path": "data-integration/data-bridge-kinesis"
+        },
+        {
+          "title": "AWS S3",
+          "path": "data-integration/s3"
+        },
+        {
+          "title": "AWS S3 Tables",
+          "path": "data-integration/s3-tables"
+        },
+        {
+          "title": "Azure Blob Storage",
+          "path": "data-integration/azure-blob-storage"
+        },
+        {
+          "title": "Azure Event Hubs",
+          "path": "data-integration/data-bridge-azure-event-hub"
+        },
+        {
+          "title": "Cassandra",
+          "path": "data-integration/data-bridge-cassa"
+        },
+        {
+          "title": "ClickHouse",
+          "path": "data-integration/data-bridge-clickhouse"
+        },
+        {
+          "title": "Confluent",
+          "path": "data-integration/confluent-sink"
+        },
+        {
+          "title": "Couchbase",
+          "path": "data-integration/data-bridge-couchbase"
+        },
+        {
+          "title": "Datalayers",
+          "path": "data-integration/data-bridge-datalayers"
+        },
+        {
+          "title": "Disk Log",
+          "path": "data-integration/disk-log"
+        },
+        {
+          "title": "DynamoDB",
+          "path": "data-integration/data-bridge-dynamo"
+        },
+        {
+          "title": "Elasticsearch",
+          "path": "data-integration/elasticsearch"
+        },
+        {
+          "title": "GCP PubSub",
+          "path": "data-integration/data-bridge-gcp-pubsub"
+        },
+        {
+          "title": "GreptimeDB",
+          "path": "data-integration/data-bridge-greptimedb"
+        },
+        {
+          "title": "HStreamDB",
+          "path": "data-integration/data-bridge-hstreamdb"
+        },
+        {
+          "title": "HTTP Server",
+          "path": "data-integration/data-bridge-webhook"
+        },
+        {
+          "title": "InfluxDB",
+          "path": "data-integration/data-bridge-influxdb"
+        },
+        {
+          "title": "Lindorm",
+          "path": "data-integration/lindorm"
+        },
+        {
+          "title": "Microsoft SQL Server",
+          "path": "data-integration/data-bridge-sqlserver"
+        },
+        {
+          "title": "MongoDB",
+          "path": "data-integration/data-bridge-mongodb"
+        },
+        {
+          "title": "MQTT",
+          "path": "data-integration/data-bridge-mqtt"
+        },
+        {
+          "title": "MySQL",
+          "path": "data-integration/data-bridge-mysql"
+        },
+        {
+          "title": "OpenTSDB",
+          "path": "data-integration/data-bridge-opents"
+        },
+        {
+          "title": "Oracle Database",
+          "path": "data-integration/data-bridge-oracle"
+        },
+        {
+          "title": "PostgreSQL",
+          "path": "data-integration/data-bridge-pgsql"
+        },
+        {
+          "title": "RabbitMQ",
+          "path": "data-integration/data-bridge-rabbitmq"
+        },
+        {
+          "title": "Redis",
+          "path": "data-integration/data-bridge-redis"
+        },
+        {
+          "title": "RocketMQ",
+          "path": "data-integration/data-bridge-rocketmq"
+        },
+        {
+          "title": "Snowflake",
+          "path": "data-integration/snowflake"
+        },
+        {
+          "title": "SysKeeper",
+          "path": "data-integration/syskeeper"
+        },
+        {
+          "title": "Tablestore",
+          "path": "data-integration/tablestore"
+        },
+        {
+          "title": "TDengine",
+          "path": "data-integration/data-bridge-tdengine"
+        },
+        {
+          "title": "TimescaleDB",
+          "path": "data-integration/data-bridge-timescale"
+        }
+      ]
+    },
+    {
+      "title": "管理员指南",
+      "path": "admin/admin-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "配置文件",
+          "path": "configuration/configuration",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "集群",
+              "path": "configuration/cluster"
+            },
+            {
+              "title": "监听器",
+              "path": "configuration/listener"
+            },
+            {
+              "title": "MQTT",
+              "path": "configuration/mqtt"
+            },
+            {
+              "title": "连接抖动",
+              "path": "configuration/flapping"
+            },
+            {
+              "title": "速率限制器",
+              "path": "configuration/limiter"
+            },
+            {
+              "title": "日志",
+              "path": "configuration/logs"
+            },
+            {
+              "title": "Prometheus",
+              "path": "configuration/prometheus"
+            },
+            {
+              "title": "Dashboard",
+              "path": "configuration/dashboard"
+            },
+            {
+              "title": "License",
+              "path": "configuration/license"
+            }
+          ]
+        },
+        {
+          "title": "EMQX 企业版配置手册",
+          "path": "https://docs.emqx.com/zh/enterprise/v5.10.0/hocon/"
+        },
+        {
+          "title": "命令行接口",
+          "path": "admin/cli"
+        },
+        {
+          "title": "MQTT 会话持久化",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "配置和管理会话持久化",
+              "path": "durability/management"
+            },
+            {
+              "title": "管理数据副本",
+              "path": "durability/managing-replication"
+            }
+          ]
+        },
+        {
+          "title": "EMQX Dashboard",
+          "path": "dashboard/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Dashboard 首页概览",
+              "path": "dashboard/dashboard"
+            },
+            {
+              "title": "监控",
+              "path": "dashboard/monitoring",
+              "children": [
+                {
+                  "title": "客户端",
+                  "path": "dashboard/connections/connections"
+                },
+                {
+                  "title": "订阅管理",
+                  "path": "dashboard/subscriptions/overview"
+                },
+                {
+                  "title": "保留消息",
+                  "path": "dashboard/retained"
+                },
+                {
+                  "title": "延迟发布",
+                  "path": "dashboard/delay-pub"
+                }
+              ]
+            },
+            {
+              "title": "访问控制",
+              "path": "dashboard/acloverview",
+              "children": [
+                {
+                  "title": "客户端认证",
+                  "path": "dashboard/authn"
+                },
+                {
+                  "title": "客户端授权",
+                  "path": "dashboard/authz"
+                }
+              ]
+            },
+            {
+              "title": "集成",
+              "path": "dashboard/bridgeoverview",
+              "children": [
+                {
+                  "title": "规则",
+                  "path": "dashboard/rules"
+                }
+              ]
+            },
+            {
+              "title": "数据智能中心",
+              "path": "dashboard/data-hub"
+            },
+            {
+              "title": "管理",
+              "path": "dashboard/configuration",
+              "children": [
+                {
+                  "title": "集群配置",
+                  "path": "dashboard/cluster_settings"
+                },
+                {
+                  "title": "MQTT 高级特性",
+                  "path": "dashboard/advanced_mqtt"
+                },
+                {
+                  "title": "插件扩展",
+                  "path": "dashboard/extensions"
+                }
+              ]
+            },
+            {
+              "title": "问题分析",
+              "path": "dashboard/diagnose"
+            },
+            {
+              "title": "系统设置",
+              "path": "dashboard/system"
+            }
+          ]
+        },
+        {
+          "title": "单点登录 (SSO)",
+          "path": "dashboard/sso",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "配置 LDAP/Azure AD 单点登录",
+              "path": "dashboard/sso-ldap"
+            },
+            {
+              "title": "配置 SAML 单点登录",
+              "path": "dashboard/sso-saml"
+            },
+            {
+              "title": "配置 OIDC 单点登录",
+              "path": "dashboard/sso-oidc"
+            }
+          ]
+        },
+        {
+          "title": "多因素认证 (MFA)",
+          "path": "multi-factor-authn/multi-factor-authentication"
+        },
+        {
+          "title": "审计日志",
+          "path": "dashboard/audit-log"
+        },
+        {
+          "title": "速率限制",
+          "path": "rate-limit/rate-limit"
+        },
+        {
+          "title": "命名空间",
+          "path": "multi-tenancy/namespace-overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "创建命名空间",
+              "path": "multi-tenancy/create-namespace"
+            },
+            {
+              "title": "配置与管理命名空间",
+              "path": "multi-tenancy/configure-manage-namespace"
+            },
+            {
+              "title": "快速体验命名空间功能",
+              "path": "multi-tenancy/namespace-quick-start"
+            }
+          ]
+        },
+        {
+          "title": "日志及可观测性",
+          "path": "observability/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "指标",
+              "path": "observability/metrics-and-stats"
+            },
+            {
+              "title": "告警",
+              "path": "observability/alarms"
+            },
+            {
+              "title": "日志",
+              "path": "observability/log"
+            },
+            {
+              "title": "主题监控",
+              "path": "observability/topic-metrics"
+            },
+            {
+              "title": "慢订阅统计",
+              "path": "observability/slow-subscribers-statistics"
+            },
+            {
+              "title": "日志追踪",
+              "path": "observability/tracer"
+            },
+            {
+              "title": "系统主题",
+              "path": "observability/mqtt-system-topics"
+            },
+            {
+              "title": "集成 Prometheus",
+              "path": "observability/prometheus"
+            },
+            {
+              "title": "集成 Datadog",
+              "path": "observability/datadog"
+            },
+            {
+              "title": "集成 OpenTelemetry",
+              "path": "observability/opentelemetry/opentelemetry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "指标",
+                  "path": "observability/opentelemetry/metrics"
+                },
+                {
+                  "title": "日志",
+                  "path": "observability/opentelemetry/logs"
+                },
+                {
+                  "title": "追踪",
+                  "path": "observability/opentelemetry/traces"
+                },
+                {
+                  "title": "端到端追踪",
+                  "path": "observability/opentelemetry/e2e-traces"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "备份与恢复",
+          "path": "operations/backup-restore"
+        },
+        {
+          "title": "插件与扩展",
+          "path": "extensions/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "钩子",
+              "path": "extensions/hooks"
+            },
+            {
+              "title": "插件",
+              "path": "extensions/plugins",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "开发 EMQX 插件",
+                  "path": "extensions/plugin-development"
+                },
+                {
+                  "title": "自定义插件逻辑",
+                  "path": "extensions/plugin-example"
+                },
+                {
+                  "title": "管理插件",
+                  "path": "extensions/plugin-management"
+                }
+              ]
+            },
+            {
+              "title": "多语言 - 钩子扩展",
+              "path": "extensions/exhook"
+            }
+          ]
+        },
+        {
+          "title": "遥测",
+          "path": "telemetry/telemetry"
+        }
+      ]
+    },
+    {
+      "title": "高级功能",
+      "path": "mqtt-over-quic/advanced-feature",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT over QUIC",
+          "path": "mqtt-over-quic/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "优势与特性",
+              "path": "mqtt-over-quic/features-mqtt-over-quic"
+            },
+            {
+              "title": "快速开始",
+              "path": "mqtt-over-quic/getting-started"
+            }
+          ]
+        },
+        {
+          "title": "集群连接",
+          "path": "cluster-linking/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "集群连接快速开始",
+              "path": "cluster-linking/quick-start"
+            },
+            {
+              "title": "配置集群连接",
+              "path": "cluster-linking/configuration"
+            }
+          ]
+        },
+        {
+          "title": "基于 MQTT 的文件传输",
+          "path": "file-transfer/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "快速体验 MQTT 文件传输",
+              "path": "file-transfer/quick-start"
+            },
+            {
+              "title": "文件传输服务端配置",
+              "path": "file-transfer/broker"
+            },
+            {
+              "title": "文件传输客户端开发",
+              "path": "file-transfer/client"
+            }
+          ]
+        },
+        {
+          "title": "多协议网关",
+          "path": "gateway/gateway",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Stomp 协议网关",
+              "path": "gateway/stomp"
+            },
+            {
+              "title": "MQTT-SN 协议网关",
+              "path": "gateway/mqttsn"
+            },
+            {
+              "title": "CoAP 协议网关",
+              "path": "gateway/coap"
+            },
+            {
+              "title": "LwM2M 协议网关",
+              "path": "gateway/lwm2m"
+            },
+            {
+              "title": "ExProto 协议网关",
+              "path": "gateway/exproto"
+            },
+            {
+              "title": "OCPP 网关",
+              "path": "gateway/ocpp"
+            },
+            {
+              "title": "JT/T 808 协议网关",
+              "path": "gateway/jt808",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "JT/T 808 2013 网关数据交换格式",
+                  "path": "gateway/jt808_data_exchange"
+                }
+              ]
+            },
+            {
+              "title": "NATS 协议网关",
+              "path": "gateway/nats"
+            },
+            {
+              "title": "GB/T 32960 协议网关",
+              "path": "gateway/gbt32960"
+            }
+          ]
+        },
+        {
+          "title": "客户端属性",
+          "path": "client-attributes/client-attributes"
+        }
+      ]
+    },
+    {
+      "title": "实用教程",
+      "path": "tutorial/tutorial",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT 客户端编程",
+          "path": "tutorial/mqtt-programming"
+        }
+      ]
+    },
+    {
+      "title": "EMQX 基础知识",
+      "path": "design/emqx-essentials",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT 教程",
+          "path": "https://www.emqx.com/zh/mqtt-guide"
+        },
+        {
+          "title": "设计与实现",
+          "path": "design/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX 集群设计",
+              "path": "design/clustering"
+            },
+            {
+              "title": "飞行窗口和消息队列",
+              "path": "design/inflight-window-and-message-queue"
+            },
+            {
+              "title": "消息重传",
+              "path": "design/retransmission"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "参考指南",
+      "path": "introduction/reference",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT 5.0 协议",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+        },
+        {
+          "title": "MQTT 3.1.1 协议",
+          "path": "http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+        },
+        {
+          "title": "MQTT 术语",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003"
+        },
+        {
+          "title": "MQTT 5.0 特性",
+          "path": "https://www.emqx.com/zh/blog/introduction-to-mqtt-5"
+        },
+        {
+          "title": "MQTT 原因码",
+          "path": "https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack"
+        }
+      ]
+    },
+    {
+      "title": "EMQX 企业版版本发布历史",
+      "path": "changes/all-changes-ee",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "EMQX 企业版 v5 版本",
+          "path": "changes/changes-ee-v5"
+        },
+        {
+          "title": "EMQX 企业版 v4 版本",
+          "path": "changes/changes-ee-v4"
+        },
+        {
+          "title": "已知问题",
+          "children": [
+            {
+              "title": "EMQX 5.9 已知问题",
+              "path": "changes/known-issues-5.9"
+            },
+            {
+              "title": "EMQX 5.8 已知问题",
+              "path": "changes/known-issues-5.8"
+            },
+            {
+              "title": "EMQX 5.3 已知问题",
+              "path": "changes/known-issues-5.3"
+            },
+            {
+              "title": "EMQX 5.1 已知问题",
+              "path": "changes/known-issues-5.1"
+            }
+          ]
+        },
+        {
+          "title": "不兼容变更",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX 5.10 中的不兼容变更",
+              "path": "changes/breaking-changes-5.10"
+            },
+            {
+              "title": "EMQX 5.9 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.9"
+            },
+            {
+              "title": "EMQX 5.8 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.8"
+            },
+            {
+              "title": "EMQX 5.7 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.7"
+            },
+            {
+              "title": "EMQX 5.6 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.6"
+            },
+            {
+              "title": "EMQX 5.5 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.5"
+            },
+            {
+              "title": "EMQX 5.4 中的不兼容变更",
+              "path": "changes/breaking-changes-ee-5.4"
+            }
+          ]
+        },
+        {
+          "title": "从 EMQX 4.4 到 EMQX 5.1 的不兼容变更",
+          "path": "changes/breaking-changes-5.1.0",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "认证 / 授权从 EMQX 4.4 到 EMQX 5.1 的不兼容变更",
+              "path": "changes/auth-4.4-to-5.1-compatibility"
+            },
+            {
+              "title": "数据集成从 EMQX 4.4 到 EMQX 5.1 的不兼容变更",
+              "path": "changes/data-integration-4.4-to-5.1-incompatibility"
+            },
+            {
+              "title": "网关从 EMQX 4.4 到 EMQX 5.1 的不兼容变更",
+              "path": "changes/gateway-4.4-to-5.1-incompatibility"
+            }
+          ]
+        },
+        {
+          "title": "产品生命周期结束日期",
+          "path": "changes/eol-ee"
+        }
+      ]
+    }
+  ],
+  "ja": [
+    {
+      "title": "EMQX 概要",
+      "path": "./",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "新機能",
+          "path": "getting-started/new-features"
+        },
+        {
+          "title": "機能比較",
+          "path": "getting-started/feature-comparison"
+        },
+        {
+          "title": "はじめに",
+          "path": "getting-started/getting-started"
+        },
+        {
+          "title": "運用制限",
+          "path": "getting-started/restrictions"
+        },
+        {
+          "title": "FAQ",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "概念FAQ",
+              "path": "faq/concept"
+            },
+            {
+              "title": "デプロイFAQ",
+              "path": "faq/deployment"
+            },
+            {
+              "title": "機能FAQ",
+              "path": "faq/feature"
+            },
+            {
+              "title": "利用FAQ",
+              "path": "faq/faq"
+            }
+          ]
+        },
+        {
+          "title": "技術サポート",
+          "path": "support/technical-support"
+        }
+      ]
+    },
+    {
+      "title": "インストールとデプロイ",
+      "path": "deploy/install",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "インストールガイド",
+          "path": "deploy/install-enterprise",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Docker",
+              "path": "deploy/install-docker"
+            },
+            {
+              "title": "Debian",
+              "path": "deploy/install-debian"
+            },
+            {
+              "title": "Ubuntu",
+              "path": "deploy/install-ubuntu"
+            },
+            {
+              "title": "CentOS/RHEL",
+              "path": "deploy/install-rhel"
+            },
+            {
+              "title": "macOS",
+              "path": "deploy/install-macOS"
+            },
+            {
+              "title": "Kubernetes",
+              "path": "https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html"
+            },
+            {
+              "title": "ライセンスの設定",
+              "path": "deploy/license"
+            }
+          ]
+        },
+        {
+          "title": "アップグレードガイド",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "ローリングアップグレード",
+              "path": "deploy/rolling-upgrades"
+            },
+            {
+              "title": "EMQX クラスターの 4.4 から 5.x へのアップグレード",
+              "path": "deploy/upgrade-cluster"
+            },
+            {
+              "title": "Kubernetes での EMQX アップグレード",
+              "path": "https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "開発者ガイド",
+      "path": "connect-emqx/developer-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "パブリッシュ/サブスクライブ",
+          "path": "messaging/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "MQTT コアコンセプト",
+              "path": "messaging/mqtt-concepts"
+            },
+            {
+              "title": "MQTTクライアントによるテスト",
+              "path": "messaging/publish-and-subscribe"
+            },
+            {
+              "title": "MQTT 共有サブスクリプション",
+              "path": "messaging/mqtt-shared-subscription"
+            },
+            {
+              "title": "MQTT Retained Message",
+              "path": "messaging/mqtt-retained-message"
+            },
+            {
+              "title": "MQTT Will Message",
+              "path": "messaging/mqtt-will-message"
+            },
+            {
+              "title": "排他サブスクリプション",
+              "path": "messaging/mqtt-exclusive-subscription"
+            },
+            {
+              "title": "遅延パブリッシュ",
+              "path": "messaging/mqtt-delayed-publish"
+            },
+            {
+              "title": "Auto Subscribe",
+              "path": "messaging/mqtt-auto-subscription"
+            },
+            {
+              "title": "トピック書き換え",
+              "path": "messaging/mqtt-topic-rewrite"
+            },
+            {
+              "title": "ワイルドカードサブスクリプション",
+              "path": "messaging/mqtt-wildcard-subscription"
+            }
+          ]
+        },
+        {
+          "title": "MQTT Durable Sessions",
+          "path": "durability/durability_introduction"
+        },
+        {
+          "title": "クライアント SDK",
+          "path": "connect-emqx/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "C SDKによる接続",
+              "path": "connect-emqx/c"
+            },
+            {
+              "title": "Java SDKで接続する",
+              "path": "connect-emqx/java"
+            },
+            {
+              "title": "Go SDKによる接続",
+              "path": "connect-emqx/go"
+            },
+            {
+              "title": "Python SDKでの接続",
+              "path": "connect-emqx/python"
+            },
+            {
+              "title": "JavaScript SDK を使った接続",
+              "path": "connect-emqx/javascript"
+            }
+          ]
+        },
+        {
+          "title": "REST API",
+          "path": "admin/api",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX エンタープライズ API ドキュメント",
+              "path": "https://docs.emqx.com/ja/enterprise/v5.10/admin/api-docs.html"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "クラスター構築",
+      "path": "deploy/cluster/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "アーキテクチャ",
+          "path": "deploy/cluster/mria-introduction"
+        },
+        {
+          "title": "クラスターの作成と管理",
+          "path": "deploy/cluster/create-cluster"
+        },
+        {
+          "title": "クラスターのセキュリティ",
+          "path": "deploy/cluster/security"
+        },
+        {
+          "title": "クラスターのロードバランサー設定",
+          "path": "deploy/cluster/lb",
+          "children": [
+            {
+              "title": "NGINXによるEMQXクラスターのロードバランス",
+              "path": "deploy/cluster/lb-nginx"
+            },
+            {
+              "title": "HAProxyによるEMQXクラスターのロードバランス",
+              "path": "deploy/cluster/lb-haproxy"
+            }
+          ]
+        },
+        {
+          "title": "ノードの退避とクラスター負荷再分散",
+          "path": "deploy/cluster/rebalancing"
+        },
+        {
+          "title": "パフォーマンスとチューニング",
+          "path": "performance/overview",
+          "children": [
+            {
+              "title": "パフォーマンスチューニング（Linux）",
+              "path": "performance/tune"
+            },
+            {
+              "title": "eMQTT-Benchによるパフォーマンステスト",
+              "path": "performance/benchmark-emqtt-bench"
+            },
+            {
+              "title": "参照用テストシナリオと結果",
+              "path": "performance/performance-reference"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "セキュリティガイド",
+      "path": "access-control/security-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "ネットワークと TLS",
+          "path": "network/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "SSL/TLS 接続の有効化",
+              "path": "network/emqx-mqtt-tls"
+            },
+            {
+              "title": "クライアントTLS接続コード例",
+              "path": "network/mqtt-client-tls"
+            },
+            {
+              "title": "SSL/TLS証明書の取得",
+              "path": "network/tls-certificate"
+            },
+            {
+              "title": "CRL チェック",
+              "path": "network/crl"
+            },
+            {
+              "title": "OCSP Stapling",
+              "path": "network/ocsp"
+            }
+          ]
+        },
+        {
+          "title": "認証",
+          "path": "access-control/authn/authn",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "X.509証明書認証",
+              "path": "access-control/authn/x509"
+            },
+            {
+              "title": "JWT認証",
+              "path": "access-control/authn/jwt"
+            },
+            {
+              "title": "パスワード認証",
+              "path": "access-control/authn/pwoverview",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "組み込みデータベースの使用",
+                  "path": "access-control/authn/mnesia"
+                },
+                {
+                  "title": "MySQLとの統合",
+                  "path": "access-control/authn/mysql"
+                },
+                {
+                  "title": "MongoDBとの統合",
+                  "path": "access-control/authn/mongodb"
+                },
+                {
+                  "title": "PostgreSQLとの統合",
+                  "path": "access-control/authn/postgresql"
+                },
+                {
+                  "title": "Redisとの統合",
+                  "path": "access-control/authn/redis"
+                },
+                {
+                  "title": "LDAPとの統合",
+                  "path": "access-control/authn/ldap"
+                },
+                {
+                  "title": "HTTPサービスの利用",
+                  "path": "access-control/authn/http"
+                }
+              ]
+            },
+            {
+              "title": "MQTT 5.0 強化認証 - SCRAM",
+              "path": "access-control/authn/scram"
+            },
+            {
+              "title": "REST APIベースの MQTT 5.0 SCRAM 認証",
+              "path": "access-control/authn/scram_restapi"
+            },
+            {
+              "title": "MQTT 5.0 強化認証 - Kerberos",
+              "path": "access-control/authn/kerberos"
+            },
+            {
+              "title": "Client-Info 認証",
+              "path": "access-control/authn/cinfo"
+            },
+            {
+              "title": "PSK認証",
+              "path": "network/psk-authentication"
+            },
+            {
+              "title": "HTTP API を使ったユーザーデータ管理",
+              "path": "access-control/authn/user_management"
+            },
+            {
+              "title": "アクセスコントロールリスト",
+              "path": "access-control/authn/acl"
+            }
+          ]
+        },
+        {
+          "title": "認可",
+          "path": "access-control/authz/authz",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "ACLファイルの使用",
+              "path": "access-control/authz/file"
+            },
+            {
+              "title": "組み込みデータベースの使用",
+              "path": "access-control/authz/mnesia"
+            },
+            {
+              "title": "MySQLとの連携",
+              "path": "access-control/authz/mysql"
+            },
+            {
+              "title": "MongoDBとの統合",
+              "path": "access-control/authz/mongodb"
+            },
+            {
+              "title": "PostgreSQLとの統合",
+              "path": "access-control/authz/postgresql"
+            },
+            {
+              "title": "Redisとの統合",
+              "path": "access-control/authz/redis"
+            },
+            {
+              "title": "LDAPとの統合",
+              "path": "access-control/authz/ldap"
+            },
+            {
+              "title": "HTTPサービスの利用",
+              "path": "access-control/authz/http"
+            }
+          ]
+        },
+        {
+          "title": "Banned Clients",
+          "path": "access-control/blacklist"
+        },
+        {
+          "title": "Flapping Detect",
+          "path": "access-control/flapping-detect"
+        }
+      ]
+    },
+    {
+      "title": "ルールエンジン",
+      "path": "data-integration/rules",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "ルールの作成",
+          "path": "data-integration/rule-get-started"
+        },
+        {
+          "title": "Rule SQL リファレンス",
+          "path": "data-integration/rule-sql-syntax"
+        },
+        {
+          "title": "データソースとフィールド",
+          "path": "data-integration/rule-sql-events-and-fields"
+        },
+        {
+          "title": "組み込みSQL関数",
+          "path": "data-integration/rule-sql-builtin-functions"
+        },
+        {
+          "title": "jq 関数",
+          "path": "data-integration/rule-sql-jq"
+        },
+        {
+          "title": "スマートデータハブ",
+          "path": "data-integration/smart-data-hub",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "スキーマレジストリ",
+              "path": "data-integration/schema-registry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "スキーマレジストリの例 - Avro",
+                  "path": "data-integration/schema-registry-example-avro"
+                },
+                {
+                  "title": "スキーマレジストリの例 - Protobuf",
+                  "path": "data-integration/schema-registry-example-protobuf"
+                },
+                {
+                  "title": "スキーマレジストリの例 - 外部HTTPサーバー",
+                  "path": "data-integration/schema-registry-example-external-http"
+                },
+                {
+                  "title": "Sparkplug B",
+                  "path": "data-integration/sparkplug"
+                }
+              ]
+            },
+            {
+              "title": "スキーマバリデーション",
+              "path": "data-integration/schema-validation"
+            },
+            {
+              "title": "メッセージ変換",
+              "path": "data-integration/message-transformation"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Flow デザイナー",
+      "path": "flow-designer/introduction",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "LLM ベースの MQTT データ処理",
+          "path": "flow-designer/llm-based-data-processing",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "クイックスタート：OpenAIノードを使ったFlowの作成",
+              "path": "flow-designer/openai-node-quick-start"
+            },
+            {
+              "title": "クイックスタート：Anthropicノードを使ったFlowの作成",
+              "path": "flow-designer/anthropic-node-quick-start"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "データ統合",
+      "path": "data-integration/data-bridges",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "Connector",
+          "path": "data-integration/connector"
+        },
+        {
+          "title": "Webhook",
+          "path": "data-integration/webhook"
+        },
+        {
+          "title": "Apache Doris",
+          "path": "data-integration/apache-doris"
+        },
+        {
+          "title": "Apache Kafka",
+          "path": "data-integration/data-bridge-kafka"
+        },
+        {
+          "title": "Apache IoTDB",
+          "path": "data-integration/data-bridge-iotdb"
+        },
+        {
+          "title": "Apache Pulsar",
+          "path": "data-integration/data-bridge-pulsar"
+        },
+        {
+          "title": "AWS Kinesis",
+          "path": "data-integration/data-bridge-kinesis"
+        },
+        {
+          "title": "AWS S3",
+          "path": "data-integration/s3"
+        },
+        {
+          "title": "AWS S3 テーブル",
+          "path": "data-integration/s3-tables"
+        },
+        {
+          "title": "Azure Blob Storage",
+          "path": "data-integration/azure-blob-storage"
+        },
+        {
+          "title": "Azure Event Hubs",
+          "path": "data-integration/data-bridge-azure-event-hub"
+        },
+        {
+          "title": "Cassandra",
+          "path": "data-integration/data-bridge-cassa"
+        },
+        {
+          "title": "ClickHouse",
+          "path": "data-integration/data-bridge-clickhouse"
+        },
+        {
+          "title": "Confluent",
+          "path": "data-integration/confluent-sink"
+        },
+        {
+          "title": "Couchbase",
+          "path": "data-integration/data-bridge-couchbase"
+        },
+        {
+          "title": "Datalayers",
+          "path": "data-integration/data-bridge-datalayers"
+        },
+        {
+          "title": "Disk Log",
+          "path": "data-integration/disk-log"
+        },
+        {
+          "title": "DynamoDB",
+          "path": "data-integration/data-bridge-dynamo"
+        },
+        {
+          "title": "Elasticsearch",
+          "path": "data-integration/elasticsearch"
+        },
+        {
+          "title": "GCP PubSub",
+          "path": "data-integration/data-bridge-gcp-pubsub"
+        },
+        {
+          "title": "GreptimeDB",
+          "path": "data-integration/data-bridge-greptimedb"
+        },
+        {
+          "title": "HStreamDB",
+          "path": "data-integration/data-bridge-hstreamdb"
+        },
+        {
+          "title": "HTTP サーバー",
+          "path": "data-integration/data-bridge-webhook"
+        },
+        {
+          "title": "InfluxDB",
+          "path": "data-integration/data-bridge-influxdb"
+        },
+        {
+          "title": "Lindorm",
+          "path": "data-integration/lindorm"
+        },
+        {
+          "title": "Microsoft SQL Server",
+          "path": "data-integration/data-bridge-sqlserver"
+        },
+        {
+          "title": "MongoDB",
+          "path": "data-integration/data-bridge-mongodb"
+        },
+        {
+          "title": "MQTT",
+          "path": "data-integration/data-bridge-mqtt"
+        },
+        {
+          "title": "MySQL",
+          "path": "data-integration/data-bridge-mysql"
+        },
+        {
+          "title": "OpenTSDB",
+          "path": "data-integration/data-bridge-opents"
+        },
+        {
+          "title": "Oracle Database",
+          "path": "data-integration/data-bridge-oracle"
+        },
+        {
+          "title": "PostgreSQL",
+          "path": "data-integration/data-bridge-pgsql"
+        },
+        {
+          "title": "RabbitMQ",
+          "path": "data-integration/data-bridge-rabbitmq"
+        },
+        {
+          "title": "Redis",
+          "path": "data-integration/data-bridge-redis"
+        },
+        {
+          "title": "RocketMQ",
+          "path": "data-integration/data-bridge-rocketmq"
+        },
+        {
+          "title": "Snowflake",
+          "path": "data-integration/snowflake"
+        },
+        {
+          "title": "SysKeeper",
+          "path": "data-integration/syskeeper"
+        },
+        {
+          "title": "Tablestore",
+          "path": "data-integration/tablestore"
+        },
+        {
+          "title": "TDengine",
+          "path": "data-integration/data-bridge-tdengine"
+        },
+        {
+          "title": "TimescaleDB",
+          "path": "data-integration/data-bridge-timescale"
+        }
+      ]
+    },
+    {
+      "title": "管理者ガイド",
+      "path": "admin/admin-guide",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "設定ファイル",
+          "path": "configuration/configuration",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "クラスター",
+              "path": "configuration/cluster"
+            },
+            {
+              "title": "リスナー",
+              "path": "configuration/listener"
+            },
+            {
+              "title": "MQTT",
+              "path": "configuration/mqtt"
+            },
+            {
+              "title": "フラッピング検出",
+              "path": "configuration/flapping"
+            },
+            {
+              "title": "リミッター",
+              "path": "configuration/limiter"
+            },
+            {
+              "title": "ログ",
+              "path": "configuration/logs"
+            },
+            {
+              "title": "Prometheus",
+              "path": "configuration/prometheus"
+            },
+            {
+              "title": "ダッシュボード",
+              "path": "configuration/dashboard"
+            },
+            {
+              "title": "ライセンス",
+              "path": "configuration/license"
+            }
+          ]
+        },
+        {
+          "title": "EMQX エンタープライズ設定マニュアル",
+          "path": "https://docs.emqx.com/ja/enterprise/v5.10.0/hocon/"
+        },
+        {
+          "title": "コマンドラインインターフェース",
+          "path": "admin/cli"
+        },
+        {
+          "title": "MQTT セッション永続化",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Durable Sessions の設定と管理",
+              "path": "durability/management"
+            },
+            {
+              "title": "データレプリカの管理",
+              "path": "durability/managing-replication"
+            }
+          ]
+        },
+        {
+          "title": "EMQX ダッシュボード",
+          "path": "dashboard/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "ダッシュボード ホームページ",
+              "path": "dashboard/dashboard"
+            },
+            {
+              "title": "監視",
+              "path": "dashboard/monitoring",
+              "children": [
+                {
+                  "title": "クライアント",
+                  "path": "dashboard/connections/connections"
+                },
+                {
+                  "title": "サブスクリプション管理",
+                  "path": "dashboard/subscriptions/overview"
+                },
+                {
+                  "title": "Retained Messages",
+                  "path": "dashboard/retained"
+                },
+                {
+                  "title": "遅延パブリッシュ",
+                  "path": "dashboard/delay-pub"
+                }
+              ]
+            },
+            {
+              "title": "アクセスコントロール",
+              "path": "dashboard/acloverview",
+              "children": [
+                {
+                  "title": "認証",
+                  "path": "dashboard/authn"
+                },
+                {
+                  "title": "Authorization",
+                  "path": "dashboard/authz"
+                }
+              ]
+            },
+            {
+              "title": "統合",
+              "path": "dashboard/bridgeoverview",
+              "children": [
+                {
+                  "title": "ルール",
+                  "path": "dashboard/rules"
+                }
+              ]
+            },
+            {
+              "title": "スマートデータハブ",
+              "path": "dashboard/data-hub"
+            },
+            {
+              "title": "管理",
+              "path": "dashboard/configuration",
+              "children": [
+                {
+                  "title": "クラスター設定",
+                  "path": "dashboard/cluster_settings"
+                },
+                {
+                  "title": "Advanced MQTT",
+                  "path": "dashboard/advanced_mqtt"
+                },
+                {
+                  "title": "Extensions",
+                  "path": "dashboard/extensions"
+                }
+              ]
+            },
+            {
+              "title": "診断",
+              "path": "dashboard/diagnose"
+            },
+            {
+              "title": "システム",
+              "path": "dashboard/system"
+            }
+          ]
+        },
+        {
+          "title": "シングルサインオン (SSO)",
+          "path": "dashboard/sso",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "OpenLDAP と Microsoft Entra ID の SSO 設定",
+              "path": "dashboard/sso-ldap"
+            },
+            {
+              "title": "SAMLベースのSSOの設定",
+              "path": "dashboard/sso-saml"
+            },
+            {
+              "title": "OIDCベースのSSO設定",
+              "path": "dashboard/sso-oidc"
+            }
+          ]
+        },
+        {
+          "title": "多要素認証 (MFA)",
+          "path": "multi-factor-authn/multi-factor-authentication"
+        },
+        {
+          "title": "Audit Log",
+          "path": "dashboard/audit-log"
+        },
+        {
+          "title": "レートリミット",
+          "path": "rate-limit/rate-limit"
+        },
+        {
+          "title": "ネームスペース",
+          "path": "multi-tenancy/namespace-overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "ネームスペースの作成",
+              "path": "multi-tenancy/create-namespace"
+            },
+            {
+              "title": "ネームスペースの設定と管理",
+              "path": "multi-tenancy/configure-manage-namespace"
+            },
+            {
+              "title": "クイックスタート：ネームスペースの体験",
+              "path": "multi-tenancy/namespace-quick-start"
+            }
+          ]
+        },
+        {
+          "title": "ログと可観測性",
+          "path": "observability/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "統計情報とメトリクス",
+              "path": "observability/metrics-and-stats"
+            },
+            {
+              "title": "アラーム",
+              "path": "observability/alarms"
+            },
+            {
+              "title": "ログ",
+              "path": "observability/log"
+            },
+            {
+              "title": "トピックメトリクス",
+              "path": "observability/topic-metrics"
+            },
+            {
+              "title": "スローサブスクリプション",
+              "path": "observability/slow-subscribers-statistics"
+            },
+            {
+              "title": "ログトレース",
+              "path": "observability/tracer"
+            },
+            {
+              "title": "システムトピック",
+              "path": "observability/mqtt-system-topics"
+            },
+            {
+              "title": "Prometheusとの統合",
+              "path": "observability/prometheus"
+            },
+            {
+              "title": "Datadogとの統合",
+              "path": "observability/datadog"
+            },
+            {
+              "title": "OpenTelemetry との統合",
+              "path": "observability/opentelemetry/opentelemetry",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "指標",
+                  "path": "observability/opentelemetry/metrics"
+                },
+                {
+                  "title": "ログ",
+                  "path": "observability/opentelemetry/logs"
+                },
+                {
+                  "title": "トレース",
+                  "path": "observability/opentelemetry/traces"
+                },
+                {
+                  "title": "エンドツーエンドトレース",
+                  "path": "observability/opentelemetry/e2e-traces"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "バックアップとリストア",
+          "path": "operations/backup-restore"
+        },
+        {
+          "title": "プラグインと拡張",
+          "path": "extensions/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "Hooks",
+              "path": "extensions/hooks"
+            },
+            {
+              "title": "プラグイン",
+              "path": "extensions/plugins",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "EMQXプラグインの開発",
+                  "path": "extensions/plugin-development"
+                },
+                {
+                  "title": "プラグインロジックのカスタマイズ",
+                  "path": "extensions/plugin-example"
+                },
+                {
+                  "title": "プラグイン管理",
+                  "path": "extensions/plugin-management"
+                }
+              ]
+            },
+            {
+              "title": "gRPC Hook Extension",
+              "path": "extensions/exhook"
+            }
+          ]
+        },
+        {
+          "title": "テレメトリ",
+          "path": "telemetry/telemetry"
+        }
+      ]
+    },
+    {
+      "title": "高度な機能",
+      "path": "mqtt-over-quic/advanced-feature",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT over QUIC",
+          "path": "mqtt-over-quic/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "特長と利点",
+              "path": "mqtt-over-quic/features-mqtt-over-quic"
+            },
+            {
+              "title": "MQTT over QUIC の利用",
+              "path": "mqtt-over-quic/getting-started"
+            }
+          ]
+        },
+        {
+          "title": "クラスターリンク",
+          "path": "cluster-linking/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "クラスターリンクのクイックスタート",
+              "path": "cluster-linking/quick-start"
+            },
+            {
+              "title": "クラスターリンクの設定",
+              "path": "cluster-linking/configuration"
+            }
+          ]
+        },
+        {
+          "title": "MQTT ベースのファイル転送",
+          "path": "file-transfer/introduction",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "MQTTファイル転送のクイックスタート",
+              "path": "file-transfer/quick-start"
+            },
+            {
+              "title": "ファイル転送サーバー側設定の構成",
+              "path": "file-transfer/broker"
+            },
+            {
+              "title": "ファイル転送クライアント開発",
+              "path": "file-transfer/client"
+            }
+          ]
+        },
+        {
+          "title": "マルチプロトコルゲートウェイ",
+          "path": "gateway/gateway",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "STOMP ゲートウェイ",
+              "path": "gateway/stomp"
+            },
+            {
+              "title": "MQTT-SN ゲートウェイ",
+              "path": "gateway/mqttsn"
+            },
+            {
+              "title": "CoAP ゲートウェイ",
+              "path": "gateway/coap"
+            },
+            {
+              "title": "LwM2M ゲートウェイ",
+              "path": "gateway/lwm2m"
+            },
+            {
+              "title": "ExProto ゲートウェイ",
+              "path": "gateway/exproto"
+            },
+            {
+              "title": "OCPP ゲートウェイ",
+              "path": "gateway/ocpp"
+            },
+            {
+              "title": "JT/T 808 ゲートウェイ",
+              "path": "gateway/jt808",
+              "collapsed": true,
+              "children": [
+                {
+                  "title": "JT/T 808 ゲートウェイデータ交換フォーマット",
+                  "path": "gateway/jt808_data_exchange"
+                }
+              ]
+            },
+            {
+              "title": "NATS プロトコルゲートウェイ",
+              "path": "gateway/nats"
+            },
+            {
+              "title": "GB/T 32960 ゲートウェイ",
+              "path": "gateway/gbt32960"
+            }
+          ]
+        },
+        {
+          "title": "MQTT クライアント属性",
+          "path": "client-attributes/client-attributes"
+        }
+      ]
+    },
+    {
+      "title": "実用的なチュートリアル",
+      "path": "tutorial/tutorial",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTTプログラミング",
+          "path": "tutorial/mqtt-programming"
+        }
+      ]
+    },
+    {
+      "title": "EMQX 基礎知識",
+      "path": "design/emqx-essentials",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "設計と実装",
+          "path": "design/overview",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQXクラスタリングの設計",
+              "path": "design/clustering"
+            },
+            {
+              "title": "インフライトおよびメッセージキュー",
+              "path": "design/inflight-window-and-message-queue"
+            },
+            {
+              "title": "メッセージ再送信",
+              "path": "design/retransmission"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "リファレンス",
+      "path": "introduction/reference",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "MQTT 5.0 仕様",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html"
+        },
+        {
+          "title": "MQTT 3.1.1 仕様",
+          "path": "http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+        },
+        {
+          "title": "MQTT 用語集",
+          "path": "https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901003"
+        },
+        {
+          "title": "MQTT 5.0 機能",
+          "path": "https://www.emqx.com/ja/blog/introduction-to-mqtt-5"
+        },
+        {
+          "title": "MQTT リーズンコード",
+          "path": "https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack"
+        }
+      ]
+    },
+    {
+      "title": "EMQX エンタープライズ版リリースノート",
+      "path": "changes/all-changes-ee",
+      "collapsed": true,
+      "children": [
+        {
+          "title": "EMQX Enterprise Version 5",
+          "path": "changes/changes-ee-v5"
+        },
+        {
+          "title": "EMQX Enterprise Version 4",
+          "path": "changes/changes-ee-v4"
+        },
+        {
+          "title": "既知の問題",
+          "children": [
+            {
+              "title": "EMQX 5.9 の既知の問題",
+              "path": "changes/known-issues-5.9"
+            },
+            {
+              "title": "EMQX 5.8 の既知の問題",
+              "path": "changes/known-issues-5.8"
+            },
+            {
+              "title": "EMQX 5.3 の既知の問題",
+              "path": "changes/known-issues-5.3"
+            },
+            {
+              "title": "EMQX 5.1 の既知の問題",
+              "path": "changes/known-issues-5.1"
+            }
+          ]
+        },
+        {
+          "title": "非互換の変更",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX 5.10 の互換性のない変更点",
+              "path": "changes/breaking-changes-5.10"
+            },
+            {
+              "title": "Incompatible Changes in EMQX 5.9",
+              "path": "changes/breaking-changes-ee-5.9"
+            },
+            {
+              "title": "EMQX 5.8 の互換性のない変更点",
+              "path": "changes/breaking-changes-ee-5.8"
+            },
+            {
+              "title": "EMQX 5.7 の互換性のない変更点",
+              "path": "changes/breaking-changes-ee-5.7"
+            },
+            {
+              "title": "EMQX 5.6 の非互換変更点",
+              "path": "changes/breaking-changes-ee-5.6"
+            },
+            {
+              "title": "EMQX 5.5 の非互換変更点",
+              "path": "changes/breaking-changes-ee-5.5"
+            },
+            {
+              "title": "EMQX 5.4 における互換性のない変更点",
+              "path": "changes/breaking-changes-ee-5.4"
+            }
+          ]
+        },
+        {
+          "title": "EMQX 4.4 から EMQX 5.1 への非互換変更",
+          "path": "changes/breaking-changes-5.1.0",
+          "collapsed": true,
+          "children": [
+            {
+              "title": "EMQX 4.4 と EMQX 5.1 間の認証／認可の互換性問題",
+              "path": "changes/auth-4.4-to-5.1-compatibility"
+            },
+            {
+              "title": "EMQX 5.1 と EMQX 4.4 間のデータ統合非互換性",
+              "path": "changes/data-integration-4.4-to-5.1-incompatibility"
+            },
+            {
+              "title": "EMQX 4.4 と EMQX 5.1 間のゲートウェイ互換性",
+              "path": "changes/gateway-4.4-to-5.1-incompatibility"
+            }
+          ]
+        },
+        {
+          "title": "製品ライフサイクル終了日",
+          "path": "changes/eol-ee"
+        }
+      ]
+    }
+  ]
+}
