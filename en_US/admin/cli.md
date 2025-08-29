@@ -231,9 +231,13 @@ Failed to leave the cluster: node_not_in_cluster
 
 Forcefully remove a node from the cluster.
 
-Use this command to forcefully remove the specified node from the EMQX cluster.
+Use this command to remove the specified node from the EMQX cluster forcefully.
 
-Note that this operation may cause cluster state inconsistency, so use it with caution.
+::: tip Note
+
+This operation may cause cluster state inconsistency, so use it with caution.
+
+:::
 
 ```bash
 $ emqx ctl cluster force-leave emqx2@127.0.0.1
@@ -316,6 +320,11 @@ This command is to view all subscribed topics in current system.
 
 List all topics. This command can be used to monitor the number and distribution of topics.
 
+:::tip Note
+
+If there are a large number of topic subscriptions in the cluster, the `list` command may be time-consuming and resource-intensive.
+:::
+
 ```bash
 $ emqx ctl topics list
 t/1 -> emqx@127.0.0.1
@@ -329,10 +338,6 @@ Show detailed information about a specific topic.
 $ emqx ctl topics show t/1
 t/1 -> emqx@127.0.0.1
 ```
-
-:::tip
-If there are a large number of topic subscriptions in the cluster, the `list` command may be time-consuming and resource-intensive.
-:::
 
 ## subscriptions
 
@@ -764,7 +769,7 @@ It's recommended to use absolute paths for trace log files when start from comma
 :::
 
 ::: tip
-You can also manage traces from the dashboard UI. See [tracer](../observability/tracer.md).
+You can also manage traces from the dashboard UI. See [Log Trace](../observability/tracer.md).
 :::
 
 ## traces
@@ -923,7 +928,7 @@ This command is useful when you want to force evict cached authz (ACL) data.
 
 Clears authorization cache on all nodes.
 
-```
+```bash
 $ emqx ctl authz cache-clean all
 Authorization cache drain started on all nodes OK
 ```
@@ -932,7 +937,7 @@ Authorization cache drain started on all nodes OK
 
 Clears authorization cache on the given node.
 
-```
+```bash
 $ emqx ctl authz cache-clean node emqx@127.0.0.1
 Authorization cache drain started on node emqx@127.0.0.1 OK
 ```
@@ -1254,9 +1259,9 @@ Print in-use configs (including default values) under the given key. Print ALL k
 
 ### conf load --replace|--merge \<path\>
 
-Load a HOCON format config file. The new configuration values will be overlaid on the existing values by default. Use the --replace flag to replace existing values with the new ones instead. The current node will initiate a cluster wide config change transaction to sync the changes to other nodes in the cluster.
+Load a HOCON format config file. The new configuration values will be overlaid on the existing values by default. Use the `--replace` flag to replace existing values with the new ones instead. The current node will initiate a cluster wide config change transaction to sync the changes to other nodes in the cluster.
 
-NOTE: do not make runtime config changes during rolling upgrade.
+NOTE: Do not make runtime config changes during rolling upgrade.
 
 ## conf cluster_sync
 
@@ -1311,13 +1316,21 @@ $ emqx ctl conf cluster_sync inspect 2
 
 Increment the (currently failing) commit on the given node.
 
-WARNING: This may lead to inconsistent configs among the clustered nodes.
+::: warning Note
+
+This may lead to inconsistent configs among the clustered nodes.
+
+:::
 
 ### conf cluster\_sync fast\_forward [node] \<tnx\_id\>
 
 Fast-forward config change to the given `tnx_id` on the given node.
 
-WARNING: This may lead to inconsistent configs among the clustered nodes.
+::: warning Note
+
+This may lead to inconsistent configs among the clustered nodes.
+
+:::
 
 ### conf cluster\_sync fix
 
