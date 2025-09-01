@@ -1,5 +1,73 @@
 # EMQX Enterprise Version 5
 
+## 6.0.0
+
+### Enhancements
+
+- [#15773](https://github.com/emqx/emqx/pull/15773) Throttle client ID registration during reconnects
+
+  Added throttling for client ID registration if the previous session cleanup is still in progress.
+  This prevents instability when clients reconnect aggressively with the same client ID.
+  Affected clients will receive reason code `137` (Server Busy) in `CONNACK` with Reason-String "THROTTLED".
+  Clients should retry after the previous session cleanup has completed.
+
+  Also fixed the reason code from `133` to `137` when there is another connection in the middle of registering the same client ID.
+
+- [#15730](https://github.com/emqx/emqx/pull/15730) Added support for overriding clientid using authentication results.  If a backend returns a `clientid_override` attribute in its successful authentication result, it'll replace the connecting client's clientid.
+
+  Backends/methods supporting setting `clientid_override` in the authentication result to
+  override clientid:
+
+  - HTTP
+  - JWT
+  - LDAP
+  - MongoDB
+  - MySQL
+  - Postgres
+  - Redis
+
+- [#15650](https://github.com/emqx/emqx/pull/15650) Implement automatic trace log rotation.
+
+  When a trace file size exceeds `trace.max_file_size`, EMQX no longer discards all subsequent events and emits an incomprehensible warning to stderr. Instead, portions of the oldest events are discarded while the most recent ones are retained.
+
+  As such, this also implies that:
+  * EMQX now maintains multiple trace log files per active trace. The layout of the trace directory has changed accordingly.
+  * Trace API has been updated to reflect this behavior. Log Stream API may now return additional errors: in particular, a stream can become stale if the consumer is too slow.
+
+  Additionally, Trace API now manages resources more carefully when handling large trace downloads.
+
+- [#15637](https://github.com/emqx/emqx/pull/15637) Added support for templating message headers and properties for the RabbitMQ Action.
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+
+### Bug Fixes
+
+- [#15783](https://github.com/emqx/emqx/pull/15783) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
+
+- [#15712](https://github.com/emqx/emqx/pull/15712) Fix node boot-up failure during rolling upgrade from older versions (before 5.9)
+
+  In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid “seconds” value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
+
+- [#15708](https://github.com/emqx/emqx/pull/15708) Previously, when restarting a node which had external schema registries configured, they would not load properly.
+
+- [#15706](https://github.com/emqx/emqx/pull/15706) Fixed an issue that could make Message Transformations and Schema Validations behave inconsistently.  If one deleted a Message Transformation / Schema Validation, and then disabled one of the items that followed the deleted one, it would remain enabled.
+
+- [#15683](https://github.com/emqx/emqx/pull/15683) Fix exhook TLS options to allow verify server host name.
+
+- [#15616](https://github.com/emqx/emqx/pull/15616) Consider Kafka connection healthy if `topic_authorization_failed` is received for the default probing topic.
+
+- [#15614](https://github.com/emqx/emqx/pull/15614) QUIC Listener: When TLS key logging is enabled, dump TLS keys even if the handshake fails.
+
+
+- [#15699](https://github.com/emqx/emqx/pull/15699) Fixed issue that caused the built-in authentication data for gateways is incorrectly purged when a node is stopped or shutdown.
+
+- [#15679](https://github.com/emqx/emqx/pull/15679) Fixed a bug where incorrect grouping of built-in authentication data for ExProto, JT/T 808,
+  GB/T 32960, and OCPP gateways caused mutual interference.
+
+- [#15639](https://github.com/emqx/emqx/pull/15639) Fix incorrect counting of the packets.subscribe.auth_error metric.
+
+- [#15543](https://github.com/emqx/emqx/pull/15543) Fixed error when an HTTP request with a large body is sent.
+
 ## 5.10.0
 
 *Release Date: 2025-06-10*
