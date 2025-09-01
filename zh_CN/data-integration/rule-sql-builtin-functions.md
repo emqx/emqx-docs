@@ -1425,7 +1425,7 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### Sparkplug B
 
-EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
+EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`spb_decode` 和`spb_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 ## 日期与时间函数
 

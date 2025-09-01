@@ -958,7 +958,7 @@ map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 
 ### map_to_redis_hset_args(Map) -> list
 
-::: tip 
+::: tip
 
 This function has been introduced since EMQX v5.7.1.
 
@@ -1413,7 +1413,7 @@ The Schema Resigtry is an EMQX Enterprise edition feature.
 
 :::
 
-EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
+EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md).
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
@@ -1433,7 +1433,7 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 
 ### **Sparkplug B Functions**
 
-EMQX Enterprise also has special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+EMQX Enterprise also has special purpose functions for decoding and encoding Sparkplug B messages (`spb_decode` and `spb_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 ## Date and Time Conversion Functions
 
