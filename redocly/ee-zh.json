@@ -317,7 +317,7 @@
         "required": false,
         "schema": {
           "default": 1000,
-          "maximum": 2147483647,
+          "maximum": 67108864,
           "minimum": 0,
           "type": "integer"
         }
@@ -343,13 +343,20 @@
         }
       },
       "trace.position": {
-        "description": "指定从该偏移量开始读取指定的 trace 日志文件。",
+        "description": "Cursor for the current trace position.",
         "in": "query",
         "name": "position",
         "required": false,
         "schema": {
           "default": 0,
-          "type": "integer"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
         }
       }
     },
@@ -455,7 +462,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -796,7 +803,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -1516,6 +1523,11 @@
             "enum": [
               "mongodb"
             ],
+            "type": "string"
+          },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
             "type": "string"
           },
           "collection": {
@@ -2437,7 +2449,7 @@
           },
           "strategy": {
             "default": "roundrobin",
-            "description": "生产者键派发策略，默认为 `roundrobin`，也支持占位符，如：`clientid`、`messageid`、`username`。",
+            "description": "生产者键派发策略。可能的值：`key_dispatch`、`roundrobin`。默认是 `roundrobin`。",
             "oneOf": [
               {
                 "type": "string"
@@ -3176,7 +3188,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -3398,7 +3410,7 @@
       "connector_snowflake_aggregated.put_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "auto_reconnect": {
@@ -3413,7 +3425,7 @@
             "type": "string"
           },
           "dsn": {
-            "description": "Data Source Name (DSN) associated with the installed Snowflake ODBC driver.",
+            "description": "与已安装的 Snowflake ODBC 驱动程序关联的数据源名称（DSN）。",
             "type": "string"
           },
           "enable": {
@@ -3434,18 +3446,18 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_aggregated.proxy_config"
@@ -3464,7 +3476,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -3723,6 +3735,20 @@
           "vm_msacc",
           "vm_statistics",
           "vm_system_info"
+        ],
+        "type": "object"
+      },
+      "mt.bulk_export_ns_configs_in": {
+        "properties": {
+          "namespaces": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "namespaces"
         ],
         "type": "object"
       },
@@ -4013,7 +4039,7 @@
       "connector_snowflake_aggregated.post_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "auto_reconnect": {
@@ -4028,7 +4054,7 @@
             "type": "string"
           },
           "dsn": {
-            "description": "Data Source Name (DSN) associated with the installed Snowflake ODBC driver.",
+            "description": "与已安装的 Snowflake ODBC 驱动程序关联的数据源名称（DSN）。",
             "type": "string"
           },
           "enable": {
@@ -4053,18 +4079,18 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_aggregated.proxy_config"
@@ -4083,7 +4109,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -4321,7 +4347,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -4582,7 +4608,7 @@
             "type": "array"
           },
           "parameters": {
-            "description": "Additional parameters specific using Influx Line Protocol",
+            "description": "使用 Influx Line Protocol 的特定附加参数",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_datalayers.action_parameters_arrow_flight"
@@ -4896,7 +4922,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "username": {
@@ -5235,7 +5261,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -5310,38 +5336,20 @@
             "minimum": 1,
             "type": "integer"
           },
+          "checkpoint_interval": {
+            "default": "5s",
+            "description": "Durable sessions periodically back up their state to disc.<br/>This happens every checkpoint interval.",
+            "example": "12m",
+            "type": "string"
+          },
           "enable": {
             "default": false,
             "description": "使用持久存储来持久化客户端会话。<br/>如果启用，会话和相应的消息将被持久存储，并在服务器停机时保留。<br/><br/>::: warning<br/>发送到持久会话的消息会被存储在磁盘上。<br/>这不可避免地限制了系统的总体吞吐量。<br/>:::",
             "type": "boolean"
           },
-          "heartbeat_interval": {
-            "default": "5000ms",
-            "description": "持久会话每个心跳间隔将其状态备份到磁盘上。<br/><br/>在对过期会话进行垃圾回收时，系统也会考虑心跳间隔的时间。<br/>当会话终止的精确时间不确定时，心跳间隔会作为安全边际添加到会话过期时间中。",
-            "example": "12m",
-            "type": "string"
-          },
-          "idle_poll_interval": {
-            "default": "10s",
-            "description": "持久会话向存储发送轮询请求的过期间隔时间。",
-            "example": "12m",
-            "type": "string"
-          },
           "message_retention_period": {
             "default": "1d",
             "description": "消息服务器会在此时间段内保留发送到持久会话的消息。",
-            "example": "12m",
-            "type": "string"
-          },
-          "session_gc_batch_size": {
-            "default": 100,
-            "description": "每次迭代要垃圾回收的过期持久会话的批量大小。",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "session_gc_interval": {
-            "default": "10m",
-            "description": "执行持久会话垃圾回收的间隔。",
             "example": "12m",
             "type": "string"
           }
@@ -6185,6 +6193,11 @@
             ],
             "type": "string"
           },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
+            "type": "string"
+          },
           "collection": {
             "description": "存储认证数据的集合。",
             "type": "string"
@@ -6324,6 +6337,11 @@
       },
       "authn.hash_method": {
         "properties": {
+          "clientid_override_attribute": {
+            "default": "clientIdOverride",
+            "description": "Indicates which attribute is used to represent a clientid override value.",
+            "type": "string"
+          },
           "is_superuser_attribute": {
             "default": "isSuperuser",
             "description": "指示哪个属性用于表示用户是否为超级用户。",
@@ -6497,7 +6515,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6555,7 +6573,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "Indicates which TCP backend should be used by the listener.<br/><br/>- `gen_tcp`: Standard backend, in use since EMQX 5.0 release.<br/><br/>- `socket`: Experimental backend, looking to improve message latency and compute resource usage.<br/>    Note that some `tcp_options` settings will have no effect when using this backend, e.g.: `high_watermark` and `send_timeout_close`.<br/>    <br/>Changing the backend require restarting the listener, which will terminate all its active connections.",
+            "description": "指示侦听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：自 EMQX 5.0 版本以来使用的标准后端。<br/><br/>- `socket`：实验性后端，旨在改善消息延迟和计算资源使用。<br/>    请注意，使用此后端时，某些 `tcp_options` 设置将无效，例如：`high_watermark` 和 `send_timeout_close`。<br/>    <br/>更改后端需要重新启动侦听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -6601,6 +6619,27 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "mt.bulk_import_ns_configs_in": {
+        "properties": {
+          "configs": {
+            "properties": {
+              "$name": {
+                "example": {},
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "configs",
+          "dry_run"
+        ],
         "type": "object"
       },
       "bridge_opents.put_bridge_v2": {
@@ -6752,7 +6791,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6954,6 +6993,14 @@
             "description": "消息将被发送到的 RabbitMQ 交换机的名称。支持使用模版（例如：`e-${payload.e}`）。",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
@@ -6998,6 +7045,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -7174,6 +7229,11 @@
             "default": "${password}",
             "description": "绑定密码的模板。",
             "example": "${password}",
+            "type": "string"
+          },
+          "clientid_override_attribute": {
+            "default": "clientIdOverride",
+            "description": "Indicates which attribute is used to represent a clientid override value.",
             "type": "string"
           },
           "is_superuser_attribute": {
@@ -7391,7 +7451,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -7493,7 +7553,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -8084,7 +8144,7 @@
             "type": "array"
           },
           "number": {
-            "description": "运行此监听器的节点数量。",
+            "description": "此监听器正在运行的节点数量。",
             "minimum": 1,
             "type": "integer"
           },
@@ -8395,7 +8455,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -8675,7 +8735,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -8905,7 +8965,7 @@
             "type": "string"
           },
           "name": {
-            "description": "触发此告警的节点名称。",
+            "description": "告警名称，用于区分不同的告警。",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -9253,11 +9313,11 @@
       "connector_snowflake_aggregated.proxy_config": {
         "properties": {
           "host": {
-            "description": "Proxy host address to connect to.",
+            "description": "要连接的代理主机地址。",
             "type": "string"
           },
           "port": {
-            "description": "Proxy port to use when connecting.",
+            "description": "连接时使用的代理端口。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -9689,6 +9749,23 @@
         ],
         "type": "object"
       },
+      "bridge_rabbitmq.header_key_value": {
+        "properties": {
+          "key": {
+            "description": "Template for key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Template for value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
       "syskeeper_forwarder.connector_resource_opts": {
         "properties": {
           "health_check_interval": {
@@ -10113,7 +10190,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -11837,7 +11914,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "type": {
@@ -13825,7 +13902,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -15362,7 +15439,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -15564,7 +15641,7 @@
             "type": "string"
           },
           "parameters": {
-            "description": "Set of parameters for the action.",
+            "description": "动作的参数集。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/action_snowflake_aggregated.aggreg_parameters"
@@ -15765,7 +15842,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -16473,7 +16550,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -17431,6 +17508,14 @@
             "description": "消息将被发送到的 RabbitMQ 交换机的名称。支持使用模版（例如：`e-${payload.e}`）。",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
@@ -17464,6 +17549,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -17611,7 +17704,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "username": {
@@ -18105,7 +18198,7 @@
       "rocketmq.action_parameters": {
         "properties": {
           "key": {
-            "description": "Value to use for message key.  Supports placeholders, e.g.: `${payload.key}`.",
+            "description": "用于消息键的值。支持占位符，例如：`${payload.key}`。",
             "type": "string"
           },
           "refresh_interval": {
@@ -18122,7 +18215,7 @@
           },
           "strategy": {
             "default": "roundrobin",
-            "description": "生产者键派发策略，默认为 `roundrobin`，也支持占位符，如：`clientid`、`messageid`、`username`。",
+            "description": "生产者键派发策略。可能的值：`key_dispatch`、`roundrobin`。默认是 `roundrobin`。",
             "oneOf": [
               {
                 "type": "string"
@@ -18148,7 +18241,7 @@
             "type": "string"
           },
           "tag": {
-            "description": "Value to use for message tag.  Supports placeholders, e.g.: `${payload.tag}`.",
+            "description": "用于消息标签的值。支持占位符，例如：`${payload.tag}`。",
             "type": "string"
           },
           "template": {
@@ -18196,7 +18289,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -18267,7 +18360,7 @@
               "log",
               "publish"
             ],
-            "description": "警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
+            "description": "告警激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
             "example": [
               "log",
               "publish"
@@ -18603,12 +18696,12 @@
       "connector_snowflake_streaming.post_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "connect_timeout": {
             "default": "15s",
-            "description": "The timeout when connecting to the HTTP server.",
+            "description": "连接到 HTTP 服务器时的超时时间。",
             "example": "32s",
             "type": "string"
           },
@@ -18630,7 +18723,7 @@
           },
           "max_retries": {
             "default": 3,
-            "description": "Max retry attempts if there's an error when sending an HTTP request.",
+            "description": "发送 HTTP 请求时出现错误的最大重试次数。",
             "minimum": 0,
             "type": "integer"
           },
@@ -18639,30 +18732,30 @@
             "type": "string"
           },
           "pipe_user": {
-            "description": "A username which has a role with permissions over the Pipe to be used.  The minimum permissions are `operate` and `monitor`.",
+            "description": "具有对要使用的管道的权限的角色的用户名。最低权限为 `operate` 和 `monitor`。",
             "type": "string"
           },
           "pipelining": {
             "default": 100,
-            "description": "A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.",
+            "description": "一个正整数。是否连续发送 HTTP 请求，当设置为 1 时，表示每次发送 HTTP 请求后，需要等待服务器返回，然后继续发送下一个请求。",
             "minimum": 1,
             "type": "integer"
           },
           "private_key": {
-            "description": "The private key configured for the Pipe User.  This supports the input formats below:<br/>- Plain key: Enter the private key contents in PEM format directly as a string value.<br/>- File Path: Specify the path to a file that contains the private key. Ensure the path starts with <code>file://</code>.  The file path must be the same on all nodes in the cluster.",
+            "description": "为管道用户配置的私钥。支持以下输入格式：<br/>- 纯文本密钥：直接作为字符串值输入 PEM 格式的私钥内容。<br/>- 文件路径：指定包含私钥的文件路径。确保路径以 <code>file://</code> 开头。文件路径在集群中的所有节点上必须相同。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_streaming.proxy_config"
@@ -18681,7 +18774,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -18953,7 +19046,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "type": {
@@ -18979,16 +19072,16 @@
         "properties": {
           "aggregation": {
             "$ref": "#/components/schemas/action_snowflake_aggregated.aggregation",
-            "description": "Set of parameters governing the aggregation process."
+            "description": "管理聚合过程的参数集。"
           },
           "connect_timeout": {
             "default": "15s",
-            "description": "The timeout when connecting to the HTTP server.",
+            "description": "连接到 HTTP 服务器时的超时时间。",
             "example": "32s",
             "type": "string"
           },
           "database": {
-            "description": "Name of the Database that contains the Snowflake resources.",
+            "description": "包含 Snowflake 资源的数据库名称。",
             "type": "string"
           },
           "max_inactive": {
@@ -18999,52 +19092,52 @@
           },
           "max_retries": {
             "default": 3,
-            "description": "Max retry attempts if there's an error when sending an HTTP request.",
+            "description": "发送 HTTP 请求时出现错误的最大重试次数。",
             "minimum": 0,
             "type": "integer"
           },
           "mode": {
-            "description": "Enables time-based aggregation of incoming events and uploading them to the Snowflake as a single object.  This aggregation is done independently by each node in the cluster.",
+            "description": "启用传入事件的基于时间的聚合，并将其作为单个对象上传到 Snowflake。此聚合由集群中的每个节点独立完成。",
             "enum": [
               "aggregated"
             ],
             "type": "string"
           },
           "pipe": {
-            "description": "Name of the Pipe that'll be used to ingest data into the table.",
+            "description": "用于将数据摄取到表中的管道名称。",
             "type": "string"
           },
           "pipe_user": {
-            "description": "A username which has a role with permissions over the Pipe to be used.  The minimum permissions are `operate` and `monitor`.",
+            "description": "具有对要使用的管道的权限的角色的用户名。最低权限为 `operate` 和 `monitor`。",
             "type": "string"
           },
           "pipelining": {
             "default": 100,
-            "description": "A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.",
+            "description": "一个正整数。是否连续发送 HTTP 请求，当设置为 1 时，表示每次发送 HTTP 请求后，需要等待服务器返回，然后继续发送下一个请求。",
             "minimum": 1,
             "type": "integer"
           },
           "pool_size": {
             "default": 8,
-            "description": "The pool size.",
+            "description": "池大小。",
             "minimum": 1,
             "type": "integer"
           },
           "private_key": {
-            "description": "The private key configured for the Pipe User.  This supports the input formats below:<br/>- Plain key: Enter the private key contents in PEM format directly as a string value.<br/>- File Path: Specify the path to a file that contains the private key. Ensure the path starts with <code>file://</code>.  The file path must be the same on all nodes in the cluster.",
+            "description": "为管道用户配置的私钥。支持以下输入格式：<br/>- 纯文本密钥：直接作为字符串值输入 PEM 格式的私钥内容。<br/>- 文件路径：指定包含私钥的文件路径。确保路径以 <code>file://</code> 开头。文件路径在集群中的所有节点上必须相同。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/action_snowflake_aggregated.proxy_config"
@@ -19058,11 +19151,11 @@
             ]
           },
           "schema": {
-            "description": "Name of the Schema that contains the Snowflake resources.",
+            "description": "包含 Snowflake 资源的 Schema 名称。",
             "type": "string"
           },
           "stage": {
-            "description": "Name of the Stage that'll be used for loading data files into Snowflake.",
+            "description": "用于将数据文件加载到 Snowflake 的 Stage 名称。",
             "type": "string"
           }
         },
@@ -20450,7 +20543,7 @@
           },
           "health_check_interval_jitter": {
             "default": "15s",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -20872,7 +20965,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -20976,7 +21069,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/action_snowflake_streaming.parameters",
-            "description": "Set of parameters for the action."
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_snowflake_streaming.action_resource_opts",
@@ -21264,6 +21357,7 @@
           "REST_FAILED",
           "RULE_NOT_FOUND",
           "SERVICE_UNAVAILABLE",
+          "STALE_CURSOR",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
           "UNEXPECTED_ERROR",
@@ -21542,7 +21636,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -21660,7 +21754,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -22175,6 +22269,16 @@
         },
         "type": "object"
       },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "告警名称，用于区分不同的告警。",
+            "example": "high_system_memory_usage",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "dashboard.error_code": {
         "properties": {
           "code": {
@@ -22604,6 +22708,36 @@
         ],
         "type": "object"
       },
+      "bridge_rabbitmq.property_key_value": {
+        "properties": {
+          "key": {
+            "description": "Template for key.",
+            "enum": [
+              "app_id",
+              "cluster_id",
+              "content_encoding",
+              "content_type",
+              "correlation_id",
+              "expiration",
+              "message_id",
+              "reply_to",
+              "timestamp",
+              "type",
+              "user_id"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Template for value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "type": "object"
+      },
       "rule_engine.user_provided_function": {
         "properties": {
           "args": {
@@ -22746,7 +22880,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -23132,7 +23266,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/action_snowflake_streaming.parameters",
-            "description": "Set of parameters for the action."
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_snowflake_streaming.action_resource_opts",
@@ -23183,7 +23317,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -23478,13 +23612,13 @@
           },
           "cpu_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在发出相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
           "cpu_low_watermark": {
             "default": "60%",
-            "description": "在解除相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在解除相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -23506,7 +23640,7 @@
           },
           "procmem_high_watermark": {
             "default": "5%",
-            "description": "在发出相应警报之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
+            "description": "在发出相应告警之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -24450,7 +24584,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "共享订阅的分发策略。<br/> - random：随机选择一个订阅者进行分发；<br/> - round_robin：从单个发布者处的消息依次分发给订阅者；<br/> - round_robin_per_group：所有消息依次分发给订阅者；<br/> - local：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/> - sticky：持续将消息分发给最初选择的订阅者，直到他们的会话结束；<br/> - hash_clientid：哈希发布者的客户端 ID 以选择订阅者；<br/> - hash_topic：哈希发布主题以选择订阅者。",
+            "description": "共享订阅的分发策略。<br/>EMQX 将 **分发状态**（如随机种子、轮询位置和粘性订阅者选择）作为 **发布客户端连接状态** 的一部分进行维护。<br/>如果发布客户端断开连接并重新连接，则此状态会丢失，必须重新初始化。<br/><br/>- `random`：随机选择一个订阅者进行分发；<br/>- `round_robin`：共享订阅组中的客户端将依次消费消息，每个发布者独立记录循环进度，因此来自**不同发布者**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `round_robin_per_group`：共享订阅组中的客户端将依次消费消息，每个节点独立记录循环进度，因此来自**不同节点**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `local`：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/>- `sticky`：持续将消息分发给最初选择的订阅者，直到他们的会话结束。初始选择基于 `mqtt_shared_subscription_initial_sticky_pick`；<br/>- `hash_clientid`：哈希发布者的客户端 ID 以选择订阅者；<br/>- `hash_topic`：哈希发布主题以选择订阅者。",
             "enum": [
               "random",
               "round_robin",
@@ -25114,7 +25248,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -25859,7 +25993,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -26223,7 +26357,7 @@
       "connector_snowflake_aggregated.get_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "actions": {
@@ -26248,7 +26382,7 @@
             "type": "string"
           },
           "dsn": {
-            "description": "Data Source Name (DSN) associated with the installed Snowflake ODBC driver.",
+            "description": "与已安装的 Snowflake ODBC 驱动程序关联的数据源名称（DSN）。",
             "type": "string"
           },
           "enable": {
@@ -26280,18 +26414,18 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_aggregated.proxy_config"
@@ -26310,7 +26444,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -26522,7 +26656,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -26654,7 +26788,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -27090,7 +27224,7 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/action_snowflake_streaming.parameters",
-            "description": "Set of parameters for the action."
+            "description": "动作的参数集。"
           },
           "resource_opts": {
             "$ref": "#/components/schemas/action_snowflake_streaming.action_resource_opts",
@@ -27409,7 +27543,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -28148,7 +28282,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -28264,7 +28398,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -28786,7 +28920,7 @@
           },
           "headers": {
             "default": {},
-            "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
+            "description": "与 OpenTelemetry 信号数据一起发送的 HTTP 头。<br/>头是一个以头名称为键的映射。",
             "example": {},
             "type": "object"
           },
@@ -29645,7 +29779,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -29747,7 +29881,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -30656,7 +30790,7 @@
           },
           "max_connections": {
             "default": 50,
-            "description": "Maximum number of simultaneous connections to the AI provider.",
+            "description": "与 AI 提供商的最大同时连接数。",
             "minimum": 1,
             "type": "integer"
           },
@@ -31841,8 +31975,8 @@
             "description": "后端类型。",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -31883,103 +32017,19 @@
             "oneOf": [
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -31997,7 +32047,7 @@
               },
               {
                 "enum": [
-                  "couchbase"
+                  "pulsar"
                 ],
                 "type": "string"
               },
@@ -32009,109 +32059,19 @@
               },
               {
                 "enum": [
-                  "redshift"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pulsar"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "s3"
                 ],
                 "type": "string"
               },
@@ -32123,7 +32083,181 @@
               },
               {
                 "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
                 ],
                 "type": "string"
               },
@@ -32518,7 +32652,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -32611,7 +32745,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "messages_burst": {
@@ -32912,7 +33046,7 @@
       "emqx_mgmt_api_metrics.aggregated_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "消息转换失败的数量",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -32927,17 +33061,17 @@
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "过载保护延迟的数量",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "客户端取消订阅次数",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "由于达到接收最大值而丢弃的消息数量",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -32947,7 +33081,7 @@
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "授权命中缓存次数",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -32992,27 +33126,27 @@
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "消息验证失败的数量",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "由于超出配额而丢弃的消息数量",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "客户端认证次数",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "在转发到订阅过程之前丢弃的消息数量",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时丢弃的 QoS 0 消息数量",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33027,7 +33161,7 @@
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "接收到的订阅失败的 SUBSCRIBE 数据包数量",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33037,7 +33171,7 @@
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "过载保护关闭新传入连接的数量",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33047,12 +33181,12 @@
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "由于匿名而成功的客户端认证次数",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "客户端认证成功次数",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33062,27 +33196,27 @@
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "发送时丢弃的消息总数",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "客户端断开连接次数",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "转发到订阅过程的消息数量",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "授权规则检查次数",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "消息转换成功的数量",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33092,17 +33226,17 @@
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "接收到的取消订阅失败的 UNSUBSCRIBE 数据包数量",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "授权允许次数",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "过载保护垃圾收集的数量",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33112,7 +33246,7 @@
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "由于发送时 No Local 订阅选项而丢弃的消息数量",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33142,12 +33276,12 @@
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "接收到的 PUBLISH 数据包中占用的标识符数量",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "接收的字节数",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33167,7 +33301,7 @@
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "接收到的 PUBCOMP 数据包中占用的标识符数量",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33232,12 +33366,12 @@
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "授权缓存未命中次数",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "由于等待 PUBREL 超时而丢弃的消息数量",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33247,7 +33381,7 @@
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "由于消息过期而在发送时丢弃的消息数量",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33257,12 +33391,12 @@
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "过载保护休眠的数量",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "客户端连接次数",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33277,12 +33411,12 @@
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "客户端认证失败次数",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "匿名登录的客户端数量",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33297,27 +33431,27 @@
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "由于长度超过限制而在发送时丢弃的消息数量",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "此连接上发送的字节数",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "过载保护延迟超时的数量",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "授权拒绝次数",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "接收到的 SUBACK 数据包中授权检查失败的数量",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33327,7 +33461,7 @@
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "由于没有订阅者而丢弃的消息数量",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33342,12 +33476,12 @@
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "接收到的 PUBACK 数据包中占用的标识符数量",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "由于消息队列已满而在发送时丢弃的消息数量",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33357,7 +33491,7 @@
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "消息验证成功的数量",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -33367,7 +33501,7 @@
             "type": "integer"
           },
           "packets.pubrec.inuse": {
-            "description": "接收到的 PUBREC 数据包中占用的标识符数量",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -33382,12 +33516,12 @@
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "客户端订阅次数",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "未接收到的 PUBCOMP 数据包数量",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -34080,7 +34214,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -36513,7 +36647,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -36766,11 +36900,11 @@
       "action_bigquery.action_parameters": {
         "properties": {
           "dataset": {
-            "description": "BigQuery Dataset.",
+            "description": "BigQuery 数据集。",
             "type": "string"
           },
           "table": {
-            "description": "BigQuery Table.",
+            "description": "BigQuery 表。",
             "type": "string"
           }
         },
@@ -37214,12 +37348,12 @@
       "connector_snowflake_streaming.put_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "connect_timeout": {
             "default": "15s",
-            "description": "The timeout when connecting to the HTTP server.",
+            "description": "连接到 HTTP 服务器时的超时时间。",
             "example": "32s",
             "type": "string"
           },
@@ -37241,35 +37375,35 @@
           },
           "max_retries": {
             "default": 3,
-            "description": "Max retry attempts if there's an error when sending an HTTP request.",
+            "description": "发送 HTTP 请求时出现错误的最大重试次数。",
             "minimum": 0,
             "type": "integer"
           },
           "pipe_user": {
-            "description": "A username which has a role with permissions over the Pipe to be used.  The minimum permissions are `operate` and `monitor`.",
+            "description": "具有对要使用的管道的权限的角色的用户名。最低权限为 `operate` 和 `monitor`。",
             "type": "string"
           },
           "pipelining": {
             "default": 100,
-            "description": "A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.",
+            "description": "一个正整数。是否连续发送 HTTP 请求，当设置为 1 时，表示每次发送 HTTP 请求后，需要等待服务器返回，然后继续发送下一个请求。",
             "minimum": 1,
             "type": "integer"
           },
           "private_key": {
-            "description": "The private key configured for the Pipe User.  This supports the input formats below:<br/>- Plain key: Enter the private key contents in PEM format directly as a string value.<br/>- File Path: Specify the path to a file that contains the private key. Ensure the path starts with <code>file://</code>.  The file path must be the same on all nodes in the cluster.",
+            "description": "为管道用户配置的私钥。支持以下输入格式：<br/>- 纯文本密钥：直接作为字符串值输入 PEM 格式的私钥内容。<br/>- 文件路径：指定包含私钥的文件路径。确保路径以 <code>file://</code> 开头。文件路径在集群中的所有节点上必须相同。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_streaming.proxy_config"
@@ -37288,7 +37422,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -37547,7 +37681,7 @@
             "type": "string"
           },
           "parameters": {
-            "description": "Additional parameters specific using Influx Line Protocol",
+            "description": "使用 Influx Line Protocol 的特定附加参数",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_datalayers.action_parameters_arrow_flight"
@@ -37833,7 +37967,7 @@
             "type": "string"
           },
           "parameters": {
-            "description": "Additional parameters specific using Influx Line Protocol",
+            "description": "使用 Influx Line Protocol 的特定附加参数",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_datalayers.action_parameters_arrow_flight"
@@ -38544,7 +38678,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -40599,7 +40733,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "73E2CF03A1B8434C",
+            "example": "B8C2B34658BE943C",
             "type": "string"
           },
           "status": {
@@ -40626,11 +40760,11 @@
       "connector_snowflake_streaming.proxy_config": {
         "properties": {
           "host": {
-            "description": "Proxy host address to connect to.",
+            "description": "要连接的代理主机地址。",
             "type": "string"
           },
           "port": {
-            "description": "Proxy port to use when connecting.",
+            "description": "连接时使用的代理端口。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -40971,7 +41105,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -41139,7 +41273,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -41197,7 +41331,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "Indicates which TCP backend should be used by the listener.<br/><br/>- `gen_tcp`: Standard backend, in use since EMQX 5.0 release.<br/><br/>- `socket`: Experimental backend, looking to improve message latency and compute resource usage.<br/>    Note that some `tcp_options` settings will have no effect when using this backend, e.g.: `high_watermark` and `send_timeout_close`.<br/>    <br/>Changing the backend require restarting the listener, which will terminate all its active connections.",
+            "description": "指示侦听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：自 EMQX 5.0 版本以来使用的标准后端。<br/><br/>- `socket`：实验性后端，旨在改善消息延迟和计算资源使用。<br/>    请注意，使用此后端时，某些 `tcp_options` 设置将无效，例如：`high_watermark` 和 `send_timeout_close`。<br/>    <br/>更改后端需要重新启动侦听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -42250,7 +42384,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -42387,7 +42521,7 @@
         "properties": {
           "sql": {
             "default": "insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, ${timestamp})",
-            "description": "SQL Template",
+            "description": "SQL 模板",
             "format": "sql",
             "type": "string"
           }
@@ -43755,7 +43889,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -45209,7 +45343,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -45860,13 +45994,13 @@
           },
           "max_records": {
             "default": 1000000,
-            "description": "Number of records (events) allowed per each aggregated file. Each aggregated upload will contain no more than that number of events, but may contain less.<br/><br/>  If event rate is high enough, there obviously may be more than one aggregated upload during the same time interval. These uploads will have different, but consecutive sequence numbers, which will be a part of Snowflake staged file name.",
+            "description": "每个聚合文件允许的记录（事件）数量。每次聚合上传将包含不超过该数量的事件，但可能包含更少。<br/>如果事件速率足够高，显然在同一时间间隔内可能会有多个聚合上传。这些上传将具有不同但连续的序列号，这将是 Snowflake 暂存文件名的一部分。",
             "minimum": 1,
             "type": "integer"
           },
           "time_interval": {
             "default": "1h",
-            "description": "Amount of time events will be aggregated in a single file on each node before uploading.",
+            "description": "在上传之前，每个节点上事件将被聚合到单个文件中的时间量。",
             "example": "1h",
             "type": "string"
           }
@@ -46912,7 +47046,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -47449,7 +47583,7 @@
           },
           "enable_prepared": {
             "default": true,
-            "description": "Enable prepared statements for the Datalayers connector.<br/>Note: this parameter only takes effect when the <code>driver_type/code> set to <code>arrow_flight</code>.",
+            "description": "启用 Datalayers 连接器的预准备语句。<br/>注意：此参数仅在 <code>driver_type</code> 设置为 <code>arrow_flight</code> 时生效。",
             "type": "boolean"
           },
           "password": {
@@ -47631,12 +47765,12 @@
         "properties": {
           "connect_timeout": {
             "default": "15s",
-            "description": "The timeout when connecting to the HTTP server.",
+            "description": "连接到 HTTP 服务器时的超时时间。",
             "example": "32s",
             "type": "string"
           },
           "database": {
-            "description": "Name of the Database that contains the Snowflake resources.",
+            "description": "包含 Snowflake 资源的数据库名称。",
             "type": "string"
           },
           "max_inactive": {
@@ -47647,28 +47781,28 @@
           },
           "max_retries": {
             "default": 3,
-            "description": "Max retry attempts if there's an error when sending an HTTP request.",
+            "description": "发送 HTTP 请求时出现错误的最大重试次数。",
             "minimum": 0,
             "type": "integer"
           },
           "pipe": {
-            "description": "Name of the Pipe that'll be used to ingest data into the table.",
+            "description": "用于将数据摄取到表中的管道名称。",
             "type": "string"
           },
           "pipelining": {
             "default": 100,
-            "description": "A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.",
+            "description": "一个正整数。是否连续发送 HTTP 请求，当设置为 1 时，表示每次发送 HTTP 请求后，需要等待服务器返回，然后继续发送下一个请求。",
             "minimum": 1,
             "type": "integer"
           },
           "pool_size": {
             "default": 8,
-            "description": "The pool size.",
+            "description": "池大小。",
             "minimum": 1,
             "type": "integer"
           },
           "schema": {
-            "description": "Name of the Schema that contains the Snowflake resources.",
+            "description": "包含 Snowflake 资源的 Schema 名称。",
             "type": "string"
           }
         },
@@ -48420,7 +48554,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -48592,7 +48726,7 @@
       "cluster.cluster_info_request": {
         "properties": {
           "description": {
-            "description": "Text blob to describe the current cluster.",
+            "description": "描述当前集群的文本块。",
             "type": "string"
           }
         },
@@ -49849,6 +49983,14 @@
             "description": "消息将被发送到的 RabbitMQ 交换机的名称。支持使用模版（例如：`e-${payload.e}`）。",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "向 RabbitMQ 服务器发送心跳消息的间隔。",
@@ -49886,6 +50028,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -50662,7 +50812,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -51145,11 +51295,11 @@
       "action_snowflake_aggregated.proxy_config": {
         "properties": {
           "host": {
-            "description": "Proxy host address to connect to.",
+            "description": "要连接的代理主机地址。",
             "type": "string"
           },
           "port": {
-            "description": "Proxy port to use when connecting.",
+            "description": "连接时使用的代理端口。",
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
@@ -52224,7 +52374,7 @@
           },
           "strategy": {
             "default": "roundrobin",
-            "description": "生产者键派发策略，默认为 `roundrobin`，也支持占位符，如：`clientid`、`messageid`、`username`。",
+            "description": "生产者键派发策略。可能的值：`key_dispatch`、`roundrobin`。默认是 `roundrobin`。",
             "oneOf": [
               {
                 "type": "string"
@@ -52320,7 +52470,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -53781,7 +53931,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -54379,7 +54529,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -54635,7 +54785,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -56079,7 +56229,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -56591,7 +56741,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -57416,13 +57566,13 @@
           },
           "process_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在发出相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           },
           "process_low_watermark": {
             "default": "60%",
-            "description": "在清除相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在清除相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           }
@@ -57524,7 +57674,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -57672,7 +57822,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -58751,7 +58901,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -58956,7 +59106,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "type": {
@@ -59023,7 +59173,7 @@
             "type": "string"
           },
           "parameters": {
-            "description": "Set of parameters for the action.",
+            "description": "动作的参数集。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/action_snowflake_aggregated.aggreg_parameters"
@@ -59309,7 +59459,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -59387,6 +59537,11 @@
             "enum": [
               "mongodb"
             ],
+            "type": "string"
+          },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
             "type": "string"
           },
           "collection": {
@@ -59658,7 +59813,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -59905,7 +60060,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -60440,7 +60595,7 @@
             "type": "array"
           },
           "ttl": {
-            "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
+            "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
           },
           "type": {
@@ -61225,7 +61380,7 @@
       "connector_snowflake_streaming.get_connector": {
         "properties": {
           "account": {
-            "description": "Account ID for Snowflake.",
+            "description": "Snowflake 的账户 ID。",
             "type": "string"
           },
           "actions": {
@@ -61240,7 +61395,7 @@
           },
           "connect_timeout": {
             "default": "15s",
-            "description": "The timeout when connecting to the HTTP server.",
+            "description": "连接到 HTTP 服务器时的超时时间。",
             "example": "32s",
             "type": "string"
           },
@@ -61262,7 +61417,7 @@
           },
           "max_retries": {
             "default": 3,
-            "description": "Max retry attempts if there's an error when sending an HTTP request.",
+            "description": "发送 HTTP 请求时出现错误的最大重试次数。",
             "minimum": 0,
             "type": "integer"
           },
@@ -61278,30 +61433,30 @@
             "type": "array"
           },
           "pipe_user": {
-            "description": "A username which has a role with permissions over the Pipe to be used.  The minimum permissions are `operate` and `monitor`.",
+            "description": "具有对要使用的管道的权限的角色的用户名。最低权限为 `operate` 和 `monitor`。",
             "type": "string"
           },
           "pipelining": {
             "default": 100,
-            "description": "A positive integer. Whether to send HTTP requests continuously, when set to 1, it means that after each HTTP request is sent, you need to wait for the server to return and then continue to send the next request.",
+            "description": "一个正整数。是否连续发送 HTTP 请求，当设置为 1 时，表示每次发送 HTTP 请求后，需要等待服务器返回，然后继续发送下一个请求。",
             "minimum": 1,
             "type": "integer"
           },
           "private_key": {
-            "description": "The private key configured for the Pipe User.  This supports the input formats below:<br/>- Plain key: Enter the private key contents in PEM format directly as a string value.<br/>- File Path: Specify the path to a file that contains the private key. Ensure the path starts with <code>file://</code>.  The file path must be the same on all nodes in the cluster.",
+            "description": "为管道用户配置的私钥。支持以下输入格式：<br/>- 纯文本密钥：直接作为字符串值输入 PEM 格式的私钥内容。<br/>- 文件路径：指定包含私钥的文件路径。确保路径以 <code>file://</code> 开头。文件路径在集群中的所有节点上必须相同。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请勿设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "proxy": {
             "default": "none",
-            "description": "Proxy configuration.  Only plain HTTP proxies are currently supported (no HTTPS).",
+            "description": "代理配置。目前仅支持普通 HTTP 代理（不支持 HTTPS）。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_snowflake_streaming.proxy_config"
@@ -61320,7 +61475,7 @@
             "description": "资源相关的选项。"
           },
           "server": {
-            "description": "The address of Snowflake computing server to connect to.",
+            "description": "要连接的 Snowflake 计算服务器地址。",
             "type": "string"
           },
           "ssl": {
@@ -61471,7 +61626,7 @@
       "emqx_mgmt_api_metrics.node_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "消息转换失败的数量",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61486,17 +61641,17 @@
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "过载保护延迟的数量",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "客户端取消订阅次数",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "由于达到接收最大值而丢弃的消息数量",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61506,7 +61661,7 @@
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "授权命中缓存次数",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61551,27 +61706,27 @@
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "消息验证失败的数量",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "由于超出配额而丢弃的消息数量",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "客户端认证次数",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "在转发到订阅过程之前丢弃的消息数量",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时丢弃的 QoS 0 消息数量",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61586,7 +61741,7 @@
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "接收到的订阅失败的 SUBSCRIBE 数据包数量",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61596,7 +61751,7 @@
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "过载保护关闭新传入连接的数量",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61606,12 +61761,12 @@
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "由于匿名而成功的客户端认证次数",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "客户端认证成功次数",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61621,27 +61776,27 @@
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "发送时丢弃的消息总数",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "客户端断开连接次数",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "转发到订阅过程的消息数量",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "授权规则检查次数",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "消息转换成功的数量",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61651,17 +61806,17 @@
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "接收到的取消订阅失败的 UNSUBSCRIBE 数据包数量",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "授权允许次数",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "过载保护垃圾收集的数量",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61671,7 +61826,7 @@
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "由于发送时 No Local 订阅选项而丢弃的消息数量",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61701,12 +61856,12 @@
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "接收到的 PUBLISH 数据包中占用的标识符数量",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "接收的字节数",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61726,7 +61881,7 @@
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "接收到的 PUBCOMP 数据包中占用的标识符数量",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61791,12 +61946,12 @@
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "授权缓存未命中次数",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "由于等待 PUBREL 超时而丢弃的消息数量",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61806,7 +61961,7 @@
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "由于消息过期而在发送时丢弃的消息数量",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61816,12 +61971,12 @@
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "过载保护休眠的数量",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "客户端连接次数",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61836,12 +61991,12 @@
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "客户端认证失败次数",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "匿名登录的客户端数量",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61856,27 +62011,27 @@
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "由于长度超过限制而在发送时丢弃的消息数量",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "此连接上发送的字节数",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "过载保护延迟超时的数量",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "授权拒绝次数",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "接收到的 SUBACK 数据包中授权检查失败的数量",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61886,7 +62041,7 @@
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "由于没有订阅者而丢弃的消息数量",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61901,12 +62056,12 @@
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "接收到的 PUBACK 数据包中占用的标识符数量",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "由于消息队列已满而在发送时丢弃的消息数量",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61916,7 +62071,7 @@
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "消息验证成功的数量",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
@@ -61930,7 +62085,7 @@
             "type": "string"
           },
           "packets.pubrec.inuse": {
-            "description": "接收到的 PUBREC 数据包中占用的标识符数量",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -61945,12 +62100,12 @@
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "客户端订阅次数",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "未接收到的 PUBCOMP 数据包数量",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -62008,7 +62163,7 @@
             "type": "array"
           },
           "parameters": {
-            "description": "Set of parameters for the action.",
+            "description": "动作的参数集。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/action_snowflake_aggregated.aggreg_parameters"
@@ -63409,7 +63564,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将自动关闭任何新连接，实际上清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -63471,7 +63626,7 @@
           },
           "tcp_backend": {
             "default": "gen_tcp",
-            "description": "Indicates which TCP backend should be used by the listener.<br/><br/>- `gen_tcp`: Standard backend, in use since EMQX 5.0 release.<br/><br/>- `socket`: Experimental backend, looking to improve message latency and compute resource usage.<br/>    Note that some `tcp_options` settings will have no effect when using this backend, e.g.: `high_watermark` and `send_timeout_close`.<br/>    <br/>Changing the backend require restarting the listener, which will terminate all its active connections.",
+            "description": "指示侦听器应使用哪个 TCP 后端。<br/><br/>- `gen_tcp`：自 EMQX 5.0 版本以来使用的标准后端。<br/><br/>- `socket`：实验性后端，旨在改善消息延迟和计算资源使用。<br/>    请注意，使用此后端时，某些 `tcp_options` 设置将无效，例如：`high_watermark` 和 `send_timeout_close`。<br/>    <br/>更改后端需要重新启动侦听器，这将终止其所有活动连接。",
             "enum": [
               "gen_tcp",
               "socket"
@@ -63632,7 +63787,7 @@
           "transport_options": {
             "$ref": "#/components/schemas/ai.transport_options",
             "default": {},
-            "description": "Transport (HTTP) options for the AI provider."
+            "description": "AI 提供商的传输（HTTP）选项。"
           },
           "type": {
             "default": "openai",
@@ -63668,10 +63823,26 @@
             "description": "消息将被发送到的 RabbitMQ 交换机的名称。支持使用模版（例如：`e-${payload.e}`）。",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "payload_template": {
             "default": "",
             "description": "在发送消息到 RabbitMQ 之前格式化消息 payload 的模板。例如 ${field1.sub_field} 的模板占位符将被相应字段的值替换。如果留空，整个输入消息将被用作 payload，格式化为 JSON 文本。这种行为等同于将 ${.} 指定为 payload 模板。",
             "type": "string"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -63786,7 +63957,7 @@
           },
           "strategy": {
             "default": "roundrobin",
-            "description": "生产者键派发策略，默认为 `roundrobin`，也支持占位符，如：`clientid`、`messageid`、`username`。",
+            "description": "生产者键派发策略。可能的值：`key_dispatch`、`roundrobin`。默认是 `roundrobin`。",
             "oneOf": [
               {
                 "type": "string"
@@ -64311,7 +64482,7 @@
           },
           "health_check_interval_jitter": {
             "default": "0ms",
-            "description": "A uniform random delay to be added to health check interval, so that Actions and Sources from the same Connector start their health checks at different instants.",
+            "description": "一个均匀的随机延迟将被添加到健康检查间隔中，以便来自同一 Connector 的动作和源在不同的时刻开始它们的健康检查。",
             "example": "32s",
             "type": "string"
           },
@@ -65033,7 +65204,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.0-M2.202508"
+    "version": "6.0.0-alpha.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -65712,7 +65883,7 @@
                 "schema": {
                   "properties": {
                     "description": {
-                      "description": "Text blob to describe the current cluster.",
+                      "description": "描述当前集群的文本块。",
                       "type": "string"
                     },
                     "name": {
@@ -65751,7 +65922,7 @@
         ]
       },
       "put": {
-        "description": "Update cluster information.",
+        "description": "更新集群信息。",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -65769,7 +65940,7 @@
                 "schema": {
                   "properties": {
                     "description": {
-                      "description": "Text blob to describe the current cluster.",
+                      "description": "描述当前集群的文本块。",
                       "type": "string"
                     },
                     "name": {
@@ -73257,8 +73428,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -73267,8 +73438,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -74098,7 +74269,7 @@
     },
     "/ai/models": {
       "post": {
-        "description": "List all AI models available for a provider type",
+        "description": "列出所有可用于提供商类型的 AI 模型",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -78239,40 +78410,40 @@
                       "cassandra",
                       "rabbitmq",
                       "rocketmq",
-                      "cockroachdb",
+                      "greptimedb",
                       "sqlserver",
                       "iotdb",
-                      "confluent_producer",
-                      "alloydb",
+                      "influxdb",
                       "mongodb",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "cockroachdb",
+                      "kafka_producer",
                       "pulsar",
                       "azure_event_hub_producer",
-                      "influxdb",
-                      "greptimedb",
-                      "gcp_pubsub_producer",
-                      "kafka_producer",
-                      "syskeeper_forwarder",
-                      "opents",
-                      "doris",
-                      "s3tables",
-                      "datalayers",
-                      "kinesis",
                       "redis",
+                      "s3tables",
+                      "doris",
                       "s3",
+                      "datalayers",
+                      "opents",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "tablestore",
+                      "snowflake",
                       "oracle",
+                      "timescale",
                       "couchbase",
+                      "tablestore",
+                      "tdengine",
                       "clickhouse",
                       "azure_blob_storage",
-                      "timescale",
-                      "tdengine",
-                      "snowflake",
                       "snowflake_streaming",
                       "disk_log",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -78287,40 +78458,40 @@
                       "cassandra",
                       "rabbitmq",
                       "rocketmq",
-                      "cockroachdb",
+                      "greptimedb",
                       "sqlserver",
                       "iotdb",
-                      "confluent_producer",
-                      "alloydb",
+                      "influxdb",
                       "mongodb",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "cockroachdb",
+                      "kafka_producer",
                       "pulsar",
                       "azure_event_hub_producer",
-                      "influxdb",
-                      "greptimedb",
-                      "gcp_pubsub_producer",
-                      "kafka_producer",
-                      "syskeeper_forwarder",
-                      "opents",
-                      "doris",
-                      "s3tables",
-                      "datalayers",
-                      "kinesis",
                       "redis",
+                      "s3tables",
+                      "doris",
                       "s3",
+                      "datalayers",
+                      "opents",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "tablestore",
+                      "snowflake",
                       "oracle",
+                      "timescale",
                       "couchbase",
+                      "tablestore",
+                      "tdengine",
                       "clickhouse",
                       "azure_blob_storage",
-                      "timescale",
-                      "tdengine",
-                      "snowflake",
                       "snowflake_streaming",
                       "disk_log",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -80708,6 +80879,86 @@
         "summary": "List audit logs",
         "tags": [
           "Audit"
+        ]
+      }
+    },
+    "/mt/bulk_export_ns_configs": {
+      "post": {
+        "description": "Export one or more namespaced configurations.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "bulk_export_ns_configs": {
+                  "namespaces": [
+                    "ns1",
+                    "ns2"
+                  ]
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/mt.bulk_export_ns_configs_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulk_export_ns_configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                },
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid configurations",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Export multiple namespaced configurations",
+        "tags": [
+          "Multi-tenancy"
         ]
       }
     },
@@ -84822,7 +85073,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -87365,8 +87616,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -87378,10 +87629,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -88664,7 +88915,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "73E2CF03A1B8434C",
+            "example": "B8C2B34658BE943C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -91436,8 +91687,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -91527,8 +91778,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -91660,8 +91911,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -97290,7 +97541,7 @@
           },
           {
             "description": "Site ID",
-            "example": "73E2CF03A1B8434C",
+            "example": "B8C2B34658BE943C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97375,7 +97626,7 @@
           },
           {
             "description": "Site ID",
-            "example": "73E2CF03A1B8434C",
+            "example": "B8C2B34658BE943C",
             "in": "path",
             "name": "site",
             "required": true,
@@ -104091,8 +104342,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -107340,6 +107591,90 @@
         ],
         "tags": [
           "Clients"
+        ]
+      }
+    },
+    "/mt/bulk_import_ns_configs": {
+      "post": {
+        "description": "Import one or more namespaced configurations.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "bulk_import_ns_configs": {
+                  "configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/mt.bulk_import_ns_configs_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulk_export_ns_configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                },
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid configurations",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Import multiple namespaced configurations",
+        "tags": [
+          "Multi-tenancy"
         ]
       }
     },
@@ -110604,7 +110939,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -111934,7 +112269,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -113267,7 +113602,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -117336,6 +117671,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "Force deactivate an alarm. This operation will forcefully deactivate an active alarm.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The alarm has been successfully deactivated."
+          },
+          "400": {
+            "description": "The alarm does not exist or has already been deactivated."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "重置某个特定验证规则的指标。",
@@ -118010,14 +118379,29 @@
                         "bytes": {
                           "default": 1000,
                           "description": "单个 HTTP 相应中包含 trace 日志的字节数。",
-                          "maximum": 2147483647,
+                          "maximum": 67108864,
                           "minimum": 0,
                           "type": "integer"
                         },
+                        "hint": {
+                          "description": "Hint on the state of the current log stream.<br/>* `eof`: Stream has reached the end of the log.<br/>* `retry`: Stream is temporarily unavailable, will recover quickly.",
+                          "enum": [
+                            "eof",
+                            "retry"
+                          ],
+                          "type": "string"
+                        },
                         "position": {
                           "default": 0,
-                          "description": "指定从该偏移量开始读取指定的 trace 日志文件。",
-                          "type": "integer"
+                          "description": "Cursor for the current trace position.",
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
                         }
                       },
                       "type": "object"
@@ -118036,7 +118420,9 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_REQUEST"
+                        "BAD_REQUEST",
+                        "INVALID_PARAMETER",
+                        "STALE_CURSOR"
                       ],
                       "type": "string"
                     },
@@ -120370,8 +120756,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120427,8 +120813,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120441,10 +120827,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -120501,8 +120887,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -120514,10 +120900,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -120534,10 +120920,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -121258,7 +121644,7 @@
     },
     "/ai/providers/{name}/models": {
       "get": {
-        "description": "List all AI models available for a provider.",
+        "description": "列出所有可用于提供商的 AI 模型。",
         "parameters": [
           {
             "in": "path",
@@ -126179,7 +126565,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -127567,7 +127953,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -129411,11 +129797,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
@@ -129470,11 +129857,12 @@
                   "enable": true,
                   "filter": {
                     "e2e_tracing_options": {
-                      "attribute_meta_value": "emqxcl",
                       "client_connect_disconnect": true,
-                      "client_publish": true,
+                      "client_messaging": true,
                       "client_subscribe_unsubscribe": true,
                       "clientid_match_rules_max": 30,
+                      "cluster_identifier": "emqxcl",
+                      "follow_traceparent": true,
                       "msg_trace_level": 0,
                       "sample_ratio": "10%",
                       "topic_match_rules_max": 30
@@ -129513,11 +129901,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30

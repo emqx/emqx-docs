@@ -317,7 +317,7 @@
         "required": false,
         "schema": {
           "default": 1000,
-          "maximum": 2147483647,
+          "maximum": 67108864,
           "minimum": 0,
           "type": "integer"
         }
@@ -343,13 +343,20 @@
         }
       },
       "trace.position": {
-        "description": "Offset from the current trace position.",
+        "description": "Cursor for the current trace position.",
         "in": "query",
         "name": "position",
         "required": false,
         "schema": {
           "default": 0,
-          "type": "integer"
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
         }
       }
     },
@@ -1516,6 +1523,11 @@
             "enum": [
               "mongodb"
             ],
+            "type": "string"
+          },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
             "type": "string"
           },
           "collection": {
@@ -3726,6 +3738,20 @@
         ],
         "type": "object"
       },
+      "mt.bulk_export_ns_configs_in": {
+        "properties": {
+          "namespaces": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "namespaces"
+        ],
+        "type": "object"
+      },
       "authz.mongo_rs": {
         "properties": {
           "auth_source": {
@@ -5310,38 +5336,20 @@
             "minimum": 1,
             "type": "integer"
           },
+          "checkpoint_interval": {
+            "default": "5s",
+            "description": "Durable sessions periodically back up their state to disc.<br/>This happens every checkpoint interval.",
+            "example": "12m",
+            "type": "string"
+          },
           "enable": {
             "default": false,
             "description": "Use durable storage for client sessions persistence.<br/>If enabled, sessions configured to outlive client connections, along with their corresponding messages, will be durably stored and survive broker downtime.<br/><br/>::: warning<br/>Messages sent to the durable sessions are saved on disc.<br/>This inevitably limits the overall throughput of the system.<br/>:::",
             "type": "boolean"
           },
-          "heartbeat_interval": {
-            "default": "5000ms",
-            "description": "Durable sessions back up their state on disc every heartbeat interval.<br/><br/>Heartbeat interval is also taken into account during garbage collection of expired sessions.<br/>It is added to the session expiry time as a safety margin when precise time of session termination is not precisely known.",
-            "example": "12m",
-            "type": "string"
-          },
-          "idle_poll_interval": {
-            "default": "10s",
-            "description": "Expiry interval for poll requests sent by durable sessions to the storage.",
-            "example": "12m",
-            "type": "string"
-          },
           "message_retention_period": {
             "default": "1d",
             "description": "Broker keeps messages sent to the durable sessions for this period of time.",
-            "example": "12m",
-            "type": "string"
-          },
-          "session_gc_batch_size": {
-            "default": 100,
-            "description": "The size of each batch of expired persistent sessions to be garbage collected per iteration.",
-            "minimum": 1,
-            "type": "integer"
-          },
-          "session_gc_interval": {
-            "default": "10m",
-            "description": "The interval at which session garbage collection is executed for persistent sessions.",
             "example": "12m",
             "type": "string"
           }
@@ -6185,6 +6193,11 @@
             ],
             "type": "string"
           },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
+            "type": "string"
+          },
           "collection": {
             "description": "Collection used to store authentication data.",
             "type": "string"
@@ -6324,6 +6337,11 @@
       },
       "authn.hash_method": {
         "properties": {
+          "clientid_override_attribute": {
+            "default": "clientIdOverride",
+            "description": "Indicates which attribute is used to represent a clientid override value.",
+            "type": "string"
+          },
           "is_superuser_attribute": {
             "default": "isSuperuser",
             "description": "Indicates which attribute is used to represent whether the user is a superuser.",
@@ -6601,6 +6619,27 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "mt.bulk_import_ns_configs_in": {
+        "properties": {
+          "configs": {
+            "properties": {
+              "$name": {
+                "example": {},
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "dry_run": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "configs",
+          "dry_run"
+        ],
         "type": "object"
       },
       "bridge_opents.put_bridge_v2": {
@@ -6954,6 +6993,14 @@
             "description": "The name of the RabbitMQ exchange where the messages will be sent. Supports templates (e.g.: `e-${payload.e}`). Leave blank and configure `routing_key` to the specified Queue to use RabbitMQ's default Exchange.",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "The interval for sending heartbeat messages to the RabbitMQ server.",
@@ -6998,6 +7045,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -7174,6 +7229,11 @@
             "default": "${password}",
             "description": "The template for password to bind.",
             "example": "${password}",
+            "type": "string"
+          },
+          "clientid_override_attribute": {
+            "default": "clientIdOverride",
+            "description": "Indicates which attribute is used to represent a clientid override value.",
             "type": "string"
           },
           "is_superuser_attribute": {
@@ -8905,7 +8965,7 @@
             "type": "string"
           },
           "name": {
-            "description": "The name of the node that triggered this alarm.",
+            "description": "Alarm name, used to distinguish different alarms.",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -9686,6 +9746,23 @@
           "name",
           "parameters",
           "type"
+        ],
+        "type": "object"
+      },
+      "bridge_rabbitmq.header_key_value": {
+        "properties": {
+          "key": {
+            "description": "Template for key.",
+            "type": "string"
+          },
+          "value": {
+            "description": "Template for value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
         ],
         "type": "object"
       },
@@ -17431,6 +17508,14 @@
             "description": "The name of the RabbitMQ exchange where the messages will be sent. Supports templates (e.g.: `e-${payload.e}`). Leave blank and configure `routing_key` to the specified Queue to use RabbitMQ's default Exchange.",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "The interval for sending heartbeat messages to the RabbitMQ server.",
@@ -17464,6 +17549,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -21264,6 +21357,7 @@
           "REST_FAILED",
           "RULE_NOT_FOUND",
           "SERVICE_UNAVAILABLE",
+          "STALE_CURSOR",
           "TEST_FAILED",
           "TOPIC_NOT_FOUND",
           "UNEXPECTED_ERROR",
@@ -22175,6 +22269,16 @@
         },
         "type": "object"
       },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "Alarm name, used to distinguish different alarms.",
+            "example": "high_system_memory_usage",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "dashboard.error_code": {
         "properties": {
           "code": {
@@ -22601,6 +22705,36 @@
           "iterations",
           "mac_fun",
           "name"
+        ],
+        "type": "object"
+      },
+      "bridge_rabbitmq.property_key_value": {
+        "properties": {
+          "key": {
+            "description": "Template for key.",
+            "enum": [
+              "app_id",
+              "cluster_id",
+              "content_encoding",
+              "content_type",
+              "correlation_id",
+              "expiration",
+              "message_id",
+              "reply_to",
+              "timestamp",
+              "type",
+              "user_id"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "description": "Template for value.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
         ],
         "type": "object"
       },
@@ -24450,7 +24584,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "Dispatch strategy for shared subscription.<br/> - `random`: Randomly select a subscriber for dispatch;<br/> - `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/> - `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber.",
+            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.  <br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
             "enum": [
               "random",
               "round_robin",
@@ -31889,60 +32023,6 @@
               },
               {
                 "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "kinesis"
                 ],
                 "type": "string"
@@ -31955,43 +32035,13 @@
               },
               {
                 "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
+                  "pulsar"
                 ],
                 "type": "string"
               },
@@ -32003,13 +32053,37 @@
               },
               {
                 "enum": [
-                  "redshift"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pulsar"
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
                 ],
                 "type": "string"
               },
@@ -32027,55 +32101,7 @@
               },
               {
                 "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -32087,7 +32113,19 @@
               },
               {
                 "enum": [
-                  "cockroachdb"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
@@ -32099,13 +32137,103 @@
               },
               {
                 "enum": [
-                  "s3"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "opents"
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -32117,7 +32245,7 @@
               },
               {
                 "enum": [
-                  "timescale"
+                  "redis"
                 ],
                 "type": "string"
               },
@@ -32129,7 +32257,13 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
                 ],
                 "type": "string"
               }
@@ -33317,7 +33451,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -40599,7 +40733,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "E3D4BA46249768B4",
+            "example": "64488D195C65C9D7",
             "type": "string"
           },
           "status": {
@@ -49849,6 +49983,14 @@
             "description": "The name of the RabbitMQ exchange where the messages will be sent. Supports templates (e.g.: `e-${payload.e}`). Leave blank and configure `routing_key` to the specified Queue to use RabbitMQ's default Exchange.",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "heartbeat": {
             "default": "30s",
             "description": "The interval for sending heartbeat messages to the RabbitMQ server.",
@@ -49886,6 +50028,14 @@
             "maximum": 65535,
             "minimum": 1,
             "type": "integer"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -59389,6 +59539,11 @@
             ],
             "type": "string"
           },
+          "clientid_override_field": {
+            "default": "clientid_override",
+            "description": "Document field that defines a clientid override for the client.",
+            "type": "string"
+          },
           "collection": {
             "description": "Collection used to store authentication data.",
             "type": "string"
@@ -61876,7 +62031,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -63668,10 +63823,26 @@
             "description": "The name of the RabbitMQ exchange where the messages will be sent. Supports templates (e.g.: `e-${payload.e}`). Leave blank and configure `routing_key` to the specified Queue to use RabbitMQ's default Exchange.",
             "type": "string"
           },
+          "headers_template": {
+            "default": [],
+            "description": "Template for message headers.",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.header_key_value"
+            },
+            "type": "array"
+          },
           "payload_template": {
             "default": "",
             "description": "The template for formatting the payload of the message before sending it to RabbitMQ. Template placeholders, such as ${field1.sub_field}, will be substituted with the respective field's value. When left empty, the entire input message will be used as the payload, formatted as a JSON text. This behavior is equivalent to specifying ${.} as the payload template.",
             "type": "string"
+          },
+          "properties_template": {
+            "default": [],
+            "description": "Template for message properties.  See also: https://www.rabbitmq.com/docs/publishers#message-properties",
+            "items": {
+              "$ref": "#/components/schemas/bridge_rabbitmq.property_key_value"
+            },
+            "type": "array"
           },
           "publish_confirmation_timeout": {
             "default": "30s",
@@ -65033,7 +65204,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.0-M2.202508"
+    "version": "6.0.0-alpha.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -78236,43 +78407,43 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rabbitmq",
-                      "cassandra",
                       "rocketmq",
-                      "syskeeper_forwarder",
-                      "cockroachdb",
-                      "iotdb",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "alloydb",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "pulsar",
-                      "influxdb",
+                      "cassandra",
+                      "rabbitmq",
                       "greptimedb",
                       "sqlserver",
+                      "iotdb",
+                      "influxdb",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "azure_event_hub_producer",
+                      "alloydb",
+                      "cockroachdb",
+                      "kafka_producer",
+                      "pulsar",
                       "gcp_pubsub_producer",
+                      "redis",
                       "opents",
-                      "s3",
                       "s3tables",
                       "doris",
+                      "s3",
                       "datalayers",
                       "kinesis",
-                      "redis",
                       "mqtt",
                       "redshift",
                       "timescale",
-                      "tablestore",
+                      "oracle",
+                      "snowflake",
                       "couchbase",
+                      "tablestore",
+                      "tdengine",
                       "clickhouse",
                       "azure_blob_storage",
-                      "oracle",
-                      "tdengine",
-                      "snowflake",
                       "snowflake_streaming",
                       "disk_log",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -78284,43 +78455,43 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rabbitmq",
-                      "cassandra",
                       "rocketmq",
-                      "syskeeper_forwarder",
-                      "cockroachdb",
-                      "iotdb",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "alloydb",
-                      "mongodb",
-                      "azure_event_hub_producer",
-                      "pulsar",
-                      "influxdb",
+                      "cassandra",
+                      "rabbitmq",
                       "greptimedb",
                       "sqlserver",
+                      "iotdb",
+                      "influxdb",
+                      "mongodb",
+                      "syskeeper_forwarder",
+                      "confluent_producer",
+                      "azure_event_hub_producer",
+                      "alloydb",
+                      "cockroachdb",
+                      "kafka_producer",
+                      "pulsar",
                       "gcp_pubsub_producer",
+                      "redis",
                       "opents",
-                      "s3",
                       "s3tables",
                       "doris",
+                      "s3",
                       "datalayers",
                       "kinesis",
-                      "redis",
                       "mqtt",
                       "redshift",
                       "timescale",
-                      "tablestore",
+                      "oracle",
+                      "snowflake",
                       "couchbase",
+                      "tablestore",
+                      "tdengine",
                       "clickhouse",
                       "azure_blob_storage",
-                      "oracle",
-                      "tdengine",
-                      "snowflake",
                       "snowflake_streaming",
                       "disk_log",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
                       "mysql",
                       "pgsql",
@@ -80708,6 +80879,86 @@
         "summary": "List audit logs",
         "tags": [
           "Audit"
+        ]
+      }
+    },
+    "/mt/bulk_export_ns_configs": {
+      "post": {
+        "description": "Export one or more namespaced configurations.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "bulk_export_ns_configs": {
+                  "namespaces": [
+                    "ns1",
+                    "ns2"
+                  ]
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/mt.bulk_export_ns_configs_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulk_export_ns_configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                },
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid configurations",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Export multiple namespaced configurations",
+        "tags": [
+          "Multi-tenancy"
         ]
       }
     },
@@ -88664,7 +88915,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "E3D4BA46249768B4",
+            "example": "64488D195C65C9D7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97290,7 +97541,7 @@
           },
           {
             "description": "Site ID",
-            "example": "E3D4BA46249768B4",
+            "example": "64488D195C65C9D7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -97375,7 +97626,7 @@
           },
           {
             "description": "Site ID",
-            "example": "E3D4BA46249768B4",
+            "example": "64488D195C65C9D7",
             "in": "path",
             "name": "site",
             "required": true,
@@ -107340,6 +107591,90 @@
         ],
         "tags": [
           "Clients"
+        ]
+      }
+    },
+    "/mt/bulk_import_ns_configs": {
+      "post": {
+        "description": "Import one or more namespaced configurations.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "bulk_import_ns_configs": {
+                  "configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/mt.bulk_import_ns_configs_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "bulk_export_ns_configs": {
+                    "ns1": {
+                      "foo": "bar"
+                    },
+                    "ns2": {
+                      "foo": "bar"
+                    }
+                  }
+                },
+                "schema": {
+                  "example": {},
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Invalid configurations",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Import multiple namespaced configurations",
+        "tags": [
+          "Multi-tenancy"
         ]
       }
     },
@@ -117336,6 +117671,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "Force deactivate an alarm. This operation will forcefully deactivate an active alarm.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The alarm has been successfully deactivated."
+          },
+          "400": {
+            "description": "The alarm does not exist or has already been deactivated."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "Reset metrics for a particular validation",
@@ -118010,14 +118379,29 @@
                         "bytes": {
                           "default": 1000,
                           "description": "Maximum number of bytes to send in response",
-                          "maximum": 2147483647,
+                          "maximum": 67108864,
                           "minimum": 0,
                           "type": "integer"
                         },
+                        "hint": {
+                          "description": "Hint on the state of the current log stream.<br/>* `eof`: Stream has reached the end of the log.<br/>* `retry`: Stream is temporarily unavailable, will recover quickly.",
+                          "enum": [
+                            "eof",
+                            "retry"
+                          ],
+                          "type": "string"
+                        },
                         "position": {
                           "default": 0,
-                          "description": "Offset from the current trace position.",
-                          "type": "integer"
+                          "description": "Cursor for the current trace position.",
+                          "oneOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "integer"
+                            }
+                          ]
                         }
                       },
                       "type": "object"
@@ -118036,7 +118420,9 @@
                   "properties": {
                     "code": {
                       "enum": [
-                        "BAD_REQUEST"
+                        "BAD_REQUEST",
+                        "INVALID_PARAMETER",
+                        "STALE_CURSOR"
                       ],
                       "type": "string"
                     },
@@ -129411,11 +129797,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
@@ -129470,11 +129857,12 @@
                   "enable": true,
                   "filter": {
                     "e2e_tracing_options": {
-                      "attribute_meta_value": "emqxcl",
                       "client_connect_disconnect": true,
-                      "client_publish": true,
+                      "client_messaging": true,
                       "client_subscribe_unsubscribe": true,
                       "clientid_match_rules_max": 30,
+                      "cluster_identifier": "emqxcl",
+                      "follow_traceparent": true,
                       "msg_trace_level": 0,
                       "sample_ratio": "10%",
                       "topic_match_rules_max": 30
@@ -129513,11 +129901,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
