@@ -128,7 +128,7 @@ messages/9                        5C6028D6CE9459C7
 - `SITES`：所有已知站点的列表，包括 EMQX 节点名称及其状态。 
 - `SHARDS`：会话持久化分片列表以及其副本所在的站点 ID。
 
-### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
+### `emqx_ctl ds set_replicas <storage> <site1> <site2> ...`
 
 此命令允许设置包含集群中持久存储副本的站点列表。 一旦执行，它会创建一个操作计划，以在站点之间公平分配分片，并继续在后台执行。 
 
@@ -189,7 +189,7 @@ messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
 
 新的 `REPLICA TRANSITIONS` 部分列出了待处理的操作。一旦所有操作完成，此列表将为空。
 
-### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
+### `emqx_ctl ds join <storage> <site>` / `emqx_ctl ds leave <storage> <site>`
 
 这些命令将一个站点添加到持久存储副本列表中或从中移除。它们类似于 `set_replicas` 命令，但每次更新一个站点。 
 
