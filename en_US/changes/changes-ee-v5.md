@@ -15,7 +15,7 @@
 
 #### Data Integration
 
-- [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcoud` library to `3.8.3.0`.  This allows users to set up an S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
+- [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcloud` library to `3.8.3.0`.  This allows users to set up an S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
 - [#15585](https://github.com/emqx/emqx/pull/15585) Updated the brod client to version 4.4.4, expanding support for a wider range of Kafka APIs. This update addresses the deprecation of `JoinGroups` API versions `v0` - `v1`.
 
 #### Alarm
@@ -59,7 +59,7 @@
 - [#15706](https://github.com/emqx/emqx/pull/15706) Fixed an indexing issue that could cause Message Transformations and Schema Validations to behave inconsistently. Deleting one item could corrupt the topic index, so that a subsequent item remained active even after being disabled.
 - [#15708](https://github.com/emqx/emqx/pull/15708) Fixed an issue where external schema registries were not reloaded after a node restart.
 
-#### Observerbility
+#### Observability
 
 - [#15639](https://github.com/emqx/emqx/pull/15639) Fixed an issue where the `packets.subscribe.auth_error` metric was not incremented when subscription authentication failed.
 
