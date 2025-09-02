@@ -67,7 +67,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Seamless connection of devices and application data<br>(Coming soon)</td>
+    <td> Seamless connection of devices and application data</td>
   </tr>
   <tr>
     <td><b>Event History</b></td>
@@ -122,7 +122,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td> Ensuring integrity and legality of messages</td>
   </tr>
   <tr>
@@ -138,7 +138,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> In product roadmap</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html">Easy orchestration of data integration</a></td>
   </tr>
   <tr>
@@ -192,6 +192,8 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
+
 
 ## Scalability and Performance
 
@@ -555,7 +557,7 @@ This page lists features supported across different deployment types in detail.
     <td> </td>
   </tr>
   <tr>
-    <td><b>GBT32960</b></td>
+    <td><b>GB/T 32960</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -565,6 +567,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Security
 
@@ -747,8 +750,9 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
-
 ## Data Integration
+
+As EMQX evolves, it supports an expanding range of data integrations, including but not limited to those listed below.
 
 <div style="text-align: center;">
 <table>
@@ -776,6 +780,13 @@ This page lists features supported across different deployment types in detail.
   <tr>
     <td><b>Webhook/HTTP Server</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Aliyun Tablestore</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -823,6 +834,13 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
+    <td><b>Azure Blob Storage</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
     <td><b>Cassandra</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -831,6 +849,13 @@ This page lists features supported across different deployment types in detail.
   </tr>
   <tr>
     <td><b>ClickHouse</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
+    <td><b>Couchbase</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
@@ -942,6 +967,13 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
   </tr>
   <tr>
+    <td><b>Snowflake</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+  </tr>
+  <tr>
     <td><b>Syskeeper</b></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
@@ -965,6 +997,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 
 ## Rule Engine
 
@@ -1073,9 +1106,26 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events">Client events</a>, event-driven business development</td>
   </tr>
+  <tr>
+    <td><b>Schema Validation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td><b>Message Transformation</b></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
+  </tr>
 </tbody>
 </table>
 </div>
+
 
 ## Extensibility
 
