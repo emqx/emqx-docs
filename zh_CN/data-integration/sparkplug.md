@@ -18,11 +18,18 @@ Sparkplug B 采用明确定义的 payload 结构来标准化数据通信。它�
 
 EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 的高级支持。使用 Schema Registry，您可以为多种数据格式（包括 Sparkplug B）创建自定义编码器和解码器。通过在 registry 中定义 [适当的 Sparkplug B schema](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto)，您可以在 EMQX 的规则引擎中使用 `schema_decode` 和 `schema_encode` 函数访问和处理符合指定格式的数据。
 
-此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`sparkplug_encode`  和`sparkplug_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
+此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`spb_encode`  和`spb_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
+
+:::: tip
+
+先前的 `sparkplug_encode` 和 `sparkplug_decode` 函数已被弃用，因为它们对 `bytes_value` 的处理方式与 Sparkplug 规范不兼容。
+请改用更新后的 `spb_encode` 和 `spb_decode` 函数。
+
+::::
 
 ## Sparkplug B 函数
 
-EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数据：`sparkplug_encode` 和 `sparkplug_decode`。[实用示例](#实用示例)部分将帮助您了解如何在不同场景中使用这些函数。
+EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数据：`spb_encode` 和 `spb_decode`。[实用示例](#实用示例)部分将帮助您了解如何在不同场景中使用这些函数。
 
 由于规则引擎及其 `jq` 函数的灵活性，Sparkplug B 编码和解码函数可以执行各种任务。要了解更多有关规则引擎及其 `jq` 函数的信息，请参阅以下页面：
 
@@ -31,15 +38,15 @@ EMQX 提供了两个规则引擎 SQL 函数用于编码和解码 Sparkplug B 数
 - [JQ 函数](./rule-sql-jq.md)
 - [JQ 编程语言完整说明](https://stedolan.github.io/jq/manual/)
 
-### sparkplug_decode
+### spb_decode
 
-`sparkplug_decode` 函数用于解码用 Sparkplug B 格式编码的消息，例如，如果您希望根据 Sparkplug B 格式编码的消息内容将其转发到特定主题，或者以某种方式更改 Sparkplug B 编码的消息，该函数可以将原始 Sparkplug B 编码 payload 转换为更易于处理和分析的用户友好格式。
+`spb_decode` 函数用于解码用 Sparkplug B 格式编码的消息，例如，如果您希望根据 Sparkplug B 格式编码的消息内容将其转发到特定主题，或者以某种方式更改 Sparkplug B 编码的消息，该函数可以将原始 Sparkplug B 编码 payload 转换为更易于处理和分析的用户友好格式。
 
 使用示例：
 
 ```sql
 select
-  sparkplug_decode(payload) as decoded
+  spb_decode(payload) as decoded
 from t
 ```
 
@@ -47,15 +54,15 @@ from t
 
 [Sparkplug B Protobuf schema](https://github.com/emqx/emqx/blob/039e27a153422028e3d0e7d517a521a84787d4a8/lib-ee/emqx_ee_schema_registry/priv/sparkplug_b.proto) 可以进一步揭示消息结构的详细信息。
 
-### sparkplug_encode
+### spb_encode
 
-`sparkplug_encode` 函数用于将消息编码为 Sparkplug B 数据格式。这在您需要向 MQTT 客户端或系统的其他组件发送 Sparkplug B 格式消息时特别有用。
+`spb_encode` 函数用于将消息编码为 Sparkplug B 数据格式。这在您需要向 MQTT 客户端或系统的其他组件发送 Sparkplug B 格式消息时特别有用。
 
 使用示例：
 
 ```sql
 select
-  sparkplug_encode(json_decode(payload)) as encoded
+  spb_encode(json_decode(payload)) as encoded
 from t
 ```
 
@@ -63,7 +70,7 @@ from t
 
 ## 实用示例
 
-本节提供使用 `sparkplug_decode` 和 `sparkplug_encode` 函数处理 Sparkplug B 消息的实用示例。请注意，所给示例仅展示了一小部分可以执行的操作，并非全部。
+本节提供使用 `spb_decode` 和 `spb_encode` 函数处理 Sparkplug B 消息的实用示例。请注意，所给示例仅展示了一小部分可以执行的操作，并非全部。
 
 试想您有一个 Sparkplug B 编码的消息，具有以下结构：
 
@@ -122,7 +129,7 @@ from t
          .metrics[] |
          select(.name == "counter_group1/counter1_run")
       ',
-      sparkplug_decode(payload)) AS item
+      spb_decode(payload)) AS item
    DO item
    FROM "my/sparkplug/topic"
    ```
@@ -184,16 +191,16 @@ jq('
    # Update payload with new metrics
    $payload | .metrics = $updated_metrics
    ',
-   sparkplug_decode(payload)) AS item
-DO sparkplug_encode(item) AS updated_payload
+   spb_decode(payload)) AS item
+DO spb_encode(item) AS updated_payload
 FROM "my/sparkplug/topic"
 ```
 
-在此规则中，`sparkplug_decode` 用于解码消息，然后使用 `jq` 过滤出名为 `counter_group1/counter1_run` 的指标。然后，`DO` 子句中的 `sparkplug_encode` 用于再次对消息进行编码。
+在此规则中，`spb_decode` 用于解码消息，然后使用 `jq` 过滤出名为 `counter_group1/counter1_run` 的指标。然后，`DO` 子句中的 `spb_encode` 用于再次对消息进行编码。
 
 在消息重发布动作中，将主题名设置为 `${updated_payload}`，因为它是在 `DO` 子句中分配给更新后的 Sparkplug B 编码消息的名称。
 
-同样，您还可以使用 `sparkplug_decode` 和 `sparkplug_encode` 来更新指标的值。假设您想将名为 `counter_group1/counter1_run` 的指标值更新为 0。您可以通过以下规则实现：
+同样，您还可以使用 `spb_decode` 和 `spb_encode` 来更新指标的值。假设您想将名为 `counter_group1/counter1_run` 的指标值更新为 0。您可以通过以下规则实现：
 
 ```sql
 FOREACH
@@ -213,8 +220,8 @@ jq('
    # Update payload with new metrics
    $payload | .metrics = $updated_metrics
    ',
-   sparkplug_decode(payload)) AS item
-DO sparkplug_encode(item) AS item
+   spb_decode(payload)) AS item
+DO spb_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
@@ -233,13 +240,13 @@ jq('
      "int_value": 42,
      "datatype": 5
    } as $new_value |
-   # Create new metrics array 
+   # Create new metrics array
    ($old_metrics + [ $new_value ]) as $updated_metrics |
    # Update payload with new metrics
    $payload | .metrics = $updated_metrics
    ',
-   sparkplug_decode(payload)) AS item
-DO sparkplug_encode(item) AS item 
+   spb_decode(payload)) AS item
+DO spb_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
@@ -258,8 +265,8 @@ jq('
    # Filter out messages where value of metric with name $to_filter is 0 or smaller
    if $value > 0 then $payload else empty end
    ',
-   sparkplug_decode(payload)) AS item
-DO sparkplug_encode(item) AS item 
+   spb_decode(payload)) AS item
+DO spb_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
@@ -280,8 +287,8 @@ jq('
         # Let the current metric be the only one in the metrics array
         $payload | .metrics = [ $metric ]
    ',
-   sparkplug_decode(payload)) AS item
-DO sparkplug_encode(item) AS output_payload
+   spb_decode(payload)) AS item
+DO spb_encode(item) AS output_payload
 FROM "my/sparkplug/topic"
 ```
 
@@ -303,9 +310,9 @@ jq('
         # Let the current metric be the only one in the metrics array
         $payload | .metrics = [ $metric ]
    ',
-   sparkplug_decode(payload)) AS item
+   spb_decode(payload)) AS item
 DO
-sparkplug_encode(item) AS output_payload,
+spb_encode(item) AS output_payload,
 first(jq('"my_metrics/" + .metrics[0].name', item)) AS output_topic
 FROM "my/sparkplug/topic"
 ```
