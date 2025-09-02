@@ -22,7 +22,8 @@ EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 
 
 :::: tip
 
-这些函数的旧版本 `sparkplug_encode` 和 `sparkplug_decode` 已被弃用。请分别切换为使用 `spb_encode` 和 `spb_decode`。
+先前的 `sparkplug_encode` 和 `sparkplug_decode` 函数已被弃用，因为它们对 `bytes_value` 的处理方式与 Sparkplug 规范不兼容。
+请改用更新后的 `spb_encode` 和 `spb_decode` 函数。
 
 ::::
 
