@@ -23,7 +23,8 @@ Additionally, EMQX offers built-in support for Sparkplug B, eliminating the need
 
 :::: tip
 
-The previous versions of these functions, `sparkplug_encode` and `sparkplug_decode`, have been deprecated.  Please switch to using `spb_encode` and `spb_decode`, respectively.
+The previous `sparkplug_encode` and `sparkplug_decode` functions are deprecated because their handling of `bytes_value` was incompatible with the Sparkplug specification.
+Please use the updated `spb_encode` and `spb_decode` functions instead.
 
 ::::
 
