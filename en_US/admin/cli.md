@@ -199,7 +199,6 @@ session.discarded             : 0
 session.resumed               : 0
 session.takenover             : 0
 session.terminated            : 0
-```
 
 ## cluster
 
@@ -774,7 +773,7 @@ You can also manage traces from the dashboard UI. See [Log Trace](../observabili
 
 ## traces
 
-This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster. 
+This command is similar to the `trace` command, but it starts or stops a tracer across all nodes in the cluster.
 
 ### traces list
 
@@ -854,6 +853,7 @@ tcp:default
   running         : true
   current_conn    : 12
   max_conns       : 5000000
+  shutdown_count  : [{takenover,2},{discarded,1}]
 ws:default
   listen_on       : 0.0.0.0:8083
   acceptors       : 16
@@ -869,6 +869,46 @@ wss:default
   current_conn    : 0
   max_conns       : 5000000
 ```
+
+#### Common Shutdown Reasons
+
+For TCP listeners, EMQX reports a `shutdown_count` field, which records how many client disconnections occurred, grouped by reason. This can help identify why clients are getting disconnected from the TCP listener.
+
+```bash
+shutdown_count  : [{takenover,2},{discarded,1}]
+```
+
+In the example above:
+
+- 2 clients were disconnected because a new session took over the same `clientid`.
+- 1 client was discarded because a new clean session replaced it.
+
+Below is a list of common shutdown reasons that may appear in this field.
+
+| Reason                        | Description                                                  |
+| ----------------------------- | ------------------------------------------------------------ |
+| `banned`                      | The client is blacklisted due to ACL violations, rate limiting, or IP restrictions. |
+| `closed`                      | The connection was closed either by the server or the client. |
+| `discarded`                   | A new client with the same `clientid` and `clean_start = true` connected while the previous session was still active. |
+| `takenover`                   | A new client with the same `clientid` and `clean_start = false` connected while the previous session was still active. |
+| `einval`                      | An invalid argument or socket error occurred, often caused by attempting to write to a socket that has already been closed (a race condition between socket state change notification and data write). |
+| `frame_too_large`             | The MQTT packet exceeds the maximum allowed frame size.      |
+| `idle_timeout`                | No `CONNECT` packet was received within the allowed time after the TCP/SSL connection was established. |
+| `invalid_proto_name`          | The protocol name in the `CONNECT` packet is invalid or not `"MQTT"`. |
+| `invalid_topic`               | The client used an invalid topic (e.g., containing illegal characters or forbidden by the broker). |
+| `keepalive_timeout`           | The client failed to send any packets within the keepalive interval. |
+| `malformed_packet`            | The MQTT packet is corrupted or does not conform to the MQTT specification. |
+| `not_authorized`              | The client attempted an unauthorized action, rejected by ACL. |
+| `ssl_closed`                  | The SSL/TLS connection was closed by the peer.               |
+| `ssl_error`                   | An error occurred during the SSL/TLS handshake or data transmission. |
+| `ssl_upgrade_timeout`         | The SSL/TLS handshake did not complete within the allowed time. |
+| `unexpected_packet`           | The client sent a packet that was unexpected in the current connection state. |
+| `zero_remaining_len`          | The packet has a zero remaining length field, which is invalid in most contexts. |
+| `bad_username_or_password`    | Authentication failed due to incorrect username or password. |
+| `client_identifier_not_valid` | The provided `clientid` is invalid or locked by another client during login. |
+| `protocol_error`              | A generic MQTT protocol violation occurred.                  |
+| `tcp_closed`                  | The TCP connection was closed by the client or due to a network issue. |
+| `timeout`                     | A general timeout occurred (e.g., during authentication, etc.). |
 
 ### listeners stop \<Identifier\>
 

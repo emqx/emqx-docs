@@ -16,6 +16,12 @@ HStreamDB 数据集成是 EMQX 企业版功能。
 
 :::
 
+::: tip
+
+HStreamDB 数据集成功能将在 EMQX 6.0 中移除。
+
+:::
+
 ## 工作原理
 
 HStreamDB 数据集成是 EMQX 的即开即用功能，结合了 EMQX 的设备连接和消息传输能力以及 HStreamDB 强大的数据存储和处理能力。内置的[规则引擎](./rules.md)组件简化了两个平台之间的数据流和处理过程。

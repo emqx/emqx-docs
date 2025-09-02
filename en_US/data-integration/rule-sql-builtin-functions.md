@@ -24,7 +24,7 @@ In this section, all function declarations conform to the following format:
 FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
-For instance, `abs(X: integer | float) -> integer | float` implies that the data type of argument `X` can be either integer or float, and correspondingly, the return value's data type can also be integer or float.
+For instance, `acos(X: integer | float) -> float` implies that the data type of argument `X` can be either integer or float, and the return value's data type is float.
 
 Be aware that if the provided argument exceeds the stipulated range or employs an unsupported data type, it will result in the current SQL execution failing, incrementing the failure count by one.
 
@@ -43,14 +43,17 @@ EMQX supports a wide range of mathematical functions:
 - Numerical functions, include abs, ceil, floor, round, sqrt, fmod.
 - Exponential and logarithmic functions, include exp, power, log, log10, log2.
 
-### abs(X: integer | float) -> integer | float
+### abs(X: integer) -> integer
 
-Returns the absolute value of number `X`. Example:
+Returns the absolute value of integer `X`. Example:
 
 ```bash
 abs(-12) = 12
-abs(-1.2) = 1.2
 ```
+
+:::tip
+For absolute value operations on floating-point numbers, please use `ceil` or `floor` functions instead.
+:::
 
 ### acos(X: integer | float) -> float
 
