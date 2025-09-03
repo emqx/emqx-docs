@@ -6,16 +6,16 @@
 
 ### Enhancements
 
-### Deployment
+#### Deployment
 
-- [#15813](https://github.com/emqx/emqx/pull/15813) Added package release on Debian 13 trixie. Docker image base is changed to Debian 13.
+- [#15813](https://github.com/emqx/emqx/pull/15813) Added package release for Debian 13 (Trixie), and updated Docker images to use Debian 13 as the base.
 
 #### Core MQTT Functionalities
 
 - [#15773](https://github.com/emqx/emqx/pull/15773) Throttled client ID registration during reconnects.
   - When a previous session cleanup is still in progress, new connections using the same client ID are now throttled. This prevents instability when clients reconnect aggressively.
   - Affected clients receive reason code `137` (Server Busy) in the `CONNACK` with Reason-String `"THROTTLED"`, and should retry after the cleanup completes.
-  - Fixed the reason code returned when another connection is registering the same client ID, now correctly `137` instead of `133`.
+  - Fixed the reason code returned when another connection registers the same client ID; now correctly returns `137` instead of `133`.
 
 #### Data Integration
 

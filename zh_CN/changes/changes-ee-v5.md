@@ -6,6 +6,10 @@
 
 ### 增强
 
+#### 部署
+
+- [#15813](https://github.com/emqx/emqx/pull/15813) 新增 Debian 13 (Trixie) 安装包发布，并将 Docker 镜像的基础系统更新为 Debian 13。
+
 #### 核心 MQTT 功能
 
 - [#15773](https://github.com/emqx/emqx/pull/15773?utm_source=chatgpt.com) 在客户端重连时增加了 Client ID 注册的节流机制。
@@ -18,7 +22,7 @@
 - [#15542](https://github.com/emqx/emqx/pull/15542?utm_source=chatgpt.com) 将 `erlcloud` 库升级至 3.8.3.0。升级后，如果 EC2 实例已具备访问目标 S3 bucket 的正确 IAM 权限，用户可在不指定访问密钥 Id 和私有访问密钥的情况下配置 S3 连接器。
 - [#15585](https://github.com/emqx/emqx/pull/15585?utm_source=chatgpt.com) 将 Kafka `brod` 客户端升级至 4.4.4，扩展了对更多 Kafka API 的支持，并解决了 `JoinGroups` API 版本 `v0` 和 `v1` 弃用的问题。
 
-#### 告警
+#### 可观测性
 
 - [#15499](https://github.com/emqx/emqx/pull/15499?utm_source=chatgpt.com) 新增强制停用告警的 API 端点，允许管理员强制停用正在触发的告警。
 
