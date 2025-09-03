@@ -6,6 +6,10 @@
 
 ### Enhancements
 
+### Deployment
+
+- [#15813](https://github.com/emqx/emqx/pull/15813) Added package release on Debian 13 trixie. Docker image base is changed to Debian 13.
+
 #### Core MQTT Functionalities
 
 - [#15773](https://github.com/emqx/emqx/pull/15773) Throttled client ID registration during reconnects.
