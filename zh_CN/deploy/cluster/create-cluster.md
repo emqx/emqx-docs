@@ -512,23 +512,36 @@ $ ./bin/emqx ctl cluster status
 
 EMQX 支持伪分布式集群功能，适用于测试和开发场景。所谓“伪分布式集群”，是指在同一台机器上运行多个 EMQX 实例，并将每个实例配置为集群中的一个节点。
 
-启动第一个节点后，可使用以下命令启动第二个节点，并手动将其加入集群。为避免端口冲突，需要调整各类监听端口：
+首先启动第一个节点：
 
 ```bash
-EMQX_NODE__NAME='emqx2@127.0.0.1' \
-EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
-EMQX_STATSD__SERVER='127.0.0.1:8124' \
-EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
-EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
-EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
-EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
-EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
-EMQX_NODE__DATA_DIR="./data2" \
+  EMQX_NODE__NAME='emqx1@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log1/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1883' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8883' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8083' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8084' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18083 \
+  EMQX_NODE__DATA_DIR="./data1" \
 ./bin/emqx start
-
-./bin/emqx ctl cluster join emqx1@127.0.0.1
 ```
 
-上述示例展示的是如何手动创建集群。如需了解如何自动创建集群，可参阅[自动集群](#自动集群)一节。
+然后使用以下命令启动第二个节点并手动加入集群。为避免端口冲突，我们为不同节点设置了不同的监听端口，同时也分别指定了日志文件目录和内部数据库目录：
 
-需要注意的是，Dashboard 的设计默认集群中所有节点使用相同的端口号。若在同一台计算机上使用不同端口，可能会导致 Dashboard 页面显示异常，因此不建议在生产环境中使用此方式。
+```bash
+  EMQX_NODE__NAME='emqx2@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1882' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8882' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8082' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8085' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18082 \
+  EMQX_NODE__DATA_DIR="./data2" \
+./bin/emqx start
+  EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
+```
+
+以上示例展示了如何手动创建集群。您也可以参考[自动集群](#自动集群)小节，了解如何通过自动方式创建集群。
+
+EMQX Dashboard 假设所有集群节点使用相同的端口号。在同一台机器上使用不同端口运行多个节点，可能会导致 Dashboard 界面显示异常。因此，不建议在生产环境中使用此方式。
+

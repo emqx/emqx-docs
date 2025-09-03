@@ -534,7 +534,7 @@ Start the first node:
 ./bin/emqx start
 ```
 
-Then use the following command to start the second node and join the cluster manually. To avoid port conflicts, we use different listening ports on different nodes. We also use separate directories for logs files, and for internal databse:
+Then use the following command to start the second node and join the cluster manually. To avoid port conflicts, you need to use a different set of listening ports on different nodes, and also use separate directories for log files and the internal database:
 
 ```bash
   EMQX_NODE__NAME='emqx2@127.0.0.1' \
@@ -546,13 +546,10 @@ Then use the following command to start the second node and join the cluster man
   EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18082 \
   EMQX_NODE__DATA_DIR="./data2" \
 ./bin/emqx start
+  EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
 ```
 
-EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
-```
+The above code example is to create a cluster manually. You can also refer to the [Auto Clustering](#auto-clustering) section on how to create a cluster automatically.
 
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically.
+The EMQX Dashboard assumes that all cluster nodes use the same port numbers. Running multiple nodes with different ports on a single machine may cause display issues in the Dashboard UI. Therefore, this setup is not recommended for production environments.
 
-The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
-
-<!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->
