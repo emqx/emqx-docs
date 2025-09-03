@@ -521,21 +521,34 @@ To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, the
 
 EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
 
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
+Start the first node:
+```bash
+  EMQX_NODE__NAME='emqx1@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log1/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1883' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8883' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8083' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8084' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18083 \
+  EMQX_NODE__DATA_DIR="./data1" \
+./bin/emqx start
+```
+
+Then use the following command to start the second node and join the cluster manually. To avoid port conflicts, we use different listening ports on different nodes. We also use separate directories for logs files, and for internal databse:
 
 ```bash
-EMQX_NODE__NAME='emqx2@127.0.0.1' \
-    EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
-    EMQX_STATSD__SERVER='127.0.0.1:8124' \
-    EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
-    EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
-    EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
-    EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
-    EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
-    EMQX_NODE__DATA_DIR="./data2" \
+  EMQX_NODE__NAME='emqx2@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1882' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8882' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8082' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8085' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18082 \
+  EMQX_NODE__DATA_DIR="./data2" \
 ./bin/emqx start
+```
 
-./bin/emqx ctl cluster join emqx1@127.0.0.1
+EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
 ```
 
 The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically.
