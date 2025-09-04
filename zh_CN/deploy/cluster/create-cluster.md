@@ -430,7 +430,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 [EMQX Kubernetes Operator](https://docs.emqx.com/zh/emqx-operator/latest/) 可以帮您快速在 Kubernetes 的环境中创建和管理 EMQX 集群，极大简化了 EMQX 集群的部署和管理流程，将部署和管理变为一种低成本、标注化、可复用的工作。
 
-如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考 [使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
+如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考[使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
 
 您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 k8s 上的服务名，地址类型:
 
@@ -507,3 +507,41 @@ $ ./bin/emqx ctl cluster status
 - TCP IPv6：`inet6_tcp`
 
 要启用 SSL，您首先需要将 `cluster.proto_dist` 设置为 `inet_tls`，然后在 `etc` 文件夹中配置 `ssl_dist.conf` 文件并指定 TLS 证书。详情参见 [使用 TLS 进行 Erlang 分布式处理](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html)。
+
+## 本地测试：伪分布式集群
+
+EMQX 支持伪分布式集群功能，适用于测试和开发场景。所谓“伪分布式集群”，是指在同一台机器上运行多个 EMQX 实例，并将每个实例配置为集群中的一个节点。
+
+首先启动第一个节点：
+
+```bash
+  EMQX_NODE__NAME='emqx1@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log1/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1883' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8883' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8083' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8084' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18083 \
+  EMQX_NODE__DATA_DIR="./data1" \
+./bin/emqx start
+```
+
+然后使用以下命令启动第二个节点并手动加入集群。为避免端口冲突，我们为不同节点设置了不同的监听端口，同时也分别指定了日志文件目录和内部数据库目录：
+
+```bash
+  EMQX_NODE__NAME='emqx2@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1882' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8882' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8082' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8085' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18082 \
+  EMQX_NODE__DATA_DIR="./data2" \
+./bin/emqx start
+  EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
+```
+
+以上示例展示了如何手动创建集群。您也可以参考[自动集群](#自动集群)小节，了解如何通过自动方式创建集群。
+
+注意，不建议在生产环境中使用此方式。
+
