@@ -17,6 +17,10 @@
   - 受影响的客户端会在 `CONNACK` 中收到原因码 `137` (Server Busy)，并带有 Reason-String `"THROTTLED"`，应在会话清理完成后重试。
   - 修复了当另一个连接正在注册相同 Client ID 时返回的原因码，现在会正确返回 `137` 而不是 `133`。
 
+#### 可观测性
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) 新增强制停用告警的 API 端点，允许管理员强制停用正在触发的告警。
+
 #### 性能
 
 - [#15536](https://github.com/emqx/emqx/pull/15536) 默认禁用了 `node.global_gc_interval` 配置。该配置在启用时会引发 CPU 波动和消息延迟，而 Erlang 内置 GC 已足够应对大部分场景。禁用后整体性能更稳定。
