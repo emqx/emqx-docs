@@ -2,7 +2,7 @@
 
 ## 5.8.8
 
-*Release Date: 2025-09-02*
+*Release Date: 2025-09-04*
 
 ### Enhancements
 
@@ -57,7 +57,7 @@
 
 - [#15616](https://github.com/emqx/emqx/pull/15616) Kafka connections are now considered healthy even if a `topic_authorization_failed` error is returned for the default probing topic.
 
-#### Smart Data Hub
+#### Rule Engine
 
 
 - [#15706](https://github.com/emqx/emqx/pull/15706) Fixed an indexing issue that could cause Message Transformations and Schema Validations to behave inconsistently. Deleting one item could corrupt the topic index, so that a subsequent item remained active even after being disabled.
