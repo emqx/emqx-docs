@@ -151,7 +151,9 @@
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
                 - deploy/kubernetes/operator/api-reference
-            - deploy/kubernetes/chart
+            - title_en: EMQX Helm Chart
+              title_cn: EMQX Helm Chart
+              path: deploy/kubernetes/chart
         - title_en: Work with License
           title_cn: 配置 License
           path: deploy/license
