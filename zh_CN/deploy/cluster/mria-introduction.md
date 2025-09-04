@@ -13,7 +13,7 @@
 
 Mria 是对 Erland 原生数据库 Mnesia 的开源扩展，支持最终一致性的数据复制。启用异步方式同步事务日志后，EMQX 节点之间的连接模式从 Mnesia 的**全网状拓扑**结构转向 Mria 的**网状+星型**状拓扑结构。
 
-<img src="./assets/emqx-mria.png" alt="EMQX Mria 架构" style="zoom:30%;" />
+<img src="./assets/emqx-mria.png" alt="EMQX Mria 架构" style="zoom:25%;" />
 
 ### 节点角色说明
 

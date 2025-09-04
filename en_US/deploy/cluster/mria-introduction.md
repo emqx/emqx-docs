@@ -16,7 +16,7 @@ It is recommended to first read [EMQX Clustering](./introduction.md).
 
 Mria is an open-source extension of Erlang’s native database, Mnesia, that enables eventual consistency in data replication. With asynchronous transaction log replication enabled, the node connection topology shifts from Mnesia’s **fully meshed** model to Mria’s **mesh + star** hybrid topology.
 
-<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 30%;" />
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
 
 ### Node Role Description
 

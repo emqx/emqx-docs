@@ -430,7 +430,7 @@ $ etcdctl ls /emqxcl/emqxcl --recursive
 
 [EMQX Kubernetes Operator](https://docs.emqx.com/zh/emqx-operator/latest/) 可以帮您快速在 Kubernetes 的环境中创建和管理 EMQX 集群，极大简化了 EMQX 集群的部署和管理流程，将部署和管理变为一种低成本、标注化、可复用的工作。
 
-如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考 [使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
+如果你希望自行部署和管理 EMQX，依然可以通过 Kubernetes API 进行节点发现和自动集群。如希望使用此功能，需要先为 EMQX Pod 配置 RBAC，允许 EMQX 通过 endpoints 资源从 Kubernetes APIServer 获取集群节点信息，具体配置步骤，请参考[使用 RBAC 鉴权](https://kubernetes.io/zh-cn/docs/reference/access-authn-authz/rbac/)。
 
 您需要为所有节点指定 Kubernetes API 服务器，EMQX 在 k8s 上的服务名，地址类型:
 

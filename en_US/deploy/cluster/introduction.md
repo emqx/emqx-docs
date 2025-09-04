@@ -43,7 +43,7 @@ This distributed design allows EMQX to support mission-critical messaging system
 
 Early versions of EMQX relied on Erlang/OTP's built-in Mnesia database and a full-mesh topology. Each node maintained direct TCP connections to all other nodes using the Erlang distribution protocol (default port: 4370), forming a tightly coupled system.
 
-<img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 33%;" />
+<img src="./assets/mnesia-cluster.png" alt="mnesia-cluster" style="zoom: 40%;" />
 
 However, this model had the following limitations:
 
@@ -65,7 +65,7 @@ Key changes include:
 
 
 
-<img src="./assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:30%;" />
+<img src="./assets/EMQX_cluster.png" alt="EMQX_cluster" style="zoom:40%;" />
 
 
 
