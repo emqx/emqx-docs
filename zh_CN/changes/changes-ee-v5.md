@@ -1,5 +1,79 @@
 # EMQX 企业版 v5 版本
 
+## 5.8.8
+
+*发布日期：2025-09-04*
+
+### 增强
+
+#### 部署
+
+- [#15813](https://github.com/emqx/emqx/pull/15813) 新增 Debian 13 (Trixie) 安装包发布，并将 Docker 镜像的基础系统更新为 Debian 13。
+
+#### 核心 MQTT 功能
+
+- [#15773](https://github.com/emqx/emqx/pull/15773) 在客户端重连时增加了 Client ID 注册的节流机制。
+  - 当之前的会话清理仍在进行中时，新连接使用相同 Client ID 将被节流，避免客户端在频繁重连时导致系统不稳定。
+  - 受影响的客户端会在 `CONNACK` 中收到原因码 `137` (Server Busy)，并带有 Reason-String `"THROTTLED"`，应在会话清理完成后重试。
+  - 修复了当另一个连接正在注册相同 Client ID 时返回的原因码，现在会正确返回 `137` 而不是 `133`。
+
+#### 数据集成
+
+- [#15542](https://github.com/emqx/emqx/pull/15542) 将 `erlcloud` 库升级至 3.8.3.0。升级后，如果 EC2 实例已具备访问目标 S3 bucket 的正确 IAM 权限，用户可在不指定访问密钥 Id 和私有访问密钥的情况下配置 S3 连接器。
+- [#15585](https://github.com/emqx/emqx/pull/15585) 将 Kafka `brod` 客户端升级至 4.4.4，扩展了对更多 Kafka API 的支持，并解决了 `JoinGroups` API 版本 `v0` 和 `v1` 弃用的问题。
+
+#### 可观测性
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) 新增强制停用告警的 API 端点，允许管理员强制停用正在触发的告警。
+
+#### 性能
+
+- [#15536](https://github.com/emqx/emqx/pull/15536) 默认禁用了 `node.global_gc_interval` 配置。该配置在启用时会引发 CPU 波动和消息延迟，而 Erlang 内置 GC 已足够应对大部分场景。禁用后整体性能更稳定。
+- [#15539](https://github.com/emqx/emqx/pull/15539) 优化 Erlang VM 参数以提升性能与稳定性：
+  - 增大分布式通道缓冲区至 32 MB（`+zdbbl 32768`），避免在高强度 Mnesia 操作中触发 `busy_dist_port` 报警。
+  - 禁用调度器忙等待（`+sbwt none +sbwtdcpu none +sbwtdio none`），降低操作系统报告的 CPU 使用率。
+  - 设置调度器绑定类型为 db（`+stbt db`），以降低消息延迟。
+
+### 修复
+
+#### 部署
+
+- [#15580](https://github.com/emqx/emqx/pull/15580) 在 EMQX Enterprise Helm Chart 中新增变量 `emqxLicenseSecretRef`，可指定包含 EMQX License Key 的 Kubernetes Secret，使 License 自动生效。
+  该变量替代了无效的 `emqxLicenseSecretName`，后者仅创建并挂载 Secret 文件，却未将 License 应用于 EMQX。
+
+#### 集群
+
+- [#14778](https://github.com/emqx/emqx/pull/14778) 修复了当一个运行节点的 `data/certs` 或 `data/authz` 目录中存在损坏的符号链接时，其他节点无法加入该集群的问题。
+
+#### 安全
+
+- [#15581](https://github.com/emqx/emqx/pull/15581) 将 Erlang/OTP 从 26.2.5.2 升级至 26.2.5.14，包含两个与 TLS 相关的重要修复：
+  - 修复了因证书更新过程中的竞争条件导致的 TLS 连接崩溃。
+  - 现在可以正常使用 RSASSA-PSS 签名的 RSA 证书。此前，TLS 握手可能因 `bad_certificate / invalid_signature` 错误而失败。
+
+#### 数据集成
+
+- [#15616](https://github.com/emqx/emqx/pull/15616) 修复了 Kafka 健康检查逻辑。即使默认探测主题返回 `topic_authorization_failed` 错误，Kafka 连接也会被视为健康。
+
+#### 智能数据中心
+
+- [#15706](https://github.com/emqx/emqx/pull/15706) 修复了可能导致消息转换 和 Schema 验证表现不一致的索引问题。删除某个条目后可能破坏主题索引，导致后续条目即使被禁用仍然保持启用状态。
+- [#15708](https://github.com/emqx/emqx/pull/15708) 修复了外部 Schema Registry 在节点重启后未能重新加载的问题。
+
+#### 可观测性
+
+- [#15639](https://github.com/emqx/emqx/pull/15639) 修复了 `packets.subscribe.auth_error` 指标未在订阅认证失败时正确递增的问题。
+
+#### 网关
+
+- [#15679](https://github.com/emqx/emqx/pull/15679) 修复了 ExProto、JT/T 808、GB/T 32960 和 OCPP 网关的 global chain name 错误。这些网关的内置认证数据此前被错误地归类到 `unknown:global`，导致网关之间产生冲突。
+- [#15699](https://github.com/emqx/emqx/pull/15699) 修复了当节点停止或重启时，网关（如 CoAP）的内置认证数据被错误删除的问题。
+- [#15822](https://github.com/emqx/emqx/pull/15822) 修复了 OCPP 网关连接在发送一定数量的消息后会崩溃的问题。
+
+#### ExHook
+
+- [#15683](https://github.com/emqx/emqx/pull/15683) 修复了 ExHook 的 TLS 选项，使 gRPC 客户端能够在 TLS 握手过程中正确验证服务器主机名。
+
 ## 5.8.7
 
 *发布日期：2025-07-02*
