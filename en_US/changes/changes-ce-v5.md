@@ -17,6 +17,10 @@
   - Affected clients receive reason code `137` (Server Busy) in the `CONNACK` with Reason-String `"THROTTLED"`, and should retry after the cleanup completes.
   - Fixed the reason code returned when another connection registers the same client ID; now correctly returns `137` instead of `133`.
 
+#### Observability
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+
 #### Performance
 
 - [#15536](https://github.com/emqx/emqx/pull/15536) Disabled the `node.global_gc_interval` configuration by default to improve overall performance stability, as it caused CPU fluctuations and higher message latency while providing little benefit over Erlang’s built-in garbage collector.
