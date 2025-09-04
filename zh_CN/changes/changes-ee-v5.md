@@ -68,6 +68,7 @@
 
 - [#15679](https://github.com/emqx/emqx/pull/15679?utm_source=chatgpt.com) 修复了 ExProto、JT/T 808、GB/T 32960 和 OCPP 网关的 global chain name 错误。这些网关的内置认证数据此前被错误地归类到 `unknown:global`，导致网关之间产生冲突。
 - [#15699](https://github.com/emqx/emqx/pull/15699?utm_source=chatgpt.com) 修复了当节点停止或重启时，网关（如 CoAP）的内置认证数据被错误删除的问题。
+- [#15822](https://github.com/emqx/emqx/pull/15822?utm_source=chatgpt.com) 修复了 OCPP 网关连接在发送一定数量的消息后会崩溃的问题。
 
 #### ExHook
 
