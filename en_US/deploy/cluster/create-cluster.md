@@ -519,7 +519,7 @@ To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, the
 
 ## Pseudo-Distributed Cluster
 
-EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
+EMQX provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
 
 Start the first node:
 ```bash
@@ -551,5 +551,4 @@ Then use the following command to start the second node and join the cluster man
 
 The above code example is to create a cluster manually. You can also refer to the [Auto Clustering](#auto-clustering) section on how to create a cluster automatically.
 
-Running multiple nodes with different ports on a single machine may cause display issues in the Dashboard UI. Therefore, this setup is not recommended for production environments.
-
+Please note that this setup is not recommended for production environments.
