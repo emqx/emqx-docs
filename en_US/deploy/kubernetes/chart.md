@@ -1,10 +1,8 @@
 # Deploy EMQX on Kubernetes Using Helm Chart
 
-This chart bootstraps an emqx deployment on a Kubernetes cluster using the Helm package manager.
-
 This page provides step-by-step instructions for deploying EMQX on a Kubernetes cluster using the official Helm chart.
 
-The EMQX Helm chart simplifies Kubernetes-based deployments by packaging all required EMQX components, such as StatefulSets, Services, ConfigMaps, and Ingress rules, into a single, configurable Helm chart.
+The official EMQX Helm chart simplifies Kubernetes-based deployments by packaging all required EMQX components, such as StatefulSets, Services, ConfigMaps, and Ingress rules, into a single, configurable Helm chart.
 
 ## Prerequisites
 
@@ -45,13 +43,13 @@ helm install my-emqx emqx/emqx-enterprise
 
 To remove the EMQX release named `my-emqx` and delete all associated Kubernetes resources:
 
-**For Helm v3 and above**:
+**For Helm v3 and above**
 
 ```bash
 $ helm uninstall  my-emqx
 ```
 
-**For Helm v2 (legacy)**:
+**For Helm v2 (legacy)**
 
 ```bash
 $ helm del  my-emqx
@@ -137,7 +135,7 @@ The EMQX Helm chart offers a wide range of configurable parameters through the `
 The following table lists the configurable EMQX-specific parameters of the chart and their default values.
 | Parameter                                                                                                                                                              | Description                                                                   | Default Value |
 |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|---------------|
-| `emqxConfig`                                                                                                                                                           | Map of [configuration](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html) items expressed as environment variables (prefix `EMQX_` can be omitted) or using the configuration files [namespaced dotted notation](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html#environment-variables)       | `nil`         |
+| `emqxConfig`                                                                                                                                                           | A map of [configuration](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html) items defined using either [environment variables](https://docs.emqx.com/en/emqx/latest/configuration/configuration.html#environment-variables) (the `EMQX_` prefix is optional) or the namespaced dotted notation used in EMQX configuration files. | `nil`         |
 | `emqxLicenseSecretName`                                                                                                                                                | Name of the secret that holds the license information (deprecated)         | `nil`         |
 | `emqxLicenseSecretRef.name`                                                                                                                                         | Name of the secret that holds the license information                         | `""`         |
 | `emqxLicenseSecretRef.key`                                                                                                                                          | Key of the secret that holds the license information                          | `""`         |

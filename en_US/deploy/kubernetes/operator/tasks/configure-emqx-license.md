@@ -11,7 +11,7 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
 
 ## Configure EMQX Cluster
 
-  `apps.emqx.io/v2beta1 EMQX` supports configuring EMQX cluster license through `.spec.config.data`. For config.data configuration, please refer to the document: [Configuration Manual](../../../../configuration/configuration.md). This field is only allowed to be configured when creating an EMQX cluster, and does not support updating.
+`apps.emqx.io/v2beta1 EMQX` supports configuring EMQX cluster license through `.spec.config.data`. For config.data configuration, please refer to the document: [Configuration Manual](../../../../configuration/configuration.md). This field is only allowed to be configured when creating an EMQX cluster, and does not support updating.
 
   > After the EMQX cluster is created, if the license needs to be updated, please update it through the EMQX Dashboard.
 
@@ -50,7 +50,7 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
 
   ```bash
   $ kubectl get svc emqx-ee-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 
@@ -109,4 +109,3 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
   customer_type   : 10
   expiry          : false
   ```
-  

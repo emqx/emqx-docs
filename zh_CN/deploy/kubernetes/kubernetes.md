@@ -1,47 +1,55 @@
-# 在 Kubernetes 上部署 EMQX
+# 在 Kubernetes 中部署 EMQX
 
-在 Kubernetes 上部署 EMQX 主要有两种方法：使用 EMQX Operator 或使用官方的 Helm Chart。两种方法都得到了完全支持，但它们满足了不同的需求和操作复杂性级别。
+EMQX 支持通过以下两种方式在 Kubernetes 中部署：
 
-本文档将通过概述每种方法的优缺点并提供详细文档的链接，帮助您为您的场景选择最佳方法。
+- **EMQX Operator**
+- **EMQX Helm chart**
 
-## 推荐方法：EMQX Operator
+这两种方式分别适用于不同的使用场景和运维需求。本文将介绍各自的优劣势，帮助你选择最适合的部署策略。
 
-EMQX Operator 是在 Kubernetes 上部署和管理 EMQX 集群的推荐方法，特别是对于生产环境或需要高级生命周期管理的场景。Operator 是一个扩展 Kubernetes API 的软件，代表用户创建、配置和管理 EMQX 实例。
+## 推荐方式：使用 EMQX Operator
 
-[**了解如何使用 EMQX Operator 部署](./operator/operator.md)**
+EMQX Operator 是在 Kubernetes 上部署和管理 EMQX 集群的推荐方式，特别适用于生产环境或需要高级生命周期自动化的场景。
 
-### 优点
+Operator 由 EMQX 官方团队开发和维护，专为在 Kubernetes 中原生部署、配置和管理 EMQX 集群而设计。它通过自定义资源定义（CRD）扩展 Kubernetes API，支持声明式集群管理，并自动化执行复杂的运维任务，如弹性伸缩、版本升级和故障恢复。
 
-- **自动化运维：** Operator 自动化了集群扩展、升级和故障恢复等复杂任务，减少了手动工作和潜在的错误。
-- **高级生命周期管理：** 支持蓝绿部署等复杂的部署策略，确保零停机升级和优雅的连接迁移。
-- **简化配置：** 通过高级别的自定义资源定义（CRD）管理 EMQX，使配置比繁杂的 Helm values 更具声明性且更易于管理。
-- **封装专业知识：** Operator 封装了运行像 EMQX 这样的有状态应用的运维知识，确保遵循最佳实践。
+[查看 EMQX Operator 部署指南](./operator/operator.md)
 
-### 缺点
+### 主要优势
 
-- **额外组件：** 需要在您的 Kubernetes 集群中安装和维护 Operator 本身。
-- **学习曲线较陡：** 用户需要熟悉 Kubernetes Operator 的概念和特定的 EMQX CRD。
+- **自动化运维：** Operator 可自动完成集群扩容、升级和故障恢复等复杂任务，降低人工操作和错误风险。
+- **高级生命周期管理：** 支持蓝绿部署等高级策略，实现无中断升级和连接迁移。
+- **配置简化：** 通过高层级的 CRD 管理 EMQX，配置更加声明式且易于维护，相比 Helm 的 `values.yaml` 更简洁。
+- **内置最佳实践：** Operator 封装了运行有状态应用（如 EMQX）所需的运维经验，保障部署符合最佳实践。
 
-## 替代方法：Helm Chart
+### 潜在限制
 
-EMQX Helm Chart 提供了一种使用流行的包管理器 Helm 在 Kubernetes 上部署 EMQX 的直接方法。此方法非常适合快速入门、开发/测试环境，或偏好直接管理 Kubernetes 资源的用户。
+- **需要部署 Operator 控制器：** 需要在集群中额外部署并维护 EMQX Operator 控制器。
+- **需要额外的学习成本：** 需要用户了解 Kubernetes Operator 概念及 EMQX 的自定义资源使用方法。
 
-[**了解如何使用 Helm 部署](./chart.md)**
+## 替代方式：使用 Helm Chart
 
-### 优点
+EMQX Helm chart 提供了一种灵活且简洁的方式，通过 Kubernetes 生态中最流行的包管理工具 Helm 来部署 EMQX。此方式非常适合快速评估、开发/测试环境，或偏好直接管理 Kubernetes 资源的用户和团队。
 
-- **简单和熟悉：** Helm 是 Kubernetes 生态系统中广泛采用的工具，使其成为许多用户的熟悉切入点。
-- **直接控制：** 通过 `values.yaml` 文件对生成的 Kubernetes 资源（如 StatefulSets、Services 和 ConfigMaps）提供直接、精细的控制。
-- **无额外依赖：** 不需要一个单独的 operator 控制器在集群中运行。
+该 Helm chart 由 EMQX 官方团队维护，封装了部署所需的全部 Kubernetes 对象，用户可通过配置 `values.yaml` 文件定义部署参数，实现可重复和可定制的部署，而无需手动编写 YAML 文件。
 
-### 缺点
+[查看 Helm Chart 部署指南](./chart.md)
 
-- **手动管理：** 升级、扩展和复杂的配置更改等生命周期操作更加手动化，自动化程度较低。
-- **自动化有限：** 缺乏内置的高级功能，如自动化的蓝绿部署。第二天的运维完全是用户的责任。
-- **配置复杂性：** 对于生产级别的设置，`values.yaml` 文件可能会变得庞大且难以管理。
+### 主要优势
 
-## 您应该选择哪种方法？
+- **简单易用：** Helm 是 Kubernetes 社区广泛使用的工具，用户熟悉度高，易于上手。
+- **直接控制：** 通过 `values.yaml` 文件对 StatefulSet、Service、ConfigMap 等 Kubernetes 资源进行细粒度控制。
+- **无需额外依赖：** 不需要运行额外的 Operator 控制器，部署更轻量。
 
-- **对于大多数生产和重要的预生产用例，强烈推荐使用 EMQX Operator。** 它简化了长期管理并减少了运维开销。
-- **对于快速评估、开发、测试，或者如果您非常偏好使用 Helm 直接管理资源，Helm Chart 是一个绝佳的选择。**
+### 潜在限制
 
+- **手动管理：** 升级、扩容、复杂配置变更等生命周期操作需要手动完成，自动化程度较低。
+- **缺乏高级自动化：** 不支持内置的蓝绿部署等高级策略。所有 Day-2 运维任务（如扩容、升级、维护）都需由用户手动执行。
+- **配置复杂度高：** 在生产环境下，`values.yaml` 文件可能变得庞大且难以维护。
+
+## 如何选择部署方式
+
+选择 EMQX Operator 还是 Helm chart 取决于你的部署目标、环境成熟度以及运维偏好。以下建议可帮助你做出决策：
+
+- 对于大多数生产环境或重要的预发布环境，强烈推荐使用 EMQX Operator。 它简化了长期集群管理，降低了运维负担。
+- 对于快速评估、开发测试场景，或需要对 Kubernetes 资源进行直接控制的情况，Helm chart 是一个轻量且灵活的选择。
