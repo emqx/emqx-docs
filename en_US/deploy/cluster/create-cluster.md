@@ -551,5 +551,5 @@ Then use the following command to start the second node and join the cluster man
 
 The above code example is to create a cluster manually. You can also refer to the [Auto Clustering](#auto-clustering) section on how to create a cluster automatically.
 
-The EMQX Dashboard assumes that all cluster nodes use the same port numbers. Running multiple nodes with different ports on a single machine may cause display issues in the Dashboard UI. Therefore, this setup is not recommended for production environments.
+Running multiple nodes with different ports on a single machine may cause display issues in the Dashboard UI. Therefore, this setup is not recommended for production environments.
 
