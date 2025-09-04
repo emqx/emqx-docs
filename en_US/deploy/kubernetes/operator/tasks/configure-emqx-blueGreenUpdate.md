@@ -1,8 +1,6 @@
-# Upgrade the EMQX cluster elegantly through blue-green deployment.
+# Upgrade the EMQX Cluster Elegantly through Blue-Green Deployment
 
-## Task objective
-
-How to gracefully upgrade the EMQX cluster through blue-green deployment
+This page demonstrates how to gracefully upgrade the EMQX cluster through blue-green deployment.
 
 :::tip
 
@@ -98,9 +96,7 @@ timeline
 						: pod-2
 ```
 
-## How to update the EMQX cluster through blue-green deployment.
-
-### Configuration update strategy
+## Configuration Update Strategy
 
 :::: tabs type:card
 ::: tab apps.emqx.io/v2beta1
@@ -206,7 +202,7 @@ emqx-ee   Running  8m33s
 :::
 ::::
 
-### Connect to EMQX cluster using MQTTX CLI.
+## Connect to EMQX Cluster Using MQTTX CLI
 
 MQTT X CLI is an open-source MQTT 5.0 CLI Client that supports automatic reconnection. It is also a pure command-line mode MQTT X. It aims to help develop and debug MQTT services and applications faster without using a graphical interface. For documentation about MQTT X CLI, please refer to: [MQTTX CLI](https://mqttx.app/cli).
 
@@ -224,7 +220,7 @@ Output is similar to:
 [10:06:13 AM] › ℹ  Done, total time: 31.113s
 ```
 
-### Upgrade EMQX cluster.
+## Upgrade EMQX Cluster
 
 - Any modifications made to the Pod Template will trigger the upgrade strategy of EMQX Operator.
 
@@ -280,7 +276,7 @@ Output is similar to:
 
   ```bash
   $ kubectl get emqx
-
+  
   NAME      STATUS   AGE
   emqx-ee   Ready    8m33s
   ```

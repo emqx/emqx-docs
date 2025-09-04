@@ -17,7 +17,7 @@ Before you begin, you must have the following:
 
 - To install EMQX Operator, please refer to [Install EMQX Operator](./getting-started.md)
 
-## Quickly deploying an EMQX cluster
+## Quickly Deploy an EMQX Cluster
 
 Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](./operator.md):
 
@@ -25,7 +25,7 @@ Here are the relevant configurations for EMQX Custom Resource. You can choose th
   If you want to request CPU and memory resources, you need to ensure that the CPU is greater than or equal to 250m and the memory is greater than or equal to 512M.
 
   - [Resource requests in Autopilot](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests)
-  :::
+    :::
 
 Save the following content as a YAML file and deploy it using the `kubectl apply` command.
 
@@ -82,7 +82,7 @@ $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].i
 
 Access the EMQX console by opening a web browser and visiting http://34.122.174.166:18083. Login using the default username and password `admin/public`.
 
-## Connecting to EMQX cluster to publish/subscribe messages using MQTTX CLI
+## Connect to EMQX Cluster to Publish/Subscribe Messages Using MQTTX CLI
 
 [MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool designed to help developers develop and debug MQTT services and applications faster without the need for a GUI.
 
@@ -120,6 +120,6 @@ $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
 [10:00:58] › payload: hello world
 ```
 
-## Use LoadBalancer for TLS offloading
+## Use LoadBalancer for TLS Offloading
 
 Since Google LoadBalancer doesn't support TCP certificates, please check [discussion](https://github.com/emqx/emqx-operator/discussions/312) to address TCP certificate offloading issues.

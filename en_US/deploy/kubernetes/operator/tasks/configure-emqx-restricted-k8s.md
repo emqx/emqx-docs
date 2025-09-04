@@ -1,4 +1,4 @@
-# Deploy EMQX Cluster in k8s with restricted access
+# Deploy EMQX Cluster in k8s with Restricted Access
 
 Here we are assuming k8s cluster does not have access to the internet, and the user does not have permissions to create and/or use `ClusterRole`.
 
@@ -14,7 +14,7 @@ Here we are assuming k8s cluster does not have access to the internet, and the u
 - Override default parameters of `emqx-operator` to use private registry, single namespace, custom `securityContext`, and disabled webhook
 - Use custom `securityContext` for EMQX
 
-## Push necessary docker images to a private docker registry
+## Push Necessary Docker Images to a Private Docker Registry
 
 ```bash
 export CERT_MANAGER_VERSION='v1.16.2'
@@ -46,7 +46,7 @@ pull_retag_push "emqx/emqx-enterprise:$EMQX_VERSION" "$REGISTRY/emqx/emqx-enterp
 pull_retag_push "emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION" "$REGISTRY/emqx/emqx-operator-controller:$EMQX_OPERATOR_VERSION"
 ```
 
-## Deploy cert-manager
+## Deploy Cert-Manager
 
 Skip this step if cert-manager is installed in the cluster.
 
@@ -73,13 +73,13 @@ helm upgrade --install cert-manager jetstack/cert-manager \
 
 ## Deploy EMQX Operator
 
-### Deploy CRDs manually from release assets
+### Deploy CRDs Manually from Release Assets
 
 ```bash
 kubectl -n emqx apply -f https://github.com/emqx/emqx-operator/releases/download/$EMQX_OPERATOR_VERSION/crds.yaml
 ```
 
-### Deploy emqx-operator
+### Deploy Emqx-Operator
 
 If cert-manager is installed cluster-wide already, add `--set cert-manager.enable=false`.
 
@@ -100,7 +100,7 @@ helm upgrade --install emqx-operator emqx/emqx-operator \
   --set image.tag=$EMQX_OPERATOR_VERSION
 ```
 
-### Ensure emqx-operator is up and running
+Ensure emqx-operator is up and running:
 
 ```bash
 kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-manager"

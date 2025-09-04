@@ -1,4 +1,4 @@
-## Overview
+# EMQX Operator Overview
 
 The EMQX Operator provides [Kubernetes](https://kubernetes.io/) native deployment and management of [EMQX](https://www.emqx.io/), including EMQX Broker and EMQX Enterprise. The purpose of this project is to simplify and automate the configuration of the EMQX cluster.
 
@@ -10,7 +10,7 @@ The EMQX Operator includes, but is not limited to, the following features:
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## How to selector Kubernetes version
+## How to Selector Kubernetes Version
 
 The EMQX Operator requires a Kubernetes cluster of version `>=1.24`.
 

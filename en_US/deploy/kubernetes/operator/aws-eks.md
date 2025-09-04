@@ -16,7 +16,7 @@ Before you begin, you must have the following:
 
 - Install EMQX Operator: For details, please refer to: [Install EMQX Operator](./getting-started.md)
 
-## Quickly Deploy An EMQX Cluster
+## Quickly Deploy an EMQX Cluster
 
 The following is the relevant configuration of EMQX custom resources.
 
@@ -91,7 +91,7 @@ The following is the relevant configuration of EMQX custom resources.
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 

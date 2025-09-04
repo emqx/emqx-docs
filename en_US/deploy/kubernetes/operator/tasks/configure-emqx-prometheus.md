@@ -44,7 +44,7 @@ Check the status of the EMQX cluster and make sure that `STATUS` is `Running`, w
   emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
   ```
 
-## Create API secret
+## Create API Secret
 emqx-exporter and Prometheus will pull metrics from EMQX dashboard API, so you need to sign in to dashboard to create an [API Key](../../../../dashboard/system.md#api-keys).
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)

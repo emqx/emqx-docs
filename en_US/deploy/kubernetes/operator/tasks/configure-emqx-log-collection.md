@@ -564,7 +564,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
 
 ## Deploy EMQX Cluster
 
-To deploy EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md)
+To deploy the EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md).
 
 ## Verify Log Collection
 
