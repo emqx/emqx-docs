@@ -76,15 +76,84 @@
         - title_en: macOS
           title_cn: macOS
           path: deploy/install-macOS
+
         - title_en: Kubernetes
           title_cn: Kubernetes
-          lang: en
-          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
-        - title_en: Kubernetes
-          title_cn: Kubernetes
-          lang: cn
-          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
-          # - deploy/install-marketplace
+          path: deploy/kubernetes/kubernetes
+          collapsed: true
+          children:
+            - title_en: EMQX Operator
+              title_cn: EMQX Operator
+              path: deploy/kubernetes/operator/operator
+              collapsed: true
+              children:
+                - deploy/kubernetes/operator/getting-started
+                - title_en: 在阿里云上部署 EMQX 集群
+                  title_cn: 在阿里云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/alibaba-cloud
+                - title_en: 在华为云上部署 EMQX 集群
+                  title_cn: 在华为云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/huawei-cloud
+                - title_en: 在腾讯云上部署 EMQX 集群
+                  title_cn: 在腾讯云上部署 EMQX 集群
+                  lang: cn
+                  path: deploy/kubernetes/operator/tencent-cloud
+                - title_en: Deploy EMQX on AWS
+                  title_cn: 在 AWS 中部署 EMQX
+                  path: deploy/kubernetes/operator/aws-eks
+                - title_en: Deploy EMQX on Google cloud
+                  title_cn: 在 GCP 中部署 EMQX
+                  path: deploy/kubernetes/operator/gcp-gke
+                - title_en: Deploy EMQX on Azure
+                  title_cn: 在 Azure 中部署 EMQX
+                  path: deploy/kubernetes/operator/azure-aks
+                - title_en: Manage EMQX Cluster
+                  title_cn: 管理 EMQX 集群
+                  path: deploy/kubernetes/operator/tasks/overview
+                  collapsed: true
+                  children:
+                    - title_en: Configure License (Enterprise)
+                      title_cn: 配置 License (企业版)
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-license
+                    - title_en: Enable TLS in EMQX
+                      title_cn: 在 EMQX 中开启 TLS
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-tls
+                    - title_en: Change EMQX Configurations
+                      title_cn: 修改 EMQX 配置
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-config
+                    - title_en: Enable Core + Replicant Cluster
+                      title_cn: 配置 Core + Replica 集群
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+                    - title_en: Enable Persistence
+                      title_cn: 开启持久化
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Access EMQX Cluster by LoadBalancer
+                      title_cn: 通过 LoadBalancer 访问 EMQX Cluster
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-service
+                    - title_en: Configure Blue-Green Upgrade
+                      title_cn: 配置蓝绿发布
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
+                    - title_en: Collect EMQX Logs
+                      title_cn: 采集 EMQX 日志
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-log-collection
+                    - title_en: Change EMQX Log Level
+                      title_cn: 修改 EMQX 日志等级
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-log-level
+                    - title_en: Monitor EMQX Cluster
+                      title_cn: 监控 EMQX 集群
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
+                    - title_en: Load Balance EMQX Cluster
+                      title_cn: 负载均衡 EMQX 集群
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+                    - title_en: Deploy EMQX Cluster in k8s with Restricted Access
+                      title_cn: 在受限的 k8s 环境中部署 EMQX 集群
+                      path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
+                - deploy/kubernetes/operator/api-reference
+            - title_en: EMQX Helm Chart
+              title_cn: EMQX Helm Chart
+              path: deploy/kubernetes/chart
         - title_en: Work with License
           title_cn: 配置 License
           path: deploy/license
