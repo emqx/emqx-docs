@@ -27,7 +27,7 @@ EMQX Operator 支持在华为云容器引擎（Cloud Container Engine，简称 C
 
 ## 快速部署一个 EMQX 集群
 
-下面是 EMQX 自定义资源的相关配置。你可以根据你想部署的 EMQX 版本选择相应的 APIVersion。关于具体的兼容性关系，请参考[ EMQX 与 EMQX Operator 的兼容性列表](./operator.md)：
+下面是 EMQX 自定义资源的相关配置。你可以根据你想部署的 EMQX 版本选择相应的 APIVersion。关于具体的兼容性关系，请参考[ EMQX 与 EMQX Operator 的兼容性列表](./operator.md)。
 
 + 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
 
@@ -93,11 +93,11 @@ EMQX Operator 支持在华为云容器引擎（Cloud Container Engine，简称 C
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   198.18.3.10
-
+  
   通过浏览器访问 `http://198.18.3.10:18083` ，使用默认的用户名和密码 `admin/public` 登录 EMQX 控制台。
-
+  
   ```
 
 ## 使用 MQTTX CLI 连接 EMQX 集群发布/订阅消息

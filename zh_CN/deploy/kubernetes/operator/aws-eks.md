@@ -12,11 +12,11 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
 - 在集群上部署 AWS Load Balancer Controller，具体请参考：[创建网络负载均衡器](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/network-load-balancing.html)
 
-- 安装 EMQX Operator：具体请参考：[安装 EMQX Operator](../getting-started/getting-started.md)
+- 安装 EMQX Operator：具体请参考：[安装 EMQX Operator](./getting-started.md)
 
 ## 快速部署一个 EMQX 集群
 
-下面是 EMQX 自定义资源的相关配置。你可以根据你想部署的 EMQX 版本选择相应的 APIVersion。关于具体的兼容性关系，请参考 [EMQX 与 EMQX Operator 的兼容性列表](../index.md)
+下面是 EMQX 自定义资源的相关配置。你可以根据你想部署的 EMQX 版本选择相应的 APIVersion。关于具体的兼容性关系，请参考 [EMQX 与 EMQX Operator 的兼容性列表](./operator.md)。
 
 :::: tabs type:card
 ::: tab apps.emqx.io/v2beta1

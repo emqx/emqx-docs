@@ -18,13 +18,13 @@ EMQX 是一款高性能的开源分布式物联网 MQTT 消息服务器，它提
 
 ## 快速部署 EMQX 集群
 
-以下是 EMQX 自定义资源的相关配置。您可以根据您希望部署的 EMQX 版本选择相应的 APIVersion。有关具体的兼容关系，请参阅 [EMQX Operator 兼容性](./operator.md)：
+以下是 EMQX 自定义资源的相关配置。您可以根据您希望部署的 EMQX 版本选择相应的 APIVersion。有关具体的兼容关系，请参阅 [EMQX Operator 兼容性](./operator.md)。
 
   ::: warning
   如果要请求 cpu 和 memory 资源，需要保证 cpu 大于等于 250m，memory 大于等于 512M
 
   - [Autopilot 中的资源请求](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests?hl=zh-cn)
-  :::
+    :::
 
 将以下内容保存为 YAML 文件，并使用 kubectl apply 命令进行部署。
 
