@@ -1,4 +1,4 @@
-# 开启 TLS
+# 在 EMQX 中开启 TLS
 
 ## 任务目标
 
@@ -111,7 +111,7 @@ Volumes 的类型有很多种，关于 Volumes 描述可以参考文档：[Volum
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 

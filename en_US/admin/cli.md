@@ -200,6 +200,8 @@ session.resumed               : 0
 session.takenover             : 0
 session.terminated            : 0
 
+```
+
 ## cluster
 
 This command is used to view and manage the cluster status of nodes.

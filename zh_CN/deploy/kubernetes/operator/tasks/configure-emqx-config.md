@@ -1,4 +1,4 @@
-# EMQX 配置
+# 修改 EMQX 配置
 
 ## 任务目标
 
@@ -53,7 +53,7 @@ EMQX 主配置文件为 `etc/emqx.conf`，从 5.0 版本开始，EMQX 采用 [HO
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
+  
   192.168.1.200
   ```
 

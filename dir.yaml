@@ -88,16 +88,16 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
-                - title_en: 在阿里云上部署 EMQX 集群
-                  title_cn: 在阿里云上部署 EMQX 集群
+                - title_en: 在阿里云中部署 EMQX
+                  title_cn: 在阿里云中部署 EMQX
                   lang: cn
                   path: deploy/kubernetes/operator/alibaba-cloud
-                - title_en: 在华为云上部署 EMQX 集群
-                  title_cn: 在华为云上部署 EMQX 集群
+                - title_en: 在华为云中部署 EMQX
+                  title_cn: 在华为云中部署 EMQX
                   lang: cn
                   path: deploy/kubernetes/operator/huawei-cloud
-                - title_en: 在腾讯云上部署 EMQX 集群
-                  title_cn: 在腾讯云上部署 EMQX 集群
+                - title_en: 在腾讯云中部署 EMQX
+                  title_cn: 在腾讯云中部署 EMQX
                   lang: cn
                   path: deploy/kubernetes/operator/tencent-cloud
                 - title_en: Deploy EMQX on AWS
