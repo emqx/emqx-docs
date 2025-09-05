@@ -121,9 +121,11 @@ The following steps assume that you run both EMQX and RabbitMQ on the local mach
 
 This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and forwarding the processed data to the queue `test_queque` in RabbitMQ via a configured Sink.
 
+### Create a Rule with Defined SQL
+
 1. Go to the EMQX Dashboard, and click Data **Integration -> Rules**.
 
-2. Click **Create** on the top right corner of the page.
+2. Click **Create** in the top right corner of the page.
 
 3. Enter a rule ID, for example, `my_rule`.
 
@@ -143,15 +145,26 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
    :::
 
-5. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to RabbitMQ.
+5. Add an action to the rule by configuring a Sink. For detailed steps, refer to [Add RabbitMQ Sink to the Rule](#add-rabbitmq-sink-to-the-rule).
+6. After the action is added, you will see the newly added Sink appear under the **Action Outputs** section. Click the **Save** button on the **Create Rule** page to complete the entire rule creation process.
 
-6. Select `RabbitMQ` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
 
-7. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into the RabbitMQ after being parsed by the rule `my_rule`.
 
-8. Select the Connector `my_rabbitmq` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+### Add RabbitMQ Sink
 
-9. Configure the following information for the Sink:
+This section demonstrates how to add a Sink to the rule for writing the processed results to RabbitMQ.
+
+1. On the **Create Rule** page, click **Add Action** under the **Action Outputs** section to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to RabbitMQ.
+
+2. Select `RabbitMQ` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+
+3. Enter a name for the Sink. The name should be a combination of upper/lower case letters and numbers.
+
+4. Select the Connector `my_rabbitmq` from the **Connector** dropdown box. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+
+5. Configure the following settings for the Sink:
 
    * **Exchange**: Enter `test_exchange` created before, which means messages will be published to this exchange.
 
@@ -185,6 +198,16 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
        :::
 
+   * **Wait for Publish Confirmations**: Enabled by default to ensure that messages are successfully published to RabbitMQ.
+
+     ::: tip
+
+     With this option enabled RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published, which improves the reliability of your message delivery.
+     
+     :::
+
+   * **Headers Template** and **Properties Template**: Define custom RabbitMQ Headers and Properties using the template. For detailed information, see [Set Headers and Properties Templates](#set-headers-and-properties-templates).
+
    * **Payload Template**: The default value is an empty string, meaning the message payload will be forwarded as JSON-formatted text to RabbitMQ without modification.
 
      You can also define a custom message payload format using placeholders within the template to dynamically include data from the incoming MQTT messages. For example, if you want to include the MQTT message payload and its timestamp in the RabbitMQ message, you can use the following template:
@@ -195,32 +218,101 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
      This template will produce a JSON-formatted message containing the payload and timestamp of the incoming MQTT message. `${payload}` and `${timestamp}` are placeholders and will be replaced by the actual values from the message when it is forwarded to the RabbitMQ server.
 
-   - **Wait for Publish Confirmations**: Enabled by default to ensure that messages are successfully published to RabbitMQ.
+6. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-     ::: tip
+7. **Advanced settings (optional)**:  
 
-     With this option enabled RabbitMQ broker acknowledges the receipt of a published message before considering it successfully published, which improves the reliability of your message delivery.
+   - **Publish Confirmation Timeout**: `30` seconds by default. The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
+   - Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
 
-     :::
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RabbitMQ server.
 
-10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. Click the **Create** button to complete the Sink configuration. After successful creation, you will return to the rule creation page, and the new Sink will be added to the **Action Outputs.**
 
-11. **Advanced settings (optional)**:  
+#### Set Headers and Properties Templates
 
-    - **Publish Confirmation Timeout**: `30` seconds by default. The publish confirmation timeout determines the duration the publisher will wait for the broker's acknowledgment before considering the publish operation a failure.
-    - Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
+Starting from EMQX 6.0, you can define custom RabbitMQ Headers and Properties when creating a RabbitMQ Sink action. This enhances message compatibility and routing flexibility within RabbitMQ by allowing metadata to be attached directly to the message.
 
-12. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the RabbitMQ server.
+These fields can be templated using variables from the rule SQL result (e.g., `${payload.device_id}`). Header and property templates are optional. If you leave these fields empty, no additional metadata is added to the message.
 
-13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+##### How to Set Headers Template
 
-14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+You can add one or more key-value pairs as RabbitMQ Headers. These headers are user-defined and can carry custom metadata to be interpreted by RabbitMQ consumers.
 
-You have now successfully created the rule for forwarding data through the RabbitMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RabbitMQ Sink.
+- **Key**: The header name. Must be a string.
+- **Value**: The value associated with the key. You can use static strings or dynamic values via template variables.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to RabbitMQ after parsing by rule `my_rule`.
+For example, to include the device ID from the MQTT payload:
 
-## Test the RabbitMQ Sink Rule
+| Key         | Value                  |
+| ----------- | ---------------------- |
+| `device_id` | `${payload.device_id}` |
+
+##### How to Set Properties Template
+
+RabbitMQ supports a standard set of message properties. EMQX lets you define these properties to provide message-level metadata such as content type or correlation ID.
+
+- **Key**: Select from the predefined valid property keys listed below (invalid keys are ignored).
+- **Value**: Set a static value or use a template variable.
+
+Valid property keys include:
+
+- `content_type`
+- `content_encoding`
+- `priority`
+- `correlation_id`
+- `reply_to`
+- `expiration`
+- `message_id`
+- `timestamp`
+- `type`
+- `user_id`
+- `app_id`
+- `cluster_id`
+
+Example: To specify a content type and an application ID:
+
+| Key            | Value              |
+| -------------- | ------------------ |
+| `content_type` | `application/json` |
+| `app_id`       | `my_iot_app`       |
+
+##### Example Use Case
+
+Suppose your MQTT message payload is:
+
+```json
+{
+  "device_id": "sensor-123",
+  "status": "ok"
+}
+```
+
+And you want to set:
+
+- A header `device_id` based on the MQTT payload
+- A property `app_id` with a static value
+
+Then your configuration would look like:
+
+**Headers Template**:
+
+| Key         | Value                  |
+| ----------- | ---------------------- |
+| `device_id` | `${payload.device_id}` |
+
+**Properties Template**:
+
+| Key      | Value    |
+| -------- | -------- |
+| `app_id` | `my_app` |
+
+This configuration ensures that every message forwarded to RabbitMQ includes:
+
+- Custom metadata (`Headers`) for consumer logic
+- Standardized metadata (`Properties`) for message handling or debugging
+
+## Test the Rule with RabbitMQ Sink
 
 You can use the built-in WebSocket client in the EMQX dashboard to test our rule and Sink.
 
@@ -253,7 +345,7 @@ You can use the built-in WebSocket client in the EMQX dashboard to test our rule
 
 <img src="./assets/rabbitmq/rabbit_mq_management_ui_got_message.png" alt="bridge_igress" style="zoom:67%;" />
 
-## Create a RabbitMQ Source Rule
+## Create a Rule with RabbitMQ Source
 
 This section demonstrates how to create a rule for forwarding data from a RabbitMQ queue to EMQX. You need to create both a RabbitMQ Source and a message republish action to consume messages from the RabbitMQ service and forward them to EMQX.
 
@@ -332,7 +424,7 @@ Now that you have successfully created a rule, you can see the newly created rul
 
 You can also click **Integrate** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages from the RabbitMQ Source will be published to `t/1` through message republishing.
 
-## Test the RabbitMQ Source Rule
+## Test the Rule with RabbitMQ Source
 
 1. Use [MQTTX CLI](https://mqttx.app/cli) to subscribe to the topic `t/1`:
 
