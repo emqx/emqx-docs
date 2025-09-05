@@ -144,7 +144,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
           ## 指定 NLB 是面向 Internet 的还是内部的。如果未指定，则默认为内部。
           service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
           ## 指定 NLB 将流量路由到的可用区。指定至少一个子网，subnetID 或 subnetName（子网名称标签）都可以使用。
-          service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-xxx1, subnet-xxx2
+          service.beta.kubernetes.io/aws-load-balancer-subnets: subnet-xxx1,subnet-xxx2
       spec:
         type: LoadBalancer
         ## 更多内容：https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/guide/service/nlb/
