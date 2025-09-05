@@ -119,7 +119,7 @@ The following steps assume that you run both EMQX and RabbitMQ on the local mach
 
 ## Create a Rule with RabbitMQ Sink
 
-This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and forwarding the processed data to the queue `test_queque` in RabbitMQ via a configured Sink.
+This section demonstrates how to create a rule in the Dashboard for processing messages from the source MQTT topic `t/#`, and forwarding the processed data to the queue `test_queue` in RabbitMQ via a configured Sink.
 
 ### Create a Rule with Defined SQL
 
