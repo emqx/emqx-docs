@@ -36,7 +36,7 @@ The online configuration management feature allows you to make configuration cha
 
 The most important distributed data structure in an MQTT broker cluster is the routing table, which is used to store the routing information of all topics. The routing table is used to determine which nodes should receive a message published to a particular topic. In this section, we will discuss how EMQX ensures that the routing table is consistent across all nodes in the cluster.
 
-EQMX cluster makes use of full ACID (Atomicity, Consistency, Isolation, Durability) transactions to ensure that the routing table is consistent across all the `core` nodes in the cluster. and employs asynchronous replication from the `core` nodes to the `replica` nodes to ensure that the routing table is eventually consistent across all nodes in the cluster.
+The EQMX cluster makes use of full ACID (Atomicity, Consistency, Isolation, Durability) transactions to ensure that the routing table is consistent across all the `core` nodes in the cluster and employs asynchronous replication from the `core` nodes to the `replica` nodes to ensure that the routing table is eventually consistent across all nodes in the cluster.
 
 Let's dive into the details of how EMQX data consistency is achieved.
 
@@ -44,7 +44,7 @@ Let's dive into the details of how EMQX data consistency is achieved.
 
 In an EMQX cluster, there are two data replication channels.
 
-- Metadata replication, such as routing information on which (wildcard) topics are being subscribed by which nodes.
+- Metadata replication, such as routing information on which (wildcard) topics are being subscribed to by which nodes.
 
 * Message delivery, such as when forwarding messages from one node to another.
 

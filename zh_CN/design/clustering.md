@@ -57,7 +57,7 @@ EMQX 使用 Erlang/OTP 内置数据库 Mnesia 来存储 MQTT 会话状态。为�
 
 Mnesia 集群采用全网状拓扑设计，其中集群中的每个节点相互连接并持续检查其活跃状态。
 
-<img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
+<img src="./assets/mnesia-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
 
 然而，全网状拓扑对集群规模有实际限制。对于 EMQX 5.0 之前的版本，建议将集群规模控制在 5 个节点以内。超过此数量时，垂直扩展（使用更强大的机器）是保持集群性能和稳定性的更佳选择。
 
@@ -69,7 +69,7 @@ Mnesia 集群采用全网状拓扑设计，其中集群中的每个节点相互�
 
 在 EMQX v5 中，我们通过引入 [Mria](https://github.com/emqx/mria)（一种带有异步事务日志复制的增强版 Mnesia），大大提高了集群的可扩展性。Mria 使用了一种新的网络拓扑，包括两种类型的节点角色：`core` 和 `replicant`（有时简称为 `replica`）。
 
-<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 20%;" />
+<img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
 
 在 EMQX v5 集群中，`core` 节点仍然形成与旧版本相同的全网状网络。然而，`replicant` 节点仅连接到一个或多个 `core` 节点，而不相互连接。
 

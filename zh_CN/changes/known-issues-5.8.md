@@ -1,5 +1,20 @@
 # EMQX 5.8 已知问题
 
+## e5.8.8
+
+- **删除前置条目后，禁用消息转换或 Schema 验证不生效（自 5.8.0 起，将在 5.8.8 修复）。**
+
+  如果你删除了一条消息转换或 Schema 验证条目，然后再禁用列表中其后的任意条目，该条目仍会保持启用状态。
+
+  > **解决方法：**
+  > 在任意一个 EMQX 节点上执行以下命令。
+  >
+  > ```
+  > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
+  > ```
+
+- **节点重启后不会加载外部 Schema Registry（自 5.8.1 起，将在 5.8.8 修复）。**
+
 ## e5.8.6
 
 | 始于版本 | 问题描述                                                     | 解决方法                                                     | 状态              |

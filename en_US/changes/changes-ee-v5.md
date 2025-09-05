@@ -506,22 +506,82 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#14775](https://github.com/emqx/emqx/pull/14775) QUIC Listener: Fixed issue where zone configurations are not applied after a config reload.
 
-## 5.8.7
+## 5.8.8
 
-*Release Date: 2025-07-02*
+*Release Date: 2025-09-04*
 
 ### Enhancements
 
-- [#15364](https://github.com/emqx/emqx/pull/15364) Added support for custom HTTP headers in the OpenTelemetry gRPC (over HTTP/2) integration. This enhancement enables compatibility with collectors that require HTTP authentication.
+#### Deployment
+
+- [#15813](https://github.com/emqx/emqx/pull/15813) Added package release for Debian 13 (Trixie), and updated Docker images to use Debian 13 as the base.
+
+#### Core MQTT Functionalities
+
+- [#15773](https://github.com/emqx/emqx/pull/15773) Throttled client ID registration during reconnects.
+  - When a previous session cleanup is still in progress, new connections using the same client ID are now throttled. This prevents instability when clients reconnect aggressively.
+  - Affected clients receive reason code `137` (Server Busy) in the `CONNACK` with Reason-String `"THROTTLED"`, and should retry after the cleanup completes.
+  - Fixed the reason code returned when another connection registers the same client ID; now correctly returns `137` instead of `133`.
+
+#### Data Integration
+
+- [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcloud` library to `3.8.3.0`.  This allows users to set up an S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
+- [#15585](https://github.com/emqx/emqx/pull/15585) Updated the brod client to version 4.4.4, expanding support for a wider range of Kafka APIs. This update addresses the deprecation of `JoinGroups` API versions `v0` - `v1`.
+
+#### Observability 
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+
+#### Performance
+
+- [#15536](https://github.com/emqx/emqx/pull/15536) Disabled the `node.global_gc_interval` configuration by default to improve overall performance stability, as it caused CPU fluctuations and higher message latency while providing little benefit over Erlang’s built-in garbage collector.
+- [#15539](https://github.com/emqx/emqx/pull/15539) Optimized Erlang VM parameters to improve performance and stability:
+  - Increased buffer size for distributed channels to 32 MB (`+zdbbl 32768`) to prevent `busy_dist_port alarms` during intensive Mnesia operations.
+  - Disabled scheduler busy-waiting (`+sbwt none +sbwtdcpu none +sbwtdio none`) to lower CPU usage reported by the operating system.
+  - Set scheduler binding type to db (`+stbt db`) to reduce message latency.
 
 ### Bug Fixes
 
-- [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in the MQTT bridge. When the bridge failed to start, the topic index table was not properly cleaned up. This fix ensures that the index table is correctly deleted to prevent resource leaks.
-- [#15331](https://github.com/emqx/emqx/pull/15331) Fixed an issue in the InfluxDB action where line protocol conversion failed if the `timestamp` in `WriteSyntax` was left blank and no timestamp field was provided in the rule. Now the system's current millisecond value is used instead, and millisecond precision is enforced.
-- [#15274](https://github.com/emqx/emqx/pull/15274) Improved the resilience of Postgres, Matrix, and TimescaleDB connectors by triggering a full reconnection on any health check failure. Previously, failed health checks could leave the connection in a broken state, causing operations to hang and potentially leading to out-of-memory issues.
-- [#15224](https://github.com/emqx/emqx/pull/15224) Fixed an issue where updating an External Schema Registry via the Dashboard would unintentionally overwrite the existing password with `******`. The password is now correctly preserved during updates.
-- [#14989](https://github.com/emqx/emqx/pull/14989) Optimized the Kinesis Connector and Action to significantly reduce the number of AWS API calls during startup and health checks. This change helps prevent exceeding AWS Kinesis API rate limits (e.g., `ListStreams` and `DescribeStream`), which previously led to frequent health check failures when using larger connection pools or multiple connectors.
-- [#15299](https://github.com/emqx/emqx/pull/15299) Fixed a `badarg` error that occurred when exporting OpenTelemetry metrics.
+#### Deployment
+
+- [#15580](https://github.com/emqx/emqx/pull/15580) Added a new `emqxLicenseSecretRef` variable to the EMQX Enterprise Helm chart. This allows users to specify a Kubernetes Secret containing the EMQX license key, so the license is applied automatically.
+
+  This replaces the non-functional `emqxLicenseSecretName` variable, which created and mounted a secret file but did not pass the license to EMQX.
+
+#### Clustering
+
+- [#14778](https://github.com/emqx/emqx/pull/14778) Fixed an issue where a node could not join a running cluster if that node had broken symlinks in its `data/certs` or `data/authz` directories.
+
+#### Security
+
+- [#15581](https://github.com/emqx/emqx/pull/15581) Upgraded Erlang/OTP version from 26.2.5.2 to 26.2.5.14. This upgrade includes two TLS-related fixes from OTP that affect EMQX:
+  - Fixed a crash in TLS connections caused by a race condition during certificate renewal.
+  - Added support for RSA certificates signed with RSASSA-PSS parameters. Previously, such certificates could cause TLS handshakes to fail with a `bad_certificate` / `invalid_signature error`.
+
+#### Data Integration
+
+
+- [#15616](https://github.com/emqx/emqx/pull/15616) Kafka connections are now considered healthy even if a `topic_authorization_failed` error is returned for the default probing topic.
+
+#### Rule Engine
+
+
+- [#15706](https://github.com/emqx/emqx/pull/15706) Fixed an indexing issue that could cause Message Transformations and Schema Validations to behave inconsistently. Deleting one item could corrupt the topic index, so that a subsequent item remained active even after being disabled.
+- [#15708](https://github.com/emqx/emqx/pull/15708) Fixed an issue where external schema registries were not reloaded after a node restart.
+
+#### Observability
+
+- [#15639](https://github.com/emqx/emqx/pull/15639) Fixed an issue where the `packets.subscribe.auth_error` metric was not incremented when subscription authentication failed.
+
+#### Gateway
+
+- [#15679](https://github.com/emqx/emqx/pull/15679) Fixed incorrect global chain names for the ExProto, JT/T 808, GB/T 32960, and OCPP gateways. Built-in authentication data for these gateways was previously grouped under `unknown:global`, causing conflicts between gateways.
+- [#15699](https://github.com/emqx/emqx/pull/15699) Fixed an issue where built-in authentication data for gateways (e.g., CoAP) was incorrectly removed when a node was stopped or restarted.
+- [#15822](https://github.com/emqx/emqx/pull/15822) Fixed an issue where the OCPP connection would crash after sending a certain number of messages.
+
+#### ExHook
+
+- [#15683](https://github.com/emqx/emqx/pull/15683) Fixed ExHook TLS options so that gRPC clients can correctly verify the server hostname during the TLS handshake.
 
 ## 5.8.7
 
