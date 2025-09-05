@@ -148,7 +148,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 5. Add an action to the rule by configuring a Sink. For detailed steps, refer to [Add RabbitMQ Sink to the Rule](#add-rabbitmq-sink-to-the-rule).
 6. After the action is added, you will see the newly added Sink appear under the **Action Outputs** section. Click the **Save** button on the **Create Rule** page to complete the entire rule creation process.
 
-You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
+You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new RabbitMQ Sink on the **Actions (Sink)** tab.
 
 You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into the RabbitMQ after being parsed by the rule `my_rule`.
 
