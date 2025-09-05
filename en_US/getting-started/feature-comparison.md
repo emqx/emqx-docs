@@ -750,6 +750,7 @@ This page lists features supported across different deployment types in detail.
 </tbody>
 </table>
 </div>
+
 ## Data Integration
 
 As EMQX evolves, it supports an expanding range of data integrations, including but not limited to those listed below.
