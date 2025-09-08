@@ -24,7 +24,7 @@ In this section, all function declarations conform to the following format:
 FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
-For instance, `abs(X: integer | float) -> integer | float` implies that the data type of argument `X` can be either integer or float, and correspondingly, the return value's data type can also be integer or float.
+For instance, `acos(X: integer | float) -> float` implies that the data type of argument `X` can be either integer or float, and the return value's data type is float.
 
 Be aware that if the provided argument exceeds the stipulated range or employs an unsupported data type, it will result in the current SQL execution failing, incrementing the failure count by one.
 
@@ -43,14 +43,17 @@ EMQX supports a wide range of mathematical functions:
 - Numerical functions, include abs, ceil, floor, round, sqrt, fmod.
 - Exponential and logarithmic functions, include exp, power, log, log10, log2.
 
-### abs(X: integer | float) -> integer | float
+### abs(X: integer) -> integer
 
-Returns the absolute value of number `X`. Example:
+Returns the absolute value of integer `X`. Example:
 
 ```bash
 abs(-12) = 12
-abs(-1.2) = 1.2
 ```
+
+:::tip
+For absolute value operations on floating-point numbers, please use `ceil` or `floor` functions instead.
+:::
 
 ### acos(X: integer | float) -> float
 
@@ -955,7 +958,7 @@ map_get('a', map_put('a', 2, json_decode('{"a": 1}'))) = 2
 
 ### map_to_redis_hset_args(Map) -> list
 
-::: tip 
+::: tip
 
 This function has been introduced since EMQX v5.7.1.
 
@@ -1404,7 +1407,7 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### Schema Registry Functions
 
-EMQX also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md). 
+EMQX also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md).
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
@@ -1424,7 +1427,7 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 
 ### **Sparkplug B Functions**
 
-EMQX also has special purpose functions for decoding and encoding Sparkplug B messages (`sparkplug_decode` and `sparkplug_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+EMQX also has special purpose functions for decoding and encoding Sparkplug B messages (`spb_decode` and `spb_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 ## Date and Time Conversion Functions
 
