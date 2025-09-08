@@ -225,7 +225,7 @@ As the concept of username and password is already defined in the connection mes
 
 OCPP gateway uses the information in the Basic Authentication of the Websocket handshake message to generate the authentication fields for the client:
 
-- Client ID: Valu of the part of the connection address after the fixed path prefix.
+- Client ID: Value of the part of the connection address after the fixed path prefix.
 - Username: Value of the Username in the Basic Authentication.
 - Password: Value of the Password in the Basic Authentication.
 

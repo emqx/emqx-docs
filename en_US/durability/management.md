@@ -131,7 +131,7 @@ This command output includes:
 - `SITES`: List of all known sites, including EMQX node names and their statuses.
 - `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
 
-### `emqx_ctl ds set_replicas <DS> <Site1> <Site2> ...`
+### `emqx_ctl ds set_replicas <storage> <site1> <site2> ...`
 
 This command allows to set the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
@@ -193,7 +193,7 @@ messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
 
 The new section `REPLICA TRANSITIONS` lists pending operations. Once all operations are complete, this list will be empty.
 
-### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
+### `emqx_ctl ds join <storage> <site>` / `emqx_ctl ds leave <storage> <Site>`
 
 These commands add or remove a site from the list of replicas of the durable storage. They are similar to the `set_replicas` command but update one site at a time.
 

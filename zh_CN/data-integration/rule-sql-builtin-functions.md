@@ -24,7 +24,7 @@
 FuncName(Arg 1: Type 1 | ..., ...) -> Type 1 | ...
 ```
 
-例如，`abs(X: integer | float) -> integer | float` 意味着参数 `X` 的数据类型可以是 integer 或者 float，并且其返回值的数据类型同样可以是 integer 或 float。
+例如，`acos(X: integer | float) -> float` 意味着参数 `X` 的数据类型可以是 integer 或者 float，而返回值的数据类型是 float。
 
 注意，如果传入参数的值超出了限定范围或者使用了不支持的数据类型，将导致当前 SQL 执行失败，并使执行失败计数加 1。
 
@@ -44,16 +44,19 @@ EMQX 支持广泛的数学函数：
 - 数值函数，包括 abs、ceil、floor、round、sqrt、fmod。
 - 指数和对数函数，包括 exp、power、log、log10、log2。
 
-### abs(X: integer | float) -> integer | float
+### abs(X: integer) -> integer
 
-返回数字 `X` 的绝对值。
+返回整数 `X` 的绝对值。
 
 示例：
 
 ```bash
 abs(-12) = 12
-abs(-1.2) = 1.2
 ```
+
+:::tip
+对于浮点数的绝对值运算，请使用 `ceil` 或 `floor` 函数。
+:::
 
 ### acos(X: integer | float) -> float
 
@@ -1422,7 +1425,7 @@ Schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 
 
 ### Sparkplug B
 
-EMQX 还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`sparkplug_decode` 和`sparkplug_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
+EMQX 还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`spb_decode` 和`spb_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 ## 日期与时间函数
 

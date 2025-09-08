@@ -1,20 +1,75 @@
-# Architecture
+# Cluster Architecture
 
 <!--need to add a section about how users can work with a cluster with all nodes as core nodes-->
 
-EMQX 5.0 redesigns the cluster architecture with [Mria](https://github.com/emqx/mria), which significantly improves EMQX's horizontal scalability. The new design supports 100,000,000 MQTT connections with a single cluster.
+Starting from EMQX 5.0, a new [Mria](https://github.com/emqx/mria) cluster architecture was introduced, along with a redesigned data replication mechanism. This significantly enhanced EMQX's horizontal scalability and is one of the key factors enabling a single EMQX 5.0 cluster to support up to 100 million MQTT connections.
 
-<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 40%;" />
+This page introduces the EMQX cluster deployment model under the new architecture, as well as key considerations during deployment. For automated cluster deployment, refer to the [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) and the guide on [Configuring EMQX Core and Replicant Nodes](https://docs.emqx.com/en/emqx-operator/latest/tasks/configure-emqx-core-replicant.html).
 
-In this [Mria](https://github.com/emqx/mria), each node assumes one of two roles: Core node or Replicant.
-Core nodes serve as a data layer for the database.
-Replicant nodes connect to Core nodes and passively replicate data updates from Core nodes. On how core and replicant node works, you can continue to read the [EMQX clustering](../../design/clustering.md).
+::: tip Prerequisite Knowledge
 
-By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 3 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 3 nodes in the cluster.
+It is recommended to first read [EMQX Clustering](./introduction.md).
+
+:::
+
+## Mria Architecture Overview
+
+Mria is an open-source extension of Erlang’s native database, Mnesia, that enables eventual consistency in data replication. With asynchronous transaction log replication enabled, the node connection topology shifts from Mnesia’s **fully meshed** model to Mria’s **mesh + star** hybrid topology.
+
+<img src="./assets/EMQX_Mria_architecture.png" alt="EMQX Mria" style="zoom: 25%;" />
+
+### Node Role Description
+
+Nodes in the cluster are categorized into two roles: Core nodes and Replicant nodes.
+
+#### Core Nodes
+
+Core nodes form the fully meshed data layer of the cluster. Each core node holds a complete and up-to-date replica of the data, ensuring fault tolerance: as long as one core node remains available, data is not lost. Core nodes are generally static and persistent, and are not recommended to be auto-scaling (i.e., frequently added, removed, or replaced).
+
+#### Replicant Nodes
+
+Replicant nodes connect to core nodes and passively replicate data updates from them. They are not allowed to perform write operations; instead, any writes are forwarded to the core nodes for processing. With a full local copy of data, replicants offer fast read access and lower routing latency.
+
+### Advantages of the Mria Architecture
+
+The Mria architecture combines the strengths of leaderless replication and master-slave replication, offering several key benefits:
+
+- **Improved horizontal scalability**: EMQX 5.0 supports large-scale clusters with up to 23 nodes.
+- **Simplified cluster auto-scaling**: Replicant nodes can be added or removed dynamically to support automated scaling.
+
+In contrast to EMQX 4.x, where all nodes used a fully connected topology (increasing sync overhead as node count grew), EMQX 5.0 avoids this issue by keeping replicant nodes read-only. As more replicants join the cluster, write efficiency is not affected, enabling the formation of much larger clusters.
+
+Moreover, replicant nodes are designed to be disposable and easily scaled in or out without affecting data redundancy. This makes them ideal for auto-scaling groups and improves DevOps practices.
+
+> **Note**: As the dataset grows, the initial data sync from core nodes to a new replicant can become resource-intensive. Avoid overly aggressive auto-scaling policies for replicant nodes to prevent performance issues.
+
+## Deployment Architecture
+
+By default, all nodes assume the Core node role, so the cluster behaves like that in [EMQX 4.x](https://docs.emqx.com/en/enterprise/v4.4/getting-started/cluster.html#node-discovery-and-autocluster), which is recommended for a small cluster with 7 nodes or fewer. The Core + Replicant mode is only recommended if there are more than 7 nodes in the cluster.
+
+::: tip Note
+
+The Core + Replicant cluster architecture is available only in EMQX Enterprise. The open-source edition supports Core-only clusters.
+
+:::
+
+::: tip Recommendation
+
+A cluster must include at least one Core node. As a best practice, we recommend starting with 3 Core nodes + N Replicant nodes.
+
+:::
+
+Node role assignment should be based on actual business requirements and the expected cluster size:
+
+| Scenario                   | Recommended Deployment                                       |
+| -------------------------- | ------------------------------------------------------------ |
+| Small cluster (≤ 7 nodes)  | Core-only mode is sufficient; all nodes handle MQTT traffic. |
+| Medium-sized cluster       | Whether Core nodes handle MQTT traffic depends on workload; test for best results. |
+| Large cluster (≥ 10 nodes) | Core nodes act only as the database layer. Replicant nodes handle all MQTT traffic to maximize stability and scalability. |
 
 ## Enable Core + Replicant Mode
 
-To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster discovery strategy (`cluster.discovery_strategy`). 
+To enable the Core + Replicant mode, it is necessary to designate certain nodes as replicant nodes. This is achieved by setting `node.role` parameter to `replicant`. Additionally, you need to enable an automatic cluster [discovery strategy](./create-cluster.md#node-discovery) (`cluster.discovery_strategy`). 
 
 ::: tip
 
@@ -35,6 +90,18 @@ cluster {
     static.seeds = [emqx@host1.local, emqx@host2.local]
 }
 ```
+
+## Network and Hardware Requirements
+
+### Network
+
+- Network latency between Core nodes should be less than 10 ms. Latency exceeding 100 ms may cause cluster failures.
+- It is strongly recommended to deploy Core nodes within the same private network.
+- Replicant nodes should also be deployed in the same private network as Core nodes, although the network quality requirements are slightly more relaxed.
+
+### CPU and Memory
+
+Core nodes require more memory, but consume relatively low CPU when not handling client connections. Replicant nodes follow the same hardware sizing as in EMQX 4.x, and their memory requirements should be estimated based on the expected number of connections and message throughput.
 
 ## Monitor and Debug
 
@@ -67,35 +134,8 @@ You can integrate with Prometheus to monitor the cluster operations. On how to i
 
 ### Console Commands
 
-You can also monitor the operating status of the cluster with command `emqx eval 'mria_rlog:status().'`  on the Erlang console.
+You can also monitor the operating status of the cluster with the command `emqx eval 'mria_rlog:status().'`  on the Erlang console.
 
-If EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
+If the EMQX cluster is operating normally, you can get a list of status information, for example, the current log level, the number of messages processed, and the number of messages dropped.
 
 <!--Here we need a query statement and the returned message, and can we link this Erlang console to https://www.erlang.org/doc/man/shell.html -->
-
-## Pseudo-Distributed Cluster
-
-EMQX also provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
-
-After starting the first node, use the following command to start the second node and join the cluster manually. To avoid port conflicts, we need to adjust some listening ports:
-
-```bash
-EMQX_NODE__NAME='emqx2@127.0.0.1' \
-    EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
-    EMQX_STATSD__SERVER='127.0.0.1:8124' \
-    EMQX_LISTENERS__TCP__DEFAULT__BIND='0.0.0.0:1882' \
-    EMQX_LISTENERS__SSL__DEFAULT__BIND='0.0.0.0:8882' \
-    EMQX_LISTENERS__WS__DEFAULT__BIND='0.0.0.0:8082' \
-    EMQX_LISTENERS__WSS__DEFAULT__BIND='0.0.0.0:8085' \
-    EMQX_DASHBOARD__LISTENERS__HTTP__BIND='0.0.0.0:18082' \
-    EMQX_NODE__DATA_DIR="./data2" \
-./bin/emqx start
-
-./bin/emqx ctl cluster join emqx1@127.0.0.1
-```
-
-The above code example is to create a cluster manually, you can also refer to the [auto clustering](./create-cluster.md#auto-clustering) section on how to create a cluster automatically.
-
-The dashboard is designed under the assumption that all cluster nodes use the same port number. Using distinct ports on a single computer may cause Dashboard UI issues, therefore, it is not recommended in production.
-
-<!--to add a quickstart with the pseudo-distributed cluster @WIVWIV -->
