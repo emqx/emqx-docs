@@ -83,6 +83,8 @@ export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login
 
 #### 步骤 2：创建内置数据库授权源
 
+比如您可通过如下代码针对 `client1` 客户端创建授权规则：
+
 ```bash
 curl -X 'POST' \
   'http://localhost:18083/api/v5/authorization/sources' \
