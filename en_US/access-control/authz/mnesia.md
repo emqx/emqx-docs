@@ -10,13 +10,21 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 ## Configure with Dashboard
 
-1. On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authorization** on the left navigation tree to enter the **Authorization** page. 
+1. On the [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), navigate to **Access Control** > **Authorization** in the left-hand menu to open the **Authorization** page.
 
-2. Click **Create** at the top right corner, select **Built-in Database** as **Backend**, and click **Next**. 
+2. Click **Create** in the top-right corner, select **Built-in Database** as the **Backend**, then click **Next** to continue.
 
-   <img src="./assets/authz-mnesia_ee.png" alt="authz-mnesia_ee" style="zoom:40%;" />
+   ![authz-mnesia_ee](./assets/authz-mnesia_ee.png)
 
-3. As built-in database authorization does not require configuration parameters, you can click **Create** to finish.
+3. In the **Configuration** step, set the value for **Max Rules** (default: `100`), which defines the maximum number of authorization rules allowed per client or user.
+
+   ::: tip Note
+
+   Setting a high number of rules may impact system performance.
+
+   :::
+
+4. Click **Create** to complete the setup.
 
 ## Configure with Configuration File
 
@@ -39,13 +47,13 @@ Sample configuration:
 
 ## Create Authorization Rules
 
-You can create authorization rules through Dashboard or API.
+You can create authorization rules through the Dashboard or API.
 
-### Create with Dashboard
+### Create Authorization Rules via Dashboard
 
 On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
 
-<img src="./assets/authz-config-built-in-rules_ee.png" alt="authz-config-built-in-rules_ee" style="zoom:50%;" />
+![authz-mnesia-rule](./assets/authz-mnesia-rule.png)
 
 You can set authorization checks based on the client ID, username, or topic as needed.
 
@@ -57,9 +65,9 @@ You can set authorization checks based on the client ID, username, or topic as n
 
 EMQX supports configuring multiple authorization check rules for a single client or user, and you can adjust the execution order and priority of different rules through the **Move Up** and **Move Down** buttons on the page.
 
-If you want to configure authorization check rules for multiple clients or users at the same time, you can import <!--how to understand "传入规则“？--> the relevant configuration through the HTTP API.
+If you want to configure authorization check rules for multiple clients or users at the same time, you can import the relevant configuration through the HTTP API.
 
-### Create with API
+### Create via REST API
 
 Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
 
