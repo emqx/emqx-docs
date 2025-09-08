@@ -92,9 +92,9 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 - **Gateway ID**: Set the unique identifier of the gateway, for example, 1. 
 
-- **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified, default: `true`, optional values: `true`, `false`.
+- **Enable Broadcast**: Set whether to allow the gateway to broadcast gateway advertisements to clients, it will broadcast the message the Gateway ID you just specified. Default: `true`; Options: `true`, `false`.
 
-- **Enable QoS3**: Set whether to allow the gateway to support QoS 3 (Exactly-once) message delivery,  this setting is intended for basic clients that only need to send `PUBLISH` messages to the gateway; default: `true`, optional values: `true`, `false`.
+- **Enable QoS 3**: Also known as QoS -1, this setting is intended for basic clients that only need to send `PUBLISH` messages to the gateway without requiring acknowledgments or subscriptions. Default: `true`; Options: `true`, `false`.
 
 - **Idle Timeout**: Set the duration (in seconds) of inactivity after which a connected MQTT-SN client will be considered disconnected. Default: `30s`.
 

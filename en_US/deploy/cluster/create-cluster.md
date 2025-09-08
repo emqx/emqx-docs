@@ -458,3 +458,39 @@ To use TCP IPv4 and TCP IPv6, you can set with the `cluster.proto_dist` in `emqx
 To enable SSL, you first need to set the `cluster.proto_dist` to `inet_tls`, then configure the `ssl_dist.conf` file in the `etc` folder and specify the TLS certificate. For details, see [Using TLS for Erlang Distribution](https://www.erlang.org/doc/apps/ssl/ssl_distribution.html).
 
 <!--need an example code here-->
+
+## Pseudo-Distributed Cluster
+
+EMQX provides a pseudo-distributed cluster feature for testing and development purposes. It refers to a cluster setup where multiple instances of EMQX are running on a single machine, with each instance configured as a node in the cluster.
+
+Start the first node:
+```bash
+  EMQX_NODE__NAME='emqx1@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log1/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1883' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8883' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8083' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8084' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18083 \
+  EMQX_NODE__DATA_DIR="./data1" \
+./bin/emqx start
+```
+
+Then use the following command to start the second node and join the cluster manually. To avoid port conflicts, you need to use a different set of listening ports on different nodes, and also use separate directories for log files and the internal database:
+
+```bash
+  EMQX_NODE__NAME='emqx2@127.0.0.1' \
+  EMQX_LOG__FILE_HANDLERS__DEFAULT__FILE='log2/emqx.log' \
+  EMQX_LISTENERS__TCP__DEFAULT__BIND='127.0.0.1:1882' \
+  EMQX_LISTENERS__SSL__DEFAULT__BIND='127.0.0.1:8882' \
+  EMQX_LISTENERS__WS__DEFAULT__BIND='127.0.0.1:8082' \
+  EMQX_LISTENERS__WSS__DEFAULT__BIND='127.0.0.1:8085' \
+  EMQX_DASHBOARD__LISTENERS__HTTP__BIND=18082 \
+  EMQX_NODE__DATA_DIR="./data2" \
+./bin/emqx start
+  EMQX_NODE__NAME='emqx2@127.0.0.1' ./bin/emqx ctl cluster join 'emqx1@127.0.0.1'
+```
+
+The above code example is to create a cluster manually. You can also refer to the [Auto Clustering](#auto-clustering) section on how to create a cluster automatically.
+
+Please note that this setup is not recommended for production environments.

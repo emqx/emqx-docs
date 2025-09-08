@@ -92,14 +92,14 @@ By default, the `epoch_bits` parameter is configured to 20 (~1 s), striking a ba
 
 The following CLI commands are available for managing the durable storage:
 
-### `emqx_ctl ds info`
+### `emqx ctl ds info`
 
 Displays an overview of the durable storage state.
 
 Example:
 
 ```bash
-$ emqx_ctl ds info
+$ emqx ctl ds info
 
 THIS SITE:
 D8894F95DC86DFDB
@@ -152,7 +152,7 @@ This command output includes:
 - `SITES`: List of all known sites, including EMQX node names and their statuses.
 - `SHARDS`: List of durable storage shards and site IDs where their replicas are located.
 
-### `emqx_ctl ds set-replicas <DS> <Site1> <Site2> ...`
+### `emqx ctl ds set-replicas <storage> <site1> <site2> ...`
 
 This command allows to set the list of sites containing replicas of the durable storage in the cluster.
 Once executed, it creates a plan of operations that leads to fair allocation of the shards between the sites, and then continues to execute it in the background.
@@ -164,14 +164,14 @@ Updating the list of durable storage replicas can be costly as it may involve co
 Example:
 
 ```bash
-$ emqx_ctl ds set-replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
+$ emqx ctl ds set-replicas messages 5C6028D6CE9459C7 D8894F95DC86DFDB F4E92DEA197C8EBC
 ok
 ```
 
 After executing this command, the output of `ds info` may look like this:
 
 ```bash
-$ emqx_ctl ds info
+$ emqx ctl ds info
 
 THIS SITE:
 D8894F95DC86DFDB
@@ -230,14 +230,14 @@ SHARDS:
 
 The new section `REPLICA TRANSITIONS` lists pending operations. Once all operations are complete, this list will be empty.
 
-### `emqx_ctl ds join <DS> <Site>` / `emqx_ctl ds leave <DS> <Site>`
+### `emqx ctl ds join <storage> <site>` / `emqx ctl ds leave <storage> <Site>`
 
 These commands add or remove a site from the list of replicas of the durable storage. They are similar to the `set_replicas` command but update one site at a time.
 
 Example:
 
 ```bash
-$ emqx_ctl ds join messages B2A7DBB2413CD6EE
+$ emqx ctl ds join messages B2A7DBB2413CD6EE
 ok
 ```
 
