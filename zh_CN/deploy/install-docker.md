@@ -33,6 +33,8 @@
 
    ```bash
    docker run -d --name emqx-enterprise \
+     --hostname node1.emqx.com \
+     -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
      -p 1883:1883 -p 8083:8083 \
      -p 8084:8084 -p 8883:8883 \
      -p 18083:18083 \
@@ -44,6 +46,10 @@
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
 3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 hostname 或者 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
+
+   对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@hostname`。您还应该设置容器主机名以保持一致，如上面示例所示。
+
+   **注意：** 节点名必须遵循 `emqx@<hostname>` 格式，其中 `<hostname>` 应该与容器的主机名或稳定的 FQDN 匹配。
 
 ## 通过 Docker Compose 构建 EMQX 集群
 
