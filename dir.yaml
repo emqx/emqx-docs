@@ -643,6 +643,51 @@
     #   children:
     #     - data-integration/rule-configs
 
+- title_en: EMQX AI
+  title_cn: EMQX AI
+  title_ja: EMQX AI
+  path: emqx-ai/overview
+  collapsed: true
+  children:
+    - title_en: MCP over MQTT
+      title_cn: MCP over MQTT
+      title_ja: MCP over MQTT
+      path: emqx-ai/mcp-over-mqtt/overview
+      children:
+        - emqx-ai/mcp-over-mqtt/architecture
+        - emqx-ai/mcp-over-mqtt/specification
+    - title_en: Multimedia Server
+      title_cn: 多媒体服务器
+      title_ja: マルチメディアサーバー
+      path: emqx-ai/multimedia-ai/overview
+      children:
+        - emqx-ai/multimedia-ai/architecture
+        - emqx-ai/multimedia-ai/message-protocol
+    - title_en: SDKs and Examples
+      title_cn: SDK 和示例
+      title_ja: SDK と例
+      path: emqx-ai/sdks/overview
+      collapsed: true
+      children:
+        - title_en: MCP SDK
+          title_cn: MCP SDK
+          title_ja: MCP SDK
+          path: emqx-ai/sdks/mcp-sdks-overview
+          collapsed: true
+          children:
+            - emqx-ai/sdks/mcp-sdk-esp32-c
+            - emqx-ai/sdks/mcp-sdk-paho-c
+            - emqx-ai/sdks/mcp-sdk-python
+            - emqx-ai/sdks/mcp-sdk-typescript
+            - emqx-ai/sdks/mcp-sdk-erlang
+        - title_en: Multimedia SDK
+          title_cn: 多媒体 SDK
+          title_ja: マルチメディア SDK
+          path: emqx-ai/sdks/multimedia-ai/overview
+          collapsed: true
+          children:
+            - emqx-ai/sdks/multimedia-ai/webrtc-typescript
+
 - title_en: Administration Guide
   title_cn: 管理员指南
   title_ja: 管理者ガイド
