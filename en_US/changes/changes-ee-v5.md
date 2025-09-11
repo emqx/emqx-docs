@@ -1,5 +1,100 @@
 # EMQX Enterprise Version 5
 
+## 5.10.1
+
+### Enhancements
+
+- [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of MQTT Connector to allow specifying usernames and passwords associated with each clientid.
+
+- [#15399](https://github.com/emqx/emqx/pull/15399) Now, `node_dump` will export the current system configuration in HOCON format with redacted secrets.
+
+- [#15387](https://github.com/emqx/emqx/pull/15387) Improved Kinesis Producer Connector and Action health checks to mitigate the occurrence of rate limiting when calling `ListStreams` and `DescribeStream` APIs.  Now, we limit the the calls per Connector to such APIs to 5/s and 10/s, respectively.  If a Connector or Action cannot call their health check API before timing out, they will simply maintain their current status.  If they receive a throttling response (e.g.: `LimitExceededException`), they will also maintain their current status.
+
+  Introduced a new `resource_opts.health_check_interval_jitter` configuration to add an uniform random delay to `resource_opts.health_check_interval`, so that multiple Actions under the same Connector will seldom run their health checks simultaneously.
+
+- [#15360](https://github.com/emqx/emqx/pull/15360) Added support for writing data files in Parquet format for S3Tables Action.
+
+- [#15349](https://github.com/emqx/emqx/pull/15349) Optimize external resource management for authentication and authorization. Previously, EMQX could remain connected to a resource configured for a disabled authentication or authorization provider.
+
+- [#15294](https://github.com/emqx/emqx/pull/15294) Enhance LDAP authentication and authorization.
+  LDAP authorization now supports extended ACL rules in JSON format.
+  LDAP authenticaton now can fetch ACL rules from LDAP. These rules are cached in the client's metadata, so authorization is performed without additional LDAP queries.
+
+### Bug Fixes
+
+- [#15872](https://github.com/emqx/emqx/pull/15872) Eliminate warning log 'unclean_terminate' when disconnected after CONNACK is sent with a non-zero reason code.
+
+- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
+
+  In rare race conditions, Kafka may return an incomplete partition list.
+  Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
+  This gap could cause the partition producer to stall and block shutdown indefinitely.
+
+- [#15863](https://github.com/emqx/emqx/pull/15863) Fix license quota alarm text.
+
+- [#15850](https://github.com/emqx/emqx/pull/15850) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected' and the connection was not re-established.
+
+- [#15844](https://github.com/emqx/emqx/pull/15844) Added validation to forbid adding empty usernames to the built-in database authenticator.  Such users cannot be deleted via the HTTP API later, since they mess up the API path.
+
+  If you have such an user and wish to delete it, run the following in an EMQX console:
+
+  ```erlang
+  mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
+  ```
+
+- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs.
+
+- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
+
+  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
+
+- [#15826](https://github.com/emqx/emqx/pull/15826) Previously, if the user used in a Kafka Consumer Connector did not have permissions to read the special `____emqx_consumer_probe` group used for health checks, the health check would fail.  Now, if the Kafka broker returns an ACL denied response, the connection is considered healthy.
+
+- [#15818](https://github.com/emqx/emqx/pull/15818) Corrected handling of `{allow|deny, all}` ACL rules.
+
+  Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
+  Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
+
+- [#15810](https://github.com/emqx/emqx/pull/15810) The original `sparkplug_{en,de}code` rule functions, when handling `bytes_value` metrics values, did not base64 decode/encode the data, respectively, thus not following the Protobuf spec.
+
+  https://protobuf.dev/programming-guides/json/
+
+  Thus, here, we introduce new `spb_{en,de}code` rule functions that translate such fields, to avoid breaking backwards compatibility, and deprecate the old `sparkplug_{en,de}code` rule functions.
+
+- [#15794](https://github.com/emqx/emqx/pull/15794) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
+
+- [#15788](https://github.com/emqx/emqx/pull/15788)  Etcd cluster discovery issue
+
+   Resolved an issue where EMQX nodes from different clusters could mistakenly join each other when using a shared etcd server.
+   This was caused by a bug in the etcd client library.
+
+- [#15712](https://github.com/emqx/emqx/pull/15712) Fix node boot-up failure during rolling upgrade from older versions (before 5.9)
+
+  In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid “seconds” value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
+
+- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected' and the connection was not re-established.
+
+- [#15553](https://github.com/emqx/emqx/pull/15553) Fixes an issue with helm chart when all nodes except one will be crashing if the chart is deployed with default values.
+
+- [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections, introduced by recent WebSocket performance improvements. These had no impact on broker capacity, but produced log entries like the following:
+  * `error: {function_clause,[{gen_tcp,send,[closed,[]],[{file,“gen_tcp.erl”},{line,966}]},{cowboy_websocket_linger,commands,3,[{file,“cowboy_websocket_linger.erl”},{line,665}]},...`
+  * `message: {tcp,#Port<0.364>,<<136,130,...>>}, msg: emqx_session_mem_unknown_message`
+
+- [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients, which were prone to crashes under high disconnect volume, resulting in potential inconsistencies in the global broker state.
+
+- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a very rare race condition in which Action metrics could end up in an inconsistent state.
+
+- [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a function clause error when parsing a malformed `User-Property` pair where the pair length is wrong (too short).
+
+- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed NATS gateway crash when clientinfo override templates contain undefined packet fields by returning empty binary instead of undefined atom.
+
+
+- [#15797](https://github.com/emqx/emqx/pull/15797) Add an `encoding` alias for the `payload_encoding` parameter in the HTTP PUBLISH interface.
+
+- [#15785](https://github.com/emqx/emqx/pull/15785) Fixed a crash triggered by MQTT usernames containing non-ASCII characters when formatting network congestion alarms.
+
+- [#15547](https://github.com/emqx/emqx/pull/15547) Fixed error when an HTTP request with a large body is sent.
+
 ## 5.10.0
 
 *Release Date: 2025-06-10*
