@@ -8,102 +8,78 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
+#### Observability
+
 - [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
 
-- [#15294](https://github.com/emqx/emqx/pull/15294) Enhance LDAP authentication and authorization.
-  LDAP authorization now supports extended ACL rules in JSON format.
-  LDAP authenticaton now can fetch ACL rules from LDAP. These rules are cached in the client's metadata, so authorization is performed without additional LDAP queries.
+#### Access Control
 
-- [#15349](https://github.com/emqx/emqx/pull/15349) Optimize external resource management for authentication and authorization. Previously, EMQX could remain connected to a resource configured for a disabled authentication or authorization provider.
+- [#15294](https://github.com/emqx/emqx/pull/15294) Enhanced LDAP authentication and authorization.
+  LDAP authorization now supports an extended ACL rule format using JSON, in addition to the existing simple topic list. ACL rules can also be fetched from LDAP during authentication based on client information, and are cached in the client’s metadata to avoid repeated LDAP queries during authorization.
+- [#15349](https://github.com/emqx/emqx/pull/15349) Optimized external resource management for authentication and authorization. Previously, EMQX could remain connected to a resource configured for a disabled authentication or authorization provider.
 
-- [#15360](https://github.com/emqx/emqx/pull/15360) Added support for writing data files in Parquet format for S3Tables Action.
+#### Data Integration
 
-- [#15364](https://github.com/emqx/emqx/pull/15364) Add HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
+- [#15360](https://github.com/emqx/emqx/pull/15360) Added support for writing data files in Parquet format for Amazon S3 Tables Action.
 
-- [#15387](https://github.com/emqx/emqx/pull/15387) Improved Kinesis Producer Connector and Action health checks to mitigate the occurrence of rate limiting when calling `ListStreams` and `DescribeStream` APIs.  Now, we limit the the calls per Connector to such APIs to 5/s and 10/s, respectively.  If a Connector or Action cannot call their health check API before timing out, they will simply maintain their current status.  If they receive a throttling response (e.g.: `LimitExceededException`), they will also maintain their current status.
+- [#15387](https://github.com/emqx/emqx/pull/15387) Added rate limiting to Kinesis Producer Connector and Action health checks to comply with AWS API quotas and improve cluster behavior.
 
-  Introduced a new `resource_opts.health_check_interval_jitter` configuration to add an uniform random delay to `resource_opts.health_check_interval`, so that multiple Actions under the same Connector will seldom run their health checks simultaneously.
+  - Health check calls to `ListStreams` and `DescribeStream` are now limited to 5/s and 10/s per Connector, respectively, matching AWS rate limits.
+  - A distributed limiter is coordinated by a core node in the cluster to enforce these limits consistently.
+  - If a health check is throttled or times out, the Connector or Action will now retain its previous status instead of being marked as disconnected.
 
-- [#15399](https://github.com/emqx/emqx/pull/15399) Now, `node_dump` will export the current system configuration in HOCON format with redacted secrets.
+  Also introduced a new `resource_opts.health_check_interval_jitter`, which adds a uniform random delay to `resource_opts.health_check_interval` to reduce the chance of multiple Actions under the same Connector running health checks at the same time.
 
 - [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcoud` library to `3.8.3.0`.  This allows one to setup a S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
+- [#15845](https://github.com/emqx/emqx/pull/15845) The `static_clientids` configuration for the MQTT Connector now supports specifying a username and password for each client ID. This is particularly useful for scenarios like connecting to Azure IoT Hub, where each device (client ID) requires a unique set of credentials. This enhancement helps ensure successful connections across multiple nodes in a clustered environment.
 
-- [#15585](https://github.com/emqx/emqx/pull/15585) Updated our `brod` client to version 4.4.4. This expands the supported Kafka API ranges, in particular due to the `JoinGroups` API `v0`-`v1` being deprecated.
+#### CLI
 
-- [#15773](https://github.com/emqx/emqx/pull/15773) Throttle client ID registration during reconnects
-
-  Added throttling for client ID registration if the previous session cleanup is still in progress.
-  This prevents instability when clients reconnect aggressively with the same client ID.
-  Affected clients will receive reason code `137` (Server Busy) in `CONNACK` with Reason-String "THROTTLED".
-  Clients should retry after the previous session cleanup has completed.
-
-  Also fixed the reason code from `133` to `137` when there is another connection in the middle of registering the same client ID.
-
-- [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of MQTT Connector to allow specifying usernames and passwords associated with each clientid.
-
-- [#15536](https://github.com/emqx/emqx/pull/15536) Disable the `node.global_gc_interval` configuration by default.
-
-- [#15539](https://github.com/emqx/emqx/pull/15539) Optimize Erlang VM parameters.
-
-  - Increase the buffer sizes for distributed channels to 32MB to avoid `busy_dist_port` alarms during intensive Mnesia operations: `+zdbbl 32768`
-  - Disable scheduler busy-waiting to reduce CPU usage observed by the operating system: `+sbwt none +sbwtdcpu none +sbwtdio none`
-  - Set scheduler binding type to `db` to reduce message latency: `+stbt db`
+- [#15399](https://github.com/emqx/emqx/pull/15399) The `node_dump` tool now exports the current system configuration in HOCON format, with sensitive information (such as passwords and secrets) automatically redacted for security.
 
 ### Bug Fixes
 
-- [#15383](https://github.com/emqx/emqx/pull/15383) Fix a potential resource leak in MQTT bridge when the bridge fails to start. Previously, the topic index table was not properly cleaned up when the bridge failed to start.
+#### API
 
-- [#15547](https://github.com/emqx/emqx/pull/15547) Fixed error when an HTTP request with a large body is sent.
+- [#15547](https://github.com/emqx/emqx/pull/15547) Resolved an issue where EMQX would fail to process HTTP requests with large bodies (e.g., 10MB) in the REST API.
+- [#15797](https://github.com/emqx/emqx/pull/15797) To improve compatibility with EMQX 4.x, the `encoding` parameter has been reintroduced in the batch publish HTTP API (`/api/v5/publish/bulk`) as an alias for `payload_encoding`. This change addresses migration issues for users relying on the original `encoding` parameter, and ensures existing integrations using EMQX v4 APIs can continue working without requiring software-level changes.
 
-- [#15639](https://github.com/emqx/emqx/pull/15639) Fix incorrect counting of the packets.subscribe.auth_error metric.
+#### Observability
 
-- [#15679](https://github.com/emqx/emqx/pull/15679) Fixed a bug where incorrect grouping of built-in authentication data for ExProto, JT/T 808,
-  GB/T 32960, and OCPP gateways caused mutual interference.
+- [#15785](https://github.com/emqx/emqx/pull/15785) Resolved a crash that occurred when MQTT usernames containing non-ASCII characters were used in formatting network congestion alarm messages.
 
-- [#15699](https://github.com/emqx/emqx/pull/15699) Fixed issue that caused the built-in authentication data for gateways is incorrectly purged when a node is stopped or shutdown.
+#### Gateway
 
-- [#15785](https://github.com/emqx/emqx/pull/15785) Fixed a crash triggered by MQTT usernames containing non-ASCII characters when formatting network congestion alarms.
+- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed a crash in the NATS gateway caused by client info override templates referencing undefined packet fields. The system now returns an empty binary instead of undefined atom.
 
-- [#15797](https://github.com/emqx/emqx/pull/15797) Add an `encoding` alias for the `payload_encoding` parameter in the HTTP PUBLISH interface.
-
-- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed NATS gateway crash when clientinfo override templates contain undefined packet fields by returning empty binary instead of undefined atom.
+#### Core MQTT Functions
 
 
-- [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a function clause error when parsing a malformed `User-Property` pair where the pair length is wrong (too short).
-
-- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a very rare race condition in which Action metrics could end up in an inconsistent state.
-
-- [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients, which were prone to crashes under high disconnect volume, resulting in potential inconsistencies in the global broker state.
-
-- [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections, introduced by recent WebSocket performance improvements. These had no impact on broker capacity, but produced log entries like the following:
+- [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
+- [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
+- [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections. This issue was introduced by recent WebSocket performance improvements. If did not affect broker capacity, but produced log entries like the following:
   * `error: {function_clause,[{gen_tcp,send,[closed,[]],[{file,“gen_tcp.erl”},{line,966}]},{cowboy_websocket_linger,commands,3,[{file,“cowboy_websocket_linger.erl”},{line,665}]},...`
   * `message: {tcp,#Port<0.364>,<<136,130,...>>}, msg: emqx_session_mem_unknown_message`
 
-- [#15553](https://github.com/emqx/emqx/pull/15553) Fixes an issue with helm chart when all nodes except one will be crashing if the chart is deployed with default values.
-
-- [#15580](https://github.com/emqx/emqx/pull/15580) Add emqxLicenseSecretRef variable to EMQX Enterprise helm chart, allowing users to specify a Kubernetes secret containing the EMQX license key. This fixes the issue with defunct emqxLicenseSecretName variable.
-
-- [#15581](https://github.com/emqx/emqx/pull/15581) Upgrade OTP version from 26.2.5.2 to 26.2.5.14
-
-  This upgrade includes two TLS-related fixes relevant to EMQX:
-
-  - Fixed a crash in TLS connections caused by a race condition during certificate renewal.
-  - Added support for RSA certificates signed with PSS parameters. Previously TLS handshake may fail with `invalid_signature`.
+#### Data Integration
 
 
-- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected' and the connection was not re-established.
+- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
+- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
 
-- [#15616](https://github.com/emqx/emqx/pull/15616) Consider Kafka connection healthy if `topic_authorization_failed` is received for the default probing topic.
+#### Deployment
 
-- [#15683](https://github.com/emqx/emqx/pull/15683) Fix exhook TLS options to allow verify server host name.
 
-- [#15706](https://github.com/emqx/emqx/pull/15706) Fixed an issue that could make Message Transformations and Schema Validations behave inconsistently.  If one deleted a Message Transformation / Schema Validation, and then disabled one of the items that followed the deleted one, it would remain enabled.
+- [#15553](https://github.com/emqx/emqx/pull/15553) Fixed an issue in the Helm chart where deploying EMQX with default values started multiple replicas and caused all nodes except one to crash. The chart now defaults to a single replica, since clustered deployments require an Commercial License.
 
-- [#15708](https://github.com/emqx/emqx/pull/15708) Previously, when restarting a node which had external schema registries configured, they would not load properly.
 
 - [#15712](https://github.com/emqx/emqx/pull/15712) Fix node boot-up failure during rolling upgrade from older versions (before 5.9)
 
   In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid “seconds” value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
+
+#### Clustering
+
 
 - [#15788](https://github.com/emqx/emqx/pull/15788) Etcd cluster discovery issue
 
@@ -123,7 +99,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
   Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
 
-- [#15822](https://github.com/emqx/emqx/pull/15822) Fixed an issue where the OCPP connection would crash after sending a certain number of messages.
+  
 
 - [#15826](https://github.com/emqx/emqx/pull/15826) Previously, if the user used in a Kafka Consumer Connector did not have permissions to read the special `____emqx_consumer_probe` group used for health checks, the health check would fail.  Now, if the Kafka broker returns an ACL denied response, the connection is considered healthy.
 
