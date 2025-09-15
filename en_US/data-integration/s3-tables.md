@@ -70,7 +70,7 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
 
   To create and manage access keys for an IAM user, see the [AWS documentation on managing access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
-- **Option 2: Automatically obtain temporary credentials (EC2 only, since EMQX 5.10.1)**
+- **Option 2: Automatically obtain temporary credentials (EC2 only)**
    If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 to fetch temporary credentials associated with that role.
 
   To learn how to assign an IAM role to an EC2 instance, see the [AWS documentation on IAM roles for Amazon EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html).
@@ -145,7 +145,7 @@ Before adding the S3 Tables Sink, you need to create the corresponding connector
    - **S3Tables ARN**: Enter the Amazon Resource Name (ARN) of your S3 Table Bucket. You can find this in the Table buckets section in the AWS Console.
    - **Access Key ID and Secret Access Key** (optional):
      - **Manual configuration:** Enter AWS credentials associated with an IAM user or role that has permission to access S3 Tables and Athena.
-     - **Automatic retrieval (since EMQX 5.10.1):** If EMQX is deployed on an AWS EC2 instance and the instance is associated with an IAM role that has the required permissions, you can leave this field blank. EMQX will automatically obtain temporary credentials through IMDSv2. See [Deployment Prerequisites and Credential Sources](#deployment-prerequisites-and-credential-sources) for details.
+     - **Automatic retrieval:** If EMQX is deployed on an AWS EC2 instance and the instance is associated with an IAM role that has the required permissions, you can leave this field blank. EMQX will automatically obtain temporary credentials through IMDSv2. See [Deployment Prerequisites and Credential Sources](#deployment-prerequisites-and-credential-sources) for details.
    - **Enable TLS**: TLS is enabled by default when connecting to S3 Tables. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
    - **Health Check Timeout**: Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables.
 7. Use the default values for the remaining settings.

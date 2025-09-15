@@ -70,7 +70,7 @@ S3 Tables 连接器支持两种凭证获取方式，请根据 EMQX 的部署环�
 
   关于如何为 IAM 用户创建和管理访问密钥，请参阅 [AWS 官方文档：管理访问密钥](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html)。
 
-- **方式二：自动获取临时凭证（EC2 专用，自 EMQX 5.10.1 起）**
+- **方式二：自动获取临时凭证（EC2 专用）**
   若 EMQX 运行在 AWS EC2 实例上，且实例已绑定具备所需权限的 IAM 角色，可在连接器中将**访问密钥 ID**与**访问密钥**留空。EMQX 将通过 IMDSv2 自动获取与该角色对应的临时凭证。
 
   关于如何为 EC2 实例分配 IAM 角色，请参阅 [AWS 官方文档：Amazon EC2 的 IAM 角色](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html)。
@@ -143,8 +143,8 @@ S3 Tables 连接器支持两种凭证获取方式，请根据 EMQX 的部署环�
 5. 输入连接信息：
    - **表资源名称（ARN）**：输入您在 AWS 控制台中 S3 表存储桶列表中找到的 Amazon Resource Name (ARN)。
    - **访问密钥 ID 和访问密钥** （可选）：
-     - 手动配置：输入与具有访问 S3 表和 Athena 权限的 IAM 用户或角色关联的 AWS 访问凭证。
-     - 自动获取（自 EMQX 5.10.1 起）：若 EMQX 部署在 AWS EC2 实例上，且实例已关联具备所需权限的 IAM 角色，可将本项留空。EMQX 将通过 IMDSv2 自动获取临时凭证。详情与前置条件见[部署前提与凭证获取方式](#部署前提与凭证获取方式)。
+     - **手动配置**：输入与具有访问 S3 表和 Athena 权限的 IAM 用户或角色关联的 AWS 访问凭证。
+     - **自动获取**：若 EMQX 部署在 AWS EC2 实例上，且实例已关联具备所需权限的 IAM 角色，可将本项留空。EMQX 将通过 IMDSv2 自动获取临时凭证。详情与前置条件见[部署前提与凭证获取方式](#部署前提与凭证获取方式)。
    - **启用 TLS**：连接到 S3 表数据存储服务时默认启用 TLS。有关 TLS 连接选项的详细信息，请参阅[外部资源访问的 TLS](../network/overview.md#启用-tls-加密访问外部资源)。
    - **健康检查超时**：指定对与 S3 表数据存储服务的连接执行自动健康检查的超时时间。
 6. 其余设置保持默认值。
