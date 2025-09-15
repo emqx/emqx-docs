@@ -171,6 +171,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Table**: The name of the Iceberg table to append data to (e.g., `testtable`).
    - **Max Records**: The maximum number of records to batch before writing to S3. Once reached, the batch is flushed and uploaded immediately.
    - **Time Interval**: The maximum time (in milliseconds) to wait before flushing data, even if the record count has not reached the Max Records threshold.
+   - **Data File Format**: Defines the format of the data file used to store batched MQTT messages in S3. Supported values:
+     - `avro`: (Default) Stores records in Avro format, which is row-based and ideal for streaming data and evolving schemas.
+     - `parquet`: Stores records in Apache Parquet format, which is column-based and optimized for analytical queries over large datasets.
 
 8. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
