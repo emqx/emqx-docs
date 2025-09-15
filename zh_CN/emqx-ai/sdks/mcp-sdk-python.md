@@ -13,7 +13,7 @@ cd mcp_over_mqtt_demo
 
 ## 创建一个简单的 MCP 服务器
 
-在 `mcp_over_mqtt_demo` 项目中，让我们创建一个简单的 MCP 服务器，暴露一个计算器工具和一些资源。创建一个名为 `demo_mcp_server.py` 的文件，并添加以下代码：
+在 `mcp_over_mqtt_demo` 项目中，让我们创建一个简单的 MCP 服务器，暴露一个工具做整数的加法运算，和一个简单的资源返回字符串。创建一个名为 `demo_mcp_server.py` 的文件，代码如下：
 
 ```python
 # demo_mcp_server.py

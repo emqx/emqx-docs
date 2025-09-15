@@ -82,8 +82,6 @@ mqttClient.on('message', (topic, message) => {
 }
 ```
 
-完整的客户端信令实现示例可参考 [signaling_mqtt.js](https://github.com/emqx/emqx-multimedia-proxy/blob/main/apps/emqx_media_proxy_web/assets/js/signaling_mqtt.js)。你可以访问 http://localhost:4000/webrtc_mqtt 体验演示。
-
 ## 通过 MQTT 发送普通消息
 
 多媒体服务器可通过以下 MQTT 主题向设备发送普通消息：
