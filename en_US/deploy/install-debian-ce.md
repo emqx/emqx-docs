@@ -8,7 +8,6 @@ Supported versions:
 - Debian 13
 - Debian 12
 - Debian 11
-- Debian 10
 
 ## Install with Apt Source
 

@@ -7,7 +7,6 @@
 - Debian 13
 - Debian 12
 - Debian 11
-- Debian 10
 
 ## 通过 Apt 源安装
 
