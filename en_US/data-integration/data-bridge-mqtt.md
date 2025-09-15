@@ -95,13 +95,15 @@ To address this issue, from version 5.7.1 onwards, EMQX has implemented the foll
 
 ### Configure Static Client IDs
 
-In some use cases, you may only have a finite set of client IDs to use in an integration. In this case, it is possible to assign static client ID sets to individual nodes while configuring the connector. To configure static client IDs, provide a list of client IDs for each node in your EMQX cluster during the Connector setup. Below is an example configuration:
+In some use cases, you may only have a finite set of client IDs to use in an integration. In this case, it is possible to assign static client ID (along with optional username and password) sets to individual nodes while configuring the connector. To configure static client IDs, provide a list of client IDs for each node in your EMQX cluster during the Connector setup. Below is an example configuration:
 
-| Node            | Client IDs               |
-| :-------------- | ------------------------ |
-| `emqx@10.0.0.1` | `clientid1`, `clientid3` |
-| `emqx@10.0.0.2` | `clientid2`              |
-| `emqx@10.0.0.3` | `clientid4`, `clientid5` |
+| Node            | Client ID   | Username (optional) | Password (optional) |
+|:----------------|-------------|---------------------|---------------------|
+| `emqx@10.0.0.1` | `clientid1` | `username1`         | `secret1`           |
+| `emqx@10.0.0.1` | `clientid3` |                     |                     |
+| `emqx@10.0.0.2` | `clientid2` | `username2`         |                     |
+| `emqx@10.0.0.3` | `clientid4` |                     |                     |
+| `emqx@10.0.0.3` | `clientid5` |                     |                     |
 
 Static client IDs can only be configured through the configuration file and are not available for setup through the Dashboard UI. You can define the `static_clientids` parameter for each node individually in configuration files.
 
