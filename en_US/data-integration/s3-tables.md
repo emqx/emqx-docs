@@ -71,7 +71,7 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
   To create and manage access keys for an IAM user, see the [AWS documentation on managing access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
 - **Option 2: Automatically obtain temporary credentials (EC2 only)**
-   If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 to fetch temporary credentials associated with that role.
+   If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 API to fetch temporary credentials associated with that role.
 
   To learn how to assign an IAM role to an EC2 instance, see the [AWS documentation on IAM roles for Amazon EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html).
 
