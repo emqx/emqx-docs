@@ -78,7 +78,7 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
 ::: tip Note
 
 - Ensure the instance role has sufficient permissions to the target S3 Tables (bucket/table) and Athena; otherwise, **Test Connectivity** may fail.
-- It’s recommended to enforce IMDSv2-only on the instance; if you are not on EC2 or no role is attached, use **Option 1** and enter access keys manually.
+- It’s recommended to use an IAM role attached to EC2 instance to manage temporary credentials; if you are not on EC2 or no role is attached, use **Option 1** and enter access keys manually.
    :::
 
 ### Prepare an S3 Tables Bucket
