@@ -69,7 +69,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
 - [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
-- [#15826](https://github.com/emqx/emqx/pull/15826) Improved Kafka consumer connector health check behavior with restricted ACLs. .Previously, Kafka Consumer Connector health checks could fail if the configured user lacked permission to access the internal `____emqx_consumer_probe` consumer group used for the check. With this fix, if the Kafka broker returns an "ACL denied" response, EMQX will treat the connection as healthy.
+- [#15826](https://github.com/emqx/emqx/pull/15826) Improved Kafka consumer connector health check behavior with restricted ACLs. Previously, Kafka Consumer Connector health checks could fail if the configured user lacked permission to access the internal `____emqx_consumer_probe` consumer group used for the check. With this fix, if the Kafka broker returns an "ACL denied" response, EMQX will treat the connection as healthy.
 - [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
 
   Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
