@@ -8,6 +8,10 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
+- [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
+
+- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the return of `GET /actions_summary` and `GET /sources_summary`, and to the fallback actions returned in `GET /actions/:id`.
+
 #### Observability
 
 - [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
@@ -39,6 +43,24 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15399](https://github.com/emqx/emqx/pull/15399) The `node_dump` tool now exports the current system configuration in HOCON format, with sensitive information (such as passwords and secrets) automatically redacted for security.
 
 ### Bug Fixes
+
+- [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
+
+  Connectors affected and fixed:
+
+  - MySQL
+  - PostgreSQL
+  - Oracle
+  - SQLServer
+  - TDEngine
+  - Cassandra
+  - Dynamo
+
+- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from 4.0.12 to 4.0.13`, which adds handling for the record_list_too_large error in ProduceResponse.
+
+- [#15899](https://github.com/emqx/emqx/pull/15899) Improved memory usage: authorization (authz) cache is now cleared immediately when a client disconnects, reducing unnecessary memory consumption.
+
+- [#15518](https://github.com/emqx/emqx/pull/15518) Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
 
 #### API
 
