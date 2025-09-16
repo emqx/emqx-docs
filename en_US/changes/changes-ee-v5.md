@@ -62,11 +62,27 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   * `error: {function_clause,[{gen_tcp,send,[closed,[]],[{file,“gen_tcp.erl”},{line,966}]},{cowboy_websocket_linger,commands,3,[{file,“cowboy_websocket_linger.erl”},{line,665}]},...`
   * `message: {tcp,#Port<0.364>,<<136,130,...>>}, msg: emqx_session_mem_unknown_message`
 
+- [#15872](https://github.com/emqx/emqx/pull/15872) Eliminated warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
+
 #### Data Integration
 
 
 - [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
 - [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
+- [#15826](https://github.com/emqx/emqx/pull/15826) Improved Kafka consumer connector health check behavior with restricted ACLs. .Previously, Kafka Consumer Connector health checks could fail if the configured user lacked permission to access the internal `____emqx_consumer_probe` consumer group used for the check. With this fix, if the Kafka broker returns an "ACL denied" response, EMQX will treat the connection as healthy.
+- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
+
+  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
+
+- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs.
+
+- [#15850](https://github.com/emqx/emqx/pull/15850) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected` and the connection was not re-established.
+
+- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
+
+  In rare race conditions, Kafka may return an incomplete partition list.
+  Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
+  This gap could cause the partition producer to stall and block shutdown indefinitely.
 
 #### Deployment
 
@@ -78,36 +94,30 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   In previous EMQX versions (before 5.9), a bug in the ZIP timestamp encoder could store an invalid “seconds” value in archive entries (values corresponding to the 30th or 31st 2-second slot in DOS time format).
 
+- [#15863](https://github.com/emqx/emqx/pull/15863) Fixed license quota alarm text.
+
 #### Clustering
 
 
-- [#15788](https://github.com/emqx/emqx/pull/15788) Etcd cluster discovery issue
+- [#15788](https://github.com/emqx/emqx/pull/15788) Fixed etcd cluster discovery issue. Resolved an issue where EMQX nodes from different clusters could mistakenly join each other when using a shared etcd server. This was caused by a bug in the etcd client library.
 
-  Resolved an issue where EMQX nodes from different clusters could mistakenly join each other when using a shared etcd server.
-  This was caused by a bug in the etcd client library.
+#### Rate Limit
 
-- [#15794](https://github.com/emqx/emqx/pull/15794) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
 
-- [#15810](https://github.com/emqx/emqx/pull/15810) The original `sparkplug_{en,de}code` rule functions, when handling `bytes_value` metrics values, did not base64 decode/encode the data, respectively, thus not following the Protobuf spec.
+- [#15794](https://github.com/emqx/emqx/pull/15794) Improved the behavior of connection rate limit updates to ensure that changes (e.g., to burst rate or rate thresholds) are applied immediately after the listener configuration is updated. Previously, parts of the internal limiter state were not refreshed correctly, which could result in rate limits appearing stricter than configured.
 
-  https://protobuf.dev/programming-guides/json/
+#### Smart Data Hub
 
-  Thus, here, we introduce new `spb_{en,de}code` rule functions that translate such fields, to avoid breaking backwards compatibility, and deprecate the old `sparkplug_{en,de}code` rule functions.
+
+- [#15810](https://github.com/emqx/emqx/pull/15810) Introduced `spb_{en,de}code` functions to ccorrect handling of `bytes_value` Metrics. Fixed an issue with the original `sparkplug_{en,de}code` functions, which did not base64 encode/decode `bytes_value` metric values as required by the [Protobuf specification](https://protobuf.dev/programming-guides/json/). To address this, new `spb_{en,de}code` functions have been introduced for correct encoding/decoding of such fields. The old `sparkplug_{en,de}code` functions are now deprecated to maintain backward compatibility.
+
+#### Access Control
+
 
 - [#15818](https://github.com/emqx/emqx/pull/15818) Corrected handling of `{allow|deny, all}` ACL rules.
 
   Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
   Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
-
-  
-
-- [#15826](https://github.com/emqx/emqx/pull/15826) Previously, if the user used in a Kafka Consumer Connector did not have permissions to read the special `____emqx_consumer_probe` group used for health checks, the health check would fail.  Now, if the Kafka broker returns an ACL denied response, the connection is considered healthy.
-
-- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
-
-  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
-
-- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs.
 
 - [#15844](https://github.com/emqx/emqx/pull/15844) Added validation to forbid adding empty usernames to the built-in database authenticator.  Such users cannot be deleted via the HTTP API later, since they mess up the API path.
 
@@ -116,18 +126,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   ```erlang
   mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
   ```
-
-- [#15850](https://github.com/emqx/emqx/pull/15850) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected' and the connection was not re-established.
-
-- [#15863](https://github.com/emqx/emqx/pull/15863) Fix license quota alarm text.
-
-- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
-
-  In rare race conditions, Kafka may return an incomplete partition list.
-  Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
-  This gap could cause the partition producer to stall and block shutdown indefinitely.
-
-- [#15872](https://github.com/emqx/emqx/pull/15872) Eliminate warning log 'unclean_terminate' when disconnected after CONNACK is sent with a non-zero reason code.
 
 ## 5.10.0
 
