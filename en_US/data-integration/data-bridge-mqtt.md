@@ -66,7 +66,7 @@ This section guides you on how to configure a connection with a remote MQTT serv
 4. Enter a **name** for the connector, which must be a combination of upper/lower case letters and numbers, for example, `my_mqtt_bridge`.
 
 5. Configure the connection information:
-   - **MQTT Broker**: Only supports MQTT over TCP/TLS. For exmaple, `broker.emqx.io:1883`.
+   - **MQTT Broker**: Only supports MQTT over TCP/TLS. For example, `broker.emqx.io:1883`.
    
    - **ClientID Prefix**: This can be left blank. In actual use, specifying a client ID prefix can facilitate client management. EMQX will automatically generate client IDs based on the client ID prefix and the size of the connection pool. For more information, see [Connection Pool and Client ID Generation Rules](#connection-pool-and-client-id-generation-rules).
    
