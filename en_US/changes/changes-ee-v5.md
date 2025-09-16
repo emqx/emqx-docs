@@ -109,7 +109,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Smart Data Hub
 
 
-- [#15810](https://github.com/emqx/emqx/pull/15810) Introduced `spb_{en,de}code` functions to ccorrect handling of `bytes_value` Metrics. Fixed an issue with the original `sparkplug_{en,de}code` functions, which did not base64 encode/decode `bytes_value` metric values as required by the [Protobuf specification](https://protobuf.dev/programming-guides/json/). To address this, new `spb_{en,de}code` functions have been introduced for correct encoding/decoding of such fields. The old `sparkplug_{en,de}code` functions are now deprecated to maintain backward compatibility.
+- [#15810](https://github.com/emqx/emqx/pull/15810) Introduced `spb_{en,de}code` functions to correct handling of `bytes_value` Metrics. Fixed an issue with the original `sparkplug_{en,de}code` functions, which did not base64 encode/decode `bytes_value` metric values as required by the [Protobuf specification](https://protobuf.dev/programming-guides/json/). To address this, new `spb_{en,de}code` functions have been introduced for correct encoding/decoding of such fields. The old `sparkplug_{en,de}code` functions are now deprecated to maintain backward compatibility.
 
 #### Access Control
 
