@@ -13,7 +13,7 @@
 const char* get_temperature_callback(int n_args, property_t *args) {
     // Read sensor data
     float temp = read_temperature_sensor();
-    
+
     // Return JSON formatted result
     static char result[64];
     snprintf(result, sizeof(result), "{\"temperature\": %.2f}", temp);
