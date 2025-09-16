@@ -37,9 +37,9 @@ Make sure you know the following:
 
 :::
 
-Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, including:
+Before creating an MQTT Broker data integration, you need to obtain the connection information for the remote MQTT service, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example:
 
-- **MQTT Service Address**: The address and port of the target MQTT service, for example, `broker.emqx.io:1883`.
+- **MQTT Service Address**: The address and port of the target MQTT service; in this example, it is `broker.emqx.io:1883`.
 - **Username**: The username required for the connection. If the target service does not require authentication, this can be left blank.
 - **Password**: The password required for the connection. If the target service does not require authentication, this can also be left blank.
 - **Protocol Type**: It is important to determine whether the target service has enabled TLS and whether it is using MQTT over TCP/TLS protocol. Note that the EMQX MQTT bridge currently does not support protocols like MQTT over WebSocket and MQTT over QUIC.
@@ -55,7 +55,7 @@ When EMQX is running in cluster mode or when a connection pool is enabled, using
 
 ## Create a Connector
 
-This section guides you on how to configure a connection with a remote MQTT server, using EMQX's [online MQTT server](https://www.emqx.com/en/mqtt/public-mqtt5-broker) as an example.
+This section guides you on how to configure a connection with a remote MQTT server.
 
 1. Go to the **Integration** -> **Connector** page on the Dashboard.
 
@@ -80,7 +80,7 @@ This section guides you on how to configure a connection with a remote MQTT serv
    
      ::: tip
    
-     If static client ID entries are defined, only the EMQX nodes that are assigned those client IDs will establish MQTT connections using them.
+     If static client ID entries are defined, only the EMQX nodes that have been explicitly assigned static client IDs will start MQTT connections.
    
      :::
 
@@ -117,12 +117,24 @@ In some use cases, you only have a finite set of client IDs to use in an integra
 
 To configure static client IDs, follow these steps:
 
-1. In the **Static ClientId Entries** section, click the **Add** button to add a new static client ID entry. You can add multiple entries for different nodes as needed.
+1. In the **Static ClientId Entries** section, click the **Add** button to add a new static client ID entry. You can add multiple entries of different nodes as needed.
+
 2. For each entry, fill in the following fields:
+
    - **Node Name**: Specify the node where the client ID will be assigned. For example, `emqx@10.0.0.1`.
-   - **Client ID**: Enter the static client ID. For example, `device1`. You can add multiple client IDs for a node as needed by clicking **Add** .
+   - **Client ID**: Enter the static client ID. For example, `device1`. You can add multiple client IDs for a node as needed by clicking **Add**.
      - **Username**: (optional) Provide the username associated with this client ID for authentication.
      - **Password**: (optional) Enter the password associated with this client ID. This is the credential used to authenticate the device or client, which may be a device-specific key, secret, or certificate, depending on the platform (e.g., an authentication key in Azure IoT Hub).
+
+   **Configuration Example**:
+
+   | Node            | Client ID   | Username (optional) | Password (optional) |
+   | --------------- | ----------- | ------------------- | ------------------- |
+   | `emqx@10.0.0.1` | `clientid1` | `username1`         | `secret1`           |
+   |                 | `clientid3` |                     |                     |
+   | `emqx@10.0.0.2` | `clientid2` | `username2`         |                     |
+   | `emqx@10.0.0.3` | `clientid4` |                     |                     |
+   |                 | `clientid5` |                     |                     |
 
 You can also define the `static_clientids` parameter for each node individually in configuration files.
 
