@@ -1,4 +1,4 @@
-## Message Protocol
+# Multimedia AI Messaging Protocol
 
 This document describes the message protocol used for interaction between the multimedia server, clients (devices), and AI agents.
 
@@ -83,19 +83,17 @@ The multimedia proxy will send the `webrtc_terminated` message to the client whe
 }
 ```
 
-See [signaling_mqtt.js](https://github.com/emqx/emqx-multimedia-proxy/blob/main/apps/emqx_media_proxy_web/assets/js/signaling_mqtt.js) for a complete example of the client-side signaling implementation using MQTT. You can go to http://localhost:4000/webrtc_mqtt to try the demo.
 
+## Send General Messages via MQTT
 
-## Normal Messages via MQTT
+The multimedia server and devices exchange general messages through the following MQTT topics:
 
-The multimedia proxy can send normal messages to the device via the following MQTT topic:
+- **`$message/<device_id>`**: Topic for the multimedia server to send general messages to a device.
+- **`$message/<device_id>/multimedia_proxy`**: Topic for a device to send arbitrary messages to the multimedia server. These messages are forwarded to the AI Agent via the `message_from_device` method.
 
-- `$message/<device_id>`: The MQTT topic for the device to receive normal messages from the multimedia proxy.
-- `$message/<device_id>/multimedia_proxy`: The MQTT topic for the multimedia proxy to receive arbitrary messages from the device, will be sent to the AI agents using the `message_from_device` method.
+### Messages Sent from Multimedia Server to Devices
 
-### The format of the normal messages sent to the device:
-
-The multimedia proxy can send the following types of messages to the device via the `$message/<device_id>` topic.
+The multimedia server can publish the following message types on the `$message/<device_id>` topic:
 
 A `asr_response` message is sent when ASR results are available:
 
@@ -153,9 +151,10 @@ A `message` message is sent to device when the agent sends an arbitrary message 
 }
 ```
 
-### The format of the arbitrary messages sent from the device to the multimedia proxy:
+### Messages Sent from Devices to the Multimedia Server
 
-The device can send arbitrary messages to the multimedia proxy via the `$message/<device_id>/multimedia_proxy` topic. The format of the messages is:
+Devices can publish arbitrary messages to the **`$message/<device_id>/multimedia_proxy`** topic.
+ The multimedia server will forward these messages to the AI Agent:
 
 ```json
 {
@@ -165,14 +164,15 @@ The device can send arbitrary messages to the multimedia proxy via the `$message
 ```
 
 
-## The Interaction Protocol between Multimedia Proxy and AI Agents
+## Interaction Protocol between Multimedia Server and AI Agent
 
-Using AI agents can enhance the capabilities of the multimedia proxy, such as processing ASR results according to specific business logic or sending messages in arbitrary formats to devices.
+Using AI agents can can extend the capabilities of the Multimedia Server, for example by processing ASR results according to business logic or sending custom messages to devices.
 
-The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based protocol. The messages are sent over STDIO (standard input/output). Messages are delimited by newlines (`\n`), and MUST NOT contain embedded newlines.
+The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based protocol. The messages are sent over Standard Input/Output (STDIO). Messages are delimited by newlines (`\n`), and MUST NOT contain embedded newlines.
 
 - **Initialization**:
-    After the STDIO connection is established, the agent must send an initialization message to the multimedia proxy, to negotiate the protocol version and configs:
+    After the STDIO connection is established, the agent must send an initialization message to the multimedia proxy, to negotiate the protocol version and configuration:
+    
     ```json
     {
         "jsonrpc": "2.0",
@@ -189,7 +189,7 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
         }
     }
     ```
-
+    
     The multimedia proxy will respond with an acknowledgment:
     ```json
     {
@@ -198,7 +198,7 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
         "result": "ok"
     }
     ```
-
+    
 - **ASR Result**:
     The multimedia proxy sends the ASR results as notifications to the AI agents in the following format:
     ```json
@@ -215,9 +215,12 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
 
 - **TTS and Send**:
 
-    The AI agents can request the multimedia proxy to perform TTS and send the audio back to the specific device.
+    The AI Agent can request the Multimedia Server to perform **TTS** and send the audio to a target device.
 
-    First the agent should send a `tts_and_send_start` message to start a TTS task, and then send one or more `tts_and_send` messages to send the texts to be converted to speech. The texts of the same task can be sent in one batch or in separate messages, but they must have the same `task_id`. Finally, the agent should send a `tts_and_send_finish` message to indicate the end of the TTS task.
+    1. The agent sends a `tts_and_send_start` message to initiate the task.
+    2. The agent sends one or more `tts_and_send` messages to provide the text to be synthesized.
+       - Multiple texts for the same task can be sent in batches or sequentially, but must use the same `task_id`.
+    3. Finally, the agent sends a `tts_and_send_finish` message to signal the end of the task.
 
     The start message:
     ```json
@@ -276,9 +279,10 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
     ]
     ```
 
-    The `tts_and_send_start` and `tts_and_send_finish` messages canbe sent in the same batch with the `tts_and_send` messages, or in separate messages.
+    The `tts_and_send_start` and `tts_and_send_finish` messages can be sent either in the same batch as `tts_and_send` messages or separately.
 
-    The multimedia proxy will acknowledge the request with "ok" or errors:
+    The Multimedia Server confirms each message with `"ok"` or returns an error:
+
     ```json
     [
         {
@@ -330,7 +334,8 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
     ```
 
 - **Forward Messages Received from Device**:
-    The multimedia proxy will send messages received from `$message/<device_id>/multimedia_proxy` topic to the AI agents via the `message_from_device` method:
+    The Multimedia Server forwards messages received on the `$message/<device_id>/multimedia_proxy` topic to the AI Agent using the `message_from_device` method:
+    
     ```json
     {
         "jsonrpc": "2.0",
@@ -342,9 +347,10 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
         }
     }
     ```
-
+    
 - **Send Message to Device**:
-    The AI agents can send arbitrary messages to the device via the multimedia proxy:
+    The AI Agent can send arbitrary messages to devices through the Multimedia Server:
+    
     ```json
     {
         "jsonrpc": "2.0",
@@ -361,8 +367,8 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
         }
     }
     ```
-
-    The multimedia proxy will acknowledge the request with:
+    
+    The Multimedia Server responds with a confirmation:
     ```json
     {
         "jsonrpc": "2.0",

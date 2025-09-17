@@ -4,7 +4,7 @@ This document demonstrates how to use the [MCP over MQTT Erlang SDK](https://git
 
 ## Example
 
-### Creating a Simple MCP Client
+### Create a Simple MCP Client
 
 ```erlang
 -module(mcp_mqtt_erl_client_demo).
@@ -50,7 +50,7 @@ start_link() ->
 
 Here, `server_name_filter` is used to subscribe to the MQTT topic filter for MCP servers, and `mqtt_options` are options passed to the underlying MQTT client.
 
-### Creating a Simple MCP Server
+### Create a Simple MCP Server
 
 Below is a simple MCP server implementation that supports two tools: `tool1` and `tool2`.
 

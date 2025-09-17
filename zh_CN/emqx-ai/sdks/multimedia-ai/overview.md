@@ -6,6 +6,6 @@
 
 - **移动应用**: 通过集成 WebRTC SDK（如 [Pion](https://pion.ly)）来实现与多媒体 AI 服务的交互。
 
-- **嵌入式设备**: 物联网设备可以通过集成与设备适配的 WebRTC 库来实现与多媒体 AI 服务的连接。如 [ESP32 WebRTC](https://github.com/espressif/esp-webrtc-solution)
+- **嵌入式设备**: 物联网设备可以通过集成与设备适配的 WebRTC 库来实现与多媒体 AI 服务的连接，如 [ESP32 WebRTC](https://github.com/espressif/esp-webrtc-solution)。
 
-具体的 WebRTC 信令和 MQTT 消息格式请参考 [多媒体 AI 消息协议](../../multimedia-ai/message-protocol.md)。这里我们提供了基于 Web 浏览器的客户端代码示例，演示如何与多媒体服务进行交互：[Typescript WebRTC 示例](./webrtc-typescript.md)。
+具体的 WebRTC 信令和 MQTT 消息格式请参考[多媒体 AI 消息协议](../../multimedia-ai/message-protocol.md)。这里我们提供了基于 Web 浏览器的客户端代码示例，演示如何与多媒体服务进行交互：[Typescript WebRTC 示例](./webrtc-typescript.md)。

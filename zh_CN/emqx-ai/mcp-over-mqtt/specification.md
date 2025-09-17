@@ -2,11 +2,11 @@
 
 本文档定义了 MCP 协议在 MQTT 传输层下的特殊要求，包括 MQTT 主题、客户端 ID 格式等，并描述了 MQTT 传输层的生命周期，包括服务发现、初始化、能力列表变更、资源更新和关闭流程。
 
-请结合 [MCP 规范](https://modelcontextprotocol.io/specification/2025-06-18) 一起阅读。
+请结合 [MCP 规范](https://modelcontextprotocol.io/specification/2025-06-18)一起阅读。
 
 ## 术语
 
-- **server-name**：MCP 服务器的标识符，将包含在主题中。
+- **server-name**：MCP 服务器的标识符，将包含在 MQTT 消息主题中。
 
     多个使用相同 `server-name` 的连接视为同一个 MCP 服务器的多个实例，提供完全相同的服务。MCP 客户端发送初始化消息时，应根据客户端侧策略选择其中一个。
 
@@ -83,19 +83,20 @@ MCP 客户端的 Client ID（`mcp-client-id`）为除 `/`、`+`、`#` 外的任�
 | `$mcp-client/presence/{mcp-client-id}`             | 客户端在线状态主题，接收客户端断开通知。                              |
 | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`| RPC 主题，接收来自客户端的 RPC 请求、响应和通知。                     |
 
-::: info
-- 服务器订阅 RPC 主题时**必须**设置 **No Local** 选项，避免收到自身消息。
+::: tip 注意
+
+服务器订阅 RPC 主题时**必须**设置 **No Local** 选项，避免收到自身消息。
 :::
 
 ### MCP 服务器发布
 
-| 主题名称                                            | 消息内容                                                                 |
-|-----------------------------------------------------|--------------------------------------------------------------------------|
-| `$mcp-server/capability/{server-id}/{server-name}`  | 能力列表变更或资源更新通知。                                             |
-| `$mcp-server/presence/{server-id}/{server-name}`    | 服务器在线状态消息，详见[服务发现](#service-discovery)。                 |
-| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`| RPC 请求、响应和通知。                                                   |
+| 主题名称                                             | 消息内容                                        |
+| ---------------------------------------------------- | ----------------------------------------------- |
+| `$mcp-server/capability/{server-id}/{server-name}`   | 能力列表变更或资源更新通知。                    |
+| `$mcp-server/presence/{server-id}/{server-name}`     | 服务器在线状态消息，详见[服务发现](#服务发现)。 |
+| `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` | RPC 请求、响应和通知。                          |
 
-::: info
+::: tip 注意
 - 服务器发布在线状态消息时，**必须**将 `$mcp-server/presence/{server-id}/{server-name}` 的 RETAIN 标志设为 True。
 - 连接 MQTT Broker 时，服务器**必须**将 `$mcp-server/presence/{server-id}/{server-name}` 设为遗嘱主题，负载为空，用于异常断开时清除保留消息。
 :::
@@ -108,8 +109,9 @@ MCP 客户端的 Client ID（`mcp-client-id`）为除 `/`、`+`、`#` 外的任�
 | `$mcp-server/presence/+/{server-name-filter}`      | 服务器在线状态主题，接收服务器在线状态消息。                          |
 | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`| RPC 主题，接收服务器发送的 RPC 请求、响应和通知。                      |
 
-::: info
-- 客户端订阅 RPC 主题时**必须**设置 **No Local** 选项，避免收到自身消息。
+::: info 注意
+
+客户端订阅 RPC 主题时**必须**设置 **No Local** 选项，避免收到自身消息。
 :::
 
 ### MCP 客户端发布
@@ -121,8 +123,9 @@ MCP 客户端的 Client ID（`mcp-client-id`）为除 `/`、`+`、`#` 外的任�
 | `$mcp-client/presence/{mcp-client-id}`     | 发送客户端断开通知。                                 |
 | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}`| 向指定服务器发送 RPC 请求/响应。                     |
 
-::: info
-- 连接 MQTT Broker 时，客户端**必须**将 `$mcp-client/presence/{mcp-client-id}` 设为遗嘱主题，负载为 "disconnected" 通知，用于异常断开时通知服务器。
+::: tip 注意
+
+连接 MQTT Broker 时，客户端**必须**将 `$mcp-client/presence/{mcp-client-id}` 设为遗嘱主题，负载为 "disconnected" 通知，用于异常断开时通知服务器。
 :::
 
 ## 服务发现
@@ -136,7 +139,7 @@ MCP 服务器启动后，向 MQTT Broker 注册服务。服务发现与注册主
 "server/online" 通知**应**只包含简要信息，避免消息过大。客户端可在初始化后请求详细信息。
 
 - MCP 服务器功能简述，便于客户端选择初始化对象。
-- 元数据，如角色与权限，帮助客户端理解访问控制策略。`rbac` 字段可包含角色列表，每个角色含名称、描述、允许的方法、工具和资源，Broker 可据此实现 RBAC。
+- 元数据，如角色与权限，帮助客户端理解访问控制策略。`rbac` 字段可包含角色列表，每个角色含名称、描述、允许的方法、工具和资源，Broker 可据此实现基于角色的访问控制（RBAC）。
 
 ```json
 {
@@ -224,7 +227,7 @@ sequenceDiagram
 
 ## 初始化
 
-本节仅描述 MQTT 传输相关的初始化流程，详细内容见 [生命周期](https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle)。
+本节仅描述 MQTT 传输相关的初始化流程，详细内容见[生命周期](https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle)。
 
 初始化阶段**必须**是客户端与服务器的首次交互。
 
