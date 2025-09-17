@@ -1,5 +1,9 @@
 # EMQX 5.10 中的不兼容变更
 
+## 5.10.1
+
+
+
 ## 5.10.0
 
 - [#15289](https://github.com/emqx/emqx/pull/15289) 为所有连接器、动作和数据源新增配置项 `resource_opts.health_check_timeout`，默认值为 60 秒。

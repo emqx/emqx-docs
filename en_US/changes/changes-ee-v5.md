@@ -4,18 +4,9 @@
 
 *Release Date: 2025-09-17*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.0.
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.1.
 
 ### Enhancements
-
-- [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
-
-- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the return of `GET /actions_summary` and `GET /sources_summary`, and to the fallback actions returned in `GET /actions/:id`.
-
-#### Observability
-
-- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
-- [#15364](https://github.com/emqx/emqx/pull/15364) Added HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
 
 #### Access Control
 
@@ -37,6 +28,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcloud` library to `3.8.3.0`.  This allows one to setup a S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
 - [#15845](https://github.com/emqx/emqx/pull/15845) The `static_clientids` configuration for the MQTT Connector now supports specifying a username and password for each client ID. This is particularly useful for scenarios like connecting to Azure IoT Hub, where each device (client ID) requires a unique set of credentials. This enhancement helps ensure successful connections across multiple nodes in a clustered environment.
+- [#15911](https://github.com/emqx/emqx/pull/15911) The HTTP request timeout for the HTTP Action is now configurable via the `resource_opts.request_ttl` setting. Previously, this timeout was fixed at 30 seconds and could not be adjusted. 
+- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the responses of `GET /actions_summary` and `GET /sources_summary` endpoints, and to the fallback actions returned by the `GET /actions/:id` endpoint.
+
+#### Observability
+
+- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
+- [#15364](https://github.com/emqx/emqx/pull/15364) Added HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
 
 #### CLI
 
@@ -44,38 +42,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Bug Fixes
 
-- [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
-
-  Connectors affected and fixed:
-
-  - MySQL
-  - PostgreSQL
-  - Oracle
-  - SQLServer
-  - TDEngine
-  - Cassandra
-  - Dynamo
-
-- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from 4.0.12 to 4.0.13`, which adds handling for the record_list_too_large error in ProduceResponse.
-
-- [#15899](https://github.com/emqx/emqx/pull/15899) Improved memory usage: authorization (authz) cache is now cleared immediately when a client disconnects, reducing unnecessary memory consumption.
-
-- [#15518](https://github.com/emqx/emqx/pull/15518) Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
-
-#### API
-
-- [#15547](https://github.com/emqx/emqx/pull/15547) Resolved an issue where EMQX would fail to process HTTP requests with large bodies (e.g., 10MB) in the REST API.
-- [#15797](https://github.com/emqx/emqx/pull/15797) To improve compatibility with EMQX 4.x, the `encoding` parameter has been reintroduced in the batch publish HTTP API (`/api/v5/publish/bulk`) as an alias for `payload_encoding`. This change addresses migration issues for users relying on the original `encoding` parameter, and ensures existing integrations using EMQX v4 APIs can continue working without requiring software-level changes.
-
-#### Observability
-
-- [#15785](https://github.com/emqx/emqx/pull/15785) Resolved a crash that occurred when MQTT usernames containing non-ASCII characters were used in formatting network congestion alarm messages.
-
-#### Gateway
-
-- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed a crash in the NATS gateway caused by client info override templates referencing undefined packet fields. The system now returns an empty binary instead of undefined atom.
-
-#### Core MQTT Functions
+#### Core MQTT Functionalities
 
 
 - [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
@@ -86,25 +53,25 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15872](https://github.com/emqx/emqx/pull/15872) Eliminated warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
 
-#### Data Integration
+- [#15518](https://github.com/emqx/emqx/pull/15518) Resolve a race condition that could cause accumulating inconsistencies in the routing table and shared subscriptions state across the cluster when a large number of shared subscribers disconnect simultaneously.
+
+#### Access Control
 
 
-- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
-- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
-- [#15826](https://github.com/emqx/emqx/pull/15826) Improved Kafka consumer connector health check behavior with restricted ACLs. Previously, Kafka Consumer Connector health checks could fail if the configured user lacked permission to access the internal `____emqx_consumer_probe` consumer group used for the check. With this fix, if the Kafka broker returns an "ACL denied" response, EMQX will treat the connection as healthy.
-- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
+- [#15818](https://github.com/emqx/emqx/pull/15818) Corrected handling of `{allow|deny, all}` ACL rules.
 
-  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
+  Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
+  Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
 
-- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs.
+- [#15844](https://github.com/emqx/emqx/pull/15844) Added validation to forbid adding empty usernames to the built-in database authenticator.  Such users cannot be deleted via the HTTP API later, since they mess up the API path.
 
-- [#15850](https://github.com/emqx/emqx/pull/15850) Fixed an issue with the MQTT bridge when a stale connection was displayed as `Connected` and the connection was not re-established.
+  If you have such an user and wish to delete it, run the following in an EMQX console:
 
-- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
+  ```erlang
+  mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
+  ```
 
-  In rare race conditions, Kafka may return an incomplete partition list.
-  Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
-  This gap could cause the partition producer to stall and block shutdown indefinitely.
+- [#15899](https://github.com/emqx/emqx/pull/15899) Improved memory management by ensuring that the authorization (authz) cache is cleared immediately when a client disconnects, reducing unnecessary memory consumption.
 
 #### Deployment
 
@@ -123,31 +90,61 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15788](https://github.com/emqx/emqx/pull/15788) Fixed etcd cluster discovery issue. Resolved an issue where EMQX nodes from different clusters could mistakenly join each other when using a shared etcd server. This was caused by a bug in the etcd client library.
 
-#### Rate Limit
-
-
-- [#15794](https://github.com/emqx/emqx/pull/15794) Improved the behavior of connection rate limit updates to ensure that changes (e.g., to burst rate or rate thresholds) are applied immediately after the listener configuration is updated. Previously, parts of the internal limiter state were not refreshed correctly, which could result in rate limits appearing stricter than configured.
-
 #### Smart Data Hub
 
 
 - [#15810](https://github.com/emqx/emqx/pull/15810) Introduced `spb_{en,de}code` functions to correct handling of `bytes_value` Metrics. Fixed an issue with the original `sparkplug_{en,de}code` functions, which did not base64 encode/decode `bytes_value` metric values as required by the [Protobuf specification](https://protobuf.dev/programming-guides/json/). To address this, new `spb_{en,de}code` functions have been introduced for correct encoding/decoding of such fields. The old `sparkplug_{en,de}code` functions are now deprecated to maintain backward compatibility.
 
-#### Access Control
+#### Data Integration
 
 
-- [#15818](https://github.com/emqx/emqx/pull/15818) Corrected handling of `{allow|deny, all}` ACL rules.
+- [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
 
-  Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
-  Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
+- [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
 
-- [#15844](https://github.com/emqx/emqx/pull/15844) Added validation to forbid adding empty usernames to the built-in database authenticator.  Such users cannot be deleted via the HTTP API later, since they mess up the API path.
+- [#15826](https://github.com/emqx/emqx/pull/15826) Improved Kafka consumer connector health check behavior with restricted ACLs. Previously, Kafka Consumer Connector health checks could fail if the configured user lacked permission to access the internal `____emqx_consumer_probe` consumer group used for the check. With this fix, if the Kafka broker returns an "ACL denied" response, EMQX will treat the connection as healthy.
 
-  If you have such an user and wish to delete it, run the following in an EMQX console:
+- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
 
-  ```erlang
-  mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
-  ```
+  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
+
+- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs
+
+- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
+
+  In rare race conditions, Kafka may return an incomplete partition list. Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing. This gap could cause the partition producer to stall and block shutdown indefinitely.
+
+- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from 4.0.12 to 4.0.13, which adds handling for the `record_list_too_large` error in `ProduceResponse`.
+
+- [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
+
+  Connectors affected and fixed:
+
+  - MySQL
+  - PostgreSQL
+  - Oracle
+  - SQLServer
+  - TDEngine
+  - Cassandra
+  - Dynamo
+
+#### API
+
+- [#15547](https://github.com/emqx/emqx/pull/15547) Resolved an issue where EMQX would fail to process HTTP requests with large bodies (e.g., 10MB) in the REST API.
+- [#15797](https://github.com/emqx/emqx/pull/15797) To improve compatibility with EMQX 4.x, the `encoding` parameter has been reintroduced in the batch publish HTTP API (`/api/v5/publish/bulk`) as an alias for `payload_encoding`. This change addresses migration issues for users relying on the original `encoding` parameter, and ensures existing integrations using EMQX v4 APIs can continue working without requiring software-level changes.
+
+#### Rate Limit
+
+
+- [#15794](https://github.com/emqx/emqx/pull/15794) Improved the behavior of connection rate limit updates to ensure that changes (e.g., to burst rate or rate thresholds) are applied immediately after the listener configuration is updated. Previously, parts of the internal limiter state were not refreshed correctly, which could result in rate limits appearing stricter than configured.
+
+#### Observability
+
+- [#15785](https://github.com/emqx/emqx/pull/15785) Resolved a crash that occurred when MQTT usernames containing non-ASCII characters were used in formatting network congestion alarm messages.
+
+#### Gateway
+
+- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed a crash in the NATS gateway caused by client info override templates referencing undefined packet fields. The system now returns an empty binary instead of undefined atom.
 
 ## 5.10.0
 
