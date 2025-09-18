@@ -20,7 +20,7 @@ flowchart LR
     LLM[LLM]
 ```
 
-### Components
+## Components
 
 - **Device**: Exchanges audio and video data with the Multimedia Server via WebRTC.
 - **Multimedia Server**: Processes audio and video streams from devices, provides Automatic Speech Recognition (ASR) and Text-to-Speech (TTS) services, and communicates with the AI Agent.
