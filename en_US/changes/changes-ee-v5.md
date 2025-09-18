@@ -2,11 +2,17 @@
 
 ## 5.10.1
 
-*Release Date: 2025-09-17*
+*Release Date: 2025-09-18*
 
-Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.0.
+Make sure to check the breaking changes and known issues before upgrading to EMQX 5.10.1.
 
 ### Enhancements
+
+#### Performance
+
+- [#15907](https://github.com/emqx/emqx/pull/15907) Improve system memory usage. Fields such as client ID, username, password, and topic are copied into new binaries (when more than 64 bytes) instead of being slices from the raw packet to reduce 'binary' part of memory usage in Erlang VM.
+
+- [#15899](https://github.com/emqx/emqx/pull/15899) Authorization (authz) cache is now cleared immediately when a client disconnects, reducing unnecessary memory consumption.
 
 #### Observability
 
@@ -34,6 +40,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcloud` library to `3.8.3.0`.  This allows one to setup a S3 Connector without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
 - [#15845](https://github.com/emqx/emqx/pull/15845) The `static_clientids` configuration for the MQTT Connector now supports specifying a username and password for each client ID. This is particularly useful for scenarios like connecting to Azure IoT Hub, where each device (client ID) requires a unique set of credentials. This enhancement helps ensure successful connections across multiple nodes in a clustered environment.
 
+- [#15944](https://github.com/emqx/emqx/pull/15944) Improved the information returned when a resource is marked as `disconnected` for the following Connectors: LDAP, Syskeeper, IoTDB, Snowflake (aggregated), JWKS Authentication.
+
+- [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
+
+- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the return of `GET /actions_summary` and `GET /sources_summary`, and to the fallback actions returned in `GET /actions/:id`.
+
 #### CLI
 
 - [#15399](https://github.com/emqx/emqx/pull/15399) The `node_dump` tool now exports the current system configuration in HOCON format, with sensitive information (such as passwords and secrets) automatically redacted for security.
@@ -55,7 +67,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Core MQTT Functions
 
-
 - [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
 - [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
 - [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections. This issue was introduced by recent WebSocket performance improvements. If did not affect broker capacity, but produced log entries like the following:
@@ -64,8 +75,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15872](https://github.com/emqx/emqx/pull/15872) Eliminated warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
 
-#### Data Integration
+- [#15518](https://github.com/emqx/emqx/pull/15518) Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
 
+#### Data Integration
 
 - [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
 - [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
@@ -83,6 +95,32 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   In rare race conditions, Kafka may return an incomplete partition list.
   Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
   This gap could cause the partition producer to stall and block shutdown indefinitely.
+
+- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from 4.0.12 to 4.0.13`, which adds handling for the record_list_too_large error in ProduceResponse.
+
+- [#15902](https://github.com/emqx/emqx/pull/15902) Upgrade MQTT client library to 1.13.8
+
+  This improves MQTT bridge connectivity with:
+  - Connector will automatically reconnect when peer broker does not reply PINGRESP.
+  - Bridge over TLS failure is more promptly handled if connection breaks while waiting for CONNACK.
+
+- [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
+
+  Connectors affected and fixed:
+
+  - MySQL
+  - PostgreSQL
+  - Oracle
+  - SQLServer
+  - TDEngine
+  - Cassandra
+  - Dynamo
+  - HTTP
+  - Couchbase
+  - GCP PubSub
+  - Snowflake
+
+  Upgraded `gun` and related dependencies to 2.1.0.
 
 #### Deployment
 
