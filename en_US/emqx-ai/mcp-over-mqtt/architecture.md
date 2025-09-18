@@ -1,8 +1,12 @@
-# Architecture
+# MCP over MQTT Architecture
+
+MCP over MQTT inherits the core concepts of the standard MCP architecture (Host, Client, Server), while introducing a centralized MQTT Broker as the transport layer. The broker enables message routing, service registration and discovery, authentication, and authorization.
+
+This architecture not only preserves MCP’s original context interaction model but also leverages MQTT’s lightweight and broadly applicable design, providing the foundation for many-to-many communication, load balancing, and scalability in IoT and edge computing scenarios.
 
 ## Core Components of the MQTT Transport
 
-MCP over MQTT introduces a centralized MQTT broker, while other components (Hosts, Clients, Servers) remain unchanged.
+In the MCP over MQTT architecture, a centralized MQTT Broker is introduced as the message router, while other components (Host, Client, Server) remain consistent with the standard MCP design.
 
 ```mermaid
 graph LR
@@ -40,28 +44,31 @@ graph LR
 
 ### Host, Client, and Server
 
-The Host, Client, and Server components remain unchanged:
+The Host, Client, and Server components remain unchanged (see [MCP core concepts](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp)):
 
-- The host process acts as the container and coordinator of the clients.
-- Each client is created by the host and maintains an isolated server connection.
-- Servers provide specialized context and capabilities.
+- **Host** acts as a container and coordinator for clients.
+- Each **Client** is created by the Host and maintains an independent connection with a Server.
+- **Server** provides dedicated context and capabilities.
 
-With the exception that the clients and servers communicate with the MQTT broker instead of directly with each other.
+The key difference is that Clients and Servers now communicate through the MQTT Broker, instead of directly. With the broker in place, the relationship between Clients and Servers becomes many-to-many rather than one-to-one.
 
-See [Core Components](https://modelcontextprotocol.io/docs/learn/architecture#concepts-of-mcp) for more details.
+### Role of the MQTT Broker
 
-### MQTT Broker
+The MQTT Broker serves as the centralized message router:
 
-The MQTT broker acts as a centralized message router:
-- Facilitates communication between clients and servers.
-- Support service discovery and service registration (via retained messages).
-- Authenticates and authorizes clients and servers.
+- Forwards messages between Clients and Servers.
+- Supports service registration and discovery (via retained messages).
+- Handles authentication and authorization for Clients and Servers.
 
-## Server Side Load Balancing and Scalability
+## Server Scaling and Load Balancing
 
-To achieve MCP server-side load balancing and scalability, an MCP server can start multiple instances (processes), each using a unique `server-id` as the MQTT Client ID to establish an independent MQTT connection. All instances of an MCP server share the same `server-name`.
+To achieve scalability and load balancing, an MCP Server can launch multiple instances (processes). Each instance connects to the broker with a unique `server-id` as its MQTT Client ID, while all instances share the same `server-name`.
 
-The client must first subscribe to the service discovery topic to obtain the list of `server-id`s for a specific `server-name`. Then, based on a client-defined server selection strategy (e.g., random selection or round-robin), it initiates an `initialize` request to one of the `server-id`s. After initialization is complete, the MCP client communicates with the selected MCP server instance on a specific RPC topic.
+**Client interaction flow:**
+
+1. The Client subscribes to the service discovery topic to obtain all available `server-id`s under the target `server-name`.
+2. The Client selects a Server instance based on a custom policy (e.g., random or round-robin) and sends an `initialize` request.
+3. After initialization, the Client communicates with the selected Server instance through a dedicated RPC topic.
 
 ```mermaid
 graph LR
@@ -83,8 +90,7 @@ graph LR
 
 ```
 
-This allows us to achieve high availability and scalability on the MCP server side:
+This approach enables high availability and scalability of MCP servers:
 
-- When scaling up, existing MCP clients remain connected to the old server instances, while new MCP clients have the opportunity to initiate initialization requests to the new server instances.
-
-- When scaling down, MCP clients could re-initiate initialization requests to the MCP server, thereby connecting to another server instance.
+- **During scaling up**, existing MCP clients remain connected to old server instances, while new clients can initialize with newly added instances.
+- **During scaling down**, MCP clients can reinitialize and connect to other available server instances.

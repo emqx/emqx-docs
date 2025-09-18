@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
 ## Run the Demo
 
-1. First, install the required dependencies:
+1. Install the required dependencies:
 
 ```bash
 uv add git+https://github.com/emqx/mcp-python-sdk --branch main

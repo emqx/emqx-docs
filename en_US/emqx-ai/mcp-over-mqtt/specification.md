@@ -112,8 +112,9 @@ The Client ID of the MCP client, referred to as `mcp-client-id`, can be any stri
 | `$mcp-server/presence/+/{server-name-filter}`                    | The presence topic to receive the presence message of the MCP server.                          |
 | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`          | The RPC topic to receive PRC requests, responses and notifications sent by the MCP server.     |
 
-::: info
-- The client **MUST** set the **No Local** option for the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`) subscription to avoid receiving its own messages.
+::: tip Note
+
+The client **MUST** set the **No Local** option for the RPC topic (`$mcp-rpc/{mcp-client-id}/{server-id}/{server-name-filter}`) subscription to avoid receiving its own messages.
 :::
 
 ### MCP Client Publications
@@ -125,8 +126,9 @@ The Client ID of the MCP client, referred to as `mcp-client-id`, can be any stri
 | `$mcp-client/presence/{mcp-client-id}`               | Send disconnected notification for the MCP client.                 |
 | `$mcp-rpc/{mcp-client-id}/{server-id}/{server-name}` | The RPC topic to send RPC requests/responses to a specific server. |
 
-::: info
-- When connecting to the MQTT broker, the client **MUST** set `$mcp-client/presence/{mcp-client-id}` as the will topic with a "disconnected" notification as the payload to notify the server in case of an unexpected disconnection.
+::: tip Note
+
+When connecting to the MQTT broker, the client **MUST** set `$mcp-client/presence/{mcp-client-id}` as the will topic with a "disconnected" notification as the payload to notify the server in case of an unexpected disconnection.
 :::
 
 ## Service Discovery
