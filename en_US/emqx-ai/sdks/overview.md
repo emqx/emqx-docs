@@ -8,7 +8,7 @@ EMQX offers client-side examples based on WebRTC and MQTT, demonstrating how to 
 
 Developers can use these examples as a reference to quickly integrate multimedia AI capabilities into web applications or devices.
 
-- [TypeScript WebRTC Example](./webrtc-typescript.md)
+- [TypeScript WebRTC Example](./multimedia-ai/webrtc-typescript.md)
 
 ## MCP over MQTT SDKs
 

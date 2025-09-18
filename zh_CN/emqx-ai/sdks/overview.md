@@ -8,7 +8,7 @@ EMQX 提供了基于 WebRTC 和 MQTT 的客户端示例，演示如何与多媒�
 
 开发者可以直接使用这些示例作为参考，将多媒体 AI 能力快速集成到 Web 应用或设备中。
 
-- [TypeScript WebRTC 示例](./webrtc-typescript.md)
+- [TypeScript WebRTC 示例](./multimedia-ai/webrtc-typescript.md)
 
 ## MCP over MQTT SDKs
 
