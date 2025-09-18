@@ -30,7 +30,7 @@ It allows messages to be persisted regardless of the subscribers' online status 
 
 * QoS Levels: Primarily supports QoS 0 (at-most-once) and QoS 1 (at-least-once). QoS 2 messages published to a queue are typically downgraded to QoS 1. Subscribers attempting QoS 2 subscriptions are also granted QoS 1.
 
-* Persistence: Messages persist even when no subscribers are online. Last Value semantic is the default behavior for queues. In a Last Value Queuue, the latest message will overwrite the previous messages from the same topic with the same key. For regular queues (without Last Value semantic), all messages are written directly to the queue.
+* Persistence: Messages persist even when no subscribers are online. Last Value semantic is the default behavior for queues. In a Last Value Queuue, the latest message will overwrite the previous messages with the same key. For regular queues (without Last Value semantic), all messages are written directly to the queue.
 
 ## Core Features
 
@@ -74,22 +74,17 @@ initiates a connection to the Message Queue Consumer.
 * The Consumer dispatches received messages to the connected subscribers.
 * The subscribers (channels) deliver MQ messages to the clients.
 
-## Enable/Create Message Queue
-
-### Via API
-
-
-
-### Explicitly Declare a Queue
-
-To be done.
-
 ## Configure Message Queue
+
+### REST API
+
+```bash
+curl -v -u key:secret -X PUT -H "Content-Type: application/json" http://localhost:18083/api/v5/message_queues/config -d '{"find_queue_retry_interval": "10s", "gc_interval": "1h", "regular_queue_retention_period": "7d"}'
+```
 
 ### Dashboard
 
 MQTT Settings -> Message Queue
-
 
 
 ### Configuration File
@@ -126,15 +121,57 @@ mq {
 
 ## Manage Message Queue
 
+### REST API
+
+```bash
+curl -s -u key:secret -X PUT -H "Content-Type: application/json" http://localhost:18083/api/v5/message_queues/queues/t1%2F%23 -d '{"dispatch_strategy": "least_inflight"}' | jq
+{
+  ...
+  "topic_filter": "t1/#"
+}
+```
+
 ### Dashboard
 
+To be done.
+
+## Enable/Create Message Queue
+
 ### REST API
+
+```bash
+curl -s -u key:secret -X POST -H "Content-Type: application/json" http://localhost:18083/api/v5/message_queues -d '{"topic_filter": "t1/#", "is_lastvalue": false}' | jq
+{
+  ...
+  "topic_filter": "t1/#"
+}
+```
+
+### Dashboard
+
+To be done.
+
+## Delete Message Queue
+
+### REST API
+
+```bash
+curl -s -u key:secret -X DELETE http://localhost:18083/api/v5/message_queues/queues/t1%2F%23
+```
+
+### Dashboard
+
+To be done.
 
 ## FAQ & Troubleshooting (Optional but Recommended)
 
 - Why messages aren’t enqueued.
 
+Inspect EMQX logs for errors with `mq_` prefix.
+
 - What happens when queues overflow?
+
+Currently, the queues are not limited in size or amount of messages. Queues are limited in time (retention period). The expired messages are not delivered to the subscribers. These messages are removed regularly by the broker.
 
 ## Reference & Related Features
 
