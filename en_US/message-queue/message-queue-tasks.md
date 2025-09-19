@@ -4,7 +4,7 @@ This page walks you through the practical usage of the Message Queue feature in 
 
 ## Create Message Queue via Dashboard
 
-Message Queues must be explicitly created before they can store or dispatch messages.
+Message Queues must be explicitly declared/created before they can store or dispatch messages.
 
 To create a new Message Queue using the EMQX Dashboard:
 

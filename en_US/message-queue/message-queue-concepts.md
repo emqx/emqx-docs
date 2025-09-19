@@ -2,13 +2,17 @@
 
 The Message Queue feature introduced in EMQX 6.0 extends the MQTT subscribe/publish pattern with durable queue semantics, enabling reliable, asynchronous message delivery. It enhances native MQTT capabilities with features commonly found in enterprise-grade message queues, such as RabbitMQ, without requiring additional infrastructure.
 
-With Message Queue, MQTT messages can be persisted server-side, even when no subscribers are online. Queues can be configured with TTLs, size limits, compaction, and dispatch strategies, giving operators and developers fine-grained control over how messages are stored and delivered.
-
 This page provides a complete overview of the Message Queue feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
 
-## Why Use Message Queue?
+## What is a Message Queue?
 
-MQTT is a lightweight and widely adopted publish/subscribe protocol, especially in IoT and device communication. However, its default behavior tightly couples message delivery to subscriber availability, which can be limiting for asynchronous or delayed-consumption scenarios.
+A Message Queue in EMQX is a durable, server-side buffer that holds MQTT messages independently of subscriber availability. Each queue is associated with a specific topic filter, and automatically stores all messages that match the filter during its lifetime. 
+
+Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$q/{topic}` format.
+
+## Why Use the Message Queue?
+
+MQTT is a lightweight and widely adopted publish/subscribe protocol. However, its default behavior tightly couples message delivery to subscriber availability, which can be limiting for asynchronous or delayed-consumption scenarios.
 
 ### Limitations of MQTT
 
@@ -27,11 +31,11 @@ These limitations make it difficult to implement patterns like:
 
 ### Extend MQTT with Message Queue
 
-Message Queue extends the MQTT protocol in EMQX to solve these kinds of problems. It allows messages to be persisted regardless of the subscribers' online status for further processing. It offers:
+Message Queue extends the MQTT protocol in EMQX. It allows messages to be persisted regardless of the subscribers' online status for further processing. It offers:
 
-- Persistent message storage (even when clients are offline)
-- Explicit queue declaration and property configuration
-- Dispatch strategies, compaction, and lifecycle controls
+- **Persistent message storage (even when clients are offline)**: While queues are not strictly ordered, they are designed for reliable and asynchronous delivery, bridging the gap between lightweight MQTT communication and more advanced enterprise messaging needs.
+- **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL (time-to-live), size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
+- **Optional Last-Value Semantics**: Messages with the same `mq-key` overwrite previous ones, ideal for retaining only the latest state or configuration update.
 
 ## Message Queue Key Concepts
 
@@ -42,7 +46,7 @@ Message Queue extends the MQTT protocol in EMQX to solve these kinds of problems
 - **Queue Deletion**
    The removal of a queue along with all its stored messages.
 - **Last-Value Semantics**
-   An optional feature enabled by setting a *Queue Key Expression* during declaration. When enabled, each new message with the same key replaces the previous one in the queue, retaining only the most recent value.
+   An optional feature enabled by setting a *Queue Key Expression* during queue declaration. When enabled, the broker expects each message to include an `mq-key` user property. Messages with the same key will replace the previous unconsumed message in the queue, ensuring that only the most recent value per key is retained. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
 - **Topic Prefix**
    Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
 - **Queue Properties**
