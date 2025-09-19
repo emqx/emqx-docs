@@ -4,9 +4,9 @@
 
 支持的 Debian 版本：
 
+- Debian 13
 - Debian 12
 - Debian 11
-- Debian 10
 
 如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取安装信息。
 
