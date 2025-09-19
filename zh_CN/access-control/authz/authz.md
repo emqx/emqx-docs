@@ -265,7 +265,7 @@ authorization {
     { ...   },
     { ...   }
   ]
-  no_match = allow
+  no_match = deny
   deny_action = ignore
   cache {
     max_size = 32
@@ -278,7 +278,7 @@ authorization {
 其中：
 
 - `sources`(可选)：带顺序的数组，用于配置授权检查器的数据源。有关各授权检查器的具体配置信息，请参考相应的配置文件文档。<!--TODO 这里需要加上对应的超链接-->
-- `no_match`：如当前客户端操作无法匹配到任何规则，将基于此规则决定允许或拒绝操作；可选值： `allow` 、 `deny`；默认值： `allow`。此配置也是黑名单/白名单模式的开关。
+- `no_match`：如当前客户端操作无法匹配到任何规则，将基于此规则决定允许或拒绝操作；可选值： `allow` 、 `deny`；默认值自 6.0 开始为 `deny`。
 - `deny_action`：如当前客户端的操作被拒绝，后续应执行的操作；可选值： `ignore` 、 `disconnect`；默认值： `ignore`。
   - `ignore`: 丢弃当前操作，例如，如针对发布动作，该消息会被丢弃；如针对订阅操作，该请求将被拒绝。
   - `disconnect`: 丢弃当前操作，并将客户端连接断开。

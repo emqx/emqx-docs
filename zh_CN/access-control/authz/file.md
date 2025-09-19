@@ -107,7 +107,7 @@ EMQX 已默认配置了基于文件的授权检查器。您可点击 **File** �
 ```hcl
 authorization {
   deny_action = ignore
-  no_match = allow
+  no_match = deny
   sources = [
     {
       type = file
