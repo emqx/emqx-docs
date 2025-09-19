@@ -5,9 +5,9 @@ This page guides you on installing and starting the latest EMQX on the Debian sy
 
 Supported versions:
 
+- Debian 13
 - Debian 12
 - Debian 11
-- Debian 10
 
 ## Install with Apt Source
 
