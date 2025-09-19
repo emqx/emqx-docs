@@ -12,13 +12,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15899](https://github.com/emqx/emqx/pull/15899) Authorization (authz) cache is now cleared immediately when a client disconnects, reducing unnecessary memory consumption.
 
-- [#15907](https://github.com/emqx/emqx/pull/15907) Improve system memory usage. Fields such as client ID, username, password, and topic are copied into new binaries (when more than 64 bytes) instead of being slices from the raw packet to reduce 'binary' part of memory usage in Erlang VM.
-
-#### Observability
-
-- [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
-
-- [#15364](https://github.com/emqx/emqx/pull/15364) Added HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
+- [#15907](https://github.com/emqx/emqx/pull/15907) Improved system memory usage. Fields such as client ID, username, password, and topic are copied into new binaries (when more than 64 bytes) instead of being slices from the raw packet to reduce 'binary' part of memory usage in Erlang VM.
 
 #### Access Control
 
@@ -45,19 +39,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15911](https://github.com/emqx/emqx/pull/15911) The HTTP request timeout for the HTTP Action is now configurable via the `resource_opts.request_ttl` setting. Previously, this timeout was fixed at 30 seconds and could not be adjusted. 
 
-- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the responses of `GET /actions_summary` and `GET /sources_summary` endpoints, and to the fallback actions returned by the `GET /actions/:id` endpoint.
-
 #### Observability
 
 - [#15499](https://github.com/emqx/emqx/pull/15499) Added a force deactivate alarm API endpoint to allow administrators to forcibly deactivate active alarms.
-
 - [#15364](https://github.com/emqx/emqx/pull/15364) Added HTTP header configuration items to the OpenTelemetry integration to adapt to collectors with HTTP authentication.
-
 - [#15944](https://github.com/emqx/emqx/pull/15944) Improved the information returned when a resource is marked as `disconnected` for the following Connectors: LDAP, Syskeeper, IoTDB, Snowflake (aggregated), JWKS Authentication.
-
-- [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
-
-- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the return of `GET /actions_summary` and `GET /sources_summary`, and to the fallback actions returned in `GET /actions/:id`.
+- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the responses of `GET /actions_summary` and `GET /sources_summary` endpoints, and to the fallback actions returned by the `GET /actions/:id` endpoint.
 
 #### CLI
 
@@ -128,18 +115,17 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs
 
-- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to `4.0.12` to improve handling of temporarily missing partitions in Kafka metadata responses.
+- [#15866](https://github.com/emqx/emqx/pull/15866) Upgraded Kafka producer lib wollf to `4.0.12` to improve handling of temporarily missing partitions in Kafka metadata responses.
 
   In rare race conditions, Kafka may return an incomplete partition list. Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing. This gap could cause the partition producer to stall and block shutdown indefinitely.
 
 - [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from `4.0.12` to `4.0.13`, which adds handling for the `record_list_too_large` error in `ProduceResponse`.
 
-- [#15902](https://github.com/emqx/emqx/pull/15902) Upgrade MQTT client library to 1.13.8
+- [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8. This improves MQTT bridge connectivity with:
 
-  This improves MQTT bridge connectivity with:
   - Connector will automatically reconnect when peer broker does not reply PINGRESP.
   - Bridge over TLS failure is more promptly handled if connection breaks while waiting for CONNACK.
-
+  
 - [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
 
   Connectors affected and fixed:

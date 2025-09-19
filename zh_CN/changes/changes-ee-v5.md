@@ -8,6 +8,11 @@
 
 ### 增强
 
+#### 性能
+
+- [#15899](https://github.com/emqx/emqx/pull/15899) 通过确保在客户端断开时立即清除授权（authz）缓存来改进内存管理，减少不必要的内存消耗。
+- [#15907](https://github.com/emqx/emqx/pull/15907) 优化了系统内存使用。当客户端 ID、用户名、密码和主题等字段长度超过 64 字节时，这些字段将被复制为新的二进制数据，而不再是原始报文的切片，以减少 Erlang 虚拟机中 “binary” 类型内存的占用。
+
 #### 访问控制
 
 - [#15294](https://github.com/emqx/emqx/pull/15294) 增强了 LDAP 认证和授权功能。LDAP 授权现在支持使用 JSON 格式的扩展 ACL 规则，除了现有的简单主题列表外，还可以在认证过程中基于客户端信息从 LDAP 获取 ACL 规则，并将其缓存在客户端的元数据中，以避免在授权过程中重复进行 LDAP 查询。
@@ -24,12 +29,13 @@
 - [#15542](https://github.com/emqx/emqx/pull/15542) 将 `erlcloud` 库升级到 `3.8.3.0`。升级后，如果 EMQX 运行的 EC2 实例具有正确的 IAM 权限来读写配置的 S3 存储桶，就可以在不指定访问密钥 ID 和私有访问密钥的情况下配置 S3 连接器。
 - [#15845](https://github.com/emqx/emqx/pull/15845) MQTT 连接器的 `static_clientids` 配置项现支持为每个客户端 ID 分别指定用户名和密码，适用于如 Azure IoT Hub 等要求每个设备使用唯一凭证的场景。此增强提升了在集群部署中多节点连接的兼容性与稳定性。
 - [#15911](https://github.com/emqx/emqx/pull/15911) HTTP 动作的 HTTP 请求超时时间现在可以通过 `resource_opts.request_ttl` 设置进行配置。此前，此超时时间固定为 30 秒且不可调整。
-- [#15371](https://github.com/emqx/emqx/pull/15371) 为 `GET /actions_summary` 和 `GET /sources_summary` 接口的响应以及 `GET /actions/:id` 接口返回的备选动作添加了 `tags` 字段。
 
 #### 可观测性
 
 - [#15499](https://github.com/emqx/emqx/pull/15499) 添加了强制停用告警的 API 接口，允许管理员强制停用活动告警。
 - [#15364](https://github.com/emqx/emqx/pull/15364) 为 OpenTelemetry 集成添加了 HTTP 头配置项，以适应带有 HTTP 认证的 collector。
+- [#15944](https://github.com/emqx/emqx/pull/15944) 改进了以下连接器在资源被标记为 `disconnected` 状态时返回的信息：LDAP、Syskeeper、IoTDB、Snowflake（聚合模式）、JWKS 认证。
+- [#15371](https://github.com/emqx/emqx/pull/15371) 为 `GET /actions_summary` 和 `GET /sources_summary` 接口的响应以及 `GET /actions/:id` 接口返回的备选动作添加了 `tags` 字段。
 
 #### CLI
 
@@ -64,8 +70,6 @@
   mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
   ```
 
-- [#15899](https://github.com/emqx/emqx/pull/15899) 通过确保在客户端断开时立即清除授权（authz）缓存来改进内存管理，减少不必要的内存消耗。
-
 #### 集群
 
 - [#15788](https://github.com/emqx/emqx/pull/15788) 修复了 etcd 集群发现问题。解决了使用共享 etcd 服务器时，EMQX 节点可能错误地加入到不同集群中的问题。此问题是由 etcd 客户端库中的 bug 引起的。
@@ -77,21 +81,43 @@
 #### 数据集成
 
 - [#15394](https://github.com/emqx/emqx/pull/15394) 修复了一个罕见的竞争条件，导致动作指标因意外的异步回复而变得不一致。
+
 - [#15603](https://github.com/emqx/emqx/pull/15603) 修复了 MQTT 桥接中的一个问题：过期的连接可能仍显示为 `Connected` 状态，且不会自动重连。
+
 - [#15826](https://github.com/emqx/emqx/pull/15826) 改进了 Kafka 消费者连接器健康检查行为，尤其是在 ACL 限制的情况下。此前，若配置的用户缺少访问内部 `____emqx_consumer_probe` 消费者组的权限，则 Kafka 消费者连接器的健康检查可能会失败。通过此修复，如果 Kafka broker 返回 "ACL denied" 响应，EMQX 将视该连接为健康连接。
+
 - [#15827](https://github.com/emqx/emqx/pull/15827) 修复了 GreptimeDB 驱动中的原子泄漏和进程泄漏问题。同时修复了在 GreptimeDB 动作中使用某些错误的写入语法时可能出现的 `function_clause` 错误。
+
 - [#15836](https://github.com/emqx/emqx/pull/15836) 丰富了 Kafka 消费者源添加失败时的返回信息，例如因主题 ACL 被拒导致的失败。
+
 - [#15866](https://github.com/emqx/emqx/pull/15866) 升级 Kafka 生产者库 `wolff` 到 4.0.12，以改善 Kafka 元数据响应中临时缺失分区的处理。
   在罕见的竞争条件下，Kafka 可能返回不完整的分区列表。此前，这种情况仅在主题被重新创建且分区较少时得到处理，而在分区临时缺失时未被处理。此修复解决了此问题，防止分区生产者挂起并无限期阻止关闭。
-- [#15906](https://github.com/emqx/emqx/pull/15906) 将 Kafka 生产者库 Wolff 从 4.0.12 升级到 4.0.13，新增了处理 `ProduceResponse` 中 `record_list_too_large` 错误的功能。
-- [#15910](https://github.com/emqx/emqx/pull/15910) 修复了连接器在多个工作线程同时崩溃时，无法从失败中恢复的问题。受影响并已修复的连接器包括：
+  
+- [#15906](https://github.com/emqx/emqx/pull/15906) 将 Kafka 生产者库 Wolff 从 `4.0.12` 升级到 `4.0.13`，新增了处理 `ProduceResponse` 中 `record_list_too_large` 错误的功能。
+
+- [#15902](https://github.com/emqx/emqx/pull/15902) 将 MQTT 客户端库升级至 1.13.8，提升了 MQTT 桥接的连接稳定性：
+
+  - 当对端 Broker 未响应 PINGRESP 时，连接器将自动重连。
+  - 若在等待 CONNACK 期间连接中断，基于 TLS 的桥接失败将更及时地被处理。
+
+- [#15910](https://github.com/emqx/emqx/pull/15910) 修复了连接器中的一个问题：在较大的工作线程池中，若多个工作线程同时崩溃，可能导致连接器无法正常恢复。
+  
+  受影响并已修复的连接器包括：
+  
   - MySQL
+  
   - PostgreSQL
   - Oracle
   - SQLServer
   - TDEngine
   - Cassandra
   - Dynamo
+  - HTTP
+  - Couchbase
+  - GCP PubSub
+  - Snowflake
+  
+  同时将 `gun` 及相关依赖升级至 2.1.0。
 
 #### API
 
