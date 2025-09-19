@@ -4,9 +4,9 @@ This page guides you on installing and starting the latest EMQX on the Debian sy
 
 Supported versions:
 
+- Debian 13
 - Debian 12
 - Debian 11
-- Debian 10
 
 For installation on other systems or to install other versions, visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise). 
 
