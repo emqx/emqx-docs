@@ -2,16 +2,18 @@
 
 EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, IP addresses, or rule IDs. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
 
-## How Log Trace Works 
+## How Log Trace Works
 
-The Log Trace feature is implemented using the built-in Erlang Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace disk logs and creates a separate process for each client connection to process its messages.
+The Log Trace feature is implemented using Erlang's built-in Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace logs and creates a separate process for each client connection to process its messages.
 
-When a client sends a message, the independent process responsible for that connection will first check if the message complies with the rules set by the customized Trace Filter. For example, the process may check if the message is from a specified client ID:
+When a client sends a message, the process responsible for that connection checks if the message matches the rules set by the Trace Filter. For example, it may check if the message is from a specified client ID:
 
-- If the message is from the specified client ID, the process will convert the message into binary data and then asynchronously send it to the appropriate File Handler. 
-- If it is not from the specified client ID, EMQX will execute the original transfer logic. 
+- If the message matches the filter criteria, the process converts it into a human-readable trace event and asynchronously sends it to the appropriate File Handler.
+- Otherwise, the message is processed as usual.
 
-The File Handlers are responsible for persisting the binary data into Trace files on disk. 
+The File Handlers are responsible for persisting trace events into their respective Trace files on disk.
+
+If a node or the entire EMQX cluster is restarted, any unfinished Log Traces will be automatically resumed.
 
 ## Why Use Log Trace
 
@@ -79,17 +81,16 @@ The trace results will include the execution results of the rule SQL and the exe
 
 The [Test Rules](../data-integration/rule-get-started.md#test-rules) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
 
-## View Log Trace 
+## View Log Trace
 
-The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the specified end time.
+Created Log Traces are listed on the **Log Trace** page. The log file size shown in the list is the sum of the uncompressed file sizes. You can stop a trace manually by clicking the **Stop** button, or it will stop automatically when the specified end time is reached.
+
+There is a limit to the number of traces you can create. By default, this limit is 30, but it is configurable via the `trace.max_traces` parameter.
 
 Click a specific trace record by the name, you can select to download the log on different nodes.
 
 <img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
 
-Trace logs have a maximum capacity of 512MB logs per node. Once the generated log file reaches the maximum limit, it stops appending any further logs and raises an alert in the primary log file. In the event of a timeout during Dashboard downloading, you can locate the log file in the `/data/trace` directory on the server. When an EMQX cluster is restarted, the unfinished log trace will be resumed.
+By default, each trace is limited to a maximum of 128MB of log data per node. This limit can be configured using the `trace.max_file_size` parameter. To manage disk space, File Handlers operate in a rotating manner: once a trace's log reaches the size limit, the oldest trace events are discarded to make room for the new ones. Note that this is not a hard limit; the total size of the log files is usually lower than the configured value but may briefly exceed it by a few KBs.
 
-
-
-
-
+If a timeout occurs when downloading from the Dashboard, you can find the log files in the `/data/trace` directory on each node in the EMQX cluster.
