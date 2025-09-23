@@ -4,6 +4,7 @@
 
 支持的 Debian 版本：
 
+- Debian 13
 - Debian 12
 - Debian 11
 

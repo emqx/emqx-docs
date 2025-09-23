@@ -61,7 +61,7 @@ If you're new to AWS S3 Tables, review the following key terms:
 - **Database (Namespace)**: A logical group of tables under a catalog.
 - **Iceberg Table**: A high-performance, transactional table format for data lakes. It supports schema evolution, partition pruning, and time travel queries.
 
-### Deployment Environment and Credential Sources
+### Deployment Prerequisites and Credential Sources
 
 The S3 Tables connector supports two ways to obtain credentials. Choose based on your EMQX deployment environment:
 
@@ -70,15 +70,16 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
 
   To create and manage access keys for an IAM user, see the [AWS documentation on managing access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
-- **Option 2: Automatically obtain temporary credentials (EC2 only, since EMQX 6.0.0)**
-   If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 to fetch temporary credentials associated with that role.
+- **Option 2: Automatically obtain temporary credentials (EC2 only)**
+  If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 API to fetch temporary credentials associated with that role.
 
   To learn how to assign an IAM role to an EC2 instance, see the [AWS documentation on IAM roles for Amazon EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html).
 
 ::: tip Note
 
 - Ensure the instance role has sufficient permissions to the target S3 Tables (bucket/table) and Athena; otherwise, **Test Connectivity** may fail.
-- It’s recommended to enforce IMDSv2-only on the instance; if you are not on EC2 or no role is attached, use **Option 1** and enter access keys manually.
+- It’s recommended to use an IAM role attached to EC2 instance to manage temporary credentials; if you are not on EC2 or no role is attached, use **Option 1** and enter access keys manually.
+
    :::
 
 ### Prepare an S3 Tables Bucket
@@ -145,7 +146,7 @@ Before adding the S3 Tables Sink, you need to create the corresponding connector
    - **S3Tables ARN**: Enter the Amazon Resource Name (ARN) of your S3 Table Bucket. You can find this in the Table buckets section in the AWS Console.
    - **Access Key ID and Secret Access Key** (optional):
      - **Manual configuration:** Enter AWS credentials associated with an IAM user or role that has permission to access S3 Tables and Athena.
-     - **Automatic retrieval (since EMQX 6.0.0):** If EMQX is deployed on an AWS EC2 instance and the instance is associated with an IAM role that has the required permissions, you can leave this field blank. EMQX will automatically obtain temporary credentials through IMDSv2. See [Deployment Prerequisites and Credential Sources](#deployment-prerequisites-and-credential-sources) for details.
+     - **Automatic retrieval:** If EMQX is deployed on an AWS EC2 instance and the instance is associated with an IAM role that has the required permissions, you can leave this field blank. EMQX will automatically obtain temporary credentials through IMDSv2. See [Deployment Prerequisites and Credential Sources](#deployment-prerequisites-and-credential-sources) for details.
    - **Enable TLS**: TLS is enabled by default when connecting to S3 Tables. For detailed TLS connection options, see [TLS for External Resource Access](../network/overview.md#enable-tls-encryption-for-accessing-external-resources).
    - **Health Check Timeout**: Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables.
 7. Use the default values for the remaining settings.
@@ -199,7 +200,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Data File Format**: Defines the format of the data file used to store batched MQTT messages in S3. Supported values:
      - `avro`: (Default) Stores records in Avro format, which is row-based and ideal for streaming data and evolving schemas.
      - `parquet`: Stores records in Apache Parquet format, which is column-based and optimized for analytical queries over large datasets.
-   
+
 8. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
 9. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
@@ -247,13 +248,13 @@ This section delves into the advanced configuration options available for the S3
 | Field Name                       | Description                                                  | Default Value   |
 | -------------------------------- | ------------------------------------------------------------ | --------------- |
 | **Min Part Size**                | The minimum part size for multipart uploads.<br/>Uploaded data will be accumulated in memory until this size is reached. | `5` MB          |
-| **Max Part Size**                | The maximum part size for multipart uploads.<br/>S3 uploader won't try to upload parts larger than this size. | `5` MB          |
+| **Max Part Size**                | The maximum part size for multipart uploads.<br/>S3 uploader won't try to upload parts larger than this size. | `5` GB          |
 | **Buffer Pool Size**             | Specifies the number of buffer worker processes, which are allocated to manage the data flow between EMQX and S3 Tables. These workers temporarily store and process data before sending it to the target service, crucial for optimizing performance and ensuring smooth data transmission. | `16`            |
-| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from S3 Tables, the request is deemed to have expired. | `45` seconds    |
+| **Request TTL**                  | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from S3 Tables, the request is deemed to have expired. | `45` second     |
 | **Health Check Interval**        | Specifies the time interval (in seconds) for the Sink to perform automatic health checks on its connection with S3 Tables. | `15` seconds    |
 | **Health Check Interval Jitter** | A uniform random delay added on top of the base health check interval to reduce the chance that multiple nodes initiate health checks at the same time. When multiple Actions or Sources share the same Connector, enabling jitter ensures their health checks are initiated at slightly different times. | `0` millisecond |
 | **Health Check Timeout**         | Specify the timeout duration for the connector to perform automatic health checks on its connection with S3 Tables. | `60` seconds    |
 | **Max Buffer Queue Size**        | Specifies the maximum number of bytes that can be buffered by each buffer worker process in the S3 Tables Sink. The buffer workers temporarily store data before sending it to S3 Tables, acting as intermediaries to handle the data stream more efficiently. Adjust this value based on system performance and data transmission requirements. | `256` MB        |
-| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to BigQuery in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and BigQuery. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | 1000            |
+| **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to S3 Tables in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and S3 Tables. If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | 1000            |
 | **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to S3 Tables does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at S3 Tables. | `Asynchronous`  |
 | **In-flight  Window**            | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with S3 Tables. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`           |
