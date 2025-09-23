@@ -60,6 +60,8 @@ If you are using the EMQX Community Edition, inviting new nodes is not supported
 
 Starting from EMQX v6.0.0, you can now add a **Cluster Description** to help identify the purpose or environment of the cluster. Enter a meaningful description in the input field and click **Save** to apply.
 
+After saving, the Cluster Description appears at the top of the Dashboard for quick reference across pages, such as **Cluster** and **Cluster Overview**. Click the edit icon to return to the **Cluster** page and update the description.
+
 - To view node details, click the node name. You will be redirected to the **Cluster View** page for detailed information.
 
 - To invite a node, click **Invite**, enter the node's IP address or hostname in the **Node Name** field, and click **Confirm**.
