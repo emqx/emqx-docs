@@ -1,5 +1,9 @@
 # EMQX 5.10 中的不兼容变更
 
+## 5.10.1
+
+- [#15752](https://github.com/emqx/emqx/pull/15752) 监听器的连接速率限制（`max_conn_rate` 和 `max_conn_burst`）现在按监听器维度生效，而非按接收器（acceptor）维度生效，恢复了 5.9.0 之前的行为。因此，来自 5.9.0、5.9.1 和 5.10.0 的配置不兼容：需要将配置的速率乘以对应监听器配置的接收器数量。
+
 ## 5.10.0
 
 - [#15289](https://github.com/emqx/emqx/pull/15289) 为所有连接器、动作和数据源新增配置项 `resource_opts.health_check_timeout`，默认值为 60 秒。

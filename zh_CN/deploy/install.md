@@ -21,7 +21,7 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
 | :-------------------------------- | :----------------------- | :----------- | :---- |
 | [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是 | 是 |
-| [Debian](./install-debian.md)     | Debian 11<br />Debian 12          | 是 | 是 |
+| [Debian](./install-debian.md)     | Debian 11<br />Debian 12<br />Debian 13          | 是 | 是 |
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是 | 是 |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是 | 是 |
 | [macOS 13](./install-macOS.md)    | macOS 13<br />                                   | 是 | 否 |

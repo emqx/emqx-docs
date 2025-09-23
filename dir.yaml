@@ -440,25 +440,25 @@
     - data-integration/rule-sql-builtin-functions
     - data-integration/rule-sql-jq
     # - data-integration/rule-sql-user-defined-function
-    - title_en: Smart Data Hub
-      title_cn: 数据智能中心
-      title_ja: スマートデータハブ
-      path: data-integration/smart-data-hub
+
+- title_en: Smart Data Hub
+  title_cn: 数据智能中心
+  title_ja: スマートデータハブ
+  path: data-integration/smart-data-hub
+  collapsed: true
+  children:
+    - title_en: Schema Registry
+      title_cn: Schema Registry
+      title_ja: スキーマレジストリ
+      path: data-integration/schema-registry
       collapsed: true
       children:
-        - title_en: Schema Registry
-          title_cn: Schema Registry
-          title_ja: スキーマレジストリ
-          path: data-integration/schema-registry
-          collapsed: true
-          children:
-            - data-integration/schema-registry-example-avro
-            - data-integration/schema-registry-example-protobuf
-            - data-integration/schema-registry-example-external-http
-            - data-integration/sparkplug
-        - data-integration/schema-validation
-        - data-integration/message-transformation
-
+        - data-integration/schema-registry-example-avro
+        - data-integration/schema-registry-example-protobuf
+        - data-integration/schema-registry-example-external-http
+        - data-integration/sparkplug
+    - data-integration/schema-validation
+    - data-integration/message-transformation
 - title_en: Flow Designer
   title_cn: Flow 设计器
   title_ja: Flow デザイナー
@@ -933,7 +933,51 @@
           path: gateway/gbt32960
         #- gateway/tcp
     - client-attributes/client-attributes
-
+- title_en: EMQX AI
+  title_cn: EMQX AI
+  title_ja: EMQX AI
+  path: emqx-ai/overview
+  collapsed: true
+  children:
+    - title_en: MCP over MQTT
+      title_cn: MCP over MQTT
+      title_ja: MCP over MQTT
+      path: emqx-ai/mcp-over-mqtt/overview
+      collapsed: true
+      children:
+        - emqx-ai/mcp-over-mqtt/architecture
+        - emqx-ai/mcp-over-mqtt/specification
+    - title_en: Multimedia Server
+      title_cn: 多媒体服务器
+      title_ja: Multimedia Server
+      path: emqx-ai/multimedia-ai/overview
+      collapsed: true
+      children:
+        - emqx-ai/multimedia-ai/architecture
+        - emqx-ai/multimedia-ai/message-protocol
+    - title_en: MCP over MQTT & Multimedia Service SDKs
+      title_cn: MCP over MQTT 和多媒体服务 SDK
+      title_ja: MCP over MQTT & Multimedia Service SDKs
+      path: emqx-ai/sdks/overview
+      collapsed: true
+      children: 
+        - title_en: Clients Compatible with Multimedia Services
+          title_cn: 与多媒体服务适配的客户端
+          title_ja: Clients Compatible with Multimedia Services
+          path: emqx-ai/sdks/multimedia-ai/overview
+          collapsed: true
+          children:
+            - emqx-ai/sdks/multimedia-ai/webrtc-typescript
+        - title_en: MCP over MQTT SDKs
+          title_cn: MCP over MQTT SDKs
+          title_ja: MCP over MQTT SDKs
+          collapsed: true
+          children:
+            - emqx-ai/sdks/mcp-sdk-erlang
+            - emqx-ai/sdks/mcp-sdk-esp32-c
+            - emqx-ai/sdks/mcp-sdk-paho-c
+            - emqx-ai/sdks/mcp-sdk-python
+            - emqx-ai/sdks/mcp-sdk-typescript
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
