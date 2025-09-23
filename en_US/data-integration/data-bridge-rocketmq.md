@@ -148,7 +148,7 @@ The following steps assume that you run both EMQX and RocketMQ on the local mach
    - **Servers**: Enter `127.0.0.1:9876`.
    - **Namespace**: Leave this field empty unless your RocketMQ service is configured with a namespace.
    - **AccessKey**, **SecretKey,** and **Secret Token**: Leave these fields empty or fill them according to your specific RocketMQ service configurations.
-   - Leave others as default.
+   - Leave others as the default.
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the RocketMQ server.
 7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the RocketMQ and record client events. For detailed steps, see [Create a Rule with RocketMQ Sink for Message Storage](#create-a-rule-with-rocketmq-sink-for-message-storage) and [Create a Rule with RocketMQ Sink for Events Recording](#create-a-rule-with-rocketmq-sink-for-events-recording).
@@ -186,15 +186,25 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 7. From the **Connector** dropdown box, select the `my_rocketmq` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
 
-8. In the **RocketMQ Topic** field, enter `TopicTest`.
+8. Fill in the following RocketMQ-specific fields:
 
-9. Leave the **Template** empty by default.
+   - **RocketMQ Topic**: Enter the topic to which messages will be forwarded, for example: `TopicTest`.
+   - **Tag** (Optional): A template field that allows you to assign RocketMQ tags dynamically. The value can include placeholders that are filled at runtime using the rule SQL results, for example, `${msg_type}` or `${clientid}`.
+     If this field is left empty, the message will not include a tag.
+   - **Key** (Optional): A template field used to assign a key to each message. Keys are useful for message tracing or deduplication in RocketMQ, for example, `${device_id}` or `${username}`.
+     This field also supports placeholders populated from rule SQL results.
 
-   ::: tip
+9. In the **Message Template** field, you can customize the structure of the message payload sent to RocketMQ:
 
-   When this value is empty the whole message will be forwarded to the RocketMQ. The actual value is JSON template data.
+   > The default value is empty. When this value is empty, the whole message will be forwarded to RocketMQ.
+   >
 
-   :::
+   The template can be any valid string with placeholders. Examples:
+
+   - `${id}`, `${username}`, `${clientid}`, `${timestamp}`
+   - `{"id": ${id}, "username": ${username}}`
+
+   The actual value can be any string, including JSON-formatted templates. Placeholders are substituted at runtime using the fields selected in your rule SQL.
 
 10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
@@ -204,11 +214,11 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
 13. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
 
-14. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+14. On the **Create Rule** page, verify the configured information. Click the **Save** button to generate the rule. 
 
-You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new RocketMQ Sink.
+You have now successfully created the rule for the RocketMQ Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab, and you can see the new RocketMQ Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `t/#` are sent and saved to RocketMQ after parsing by rule `my_rule`.
+You can also click **Integration** -> **Flow Designer** to view the topology, and you can see that the messages under topic `t/#` are sent and saved to RocketMQ after parsing by rule `my_rule`.
 
 ## Create a Rule with RocketMQ Sink for Events Recording
 

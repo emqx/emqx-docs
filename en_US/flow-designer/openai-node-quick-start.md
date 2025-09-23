@@ -57,13 +57,26 @@ Make sure you have a valid OpenAI API Key.
 4. Add an **OpenAI** node.
 
    - Drag an **OpenAI** node from the Processing section and connect it to the Data Processing node.
+
    - Configure the node:
      - **Input**: Enter `payload`.
+     
      - **System Message**: Enter `Generate a short summary of the device’s sensor readings in human-readable format`.
+     
      - **Model**: Select `gpt-4o`.
+     
      - **API Key**: Enter your OpenAI API key.
-     - **Base URL**: Leave empty.
+     
+     - **Base URL**: Leave empty to use OpenAI’s default endpoint.
+     
+       ::: tip
+     
+       You can use this field to connect to other OpenAI-compatible services by entering the provider’s API base URL and your API key.
+     
+       :::
+     
      - **Output Result Alias**: Enter `summary`.
+     
    - Click **Save**.
 
 5. Add a **Republish** node.
@@ -118,7 +131,7 @@ Make sure you have a valid OpenAI API Key.
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
    
-   - To view the running statistics and metrics of the **OpenAI** node, click the node to open the Edit panel and click the **Overview** tab.
+   - To view the running statistics and metrics of the **OpenAI** node, exit the editting page, click the node to open the Edit panel and click the **Overview** tab.
    
      ![openai_node_statistics](./assets/openai_node_statistics.png)
 

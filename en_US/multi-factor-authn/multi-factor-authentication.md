@@ -49,7 +49,13 @@ dashboard.default_mfa = {mechanism: totp}
 2. On the **Users** page, you will see a list of users. In the **Actions** column, click **MFA Settings** next to the specific user for whom you want to enable MFA.
 3. In the **MFA Settings** dialog, click **Enable** to enable MFA for the selected user.
 
-Once enabled, the user will be required to complete the MFA setup process during their next login.
+::: tip Note
+
+If you enable MFA via the Dashboard for your own account, you are immediately prompted in the same session to complete MFA setup (see [First-Time Setup](#first-time-setup)).
+
+If an admin enables MFA for another user, the MFA step remains deferred until that user’s next login.
+
+:::
 
 ### Reset TOTP Secret Key
 

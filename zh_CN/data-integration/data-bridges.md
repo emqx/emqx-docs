@@ -98,6 +98,9 @@ D1 -->|发布消息| E[客户端]
 - [PostgreSQL](./data-bridge-pgsql.md)
 - [Lindorm](./lindorm)
 - [Doris](./apache-doris)
+- [AlloyDB](./alloydb.md)
+- [CockroachDB](./cockroachdb.md)
+- [Redshift](./redshift.md)
 
 **NoSQL**
 
@@ -113,7 +116,6 @@ D1 -->|发布消息| E[客户端]
 **消息队列**
 
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
@@ -126,6 +128,7 @@ D1 -->|发布消息| E[客户端]
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)
+- [BigQuery](./bigquery.md)
 
 ## Sink 的特性
 

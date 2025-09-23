@@ -2,94 +2,96 @@
 
 EMQX 5.0 introduces the Log Trace feature, enabling real-time debug-level log outputs for specific client IDs, topics, IP addresses, or rule IDs. This allows detailed debugging in production environments without affecting system performance due to excessive logs, increasing the efficiency of diagnosing and resolving EMQX issues.
 
-## How Log Trace Works 
+## How Log Trace Works
 
-The Log Trace feature is implemented using the built-in Erlang Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace disk logs and creates a separate process for each client connection to process its messages.
+The Log Trace feature is implemented using Erlang's built-in Logger Filter function, which has a negligible impact on the overall message throughput. EMQX uses independent File Handlers to persist Trace logs and creates a separate process for each client connection to process its messages.
 
-When a client sends a message, the independent process responsible for that connection will first check if the message complies with the rules set by the customized Trace Filter. For example, the process may check if the message is from a specified client ID:
+When a client sends a message, the process responsible for that connection checks if the message matches the rules set by the Trace Filter. For example, it may check if the message is from a specified client ID:
 
-- If the message is from the specified client ID, the process will convert the message into binary data and then asynchronously send it to the appropriate File Handler. 
-- If it is not from the specified client ID, EMQX will execute the original transfer logic. 
+- If the message matches the filter criteria, the process converts it into a human-readable trace event and asynchronously sends it to the appropriate File Handler.
+- Otherwise, the message is processed as usual.
 
-The File Handlers are responsible for persisting the binary data into Trace files on disk. 
+The File Handlers are responsible for persisting trace events into their respective Trace files on disk.
+
+If a node or the entire EMQX cluster is restarted, any unfinished Log Traces will be automatically resumed.
 
 ## Why Use Log Trace
 
-The Log Trace feature offers several key benefits that make it an effective tool for debugging and monitoring in production environments.
+The Log Trace feature is an effective tool for debugging and monitoring in production environments for several key reasons:
 
-- **Safety**: The filtering process is performed independently for each client, which prevents the File Handler from being overloaded with incoming messages. Since most of the logs are filtered out, this approach is safe for production environments. 
+- **Safety**: The filtering process is performed independently for each client, which prevents the File Handler from being overloaded. Since most logs are filtered out, this approach is safe for production environments.
 - **Reliability**: This feature ensures that trace logging does not impact the overall message throughput of EMQX and provides a reliable and efficient way to store and retrieve log data.
-- **Agility**: Log Trace can be used for various scenarios, such as debugging abnormal messages or data losses, client disconnection, subscription failure, and etc. For system malfunctions that occur at a specific time, you can set the task start/stop time for automatic log collection, which is very convenient.
+- **Agility**: Log Trace can be used for various scenarios, such as debugging messages or data loss, client disconnections, or subscription failures. For issues that occur at a specific time, you can schedule the trace to start and stop automatically for convenient log collection.
 
-## Create Log Trace
+## Create a Log Trace
 
-This section demonstrates how to create Log Trace rules in the Dashboard. You can trace interactions based on Client ID, Topic, IP address, or Rule ID.
+This section demonstrates how to create Log Trace rules from the Dashboard. You can trace interactions based on Client ID, Topic, IP address, or Rule ID.
 
-1. Click **Diagnose** -> **Log Trace** on the left navigation menu. 
-2. On the **Log Trace** page, click **Create** to configure your trace rules. 
+1. Click **Diagnose** -> **Log Traces** on the left navigation menu. 
+2. On the **Log Traces** page, click **Create** to configure your trace rules. 
 
 ### Configure Common Trace Options
 
 On the **Create Trace** dialog, configure the following options that apply to all trace types:
 
-- **Name**: Enter a descriptive name for the trace to identify it in the logs. This name will appear in the trace list and should provide useful context, such as the type of trace (e.g., "Client ID Trace" or "Topic Trace") for quicker search and identification. 
-- **Start Time / End Time**: Select the start and end times for the trace. If the start time is earlier than or the same as the current time, the trace will begin from the current time.
-- **Formatter**: Select the formatter to specify how the log output should be formatted. Options include `JSON` and `Text`.
-- **Payload Encode**: Specify the format in which the payload will be encoded in the trace log file. Choose one of the following options:
-  - `Text`: A text-based or plain text protocol. Recommended for JSON-encoded payloads.
-  - `HEX`: Binary hexadecimal encoding. Recommended for custom binary protocols.
-  - `Hidden`: Obfuscates the payload as `******` (useful for masking sensitive information).
-- **Payload Limit**: Set the maximum number of bytes that will be printed for the payload in the trace file. This option is only effective when **Payload Encode** is set to either `Text` or `HEX`. If the payload exceeds this limit, it will be truncated. The default value is `1024 B`. When the Payload Limit is disabled, the trace will not impose a limit on the payload size. It is enabled by default.
+- **Name**: Enter a descriptive name to identify the trace in the system. This name will appear in the trace list and should provide useful context, such as the type of trace (e.g., "Client ID Trace" or "Topic Trace") for quicker search and identification.
+- **Start Time / End Time**: Select the start and end times for the trace. If the start time is in the past, the trace will begin immediately.
+- **Formatter**: The format for the log output. Options include `JSON` and `Text`.
+- **Payload Encode**: Specify the format for the message payload in the trace log. Choose one of the following:
+  - `Text`: Plain text, recommended for JSON-encoded payloads.
+  - `HEX`: Hexadecimal encoding, recommended for custom binary protocols.
+  - `Hidden`: Obfuscates the payload as `******`, useful for masking sensitive information.
+- **Payload Limit**: Set the maximum number of bytes to be printed for the payload in the trace file. This option is only effective when **Payload Encode** is either `Text` or `HEX`. If the payload exceeds this limit, it will be truncated. The default value is `1024 B`. This limit is enabled by default but can be disabled to allow unlimited payload size.
 
 ### Trace by Client ID
 
-1. On the Create Trace dialog, select `Client ID` from the **Type** drop-down list.
-2. Type the Client IDs to be traced.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. In the **Create Trace** dialog, select `Client ID` from the **Type** drop-down list.
+2. Enter the Client IDs to be traced.
+3. Configure the common options as described in [Common Trace Options](#configure-common-trace-options).
+4. Click **Create**.
 
-The log trace will contain interactions for the specified Client ID with the EMQX connection.
+The log trace will capture interactions between the specified Client ID and the EMQX broker.
 
 ### Trace by Topic
 
-1. On the Create Trace dialog, select `Topic` from the **Type** drop-down list.
-2. Type the topic to be traced. Wildcard characters are supported, for example, `/pay/#`.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. In the **Create Trace** dialog, select `Topic` from the **Type** drop-down list.
+2. Enter the topic to be traced. Wildcards are supported, for example, `/pay/#`.
+3. Configure the common options as described in [Common Trace Options](#configure-common-trace-options).
+4. Click **Create**.
 
-The log trace will contain information about publishing, subscription and unsubscription of the specified topic.
+The log trace will capture messages published to the specified topic, as well as subscription and unsubscription events.
 
 ### Trace by IP Address
 
-1. On the Create Trace dialog, select `IP Address` from the **Type** drop-down list.
-2. Type the IP address to be traced, for example, `192.168.0.5`.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. In the **Create Trace** dialog, select `IP Address` from the **Type** drop-down list.
+2. Enter the IP address to be traced, for example, `192.168.0.5`.
+3. Configure the common options as described in [Common Trace Options](#configure-common-trace-options).
+4. Click **Create**.
 
-The log trace will contain interactions for the specified IP address with the EMQX connection.
+The log trace will capture interactions between the client connecting from the specified IP address and the EMQX broker.
 
 ### Trace by Rule ID
 
-1. On the Create Trace dialog, select `Rule ID` from the **Type** drop-down list.
-2. Enter the rule ID you need to trace. You can find the rule ID on the **Integration** -> **Rules** page.
-3. Configure the common options. See [Configure Common Trace Options](#configure-common-trace-options).
-4. Click **Create** to complete.
+1. In the **Create Trace** dialog, select `Rule ID` from the **Type** drop-down list.
+2. Enter the rule ID to trace. You can find the rule ID on the **Integration** -> **Rules** page.
+3. Configure the common options as described in [Common Trace Options](#configure-common-trace-options).
+4. Click **Create**.
 
 The trace results will include the execution results of the rule SQL and the execution logs for all actions added to the rule, useful for debugging and optimizing the rule.
 
 The [Test Rules](../data-integration/rule-get-started.md#test-rules) operation can automatically create and manage this trace type. When testing a rule, EMQX will automatically generate a trace task and delete it automatically after the test stops.
 
-## View Log Trace 
+## View Log Trace
 
-The created trace records will be listed. You can create up to 30 traced logs. The log file size viewed in the list is the sum of the uncompressed file sizes. You can click the **Stop** button to stop logging manually or wait until the specified end time.
+Created Log Traces are listed on the **Log Trace** page. The log file size shown in the list is the sum of the uncompressed file sizes. You can stop a trace manually by clicking the **Stop** button, or it will stop automatically when the specified end time is reached.
 
-Click a specific trace record by the name, you can select to download the log on different nodes.
+There is a limit to the number of traces you can create. By default, this limit is 30, but it is configurable via the `trace.max_traces` parameter.
+
+Click a trace name to open the trace details, where you can view trace events and download the logs from a specific node in the cluster.
 
 <img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
 
-Trace logs have a maximum capacity of 512MB logs per node. Once the generated log file reaches the maximum limit, it stops appending any further logs and raises an alert in the primary log file. In the event of a timeout during Dashboard downloading, you can locate the log file in the `/data/trace` directory on the server. When an EMQX cluster is restarted, the unfinished log trace will be resumed.
+By default, each trace is limited to a maximum of 128MB of log data per node. This limit can be configured using the `trace.max_file_size` configuration parameter. To manage disk space, File Handlers operate in a rotating manner: once a trace's log reaches the size limit, the oldest trace events are discarded to make room for the new ones. Note that this is not a hard limit; the total size of the log files is usually lower than the configured value but may briefly exceed it by a few kilobytes.
 
-
-
-
+If a download from the Dashboard times out, you can manually retrieve the trace logs from the `/data/trace` directory on each EMQX node.
 

@@ -473,6 +473,7 @@
       children:
         - flow-designer/openai-node-quick-start
         - flow-designer/anthropic-node-quick-start
+        - flow-designer/gemini-node-quick-start
 - title_en: Data Integration
   title_cn: 数据集成
   title_ja: データ統合
@@ -484,6 +485,10 @@
       title_cn: Webhook
       title_ja: Webhook
       path: data-integration/webhook
+    - title_en: AlloyDB
+      title_cn: AlloyDB
+      title_ja: AlloyDB
+      path: data-integration/alloydb
     - title_en: Apache Doris
       title_cn: Apache Doris
       title_ja: Apache Doris
@@ -504,6 +509,10 @@
       title_cn: AWS Kinesis
       title_ja: AWS Kinesis
       path: data-integration/data-bridge-kinesis
+    - title_en: AWS Redshift
+      title_cn: AWS Redshift
+      title_ja: AWS Redshift
+      path: data-integration/redshift
     - title_en: AWS S3
       title_cn: AWS S3
       title_ja: AWS S3
@@ -520,6 +529,10 @@
       title_cn: Azure Event Hubs
       title_ja: Azure Event Hubs
       path: data-integration/data-bridge-azure-event-hub
+    - title_en: BigQuery
+      title_cn: BigQuery
+      title_ja: BigQuery
+      path: data-integration/bigquery
     - title_en: Cassandra
       title_cn: Cassandra
       title_ja: Cassandra
@@ -528,6 +541,10 @@
       title_cn: ClickHouse
       title_ja: ClickHouse
       path: data-integration/data-bridge-clickhouse
+    - title_en: CockroachDB
+      title_cn: CockroachDB
+      title_ja: CockroachDB
+      path: data-integration/cockroachdb
     - title_en: Confluent
       title_cn: Confluent
       title_ja: Confluent
@@ -560,10 +577,6 @@
       title_cn: GreptimeDB
       title_ja: GreptimeDB
       path: data-integration/data-bridge-greptimedb
-    - title_en: HStreamDB
-      title_cn: HStreamDB
-      title_ja: HStreamDB
-      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       title_ja: HTTP サーバー

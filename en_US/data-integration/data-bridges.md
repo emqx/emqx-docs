@@ -104,6 +104,9 @@ EMQX supports data integrations with the following types of data systems:
 - [PostgreSQL](./data-bridge-pgsql.md)
 - [Lindorm](./lindorm)
 - [Doris](./apache-doris)
+- [AlloyDB](./alloydb.md)
+- [CockroachDB](./cockroachdb.md)
+- [Redshift](./redshift.md)
 
 **NoSQL**
 
@@ -119,7 +122,6 @@ EMQX supports data integrations with the following types of data systems:
 **Message Queue**
 
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)
@@ -132,6 +134,7 @@ EMQX supports data integrations with the following types of data systems:
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)
+- [BigQuery](./bigquery.md)
 
 ## Features of Sink
 

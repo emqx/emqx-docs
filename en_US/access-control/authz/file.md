@@ -88,7 +88,7 @@ Sample configuration:
 ```bash
 authorization {
   deny_action = ignore
-  no_match = allow
+  no_match = deny
   sources = [
     {
       type = file
