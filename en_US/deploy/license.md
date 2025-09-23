@@ -113,7 +113,7 @@ After execution, you can run `emqx ctl license info` to confirm that the new lic
 
 ## License Limits
 
-EMQX Enterprise Licenses may include usage limits to enforce compliance with licensed terms in production environments. The  license limits include:
+EMQX Enterprise Licenses may include usage limits to enforce compliance with licensed terms in production environments. The license limits include:
 
 - Session Limits
 - TPS Limits (from EMQX 6.0)
