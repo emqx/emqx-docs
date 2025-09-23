@@ -234,7 +234,7 @@ authorization {
     { ...   },
     { ...   }
   ]
-  no_match = allow
+  no_match = deny
   deny_action = ignore
   cache {
     max_size = 32
@@ -248,7 +248,7 @@ authorization {
 
 - `sources`（任意）：順序付き配列。各要素は対応するオーソライザーのデータソースを定義します。詳細は各オーソライザーの設定ファイルを参照してください。
 
-- `no_match`：設定されたオーソライザーのいずれも認可ルールを見つけられなかった場合のデフォルト動作。値は `allow` または `deny`。デフォルトは `allow`。この設定によりブラック／ホワイトリスト機能も有効になります。
+- `no_match`：設定されたオーソライザーのいずれも認可ルールを見つけられなかった場合のデフォルト動作。値は `allow` または `deny`。デフォルトは `deny`。
 
 - `deny_action`：パブリッシュ／サブスクライブ操作が拒否された場合の次の処理。値は `ignore` または `disconnect`。デフォルトは `ignore`。`ignore` は操作を静かに無視し、`disconnect` はクライアント接続を切断します。
 
