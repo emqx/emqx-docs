@@ -22,7 +22,7 @@ This page guides you through the process of obtaining a Commercial License and i
 
 To apply for a Commercial License with a valid License Key, contact your EMQ sales representative or fill out the contact information on our [Contact Us](https://www.emqx.com/en/contact?product=emqx&channel=apply-Licenses) page to apply for a commercial license. Our sales representative will contact you as soon as possible. 
 
-Suppose you prefer to try EMQX Enterprise before purchasing. In that case, you can apply for a Trial License on our [Trial License application page,](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email box immediately:
+Suppose you prefer to try EMQX Enterprise before purchasing. In that case, you can apply for a Trial License on our [Trial License application page,](https://www.emqx.com/en/apply-licenses/emqx) and the license file will be sent to your email immediately:
 
 - The Trial License is valid for 15 days.
 - The Trial License supports 10,000 concurrent sessions.
@@ -49,10 +49,10 @@ You can update your license file and configure the settings for the license conn
 
    Verify the information to confirm that the new license file has taken effect.
 
-3. In the **License Settings** section, you can configure the watermark limits for the license connection quota usage.
+3. In the **License Settings** section, you can configure the watermark thresholds for the license session quota usage limits. For details about session limits, see [Session Limits](#session-limits).
 
-   - **Usage High Watermark**: Specify the percentage value to set the threshold above which alarms for license connection quota usage will be triggered.
-   - **Usage Low Watermark**: Specify the percentage value to set the threshold below which alarms for license connection quota usage will be deactivated.
+   - **Usage High Watermark**: Specify the percentage value to set the threshold above which alarms for license session quota usage will be triggered.
+   - **Usage Low Watermark**: Specify the percentage value to set the threshold below which alarms for license session quota usage will be deactivated.
 
 4. Click **Save Changes** to save your License settings.
 
@@ -110,3 +110,39 @@ license {
 After execution, you can run `emqx ctl license info` to confirm that the new license file has taken effect.
 
 <!-- 您也可以通过环境变量 `EMQX_LICENSE__KEY` 变量名设置您的 License。TODO 确认是否可以 reload -->
+
+## License Limits
+
+EMQX Enterprise Licenses may include usage limits to enforce compliance with licensed terms in production environments. The  license limits include:
+
+- Session Limits
+- TPS Limits (from EMQX 6.0)
+
+### Session Limits
+
+The session limit defines the maximum number of concurrent MQTT client connections (sessions) that EMQX Enterprise can support under the current License.
+
+- When the limit is reached, any new connection attempts will be rejected.
+- Clients attempting to connect beyond the licensed quota will receive a "Quota Exceeded" response with CONNACK reason code `151 (0x97)`.
+- An alarm will be raised if the session usage crosses the configured high watermark threshold.
+- The alarm will be cleared automatically once the usage drops below the low watermark threshold.
+
+You can configure the alarm watermarks via the EMQX Dashboard or configuration file.
+
+### TPS Limits
+
+Starting from EMQX 6.0, Licenses can also include a Transactions Per Second (TPS)  limit. This limit applies to the total MQTT messages processed across the cluster, including both incoming and outgoing MQTT messages.
+
+- When the TPS usage exceeds the licensed limit, EMQX raises an alarm.
+- The alarm will record the peak TPS observed, but will not restrict message traffic.
+- The alarm remains active until:
+  - A new license with a higher TPS limit is applied, or
+  - The alarm is manually deactivated from the EMQX Dashboard or CLI.
+
+This TPS limit is designed for observability and compliance rather than strict enforcement.
+
+::: tip Note
+
+The TPS limit is defined in the license and cannot be configured or adjusted by the user. To raise the limit, apply a new license with a higher TPS value.
+
+:::
