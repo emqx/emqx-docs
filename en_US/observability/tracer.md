@@ -21,14 +21,14 @@ The Log Trace feature is an effective tool for debugging and monitoring in produ
 
 - **Safety**: The filtering process is performed independently for each client, which prevents the File Handler from being overloaded. Since most logs are filtered out, this approach is safe for production environments.
 - **Reliability**: This feature ensures that trace logging does not impact the overall message throughput of EMQX and provides a reliable and efficient way to store and retrieve log data.
-- **Agility**: Log Trace can be used for various scenarios, such as debugging message or data loss, client disconnections, or subscription failures. For issues that occur at a specific time, you can schedule the trace to start and stop automatically for convenient log collection.
+- **Agility**: Log Trace can be used for various scenarios, such as debugging messages or data loss, client disconnections, or subscription failures. For issues that occur at a specific time, you can schedule the trace to start and stop automatically for convenient log collection.
 
 ## Create a Log Trace
 
 This section demonstrates how to create Log Trace rules from the Dashboard. You can trace interactions based on Client ID, Topic, IP address, or Rule ID.
 
-1. Click **Diagnose** -> **Log Trace** on the left navigation menu. 
-2. On the **Log Trace** page, click **Create** to configure your trace rules. 
+1. Click **Diagnose** -> **Log Traces** on the left navigation menu. 
+2. On the **Log Traces** page, click **Create** to configure your trace rules. 
 
 ### Configure Common Trace Options
 
@@ -64,11 +64,11 @@ The log trace will capture messages published to the specified topic, as well as
 ### Trace by IP Address
 
 1. In the **Create Trace** dialog, select `IP Address` from the **Type** drop-down list.
-2. Enter the IP address to be traced, for example `192.168.0.5`.
+2. Enter the IP address to be traced, for example, `192.168.0.5`.
 3. Configure the common options as described in [Common Trace Options](#configure-common-trace-options).
 4. Click **Create**.
 
-The log trace will capture interactions between client connecting from the specified IP address and the EMQX broker.
+The log trace will capture interactions between the client connecting from the specified IP address and the EMQX broker.
 
 ### Trace by Rule ID
 
@@ -87,10 +87,11 @@ Created Log Traces are listed on the **Log Trace** page. The log file size shown
 
 There is a limit to the number of traces you can create. By default, this limit is 30, but it is configurable via the `trace.max_traces` parameter.
 
-Click a trace name to open the trace details, where you can view trace events and download the logs from specific node in the cluster.
+Click a trace name to open the trace details, where you can view trace events and download the logs from a specific node in the cluster.
 
 <img src="./assets/log-trace-node-ee.png" alt="log-trace-node-ee" style="zoom:50%;" />
 
-By default, each trace is limited to a maximum of 128MB of log data per node. This limit can be configured using the `trace.max_file_size` parameter. To manage disk space, File Handlers operate in a rotating manner: once a trace's log reaches the size limit, the oldest trace events are discarded to make room for the new ones. Note that this is not a hard limit; the total size of the log files is usually lower than the configured value but may briefly exceed it by a few KBs.
+By default, each trace is limited to a maximum of 128MB of log data per node. This limit can be configured using the `trace.max_file_size` configuration parameter. To manage disk space, File Handlers operate in a rotating manner: once a trace's log reaches the size limit, the oldest trace events are discarded to make room for the new ones. Note that this is not a hard limit; the total size of the log files is usually lower than the configured value but may briefly exceed it by a few kilobytes.
 
-If a timeout occurs when downloading from the Dashboard, you can find the log files in the `/data/trace` directory on each node in the EMQX cluster.
+If a download from the Dashboard times out, you can manually retrieve the trace logs from the `/data/trace` directory on each EMQX node.
+
