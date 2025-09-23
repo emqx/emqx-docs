@@ -28,6 +28,8 @@ To create a new Message Queue using the EMQX Dashboard:
 
    - **Last Value Semantics**: Toggle this switch **on** if you want the queue to overwrite older messages with the same key, keeping only the latest value per key.
 
+   - **Queue Key Expression**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message (e.g., `message.from`). The key is used to determine whether a new message should replace an existing one.
+
 4. Click **Create** to save the queue.
 
 The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit or delete queues using the buttons in the **Actions** column.

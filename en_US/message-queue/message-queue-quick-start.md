@@ -1,0 +1,192 @@
+# EMQX Message Queue Quick Start
+
+This page walks you through how to use the Message Queue feature in EMQX 6.0. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
+
+## Objectives
+
+This quick start showcases how EMQX Message Queues can:
+
+- Persist messages even when subscribers are offline
+- Support configurable dispatch strategies
+- Enable Last-Value Semantics for message compaction
+
+## Prerequisites
+
+Before starting, ensure you have:
+
+- EMQX 6.0+ running (Message Queue feature enabled)
+- [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
+- Access to the EMQX Dashboard (default: `http://localhost:18083`)
+- REST API credentials (default user: `admin`, password: `public`)
+
+## Test Core Message Queue Basic Features
+
+This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline
+
+### Step 1: Create a Message Queue
+
+1. Navigate to **Message Queue** in the left menu.
+2. Click the **Create** button in the upper-right corner of the page.
+
+3. In the **Create Message Queue** dialog, configure the following settings:
+   - **Topic Filter**: `demo/topic`
+   - **Dispatch Strategy**: `Least Inflight Subscriber`
+   - **Data Retention Period**: `1` day
+   - **Last Value Semantics**: `Disabled`
+4. Click **Create**.
+
+### Step 2: Publish Messages
+
+Use MQTTX to simulate a **publisher**:
+
+1. Open MQTTX and create a client (e.g., `publisher`).
+2. Connect to EMQX (`mqtt://localhost:1883`).
+3. Publish messages to the topic `demo/topic` with QoS 1:
+
+Example:
+
+```
+Topic: demo/topic
+QoS: 1
+Payload: {"msg": "Hello 1"}
+```
+
+Repeat with more payloads: `{"msg": "Hello 2"}`, etc.
+
+At this point, there are no subscribers. Messages will be queued and persisted by EMQX.
+
+### Step 3: Subscribe and Consume Messages
+
+Use MQTTX to simulate a **subscriber**:
+
+1. Open a second client (e.g., `worker-a`).
+
+2. Connect to EMQX.
+
+3. Subscribe to the queue topic:
+
+   ```json
+   Topic: $q/demo/topic
+   QoS: 1
+   ```
+
+You should now receive all previously published messages in the queue.
+
+<img src="./assets/consume_message.png" alt="consume_message" style="zoom:67%;" />
+
+## Simulate Multiple Subscribers with Dispatch Strategies
+
+In this section, you will simulate multiple subscribers connected to the same Message Queue and explore how different dispatch strategies influence message distribution behavior.
+
+1. Open another MQTTX client (e.g., `worker-b`).
+
+2. Connect to EMQX and subscribe to the same queue topic:
+
+   ```json
+   Topic: $q/demo/topic
+   QoS: 1
+   ```
+
+   Now, both `worker-a` and `worker-b` are consuming messages from the same queue.
+
+3. In your `publisher` client, publish a series of messages to the original topic (not prefixed with `$q/`), e.g.:
+
+   ```bash
+   for i in {1..10}; do
+     mqttx pub -t demo/topic -m "message-$i" -q 1
+   done
+   ```
+
+4. Observe the message flow in both subscriber clients.
+
+### How Dispatch Strategies Affect Delivery
+
+The behavior of message distribution depends on the selected **Dispatch Strategy** for the queue:
+
+| Dispatch Strategy           | Behavior                                                     | Use Case                               |
+| --------------------------- | ------------------------------------------------------------ | -------------------------------------- |
+| `Least Inflight Subscriber` | Prefers subscribers with fewer in-flight (unacknowledged) messages. | Load balancing across uneven consumers |
+| `Round Robin`               | Delivers messages alternately to each subscriber in strict rotation. | Fair distribution regardless of speed  |
+| `Random` (default)          | Sends each message to a randomly chosen subscriber.          | Unpredictable or demo scenarios        |
+
+You can verify these behaviors by watching how messages are delivered to `worker-a` and `worker-b`.
+
+### Modify the Dispatch Strategy
+
+You can change the strategy on the fly:
+
+- Go to **Message Queue** in Dashboard.
+- Click **Edit** next to your queue.
+- Select a new **Dispatch Strategy** and save.
+
+After switching, repeat the message publishing test and observe the difference in distribution patterns between the subscribers.
+
+## Test Last-Value Semantics
+
+This section demonstrates how to enable **Last-Value Semantics**, which ensures only the most recent message per key is retained in the queue, ideal for use cases such as device configuration updates.
+
+### Step 1: Delete the Existing Queue
+
+1. Navigate to **Message Queue** in the EMQX Dashboard.
+2. Locate the queue with the topic filter `demo/topic`.
+3. Click **Delete** in the **Actions** column.
+4. Confirm deletion in the prompt.
+
+This removes the previous queue and its stored messages.
+
+### Step 2: Create a Queue with Last-Value Semantics
+
+1. On the **Message Queue** page, click **Create**.
+2. In the **Create Message Queue** dialog, configure the settings:
+   - **Topic Filter**: `device/config`
+   - **Dispatch Strategy**: `Random` (or your choice)
+   - **Data Retention Period**: `1` day
+   - **Last Value Semantics**: Toggle on
+   - **Queue Key Expression**: `message.key` (or any field name you will use as key)
+3. Click **Create**.
+
+The “Queue Key Expression” defines where to extract the key from the message’s user properties (e.g., `mq-key`).
+
+### Step 3: Publish Messages with `mq-key` User Property
+
+1. Open MQTTX and select or create a client (e.g., `publisher`).
+
+2. Connect to EMQX (`mqtt://localhost:1883`).
+
+3. Publish messages to `device/config` with a user property set:
+
+   Example:
+
+   | Field             | Value               |
+   | ----------------- | ------------------- |
+   | **Topic**         | `device/config`     |
+   | **QoS**           | 1                   |
+   | **Payload**       | `{"ssid": "wifi1"}` |
+   | **User Property** | `mq-key=wifi`       |
+
+4. Publish another message using the same key but with updated content:
+
+   ```json
+   Payload: {"ssid": "wifi2"}
+   User Property: mq-key=wifi
+   ```
+
+Since Last-Value Semantics is enabled, the second message will replace the first one in the queue.
+
+### Step 4: Subscribe to the Queue
+
+1. Open a second MQTTX client (e.g., `subscriber`).
+
+2. Connect to EMQX.
+
+3. Subscribe to the queue topic:
+
+   ```json
+   Topic: $q/device/config
+   QoS: 1
+   ```
+
+**Expected Behavior**:
+Only the most recent message for each unique `mq-key` is delivered. In this case, only `{"ssid": "wifi2"}` will be received.
+
+
