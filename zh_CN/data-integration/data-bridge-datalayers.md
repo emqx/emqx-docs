@@ -306,8 +306,15 @@ Datalayers 数据集成具有以下特性与优势：
 
    :::
 
+   ::: tip
+
+   如需向不同于连接器中设置的数据库插入数据，请在 SQL 模板中添加对应的数据库名字。
+   但连接器仍会检查目标数据库是否存在。
+
+   :::
+
    ```sql
-   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
+   insert into t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
 
 6. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
