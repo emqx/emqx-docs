@@ -179,5 +179,5 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 
 Now that you understand the Message Queue fundamentals, explore how to put them into practice:
 
-- [Create and Configure a Queue](./message-queue-tasks.md): Learn how to declare queues via Dashboard or REST API, define dispatch strategies, and set retention policies.
+- [Create and Configure a Queue](./message-queue-task.md): Learn how to declare queues via Dashboard or REST API, define dispatch strategies, and set retention policies.
 - [Quick Start Tutorial](./message-queue-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.

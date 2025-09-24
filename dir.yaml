@@ -881,7 +881,7 @@
       path: message-queue/message-queue-concept
       collapsed: true
       children:
-        - message-queue/message-queue-tasks
+        - message-queue/message-queue-task
         - message-queue/message-queue-quick-start
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC

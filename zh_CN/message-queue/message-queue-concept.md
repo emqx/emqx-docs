@@ -185,5 +185,5 @@ EMQX 的消息队列功能提供了一套关键能力，用于实现可靠、解
 
 现在您已经了解了消息队列的基本概念，接下来可以进一步实践：
 
-- [创建与配置队列](./message-queue-tasks.md)：学习如何通过 Dashboard 或 REST API 创建队列，配置分发策略和保留策略。
+- [创建与配置队列](./message-queue-task.md)：学习如何通过 Dashboard 或 REST API 创建队列，配置分发策略和保留策略。
 - [快速开始教程](./message-queue-quick-start.md)：通过 MQTTX 模拟实际的发布者和订阅者场景，完成端到端演示。
