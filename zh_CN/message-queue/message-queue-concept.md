@@ -176,10 +176,10 @@ EMQX 的消息队列功能提供了一套关键能力，用于实现可靠、解
 
 消息队列构建于 MQTT 协议之上，并与 EMQX 中的其他消息功能互为补充：
 
-- [共享订阅](./messaging/mqtt-shared-subscription.md)：将消息分发给多个订阅者，但在没有客户端在线时不会保留消息。
-- [保留消息](./messaging/mqtt-retained-message.md)：保存某个主题的最新消息，但仅在新客户端订阅该主题时发送一次。
-- [MQTT 持久会话](./durability/durability_introduction.md)：在客户端断线重连后，保留其会话状态（订阅信息及 QoS 1/2 消息）。
-- [规则引擎](./data-integration/rules.md)：通过类 SQL 规则对队列中的消息进行过滤、处理，并可实现转发等操作。
+- [共享订阅](../messaging/mqtt-shared-subscription.md)：将消息分发给多个订阅者，但在没有客户端在线时不会保留消息。
+- [保留消息](../messaging/mqtt-retained-message.md)：保存某个主题的最新消息，但仅在新客户端订阅该主题时发送一次。
+- [MQTT 持久会话](../durability/durability_introduction.md)：在客户端断线重连后，保留其会话状态（订阅信息及 QoS 1/2 消息）。
+- [规则引擎](../data-integration/rules.md)：通过类 SQL 规则对队列中的消息进行过滤、处理，并可实现转发等操作。
 
 ## 后续步骤
 
