@@ -97,7 +97,7 @@ The diagram below shows the data flow between major Message Queue components:
       |                                                           | proto                |
       |                                                           V                      |
 +---------------------------+                         +----------------------------+     |
-| Channel (writing)         |                         | Channel (subscribing)      |     |
+| Channel (publishing)      |                         | Channel (subscribing)      |     |
 |                           |                         | [MQ subscription registry] |     |
 +---------------------------+                         +----------------------------+     |
       |                                                                    |             |
@@ -116,7 +116,7 @@ The diagram below shows the data flow between major Message Queue components:
 3. The hook checks the Message Queue Registry for any queues whose topic filter matches the published topic.
 4. If a matching queue is found, the message is written to the queue’s message database.
 
-### Subscribing & Consuming Workflow
+### Subscribing and Consuming Workflow
 
 1. A client subscribes to a topic.
 2. An MQ hook is triggered to handle the subscription.

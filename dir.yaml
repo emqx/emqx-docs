@@ -875,6 +875,14 @@
   collapsed: true
   path: mqtt-over-quic/advanced-feature
   children:
+    - title_en: Message Queue
+      title_cn: 消息队列
+      title_ja: Message Queue
+      path: message-queue/message-queue-concept
+      collapsed: true
+      children:
+        - message-queue/message-queue-tasks
+        - message-queue/message-queue-quick-start
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       title_ja: MQTT over QUIC
