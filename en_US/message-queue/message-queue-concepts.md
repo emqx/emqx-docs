@@ -67,7 +67,7 @@ The following main components are involved:
 - **Message Queue Registry**
   Manages the lifecycle of all message queues. Responsible for creating, deleting, and looking up queues.
 - **Message Queue Message DB**
-  Stores the actual messages published to queues. Built on EMQX’s [Durable Storage](../durability/durability_introduction.md#durable-storage-architecture).
+  Stores the actual messages published to queues and is built on EMQX’s [Durable Storage](../durability/durability_introduction.md#durable-storage-architecture).
 - **Message Queue State Storage**
   Persists consumption progress and queue metadata (e.g., TTL, properties).
 - **Message Queue Consumer**
@@ -167,7 +167,16 @@ Message Queue enables reliable, asynchronous messaging patterns that are critica
 
 ## Reference & Related Features
 
-- [Shared Subscriptions](#) – Compared with Message Queues
-- MQTT Durable Sessions
+Message Queue builds upon MQTT and complements other messaging features in EMQX:
+
+- [Shared Subscriptions](./messaging/mqtt-shared-subscription.md): Distributes messages among multiple subscribers, but does not retain messages when no clients are online.
+- [Retained Messages](./messaging/mqtt-retained-message.md): Stores the last known message for a topic, but only delivers one retained message per topic to new subscribers.
+- [MQTT Durable Sessions](./durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
+- [Rule Engine](./data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
 
 ## What's Next
+
+Now that you understand the Message Queue fundamentals, explore how to put them into practice:
+
+- [Create and Configure a Queue](./message-queue-tasks.md): Learn how to declare queues via Dashboard or REST API, define dispatch strategies, and set retention policies.
+- [Quick Start Tutorial](./message-queue-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.
