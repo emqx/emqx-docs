@@ -83,7 +83,7 @@ EMQX 中的消息队列作为一个松耦合的扩展，通过内部钩子（Hoo
 - **Hook 机制**
   拦截发布和订阅事件，将消息路由到队列或消费者。
 
-### 架构图示
+### 消息队列数据流图示
 
 下图展示了消息队列各主要组件之间的数据流动关系：
 
@@ -92,15 +92,15 @@ EMQX 中的消息队列作为一个松耦合的扩展，通过内部钩子（Hoo
 | Message Queue DS DB   |                                     | Message Queue State Storage |
 +-----------------------+                                     +-----------------------------+
       ^      ^                                                    ^                      ^
-      |      |                                                    | persist              |
+      |      |                                                    | Persist              |
       |      |                                                    | progress             |
-      |      |              subscription on topic data            |                      |
+      |      |              Subscription on topic data            |                      |
       |      |                  via emqx_ds_client          +-------------+              |
       |      +--------------------------------------------->| MQ Consumer |              |
       |                                                     |             |              |
-      | write tx                                            +-------------+              | message metadata
+      | Write transaction                                   +-------------+              | Message metadata
       |                                                           ^                      | persist/lookup
-      |                                                           | proto                |
+      |                                                           | Protocol                |
       |                                                           V                      |
 +---------------------------+                         +----------------------------+     |
 | Client connection         |                         | Client connection          |
@@ -108,10 +108,10 @@ EMQX 中的消息队列作为一个松耦合的扩展，通过内部钩子（Hoo
 |                           |                         | [MQ subscription registry] |     |
 +---------------------------+                         +----------------------------+     |
       |                                                                    |             |
-      |                                                              queue |             |
+      |                                                              Queue |             |
       |                                                             lookup V             |
       |                                                                  +--------------------------+
-      |        fast queue lookup in the index                            | MQ Registry              |
+      |        Fast queue lookup in the index                            | MQ Registry              |
       +----------------------------------------------------------------> |                          |
                                                                          +--------------------------+
 ```

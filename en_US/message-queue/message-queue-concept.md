@@ -77,7 +77,7 @@ The following main components are involved:
 - **Message Queue Hooks**
   Hook into publish and subscribe events to intercept messages and route them to queues or consumers.
 
-### Schematic View
+### Message Queue Data Flow Diagram
 
 The diagram below shows the data flow between major Message Queue components:
 
@@ -86,15 +86,15 @@ The diagram below shows the data flow between major Message Queue components:
 | Message Queue DS DB   |                                     | Message Queue State Storage |
 +-----------------------+                                     +-----------------------------+
       ^      ^                                                    ^                      ^
-      |      |                                                    | persist              |
+      |      |                                                    | Persist              |
       |      |                                                    | progress             |
-      |      |              subscription on topic data            |                      |
+      |      |              Subscription on topic data            |                      |
       |      |                  via emqx_ds_client          +-------------+              |
       |      +--------------------------------------------->| MQ Consumer |              |
       |                                                     |             |              |
-      | write tx                                            +-------------+              | message metadata
+      | Write transaction                                   +-------------+              | Message metadata
       |                                                           ^                      | persist/lookup
-      |                                                           | proto                |
+      |                                                           | Protocol                |
       |                                                           V                      |
 +---------------------------+                         +----------------------------+     |
 | Client connection         |                         | Client connection          |
@@ -102,10 +102,10 @@ The diagram below shows the data flow between major Message Queue components:
 |                           |                         | [MQ subscription registry] |     |
 +---------------------------+                         +----------------------------+     |
       |                                                                    |             |
-      |                                                              queue |             |
+      |                                                              Queue |             |
       |                                                             lookup V             |
       |                                                                  +--------------------------+
-      |        fast queue lookup in the index                            | MQ Registry              |
+      |        Fast queue lookup in the index                            | MQ Registry              |
       +----------------------------------------------------------------> |                          |
                                                                          +--------------------------+
 ```

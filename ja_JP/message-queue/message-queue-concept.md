@@ -50,7 +50,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 - **Topic Prefix**
    Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
 - **Queue Properties**
-   Customizable settings that control queue behavior, such as message retention time, maximum length, and dispatch strategy.
+   Customizable settings that control queue behavior, such as message retention time and dispatch strategy.
 - **Quality of Service (QoS)**
    All messages in Message Queues are delivered with QoS 1 (at-least-once), regardless of the QoS level used when publishing or subscribing. This ensures reliable message delivery and unifies the queue's delivery behavior.
 - **Message Persistence**
@@ -77,7 +77,7 @@ The following main components are involved:
 - **Message Queue Hooks**
   Hook into publish and subscribe events to intercept messages and route them to queues or consumers.
 
-### Schematic View
+### Message Queue Data Flow Diagram
 
 The diagram below shows the data flow between major Message Queue components:
 
@@ -86,15 +86,15 @@ The diagram below shows the data flow between major Message Queue components:
 | Message Queue DS DB   |                                     | Message Queue State Storage |
 +-----------------------+                                     +-----------------------------+
       ^      ^                                                    ^                      ^
-      |      |                                                    | persist              |
+      |      |                                                    | Persist              |
       |      |                                                    | progress             |
-      |      |              subscription on topic data            |                      |
+      |      |              Subscription on topic data            |                      |
       |      |                  via emqx_ds_client          +-------------+              |
       |      +--------------------------------------------->| MQ Consumer |              |
       |                                                     |             |              |
-      | write tx                                            +-------------+              | message metadata
+      | Write transaction                                   +-------------+              | Message metadata
       |                                                           ^                      | persist/lookup
-      |                                                           | proto                |
+      |                                                           | Protocol                |
       |                                                           V                      |
 +---------------------------+                         +----------------------------+     |
 | Client connection         |                         | Client connection          |
@@ -102,10 +102,10 @@ The diagram below shows the data flow between major Message Queue components:
 |                           |                         | [MQ subscription registry] |     |
 +---------------------------+                         +----------------------------+     |
       |                                                                    |             |
-      |                                                              queue |             |
+      |                                                              Queue |             |
       |                                                             lookup V             |
       |                                                                  +--------------------------+
-      |        fast queue lookup in the index                            | MQ Registry              |
+      |        Fast queue lookup in the index                            | MQ Registry              |
       +----------------------------------------------------------------> |                          |
                                                                          +--------------------------+
 ```
