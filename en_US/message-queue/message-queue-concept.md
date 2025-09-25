@@ -50,7 +50,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 - **Topic Prefix**
    Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
 - **Queue Properties**
-   Customizable settings that control queue behavior, such as message retention time, maximum length, and dispatch strategy.
+   Customizable settings that control queue behavior, such as message retention time and dispatch strategy.
 - **Quality of Service (QoS)**
    All messages in Message Queues are delivered with QoS 1 (at-least-once), regardless of the QoS level used when publishing or subscribing. This ensures reliable message delivery and unifies the queue's delivery behavior.
 - **Message Persistence**
