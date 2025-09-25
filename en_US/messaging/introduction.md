@@ -36,5 +36,5 @@ In addition to the native MQTT features, EMQX provides several extended capabili
 Unlike shared subscriptions or retained messages, Message Queues provide:
 
 - Durable message persistence independent of client connection state
-- Configurable queue lifecycle and message TTL
+- Configurable queue lifecycle and message Time-to-Live (TTL)
 - Queue-based delivery semantics with fine-grained control
