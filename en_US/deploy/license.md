@@ -131,7 +131,7 @@ You can configure the alarm watermarks via the EMQX Dashboard or configuration f
 
 ### TPS Limits
 
-Starting from EMQX 6.0, Licenses can also include a Transactions Per Second (TPS)  limit. This limit applies to the total MQTT messages processed across the cluster, including both incoming and outgoing MQTT messages.
+Starting from EMQX 6.0, Licenses can also include a Transactions Per Second (TPS) limit. This limit applies to the total MQTT messages processed across the cluster, including both incoming and outgoing MQTT messages.
 
 - When the TPS usage exceeds the licensed limit, EMQX raises an alarm.
 - The alarm will record the peak TPS observed, but will not restrict message traffic.
