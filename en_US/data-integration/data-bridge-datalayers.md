@@ -324,10 +324,17 @@ The Arrow Flight SQL driver is currently experimental. Use with caution in produ
 
    :::
 
-   For example:
+   ::: tip
 
+   If you need to insert data into a database other than the one configured in the connector, make sure to specify the target database name explicitly in the SQL template.
+   Note that the connector will still check whether the target database exists.
+   
+   :::
+   
+   For example:
+   
    ```sql
-   insert into mqtt.t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
+   insert into t_mqtt_msg(time, msgid, sender, topic, qos, payload, arrived) values (${timestamp}, ${id}, ${clientid}, ${topic}, ${qos}, ${payload}, ${timestamp})
    ```
    
 6. **Fallback Actions** (Optional): To enhance reliability, you can configure one or more fallback actions. These will be triggered if the Sink fails to process a message. For more information, refer to [Fallback Actions](./data-bridges.md#fallback-actions).
