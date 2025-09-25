@@ -1,13 +1,13 @@
 # Incompatible Changes between EMQX 5.x and EMQX 6.0
 
-### Deprecated Packages
+## Deprecated Packages
 
 - [#15939](https://github.com/emqx/emqx/pull/15939) Stop releasing packages for systems which have already reached end-of-life:
   - Enterprise Linux (CentOS) 7
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
-### Durable Sessions
+## Durable Sessions
 
 If durable sessions feature was not previously enabled, the following information can be ignored.
 
@@ -22,12 +22,12 @@ it must be recreated from the clean state.
   This change also improves general performance of durable sessions thanks to sharding and more efficient data representation.
 
 
-### Will message behavior
+## Will message behavior
 
 Authorization checks that decide whether the durable session is eligible to publish the will message now run at the moment of client disconnection.
 Previously they ran after expiration of `Will-Delay-Interval`.
 
-### Configuration Changes
+## Configuration Changes
 
 - `durable_sessions.heartbeat_interval` parameter has been renamed to `durable_sessions.checkpoint_interval`.
 
@@ -46,6 +46,6 @@ Previously they ran after expiration of `Will-Delay-Interval`.
 
 - [#15734](https://github.com/emqx/emqx/pull/15734) Improved reliability and throughput of durable sessions.
 
-### Rate Limit
+## Rate Limit
 
 - [#15743](https://github.com/emqx/emqx/pull/15743) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the pre-5.9.0 behavior. As a result, configurations from versions 5.9.0, 5.9.1 and 5.10.0 are incompatible: specified rates must be scaled up by the number of acceptors configured for respective listeners.
