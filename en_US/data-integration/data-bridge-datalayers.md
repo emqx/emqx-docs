@@ -328,7 +328,6 @@ The Arrow Flight SQL driver is currently experimental. Use with caution in produ
 
    If you need to insert data into a database other than the one configured in the connector, make sure to specify the target database name explicitly in the SQL template.
    Note that the connector will still check whether the target database exists.
-   
    :::
    
    For example:
