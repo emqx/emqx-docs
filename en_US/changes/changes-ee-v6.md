@@ -130,6 +130,8 @@ New `cluster.description` configuration option allows users to set and display c
 
 - [#15864](https://github.com/emqx/emqx/pull/15864) Removed the deprecated "Bridges V1" APIs and configuration schemas. All endpoints under `/bridges/*` and configuration entries under the `bridges` root key are no longer available, as data integrations have fully migrated to the "Connectors/Actions/Sources" model.
 
+- [#15583](https://github.com/emqx/emqx/pull/15583) Updated our `brod` client to version 4.4.4.  This expands the supported Kafka API ranges, in particular due to the `JoinGroups` API `v0`-`v1` being deprecated.
+
 #### Smart Data Hub
 
 - [#15525](https://github.com/emqx/emqx/pull/15525) Prevented deletion of internal schemas that are still in use. If a schema is referenced by a Schema Validation or Message Transformation, it can no longer be removed to avoid runtime errors and configuration inconsistencies.
@@ -202,7 +204,10 @@ New `cluster.description` configuration option allows users to set and display c
 #### Core MQTT Functionalities
 
 - [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
+
 - [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
+
+- [#15783](https://github.com/emqx/emqx/pull/15783) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
 
 #### Access Control
 
@@ -216,15 +221,27 @@ New `cluster.description` configuration option allows users to set and display c
 #### Data Integration
 
 - [#15522](https://github.com/emqx/emqx/pull/15522) Fixed an issue where Snowflake Connector would fail to start correctly if `username` was not provided.
+
 - [#15476](https://github.com/emqx/emqx/pull/15476) Fixed a missing callback in `emqx_connector_aggreg_delivery` that caused a crash when formatting delivery process status for aggregated-mode Actions (e.g., Azure Blob Storage, Snowflake, S3 Tables).
   This occurred during failures or when inspecting delivery processes with `gen_server:format_status/1`. The issue is now resolved, and more detailed delivery status information will be logged.
+
 - [#15394](https://github.com/emqx/emqx/pull/15394) Fixed a rare race condition where Action metrics could become inconsistent due to unexpected asynchronous replies.
+
 - [#15647](https://github.com/emqx/emqx/pull/15647) Fixed an issue where a MongoDB Connector was marked as `Disconnected` if the MongoDB account specified in the connector configuration lacked privileges to perform `find` queries on the `foo` collection.
+
 - [#15603](https://github.com/emqx/emqx/pull/15603) Fixed an issue in the MQTT bridge where a stale connection could be shown as `Connected` and would not automatically reconnect.
+
 - [#15383](https://github.com/emqx/emqx/pull/15383) Fixed a potential resource leak in MQTT bridge. When a bridge failed to start, the topic index table was not properly cleaned up.
+
 - [#15786](https://github.com/emqx/emqx/pull/15786) Fixed a potential atom leak when probing RocketMQ Connectors.
+
 - [#15806](https://github.com/emqx/emqx/pull/15806) Improved validation for Oracle Actions during creation. Previously, in rare cases, an Action containing an invalid SQL statement could be added successfully.
+
 - [#15848](https://github.com/emqx/emqx/pull/15848) Improved error reporting for the Oracle Connector. When the connector becomes disconnected, its status now includes a more specific reason, making diagnostics easier.
+
+- [#15693](https://github.com/emqx/emqx/pull/15693) Postgres-based bridges were patched to avoid leaking connection pools. Previously, depending on race conditions when initializing the pool, if one later deleted the Connector, the pool could still be present.
+
+- [#15543](https://github.com/emqx/emqx/pull/15543) Fixed an issue in HTTP Server data integration when sending large payloads. If the payload size was 10 MB or more, the HTTP request could fail.
 
 #### Smart Data Hub
 
@@ -268,20 +285,21 @@ New `cluster.description` configuration option allows users to set and display c
 
 #### Observability
 
-- [#15931](https://github.com/emqx/emqx/pull/15931) Fixed two issues related to the EMQX alarm system:
-
-  - Resolved a bug where spurious but harmless error logs could appear during node startup, such as:
-
+- [#15931](https://github.com/emqx/emqx/pull/15931) Resolved a bug where spurious but harmless error logs could appear during node startup:
     ```
     [error] Generic event handler emqx_alarm_handler crashed ...
     Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
     ```
 
-  - Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
+- [#15973](https://github.com/emqx/emqx/pull/15973) Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
 
 #### MQTT over QUIC
 
 - [#15614](https://github.com/emqx/emqx/pull/15614) QUIC Listener: When TLS key logging (`SSLKEYLOGFILE`) is enabled, EMQX now dumps TLS keys even if the handshake fails.
+
+#### Cluster
+
+- [#16021](https://github.com/emqx/emqx/pull/16021) Fixed issues that occasionally prevented the DS Raft backend from functioning correctly when an existing node joined a new cluster and subsequently became member of DS replica sets.
 
 #### Cluster Linking
 
