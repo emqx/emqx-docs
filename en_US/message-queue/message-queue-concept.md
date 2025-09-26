@@ -81,34 +81,7 @@ The following main components are involved:
 
 The diagram below shows the data flow between major Message Queue components:
 
-```
-+-----------------------+                                     +-----------------------------+
-| Message Queue DS DB   |                                     | Message Queue State Storage |
-+-----------------------+                                     +-----------------------------+
-      ^      ^                                                    ^                      ^
-      |      |                                                    | Persist              |
-      |      |                                                    | progress             |
-      |      |              Subscription on topic data            |                      |
-      |      |                  via emqx_ds_client          +-------------+              |
-      |      +--------------------------------------------->| MQ Consumer |              |
-      |                                                     |             |              |
-      | Write transaction                                   +-------------+              | Message metadata
-      |                                                           ^                      | persist/lookup
-      |                                                           | Protocol                |
-      |                                                           V                      |
-+---------------------------+                         +----------------------------+     |
-| Client connection         |                         | Client connection          |
-| (Publishing channel)      |                         | (Subscribing channel)      |     |
-|                           |                         | [MQ subscription registry] |     |
-+---------------------------+                         +----------------------------+     |
-      |                                                                    |             |
-      |                                                              Queue |             |
-      |                                                             lookup V             |
-      |                                                                  +--------------------------+
-      |        Fast queue lookup in the index                            | MQ Registry              |
-      +----------------------------------------------------------------> |                          |
-                                                                         +--------------------------+
-```
+![message-queue-data-flow](./assets/message_queue_data_flow.png)
 
 ### Publishing Workflow
 

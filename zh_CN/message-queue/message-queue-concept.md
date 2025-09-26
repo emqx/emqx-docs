@@ -87,34 +87,7 @@ EMQX 中的消息队列作为一个松耦合的扩展，通过内部钩子（Hoo
 
 下图展示了消息队列各主要组件之间的数据流动关系：
 
-```
-+-----------------------+                                     +-----------------------------+
-| Message Queue DS DB   |                                     | Message Queue State Storage |
-+-----------------------+                                     +-----------------------------+
-      ^      ^                                                    ^                      ^
-      |      |                                                    | Persist              |
-      |      |                                                    | progress             |
-      |      |              Subscription on topic data            |                      |
-      |      |                  via emqx_ds_client          +-------------+              |
-      |      +--------------------------------------------->| MQ Consumer |              |
-      |                                                     |             |              |
-      | Write transaction                                   +-------------+              | Message metadata
-      |                                                           ^                      | persist/lookup
-      |                                                           | Protocol                |
-      |                                                           V                      |
-+---------------------------+                         +----------------------------+     |
-| Client connection         |                         | Client connection          |
-| (Publishing channel)      |                         | (Subscribing channel)      |     |
-|                           |                         | [MQ subscription registry] |     |
-+---------------------------+                         +----------------------------+     |
-      |                                                                    |             |
-      |                                                              Queue |             |
-      |                                                             lookup V             |
-      |                                                                  +--------------------------+
-      |        Fast queue lookup in the index                            | MQ Registry              |
-      +----------------------------------------------------------------> |                          |
-                                                                         +--------------------------+
-```
+![message_queue_data_flow](./assets/message_queue_data_flow.png)
 
 ### 发布流程
 
