@@ -2,50 +2,52 @@
 
 ## Deprecated Packages
 
-- [#15939](https://github.com/emqx/emqx/pull/15939) Stop releasing packages for systems which have already reached end-of-life:
+- [#15939](https://github.com/emqx/emqx/pull/15939) Stopped releasing packages for systems that have already reached end-of-life:
   - Enterprise Linux (CentOS) 7
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
 ## Durable Sessions
 
-If durable sessions feature was not previously enabled, the following information can be ignored.
+If the durable sessions feature was not enabled before, you can ignore this section.
 
-6.0 release changes the internal representation of the durable sessions and messages.
-If the cluster was previously running on version 5.x with the feature enabled,
-it must be recreated from the clean state.
+In EMQX 6.0, the internal representation of durable sessions and their messages has changed. Clusters previously running on version 5.x with durable sessions enabled must be recreated from a clean state when upgrading to 6.0.
 
-- [#15496](https://github.com/emqx/emqx/pull/15496) State of the durable sessions has been moved from Mnesia to a new database based on EMQX durable storage.
-  As a consequence, state of the durable sessions created prior to 6.0.0 release will be lost during the move.
-
-  This solves a problem with session state corruption that could occur due to insufficient transaction isolation of Mnesia (as reported in [#14039](https://github.com/emqx/emqx/issues/14039)).
-  This change also improves general performance of durable sessions thanks to sharding and more efficient data representation.
+- [#15496](https://github.com/emqx/emqx/pull/15496) The state of durable sessions has been migrated from Mnesia to a new database built on EMQX durable storage.
+  - As a result, all durable session states created before 6.0.0 will be lost during the migration.
+  - This change resolves potential session state corruption caused by Mnesia’s limited transaction isolation (see [#14039](https://github.com/emqx/emqx/issues/14039)).
+  - It also improves the performance and scalability of durable sessions through sharding and a more efficient data representation.
 
 
-## Will message behavior
+## Will Message Behavior
 
-Authorization checks that decide whether the durable session is eligible to publish the will message now run at the moment of client disconnection.
-Previously they ran after expiration of `Will-Delay-Interval`.
+Authorization checks for durable sessions are now performed at the moment of client disconnection to determine whether the will message may be published.
+
+Previously, these checks were deferred until after the configured `Will-Delay-Interval` had expired.
 
 ## Configuration Changes
 
-- `durable_sessions.heartbeat_interval` parameter has been renamed to `durable_sessions.checkpoint_interval`.
+**Durable Sessions**
 
-- `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` parameters have been removed, as sessions have become fully event-based.
+- `durable_sessions.heartbeat_interval` has been renamed to `durable_sessions.checkpoint_interval`.
+- `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` have been removed, as sessions are now fully event-driven.
+- `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` have been removed as obsolete.
+- [#15734](https://github.com/emqx/emqx/pull/15734) Improved the reliability and throughput of durable sessions.
 
-- `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` parameters have been removed as obsolete.
+**Durable Storage**
 
-- `durable_storage.messages.n_sites` parameter has been renamed to `durable_storage.n_sites`.
-  This parameter has become common for all durable storages.
+- `durable_storage.messages.n_sites` has been renamed to `durable_storage.n_sites`, which now applies to all durable storage types.
+- Added new configuration entries for `durable_storage.sessions` and `durable_storage.timers`.
 
-- Added configuration for new durable storages: `durable_storage.sessions` and `durable_storage.timers`.
-- [#15613](https://github.com/emqx/emqx/pull/15613) Stopped releasing packages for Debian 10.
+**RocketMQ**
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) The `parameters.strategy` field in the RocketMQ Action no longer accepts key templates (which implicitly selected the `key_dispatch` strategy).
-  Instead, users must explicitly set `parameters.strategy = key_dispatch` and provide the key template in `parameters.key`.
+- [#15635](https://github.com/emqx/emqx/pull/15635) The `parameters.strategy` field no longer accepts key templates (which previously implied the `key_dispatch` strategy).
+  Instead, set `parameters.strategy = key_dispatch` explicitly and specify the key template in `parameters.key`.
 
-- [#15734](https://github.com/emqx/emqx/pull/15734) Improved reliability and throughput of durable sessions.
+**Platform Support**
+
+- [#15613](https://github.com/emqx/emqx/pull/15613) Discontinued package builds for Debian 10.
 
 ## Rate Limit
 
-- [#15743](https://github.com/emqx/emqx/pull/15743) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the pre-5.9.0 behavior. As a result, configurations from versions 5.9.0, 5.9.1 and 5.10.0 are incompatible: specified rates must be scaled up by the number of acceptors configured for respective listeners.
+- [#15743](https://github.com/emqx/emqx/pull/15743) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the behavior before 5.9.0. As a result, configurations from versions 5.9.0, 5.9.1, and 5.10.0 are incompatible: the specified rate values must be scaled up by the number of acceptors configured for each listener to preserve the same effective limits.

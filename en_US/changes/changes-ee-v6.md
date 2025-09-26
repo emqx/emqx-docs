@@ -8,17 +8,51 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Feature Highlights
 
-- **Major Version Release**: EMQX Enterprise 6.0.0 is the first release of the EMQX Enterprise version 6 series, bringing significant architectural improvements and new capabilities.
-- **Enhanced AWS Integration**: Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
-- **Elixir Support**: All packages now ship with Elixir support through the Mix build system, opening EMQX to the Elixir community and enabling better tooling with IEx console.
-- **New Data Integrations**:
-  - BigQuery Connector and Action for appending data to Google BigQuery
-  - Snowpipe Streaming upload mode for Snowflake Action (preview feature)
-  - Parquet format support for S3Tables Action
-- **Durable Storage Optimizations**: Significant RAM usage and storage efficiency improvements with new RocksDB configuration options and ASN1 serialization schema as default.
-- **Enhanced LDAP Support**: LDAP authorization now supports extended ACL rules in JSON format, and LDAP authentication can fetch ACL rules directly from LDAP with client-side caching.
-- **Improved Tracing**: Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`), with optimized implementation to prevent atom leaks.
-- **Cluster Management**: New `cluster.description` configuration option allows users to set and display custom cluster descriptions in the EMQX Dashboard.
+EMQX Enterprise 6.0.0 is the first release of the EMQX Enterprise version 6 series, bringing significant architectural improvements and new capabilities.
+
+#### Message Queue
+
+<!-- to be added-->
+
+#### Namespace
+
+<!-- to be added-->
+
+#### Durable Storage
+
+Significant RAM usage and storage efficiency improvements with new RocksDB configuration options and ASN1 serialization schema as default.
+
+#### New Data Integrations:
+
+- Google BigQuery
+- AWS AlloyDB
+- CockroachDB
+- AWS Redshift
+
+#### Enhanced Integration: 
+
+- **AWS**: 
+  - Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
+  - Parquet format support for S3 Tables Action.
+
+- **RabbitMQ**: Define custom Headers and Properties Templates in RabbitMQ Sink to enhance message routing and compatibility within RabbitMQ.
+- **Snowflake**: Snowpipe Streaming upload mode for Snowflake Action (preview feature).
+
+#### Elixir Support
+
+All packages now ship with Elixir support through the Mix build system, opening EMQX to the Elixir community and enabling better tooling with IEx console.
+
+#### Enhanced LDAP Support
+
+LDAP authorization now supports extended ACL rules in JSON format, and LDAP authentication can fetch ACL rules directly from LDAP with client-side caching.
+
+#### Improved Tracing
+
+Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`), with optimized implementation to prevent atom leaks.
+
+#### Cluster Management
+
+New `cluster.description` configuration option allows users to set and display custom cluster descriptions in the EMQX Dashboard.
 
 ### Enhancements
 
@@ -67,9 +101,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Data Integration
 
-- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX supports data integration with [BigQuery](https://docs.mqttce.com/en/emqx/v6.0/data-integration/bigquery.html). 
+- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX supports data integration with BigQuery. 
 
-- [#15401](https://github.com/emqx/emqx/pull/15401) Added support for the Snowpipe Streaming upload mode in the [Snowflake Action](https://docs.mqttce.com/en/emqx/v6.0/data-integration/snowflake.html#create-a-rule-with-snowflake-sink).
+- [#15401](https://github.com/emqx/emqx/pull/15401) Added support for the Snowpipe Streaming upload mode in the Snowflake Action.
   *Note: Snowpipe Streaming is currently a* [*preview feature*](https://docs.snowflake.com/en/release-notes/preview-features) *and is only available for Snowflake accounts hosted on AWS.*
 
 - [#15387](https://github.com/emqx/emqx/pull/15387) Added rate limiting to Kinesis Producer Connector and Action health checks to comply with AWS API quotas and improve cluster behavior.
@@ -80,21 +114,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Also introduced a new `resource_opts.health_check_interval_jitter`, which adds a uniform random delay to `resource_opts.health_check_interval` to reduce the chance of multiple Actions under the same Connector running health checks at the same time.
 
-- [#15371](https://github.com/emqx/emqx/pull/15371) Added `tags` fields to the responses of `GET /actions_summary` and to the `fallback_actions` section returned by `GET /actions/:id`. This improves consistency and allows clients to retrieve tag metadata for actions and fallback actions.
-
-- [#15360](https://github.com/emqx/emqx/pull/15360) Added support for writing data files in Parquet format in the S3 Tables Action.
-
 - [#15176](https://github.com/emqx/emqx/pull/15176) Upgraded the GreptimeDB Connector client and supported an optional new parameter `ttl` to set the default time-to-live for automatically created tables.
 
-- [#15649](https://github.com/emqx/emqx/pull/15649) EMQX supports data integration with [AWS AlloyDB](https://docs.mqttce.com/en/emqx/v6.0/data-integration/alloydb.html), [CockroachDB](https://docs.mqttce.com/en/emqx/v6.0/data-integration/cockroachdb.html) and [AWS Redshift](https://docs.mqttce.com/en/emqx/v6.0/data-integration/redshift.html).
+- [#15649](https://github.com/emqx/emqx/pull/15649) EMQX supports data integration with AWS AlloyDB, CockroachDB, and AWS Redshift.
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) Added new `key` and `tag` template fields in the [RocketMQ Action](https://docs.mqttce.com/en/emqx/v6.0/data-integration/data-bridge-rocketmq.html#create-a-rule-with-rocketmq-sink-for-message-storage), allowing customization of the message's key and tag. Also, introduced a new `key_dispatch` option for the `Produce Strategy` field. 
+- [#15635](https://github.com/emqx/emqx/pull/15635) Added new `key` and `tag` template fields in the RocketMQ Action, allowing customization of the message's key and tag. Also, introduced a new `key_dispatch` option for the `Produce Strategy` field. 
 
-- [#15621](https://github.com/emqx/emqx/pull/15621) Now, `access_key_id` and `secret_access_key` are optional fields for the S3Tables Connector.  If omitted, they'll be obtained from the Instance Metadata Service v2 APIs from the EC2 instance where EMQX is deployed.
-
-- [#15542](https://github.com/emqx/emqx/pull/15542) Upgraded our `erlcoud` library to `3.8.3.0`.  This allows users to set up an [S3 Connector](https://docs.mqttce.com/en/emqx/v6.0/data-integration/s3.html#create-a-connector) without specifying Access Key Id and Secret Access Key, so long as the EC2 instance EMQX is running in has the correct IAM permissions to read/write to the configured bucket(s).
-
-- [#15583](https://github.com/emqx/emqx/pull/15583) [#15585](https://github.com/emqx/emqx/pull/15585) Updated the `brod` client to version 4.4.4, expanding support for a wider range of Kafka APIs. This update addresses the deprecation of `JoinGroups` API versions `v0 `-`v1`.
+- [#15621](https://github.com/emqx/emqx/pull/15621) Now, `access_key_id` and `secret_access_key` are optional fields for the S3 Tables Connector.  If omitted, they'll be obtained from the Instance Metadata Service v2 APIs from the EC2 instance where EMQX is deployed.
 
 - [#15628](https://github.com/emqx/emqx/pull/15628) Removed HStreamDB data integration.
 
@@ -153,11 +179,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Performance
 
-- [#15536](https://github.com/emqx/emqx/pull/15536) Disabled the `node.global_gc_interval` configuration by default to improve overall performance stability, as it caused CPU fluctuations and higher message latency while providing little benefit over Erlang’s built-in garbage collector. also in 5.8.8 
-- [#15539](https://github.com/emqx/emqx/pull/15539) Optimized Erlang VM parameters to improve performance and stability:
-  - Increased buffer size for distributed channels to 32 MB (`+zdbbl 32768`) to prevent `busy_dist_port` alarms during intensive Mnesia operations.
-  - Disabled scheduler busy-waiting (`+sbwt none +sbwtdcpu none +sbwtdio none`) to lower CPU usage reported by the operating system.
-  - Set scheduler binding type to `db` (`+stbt db`) to reduce message latency. Also in 5.8.8 
 - [#15451](https://github.com/emqx/emqx/pull/15451) Introduced an experimental `socket` backend for TCP listeners, aimed at improving message processing latency and reducing compute resource usage. The feature can be enabled with the new `tcp_backend` listener option.
 
 #### Build and Tooling
@@ -182,32 +203,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
 - [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
-- [#15416](https://github.com/emqx/emqx/pull/15416) Fixed occasional warning-level log events and crashes during session expiration of WebSocket connections. This issue was introduced by recent WebSocket performance improvements. If did not affect broker capacity, but produced log entries like the following:
-  - `error: {function_clause,[{gen_tcp,send,[closed,[]],[{file,“gen_tcp.erl”},{line,966}]},{cowboy_websocket_linger,commands,3,[{file,“cowboy_websocket_linger.erl”},{line,665}]},...`
-  - `message: {tcp,#Port<0.364>,<<136,130,...>>}, msg: emqx_session_mem_unknown_message`
-
-#### Deployment
-
-- [#15580](https://github.com/emqx/emqx/pull/15580) Added a new `emqxLicenseSecretRef` variable to the EMQX Enterprise Helm chart. This allows users to specify a Kubernetes Secret containing the EMQX license key, so the license is applied automatically.
-
-  This replaces the non-functional `emqxLicenseSecretName` variable, which created and mounted a secret file but did not pass the license to EMQX.
-
-- [#15553](https://github.com/emqx/emqx/pull/15553) Fixed an issue in the Helm chart where deploying EMQX with default values started multiple replicas and caused all nodes except one to crash. The chart now defaults to a single replica, since clustered deployments require an Commercial License.
-
-#### Security
-
-- [#15581](https://github.com/emqx/emqx/pull/15581) Upgraded Erlang/OTP version from 26.2.5.2 to 26.2.5.14. This upgrade includes two TLS-related fixes from OTP that affect EMQX:
-  - Fixed a crash in TLS connections caused by a race condition during certificate renewal.
-  - Added support for RSA certificates signed with RSASSA-PSS parameters. Previously, such certificates could cause TLS handshakes to fail with a `bad_certificate` / `invalid_signature` error.
 
 #### Access Control
 
 - [#15489](https://github.com/emqx/emqx/pull/15489) Fixed OIDC issuer URL validation in Single Sign-On (SSO) settings. Previously, issuer URLs containing a port number (for example,
   `https://xxxxxxxx:8443/webman/sso/.well-known/openid-configuration`) were rejected with a `bad_port_number` error. These URLs are now supported.
-
-#### Clustering
-
-- [#15518](https://github.com/emqx/emqx/pull/15518) Resolved a race condition that could cause accumulating inconsistencies in the routing table and shared subscription state in the cluster when a large number of shared subscribers disconnect simultaneously.
 
 #### Rule Engine
 
@@ -278,10 +278,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     ```
 
   - Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
-
-#### Gateway
-
-- [#15342](https://github.com/emqx/emqx/pull/15342) Fixed a crash in the NATS gateway caused by client info override templates referencing undefined packet fields. The system now returns an empty binary instead of undefined atom.
 
 #### MQTT over QUIC
 

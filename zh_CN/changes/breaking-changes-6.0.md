@@ -7,18 +7,16 @@
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
-## 持久会话
+## MQTT 会话持久化
 
-如果之前未启用持久会话功能，可以忽略以下信息。
+如果之前未启用 MQTT 会话持久化功能，可以忽略本节内容。
 
-6.0 版本更改了持久会话和消息的内部表示。
-如果集群先前在 5.x 版本上运行并启用了该功能，则必须从全新状态重新创建。
+在 EMQX 6.0 中，会话持久化及其消息的内部表示方式已发生变更。对于在 5.x 版本中启用了会话持久化的集群，在升级到 6.0 时必须重新创建一个不带历史数据的集群。
 
-- [#15496](https://github.com/emqx/emqx/pull/15496) 持久会话的状态已从 Mnesia 移至基于 EMQX 持久存储的新数据库。
-  因此，在 6.0.0 版本发布之前创建的持久会话状态将在迁移过程中丢失。
-
-  这解决了由于 Mnesia 事务隔离不足可能导致的会话状态损坏问题（如 [#14039](https://github.com/emqx/emqx/issues/14039) 中报告）。
-  此更改还通过分片和更高效的数据表示提高了持久会话的总体性能。
+- [#15496](https://github.com/emqx/emqx/pull/15496) 会话持久化的状态已从 Mnesia 迁移到基于 EMQX 持久存储的新数据库。
+  - 因此，6.0.0 之前创建的所有会话持久化状态在迁移过程中都会丢失。
+  - 此改动解决了由于 Mnesia 事务隔离性不足而可能导致的会话状态损坏问题（见 [#14039](https://github.com/emqx/emqx/issues/14039)）。
+  - 同时通过分片和更高效的数据表示方式提升了会话持久化的性能与可扩展性。
 
 
 ## 遗嘱消息行为
@@ -28,21 +26,26 @@
 
 ## 配置变更
 
-- `durable_sessions.heartbeat_interval` 参数已重命名为 `durable_sessions.checkpoint_interval`。
+**会话持久化**
 
-- `durable_sessions.idle_poll_interval` 和 `durable_sessions.renew_streams_interval` 参数已被移除，因为会话已变为完全基于事件。
+- `durable_sessions.heartbeat_interval` 已更名为 `durable_sessions.checkpoint_interval`。
+- `durable_sessions.idle_poll_interval` 和 `durable_sessions.renew_streams_interval` 已被移除，因为会话现已完全事件驱动。
+- `durable_sessions.session_gc_interval` 和 `durable_sessions.session_gc_batch_size` 已作为过时参数移除。
+- [#15734](https://github.com/emqx/emqx/pull/15734) 提升了会话持久化的可靠性和吞吐量。
 
-- `durable_sessions.session_gc_interval` 和 `durable_sessions.session_gc_batch_size` 参数因过时而被移除。
+**持久存储**
 
-- `durable_storage.messages.n_sites` 参数已重命名为 `durable_storage.n_sites`。此参数已成为所有持久存储的通用参数。
+- `durable_storage.messages.n_sites` 已更名为 `durable_storage.n_sites`，该参数现适用于所有持久存储类型。
+- 新增了 `durable_storage.sessions` 和 `durable_storage.timers` 配置项。
 
-- 为新的持久存储添加了配置：`durable_storage.sessions` 和 `durable_storage.timers`。
-- [#15613](https://github.com/emqx/emqx/pull/15613) 停止为 Debian 10 发布软件包。
+**RocketMQ**
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) RocketMQ 动作中的 `parameters.strategy` 字段不再接受密钥模板（该模板隐式选择了 `key_dispatch` 策略）。
-  用户必须显式设置 `parameters.strategy = key_dispatch` 并在 `parameters.key` 中提供密钥模板。
+- [#15635](https://github.com/emqx/emqx/pull/15635) `parameters.strategy` 字段不再接受键模板（此前会隐式选择 `key_dispatch` 策略）。
+  现在必须显式设置 `parameters.strategy = key_dispatch`，并在 `parameters.key` 中指定键模板。
 
-- [#15734](https://github.com/emqx/emqx/pull/15734) 提高了持久会话的可靠性和吞吐量。
+**平台支持**
+
+- [#15613](https://github.com/emqx/emqx/pull/15613) 停止提供 Debian 10 的安装包构建。
 
 ## 速率限制
 
