@@ -20,7 +20,7 @@ for lang in en zh; do
   SWAGGER_INPUT="/tmp/swagger-ee-${lang}.json"
   REDOCLY_TARGET="redocly/ee-${lang}.json"
   curl -o "${SWAGGER_INPUT}" http://127.0.0.1:$EMQX_API_PORT/api-docs/swagger.json
-  jq --indent 2 'del(.paths[] | .[] | select(.deprecated == true))' > "${REDOCLY_TARGET}" < "${SWAGGER_INPUT}"
+  jq -S --indent 2 'del(.paths[] | .[] | select(.deprecated == true))' > "${REDOCLY_TARGET}" < "${SWAGGER_INPUT}"
   # replace docker ip 172.17.0.* with 127.0.0.1
   sed -i 's/172\.17\.0\.\([0-9]\{1,3\}\)/127.0.0.1/g' "${REDOCLY_TARGET}"
   docker logs "$CID"
