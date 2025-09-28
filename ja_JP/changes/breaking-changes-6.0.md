@@ -3,6 +3,7 @@
 ## 非推奨のパッケージ
 
 - [#15939](https://github.com/emqx/emqx/pull/15939) ライフサイクルが終了したシステム向けのパッケージのリリースを停止します：
+  - Debian 10 (Buster)
   - Enterprise Linux (CentOS) 7
   - Ubuntu 20.04
   - macOS 13 (Ventura)
@@ -13,6 +14,7 @@
 
 6.0 リリースでは、永続セッションとメッセージの内部表現が変更されます。
 以前にクラスターがバージョン 5.x でこの機能を有効にして実行されていた場合、クリーンな状態から再作成する必要があります。
+詳細なローリングアップグレード手順については、[ローリングアップグレードドキュメント](https://docs.emqx.com/ja/emqx/latest/deploy/rolling-upgrades.html#emqx-enterprise-rolling-upgrade) を参照してください。
 
 - [#15496](https://github.com/emqx/emqx/pull/15496) 永続セッションの状態は Mnesia から EMQX の永続ストレージに基づく新しいデータベースに移動されました。
   その結果、6.0.0 リリースより前に作成された永続セッションの状態は、移動中に失われます。
