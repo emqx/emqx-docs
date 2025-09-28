@@ -18,7 +18,7 @@ Message Queues support offline message storage, last-value retention, and flexib
 
 #### Namespace
 
-The Namespace feature improves multi-tenancy and observability with namespace-level roles in the Dashboard. Users are restricted to their own resources (e.g., Rules, Connectors) with fine-grained permissions such as Administrator or Viewer, and roles can be managed via the Dashboard, API, or CLI, simplifying multi-tenant operations.
+The Namespace feature improves multi-tenancy and observability with namespace-level roles in the Dashboard. Users are restricted to their own resources (e.g., Rules, Actions, and Connectors) with fine-grained permissions such as Administrator or Viewer, and roles can be managed via the Dashboard, API, or CLI, simplifying multi-tenant operations.
 
 Session count tracking has also been optimized: counts refresh on demand when there are fewer than 1,000 connections, and every 5 seconds otherwise. During rolling upgrades from older versions, counts may temporarily appear inconsistent, but will stabilize once all nodes are updated.
 
@@ -37,7 +37,7 @@ New configuration options provide finer control over RocksDB memory usage and pe
 
 #### Enhanced Integration
 
-- **AWS**: 
+- **AWS**:
   - Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
   - Parquet format support for S3 Tables Action.
 
@@ -54,7 +54,8 @@ LDAP authorization now supports extended ACL rules in JSON format, and LDAP auth
 
 #### Improved Tracing
 
-Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`), with optimized implementation to prevent atom leaks.
+Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`).
+After `max_file_size` is reached, the trace log will rotate to a new file instead of halting.
 
 #### Cluster Management
 

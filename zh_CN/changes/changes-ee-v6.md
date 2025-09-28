@@ -52,7 +52,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 #### 改进的追踪功能
 
-新增可配置的追踪数量上限（`trace.max_traces`）和追踪文件大小上限（`trace.max_file_size`），并优化了实现以防止 atom 泄漏。
+新增可配置的追踪数量上限（`trace.max_traces`）和追踪文件大小上限（`trace.max_file_size`）。
+当达到 max_file_size 时，跟踪日志将轮转到新文件，而不是停止。
 
 #### 集群管理
 
