@@ -124,69 +124,88 @@ On the **Permissions** page, you can edit or delete existing rules:
 
 ### Create Authorization Rules via REST API
 
-Rules are also managed through `/api/v5/authorization/sources/built_in_database` API endpoints.
+You can also manage authorization rules through the REST API. The API endpoints correspond directly to the Dashboard’s three scopes: Username, Client ID, and All Users.
 
-Each rule can be applied to:
-* A specific client by client ID
-  *  `/api/v5/authorization/sources/built_in_database/clientid`
-* A specific client by username
-  * `/api/v5/authorization/sources/built_in_database/username` 
+#### Endpoints
 
-* all clients
-  *  `/api/v5/authorization/sources/built_in_database/all` 
+- **Username rules**
+  - `POST /authorization/sources/built_in_database/rules/users`: Create rules for a user.
+  - `PUT /authorization/sources/built_in_database/rules/users/:username`: Replace rules for a specific user.
+- **Client ID rules**
+  - `POST /authorization/sources/built_in_database/rules/clients`: Create rules for a client.
+  - `PUT /authorization/sources/built_in_database/rules/clients/:clientid`: Replace rules for a specific client.
+- **All Users rules**
+  - `POST /authorization/sources/built_in_database/rules/all`: Create or replace global rules that apply to all clients/users.
+  - There is no `PUT` request, just `POST` updating or creating all the rules.
 
-#### Using Regular Expressions and IP Ranges
-
-In addition to exact matches for client ID or username, you can define rules for groups of clients using regular expressions or IP address ranges. This allows you to apply the same ACLs to multiple clients that share the same naming pattern or network location, avoiding the need to create duplicate rules multiple times.
-
-Two new fields are available for this purpose:
-
-| Field           | Description                                                  |
-| --------------- | ------------------------------------------------------------ |
-| **scope**       | The match type for the rule. Options: `all` (default), `clientid_re` (client ID regex), `username_re` (username regex), `ipaddress` (IP or CIDR). |
-| **scope_value** | The value to match against, based on the `scope` type. For regex, provide a regular expression (e.g., `^emqx-.*`). For `ipaddress`, use exact IP or CIDR notation (e.g., `192.168.1.0/24`). |
-
-Below is an example of how to create rules for a client (`client1`):
+#### Example: Create Rules for a User
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
   -H 'Content-Type: application/json' \
   -d '[
-  {
-    "clientid": "client1",
-    "scope": "username_re",
-    "scope_value": "^emqx-.*",
-    "rules": [
-      {
-        "permission": "allow",
-        "action": "publish",
-        "topic": "v1/devices/#"
-      },
-      {
-        "permission": "deny",
-        "action": "all",
-        "topic": "v1/#"
-      },
-      {
-        "permission": "allow",
-        "action": "subscribe",
-        "topic": "v1/devices/+/robot_state"
-      }
-    ]
-  }
-]'
+    {
+      "username": "user1",
+      "rules": [
+        {
+          "topic": "v1/devices/#",
+          "permission": "allow",
+          "action": "publish",
+          "qos": [0,1,2],
+          "retain": "all"
+        }
+      ]
+    }
+  ]'
 ```
 
-Each rule contains:
+#### Example: Update Rules for a User
 
-- `clientid`: Exact Client ID to which this rule applies.
-- `scope`: The additional matching filter. `scope = "username_re"` with `scope_value = "^emqx-.*"` means these rules only apply to usernames starting with `emqx-` *for this client*.
+```bash
+curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "user1",
+    "rules": [
+      {
+        "topic": "v1/devices/+/state",
+        "permission": "allow",
+        "action": "subscribe",
+        "qos": [0,1],
+        "retain": "all"
+      }
+    ]
+  }'
+```
 
-* `permission`: Whether to allow or deny a certain type of operation request from the current client/user; optional values: `allow` or `deny`;
-* `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic`: Configure the corresponding topic to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
-* `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g., `[0, 1]`, `[1, 2]`. The default is all QoS levels.
-* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+#### Example: Create Rules for All Users
+
+```bash
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+  -H 'Content-Type: application/json' \
+  -d '[
+    {
+      "rules": [
+        {
+          "topic": "v1/#",
+          "permission": "deny",
+          "action": "all"
+        }
+      ]
+    }
+  ]'
+```
+
+#### Rule Fields
+
+Each rule can include the following fields:
+
+| Field                       | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| **username** / **clientid** | The exact username or client ID this rule applies to (depending on endpoint). |
+| **topic**                   | The MQTT topic this rule applies to. Supports wildcards (`+`, `#`) and [topic placeholders](./authz.md#topic-placeholders). |
+| **permission**              | Whether to allow or deny the operation request from the current client/user. Options: `allow`, `deny`. |
+| **action**                  | Operation type. Options: `publish`, `subscribe`, `all`.      |
+| **qos**                     | (Optional) Allowed QoS levels. Example: `[0,1]`. Default: all levels. |
+| **retain**                  | (Optional) Whether the rule applies to retained messages. Options: `true`, `false`, `all`. |
 

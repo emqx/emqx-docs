@@ -124,68 +124,87 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
 
 ### 通过 REST API 创建授权检查规则
 
-您也可以通过 `/api/v5/authorization/sources/built_in_database` 系列 API 接口管理规则。
+您也可以通过 REST API 来管理授权规则。API 的端点与 Dashboard 中的三种作用域直接对应：用户名、客户端 ID 和全部用户。
 
-每条规则可以应用于：
+#### 接口端点
 
-- 按客户端 ID指定的客户端
-   `/api/v5/authorization/sources/built_in_database/clientid`
-- 按用户名指定的客户端
-   `/api/v5/authorization/sources/built_in_database/username`
-- 所有客户端
-   `/api/v5/authorization/sources/built_in_database/all`
+- **用户名规则**
+  - `POST /authorization/sources/built_in_database/rules/users`：为指定用户创建规则。
+  - `PUT /authorization/sources/built_in_database/rules/users/:username`：替换某个用户的规则。
+- **客户端 ID 规则**
+  - `POST /authorization/sources/built_in_database/rules/clients`：为指定客户端创建规则。
+  - `PUT /authorization/sources/built_in_database/rules/clients/:clientid`：替换某个客户端的规则。
+- **全部用户规则**
+  - `POST /authorization/sources/built_in_database/rules/all`：创建或替换适用于所有客户端/用户的全局规则。
+  - 不支持 `PUT` 请求，仅支持使用 `POST` 来更新或创建所有规则。
 
-#### 使用正则表达式和 IP 地址范围
-
-除了精确匹配客户端 ID 或用户名外，您还可以使用正则表达式或 IP 地址范围为一组客户端定义规则。您可以为具有相同命名模式或处于相同网络位置的多个客户端应用相同 ACL，避免重复多次创建规则。
-
-为此新增了两个字段：
-
-| 字段            | 说明                                                         |
-| --------------- | ------------------------------------------------------------ |
-| **scope**       | 规则的匹配类型。可选值：`all`（默认）、`clientid_re`（客户端 ID 表达式）、`username_re`（用户名表达式）、`ipaddress`（IP 或 CIDR）。 |
-| **scope_value** | 根据 `scope` 类型匹配的值。对于正则表达式，填写正则表达式（例如：`^emqx-.*`）；对于 `ipaddress`，填写精确 IP 或 CIDR 表示法（例如：`192.168.1.0/24`）。 |
-
-比如您可通过如下代码针对 `client1` 客户端创建授权规则：
+#### 示例：为用户创建规则
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
   -H 'Content-Type: application/json' \
   -d '[
-  {
-    "clientid": "client1",
-    "scope": "username_re",
-    "scope_value": "^emqx-.*",
-    "rules": [
-      {
-        "permission": "allow",
-        "action": "publish",
-        "topic": "v1/devices/#"
-      },
-      {
-        "permission": "deny",
-        "action": "all",
-        "topic": "v1/#"
-      },
-      {
-        "permission": "allow",
-        "action": "subscribe",
-        "topic": "v1/devices/+/robot_state"
-      }
-    ]
-  }
-]'
+    {
+      "username": "user1",
+      "rules": [
+        {
+          "topic": "v1/devices/#",
+          "permission": "allow",
+          "action": "publish",
+          "qos": [0,1,2],
+          "retain": "all"
+        }
+      ]
+    }
+  ]'
 ```
 
-每条规则应包括如下信息：
+#### 示例：为用户更新规则
 
-- `clientid`：该规则配置所适用的精确客户端 ID。
-- `scope`：额外的匹配过滤条件。`scope = "username_re"` 且 `scope_value = "^emqx-.*"` 表示这些规则仅适用于**该客户端**下用户名以 `emqx-` 开头的连接。
+```bash
+curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "user1",
+    "rules": [
+      {
+        "topic": "v1/devices/+/state",
+        "permission": "allow",
+        "action": "subscribe",
+        "qos": [0,1],
+        "retain": "all"
+      }
+    ]
+  }'
+```
 
-- `permission`：是否允许当前客户端/用户的某类操作请求；可选值：`allow`、`deny`。
-- `action`：配置该条规则对应的操作；可选值: `publish`、`subscribe`、 `all`。
-- `topic`：配置该条规则对应的主题，支持[主题占位符](authz.md#主题占位符)。
-- `qos`: (可选) 使用数字数组指定规则适用的消息 QoS，如 `[0, 1]`、`[1, 2]`。默认为全部 QoS。
-- `retain`: （可选）用于指定当前规则是否支持发布保留消息，可选值有 `true`、`false`，默认允许保留消息。
+#### 示例：为全部用户创建规则
+
+```bash
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+  -H 'Content-Type: application/json' \
+  -d '[
+    {
+      "rules": [
+        {
+          "topic": "v1/#",
+          "permission": "deny",
+          "action": "all"
+        }
+      ]
+    }
+  ]'
+```
+
+#### 规则字段说明
+
+每条规则可以包含以下字段：
+
+| 字段                        | 描述                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| **username** / **clientid** | 规则所应用的用户名或客户端 ID（根据调用的端点而定）。        |
+| **topic**                   | 规则所应用的 MQTT 主题，支持通配符 (`+`, `#`) 以及 [主题占位符](./authz.md#主题占位符)。 |
+| **permission**              | 是否允许或拒绝当前客户端/用户的操作请求。可选值：`allow`、`deny`。 |
+| **action**                  | 操作类型。可选值：`publish`、`subscribe`、`all`。            |
+| **qos**                     | （可选）规则允许的 QoS 等级，例如 `[0,1]`。默认支持所有等级。 |
+| **retain**                  | （可选）规则是否应用于保留消息。可选值：`true`、`false`、`all`。 |
