@@ -104,6 +104,7 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 - [#15544](https://github.com/emqx/emqx/pull/15544) 为 Datalayers 集成添加了 Arrow Flight SQL NIF 驱动支持。
 - [#15637](https://github.com/emqx/emqx/pull/15637) 为 RabbitMQ 动作添加了消息头和属性的模板支持。
 - [#15864](https://github.com/emqx/emqx/pull/15864) 移除了已弃用的“Bridges V1” API 和配置模式。`/bridges/*` 下的所有端点和 `bridges` 根键下的配置条目已不再可用，因为数据集成已完全迁移到“连接器/动作/Source”模型。
+- [#15585](https://github.com/emqx/emqx/pull/15585) 将 Kafka `brod` 客户端升级至 4.4.4，扩展了对更多 Kafka API 的支持，并解决了 `JoinGroups` API 版本 `v0` 和 `v1` 弃用的问题。
 
 #### 智能数据中心
 
@@ -176,6 +177,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 - [#15396](https://github.com/emqx/emqx/pull/15396) 移除了已断开客户端的共享订阅中冗余的清理操作。这些操作在高并发断开情况下容易导致崩溃，并可能引发全局路由状态不一致。
 - [#15361](https://github.com/emqx/emqx/pull/15361) 修复了在解析格式错误的 `User-Property` 键值对时产生的 `function_clause` 错误，特别是当键值对的长度无效（过短）时。
+- [#15783](https://github.com/emqx/emqx/pull/15783) 确保连接速率限制的配置修改在监听器更新完成后立即生效。
+  之前部分内部限流器状态未能及时应用新配置，例如在提升突发速率 (`max_conn_burst`) 后，实际生效的限流可能比预期更严格。
 
 #### 访问控制
 
@@ -199,6 +202,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 - [#15786](https://github.com/emqx/emqx/pull/15786) 修复了探测 RocketMQ 连接器时可能存在的 atom 泄漏。
 - [#15806](https://github.com/emqx/emqx/pull/15806) 改进了 Oracle 动作创建时的验证。以前，在极少数情况下，包含无效 SQL 语句的动作可能会被成功添加。
 - [#15848](https://github.com/emqx/emqx/pull/15848) 改进了 Oracle 连接器的错误报告。当连接器断开连接时，其状态现在包含更具体的原因，使诊断更容易。
+- [#15693](https://github.com/emqx/emqx/pull/15693) 修复了基于 Postgres 的桥接中的资源泄漏问题。在连接池初始化过程中，如果出现特定的竞争条件，删除连接器后，其连接池可能仍然残留。此问题已修复，确保连接池能够被正确清理。
+- [#15543](https://github.com/emqx/emqx/pull/15543) 修复了 HTTP 服务数据集成在发送大消息 payload 时的问题。当 payload 大小达到 10 MB 或以上时，HTTP 请求可能会失败。
 
 #### 数据智能中心
 
@@ -235,18 +240,22 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 #### 可观测性
 
-- [#15931](https://github.com/emqx/emqx/pull/15931) 修复了与 EMQX 告警系统相关的两个问题：
+- [#15931](https://github.com/emqx/emqx/pull/15931) 修复了与 EMQX 告警系统相关的问题：在节点启动期间可能出现虚假但无害的错误日志的错误，例如：
   
-  - 解决了一个在节点启动期间可能出现虚假但无害的错误日志的错误，例如：
-    ```
-    [error] Generic event handler emqx_alarm_handler crashed ...
-    Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
-    ```
-  - 修复了一个在某些条件下告警激活超时可能导致连接进程崩溃的错误。
+  ```
+  [error] Generic event handler emqx_alarm_handler crashed ...
+  Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
+  ```
+
+- [#15973](https://github.com/emqx/emqx/pull/15973) 修复了一个在某些条件下告警激活超时可能导致连接进程崩溃的错误。
 
 #### MQTT over QUIC
 
 - [#15614](https://github.com/emqx/emqx/pull/15614) QUIC 监听器：当启用 TLS 密钥日志记录（`SSLKEYLOGFILE`）时，即使握手失败，EMQX 现在也会转储 TLS 密钥。
+
+#### 集群
+
+- [#16021](https://github.com/emqx/emqx/pull/16021) 修复了 DS Raft 后端在某些情况下无法正常工作的问题。当已有节点加入新集群并随后成为 DS 副本集成员时，可能会触发该问题。
 
 #### 集群连接
 

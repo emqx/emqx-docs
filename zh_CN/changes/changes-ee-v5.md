@@ -454,7 +454,7 @@
   - 管理员命名空间（管理员用户组）功能不包括在此次提交中，仍在开发中。
 
 - [#14884](https://github.com/emqx/emqx/pull/14884) 添加了 HTTP API 用于管理命名空间配置。
-- [#14840](https://github.com/emqx/emqx/pull/14840) Added HTTP API endpoints to configure client and tenant rate limiters for multi-tenancy feature.
+- [#14840](https://github.com/emqx/emqx/pull/14840) 为多租户功能新增了 HTTP API 接口，用于配置客户端和租户的速率限制器。
 
 #### 认证与授权
 
