@@ -12,24 +12,30 @@ EMQX Enterprise 6.0.0 is the first release of the EMQX Enterprise version 6 seri
 
 #### Message Queue
 
-<!-- to be added-->
+The native Message Queue feature unifies real-time MQTT publish/subscribe with persistent asynchronous queuing. The server buffers messages that match a topic filter, retaining them even when subscribers are offline. Clients can consume these messages through the special `$q/{topic}` topic, ensuring reliable message delivery.
+
+Message Queues support offline message storage, last-value retention, and flexible dispatch strategies, enhancing MQTT with both real-time and durable messaging capabilities.
 
 #### Namespace
 
-<!-- to be added-->
+The Namespace feature improves multi-tenancy and observability with namespace-level roles in the Dashboard. Users are restricted to their own resources (e.g., Rules, Connectors) with fine-grained permissions such as Administrator or Viewer, and roles can be managed via the Dashboard, API, or CLI, simplifying multi-tenant operations.
 
-#### Durable Storage
+Session count tracking has also been optimized: counts refresh on demand when there are fewer than 1,000 connections, and every 5 seconds otherwise. During rolling upgrades from older versions, counts may temporarily appear inconsistent, but will stabilize once all nodes are updated.
 
-Significant RAM usage and storage efficiency improvements with new RocksDB configuration options and ASN1 serialization schema as default.
+#### MQTT Durable Sessions
 
-#### New Data Integrations:
+Durable storage has been optimized by separating session data from the broker’s other metadata, significantly reducing RAM usage and improving storage efficiency.
+
+New configuration options provide finer control over RocksDB memory usage and performance. In addition, the default serialization schema for stored messages has been updated to ASN.1, further enhancing efficiency.
+
+#### New Data Integrations
 
 - Google BigQuery
 - AWS AlloyDB
 - CockroachDB
 - AWS Redshift
 
-#### Enhanced Integration: 
+#### Enhanced Integration
 
 - **AWS**: 
   - Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
@@ -58,8 +64,7 @@ New `cluster.description` configuration option allows users to set and display c
 
 #### Message Queue
 
-- [#15789](https://github.com/emqx/emqx/pull/15789) Implemented Message Queues, which are collections of messages identified by `topic/filter`. Each queue has an explicit lifecycle and is automatically replenished with published messages matched with the queue's topic filter during the queue's lifetime.
-  Clients can cooperatively consume messages from a queue by subscribing to a special topic in the format: `$q/topic/filter`.
+- [#15789](https://github.com/emqx/emqx/pull/15789) Implemented Message Queues, which are collections of messages identified by `topic_filter`. Each queue has an explicit lifecycle and is automatically replenished with published messages matched with the queue's topic filter during the queue's lifetime. Clients can cooperatively consume messages from a queue by subscribing to a special topic in the format: `$q/{topic}`.
 
 #### Core MQTT Functionalities
 
