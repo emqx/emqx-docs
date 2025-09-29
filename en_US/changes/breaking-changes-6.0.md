@@ -15,7 +15,7 @@ If the durable sessions feature was not enabled before, you can ignore this sect
 In EMQX 6.0, the internal representation of durable sessions and their messages has changed. 
 Clusters previously running on version 5.x with durable sessions enabled must be recreated from a clean state when upgrading to 6.0.
 
-For detailed upgrade instructions, see the [rolling upgrade disconnection](https://docs.emqx.com/en/emqx/latest/deploy/rolling-upgrades.html#emqx-enterprise-rolling-upgrade).
+For detailed upgrade instructions, see the [rolling upgrade documentation](https://docs.emqx.com/en/emqx/latest/deploy/rolling-upgrades.html#emqx-enterprise-rolling-upgrade).
 
 - [#15496](https://github.com/emqx/emqx/pull/15496) The state of durable sessions has been migrated from Mnesia to a new database built on EMQX durable storage.
   - As a result, all durable session states created before 6.0.0 will be lost during the migration.
