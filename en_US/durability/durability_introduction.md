@@ -115,7 +115,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Using [MQTTX CLI](https://mqttx.app/cli) as an example, which defaults to using MQTT 5.0 protocol, add the `--no-clean` option to set `Clean Start = false`, and specify the client ID as `emqx_c`. Connect to EMQX and subscribe to the `t/1` topic:
 
    ```bash
-   mqttx sub -t t/1 -i emqx_c --no-clean
+   mqttx sub -t t/1 -i emqx_c --no-clean -q1
    ```
 
 3. Disconnect the client, and the session will be retained.
@@ -129,7 +129,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Using MQTTX CLI again, use the `bench` command to repeatedly publish messages to the `t/1` topic with one client:
 
    ```bash
-   mqttx bench pub -t t/1 -c 1
+   mqttx bench pub -t t/1 -c 1 -q1
    ```
 
    According to the MQTT protocol, even if the `emqx_c` client is offline, the messages for the `t/1` topic it subscribed to will be saved in the client queue and will be delivered when it reconnects.
@@ -141,7 +141,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Try connecting to EMQX with the same client ID `emqx_c` and using the `--no-clean` option to set `Clean Start = false`:
 
    ```bash
-   mqttx sub -t t/1 -i emqx_c --no-clean
+   mqttx sub -t t/1 -i emqx_c --no-clean -q1
    ```
 
    The messages received during the offline period will be delivered to the current client:
