@@ -15,7 +15,7 @@ Each alarm record contains the following details:
 
 On the **Active** tab, you can view all alarms that are currently active in the system.
 
-### Available Actions:
+### Available Actions
 
 - **Refresh**: Click the **Refresh** button to update the list with the latest alarm data.
 - **Settings**: Click **Settings** to navigate to the [Monitoring](./cluster_settings.md#monitoring) settings page, where you can configure alarm trigger thresholds and check intervals.
@@ -24,7 +24,7 @@ On the **Active** tab, you can view all alarms that are currently active in the 
    In some cases, alarms (e.g., from client disconnections or resource timeouts) may not automatically resolve.
    Click the **Deactivate** button in the **Actions** column to manually clear the alarm.
 
-> **Tip**: Manual deactivation should only be used when automatic recovery is not triggered, such as after a disconnected client or failed connector that no longer exists.
+> **Tip**: Manual deactivation should only be used when automatic recovery is not triggered, such as after a disconnected client or a failed connector that no longer exists.
 
 **Example**
 
