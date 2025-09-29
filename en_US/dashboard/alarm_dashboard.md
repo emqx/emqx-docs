@@ -30,6 +30,14 @@ On the **Active** tab, you can view all alarms that are currently active in the 
 
 The image below shows an active system alarm triggered by a failed MQTT connector (`connector:mqtt:qwe`) due to a resource timeout. The **Deactivate** button is available to manually resolve this alarm if necessary.
 
+::: tip Note
+
+Currently, alerts are node-based. You can only clear alerts that were triggered on the node you are logged into. For example, if you are logged into `emqx@10.50.0.12`, you cannot clear alerts triggered on `emqx@127.0.0.1`. 
+
+This limitation only applies to cluster mode and does not affect single-node deployments.
+
+:::
+
 <img src="./assets/alarm.png" alt="image" style="zoom:67%;" />
 
 ## Historical Alarms
