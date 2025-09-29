@@ -16,7 +16,7 @@ if sys.argv[1] != r'ce' and sys.argv[1] != r'ee':
 ## check if the 'lang' field matches expected input
 ## when no 'lang' is defined, it matches both 'en', 'cn' and 'ja'
 def is_lang_match(i, lang):
-    if 'lang' in i:
+    if isinstance(i, dict) and ('lang' in i):
         return i['lang'] == lang
     else:
         return True

@@ -1,16 +1,18 @@
 # System
 
-The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, hot upgrade and general settings.
+The **System** menu in the EMQX Dashboard provides access to system management options such as user and role management, audit logs, API keys, licensing, SSO, data backup and restore, hot upgrade, and general settings.
 
 ## Users
 
 The **Users** page provides an overview of all active Dashboard users, including those generated via the [CLI](../admin/cli.md).
 
-To add new users, click the + Create button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
+To add new users, click the **+ Create** button in the page's top-right corner. A pop-up dialog will appear, prompting you to input the necessary user details. Once entered, click the **Create** button to generate the user account. You can easily access these options through the Actions column for further user management, such as editing users, updating passwords, or deleting users' information.
 
 > For security reasons, starting with EMQX 5.0.0, Dashboard users cannot be used for REST API authentication.
 
 <img src="./assets/ee-users.png" alt="image" style="zoom:67%;" />
+
+### Role-Based Access Control
 
 Starting from EMQX 5.3, the Dashboard introduces the Role-Based Access Control (RBAC) feature for EMQX Enterprise users.
 
@@ -24,6 +26,59 @@ Currently, either of the following two predefined roles can be set for a user. Y
 + Viewer
 
     Viewers can access all EMQX data and configurations, corresponding to all `GET` requests in the REST API. However, they do not have the right to create, modify, or delete any data.
+
+### Namespaced Roles
+
+Starting from EMQX 6.0, the Dashboard supports namespaced roles. This feature extends role-based access control to enable multi-tenancy, where each user can be restricted to operate only within a specific namespace.
+
+::: tip
+
+To learn more about the namespaces, see [Namespace](../multi-tenancy/namespace-overview.md).
+
+:::
+
+#### Create a User with a Namespaced Role
+
+When creating a new user in the Dashboard, you will now see a **Namespace** option.
+
+::: tip Prerequisite
+
+1. Create a managed namespace (for example, `namespace_01`) in the Dashboard. For instructions, see [Create Namespaces](../multi-tenancy/create-namespace.md).
+2. Ensure your EMQX license and cluster are running EMQX 6.0 or later.
+
+:::
+
+1. Navigate to **System** -> **Users** and click **+ Create**.
+2. Fill in the required fields:
+   - **Username**: Unique identifier for the user.
+   - **Note**: Optional description.
+   - **Password**: User’s login password.
+   - **Role**: Select either **Administrator** or **Viewer**.
+3. Toggle the **Namespace** option and select an existing namespace (for example, `namespace_01`).
+4. Click **Create** to finish.
+
+When creating users via the CLI or API, the role must be explicitly specified in the following format:
+
+```
+ns:<NAMESPACE>::<ROLE>
+```
+
+For example:
+
+- `ns:namespace_01::administrator`
+- `ns:namespace_01::viewer`
+
+#### Behavior of Namespaced Users
+
+- **Scoped resources**: Namespaced users can view and manage only the resources within their assigned namespace, such as Connectors, Actions, Sources, Rules, and other namespace-aware modules.
+- **Cluster-level settings**: Configurations not yet namespace-aware remain read-only for namespaced users. Only global administrators can modify them.
+- **Default landing page**: Namespaced users log in to the Dashboard normally and start on the **Overview** page. All menu items remain visible, but resource data is automatically filtered to their namespace.
+- **License management**: Namespaced users do not see license notifications. License handling remains a responsibility of system administrators.
+
+#### Role Semantics within a Namespace
+
+- **Administrator**: Full control (create, update, delete, and read) over resources in the assigned namespace.
+- **Viewer**: Read-only access (equivalent to `GET` requests) within the assigned namespace.
 
 ## Audit Logs
 

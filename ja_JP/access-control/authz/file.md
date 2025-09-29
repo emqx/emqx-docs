@@ -88,7 +88,7 @@ EMQXはデフォルトでファイルベースの認可機能を設定してい�
 ```bash
 authorization {
   deny_action = ignore
-  no_match = allow
+  no_match = deny
   sources = [
     {
       type = file
