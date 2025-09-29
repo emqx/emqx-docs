@@ -73,9 +73,9 @@ jobs:
           sed -i "s/EE_MINOR_VERSION=.*/EE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
           git add current-version.env
 
-          cp "_build/docgen/emqx-enterprise/schema-v2-en.json" "hocon/hocon-ee-v${VERSION}-en.json"
-          cp "_build/docgen/emqx-enterprise/schema-v2-zh.json" "hocon/hocon-ee-v${VERSION}-zh.json"
+          jq -S --indent 2 '.' "_build/docgen/emqx-enterprise/schema-v2-en.json" > "hocon/hocon-ee-v${VERSION}-en.json"
           git add "hocon/hocon-ee-v${VERSION}-en.json"
+          jq -S --indent 2 '.' "_build/docgen/emqx-enterprise/schema-v2-zh.json" > "hocon/hocon-ee-v${VERSION}-zh.json"
           git add "hocon/hocon-ee-v${VERSION}-zh.json"
 
           DOCKER_IMAGE="emqx/emqx-enterprise:${EMQX_VERSION}"
