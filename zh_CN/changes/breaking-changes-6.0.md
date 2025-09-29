@@ -5,6 +5,7 @@
 - [#15939](https://github.com/emqx/emqx/pull/15939) 停止为已达生命周期终止（EOL）的操作系统发布安装包：
   - Debian 10 (Buster)
   - 企业版 Linux (CentOS) 7
+  - Ubuntu 18.04
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
@@ -14,7 +15,7 @@
 
 在 EMQX 6.0 中，会话持久化及其消息的内部表示方式已发生变更。对于在 5.x 版本中启用了会话持久化的集群，在升级到 6.0 时必须重新创建一个不带历史数据的集群。
 
-有关详细的升级说明，请参见 [滚动升级文档](https://docs.emqx.com/zh/emqx/latest/deploy/rolling-upgrades.html#emqx-enterprise-rolling-upgrade)。
+有关详细的升级说明，请参见[滚动升级文档](../deploy/rolling-upgrades.md#emqx-enterprise-rolling-upgrade)。
 
 - [#15496](https://github.com/emqx/emqx/pull/15496) 会话持久化的状态已从 Mnesia 迁移到基于 EMQX 持久存储的新数据库。
   - 因此，6.0.0 之前创建的所有会话持久化状态在迁移过程中都会丢失。
