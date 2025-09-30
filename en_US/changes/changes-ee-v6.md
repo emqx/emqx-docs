@@ -153,6 +153,12 @@ New `cluster.description` configuration option allows users to set and display c
     - `durable_storage.messages.layout.wildcard_thresholds`: Allows to tune wildcard thresholds for the `wildcard_optimized_v2` storage layout.
   - Additionally, the default `serialization_schema` for stored messages has been changed to `asn1`.
 
+- [#16044](https://github.com/emqx/emqx/pull/16044) Some of config fields for durable sessions have been removed or renamed, and old values are marked as deprecated:
+
+    - `durable_sessions.heartbeat_interval` has been renamed to `durable_sessions.checkpoint_interval`.
+    - `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` have been removed, as sessions are now fully event-driven.
+    - `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` have been removed as obsolete.
+
 #### CLI
 
 - [#15399](https://github.com/emqx/emqx/pull/15399) The `node_dump` tool now exports the current system configuration in HOCON format, with sensitive information (such as passwords and secrets) automatically redacted for security.

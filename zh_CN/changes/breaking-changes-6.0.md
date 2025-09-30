@@ -34,9 +34,6 @@
 
 **会话持久化**
 
-- `durable_sessions.heartbeat_interval` 已更名为 `durable_sessions.checkpoint_interval`。
-- `durable_sessions.idle_poll_interval` 和 `durable_sessions.renew_streams_interval` 已被移除，因为会话现已完全事件驱动。
-- `durable_sessions.session_gc_interval` 和 `durable_sessions.session_gc_batch_size` 已作为过时参数移除。
 - `durable_storage.messages.n_sites` 参数已重命名为 `durable_storage.n_sites`。该参数现已适用于所有持久化存储。
 - 新增了 `durable_storage.sessions` 和 `durable_storage.timers` 配置项。
 - [#15734](https://github.com/emqx/emqx/pull/15734) 提升了会话持久化的可靠性和吞吐量。
