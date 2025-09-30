@@ -35,7 +35,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
 - **Persistent message storage (even when clients are offline)**: While queues are not strictly ordered, they are designed for reliable and asynchronous delivery, bridging the gap between lightweight MQTT communication and more advanced enterprise messaging needs.
 - **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL, size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
-- **Optional Last-Value Semantics**: Messages with the same ` queue key` property overwrite previous ones, ideal for retaining only the latest state or configuration update.
+- **Optional Last-Value Semantics**: Messages with the same key overwrite previous ones, ideal for retaining only the latest state or configuration update.
 
 ## Message Queue Key Concepts
 
