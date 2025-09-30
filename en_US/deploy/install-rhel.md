@@ -5,7 +5,6 @@ This page guides you on installing and starting EMQX on a CentOS/RHEL system.
 Supported versions:
 
 - Amazon Linux 2023
-- Amazon Linux 2
 - Rocky Linux 9 (RHEL 9)
 - Rocky Linux 8 (RHEL 8)
 

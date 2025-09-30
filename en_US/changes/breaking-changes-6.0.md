@@ -9,6 +9,8 @@
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
+- [#16050](https://github.com/emqx/emqx/pull/16050) Stopped releasing packages for Amazon Linux 2. It will reach end-of-life on June 30, 2026.
+
 ## Durable Sessions
 
 If the durable sessions feature was not enabled before, you can ignore this section.

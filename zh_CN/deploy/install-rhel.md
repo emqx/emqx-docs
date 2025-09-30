@@ -5,7 +5,6 @@
 支持的 CentOS/RHEL 版本：
 
 - Amazon Linux 2023
-- Amazon Linux 2
 - Rocky Linux 9 (RHEL 9)
 - Rocky Linux 8 (RHEL 8)
 

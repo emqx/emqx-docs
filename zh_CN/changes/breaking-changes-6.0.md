@@ -9,6 +9,8 @@
   - Ubuntu 20.04
   - macOS 13 (Ventura)
 
+- [#16050](https://github.com/emqx/emqx/pull/16050) 停止为 Amazon Linux 2 发布安装包。该操作系统将于 2026 年 6 月 30 日达到生命周期终止。
+
 ## MQTT 会话持久化
 
 如果之前未启用 MQTT 会话持久化功能，可以忽略本节内容。
