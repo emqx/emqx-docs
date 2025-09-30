@@ -119,7 +119,7 @@ You can change the strategy on the fly:
 2. Click **Edit** next to your queue.
 3. Select a new **Dispatch Strategy** and save.
 
-Note that the new dispatch strategy will not apply while there are active subscribers online. You need to disconnect the clients and reconnects them back.
+Note that the new dispatch strategy will not apply while there are active subscribers online. You need to disconnect the clients and reconnect them back.
 
 After switching, repeat the message publishing test and observe the difference in distribution patterns between the subscribers.
 
