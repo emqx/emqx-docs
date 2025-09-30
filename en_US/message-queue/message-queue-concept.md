@@ -37,7 +37,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 - **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL, size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
 - **Optional Last-Value Semantics**: Messages with the same key overwrite previous ones, ideal for retaining only the latest state or configuration update.
 
-## Message Queue Key Concepts
+## Message Queue Concepts
 
 - **Queue Name**
    An MQTT topic or topic filter that identifies the queue. Messages published to matching topics are automatically enqueued.
