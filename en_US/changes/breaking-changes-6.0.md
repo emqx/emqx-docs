@@ -36,6 +36,8 @@ Previously, these checks were deferred until after the configured `Will-Delay-In
 - `durable_sessions.heartbeat_interval` has been renamed to `durable_sessions.checkpoint_interval`.
 - `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` have been removed, as sessions are now fully event-driven.
 - `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` have been removed as obsolete.
+- `durable_storage.messages.n_sites` parameter has been renamed to `durable_storage.n_sites`. This parameter has become common for all durable storage.
+- `durable_storage.sessions` and `durable_storage.timers` have been added.
 - [#15734](https://github.com/emqx/emqx/pull/15734) Improved the reliability and throughput of durable sessions.
 
 **Durable Storage**
