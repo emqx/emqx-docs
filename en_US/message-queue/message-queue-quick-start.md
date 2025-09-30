@@ -169,7 +169,7 @@ The “Queue Key Expression” defines where to extract the key from the message
    Payload: {"ssid": "wifi2"}
    ```
 
-Since the **Queue Key Expression** is set to `message.key`, EMQX will automatically extract the client ID from each message and use it as the queue key. Messages from the same client will overwrite previous unconsumed messages in the queue.
+Since the **Queue Key Expression** is set to `message.from`, EMQX will automatically extract the client ID from each message and use it as the queue key. Messages from the same client will overwrite previous unconsumed messages in the queue.
 
 ### Step 4: Subscribe to the Queue
 
