@@ -10,7 +10,7 @@ A Message Queue in EMQX is a durable, server-side buffer that holds MQTT message
 
 Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$q/{topic}` format.
 
-## Why Use the Message Queue?
+## Why Use Message Queue?
 
 MQTT is a lightweight and widely adopted publish/subscribe protocol. However, its default behavior tightly couples message delivery to subscriber availability, which can be limiting for asynchronous or delayed-consumption scenarios.
 
@@ -19,7 +19,7 @@ MQTT is a lightweight and widely adopted publish/subscribe protocol. However, it
 While MQTT supports some queue-like features through [shared subscriptions](../messaging/mqtt-shared-subscription.md) (`$share/{group}/topic`), it has limitations:
 
 - **Messages are not retained** if no subscribers are online.
-- **No built-in support for TTL**, queue size limits, or overflow control.
+- **No built-in support** for Time to Live (TTL), queue size limits, or overflow control.
 - **No message deduplication**, such as keeping only the latest value per key.
 - **No explicit lifecycle management** for queues.
 
@@ -34,7 +34,7 @@ These limitations make it difficult to implement patterns like:
 Message Queue extends the MQTT protocol in EMQX. It allows messages to be persisted regardless of the subscribers' online status for further processing. It offers:
 
 - **Persistent message storage (even when clients are offline)**: While queues are not strictly ordered, they are designed for reliable and asynchronous delivery, bridging the gap between lightweight MQTT communication and more advanced enterprise messaging needs.
-- **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL (time-to-live), size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
+- **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL, size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
 - **Optional Last-Value Semantics**: Messages with the same ` queue key` property overwrite previous ones, ideal for retaining only the latest state or configuration update.
 
 ## Message Queue Key Concepts
@@ -46,7 +46,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 - **Queue Deletion**
    The removal of a queue along with all its stored messages.
 - **Last-Value Semantics**
-   An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the queue key from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
+   An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the `queue key` from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
 - **Topic Prefix**
    Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
 - **Queue Properties**
@@ -58,7 +58,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
 ## How Message Queue Works
 
-The EMQX Message Queue feature is implemented as a loosely coupled extension and intercepts publish and subscribe operations using internal hooks. These hooks interact with a registry and storage layer to persist and deliver messages reliably.
+The Message Queue feature in EMQX is implemented as a loosely coupled extension and intercepts publish and subscribe operations using internal hooks. These hooks interact with a registry and storage layer to persist and deliver messages reliably.
 
 ### Main Components
 
@@ -107,21 +107,16 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
 - **Enqueueing Messages**
   Messages published to topics matching a declared queue are automatically enqueued. 
 
-  If the queue is configured with a Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
+  If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
 
   - If a key is derived, it replaces any unconsumed message with the same key.
   - If no key is defined or resolved, messages are enqueued in FIFO (first-in, first-out) order.
 
 - **Dequeueing Messages**
-  Subscribed clients receive messages from the queue according to the configured dispatch strategy. Acknowledgments (for QoS 1) trigger message removal from the queue.
-
-- **Quality of Service (QoS)**
-
-  - Supports QoS 0 (at-most-once) and QoS 1 (at-least-once).
-  - QoS 2 messages are automatically downgraded to QoS 1 upon publishing or subscription.
+  Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 to ensure reliable message delivery. Acknowledgments (for QoS 1) trigger message removal from the queue.
 
 - **Dispatch Strategies**
-   Defines how messages are distributed across subscribers:
+   You can define how messages are distributed across subscribers:
 
   - `random`: Distribute randomly.
   - `round_robin`: Rotate among available subscribers.
