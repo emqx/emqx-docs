@@ -91,6 +91,7 @@ You can use EMQX Dashboard to configure how to use MongoDB for password authenti
          - Resulting hash is represented as a string of hexadecimal characters, and compared case-insensitively with the stored credential. 
    - **Salt Field**: Specify the salt field in MongoDB.
    - **is_superuser Field**: Determine if the user is a super user. 
+   - **Client ID Override Filed**: Specifies the name of the field in the MongoDB authentication result that can be used to override the client-provided Client ID during connection. This allows assigning unique Client IDs based on authentication data, helping prevent session conflicts in scenarios such as multi-tenancy.
    - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this MongoDB authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
    - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
    - **Filter**: A map interpreted as MongoDB selector for credential lookup. [Placeholders](./authn.md#authentication-placeholders) are supported.
