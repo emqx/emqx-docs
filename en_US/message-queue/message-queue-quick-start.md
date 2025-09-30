@@ -145,7 +145,7 @@ This removes the previous queue and its stored messages.
    - **Queue Key Expression**: `message.key` (or any field name you will use as key)
 3. Click **Create**.
 
-The “Queue Key Expression” defines where to extract the key from the message’s metadata. Set to `message.key` means EMQX will extract the queue key from the client ID of the message publisher.
+The “Queue Key Expression” defines where to extract the key from the message’s metadata. Set to `message.from` means EMQX will extract the queue key from the client ID of the message publisher.
 
 ### Step 3: Publish Messages
 
