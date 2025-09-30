@@ -24,6 +24,39 @@ If a License configuration is added to `emqx.conf`, any runtime changes made fro
 
 :::
 
+## Rolling Upgrade Paths Since 5.0
+
+Below is the matrix of supported rolling upgrade paths since 5.0.
+
+- Version numbers end with `?` e.g. `6.1?` are future releases.
+- ✅: Supported, or planned to support.
+- ⚠️: Supported, but with limitations.
+- ❌: Not supported.
+- 🔄: Tentative full support for future versions.
+
+See [release notes](../changes/all-changes-ee.md) for detailed information.
+
+| From\To | 5.1  | 5.2  | 5.3  | 5.4  | 5.5  | 5.6  | 5.7  | 5.8  | 5.9  | 5.10 | 6.0  | 6.1? |
+| ------- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 5.0     | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ⚠️[1] | ❌[2] | ❌[2] | ❌[2] |
+| 5.1     | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] | ❌[2] | ❌[2] |
+| 5.2     |      | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] | ❌[2] | ❌[2] |
+| 5.3     |      |      | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ❌[2] | ❌[2] | ❌[2] |
+| 5.4     |      |      |      | ✅    | ✅    | ⚠️    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    |
+| 5.5     |      |      |      |      | ✅    | ⚠️    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    |
+| 5.6     |      |      |      |      |      | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    | ✅    |
+| 5.7     |      |      |      |      |      |      | ✅    | ✅    | ✅    | ✅    | ⚠️[4] | 🔄    |
+| 5.8     |      |      |      |      |      |      |      | ✅    | ⚠️[3] | ⚠️[3] | ⚠️[4] | 🔄    |
+| 5.9     |      |      |      |      |      |      |      |      | ✅    | ✅    | ⚠️[4] | 🔄    |
+| 5.10    |      |      |      |      |      |      |      |      |      | ✅    | ⚠️[4] | 🔄    |
+| 6.0     |      |      |      |      |      |      |      |      |      |      | ✅    | ✅    |
+| 6.1?    |      |      |      |      |      |      |      |      |      |      |      | ✅    |
+
+- [1] Old limiter configs should be deleted from the config files (`etc/emqx.conf` and `data/configs/cluster-override.conf`) before the upgrade.
+- [2] The pre-5.4 routing table will be deleted. Upgrade to 5.9 first, then perform a full-cluster restart (not rolling) before upgrading to 5.10 or later.
+- [3] Opentelemetry headers configuration support was introduced in 5.8.7. This release date is later than 5.9.0 and 5.10.0. 5.8 versions running 5.8.7 or later require a rolling upgrade to version 5.9.1 or 5.10.1. Alternatively, remove the header configuration for OpenTelemetry integration during the upgrade.
+- [4] Durable session storage must be disabled before upgrading from v5 to v6. Durable session storage can be re-enabled after the upgrade.
+
 ## Rolling Upgrade Considerations for EMQX 5.10 or Later
 
 Starting from EMQX 5.10.0, only the _v2_ routing storage schema is supported. The legacy _v1_ schema, which was the default in versions before 5.4.0, is no longer compatible. As a result, clusters still using the *v1* schema, particularly those that have been incrementally upgraded from earlier versions, cannot perform rolling upgrades to 5.10.0 or later.
