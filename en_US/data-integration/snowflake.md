@@ -527,7 +527,9 @@ This section demonstrates how to add a Sink to the rule to write the processed r
 
 7. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
-8. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Snowflake server.
+
+9. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
 
 ### Add Snowflake Sink with Streaming Upload Mode
 
@@ -547,7 +549,8 @@ This section demonstrates how to add a Sink to the rule to write the processed r
    - **Max Inactive**: The maximum amount of time an idle connection can remain open before being closed. Default: `10` seconds.
 6. **Fallback Actions (optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 7. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
-8. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+8. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Snowflake server.
+9. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
 
 ## Test the Rule
 
