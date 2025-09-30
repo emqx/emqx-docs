@@ -2,7 +2,7 @@
 
 ## 6.0.0
 
-*Release Date: 2025-09-29*
+*Release Date: 2025-09-30*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.0.
 
@@ -12,31 +12,38 @@ EMQX Enterprise 6.0.0 is the first release of the EMQX Enterprise version 6 seri
 
 #### Message Queue
 
-<!-- to be added-->
+The native Message Queue feature unifies real-time MQTT publish/subscribe with persistent asynchronous queuing. The server buffers messages that match a topic filter, retaining them even when subscribers are offline. Clients can consume these messages through the special `$q/{topic}` topic, ensuring reliable message delivery.
+
+Message Queues support offline message storage, last-value retention, and flexible dispatch strategies, enhancing MQTT with both real-time and durable messaging capabilities.
 
 #### Namespace
 
-<!-- to be added-->
+The Namespace feature improves multi-tenancy and observability with namespace-level roles in the Dashboard. Users are restricted to their own resources (e.g., Rules, Actions, and Connectors) with fine-grained permissions such as Administrator or Viewer, and roles can be managed via the Dashboard, API, or CLI, simplifying multi-tenant operations.
 
-#### Durable Storage
+Session count tracking has also been optimized: counts refresh on demand when there are fewer than 1,000 connections, and every 5 seconds otherwise. During rolling upgrades from older versions, counts may temporarily appear inconsistent, but will stabilize once all nodes are updated.
 
-Significant RAM usage and storage efficiency improvements with new RocksDB configuration options and ASN1 serialization schema as default.
+#### MQTT Durable Sessions
 
-#### New Data Integrations:
+Durable storage has been optimized by separating session data from the broker’s other metadata, significantly reducing RAM usage and improving storage efficiency.
+
+New configuration options provide finer control over RocksDB memory usage and performance. In addition, the default serialization schema for stored messages has been updated to ASN.1, further enhancing efficiency.
+
+#### New Data Integrations
 
 - Google BigQuery
 - AWS AlloyDB
 - CockroachDB
 - AWS Redshift
 
-#### Enhanced Integration: 
+#### Enhanced Integration
 
-- **AWS**: 
+- **AWS**:
   - Support for Instance Metadata Service v2 APIs from EC2 instances when using S3 or S3Tables data integration. This enables seamless access to S3 buckets without manual AWS credential configuration, leveraging IAM roles for better security.
   - Parquet format support for S3 Tables Action.
 
 - **RabbitMQ**: Define custom Headers and Properties Templates in RabbitMQ Sink to enhance message routing and compatibility within RabbitMQ.
 - **Snowflake**: Snowpipe Streaming upload mode for Snowflake Action (preview feature).
+- **RocketMQ**: New `key` and `tag` template fields in Action, along with a `key_dispatch` option for the Produce Strategy, allowing greater customization of message metadata.
 
 #### Elixir Support
 
@@ -48,7 +55,8 @@ LDAP authorization now supports extended ACL rules in JSON format, and LDAP auth
 
 #### Improved Tracing
 
-Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`), with optimized implementation to prevent atom leaks.
+Configurable limits for maximum traces (`trace.max_traces`) and trace file sizes (`trace.max_file_size`).
+After `max_file_size` is reached, the trace log will rotate to a new file instead of halting.
 
 #### Cluster Management
 
@@ -58,8 +66,7 @@ New `cluster.description` configuration option allows users to set and display c
 
 #### Message Queue
 
-- [#15789](https://github.com/emqx/emqx/pull/15789) Implemented Message Queues, which are collections of messages identified by `topic/filter`. Each queue has an explicit lifecycle and is automatically replenished with published messages matched with the queue's topic filter during the queue's lifetime.
-  Clients can cooperatively consume messages from a queue by subscribing to a special topic in the format: `$q/topic/filter`.
+- [#15789](https://github.com/emqx/emqx/pull/15789) Implemented Message Queues, which are collections of messages identified by `topic_filter`. Each queue has an explicit lifecycle and is automatically replenished with published messages matched with the queue's topic filter during the queue's lifetime. Clients can cooperatively consume messages from a queue by subscribing to a special topic in the format: `$q/{topic}`.
 
 #### Core MQTT Functionalities
 
@@ -130,6 +137,8 @@ New `cluster.description` configuration option allows users to set and display c
 
 - [#15864](https://github.com/emqx/emqx/pull/15864) Removed the deprecated "Bridges V1" APIs and configuration schemas. All endpoints under `/bridges/*` and configuration entries under the `bridges` root key are no longer available, as data integrations have fully migrated to the "Connectors/Actions/Sources" model.
 
+- [#15583](https://github.com/emqx/emqx/pull/15583) Updated the `brod` client to version 4.4.4, expanding support for a wider range of Kafka APIs. This update addresses the deprecation of `JoinGroups` API versions `v0` - `v1`.
+
 #### Smart Data Hub
 
 - [#15525](https://github.com/emqx/emqx/pull/15525) Prevented deletion of internal schemas that are still in use. If a schema is referenced by a Schema Validation or Message Transformation, it can no longer be removed to avoid runtime errors and configuration inconsistencies.
@@ -143,6 +152,12 @@ New `cluster.description` configuration option allows users to set and display c
     - `durable_storage.messages.rocksdb.max_open_files`: Limits the number of file descriptors used by RocksDB per shard.
     - `durable_storage.messages.layout.wildcard_thresholds`: Allows to tune wildcard thresholds for the `wildcard_optimized_v2` storage layout.
   - Additionally, the default `serialization_schema` for stored messages has been changed to `asn1`.
+
+- [#16044](https://github.com/emqx/emqx/pull/16044) Some of config fields for durable sessions have been removed or renamed, and old values are marked as deprecated:
+
+    - `durable_sessions.heartbeat_interval` has been renamed to `durable_sessions.checkpoint_interval`.
+    - `durable_sessions.idle_poll_interval` and `durable_sessions.renew_streams_interval` have been removed, as sessions are now fully event-driven.
+    - `durable_sessions.session_gc_interval` and `durable_sessions.session_gc_batch_size` have been removed as obsolete.
 
 #### CLI
 
@@ -202,7 +217,10 @@ New `cluster.description` configuration option allows users to set and display c
 #### Core MQTT Functionalities
 
 - [#15396](https://github.com/emqx/emqx/pull/15396) Removed redundant cleanup operations for shared subscriptions of disconnected clients. These operations were prone to crashes under high disconnect volumes and could lead to inconsistencies in the global broker state.
+
 - [#15361](https://github.com/emqx/emqx/pull/15361) Fixed a `function_clause` error when parsing a malformed `User-Property` pair with invalid (too short) length.
+
+- [#15783](https://github.com/emqx/emqx/pull/15783) Ensure that any changes to connection rate limits take effect immediately after the listener update has completed. Previously, parts of internal limiter state were not directly affected by configuration changes. For example, after increasing the burst rate, the effective rate limit could appear stricter than expected.
 
 #### Access Control
 
@@ -225,6 +243,8 @@ New `cluster.description` configuration option allows users to set and display c
 - [#15786](https://github.com/emqx/emqx/pull/15786) Fixed a potential atom leak when probing RocketMQ Connectors.
 - [#15806](https://github.com/emqx/emqx/pull/15806) Improved validation for Oracle Actions during creation. Previously, in rare cases, an Action containing an invalid SQL statement could be added successfully.
 - [#15848](https://github.com/emqx/emqx/pull/15848) Improved error reporting for the Oracle Connector. When the connector becomes disconnected, its status now includes a more specific reason, making diagnostics easier.
+- [#15693](https://github.com/emqx/emqx/pull/15693) Fixed a resource leak in Postgres-based bridges. Under certain race conditions during pool initialization, deleting a Connector could leave its connection pool behind. This has been corrected to ensure connection pools are properly cleaned up.
+- [#15543](https://github.com/emqx/emqx/pull/15543) Fixed an issue in HTTP Server data integration when sending large payloads. If the payload size was 10 MB or more, the HTTP request could fail.
 
 #### Smart Data Hub
 
@@ -268,20 +288,21 @@ New `cluster.description` configuration option allows users to set and display c
 
 #### Observability
 
-- [#15931](https://github.com/emqx/emqx/pull/15931) Fixed two issues related to the EMQX alarm system:
-
-  - Resolved a bug where spurious but harmless error logs could appear during node startup, such as:
-
+- [#15931](https://github.com/emqx/emqx/pull/15931) Resolved a bug where spurious but harmless error logs could appear during node startup:
     ```
     [error] Generic event handler emqx_alarm_handler crashed ...
     Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
     ```
 
-  - Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
+- [#15973](https://github.com/emqx/emqx/pull/15973) Fixed a bug where an alarm activation timeout could crash the connection process under certain conditions.
 
 #### MQTT over QUIC
 
 - [#15614](https://github.com/emqx/emqx/pull/15614) QUIC Listener: When TLS key logging (`SSLKEYLOGFILE`) is enabled, EMQX now dumps TLS keys even if the handshake fails.
+
+#### Clustering
+
+- [#16021](https://github.com/emqx/emqx/pull/16021) Fixed issues that occasionally prevented the DS Raft backend from functioning correctly when an existing node joined a new cluster and subsequently became member of DS replica sets.
 
 #### Cluster Linking
 

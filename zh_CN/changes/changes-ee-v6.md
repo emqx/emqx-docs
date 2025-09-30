@@ -2,7 +2,7 @@
 
 ## 6.0.0
 
-*发布日期: 2025-09-29*
+*发布日期: 2025-09-30*
 
 在升级到 EMQX 6.0.0 之前，请务必查阅不兼容变更和已知问题。
 
@@ -12,11 +12,20 @@ EMQX Enterprise 6.0.0 是 EMQX 企业版 6 系列的首个发布版本，带来�
 
 #### 消息队列
 
+原生的消息队列功能结合了实时 MQTT 发布/订阅与持久化异步队列。服务端缓存匹配主题过滤器的消息，即使订阅端离线也能保留，客户端通过 `$q/{topic}` 主题消费，实现更可靠的消息投递。消息队列支持离线消息存储、最后值保留和灵活的分发策略，使 MQTT 同时具备实时性与持久化能力。
+
 #### 命名空间
 
-#### 持久存储
+命名空间功能进一步提升了多租户支持和可观测性。
 
-通过新的 RocksDB 配置选项和默认启用的 ASN1 序列化方案，显著提升了内存使用效率和存储效率。
+- **命名空间角色**：在 Dashboard 中引入命名空间级别的角色控制，限制用户仅能访问本命名空间内的资源（如规则、动作和连接器），实现安全隔离。管理员可为不同命名空间分配更细颗粒度的权限（如管理员或查看者），通过 Dashboard、API 或 CLI 添加用户时，可直接创建和分配命名空间角色，简化了多租户场景下的运维管理。
+- **会话数刷新优化**：改进了会话数刷新机制，连接数少于 1000 时按需更新，超过时每 5 秒更新一次。在从旧版本滚动升级时，会话数可能暂时不一致，升级完成后将恢复准确。
+
+#### MQTT 会话持久化
+
+通过将会话数据与 Broker 的其他元数据分离，优化了持久存储，显著降低了内存占用并提升了存储效率。
+
+新增配置选项可对 RocksDB 的内存使用和性能进行更精细的控制。此外，存储消息的默认序列化方案已更新为 ASN.1，进一步提升了效率。
 
 #### 新增数据集成
 
@@ -27,11 +36,12 @@ EMQX Enterprise 6.0.0 是 EMQX 企业版 6 系列的首个发布版本，带来�
 
 #### 增强的数据集成
 
-- **AWS**:
+- **AWS**：
   - 在使用 S3 或 S3Tables 数据集成时，支持来自 EC2 实例的 Instance Metadata Service v2 API。这使得 EMQX 能够在无需手动配置 AWS 凭证的情况下无缝访问 S3 存储桶，并利用 IAM 角色提升安全性。
   - S3 Tables Action 新增 Parquet 格式支持。
-- **RabbitMQ**: 在 RabbitMQ Sink 中支持自定义 Headers 和 Properties 模板，以增强消息路由能力和与 RabbitMQ 的兼容性。
-- **Snowflake**: Snowflake Action 新增 Snowpipe Streaming 上传模式（预览功能）。
+- **RabbitMQ**：在 RabbitMQ Sink 中支持自定义 Headers 和 Properties 模板，以增强消息路由能力和与 RabbitMQ 的兼容性。
+- **Snowflake**： Snowflake Action 新增 Snowpipe Streaming 上传模式（预览功能）。
+- **RocketMQ**：在动作中新增了 `key` 和 `tag` 模板字段，并在消息 Produce Strategy 中增加了 `key_dispatch` 选项，使消息元数据的自定义更加灵活。
 
 #### Elixir 支持
 
@@ -43,7 +53,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 #### 改进的追踪功能
 
-新增可配置的追踪数量上限（`trace.max_traces`）和追踪文件大小上限（`trace.max_file_size`），并优化了实现以防止 atom 泄漏。
+新增可配置的追踪数量上限（`trace.max_traces`）和追踪文件大小上限（`trace.max_file_size`）。
+当达到 max_file_size 时，跟踪日志将轮转到新文件，而不是停止。
 
 #### 集群管理
 
@@ -53,7 +64,7 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 #### 消息队列
 
-- [#15789](https://github.com/emqx/emqx/pull/15789) 实现了消息队列，这是由 `topic/filter` 标识的消息集合。每个队列都有明确的生命周期，并在其生命周期内自动补充与队列主题过滤器匹配的已发布消息。客户端可以通过订阅特殊格式的主题 `$q/topic/filter` 来协同消费队列中的消息。
+- [#15789](https://github.com/emqx/emqx/pull/15789) 实现了消息队列，这是由 `topic_filter` 标识的消息集合。每个队列都有明确的生命周期，并在其生命周期内自动补充与队列主题过滤器匹配的已发布消息。客户端可以通过订阅特殊格式的主题 `$q/{topic}` 来协同消费队列中的消息。
 
 #### 核心 MQTT 功能
 
@@ -104,6 +115,7 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 - [#15544](https://github.com/emqx/emqx/pull/15544) 为 Datalayers 集成添加了 Arrow Flight SQL NIF 驱动支持。
 - [#15637](https://github.com/emqx/emqx/pull/15637) 为 RabbitMQ 动作添加了消息头和属性的模板支持。
 - [#15864](https://github.com/emqx/emqx/pull/15864) 移除了已弃用的“Bridges V1” API 和配置模式。`/bridges/*` 下的所有端点和 `bridges` 根键下的配置条目已不再可用，因为数据集成已完全迁移到“连接器/动作/Source”模型。
+- [#15583](https://github.com/emqx/emqx/pull/15583) 将 Kafka `brod` 客户端升级至 4.4.4，扩展了对更多 Kafka API 的支持，并解决了 `JoinGroups` API 版本 `v0` 和 `v1` 弃用的问题。
 
 #### 智能数据中心
 
@@ -118,6 +130,12 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
     - `durable_storage.messages.rocksdb.max_open_files`：限制每个分片 RocksDB 使用的文件描述符数量。
     - `durable_storage.messages.layout.wildcard_thresholds`：允许为 `wildcard_optimized_v2` 存储布局调整通配符阈值。
   - 此外，存储消息的默认 `serialization_schema` 已更改为 `asn1`。
+
+- [#16044](https://github.com/emqx/emqx/pull/16044) 持久会话的部分配置字段已被移除或重命名，旧值标记为已弃用：
+
+    - `durable_sessions.heartbeat_interval` 已重命名为 `durable_sessions.checkpoint_interval`。
+    - `durable_sessions.idle_poll_interval` 和 `durable_sessions.renew_streams_interval` 已被移除，因为会话现在完全基于事件驱动。
+    - `durable_sessions.session_gc_interval` 和 `durable_sessions.session_gc_batch_size` 已作为过时配置被移除。
 
 #### CLI
 
@@ -176,6 +194,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 - [#15396](https://github.com/emqx/emqx/pull/15396) 移除了已断开客户端的共享订阅中冗余的清理操作。这些操作在高并发断开情况下容易导致崩溃，并可能引发全局路由状态不一致。
 - [#15361](https://github.com/emqx/emqx/pull/15361) 修复了在解析格式错误的 `User-Property` 键值对时产生的 `function_clause` 错误，特别是当键值对的长度无效（过短）时。
+- [#15783](https://github.com/emqx/emqx/pull/15783) 确保连接速率限制的配置修改在监听器更新完成后立即生效。
+  之前部分内部限流器状态未能及时应用新配置，例如在提升突发速率 (`max_conn_burst`) 后，实际生效的限流可能比预期更严格。
 
 #### 访问控制
 
@@ -199,6 +219,8 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 - [#15786](https://github.com/emqx/emqx/pull/15786) 修复了探测 RocketMQ 连接器时可能存在的 atom 泄漏。
 - [#15806](https://github.com/emqx/emqx/pull/15806) 改进了 Oracle 动作创建时的验证。以前，在极少数情况下，包含无效 SQL 语句的动作可能会被成功添加。
 - [#15848](https://github.com/emqx/emqx/pull/15848) 改进了 Oracle 连接器的错误报告。当连接器断开连接时，其状态现在包含更具体的原因，使诊断更容易。
+- [#15693](https://github.com/emqx/emqx/pull/15693) 修复了基于 Postgres 的桥接中的资源泄漏问题。在连接池初始化过程中，如果出现特定的竞争条件，删除连接器后，其连接池可能仍然残留。此问题已修复，确保连接池能够被正确清理。
+- [#15543](https://github.com/emqx/emqx/pull/15543) 修复了 HTTP 服务数据集成在发送大消息 payload 时的问题。当 payload 大小达到 10 MB 或以上时，HTTP 请求可能会失败。
 
 #### 数据智能中心
 
@@ -235,18 +257,22 @@ LDAP 授权现在支持基于 JSON 格式的扩展 ACL 规则；LDAP 认证也�
 
 #### 可观测性
 
-- [#15931](https://github.com/emqx/emqx/pull/15931) 修复了与 EMQX 告警系统相关的两个问题：
+- [#15931](https://github.com/emqx/emqx/pull/15931) 修复了与 EMQX 告警系统相关的问题：在节点启动期间可能出现虚假但无害的错误日志的错误，例如：
   
-  - 解决了一个在节点启动期间可能出现虚假但无害的错误日志的错误，例如：
-    ```
-    [error] Generic event handler emqx_alarm_handler crashed ...
-    Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
-    ```
-  - 修复了一个在某些条件下告警激活超时可能导致连接进程崩溃的错误。
+  ```
+  [error] Generic event handler emqx_alarm_handler crashed ...
+  Reason: {aborted,{no_exists,[emqx_activated_alarm,runq_overload]}}
+  ```
+
+- [#15973](https://github.com/emqx/emqx/pull/15973) 修复了一个在某些条件下告警激活超时可能导致连接进程崩溃的错误。
 
 #### MQTT over QUIC
 
 - [#15614](https://github.com/emqx/emqx/pull/15614) QUIC 监听器：当启用 TLS 密钥日志记录（`SSLKEYLOGFILE`）时，即使握手失败，EMQX 现在也会转储 TLS 密钥。
+
+#### 集群
+
+- [#16021](https://github.com/emqx/emqx/pull/16021) 修复了 DS Raft 后端在某些情况下无法正常工作的问题。当已有节点加入新集群并随后成为 DS 副本集成员时，可能会触发该问题。
 
 #### 集群连接
 

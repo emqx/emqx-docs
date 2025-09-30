@@ -3,15 +3,21 @@
 ## 停止支持的安装包
 
 - [#15939](https://github.com/emqx/emqx/pull/15939) 停止为已达生命周期终止（EOL）的操作系统发布安装包：
+  - Debian 10 (Buster)
   - 企业版 Linux (CentOS) 7
+  - Ubuntu 18.04
   - Ubuntu 20.04
   - macOS 13 (Ventura)
+
+- [#16050](https://github.com/emqx/emqx/pull/16050) 停止为 Amazon Linux 2 发布安装包。该操作系统将于 2026 年 6 月 30 日达到生命周期终止。
 
 ## MQTT 会话持久化
 
 如果之前未启用 MQTT 会话持久化功能，可以忽略本节内容。
 
 在 EMQX 6.0 中，会话持久化及其消息的内部表示方式已发生变更。对于在 5.x 版本中启用了会话持久化的集群，在升级到 6.0 时必须重新创建一个不带历史数据的集群。
+
+有关详细的升级说明，请参见[滚动升级文档](../deploy/rolling-upgrades.md#emqx-enterprise-rolling-upgrade)。
 
 - [#15496](https://github.com/emqx/emqx/pull/15496) 会话持久化的状态已从 Mnesia 迁移到基于 EMQX 持久存储的新数据库。
   - 因此，6.0.0 之前创建的所有会话持久化状态在迁移过程中都会丢失。
@@ -28,9 +34,8 @@
 
 **会话持久化**
 
-- `durable_sessions.heartbeat_interval` 已更名为 `durable_sessions.checkpoint_interval`。
-- `durable_sessions.idle_poll_interval` 和 `durable_sessions.renew_streams_interval` 已被移除，因为会话现已完全事件驱动。
-- `durable_sessions.session_gc_interval` 和 `durable_sessions.session_gc_batch_size` 已作为过时参数移除。
+- `durable_storage.messages.n_sites` 参数已重命名为 `durable_storage.n_sites`。该参数现已适用于所有持久化存储。
+- 新增了 `durable_storage.sessions` 和 `durable_storage.timers` 配置项。
 - [#15734](https://github.com/emqx/emqx/pull/15734) 提升了会话持久化的可靠性和吞吐量。
 
 **持久存储**
