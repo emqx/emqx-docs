@@ -45,6 +45,8 @@ Additionally, you can subscribe to system topics via MQTT to receive real-time n
 
 On the EMQX Dashboard, click **Monitoring** -> **Alarms**. Then, select the **Active** or **History** tab to view a list of currently active alarms and historical alarms.
 
+For a complete guide to managing alarms using the EMQX Dashboard, see [Alarms](../dashboard/alarm_dashboard.md).
+
 <img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
 
 ### Get Alarms via System Topic

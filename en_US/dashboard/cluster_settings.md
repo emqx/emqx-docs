@@ -139,7 +139,7 @@ The Monitoring feature is only available in the EMQX Enterprise edition.
 
 The **Monitoring** page contains two tabs:
 
-- **System**: Depending on the user's needs, the settings for the [Alarms](./diagnose.md#alarms) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
+- **System**: Depending on the user's needs, the settings for the [Alarms](./alarm_dashboard.md) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
 - **Integration**: Provides configuration for integration with third-party monitoring platforms.
 
 ### System

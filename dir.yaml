@@ -754,6 +754,7 @@
             - dashboard/subscriptions/overview
             - dashboard/retained
             - dashboard/delay-pub
+            - dashboard/alarm_dashboard
         - title_en: Access Control
           title_cn: 访问控制
           title_ja: アクセスコントロール

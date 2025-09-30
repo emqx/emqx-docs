@@ -43,6 +43,8 @@ EMQX 提供多种方式获取告警并查看详细信息。其中一种方式是
 
 在 EMQX Dashboard 上，点击**监控** -> **告警**。选择**当前告警**或**历史告警**页签，您可以查看当前活动的告警和历史告警列表。
 
+要了解如何通过 EMQX Dashboard 管理告警，请参见[告警](../dashboard/alarm_dashboard.md)。
+
 <img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
 
 ### 订阅系统主题获取告警
@@ -78,7 +80,7 @@ EMQX 提供多种方式获取告警并查看详细信息。其中一种方式是
 
 <img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
 
-### 通过 Webhook 集成发送告警事件通知
+### 集成 Webhook 发送告警事件通知
 
 从 EMQX 版本 5.8.5 开始，规则引擎支持两个新的客户端事件：[系统告警激活事件](../data-integration/rule-sql-events-and-fields.md#alarm-activated-event-events-sys-alarm-activated)和[系统告警解除事件](../data-integration/rule-sql-events-and-fields.md#alarm-deactivated-event-events-sys-alarm-deactivated)。这些事件允许您通过 Webhook 集成，将告警活动的通知发送到外部 HTTP 服务。
 
