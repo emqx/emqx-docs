@@ -32,7 +32,7 @@
 
 4. 点击**创建**保存队列。
 
-新队列将出现在消息队列列表中，并显示其主题过滤器、分发策略、是否启用了最新值语义以及数据保留时间。你可以通过**操作** 栏中的按钮编辑或删除队列。
+新队列将出现在消息队列列表中，并显示其主题过滤器、分发策略、是否启用了最新值语义以及数据保留时间。你可以通过**操作**栏中的按钮编辑或删除队列。
 
 ## 配置消息队列设置
 
@@ -66,30 +66,9 @@ curl -v -u key:secret -X PUT -H "Content-Type: application/json" http://localhos
 
 ```hocon
 mq {
-    ## 消息队列清理过期消息的周期。
     gc_interval = 1h
-    ## 普通消息队列中消息的最长保留时间。
     regular_queue_retention_period = 1d
-    ## 当订阅队列主题时未找到队列，订阅者尝试重新查找的周期。
     find_queue_retry_interval = 10s
-    ## 存储消息队列状态的数据库配置。
-    ## 详细信息见 Durable Storage 配置。
-    state_db {
-        transaction {
-            flush_interval = 10
-            idle_flush_interval = 5
-            conflict_window = 5000
-        }
-    }
-    ## 存储消息内容的消息队列数据库配置。
-    ## 详细信息见 Durable Storage 配置。
-    message_db {
-        transaction {
-            flush_interval = 100
-            idle_flush_interval = 20
-            conflict_window = 5000
-        }
-    }
 }
 ```
 
@@ -97,15 +76,7 @@ mq {
 
 - **`gc_interval`**：定义 EMQX 扫描消息队列并清理过期消息的时间间隔。
 - **`regular_queue_retention_period`**：设置队列中消息的最长保留时间。超时的消息将被自动清除。
-- **`find_queue_retry_interval`**：当订阅者订阅 `$q/` 主题但队列尚未存在时，重新尝试查找队列的周期。
-- **`state_db`**：消息队列状态数据库配置，用于存储队列元数据（如属性、消费进度）。
-  - `flush_interval`：活跃事务的提交间隔。
-  - `idle_flush_interval`：空闲事务的提交间隔。
-  - `conflict_window`：并发写入冲突检测的时间窗口（毫秒）。
-- **`message_db`**：消息队列消息数据库配置，实际消息存储于此。
-  - `flush_interval`：写入事务的提交间隔。
-  - `idle_flush_interval`：空闲写入事务的提交间隔。
-  - `conflict_window`：消息写入冲突检测的时间窗口（毫秒）。
+- **`find_queue_retry_interval`**：当订阅者订阅 `$q/` 主题时未找到队列，订阅者重新尝试查找队列的周期。
 
 ## 通过 REST API 管理消息队列
 

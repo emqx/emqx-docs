@@ -66,52 +66,20 @@ For persistent and version-controlled configuration, you can define Message Queu
 
 ```hocon
 mq {
-    ## The interval at which the Message Queues will clean up expired messages.
     gc_interval = 1h
-    ## The maximum retention period of messages in regular Message Queues.
     regular_queue_retention_period = 1d
-    ## The interval at which subscribers will retry to find a queue if the queue is not found
-    ## when subscribing to a queue topic.
     find_queue_retry_interval = 10s
-    ## Settings for the database storing the Message Queue state.
-    ## See Durable Storage configuration for more details.
-    state_db {
-        transaction {
-            flush_interval = 10
-            idle_flush_interval = 5
-            conflict_window = 5000
-        }
-    }
-    ## Settings for the database storing the Message Queue messages.
-    ## See Durable Storage configuration for more details.
-    message_db {
-        transaction {
-            flush_interval = 100
-            idle_flush_interval = 20
-            conflict_window = 5000
-        }
-    }
 }
 ```
 
 #### Configuration Descriptions
 
 - **`gc_interval`**:
-  Defines how often EMQX scans message queues to remove expired messages.
+  Defines the interval at which the Message Queues will clean up expired messages.
 - **`regular_queue_retention_period`**:
   Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
 - **`find_queue_retry_interval`**:
   Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
-- **`state_db`**:
-  Configuration for the **Message Queue State Database**, which stores queue metadata (like properties and consumption progress).
-  - `flush_interval`: Commit interval for active transactions.
-  - `idle_flush_interval`: Commit interval for idle transactions.
-  - `conflict_window`: Time window (in ms) used for conflict detection during concurrent writes.
-- **`message_db`**:
-  Configuration for the **Message Queue Message Database**, where the actual messages are stored.
-  - `flush_interval`: Commit interval for message write transactions.
-  - `idle_flush_interval`: Commit interval for idle message writes.
-  - `conflict_window`: Time window (in ms) used for conflict detection on message writes.
 
 ## Manage Message Queue via REST API
 

@@ -1,4 +1,4 @@
-# EMQX Message Queue Quick Start
+# Message Queue Quick Start
 
 This page walks you through how to use the Message Queue feature in EMQX 6.0. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
 
@@ -18,9 +18,9 @@ Before starting, ensure you have:
 - [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
 - Access to the EMQX Dashboard (default: `http://localhost:18083`)
 
-## Test Core Message Queue Basic Features
+## Test Message Queue Basic Features
 
-This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline
+This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline.
 
 ### Step 1: Create a Message Queue
 
@@ -36,7 +36,7 @@ This section demonstrates how EMQX Message Queues persist and deliver messages. 
 
 ### Step 2: Publish Messages
 
-Use MQTTX to simulate a **publisher**:
+Use MQTTX to simulate a client as a **publisher**:
 
 1. Open MQTTX and create a client (e.g., `publisher`).
 2. Connect to EMQX (`mqtt://localhost:1883`).
@@ -56,7 +56,7 @@ At this point, there are no subscribers. Messages will be queued and persisted b
 
 ### Step 3: Subscribe and Consume Messages
 
-Use MQTTX to simulate a **subscriber**:
+Use MQTTX to simulate a client as a **subscriber**:
 
 1. Open a second client (e.g., `worker-a`).
 
