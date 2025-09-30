@@ -120,7 +120,7 @@ durable_sessions {
 以 [MQTTX CLI](https://mqttx.app/zh/cli) 为例，它默认使用了 MQTT 5.0 协议，添加 `--no-clean` 选项以设置 `Clean Start = false`，同时指定客户端 ID 为 `emqx_c`，连接到 EMQX 并订阅 `t/1` 主题：
 
 ```bash
-mqttx sub -t t/1 -i emqx_c --no-clean
+mqttx sub -t t/1 -i emqx_c --no-clean -q 1
 ```
 
 ### 3. 断开客户端连接，会话将被保留
@@ -134,7 +134,7 @@ mqttx sub -t t/1 -i emqx_c --no-clean
 仍以 MQTTX CLI 为例，使用 `bench` 命令，通过 1 个客户端重复向 `t/1` 主题发布消息：
 
 ```bash
-mqttx bench pub -t t/1 -c 1
+mqttx bench pub -t t/1 -c 1 -q 1
 ```
 
 根据 MQTT 协议要求，即使 `emqx_c` 客户端不在线，它订阅的 `t/1` 主题消息也会被保存在客户端队列中，以便在重新连接后继续派发。
@@ -146,7 +146,7 @@ mqttx bench pub -t t/1 -c 1
 尝试使用相同的客户端 ID `emqx_c`，并使用 `--no-clean` 选项设置 `Clean Start = false`）连接到 EMQX：
 
 ```bash
-mqttx sub -t t/1 -i emqx_c --no-clean
+mqttx sub -t t/1 -i emqx_c --no-clean -q 1
 ```
 
 离线期间接收到的消息将在此时将派发到当前客户端：
