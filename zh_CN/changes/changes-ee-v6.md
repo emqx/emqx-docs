@@ -36,11 +36,12 @@ EMQX Enterprise 6.0.0 是 EMQX 企业版 6 系列的首个发布版本，带来�
 
 #### 增强的数据集成
 
-- **AWS**:
+- **AWS**：
   - 在使用 S3 或 S3Tables 数据集成时，支持来自 EC2 实例的 Instance Metadata Service v2 API。这使得 EMQX 能够在无需手动配置 AWS 凭证的情况下无缝访问 S3 存储桶，并利用 IAM 角色提升安全性。
   - S3 Tables Action 新增 Parquet 格式支持。
-- **RabbitMQ**: 在 RabbitMQ Sink 中支持自定义 Headers 和 Properties 模板，以增强消息路由能力和与 RabbitMQ 的兼容性。
-- **Snowflake**: Snowflake Action 新增 Snowpipe Streaming 上传模式（预览功能）。
+- **RabbitMQ**：在 RabbitMQ Sink 中支持自定义 Headers 和 Properties 模板，以增强消息路由能力和与 RabbitMQ 的兼容性。
+- **Snowflake**： Snowflake Action 新增 Snowpipe Streaming 上传模式（预览功能）。
+- **RocketMQ**：在动作中新增了 `key` 和 `tag` 模板字段，并在消息 Produce Strategy 中增加了 `key_dispatch` 选项，使消息元数据的自定义更加灵活。
 
 #### Elixir 支持
 

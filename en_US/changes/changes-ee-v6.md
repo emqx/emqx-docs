@@ -43,6 +43,7 @@ New configuration options provide finer control over RocksDB memory usage and pe
 
 - **RabbitMQ**: Define custom Headers and Properties Templates in RabbitMQ Sink to enhance message routing and compatibility within RabbitMQ.
 - **Snowflake**: Snowpipe Streaming upload mode for Snowflake Action (preview feature).
+- **RocketMQ**: New `key` and `tag` template fields in Action, along with a `key_dispatch` option for the Produce Strategy, allowing greater customization of message metadata.
 
 #### Elixir Support
 
