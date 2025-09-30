@@ -35,9 +35,9 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
 - **Persistent message storage (even when clients are offline)**: While queues are not strictly ordered, they are designed for reliable and asynchronous delivery, bridging the gap between lightweight MQTT communication and more advanced enterprise messaging needs.
 - **Explicit queue declaration and property configuration**: Each queue has a configurable lifecycle, with support for TTL, size limits, and dispatch strategies, allowing fine-grained control over how messages are retained and delivered.
-- **Optional Last-Value Semantics**: Messages with the same ` queue key` property overwrite previous ones, ideal for retaining only the latest state or configuration update.
+- **Optional Last-Value Semantics**: Messages with the same key overwrite previous ones, ideal for retaining only the latest state or configuration update.
 
-## Message Queue Key Concepts
+## Message Queue Concepts
 
 - **Queue Name**
    An MQTT topic or topic filter that identifies the queue. Messages published to matching topics are automatically enqueued.
@@ -110,7 +110,7 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
   If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
 
   - If a key is derived, it replaces any unconsumed message with the same key.
-  - If no key is defined or resolved, messages are enqueued in FIFO (first-in, first-out) order.
+  - If a key fails to evaluate for a last-value queue, the message is discarded.
 
 - **Dequeueing Messages**
   Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 to ensure reliable message delivery. Acknowledgments (for QoS 1) trigger message removal from the queue.

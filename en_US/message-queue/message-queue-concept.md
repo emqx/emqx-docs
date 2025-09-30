@@ -110,7 +110,7 @@ The Message Queue feature in EMQX provides a set of core capabilities that enabl
   If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
 
   - If a key is derived, it replaces any unconsumed message with the same key.
-  - If no key is defined or resolved, messages are enqueued in FIFO (first-in, first-out) order.
+  - If a key fails to evaluate for a last-value queue, the message is discarded.
 
 - **Dequeueing Messages**
   Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 to ensure reliable message delivery. Acknowledgments (for QoS 1) trigger message removal from the queue.

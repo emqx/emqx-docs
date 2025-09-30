@@ -115,9 +115,11 @@ You can verify these behaviors by watching how messages are delivered to `worker
 
 You can change the strategy on the fly:
 
-- Go to **Message Queue** in Dashboard.
-- Click **Edit** next to your queue.
-- Select a new **Dispatch Strategy** and save.
+1. Go to **Message Queue** in Dashboard.
+2. Click **Edit** next to your queue.
+3. Select a new **Dispatch Strategy** and save.
+
+Note that the new dispatch strategy will not apply while there are active subscribers online. You need to disconnect the clients and reconnects them back.
 
 After switching, repeat the message publishing test and observe the difference in distribution patterns between the subscribers.
 
@@ -142,10 +144,10 @@ This removes the previous queue and its stored messages.
    - **Dispatch Strategy**: `Random` (or your choice)
    - **Data Retention Period**: `1` day
    - **Last Value Semantics**: Toggle on
-   - **Queue Key Expression**: `message.key` (or any field name you will use as key)
+   - **Queue Key Expression**: `message.from` (or any field name you will use as key)
 3. Click **Create**.
 
-The “Queue Key Expression” defines where to extract the key from the message’s metadata. Set to `message.key` means EMQX will extract the queue key from the client ID of the message publisher.
+The “Queue Key Expression” defines where to extract the key from the message’s metadata. Set to `message.from` means EMQX will extract the queue key from the client ID of the message publisher.
 
 ### Step 3: Publish Messages
 
@@ -169,7 +171,7 @@ The “Queue Key Expression” defines where to extract the key from the message
    Payload: {"ssid": "wifi2"}
    ```
 
-Since the **Queue Key Expression** is set to `message.key`, EMQX will automatically extract the client ID from each message and use it as the queue key. Messages from the same client will overwrite previous unconsumed messages in the queue.
+Since the **Queue Key Expression** is set to `message.from`, EMQX will automatically extract the client ID from each message and use it as the queue key. Messages from the same client will overwrite previous unconsumed messages in the queue.
 
 ### Step 4: Subscribe to the Queue
 
