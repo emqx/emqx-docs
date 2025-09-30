@@ -2,7 +2,7 @@
 
 ## 6.0.0
 
-*Release Date: 2025-09-29*
+*Release Date: 2025-09-30*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 6.0.0.
 
