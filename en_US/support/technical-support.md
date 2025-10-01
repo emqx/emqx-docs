@@ -28,7 +28,7 @@ If you have any questions about EMQX products or our IoT solutions, you are welc
 **Address**: 
 
 - Headquarter: #A301, Building 3, No.88 Longyuan Road, Yuhang District, Hangzhou, Zhejiang, China
-- Global R&D center: Stockholm Mazarinvägen 36 Sköndal, Stockholm, Sweden
+- Global R&D center: Klarabergsgatan 60, 111 21 Stockholm, Sweden
 - Europe office: Frankfurt Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M), Germany
 - US office: 1300 El Camino Real, Suite 100, Menlo Park, CA 94025
 
