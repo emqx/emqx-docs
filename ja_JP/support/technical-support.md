@@ -28,7 +28,7 @@ EMQX製品や当社のIoTソリューションに関するご質問がござい�
 **所在地:** 
 
 - 本社： 中国 浙江省 杭州市 餘杭区 龍源路88号 3号棟 A301
-- グローバルR&Dセンター： スウェーデン ストックホルム Mazarinvägen 36 Sköndal
+- グローバルR&Dセンター： スウェーデン ストックホルム Klarabergsgatan 60, 111 21 Stockholm, Sweden
 - ヨーロッパオフィス： ドイツ フランクフルト Eschborner Landstraße 42-50 Haus B, 60489 Frankfurt(M)
 - 米国オフィス： 1300 El Camino Real, Suite 100, Menlo Park, CA 94025
 
