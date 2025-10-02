@@ -110,7 +110,6 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
 | [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
 | [macOS](./install-macOS.md)       | macOS 12<br />macOS 13 (Homebrew)  | 是   | 是  |
-| [Windows](./install-windows.md)   | Windows Server 2019                              | 是   | 是  |
 
 {% endemqxce %}
 
@@ -125,7 +124,7 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 | [macOS](./install-macOS.md)       | macOS 12<br />macOS 13<br />                   | 是   | 是  |
 
 {% endemqxee %}
- 
+
 <!-- ## 硬件规格
 
 EMQX 的硬件要求根据客户端连接数、消息消息速率和消息大小以及启用的功能而异。
