@@ -2,13 +2,23 @@
 
 When in a cluster, EMQX nodes can be upgraded one at a time without any downtime. This process is referred to as a rolling upgrade. To achieve smooth client session migration, you can use the Cluster Rebalancing feature of the EMQX Enterprise edition to evacuate clients from a node before upgrading it. Find more information about Cluster Rebalancing [here](../deploy/cluster/rebalancing.md).
 
-The rolling upgrade process for each node in the cluster is as follows:
+**The Upgrade Process for a Cluster Node**
 
 1. Evacuate clients from the node using cluster rebalancing. (optional)
 2. Stop the old version node.
 3. [Backup](../operations/backup-restore.md) the config files and data directory of the nodes.
 4. Install a new version of EMQX.
 5. Start the new version node.
+
+**Upgrading Core and Replicant Nodes**
+
+In a core/replicant cluster, upgrade nodes in alternating groups to maintain cluster stability:
+
+- Begin with one core node.
+- Then upgrade a proportionate subset of replicant nodes (for example, roughly one-third if there are three core nodes).
+- Continue alternating between core and replicant nodes until all nodes are upgraded.
+
+This approach ensures replicants always have compatible cores to connect to during the rollout.
 
 :::tip Note
 Do not perform cluster-wide config changes during a rolling upgrade. Configuration changes made from Dashboard, HTTP API, or CLI are applied to all nodes in the cluster. Making configuration changes during a rolling upgrade may cause nodes to become out of sync.
