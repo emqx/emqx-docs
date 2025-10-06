@@ -34,6 +34,16 @@ To upgrade each node in the cluster without downtime, follow these steps:
 4. Install a new version of EMQX.
 5. Start the new version node.
 
+**Upgrading Core and Replicant Nodes**
+
+In a core/replicant cluster, upgrade nodes in alternating groups to maintain cluster stability:
+
+- Begin with one core node.
+- Then upgrade a proportionate subset of replicant nodes (for example, roughly one-third if there are three core nodes).
+- Continue alternating between core and replicant nodes until all nodes are upgraded.
+
+This approach ensures replicants always have compatible cores to connect to during the rollout.
+
 :::tip Note
 Do not perform cluster-wide config changes during a rolling upgrade. Configuration changes made from the Dashboard, HTTP API, or CLI are applied to all nodes in the cluster. Making configuration changes during a rolling upgrade may cause nodes to become out of sync.
 :::
