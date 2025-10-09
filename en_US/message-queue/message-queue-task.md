@@ -92,17 +92,20 @@ Queue Key Expressions are evaluated against the following message structure:
 ```erlang
 #{message =>
       #{extra => #{},
-        flags => #{dup => false,retain => false},
+        flags => #{dup => false, retain => false},
         id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
         timestamp => 1759238376252, from => <<"clientid">>,
         headers =>
-            #{peername => <<"127.0.0.1:49352">>,protocol => mqtt,
-              username => undefined,peerhost => <<"127.0.0.1">>,
+            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
+              username => undefined, peerhost => <<"127.0.0.1">>,
               properties =>
                   #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
-              proto_ver => 5,client_attrs => #{}},
-        payload => <<"some-payload">>,topic => <<"some/topic">>,
-        qos => 0}}
+              proto_ver => 5, client_attrs => #{}
+            },
+        payload => <<"some-payload">>, topic => <<"some/topic">>,
+        qos => 0
+      }
+    }
 ```
 
 </details>
