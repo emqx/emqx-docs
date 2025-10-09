@@ -2,18 +2,10 @@
 
 ## e5.8.8
 
-- **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item (since 5.8.0, will be fixed in 5.8.8)**.
-
-  If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled.
-
-  > **Workaround:**
-  > Run the following command on any EMQX node.
-  >
-  > ```
-  > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
-  > ```
-
-- **External Schema Registries are not loaded after a node restart (since 5.8.1, will be fixed in 5.8.8)**.
+| Since version | Issue                                                        | Workaround                                                   | Status         |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- |
+| 5.8.0         | **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item**<br />If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled. | Run the following command on any EMQX node:<br />`$ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."` | Fixed in 5.8.8 |
+| 5.8.1         | **External Schema Registries are not loaded after a node restart** | None                                                         | Fixed in 5.8.8 |
 
 ## e5.8.6
 
