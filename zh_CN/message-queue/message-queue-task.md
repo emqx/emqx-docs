@@ -50,7 +50,9 @@ message.headers.properties.'User-Property'.user-prop
 
 队列键表达式会在如下结构的消息上下文中进行求值：
 
-<details> <summary><strong>JSON 示例</strong></summary>
+<details>
+
+<summary><strong>JSON 示例</strong></summary>
 
 ```json
 {
@@ -83,7 +85,11 @@ message.headers.properties.'User-Property'.user-prop
 }
 ```
 
-<details> <summary><strong>Erlang Term 示例</strong></summary>
+</details>
+
+<details>
+
+<summary><strong>Erlang Term 示例</strong></summary>
 
 ```erlang
 #{
