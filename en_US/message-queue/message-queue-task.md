@@ -28,7 +28,7 @@ To create a new Message Queue using the EMQX Dashboard:
 
    - **Last Value Semantics**: Toggle this switch on if you want new messages with the same queue key to overwrite older messages in the same queue. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the queue.
 
-     - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The defatul value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
+     - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
 4. Click **Create** to save the queue.
 
