@@ -28,11 +28,95 @@
 
    - **最后值语义**：若希望同一队列中使用相同队列键的新消息覆盖旧消息，请开启此开关。启用此选项后，每条消息应该具有“队列键表达式”所配置的属性，以保存到队列中。
 
-     - **队列键表达式**：启用“最新值语义”后，该字段用于定义如何从每条消息中提取队列键，默认值为 `message.from`，即为消息的发送者客户端 ID。该字段支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)设置。
+     - **[队列键表达式](#队列键表达式)**：启用“最新值语义”后，该字段用于定义如何从每条消息中提取队列键，默认值为 `message.from`，即为消息的发送者客户端 ID。该字段支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)设置。
 
 4. 点击**创建**保存队列。
 
 新队列将出现在消息队列列表中，并显示其主题过滤器、分发策略、是否启用了最新值语义以及数据保留时间。你可以通过**操作**栏中的按钮编辑或删除队列。
+
+### 队列键表达式
+
+队列键表达式用于指定在启用“最新值语义”模式下，如何从消息元数据中提取用于消息去重的键。该表达式会针对每条消息的元数据进行求值，并遵循[Variform 表达式](../configuration/configuration.md#variform-表达式)的语法。
+
+该表达式会在包含 `from`、`topic`、`payload`、`headers.properties` 等字段的消息上下文中进行求值。例如，如果希望使用用户属性（User Property）作为键，可以将表达式设置为：
+
+```
+message.headers.properties.'User-Property'.user-prop
+```
+
+如果无法根据表达式提取出队列键（例如字段不存在），该消息将被丢弃，不会被加入队列。
+
+#### 消息上下文示例
+
+队列键表达式会在如下结构的消息上下文中进行求值：
+
+<details> <summary><strong>JSON 示例</strong></summary>
+
+```json
+{
+  "message": {
+    "qos": 0,
+    "topic": "some/topic",
+    "payload": "some-payload",
+    "headers": {
+      "client_attrs": {},
+      "proto_ver": 5,
+      "properties": {
+        "User-Property": {
+          "user-prop": "some-value"
+        }
+      },
+      "peerhost": "127.0.0.1",
+      "username": "undefined",
+      "protocol": "mqtt",
+      "peername": "127.0.0.1:49352"
+    },
+    "from": "clientid",
+    "timestamp": 1759238376252,
+    "id": "..non utf8 bytes...",
+    "flags": {
+      "retain": false,
+      "dup": false
+    },
+    "extra": {}
+  }
+}
+```
+
+<details> <summary><strong>Erlabg Term 示例</strong></summary>
+
+```erlang
+#{
+  message =>
+      #{
+        extra => #{},
+        flags => #{dup => false, retain => false},
+        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
+        timestamp => 1759238376252,
+        from => <<"clientid">>,
+        headers =>
+            #{
+              peername => <<"127.0.0.1:49352">>,
+              protocol => mqtt,
+              username => undefined,
+              peerhost => <<"127.0.0.1">>,
+              properties =>
+                  #{
+                    'User-Property' => #{
+                      <<"user-prop">> => <<"some-value">>
+                    }
+                  },
+              proto_ver => 5,
+              client_attrs => #{}
+            },
+        payload => <<"some-payload">>,
+        topic => <<"some/topic">>,
+        qos => 0
+      }
+}
+```
+
+</details>
 
 ## 配置消息队列设置
 
