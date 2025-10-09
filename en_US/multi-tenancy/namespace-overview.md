@@ -18,8 +18,6 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
 
 ### What Namespaces Can Achieve
 
-Namespaces provide a logical isolation mechanism in EMQX, enabling multi-tenancy by separating data, configurations, and permissions. With namespaces, different teams or tenants can share the same EMQX cluster while ensuring strict boundaries for their resources and operations.
-
 - **Logical Isolation of Clients and Messages**
 
   Namespaces enable you to logically separate clients across different tenants by isolating client IDs and topic spaces.
@@ -44,11 +42,12 @@ Namespaces provide a logical isolation mechanism in EMQX, enabling multi-tenancy
 
 - **Admin User Isolation**
    Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
+  
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
-  - This ensures secure, tenant-specific administrative access alongside data isolation.
-
+   - This ensures secure, tenant-specific administrative access alongside data isolation.
+   
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
