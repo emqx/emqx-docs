@@ -8,7 +8,7 @@ During the initial setup of the cluster, several configuration parameters influe
 
 ### Replication Factor
 
-The replication factor, controlled with `durable_storage.messages.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
+The replication factor, controlled with `durable_storage.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
 
 Setting the replication factor to an odd number is advisable as it influences the quorum size required for successful write operations. A higher replication factor results in more copies of data distributed across the cluster, thereby enhancing high availability. However, it also increases storage and network overhead due to additional communication needed to achieve consensus.
 
@@ -27,7 +27,7 @@ The `durable_storage.messages.n_shards` parameter controls the number of shards,
 
 ### Number of Sites
 
-The `durable_storage.messages.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storage begins allocating shards to the available sites in a balanced manner.
+The `durable_storage.n_sites` configuration parameter determines the minimum number of sites that must be online for the durable storage to initialize and start accepting writes. Once this minimum is met, the durable storage begins allocating shards to the available sites in a balanced manner.
 
 The default value is `1`, meaning each node may initially consider itself the sole site responsible for data storage. This setup is optimized for single-node EMQX clusters. When the cluster forms, one node's view will eventually dominate, causing other nodes to abandon their stored data.
 
@@ -52,7 +52,7 @@ SHARDS:
 When a new node joins the cluster, it is assigned a *Site ID* and can be included in the durable storage. Some shard replica responsibilities will be transferred to the new site, which will then start replicating the data.
 
 ```shell
-$ emqx ctl ds join messages <Site ID>
+$ emqx ctl ds join all <Site ID>
 ok
 ```
 
@@ -65,7 +65,7 @@ Changes to the replica set are durably stored, ensuring that node restarts or ne
 Removing a site involves transferring shard replica responsibilities away from the site being removed. Similar to adding a site, this process can take time and resources.
 
 ```shell
-$ emqx ctl ds leave messages <Site ID>
+$ emqx ctl ds leave all <Site ID>
 ok
 ```
 
@@ -76,7 +76,7 @@ Removing a site can cause the effective replication factor to drop below the con
 A series of changes to the set of sites holding durable storage replicas can be performed in a single operation.
 
 ```shell
-$ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set-replicas all <Site ID 1> <Site ID 2> ...
 ```
 
 This approach minimizes the volume of data transferred between sites, while ensuring that the replication factor is maintained if possible.
@@ -102,7 +102,7 @@ If a node is completely lost, the cluster's availability is compromised to some 
 
     The next step is to restore availability by reallocating the lost node’s shards to other nodes in the cluster. You can use the standard `leave` command to achieve this. This command can still function even if the node is lost or unreachable, although the transition may take longer to complete.
     ```shell
-    $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+    $ emqx ctl ds leave all 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
     ```
 
 3. Monitor the cluster status.
@@ -138,7 +138,7 @@ If a node is completely lost, the cluster's availability is compromised to some 
     Once all shard transitions are complete, you need to inform the cluster that the lost site will never come back.
 
     ```shell
-    $ emqx ctl ds forget messages 5C6028D6CE9459C7
+    $ emqx ctl ds forget all 5C6028D6CE9459C7
     ```
 
     This step is crucial if you plan to replace the lost node with a new one using the original node name. Failing to do so could result in the cluster recognizing the same node name under two different Site IDs, leading to significant confusion and potential issues.
