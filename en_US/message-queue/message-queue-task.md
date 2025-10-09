@@ -26,13 +26,89 @@ To create a new Message Queue using the EMQX Dashboard:
 
    - **Data Retention Period**: Specify how long messages should be retained in the queue. You can set the time unit (e.g., days).
 
-   - **Last Value Semantics**: Toggle this switch on if you want the queue to overwrite older messages with the same key, keeping only the latest value per key.
+   - **Last Value Semantics**: Toggle this switch on if you want new messages with the same queue key to overwrite older messages in the same queue. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the queue.
 
-   - **Queue Key Expression**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message (e.g., `message.from`, which means the client ID of the message publisher). The key is used to determine whether a new message should replace an existing one.
+     - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
 4. Click **Create** to save the queue.
 
 The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit or delete queues using the buttons in the **Actions** column.
+
+### Queue Key Expression
+
+The Queue Key Expression specifies how to extract the key used for message deduplication in Last-Value Semantics mode. This expression is evaluated against a message's metadata and follows the syntax of [Variform expressions](../configuration/configuration.md#variform-expressions).
+
+The expression is evaluated against a message context that includes fields such as `from`, `topic`, `payload`, `headers.properties`, and more. For example, to use a user property as the key, you could set the expression to:
+
+```
+message.headers.properties.'User-Property'.user-prop
+```
+
+If the key cannot be extracted based on the expression (e.g., the field doesn't exist), the message will be discarded and not enqueued.
+
+#### Message Context Example
+
+Queue Key Expressions are evaluated against the following message structure:
+
+<details>
+<summary><strong>JSON Example</strong></summary>
+
+```json
+{
+  "message": {
+    "qos": 0,
+    "topic": "some/topic",
+    "payload": "some-payload",
+    "headers": {
+      "client_attrs": {},
+      "proto_ver": 5,
+      "properties": {
+        "User-Property": {
+          "user-prop": "some-value"
+        }
+      },
+      "peerhost": "127.0.0.1",
+      "username": "undefined",
+      "protocol": "mqtt",
+      "peername": "127.0.0.1:49352"
+    },
+    "from": "clientid",
+    "timestamp": 1759238376252,
+    "id": "..non utf8 bytes...",
+    "flags": {
+      "retain": false,
+      "dup": false
+    },
+    "extra": {}
+  }
+}
+```
+
+
+</details>
+
+<details> <summary><strong>Erlang Term Example</strong></summary>
+
+```erlang
+#{message =>
+      #{extra => #{},
+        flags => #{dup => false, retain => false},
+        id => <<0,6,64,4,154,125,229,77,244,69,0,0,28,21,0,2>>,
+        timestamp => 1759238376252, from => <<"clientid">>,
+        headers =>
+            #{peername => <<"127.0.0.1:49352">>, protocol => mqtt,
+              username => undefined, peerhost => <<"127.0.0.1">>,
+              properties =>
+                  #{'User-Property' => #{<<"user-prop">> => <<"some-value">>}},
+              proto_ver => 5, client_attrs => #{}
+            },
+        payload => <<"some-payload">>, topic => <<"some/topic">>,
+        qos => 0
+      }
+    }
+```
+
+</details>
 
 ## Configure Message Queue Settings
 
