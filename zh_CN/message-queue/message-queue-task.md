@@ -83,7 +83,7 @@ message.headers.properties.'User-Property'.user-prop
 }
 ```
 
-<details> <summary><strong>Erlabg Term 示例</strong></summary>
+<details> <summary><strong>Erlang Term 示例</strong></summary>
 
 ```erlang
 #{
