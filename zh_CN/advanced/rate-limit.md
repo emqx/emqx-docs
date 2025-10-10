@@ -36,7 +36,7 @@ EMQX 使⽤[令牌桶 (Token Bucket)](https://en.wikipedia.org/wiki/Token_bucket
 ![image-20190604103907875](../assets/token-bucket.jpg)
 
 - 存在一个可容纳令牌 (Token) 的桶 (Bucket) ，可容纳令牌数量的最大值为 $burst$ ，简记为 $b$ 。
-- 存在一个每秒向桶添加令牌的速率 $rate$，简记为 $r$ 。当桶满时则不再向桶中加⼊令牌。
+- 存在一个每秒向桶添加令牌的速率 $rate$，简记为 $r$ 。当桶满时则不再向桶中加入令牌。
 - 每当有 1 个 (或 N 个) 请求抵达时，则从桶中拿出 1 个 (或 N 个) 令牌。如果令牌不够则阻塞，等待令牌的⽣成。
 
 该算法中:
