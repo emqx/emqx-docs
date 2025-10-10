@@ -20,17 +20,31 @@ When a username exceeds its quota, new session connections will be rejected, and
 
 5. Click **Add** to complete the settings.
 
-   ![user-quota-create](./assets/user-quota-create-en.png)
+   ![user-quota-create](./assets/username-quota-create-en.png)
 
 ## Manage Username Quota
 
 On the Modules page, navigate to the **Username Quota** module you have added. Click **Manage** on the right.
 
-On the **Usage** tab, you can view the current usernames in the EMQX cluster and the number of sessions used for each username. By clicking the **View** button next to the session count, you can see the session list for the selected username.
+![user-quota-usage](./assets/username-quota-usage-en.png)
 
-On the **Configuration** tab, you can edit the configuration of the username quota limits. To delete the module, click **Delete** in the upper right corner.
+### View Username Sessions
 
-![user-quota-usage](./assets/user-quota-usage-en.png)
+Under the **Usage** tab, you can view all active usernames in the EMQX cluster along with the number of active sessions for each.
+
+- Click **View** next to a username to see detailed session information.
+- Click **Disconnect All Sessions** to forcibly disconnect all client sessions associated with that username.
+- To sort the list by the number of sessions, toggle the **Sort** switch next to **Number of Sessions**.
+
+If you want to sort the username and session list by number of sessions, you can click the **Sort** button next to the **Number of Sessions**.
+
+### Configure Quota Limits
+
+Go to the **Configuration** tab to edit the session limit settings for MQTT usernames. This allows you to control how many concurrent sessions are permitted per username.
+
+### Delete Username Quota Module
+
+To remove the Username Quota module, click **Delete** in the top-right corner of the page.
 
 ## HTTP API
 
