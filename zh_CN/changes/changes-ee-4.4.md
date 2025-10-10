@@ -46,7 +46,11 @@
   [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
   ```
 
-- 修复滚动升级之后重启 EMQX 节点，可能会因为丢失 `emqx_trace` 远程表导致启动失败的问题。
+- 修复升级 EMQX 版本之后，可能会因为丢失 `emqx_trace` 远程表导致日志追踪功能无法使用的问题。
+
+  某些升级场景中，用户会将新版本的 EMQX 加入正在运行的老版本 EMQX 集群，然后再移除老版本节点。
+  如果用户在通过 CLI 或 API 移除老版本节点之前，先（通过 `emqx stop` 命令或者其他方式）停止了老版本节点，并且老版本曾经使用过日志追踪功能，那么新版本节点上的日志追踪模块可能会因为无法访问 `emqx_trace` 远程表而出现异常。另外，此问题也会导致 `emqx ctl cluster force-leave <node>` 命令无法正常工作。
+  修复后，日志追踪模块会在启动时修复 `emqx_trace` 表，同时 `force-leave` 命令不可用的问题也会在日志追踪模块启动后得到解决。
 
 - 修复速率限制不精准的问题。
 

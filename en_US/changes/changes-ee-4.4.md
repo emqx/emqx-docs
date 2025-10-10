@@ -46,7 +46,9 @@
   [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
   ```
 
-- Fixed an issue where restarting EMQX nodes after rolling upgrades could fail to start due to the loss of the `emqx_trace` remote table.
+- Fixed an issue where the log tracing feature could become unusable after upgrading EMQX versions due to the loss of the `emqx_trace` remote table.
+
+  In certain upgrade scenarios, users might add a new version of EMQX to a running cluster of an older version and then remove the old nodes. If users stop the old nodes (using the `emqx stop` command or other methods) before removing them via CLI or API, and if the old version had used the log tracing feature, the log tracing module on the new version node might encounter exceptions due to being unable to access the `emqx_trace` remote table. Additionally, this issue could cause the `emqx ctl cluster force-leave <node>` command to malfunction. After the fix, the log tracing module will repair the `emqx_trace` table during startup, and the issue with the `force-leave` command will be resolved once the log tracing module starts.
 
 - Fixed inaccurate rate limiting.
 
