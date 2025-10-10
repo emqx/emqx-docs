@@ -18,7 +18,7 @@
 
 - Improved user experience on the "Usage" page of the username quota module.
 
-  Previously, the "Usage Details" page automatically sorted usernames by session count, displaying those with the most sessions at the top. However, when there were many usernames, sorting caused long page load times and affected user experience. Now, a sort button has been added to the page, and sorting is only performed when the button is clicked.
+  Previously, the "Usage" page automatically sorted usernames by session count, displaying those with the most sessions at the top. However, when there were many usernames, sorting caused long page load times and affected user experience. Now, a sort button has been added to the page, and sorting is only performed when the button is clicked.
 
 - Reduced system resource consumption of the username quota module during cluster node changes.
 
