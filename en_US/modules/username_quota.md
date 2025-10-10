@@ -36,7 +36,6 @@ Under the **Usage** tab, you can view all active usernames in the EMQX cluster a
 - Click **Disconnect All Sessions** to forcibly disconnect all client sessions associated with that username.
 - To sort the list by the number of sessions, toggle the **Sort** switch next to **Number of Sessions**.
 
-If you want to sort the username and session list by number of sessions, you can click the **Sort** button next to the **Number of Sessions**.
 
 ### Configure Quota Limits
 
