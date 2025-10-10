@@ -1,5 +1,49 @@
 # Releases
 
+## e4.4.33
+
+*Release Date: 2025-10-15*
+
+## Enhancements
+
+- Added rate limiting based on Tag.
+
+  Users can now use Tags returned by the HTTP authentication service to categorize clients and apply rate limits based on these categories.
+
+- Reduced memory consumption of the ACL cache feature.
+
+- The Username Quota module now supports kicking all client connections for a specified username.
+
+- Improved the user experience of the "Usage" page in the Username Quota module. Usernames will now only be sorted when the Sort button is clicked.
+
+- Reduced resource consumption caused by data synchronization in the Username Quota module when network disconnection with other nodes is detected.
+
+## Bug Fixes
+
+- Fixed an issue where SQL multi-row insert syntax could not be used in MySQL and PostgreSQL actions. The following error message would appear in the logs:
+
+  ```
+  ... Not an INSERT statement or incorrect SQL syntax
+  ```
+
+- Fixed an issue where the LwM2M module failed to start during rolling upgrades. The following error message would appear in the logs:
+
+  ```
+  [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
+  ```
+
+- Fixed the default XML path error for the LwM2M module in EMQX environments installed with binary packages.
+
+- Fixed an issue where cached messages in the Kafka Producer could not be sent after Kafka service recovery. The following warning would appear in the logs:
+
+  ```
+  [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
+  ```
+
+- Fixed an issue where the `emqx_trace` table was lost after rolling upgrade and EMQX cluster restart, causing cluster startup failure.
+
+- Fixed inaccurate rate limiting.
+
 ## e4.4.32
 
 *Release Date: 2025-07-30*

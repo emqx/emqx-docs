@@ -1,5 +1,49 @@
 # 版本发布
 
+## e4.4.33
+
+*发布日期: 2025-10-15*
+
+## 增强
+
+- 新增基于 Tag 的速率限制功能。
+
+  现在用户可以使用 HTTP 认证服务返回的 Tag 来对客户端进行分类，并根据分类进行速率限制。
+
+- 降低 ACL 缓存功能的内存消耗。
+
+- 用户名配额模块支持踢除指定用户名的所有客户端连接。
+
+- 优化用户名配额模块的 “使用详情” 页面的用户体验。现在只有在点击排序按钮时，才会对用户名进行排序。
+
+- 在检测到与其他节点网络断开时，降低用户名配额模块同步数据导致的资源消耗。
+
+## 修复
+
+- 修复 MySQL，PostgreSQL 动作中无法使用 SQL 多行插入语法的问题。日志中会看到如下错误信息：
+
+  ```
+  ... Not an INSERT statement or incorrect SQL syntax
+  ```
+
+- 修复滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
+
+  ```
+  [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
+  ```
+
+- 修复使用二进制包安装的 EMQX 环境中，LwM2M 模块的默认 XML 路径错误的问题。
+
+- 修复在 Kafka 服务故障恢复之后，Kafka Producer 缓存的消息无法继续发送的问题。日志中会看到如下错误信息：
+
+  ```
+  [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
+  ```
+
+- 修复滚动升级之后重启 EMQX 集群，`emqx_trace` 表丢失导致集群启动失败的问题。
+
+- 修复速率限制不精准的问题。
+
 ## e4.4.32
 
 *发布日期: 2025-07-30*
