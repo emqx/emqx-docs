@@ -12,13 +12,19 @@
 
 - Reduced memory consumption of the ACL cache feature.
 
-- The Username Quota module now supports kicking all client connections for a specified username.
+  Previously, when MQTT message payloads were large, the ACL cache feature consumed significant memory, with usage proportional to the number of MQTT sessions.
 
-- Improved the user experience of the "Usage" page in the Username Quota module. Usernames will now only be sorted when the Sort button is clicked.
+- The username quota module now supports kicking all client connections for a specified username.
 
-- Reduced resource consumption caused by data synchronization in the Username Quota module when network disconnection with other nodes is detected.
+- Improved user experience on the "Usage Details" page of the username quota module.
 
-## Bug Fixes
+  Previously, the "Usage Details" page automatically sorted usernames by session count, displaying those with the most sessions at the top. However, when there were many usernames, sorting caused long page load times and affected user experience. Now, a sort button has been added to the page, and sorting is only performed when the button is clicked.
+
+- Reduced system resource consumption of the username quota module during cluster node changes.
+
+  This optimization reduces unnecessary data synchronization operations when the module detects other nodes going offline, thereby lowering system resource usage.
+
+## Fixes
 
 - Fixed an issue where SQL multi-row insert syntax could not be used in MySQL and PostgreSQL actions. The following error message would appear in the logs:
 
@@ -32,17 +38,19 @@
   [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
   ```
 
-- Fixed the default XML path error for the LwM2M module in EMQX environments installed with binary packages.
+- Fixed the default XML path error for the LwM2M module in EMQX environments installed via binary packages.
 
-- Fixed an issue where cached messages in the Kafka Producer could not be sent after Kafka service recovery. The following warning would appear in the logs:
+- Fixed an issue where cached messages in Kafka Producer could not be sent after Kafka service recovery. The following error message would appear in the logs:
 
   ```
   [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
   ```
 
-- Fixed an issue where the `emqx_trace` table was lost after rolling upgrade and EMQX cluster restart, causing cluster startup failure.
+- Fixed an issue where restarting EMQX nodes after rolling upgrades could fail to start due to the loss of the `emqx_trace` remote table.
 
 - Fixed inaccurate rate limiting.
+
+  Corrected the implementation of the token bucket algorithm in rate limiting. Before the fix, the actual maximum achievable rate was always slightly higher than the configured value.
 
 ## e4.4.32
 
