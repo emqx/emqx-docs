@@ -15,12 +15,12 @@ You can configure the parameters for durable sessions in the Dashboard. Click **
 
 <img src="./assets/dashboard_session_config.png" alt="dashboard_session_config" style="zoom:67%;" />
 
-| Parameter                                   | Dashboard UI                | Description                                                                                                                                                                                                            |
-|---------------------------------------------|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `durable_sessions.enable`                   | Enable Durable Sessions     | Enables session durability. This configuration item cannot be modified through dashboard, REST API, or CLI; it must be set in the configuration file. Note: Restart of the EMQX node is required for changes to take effect. |
-| `durable_sessions.message_retention_period` | Message Retention Period    | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global.                                                                                                                     |
-| `durable_sessions.batch_size`               | Message Query Batch Size    | Controls the maximum size of message batches consumed from the storage by durable sessions.                                                                                                                            |
-| `durable_sessions.checkpoint_interval`      | Session Checkpoint Interval | Specifies the interval for saving session metadata.                                                                                                                                                                    |
+| Parameter                                   | Dashboard UI                | Description                                                  |
+| ------------------------------------------- | --------------------------- | ------------------------------------------------------------ |
+| `durable_sessions.enable`                   | Enable Durable Sessions     | Enables session durability. This configuration item cannot be modified through Dashboard, REST API, or CLI; it must be set in the configuration file. Note: Restart of the EMQX node is required for changes to take effect. |
+| `durable_sessions.message_retention_period` | Message Retention Period    | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
+| `durable_sessions.batch_size`               | Message Query Batch Size    | Controls the maximum size of message batches consumed from the storage by durable sessions. |
+| `durable_sessions.checkpoint_interval`      | Session Checkpoint Interval | Specifies the interval for saving session metadata.          |
 
 
 The following parameters can be overridden per [zone](../configuration/configuration.md#zone-override):
@@ -33,13 +33,13 @@ The following parameters can be overridden per [zone](../configuration/configura
 
 The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `message`.
 
-| Parameter                                 | Description                                                                                                                         |
-|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `durable_storage.n_sites`                 | [Number of sites](./managing-replication.md#number-of-sites).                                                                       |
-| `durable_storage.<DS>.data_dir`           | Directory in the file system where EMQX stores the data.                                                                            |
-| `durable_storage.<DS>.n_shards`           | [Numer of shards](./managing-replication.md#number-of-shards).                                                                      |
-| `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard.                |
-| `durable_storage.<DS>.transaction`        | Contains parameters related to message buffering. See [Buffering](#buffering).        |
+| Parameter                                 | Description                                                  |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| `durable_storage.n_sites`                 | [Number of sites](./managing-replication.md#number-of-sites). |
+| `durable_storage.<DS>.data_dir`           | Directory in the file system where EMQX stores the data.     |
+| `durable_storage.<DS>.n_shards`           | [Number of shards](./managing-replication.md#number-of-shards). |
+| `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard. |
+| `durable_storage.<DS>.transaction`        | Contains parameters related to message buffering. See [Buffering](#buffering). |
 | `durable_storage.<DS>.layout`             | Contains parameters that control how EMQX lays out data on disk. See [Storage Layout Configuration](#storage-layout-configuration). |
 
 #### Buffering
@@ -47,11 +47,11 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 EMQX writes MQTT messages from clients to the durable storage in batches to maximize the throughput.
 Batching is configured using the following parameters under `durable_storage.<DS>.transaction` configuration sub-tree:
 
-| Parameter             | Description                                                                             |
-|-----------------------|-----------------------------------------------------------------------------------------|
-| `max_pending`         | The buffer is flushed when it accumulates this many messages.                           |
-| `flush_interval`      | The buffer is also flushed at this interval, provided it contains at least one message. |
-| `idle_flush_interval` | If new messages don't arrive at this interval, the buffer is flushed early              |
+| Parameter             | Description                                                  |
+| --------------------- | ------------------------------------------------------------ |
+| `max_pending`         | Flushes the buffer once it accumulates this specified number of messages. |
+| `flush_interval`      | Flushes the buffer at this time interval if it contains at least one message. |
+| `idle_flush_interval` | Flushes the buffer early if no new messages arrive within this interval. |
 
 #### Storage Layout Configuration
 
@@ -59,12 +59,12 @@ Storage layout determines how EMQX organizes data on disk. Setting `durable_stor
 
 ##### Configuration of `wildcard_optimized` Layout Type
 
-The `wildcard_optimized` layout is aimed to optimize wildcard subscriptions matching a large number of MQTT topics. It achieves this by autonomously accumulating knowledge about topic structures over time. Leveraging a lightweight machine learning algorithm, it predicts the wildcard topic filters that clients are likely to subscribe to. Subsequently, it organizes these topics into a unified stream, allowing efficient consumption in a single sweep.
+The `wildcard_optimized` layout is aimed at optimizing wildcard subscriptions matching a large number of MQTT topics. It achieves this by autonomously accumulating knowledge about topic structures over time. Leveraging a lightweight machine learning algorithm, it predicts the wildcard topic filters that clients are likely to subscribe to. Subsequently, it organizes these topics into a unified stream, allowing efficient consumption in a single sweep.
 
 
 | Parameter               | Description                                           |
-|-------------------------|-------------------------------------------------------|
-| `bytes_per_topic_level` | Determines the size of the topic level hash.          |
+| ----------------------- | ----------------------------------------------------- |
+| `bytes_per_topic_level` | Determines the size of the topic-level hash.          |
 | `topic_index_bytes`     | Specifies the size of the stream identifier in bytes. |
 
 ## CLI Commands
