@@ -26,35 +26,38 @@
 
 ## 修复
 
-- 修复 MySQL，PostgreSQL 动作中无法使用 SQL 多行插入语法的问题。日志中会看到如下错误信息：
+- 修复了 MySQL，PostgreSQL 动作中无法使用 SQL 多行插入语法的问题。日志中会看到如下错误信息：
 
   ```
   ... Not an INSERT statement or incorrect SQL syntax
   ```
 
-- 修复滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
+- 修复了l滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
 
   ```
   [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
   ```
 
-- 修复使用二进制包安装的 EMQX 环境中，LwM2M 模块的默认 XML 路径错误的问题。
+- 修复了使用二进制包安装的 EMQX 环境中，LwM2M 模块的默认 XML 路径错误的问题。
 
-- 修复在 Kafka 服务故障恢复之后，Kafka Producer 缓存的消息无法继续发送的问题。日志中会看到如下错误信息：
+- 修复了在 Kafka 服务故障恢复之后，Kafka Producer 缓存的消息无法继续发送的问题。日志中会看到如下错误信息：
 
   ```
   [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
   ```
 
-- 修复升级 EMQX 版本之后，可能会因为丢失 `emqx_trace` 远程表导致日志追踪功能无法使用的问题。
+- 修复了升级 EMQX 版本之后，日志追踪功能可能因为丢失 `emqx_trace` 远程表而无法使用的问题。
 
-  某些升级场景中，用户会将新版本的 EMQX 加入正在运行的老版本 EMQX 集群，然后再移除老版本节点。
-  如果用户在通过 CLI 或 API 移除老版本节点之前，先（通过 `emqx stop` 命令或者其他方式）停止了老版本节点，并且老版本曾经使用过日志追踪功能，那么新版本节点上的日志追踪模块可能会因为无法访问 `emqx_trace` 远程表而出现异常。另外，此问题也会导致 `emqx ctl cluster force-leave <node>` 命令无法正常工作。
+  在某些升级场景中，用户可能会先将新版本的 EMQX 节点加入到运行中的旧版本集群中，然后再移除旧节点。
+  如果用户在通过 CLI 或 API 移除旧节点之前，先通过 `emqx stop` 命令或其他方式手动停止了旧版本节点，且该节点曾启用过日志追踪功能，则新版本节点上的日志追踪模块可能因无法访问 `emqx_trace` 远程表而发生异常。
+
+  此外，该问题还可能导致 `emqx ctl cluster force-leave <node>` 命令无法正常执行。
+
   修复后，日志追踪模块会在启动时修复 `emqx_trace` 表，同时 `force-leave` 命令不可用的问题也会在日志追踪模块启动后得到解决。
 
-- 修复速率限制不精准的问题。
+- 修复了速率限制不精准的问题。
 
-  修复速率限制中令牌桶算法的实现错误，修复前，实际能达到的最大速率总是略大于给定配置。
+  修复了速率限制中令牌桶算法的实现错误。修复前，实际能达到的最大速率总是略大于给定配置。
 
 ## e4.4.32
 

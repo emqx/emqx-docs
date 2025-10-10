@@ -48,7 +48,11 @@
 
 - Fixed an issue where the log tracing feature could become unusable after upgrading EMQX versions due to the loss of the `emqx_trace` remote table.
 
-  In certain upgrade scenarios, users might add a new version of EMQX to a running cluster of an older version and then remove the old nodes. If users stop the old nodes (using the `emqx stop` command or other methods) before removing them via CLI or API, and if the old version had used the log tracing feature, the log tracing module on the new version node might encounter exceptions due to being unable to access the `emqx_trace` remote table. Additionally, this issue could cause the `emqx ctl cluster force-leave <node>` command to malfunction. After the fix, the log tracing module will repair the `emqx_trace` table during startup, and the issue with the `force-leave` command will be resolved once the log tracing module starts.
+  In certain upgrade scenarios, users might add a new-version EMQX node to a running cluster that includes older-version nodes, and later remove the old nodes. If an old node is stopped (e.g., using the `emqx stop` command) before being removed via the CLI or API, and if log tracing was previously enabled on that node, the log tracing module on the new node may fail due to missing access to the `emqx_trace` remote table.
+
+  This issue can also cause the `emqx ctl cluster force-leave <node>` command to fail.
+
+  This fix ensures that the log tracing module automatically restores the `emqx_trace` table during startup. Once the module is initialized, the `force-leave` command will also function correctly.
 
 - Fixed inaccurate rate limiting.
 
