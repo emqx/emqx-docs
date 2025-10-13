@@ -117,3 +117,28 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
   "code": 0
 }
 ```
+
+### DELETE /api/v4/quota/usernames/:username
+
+Forcefully disconnect all sessions associated with a specific username.
+
+**Success Response Body (JSON):**
+
+| Name | Type    | Description |
+| ---- | ------- | ----------- |
+| code | Integer | 0 indicates success   |
+| data | Object  | Details of disconnected sessions   |
+| data.kicked | Integer   | Number of disconnected sessions |
+
+**Examples**
+
+```shell
+curl -X DELETE -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
+
+{
+  "data": {
+    "kicked": 1
+  },
+  "code": 0
+}
+```

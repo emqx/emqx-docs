@@ -96,7 +96,7 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames' | jq .
 | data.used | Integer   | 该用户名的会话数 |
 | data.clientids | Array | 包含客户端 ID 的列表 |
 
-**Examples**
+**示例**
 
 ```shell
 curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
@@ -108,6 +108,30 @@ curl -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
     "clientids": [
       "mqttjs_6916e2ae"
     ]
+  },
+  "code": 0
+}
+```
+
+### DELETE /api/v4/quota/usernames/:username
+
+强制断开指定用户名下的所有客户端连接。
+
+**成功响应体 (JSON):**
+| 名称 | 类型  | 描述 |
+| ---- | ------- | ----------- |
+| code | Integer | 0 表示成功   |
+| data | Object  | 断开会话详情   |
+| data.kicked | Integer   | 被断开的会话数 |
+
+**示例**
+
+```shell
+curl -X DELETE -u admin:public 'http://localhost:18083/api/v4/quota/usernames/a' | jq .
+
+{
+  "data": {
+    "kicked": 1
   },
   "code": 0
 }
