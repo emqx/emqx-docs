@@ -26,7 +26,7 @@ Information on currently supported alarms and more details can be found in [alar
 
 ## WebSocket Client
 
-Click on **WebSocket Client** under the **Diagnose** menu on the left to go to the WebSocket Client page. The WebSocket Client page provides a simple but effective MQTT testing tool that includes connect, subscribe and publish functionality for quick debugging of the client's connect, publish and subscribe functionality, as well as the ability to view your own sent and received message data. Multiple WebSocket connections can be added by clicking the `+` button at the top of the page; the connection status and sent and received data for all connections will be cleared when the page is refreshed.
+Click on **WebSocket Client** under the **Diagnose** menu on the left to go to the WebSocket Client page. The WebSocket Client page provides a simple but effective MQTT testing tool that includes connect, subscribe, and publish functionality for quick debugging of the client's connect, publish, and subscribe functionality, as well as the ability to view your own sent and received message data. Multiple WebSocket connections can be added by clicking the **+** button at the top of the page; the connection status and sent and received data for all connections will be cleared when the page is refreshed.
 
 <img src="./assets/web-socket.png" alt="image" style="zoom:67%;" />
 

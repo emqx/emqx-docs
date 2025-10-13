@@ -14,13 +14,12 @@ This feature is disabled by default, and you can enable it via EMQX Dashboard or
 
 ## Enable Flapping Detect on Dashboard
 
-Go to Dashboard, and click **Access Control** -> **Flapping Detect** from the left navigation menu to enter the **Flapping Detect** page. Enable the flapping detection feature by clicking the toggle switch.
-
-- **Detection Time Window**: You can specify the duration for which the system monitors the client's flapping behavior. The default value is `1` minute.
-- **Max Disconnection Count**: You can specify the maximum number of disconnections allowed for an MQTT client during the detection window time. It allows you to set precise criteria for identifying and responding to clients exhibiting flapping behavior. The default number is `15`.
-- **Ban Duration**: You can specify for how long the client should be banned. The default value is `5` minutes.
-
-Click **Save Changes** to finish the setting.
+1. Go to Dashboard, and click **Access Control** -> **Flapping Detect** from the left navigation menu to enter the **Flapping Detect** page. 
+2. Enable the flapping detection feature by clicking the toggle switch.
+   - **Detection Time Window**: You can specify the duration for which the system monitors the client's flapping behavior. The default value is `1` minute.
+   - **Max Disconnection Count**: You can specify the maximum number of disconnections allowed for an MQTT client during the detection window time. It allows you to set precise criteria for identifying and responding to clients exhibiting flapping behavior. The default number is `15`.
+   - **Ban Duration**: You can specify for how long the client should be banned. The default value is `5` minutes.
+3. Click **Save Changes** to finish the setting.
 
 <img src="./assets/flapping-detect.png" alt="flapping-detect" style="zoom:67%;" />
 
