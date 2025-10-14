@@ -77,12 +77,12 @@ The top of the list contains a search bar, we can use rule ID, topic, enabled st
 
 ## Rule Execution Statistics
 
-On the rule list page, click the rule ID to quickly enter the rule overview page. The rule overview page contains the basic data statistics of the rule, including the execution statistics of the rule and the execution statistics of the action under the current rule. For example, the number of matched, passed, and failed, the execution rate of the rule, successful and failed executions of the action, etc. Click the `Refresh` button in the upper right corner to view the real-time running data statistics of the current rule.
+On the rule list page, click the rule ID to quickly enter the rule overview page. The rule overview page contains the basic data statistics of the rule, including the execution statistics of the rule and the execution statistics of the action under the current rule. For example, the number of matched, passed, and failed, the execution rate of the rule, successful and failed executions of the action, etc. Click the **Refresh** button in the upper-right corner to view the real-time running data statistics of the current rule.
 
 ![image](./assets/rule-overview.png)
 
 ## Settings
 
-By clicking the **Settings** tab or the **Settings** button in the **Action** colum in the rule list you can enter the Settings page. It contains the basic information of the rule, which displays the same as the rule creation page. On this page, you can modify and debug the rule. For example, you need to modify the execution action under the current rule, modify the rule notes, and re-edit the SQL statement.
+By clicking the **Settings** tab or the **Settings** button in the **Action** column in the rule list, you can enter the Settings page. It contains the basic information of the rule, which is the same as the rule creation page. On this page, you can modify and debug the rule. For example, you need to modify the execution action under the current rule, modify the rule notes, and re-edit the SQL statement.
 
 ![image](./assets/rule-settings.png)
