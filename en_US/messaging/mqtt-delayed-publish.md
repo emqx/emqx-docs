@@ -21,14 +21,15 @@ Example:
 
 ## Configure Delayed Publish via Dashboard
 
-1. Open EMQX Dashboard. In the left navigation menu, click **Management**-> **Delayed Publish**. 
+1. Open EMQX Dashboard. In the left navigation menu, click **Management** -> **Delayed Publish**. 
 
 2. On the **Delayed Publish** page, you can configure as follows:
 
    - **Enable**: Enable or disable delayed publish. By default, it is enabled.
    - **Max Delayed Messages**: You can specify the max number of delayed messages.
    
-   <img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
+
+<img src="./assets/configure-delayed-publish-dashboard.png" alt="configure-delayed-publish-dashboard" style="zoom:45%;" />
 
 ## Try Delayed Publish with MQTTX Desktop
 
