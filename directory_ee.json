@@ -275,6 +275,10 @@
         {
           "title": "用户名配额限制",
           "path": "modules/username_quota"
+        },
+        {
+          "title": "客户端标签管理",
+          "path": "modules/client_tag"
         }
       ]
     },
