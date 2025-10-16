@@ -8,7 +8,7 @@ During the initial setup of the cluster, several configuration parameters influe
 
 ### Replication Factor
 
-The replication factor, controlled with `durable_storage.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
+The replication factor, controlled with `durable_storage.<DB>.replication_factor` configuration parameter, determines the number of replicas each shard should have across the cluster. The default value is `3`.
 
 Setting the replication factor to an odd number is advisable as it influences the quorum size required for successful write operations. A higher replication factor results in more copies of data distributed across the cluster, thereby enhancing high availability. However, it also increases storage and network overhead due to additional communication needed to achieve consensus.
 

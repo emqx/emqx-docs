@@ -8,7 +8,7 @@
 
 ### 复制因子 (replication factor)
 
-复制因子由 `durable_storage.replication_factor` 配置参数控制，它确定了集群中每个分片应该具有的副本数量。默认值为 `3`。
+复制因子由 `durable_storage.<DB>.replication_factor` 配置参数控制，它确定了集群中每个分片应该具有的副本数量。默认值为 `3`。
 
 建议将复制因子设置为奇数，因为它影响到成功写入操作所需的副本数量。较高的复制因子意味着数据的副本分布在集群中的数量更多，从而提高了高可用性。但是，这也会增加存储和网络开销，因为需要进行更多的通信以达成共识。
 
@@ -18,7 +18,7 @@
 
 内置的持久存储被分割成独立的分片，各个分片之间相互独立地复制。较多的分片数量允许更多的 MQTT 消息从持久存储中并行发布和消费。然而，每个分片都会消耗系统资源，比如文件描述符，并且会增加每个会话存储的元数据量。
 
-`durable_storage.messages.n_shards` 参数控制分片的数量，一旦持久存储被初始化，这个数量就不会改变。
+`durable_storage.<DB>.n_shards` 参数控制分片的数量，一旦持久存储被初始化，这个数量就不会改变。
 
 ### 站点 (site) 数量
 
@@ -105,7 +105,7 @@ $ emqx ctl ds set-replicas all <Site ID 1> <Site ID 2> ...
    ```shell
    $ emqx ctl ds info
    <...>
-   
+
    SITES:
    .------------------.-------------------.----------.
    : Site             : Node              : Status   :
@@ -113,7 +113,7 @@ $ emqx ctl ds set-replicas all <Site ID 1> <Site ID 2> ...
    : D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
    : 5C6028D6CE9459C7 : 'emqx@n2.local'   : (!) LOST :
    : <...>
-   
+
    SHARDS:
    .------------.----------------------.------------------------.
    : DB/Shard   : Replicas             : Transitions            :
