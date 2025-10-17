@@ -8,7 +8,7 @@
 
 ### 复制因子 (replication factor)
 
-复制因子由 `durable_storage.messages.replication_factor` 配置参数控制，它确定了集群中每个分片应该具有的副本数量。默认值为 `3`。
+复制因子由 `durable_storage.<DB>.replication_factor` 配置参数控制，它确定了集群中每个分片应该具有的副本数量。默认值为 `3`。
 
 建议将复制因子设置为奇数，因为它影响到成功写入操作所需的副本数量。较高的复制因子意味着数据的副本分布在集群中的数量更多，从而提高了高可用性。但是，这也会增加存储和网络开销，因为需要进行更多的通信以达成共识。
 
@@ -18,11 +18,11 @@
 
 内置的持久存储被分割成独立的分片，各个分片之间相互独立地复制。较多的分片数量允许更多的 MQTT 消息从持久存储中并行发布和消费。然而，每个分片都会消耗系统资源，比如文件描述符，并且会增加每个会话存储的元数据量。
 
-`durable_storage.messages.n_shards` 参数控制分片的数量，一旦持久存储被初始化，这个数量就不会改变。
+`durable_storage.<DB>.n_shards` 参数控制分片的数量，一旦持久存储被初始化，这个数量就不会改变。
 
 ### 站点 (site) 数量
 
-`durable_storage.messages.n_sites` 配置参数确定了必须在线的最小站点数，以便持久存储初始化并开始接受写入。一旦达到了这个最小值，持久存储就会开始向可用站点平衡地分配分片。
+`durable_storage.n_sites` 配置参数确定了必须在线的最小站点数，以便持久存储初始化并开始接受写入。一旦达到了这个最小值，持久存储就会开始向可用站点平衡地分配分片。
 
 默认值为 `1`，意味着每个节点最初可能认为自己是唯一负责数据存储的站点。这种设置针对单节点 EMQX 集群进行了优化。当集群形成时，一个节点的视图最终会占主导地位，导致其他节点放弃他们存储的数据。
 
@@ -47,7 +47,7 @@ SHARDS:
 当新节点加入集群时，它会被分配一个 *站点 ID*，并可以纳入持久存储中。一些分片的复制任务将转移到新站点，然后它将开始复制数据。
 
 ```shell
-$ emqx ctl ds join messages <Site ID>
+$ emqx ctl ds join all <Site ID>
 ok
 ```
 
@@ -60,7 +60,7 @@ ok
 移除一个站点意味着将分片的复制任务从被移除的站点转移出去。类似于添加站点，此过程可能需要一些时间和资源。
 
 ```shell
-$ emqx ctl ds leave messages <Site ID>
+$ emqx ctl ds leave all <Site ID>
 ok
 ```
 
@@ -71,7 +71,7 @@ ok
 可以在单个操作中执行一系列更改，以设置持久存储副本所在站点的集合。
 
 ```shell
-$ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set-replicas all <Site ID 1> <Site ID 2> ...
 ```
 
 这种方法可以最大程度地减少站点之间的数据传输量，同时确保尽可能地维持复制因子。
@@ -97,7 +97,7 @@ $ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
    接下来，恢复可用性的方法是将丢失节点的分片重新分配到集群中其他节点。您可以使用标准的 `leave` 命令来实现这一点。即使丢失的节点不可访问，该命令仍然可以运行，但转换可能需要更长时间完成。
 
    ```shell
-   $ emqx ctl ds leave messages 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
+   $ emqx ctl ds leave all 5C6028D6CE9459C7 # Here, 5C6028D6CE9459C7 is the lost node's Site ID
    ```
 
 3. 监控集群状态并等待所有分片转换成功完成。您可以使用 `info` 命令检查哪些转换仍在进行中。
@@ -105,7 +105,7 @@ $ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
    ```shell
    $ emqx ctl ds info
    <...>
-   
+
    SITES:
    .------------------.-------------------.----------.
    : Site             : Node              : Status   :
@@ -113,7 +113,7 @@ $ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
    : D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
    : 5C6028D6CE9459C7 : 'emqx@n2.local'   : (!) LOST :
    : <...>
-   
+
    SHARDS:
    .------------.----------------------.------------------------.
    : DB/Shard   : Replicas             : Transitions            :
@@ -129,7 +129,7 @@ $ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
 4. 转换完成。一旦所有分片转换完成，您需要告知集群丢失的节点不会返回。
 
    ```shell
-   $ emqx ctl ds forget messages 5C6028D6CE9459C7
+   $ emqx ctl ds forget all 5C6028D6CE9459C7
    ```
 
    如果计划使用原始节点名称替换丢失的节点，这一步至关重要。如果不这样做，可能会导致集群在两个不同的 Site ID 下识别出相同的节点名称，从而导致严重的混淆和潜在的问题。
