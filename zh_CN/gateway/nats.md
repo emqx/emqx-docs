@@ -261,3 +261,7 @@ gateway.nats {
 
 - 详细配置说明参考：[网关配置 - NATS 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 - 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+
+## 更多信息
+
+要了解有关 NATS 协议网关及其应用场景的更多信息，请参阅博客：[突破连接边界：EMQX 实现 MQTT 和 NATS 协议双向互通](https://www.emqx.com/zh/blog/emqx-nats-gateway)。
