@@ -24,7 +24,7 @@ EMQX utilizes the rule engine and Sink to forward device events and data to Snow
 
    Snowpipe Streaming is currently a [preview feature](https://docs.snowflake.com/en/release-notes/preview-features) in Snowflake. It is available only for accounts hosted on AWS.
 
-   ::: 
+   :::
 
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
@@ -101,7 +101,7 @@ The script automatically downloads the Snowflake ODBC `.deb` installation packag
 Run the following command to view the configurations in the `/etc/odbc.ini` file:
 
 ```
-emqx@emqx-0:~$ cat /etc/odbc.ini 
+emqx@emqx-0:~$ cat /etc/odbc.ini
 
 [snowflake]
 Description=SnowflakeDB
@@ -117,7 +117,7 @@ snowflake = SnowflakeDSIIDriver
 Run the following command to view the configurations in the  `/etc/odbcinst.ini` file:
 
 ```
-emqx@emqx-0:~$ cat /etc/odbcinst.ini 
+emqx@emqx-0:~$ cat /etc/odbcinst.ini
 
 [ODBC Driver 18 for SQL Server]
 Description=Microsoft ODBC Driver 18 for SQL Server
@@ -171,13 +171,13 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
      [ODBC]
      Trace=no
      TraceFile=
-     
+
      [ODBC Drivers]
      Snowflake = Installed
-     
+
      [ODBC Data Sources]
      snowflake = Snowflake
-     
+
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -273,10 +273,10 @@ This includes:
 
    ```sql
    USE ROLE accountadmin;
-   
+
    -- Create a database to store your data (if not exists)
    CREATE DATABASE IF NOT EXISTS testdatabase;
-   
+
    -- Create a table to receive MQTT data
    CREATE OR REPLACE TABLE testdatabase.public.emqx (
        clientid STRING,
@@ -284,18 +284,18 @@ This includes:
        payload STRING,
        publish_received_at TIMESTAMP_LTZ
    );
-   
+
    -- Create a Snowflake stage for uploading files (aggregated mode only)
    CREATE STAGE IF NOT EXISTS testdatabase.public.emqx
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
-   
+
    -- Create a pipe for aggregated mode that copies from the stage
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
-   
+
    -- Create a pipe for streaming mode (direct ingestion)
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
    COPY INTO testdatabase.public.emqx (
@@ -312,8 +312,7 @@ This includes:
            $1:publish_received_at::TIMESTAMP_LTZ
        FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
    );
-   MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
-   
+
    ```
 
    - The `COPY INTO` inside the pipe ensures Snowflake automatically loads staged or streamed data into your table.
@@ -326,7 +325,7 @@ This includes:
    CREATE USER IF NOT EXISTS snowpipeuser
        PASSWORD = 'Snowpipeuser99'
        MUST_CHANGE_PASSWORD = FALSE;
-   
+
    -- Bind the RSA public key to the user
    ALTER USER snowpipeuser SET RSA_PUBLIC_KEY = '
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_1>
@@ -348,19 +347,19 @@ This includes:
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-   
+
    -- Grant usage and read/write permissions
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-   
+
    -- Aggregated mode requires access to stage and pipe
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-   
+
    -- Streaming mode requires permissions on the streaming pipe
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-   
+
    -- Link role to the user and set it as default
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
@@ -395,7 +394,7 @@ If you plan to use the aggregated upload mode in your Snowflake Sink, you need t
      - Or configure it in `/etc/odbc.ini`;
 
      - If using key-pair authentication instead, leave this field blank.
-   
+
        ::: tip
 
        Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
@@ -404,14 +403,14 @@ If you plan to use the aggregated upload mode in your Snowflake Sink, you need t
 
    - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be consistent across all nodes of the cluster. For example:
       `/etc/emqx/certs/snowflake_rsa_key.private.pem`.
-   
+
    - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
-   
+
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
 
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-   
+
 6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access). TLS must be enabled for streaming mode, as communication is over HTTPS.
 
 7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
@@ -475,9 +474,9 @@ This section demonstrates how to create a rule in EMQX to process messages (e.g.
 
    :::
    ::: tip
-   
-   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`. 
-   
+
+   For Snowflake integration, it is important that the selected fields exactly match the number of columns and their names of the table defined in Snowflake, so avoid adding extra fields or selecting from `*`.
+
    :::
 
 
@@ -597,4 +596,3 @@ This section delves into the advanced configuration options available for the Sn
 | **Query Mode**                   | Allows you to choose between `synchronous` or `asynchronous` request modes to optimize message transmission according to different requirements. In asynchronous mode, writing to Snowflake does not block the MQTT message publishing process. However, this may lead to clients receiving messages before they arrive at Snowflake. | `Asynchronous`  |
 | **Batch Size**                   | Specifies the maximum size of data batches transmitted from EMQX to Snowflake in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Snowflake.<br />If the "Batch Size" is set to "1," data records are sent individually, without being grouped into batches. | `100`           |
 | **Inflight  Window**             | "In-flight queue requests" refer to requests that have been initiated but have not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queue requests that can exist simultaneously during Sink communication with Snowflake. <br/>When **Request Mode** is set to `asynchronous`, the "Request In-flight Queue Window" parameter becomes particularly important. If strict sequential processing of messages from the same MQTT client is crucial, then this value should be set to `1`. | `100`           |
-

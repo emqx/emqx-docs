@@ -24,7 +24,7 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
    Snowpipe Streaming 当前是 Snowflake 的[预览功能](https://docs.snowflake.com/en/release-notes/preview-features)，仅适用于部署在 AWS 上的账户。
 
-   ::: 
+   :::
 
 当事件和消息数据写入 Snowflake 后，可用于各种业务和技术用途，包括：
 
@@ -118,13 +118,13 @@ scripts/install-snowflake-driver.sh
      [ODBC]
      Trace=no
      TraceFile=
-     
+
      [ODBC Drivers]
      Snowflake = Installed
-     
+
      [ODBC Data Sources]
      snowflake = Snowflake
-     
+
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -219,10 +219,10 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    ```sql
    USE ROLE accountadmin;
-   
+
    -- 创建用于存储数据的数据库（如果不存在）
    CREATE DATABASE IF NOT EXISTS testdatabase;
-   
+
    -- 创建用于接收 MQTT 数据的表
    CREATE OR REPLACE TABLE testdatabase.public.emqx (
        clientid STRING,
@@ -230,18 +230,18 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
        payload STRING,
        publish_received_at TIMESTAMP_LTZ
    );
-   
+
    -- 创建用于聚合模式的存储区，用于上传文件
    CREATE STAGE IF NOT EXISTS testdatabase.public.emqx
    FILE_FORMAT = (TYPE = CSV PARSE_HEADER = TRUE FIELD_OPTIONALLY_ENCLOSED_BY = '"')
    COPY_OPTIONS = (ON_ERROR = CONTINUE PURGE = TRUE);
-   
+
    -- 创建用于聚合模式的管道，从存储区中复制数据
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqx AS
    COPY INTO testdatabase.public.emqx
    FROM @testdatabase.public.emqx
    MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
-   
+
    -- 创建用于流式模式的管道，直接摄取数据
    CREATE PIPE IF NOT EXISTS testdatabase.public.emqxstreaming AS
    COPY INTO testdatabase.public.emqx (
@@ -258,8 +258,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
            $1:publish_received_at::TIMESTAMP_LTZ
        FROM TABLE(DATA_SOURCE(TYPE => 'STREAMING'))
    );
-   MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
-   
+
    ```
 
    - `COPY INTO` 语句确保 Snowflake 能自动将存储区或 Streaming 中的数据加载到目标表。
@@ -272,7 +271,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    CREATE USER IF NOT EXISTS snowpipeuser
        PASSWORD = 'Snowpipeuser99'
        MUST_CHANGE_PASSWORD = FALSE;
-   
+
    -- 将 RSA 公钥绑定到该用户
    ALTER USER snowpipeuser SET RSA_PUBLIC_KEY = '
    <YOUR_PUBLIC_KEY_CONTENTS_LINE_1>
@@ -294,19 +293,19 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-   
+
    -- 授权数据库和表的使用与读写权限
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-   
+
    -- 聚合模式需要访问存储区和管道
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-   
+
    -- 流式模式需要访问流式管道
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-   
+
    -- 将角色授予用户，并设置为默认角色
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
@@ -341,7 +340,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
      - 或在系统的 `/etc/odbc.ini` 文件中配置；
 
      - 如果使用密钥对认证（Key-pair authentication），则无需提供密码。
-   
+
        ::: tip
 
        使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
@@ -356,7 +355,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-   
+
 6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。流式模式必须启用 TLS，因为通信是通过 HTTPS 进行的。
 
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
