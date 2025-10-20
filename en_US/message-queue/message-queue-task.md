@@ -2,11 +2,11 @@
 
 This page walks you through the practical usage of the Message Queue feature in EMQX, from creating queues to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
-## Create Message Queue via Dashboard
+## Manually Create Message Queue via Dashboard
 
-Message Queues must be explicitly declared/created before they can store or dispatch messages.
+Message Queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queue via Dashboard](#automatically-create-message-queue-via-dashboard).
 
-To create a new Message Queue using the EMQX Dashboard:
+To create a new Message Queue manually using the EMQX Dashboard:
 
 1. Navigate to **Message Queue** in the left menu.
 
@@ -26,7 +26,7 @@ To create a new Message Queue using the EMQX Dashboard:
 
    - **Data Retention Period**: Specify how long messages should be retained in the queue. You can set the time unit (e.g., days).
 
-   - **Last Value Semantics**: Toggle this switch on if you want new messages with the same queue key to overwrite older messages in the same queue. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the queue.
+   - **Last Value Semantics**: This option is enabled by default. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the same queue. This ensures only the most recent message per key is retained.
 
      - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
@@ -110,9 +110,50 @@ Queue Key Expressions are evaluated against the following message structure:
 
 </details>
 
+## Automatically Create Message Queue via Dashboard
+
+Starting from EMQX 6.0.1, Message Queues can be automatically created when clients subscribe to a `$q/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
+
+There are two types of auto-created queues: regular queue and last-value semantics queue. 
+
+::: tip Note
+
+To ensure proper queue behavior, you can enable either **Auto Create Regular Message Queue** or **Auto Create Last Value Semantics Queue**, but not both at the same time.
+
+:::
+
+### Auto Create Last Value Semantics Queue
+
+This option is turned on by default in the **Message Queue** tab under **MQTT Settings**. It allows EMQX to automatically create queues that support Last-Value Semantics, where only the most recent message with a given key is retained.
+
+1. Navigate to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+
+2. By default, **Enable Auto Create Last Value Semantics Queue** is enabled.
+
+   Configure the following:
+
+   - **Queue Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`).
+   - **Dispatch Strategy**: Determines how messages are distributed to subscribers (default: `Random`).
+   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+
+3. Click **Save Changes**.
+
+When a client subscribes to a topic such as `$q/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Queue** list.
+
+### Auto Create Regular Message Queue
+
+This option can be enabled manually if you prefer regular queues where messages are stored independently and not overwritten.
+
+1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+2. Turn on **Enable Auto Create Regular Message Queue**.
+3. Set the following:
+   - **Dispatch Strategy**: Determines how messages are distributed to subscribers (default: `Random`).
+   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+4. Click **Save Changes**.
+
 ## Configure Message Queue Settings
 
-This section explains how to configure global settings that apply to all Message Queues in EMQX. These settings control message retention, cleanup intervals, and internal queue behavior. You can configure them via the Dashboard, REST API, or configuration file.
+This section explains how to configure global settings that apply to all Message Queues in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
 ### Dashboard
 
@@ -120,13 +161,34 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
 To configure global settings for Message Queues via the Dashboard:
 
-1. Navigate to the **Message Queue** page from the left menu.
-2. Click the **Settings** button in the top-right corner of the page.
-3. You will be redirected to the **MQTT Settings** -> **Message Queue** tab. In this panel, you can configure the following parameters:
+1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+
+   Alternatively, you can click the **Settings** button in the top-right corner of the **Message Queue** page.
+
+2. In the **Message Queue** panel, the following configuration options are available:
+   - **Enable Message Queue**: The message queue system is enabled by default and cannot be disabled via the Dashboard.
+
+     > To disable it, you must modify the configuration file directly.
+
+   - **Max Queue Count**: Sets the maximum number of queues that can be created.
+
    - **GC Interval**: The interval at which expired messages are cleaned up from queues. Default is `1` hour.
+
    - **Regular Queue Retention Period**: The maximum duration for which messages are retained in regular queues. Default is `7` days.
+
    - **Find Queue Retry Interval**: When a client subscribes to a `$q/`-prefixed queue topic and the corresponding queue does not yet exist, this setting controls how often the client retries to find the queue. Default is `10` seconds.
-4. After making changes, click **Save Changes** to apply the new settings.
+
+   - **Auto-Creation Options**: EMQX supports dynamic queue provisioning through auto-creation features.
+
+     - **Auto Create Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$q/` topic and no matching queue exists, EMQX will automatically create a queue with Last-Value Semantics enabled. 
+
+       For details of the settings, see [Auto Create Last Value Semantics Queue](#auto-create-last-value-semantics-queue).
+
+     - **Auto Create Regular Message Queue**: Can be enabled as an alternative to the above. When enabled, EMQX will create regular (non-overwriting) queues automatically for `$q/` subscriptions.
+
+       For details of the settings, see [Auto Create Regular Message Queue](#auto-create-regular-message-queue).
+
+3. After making changes, click **Save Changes** to apply the new settings.
 
 ### REST API
 
@@ -145,6 +207,11 @@ mq {
     gc_interval = 1h
     regular_queue_retention_period = 1d
     find_queue_retry_interval = 10s
+    
+     limits {
+        max_shard_message_count = 10000
+        max_shard_message_bytes = 200MB
+    }
 }
 ```
 
@@ -156,6 +223,18 @@ mq {
   Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
 - **`find_queue_retry_interval`**:
   Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
+- **`limits.max_shard_message_count`**: (Optional) Sets the maximum number of messages allowed per shard in a message queue. The default is `infinity` (no limit).
+  
+  > This limit is soft and enforced during garbage collection (GC), rather than in real-time. Queues may temporarily exceed the configured limits between GC runs.
+- **`limits.max_shard_message_bytes`**: (Optional) Sets the maximum total message size (in bytes) per shard. The default is `infinity` (no limit). Accepts units like `KB`, `MB`, `GB`.
+
+  > Like `max_shard_message_count`, this limit is applied loosely during GC, and queues may temporarily exceed this threshold.
+
+::: tip Performance Note
+
+Queues with size limits may have slower write performance, especially under high throughput conditions.
+
+:::
 
 ## Manage Message Queue via REST API
 
