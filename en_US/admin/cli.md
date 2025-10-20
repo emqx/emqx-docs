@@ -317,12 +317,15 @@ ok
 Dumps per-client statistics to a CSV file, allowing system administrators to observe client activity and identify top-k busy clients.
 
 ```bash
-$ emqx ctl clients stats --file /var/log/emqx/client_stats_20251020.csv
+$ emqx ctl clients stats path/to/file.csv
 ```
 
 **Arguments:**
 
-- `--file`: Path to the output CSV file.
+- Path to the output CSV file.
+- `--batch` option controls how many clients to be processed in one batch, lower the size will make the command take longer time, but more resource friendly (default is `1000`).
+- `--sleep` option controls the number of milliseconds to pause between the chunks, increase it will make the command take longer time, but more resource friendly (default is `10ms`).
+- 
 
 **Output Format:**
 
@@ -337,13 +340,13 @@ Descriptions of each field:
 - `timestamp`: UNIX timestamp in milliseconds when the data was collected
 - `clientid`: MQTT client ID
 - `recv_oct`: Total bytes received from the client
-- `recv_cnt`: Number of receive operations
+- `recv_cnt`: Number of received messages (or message fragments)
 - `send_oct`: Total bytes sent to the client
-- `send_cnt`: Number of send operations
+- `send_cnt`: Number of sent MQTT packets.
 - `subscriptions_cnt`: Number of subscriptions held by the client
 - `awaiting_rel_cnt`: Number of QoS 2 messages awaiting PUBREL
-- `mqueue_len`: Length of the client’s message queue
-- `mqueue_dropped`: Number of messages dropped from the message queue
+- `mqueue_len`: Length of the client’s in-memory session message queue
+- `mqueue_dropped`: Number of messages dropped from the in-memory session message queue
 
 **Notes:**
 
