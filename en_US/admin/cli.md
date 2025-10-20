@@ -313,7 +313,7 @@ $ emqx ctl clients kick emqx_c
 ok
 ```
 
-### clients stats -- file <path/to/file.cvs>
+### clients stats -- file <path/to/file.csv>
 
 Dumps per-client statistics to a CSV file, allowing system administrators to observe client activity and identify top-k busy clients.
 
