@@ -313,6 +313,45 @@ $ emqx ctl clients kick emqx_c
 ok
 ```
 
+### clients stats -- file <path/to/file.cvs>
+
+Dumps per-client statistics to a CSV file, allowing system administrators to observe client activity and identify top-k busy clients.
+
+```bash
+$ emqx ctl clients stats --file /var/log/emqx/client_stats_20251020.csv
+```
+
+**Arguments:**
+
+- `--file`: Path to the output CSV file.
+
+**Output Format:**
+
+The generated CSV file will contain the following columns:
+
+```sql
+timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, awaiting_rel_cnt, mqueue_len, mqueue_dropped
+```
+
+Descriptions of each field:
+
+- `timestamp`: UNIX timestamp in milliseconds when the data was collected
+- `clientid`: MQTT client ID
+- `recv_oct`: Total bytes received from the client
+- `recv_cnt`: Number of receive operations
+- `send_oct`: Total bytes sent to the client
+- `send_cnt`: Number of send operations
+- `subscriptions_cnt`: Number of subscriptions held by the client
+- `awaiting_rel_cnt`: Number of QoS 2 messages awaiting PUBREL
+- `mqueue_len`: Length of the client’s message queue
+- `mqueue_dropped`: Number of messages dropped from the message queue
+
+**Notes:**
+
+- The command is designed for observability, not real-time telemetry.
+- To avoid performance degradation, it throttles Erlang Term Storage (ETS) scans by sleeping periodically (e.g., 10ms every 1000 records).
+- The resulting CSV can be used for offline analysis, visualizations, or further automated processing.
+
 ## topics
 
 This command is to view all subscribed topics in current system.
