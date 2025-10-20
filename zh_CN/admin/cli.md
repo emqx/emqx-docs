@@ -315,12 +315,12 @@ ok
 将每个客户端的统计信息导出为 CSV 文件，便于系统管理员观察客户端活动，并识别 Top-k 最繁忙的客户端。
 
 ```bash
-$ emqx ctl clients stats --file /var/log/emqx/client_stats_20251020.csv
+$ emqx ctl clients stats --file path/to/file.csv
 ```
 
 **参数说明：**
 
-- `--file`：输出 CSV 文件的路径。
+- 输出 CSV 文件的路径。
 
 **输出格式：**
 
@@ -335,13 +335,13 @@ timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, 
 - `timestamp`：数据采集时的 UNIX 时间戳（毫秒）
 - `clientid`：MQTT 客户端 ID
 - `recv_oct`：客户端接收的总字节数
-- `recv_cnt`：接收操作的次数
+- `recv_cnt`：接收到的消息数量（或消息片段）
 - `send_oct`：发送给客户端的总字节数
-- `send_cnt`：发送操作的次数
-- `subscriptions_cnt`：客户端当前的订阅数量
+- `send_cnt`：发送的 MQTT 报文数量
+- `subscriptions_cnt`：客户端持有的订阅数量
 - `awaiting_rel_cnt`：等待 PUBREL 的 QoS 2 消息数量
-- `mqueue_len`：客户端消息队列长度
-- `mqueue_dropped`：客户端消息队列中被丢弃的消息数量
+- `mqueue_len`：客户端内存会话消息队列的长度
+- `mqueue_dropped`：从客户端内存会话消息队列中被丢弃的消息数量
 
 **注意事项：**
 

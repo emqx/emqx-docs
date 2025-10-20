@@ -323,9 +323,8 @@ $ emqx ctl clients stats path/to/file.csv
 **Arguments:**
 
 - Path to the output CSV file.
-- `--batch` option controls how many clients to be processed in one batch, lower the size will make the command take longer time, but more resource friendly (default is `1000`).
-- `--sleep` option controls the number of milliseconds to pause between the chunks, increase it will make the command take longer time, but more resource friendly (default is `10ms`).
-- 
+- `--batch` option controls how many clients to be processed in one batch. A smaller value reduces resource usage but increases the total execution time. (default is `1000`).
+- `--sleep` option controls the pause duration (in milliseconds) between processing batches. Increasing this value can further reduce system impact at the cost of longer execution time. (default is `10ms`).
 
 **Output Format:**
 
