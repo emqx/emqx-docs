@@ -59,13 +59,13 @@ EMQX provides fine-grained rate-limiting strategies per tag, allowing you to con
 
 ### Configurable Limits
 
-| Limit Type                        | Unit         | Description                                                  |
-| --------------------------------- | ------------ | ------------------------------------------------------------ |
-| Sent Message TPS Limit            | Messages/sec | Limits the number of messages a client can publish per second (TPS). |
-| Subscribe Message TPS Limit       | Messages/sec | Limits the number of messages EMQX can deliver to a client per second. |
-| Sent Traffic Limit (bytes/s)      | Bytes/sec    | Limits the message traffic a client can publish per second.  |
-| Subscribe Traffic Limit (bytes/s) | Bytes/sec    | Limits the message traffic a client can deliver per second.  |
-| Maximum QoS Level                 | 0, 1, 2      | Limits the maximum QoS level a client is allowed to publish with. |
+| Limit Type                        | Unit         | Description                                                                          |
+|-----------------------------------|--------------|--------------------------------------------------------------------------------------|
+| Sent Message TPS Limit            | Messages/sec | Limits the number of messages a client can publish per second (TPS).                 |
+| Subscribe Message TPS Limit       | Messages/sec | Limits the number of messages EMQX can deliver to a client per second.               |
+| Sent Traffic Limit (bytes/s)      | Bytes/sec    | Limits the message traffic a client can publish per second.                          |
+| Subscribe Traffic Limit (bytes/s) | Bytes/sec    | Limits the message traffic a client can deliver per second.                          |
+| Maximum QoS Level                 | 0, 1, 2      | Limits the maximum QoS level that clients can use to publish and subscribe messages. |
 
 ::: tip
 
