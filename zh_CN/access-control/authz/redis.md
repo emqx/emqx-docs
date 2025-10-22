@@ -64,11 +64,11 @@ Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Auth
 
    - **数据库**：填写 Redis 的数据库编号或名称。
 
-   - **用户名**：指定用于连接 Redis 的用户名。如果您的 Redis 实例启用了 [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（在 Redis 6.0 引入）进行身份认证，则此字段为必填项。如果您的 Redis 使用默认用户（未启用或未强制启用 ACL），则可以留空此字段。
+   - **用户名**：指定用于连接 Redis 的用户名。如果您的 Redis 实例启用了 [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（在 Redis 6.0 引入），则此字段为必填项。如果您的 Redis 使用默认用户（未启用或未强制启用 ACL），则可以留空此字段。
 
      ::: tip 提示
 
-     `username` 字段从 EMQX 5.2.0 版本开始支持。请确保你部署的版本为 5.2.0 或更高版本，以支持 Redis ACL。
+     `username` 字段从 EMQX 5.2.0 版本开始支持。请确保您的部署版本为 5.2.0 或更高版本，以支持 Redis ACL。
 
      :::
 

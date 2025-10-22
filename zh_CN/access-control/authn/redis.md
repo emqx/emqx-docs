@@ -53,7 +53,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 - **数据库**：整数，用于指定 Redis 数据库的 Index。
 
-- **用户名**：指定用于连接 Redis 的用户名。如果您的 Redis 实例启用了 [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（在 Redis 6.0 引入），则此字段为必填项。如果你的 Redis 使用默认用户（未启用或未强制使用 ACL），则可以留空此字段。
+- **用户名**：指定用于连接 Redis 的用户名。如果您的 Redis 实例启用了 [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（在 Redis 6.0 引入）进行身份验证，则此字段为必填项。如果您的 Redis 使用默认用户（未启用或未强制使用 ACL），则可以留空此字段。
 
   ::: tip 提示
 
