@@ -1,6 +1,6 @@
 # Integrate with Redis
 
-EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to running in three different modes, which are Single, [Redis Sentinel](https://redis.io/docs/manual/sentinel/) and [Redis Cluster](https://redis.io/docs/manual/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and configuration file. 
+EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to running in three different modes, which are Single, [Redis Sentinel,](https://redis.io/docs/manual/sentinel/) and [Redis Cluster](https://redis.io/docs/manual/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and the configuration file. 
 
 ::: tip Prerequisite:
 
@@ -54,10 +54,26 @@ Follow the instructions below on how to configure the authentication:
 **Connect**: Enter the information for connecting to Redis.
 
 - **Redis Mode**: Select how Redis is deployed, including `Single`, `Sentinel` and `Cluster`. 
+
 - **Server(s)**: Specify the Redis server address that EMQX is to connect, if **Redis Mode** is set to `Sentinel` or `Cluster`, you will need to input all Redis servers (separated with a `,`) that EMQX is to connect.
+
 - **Sentinel Name**: Specify the name to use; type: strings; only needed if you set **Redis Mode** to `Sentinel`.
+
 - **Database**: Redis database name; Data type: strings.
-- **Password**: Specify Redis user password. 
+
+- **Username**: Specify the Redis username to connect with. This field is required if your Redis instance uses [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command) (introduced in Redis 6.0) for authentication. If your Redis server uses the default user (with ACLs disabled or not enforced), you can leave this field blank.
+
+  ::: tip
+
+  The `username` field is supported starting from EMQX 5.2.0. Ensure your deployment is running this version or later to use Redis ACL.
+
+  :::
+
+- **Password**: Specify the password for the Redis user. The field is required for connecting to Redis instances with authentication enabled.
+
+  - If you have entered a username, this password must match the credentials configured in your Redis ACL settings.
+  - If no username is provided, this password will be used to authenticate as the `default` user (if enabled).
+
 
 **TLS Configuration**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
 
