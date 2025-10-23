@@ -26,7 +26,7 @@ To create a new Message Queue manually using the EMQX Dashboard:
 
    - **Data Retention Period**: Specify how long messages should be retained in the queue. You can set the time unit (e.g., days).
 
-   - **Last Value Semantics**: This option is enabled by default. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the same queue. This ensures only the most recent message per key is retained.
+   - **Last Value Semantics**: This option is enabled by default. When enabled, a new message with the same queue key will overwrite any previous, unconsumed message with that key in the same queue. This ensures only the most recent message per key is retained. The default key is the ClientId of the message's publisher.
 
      - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
