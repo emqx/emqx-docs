@@ -114,7 +114,7 @@ Queue Key Expressions are evaluated against the following message structure:
 
 Starting from EMQX 6.0.1, Message Queues can be automatically created when clients subscribe to a `$q/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
 
-There are two types of auto-created queues: regular queue and last-value semantics queue. 
+The queues may be auto-created either as regular queues or last-value semantics queues. 
 
 ::: tip Note
 
