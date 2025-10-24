@@ -23,7 +23,7 @@ This feature enables MQTT to handle both real-time and delayed workloads, simpli
 - **Flexible Dispatch Strategies**: Choose from Random, Round Robin, or Least Inflight Subscriber to distribute messages efficiently.
 - **Guaranteed Delivery**: Supports persistent storage and QoS 1 delivery to ensure no data is lost.
 
-Learn more in the [Message Queue documentation](../message-queue/message-queue-concepts.md).
+Learn more in the [Message Queue documentation](../message-queue/message-queue-concept.md).
 
 ### Multi-Tenancy with Namespaced Roles
 
