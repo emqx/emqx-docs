@@ -43,7 +43,7 @@ Namespaced roles support fine-grained permissions such as Administrator and View
 - **Improved Observability**: Dashboard views are filtered by namespace for better focus.
 - **Optimized Session Tracking**: Namespaced session counts now refresh on demand (under 1,000 sessions) or every 5 seconds otherwise, ensuring better performance and accuracy.
 
-For detailed instructions, see [Create a User with a Namespaced Role](../dashboard/system.md#create-a-user-with-a-namespaced-role.md).
+For detailed instructions, see [Create a User with a Namespaced Role](../dashboard/system.md#create-a-user-with-a-namespaced-role).
 
 ### Optimized Durable Storage
 
