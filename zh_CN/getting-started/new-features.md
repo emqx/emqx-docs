@@ -10,7 +10,7 @@ EMQX 6.0.0 引入了原生**消息队列**功能，将可靠的实时 MQTT 发�
 
 与传统 MQTT 依赖订阅者在线不同，消息队列通过在服务器端缓存消息，实现发布者与订阅者的解耦。匹配特定主题过滤器（Topic Filter）的消息会被持久化存储，并可通过特殊的主题格式 `$q/{topic_filter}` 进行消费。这确保了即使客户端离线或网络不稳定，也能可靠地传递消息。
 
-<img src="./assets/messsage_queque.png" alt="messsage_queque" style="zoom: 33%;" />
+<img src="./assets/message_queue.png" alt="message_queue" style="zoom: 33%;" />
 
 该功能使 MQTT 同时支持实时与延迟消息处理，简化了物联网系统架构，无需再引入 Kafka 或 RabbitMQ 等外部队列系统。它特别适用于对消息持久性、可靠传递和离线缓存有严格要求的场景。
 
