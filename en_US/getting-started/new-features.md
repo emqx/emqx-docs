@@ -14,6 +14,8 @@ Message Queue unifies reliable real-time MQTT publish/subscribe with asynchronou
 
 Unlike traditional MQTT, which depends on subscriber availability, Message Queues decouple publishers and subscribers by buffering messages on the server. Messages matching a specified topic filter are stored persistently and can be consumed later using a special topic format: `$q/{topic_filter}`. This ensures reliable message delivery, even when clients are offline or the network is unstable.
 
+<img src="./assets/messsage_queque.png" alt="messsage_queque" style="zoom: 33%;" />
+
 This feature enables MQTT to handle both real-time and delayed workloads, simplifying IoT system architecture by removing the need for external queuing systems like Kafka or RabbitMQ. It’s ideal for scenarios where message durability, reliable delivery, and offline buffering are critical.
 
 #### Feature Highlights
@@ -76,9 +78,9 @@ The following integrations have been newly added in EMQX 6.0.0:
 
 #### Enhanced Integrations
 
-In addition to new connectors, EMQX 6.0.0 brings powerful enhancements to existing integrations, improving performance, usability, and cloud-native compatibility:
+In addition to new integrations, EMQX 6.0.0 brings powerful enhancements to existing integrations, improving performance, usability, and cloud-native compatibility:
 
-- **Snowflake Snowpipe Streaming**: Now supports low-latency data ingestion into Snowflake tables via Snowpipe Streaming (preview), available for AWS-hosted accounts.
+- **Snowflake Snowpipe Streaming**: Now supports low-latency data ingestion into Snowflake tables via Snowpipe Streaming (preview feature of Snowflake), available for AWS-hosted accounts.
 - **RocketMQ Action**: Adds support for `key` and `tag` templates, plus a `key_dispatch` strategy for flexible message routing and metadata enrichment.
 - **S3 Tables Connector**: `access_key_id` and `secret_access_key` are now optional, with automatic retrieval from EC2 Instance Metadata Service v2 APIs in AWS-hosted environments.
 - **RabbitMQ Sink**: Allows customization of Headers and Properties Templates to enhance message routing and compatibility within RabbitMQ.
