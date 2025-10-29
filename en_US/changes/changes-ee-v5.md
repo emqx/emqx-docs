@@ -61,6 +61,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, when the dispatch rate limit was reached during retained message iteration, dispatcher processes would schedule a retry. However, retries for iterations that had started too far in the past could be dropped. The TTL (time-to-live) for such iterations is controlled by the `retainer.dispatch_retry_ttl` setting (default: 10 minutes).
 
   Also, the number of concurrent retainer dispatch requests is limited to 1000 _per dispatcher process_ (non-configurable).  One dispatcher process is started per Erlang scheduler, which typically means one per CPU core.  If more requests arrive over this limit, the dispatcher will drop older queued requests.
+  
+  After the fix. EMQX will now continue delivering retained messages in subsequent retries even after hitting the dispatch rate limit, ensuring more complete delivery.
 
 #### Deployment
 
@@ -129,11 +131,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   In rare race conditions, Kafka may return an incomplete partition list. Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing. This gap could cause the partition producer to stall and block shutdown indefinitely.
 
+
+- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from `4.0.12` to `4.0.13`, which adds handling for the `record_list_too_large` error in `ProduceResponse`.
+
+
 - [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8. This improves MQTT bridge connectivity with:
   - Connector will automatically reconnect when peer broker does not reply PINGRESP.
   - Bridge over TLS failure is more promptly handled if connection breaks while waiting for CONNACK.
-
-- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from `4.0.12` to `4.0.13`, which adds handling for the `record_list_too_large` error in `ProduceResponse`.
 
 - [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
 
@@ -162,6 +166,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   ```
 
 - [#16043](https://github.com/emqx/emqx/pull/16043) Improved log details for Kafka data integration when `not_all_kafka_partitions_connected` event occurs.
+
 - [#16046](https://github.com/emqx/emqx/pull/16046) Fixed a potential out-of-memory (OOM) crash when loading or restarting a configuration containing a Connector with several hundred Actions.
 
 #### Rule Engine
