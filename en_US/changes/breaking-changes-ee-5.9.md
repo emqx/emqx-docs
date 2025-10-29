@@ -1,5 +1,15 @@
 # Incompatible Changes in EMQX 5.9
 
+## 5.9.2
+
+- [#15753](https://github.com/emqx/emqx/pull/15753) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the behavior before 5.9.0.
+
+  As a result, configurations from versions 5.9.0 and 5.9.1 are incompatible: the specified rate values must be scaled up by the number of acceptors configured for each listener to preserve the same effective limits.
+
+- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ actions ignored the configured payload template and sent the entire rule output instead.
+
+  If you relied on the previous (incorrect) behavior, you may need to update your payload templates to ensure messages are formatted as expected.
+
 ## 5.9.1
 
 - [#15156](https://github.com/emqx/emqx/pull/15156) Added strict schema validation for the `dashboard.sso.oidc.issuer` field. This field must now contain a valid URL. Previously, invalid configurations could be accepted by the API without errors but would cause EMQX to fail to restart, potentially resulting in a crash (`erl_crash.dump`).
