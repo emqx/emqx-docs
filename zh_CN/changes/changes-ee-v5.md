@@ -31,7 +31,7 @@
 
 - [#15536](https://github.com/emqx/emqx/pull/15536) 默认禁用了 `node.global_gc_interval` 配置。该配置在启用时会引发 CPU 波动和消息延迟，而 Erlang 内置 GC 已足够应对大部分场景。禁用后整体性能更稳定。
 
-- - [#15539](https://github.com/emqx/emqx/pull/15539) 优化 Erlang VM 参数以提升性能与稳定性：
+- [#15539](https://github.com/emqx/emqx/pull/15539) 优化 Erlang VM 参数以提升性能与稳定性：
     - 增大分布式通道缓冲区至 32 MB（`+zdbbl 32768`），避免在高强度 Mnesia 操作中触发 `busy_dist_port` 报警。
     - 禁用调度器忙等待（`+sbwt none +sbwtdcpu none +sbwtdio none`），降低操作系统报告的 CPU 使用率。
     - 设置调度器绑定类型为 db（`+stbt db`），以降低消息延迟。
