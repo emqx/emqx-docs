@@ -62,7 +62,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Also, the number of concurrent retainer dispatch requests is limited to 1000 _per dispatcher process_ (non-configurable).  One dispatcher process is started per Erlang scheduler, which typically means one per CPU core.  If more requests arrive over this limit, the dispatcher will drop older queued requests.
   
-  After the fix. EMQX will now continue delivering retained messages in subsequent retries even after hitting the dispatch rate limit, ensuring more complete delivery.
+  After the fix, EMQX will now continue delivering retained messages in subsequent retries even after hitting the dispatch rate limit, ensuring more complete delivery.�
 
 #### Deployment
 
