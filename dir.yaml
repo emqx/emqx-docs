@@ -811,6 +811,12 @@
               title_cn: 端到端追踪
               title_ja: エンドツーエンドトレース
               path: observability/opentelemetry/e2e-traces
+              collapsed: true
+              children:
+                - title_en: End-to-End Tracing Span Details
+                  title_cn: 端到端追踪 Span 详情
+                  title_ja: エンドツーエンドトレース Span 詳細
+                  path: observability/opentelemetry/e2e_span_details
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       title_ja: バックアップとリストア
