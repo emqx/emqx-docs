@@ -171,6 +171,20 @@ opentelemetry {
 
    :::
 
+## Understanding Trace Spans
+
+EMQX generates various types of spans during end-to-end tracing to provide deep insights into the internal workings of the Broker. These spans cover multiple aspects such as client lifecycle, message lifecycle, authentication and authorization, rule engine, and internal Broker operations.
+
+Here is an overview of the main span types:
+
+- **Client Lifecycle Spans**: Trace major lifecycle events of a client, such as connection, disconnection, subscription, and unsubscription.
+- **Authentication and Authorization Spans**: Provide visibility into security-related checks performed for a client, including authentication and authorization processes.
+- **Message Lifecycle Spans**: Trace the complete journey of an MQTT message within the Broker, including message reception, routing, forwarding, and acknowledgment flows for different QoS levels.
+- **Rule Engine Spans**: Trace the processing and execution of the rule engine.
+- **Broker Internal Spans**: Trace internal Broker operations, such as actively disconnecting a client or internal subscriptions.
+
+For a detailed explanation of each span, please refer to the [End-to-End Tracing Span Details](./e2e_span_details.md) documentation.
+
 ## Manage Trace Span Overload
 
 EMQX accumulates trace spans and periodically exports them in batches. The export interval is controlled by the `opentelemetry.trace.scheduled_delay` parameter, which defaults to 5 seconds. The batch trace span processor includes overload protection, allowing accumulation of spans up to a limit, which defaults to 2048 spans. You can adjust this limit using the following configuration:
