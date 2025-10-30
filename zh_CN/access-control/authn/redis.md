@@ -45,11 +45,26 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 **连接**：在此部分完成到 Redis 数据库的连接设置。
 
-- **部署模式**：选择 Redis 数据库的部署模式，可选值：**单节点**、**Sentinel**、**Cluster**
-- **服务**（**列表**）：填入 Redis 服务器地址 (`host:port`) ；当部署模式选为 Sentinel 或 Cluster，您需在此提供所有相关 Redis 服务器的地址，不同地址之间以 `,` 分隔，格式为 `host1:port1,host2:port2,...`
-- **Sentinel 名字**：指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)，仅需在**部署模式**设置为 **Sentinel** 时设置。
+- **部署模式**：选择 Redis 数据库的部署模式，可选值：**单节点**、**Sentinel**、**Cluster**。
+
+- **服务器地址**：填入 Redis 服务器地址 (`host:port`) ；当部署模式选为 Sentinel 或 Cluster，您需在此提供所有相关 Redis 服务器的地址，不同地址之间以 `,` 分隔，格式为 `host1:port1,host2:port2,...`。
+
+- **Sentinel 名字**（仅需在**部署模式**设置为 **Sentinel** 时设置）：指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)。
+
 - **数据库**：整数，用于指定 Redis 数据库的 Index。
-- **密码**：填入认证密码。
+
+- **用户名**：指定用于连接 Redis 的用户名。如果您的 Redis 实例启用了 [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command)（在 Redis 6.0 引入）进行身份验证，则此字段为必填项。如果您的 Redis 使用默认用户（未启用或未强制使用 ACL），则可以留空此字段。
+
+  ::: tip 提示
+
+  `username` 字段从 EMQX 5.2.0 版本开始支持。请确保您的部署版本为 5.2.0 或更高，以使用 Redis ACL 功能。
+
+  :::
+
+- **密码**：指定用于连接 Redis 的用户密码。若 Redis 实例启用了身份验证，该字段为必填项。
+
+  - 如果填写了用户名，则此密码必须与 Redis ACL 配置中的凭据匹配。
+  - 如果未填写用户名，则此密码将用于以 Redis 的 `default` 用户身份进行身份验证（前提是默认用户已启用）。
 
 **TLS 配置**：配置是否启用 TLS。
 
@@ -72,7 +87,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
     - **迭代次数**：指定散列次数，默认值：`4096`。<!--后续补充取值范围-->
     - **密钥长度**（可选）：指定希望得到的密钥长度。如不指定，密钥长度将由**伪随机函数**确定。
     - 生成的哈希值以十六进制字符串表示，并与存储的凭据进行不区分大小写的比对。
-- **命令**：Redis 查询命令
+- **命令**：Redis 查询命令。
 
 点击**创建**完成相关配置。
 
