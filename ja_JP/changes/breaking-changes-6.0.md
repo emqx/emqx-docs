@@ -1,4 +1,4 @@
-# Incompatible Changes in EMQX 6.0
+# EMQX 6.0 の非互換の変更
 
 ## 6.0.1
 
