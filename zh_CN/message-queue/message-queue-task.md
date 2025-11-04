@@ -12,7 +12,7 @@
 
 2. 点击页面中的**创建**按钮。
 
-3. 在**创建消息队列**对话框中：
+3. 在**创建消息队列**对话框中，配置以下选项：
 
    - **过滤主题**：输入主题或主题过滤器（例如 `t/1`）。该字段用于根据主题匹配决定哪些发布的消息将被入队。一个队列将收集所有匹配该过滤器的消息。
 
@@ -30,9 +30,12 @@
 
      - **[队列键表达式](#队列键表达式)**：启用“最后值语义”后，该字段用于定义如何从每条消息中提取队列键，默认值为 `message.from`，即为消息发布者的客户端 ID。该字段支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)设置。
 
+   - **最大分片消息数量**：（可选）设置每个队列分片中允许的最大消息数量。您可以开启该选项并输入自定义数值，或保持关闭状态以表示不限制（`infinity`）。该配置将被持久化到存储中。
+   - **最大分片消息字节数**：（可选）设置每个队列分片中消息允许占用的最大总字节数。您可以开启该选项并输入数值（例如 `200MB`），或保持关闭状态以表示不限制（`infinity`）。该配置将被持久化到存储中。
+
 4. 点击**创建**保存队列。
 
-新队列将出现在消息队列列表中，并显示其主题过滤器、分发策略、是否启用了最新值语义以及数据保留时间。你可以通过**操作**栏中的按钮编辑或删除队列。
+新队列将出现在消息队列列表中，并显示其主题过滤器、分发策略、是否启用了最新值语义以及数据保留时间。你可以通过**操作**栏中的按钮编辑队列设置或删除队列。
 
 ### 队列键表达式
 
@@ -244,7 +247,7 @@ EMQX 提供一组 REST API 用于管理消息队列的生命周期，包括创�
 ```bash
 curl -s -u key:secret -X POST -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues \
--d '{"topic_filter": "t1/#", "is_lastvalue": false}' | jq
+-d '{"topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
 ### 列出所有消息队列
@@ -263,7 +266,7 @@ http://localhost:18083/api/v5/message_queues | jq
 ```bash
 curl -s -u key:secret -X PUT -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues/t1%2F%23 \
--d '{"dispatch_strategy": "least_inflight"}' | jq
+-d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
 ### 删除消息队列
@@ -290,5 +293,14 @@ http://localhost:18083/api/v5/message_queues/t1%2F%23
 
 ### 队列容量超过后会发生什么？
 
-- 当前消息队列**不限制**消息数量或总字节数，但会通过配置的*保留时长*进行时间限制。
-- 一旦消息过期（即超出保留时长），将不再被投递，并会在 EMQX 定期执行垃圾回收时被自动清除。
+EMQX 中的消息队列现在支持多种容量限制。当队列达到任一限制时，EMQX 会在垃圾回收（GC）期间删除最旧的消息，直到队列大小恢复到配置的范围内。
+
+- **基于时间的限制**：所有队列仍受配置的*保留周期（retention period）* 限制。超过保留时间的消息将不再具备投递资格，并会在 GC 期间被自动清除。
+
+- **基于大小的限制**：您可以为每个队列分片可选地配置以下限制：
+
+  - **最大消息数量**（`max_shard_message_count`）
+  - **最大消息总大小（字节）**（`max_shard_message_bytes`）
+
+  这些限制为软性限制，仅在 GC 期间生效，而非实时强制执行。在两次 GC 之间，队列可能会暂时超过配置的阈值。
+

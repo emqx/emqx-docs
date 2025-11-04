@@ -12,7 +12,7 @@ To create a new Message Queue manually using the EMQX Dashboard:
 
 2. Click the **Create** button on the page.
 
-3. In the **Create Message Queue** dialog:
+3. In the **Create Message Queue** dialog, configure the following options:
 
    - **Topic Filter**: Enter the topic or topic filter (e.g., `t/1`).  It defines which published messages are enqueued based on topic matching. A queue will collect all messages that match this topic filter.
 
@@ -30,9 +30,12 @@ To create a new Message Queue manually using the EMQX Dashboard:
 
      - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
+   - **Max Shard Message Count**: (Optional) Sets the maximum number of messages allowed in each shard of the queue. You can toggle this setting on and enter a custom value, or leave it disabled to allow unlimited messages (`infinity`). This setting is persisted to durable storage.
+   - **Max Shard Message Bytes**: (Optional) Sets the maximum total size (in bytes) of messages in each shard of the queue. You can toggle this setting on and enter a value (e.g., `200MB`), or leave it disabled for unlimited size (`infinity`). This setting is persisted to durable storage.
+
 4. Click **Create** to save the queue.
 
-The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit or delete queues using the buttons in the **Actions** column.
+The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
 
 ### Queue Key Expression
 
@@ -146,7 +149,7 @@ This option can be enabled manually if you prefer regular queues where messages 
 
 1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
 2. Turn on **Enable Auto Create Regular Message Queue**.
-3. Set the following:
+3. Configure the following:
    - **Dispatch Strategy**: Determines how messages are distributed to subscribers (default: `Random`).
    - **Data Retention Period**: Specifies how long messages should be retained in the queue.
 4. Click **Save Changes**.
@@ -247,7 +250,7 @@ Create a new message queue by specifying the topic filter and queue properties s
 ```bash
 curl -s -u key:secret -X POST -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues \
--d '{"topic_filter": "t1/#", "is_lastvalue": false}' | jq
+-d '{"topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
 ### List All Message Queues
@@ -266,7 +269,7 @@ Update the properties of an existing queue, such as its dispatch strategy:
 ```bash
 curl -s -u key:secret -X PUT -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues/t1%2F%23 \
--d '{"dispatch_strategy": "least_inflight"}' | jq
+-d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
 ### Delete a Message Queue
@@ -293,6 +296,14 @@ http://localhost:18083/api/v5/message_queues/t1%2F%23
 
 ### What happens when queues exceed capacity?
 
-- Currently, Message Queues are not limited by size (number of messages or total bytes), but they are time-limited via the configured *retention period*.
-- Once messages expire (i.e., exceed the retention period), they are no longer eligible for delivery and will be automatically purged by EMQX during regular garbage collection cycles.
+Message Queues in EMQX now support multiple types of capacity limits. If any of these limits are reached, EMQX will remove the oldest messages during garbage collection (GC) until the queue size returns within the configured bounds.
+
+- **Time-based limit**: All queues are still subject to the configured *retention period*. Once messages exceed the retention period, they are no longer eligible for delivery and will be automatically purged during GC.
+
+- **Size-based limits**: You can optionally configure per-shard limits on:
+
+  - **Max number of messages** (`max_shard_message_count`)
+  - **Max total size of messages in bytes** (`max_shard_message_bytes`)
+
+  These limits are soft and applied during GC, not in real time. Queues may temporarily exceed the configured thresholds between GC cycles.
 
