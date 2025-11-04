@@ -10,11 +10,11 @@ This page highlights major new features supported in the current release. Note t
 
 ### Message Queue
 
-Message Queue unifies reliable real-time MQTT publish/subscribe with asynchronous message queueing within EMQX, without relying on external queuing services.
+Message Queue unifies reliable, real-time MQTT publish/subscribe with asynchronous message queuing within EMQX, eliminating the need for external queuing services.
 
 Unlike traditional MQTT, which depends on subscriber availability, Message Queues decouple publishers and subscribers by buffering messages on the server. Messages matching a specified topic filter are stored persistently and can be consumed later using a special topic format: `$q/{topic_filter}`. This ensures reliable message delivery, even when clients are offline or the network is unstable.
 
-<img src="./assets/message_queue.png" alt="message_queue" style="zoom: 33%;" />
+<img src="./assets/message_queque.png" alt="message_queque" style="zoom:50%;" />
 
 This feature enables MQTT to handle both real-time and delayed workloads, simplifying IoT system architecture by removing the need for external queuing systems like Kafka or RabbitMQ. It’s ideal for scenarios where message durability, reliable delivery, and offline buffering are critical.
 
