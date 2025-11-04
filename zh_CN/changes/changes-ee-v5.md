@@ -1,5 +1,85 @@
 # EMQX 企业版 v5 版本
 
+## 5.10.2
+
+*发布日期：2025-10-07*
+
+升级前请查看已知问题列表和不兼容变更列表。
+
+### 增强
+
+#### 数据集成
+
+- [#16183](https://github.com/emqx/emqx/pull/16183) EMQX 现在将有关过期消息被丢弃的日志（`buffer_worker_dropped_expired_messages`）以 warning 级别输出，并按resource  ID 进行日志限流。
+  这有助于识别哪些外部资源未能跟上消息输入速率，从而可能导致消息被丢弃。
+
+- 为 Kafka Producer 连接器新增了 `allow_auto_topic_creation` 配置项。
+   启用该选项后，当客户端发送元数据请求（metadata fetch request）且目标主题不存在时，EMQX 将允许 Kafka 自动创建该主题。
+
+#### 性能
+
+- [#15949](https://github.com/emqx/emqx/pull/15949) 将监听器配置中的 `parse_unit` 选项默认值从 `chunk` 修改为 `frame`。当负载大小超过 socket 缓冲区（默认 4 KB）时，此更改可以显著降低 CPU 使用率。
+
+  **注意：** 当 `parse_unit = frame` 时，如果 `PUBLISH` 报文超过允许的最大大小，EMQX 将关闭连接，而不是发送 `DISCONNECT` 报文。
+
+- [#16165](https://github.com/emqx/emqx/pull/16165) 优化了 `GET /clients_v2` API 的性能。此前，在集群中连接客户端数量达到约 50,000 或以上时，调用该 API 获取客户端列表的响应速度可能非常慢，甚至会超时。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#15884](https://github.com/emqx/emqx/pull/15884) 修复了一个问题：在极少数情况下，全局路由表可能会无限期保留已长时间离开集群的节点的路由信息。
+
+- [#15518](https://github.com/emqx/emqx/pull/15518) 修复了一个竞争条件，该问题在大量共享订阅者同时断开连接时，可能导致集群中路由表和共享订阅状态持续出现不一致。
+
+- [#16137](https://github.com/emqx/emqx/pull/16137) 修复了一个问题：当订阅者触发保留消息的派发速率限制时，可能无法收到全部保留消息。
+
+  此前，在遍历保留消息主题期间，如果达到派发速率限制，派发进程会安排稍后重试。然而，对于启动时间过早的遍历操作，重试可能会被丢弃。此类遍历操作的生存时间（TTL）由 `retainer.dispatch_retry_ttl` 配置项控制，默认值为 10 分钟。
+
+  此外，每个派发进程最多同时处理 1000 个保留消息派发请求（该限制不可配置）。EMQX 会为每个 Erlang 调度器启动一个派发进程，通常对应每个 CPU core。如果请求数量超过该限制，派发进程将丢弃队列中较早的请求。
+
+  修复后，EMQX 现在会在触发速率限制后继续在后续重试中派发保留消息，从而确保更完整的消息投递。
+
+#### 访问控制
+
+- [#16081](https://github.com/emqx/emqx/pull/16081) 修复了一个问题：使用扩展认证和内存会话的客户端可能因 `calling_self` 错误导致触发 `session_stepdown_request_exception` 异常并发生崩溃。
+
+  <details> <summary>错误日志示例</summary>
+  ```
+  2025-09-24T07:13:08.973954+08:00 [error] clientid: someclientid, msg: session_stepdown_request_exception, peername: 127.0.0.1:41782, username: admin, error: exit, reason: calling_self, stacktrace: [{gen_server,call,3,[{file,"gen_server.erl"},{line,1222}]},{emqx_cm,request_stepdown,4,[{file,"emqx_cm.erl"},{line,427}]},{emqx_cm,do_takeover_begin,2,[{file,"emqx_cm.erl"},{line,398}]},{emqx_cm,takeover_session,2,[{file,"emqx_cm.erl"},{line,384}]},{emqx_cm,takeover_session_begin,2,[{file,"emqx_cm.erl"},{line,305}]},{emqx_session_mem,open,4,[{file,"emqx_session_mem.erl"},{line,210}]},{emqx_session,open,3,[{file,"emqx_session.erl"},{line,263}]},{emqx_cm,'-open_session/4-fun-1-',4,[{file,"emqx_cm.erl"},{line,290}]},{emqx_cm_locker,trans,2,[{file,"emqx_cm_locker.erl"},{line,32}]},{emqx_channel,post_process_connect,2,[{file,"emqx_channel.erl"},{line,575}]},{emqx_connection,with_channel,3,[{file,"emqx_connection.erl"},{line,852}]},{emqx_connection,process_msg,2,[{file,"emqx_connection.erl"},{line,470}]},{emqx_connection,process_msgs,2,[{file,"emqx_connection.erl"},{line,462}]},{emqx_connection,handle_recv,3,[{file,"emqx_connection.erl"},{line,406}]},{proc_lib,wake_up,3,[{file,"proc_lib.erl"},{line,340}]}], action: {takeover,'begin'}, ...
+  ```
+  
+  </details>
+
+#### 规则引擎
+
+- [#16028](https://github.com/emqx/emqx/pull/16028) 修复了规则引擎中 `jq` 函数的内存泄漏问题。 此前，如果使用内置的 `jq` 函数 `index`（例如 `.key | index("name")`），会导致内存泄漏。
+
+#### 数据集成
+
+- [#16010](https://github.com/emqx/emqx/pull/16010) 修复了一个问题：如果原始规则的 SQL 未包含规则环境中的 `metadata` 字段，规则的备选动作可能会因 `function_clause` 错误而执行失败。
+
+  错误日志示例：
+
+  ```
+  [error] tag: RESOURCE, msg: failed_to_trigger_fallback_action, reason: {error,function_clause}, fallback_kind: republish, primary_action_resource_id: <<"action:type:name:connector:type:name">>, republish_topic: <<"republish/topic">>
+  ```
+
+- [#16043](https://github.com/emqx/emqx/pull/16043) 优化了 Kafka 数据集成在发生 `not_all_kafka_partitions_connected` 事件时的日志信息。
+
+- [#16046](https://github.com/emqx/emqx/pull/16046) 修复了一个潜在的内存溢出（OOM）崩溃问题：当加载或重启包含数百个动作的连接器配置时，可能导致崩溃。
+
+- [#16138](https://github.com/emqx/emqx/pull/16138) 修复了一个 Redis 集群故障转移（failover）相关的问题，该问题可能导致连接器长时间停留在 “connecting” 状态。
+
+  此前，EMQX 的 Redis 集群客户端仅在常规查询（如 `GET`）失败时才会刷新集群拓扑结构。然而，周期性发送的 `PING` 命令即使失败，也不会触发刷新操作。因此，在发生故障转移后，如果没有其他命令被发送，连接器可能会继续使用过时的拓扑信息，导致无法恢复连接。
+
+  此次修复后，`PING` 命令失败也会触发集群拓扑刷新，确保连接器能够及时检测到故障转移并恢复正常工作。
+
+#### 可观测性
+
+- [#15963](https://github.com/emqx/emqx/pull/15963) 减少了在远程 shell（`remsh`）中进行循环评估时产生的过多审计日志。
+- [#15967](https://github.com/emqx/emqx/pull/15967) 修复了一个问题：在清理大量审计日志时，Mnesia 事务阻塞可能导致内存迅速增长。
+
 ## 5.10.1
 
 *发布日期：2025-09-18*
