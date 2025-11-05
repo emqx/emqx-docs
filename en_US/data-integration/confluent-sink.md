@@ -259,6 +259,7 @@ This section describes some advanced configuration options that can optimize the
 
 | Fields                            | Descriptions                                                 | Recommended Values |
 | --------------------------------- | ------------------------------------------------------------ | ------------------ |
+| Allow Auto Topic Creation         | (For Producer only) When enabled, EMQX allows automatic creation of a Kafka topic if it doesn’t exist when a client sends a metadata fetch request. | `Disabled`         |
 | Connect Timeout                   | The maximum time to wait for TCP connection establishment, which includes the authentication time if enabled. | `5` second         |
 | Start Timeout                     | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Sink does not proceed with operations until it verifies that the connected resource, such as a Confluent cluster, is fully operational and ready to handle data transactions. | `5` second         |
 | Health Check Interval             | The time interval for checking the running status of the Connector. | `15` second        |

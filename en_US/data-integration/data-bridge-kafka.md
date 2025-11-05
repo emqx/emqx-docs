@@ -103,13 +103,13 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 
      See [Authentication Method](#authentication-method) for details on each method.
 
-   - Leave other options as default or configure them according to your business needs.
+   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 
-   - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
+   - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
 
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
-5. Click the **Create** button to complete the creation of the connector.
+6. Click the **Create** button to complete the creation of the connector.
 
 Once created, the connector will automatically connect to Kafka. Next, you need to create a rule based on this connector to forward data to the Kafka cluster configured in the connector.
 
@@ -200,9 +200,9 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
-9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+9. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
+10. **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
 
 11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
 
@@ -274,7 +274,7 @@ To prevent leakage of other system environment variables, the names of environme
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
      --topic testtopic-in
-
+   
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
@@ -324,23 +324,31 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "Hello Kafka" }'
 Before adding a Kafka Source action, you need to create a Kafka consumer connector to establish a connection between EMQX and Kafka.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Connector**.
+
 2. Click **Create** on the top right corner of the page.
+
 3. In the **Create Connector** page, click to select **Kafka Consumer**, and then click **Next**.
+
 4. Enter a name for the source. The name should be a combination of upper/lower case letters and numbers, for example, `my-kafka-source`.
+
 5. Enter the connection information for the source.
    - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
+   
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
-
+   
      - `None`: No authentication.
      - `authentication_msk_iam`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
      - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.
-
+   
      See the [Authentication Method](#authentication-method) for details on each method.
-   - Leave other options as default or configure according to your business needs.
+     
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
-6. Advanced settings (optional): See **Advanced Configurations.**
-7. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
+   
+   - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
+   
+6. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
+
 11. Click **Create**. You will be offered the option of creating an associated rule. See [Create a Rule with Kafka Consumer Source](#create-a-rule-with-kafka-consumer-source).
 
 ## Create a Rule with Kafka Consumer Source
@@ -383,7 +391,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
    - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
    - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-8. Advanced settings (optional): See **Advanced Configurations.**
+8. **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
 9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.
 10. Click **Create** to complete the Source creation. Back on the **Create Rule** page, you will see the new Source appear under the **Data Inputs** tab.
 
@@ -440,6 +448,7 @@ This section describes some advanced configuration options that can optimize the
 
 | Fields                                    | Descriptions                                                 | Recommended Values |
 | ----------------------------------------- | ------------------------------------------------------------ | ------------------ |
+| Allow Auto Topic Creation                 | (For Producer Connector only) When enabled, EMQX allows automatic creation of a Kafka topic if it doesn’t exist when a client sends a metadata fetch request. | `disabled`         |
 | Min Metadata Refresh Interval             | The minimum time interval the client must wait before refreshing Kafka broker and topic metadata. Setting this value too small may increase the load on the Kafka server unnecessarily. | `3 `second         |
 | Metadata Request Timeout                  | The maximum duration to wait when the bridge requests metadata from Kafka. | `5` second         |
 | Connect Timeout                           | The maximum time to wait for TCP connection establishment, which includes the authentication time if enabled. | `5` second         |
