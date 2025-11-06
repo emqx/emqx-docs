@@ -76,7 +76,7 @@ This section guides you on how to configure a connection with a remote MQTT serv
    
    - **MQTT Version**: Choose the appropriate version for the broker connection.
    
-   - **Static ClientId Entries**: This section allows you to configure static client IDs for the connector to ensure stable connections, especially when connecting to services like Azure IoT Hub. See the [Configure Static Client IDs](#configure-static-client-ids) section for more details on how to configure this.
+   - **Static ClientId Entries**: This section allows you to configure static client IDs for the connector to ensure stable connections, especially when connecting to services like Azure IoT Hubs. See the [Configure Static Client IDs](#configure-static-client-ids) section for more details on how to configure this.
    
      ::: tip
    
@@ -113,7 +113,7 @@ To address this issue, from version 5.7.1 onwards, EMQX has implemented the foll
 
 ### Configure Static Client IDs
 
-In some use cases, you only have a finite set of client IDs to use in an integration. In this case, it is possible to assign static client ID sets to individual nodes while configuring the connector. To configure static client IDs, provide a list of client IDs for each node in your EMQX cluster. For each client ID, you can specify the corresponding username and password. This is particularly useful for scenarios like connecting to Azure IoT Hub, where each device (client ID) requires a unique set of credentials.
+In some use cases, you only have a finite set of client IDs to use in an integration. In this case, it is possible to assign static client ID sets to individual nodes while configuring the connector. To configure static client IDs, provide a list of client IDs for each node in your EMQX cluster. For each client ID, you can specify the corresponding username and password. This is particularly useful for scenarios like connecting to Azure IoT Hubs, where each device (client ID) requires a unique set of credentials.
 
 To configure static client IDs, follow these steps:
 
@@ -124,7 +124,7 @@ To configure static client IDs, follow these steps:
    - **Node Name**: Specify the node where the client ID will be assigned. For example, `emqx@10.0.0.1`.
    - **Client ID**: Enter the static client ID. For example, `device1`. You can add multiple client IDs for a node as needed by clicking **Add**.
      - **Username**: (optional) Provide the username associated with this client ID for authentication.
-     - **Password**: (optional) Enter the password associated with this client ID. This is the credential used to authenticate the device or client, which may be a device-specific key, secret, or certificate, depending on the platform (e.g., an authentication key in Azure IoT Hub).
+     - **Password**: (optional) Enter the password associated with this client ID. This is the credential used to authenticate the device or client, which may be a device-specific key, secret, or certificate, depending on the platform (e.g., an authentication key in Azure IoT Hubs).
 
    **Configuration Example**:
 
