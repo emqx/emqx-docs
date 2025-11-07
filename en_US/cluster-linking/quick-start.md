@@ -1,4 +1,4 @@
-# Quick Start with Cluster Linking
+# Cluster Linking Quick Start
 
 This page provides a quick start guide to setting up cluster linking between two distant EMQX clusters.
 
