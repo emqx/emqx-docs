@@ -12,6 +12,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16183](https://github.com/emqx/emqx/pull/16183) EMQX now logs messages about dropped expired messages (`buffer_worker_dropped_expired_messages` ) at the warning level, and throttles such messages per resource ID. This helps identify when specific external resources are not keeping up with incoming message rates, potentially leading to message drops.
 - [#16206](https://github.com/emqx/emqx/pull/16206) Added the `allow_auto_topic_creation` configuration option to the Kafka Producer Connector. When enabled, EMQX allows Kafka to automatically create a topic if it doesn’t exist when a client sends a metadata fetch request.
+- [#16209](https://github.com/emqx/emqx/pull/16209) Added support for specifying a custom timestamp column name (`ts_column`) parameter to GreptimeDB Connector.
 
 #### Performance
 
@@ -73,6 +74,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (such as `GET`) failed. However, failures in periodic `PING` commands did not trigger a refresh. As a result, after a failover, the connector could continue using the outdated cluster topology if no other commands were issued, preventing recovery.
 
   With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that the connector can detect failovers and recover promptly.
+
+- [#16212](https://github.com/emqx/emqx/pull/16212) Removed Kafka producer linger time when the buffer queue is in memory mode.
 
 #### Observability
 

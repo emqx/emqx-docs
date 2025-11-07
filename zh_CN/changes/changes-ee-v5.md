@@ -15,6 +15,8 @@
 
 - [#16206](https://github.com/emqx/emqx/pull/16206) 为 Kafka Producer 连接器新增了 `allow_auto_topic_creation` 配置项。
    启用该选项后，当客户端发送元数据请求（metadata fetch request）且目标主题不存在时，EMQX 将允许 Kafka 自动创建该主题。
+   
+- [#16209](https://github.com/emqx/emqx/pull/16209) GreptimeDB 连接器新增支持自定义时间戳列名，可通过配置参数 `ts_column` 指定。
 
 #### 性能
 
@@ -74,6 +76,8 @@
   此前，EMQX 的 Redis 集群客户端仅在常规查询（如 `GET`）失败时才会刷新集群拓扑结构。然而，周期性发送的 `PING` 命令即使失败，也不会触发刷新操作。因此，在发生故障转移后，如果没有其他命令被发送，连接器可能会继续使用过时的拓扑信息，导致无法恢复连接。
 
   此次修复后，`PING` 命令失败也会触发集群拓扑刷新，确保连接器能够及时检测到故障转移并恢复正常工作。
+
+- [#16212](https://github.com/emqx/emqx/pull/16212) 当缓冲队列处于 `memory` 模式时，移除了 Kafka 生产者的 linger time 设置。
 
 #### 可观测性
 
