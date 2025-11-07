@@ -31,7 +31,14 @@ To create a new Message Queue manually using the EMQX Dashboard:
      - **[Queue Key Expression](#queue-key-expression)**: When Last-Value Semantics is enabled, this field defines the expression used to extract the key from each message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
 
    - **Max Shard Message Count**: (Optional) Sets the maximum number of messages allowed in each shard of the queue. You can toggle this setting on and enter a custom value, or leave it disabled to allow unlimited messages (`infinity`). This setting is persisted to durable storage.
+
    - **Max Shard Message Bytes**: (Optional) Sets the maximum total size (in bytes) of messages in each shard of the queue. You can toggle this setting on and enter a value (e.g., `200MB`), or leave it disabled for unlimited size (`infinity`). This setting is persisted to durable storage.
+
+     ::: tip Performance Note
+
+     Queues with size limits may have slower write performance, especially under high throughput conditions.
+
+     :::
 
 4. Click **Create** to save the queue.
 
@@ -210,10 +217,7 @@ mq {
     gc_interval = 1h
     regular_queue_retention_period = 1d
     find_queue_retry_interval = 10s
-    
-     limits {
-        max_shard_message_count = 10000
-        max_shard_message_bytes = 200MB
+    max_queue_count = 100
     }
 }
 ```
@@ -226,18 +230,7 @@ mq {
   Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
 - **`find_queue_retry_interval`**:
   Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
-- **`limits.max_shard_message_count`**: (Optional) Sets the maximum number of messages allowed per shard in a message queue. The default is `infinity` (no limit).
-  
-  > This limit is soft and enforced during garbage collection (GC), rather than in real-time. Queues may temporarily exceed the configured limits between GC runs.
-- **`limits.max_shard_message_bytes`**: (Optional) Sets the maximum total message size (in bytes) per shard. The default is `infinity` (no limit). Accepts units like `KB`, `MB`, `GB`.
-
-  > Like `max_shard_message_count`, this limit is applied loosely during GC, and queues may temporarily exceed this threshold.
-
-::: tip Performance Note
-
-Queues with size limits may have slower write performance, especially under high throughput conditions.
-
-:::
+- **`max_queue_count`**: (Optional) Sets the maximum number of queues that can be created.
 
 ## Manage Message Queue via REST API
 
@@ -306,4 +299,7 @@ Message Queues in EMQX now support multiple types of capacity limits. If any of 
   - **Max total size of messages in bytes** (`max_shard_message_bytes`)
 
   These limits are soft and applied during GC, not in real time. Queues may temporarily exceed the configured thresholds between GC cycles.
+  
+  Note that these limits apply per shard. For information on how to configure the number of shards, see [Number of Shards](../durability/managing-replication.md#number-of-shards). In addition, size limits do not account for the [replication factor](../durability/managing-replication.md#replication-factor); the actual physical storage used by a queue will be multiplied by the replication factor.
+  
 
