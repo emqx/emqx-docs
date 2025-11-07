@@ -300,6 +300,6 @@ Message Queues in EMQX now support multiple types of capacity limits. If any of 
 
   These limits are soft and applied during GC, not in real time. Queues may temporarily exceed the configured thresholds between GC cycles.
   
-  Note that these limits apply per shard. For information on how to configure the number of shards, see [Number of Shards](../durability/managing-replication.md#number-of-shards). In addition, size limits do not account for the [replication factor](../durability/managing-replication.md#replication-factor); the actual physical storage used by a queue will be multiplied by the replication factor.
+  Note that these limits apply per shard in durable storage. For information on how to configure the number of shards, see [Number of Shards](../durability/managing-replication.md#number-of-shards). In addition, size limits do not account for the [replication factor](../durability/managing-replication.md#replication-factor); the actual physical storage used by a queue will be multiplied by the replication factor.
   
 

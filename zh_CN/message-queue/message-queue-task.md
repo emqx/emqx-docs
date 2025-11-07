@@ -31,7 +31,14 @@
      - **[队列键表达式](#队列键表达式)**：启用“最后值语义”后，该字段用于定义如何从每条消息中提取队列键，默认值为 `message.from`，即为消息发布者的客户端 ID。该字段支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)设置。
 
    - **最大分片消息数量**：（可选）设置每个队列分片中允许的最大消息数量。您可以开启该选项并输入自定义数值，或保持关闭状态以表示不限制（`infinity`）。该配置将被持久化到存储中。
+
    - **最大分片消息字节数**：（可选）设置每个队列分片中消息允许占用的最大总字节数。您可以开启该选项并输入数值（例如 `200MB`），或保持关闭状态以表示不限制（`infinity`）。该配置将被持久化到存储中。
+
+     ::: tip 性能提示
+
+     启用队列大小限制可能会在高吞吐场景下导致写入性能下降。
+
+     :::
 
 4. 点击**创建**保存队列。
 
@@ -210,10 +217,7 @@ mq {
     gc_interval = 1h
     regular_queue_retention_period = 1d
     find_queue_retry_interval = 10s
-    
-     limits {
-        max_shard_message_count = 10000
-        max_shard_message_bytes = 200MB
+    max_queue_count = 100
     }
 }
 ```
@@ -223,18 +227,7 @@ mq {
 - **`gc_interval`**：定义 EMQX 扫描消息队列并清理过期消息的时间间隔。
 - **`regular_queue_retention_period`**：设置队列中消息的最长保留时间。超时的消息将被自动清除。
 - **`find_queue_retry_interval`**：当订阅者订阅 `$q/` 主题时未找到队列，订阅者重新尝试查找队列的周期。
-- **`limits.max_shard_message_count`**：（可选）设置每个队列分片中允许的最大消息数量。默认值为 `infinity`（无限制）。
-
-  > 此限制为软性限制，仅在垃圾回收（GC）过程中生效，而非实时强制执行。GC 运行之前，队列可能会暂时超过所配置的限制。
-- **`limits.max_shard_message_bytes`**：（可选）设置每个分片中允许的最大消息总大小（以字节为单位）。默认值为 `infinity`（无限制）。支持的单位包括 `KB`、`MB`、`GB` 等。
-
-  > 与 `max_shard_message_count` 类似，此限制也是在 GC 时应用，队列在 GC 之间可能会暂时超出该阈值。
-
-::: tip 性能提示
-
-启用队列大小限制可能会在高吞吐场景下导致写入性能下降。
-
-:::
+- **`max_queue_count`**：设置系统允许创建的最大队列数量。
 
 ## 通过 REST API 管理消息队列
 
@@ -303,4 +296,8 @@ EMQX 中的消息队列现在支持多种容量限制。当队列达到任一限
   - **最大消息总大小（字节）**（`max_shard_message_bytes`）
 
   这些限制为软性限制，仅在 GC 期间生效，而非实时强制执行。在两次 GC 之间，队列可能会暂时超过配置的阈值。
+  
+  请注意，这些限制是按持久存储的分片（shard）应用的。有关如何配置分片数量的信息，请参见：[分片数量](../durability/managing-replication.md#分片-shard-数量)。
+  
+  此外，大小限制不包含[副本因子（replication factor）](../durability/managing-replication.md#复制因子-replication-factor)的影响；队列实际占用的物理存储空间将乘以副本因子。
 
