@@ -1,5 +1,9 @@
 # Incompatible Changes between EMQX 5.x and EMQX 6.0
 
+## e6.0.1
+
+- [#16061](https://github.com/emqx/emqx/pull/16061) Fixed an issue where RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
+
 ## Deprecated Packages
 
 - [#15939](https://github.com/emqx/emqx/pull/15939) Stopped releasing packages for systems that have already reached end-of-life:
