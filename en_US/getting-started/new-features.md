@@ -82,7 +82,7 @@ In addition to new integrations, EMQX 6.0.0 brings powerful enhancements to exis
 
 - **Snowflake Snowpipe Streaming**: Now supports low-latency data ingestion into Snowflake tables via Snowpipe Streaming (preview feature of Snowflake), available for AWS-hosted accounts.
 - **RocketMQ Action**: Adds support for `key` and `tag` templates, plus a `key_dispatch` strategy for flexible message routing and metadata enrichment.
-- **S3 Tables Connector**: `access_key_id` and `secret_access_key` are now optional, with automatic retrieval from EC2 Instance Metadata Service v2 APIs in AWS-hosted environments.
+- **AWS S3 and AWS S3 Tables Connector**: `access_key_id` and `secret_access_key` are now optional, with automatic retrieval from EC2 Instance Metadata Service v2 APIs in AWS-hosted environments.
 - **RabbitMQ Sink**: Allows customization of Headers and Properties Templates to enhance message routing and compatibility within RabbitMQ.
 
 ### Other Enhancements

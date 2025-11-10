@@ -83,7 +83,7 @@ EMQX 6.0.0 进一步增强了数据集成功能，支持与各类主流云服务
 
 - **Snowflake Snowpipe Streaming**：现支持通过 Snowpipe Streaming（Snowflake 的预览版功能）将数据低延迟写入 Snowflake 表，适用于 AWS 托管账户。
 - **RocketMQ 动作**：新增 `key` 与 `tag` 模板字段，并提供 `key_dispatch` 消息分发策略，实现更灵活的消息路由与元数据管理。
-- **S3 Tables 连接器**：`access_key_id` 与 `secret_access_key` 参数现为可选项，EMQX 可自动通过 AWS EC2 Instance Metadata Service v2 获取凭证，实现无缝集成。
+- **AWS S3 和 AWS S3 Tables 连接器**：`access_key_id` 与 `secret_access_key` 参数现为可选项，EMQX 可自动通过 AWS EC2 Instance Metadata Service v2 获取凭证，实现无缝集成。
 - **RabbitMQ Sink**：支持自定义消息 Headers 与 Properties 模板，提升消息在 RabbitMQ 中的消息路由能力和兼容性。
 
 ### 其他增强功能
