@@ -10,7 +10,7 @@
 
 #### 数据集成
 
-- [#16183](https://github.com/emqx/emqx/pull/16183) EMQX 现在将有关过期消息被丢弃的日志（`buffer_worker_dropped_expired_messages`）以 warning 级别输出，并按resource  ID 进行日志限流。
+- [#16183](https://github.com/emqx/emqx/pull/16183) EMQX 现在将有关过期消息被丢弃的日志（`buffer_worker_dropped_expired_messages`）以 warning 级别输出，并按resource ID 进行日志限流。
   这有助于识别哪些外部资源未能跟上消息输入速率，从而可能导致消息被丢弃。
 
 - [#16206](https://github.com/emqx/emqx/pull/16206) 为 Kafka Producer 连接器新增了 `allow_auto_topic_creation` 配置项。
