@@ -159,7 +159,7 @@
         }
       },
       "emqx_prometheus_api.mode": {
-        "description": "<br/>Metrics format mode.<br/><br/>`node`:<br/>Return metrics from local node. And it is the default behaviour if `mode` not specified.<br/><br/>`all_nodes_aggregated`:<br/>Return metrics for all nodes.<br/>And if possible, calculate the arithmetic sum or logical sum of the indicators of all nodes.<br/><br/>`all_nodes_unaggregated`:<br/>Return metrics from all nodes, and the metrics are not aggregated.<br/>The node name will be included in the returned results to<br/>indicate that certain metrics were returned on a certain node.<br/>",
+        "description": "Metrics format mode.<br/><br/>`node`:<br/>Return metrics from local node. And it is the default behaviour if `mode` not specified.<br/><br/>`all_nodes_aggregated`:<br/>Return metrics for all nodes.<br/>And if possible, calculate the arithmetic sum or logical sum of the indicators of all nodes.<br/><br/>`all_nodes_unaggregated`:<br/>Return metrics from all nodes, and the metrics are not aggregated.<br/>The node name will be included in the returned results to<br/>indicate that certain metrics were returned on a certain node.",
         "example": "node",
         "in": "query",
         "name": "mode",
@@ -3778,6 +3778,216 @@
             "oneOf": [
               {
                 "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "iotdb"
                 ],
                 "type": "string"
@@ -3790,49 +4000,7 @@
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
+                  "opents"
                 ],
                 "type": "string"
               },
@@ -3844,157 +4012,7 @@
               },
               {
                 "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
                 ],
                 "type": "string"
               },
@@ -4006,25 +4024,7 @@
               },
               {
                 "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               }
@@ -9053,6 +9053,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -9242,6 +9247,11 @@
       },
       "bridge_azure_event_hub.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -9500,6 +9510,11 @@
       },
       "bridge_azure_event_hub.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -12525,6 +12540,10 @@
             },
             "type": "array"
           },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
+          },
           "ttl": {
             "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
             "type": "string"
@@ -12663,6 +12682,10 @@
             },
             "type": "array"
           },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
+          },
           "ttl": {
             "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
             "type": "string"
@@ -12785,6 +12808,10 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
           },
           "ttl": {
             "description": "The time-to-live setting for automatically created tables in GreptimeDB.",
@@ -14585,9 +14612,14 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -14641,7 +14673,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -14793,9 +14825,14 @@
       },
       "bridge_kafka.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -14849,7 +14886,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -14895,12 +14932,12 @@
         "properties": {
           "memory_overload_protection": {
             "default": true,
-            "description": "Applicable when buffer mode is set to <code>memory</code><br/>EMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config <code>sysmon.os.sysmem_high_watermark</code>. NOTE: This config only works on Linux.",
+            "description": "Applicable when buffer mode is set to <code>memory</code>.<br/>EMQX will drop old buffered messages under high memory pressure. The high memory threshold is defined in config <code>sysmon.os.sysmem_high_watermark</code>. NOTE: This config only works on Linux.",
             "type": "boolean"
           },
           "mode": {
             "default": "memory",
-            "description": "Message buffer mode.<br/><br/><code>memory</code>: Buffer all messages in memory. The messages will be lost in case of EMQX node restart<br/><code>disk</code>: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.<br/><code>hybrid</code>: Buffer message in memory first, when up to certain limit (see <code>segment_bytes</code> config for more information), then start offloading messages to disk, Like <code>memory</code> mode, the messages will be lost in case of EMQX node restart.",
+            "description": "Message buffer mode.<br/><br/><code>memory</code>: Buffer all messages in memory. The messages will be lost in case of EMQX node restart.<br/><code>disk</code>: Buffer all messages on disk. The messages on disk are able to survive EMQX node restart.<br/><code>hybrid</code>: Buffer message in memory first, when up to certain limit (see <code>segment_bytes</code> config for more information), then start offloading messages to disk. Like <code>memory</code> mode, the messages will be lost in case of EMQX node restart.",
             "enum": [
               "memory",
               "disk",
@@ -14926,11 +14963,11 @@
       "bridge_kafka.producer_kafka_ext_headers": {
         "properties": {
           "kafka_ext_header_key": {
-            "description": "Key of the header. Placeholders in format of ${var} are supported.",
+            "description": "Key of the header. Placeholders in the format of ${var} are supported.",
             "type": "string"
           },
           "kafka_ext_header_value": {
-            "description": "Value of the header. Placeholders in format of ${var} are supported.",
+            "description": "Value of the header. Placeholders in the format of ${var} are supported.",
             "type": "string"
           }
         },
@@ -14957,7 +14994,7 @@
             "type": "string"
           },
           "kafka_ext_headers": {
-            "description": "Provide more key-value pairs for message headers<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before sending producing.",
+            "description": "Provide more key-value pairs for message headers.<br/><br/>The key-value pairs here will be combined with the<br/>value of <code>kafka_headers</code> field before producing.",
             "items": {
               "$ref": "#/components/schemas/bridge_kafka.producer_kafka_ext_headers"
             },
@@ -14973,7 +15010,7 @@
             "type": "string"
           },
           "kafka_headers": {
-            "description": "Provide a placeholder for message headers<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>",
+            "description": "Provide a placeholder for message headers.<br/><br/>e.g. <code>${pub_props}</code><br/><br/>Note that the value of the placeholder must be either an object:<br/><code>{\"foo\": \"bar\"}</code><br/>or an array of key-value pairs:<br/><code>[{\"key\": \"foo\", \"value\": \"bar\"}]</code>.",
             "type": "string"
           },
           "max_batch_bytes": {
@@ -15021,7 +15058,7 @@
           },
           "partitions_limit": {
             "default": "all_partitions",
-            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions in has no effect.",
+            "description": "Limit the number of partitions to produce data for the given topic.<br/>The special value `all_partitions` is to utilize all partitions for the topic.<br/>Setting this to a value which is greater than the total number of partitions has no effect.",
             "oneOf": [
               {
                 "minimum": 1,
@@ -15037,7 +15074,7 @@
           },
           "query_mode": {
             "default": "async",
-            "description": "Query mode. Optional 'sync/async', default 'async'.",
+            "description": "Query mode. Optional 'sync' or 'async', default is 'async'.",
             "enum": [
               "async",
               "sync"
@@ -15061,7 +15098,7 @@
             "type": "string"
           },
           "topic": {
-            "description": "Kafka topic name.  Supports templates (e.g.: `t-${payload.t}`).",
+            "description": "Kafka topic name. Supports templates (e.g.: `t-${payload.t}`).",
             "type": "string"
           }
         },
@@ -15125,9 +15162,14 @@
       },
       "bridge_kafka.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -15181,7 +15223,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -22964,6 +23006,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -23153,6 +23200,11 @@
       },
       "confluent.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -23422,6 +23474,11 @@
       },
       "confluent.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -28570,8 +28627,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "saml",
-              "oidc"
+              "oidc",
+              "saml"
             ],
             "type": "string"
           },
@@ -35929,10 +35986,12 @@
       "emqx_mgmt_api_ds.db_site": {
         "properties": {
           "site": {
-            "example": "3AE26482062DF5E3",
+            "description": "The identifier of the site.",
+            "example": "52D1C1BEA6434EFE",
             "type": "string"
           },
           "status": {
+            "description": "The status of the replica.",
             "enum": [
               "up",
               "down",
@@ -41114,9 +41173,14 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -41166,7 +41230,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -41304,9 +41368,14 @@
       },
       "kafka_consumer.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -41356,7 +41425,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -41450,9 +41519,14 @@
       },
       "kafka_consumer.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
-            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html).  Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
+            "description": "Authentication configs.<br/>- <code>none</code>: No authentication.<br/>- <code>msk_iam</code>: Use [MSK IAM authentication](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html). Note: This only works when EMQX is running on an EC2 instance.<br/>- <code>basic auth</code>: Simple username and password authentication.<br/>- <code>kerberos</code>: Use Kerberos GSSAPI authentication.",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/bridge_kafka.auth_gssapi_kerberos"
@@ -41502,7 +41576,7 @@
           },
           "min_metadata_refresh_interval": {
             "default": "3s",
-            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small value may add extra load on Kafka.",
+            "description": "Minimum time interval the client has to wait before refreshing Kafka broker and topic metadata. Setting too small a value may add extra load on Kafka.",
             "example": "32s",
             "type": "string"
           },
@@ -41578,7 +41652,7 @@
           },
           "key_encoding_mode": {
             "default": "none",
-            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code> Uses the key from the Kafka message unchanged.  Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code> Uses base-64 encoding on the received key.",
+            "description": "Defines how the key from the Kafka message is encoded before being forwarded via MQTT.<br/><code>none</code>: Uses the key from the Kafka message unchanged. Note: in this case, the key must be a valid UTF-8 string.<br/><code>base64</code>: Uses base-64 encoding on the received key.",
             "enum": [
               "none",
               "base64"
@@ -45250,10 +45324,19 @@
             "default": "message.from",
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
-          "key_expression"
+          "key_expression",
+          "limits"
         ],
         "type": "object"
       },
@@ -45274,8 +45357,19 @@
               "round_robin"
             ],
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
+        "required": [
+          "limits"
+        ],
         "type": "object"
       },
       "mq.message_queue_api_lastvalue_put": {
@@ -45308,11 +45402,20 @@
             "default": "message.from",
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
           "is_lastvalue",
-          "key_expression"
+          "key_expression",
+          "limits"
         ],
         "type": "object"
       },
@@ -45341,10 +45444,19 @@
               false
             ],
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
-          "is_lastvalue"
+          "is_lastvalue",
+          "limits"
         ],
         "type": "object"
       },
@@ -45379,6 +45491,14 @@
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45387,6 +45507,7 @@
         "required": [
           "is_lastvalue",
           "key_expression",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45422,6 +45543,14 @@
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45430,6 +45559,7 @@
         "required": [
           "is_lastvalue",
           "key_expression",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45460,6 +45590,14 @@
             ],
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45467,6 +45605,7 @@
         },
         "required": [
           "is_lastvalue",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45497,6 +45636,14 @@
             ],
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45504,7 +45651,49 @@
         },
         "required": [
           "is_lastvalue",
+          "limits",
           "topic_filter"
+        ],
+        "type": "object"
+      },
+      "mq.mq_individual_limits": {
+        "properties": {
+          "max_shard_message_bytes": {
+            "default": "infinity",
+            "description": "The maximum number of bytes in a shard for the Message Queue. The number of shards is configured<br/>for all Message Queues in the Durable Storage settings. Note that this limit is not aware of the replication factor.<br/>So the total byte limit for the Message Queue is `n_shards * replication_factor * max_shard_message_bytes`.",
+            "oneOf": [
+              {
+                "example": "32MB",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "max_shard_message_count": {
+            "default": "infinity",
+            "description": "The maximum number of messages in a shard for the Message Queue. The number of shards is configured<br/>for all Message Queues in the Durable Storage settings.<br/>The total count limit for the Message Queue is `n_shards * max_shard_message_count`.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "max_shard_message_bytes",
+          "max_shard_message_count"
         ],
         "type": "object"
       },
@@ -48580,7 +48769,7 @@
                 3
               ]
             ],
-            "description": "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.",
+            "description": "Retainer index specifications: list of arrays of positive ascending integers.<br/>Each array specifies an index. Numbers in an index specification are 1-based<br/>word positions in topics. Words from specified positions will be used for indexing.<br/><br/>For example, it is good to have <code>[2, 4]</code> index to optimize<br/><code>+/X/+/Y/...</code> topic wildcard subscriptions.",
             "example": [
               [
                 2,
@@ -51987,6 +52176,10 @@
             "description": "The valid time span for an OIDC `state`, the default is `30s`, if the code response returned by the authorization server exceeds this time span, it will be treated as invalid.",
             "example": "1h",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "description": "SSL connection settings."
           }
         },
         "required": [
@@ -53153,7 +53346,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.1-alpha.2"
+    "version": "6.0.1-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -53170,46 +53363,46 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "cassandra",
                       "rabbitmq",
+                      "cassandra",
                       "rocketmq",
-                      "gcp_pubsub_producer",
-                      "cockroachdb",
-                      "influxdb",
-                      "alloydb",
-                      "azure_event_hub_producer",
-                      "mongodb",
-                      "syskeeper_forwarder",
-                      "sqlserver",
-                      "greptimedb",
-                      "confluent_producer",
-                      "pulsar",
-                      "kafka_producer",
                       "iotdb",
-                      "doris",
+                      "mongodb",
+                      "greptimedb",
+                      "cockroachdb",
+                      "sqlserver",
+                      "kafka_producer",
+                      "influxdb",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "pulsar",
+                      "confluent_producer",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
                       "opents",
-                      "s3",
-                      "kinesis",
                       "redis",
-                      "datalayers",
                       "s3tables",
+                      "s3",
+                      "doris",
+                      "datalayers",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "tdengine",
-                      "oracle",
-                      "clickhouse",
                       "azure_blob_storage",
+                      "clickhouse",
                       "snowflake",
                       "tablestore",
-                      "timescale",
                       "couchbase",
-                      "disk_log",
+                      "timescale",
+                      "tdengine",
+                      "oracle",
                       "snowflake_streaming",
-                      "matrix",
+                      "disk_log",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -53218,46 +53411,46 @@
                   "items": {
                     "enum": [
                       "http",
-                      "cassandra",
                       "rabbitmq",
+                      "cassandra",
                       "rocketmq",
-                      "gcp_pubsub_producer",
-                      "cockroachdb",
-                      "influxdb",
-                      "alloydb",
-                      "azure_event_hub_producer",
-                      "mongodb",
-                      "syskeeper_forwarder",
-                      "sqlserver",
-                      "greptimedb",
-                      "confluent_producer",
-                      "pulsar",
-                      "kafka_producer",
                       "iotdb",
-                      "doris",
+                      "mongodb",
+                      "greptimedb",
+                      "cockroachdb",
+                      "sqlserver",
+                      "kafka_producer",
+                      "influxdb",
+                      "gcp_pubsub_producer",
+                      "alloydb",
+                      "pulsar",
+                      "confluent_producer",
+                      "syskeeper_forwarder",
+                      "azure_event_hub_producer",
                       "opents",
-                      "s3",
-                      "kinesis",
                       "redis",
-                      "datalayers",
                       "s3tables",
+                      "s3",
+                      "doris",
+                      "datalayers",
+                      "kinesis",
                       "mqtt",
                       "redshift",
-                      "tdengine",
-                      "oracle",
-                      "clickhouse",
                       "azure_blob_storage",
+                      "clickhouse",
                       "snowflake",
                       "tablestore",
-                      "timescale",
                       "couchbase",
-                      "disk_log",
+                      "timescale",
+                      "tdengine",
+                      "oracle",
                       "snowflake_streaming",
-                      "matrix",
+                      "disk_log",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -66594,7 +66787,7 @@
             }
           },
           {
-            "description": "The import file template type, enum with `plain`,`hash`",
+            "description": "The import file template type, enum with `plain`, `hash`",
             "example": "hash",
             "in": "query",
             "name": "type",
@@ -66638,8 +66831,7 @@
                 "type": "object"
               }
             }
-          },
-          "description": "Import body"
+          }
         },
         "responses": {
           "200": {
@@ -66660,6 +66852,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -69454,6 +69647,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69517,6 +69711,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69625,6 +69820,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -69735,6 +69931,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69833,6 +70030,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69854,6 +70052,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -69982,6 +70181,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -70003,6 +70203,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -76283,7 +76484,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -77792,7 +77993,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -79515,7 +79716,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -80677,7 +80878,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -82175,7 +82376,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -83663,7 +83864,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -84479,7 +84680,8 @@
         "description": "Get information about a durable storage site.",
         "parameters": [
           {
-            "example": "3AE26482062DF5E3",
+            "description": "The identifier of the site.",
+            "example": "52D1C1BEA6434EFE",
             "in": "path",
             "name": "site",
             "required": true,
@@ -84540,7 +84742,8 @@
         "description": "Forget site",
         "parameters": [
           {
-            "example": "3AE26482062DF5E3",
+            "description": "The identifier of the site.",
+            "example": "52D1C1BEA6434EFE",
             "in": "path",
             "name": "site",
             "required": true,
@@ -84587,7 +84790,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Site",
+                      "description": "The specified site was not found.",
                       "type": "string"
                     }
                   },
@@ -84948,7 +85151,8 @@
             }
           },
           {
-            "example": "3AE26482062DF5E3",
+            "description": "The identifier of the site.",
+            "example": "52D1C1BEA6434EFE",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85032,7 +85236,8 @@
             }
           },
           {
-            "example": "3AE26482062DF5E3",
+            "description": "The identifier of the site.",
+            "example": "52D1C1BEA6434EFE",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85130,10 +85335,10 @@
     },
     "/error_codes/{code}": {
       "get": {
-        "description": "API Error Codes",
+        "description": "Get error code details.",
         "parameters": [
           {
-            "description": "API Error Codes",
+            "description": "Code Name",
             "example": "BAD_USERNAME_OR_PWD",
             "in": "path",
             "name": "code",
@@ -86216,7 +86421,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List all gateways",
         "tags": [
           "Gateways"
         ]
@@ -86360,7 +86564,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Send a Request to a Client",
         "tags": [
           "CoAP Gateways"
         ]
@@ -86464,7 +86667,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List Client's Resources",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86518,7 +86720,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86537,7 +86739,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Observe a Resource",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86582,7 +86783,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86601,7 +86802,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Read Value from a Resource Path",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86673,7 +86873,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86692,7 +86892,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Write a Value to Resource Path",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86992,7 +87191,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get gateway",
         "tags": [
           "Gateways"
         ]
@@ -87260,6 +87458,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad request",
                       "type": "string"
                     }
                   },
@@ -87282,6 +87481,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -87300,7 +87500,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Load or update the gateway confs",
         "tags": [
           "Gateways"
         ]
@@ -88454,6 +88653,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -90300,7 +90500,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable gateway",
         "tags": [
           "Gateways"
         ]
@@ -93568,6 +93767,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -94482,7 +94682,7 @@
                 }
               }
             },
-            "description": ""
+            "description": "Complete information about a GCP device including creation time"
           },
           "404": {
             "content": {
@@ -94551,7 +94751,7 @@
                 }
               }
             },
-            "description": ""
+            "description": "Information about a GCP device"
           },
           "400": {
             "content": {
@@ -94629,7 +94829,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get license info",
         "tags": [
           "License"
         ]
@@ -94712,7 +94911,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update license key",
         "tags": [
           "License"
         ]
@@ -94756,7 +94954,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get license setting",
         "tags": [
           "License"
         ]
@@ -94843,7 +95040,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update license setting",
         "tags": [
           "License"
         ]
@@ -95228,7 +95424,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Listener id not found",
+                      "description": "Listener not found.",
                       "type": "string"
                     }
                   },
@@ -95397,7 +95593,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Listener id not found",
+                      "description": "Listener not found.",
                       "type": "string"
                     }
                   },
@@ -96278,8 +96474,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -102777,7 +102973,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102808,7 +103004,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102839,7 +103035,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102870,7 +103066,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102901,7 +103097,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102976,7 +103172,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Publish a message",
         "tags": [
           "Publish"
         ]
@@ -106136,7 +106331,7 @@
     },
     "/schemas/{name}": {
       "get": {
-        "description": "Get the schema JSON of the specified name. NOTE: only intended for EMQX Dashboard.",
+        "description": "Get the schema JSON of the specified name.<br/>NOTE: only intended for EMQX Dashboard.",
         "parameters": [
           {
             "in": "path",
@@ -107939,8 +108134,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -107952,10 +108147,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -108208,8 +108403,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "saml",
-                      "oidc"
+                      "oidc",
+                      "saml"
                     ],
                     "type": "string"
                   },
@@ -108396,8 +108591,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -108453,8 +108648,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -108467,10 +108662,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -108527,8 +108722,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -108540,10 +108735,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -108560,10 +108755,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -109817,8 +110012,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
@@ -109908,8 +110103,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "saml",
-                "oidc"
+                "oidc",
+                "saml"
               ],
               "type": "string"
             }
