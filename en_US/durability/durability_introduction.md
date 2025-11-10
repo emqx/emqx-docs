@@ -4,12 +4,6 @@ EMQX includes a Durable Sessions feature, which allows MQTT sessions and message
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
-::: warning Important Notice
-
-This feature is available starting from EMQX v5.7.0. However, it does not yet support the persistence of shared subscription sessions, which is planned to be implemented in future versions.
-
-:::
-
 ## Basic Concepts
 
 Before learning the Durable Sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
@@ -165,7 +159,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 ## Durable Storage Architecture
 
-The database engine powering EMQX's builtin durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
+The database engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
 
 ![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
 
