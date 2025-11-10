@@ -51,18 +51,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Core MQTT Functionalities
 
 - [#15884](https://github.com/emqx/emqx/pull/15884) Resolved an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long left the cluster.
-
 - [#15518](https://github.com/emqx/emqx/pull/15518) Resolved a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
-
 - [#15872](https://github.com/emqx/emqx/pull/15872) Eliminated warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
-
-- [#16137](https://github.com/emqx/emqx/pull/16137) Fixed an issue where not all retained messages would be delivered if a subscriber hit the retained message dispatch rate limit.
-
-  Previously, when the dispatch rate limit was reached during retained message iteration, dispatcher processes would schedule a retry. However, retries for iterations that had started too far in the past could be dropped. The TTL (time-to-live) for such iterations is controlled by the `retainer.dispatch_retry_ttl` setting (default: 10 minutes).
-
-  Also, the number of concurrent retainer dispatch requests is limited to 1000 _per dispatcher process_ (non-configurable).  One dispatcher process is started per Erlang scheduler, which typically means one per CPU core.  If more requests arrive over this limit, the dispatcher will drop older queued requests.
-  
-  After the fix, EMQX will now continue delivering retained messages in subsequent retries even after hitting the dispatch rate limit, ensuring more complete delivery.�
 
 #### Deployment
 
