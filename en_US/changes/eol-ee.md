@@ -147,7 +147,7 @@ The following table outlines release dates, support types, lifecycles, and estim
 | **5.8.x LTS** | **2024-08-28** | **LTS** | **3 years** | **2027-08-27** | **Latest Active LTS Version** |
 | **5.9.x** | 2025-05-02 | Feature Release | 18 months | 2026-11-01 | Latest Feature Release |
 | **5.10.x** | 2025-06-09 | Feature Release | 18 months | 2026-12-08 | Next Feature Release |
-| **6.0.0** | 2025-09-30 | Major Release | 18 months | TBD | Next Major Release |
+| **6.0.0** | 2025-09-30 | Major Release | 18 months | 2027-03-30 | Next Major Release |
 
 ## Upgrade Path Recommendations
 
