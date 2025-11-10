@@ -1,5 +1,59 @@
 # EMQX Enterprise Version 5
 
+## 5.10.2
+
+### Enhancements
+
+- [#16209](https://github.com/emqx/emqx/pull/16209) Added support for specifying a custom timestamp column name (`ts_column`) parameter to GreptimeDB Connector.
+
+- [#16206](https://github.com/emqx/emqx/pull/16206) Add `allow_auto_topic_creation` config to Kafka connector.
+
+- [#16183](https://github.com/emqx/emqx/pull/16183) We now log `buffer_worker_dropped_expired_messages` messages at the warning level, and throttle such messages on a per-resource basis.  This will help track actions that are not keeping up with their demand.
+
+### Bug Fixes
+
+- [#16237](https://github.com/emqx/emqx/pull/16237) When disabling OIDC SSO, some logs related to it might still be printed.  This has been fixed.
+
+- [#16217](https://github.com/emqx/emqx/pull/16217) Fixed an issue where OIDC callback could fail to find the session during login in a multi-node cluster.
+
+- [#16212](https://github.com/emqx/emqx/pull/16212) Remove Kafka producer linger time when the buffer queue is in memory mode.
+
+- [#16138](https://github.com/emqx/emqx/pull/16138) Fix redis cluster failover issue.
+
+  Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (e.g., GET) failed. However, periodic PING commands did not trigger a refresh when they failed.
+  This could cause the connector to remain in a “connecting” state and keep using outdated topology information if no new queries were made after a failover.
+  With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that connector management promptly recovers and updates its view of the Redis cluster after failovers.
+
+- [#16081](https://github.com/emqx/emqx/pull/16081) Fixed an issue where, if a client used extended authentication mechanisms and memory sessions, they could crash with an `session_stepdown_request_exception` error and `calling_self` reason.
+
+  e.g.:
+
+  ```
+  2025-09-24T07:13:08.973954+08:00 [error] clientid: someclientid, msg: session_stepdown_request_exception, peername: 127.0.0.1:41782, username: admin, error: exit, reason: calling_self, stacktrace: [{gen_server,call,3,[{file,"gen_server.erl"},{line,1222}]},{emqx_cm,request_stepdown,4,[{file,"emqx_cm.erl"},{line,427}]},{emqx_cm,do_takeover_begin,2,[{file,"emqx_cm.erl"},{line,398}]},{emqx_cm,takeover_session,2,[{file,"emqx_cm.erl"},{line,384}]},{emqx_cm,takeover_session_begin,2,[{file,"emqx_cm.erl"},{line,305}]},{emqx_session_mem,open,4,[{file,"emqx_session_mem.erl"},{line,210}]},{emqx_session,open,3,[{file,"emqx_session.erl"},{line,263}]},{emqx_cm,'-open_session/4-fun-1-',4,[{file,"emqx_cm.erl"},{line,290}]},{emqx_cm_locker,trans,2,[{file,"emqx_cm_locker.erl"},{line,32}]},{emqx_channel,post_process_connect,2,[{file,"emqx_channel.erl"},{line,575}]},{emqx_connection,with_channel,3,[{file,"emqx_connection.erl"},{line,852}]},{emqx_connection,process_msg,2,[{file,"emqx_connection.erl"},{line,470}]},{emqx_connection,process_msgs,2,[{file,"emqx_connection.erl"},{line,462}]},{emqx_connection,handle_recv,3,[{file,"emqx_connection.erl"},{line,406}]},{proc_lib,wake_up,3,[{file,"proc_lib.erl"},{line,340}]}], action: {takeover,'begin'}, ...
+  ```
+
+- [#16046](https://github.com/emqx/emqx/pull/16046) Fixed an issue where, if loading a configuration containing a Connector with several hundred Actions, or if restarting a node with such configuration, an OOM (out of memory) crash could occur.
+
+- [#16043](https://github.com/emqx/emqx/pull/16043) Fix log details for Kafka data integration when "not_all_kafka_partitions_connected" happened.
+
+- [#16028](https://github.com/emqx/emqx/pull/16028) Fixed rule engine `jq` function memory leak.
+
+  Previously if `jq` built-in function `index` is used (e.g. `.key | index("name")`), it would result in memory leak.
+
+- [#16010](https://github.com/emqx/emqx/pull/16010) Fixed an issue where a Republish Fallback Action could fail with the following error when the originating rule SQL didn't include the `metadata` field from rule environment.
+
+  ```
+  [error] tag: RESOURCE, msg: failed_to_trigger_fallback_action, reason: {error,function_clause}, fallback_kind: republish, primary_action_resource_id: <<"action:type:name:connector:type:name">>, republish_topic: <<"republish/topic">>
+  ```
+
+- [#15967](https://github.com/emqx/emqx/pull/15967) Avoid a rapid increase in memory usage caused by Mnesia transaction blocking when cleaning a large number of audit logs.
+
+- [#15963](https://github.com/emqx/emqx/pull/15963) Avoid excessive audit logs from remote console.
+
+- [#15884](https://github.com/emqx/emqx/pull/15884) Resolve an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long left the cluster.
+
+  Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
+
 ## 5.10.1
 
 *Release Date: 2025-09-18*
