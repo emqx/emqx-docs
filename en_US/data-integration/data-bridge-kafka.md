@@ -202,7 +202,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 9. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
+10. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
 
 11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
 
@@ -345,7 +345,7 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
      
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
    
-   - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
+   - **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
    
 6. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
@@ -391,7 +391,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
 
    - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
    - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
-8. **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
+8. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
 9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.
 10. Click **Create** to complete the Source creation. Back on the **Create Rule** page, you will see the new Source appear under the **Data Inputs** tab.
 
@@ -442,7 +442,7 @@ To test if the Kafka source and rule work as expected, you can use [MQTTX](https
    }
    ```
 
-## Advanced Configurations
+## Advanced Configuration
 
 This section describes some advanced configuration options that can optimize the performance of your data integration and customize the operation based on your specific scenarios. When creating the Connector, Sink and Source, you can unfold the **Advanced Settings** and configure the following settings according to your business needs.
 
