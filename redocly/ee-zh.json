@@ -159,7 +159,7 @@
         }
       },
       "emqx_prometheus_api.mode": {
-        "description": "<br/>Metrics format mode.<br/><br/>`node`:<br/>Return metrics from local node. And it is the default behaviour if `mode` not specified.<br/><br/>`all_nodes_aggregated`:<br/>Return metrics for all nodes.<br/>And if possible, calculate the arithmetic sum or logical sum of the indicators of all nodes.<br/><br/>`all_nodes_unaggregated`:<br/>Return metrics from all nodes, and the metrics are not aggregated.<br/>The node name will be included in the returned results to<br/>indicate that certain metrics were returned on a certain node.<br/>",
+        "description": "Metrics format mode.<br/><br/>`node`:<br/>Return metrics from local node. And it is the default behaviour if `mode` not specified.<br/><br/>`all_nodes_aggregated`:<br/>Return metrics for all nodes.<br/>And if possible, calculate the arithmetic sum or logical sum of the indicators of all nodes.<br/><br/>`all_nodes_unaggregated`:<br/>Return metrics from all nodes, and the metrics are not aggregated.<br/>The node name will be included in the returned results to<br/>indicate that certain metrics were returned on a certain node.",
         "example": "node",
         "in": "query",
         "name": "mode",
@@ -3778,31 +3778,25 @@
             "oneOf": [
               {
                 "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "snowflake_streaming"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "greptimedb"
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
                 ],
                 "type": "string"
               },
@@ -3814,19 +3808,13 @@
               },
               {
                 "enum": [
-                  "datalayers"
+                  "matrix"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -3838,85 +3826,7 @@
               },
               {
                 "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "tdengine"
                 ],
                 "type": "string"
               },
@@ -3928,19 +3838,67 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "http"
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -3958,13 +3916,19 @@
               },
               {
                 "enum": [
-                  "dynamo"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
                 ],
                 "type": "string"
               },
@@ -3976,7 +3940,49 @@
               },
               {
                 "enum": [
-                  "s3tables"
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -3988,19 +3994,19 @@
               },
               {
                 "enum": [
-                  "oracle"
+                  "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "doris"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "mysql"
                 ],
                 "type": "string"
               },
@@ -4012,19 +4018,13 @@
               },
               {
                 "enum": [
-                  "matrix"
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
+                  "s3tables"
                 ],
                 "type": "string"
               }
@@ -9053,6 +9053,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -9242,6 +9247,11 @@
       },
       "bridge_azure_event_hub.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -9500,6 +9510,11 @@
       },
       "bridge_azure_event_hub.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/bridge_azure_event_hub.auth_username_password",
             "default": {},
@@ -12525,6 +12540,10 @@
             },
             "type": "array"
           },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
+          },
           "ttl": {
             "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
@@ -12663,6 +12682,10 @@
             },
             "type": "array"
           },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
+          },
           "ttl": {
             "description": "GreptimeDB 中自动创建表的存活时间设置。",
             "type": "string"
@@ -12785,6 +12808,10 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "ts_column": {
+            "description": "If defined, specifies a custom timestamp column name that will appear when querying.",
+            "type": "string"
           },
           "ttl": {
             "description": "GreptimeDB 中自动创建表的存活时间设置。",
@@ -14585,6 +14612,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -14793,6 +14825,11 @@
       },
       "bridge_kafka.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -15125,6 +15162,11 @@
       },
       "bridge_kafka.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -22964,6 +23006,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -23153,6 +23200,11 @@
       },
       "confluent.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -23422,6 +23474,11 @@
       },
       "confluent.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "$ref": "#/components/schemas/confluent.auth_username_password",
             "default": {},
@@ -35929,10 +35986,12 @@
       "emqx_mgmt_api_ds.db_site": {
         "properties": {
           "site": {
-            "example": "5C39B66D754070A4",
+            "description": "The identifier of the site.",
+            "example": "DA02E031D04317F0",
             "type": "string"
           },
           "status": {
+            "description": "The status of the replica.",
             "enum": [
               "up",
               "down",
@@ -41114,6 +41173,11 @@
             },
             "type": "array"
           },
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -41304,6 +41368,11 @@
       },
       "kafka_consumer.post_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -41450,6 +41519,11 @@
       },
       "kafka_consumer.put_connector": {
         "properties": {
+          "allow_auto_topic_creation": {
+            "default": false,
+            "description": "Set to true to allow automatic Kafka topic creation with metadata fetch request.",
+            "type": "boolean"
+          },
           "authentication": {
             "default": "none",
             "description": "认证配置。<br/>- <code>none</code>：无认证。<br/>- <code>msk_iam</code>：使用 [MSK IAM 认证](https://docs.aws.amazon.com/msk/latest/developerguide/security-iam.html)。注意：这仅在 EMQX 运行在 EC2 实例上时有效。<br/>- <code>basic auth</code>：简单的用户名和密码认证。<br/>- <code>kerberos</code>：使用 Kerberos GSSAPI 认证。",
@@ -45250,10 +45324,19 @@
             "default": "message.from",
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
-          "key_expression"
+          "key_expression",
+          "limits"
         ],
         "type": "object"
       },
@@ -45274,8 +45357,19 @@
               "round_robin"
             ],
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
+        "required": [
+          "limits"
+        ],
         "type": "object"
       },
       "mq.message_queue_api_lastvalue_put": {
@@ -45308,11 +45402,20 @@
             "default": "message.from",
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
           "is_lastvalue",
-          "key_expression"
+          "key_expression",
+          "limits"
         ],
         "type": "object"
       },
@@ -45341,10 +45444,19 @@
               false
             ],
             "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
           }
         },
         "required": [
-          "is_lastvalue"
+          "is_lastvalue",
+          "limits"
         ],
         "type": "object"
       },
@@ -45379,6 +45491,14 @@
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45387,6 +45507,7 @@
         "required": [
           "is_lastvalue",
           "key_expression",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45422,6 +45543,14 @@
             "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45430,6 +45559,7 @@
         "required": [
           "is_lastvalue",
           "key_expression",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45460,6 +45590,14 @@
             ],
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45467,6 +45605,7 @@
         },
         "required": [
           "is_lastvalue",
+          "limits",
           "topic_filter"
         ],
         "type": "object"
@@ -45497,6 +45636,14 @@
             ],
             "type": "string"
           },
+          "limits": {
+            "$ref": "#/components/schemas/mq.mq_individual_limits",
+            "default": {
+              "max_shard_message_bytes": "infinity",
+              "max_shard_message_count": "infinity"
+            },
+            "description": "The byte size and count limits for an individual Message Queue."
+          },
           "topic_filter": {
             "description": "The filter used to determine which messages are getting into the message queue.",
             "type": "string"
@@ -45504,7 +45651,49 @@
         },
         "required": [
           "is_lastvalue",
+          "limits",
           "topic_filter"
+        ],
+        "type": "object"
+      },
+      "mq.mq_individual_limits": {
+        "properties": {
+          "max_shard_message_bytes": {
+            "default": "infinity",
+            "description": "The maximum number of bytes in a shard for the Message Queue. The number of shards is configured<br/>for all Message Queues in the Durable Storage settings. Note that this limit is not aware of the replication factor.<br/>So the total byte limit for the Message Queue is `n_shards * replication_factor * max_shard_message_bytes`.",
+            "oneOf": [
+              {
+                "example": "32MB",
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "max_shard_message_count": {
+            "default": "infinity",
+            "description": "The maximum number of messages in a shard for the Message Queue. The number of shards is configured<br/>for all Message Queues in the Durable Storage settings.<br/>The total count limit for the Message Queue is `n_shards * max_shard_message_count`.",
+            "oneOf": [
+              {
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "enum": [
+                  "infinity"
+                ],
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "required": [
+          "max_shard_message_bytes",
+          "max_shard_message_count"
         ],
         "type": "object"
       },
@@ -48580,7 +48769,7 @@
                 3
               ]
             ],
-            "description": "Retainer index specifications: list of arrays of positive ascending integers. Each array specifies an index. Numbers in an index specification are 1-based word positions in topics. Words from specified positions will be used for indexing.<br/>For example, it is good to have <code>[2, 4]</code> index to optimize <code>+/X/+/Y/...</code> topic wildcard subscriptions.",
+            "description": "Retainer index specifications: list of arrays of positive ascending integers.<br/>Each array specifies an index. Numbers in an index specification are 1-based<br/>word positions in topics. Words from specified positions will be used for indexing.<br/><br/>For example, it is good to have <code>[2, 4]</code> index to optimize<br/><code>+/X/+/Y/...</code> topic wildcard subscriptions.",
             "example": [
               [
                 2,
@@ -51987,6 +52176,10 @@
             "description": "OIDC `state` 的有效时间范围，默认为 `30s`，如果授权服务器返回的代码响应超过此时间范围，将视为无效。",
             "example": "1h",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "description": "启用 SSL 连接。"
           }
         },
         "required": [
@@ -53153,7 +53346,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.1-alpha.2"
+    "version": "6.0.1-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -53170,46 +53363,46 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
+                      "rabbitmq",
                       "cassandra",
                       "rocketmq",
-                      "rabbitmq",
-                      "kafka_producer",
+                      "iotdb",
+                      "mongodb",
+                      "greptimedb",
                       "cockroachdb",
+                      "gcp_pubsub_producer",
                       "influxdb",
                       "alloydb",
-                      "azure_event_hub_producer",
-                      "sqlserver",
                       "syskeeper_forwarder",
-                      "mongodb",
-                      "gcp_pubsub_producer",
-                      "greptimedb",
-                      "confluent_producer",
+                      "sqlserver",
                       "pulsar",
-                      "iotdb",
-                      "doris",
-                      "opents",
+                      "confluent_producer",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
                       "s3tables",
+                      "opents",
                       "s3",
                       "redis",
                       "kinesis",
+                      "doris",
                       "datalayers",
                       "mqtt",
                       "redshift",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "snowflake",
+                      "tablestore",
+                      "couchbase",
+                      "timescale",
                       "tdengine",
                       "oracle",
-                      "clickhouse",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "timescale",
-                      "couchbase",
-                      "tablestore",
                       "disk_log",
                       "snowflake_streaming",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -53218,46 +53411,46 @@
                   "items": {
                     "enum": [
                       "http",
+                      "rabbitmq",
                       "cassandra",
                       "rocketmq",
-                      "rabbitmq",
-                      "kafka_producer",
+                      "iotdb",
+                      "mongodb",
+                      "greptimedb",
                       "cockroachdb",
+                      "gcp_pubsub_producer",
                       "influxdb",
                       "alloydb",
-                      "azure_event_hub_producer",
-                      "sqlserver",
                       "syskeeper_forwarder",
-                      "mongodb",
-                      "gcp_pubsub_producer",
-                      "greptimedb",
-                      "confluent_producer",
+                      "sqlserver",
                       "pulsar",
-                      "iotdb",
-                      "doris",
-                      "opents",
+                      "confluent_producer",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
                       "s3tables",
+                      "opents",
                       "s3",
                       "redis",
                       "kinesis",
+                      "doris",
                       "datalayers",
                       "mqtt",
                       "redshift",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "snowflake",
+                      "tablestore",
+                      "couchbase",
+                      "timescale",
                       "tdengine",
                       "oracle",
-                      "clickhouse",
-                      "azure_blob_storage",
-                      "snowflake",
-                      "timescale",
-                      "couchbase",
-                      "tablestore",
                       "disk_log",
                       "snowflake_streaming",
-                      "matrix",
                       "elasticsearch",
+                      "matrix",
                       "bigquery",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -66594,7 +66787,7 @@
             }
           },
           {
-            "description": "The import file template type, enum with `plain`,`hash`",
+            "description": "The import file template type, enum with `plain`, `hash`",
             "example": "hash",
             "in": "query",
             "name": "type",
@@ -66638,8 +66831,7 @@
                 "type": "object"
               }
             }
-          },
-          "description": "Import body"
+          }
         },
         "responses": {
           "200": {
@@ -66660,6 +66852,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -69454,6 +69647,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69517,6 +69711,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69625,6 +69820,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -69735,6 +69931,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69833,6 +70030,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -69854,6 +70052,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -69982,6 +70181,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad Request",
                       "type": "string"
                     }
                   },
@@ -70003,6 +70203,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -84479,7 +84680,8 @@
         "description": "Get information about a durable storage site.",
         "parameters": [
           {
-            "example": "5C39B66D754070A4",
+            "description": "The identifier of the site.",
+            "example": "DA02E031D04317F0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -84540,7 +84742,8 @@
         "description": "Forget site",
         "parameters": [
           {
-            "example": "5C39B66D754070A4",
+            "description": "The identifier of the site.",
+            "example": "DA02E031D04317F0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -84587,7 +84790,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Site",
+                      "description": "The specified site was not found.",
                       "type": "string"
                     }
                   },
@@ -84948,7 +85151,8 @@
             }
           },
           {
-            "example": "5C39B66D754070A4",
+            "description": "The identifier of the site.",
+            "example": "DA02E031D04317F0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85032,7 +85236,8 @@
             }
           },
           {
-            "example": "5C39B66D754070A4",
+            "description": "The identifier of the site.",
+            "example": "DA02E031D04317F0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85130,10 +85335,10 @@
     },
     "/error_codes/{code}": {
       "get": {
-        "description": "API 错误码",
+        "description": "Get error code details.",
         "parameters": [
           {
-            "description": "API 错误码",
+            "description": "Code Name",
             "example": "BAD_USERNAME_OR_PWD",
             "in": "path",
             "name": "code",
@@ -86216,7 +86421,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List all gateways",
         "tags": [
           "Gateways"
         ]
@@ -86360,7 +86564,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Send a Request to a Client",
         "tags": [
           "CoAP Gateways"
         ]
@@ -86464,7 +86667,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "List Client's Resources",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86518,7 +86720,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86537,7 +86739,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Observe a Resource",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86582,7 +86783,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86601,7 +86802,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Read Value from a Resource Path",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86673,7 +86873,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Clientid not found",
+                      "description": "Client not found",
                       "type": "string"
                     }
                   },
@@ -86692,7 +86892,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Write a Value to Resource Path",
         "tags": [
           "LwM2M Gateways"
         ]
@@ -86992,7 +87191,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get gateway",
         "tags": [
           "Gateways"
         ]
@@ -87260,6 +87458,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Bad request",
                       "type": "string"
                     }
                   },
@@ -87282,6 +87481,7 @@
                       "type": "string"
                     },
                     "message": {
+                      "description": "Not Found",
                       "type": "string"
                     }
                   },
@@ -87300,7 +87500,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Load or update the gateway confs",
         "tags": [
           "Gateways"
         ]
@@ -88454,6 +88653,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -90300,7 +90500,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Enable or disable gateway",
         "tags": [
           "Gateways"
         ]
@@ -93568,6 +93767,7 @@
                       "type": "integer"
                     },
                     "success": {
+                      "description": "Total number of users successfully imported with new records.",
                       "type": "integer"
                     },
                     "total": {
@@ -94482,7 +94682,7 @@
                 }
               }
             },
-            "description": ""
+            "description": "Complete information about a GCP device including creation time"
           },
           "404": {
             "content": {
@@ -94551,7 +94751,7 @@
                 }
               }
             },
-            "description": ""
+            "description": "Information about a GCP device"
           },
           "400": {
             "content": {
@@ -94629,7 +94829,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get license info",
         "tags": [
           "License"
         ]
@@ -94712,7 +94911,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update license key",
         "tags": [
           "License"
         ]
@@ -94756,7 +94954,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Get license setting",
         "tags": [
           "License"
         ]
@@ -94843,7 +95040,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Update license setting",
         "tags": [
           "License"
         ]
@@ -95228,7 +95424,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Listener id not found",
+                      "description": "Listener not found.",
                       "type": "string"
                     }
                   },
@@ -95397,7 +95593,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Listener id not found",
+                      "description": "Listener not found.",
                       "type": "string"
                     }
                   },
@@ -102777,7 +102973,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102808,7 +103004,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102839,7 +103035,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102870,7 +103066,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102901,7 +103097,7 @@
                 }
               }
             },
-            "description": "Get Prometheus Data."
+            "description": ""
           }
         },
         "security": [],
@@ -102976,7 +103172,6 @@
             "bearerAuth": []
           }
         ],
-        "summary": "Publish a message",
         "tags": [
           "Publish"
         ]
@@ -106136,7 +106331,7 @@
     },
     "/schemas/{name}": {
       "get": {
-        "description": "Get the schema JSON of the specified name. NOTE: only intended for EMQX Dashboard.",
+        "description": "Get the schema JSON of the specified name.<br/>NOTE: only intended for EMQX Dashboard.",
         "parameters": [
           {
             "in": "path",
@@ -106376,8 +106571,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -106386,8 +106581,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "type": "string"
