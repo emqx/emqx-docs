@@ -109,7 +109,7 @@ In addition to the highlights covered above, recent EMQX updates include many ot
 
 ### Breaking Changes
 
-For complete information about what's deprecated and breaking changes, see [Incompatible Changes between EMQX 5.x and EMQX 6.0](../changes/breaking-changes-6.0.md).
+For complete information about what's deprecated and breaking changes, see [Incompatible Changes between EMQX 5.x and EMQX 6.0](../changes/breaking-changes-6.0.0.md).
 
 ## EMQX 5.x Series
 
