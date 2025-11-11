@@ -1,120 +1,137 @@
-# Design for Durable Storage
+# 持久存储设计
 
-EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built application designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
+EMQX 6.0 引入了优化的持久存储（Optimized Durable Storage，简称 DS），这是一款专门设计的系统，旨在确保 MQTT 消息传递的高可靠性和持久性。DS 结合了流式服务（如 Kafka）和键值存储（Key-Value Store）的优势，为 MQTT 数据的存储、重放和管理提供了稳健且高度优化的基础。
 
-## Foundational Concepts
+## 基础概念
 
-- **Databases (DBs):** The top-level logical container for data. Each DB is independent and can be created, managed, and dropped as needed. For instance:
-  - **Sessions DB** stores durable session states.
-  - **Messages DB** holds the corresponding MQTT message data.
-- **Topic-Timestamp-Value triple (TTV)**: The minimal storage unit in the database, where the topic follows MQTT semantics and the value is an arbitrary binary blob.
-- **Streams:** A critical abstraction introduced for efficient handling of wildcard topic filters. Streams are units of batching and serialization. They group TTVs with similar structures, allowing data to be read in time-ordered, deterministic chunks.
+- **数据库（Databases, DBs）：** 数据的顶层逻辑容器。每个数据库相互独立，可根据需要创建、管理或删除。
+   例如：
+  - **Sessions DB（会话数据库）**：存储持久会话状态。
+  - **Messages DB（消息数据库）**：存储对应的 MQTT 消息数据。
+- **主题-时间戳-值三元组（Topic–Timestamp–Value, TTV）：** 数据库中的最小存储单元。其中主题遵循 MQTT 语义，而值为任意二进制数据块。
+- **流（Streams）：** 为高效处理带有通配符的主题过滤器而引入的重要抽象。流是批处理和序列化的单位，它将结构相似的 TTV 进行分组，从而以时间有序**、**确定性的方式读取数据块。
 
-## Architecture: Backends and Storage Hierarchy
+## 架构：后端与存储层次结构
 
-Durable Storage is implementation-agnostic, using a backend layer to allow data to be stored across different database management systems.
+持久存储的实现与底层数据库系统解耦，通过后端层（Backend Layer）将数据存储在不同类型的数据库引擎中。
 
-### Embedded Backends
+### 内嵌后端
 
-EMQX provides two embedded backends that do not rely on third-party services: 
+EMQX 提供了两个不依赖外部服务的内嵌后端：
 
-- The `builtin_local` backend uses RocksDB as the storage engine and is intended for single-node deployments. 
-- The `builtin_raft` backend extends `builtin_local` with support for clustering and data replication across different sites.
+- **`builtin_local`**：使用 RocksDB 作为存储引擎，适用于单节点部署。
+- **`builtin_raft`**：在 `builtin_local` 的基础上扩展，支持集群模式与跨站点数据复制。
 
-### Data Storage Hierarchy
+### 数据存储层次结构
 
-Internally, DS organizes data into a sophisticated hierarchy, transparent to the application:
+在内部，DS 将数据组织为复杂但对应用透明的层次结构：
 
-- **Databases -> Shards:** A DB is horizontally partitioned into Shards. Shards are independent in operation and can reside on different physical servers, enabling horizontal scaling and partial availability during cluster outages.
-- **Shards -> Generations:** Data within a shard is temporally subdivided into Generations. Periodically creating new generations serves several main purposes:
-  1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
-  2. **Time-based data retention:** Since each generation covers a specific time period, old data can be removed by dropping entire generations.
-- **Slabs:** A volume of data identified by its shard and generation. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+- **数据库 -> 分片（Shards）：** 每个数据库水平划分为多个分片。分片之间相互独立，可部署在不同物理服务器上，从而实现**水平扩展**和**部分可用性**（当集群出现局部故障时仍可运行）。
+- **分片 -> 代（Generations）：** 分片内的数据按时间划分为不同的代。定期创建新代具有以下主要目的：
+  1. **向后兼容与数据迁移：** 新数据写入新的代，可使用改进的编码方式，而旧代保持不可变且只读。
+  2. **基于时间的数据保留：** 由于每一代覆盖特定时间段，删除过期数据只需丢弃旧代即可。
+- **数据块（Slabs）：** 由“分片 + 代”共同标识的一段数据。每个 Slab 内部采用固定的编码格式，并且写入操作是**原子的（Atomic）**。这种统一的编码方式消除了额外元数据的需求。
 
-<!-- Consider adding a diagram here -->
+<!-- 可在此添加一张“Database → Shard → Generation → Slab”层次结构图 -->
 
-## Write Path
+## 写入路径
 
-Data writes to DS can use either **append-only mode** or **ACID transactions**.
+向 DS 写入数据可采用两种模式：仅追加模式（Append-Only Mode）或 ACID 事务（ACID Transactions）。
 
-### Append-Only Mode
+### 仅追加模式
 
-This mode supports only the **appending of data**, offering minimal overhead for high-throughput scenarios.
+该模式仅支持数据追加写入，具有极低的开销，适用于高吞吐量场景。
 
-### ACID Transactions
+### ACID 事务
 
-Transactions rely on **Optimistic Concurrency Control (OCC)**, assuming that clients typically operate on non-conflicting data subsets. If a conflict occurs, only one contender succeeds in committing the transaction; the others are aborted and retried.
+事务机制基于**乐观并发控制（Optimistic Concurrency Control, OCC）**。假设客户端通常操作的是互不冲突的数据子集；若发生冲突，只有一个事务能成功提交，其他事务会被中止并重试。
 
-**Transaction Flow:**
+**事务流程：**
 
-1. **Initiation:** A client process (Tx) requests the Leader node to create a transaction context (containing the Leader's term and last committed serial number).
-2. **Operations:** The client schedules reads (added to the context), writes, and deletes. It also sets commit preconditions (e.g., check for the existence/non-existence of specific TTVs). Scheduled writes/deletes only materialize upon full commitment and replication.
-3. **Submission & Verification:** The client sends the list of operations to the Leader.
-   - The Leader checks the preconditions against the latest data snapshot.
-   - It verifies that the reads do not conflict with recent writes.
-4. **"Cooking (preparing)" and Logging:** If successful, the Leader "cooks" the transaction:
-   - It assigns written TTVs to streams.
-   - It creates a deterministic list of low-level storage mutations applicable to all replicas.
-5. **Commit:** A batch of "cooked" transactions is added to the Raft log (`builtin_raft`) or the RocksDB write-ahead log (WAL).
-6. **Outcome:** Upon successful completion, the transaction process is notified. Conflicts result in the transaction being aborted and retried.
+1. **初始化：** 客户端进程（Tx）请求 Leader 节点创建一个事务上下文（包含 Leader 的任期号和最近一次提交的序列号）。
+2. **操作阶段：** 客户端在上下文中调度读取（会加入上下文）、写入和删除操作，并可设置提交前提条件（如检查特定 TTV 是否存在/不存在）。这些操作仅在事务成功提交并完成复制后才会真正生效。
+3. **提交与验证：** 客户端将操作列表发送至 Leader。
+   - Leader 根据最新数据快照检查前提条件。
+   - 验证读取内容是否与最近写入发生冲突。
+4. **“烹制（准备）”与日志记录：** 如果验证通过，Leader 对事务进行“烹制”（即准备阶段）：
+   - 将写入的 TTV 分配到对应的流（Stream）。
+   - 生成一组确定性的底层存储变更操作，可在所有副本上复现。
+5. **提交：** 经过“烹制”的事务批次被写入 Raft 日志（`builtin_raft`）或 RocksDB 的预写日志（Write-Ahead Log, WAL）。
+6. **结果：** 成功完成后，客户端进程收到提交通知。若检测到冲突，则事务会被中止并重新尝试。
 
-**Write Flush Control**:
+**写入刷新控制（Write Flush Control）：**
 
-The frequency of flushing the buffer to the Raft log is controlled:
+缓冲区中事务写入 Raft 日志的频率由以下参数控制：
 
-- `flush_interval`: Maximum time a cooked transaction can remain in the buffer.
-- `max_items`: Maximum number of pending transactions.
-- `idle_flush_interval`: Allows early flushing if no new data has been added within this interval.
+- `flush_interval`：事务在缓冲区中可保留的最大时间。
+- `max_items`：缓冲区中允许的最大待提交事务数。
+- `idle_flush_interval`：当缓冲区在一定时间内无新数据写入时，允许提前触发刷新。
 
-The following sequence describes the transaction lifecycle within the `builtin_raft` backend.
+以下流程描述了 `builtin_raft` 后端中事务的完整生命周期：
 
 <img src="./assets/transaction_flow.png" alt="transaction_flow" style="zoom:67%;" />
 
-## Read Path
+## 读取路径
 
-Reading data from DS revolves around streams. 
+从 DS 读取数据主要围绕流（Streams）进行。
 
-1. To access data in an MQTT topic, the reader first retrieves the list of streams associated with the topic using the `get_streams` API. This indirection allows DS to group similar topics and minimize metadata volume. The reader then creates an *iterator* for each stream with a specified start time. An iterator is a small data structure that tracks the read position in the stream. 
-2. Data can then be read using the `next` API, which returns a chunk of data and an updated iterator pointing to the next chunk.
+1. **获取流列表：**
 
-### Reads with Wildcard Topic Filters
+   当需要访问某个 MQTT 主题的数据时，读取端首先通过 `get_streams` API 获取与该主题关联的流列表。这种间接层允许 DS 将结构相似的主题归组，减少元数据体积。随后，读取端为每个流创建一个**迭代器（Iterator）**并指定起始时间。迭代器是一个轻量级数据结构，用于跟踪流中的读取位置。
 
-To facilitate efficient subscriptions to wildcard topic filters, DS groups TTVs with similarly structured topics into the same stream. This is achieved using the Learned Topic Structure (LTS) algorithm, which splits topics into *static* and *varying* parts. 
+2. **读取数据：**
 
-- **Example:** If clients publish data to the topic `metrics/<hostname>/cpu/socket/1/core/16`, the LTS algorithm, given enough data, derives the static topic part as `metrics/+/cpu/socket/+/core/+`, treating the hostname, socket, and core as varying parts. 
-- **Benefits:** This enables efficient queries such as `metrics/my_host/cpu/#` or `metrics/+/cpu/socket/1/core/+`.
+   使用 `next` API 可读取下一段数据块，并返回更新后的迭代器，指向下一个读取位置。
 
-### Real-Time Subscriptions
+### 使用通配符主题过滤器读取数据
 
-Readers can also access data in real time using the subscription mechanism. The `subscribe` API, also based on iterators, allows DS to push data to subscribers instead of requiring clients to poll for data.
+为支持高效的通配符主题订阅，DS 使用学习型主题结构算法（Learned Topic Structure, LTS）将结构相似的 TTV 分配到同一流中。该算法自动将主题拆分为**静态部分**和**可变部分**。
 
-DS maintains two pools of subscribers: 
+- **示例：**
 
-- **Catch-up subscribers** read historical data and, upon reaching the end, become real-time subscribers. 
-- **Real-time subscriptions** are event-based and activate only when new data is written to DS.
+  若客户端发布的主题为 `metrics/<hostname>/cpu/socket/1/core/16`，当积累足够数据后，LTS 算法可推导出静态主题模式：
+   `metrics/+/cpu/socket/+/core/+`，
+   其中 `<hostname>`、`socket` 和 `core` 为可变部分。
 
-Both pools group subscribers by stream and topic, reusing resources to serve multiple subscribers simultaneously. This approach saves IOPS when reading from disk and reduces network bandwidth when sending data to remote clients. A batch of messages, a list of subscription IDs, and a sparse dispatch matrix are sent across the cluster to remote nodes hosting subscribers, which then dispatches messages to local clients.
+- **优势：**
+
+  这样便可高效地执行查询：`metrics/my_host/cpu/#` 或 `metrics/+/cpu/socket/1/core/+`。
+
+## 实时订阅（Real-Time Subscriptions）
+
+除了按需读取外，客户端还可以通过订阅机制实时获取 DS 数据。基于迭代器的 `subscribe` API 允许 DS 主动推送数据给订阅者，而无需客户端轮询。
+
+DS 维护两个订阅者池：
+
+- **追赶型订阅者（Catch-up Subscribers）：** 读取历史数据，当到达最新位置后自动转为实时订阅。
+- **实时订阅者（Real-Time Subscribers）：** 基于事件触发，仅在 DS 有新数据写入时激活。
+
+这两个池均按流与主题对订阅者进行分组，从而在多订阅场景中复用底层资源。这种方式能有效节省磁盘 I/O（IOPS）和跨节点网络带宽。
+
+在集群中，系统会将消息批次、订阅 ID 列表和稀疏分发矩阵发送到远程节点，再由这些节点将消息分发给本地客户端。
 
 <img src="./assets/real-time_subscriptions.png" alt="real-time_subscriptions" style="zoom:67%;" />
 
-## Applications: Durable Sessions and Shared Subscriptions
+## 应用场景：持久会话与共享订阅
 
-DS is the backbone for EMQX's advanced reliability features:
+DS 是 EMQX 高可靠性功能的核心基础。
 
-### Durable Sessions (EMQX 5+)
+### 持久会话（EMQX 5+）
 
-Durable sessions are a parallel session implementation that uses DS for message routing.
+持久会话是一种基于 DS 的并行会话实现，用于可靠的消息路由。
 
-- **Mechanism:** When a client connects with a session expiry interval greater than zero and subscribes to a topic, the filter is marked as durable. Messages published to matching topics are saved to DS *in addition* to being dispatched.
-- **State:** Durable sessions access saved messages via the DS subscription mechanism. Their state includes a set of iterators for each matching stream, allowing them to precisely track their progress. Only one copy of each message is stored per database replica, regardless of how many durable sessions share it.
+- **机制：** 当客户端以非零的会话过期间隔（Session Expiry Interval）连接并订阅主题时，该订阅过滤器会被标记为“持久化”。之后，发布到匹配主题的消息会**同时写入 DS** 并分发给在线订阅者。
+- **状态：** 持久会话通过 DS 的订阅机制读取保存的消息，其状态包含每个匹配流的迭代器集合，以精确追踪消息消费进度。在数据库每个副本中，同一消息仅存储一份，即使多个持久会话共享它。
 
-### Shared Subscriptions (EMQX 6.0)
+### 共享订阅（EMQX 6.0）
 
-EMQX 6.0 extended DS to shared subscriptions for enhanced load balancing and reliability.
+在 EMQX 6.0 中，DS 被扩展用于共享订阅，以增强负载均衡与可靠性。
 
-- **Iterator Management:** The iterator sets for shared subscriptions are managed by a separate entity called the **shared sub leader**.
-- **Replay and Rebalancing:** Sessions subscribing to a shared topic communicate with the leader, which **lends them iterators** for message replay. Updated iterators are reported back. If a client disconnects or the group is rebalanced, the leader **revokes the iterators** and redistributes them to other members, ensuring consumption continuity and load distribution.
+- **迭代器管理：** 共享订阅的迭代器集合由一个称为共享订阅主节点（Shared Sub Leader）的独立实体负责管理。
+- **消息重放与重平衡：** 订阅共享主题的会话与 Leader 通信，由其借出迭代器以实现消息重放。当客户端断开或发生组重平衡时，Leader 会回收迭代器并将其重新分配给其他成员，从而保证消息消费的连续性与负载分配的均衡性。
 
-## Conclusion: The Foundation of High-Reliability MQTT
+## 结论：高可靠 MQTT 的基石
 
-The Optimized Durable Storage in EMQX 6.0 is the resilient foundation for high-reliability MQTT messaging. By re-engineering RocksDB and embedding concepts like TTVs and Streams, DS provides a purpose-built, highly available, and persistent internal database. This architecture, coupled with sophisticated features like the LTS algorithm and Raft replication, ensures lossless message delivery and optimal retrieval for complex wildcard and shared subscriptions, solidifying EMQX's position as a leading solution for demanding IoT infrastructure.
+EMQX 6.0 中的优化的持久存储（DS）为高可靠 MQTT 消息传递提供了坚实的基础。通过重新设计 RocksDB 并引入 TTV 与 Stream 等概念，DS 构建了一个专用的、高可用且持久的内部数据库系统。
+
+结合 LTS 算法 与 Raft 复制机制，该架构实现了无损消息传递与复杂通配符/共享订阅场景下的最优数据读取性能，进一步巩固了 EMQX 作为高要求 IoT 基础设施领先方案的地位。
