@@ -160,6 +160,7 @@ This section describes some advanced configuration options that can optimize the
 | Field Name                   | Description                                                  | Default Value |
 | ---------------------------- | ------------------------------------------------------------ | ------------- |
 | Time-To-Live (TTL)           | The time-to-live setting for automatically created tables in GreptimeDB. | -             |
+| Custom Timestamp Column Name | If defined, specifies a custom timestamp column name that appears when querying. | -             |
 | Start Timeout                | The maximum time interval, in seconds, that the connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Sink does not proceed with operations until it verifies that the connected resource is fully operational and ready to handle data transactions. | `5` second    |
 | Health Check Interval        | The time interval for checking the running status of the connector. | `15` second   |
 | Health Check Timeout         | The timeout duration for the connector to perform automatic health checks on its connection with the GreptimeDB server. | `60` second   |
