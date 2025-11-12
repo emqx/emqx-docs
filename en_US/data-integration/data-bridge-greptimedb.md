@@ -75,8 +75,9 @@ The following steps assume that you run both EMQX and GreptimeDB on the local ma
    - **Server Host**: Enter `127.0.0.1:4001`. If you are creating a connection to GreptimeCloud, use 443 as the port by entering `{url}:443`.
    - **Database**: Enter `public`. If you are connecting to GreptimeCloud, enter the service name instead.
    - **Username** and **Password**: Enter `greptime_user` and `greptime_pwd`, which are set in the [Install GreptimeDB Server](#install-greptimedb-server). If you are connecting to GreptimeCloud, enter the service username and password.
-5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GreptimeDB server.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GreptimeDB Sink to specify the data to be forwarded to GreptimeDB. For detailed steps, see [Create a Rule with GreptimeDB Sink](#create-a-rule-with-greptimedb-sink).
+5. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Configuration](#advanced-configuration).
+6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the GreptimeDB server.
+7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating a rule with GreptimeDB Sink to specify the data to be forwarded to GreptimeDB. For detailed steps, see [Create a Rule with GreptimeDB Sink](#create-a-rule-with-greptimedb-sink).
 
 ## Create a Rule with GreptimeDB Sink
 
@@ -151,3 +152,15 @@ mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello GreptimeDB" }'
 Check the running status of the Sink, there should be one new incoming and one new outgoing message.
 
 In the GreptimeDB dashboard, you can confirm whether the message is written into the GreptimeDB via `SQL`.
+
+## Advanced Configuration
+
+This section describes some advanced configuration options that can optimize the performance of your connectors and customize operations according to your specific scenario. When creating the connector, you can expand **Advanced Settings** and configure the following settings according to your business needs.
+
+| Field Name                   | Description                                                  | Default Value |
+| ---------------------------- | ------------------------------------------------------------ | ------------- |
+| Time-To-Live (TTL)           | The time-to-live setting for automatically created tables in GreptimeDB. | -             |
+| Custom Timestamp Column Name | If defined, specifies a custom timestamp column name that appears when querying. | -             |
+| Start Timeout                | The maximum time interval, in seconds, that the connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Sink does not proceed with operations until it verifies that the connected resource is fully operational and ready to handle data transactions. | `5` seconds    |
+| Health Check Interval        | The time interval for checking the running status of the connector. | `15` seconds   |
+| Health Check Timeout         | The timeout duration for the connector to perform automatic health checks on its connection with the GreptimeDB server. | `60` seconds   |
