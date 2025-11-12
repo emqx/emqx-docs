@@ -268,3 +268,7 @@ For other authentication types, refer to the documentation on [EMQX Authenticato
 
 - For complete configuration reference, see: [NATS Gateway Configuration](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/)
 - For REST API details, see: [Gateway REST API Documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+
+## More Information
+
+To learn more about the NATS Protocol Gateway and its use cases, see the blog post: [EMQX NATS Gateway: Enabling MQTT-NATS Bidirectional Interoperability](https://www.emqx.com/en/blog/emqx-nats-gateway).

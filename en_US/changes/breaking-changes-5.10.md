@@ -1,5 +1,11 @@
 # Incompatible Changes in EMQX 5.10
 
+## 5.10.2
+
+- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ actions ignored the configured payload template and sent the entire rule output instead.
+
+  If you relied on the previous (incorrect) behavior, you may need to update your payload templates to ensure messages are formatted as expected.
+
 ## 5.10.1
 
 - [#15752](https://github.com/emqx/emqx/pull/15752) Listener connection rate limits (`max_conn_rate` and `max_conn_burst`) are now enforced per listener rather than per acceptor, restoring the pre-5.9.0 behavior. As a result, configurations from versions 5.9.0, 5.9.1, and 5.10.0 are incompatible: specified rates must be scaled up by the number of acceptors configured for respective listeners.

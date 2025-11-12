@@ -176,3 +176,6 @@ The following two examples demonstrate how to quickly build and test Flows using
 - [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
 - [Create a Flow Using Gemini Node](./gemini-node-quick-start): Use Gemini models to generate contextual responses based on prompts in MQTT messages, and route the results to per-client topics using the MQTT client ID.
 
+## More Information
+
+To explore the LLM‑powered MQTT data processing capabilities, see the blog post: [Real-Time AI for IoT: Introducing LLM Integration in EMQX 5.10](https://www.emqx.com/en/blog/introducing-llm-integration-in-emqx-5-10).
