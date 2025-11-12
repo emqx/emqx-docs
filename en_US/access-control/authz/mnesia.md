@@ -8,7 +8,7 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 :::
 
-## Configure with Dashboard
+## Create Built-in Database Authorizer via Dashboard
 
 1. On the [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), navigate to **Access Control** > **Authorization** in the left-hand menu to open the **Authorization** page.
 
@@ -26,7 +26,7 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 
 4. Click **Create** to complete the setup.
 
-## Configure with Configuration File
+## Create Built-in Database Authorizer via Configuration File
 
 The built-in database authorizer is identified by type `built_in_database`.
 
@@ -51,71 +51,161 @@ You can create authorization rules through the Dashboard or API.
 
 ### Create Authorization Rules via Dashboard
 
-On the **Authorization** page in Dashboard, click the **Permissions** button in the **Actions** column of the **Built-in Database** backend.
+You can define authorization rules directly from the EMQX Dashboard by using the **Permissions** page of the **Built-in Database** backend.
+
+#### Access the Permissions Page
+
+1. In the Dashboard, go to the **Authorization** page.
+2. In the **Actions** column of the **Built-in Database** backend, click **Permissions**.
 
 ![authz-mnesia-rule](./assets/authz-mnesia-rule.png)
 
-You can set authorization checks based on the client ID, username, or topic as needed.
+#### Authorization Rule Scope
 
-- **Client ID**: See the **Client ID** tab, specify the client that this rule applies to.
-- **Username**: See the **Username** tab, specify the user that this rule applies to.
-- **Permission**: Whether to allow or deny a certain type of operation request from the current client/user; optional values: **Allow**, **Deny**.
-- **Action**: Configure the operation corresponding to this rule; optional values: **Publish**, **Subscribe**, **Publish & Subscribe**.
-- **Topic**: Configure the topic corresponding to this rule.
+Authorization rules can be configured at three scopes:
 
-EMQX supports configuring multiple authorization check rules for a single client or user, and you can adjust the execution order and priority of different rules through the **Move Up** and **Move Down** buttons on the page.
+- **Client ID**: Apply rules to a specific client ID.
+- **Username**: Apply rules to a specific username.
+- **All Users**: Apply rules to all clients/users, optionally filtered by patterns or IP ranges.
 
-If you want to configure authorization check rules for multiple clients or users at the same time, you can import the relevant configuration through the HTTP API.
+#### Common Rule Fields
 
-### Create via REST API
+These fields are available for all rule types:
 
-Rules are also managed through `/api/v5/authorization/sources/built_in_database` APIs.
+| Field                | Description                                                  |
+| -------------------- | ------------------------------------------------------------ |
+| **Action**           | The operation type the rule applies to. Options: `Publish`, `Subscribe`, `Publish & Subscribe`. |
+| **Permission**       | Whether to allow or deny the operation. Options: `Allow`, `Deny`. |
+| **Topic**            | The MQTT topic this rule applies to. Wildcards (`+`, `#`) are supported. |
+| **QoS**              | Allowed QoS levels. Multiple values can be selected: `0`, `1`, `2`. |
+| **Retain**           | Whether the rule applies to retained messages. Options: `true`, `false`, `All`. |
+| **IP Address Range** | Specifies the client IP range this rule applies to. Supports CIDR notation (e.g., `192.168.1.0/24`) or exact IPs. |
+| **Listener**         | The listener this rule applies to. Use `{type}:{name}` format, e.g., `tcp:default`, `ws:default`. |
+| **Zone**             | The Zone in which the rule takes effect. Applicable in multi-Zone deployments. |
 
-Each rule is applied to:
-* a particular client identified by clientid
-  *  `/api/v5/authorization/sources/built_in_database/clientid`
-* a particular client identified by username
-  * `/api/v5/authorization/sources/built_in_database/username` 
+#### Fields by Rule Scope
 
-* all clients
-  *  `/api/v5/authorization/sources/built_in_database/all` 
+| Rule Scope    | Fields                                                       |
+| ------------- | ------------------------------------------------------------ |
+| **Client ID** | **Client ID**: (Required) Exact client ID to which this rule applies.<br />**Username Pattern**: (Optional) A regular expression to match usernames for which this rule is valid. |
+| **Username**  | **Username**: (Required) Exact username to which this rule applies.<br />**Client ID Pattern**: (Optional) A regular expression to match client IDs for which this rule is valid. |
+| **All Users** | **Client ID Pattern**: (Optional) A regular expression to match usernames for which this rule is valid.<br />**Username Pattern**: (Optional) A regular expression to match usernames for which this rule is valid. |
 
+**Example patterns:**
 
-Below is a quick example of how to create rules for a client (`client1`):
+- `^device-user-.*`: Matches usernames starting with `device-user-`.
+- `^sensor-.*`: Matches client IDs starting with `sensor-`.
+
+#### Add a Rule
+
+1. On the **Permissions** page, select the target tab: **Client ID**, **Username**, or **All Users**.
+2. Click **Add**.
+3. Fill in the [common fields](#common-rule-fields) and any [scope-specific fields](#fields-by-rule-scope).
+4. (Optional) Click **Add Permission** to add multiple rules. Use the **Up** and **Down** buttons to adjust rule execution order.
+5. Click **Add** to save the rule.
+
+#### Manage Multiple Rules (All Users Only)
+
+For **All Users** rules, you can change rule order from the **More** menu in the **Actions** column:
+
+- Move Up
+- Move Down
+- Move to Top
+- Move to Bottom
+
+Rules are evaluated from top to bottom, so order determines priority.
+
+#### Edit and Manage Rules
+
+On the **Permissions** page, you can edit or delete existing rules:
+
+- In the **Actions** column of the corresponding rule, click the **Edit** button to modify rule fields, matching patterns, or IP range settings.
+- Click the **Delete** button to remove a rule.
+
+### Create Authorization Rules via REST API
+
+You can also manage authorization rules through the REST API. The API endpoints correspond directly to the Dashboard’s three scopes: Username, Client ID, and All Users.
+
+#### Endpoints
+
+- **Username rules**
+  - `POST /authorization/sources/built_in_database/rules/users`: Create rules for a user.
+  - `PUT /authorization/sources/built_in_database/rules/users/:username`: Replace rules for a specific user.
+- **Client ID rules**
+  - `POST /authorization/sources/built_in_database/rules/clients`: Create rules for a client.
+  - `PUT /authorization/sources/built_in_database/rules/clients/:clientid`: Replace rules for a specific client.
+- **All Users rules**
+  - `POST /authorization/sources/built_in_database/rules/all`: Create or replace global rules that apply to all clients/users.
+  - There is no `PUT` request, just `POST` updating or creating all the rules.
+
+#### Example: Create Rules for a User
 
 ```bash
-curl -X 'POST' \
-  'http://localhost:18083/api/v5/authorization/sources/built_in_database/clientid' \
-  -H 'accept: */*' \
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
   -H 'Content-Type: application/json' \
   -d '[
-  {
-    "clientid": "client1",
-    "rules": [
-      {
-        "action": "publish",
-        "permission": "allow",
-        "topic": "test/topic/1"
-      },
-      {
-        "action": "subscribe",
-        "permission": "allow",
-        "topic": "test/topic/2"
-      },
-      {
-        "action": "all",
-        "permission": "deny",
-        "topic": "eq test/#"
-      }
-    ]
-  }
-]'
+    {
+      "username": "user1",
+      "rules": [
+        {
+          "topic": "v1/devices/#",
+          "permission": "allow",
+          "action": "publish",
+          "qos": [0,1,2],
+          "retain": "all"
+        }
+      ]
+    }
+  ]'
 ```
 
-Each rule contains:
-* `permission`: Whether to allow or deny a certain type of operation request from current client/user; optional values: `allow` or `deny`;
-* `action`: Configure the operation corresponding to this rule; optional values: `publish`, `subscribe`, or `all`;
-* `topic`: Configure the corresponding to this rule, supporting [topic placeholders](./authz.md#topic-placeholders).
-* `qos`: (Optional) A number array used to specify the QoS levels that the rule applies to, e.g. `[0, 1]`, `[1, 2]`. The default is all QoS levels.
-* `retain`: (Optional) Used to specify whether the current rule supports retained messages. Value options are `true`, `false`. Default is to allow retained messages.
+#### Example: Update Rules for a User
+
+```bash
+curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "username": "user1",
+    "rules": [
+      {
+        "topic": "v1/devices/+/state",
+        "permission": "allow",
+        "action": "subscribe",
+        "qos": [0,1],
+        "retain": "all"
+      }
+    ]
+  }'
+```
+
+#### Example: Create Rules for All Users
+
+```bash
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+  -H 'Content-Type: application/json' \
+  -d '[
+    {
+      "rules": [
+        {
+          "topic": "v1/#",
+          "permission": "deny",
+          "action": "all"
+        }
+      ]
+    }
+  ]'
+```
+
+#### Rule Fields
+
+Each rule can include the following fields:
+
+| Field                       | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| **username** / **clientid** | The exact username or client ID this rule applies to (depending on endpoint). |
+| **topic**                   | The MQTT topic this rule applies to. Supports wildcards (`+`, `#`) and [topic placeholders](./authz.md#topic-placeholders). |
+| **permission**              | Whether to allow or deny the operation request from the current client/user. Options: `allow`, `deny`. |
+| **action**                  | Operation type. Options: `publish`, `subscribe`, `all`.      |
+| **qos**                     | (Optional) Allowed QoS levels. Example: `[0,1]`. Default: all levels. |
+| **retain**                  | (Optional) Whether the rule applies to retained messages. Options: `true`, `false`, `all`. |
 
