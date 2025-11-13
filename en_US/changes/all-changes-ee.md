@@ -4,10 +4,12 @@ The release notes page for EMQX Enterprise provides a comprehensive and detailed
 
 ## v6.0
 
+- [6.0.1](./changes-ee-v6.md#_6-0-1): 2025-11-11
 - [6.0.0](./changes-ee-v6.md#_6-0-0): 2025-09-30
 
 ## v5.10
 
+- [5.10.2](./changes-ee-v5.md#_5-10-2): 2025-11-11
 - [5.10.1](./changes-ee-v5.md#_5-10-1): 2025-09-18
 - [5.10.0](./changes-ee-v5.md#_5-10-0): 2025-06-10
 
