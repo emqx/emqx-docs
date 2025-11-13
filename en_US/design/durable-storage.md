@@ -2,14 +2,6 @@
 
 EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built application designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
 
-## Foundational Concepts
-
-- **Databases (DBs):** The top-level logical container for data. Each DB is independent and can be created, managed, and dropped as needed. For instance:
-  - **Sessions DB** stores durable session states.
-  - **Messages DB** holds the corresponding MQTT message data.
-- **Topic-Timestamp-Value triple (TTV)**: The minimal storage unit in the database, where the topic follows MQTT semantics and the value is an arbitrary binary blob.
-- **Streams:** A critical abstraction introduced for efficient handling of wildcard topic filters. Streams are units of batching and serialization. They group TTVs with similar structures, allowing data to be read in time-ordered, deterministic chunks.
-
 ## Architecture: Backends and Storage Hierarchy
 
 Durable Storage is implementation-agnostic, using a backend layer to allow data to be stored across different database management systems.
@@ -23,15 +15,80 @@ EMQX provides two embedded backends that do not rely on third-party services:
 
 ### Data Storage Hierarchy
 
-Internally, DS organizes data into a sophisticated hierarchy, transparent to the application:
+Internally, DS organizes data into a multi-layered hierarchy designed for both horizontal scalability and temporal partitioning. The structure is transparent to applications and ensures efficient data management across distributed EMQX nodes.
 
-- **Databases -> Shards:** A DB is horizontally partitioned into Shards. Shards are independent in operation and can reside on different physical servers, enabling horizontal scaling and partial availability during cluster outages.
-- **Shards -> Generations:** Data within a shard is temporally subdivided into Generations. Periodically creating new generations serves several main purposes:
-  1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
-  2. **Time-based data retention:** Since each generation covers a specific time period, old data can be removed by dropping entire generations.
-- **Slabs:** A volume of data identified by its shard and generation. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+The complete DS hierarchy can be represented as follows:
 
-<!-- Consider adding a diagram here -->
+```mermaid
+flowchart TB
+    %% Durable Storage Hierarchy Diagram
+    DB["Database (DB)"]
+    SH["Shard"]
+    GEN(["Generation (logical, time-based)"])
+    SL["Slab (physical container)"]
+    ST["Stream"]
+    TTV["Topic–Timestamp–Value (TTV)"]
+
+    %% Main hierarchy
+    DB --> SH --> SL --> ST --> TTV
+
+    %% Logical relationship
+    GEN -. labels .- SL
+
+    %% Styling
+    classDef box fill:#f9f9ff,stroke:#666,stroke-width:1px,rx:6,ry:6;
+    class DB,SH,SL,ST,TTV,GEN box;
+
+
+```
+
+
+
+#### Database (DB)
+
+The top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
+
+- **Sessions DB** stores durable session states.
+- **Messages DB** holds the corresponding MQTT message data.
+
+A single EMQX cluster may host multiple DS databases.
+
+#### Shard
+
+A horizontal partition of the database. Data from different MQTT clients or topics is distributed across shards to support parallelism and high availability.
+
+Each EMQX node can host one or more shards, and shards can be replicated across nodes for redundancy.
+
+#### Generation
+
+A logical partition of the database by time. Data written at different times may be assigned to different generations. Periodically creating new generations serves several main purposes:
+
+1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
+2. **Time-based data retention:** Since each generation covers a specific time period, old data can be removed by dropping entire generations.
+
+Although conceptually related to slabs, generations are not physical containers. They serve as temporal boundaries that organize slabs within each shard.
+
+#### Slab
+
+A physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+
+Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
+
+#### Stream
+
+Logical units of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
+
+Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. 
+
+#### Topic–Timestamp–Value
+
+The minimal storage unit, representing a single MQTT record. Each TTV includes:
+
+- **Topic:** Follows MQTT semantics.
+
+- **Timestamp:** Write time or logical ordering key.
+
+- **Value:** an arbitrary binary blob.
 
 ## Write Path
 

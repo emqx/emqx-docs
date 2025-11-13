@@ -159,13 +159,19 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 ## Durable Storage Architecture
 
-The database engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
+The database engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:
 
 ![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
 
-### Storage
+### Database (DS)
 
-Storage encapsulates all data of a certain type, such as MQTT messages or MQTT sessions.
+Each EMQX node hosts one or more Durable Storage databases.
+ For example:
+
+- The **Sessions** database stores session metadata.
+- The **Messages** database stores MQTT message data.
+
+Each database operates independently and manages its own internal partitions.
 
 ### Shard
 
@@ -173,17 +179,33 @@ Messages are segregated by clients and stored in shards based on the publisher's
 
 ### Generation
 
-Messages within a shard are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. EMQX cleans up old MQTT messages by deleting old generations in their entirety. The retention period for old MQTT messages is determined by the `durable_sessions.message_retention_period` parameter.
+A generation is a logical partition of the database by time. Messages are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. EMQX cleans up old MQTT messages by deleting old generations in their entirety. The retention period for old MQTT messages is determined by the `durable_sessions.message_retention_period` parameter.
 
 Generations can organize data differently according to the storage layout specification. Currently, only one layout is supported, optimized for high throughput of wildcard and single-topic subscriptions. Future updates will introduce layouts optimized for different workloads.
 
 The storage layout for new generations is configured by the `durable_storage.messages.layout` parameter, with each layout engine defining its own configuration parameters.
 
+### Slab
+
+A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+
+Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
+
 ### Stream
 
-Messages in each shard and generation are split into streams. Streams serve as units of message serialization in EMQX. Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
+A stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
 
-Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
+Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
+
+### Topic–Timestamp–Value
+
+A TTV is a minimal storage unit, representing a single MQTT record. Each TTV includes:
+
+- **Topic:** Follows MQTT semantics.
+
+- **Timestamp:** Write time or logical ordering key.
+
+- **Value:** an arbitrary binary blob.
 
 ## Durable Storages Across Cluster
 
@@ -207,3 +229,8 @@ To learn how to configure and manage the Durable Sessions feature, as well as ho
 
 - [Configure and Manage Durable Sessions](./management.md)
 - [Manage Data Replication](./managing-replication.md)
+
+## More Information
+
+For a deeper understanding of the design principles behind MQTT Durable Sessions, see [Design for Durable Storage](../design/durable-storage.md).
+
