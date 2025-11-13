@@ -1069,6 +1069,7 @@
         - design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
+        - design/durable-storage
       # - design/design
       # - title_en: SDK & Tools
       #   title_cn: SDK 与工具
