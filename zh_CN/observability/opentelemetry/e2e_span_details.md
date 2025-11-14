@@ -50,7 +50,7 @@ EMQX 提供基于 OpenTelemetry 标准的端到端追踪能力。这允许您监
 
 #### Broker -> 发布者
 
-- **`broker.puback`**：追踪 Broker向发布者发送 `PUBACK` 的过程 (QoS 1)。
+- **`broker.puback`**：追踪 Broker 向发布者发送 `PUBACK` 的过程 (QoS 1)。
 
 - **`broker.pubrec`**：追踪 Broker 向发布者发送 `PUBREC` 的过程 (QoS 2)。
 
