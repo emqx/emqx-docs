@@ -1,5 +1,15 @@
 # EMQX 5.9 中的不兼容变更
 
+## 5.9.2
+
+- [#15753](https://github.com/emqx/emqx/pull/15753) 监听器连接速率限制（`max_conn_rate` 和 `max_conn_burst`）现在按监听器维度生效，而不再是按 acceptor （连接接收进程）生效，恢复了 5.9.0 之前的行为。
+
+  这导致 5.9.0 和 5.9.1 版本的相关配置与当前版本不兼容。为了保持相同的限流效果，指定的速率必须按相应监听器配置的 acceptor 数量进行放大。
+
+- [#16062](https://github.com/emqx/emqx/pull/16062) 修复了一个问题：RocketMQ 动作忽略了配置的 payload 模板，错误地发送了整个规则的输出结果。
+
+  如果您依赖了此前（错误）行为，可能需要更新 payload 模板，以确保消息格式符合预期。
+
 ## 5.9.1
 
 - [#15156](https://github.com/emqx/emqx/pull/15156) 为 `dashboard.sso.oidc.issuer` 字段新增了严格的 schema 校验。该字段现在必须为合法的 URL。此前，即使配置无效，API 也可能错误地接受，但会导致 EMQX 无法重启，甚至触发崩溃（`erl_crash.dump`）。
