@@ -158,7 +158,7 @@ opentelemetry {
 
    以下是在两个客户端均具有 QoS2 级别订阅，消息发布者发布 QoS2 等级的 MQTT 消息，及 `msg_trace_level` 配置为 2 时的追踪时间线及 Span 信息。
 
-   特别地，由于客户端 `mqttx_9137a6bb` 与消息发布者连接在不同的 EMQX 节点。在消息向该客户端投递时需要跨节点传输，所以具有两个额外的 Span ：`message.forward` 与 `message.handle_forward`。
+   特别地，由于客户端 `mqttx_9137a6bb` 与消息发布者连接在不同的 EMQX 节点。在消息向该客户端投递时需要跨节点传输，所以具有两个额外的 Span：`message.forward` 与 `message.handle_forward`。
 
    ![Jaeger-WEB-UI-e2e-Message](./assets/e2e-message.png)
 
@@ -195,7 +195,7 @@ EMQX 在端到端追踪过程中会生成多种类型的 Span，以便深入了�
 
 ## 管理追踪 Span 过载
 
-EMQX 会积累追踪 Span ，并定期批量导出它们。 导出间隔由 `opentelemetry.trace.scheduled_delay` 参数控制，默认为 5 秒。 批处理追踪 Span 处理器包含过载保护机制，允许只积累到一定限制的 Span ，该限制默认为 2048 个 Span 。您可以使用以下配置设置此限制：
+EMQX 会积累追踪 Span，并定期批量导出它们。 导出间隔由 `opentelemetry.trace.scheduled_delay` 参数控制，默认为 5 秒。 批处理追踪 Span 处理器包含过载保护机制，允许只积累到一定限制的 Span，该限制默认为 2048 个 Span。您可以使用以下配置设置此限制：
 
 ```yaml
 opentelemetry {
