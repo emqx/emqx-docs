@@ -69,7 +69,7 @@ The following steps assume that you run both EMQX and InfluxDB on the local mach
 3. On the **Create Connector** page, select **InfluxDB** and then click **Next**.
 4. In the **Configuration** step, configure the following information:
    - Enter the connector name, which should be a combination of upper and lower case letters and numbers, for example: `my_influxdb`.
-   - Select the **Version of InfluxDB** as needed, with the default being `V2`.
+   - Select the **Version of InfluxDB** as needed. Supported options are `v1`, `v2` (default), and `v3`.
    - Enter the InfluxDB server connection information:
      - For the **Server Host**, enter `127.0.0.1:8086`. If using InfluxDB Cloud, specify port 443, i.e., enter `{url}:443` and click **Enable TLS** to activate TSL connection.
      - Complete the **Token**, **Organization**, and **Bucket** settings according to the setup in [Install and Set Up InfluxDB](#install-and-set-up-influxdb). Note: If choosing InfluxDB v1, please complete the settings for **Database**, **Username**, and **Password**.
