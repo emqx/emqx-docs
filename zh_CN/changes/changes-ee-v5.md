@@ -2,7 +2,7 @@
 
 ## 5.9.2
 
-*发布日期 2025-10-31*
+*发布日期 2025-11-14*
 
 升级前请查看已知问题列表和不兼容变更列表。
 
@@ -44,6 +44,8 @@
 
   **注意：** 当 `parse_unit = frame` 时，如果 `PUBLISH` 报文超过允许的最大大小，EMQX 将关闭连接，而不是发送 `DISCONNECT` 报文。
 
+- [#16165](https://github.com/emqx/emqx/pull/16165) 优化了 `GET /clients_v2` API 的性能。此前，在集群中连接客户端数量达到约 50,000 或以上时，调用该 API 获取客户端列表的响应速度可能非常慢，甚至会超时。
+
 ### 修复
 
 #### 核心 MQTT 功能
@@ -68,6 +70,9 @@
 - [#15581](https://github.com/emqx/emqx/pull/15581) 将 Erlang/OTP 从 26.2.5.2 升级至 26.2.5.14，包含两个与 TLS 相关的重要修复：
   - 修复了因证书更新过程中的竞争条件导致的 TLS 连接崩溃。
   - 现在可以正常使用 RSASSA-PSS 签名的 RSA 证书。此前，TLS 握手可能因 `bad_certificate / invalid_signature` 错误而失败。
+
+- [#16237](https://github.com/emqx/emqx/pull/16237) 修复了禁用 OIDC SSO 后仍可能输出与 SSO 相关日志的问题。
+- [#16217](https://github.com/emqx/emqx/pull/16217) 修复了在多节点集群环境下，OIDC 登录回调可能无法找到对应用户会话的问题。
 
 #### 访问控制
 
@@ -144,6 +149,13 @@
 - [#16043](https://github.com/emqx/emqx/pull/16043) 优化了 Kafka 数据集成在发生 `not_all_kafka_partitions_connected` 事件时的日志信息。
 
 - [#16046](https://github.com/emqx/emqx/pull/16046) 修复了一个潜在的内存溢出（OOM）崩溃问题：当加载或重启包含数百个动作的连接器配置时，可能导致崩溃。
+
+- [#16138](https://github.com/emqx/emqx/pull/16138) 修复了一个 Redis 集群故障转移（failover）相关的问题，该问题可能导致连接器长时间停留在 “connecting” 状态。
+
+  此前，EMQX 的 Redis 集群客户端仅在常规查询（如 `GET`）失败时才会刷新集群拓扑结构。然而，周期性发送的 `PING` 命令即使失败，也不会触发刷新操作。因此，在发生故障转移后，如果没有其他命令被发送，连接器可能会继续使用过时的拓扑信息，导致无法恢复连接。
+
+  此次修复后，`PING` 命令失败也会触发集群拓扑刷新，确保连接器能够及时检测到故障转移并恢复正常工作。
+
 
 #### 规则引擎
 

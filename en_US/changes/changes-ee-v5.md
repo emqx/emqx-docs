@@ -2,7 +2,7 @@
 
 ## 5.9.2
 
-*Release Date: 2025-10-31*
+*Release Date: 2025-11-14*
 
 Make sure to check the breaking changes and known issues before upgrading to EMQX 5.9.2.
 
@@ -46,6 +46,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   **Note:** With `parse_unit = frame`, if a `PUBLISH` packet exceeds the maximum allowed size, EMQX will close the connection instead of sending a `DISCONNECT` packet.
 
+- [#16165](https://github.com/emqx/emqx/pull/16165) Optimized the performance of the `GET /clients_v2` API. Previously, when the cluster had around 50,000 clients or more, API calls to retrieve the client list could be extremely slow or even time out.
+
 ### Bug Fixes
 
 #### Core MQTT Functionalities
@@ -73,6 +75,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#15581](https://github.com/emqx/emqx/pull/15581) Upgraded Erlang/OTP version from 26.2.5.2 to 26.2.5.14. This upgrade includes two TLS-related fixes from OTP that affect EMQX:
   - Fixed a crash in TLS connections caused by a race condition during certificate renewal.
   - Added support for RSA certificates signed with RSASSA-PSS parameters. Previously, such certificates could cause TLS handshakes to fail with a `bad_certificate` / `invalid_signature error`.
+
+- [#16237](https://github.com/emqx/emqx/pull/16237) Fixed an issue where OIDC SSO–related logs might still be printed even after SSO was disabled.
+- [#16217](https://github.com/emqx/emqx/pull/16217) Fixed an issue where the OIDC login callback could fail to locate the user session in multi-node cluster environments.
 
 #### Access Control
 
@@ -158,6 +163,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 - [#16043](https://github.com/emqx/emqx/pull/16043) Improved log details for Kafka data integration when `not_all_kafka_partitions_connected` event occurs.
 
 - [#16046](https://github.com/emqx/emqx/pull/16046) Fixed a potential out-of-memory (OOM) crash when loading or restarting a configuration containing a Connector with several hundred Actions.
+
+- [#16138](https://github.com/emqx/emqx/pull/16138) Fixed a Redis cluster failover issue that could cause the Connector to remain stuck in a "connecting" state.
+
+  Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (such as `GET`) failed. However, failures in periodic `PING` commands did not trigger a refresh. As a result, after a failover, the connector could continue using the outdated cluster topology if no other commands were issued, preventing recovery.
+
+  With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that the connector can detect failovers and recover promptly.
+
 
 #### Rule Engine
 
