@@ -195,7 +195,9 @@ Example: `shard 2, gen 3` represents a distinct slab that stores all streams wri
 
 A stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
 
-Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
+Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
+
+Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
 
 ### Topic–Timestamp–Value
 

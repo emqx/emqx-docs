@@ -175,3 +175,11 @@ EMQX 6.0 extended DS to shared subscriptions for enhanced load balancing and rel
 ## Conclusion: The Foundation of High-Reliability MQTT
 
 The Optimized Durable Storage in EMQX 6.0 is the resilient foundation for high-reliability MQTT messaging. By re-engineering RocksDB and embedding concepts like TTVs and Streams, DS provides a purpose-built, highly available, and persistent internal database. This architecture, coupled with sophisticated features like the LTS algorithm and Raft replication, ensures lossless message delivery and optimal retrieval for complex wildcard and shared subscriptions, solidifying EMQX's position as a leading solution for demanding IoT infrastructure.
+
+## More Information
+
+Durable Storage serves as the core data foundation for several high-reliability and persistence-related features in EMQX, providing unified storage, replay, and consistency guarantees for upper-layer functionality, including:
+
+- **[MQTT Durable Sessions](../durability/durability_introduction.md)**: A DS-based mechanism for persisting session state and undelivered messages.
+- **[Message Queue](../message-queue/message-queue-concept.md)**: A built-in message queueing feature that provides ordered message delivery, message replay, and high availability across the EMQX cluster.
+- **[Shared Subscription](../messaging/mqtt-shared-subscription.md)**: A load-balancing subscription mechanism that distributes messages among multiple subscribers in the same group.
