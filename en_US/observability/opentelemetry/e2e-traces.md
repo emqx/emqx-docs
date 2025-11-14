@@ -171,7 +171,7 @@ opentelemetry {
 
    :::
 
-## Understanding Trace Spans
+## Understand Trace Spans
 
 EMQX generates various types of spans during end-to-end tracing to provide deep insights into the internal workings of the Broker. These spans cover multiple aspects such as client lifecycle, message lifecycle, authentication and authorization, rule engine, and internal Broker operations.
 
@@ -183,7 +183,7 @@ Here is an overview of the main span types:
 - **Rule Engine Spans**: Trace the processing and execution of the rule engine.
 - **Broker Internal Spans**: Trace internal Broker operations, such as actively disconnecting a client or internal subscriptions.
 
-For a detailed explanation of each span, please refer to the [End-to-End Tracing Span Details](./e2e_span_details.md) documentation.
+For a detailed explanation of each span, please refer to the [End-to-End Tracing Span Details](./e2e_span_details.md).
 
 ## Manage Trace Span Overload
 

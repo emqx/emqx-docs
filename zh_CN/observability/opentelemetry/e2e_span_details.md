@@ -1,6 +1,6 @@
 # 端到端追踪 Span 详情
 
-EMQX 提供基于 OpenTelemetry 标准的端到端追踪能力。这允许您监控 EMQX 集群内 MQTT 消息和客户端活动的全生命周期。本文档详细介绍了 EMQX 生成的各种 Span，以便深入了解 Broker 的内部工作原理。
+EMQX 提供基于 OpenTelemetry 标准的端到端追踪能力。这允许您监控 EMQX 集群内 MQTT 消息和客户端活动的全生命周期。本页详细介绍了 EMQX 生成的各种 Span，以便深入了解 Broker 的内部工作原理。
 
 ## 客户端生命周期 Span
 
@@ -84,9 +84,9 @@ EMQX 提供基于 OpenTelemetry 标准的端到端追踪能力。这允许您监
 
 这些 Span 追踪 Broker 的内部操作。
 
-- **`broker.disconnect`**：追踪 Broker 主动断开客户端连接的情况（例如，由于管理操作）。
+- **`broker.disconnect`**：追踪 Broker 主动断开客户端连接的情况（例如，由于管理操作导致的断开）。
 
-- **`broker.subscribe`**：追踪由 Broker 自身发起的内部订阅过程（例如，由于管理操作）。
+- **`broker.subscribe`**：追踪由 Broker 自身发起的内部订阅过程（例如，由于管理操作导致的订阅）。
 
 - **`broker.unsubscribe`**：追踪内部取消订阅的过程。
 
@@ -109,14 +109,15 @@ EMQX 的 OpenTelemetry 集成包含一个灵活的采样器，允许您控制生
 4.  **基于比例的采样**: 如果没有匹配的白名单规则，则决策将回退到基于比例的采样，由 `sample_ratio` 配置控制。
     -   `sample_ratio`：您可以配置此比例（从 `0.0` 到 `1.0`）来控制捕获的追踪百分比。值为 `1.0` 意味着将捕获 100% 的追踪，而 `0.0` 意味着不会捕获任何追踪（除非它们匹配白名单规则）。
 
-5.  **事件类型开关**: 即使追踪被基于比例的采样器选中，也只有在通过其配置开关启用了相应的事件类型时，才会生成该追踪。这些开关充当各类 Span 的全局开关。可用的开关有：
-    -   `client_connect_disconnect`：一个布尔开关，用于启用或禁用客户端连接和断开连接事件的追踪。
-
-    -   `client_subscribe_unsubscribe`：一个布尔开关，用于启用或禁用客户端订阅和取消订阅事件的追踪。
-
-    -   `client_messaging`：一个布尔开关，用于启用或禁用客户端消息发布事件的追踪。
-
-    -   `trace_rule_engine`：一个布尔开关，用于启用或禁用规则引擎的追踪。
-
+5.  **事件类型开关**: 即使追踪被基于比例的采样器选中，只有在对应事件类型的开关被启用时，才会实际生成该追踪。此类开关相当于各类 Span 的全局启用开关。可用的开关包括：
+    
+    -   `client_connect_disconnect`：布尔开关，用于启用或禁用客户端连接和断开连接事件的追踪。
+    
+    -   `client_subscribe_unsubscribe`：布尔开关，用于启用或禁用客户端订阅和取消订阅事件的追踪。
+    
+    -   `client_messaging`：布尔开关，用于启用或禁用客户端消息发布事件的追踪。
+    
+    -   `trace_rule_engine`：布尔开关，用于启用或禁用规则引擎的追踪。
+    
 6.  **消息追踪级别**: 对于与 QoS 确认相关的 Span（例如 `PUBACK`、`PUBREC`），您可以使用 `msg_trace_level` 开关根据 QoS 级别控制它们的创建。
     -   `msg_trace_level`：此设置可以配置为特定的 QoS 级别（0、1 或 2），以根据原始消息的 QoS 控制创建哪些确认 Span。例如，如果 `msg_trace_level` 设置为 `1`，将为 QoS 1 消息创建 `PUBACK` Span。对于 QoS 2 消息，此设置将生成 `PUBREC` Span，但不会生成 `PUBREL` 或 `PUBCOMP` Span。这有助于减少高 QoS 消息流的追踪详细程度。
