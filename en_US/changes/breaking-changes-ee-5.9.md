@@ -10,6 +10,9 @@
 
   If you relied on the previous (incorrect) behavior, you may need to update your payload templates to ensure messages are formatted as expected.
 
+- [#16284](https://github.com/emqx/emqx/pull/16284) Stopped releasing packages for macOS 13 and CentOS 7.
+
+
 ## 5.9.1
 
 - [#15156](https://github.com/emqx/emqx/pull/15156) Added strict schema validation for the `dashboard.sso.oidc.issuer` field. This field must now contain a valid URL. Previously, invalid configurations could be accepted by the API without errors but would cause EMQX to fail to restart, potentially resulting in a crash (`erl_crash.dump`).
