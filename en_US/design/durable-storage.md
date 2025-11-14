@@ -88,7 +88,7 @@ The minimal storage unit, representing a single MQTT record. Each TTV includes:
 
 - **Timestamp:** Write time or logical ordering key.
 
-- **Value:** an arbitrary binary blob.
+- **Value:** An arbitrary binary blob.
 
 ## Write Path
 
