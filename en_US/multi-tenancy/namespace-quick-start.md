@@ -69,3 +69,29 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
    - In the **Monitoring** -> **Clients** page:
      - Client A's subscribed topic appears as `tenantA/test/topic`.
      - Client B's published topic appears as `tenantB/test/topic`.
+
+4. ACL isolation
+
+   By default, authorization (ACL) checks do not include the mountpoint prefix for backward compatibility. This means that ACL rules are evaluated against the original topic name (e.g., `test/topic`) rather than the namespaced topic (e.g., `tenantA/test/topic`).
+
+   Starting from EMQX 6.1, you can enable mountpoint-aware authorization to achieve namespace-level ACL isolation:
+
+   **Enable mountpoint-aware authorization**:
+
+   Add the following configuration to `base.hocon`:
+
+   ```
+   authorization.include_mountpoint = true
+   ```
+
+   Alternatively, configure this in the Dashboard:
+
+   1. Navigate to **Access Control** -> **Authorization** -> **Settings**.
+   2. Enable **Include Mountpoint in Authorization Check**.
+   3. Click **Save Changes**.
+
+   ::: tip Note
+
+   When `authorization.include_mountpoint=true` is enabled, all ACL rules must include the mountpoint in the topic pattern. For example, if a client connects to a listener with mountpoint `tenantA/` wants to subscribe to `test/topic`, the ACL rule should be configured as `tenantA/test/topic`.
+
+   :::

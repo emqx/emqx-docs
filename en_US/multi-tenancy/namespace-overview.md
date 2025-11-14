@@ -79,7 +79,7 @@ However, note that isolation strategies still require **manual configuration** b
 
   This setting adds a namespace prefix to the topic name.
 
-As of version 5.9, namespaces are only applicable to MQTT clients. The Dashboard and REST API are not yet isolated based on namespaces. EMQX plans to implement unified management namespaces and MQTT namespaces in future versions. For details, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+  For backward compatibility, the Authorization(ACL) checks do **NOT** include mountpoint prefix by default. Starting from 6.1 you can set `authorization.include_mountpoint=true` to allow authorization backends to receive topic with mountpoint prefix.
 
 ## Enable Namespaces
 
@@ -109,11 +109,11 @@ You can also enable namespaces using the EMQX Dashboard:
 
 The following features are being rolled out progressively:
 
-- Unify management namespaces and MQTT namespaces.
-- Implement isolation for built-in database authentication.
-- Implement isolation for built-in database authorization.
+- Unify management namespaces and MQTT namespaces. [6.0]
+- Implement isolation for built-in database authentication. [6.1]
+- Implement isolation for built-in database authorization. [6.1]
+- Implement isolation for Prometheus metrics. [6.1]
 - Implement quota isolation for retained messages.
-- Implement isolation for Prometheus metrics.
 
 ::: tip Update
 
