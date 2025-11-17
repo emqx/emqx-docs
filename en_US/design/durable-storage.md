@@ -15,6 +15,10 @@ EMQX provides two embedded backends that do not rely on third-party services:
 
 ### Data Storage Hierarchy
 
+The database storage engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:
+
+![emqx_ds_sharding](./assets/emqx_ds_sharding.png)
+
 Internally, DS organizes data into a multi-layered hierarchy designed for both horizontal scalability and temporal partitioning. The structure is transparent to applications and ensures efficient data management across distributed EMQX nodes.
 
 The complete DS hierarchy can be represented as follows:
@@ -26,7 +30,7 @@ flowchart TB
     SH["Shard"]
     GEN(["Generation (logical, time-based)"])
     SL["Slab (physical container)"]
-    ST["Stream"]
+    ST["Durable Storage Stream"]
     TTV["Topic–Timestamp–Value (TTV)"]
 
     %% Main hierarchy
@@ -46,7 +50,7 @@ flowchart TB
 
 #### Database (DB)
 
-The top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
+A database is the top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
 
 - **Sessions DB** stores durable session states.
 - **Messages DB** holds the corresponding MQTT message data.
@@ -55,30 +59,32 @@ A single EMQX cluster can host multiple DS databases.
 
 #### Shard
 
-A horizontal partition of the database. Data from different MQTT clients is distributed across shards to support parallelism and high availability.
+A shard is the horizontal partition of a durable storage database. Data is distributed across shards based on the publisher's client ID, enabling parallel processing and high availability. Each EMQX node can host one or more shards, and the total number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. 
 
-Each EMQX node can host one or more shards, and shards can be replicated across nodes for redundancy.
+Shards also serve as the fundamental unit of replication. Each shard is replicated across multiple nodes according to the `durable_storage.messages.replication_factor` setting, ensuring that all replicas maintain identical message sets for redundancy and fault tolerance.
 
 #### Generation
 
-A logical partition of the database by time. Data written at different times may be assigned to different generations. Periodically creating new generations serves several main purposes:
+A generation is a logical, time-based partition of the database. Data written during different time periods is grouped into separate generations. New messages are always written to the current generation, while older generations become immutable and read-only. EMQX periodically creates new generations for several main purposes:
 
 1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
-2. **Time-based data retention:** Since each generation covers a specific time period, old data can be removed by dropping entire generations.
+2. **Time-based data retention:** Because each generation corresponds to a specific time range, expired data can be efficiently removed by dropping entire generations.
 
-Although conceptually related to slabs, generations are not physical containers. They serve as temporal boundaries that organize slabs within each shard.
+Although conceptually related to slabs, generations are not physical storage units. Instead, they define temporal boundaries that organize slabs within each shard.
+
+Generations may also differ in how they internally structure and store data, depending on the configured storage layout. Currently, DS supports a single layout optimized for high-throughput wildcard and single-topic subscriptions. Future releases will introduce additional layouts designed for different workloads. The layout used for new generations is configured via the `durable_storage.messages.layout` parameter, with each layout engine providing its own set of configuration options.
 
 #### Slab
 
-A physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
+A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
 
 Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
 
 #### Stream
 
-Logical units of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topics, allowing data to be read in time-ordered, deterministic chunks.
+A durable storage stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topic structures, allowing data to be read in time-ordered, deterministic chunks. A single durable storage stream may contain messages from multiple topics, and different storage layouts may apply different strategies for mapping topics into streams.
 
-Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. 
+Durable storage streams are also the fundamental unit of subscription and iteration in Durable Storage, enabling efficient handling of wildcard topic filters and consistent replay of ordered data. [Durable sessions](../durability/durability_introduction.md#durable-sessions) read messages from streams in batches, with the batch size controlled by the `durable_sessions.batch_size` configuration parameter.
 
 #### Topic–Timestamp–Value
 

@@ -159,56 +159,9 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 ## Durable Storage Architecture
 
-The database engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:
+Durable Sessions rely on the Durable Storage for persisting session state and messages. To understand how this storage layer is structured and operates, refer to the *Architecture: Backends and Storage Hierarchy* section in [Design for Durable Storage](../design/durable-storage.md).
 
-![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
-
-### Database (DS)
-
-The top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
-
-- **Sessions DB** stores durable session states.
-- **Messages DB** holds the corresponding MQTT message data.
-
-A single EMQX cluster can host multiple DS databases.
-
-### Shard
-
-Messages are segregated by clients and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
-
-### Generation
-
-A generation is a logical partition of the database by time. Messages are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. EMQX cleans up old MQTT messages by deleting old generations in their entirety. The retention period for old MQTT messages is determined by the `durable_sessions.message_retention_period` parameter.
-
-Generations can organize data differently according to the storage layout specification. Currently, only one layout is supported, optimized for high throughput of wildcard and single-topic subscriptions. Future updates will introduce layouts optimized for different workloads.
-
-The storage layout for new generations is configured by the `durable_storage.messages.layout` parameter, with each layout engine defining its own configuration parameters.
-
-### Slab
-
-A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
-
-Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
-
-### Stream
-
-A stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topics, allowing data to be read in time-ordered, deterministic chunks.
-
-Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
-
-Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
-
-### Topic–Timestamp–Value
-
-A TTV is a minimal storage unit, representing a single MQTT record. Each TTV includes:
-
-- **Topic:** Follows MQTT semantics.
-
-- **Timestamp:** Write time or logical ordering key.
-
-- **Value:** an arbitrary binary blob.
-
-## Durable Storages Across Cluster
+## Durable Storage Across Cluster
 
 Each node within an EMQX cluster is assigned a unique *Site ID*, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of the data, especially in scenarios where nodes might undergo name modifications or reconfigurations.
 
