@@ -4,7 +4,7 @@ EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built application 
 
 ## Architecture: Backends and Storage Hierarchy
 
-Durable Storage is implementation-agnostic, using a backend layer to allow data to be stored across different database management systems.
+Durable Storage is implementation-agnostic, using a backend concept to allow data to be stored across different database management systems.
 
 ### Embedded Backends
 
