@@ -428,6 +428,14 @@
     - access-control/blacklist
     - access-control/flapping-detect
 
+- title_en: Migration Guides
+  title_cn: 迁移指南
+  title_ja: 移行ガイド
+  path: migration/overview
+  collapsed: true
+  children:
+    - migration/migrate-from-aws-iot-core
+
 - title_en: Rule Engine
   title_cn: 规则引擎
   title_ja: ルールエンジン
