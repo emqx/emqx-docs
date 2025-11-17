@@ -165,13 +165,12 @@ The database engine powering EMQX's built-in durability facilities organizes dat
 
 ### Database (DS)
 
-Each EMQX node hosts one or more Durable Storage databases.
- For example:
+The top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
 
-- The **Sessions** database stores session metadata.
-- The **Messages** database stores MQTT message data.
+- **Sessions DB** stores durable session states.
+- **Messages DB** holds the corresponding MQTT message data.
 
-Each database operates independently and manages its own internal partitions.
+A single EMQX cluster can host multiple DS databases.
 
 ### Shard
 
@@ -193,7 +192,7 @@ Example: `shard 2, gen 3` represents a distinct slab that stores all streams wri
 
 ### Stream
 
-A stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
+A stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topics, allowing data to be read in time-ordered, deterministic chunks.
 
 Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
 

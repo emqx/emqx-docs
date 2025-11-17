@@ -1,6 +1,6 @@
 # Design for Durable Storage
 
-EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built application designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
+EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built database abstraction layer designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
 
 ## Architecture: Backends and Storage Hierarchy
 
@@ -33,7 +33,7 @@ flowchart TB
     DB --> SH --> SL --> ST --> TTV
 
     %% Logical relationship
-    GEN -. labels .- SL
+    GEN -. identifies .- SL
 
     %% Styling
     classDef box fill:#f9f9ff,stroke:#666,stroke-width:1px,rx:6,ry:6;
@@ -51,11 +51,11 @@ The top-level logical container for data. Each DS database is independent and ma
 - **Sessions DB** stores durable session states.
 - **Messages DB** holds the corresponding MQTT message data.
 
-A single EMQX cluster may host multiple DS databases.
+A single EMQX cluster can host multiple DS databases.
 
 #### Shard
 
-A horizontal partition of the database. Data from different MQTT clients or topics is distributed across shards to support parallelism and high availability.
+A horizontal partition of the database. Data from different MQTT clients is distributed across shards to support parallelism and high availability.
 
 Each EMQX node can host one or more shards, and shards can be replicated across nodes for redundancy.
 
@@ -70,19 +70,19 @@ Although conceptually related to slabs, generations are not physical containers.
 
 #### Slab
 
-A physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+A physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
 
 Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
 
 #### Stream
 
-Logical units of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
+Logical units of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topics, allowing data to be read in time-ordered, deterministic chunks.
 
 Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. 
 
 #### Topic–Timestamp–Value
 
-The minimal storage unit, representing a single MQTT record. Each TTV includes:
+The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 - **Topic:** Follows MQTT semantics.
 
