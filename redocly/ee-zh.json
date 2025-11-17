@@ -222,7 +222,7 @@
         }
       },
       "listeners.listener_id": {
-        "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+        "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
         "example": "tcp:demo",
         "in": "path",
         "name": "id",
@@ -933,7 +933,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -953,7 +953,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -961,7 +961,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -1005,14 +1005,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ws"
             ],
@@ -6011,7 +6011,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -6031,7 +6031,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -6039,7 +6039,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6072,7 +6072,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -6092,14 +6092,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "tcp"
             ],
@@ -6261,7 +6261,7 @@
             "type": "array"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -6285,7 +6285,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6318,11 +6318,11 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -6330,7 +6330,7 @@
             "description": "QUIC 传输层的 TLS 选项"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "quic"
             ],
@@ -6891,7 +6891,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -6911,7 +6911,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -6919,7 +6919,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -6952,7 +6952,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -6972,7 +6972,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -6982,7 +6982,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ssl"
             ],
@@ -7424,26 +7424,26 @@
       "listeners.listener_id_status": {
         "properties": {
           "acceptors": {
-            "description": "Number of acceptors for a listener.",
+            "description": "监听器的接受者数量。",
             "minimum": 1,
             "type": "integer"
           },
           "bind": {
-            "description": "The IP address and port that the listener binds to.",
+            "description": "监听器绑定的 IP 地址和端口。",
             "example": "127.0.0.1:80",
             "type": "string"
           },
           "enable": {
-            "description": "Whether the listener is enabled.",
+            "description": "监听器是否启用。",
             "type": "boolean"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "example": "tcp:demo",
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "node_status": {
@@ -7453,7 +7453,7 @@
             "type": "array"
           },
           "number": {
-            "description": "Number of nodes where this listener is running.",
+            "description": "此监听器正在运行的节点数量。",
             "minimum": 1,
             "type": "integer"
           },
@@ -7461,7 +7461,7 @@
             "$ref": "#/components/schemas/listeners.status"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "tcp",
               "ssl",
@@ -8162,7 +8162,7 @@
             "type": "string"
           },
           "name": {
-            "description": "触发此告警的节点名称。",
+            "description": "告警名称，用于区分不同的告警。",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -11174,11 +11174,11 @@
       "listeners.listener_type_status": {
         "properties": {
           "enable": {
-            "description": "Whether the listener is enabled.",
+            "description": "监听器是否启用。",
             "type": "boolean"
           },
           "ids": {
-            "description": "List of listener identifiers.",
+            "description": "监听器标识符列表。",
             "items": {
               "type": "string"
             },
@@ -11194,7 +11194,7 @@
             "$ref": "#/components/schemas/listeners.status"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "tcp",
               "ssl",
@@ -13616,7 +13616,7 @@
       "listeners.node_status": {
         "properties": {
           "node": {
-            "description": "Node Name",
+            "description": "节点名称",
             "example": "emqx@127.0.0.1",
             "type": "string"
           },
@@ -16937,7 +16937,7 @@
               "log",
               "publish"
             ],
-            "description": "警报激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
+            "description": "告警激活时触发的动作。<br/>目前，支持以下操作：<code>log</code> 和 <code>publish</code>.<br/><code>log</code> 将告警写入日志 (控制台或者文件).<br/><code>publish</code> 将告警作为 MQTT 消息发布到系统主题:<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/activate</code> and<br/><code>$SYS/brokers/emqx@xx.xx.xx.x/alarms/deactivate</code>",
             "example": [
               "log",
               "publish"
@@ -19510,7 +19510,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -19534,7 +19534,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -19567,11 +19567,11 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -19591,7 +19591,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -19601,7 +19601,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ssl"
             ],
@@ -20140,6 +20140,16 @@
             "default": "insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})",
             "description": "CQL 模板",
             "format": "sql",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "告警名称，用于区分不同的告警。",
+            "example": "high_system_memory_usage",
             "type": "string"
           }
         },
@@ -21322,13 +21332,13 @@
           },
           "cpu_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在发出相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
           "cpu_low_watermark": {
             "default": "60%",
-            "description": "在解除相应警报之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
+            "description": "在解除相应告警之前可以使用多少系统 CPU 的阈值，以系统 CPU 负载的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -21350,7 +21360,7 @@
           },
           "procmem_high_watermark": {
             "default": "5%",
-            "description": "在发出相应警报之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
+            "description": "在发出相应告警之前，一个 Erlang 进程可以分配多少系统内存的阈值，以系统内存的百分比表示。",
             "example": "12%",
             "type": "string"
           },
@@ -22224,7 +22234,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "共享订阅的分发策略。<br/> - random：随机选择一个订阅者进行分发；<br/> - round_robin：从单个发布者处的消息依次分发给订阅者；<br/> - round_robin_per_group：所有消息依次分发给订阅者；<br/> - local：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/> - sticky：持续将消息分发给最初选择的订阅者，直到他们的会话结束；<br/> - hash_clientid：哈希发布者的客户端 ID 以选择订阅者；<br/> - hash_topic：哈希发布主题以选择订阅者。",
+            "description": "共享订阅的分发策略。<br/>EMQX 将 **分发状态**（如随机种子、轮询位置和粘性订阅者选择）作为 **发布客户端连接状态** 的一部分进行维护。<br/>如果发布客户端断开连接并重新连接，则此状态会丢失，必须重新初始化。<br/><br/>- `random`：随机选择一个订阅者进行分发；<br/>- `round_robin`：共享订阅组中的客户端将依次消费消息，每个发布者独立记录循环进度，因此来自**不同发布者**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `round_robin_per_group`：共享订阅组中的客户端将依次消费消息，每个节点独立记录循环进度，因此来自**不同节点**的两个相邻消息可能会被订阅组中的同一客户端消费；<br/>- `local`：随机选择当前节点上的一个订阅者，如果当前节点没有订阅者，则在集群内随机选择；<br/>- `sticky`：持续将消息分发给最初选择的订阅者，直到他们的会话结束。初始选择基于 `mqtt_shared_subscription_initial_sticky_pick`；<br/>- `hash_clientid`：哈希发布者的客户端 ID 以选择订阅者；<br/>- `hash_topic`：哈希发布主题以选择订阅者。",
             "enum": [
               "random",
               "round_robin",
@@ -22818,7 +22828,7 @@
             "type": "array"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -22838,7 +22848,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -22846,7 +22856,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -22879,7 +22889,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -22887,7 +22897,7 @@
             "description": "QUIC 传输层的 TLS 选项"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "quic"
             ],
@@ -23557,7 +23567,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -23577,7 +23587,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -23585,7 +23595,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -23629,14 +23639,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ws"
             ],
@@ -25561,12 +25571,12 @@
       "listeners.status": {
         "properties": {
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
           "max_connections": {
-            "description": "Maximum number of connections configured for a listener.",
+            "description": "为监听器配置的最大连接数。",
             "oneOf": [
               {
                 "type": "integer"
@@ -25580,7 +25590,7 @@
             ]
           },
           "running": {
-            "description": "Running status of the listener. Can be 'true', 'false' or 'inconsistent' when nodes have different running status.",
+            "description": "监听器的运行状态。当节点有不同的运行状态时，可以是 'true'，'false' 或 'inconsistent'。",
             "oneOf": [
               {
                 "type": "boolean"
@@ -25772,7 +25782,14 @@
           "ids": {
             "description": "分配给此节点的静态客户端 ID 数组。",
             "items": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/connector_mqtt.static_clientid_entry_tuple"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             },
             "type": "array"
           },
@@ -25940,7 +25957,7 @@
           },
           "headers": {
             "default": {},
-            "description": "HTTP headers to be sent with the OpenTelemetry signal data.<br/>The headers are a map with header names as keys.",
+            "description": "与 OpenTelemetry 信号数据一起发送的 HTTP 头。<br/>头是一个以头名称为键的映射。",
             "example": {},
             "type": "object"
           },
@@ -26259,7 +26276,7 @@
             "type": "string"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -27348,7 +27365,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 10,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -29038,55 +29055,13 @@
             "oneOf": [
               {
                 "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
+                  "opents"
                 ],
                 "type": "string"
               },
@@ -29104,109 +29079,7 @@
               },
               {
                 "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -29218,13 +29091,43 @@
               },
               {
                 "enum": [
-                  "oracle"
+                  "hstreamdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kinesis"
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -29236,19 +29139,133 @@
               },
               {
                 "enum": [
-                  "mqtt"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
                 ],
                 "type": "string"
               }
@@ -29708,7 +29725,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "messages_burst": {
@@ -30003,487 +30020,487 @@
       "emqx_mgmt_api_metrics.aggregated_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "Number of message transformation failed",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "session.created": {
-            "description": "Number of sessions created",
+            "description": "创建的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.sent": {
-            "description": "Number of sent CONNACK packets",
+            "description": "发送的 CONNACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "Number of overload protection delayed",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "Number of client unsubscriptions",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "Number of messages dropped due to receive maximum being reached",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.discarded": {
-            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
+            "description": "由于 Clean Session 或 Clean Start 为 true 而丢弃的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "Number of Authorization hits the cache",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.sent": {
-            "description": "Number of sent PUBCOMP packet",
+            "description": "发送的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.persisted": {
-            "description": "Number of message persisted",
+            "description": "持久化的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos0.received": {
-            "description": "Number of QoS 0 messages received from clients",
+            "description": "从客户端接收到的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.sent": {
-            "description": "Number of sent PUBACK packet",
+            "description": "发送的 PUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.sent": {
-            "description": "Number of sent PUBLISH packet",
+            "description": "发送的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.missed": {
-            "description": "Number of received PUBREC packet with unknown identifiers",
+            "description": "接收到的带有未知标识符的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.connected": {
-            "description": "Number of successful client connected",
+            "description": "成功连接的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.suback.sent": {
-            "description": "Number of sent SUBACK packet",
+            "description": "发送的 SUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "Number of message validation failed",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "Number of messages dropped due to quota being exceeded",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "Number of client Authentication",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "Number of messages dropped before forwarding to the subscription process",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "Number of messages with QoS 0 that were dropped because mqtt.mqueue_store_qos0=false when sending",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.received": {
-            "description": "Number of received packets",
+            "description": "接收到的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.auth.sent": {
-            "description": "Number of sent AUTH packet",
+            "description": "发送的 AUTH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.publish": {
-            "description": "Number of messages published in addition to system messages",
+            "description": "发布的消息数量（不包括系统消息）",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "Number of overload protection close new incoming connection",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.received": {
-            "description": "Number of received PUBREL packet",
+            "description": "接收到的 PUBREL 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "Number of successful client Authentication due to anonymous",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "Number of successful client Authentication",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.received": {
-            "description": "Number of received PUBREC packet",
+            "description": "接收到的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "Total number of discarded messages when sending",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "Number of client disconnects",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "Number of messages forwarded to the subscription process internally",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "Number of Authorization rule checks",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "Number of message transformation succeeded",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos1.received": {
-            "description": "Number of QoS 1 messages received from clients",
+            "description": "从客户端接收到的 QoS 1 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "Number of Authorization allow",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "Number of overload protection garbage collection",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.auth_error": {
-            "description": "Number of received PUBLISH packets with failed the Authorization check",
+            "description": "接收到的 PUBLISH 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.takenover": {
-            "description": "Number of sessions takenover because Clean Session or Clean Start is false",
+            "description": "由于 Clean Session 或 Clean Start 为 false 而接管的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsuback.sent": {
-            "description": "Number of sent UNSUBACK packet",
+            "description": "发送的 UNSUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.received": {
-            "description": "Number of received PUBLISH packet",
+            "description": "接收到的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.missed": {
-            "description": "Number of received packet with identifiers",
+            "description": "接收到的带有标识符的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.missed": {
-            "description": "Number of received PUBREC packet with unknown identifiers",
+            "description": "接收到的带有未知标识符的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "Number of received PUBLISH packet with occupied identifiers",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "Number of bytes received",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos2.sent": {
-            "description": "Number of QoS 2 messages sent to clients",
+            "description": "发送到客户端的 QoS 2 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.connack": {
-            "description": "Number of CONNACK packet sent",
+            "description": "发送的 CONNACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.received": {
-            "description": "Number of received PUBACK packet",
+            "description": "接收到的 PUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos2.received": {
-            "description": "Number of QoS 2 messages received from clients",
+            "description": "从客户端接收到的 QoS 2 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.sent": {
-            "description": "Number of sent packets",
+            "description": "发送的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.disconnect.sent": {
-            "description": "Number of sent DISCONNECT packet",
+            "description": "发送的 DISCONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.sent": {
-            "description": "Number of sent PUBREL packet",
+            "description": "发送的 PUBREL 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.disconnect.received": {
-            "description": "Number of received DISCONNECT packet",
+            "description": "接收到的 DISCONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pingresp.sent": {
-            "description": "Number of sent PUBRESP packet",
+            "description": "发送的 PUBRESP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connect.received": {
-            "description": "Number of received CONNECT packets",
+            "description": "接收到的 CONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.sent": {
-            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent, messages.qos1.sent and messages.qos2.sent",
+            "description": "发送到客户端的消息数量，等于 messages.qos0.sent、messages.qos1.sent 和 messages.qos2.sent 的总和",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.quota_exceeded": {
-            "description": "Number of received PUBLISH packets that exceeded the quota",
+            "description": "接收到的超出配额的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.auth.received": {
-            "description": "Number of received AUTH packet",
+            "description": "接收到的 AUTH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.received": {
-            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received, messages.qos1.received and messages.qos2.received",
+            "description": "从客户端接收到的消息数量，等于 messages.qos0.received、messages.qos1.received 和 messages.qos2.received 的总和",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.sent": {
-            "description": "Number of sent PUBREC packet",
+            "description": "发送的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "Number of Authorization cache missing",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "Number of messages dropped due to waiting PUBREL timeout",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.received": {
-            "description": "Number of received SUBSCRIBE packet",
+            "description": "接收到的 SUBSCRIBE 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "Number of messages dropped due to message expiration on sending",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.terminated": {
-            "description": "Number of terminated sessions",
+            "description": "终止的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "Number of overload protection hibernation",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "Number of client connections",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delayed": {
-            "description": "Number of delay-published messages",
+            "description": "延迟发布的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.received": {
-            "description": "Number of received PUBCOMP packet",
+            "description": "接收到的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "Number of failed client Authentication",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "Number of clients who log in anonymously",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos1.sent": {
-            "description": "Number of QoS 1 messages sent to clients",
+            "description": "发送到客户端的 QoS 1 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pingreq.received": {
-            "description": "Number of received PINGREQ packet",
+            "description": "接收到的 PINGREQ 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "Number of bytes sent on this connection",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "Number of overload protection delay timeout",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "Number of Authorization deny",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.error": {
-            "description": "Number of received CONNECT packet with unsuccessful connections",
+            "description": "接收到的 CONNECT 数据包中连接不成功的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "Number of messages dropped due to no subscribers",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.forward": {
-            "description": "Number of messages forwarded to other nodes",
+            "description": "转发到其他节点的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.acked": {
-            "description": "Number of received PUBACK and PUBREC packet",
+            "description": "接收到的 PUBACK 和 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "Number of received PUBACK packet with occupied identifiers",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "Number of messages that were dropped because the message queue was full when sending",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.error": {
-            "description": "Number of received PUBLISH packet that cannot be published",
+            "description": "接收到的无法发布的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "Number of message validation successful",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "session.resumed": {
-            "description": "Number of sessions resumed because Clean Session or Clean Start is false",
+            "description": "由于 Clean Session 或 Clean Start 为 false 而恢复的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.inuse": {
-            "description": "Number of received PUBREC packet with occupied identifiers",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos0.sent": {
-            "description": "Number of QoS 0 messages sent to clients",
+            "description": "发送到客户端的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsubscribe.received": {
-            "description": "Number of received UNSUBSCRIBE packet",
+            "description": "接收到的 UNSUBSCRIBE 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "Number of client subscriptions",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "Number of missed PUBCOMP packet",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.auth_error": {
-            "description": "Number of received CONNECT packet with failed Authentication",
+            "description": "接收到的 CONNECT 数据包中认证失败的数量",
             "minimum": 0,
             "type": "integer"
           }
@@ -31635,13 +31652,13 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
@@ -33524,13 +33541,13 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
@@ -37395,7 +37412,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "31030540E186F036",
+            "example": "1D0DBFA64D78CBC5",
             "type": "string"
           },
           "status": {
@@ -37682,7 +37699,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -37706,7 +37723,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -37739,7 +37756,7 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "proxy_protocol": {
@@ -37754,14 +37771,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ws"
             ],
@@ -37846,7 +37863,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -37866,7 +37883,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -37874,7 +37891,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -37907,7 +37924,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -37927,14 +37944,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "tcp"
             ],
@@ -40107,13 +40124,13 @@
             "type": "integer"
           },
           "private_key_password": {
-            "description": "Password to decrypt the private key.  Do not set this value if the private key is not encrypted.",
+            "description": "用于解密私钥的密码。如果私钥未加密，请不要设置此值。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "private_key_path": {
-            "description": "Full file path to the private key to be used for the ODBC connection.  This path must be the same on all nodes of the cluster.",
+            "description": "用于 ODBC 连接的私钥的完整文件路径。此路径在集群的所有节点上必须相同。",
             "type": "string"
           },
           "proxy": {
@@ -41511,7 +41528,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -41535,7 +41552,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -41568,7 +41585,7 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "proxy_protocol": {
@@ -41583,7 +41600,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -41593,7 +41610,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "wss"
             ],
@@ -42756,6 +42773,10 @@
             "description": "OIDC `state` 的有效时间范围，默认为 `30s`，如果授权服务器返回的代码响应超过此时间范围，将视为无效。",
             "example": "1h",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "description": "启用 SSL 连接。"
           }
         },
         "required": [
@@ -47714,7 +47735,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -47734,7 +47755,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -47742,7 +47763,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -47775,7 +47796,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -47795,7 +47816,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -47805,7 +47826,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "ssl"
             ],
@@ -49697,7 +49718,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -49717,7 +49738,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -49725,7 +49746,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -49769,7 +49790,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -49779,7 +49800,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "wss"
             ],
@@ -49953,7 +49974,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -49973,7 +49994,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -49981,7 +50002,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -50025,7 +50046,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -50035,7 +50056,7 @@
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "wss"
             ],
@@ -52365,13 +52386,13 @@
           },
           "process_high_watermark": {
             "default": "80%",
-            "description": "在发出相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在发出相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           },
           "process_low_watermark": {
             "default": "60%",
-            "description": "在清除相应警报之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
+            "description": "在清除相应告警之前，本地节点上可以同时存在多少进程的阈值（以进程百分比表示）。",
             "example": "12%",
             "type": "string"
           }
@@ -52601,7 +52622,7 @@
             "type": "array"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -52621,7 +52642,7 @@
             "type": "string"
           },
           "id": {
-            "description": "The identifier of the listener, in the format of {type}:{name}, e.g. 'tcp:default', 'ssl:default', etc.",
+            "description": "监听器的标识符，格式为 {type}:{name}，例如 'tcp:default'，'ssl:default' 等。",
             "type": "string"
           },
           "max_conn_burst": {
@@ -52629,7 +52650,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -52662,7 +52683,7 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "ssl_options": {
@@ -52670,7 +52691,7 @@
             "description": "QUIC 传输层的 TLS 选项"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "quic"
             ],
@@ -53573,6 +53594,28 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "connector_mqtt.static_clientid_entry_tuple": {
+        "properties": {
+          "clientid": {
+            "description": "Static client ID assigned to this node.",
+            "type": "string"
+          },
+          "password": {
+            "description": "MQTT 协议的密码",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username associated with the static clientid.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clientid"
+        ],
         "type": "object"
       },
       "emqx_dashboard_monitor_api.sampler_current": {
@@ -55630,7 +55673,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 10,
             "description": "TCP 协议的 Socket acceptor 池大小, 通常配置为 CPU 核数",
             "type": "integer"
           },
@@ -56051,457 +56094,457 @@
       "emqx_mgmt_api_metrics.node_metrics": {
         "properties": {
           "messages.transformation_failed": {
-            "description": "Number of message transformation failed",
+            "description": "消息转换失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "session.created": {
-            "description": "Number of sessions created",
+            "description": "创建的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.sent": {
-            "description": "Number of sent CONNACK packets",
+            "description": "发送的 CONNACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.ok": {
-            "description": "Number of overload protection delayed",
+            "description": "过载保护延迟的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.unsubscribe": {
-            "description": "Number of client unsubscriptions",
+            "description": "客户端取消订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.receive_maximum": {
-            "description": "Number of messages dropped due to receive maximum being reached",
+            "description": "由于达到接收最大值而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.discarded": {
-            "description": "Number of sessions dropped because Clean Session or Clean Start is true",
+            "description": "由于 Clean Session 或 Clean Start 为 true 而丢弃的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.cache_hit": {
-            "description": "Number of Authorization hits the cache",
+            "description": "授权缓存命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.sent": {
-            "description": "Number of sent PUBCOMP packet",
+            "description": "发送的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.persisted": {
-            "description": "Number of message persisted",
+            "description": "持久化的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos0.received": {
-            "description": "Number of QoS 0 messages received from clients",
+            "description": "从客户端接收到的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.sent": {
-            "description": "Number of sent PUBACK packet",
+            "description": "发送的 PUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.sent": {
-            "description": "Number of sent PUBLISH packet",
+            "description": "发送的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.missed": {
-            "description": "Number of received PUBREC packet with unknown identifiers",
+            "description": "接收到的带有未知标识符的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.connected": {
-            "description": "Number of successful client connected",
+            "description": "成功连接的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.suback.sent": {
-            "description": "Number of sent SUBACK packet",
+            "description": "发送的 SUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.validation_failed": {
-            "description": "Number of message validation failed",
+            "description": "消息验证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.quota_exceeded": {
-            "description": "Number of messages dropped due to quota being exceeded",
+            "description": "由于超出配额而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authenticate": {
-            "description": "Number of client Authentication",
+            "description": "客户端认证的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped": {
-            "description": "Number of messages dropped before forwarding to the subscription process",
+            "description": "在转发到订阅过程之前被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.qos0_msg": {
-            "description": "Number of messages with QoS 0 that were dropped because mqtt.mqueue_store_qos0=false when sending",
+            "description": "由于 mqtt.mqueue_store_qos0=false 而在发送时被丢弃的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.received": {
-            "description": "Number of received packets",
+            "description": "接收到的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.auth.sent": {
-            "description": "Number of sent AUTH packet",
+            "description": "发送的 AUTH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.error": {
-            "description": "Number of received SUBSCRIBE packet with failed subscriptions",
+            "description": "接收到的 SUBSCRIBE 数据包中订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.publish": {
-            "description": "Number of messages published in addition to system messages",
+            "description": "发布的消息数量（不包括系统消息）",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.new_conn": {
-            "description": "Number of overload protection close new incoming connection",
+            "description": "过载保护关闭新传入连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.received": {
-            "description": "Number of received PUBREL packet",
+            "description": "接收到的 PUBREL 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success.anonymous": {
-            "description": "Number of successful client Authentication due to anonymous",
+            "description": "由于匿名导致的客户端认证成功次数",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.success": {
-            "description": "Number of successful client Authentication",
+            "description": "客户端认证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.received": {
-            "description": "Number of received PUBREC packet",
+            "description": "接收到的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped": {
-            "description": "Total number of discarded messages when sending",
+            "description": "发送时被丢弃的消息总数",
             "minimum": 0,
             "type": "integer"
           },
           "client.disconnected": {
-            "description": "Number of client disconnects",
+            "description": "客户端断开连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delivered": {
-            "description": "Number of messages forwarded to the subscription process internally",
+            "description": "转发到内部订阅过程的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.authorize": {
-            "description": "Number of Authorization rule checks",
+            "description": "授权规则检查的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.transformation_succeeded": {
-            "description": "Number of message transformation succeeded",
+            "description": "消息转换成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos1.received": {
-            "description": "Number of QoS 1 messages received from clients",
+            "description": "从客户端接收到的 QoS 1 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsubscribe.error": {
-            "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
+            "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.allow": {
-            "description": "Number of Authorization allow",
+            "description": "授权允许的次数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.gc": {
-            "description": "Number of overload protection garbage collection",
+            "description": "过载保护垃圾回收的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.auth_error": {
-            "description": "Number of received PUBLISH packets with failed the Authorization check",
+            "description": "接收到的 PUBLISH 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.no_local": {
-            "description": "Number of messages that were dropped due to the No Local subscription option when sending",
+            "description": "由于 No Local 订阅选项而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.takenover": {
-            "description": "Number of sessions takenover because Clean Session or Clean Start is false",
+            "description": "由于 Clean Session 或 Clean Start 为 false 而接管的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsuback.sent": {
-            "description": "Number of sent UNSUBACK packet",
+            "description": "发送的 UNSUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.received": {
-            "description": "Number of received PUBLISH packet",
+            "description": "接收到的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.missed": {
-            "description": "Number of received packet with identifiers",
+            "description": "接收到的带有标识符的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.missed": {
-            "description": "Number of received PUBREC packet with unknown identifiers",
+            "description": "接收到的带有未知标识符的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.inuse": {
-            "description": "Number of received PUBLISH packet with occupied identifiers",
+            "description": "接收到的 PUBLISH 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.received": {
-            "description": "Number of bytes received",
+            "description": "接收到的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos2.sent": {
-            "description": "Number of QoS 2 messages sent to clients",
+            "description": "发送到客户端的 QoS 2 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.connack": {
-            "description": "Number of CONNACK packet sent",
+            "description": "发送的 CONNACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.received": {
-            "description": "Number of received PUBACK packet",
+            "description": "接收到的 PUBACK 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.inuse": {
-            "description": "Number of received PUBCOMP packet with occupied identifiers",
+            "description": "接收到的 PUBCOMP 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos2.received": {
-            "description": "Number of QoS 2 messages received from clients",
+            "description": "从客户端接收到的 QoS 2 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.sent": {
-            "description": "Number of sent packets",
+            "description": "发送的数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.disconnect.sent": {
-            "description": "Number of sent DISCONNECT packet",
+            "description": "发送的 DISCONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrel.sent": {
-            "description": "Number of sent PUBREL packet",
+            "description": "发送的 PUBREL 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.disconnect.received": {
-            "description": "Number of received DISCONNECT packet",
+            "description": "接收到的 DISCONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pingresp.sent": {
-            "description": "Number of sent PUBRESP packet",
+            "description": "发送的 PUBRESP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connect.received": {
-            "description": "Number of received CONNECT packets",
+            "description": "接收到的 CONNECT 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.sent": {
-            "description": "Number of messages sent to the client, equal to the sum of messages.qos0.sent, messages.qos1.sent and messages.qos2.sent",
+            "description": "发送到客户端的消息数量，等于 messages.qos0.sent、messages.qos1.sent 和 messages.qos2.sent 的总和",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.quota_exceeded": {
-            "description": "Number of received PUBLISH packets that exceeded the quota",
+            "description": "接收到的超出配额的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.auth.received": {
-            "description": "Number of received AUTH packet",
+            "description": "接收到的 AUTH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.received": {
-            "description": "Number of messages received from the client, equal to the sum of messages.qos0.received, messages.qos1.received and messages.qos2.received",
+            "description": "从客户端接收到的消息数量，等于 messages.qos0.received、messages.qos1.received 和 messages.qos2.received 的总和",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubrec.sent": {
-            "description": "Number of sent PUBREC packet",
+            "description": "发送的 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.cache_miss": {
-            "description": "Number of Authorization cache missing",
+            "description": "授权缓存未命中的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.await_pubrel_timeout": {
-            "description": "Number of messages dropped due to waiting PUBREL timeout",
+            "description": "由于等待 PUBREL 超时而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.received": {
-            "description": "Number of received SUBSCRIBE packet",
+            "description": "接收到的 SUBSCRIBE 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.expired": {
-            "description": "Number of messages dropped due to message expiration on sending",
+            "description": "由于消息过期而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "session.terminated": {
-            "description": "Number of terminated sessions",
+            "description": "终止的会话数量",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.hibernation": {
-            "description": "Number of overload protection hibernation",
+            "description": "过载保护休眠的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.connect": {
-            "description": "Number of client connections",
+            "description": "客户端连接的次数",
             "minimum": 0,
             "type": "integer"
           },
           "messages.delayed": {
-            "description": "Number of delay-published messages",
+            "description": "延迟发布的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.received": {
-            "description": "Number of received PUBCOMP packet",
+            "description": "接收到的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "authentication.failure": {
-            "description": "Number of failed client Authentication",
+            "description": "客户端认证失败的次数",
             "minimum": 0,
             "type": "integer"
           },
           "client.auth.anonymous": {
-            "description": "Number of clients who log in anonymously",
+            "description": "以匿名方式登录的客户端数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos1.sent": {
-            "description": "Number of QoS 1 messages sent to clients",
+            "description": "发送到客户端的 QoS 1 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pingreq.received": {
-            "description": "Number of received PINGREQ packet",
+            "description": "接收到的 PINGREQ 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.too_large": {
-            "description": "The number of messages that were dropped because the length exceeded the limit when sending",
+            "description": "由于长度超过限制而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "bytes.sent": {
-            "description": "Number of bytes sent on this connection",
+            "description": "此连接发送的字节数",
             "minimum": 0,
             "type": "integer"
           },
           "overload_protection.delay.timeout": {
-            "description": "Number of overload protection delay timeout",
+            "description": "过载保护延迟超时的次数",
             "minimum": 0,
             "type": "integer"
           },
           "authorization.deny": {
-            "description": "Number of Authorization deny",
+            "description": "授权拒绝的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "接收到的 SUBSCRIBE 数据包中授权检查失败的数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.error": {
-            "description": "Number of received CONNECT packet with unsuccessful connections",
+            "description": "接收到的 CONNECT 数据包中连接不成功的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.dropped.no_subscribers": {
-            "description": "Number of messages dropped due to no subscribers",
+            "description": "由于没有订阅者而被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.forward": {
-            "description": "Number of messages forwarded to other nodes",
+            "description": "转发到其他节点的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.acked": {
-            "description": "Number of received PUBACK and PUBREC packet",
+            "description": "接收到的 PUBACK 和 PUBREC 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.puback.inuse": {
-            "description": "Number of received PUBACK packet with occupied identifiers",
+            "description": "接收到的 PUBACK 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "delivery.dropped.queue_full": {
-            "description": "Number of messages that were dropped because the message queue was full when sending",
+            "description": "由于消息队列已满而在发送时被丢弃的消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.publish.error": {
-            "description": "Number of received PUBLISH packet that cannot be published",
+            "description": "接收到的无法发布的 PUBLISH 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.validation_succeeded": {
-            "description": "Number of message validation successful",
+            "description": "消息验证成功的次数",
             "minimum": 0,
             "type": "integer"
           },
           "session.resumed": {
-            "description": "Number of sessions resumed because Clean Session or Clean Start is false",
+            "description": "由于 Clean Session 或 Clean Start 为 false 而恢复的会话数量",
             "minimum": 0,
             "type": "integer"
           },
@@ -56510,32 +56553,32 @@
             "type": "string"
           },
           "packets.pubrec.inuse": {
-            "description": "Number of received PUBREC packet with occupied identifiers",
+            "description": "接收到的 PUBREC 数据包中已占用标识符的数量",
             "minimum": 0,
             "type": "integer"
           },
           "messages.qos0.sent": {
-            "description": "Number of QoS 0 messages sent to clients",
+            "description": "发送到客户端的 QoS 0 消息数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.unsubscribe.received": {
-            "description": "Number of received UNSUBSCRIBE packet",
+            "description": "接收到的 UNSUBSCRIBE 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "client.subscribe": {
-            "description": "Number of client subscriptions",
+            "description": "客户端订阅的次数",
             "minimum": 0,
             "type": "integer"
           },
           "packets.pubcomp.missed": {
-            "description": "Number of missed PUBCOMP packet",
+            "description": "丢失的 PUBCOMP 数据包数量",
             "minimum": 0,
             "type": "integer"
           },
           "packets.connack.auth_error": {
-            "description": "Number of received CONNECT packet with failed Authentication",
+            "description": "接收到的 CONNECT 数据包中认证失败的数量",
             "minimum": 0,
             "type": "integer"
           }
@@ -57771,7 +57814,7 @@
             "type": "string"
           },
           "current_connections": {
-            "description": "Current number of connections.",
+            "description": "当前连接数量。",
             "minimum": 0,
             "type": "integer"
           },
@@ -57795,7 +57838,7 @@
             "type": "string"
           },
           "max_conn_rate": {
-            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>一旦达到限制，EMQX 将暂停从接受队列中服务连接，从而延迟或拒绝新连接。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
+            "description": "限制此监听器每个节点接受连接的速度。<br/><br/>当达到限制后，EMQX 会在新连接被接受后立即关闭它们，从而有效清空等待被接受的连接队列。<br/><br/>例如：<br/><br/>- `1000/s`：每秒只接受 1000 个连接。<br/>- `1000/10s`：每 10 秒只接受 1000 个连接。",
             "type": "string"
           },
           "max_connections": {
@@ -57828,11 +57871,11 @@
             "type": "string"
           },
           "name": {
-            "description": "Name of the listener.",
+            "description": "监听器的名称。",
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "此设置指定 MQTT 解析时的数据处理粒度，决定从字节流中提取和解析 MQTT 帧的方式：<br/><br/>- `chunk`：按传输层数据包级别处理帧。此方式使用原始字节块作为解析单位，需要应用逻辑自行组装和解析 MQTT 帧。每个数据块的大小不确定，受传输速率、socket 缓冲区大小及其他内核设置影响。<br/>- `frame`：按完整的 MQTT 消息处理帧。此方式确保应用逻辑仅接收完整的 MQTT 帧进行处理。在大多数情况下，它比 `chunk` 选项具有更好的性能。<br/><br/>请注意，`parse_unit` 的选择会影响 `active_n` 设置的解释方式：它决定了传递到连接进程的是原始字节块的数量还是完整的 MQTT 消息数量。",
             "enum": [
               "chunk",
@@ -57852,14 +57895,14 @@
             "type": "string"
           },
           "running": {
-            "description": "Status of the listener. 'true' for running, otherwise 'false'.",
+            "description": "监听器的状态。'true' 表示正在运行，否则为 'false'。",
             "type": "boolean"
           },
           "tcp_options": {
             "$ref": "#/components/schemas/emqx.tcp_opts"
           },
           "type": {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "enum": [
               "tcp"
             ],
@@ -59282,7 +59325,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.9.1"
+    "version": "5.9.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -66652,8 +66695,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ]
                   }
@@ -66662,8 +66705,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "gcp_pubsub_consumer",
                       "kafka_consumer",
+                      "gcp_pubsub_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -71565,35 +71608,35 @@
                     "summary": "Action types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "cassandra",
+                      "rocketmq",
                       "rabbitmq",
+                      "greptimedb",
                       "mongodb",
-                      "iotdb",
-                      "syskeeper_forwarder",
-                      "influxdb",
-                      "sqlserver",
                       "azure_event_hub_producer",
                       "confluent_producer",
-                      "pulsar",
-                      "kafka_producer",
-                      "greptimedb",
+                      "syskeeper_forwarder",
+                      "sqlserver",
+                      "iotdb",
+                      "influxdb",
                       "gcp_pubsub_producer",
                       "hstreamdb",
+                      "pulsar",
+                      "kafka_producer",
                       "kinesis",
-                      "opents",
-                      "redis",
                       "datalayers",
+                      "redis",
                       "s3",
+                      "opents",
                       "mqtt",
-                      "oracle",
-                      "snowflake",
-                      "couchbase",
-                      "timescale",
                       "azure_blob_storage",
                       "tdengine",
-                      "tablestore",
                       "clickhouse",
+                      "timescale",
+                      "couchbase",
+                      "snowflake",
+                      "oracle",
+                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -71607,35 +71650,35 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "cassandra",
+                      "rocketmq",
                       "rabbitmq",
+                      "greptimedb",
                       "mongodb",
-                      "iotdb",
-                      "syskeeper_forwarder",
-                      "influxdb",
-                      "sqlserver",
                       "azure_event_hub_producer",
                       "confluent_producer",
-                      "pulsar",
-                      "kafka_producer",
-                      "greptimedb",
+                      "syskeeper_forwarder",
+                      "sqlserver",
+                      "iotdb",
+                      "influxdb",
                       "gcp_pubsub_producer",
                       "hstreamdb",
+                      "pulsar",
+                      "kafka_producer",
                       "kinesis",
-                      "opents",
-                      "redis",
                       "datalayers",
+                      "redis",
                       "s3",
+                      "opents",
                       "mqtt",
-                      "oracle",
-                      "snowflake",
-                      "couchbase",
-                      "timescale",
                       "azure_blob_storage",
                       "tdengine",
-                      "tablestore",
                       "clickhouse",
+                      "timescale",
+                      "couchbase",
+                      "snowflake",
+                      "oracle",
+                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -75567,7 +75610,7 @@
         "description": "列出所有节点上的指定类型的监听器",
         "parameters": [
           {
-            "description": "监听器类型",
+            "description": "监听器的类型（tcp, ssl, ws, wss, quic）",
             "example": "tcp",
             "in": "query",
             "name": "type",
@@ -81512,7 +81555,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "31030540E186F036",
+            "example": "1D0DBFA64D78CBC5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -89530,7 +89573,7 @@
           },
           {
             "description": "Site ID",
-            "example": "31030540E186F036",
+            "example": "1D0DBFA64D78CBC5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -89615,7 +89658,7 @@
           },
           {
             "description": "Site ID",
-            "example": "31030540E186F036",
+            "example": "1D0DBFA64D78CBC5",
             "in": "path",
             "name": "site",
             "required": true,
@@ -95636,7 +95679,7 @@
     },
     "/mt/bulk_delete_ns": {
       "delete": {
-        "description": "Bulk delete namespaces",
+        "description": "批量删除命名空间",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -108679,6 +108722,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "强制停用告警。此操作将强制关闭一个告警。",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "告警已成功停用。"
+          },
+          "400": {
+            "description": "告警不存在或已被停用。"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "重置某个特定验证规则的指标。",
@@ -119409,11 +119486,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
@@ -119468,11 +119546,12 @@
                   "enable": true,
                   "filter": {
                     "e2e_tracing_options": {
-                      "attribute_meta_value": "emqxcl",
                       "client_connect_disconnect": true,
-                      "client_publish": true,
+                      "client_messaging": true,
                       "client_subscribe_unsubscribe": true,
                       "clientid_match_rules_max": 30,
+                      "cluster_identifier": "emqxcl",
+                      "follow_traceparent": true,
                       "msg_trace_level": 0,
                       "sample_ratio": "10%",
                       "topic_match_rules_max": 30
@@ -119511,11 +119590,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30

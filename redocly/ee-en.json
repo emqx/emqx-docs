@@ -2389,7 +2389,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -2458,7 +2458,7 @@
             "type": "string"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -6072,7 +6072,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -6952,7 +6952,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -8162,7 +8162,7 @@
             "type": "string"
           },
           "name": {
-            "description": "The name of the node that triggered this alarm.",
+            "description": "Alarm name, used to distinguish different alarms.",
             "example": "high_system_memory_usage",
             "type": "string"
           },
@@ -18829,7 +18829,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -18885,7 +18885,7 @@
             "type": "array"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -19571,7 +19571,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -20140,6 +20140,16 @@
             "default": "insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})",
             "description": "CQL Template",
             "format": "sql",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_alarms.force_deactivate_alarm_request": {
+        "properties": {
+          "name": {
+            "description": "Alarm name, used to distinguish different alarms.",
+            "example": "high_system_memory_usage",
             "type": "string"
           }
         },
@@ -22083,7 +22093,7 @@
           },
           "mqueue_store_qos0": {
             "default": true,
-            "description": "Specifies whether to store QoS 0 messages in the message queue while the connection is down but the session remains.",
+            "description": "Controls how QoS 0 messages are handled when the client connection is down or the inflight window (used for QoS 1 and 2) is full.<br/>- When set to `true`, QoS 0 messages are buffered in the session’s message queue.<br/>- When set to `false`, QoS 0 messages are dropped immediately.<br/>This setting applies only to non-durable sessions.",
             "type": "boolean"
           },
           "max_inflight": {
@@ -22224,7 +22234,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "Dispatch strategy for shared subscription.<br/> - `random`: Randomly select a subscriber for dispatch;<br/> - `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/> - `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/> - `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/> - `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/> - `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/> - `hash_topic`: Hash the publishing topic to select a subscriber.",
+            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.  <br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
             "enum": [
               "random",
               "round_robin",
@@ -22242,7 +22252,7 @@
           },
           "max_packet_size": {
             "default": "1MB",
-            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB",
+            "description": "Maximum MQTT packet size allowed. Default: 1 MB, Maximum: 256 MB.<br/>Note: changing this config at runtime may only take effect for newly established connections after the change.",
             "example": "32MB",
             "type": "string"
           },
@@ -25770,9 +25780,16 @@
       "connector_mqtt.static_clientid_entry": {
         "properties": {
           "ids": {
-            "description": "Array of static client IDs assigned to this node.",
+            "description": "Array of static client IDs (and usernames/passwords) assigned to this node.",
             "items": {
-              "type": "string"
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/connector_mqtt.static_clientid_entry_tuple"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             },
             "type": "array"
           },
@@ -27348,7 +27365,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 10,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -29038,49 +29055,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
                 ],
                 "type": "string"
               },
@@ -29092,25 +29067,7 @@
               },
               {
                 "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
                 ],
                 "type": "string"
               },
@@ -29122,31 +29079,19 @@
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "snowflake"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "hstreamdb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
+                  "disk_log"
                 ],
                 "type": "string"
               },
@@ -29158,19 +29103,55 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "couchbase"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
+                  "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
@@ -29188,13 +29169,37 @@
               },
               {
                 "enum": [
-                  "influxdb"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pgsql"
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -29206,25 +29211,13 @@
               },
               {
                 "enum": [
-                  "rocketmq"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
@@ -29236,7 +29229,25 @@
               },
               {
                 "enum": [
-                  "iotdb"
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
                 ],
                 "type": "string"
               },
@@ -29248,7 +29259,13 @@
               },
               {
                 "enum": [
-                  "mongodb"
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               }
@@ -30408,7 +30425,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -37395,7 +37412,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "23D853AD567F0973",
+            "example": "82C9E123DD580D94",
             "type": "string"
           },
           "status": {
@@ -37907,7 +37924,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -40990,7 +41007,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -41074,7 +41091,7 @@
             "type": "string"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -42756,6 +42773,10 @@
             "description": "The valid time span for an OIDC `state`, the default is `30s`, if the code response returned by the authorization server exceeds this time span, it will be treated as invalid.",
             "example": "1h",
             "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "description": "SSL connection settings."
           }
         },
         "required": [
@@ -45089,7 +45110,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -45151,7 +45172,7 @@
             "type": "array"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -47775,7 +47796,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -50251,7 +50272,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -50314,7 +50335,7 @@
             "type": "string"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -51410,7 +51431,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password of the MQTT protocol",
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -51481,7 +51502,7 @@
             "type": "array"
           },
           "username": {
-            "description": "The username of the MQTT protocol",
+            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
             "type": "string"
           }
         },
@@ -53575,6 +53596,28 @@
         },
         "type": "object"
       },
+      "connector_mqtt.static_clientid_entry_tuple": {
+        "properties": {
+          "clientid": {
+            "description": "Static client ID assigned to this node.",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "example": "R4ND0M/S∃CЯ∃T",
+            "format": "password",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username associated with the static clientid.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "clientid"
+        ],
+        "type": "object"
+      },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
           "cluster_sessions": {
@@ -55630,7 +55673,7 @@
             "type": "integer"
           },
           "num_acceptors": {
-            "default": 4,
+            "default": 10,
             "description": "Socket acceptor pool size for TCP protocols. Default is the number of schedulers online",
             "type": "integer"
           },
@@ -56456,7 +56499,7 @@
             "type": "integer"
           },
           "packets.subscribe.auth_error": {
-            "description": "Number of received SUBACK packet with failed Authorization check",
+            "description": "Number of received SUBSCRIBE packet with failed authorization check",
             "minimum": 0,
             "type": "integer"
           },
@@ -57832,7 +57875,7 @@
             "type": "string"
           },
           "parse_unit": {
-            "default": "chunk",
+            "default": "frame",
             "description": "This setting specifies the level of granularity for data processed during MQTT framing, determining how frames are extracted and parsed from a byte stream:<br/><br/>- `chunk`: Frames are processed at the transport layer packet level. This method uses raw byte chunks as the parsing unit, requiring the application logic to assemble and interpret MQTT frames. The size of each chunk non-deterministically depends on factors such as transmission speed, socket buffer size, and other kernel settings.<br/>- `frame`: Frames are processed as complete MQTT messages. This method ensures that only fully-formed MQTT frames are delivered to the application logic for further handling. In most of the cases, it offers better performance than the `chunk` option.<br/><br/>Note, the choice of `parse_unit` affects the interpretation of the `active_n` setting: it defines either the number of raw byte chunks or complete MQTT messages are delivered to the connection process.",
             "enum": [
               "chunk",
@@ -59282,7 +59325,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.9.1"
+    "version": "5.9.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -71565,35 +71608,35 @@
                     "summary": "Action types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
+                      "greptimedb",
                       "mongodb",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
+                      "confluent_producer",
+                      "sqlserver",
+                      "syskeeper_forwarder",
                       "iotdb",
                       "influxdb",
-                      "kafka_producer",
-                      "syskeeper_forwarder",
-                      "sqlserver",
-                      "confluent_producer",
-                      "pulsar",
-                      "azure_event_hub_producer",
-                      "gcp_pubsub_producer",
-                      "greptimedb",
                       "hstreamdb",
+                      "pulsar",
+                      "gcp_pubsub_producer",
                       "kinesis",
+                      "datalayers",
                       "redis",
                       "s3",
                       "opents",
-                      "datalayers",
                       "mqtt",
-                      "snowflake",
-                      "couchbase",
+                      "oracle",
+                      "timescale",
                       "azure_blob_storage",
                       "tdengine",
-                      "timescale",
-                      "tablestore",
-                      "oracle",
                       "clickhouse",
+                      "couchbase",
+                      "snowflake",
+                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -71607,35 +71650,35 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
+                      "greptimedb",
                       "mongodb",
+                      "kafka_producer",
+                      "azure_event_hub_producer",
+                      "confluent_producer",
+                      "sqlserver",
+                      "syskeeper_forwarder",
                       "iotdb",
                       "influxdb",
-                      "kafka_producer",
-                      "syskeeper_forwarder",
-                      "sqlserver",
-                      "confluent_producer",
-                      "pulsar",
-                      "azure_event_hub_producer",
-                      "gcp_pubsub_producer",
-                      "greptimedb",
                       "hstreamdb",
+                      "pulsar",
+                      "gcp_pubsub_producer",
                       "kinesis",
+                      "datalayers",
                       "redis",
                       "s3",
                       "opents",
-                      "datalayers",
                       "mqtt",
-                      "snowflake",
-                      "couchbase",
+                      "oracle",
+                      "timescale",
                       "azure_blob_storage",
                       "tdengine",
-                      "timescale",
-                      "tablestore",
-                      "oracle",
                       "clickhouse",
+                      "couchbase",
+                      "snowflake",
+                      "tablestore",
                       "disk_log",
                       "matrix",
                       "elasticsearch",
@@ -81512,7 +81555,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "23D853AD567F0973",
+            "example": "82C9E123DD580D94",
             "in": "path",
             "name": "site",
             "required": true,
@@ -89530,7 +89573,7 @@
           },
           {
             "description": "Site ID",
-            "example": "23D853AD567F0973",
+            "example": "82C9E123DD580D94",
             "in": "path",
             "name": "site",
             "required": true,
@@ -89615,7 +89658,7 @@
           },
           {
             "description": "Site ID",
-            "example": "23D853AD567F0973",
+            "example": "82C9E123DD580D94",
             "in": "path",
             "name": "site",
             "required": true,
@@ -108679,6 +108722,40 @@
         ]
       }
     },
+    "/alarms/force_deactivate": {
+      "post": {
+        "description": "Force deactivate an alarm. This operation will forcefully deactivate an active alarm.",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_alarms.force_deactivate_alarm_request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The alarm has been successfully deactivated."
+          },
+          "400": {
+            "description": "The alarm does not exist or has already been deactivated."
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
     "/schema_validations/validation/{name}/metrics/reset": {
       "post": {
         "description": "Reset metrics for a particular validation",
@@ -119409,11 +119486,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
@@ -119468,11 +119546,12 @@
                   "enable": true,
                   "filter": {
                     "e2e_tracing_options": {
-                      "attribute_meta_value": "emqxcl",
                       "client_connect_disconnect": true,
-                      "client_publish": true,
+                      "client_messaging": true,
                       "client_subscribe_unsubscribe": true,
                       "clientid_match_rules_max": 30,
+                      "cluster_identifier": "emqxcl",
+                      "follow_traceparent": true,
                       "msg_trace_level": 0,
                       "sample_ratio": "10%",
                       "topic_match_rules_max": 30
@@ -119511,11 +119590,12 @@
                     "enable": true,
                     "filter": {
                       "e2e_tracing_options": {
-                        "attribute_meta_value": "emqxcl",
                         "client_connect_disconnect": true,
-                        "client_publish": true,
+                        "client_messaging": true,
                         "client_subscribe_unsubscribe": true,
                         "clientid_match_rules_max": 30,
+                        "cluster_identifier": "emqxcl",
+                        "follow_traceparent": true,
                         "msg_trace_level": 0,
                         "sample_ratio": "10%",
                         "topic_match_rules_max": 30
