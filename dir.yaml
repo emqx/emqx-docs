@@ -1050,6 +1050,7 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+        - changes/breaking-changes-ee-5.9
         - changes/breaking-changes-ee-5.8
         - changes/breaking-changes-ee-5.7
         - changes/breaking-changes-ee-5.6

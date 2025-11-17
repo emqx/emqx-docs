@@ -10,6 +10,8 @@
 
   如果您依赖了此前（错误）行为，可能需要更新 payload 模板，以确保消息格式符合预期。
 
+- [#16284](https://github.com/emqx/emqx/pull/16284) 停止发布 macOS 13 和 CentOS 7 安装包。
+
 ## 5.9.1
 
 - [#15156](https://github.com/emqx/emqx/pull/15156) 为 `dashboard.sso.oidc.issuer` 字段新增了严格的 schema 校验。该字段现在必须为合法的 URL。此前，即使配置无效，API 也可能错误地接受，但会导致 EMQX 无法重启，甚至触发崩溃（`erl_crash.dump`）。
