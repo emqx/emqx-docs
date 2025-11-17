@@ -16,6 +16,10 @@ Before you begin, you need to have the following:
 - Installed EMQX Operator.
   - Please refer to [Install EMQX Operator](./getting-started.md) for further details.
 
+   ::: warning
+   If you install cert-manager on Google Kubernetes Engine (GKE) with default configuration may cause bootstrapping issues. Therefore, by adding the configuration of `--set global.leaderElection.namespace=cert-manager`, configure to use a different namespace in leader election. Please check [cert-manager compatibility](https://cert-manager.io/docs/installation/compatibility/)
+   :::
+
 ## Deploy EMQX Cluster Quickly
 
 Here is the basic configuration for an EMQX Custom Resource (CR).
