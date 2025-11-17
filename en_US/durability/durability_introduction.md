@@ -12,7 +12,7 @@ Before learning the Durable Sessions feature in EMQX, it's essential to understa
 
 **Session**: A session is a lightweight process within EMQX created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
 
-**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
+**Durable Storage (DS)**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
 
 ### Session Expiry Interval
 
@@ -160,6 +160,40 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 ## Durable Storage Architecture
 
 Durable Sessions rely on the Durable Storage for persisting session state and messages. To understand how this storage layer is structured and operates, refer to the *Architecture: Backends and Storage Hierarchy* section in [Design for Durable Storage](../design/durable-storage.md).
+
+## How Durable Storage Supports Durable and Shared Subscription Sessions
+
+Durable Storage is the backbone for durable sessions and shared subscription sessions in EMQX.
+
+### Durable Sessions
+
+Durable Sessions are implemented on top of the DS database engine. When a client connects with a **non-zero session expiry interval**, EMQX stores the session state and the messages routed to that session in DS.
+
+- **Message persistence:**
+
+  When a durable session subscribes to a topic, matching messages are saved to the DS in addition to being delivered to online clients. This ensures that messages published while the client is offline are available when it reconnects.
+
+- **Progress tracking:**
+
+  Durable sessions read messages from DS using *iterators*, lightweight markers that track how far the session has progressed within each durable storage stream. This allows message replay to resume reliably after disconnection or node restart.
+
+- **Efficient storage:**
+
+  Messages are stored only once per DS replica, regardless of how many durable sessions subscribe to the topic, minimizing storage overhead.
+
+### Shared Subscription Sessions
+
+Starting from EMQX v6.0, DS also supports the persistence of shared subscription sessions. Shared subscriptions rely on DS to maintain consistent message distribution across a subscriber group.
+
+- **Iterator management:**
+
+  A designated shared subscription leader manages iterator sets for the group. It assigns iterators to members to ensure coordinated consumption.
+
+- **Replay and rebalancing:**
+
+  Sessions subscribing to a shared topic communicate with the leader, which lends them iterators for message replay. Updated iterators are reported back. If a client disconnects or the group is rebalanced, the leader revokes the iterators and redistributes them to other members, ensuring consumption continuity and load distribution.
+
+These mechanisms ensure load balancing, message ordering, and fault tolerance across the entire subscription group.
 
 ## Durable Storage Across Cluster
 

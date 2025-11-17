@@ -59,7 +59,7 @@ A single EMQX cluster can host multiple DS databases.
 
 #### Shard
 
-A shard is the horizontal partition of a durable storage database. Data is distributed across shards based on the publisher's client ID, enabling parallel processing and high availability. Each EMQX node can host one or more shards, and the total number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. 
+A shard is the horizontal partition of a durable storage database. Data is distributed across shards based on the publisher's client ID, enabling parallel processing and high availability. Each EMQX node can host one or more shards, and the total number of shards is determined by [n_shards](../durability/managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. 
 
 Shards also serve as the fundamental unit of replication. Each shard is replicated across multiple nodes according to the `durable_storage.messages.replication_factor` setting, ensuring that all replicas maintain identical message sets for redundancy and fault tolerance.
 
@@ -76,7 +76,7 @@ Generations may also differ in how they internally structure and store data, dep
 
 #### Slab
 
-A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
+A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more durable storage streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
 
 Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
 
@@ -159,24 +159,6 @@ DS maintains two pools of subscribers:
 Both pools group subscribers by stream and topic, reusing resources to serve multiple subscribers simultaneously. This approach saves IOPS when reading from disk and reduces network bandwidth when sending data to remote clients. A batch of messages, a list of subscription IDs, and a sparse dispatch matrix are sent across the cluster to remote nodes hosting subscribers, which then dispatches messages to local clients.
 
 <img src="./assets/real-time_subscriptions.png" alt="real-time_subscriptions" style="zoom:67%;" />
-
-## Applications: Durable Sessions and Shared Subscriptions
-
-Durable Storage is the backbone for EMQX's advanced reliability features:
-
-### Durable Sessions (EMQX 5+)
-
-Durable sessions are a parallel session implementation that uses DS for message routing.
-
-- **Mechanism:** When a client connects with a session expiry interval greater than zero and subscribes to a topic, the filter is marked as durable. Messages published to matching topics are saved to DS *in addition* to being dispatched.
-- **State:** Durable sessions access saved messages via the DS subscription mechanism. Their state includes a set of iterators for each matching stream, allowing them to precisely track their progress. Only one copy of each message is stored per database replica, regardless of how many durable sessions share it.
-
-### Shared Subscriptions (EMQX 6.0)
-
-EMQX 6.0 extended DS to shared subscriptions for enhanced load balancing and reliability.
-
-- **Iterator Management:** The iterator sets for shared subscriptions are managed by a separate entity called the **shared sub leader**.
-- **Replay and Rebalancing:** Sessions subscribing to a shared topic communicate with the leader, which **lends them iterators** for message replay. Updated iterators are reported back. If a client disconnects or the group is rebalanced, the leader **revokes the iterators** and redistributes them to other members, ensuring consumption continuity and load distribution.
 
 ## Conclusion: The Foundation of High-Reliability MQTT
 
