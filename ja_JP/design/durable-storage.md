@@ -1,10 +1,10 @@
 # Design for Durable Storage
 
-EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built application designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
+EMQX 6.0 introduces Optimized Durable Storage (DS), a purpose-built database abstraction layer designed to ensure high reliability and persistence for MQTT message delivery. DS combines the strengths of a streaming service (like Kafka) and a key-value store, providing a robust, highly optimized foundation for storing, replaying, and managing MQTT data.
 
 ## Architecture: Backends and Storage Hierarchy
 
-Durable Storage is implementation-agnostic, using a backend layer to allow data to be stored across different database management systems.
+Durable Storage is implementation-agnostic, using a backend concept to allow data to be stored across different database management systems.
 
 ### Embedded Backends
 
@@ -14,6 +14,10 @@ EMQX provides two embedded backends that do not rely on third-party services:
 - The `builtin_raft` backend extends `builtin_local` with support for clustering and data replication across different sites.
 
 ### Data Storage Hierarchy
+
+The database storage engine powering EMQX's built-in durability facilities organizes data into a hierarchical structure. The following figure illustrates how the durable storage databases are distributed across an EMQX cluster:
+
+![emqx_ds_sharding](./assets/emqx_ds_sharding.png)
 
 Internally, DS organizes data into a multi-layered hierarchy designed for both horizontal scalability and temporal partitioning. The structure is transparent to applications and ensures efficient data management across distributed EMQX nodes.
 
@@ -26,14 +30,14 @@ flowchart TB
     SH["Shard"]
     GEN(["Generation (logical, time-based)"])
     SL["Slab (physical container)"]
-    ST["Stream"]
+    ST["Durable Storage Stream"]
     TTV["Topic–Timestamp–Value (TTV)"]
 
     %% Main hierarchy
     DB --> SH --> SL --> ST --> TTV
 
     %% Logical relationship
-    GEN -. labels .- SL
+    GEN -. identifies .- SL
 
     %% Styling
     classDef box fill:#f9f9ff,stroke:#666,stroke-width:1px,rx:6,ry:6;
@@ -46,49 +50,51 @@ flowchart TB
 
 #### Database (DB)
 
-The top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
+A database is the top-level logical container for data. Each DS database is independent and manages its own shards, slabs, and streams, and it can be created, managed, and dropped as needed. For instance:
 
 - **Sessions DB** stores durable session states.
 - **Messages DB** holds the corresponding MQTT message data.
 
-A single EMQX cluster may host multiple DS databases.
+A single EMQX cluster can host multiple DS databases.
 
 #### Shard
 
-A horizontal partition of the database. Data from different MQTT clients or topics is distributed across shards to support parallelism and high availability.
+A shard is the horizontal partition of a durable storage database. Data is distributed across shards based on the publisher's client ID, enabling parallel processing and high availability. Each EMQX node can host one or more shards, and the total number of shards is determined by [n_shards](../durability/managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. 
 
-Each EMQX node can host one or more shards, and shards can be replicated across nodes for redundancy.
+Shards also serve as the fundamental unit of replication. Each shard is replicated across multiple nodes according to the `durable_storage.messages.replication_factor` setting, ensuring that all replicas maintain identical message sets for redundancy and fault tolerance.
 
 #### Generation
 
-A logical partition of the database by time. Data written at different times may be assigned to different generations. Periodically creating new generations serves several main purposes:
+A generation is a logical, time-based partition of the database. Data written during different time periods is grouped into separate generations. New messages are always written to the current generation, while older generations become immutable and read-only. EMQX periodically creates new generations for several main purposes:
 
 1. **Backward compatibility and data migrations:** New data is appended to new generations, possibly with improved encoding, while old generations remain immutable and read-only.
-2. **Time-based data retention:** Since each generation covers a specific time period, old data can be removed by dropping entire generations.
+2. **Time-based data retention:** Because each generation corresponds to a specific time range, expired data can be efficiently removed by dropping entire generations.
 
-Although conceptually related to slabs, generations are not physical containers. They serve as temporal boundaries that organize slabs within each shard.
+Although conceptually related to slabs, generations are not physical storage units. Instead, they define temporal boundaries that organize slabs within each shard.
+
+Generations may also differ in how they internally structure and store data, depending on the configured storage layout. Currently, DS supports a single layout optimized for high-throughput wildcard and single-topic subscriptions. Future releases will introduce additional layouts designed for different workloads. The layout used for new generations is configured via the `durable_storage.messages.layout` parameter, with each layout engine providing its own set of configuration options.
 
 #### Slab
 
-A physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more streams. All data in a slab share the same encoding schema, and writes are atomic, eliminating the need for extra metadata.
+A slab is a physical partition of data identified by both shard ID and generation ID. Each slab acts as a durable container for one or more durable storage streams. All data in a slab shares the same encoding schema, eliminating the need for storing extra metadata. Atomicity and consistency properties are guaranteed within a slab.
 
 Example: `shard 2, gen 3` represents a distinct slab that stores all streams written during that generation’s time range.
 
 #### Stream
 
-Logical units of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar structures, allowing data to be read in time-ordered, deterministic chunks.
+A durable storage stream is a logical unit of batching and serialization inside each slab. Streams group **Topic–Timestamp–Value (TTV)** triples with similar topic structures, allowing data to be read in time-ordered, deterministic chunks. A single durable storage stream may contain messages from multiple topics, and different storage layouts may apply different strategies for mapping topics into streams.
 
-Streams are also the unit of subscription and iteration in DS, enabling efficient handling of wildcard topic filters. 
+Durable storage streams are also the fundamental unit of subscription and iteration in Durable Storage, enabling efficient handling of wildcard topic filters and consistent replay of ordered data. [Durable sessions](../durability/durability_introduction.md#durable-sessions) read messages from streams in batches, with the batch size controlled by the `durable_sessions.batch_size` configuration parameter.
 
 #### Topic–Timestamp–Value
 
-The minimal storage unit, representing a single MQTT record. Each TTV includes:
+The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 - **Topic:** Follows MQTT semantics.
 
 - **Timestamp:** Write time or logical ordering key.
 
-- **Value:** an arbitrary binary blob.
+- **Value:** An arbitrary binary blob.
 
 ## Write Path
 
@@ -154,24 +160,14 @@ Both pools group subscribers by stream and topic, reusing resources to serve mul
 
 <img src="./assets/real-time_subscriptions.png" alt="real-time_subscriptions" style="zoom:67%;" />
 
-## Applications: Durable Sessions and Shared Subscriptions
-
-Durable Storage is the backbone for EMQX's advanced reliability features:
-
-### Durable Sessions (EMQX 5+)
-
-Durable sessions are a parallel session implementation that uses DS for message routing.
-
-- **Mechanism:** When a client connects with a session expiry interval greater than zero and subscribes to a topic, the filter is marked as durable. Messages published to matching topics are saved to DS *in addition* to being dispatched.
-- **State:** Durable sessions access saved messages via the DS subscription mechanism. Their state includes a set of iterators for each matching stream, allowing them to precisely track their progress. Only one copy of each message is stored per database replica, regardless of how many durable sessions share it.
-
-### Shared Subscriptions (EMQX 6.0)
-
-EMQX 6.0 extended DS to shared subscriptions for enhanced load balancing and reliability.
-
-- **Iterator Management:** The iterator sets for shared subscriptions are managed by a separate entity called the **shared sub leader**.
-- **Replay and Rebalancing:** Sessions subscribing to a shared topic communicate with the leader, which **lends them iterators** for message replay. Updated iterators are reported back. If a client disconnects or the group is rebalanced, the leader **revokes the iterators** and redistributes them to other members, ensuring consumption continuity and load distribution.
-
 ## Conclusion: The Foundation of High-Reliability MQTT
 
 The Optimized Durable Storage in EMQX 6.0 is the resilient foundation for high-reliability MQTT messaging. By re-engineering RocksDB and embedding concepts like TTVs and Streams, DS provides a purpose-built, highly available, and persistent internal database. This architecture, coupled with sophisticated features like the LTS algorithm and Raft replication, ensures lossless message delivery and optimal retrieval for complex wildcard and shared subscriptions, solidifying EMQX's position as a leading solution for demanding IoT infrastructure.
+
+## More Information
+
+Durable Storage serves as the core data foundation for several high-reliability and persistence-related features in EMQX, providing unified storage, replay, and consistency guarantees for upper-layer functionality, including:
+
+- **[MQTT Durable Sessions](../durability/durability_introduction.md)**: A DS-based mechanism for persisting session state and undelivered messages.
+- **[Message Queue](../message-queue/message-queue-concept.md)**: A built-in message queueing feature that provides ordered message delivery, message replay, and high availability across the EMQX cluster.
+- **[Shared Subscription](../messaging/mqtt-shared-subscription.md)**: A load-balancing subscription mechanism that distributes messages among multiple subscribers in the same group.
