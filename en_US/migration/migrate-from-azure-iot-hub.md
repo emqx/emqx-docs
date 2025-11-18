@@ -206,40 +206,9 @@ client.send_message("Hello from migrated device")
 ```
 
 ::: tip
-The `server_verification_cert` parameter expects the certificate **content as a string**, not a file path. If you've added the EMQX server CA to your system's trusted certificate store (recommended), you can omit this parameter and let the system handle verification.
-:::
-
-**C# Example**:
-
-```csharp
-var auth = new DeviceAuthenticationWithX509Certificate(
-    deviceId: "device-001",
-    certificate: new X509Certificate2("device-001.pfx", "password")
-);
-
-var options = new ClientOptions
-{
-    // Point to EMQX instead of Azure IoT Hub
-    ModelId = "",
-    CertificateValidationCallback = (sender, certificate, chain, errors) =>
-    {
-        // Validate against EMQX CA
-        return ValidateServerCertificate(certificate, "emqx-server-ca.pem");
-    }
-};
-
-var client = new DeviceClient(
-    hostname: "mqtt.example.com",  // EMQX hostname
-    authenticationMethod: auth,
-    transportType: TransportType.Mqtt_Tcp_Only,
-    options: options
-);
-
-await client.OpenAsync();
-```
-
-::: tip
-Using the Azure IoT SDK preserves your existing application code structure, requiring only configuration changes. This is the simplest migration path for devices already using X.509 authentication.
+- The `server_verification_cert` parameter expects the certificate **content as a string**, not a file path.
+- If you've added the EMQX server CA to your system's trusted certificate store (recommended), you can omit this parameter and let the system handle verification.
+- Using the Azure IoT SDK preserves your existing application code structure, requiring only configuration changes. This is the simplest migration path for devices already using X.509 authentication.
 :::
 
 ### Device-Side Parameter Summary
