@@ -52,7 +52,9 @@ With your CA certificate located, the next step is to configure the EMQX broker 
 
 The core of the migration is enabling two-way SSL/TLS authentication (mTLS) on an EMQX listener. This configuration instructs EMQX to demand a certificate from the connecting client and verify its authenticity against your CA.
 
-**Action**: Open the EMQX configuration file (e.g., `emqx.conf`) and configure the SSL/TLS listener:
+For detailed information on SSL/TLS configuration options, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md). For certificate management, see [TLS Certificates](../network/tls-certificate.md).
+
+**Action**: Open the EMQX configuration file (e.g., `emqx.conf`) and configure the SSL/TLS listener, or use the Dashboard (**Management** -> **Listeners**):
 
 ```hocon
 listeners.ssl.default {
@@ -89,6 +91,14 @@ Both AWS IoT Core and EMQX use port 8883 as the default for MQTT over TLS/SSL, s
 * `verify`: Must be set to `verify_peer` to enable mTLS.
 * `fail_if_no_peer_cert`: Must be set to `true` to reject connections without a client certificate, enforcing mTLS.
 * `certfile` and `keyfile`: Your EMQX server's own certificate and private key. Clients will verify this certificate to ensure they're connecting to the correct broker.
+
+After updating the configuration file, reload the configuration:
+
+```bash
+emqx ctl conf reload
+```
+
+If you made changes via the Dashboard, click **Update** to apply them. The listener will restart automatically to apply the new settings.
 
 ### (Optional) Map Certificate CN to ClientID or Username
 
