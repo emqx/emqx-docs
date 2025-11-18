@@ -144,6 +144,35 @@ The connection should fail without a client certificate.
 
 The final phase is to update device client code to connect to EMQX instead of Azure IoT Hub.
 
+### Prepare EMQX Server CA Certificate
+
+Before updating device code, you need to obtain the EMQX server's CA certificate. This is the CA that signed the EMQX server's TLS certificate.
+
+**For self-signed EMQX server certificates**, you must add the server CA to your device's trusted certificate store:
+
+**On Linux**:
+```bash
+# Copy CA to system trust store
+sudo cp emqx-server-ca.pem /usr/local/share/ca-certificates/emqx-ca.crt
+sudo update-ca-certificates
+```
+
+**On macOS**:
+```bash
+# Add to system keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain emqx-server-ca.pem
+```
+
+**On Windows**:
+```powershell
+# Import certificate to Trusted Root CA store
+Import-Certificate -FilePath emqx-server-ca.pem -CertStoreLocation Cert:\LocalMachine\Root
+```
+
+::: tip
+If your EMQX server uses a certificate from a public CA (like Let's Encrypt), this step is not needed as the CA is already trusted by the system.
+:::
+
 ### Update Device Client Code
 
 The Azure IoT SDK for Python (and other languages) supports connecting to custom MQTT brokers through the `server_verification_cert` and custom `hostname` parameters. This allows for minimal code changes.
@@ -159,18 +188,26 @@ x509 = X509(
     key_file="certs/device-001.key.pem"
 )
 
+# Read EMQX server CA certificate content
+with open("certs/emqx-server-ca.pem", "r") as f:
+    emqx_server_ca = f.read()
+
 # Create client pointing to EMQX
 client = IoTHubDeviceClient.create_from_x509_certificate(
     x509=x509,
     hostname="mqtt.example.com",  # EMQX hostname instead of Azure
     device_id="device-001",
-    server_verification_cert="certs/emqx-server-ca.pem"  # EMQX server CA
+    server_verification_cert=emqx_server_ca  # CA cert content as string
 )
 
 # Connect and use as before
 client.connect()
 client.send_message("Hello from migrated device")
 ```
+
+::: tip
+The `server_verification_cert` parameter expects the certificate **content as a string**, not a file path. If you've added the EMQX server CA to your system's trusted certificate store (recommended), you can omit this parameter and let the system handle verification.
+:::
 
 **C# Example**:
 
