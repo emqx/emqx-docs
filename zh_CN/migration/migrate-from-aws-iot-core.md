@@ -124,7 +124,7 @@ Based on the `mqtt5_client_builder` module from the `aws-iot-device-sdk-python-v
 
 2. **Update the Server CA Certificate** (`ca_filepath`):
    * This is how the device verifies the EMQX server's identity.
-   * AWS: Often omitted (defaults to system trust store) or `ca_filepath="root-CA.crt"` (Amazon Root CA 1)
+   * AWS: Often omitted (defaults to system trust store) or `ca_filepath="AmazonRootCA1.pem"` (Amazon Root CA 1)
    * EMQX: `ca_filepath="emqx-server-ca.pem"` (The CA that issued your EMQX server certificate)
 
 3. **Device Certificates Remain the Same**:
