@@ -174,6 +174,15 @@
           "type": "string"
         }
       },
+      "emqx_prometheus_api.ns": {
+        "example": "some_ns",
+        "in": "query",
+        "name": "ns",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
+      },
       "file_transfer.client_id": {
         "description": "MQTT Client ID",
         "in": "path",
@@ -575,6 +584,233 @@
         ],
         "type": "object"
       },
+      "action_aws_timestream.action_parameters": {
+        "properties": {
+          "precision": {
+            "default": "ms",
+            "description": "InfluxDB time precision.",
+            "enum": [
+              "ns",
+              "us",
+              "ms",
+              "s"
+            ],
+            "type": "string"
+          },
+          "write_syntax": {
+            "description": "Conf of InfluxDB line protocol to write data points. It is a text-based format that provides the measurement, tag set, field set, and timestamp of a data point, and placeholder supported.<br/>See also [InfluxDB 2.3 Line Protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) and<br/>[InfluxDB 1.8 Line Protocol](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_tutorial/) <br/><br/>TLDR:<br/><br/>```<br/><measurement>[,<tag_key>=<tag_value>[,<tag_key>=<tag_value>]] <field_key>=<field_value>[,<field_key>=<field_value>] [<timestamp>]<br/>```<br/>Please note that a placeholder for an integer value must be annotated with a suffix `i`. For example `${payload.int_value}i`.",
+            "format": "sql",
+            "type": "string"
+          }
+        },
+        "required": [
+          "write_syntax"
+        ],
+        "type": "object"
+      },
+      "action_aws_timestream.get_bridge_v2": {
+        "properties": {
+          "connector": {
+            "description": "Name of the connector specified by the action, used for external resource selection.",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this action.",
+            "type": "boolean"
+          },
+          "fallback_actions": {
+            "default": [],
+            "description": "List of fallback actions that will be triggered if a query to this action fails.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_republish"
+                },
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_reference"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "node_status": {
+            "description": "Node status.",
+            "items": {
+              "$ref": "#/components/schemas/actions_and_sources.node_status"
+            },
+            "type": "array"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/action_aws_timestream.action_parameters"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/actions_and_sources.action_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "status": {
+            "description": "The status of the bridge<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the bridge passes the health probes.<br/><br/>- <code>disconnected</code>: when the bridge can not pass health probes.<br/><br/>- <code>stopped</code>: when the bridge resource is requested to be stopped.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ],
+            "type": "string"
+          },
+          "status_reason": {
+            "description": "This is the reason given in case a bridge is failing to connect.",
+            "example": "Connection refused",
+            "type": "string"
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "aws_timestream"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "type": "object"
+      },
+      "action_aws_timestream.post_bridge_v2": {
+        "properties": {
+          "connector": {
+            "description": "Name of the connector specified by the action, used for external resource selection.",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this action.",
+            "type": "boolean"
+          },
+          "fallback_actions": {
+            "default": [],
+            "description": "List of fallback actions that will be triggered if a query to this action fails.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_republish"
+                },
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_reference"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/action_aws_timestream.action_parameters"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/actions_and_sources.action_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "aws_timestream"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "connector",
+          "name",
+          "parameters",
+          "type"
+        ],
+        "type": "object"
+      },
+      "action_aws_timestream.put_bridge_v2": {
+        "properties": {
+          "connector": {
+            "description": "Name of the connector specified by the action, used for external resource selection.",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this action.",
+            "type": "boolean"
+          },
+          "fallback_actions": {
+            "default": [],
+            "description": "List of fallback actions that will be triggered if a query to this action fails.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_republish"
+                },
+                {
+                  "$ref": "#/components/schemas/actions_and_sources.fallback_action_reference"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/action_aws_timestream.action_parameters"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/actions_and_sources.action_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "connector",
+          "parameters"
+        ],
+        "type": "object"
+      },
       "action_azure_blob_storage.action_resource_opts": {
         "properties": {
           "batch_size": {
@@ -702,6 +938,9 @@
             },
             "description": "Settings governing the file format of an upload containing aggregated events.",
             "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_aggregator.container_parquet"
+              },
               {
                 "$ref": "#/components/schemas/connector_aggregator.container_json_lines"
               },
@@ -3778,181 +4017,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
                 ],
                 "type": "string"
               },
@@ -3964,55 +4029,13 @@
               },
               {
                 "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "redshift"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -4024,7 +4047,229 @@
               },
               {
                 "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
                 ],
                 "type": "string"
               }
@@ -9649,6 +9894,10 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -15367,6 +15616,10 @@
             ],
             "type": "string"
           },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+          },
           "middlebox_comp_mode": {
             "default": true,
             "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
@@ -20386,6 +20639,9 @@
             "description": "Settings governing the file format of an upload containing aggregated events.",
             "oneOf": [
               {
+                "$ref": "#/components/schemas/connector_aggregator.container_parquet"
+              },
+              {
                 "$ref": "#/components/schemas/connector_aggregator.container_json_lines"
               },
               {
@@ -23606,6 +23862,10 @@
             ],
             "type": "string"
           },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+          },
           "middlebox_comp_mode": {
             "default": true,
             "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
@@ -23774,6 +24034,89 @@
           }
         },
         "required": [
+          "type"
+        ],
+        "type": "object"
+      },
+      "connector_aggregator.container_parquet": {
+        "properties": {
+          "default_compression": {
+            "default": "snappy",
+            "description": "The default algorithm to use for compressing data pages in Parquet row groups.",
+            "enum": [
+              "none",
+              "zstd",
+              "snappy"
+            ],
+            "type": "string"
+          },
+          "max_row_group_bytes": {
+            "default": "128MB",
+            "description": "The size above which row groups are flushed.  The actual triggering of row group flushes uses estimates of the buffered data sizes, since the actual output may differ in size from the raw input data size.",
+            "example": "32MB",
+            "type": "string"
+          },
+          "schema": {
+            "description": "The schema to be used for the Parquet files, in Avro format.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_aggregator.parquet_schema_avro_ref"
+              },
+              {
+                "$ref": "#/components/schemas/connector_aggregator.parquet_schema_avro_inline"
+              }
+            ]
+          },
+          "type": {
+            "description": "Use [Parquet](https://parquet.apache.org/docs/) for encoding data files.",
+            "enum": [
+              "parquet"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "schema",
+          "type"
+        ],
+        "type": "object"
+      },
+      "connector_aggregator.parquet_schema_avro_inline": {
+        "properties": {
+          "def": {
+            "description": "Avro schema definition in JSON format.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Avro schema defined inline.",
+            "enum": [
+              "avro_inline"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "def",
+          "type"
+        ],
+        "type": "object"
+      },
+      "connector_aggregator.parquet_schema_avro_ref": {
+        "properties": {
+          "name": {
+            "description": "Avro schema name that lives in Schema Registry.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Avro schema that lives in Schema Registry.",
+            "enum": [
+              "avro_ref"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
           "type"
         ],
         "type": "object"
@@ -24055,6 +24398,247 @@
           "database",
           "server",
           "username"
+        ],
+        "type": "object"
+      },
+      "connector_aws_timestream.get_connector": {
+        "properties": {
+          "actions": {
+            "description": "List of actions added to this connector.",
+            "example": [
+              "my_action"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this connector.",
+            "type": "boolean"
+          },
+          "max_inactive": {
+            "default": "10s",
+            "description": "Maximum amount of time without any activity that the HTTP driver will wait before attempting to reconnect.",
+            "example": "32s",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of the connector.",
+            "type": "string"
+          },
+          "node_status": {
+            "description": "Node status.",
+            "items": {
+              "$ref": "#/components/schemas/connector.node_status"
+            },
+            "type": "array"
+          },
+          "parameters": {
+            "description": "Set of parameters specific for the given type of this InfluxDB connector, `influxdb_type` can be one of `influxdb_api_v1`, `influxdb_api_v1`.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_influxdb.connector_influxdb_api_v2"
+              }
+            ]
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "Size of the connection pool towards the bridge target service.",
+            "type": "integer"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/bridge_influxdb.connector_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "server": {
+            "default": "127.0.0.1:8086",
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The InfluxDB default port 8086 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
+          "status": {
+            "description": "The status of the connector<br/><br/>- <code>connecting</code>: the initial state before any health probes were made.<br/><br/>- <code>connected</code>: when the connector passes the health probes.<br/><br/>- <code>disconnected</code>: when the connector can not pass health probes.<br/><br/>- <code>inconsistent</code>: When not all the nodes are at the same status.",
+            "enum": [
+              "connected",
+              "disconnected",
+              "connecting",
+              "inconsistent"
+            ],
+            "type": "string"
+          },
+          "status_reason": {
+            "description": "This is the reason given in case a connector is failing to connect.",
+            "example": "Connection refused",
+            "type": "string"
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "The type of the connector.",
+            "enum": [
+              "aws_timestream"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "parameters",
+          "type"
+        ],
+        "type": "object"
+      },
+      "connector_aws_timestream.post_connector": {
+        "properties": {
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this connector.",
+            "type": "boolean"
+          },
+          "max_inactive": {
+            "default": "10s",
+            "description": "Maximum amount of time without any activity that the HTTP driver will wait before attempting to reconnect.",
+            "example": "32s",
+            "type": "string"
+          },
+          "name": {
+            "description": "The name of the connector.",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "Set of parameters specific for the given type of this InfluxDB connector, `influxdb_type` can be one of `influxdb_api_v1`, `influxdb_api_v1`.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_influxdb.connector_influxdb_api_v2"
+              }
+            ]
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "Size of the connection pool towards the bridge target service.",
+            "type": "integer"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/bridge_influxdb.connector_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "server": {
+            "default": "127.0.0.1:8086",
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The InfluxDB default port 8086 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "type": {
+            "description": "The type of the connector.",
+            "enum": [
+              "aws_timestream"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "parameters",
+          "type"
+        ],
+        "type": "object"
+      },
+      "connector_aws_timestream.put_connector": {
+        "properties": {
+          "description": {
+            "default": "",
+            "description": "Descriptive text.",
+            "type": "string"
+          },
+          "enable": {
+            "default": true,
+            "description": "Enable (true) or disable (false) this connector.",
+            "type": "boolean"
+          },
+          "max_inactive": {
+            "default": "10s",
+            "description": "Maximum amount of time without any activity that the HTTP driver will wait before attempting to reconnect.",
+            "example": "32s",
+            "type": "string"
+          },
+          "parameters": {
+            "description": "Set of parameters specific for the given type of this InfluxDB connector, `influxdb_type` can be one of `influxdb_api_v1`, `influxdb_api_v1`.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/connector_influxdb.connector_influxdb_api_v2"
+              }
+            ]
+          },
+          "pool_size": {
+            "default": 8,
+            "description": "Size of the connection pool towards the bridge target service.",
+            "type": "integer"
+          },
+          "resource_opts": {
+            "$ref": "#/components/schemas/bridge_influxdb.connector_resource_opts",
+            "default": {},
+            "description": "Resource options."
+          },
+          "server": {
+            "default": "127.0.0.1:8086",
+            "description": "The IPv4 or IPv6 address or the hostname to connect to.<br/><br/>A host entry has the following form: `Host[:Port]`.<br/><br/>The InfluxDB default port 8086 is used if `[:Port]` is not specified.",
+            "type": "string"
+          },
+          "ssl": {
+            "$ref": "#/components/schemas/emqx.ssl_client_opts",
+            "default": {
+              "enable": false
+            },
+            "description": "SSL connection settings."
+          },
+          "tags": {
+            "description": "Tags to annotate this config entry.",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "parameters"
         ],
         "type": "object"
       },
@@ -25647,6 +26231,10 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
           },
           "middlebox_comp_mode": {
             "default": false,
@@ -28516,6 +29104,20 @@
             ],
             "type": "string"
           },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
+          },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
             "enum": [
@@ -28627,8 +29229,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
@@ -29202,7 +29804,7 @@
             "type": "integer"
           },
           "checkpoint_interval": {
-            "default": "5s",
+            "default": "15s",
             "description": "Durable sessions periodically back up their state to disc.<br/>This happens every checkpoint interval.",
             "example": "12m",
             "type": "string"
@@ -29227,7 +29829,7 @@
       "emqx.durable_shared_subs": {
         "properties": {
           "checkpoint_interval": {
-            "default": "5s",
+            "default": "15s",
             "description": "Shared subscription leader periodically commits progress of the topic replay to the database.<br/>This parameter specifies minimum interval between such commits.",
             "example": "12m",
             "type": "string"
@@ -29402,6 +30004,20 @@
             "description": "PEM format private key file.",
             "type": "string"
           },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
+          },
           "password": {
             "description": "String containing the user's password. Only used if the private key file is password-protected.",
             "example": "",
@@ -29513,6 +30129,20 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
           },
           "ocsp": {
             "$ref": "#/components/schemas/emqx.ocsp"
@@ -29654,6 +30284,20 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
           },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
@@ -29919,6 +30563,42 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "emqx.managed_certs": {
+        "properties": {
+          "bundle_name": {
+            "description": "The name of the managed certificate file bundle.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace under which the certificate file bundle lives.  Omit this field to target the global namespace.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bundle_name"
+        ],
+        "type": "object"
+      },
+      "emqx.managed_certs_server": {
+        "properties": {
+          "bundle_name": {
+            "description": "The name of the managed certificate file bundle.",
+            "type": "string"
+          },
+          "namespace": {
+            "description": "The namespace under which the certificate file bundle lives.  Omit this field to target the global namespace.",
+            "type": "string"
+          },
+          "sni": {
+            "description": "If this is set, it's used during dynamic certificate selection based on the SNI sent from the client.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "bundle_name"
+        ],
         "type": "object"
       },
       "emqx.mqtt": {
@@ -30221,7 +30901,7 @@
           },
           "shared_subscription_strategy": {
             "default": "round_robin",
-            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.  <br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
+            "description": "Dispatch strategy for shared subscription.<br/>EMQX keeps **dispatch state** (such as random seeds, round-robin position, and sticky subscriber choice) as part of the **publishing client’s connection state**.<br/>If the publishing client disconnects and reconnects, this state is lost and must be re-initialized<br/><br/>- `random`: Randomly select a subscriber for dispatch;<br/>- `round_robin`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each publisher, so two adjacent messages from **different publishers** may be consumed by the same client in the subscription group;<br/>- `round_robin_per_group`: Clients in a shared subscription group will consume messages in turn, and the progress of the loop is recorded independently in each node, so two adjacent messages from **different nodes** may be consumed by the same client in the subscription group;<br/>- `local`: Randomly select a subscriber on the current node, if there are no subscribers on the current node, then randomly select within the cluster;<br/>- `sticky`: Continuously dispatch messages to the initially selected subscriber until their session ends. The initial selection is made based on `mqtt_shared_subscription_initial_sticky_pick`;<br/>- `hash_clientid`: Hash the publisher's client ID to select a subscriber;<br/>- `hash_topic`: Hash the publishing topic to select a subscriber.",
             "enum": [
               "random",
               "round_robin",
@@ -30347,6 +31027,10 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -31393,6 +32077,10 @@
       },
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
+          "actions_executed": {
+            "description": "Number of Action executions (failures + successes) in the last sample window.",
+            "type": "integer"
+          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -31415,6 +32103,10 @@
           },
           "received": {
             "description": "Received messages in the last sample window.",
+            "type": "integer"
+          },
+          "rules_matched": {
+            "description": "Number of Rules that matched their where clauses in the last sample window.",
             "type": "integer"
           },
           "sent": {
@@ -31459,6 +32151,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -31493,6 +32189,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -31540,6 +32240,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -31578,6 +32282,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -35380,6 +36088,42 @@
         ],
         "type": "object"
       },
+      "emqx_mgmt_api_certs.bundle_out": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_certs.file_out": {
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "emqx_mgmt_api_certs.files_in": {
+        "properties": {
+          "acc_key": {
+            "type": "string"
+          },
+          "ca": {
+            "type": "string"
+          },
+          "chain": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "key_password": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "emqx_mgmt_api_clients.authz_cache": {
         "properties": {
           "access": {
@@ -35987,7 +36731,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "3A3DAE94EE1FA000",
+            "example": "8C00D19679D669AD",
             "type": "string"
           },
           "status": {
@@ -36063,6 +36807,10 @@
       },
       "emqx_mgmt_api_metrics.aggregated_metrics": {
         "properties": {
+          "actions.executed": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -36523,6 +37271,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "session.created": {
             "description": "Number of sessions created",
             "minimum": 0,
@@ -36557,6 +37309,10 @@
       },
       "emqx_mgmt_api_metrics.node_metrics": {
         "properties": {
+          "actions.executed": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "authentication.failure": {
             "description": "Number of failed client Authentication",
             "minimum": 0,
@@ -37018,6 +37774,10 @@
           },
           "packets.unsubscribe.received": {
             "description": "Number of received UNSUBSCRIBE packet",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "rules.matched": {
             "minimum": 0,
             "type": "integer"
           },
@@ -38310,6 +39070,10 @@
             ],
             "type": "string"
           },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+          },
           "middlebox_comp_mode": {
             "default": true,
             "description": "Configures the middle box compatibility mode for a TLS-1.3 connection.<br/><br/>A significant number of middle boxes misbehave when a TLS-1.3 connection is negotiated. Implementations can increase the chance of making connections through those middle boxes by adapting the TLS-1.3 handshake to resemble that of a TLS-1.2 handshake.",
@@ -38764,6 +39528,20 @@
             ],
             "type": "string"
           },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
+          },
           "ocsp": {
             "$ref": "#/components/schemas/emqx.ocsp"
           },
@@ -39063,6 +39841,20 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "oneOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/emqx.managed_certs_server"
+                },
+                "type": "array"
+              },
+              {
+                "$ref": "#/components/schemas/emqx.managed_certs_server"
+              }
+            ]
           },
           "partial_chain": {
             "description": "Enable or disable peer verification with partial_chain.<br/>When local verifies a peer certificate during the x509 path validation<br/>process, it constructs a certificate chain that starts with the peer<br/>certificate and ends with a trust anchor.<br/>By default, if it is set to `false`, the trust anchor is the<br/>Root CA, and the certificate chain must be complete.<br/>However, if the setting is set to `true` or `cacert_from_cacertfile`,<br/>the last certificate in `cacertfile` will be used as the trust anchor<br/>certificate (intermediate CA). This creates a partial chain<br/>in the path validation.<br/>Alternatively, if it is configured with `two_cacerts_from_cacertfile`,<br/>one of the last two certificates in `cacertfile` will be used as the<br/>trust anchor certificate, forming a partial chain. This option is<br/>particularly useful for intermediate CA certificate rotation.<br/>However, please note that it incurs some additional overhead, so it<br/>should only be used for certificate rotation purposes.",
@@ -41765,6 +42557,10 @@
               "all"
             ],
             "type": "string"
+          },
+          "managed_certs": {
+            "$ref": "#/components/schemas/emqx.managed_certs",
+            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -50138,6 +50934,62 @@
         ],
         "type": "object"
       },
+      "rule_engine.ctx_ping": {
+        "properties": {
+          "clean_start": {
+            "default": true,
+            "description": "Clean Start",
+            "type": "boolean"
+          },
+          "clientid": {
+            "description": "The Client ID",
+            "type": "string"
+          },
+          "connected_at": {
+            "description": "The Time that this Client is Connected",
+            "type": "integer"
+          },
+          "event_type": {
+            "description": "Event Type",
+            "enum": [
+              "client_ping"
+            ],
+            "type": "string"
+          },
+          "expiry_interval": {
+            "description": "Expiry Interval",
+            "type": "integer"
+          },
+          "keepalive": {
+            "description": "KeepAlive",
+            "type": "integer"
+          },
+          "peername": {
+            "description": "The IP Address and Port of the Peer Client",
+            "type": "string"
+          },
+          "proto_name": {
+            "description": "Protocol Name",
+            "type": "string"
+          },
+          "proto_ver": {
+            "description": "Protocol Version",
+            "type": "string"
+          },
+          "sockname": {
+            "description": "The IP Address and Port of the Local Listener",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "event_type"
+        ],
+        "type": "object"
+      },
       "rule_engine.ctx_pub": {
         "properties": {
           "clientid": {
@@ -50609,6 +51461,9 @@
                 "$ref": "#/components/schemas/rule_engine.ctx_delivery_dropped"
               },
               {
+                "$ref": "#/components/schemas/rule_engine.ctx_ping"
+              },
+              {
                 "$ref": "#/components/schemas/rule_engine.ctx_disconnected"
               },
               {
@@ -50747,6 +51602,7 @@
               "$events/client/connected",
               "$events/client/disconnected",
               "$events/client/connack",
+              "$events/client/ping",
               "$events/auth/check_authn_complete",
               "$events/auth/check_authz_complete",
               "$events/session/subscribed",
@@ -50949,6 +51805,9 @@
               },
               {
                 "$ref": "#/components/schemas/rule_engine.ctx_delivery_dropped"
+              },
+              {
+                "$ref": "#/components/schemas/rule_engine.ctx_ping"
               },
               {
                 "$ref": "#/components/schemas/rule_engine.ctx_disconnected"
@@ -53346,7 +54205,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.0.1"
+    "version": "6.1.0-alpha.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -53363,46 +54222,47 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "cassandra",
                       "rocketmq",
+                      "cassandra",
                       "rabbitmq",
-                      "sqlserver",
-                      "iotdb",
                       "mongodb",
-                      "greptimedb",
-                      "cockroachdb",
-                      "gcp_pubsub_producer",
                       "influxdb",
+                      "azure_event_hub_producer",
+                      "syskeeper_forwarder",
+                      "iotdb",
                       "alloydb",
                       "kafka_producer",
-                      "pulsar",
+                      "gcp_pubsub_producer",
                       "confluent_producer",
-                      "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "s3tables",
-                      "opents",
+                      "cockroachdb",
+                      "pulsar",
+                      "sqlserver",
+                      "greptimedb",
                       "kinesis",
                       "redis",
                       "doris",
                       "datalayers",
+                      "opents",
+                      "s3tables",
                       "s3",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "clickhouse",
-                      "snowflake",
                       "tablestore",
                       "couchbase",
-                      "timescale",
-                      "tdengine",
                       "oracle",
+                      "snowflake",
+                      "tdengine",
+                      "timescale",
+                      "clickhouse",
+                      "azure_blob_storage",
                       "snowflake_streaming",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
+                      "aws_timestream",
                       "dynamo"
                     ]
                   }
@@ -53411,46 +54271,47 @@
                   "items": {
                     "enum": [
                       "http",
-                      "cassandra",
                       "rocketmq",
+                      "cassandra",
                       "rabbitmq",
-                      "sqlserver",
-                      "iotdb",
                       "mongodb",
-                      "greptimedb",
-                      "cockroachdb",
-                      "gcp_pubsub_producer",
                       "influxdb",
+                      "azure_event_hub_producer",
+                      "syskeeper_forwarder",
+                      "iotdb",
                       "alloydb",
                       "kafka_producer",
-                      "pulsar",
+                      "gcp_pubsub_producer",
                       "confluent_producer",
-                      "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "s3tables",
-                      "opents",
+                      "cockroachdb",
+                      "pulsar",
+                      "sqlserver",
+                      "greptimedb",
                       "kinesis",
                       "redis",
                       "doris",
                       "datalayers",
+                      "opents",
+                      "s3tables",
                       "s3",
                       "mqtt",
                       "redshift",
-                      "azure_blob_storage",
-                      "clickhouse",
-                      "snowflake",
                       "tablestore",
                       "couchbase",
-                      "timescale",
-                      "tdengine",
                       "oracle",
+                      "snowflake",
+                      "tdengine",
+                      "timescale",
+                      "clickhouse",
+                      "azure_blob_storage",
                       "snowflake_streaming",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
                       "bigquery",
-                      "mysql",
                       "pgsql",
+                      "mysql",
+                      "aws_timestream",
                       "dynamo"
                     ],
                     "type": "string"
@@ -53967,6 +54828,31 @@
                     },
                     "status": "connected",
                     "type": "influxdb"
+                  },
+                  {
+                    "connector": "my_connector",
+                    "description": "my action",
+                    "enable": true,
+                    "node_status": [
+                      {
+                        "node": "emqx@localhost",
+                        "status": "connected"
+                      }
+                    ],
+                    "parameters": {
+                      "precision": "ms",
+                      "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                    },
+                    "resource_opts": {
+                      "batch_size": 1,
+                      "batch_time": "0s",
+                      "health_check_interval": "30s",
+                      "inflight_window": 100,
+                      "query_mode": "sync",
+                      "request_ttl": "45s",
+                      "worker_pool_size": 16
+                    },
+                    "status": "connected"
                   },
                   {
                     "connector": "my_connector_name",
@@ -54740,6 +55626,9 @@
                         "$ref": "#/components/schemas/redis.get_bridge_v2"
                       },
                       {
+                        "$ref": "#/components/schemas/action_aws_timestream.get_bridge_v2"
+                      },
+                      {
                         "$ref": "#/components/schemas/bridge_influxdb.get_bridge_v2"
                       },
                       {
@@ -54872,6 +55761,29 @@
                       "worker_pool_size": 16
                     },
                     "type": "alloydb"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Action",
+                  "value": {
+                    "connector": "my_connector",
+                    "description": "my action",
+                    "enable": true,
+                    "name": "my_action",
+                    "parameters": {
+                      "precision": "ms",
+                      "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                    },
+                    "resource_opts": {
+                      "batch_size": 1,
+                      "batch_time": "0s",
+                      "health_check_interval": "30s",
+                      "inflight_window": 100,
+                      "query_mode": "sync",
+                      "request_ttl": "45s",
+                      "worker_pool_size": 16
+                    },
+                    "type": "aws_timestream"
                   }
                 },
                 "azure_event_hub_producer": {
@@ -55919,6 +56831,9 @@
                     "$ref": "#/components/schemas/redis.post_bridge_v2"
                   },
                   {
+                    "$ref": "#/components/schemas/action_aws_timestream.post_bridge_v2"
+                  },
+                  {
                     "$ref": "#/components/schemas/bridge_influxdb.post_bridge_v2"
                   },
                   {
@@ -56044,6 +56959,34 @@
                       },
                       "status": "connected",
                       "type": "alloydb"
+                    }
+                  },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Action",
+                    "value": {
+                      "connector": "my_connector",
+                      "description": "my action",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "precision": "ms",
+                        "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                      },
+                      "resource_opts": {
+                        "batch_size": 1,
+                        "batch_time": "0s",
+                        "health_check_interval": "30s",
+                        "inflight_window": 100,
+                        "query_mode": "sync",
+                        "request_ttl": "45s",
+                        "worker_pool_size": 16
+                      },
+                      "status": "connected"
                     }
                   },
                   "azure_event_hub_producer": {
@@ -57366,6 +58309,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/redis.get_bridge_v2"
+                    },
+                    {
+                      "$ref": "#/components/schemas/action_aws_timestream.get_bridge_v2"
                     },
                     {
                       "$ref": "#/components/schemas/bridge_influxdb.get_bridge_v2"
@@ -57662,6 +58608,34 @@
                       "type": "alloydb"
                     }
                   },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Action",
+                    "value": {
+                      "connector": "my_connector",
+                      "description": "my action",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "precision": "ms",
+                        "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                      },
+                      "resource_opts": {
+                        "batch_size": 1,
+                        "batch_time": "0s",
+                        "health_check_interval": "30s",
+                        "inflight_window": 100,
+                        "query_mode": "sync",
+                        "request_ttl": "45s",
+                        "worker_pool_size": 16
+                      },
+                      "status": "connected"
+                    }
+                  },
                   "azure_event_hub_producer": {
                     "summary": "Azure Event Hub Action",
                     "value": {
@@ -58984,6 +59958,9 @@
                       "$ref": "#/components/schemas/redis.get_bridge_v2"
                     },
                     {
+                      "$ref": "#/components/schemas/action_aws_timestream.get_bridge_v2"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_influxdb.get_bridge_v2"
                     },
                     {
@@ -59145,6 +60122,27 @@
                       "worker_pool_size": 16
                     },
                     "type": "alloydb"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Action",
+                  "value": {
+                    "connector": "my_connector",
+                    "description": "my action",
+                    "enable": true,
+                    "parameters": {
+                      "precision": "ms",
+                      "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                    },
+                    "resource_opts": {
+                      "batch_size": 1,
+                      "batch_time": "0s",
+                      "health_check_interval": "30s",
+                      "inflight_window": 100,
+                      "query_mode": "sync",
+                      "request_ttl": "45s",
+                      "worker_pool_size": 16
+                    }
                   }
                 },
                 "azure_event_hub_producer": {
@@ -60112,6 +61110,9 @@
                     "$ref": "#/components/schemas/redis.put_bridge_v2"
                   },
                   {
+                    "$ref": "#/components/schemas/action_aws_timestream.put_bridge_v2"
+                  },
+                  {
                     "$ref": "#/components/schemas/bridge_influxdb.put_bridge_v2"
                   },
                   {
@@ -60237,6 +61238,34 @@
                       },
                       "status": "connected",
                       "type": "alloydb"
+                    }
+                  },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Action",
+                    "value": {
+                      "connector": "my_connector",
+                      "description": "my action",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "precision": "ms",
+                        "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                      },
+                      "resource_opts": {
+                        "batch_size": 1,
+                        "batch_time": "0s",
+                        "health_check_interval": "30s",
+                        "inflight_window": 100,
+                        "query_mode": "sync",
+                        "request_ttl": "45s",
+                        "worker_pool_size": 16
+                      },
+                      "status": "connected"
                     }
                   },
                   "azure_event_hub_producer": {
@@ -61561,6 +62590,9 @@
                       "$ref": "#/components/schemas/redis.get_bridge_v2"
                     },
                     {
+                      "$ref": "#/components/schemas/action_aws_timestream.get_bridge_v2"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_influxdb.get_bridge_v2"
                     },
                     {
@@ -62112,6 +63144,29 @@
                       "worker_pool_size": 16
                     },
                     "type": "alloydb"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Action",
+                  "value": {
+                    "connector": "my_connector",
+                    "description": "my action",
+                    "enable": true,
+                    "name": "my_action",
+                    "parameters": {
+                      "precision": "ms",
+                      "write_syntax": "${topic},clientid=${clientid} payload=${payload},${clientid}_int_value=${payload.int_key}i,bool=${payload.bool}"
+                    },
+                    "resource_opts": {
+                      "batch_size": 1,
+                      "batch_time": "0s",
+                      "health_check_interval": "30s",
+                      "inflight_window": 100,
+                      "query_mode": "sync",
+                      "request_ttl": "45s",
+                      "worker_pool_size": 16
+                    },
+                    "type": "aws_timestream"
                   }
                 },
                 "azure_event_hub_producer": {
@@ -63157,6 +64212,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/redis.post_bridge_v2"
+                  },
+                  {
+                    "$ref": "#/components/schemas/action_aws_timestream.post_bridge_v2"
                   },
                   {
                     "$ref": "#/components/schemas/bridge_influxdb.post_bridge_v2"
@@ -67959,6 +69017,11 @@
                       ],
                       "type": "string"
                     },
+                    "include_mountpoint": {
+                      "default": false,
+                      "description": "When enabled, the target topics and topic filters are prefixed by the listener's configured mountpoint before being checked by authorization backends.",
+                      "type": "boolean"
+                    },
                     "no_match": {
                       "default": "deny",
                       "description": "Default access control action if the user or client matches no ACL rules,<br/>or if no such user or client is found by the configurable authorization<br/>sources such as built_in_database, an HTTP API, or a query against PostgreSQL.<br/>Find more details in 'authorization.sources' config.",
@@ -68012,6 +69075,11 @@
                     ],
                     "type": "string"
                   },
+                  "include_mountpoint": {
+                    "default": false,
+                    "description": "When enabled, the target topics and topic filters are prefixed by the listener's configured mountpoint before being checked by authorization backends.",
+                    "type": "boolean"
+                  },
                   "no_match": {
                     "default": "deny",
                     "description": "Default access control action if the user or client matches no ACL rules,<br/>or if no such user or client is found by the configurable authorization<br/>sources such as built_in_database, an HTTP API, or a query against PostgreSQL.<br/>Find more details in 'authorization.sources' config.",
@@ -68048,6 +69116,11 @@
                         "disconnect"
                       ],
                       "type": "string"
+                    },
+                    "include_mountpoint": {
+                      "default": false,
+                      "description": "When enabled, the target topics and topic filters are prefixed by the listener's configured mountpoint before being checked by authorization backends.",
+                      "type": "boolean"
                     },
                     "no_match": {
                       "default": "deny",
@@ -70522,6 +71595,667 @@
         ]
       }
     },
+    "/certs/global/list": {
+      "get": {
+        "description": "List all bundles in global namespace.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "list": {
+                    "summary": "List",
+                    "value": [
+                      {
+                        "name": "bundle1"
+                      },
+                      {
+                        "name": "bundle2"
+                      }
+                    ]
+                  }
+                },
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/emqx_mgmt_api_certs.bundle_out"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      }
+    },
+    "/certs/global/name/{name}": {
+      "delete": {
+        "description": "Delete a global namespace bundle.",
+        "parameters": [
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      },
+      "get": {
+        "description": "List all files in a global namespace bundle.",
+        "parameters": [
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "list": {
+                    "summary": "List",
+                    "value": {
+                      "acc_key": {
+                        "path": "/path/to/bundle/acc-key.pem"
+                      },
+                      "ca": {
+                        "path": "/path/to/bundle/ca.pem"
+                      },
+                      "chain": {
+                        "path": "/path/to/bundle/chain.pem"
+                      },
+                      "key": {
+                        "path": "/path/to/bundle/key.pem"
+                      },
+                      "key_password": {
+                        "path": "/path/to/bundle/key-password.pem"
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$file_kind": {
+                      "$ref": "#/components/schemas/emqx_mgmt_api_certs.file_out"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bundle not found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      },
+      "post": {
+        "description": "Upload a file to a global namespace bundle.",
+        "parameters": [
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_certs.files_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      }
+    },
+    "/certs/ns/{namespace}/list": {
+      "get": {
+        "description": "List all bundles in a managed namespace.",
+        "parameters": [
+          {
+            "example": "ns1",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "list": {
+                    "summary": "List",
+                    "value": [
+                      {
+                        "name": "bundle1"
+                      },
+                      {
+                        "name": "bundle2"
+                      }
+                    ]
+                  }
+                },
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/emqx_mgmt_api_certs.bundle_out"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      }
+    },
+    "/certs/ns/{namespace}/name/{name}": {
+      "delete": {
+        "description": "Delete a managed namespace bundle.",
+        "parameters": [
+          {
+            "example": "ns1",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      },
+      "get": {
+        "description": "List all files in a managed namespace bundle.",
+        "parameters": [
+          {
+            "example": "ns1",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "list": {
+                    "summary": "List",
+                    "value": {
+                      "acc_key": {
+                        "path": "/path/to/bundle/acc-key.pem"
+                      },
+                      "ca": {
+                        "path": "/path/to/bundle/ca.pem"
+                      },
+                      "chain": {
+                        "path": "/path/to/bundle/chain.pem"
+                      },
+                      "key": {
+                        "path": "/path/to/bundle/key.pem"
+                      },
+                      "key_password": {
+                        "path": "/path/to/bundle/key-password.pem"
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "properties": {
+                    "$file_kind": {
+                      "$ref": "#/components/schemas/emqx_mgmt_api_certs.file_out"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "NOT_FOUND"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bundle not found.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      },
+      "post": {
+        "description": "Upload a file to a managed namespace bundle.",
+        "parameters": [
+          {
+            "example": "ns1",
+            "in": "path",
+            "name": "namespace",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "example": "bundle1",
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/emqx_mgmt_api_certs.files_in"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "BAD_REQUEST"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Bad request.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "code": {
+                      "enum": [
+                        "INTERNAL_ERROR"
+                      ],
+                      "type": "string"
+                    },
+                    "message": {
+                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "bearerAuth": []
+          }
+        ],
+        "tags": [
+          "TLS Management"
+        ]
+      }
+    },
     "/clients": {
       "get": {
         "description": "List clients",
@@ -72797,7 +74531,8 @@
                 "sys_topics",
                 "sysmon",
                 "telemetry",
-                "topic_metrics"
+                "topic_metrics",
+                "trace"
               ],
               "type": "string"
             }
@@ -74636,6 +76371,33 @@
                     "username": "default"
                   },
                   {
+                    "description": "My connector",
+                    "enable": true,
+                    "node_status": [
+                      {
+                        "node": "emqx@localhost",
+                        "status": "connected"
+                      }
+                    ],
+                    "parameters": {
+                      "bucket": "example_bucket",
+                      "influxdb_type": "influxdb_api_v2",
+                      "org": "examlpe_org",
+                      "token": "example_token"
+                    },
+                    "pool_size": 8,
+                    "resource_opts": {
+                      "health_check_interval": "45s",
+                      "start_after_created": true,
+                      "start_timeout": "5s"
+                    },
+                    "server": "my.timestream.endpoint:8086",
+                    "ssl": {
+                      "enable": true
+                    },
+                    "status": "connected"
+                  },
+                  {
                     "actions": [
                       "my_action"
                     ],
@@ -75527,6 +77289,9 @@
                         "$ref": "#/components/schemas/redis.get_connector"
                       },
                       {
+                        "$ref": "#/components/schemas/connector_aws_timestream.get_connector"
+                      },
+                      {
                         "$ref": "#/components/schemas/bridge_influxdb.get_connector"
                       },
                       {
@@ -75653,6 +77418,31 @@
                     },
                     "type": "alloydb",
                     "username": "postgres"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Connector",
+                  "value": {
+                    "description": "My connector",
+                    "enable": true,
+                    "name": "my_connector",
+                    "parameters": {
+                      "bucket": "example_bucket",
+                      "influxdb_type": "influxdb_api_v2",
+                      "org": "examlpe_org",
+                      "token": "example_token"
+                    },
+                    "pool_size": 8,
+                    "resource_opts": {
+                      "health_check_interval": "45s",
+                      "start_after_created": true,
+                      "start_timeout": "5s"
+                    },
+                    "server": "my.timestream.endpoint:8086",
+                    "ssl": {
+                      "enable": true
+                    },
+                    "type": "aws_timestream"
                   }
                 },
                 "azure_event_hub_producer": {
@@ -76484,7 +78274,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -76685,6 +78475,9 @@
                     "$ref": "#/components/schemas/redis.post_connector"
                   },
                   {
+                    "$ref": "#/components/schemas/connector_aws_timestream.post_connector"
+                  },
+                  {
                     "$ref": "#/components/schemas/bridge_influxdb.post_connector"
                   },
                   {
@@ -76808,6 +78601,36 @@
                       "status": "connected",
                       "type": "alloydb",
                       "username": "postgres"
+                    }
+                  },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Connector",
+                    "value": {
+                      "description": "My connector",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "bucket": "example_bucket",
+                        "influxdb_type": "influxdb_api_v2",
+                        "org": "examlpe_org",
+                        "token": "example_token"
+                      },
+                      "pool_size": 8,
+                      "resource_opts": {
+                        "health_check_interval": "45s",
+                        "start_after_created": true,
+                        "start_timeout": "5s"
+                      },
+                      "server": "my.timestream.endpoint:8086",
+                      "ssl": {
+                        "enable": true
+                      },
+                      "status": "connected"
                     }
                   },
                   "azure_event_hub_producer": {
@@ -77993,7 +79816,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -78257,6 +80080,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/redis.get_connector"
+                    },
+                    {
+                      "$ref": "#/components/schemas/connector_aws_timestream.get_connector"
                     },
                     {
                       "$ref": "#/components/schemas/bridge_influxdb.get_connector"
@@ -78533,6 +80359,36 @@
                       "username": "postgres"
                     }
                   },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Connector",
+                    "value": {
+                      "description": "My connector",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "bucket": "example_bucket",
+                        "influxdb_type": "influxdb_api_v2",
+                        "org": "examlpe_org",
+                        "token": "example_token"
+                      },
+                      "pool_size": 8,
+                      "resource_opts": {
+                        "health_check_interval": "45s",
+                        "start_after_created": true,
+                        "start_timeout": "5s"
+                      },
+                      "server": "my.timestream.endpoint:8086",
+                      "ssl": {
+                        "enable": true
+                      },
+                      "status": "connected"
+                    }
+                  },
                   "azure_event_hub_producer": {
                     "summary": "Azure Event Hub Connector",
                     "value": {
@@ -79716,7 +81572,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -79982,6 +81838,9 @@
                       "$ref": "#/components/schemas/redis.get_connector"
                     },
                     {
+                      "$ref": "#/components/schemas/connector_aws_timestream.get_connector"
+                    },
+                    {
                       "$ref": "#/components/schemas/bridge_influxdb.get_connector"
                     },
                     {
@@ -80135,6 +81994,29 @@
                       ]
                     },
                     "username": "postgres"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Connector",
+                  "value": {
+                    "description": "My connector",
+                    "enable": true,
+                    "parameters": {
+                      "bucket": "example_bucket",
+                      "influxdb_type": "influxdb_api_v2",
+                      "org": "examlpe_org",
+                      "token": "example_token"
+                    },
+                    "pool_size": 8,
+                    "resource_opts": {
+                      "health_check_interval": "45s",
+                      "start_after_created": true,
+                      "start_timeout": "5s"
+                    },
+                    "server": "my.timestream.endpoint:8086",
+                    "ssl": {
+                      "enable": true
+                    }
                   }
                 },
                 "azure_event_hub_producer": {
@@ -80878,7 +82760,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -81068,6 +82950,9 @@
                     "$ref": "#/components/schemas/redis.put_connector"
                   },
                   {
+                    "$ref": "#/components/schemas/connector_aws_timestream.put_connector"
+                  },
+                  {
                     "$ref": "#/components/schemas/bridge_influxdb.put_connector"
                   },
                   {
@@ -81191,6 +83076,36 @@
                       "status": "connected",
                       "type": "alloydb",
                       "username": "postgres"
+                    }
+                  },
+                  "aws_timestream": {
+                    "summary": "AWS Timestream Connector",
+                    "value": {
+                      "description": "My connector",
+                      "enable": true,
+                      "node_status": [
+                        {
+                          "node": "emqx@localhost",
+                          "status": "connected"
+                        }
+                      ],
+                      "parameters": {
+                        "bucket": "example_bucket",
+                        "influxdb_type": "influxdb_api_v2",
+                        "org": "examlpe_org",
+                        "token": "example_token"
+                      },
+                      "pool_size": 8,
+                      "resource_opts": {
+                        "health_check_interval": "45s",
+                        "start_after_created": true,
+                        "start_timeout": "5s"
+                      },
+                      "server": "my.timestream.endpoint:8086",
+                      "ssl": {
+                        "enable": true
+                      },
+                      "status": "connected"
                     }
                   },
                   "azure_event_hub_producer": {
@@ -82376,7 +84291,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Connector",
+                    "summary": "Snowflake Aggregated Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -82640,6 +84555,9 @@
                     },
                     {
                       "$ref": "#/components/schemas/redis.get_connector"
+                    },
+                    {
+                      "$ref": "#/components/schemas/connector_aws_timestream.get_connector"
                     },
                     {
                       "$ref": "#/components/schemas/bridge_influxdb.get_connector"
@@ -83033,6 +84951,31 @@
                     },
                     "type": "alloydb",
                     "username": "postgres"
+                  }
+                },
+                "aws_timestream": {
+                  "summary": "AWS Timestream Connector",
+                  "value": {
+                    "description": "My connector",
+                    "enable": true,
+                    "name": "my_connector",
+                    "parameters": {
+                      "bucket": "example_bucket",
+                      "influxdb_type": "influxdb_api_v2",
+                      "org": "examlpe_org",
+                      "token": "example_token"
+                    },
+                    "pool_size": 8,
+                    "resource_opts": {
+                      "health_check_interval": "45s",
+                      "start_after_created": true,
+                      "start_timeout": "5s"
+                    },
+                    "server": "my.timestream.endpoint:8086",
+                    "ssl": {
+                      "enable": true
+                    },
+                    "type": "aws_timestream"
                   }
                 },
                 "azure_event_hub_producer": {
@@ -83864,7 +85807,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Connector",
+                  "summary": "Snowflake Aggregated Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -84063,6 +86006,9 @@
                   },
                   {
                     "$ref": "#/components/schemas/redis.post_connector"
+                  },
+                  {
+                    "$ref": "#/components/schemas/connector_aws_timestream.post_connector"
                   },
                   {
                     "$ref": "#/components/schemas/bridge_influxdb.post_connector"
@@ -84681,7 +86627,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "3A3DAE94EE1FA000",
+            "example": "8C00D19679D669AD",
             "in": "path",
             "name": "site",
             "required": true,
@@ -84743,7 +86689,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "3A3DAE94EE1FA000",
+            "example": "8C00D19679D669AD",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85152,7 +87098,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "3A3DAE94EE1FA000",
+            "example": "8C00D19679D669AD",
             "in": "path",
             "name": "site",
             "required": true,
@@ -85237,7 +87183,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "3A3DAE94EE1FA000",
+            "example": "8C00D19679D669AD",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90685,73 +92631,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -90852,6 +92731,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -96474,8 +98420,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -103044,6 +104990,40 @@
         ]
       }
     },
+    "/prometheus/namespaced_stats": {
+      "get": {
+        "description": "Get Prometheus Namespaced Metrics",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/emqx_prometheus_api.mode"
+          },
+          {
+            "$ref": "#/components/parameters/emqx_prometheus_api.ns"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "security": [],
+        "tags": [
+          "Monitor"
+        ]
+      }
+    },
     "/prometheus/schema_validation": {
       "get": {
         "description": "Get Prometheus Metrics for Schema Validation",
@@ -106571,8 +108551,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -106581,8 +108561,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -108134,8 +110114,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -108147,10 +110127,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -108403,8 +110383,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -108591,8 +110571,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -108648,8 +110628,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -108662,10 +110642,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -108722,8 +110702,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -108735,10 +110715,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -108755,10 +110735,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -110012,8 +111992,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -110103,8 +112083,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
