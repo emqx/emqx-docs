@@ -111,13 +111,13 @@ Transactions rely on **Optimistic Concurrency Control (OCC)**, assuming that cli
 **Transaction Flow:**
 
 1. **Initiation:** A client process (Tx) requests the Leader node to create a transaction context (containing the Leader's term and last committed serial number).
-2. **Operations:** The client schedules reads (added to the context), writes, and deletes. It also sets commit preconditions (e.g., check for the existence/non-existence of specific TTVs). Scheduled writes/deletes only materialize upon full commitment and replication.
+2. **Operations:** Durable storage transaction is represented by an Erlang function. In the body of the function the client can read data (information about accessed topics and time ranges is added to the transaction context), schedule writes and deletes. The client can also set commit preconditions (checks for the existence/non-existence of specific TTVs). Reads are executed immediately, while scheduled writes/deletes only materialize upon full commitment and replication.
 3. **Submission & Verification:** The client sends the list of operations to the Leader.
    - The Leader checks the preconditions against the latest data snapshot.
    - It verifies that the reads do not conflict with recent writes.
 4. **"Cooking (preparing)" and Logging:** If successful, the Leader "cooks" the transaction:
-   - It assigns written TTVs to streams.
-   - It creates a deterministic list of low-level storage mutations applicable to all replicas.
+   - It assigns each written TTVs to on of the streams, creating new streams if necessary.
+   - It creates a list of low-level storage mutations that can be applied to all replicas in a deterministic manner.
 5. **Commit:** A batch of "cooked" transactions is added to the Raft log (`builtin_raft`) or the RocksDB write-ahead log (WAL).
 6. **Outcome:** Upon successful completion, the transaction process is notified. Conflicts result in the transaction being aborted and retried.
 

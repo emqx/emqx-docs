@@ -167,11 +167,11 @@ Durable Storage is the backbone for durable sessions and shared subscription ses
 
 ### Durable Sessions
 
-Durable Sessions are implemented on top of the DS database engine. When a client connects with a **non-zero session expiry interval**, EMQX stores the session state and the messages routed to that session in DS.
+Durable Sessions are implemented on top of the DS database engine. When a client connects with a **non-zero session expiry interval**, EMQX stores the session state in DS.
 
 - **Message persistence:**
 
-  When a durable session subscribes to a topic, matching messages are saved to the DS in addition to being delivered to online clients. This ensures that messages published while the client is offline are available when it reconnects.
+  When a durable session subscribes to a topic filter with QoS > 0, this topic filter is marked as "durable" in the EMQX's routing table. Messages published to any topic marked this way are saved to the DS in addition to being delivered to regular clients.
 
 - **Progress tracking:**
 
