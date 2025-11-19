@@ -1,6 +1,6 @@
 # Quick Start: Experience Namespaces
 
-This section guides you through using the [MQTTX client](https://mqttx.app) to connect to EMQX and quickly experience the core capabilities of the namespace feature: tenant identification, client isolation, and topic isolation.
+This section guides you through using the [MQTTX client](https://mqttx.app) to connect to EMQX and quickly experience the core capabilities of the namespace feature: tenant identification, client and topic isolation, and ACL isolation.
 
 ## Enable the `tns` Attribute for Namespace Identification
 
@@ -70,28 +70,26 @@ This section guides you through using the [MQTTX client](https://mqttx.app) to c
      - Client A's subscribed topic appears as `tenantA/test/topic`.
      - Client B's published topic appears as `tenantB/test/topic`.
 
-4. ACL isolation
+## Enable Mountpoint-Based ACL Checks
 
-   By default, authorization (ACL) checks do not include the mountpoint prefix for backward compatibility. This means that ACL rules are evaluated against the original topic name (e.g., `test/topic`) rather than the namespaced topic (e.g., `tenantA/test/topic`).
+By default, authorization (ACL) checks do not include the mountpoint prefix to preserve backward compatibility. This means that ACL rules are evaluated against the original topic name (e.g., `test/topic`) rather than the namespaced topic (e.g., `tenantA/test/topic`).
 
-   Starting from EMQX 6.1, you can enable mountpoint-aware authorization to achieve namespace-level ACL isolation:
+Starting from EMQX 6.1, you can enable mountpoint-aware authorization to achieve namespace-level ACL isolation.
 
-   **Enable mountpoint-aware authorization**:
+To enable this feature, add the following configuration to `base.hocon`:
 
-   Add the following configuration to `base.hocon`:
+```hocon
+authorization.include_mountpoint = true
+```
 
-   ```
-   authorization.include_mountpoint = true
-   ```
+Alternatively, enable it in the Dashboard:
 
-   Alternatively, configure this in the Dashboard:
+1. Navigate to **Access Control** -> **Authorization** -> **Settings**.
+2. Enable **Include Mountpoint in Authorization Check**.
+3. Click **Save Changes**.
 
-   1. Navigate to **Access Control** -> **Authorization** -> **Settings**.
-   2. Enable **Include Mountpoint in Authorization Check**.
-   3. Click **Save Changes**.
+::: tip Note
 
-   ::: tip Note
+When `authorization.include_mountpoint=true` is enabled, all ACL rules must include the mountpoint in the topic pattern. For example, if a client connects to a listener with mountpoint `tenantA/` wants to subscribe to `test/topic`, the corresponding ACL rule must be configured as `tenantA/test/topic`.
 
-   When `authorization.include_mountpoint=true` is enabled, all ACL rules must include the mountpoint in the topic pattern. For example, if a client connects to a listener with mountpoint `tenantA/` wants to subscribe to `test/topic`, the ACL rule should be configured as `tenantA/test/topic`.
-
-   :::
+:::
