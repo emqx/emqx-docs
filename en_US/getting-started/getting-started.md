@@ -56,7 +56,7 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
 
 ### Install EMQX Using Installation Package
 
-You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecure (Apple Silicon) as an example to illustrate the installation steps.
+You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
 
 ::: tip
 
@@ -114,7 +114,7 @@ The broker address and the port information should be prepared before testing th
 
 1. Click [MQTTX Web](https://mqttx.app/web-client#/recent_connections) to visit the browser-based MQTTX.
 
-2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page:
+2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configuration page:
 
    - **Name**: Input a connection name, for example, `MQTTX_Test`.
 
