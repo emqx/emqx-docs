@@ -4,8 +4,8 @@
 
 | Since version | Issue                                                        | Workaround                                                   | Status         |
 | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------- |
-| 5.8.0         | **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item**<br />If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled. | Run the following command on any EMQX node:<br />`$ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."` | Fixed in 5.8.8 |
-| 5.8.1         | **External Schema Registries are not loaded after a node restart** | -                                                        | Fixed in 5.8.8 |
+| 5.8.0         | **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item**<br />If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled. | Run the following command on any EMQX node:<br />`$ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."` | Resolved in 5.8.8 |
+| 5.8.1         | **External Schema Registries are not loaded after a node restart** | -                                                        | Resolved in 5.8.8 |
 | 5.7.0         | **Cluster Link garbage collection may remove active routes**<br />When multiple independent Cluster Links are configured and some links remain down for relatively long periods, the garbage collection process may mistakenly remove active routes from the internal routing table. This can cause affected Cluster Links to forward only a subset of messages or stop forwarding messages entirely. | -                                                        |  |
 
 ## e5.8.6
