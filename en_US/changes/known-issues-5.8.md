@@ -2,143 +2,42 @@
 
 ## e5.8.8
 
-- **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item (since 5.8.0, will be fixed in 5.8.8)**.
-
-  If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled.
-
-  > **Workaround:**
-  > Run the following command on any EMQX node.
-  >
-  > ```
-  > $ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."
-  > ```
-
-- **External Schema Registries are not loaded after a node restart (since 5.8.1, will be fixed in 5.8.8)**.
+| Since version | Issue                                                        | Workaround                                                   | Status            |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| 5.8.0         | **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item**<br />If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled. | Run the following command on any EMQX node:<br />`$ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."` | Resolved in 5.8.8 |
+| 5.8.1         | **External Schema Registries are not loaded after a node restart** | -                                                            | Resolved in 5.8.8 |
+| 5.7.0         | **Cluster Link garbage collection may remove active routes**<br />When multiple independent Cluster Links are configured and some links remain down for relatively long periods, the garbage collection process may mistakenly remove active routes from the internal routing table. This can cause affected Cluster Links to forward only a subset of messages or stop forwarding messages entirely. | -                                                            |                   |
 
 ## e5.8.6
 
-- **Occasional RPC errors in logs due to failed attempts to contact nodes that had left the cluster (since 5.8.5, will be fixed in 5.9.0)**
-
-  This type of log message surge typically begins after a routine rolling upgrade. Example of such a log event:
-  ```
-  pid: <0.123456.0>, msg: event=connect_to_remote_server, peer=emqx@10.11.12.13, port=5370, reason=ehostunreach
-  ```
-
-  The presence of these messages does not indicate any impact on message delivery for existing connections.
-
-  > **Workaround:**
-  > Run the following command on one of EMQX hosts. Replace `emqx@10.11.12.13` with the actual node name mentioned in the error log.
-  > Before executing this command, double-check that this node is no longer part of the cluster.
-  >
-  > ```
-  > $ emqx eval "emqx_router:cleanup_routes('emqx@10.11.12.13')"
-  > ```
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-14055 -->
-
-- **TLS listener started with default configuration cannot be hot-updated to use tlsv1.3 only (since 5.4.0, will be fixed in 5.9.0)**
-
-  May fail with error like `incompatible,[client_renegotiation,{versions,['tlsv1.3']}]`
-
-  > **Workaround:**
-  > Disable the listener, then re-enable it after config change.
-
-- **Node Crash if Linux monotonic clock steps backward (since 5.0)**
-
-  In certain virtual Linux environments, the operating system is unable to keep the clocks monotonic,
-  which may cause Erlang VM to exit with message `OS monotonic time stepped backwards!`.
-  For such environments, one may set the `+c` flag to `false` in `etc/vm.args`.
-
-- **IoTDB May Not Work Properly in Batch Mode when `batch_size > 1` (since 5.0)**
-
-  This issue arises because EMQX uses the IoTDB v1 API, which lacks native support for batch operations. To simulate batch functionality, an iterative approach is used; however, this method is not atomic and may lead to bugs.
-
-- **The Thrift Driver for IoTDB Does Not Support `async` Mode (since 5.8.1)**
-
-- **Limitation in SAML-Based SSO (since 5.3)**
-
-  EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity.
+| Since version | Issue                                                        | Workaround                                                   | Status                    |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------- |
+| 5.8.5         | <!-- https://emqx.atlassian.net/browse/EMQX-14055 -->**Occasional RPC errors appear in logs due to failed attempts to contact nodes that had left the cluster**<br />This type of log message surge typically begins after a routine rolling upgrade. Example of such a log event:<br />`pid: <0.123456.0>, msg: event=connect_to_remote_server, peer=emqx@10.11.12.13, port=5370, reason=ehostunreach`<br />The presence of these messages does not indicate any impact on message delivery for existing connections. | Run the following command on one of the EMQX hosts. Replace `emqx@10.11.12.13` with the actual node name mentioned in the error log.<br />Before executing this command, double-check that this node is no longer part of the cluster.<br />`$ emqx eval "emqx_router:cleanup_routes('emqx@10.11.12.13')"` | Will be resolved in 5.9.0 |
+| 5.4.0         | **TLS listener started with default configuration cannot be hot-updated to use tlsv1.3 only.**<br />May fail with error like `incompatible,[client_renegotiation,{versions,['tlsv1.3']}]` | Disable the listener, then re-enable it after config change. | Will be resolved in 5.9.0 |
+| 5.0.0         | **Node Crash if Linux monotonic clock steps backward**<br />In certain virtual Linux environments, the operating system is unable to keep the clocks monotonic, which may cause Erlang VM to exit with the message `OS monotonic time stepped backwards!`. | For such environments, you may set the `+c` flag to `false` in `etc/vm.args`. |                           |
+| 5.0.0         | **IoTDB May Not Work Properly in Batch Mode when `batch_size > 1`**<br />This issue arises because EMQX uses the IoTDB v1 API, which lacks native support for batch operations. To simulate batch functionality, an iterative approach is used; however, this method is not atomic and may lead to bugs. | -                                                            |                           |
+| 5.8.1         | **The Thrift Driver for IoTDB Does Not Support `async` Mode** | -                                                            |                           |
+| 5.3.0         | **Limitation in SAML-Based SSO**<br />EMQX Dashboard supports Single Sign-On based on the Security Assertion Markup Language (SAML) 2.0 standard and integrates with Okta and OneLogin as identity providers. However, the SAML-based SSO currently does not support a certificate signature verification mechanism and is incompatible with Azure Entra ID due to its complexity. | -                                                            |                           |
 
 ## e5.8.4
 
-- **Node Cannot Start if a New Node Joined Cluster While It was Stopped (since 5.0, fixed in 5.8.5)**
-
-  In a cluster of 2 or more nodes, if a new node joins the cluster while some nodes are down, the nodes that were down will fail to restart and will emit logs like below.
-  `2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (core dumped to file: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** Failed to merge schema: {aborted,function_clause}`
-
-  > **Workaround:**
-  > Delete the `data/mnesia` directory and restart the node.
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-12290 -->
-
-- **Shard Replica Set Changes Become Stuck once Number of Sites are Lost (since 5.8.0, fixed in 5.8.5)**
-
-  _This issue may occur only when Durable Sessions are enabled and backed by DS Raft backend._
-
-  When nodes acting as replication sites for Durable Storage data permanently leave the cluster without handing off the data first, it may lead to a situation where any requested replica set transitions will never finish.
-
-  As a simplified example, this is how it could look in `emqx ctl ds info` output. Here, node `emqx@emqxc1-core0.local` has left the cluster while it was still responsible and was the only replication site for all shards, and then `emqx@emqxc2-core0.local` was asked to take over with `emqx ds join messages ABCDEF2222222222`.
-  ```
-  Site
-  ABCDEF1111111111 'emqx@emqxc1-core0.local' (!) UNIDENTIFIED
-  ABCDEF2222222222 'emqx@emqxc2-core0.local' up
-  <...>
-  
-  Shard            Replicas
-  messages/0       (!) ABCDEF1111111111
-  messages/1       (!) ABCDEF1111111111
-  <...>
-  messages/9       (!) ABCDEF1111111111
-  
-  Shard             Transitions
-  messages/0        +ABCDEF2222222222 -ABCDEF1111111111
-  messages/1        +ABCDEF2222222222 -ABCDEF1111111111
-  <...>
-  messages/9        +ABCDEF2222222222 -ABCDEF1111111111
-  ```
-
-  In this example, transition `+ABCDEF2222222222` would never finish.
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-13886 -->
+| Since version | Issue                                                        | Workaround                                               | Status            |
+| ------------- | ------------------------------------------------------------ | -------------------------------------------------------- | ----------------- |
+| 5.0.0         | <!-- https://emqx.atlassian.net/browse/EMQX-12290 -->**Node Cannot Start if a New Node Joined Cluster While It was Stopped**<br />In a cluster of 2 or more nodes, if a new node joins the cluster while some nodes are down, the nodes that were down will fail to restart and will emit logs like below.<br />`2024-10-03T17:13:45.063985+00:00 [error] Mnesia('emqx@172.17.0.5'): ** ERROR ** (core dumped to file: "/opt/emqx/MnesiaCore.emqx@172.17.0.5_1727_975625_63176"), ** FATAL ** Failed to merge schema: {aborted,function_clause}` | Delete the `data/mnesia` directory and restart the node. | Resolved in 5.8.5 |
+| 5.8.0         | <!-- https://emqx.atlassian.net/browse/EMQX-13886 -->**Shard Replica Set Changes Become Stuck once Number of Sites are Lost**<br />_This issue may occur only when Durable Sessions are enabled and backed by DS Raft backend._<br />When nodes acting as replication sites for Durable Storage data permanently leave the cluster without handing off the data first, it may lead to a situation where any requested replica set transitions will never finish.<br />As a simplified example, this is how it could look in `emqx ctl ds info` output. Here, node `emqx@emqxc1-core0.local` has left the cluster while it was still responsible and was the only replication site for all shards, and then `emqx@emqxc2-core0.local` was asked to take over with `emqx ds join messages ABCDEF2222222222`.<br />`Site`<br />`ABCDEF1111111111 'emqx@emqxc1-core0.local' (!) UNIDENTIFIED`<br />`ABCDEF2222222222 'emqx@emqxc2-core0.local' up`<br />`<...>`<br /><br />`Shard            Replicas`<br />`messages/0       (!) ABCDEF1111111111`<br />`messages/1       (!) ABCDEF1111111111`<br />`<...>`<br />`messages/9       (!) ABCDEF1111111111`<br /><br />`Shard             Transitions`<br />`messages/0        +ABCDEF2222222222 -ABCDEF1111111111`<br />`messages/1        +ABCDEF2222222222 -ABCDEF1111111111`<br />`<...>`<br />`messages/9        +ABCDEF2222222222 -ABCDEF1111111111`<br />In this example, transition `+ABCDEF2222222222` would never finish. | -                                                        | Resolved in 5.8.5 |
 
 ## e5.8.1
 
-- **Kafka Disk Buffer Directory Name (since 5.8.0, fixed in 5.8.2)**
-
-  The introduction of a dynamic topic template for Kafka (Azure EventHubs, Confluent Platform) producer integration imposed an incompatible change for the on-disk buffer directory name.
-  If `disk` mode buffer is used, please wait for the 5.8.2 release to avoid buffered messages getting lost after upgrade from an older version.
-  If `hybrid` mode buffer is used, you will need to manually clean up the old directories after upgrading from an older version.
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-13248 -->
-
-- **Kafka Disk Buffer Resume (since 5.8.0, fixed in 5.8.2)**
-
-  If `disk` mode buffer is used, Kafka (Azure EventHubs, Confluent Platform) producers will not automatically start sending data from disk to Kafka after node restart. The sending will be triggered only after there is a new message to trigger the dynamic add of a topic producer.
-
-  <!-- https://emqx.atlassian.net/browse/EMQX-13242 -->
-
-- **Performance Degradation When Viewing Audit Events (since 5.4.0, fixed in 5.8.2)**
-
-  Enabling the audit log and viewing specific events in the Dashboard can, in rare cases, cause significant performance degradation or even crash the EMQX node in exceptional situations, particularly on memory-constrained nodes. Events known to cause this issue include Backup and Restore API requests and commands executed in the EMQX remote console that manipulate large data structures. Nodes may also take longer to start and become responsive in these situations.
-
-  > **Workaround:**
-  > Adjust the **Max Dashboard Record Size** through the Dashboard, or lower the `log.audit.max_filter_size` setting. Over time, problematic events will be cleared from the Audit log as new events are recorded.
-
-- **Distorted Gauge Values in `GET /monitor` HTTP API and Dashboard (since 5.8.1, fixed in 5.8.2)**
-
-  When using the `GET /monitor` HTTP API, which also provides data for the Dashboard, changing the time window from 1 hour to a larger time frame may cause fresh data points (collected within the past hour) to appear distorted.  For instance, three connections may incorrectly display as nine or more. This issue is purely visual for data points within the past hour. However, for data older than 1 hour, the distortion is irreversible.
-
-  Impacted gauges:
-
-  - `disconnected_durable_sessions`
-  - `subscriptions_durable`
-  - `subscriptions`
-  - `topics`
-  - `connections`
-  - `live_connections`
-
+| Since version | Issue                                                        | Workaround                                                   | Status            |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| 5.8.0         | <!-- https://emqx.atlassian.net/browse/EMQX-13248 -->**Kafka Disk Buffer Directory Name**<br />The introduction of a dynamic topic template for Kafka (Azure EventHubs, Confluent Platform) producer integration imposed an incompatible change for the on-disk buffer directory name.<br />If `disk` mode buffer is used, please wait for the 5.8.2 release to avoid buffered messages getting lost after upgrade from an older version.<br />If `hybrid` mode buffer is used, you will need to manually clean up the old directories after upgrading from an older version. | -                                                            | Resolved in 5.8.2 |
+| 5.8.0         | <!-- https://emqx.atlassian.net/browse/EMQX-13242 -->**Kafka Disk Buffer Resume**<br />If `disk` mode buffer is used, Kafka (Azure EventHubs, Confluent Platform) producers will not automatically start sending data from disk to Kafka after node restart. The sending will be triggered only after there is a new message to trigger the dynamic adding of a topic producer. | -                                                            | Resolved in 5.8.2 |
+| 5.4.0         | **Performance Degradation When Viewing Audit Events**<br />Enabling the audit log and viewing specific events in the Dashboard can, in rare cases, cause significant performance degradation or even crash the EMQX node in exceptional situations, particularly on memory-constrained nodes. Events known to cause this issue include Backup and Restore API requests and commands executed in the EMQX remote console that manipulate large data structures. Nodes may also take longer to start and become responsive in these situations. | Adjust the **Max Dashboard Record Size** through the Dashboard, or lower the `log.audit.max_filter_size` setting. Over time, problematic events will be cleared from the Audit log as new events are recorded. | Resolved in 5.8.2 |
+| 5.8.1         | **Distorted Gauge Values in `GET /monitor` HTTP API and Dashboard**<br />When using the `GET /monitor` HTTP API, which also provides data for the Dashboard, changing the time window from 1 hour to a larger time frame may cause fresh data points (collected within the past hour) to appear distorted.  For instance, three connections may incorrectly display as nine or more. This issue is purely visual for data points within the past hour. However, for data older than 1 hour, the distortion is irreversible.<br />Impacted gauges:<br />`disconnected_durable_sessions`<br />`subscriptions_durable`<br />`subscriptions`<br />`topics`<br />`connections`<br />`live_connections` | -                                                            | Resolved in 5.8.2 |
 
 ## e5.8.0
 
-- **Node Crash Race Condition (since 5.0, fixed in 5.8.1)**
-  If a node shuts down while RPC channels are being established, it may cause the peer node to crash.
+| Since version | Issue                                                        | Workaround | Status            |
+| ------------- | ------------------------------------------------------------ | ---------- | ----------------- |
+| 5.0.0         | **Node Crash Race Condition**<br />If a node shuts down while RPC channels are being established, it may cause the peer node to crash. | -          | Resolved in 5.8.1 |
+
