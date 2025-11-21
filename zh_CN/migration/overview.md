@@ -1,20 +1,20 @@
-# Migration Guides
+# 迁移指南
 
-This section provides comprehensive guides for migrating your IoT devices and solutions from other platforms to EMQX. Whether you are moving from a public cloud IoT service or another broker, these guides aim to provide a clear "happy path" for a seamless transition.
+本节提供从其他平台迁移 IoT 设备与解决方案至 EMQX 的完整指南。无论您是从公共云 IoT 服务还是其他 MQTT Broker 迁移，这些指南都将为您提供清晰可靠的路径，确保迁移过程顺畅无阻。
 
-## Available Guides
+## 可用的迁移指南
 
-Below are the step-by-step guides for migrating from specific platforms.
+以下是针对特定平台的分步迁移指南：
 
-* [AWS IoT Core](./migrate-from-aws-iot-core.md)
-* Azure IoT *(coming soon)*
-* HiveMQ *(coming soon)*
-* Mosquitto *(coming soon)*
+- [AWS IoT Core](./migrate-from-aws-iot-core.md)
+- [Azure IoT Hub](./migrate-from-azure-iot-hub)
+- HiveMQ *(即将上线)*
+- Mosquitto *(即将上线)*
 
-## General Migration Principles
+## 通用迁移原则
 
-While each platform has unique specifics, most migrations to EMQX follow a similar three-phase pattern, especially when using X.509 client certificate (mTLS) authentication:
+尽管各平台存在差异，但大多数迁移至 EMQX 的流程具有相似的三阶段模式，特别是在设备使用 X.509 客户端证书进行双向 TLS（mTLS）认证的场景下：
 
-1. **Gather Existing Credentials**: Before starting, ensure you have access to your devices' existing cryptographic assets. This typically includes each device's private key and the public CA (Certificate Authority) certificate that was used to issue your device certificates.
-2. **Configure EMQX Server-Side**: Set up the appropriate listeners on your EMQX cluster to handle the authentication method used by your devices. For a typical mTLS migration, this involves configuring an SSL/TLS listener to trust the CA that issued your device certificates.
-3. **Update Device Client-Side**: Reconfigure your devices to connect to the new EMQX broker. This change is often limited to updating the endpoint address, port, and (if necessary) the server's root CA certificate that the client uses to verify the EMQX server.
+1. **收集现有凭证**：在开始迁移前，确保您拥有设备现有的加密材料。通常包括每个设备的私钥，以及用于签发设备证书的公共 CA（证书颁发机构）证书。
+2. **配置 EMQX 服务端**：在 EMQX 集群上配置合适的监听器，以支持设备当前使用的认证方式。对于基于 mTLS 的迁移，这通常需要创建一个 SSL/TLS 监听器，并配置其信任签发设备证书的 CA。
+3. **更新设备端配置**：将设备的连接配置修改为指向 EMQX Broker。多数情况下，这仅需更新连接地址、端口，以及（如有必要）用于验证 EMQX 服务端身份的根 CA 证书。
