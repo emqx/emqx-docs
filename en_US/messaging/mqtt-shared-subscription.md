@@ -13,7 +13,7 @@ You can use client tools to connect to EMQX and try this messaging service. This
 
 ## Shared Subscription for Groups
 
-You can enable a shared subscription for groups of subscribers by adding the prefixed `$share/<group-name>` to the original topic. The group name can be any string. EMQX forwards messages to different groups at the same time and subscribers belonging to the same group receive messages with load balancing.
+You can enable a shared subscription for groups of subscribers by adding the prefixed `$share/<group-name>` to the original topic. The group name can be any string. EMQX forwards messages to different groups at the same time, and subscribers belonging to the same group receive messages with load balancing.
 
 For example, if subscribers `s1`, `s2`, and `s3` are members of group `g1`, subscribers `s4` and `s5` are members of group `g2`, and all subscribers subscribe to the original topic `t1`. The shared subscription topics must be `$share/g1/t1` and `$share/g2/t1`. When EMQX publishes a message `msg1` to the original topic `t1`:
 
@@ -36,6 +36,44 @@ When a client has a persistent session and subscribes to shared subscriptions, t
 When clients use MQTT v5, it is a good practice to set a short session expiry interval (if not 0). This allows the client to temporarily disconnect and reconnect to receive messages published during the disconnection period. When a session expires, the QoS1 and QoS2 messages in the send queue or the QoS1 messages in the infight queue will be re-dispatched to other sessions in the same group. When the last session expires, all pending messages will be discarded.
 
 For more information on the persistent session, see [MQTT Persistent Session and Clean Session Explained](https://www.emqx.com/en/blog/mqtt-session).
+
+## Configure Shared Subscription Strategy
+
+EMQX allows fine-grained control over how messages are distributed to subscribers within a shared subscription group. This behavior is defined by the Shared Subscription Strategy, which determines the algorithm used to select the subscriber that receives each message. By tuning this strategy, you can optimize message flow for different workloads, client deployment patterns, and cluster topologies.
+
+### Shared Subscription Dispatch Strategy
+
+The shared subscription dispatcher supports multiple strategies that influence how EMQX balances messages among subscribers:
+
+- **`random`**: Selects a subscriber at random, providing evenly distributed but non-deterministic message routing.
+
+- **`round_robin`**: Circulates messages through subscribers in sequence to achieve predictable distribution.
+
+- **`round_robin_per_group`**: Applies round-robin selection independently within each shared subscription group, suitable for deployments where groups represent separate workloads.
+
+- **`sticky`**: Attempts to keep routing messages to the same subscriber until the subscriber disconnects. This strategy helps avoid unnecessary re-processing or cross-client state sharing by keeping message flows on a single subscriber whenever possible.
+
+  When using this strategy, EMQX also applies an **Initial Sticky Pick** rule to decide which subscriber becomes the initial target when no sticky association exists.
+
+- **`local`**, **`hash_topic`**, **`hash_clientid`**: These strategies apply deterministic routing rules. The `local` strategy prioritizes delivering messages to subscribers on the same cluster node where the message is processed, reducing cross-node traffic and latency. The `hash_topic` and `hash_clientid` strategies use hashing on the topic name or publisher Client ID to route messages consistently to a specific subscriber. These strategies are useful when messages need stable, predictable routing for stateful processing or sharding scenarios.
+
+### Initial Sticky Pick
+
+When the shared subscription strategy is set to `sticky`, EMQX must determine the first subscriber to associate with the incoming message flow. The **Shared Subscription Initial Sticky Pick** option defines how EMQX performs this initial selection.
+
+This allows you to control whether the system favors local subscribers, uses hashing for deterministic routing, or randomly selects a subscriber.
+
+### Configure Dispatch Strategy via Dashboard
+
+You can configure these options in the EMQX Dashboard:
+
+1. Navigate to **Management** -> **MQTT Settings** -> **General**.
+2. Ensure **Allowed Shared Subscription** is enabled.
+3. Select the desired **Shared Subscription Strategy** from the dropdown list. The default option is `round_robin`.
+4. If the selected strategy is `sticky`, choose an appropriate **Shared Subscription Initial Sticky Pick** method. The default option is `random`.
+5. Click **Save Changes**.
+
+These settings take effect immediately and allow EMQX to adjust its message dispatching logic without requiring client-side configuration changes.
 
 ## Try Shared Subscription with MQTTX Desktop
 
