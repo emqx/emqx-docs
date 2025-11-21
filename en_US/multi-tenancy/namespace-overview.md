@@ -41,21 +41,21 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
   Namespaces provide a clean boundary for collecting metrics such as connection count and message throughput per tenant, essential for capacity planning and operational insight.
 
 - **Admin User Isolation**
-   
+  
   Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
   
   - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
   - Namespaced users only see and operate on resources within their assigned namespace.
    - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
    - This ensures secure, tenant-specific administrative access alongside data isolation.
-   
+  
 - **Multi-Tenant Management**
 
   System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
 
 ### Isolation Mechanisms
 
-EMQX offers high flexibility and has supported various isolation methods even before the namespace feature. The namespace feature provides a unified tenant identifier field (`client_attrs.tns`), allowing configurations like client ID and topic mount points to be organized and managed around unified tenant information.
+EMQX offers high flexibility and has supported various isolation methods even before the namespace feature. The namespace feature provides a unified tenant identifier field (`client_attrs.tns`), allowing configurations like client ID and topic mountpoints to be organized and managed around unified tenant information.
 
 However, note that isolation strategies still require **manual configuration** by users based on business needs; the system will not automatically enable client ID or topic isolation features.
 
@@ -69,9 +69,9 @@ However, note that isolation strategies still require **manual configuration** b
 
 ​       This rule adds the namespace as a prefix to the client ID to avoid conflicts.
 
-- **Topic Isolation Using Mount Points**
+- **Topic Isolation Using Mountpoints**
 
-  If clients in different namespaces need to publish or subscribe to the same topic names without affecting each other, you can use mount points to automatically add namespace prefixes:
+  If clients in different namespaces need to publish or subscribe to the same topic names without affecting each other, you can use mountpoints to automatically add namespace prefixes:
 
   ```
   listener.{TYPE}.{NAME}.mountpoint = "${client_attrs.tns}/"
@@ -79,7 +79,7 @@ However, note that isolation strategies still require **manual configuration** b
 
   This setting adds a namespace prefix to the topic name.
 
-As of version 5.9, namespaces are only applicable to MQTT clients. The Dashboard and REST API are not yet isolated based on namespaces. EMQX plans to implement unified management namespaces and MQTT namespaces in future versions. For details, see the [Multi-Tenancy Roadmap](#multi-tenancy-roadmap).
+  For backward compatibility, the Authorization (ACL) checks do **NOT** include the mountpoint prefix by default. Starting from EMQX 6.1, you can set `authorization.include_mountpoint=true` to allow authorization backends to receive topics with a mountpoint prefix.
 
 ## Enable Namespaces
 
@@ -109,11 +109,11 @@ You can also enable namespaces using the EMQX Dashboard:
 
 The following features are being rolled out progressively:
 
-- Unify management namespaces and MQTT namespaces.
-- Implement isolation for built-in database authentication.
-- Implement isolation for built-in database authorization.
+- Unify management namespaces and MQTT namespaces. (6.0)
+- Implement isolation for built-in database authentication. (6.1)
+- Implement isolation for built-in database authorization. (6.1)
+- Implement isolation for Prometheus metrics. (6.1)
 - Implement quota isolation for retained messages.
-- Implement isolation for Prometheus metrics.
 
 ::: tip Update
 
