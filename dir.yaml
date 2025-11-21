@@ -827,22 +827,16 @@
           path: observability/opentelemetry/opentelemetry
           collapsed: true
           children:
-            - title_en: Metrics
-              title_cn: 指标
-              title_ja: 指標
-              path: observability/opentelemetry/metrics
-            - title_en: Logs
-              title_cn: 日志
-              title_ja: ログ
-              path: observability/opentelemetry/logs
-            - title_en: Traces
-              title_cn: 追踪
-              title_ja: トレース
-              path: observability/opentelemetry/traces
+            - observability/opentelemetry/metrics
+            - observability/opentelemetry/logs
+            - observability/opentelemetry/traces
             - title_en: End-to-end Traces
               title_cn: 端到端追踪
               title_ja: エンドツーエンドトレース
               path: observability/opentelemetry/e2e-traces
+              collapsed: true
+              children:
+                - observability/opentelemetry/e2e_span_details
     - title_en: Backup and Restore
       title_cn: 备份与恢复
       title_ja: バックアップとリストア
