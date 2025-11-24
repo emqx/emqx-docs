@@ -435,6 +435,7 @@
   collapsed: true
   children:
     - migration/migrate-from-aws-iot-core
+    - migration/migrate-from-azure-iot-hub
 
 - title_en: Rule Engine
   title_cn: 规则引擎
