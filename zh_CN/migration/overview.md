@@ -8,7 +8,7 @@
 
 - [AWS IoT Core](./migrate-from-aws-iot-core.md)
 - [Azure IoT Hub](./migrate-from-azure-iot-hub)
-- HiveMQ *(即将上线)*
+- [HiveMQ](./migrate-from-hivemq)
 - Mosquitto *(即将上线)*
 
 ## 通用迁移原则

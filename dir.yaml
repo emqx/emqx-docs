@@ -436,6 +436,7 @@
   children:
     - migration/migrate-from-aws-iot-core
     - migration/migrate-from-azure-iot-hub
+    - migration/migrate-from-hivemq
 
 - title_en: Rule Engine
   title_cn: 规则引擎
