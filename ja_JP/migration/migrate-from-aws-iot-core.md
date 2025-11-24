@@ -1,12 +1,12 @@
 # Migrating from AWS IoT Core to EMQX
 
-This guide provides a comprehensive walkthrough for migrating IoT devices from AWS IoT Core to EMQX. It outlines the process for reconfiguring devices and the EMQX broker to ensure a seamless transition for an entire device fleet.
+This page provides a comprehensive walkthrough for migrating IoT devices from AWS IoT Core to EMQX. It outlines the process for reconfiguring devices and the EMQX broker to ensure a seamless transition for an entire device fleet.
 
-The guide focuses on the most common and robust authentication method supported by both platforms: X.509 Client Certificate (mTLS) Authentication. This guide assumes you are using your own custom Certificate Authority (CA) registered with AWS IoT Core to sign device certificates. If you are using AWS-issued certificates ("one-click" method), you will need to transition to using your own CA, as AWS's proprietary intermediate CAs are not accessible for third-party broker configuration.
+The guide focuses on the most common and robust authentication method supported by both platforms: X.509 Client Certificate (mTLS) Authentication. This guide assumes you are using your own custom Certificate Authority (CA) registered with AWS IoT Core to sign device certificates. If your devices were provisioned using AWS-issued (“one-click”) certificates, you cannot reuse those certificates. AWS does not expose the intermediate CAs used to sign these certificates, so they cannot be trusted by MQTT brokers such as EMQX. In this case, you must create your own CA and re-issue device certificates.
 
-## Migration at a Glance: The "Happy Path"
+## Migration at a Glance: Standard Flow
 
-For devices using X.509 client certificates (mTLS) signed by your own CA with AWS IoT Core, the migration to EMQX is straightforward. Standard-compliant clients, including the official AWS IoT Device SDKs, can connect to EMQX with minimal changes to the client-side code—only the endpoint and server CA certificate need to be updated. Your existing device certificates and private keys remain valid.
+For devices using X.509 client certificates (mTLS) signed by your own CA with AWS IoT Core, the migration to EMQX is straightforward. Standard-compliant clients, including the official AWS IoT Device SDKs, can connect to EMQX with minimal changes to the client-side code: only the endpoint and server CA certificate need to be updated. Your existing device certificates and private keys remain valid.
 
 The migration process consists of three main phases:
 
@@ -14,17 +14,17 @@ The migration process consists of three main phases:
 
 2. **Configure EMQX for mTLS**. Set up an SSL/TLS listener on the EMQX broker, enable mandatory peer verification, and configure the listener to trust your CA.
 
-3. **Update Device Clients**. Update device client code with the new EMQX endpoint address and the EMQX server's CA certificate for server verification.
+3. **Update Device Clients**. Update the device client code with the new EMQX endpoint address and the EMQX server's CA certificate for server verification.
 
 The following table summarizes the parameter changes required at a high level.
 
 | **Parameter** | **AWS IoT Core (Example)** | **EMQX (Example)** | **Notes** |
 | ------------- | -------------------------- | ------------------ | --------- |
 | **Endpoint Hostname**  | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com` | `mqtt.example.com` | Update device client code/firmware |
-| **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. Device continues using its existing certificate signed by your CA. |
-| **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. Device continues using its existing private key. |
+| **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. The device continues using its existing certificate signed by your CA. |
+| **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. The device continues using its existing private key. |
 | **Server Verification** (Device trusts Server) | Device client uses `AmazonRootCA1.pem` | Device client must be updated to use `emqx-server-ca.pem` | The client must trust the CA that issued the EMQX server's certificate. |
-| **Client Verification** (Server trusts Device) | AWS IoT Core trusts your registered CA | EMQX listener's `cacertfile` must be set to `your-ca.pem` | EMQX must be configured to trust the same CA you registered with AWS IoT Core.
+| **Client Verification** (Server trusts Device) | AWS IoT Core trusts your registered CA | EMQX listener's `cacertfile` must be set to `your-ca.pem` | EMQX must be configured to trust the same CA you registered with AWS IoT Core.|
 
 ## Phase 1: Prepare Your CA Certificate
 
@@ -41,7 +41,7 @@ openssl x509 -in device-001.cert.pem -text -noout | grep "Issuer"
 The issuer should match your organization's CA, not AWS intermediate CAs.
 
 ::: tip
-**If you are using AWS-issued certificates**: AWS IoT Core's "one-click" certificate generation uses proprietary intermediate CAs that are not accessible to customers. If your devices use AWS-issued certificates, you will need to create your own CA and re-issue certificates to your devices before migrating to EMQX. This is beyond the scope of this guide, but you can use standard tools like OpenSSL or a PKI solution to create a CA and issue device certificates.
+**If you are using AWS-issued certificates**, AWS IoT Core's "one-click" certificate generation uses proprietary intermediate CAs that are not accessible to customers. If your devices use AWS-issued certificates, you will need to create your own CA and re-issue certificates to your devices before migrating to EMQX. This is beyond the scope of this guide, but you can use standard tools like OpenSSL or a PKI solution to create a CA and issue device certificates.
 :::
 
 ## Phase 2: Configure EMQX for mTLS Authentication
@@ -83,10 +83,11 @@ listeners.ssl.default {
 ```
 
 ::: tip
-Both AWS IoT Core and EMQX use port 8883 as the default for MQTT over TLS/SSL, so no port changes are needed in your device clients.
+Both AWS IoT Core and EMQX use port `8883` as the default for MQTT over TLS/SSL, so no port changes are needed in your device clients.
 :::
 
 **Key Configuration Parameters**:
+
 * `cacertfile`: Path to your CA certificate file that you registered with AWS IoT Core. This allows EMQX to verify that connecting device certificates are authentic.
 * `verify`: Must be set to `verify_peer` to enable mTLS.
 * `fail_if_no_peer_cert`: Must be set to `true` to reject connections without a client certificate, enforcing mTLS.
@@ -120,9 +121,9 @@ For example, if your device certificates have CN=device-001, enabling `mqtt.peer
 
 ## Phase 3: Update Device Clients and Verify Migration
 
-The final phase is to update device client code to point to the new EMQX broker endpoint. This process is demonstrated using the official [AWS IoT Device SDK for Python v2](https://github.com/aws/aws-iot-device-sdk-python-v2).
+The final phase is to update the device client code to point to the new EMQX broker endpoint. This process is demonstrated using the official [AWS IoT Device SDK for Python v2](https://github.com/aws/aws-iot-device-sdk-python-v2).
 
-AWS IoT SDKs are not locked into the AWS platform; they function as standard-compliant MQTT-over-TLS clients. This means existing application code built on these SDKs can be preserved, requiring changes only to the connection endpoint and server CA certificate parameters.
+AWS IoT SDKs are not locked into the AWS platform. They function as standard-compliant MQTT-over-TLS clients. This means existing application code built on these SDKs can be preserved, requiring changes only to the connection endpoint and server CA certificate parameters.
 
 ### Client-Side Code Modifications (Python Example)
 
@@ -167,9 +168,9 @@ python3 mqtt5_x509.py \
   --count 10
 ```
 
-Note that the certificate and key parameters remain unchanged - only the endpoint changes.
+Note that the certificate and key parameters remain unchanged. Only the endpoint changes.
 
-If you need to explicitly specify the server CA certificate (when not using system trust store), you can modify the SDK sample to add the `ca_filepath` parameter:
+If you need to explicitly specify the server CA certificate (when not using the system trust store), you can modify the SDK sample to add the `ca_filepath` parameter:
 
 ```python
 # In mqtt5_x509.py, locate the mqtt5_client_builder.mtls_from_path() call
@@ -191,10 +192,10 @@ client = mqtt5_client_builder.mtls_from_path(
 ```
 
 **Key Changes Summary**:
-- **Endpoint**: Changed from AWS IoT Core endpoint to your EMQX broker hostname
-- **Server CA**: Optionally specify the CA that signed your EMQX server certificate
-- **Device Certificates**: No changes - devices continue using existing certificates and private keys
-- **Application logic**: No changes required - publish, subscribe, and message handling code remains identical
+- **Endpoint**: Changed from AWS IoT Core endpoint to your EMQX broker hostname.
+- **Server CA**: Optionally specify the CA that signed your EMQX server certificate.
+- **Device Certificates**: No changes. Devices continue using existing certificates and private keys.
+- **Application logic**: No changes required. Publish, subscribe, and message handling code remains identical.
 
 Running this updated command will verify a successful connection, subscribe, and publish, confirming that the device migration is complete.
 
@@ -202,13 +203,13 @@ Running this updated command will verify a successful connection, subscribe, and
 
 The same migration approach applies to more advanced connection scenarios.
 
-### Migrating Devices Using PKCS11 (HSMs)
+### Migrate Devices Using PKCS11 (HSMs)
 
 For devices that store private keys in a Hardware Security Module (HSM) for enhanced security, the migration process is straightforward. The private keys remain in the HSM, and the device certificates remain valid as long as they were signed by your custom CA.
 
 **Client-Side Code Modification**:
 
-The EMQX server-side configuration (Phase 2) remains the same. On the client side, use the `mtls_with_pkcs11` builder with updated endpoint:
+The EMQX server-side configuration (Phase 2) remains the same. On the client side, use the `mtls_with_pkcs11` builder with the updated endpoint:
 
 ```python
 client = mqtt5_client_builder.mtls_with_pkcs11(
@@ -234,11 +235,11 @@ client = mqtt5_client_builder.mtls_with_pkcs11(
 )
 ```
 
-### Migrating Devices Connecting via an HTTP Proxy
+### Migrate Devices Connecting via an HTTP Proxy
 
 For devices in restricted networks that must connect via an HTTP Proxy, the migration process remains the same as the standard path. The mTLS connection is tunneled through an HTTP CONNECT request.
 
-The EMQX server-side configuration (Phase 2) is **exactly the same**. The proxy is transparent to the EMQX listener, which only sees the incoming mTLS connection.
+The EMQX server-side configuration (Phase 2) is **the same**. The proxy is transparent to the EMQX listener, which only sees the incoming mTLS connection.
 
 The client SDK configuration must include the proxy settings in addition to the updated endpoint.
 

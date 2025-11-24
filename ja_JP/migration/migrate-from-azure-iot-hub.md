@@ -2,69 +2,85 @@
 
 This guide provides a practical walkthrough for migrating IoT devices from Azure IoT Hub to EMQX. It covers two migration paths:
 
-1. **X.509 certificate authentication** - Devices using client certificates
-2. **SAS token authentication** - Devices using Shared Access Signature tokens with HTTP-based authentication
+1. **X.509 certificate authentication**: For devices using client certificates
+2. **SAS token authentication**: For devices using Shared Access Signature (SAS) tokens with HTTP-based authentication
 
 ## Migration at a Glance
 
-For devices using X.509 certificates, the migration is primarily a configuration change. Device certificates and private keys remain unchanged; only the broker endpoint and server CA certificate need updates. EMQX must be configured to trust the same CA that Azure trusts and to replicate Azure's identity mapping model where the certificate Common Name (CN) equals the deviceId.
+For devices using X.509 certificates, the migration is primarily a configuration change. Device certificates and private keys remain unchanged; only the broker endpoint and server CA certificate need updates. EMQX must be configured to trust the same CA that Azure trusts and to replicate Azure's identity mapping model, where the certificate Common Name (CN) equals the deviceId.
 
 
 The migration process consists of three main phases:
 
 1. **Locate Your CA Certificate**. Find the CA certificate that signed your device certificates.
 
-2. **Configure EMQX for mTLS**. Set up an SSL/TLS listener on the EMQX broker, enable mandatory peer verification, and configure the listener to trust your CA and map certificate CN to deviceId.
+2. **Configure EMQX for mTLS**. Set up an SSL/TLS listener on the EMQX broker, enable mandatory peer verification, and configure the listener to trust your CA and map the certificate CN to deviceId.
 
-3. **Update Device Clients**. Update device code to connect to the EMQX endpoint and trust the EMQX server CA certificate. Devices can continue using Azure IoT SDK or use standard MQTT clients.
+3. **Update Device Clients**. Update device code to connect to the EMQX endpoint and trust the EMQX server CA certificate. Devices can continue to use the Azure IoT SDK or utilize standard MQTT clients.
 
 The following table summarizes the parameter changes:
 
 | **Parameter** | **Azure IoT Hub (Example)** | **EMQX (Example)** | **Notes** |
 | ------------- | -------------------------- | ------------------ | --------- |
 | **Endpoint Hostname** | `my-hub.azure-devices.net` | `mqtt.example.com` | Update device client code |
-| **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. Device continues using existing certificate |
-| **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. Device continues using existing private key |
+| **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. Devices continue using the existing certificate |
+| **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. Devices continues using the existing private key |
 | **Server Verification** (Device trusts Server) | Device trusts Azure's public CA | Device must trust `emqx-server-ca.pem` | Deploy EMQX server CA to devices |
 | **Client Verification** (Server trusts Device) | Azure trusts your CA (registered via CA upload or thumbprint) | EMQX `cacertfile` must be set to your CA | Same CA used in Azure |
 | **Identity Mapping** | Azure extracts `CN=deviceId` | Enable `mqtt.peer_cert_as_clientid = cn` | Preserves deviceId-based authorization |
 
 ## Phase 1: Locate Your CA Certificate
 
-**What you need**: The CA certificate that signed your device certificates (in PEM format, e.g., `device-ca.pem`).
+**What you need**: The CA certificate that signed your device certificates (in PEM format, e.g., `device-ca.pem`). This certificate is essential for EMQX to verify device identities during mTLS authentication.
 
-Azure IoT Hub has two X.509 registration methods:
-- **CA registration**: You uploaded the CA to Azure IoT Hub
-- **Thumbprint registration**: You registered devices individually by certificate thumbprint
+Azure IoT Hub supports two X.509 registration methods:
+- **CA registration**: You uploaded a CA to Azure IoT Hub. You must locate the same CA file that you originally uploaded.
+- **Thumbprint registration**: You registered each device individually by its certificate thumbprint. Although no CA was uploaded to Azure, the device certificates were still signed by a CA (such as an internal CA, a self-signed CA, or an enterprise PKI). You must locate the CA that issued these certificates.
 
-**Both methods use the same certificate structure** - your device certificates were signed by a CA. For EMQX migration, you need that CA certificate.
+Regardless of the method, the certificate hierarchy is the same: your devices are always signed by your own CA. For migration to EMQX, you must obtain this CA certificate so EMQX can verify your devices.
+
+### Identify the CA That Issued Your Device Certificates
+
+Use OpenSSL to inspect the Issuer field in a device certificate:
+
+```bash
+openssl x509 -in device-001.cert.pem -noout -issuer
+```
+
+Expected output:
+
+```
+issuer=CN = MyCompany-Device-CA
+```
+
+The corresponding CA file (e.g., `MyCompany-Device-CA.pem`) is the CA certificate you must provide to EMQX. This is the most reliable way to determine the correct CA, especially when using thumbprint registration.
 
 ### Verify Certificate Requirements
 
-Azure requires that the certificate Subject Common Name (CN) matches the deviceId (or `deviceId/moduleId` for modules). Verify with:
+Azure requires that the certificate Subject Common Name (CN) match the deviceId (or `deviceId/moduleId` for modules). You can verify this using:
 
 ```bash
 openssl x509 -in device-001.cert.pem -noout -subject
 ```
 
-The output should show:
+Expected output:
 ```
 subject=CN = device-001
 ```
 
-This CN value will be used by EMQX to identify the device.
+EMQX extracts this CN during mTLS authentication and use it as the device’s identity.
 
 ### Confirm Device Credential Access
 
-Ensure each device retains secure access to:
-- Its leaf certificate (`device-001.cert.pem`)
-- Its private key (`device-001.key.pem`)
+Each device retains secure access to its own credentials:
+- The device's leaf certificate (`device-001.cert.pem`)
+- The device's private key (`device-001.key.pem`)
 
-No certificate re-provisioning is needed for this migration path.
+Because Azure IoT Hub and EMQX both use standard X.509 authentication, no certificate re-provisioning is required for this migration path.
 
-## Phase 2: Configure EMQX for Azure-Style mTLS
+## Phase 2: Configure EMQX for Azure-Compatible mTLS
 
-Configure the EMQX broker to authenticate devices using the same certificates trusted by Azure IoT Hub.
+Configure EMQX to authenticate devices using the same CA and identity-mapping rules that Azure IoT Hub uses for X.509 authentication.
 
 ### Enable and Configure the mTLS Listener
 
@@ -98,7 +114,7 @@ listeners.ssl.default {
 ```
 
 ::: tip
-Both Azure IoT Hub and EMQX use port 8883 as the default for MQTT over TLS/SSL, so no port changes are needed in device clients.
+Both Azure IoT Hub and EMQX use port `8883` as the default for MQTT over TLS/SSL, so no port changes are needed in device clients.
 :::
 
 **Key Configuration Parameters**:
@@ -142,7 +158,39 @@ The connection should fail without a client certificate.
 
 ## Phase 3: Update Device Clients and Verify Migration
 
-The final phase is to update device client code to connect to EMQX instead of Azure IoT Hub.
+The final phase is to update the device client code to connect to EMQX instead of Azure IoT Hub.
+
+### Prepare EMQX Server CA Certificate
+
+Before updating the device code, you need to obtain the EMQX server's CA certificate. This is the CA that signed the EMQX server's TLS certificate.
+
+**For self-signed EMQX server certificates**, you must add the server CA to your device's trusted certificate store:
+
+**Linux**:
+
+```bash
+# Copy CA to system trust store
+sudo cp emqx-server-ca.pem /usr/local/share/ca-certificates/emqx-ca.crt
+sudo update-ca-certificates
+```
+
+**macOS**:
+
+```bash
+# Add to system keychain
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain emqx-server-ca.pem
+```
+
+**Windows**:
+
+```powershell
+# Import certificate to Trusted Root CA store
+Import-Certificate -FilePath emqx-server-ca.pem -CertStoreLocation Cert:\LocalMachine\Root
+```
+
+::: tip
+If your EMQX server uses a certificate from a public CA (like Let's Encrypt), this step is not needed as the CA is already trusted by the system.
+:::
 
 ### Update Device Client Code
 
@@ -159,12 +207,16 @@ x509 = X509(
     key_file="certs/device-001.key.pem"
 )
 
+# Read EMQX server CA certificate content
+with open("certs/emqx-server-ca.pem", "r") as f:
+    emqx_server_ca = f.read()
+
 # Create client pointing to EMQX
 client = IoTHubDeviceClient.create_from_x509_certificate(
     x509=x509,
     hostname="mqtt.example.com",  # EMQX hostname instead of Azure
     device_id="device-001",
-    server_verification_cert="certs/emqx-server-ca.pem"  # EMQX server CA
+    server_verification_cert=emqx_server_ca  # CA cert content as string
 )
 
 # Connect and use as before
@@ -172,37 +224,10 @@ client.connect()
 client.send_message("Hello from migrated device")
 ```
 
-**C# Example**:
-
-```csharp
-var auth = new DeviceAuthenticationWithX509Certificate(
-    deviceId: "device-001",
-    certificate: new X509Certificate2("device-001.pfx", "password")
-);
-
-var options = new ClientOptions
-{
-    // Point to EMQX instead of Azure IoT Hub
-    ModelId = "",
-    CertificateValidationCallback = (sender, certificate, chain, errors) =>
-    {
-        // Validate against EMQX CA
-        return ValidateServerCertificate(certificate, "emqx-server-ca.pem");
-    }
-};
-
-var client = new DeviceClient(
-    hostname: "mqtt.example.com",  // EMQX hostname
-    authenticationMethod: auth,
-    transportType: TransportType.Mqtt_Tcp_Only,
-    options: options
-);
-
-await client.OpenAsync();
-```
-
 ::: tip
-Using the Azure IoT SDK preserves your existing application code structure, requiring only configuration changes. This is the simplest migration path for devices already using X.509 authentication.
+- The `server_verification_cert` parameter expects the certificate **content as a string**, not a file path.
+- If you've added the EMQX server CA to your system's trusted certificate store (recommended), you can omit this parameter and let the system handle verification.
+- Using the Azure IoT SDK preserves your existing application code structure, requiring only configuration changes. This is the simplest migration path for devices already using X.509 authentication.
 :::
 
 ### Device-Side Parameter Summary
@@ -214,59 +239,68 @@ These are the parameter changes needed:
    - EMQX: `mqtt.example.com`
 
 2. **Server CA Certificate**:
-   - Azure: Uses system trust store or Azure CA
+   - Azure: Uses the system trust store or Azure CA
    - EMQX: Must explicitly provide `emqx-server-ca.pem`
 
 3. **Device Credentials** (no changes):
-   - Certificate: Keep existing device certificate
-   - Private key: Keep existing private key
+   - Certificate: Keep the existing device certificate
+   - Private key: Keep the existing private key
 
 4. **ClientId**: Set to deviceId (matching certificate CN)
 
 ### Validation Checklist
 
-1. Device appears in EMQX Dashboard with `clientid = deviceId`
-2. TLS handshake succeeds and device certificate is verified
-3. Device can publish to authorized topics
-4. Device can subscribe to authorized topics
-5. No authentication errors in EMQX logs
+1. Device appears in EMQX Dashboard with `clientid = deviceId`.
+2. TLS handshake succeeds, and the device certificate is verified.
+3. The device can publish to authorized topics.
+4. The device can subscribe to authorized topics.
+5. No authentication errors in EMQX logs.
 
-## Happy Path Variations
+## Variations of the Standard Migration Path
 
-### CA-Signed Fleet
+Besides the core migration workflow described above, some device fleets follow simple variations that still fit within the same X.509-based migration process. This section highlights two common variations and explains how EMQX accommodates them without requiring changes to device certificates or firmware.
 
-- Upload the CA certificate to EMQX
-- All devices signed by this CA are automatically trusted
-- Simplified certificate lifecycle management
-- Easy to add new devices without EMQX reconfiguration
+### CA-Signed Device Fleets
 
-### Modules (deviceId/moduleId)
+- Upload the CA certificate to EMQX.
+- All devices whose certificates were signed by this CA will be trusted automatically.
+- Certificate lifecycle management remains centralized and simple.
+- New devices can be added without any EMQX configuration changes.
 
-- Certificates with CN in format `deviceId/moduleId`
-- EMQX can use the full CN for authorization
-- Reflect the same structure in ACL rules
+This scenario mirrors Azure IoT Hub’s CA-based provisioning model and offers the most scalable migration path for large fleets.
+
+### Devices Using Modules (`deviceId/moduleId`)
+
+- Devices whose certificates include a Common Name (CN) in the format `deviceId/moduleId` are fully supported.
+- EMQX can use the full CN for identity mapping and authentication.
+- Authorization rules (ACLs) can reference the entire CN, preserving Azure’s module-level access control behavior.
+
+This allows devices using Azure’s module hierarchy to migrate seamlessly, without certificate modification or custom identity logic.
 
 ## Alternative: SAS Token Authentication with HTTP Authenticator
 
-Devices using Azure Shared Access Signature (SAS) tokens can continue using them with EMQX by implementing an **HTTP Authentication** service. For detailed information on HTTP authentication, see [Use HTTP Service](../access-control/authn/http.md).
+If your devices use Azure SAS tokens, you can continue using this authentication method in EMQX by implementing a simple HTTP authentication service. For detailed information on HTTP authentication, see [Use HTTP Service](../access-control/authn/http.md).
 
 ### How SAS Token Authentication Works
 
-Azure SAS tokens are passed in the MQTT password field with a specific format:
+Azure IoT Hub sends SAS credentials through the MQTT username and password fields:
+
 - **Username**: `{iothubhostname}/{deviceId}/?api-version=2021-04-12`
 - **Password**: `SharedAccessSignature sr={resource}&sig={signature}&se={expiry}`
 
+EMQX forwards these values to your HTTP service, which performs the actual SAS token validation.
+
 ### Implement HTTP Authentication for SAS Tokens
 
-1. **Create an HTTP authentication service** that:
-   - Receives the username and password from EMQX
-   - Extracts the deviceId from the username
-   - Parses the SAS token from the password field
-   - Validates the token signature using the device's symmetric key
-   - Checks the token expiry (`se` field)
-   - Returns `{"result": "allow"}` or `{"result": "deny"}`
+1. Create an HTTP authentication service. Your service should perform the following tasks:
+   - Receive the username and password from EMQX.
+   - Extract the `deviceId` from the username.
+   - Parse the SAS token from the password field.
+   - Validate the token signature using the device's symmetric key.
+   - Check the token expiry value (`se` field).
+   - Return `{"result": "allow"}` or `{"result": "deny"}` based on the validation result.
 
-2. **Configure EMQX HTTP Authenticator** via Dashboard or configuration file:
+2. Configure EMQX HTTP Authenticator to use your HTTP service. Add an HTTP authenticator either through the Dashboard or configuration file:
 
 ```hocon
 authentication = [
@@ -287,9 +321,11 @@ authentication = [
 ]
 ```
 
-3. **Provision Device Credentials**: Export device identities and symmetric keys from Azure IoT Hub identity registry and provision them in your authentication service's database.
+3. Provision Device Credentials. Export device identities and symmetric keys from the Azure IoT Hub identity registry. Store them in the database used by your HTTP authentication service so it can validate SAS signatures.
 
 ### Example HTTP Authentication Service Response
+
+Your service should respond with JSON similar to the following:
 
 ```json
 {
@@ -307,12 +343,24 @@ This approach allows SAS token-based devices to migrate without firmware changes
 
 ## Conclusion
 
-Migrating devices from Azure IoT Hub to EMQX offers flexible paths depending on your authentication method:
+Migrating devices from Azure IoT Hub to EMQX can follow one of two authentication paths, depending on how your devices are currently provisioned.
 
-**For X.509 certificate-based devices**: The migration is straightforward when using your own Certificate Authority. Device certificates and private keys remain unchanged, requiring only endpoint updates and server CA deployment. Follow the three phases: locating your CA certificate, configuring EMQX for mTLS with CN-based identity mapping, and updating device clients to successfully migrate while maintaining the same security model.
+### X.509 Certificate–Based Devices
 
-**For SAS token-based devices**: Devices can continue using SAS tokens by implementing an HTTP authentication service that validates token signatures and expiry. This allows migration without firmware changes, though transitioning to X.509 certificates is recommended for long-term portability.
+This is the simplest and most direct migration path. Your existing device certificates and private keys remain unchanged, and only the following updates are required:
+
+- Configure EMQX to trust the same CA used in Azure
+- Enable mTLS and certificate-based identity mapping
+- Update device endpoints and server CA certificates
+
+With these adjustments, devices can connect to EMQX while preserving the same security model and certificate workflow.
+
+### SAS Token–Based Devices
+
+Devices using Azure SAS tokens can continue using them in EMQX by implementing an HTTP authentication service that validates token signatures and expiry. This enables migration without firmware changes.
+
+However, for long-term portability and stronger security, transitioning to X.509 certificates is recommended.
 
 ::: tip
-Focus your initial migration on X.509 CA-signed devices to achieve quick wins. For SAS token devices, evaluate whether to implement HTTP authentication for immediate migration or refactor to X.509 certificates for better long-term maintainability.
+If your deployment includes both X.509 and SAS token devices, consider migrating the X.509 fleet first to reduce effort and accelerate validation. Then evaluate whether SAS token devices should use an HTTP authentication service for immediate compatibility or migrate to X.509 certificates for long-term maintainability.
 :::
