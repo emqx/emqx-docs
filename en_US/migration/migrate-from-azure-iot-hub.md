@@ -50,10 +50,10 @@ openssl x509 -in device-001.cert.pem -noout -issuer
 Expected output:
 
 ```
-issuer=CN = MyCompany-Device-CA
+issuer=CN = Azure-Device-CA
 ```
 
-The corresponding CA file (e.g., `MyCompany-Device-CA.pem`) is the CA certificate you must provide to EMQX. This is the most reliable way to determine the correct CA, especially when using thumbprint registration.
+The corresponding CA file (e.g., `Azure-Device-CA.pem`) is the CA certificate you must provide to EMQX. This is the most reliable way to determine the correct CA, especially when using thumbprint registration.
 
 ### Verify Certificate Requirements
 
