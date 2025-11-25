@@ -15,23 +15,21 @@ To minimize the impact of logs on system operation, for example, when the log da
 
 ## Log Level
 
-EMQX log has 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these 8 levels are:
+EMQX log has 6 out of the 8 levels ([RFC 5424](https://www.ietf.org/rfc/rfc5424.txt)), with warning as the default level, from low to high these levels are:
 
 ```bash
-debug < info < notice < warning < error < critical < alert < emergency
+debug < info < notice < warning < error < critical
 ```
 The table below describes the meaning and output contents for each log level.
 
 | Log Level | Meaning                                                      | Output Examples                                              |
 | --------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | debug     | Detailed information about the internal workings of a program, helping to debug and diagnose issues in the code. <br />It is not recommended to output this level of logging directly to the production environment. Instead, enable [Log Trace](./tracer.md) for a specific client. | Variable values, function call stacks, and other detailed debugging data. |
-| info      | Useful information that is more general than debug-level logs. | Client connections, subscriptions, publishes, QoS levels, and message delivery status. |
-| notice    | Important system information indicating that an event has occurred, but no action is required. | Number of clients connected to the proxy server, number of reconnections attempted, and number of crashed nodes. |
+| info      | Useful information that is more general than debug-level logs. | Minor abnormalities such as authorization denial, and management operation results, such as a successful configuration change. |
+| notice    | Important system information indicating that an event has occurred, but no action is required. | Component restarted per request from dashboard or CLI |
 | warning   | Potential issues or errors that require action; typically used for proactive monitoring and detecting potential problems before they become critical issues. | Disconnections, connection timeouts, authentication failures, and other similar events. |
 | error     | The occurrence of an error that requires error handling; typically used to flag errors so that administrators can quickly detect and resolve issues. | Fails to connect to an external database, to subscribe to a non-existent topic, or to parse a configuration file, or other similar events. |
-| critical  | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | Proxy server crashes, database unavailability, and other similar events. |
-| alert     | Severe problems that may cause the application to stop and need to take immediate action to prevent further losses. | The application has reached a critical threshold, such as running out of disk space or memory, or a critical system process has crashed or stopped responding. |
-| emergency | Extremely serious problems that prevent the application from running and require immediate action; happen in rare circumstances. | Failure in data synchronizing between different nodes.       |
+| critical  | Critical error that results in system crashes or prevents it from functioning; typically used to flag severe problems so that administrators can take immediate action. | A component is unable to start or function normally due to incorrect configuration. |
 
 ## Configure Logging via Dashboard
 
@@ -79,7 +77,7 @@ Configure the following settings for file log handler:
 
 - **Rotation Size**: Log file will be rotated once it reaches the specified size. It is by default enabled. You can type the specific value in the text box below. If you disable it, the value will be `infinity`, which means the log file will grow indefinitely.
 
-- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`. Default value is: `warning`.
+- **Log Level**: Select the log level to use from the drop-down list. Optional values are: `debug`, `info`, `notice`, `warning`, `error`, `critical`. Default value is: `warning`.
 
 - **Log Formatter**: Select the log format from the drop-down list. Optional values are `text` and `JSON`. The default value is `text`.
 
