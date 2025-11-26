@@ -1,26 +1,28 @@
 # Deploy EMQX on Amazon Elastic Kubernetes Service
 
-EMQX Operator supports deploying EMQX on Amazon Container Service EKS (Elastic Kubernetes Service). Amazon EKS is a managed Kubernetes service that makes it easy to deploy, manage, and scale containerized applications. EKS provides the Kubernetes control plane and node groups, automatically handling node replacements, upgrades, and patching. It supports AWS services such as Load Balancers, RDS, and IAM, and integrates seamlessly with other Kubernetes ecosystem tools. For details, please see [What is Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+EMQX Operator supports running on Amazon Container Service EKS (Elastic Kubernetes Service). Amazon EKS is a managed Kubernetes service that makes it easy to deploy, manage, and scale containerized applications. EKS provides the Kubernetes control plane and node groups, automatically handling node replacements, upgrades, and patching. It supports AWS services such as Load Balancers, RDS, and IAM, and integrates seamlessly with other Kubernetes ecosystem tools.
+
+For a deeper introduction, please refer to [What is Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html).
 
 ## Before You Begin
 
 Before you begin, you must have the following:
 
-- Activate Amazon Container Service and create an EKS cluster. For details, please refer to: [Create an Amazon EKS cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+- Activate Amazon Container Service and create an EKS cluster.<br/>Please refer to [Create an Amazon EKS cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) for more details.
 
-- Connect to EKS cluster by installing kubectl tool locally: For details, please refer to: [Using kubectl to connect to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)
+- Connect to EKS cluster by installing kubectl tool locally.<br/>Refer to [Using kubectl to connect to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl) for more details.
 
-- Deploy an AWS Load Balancer Controller on a cluster, for details, please refer to: [Create a Network Load Balancer](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)
+- Deploy an AWS Load Balancer Controller on a cluster.<br/>See [Create a Network Load Balancer](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html) for more details.
 
-- Install the Amazon EBS CSI driver on the cluster, for details, please refer to: [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html)
+- Install the Amazon EBS CSI driver on the cluster.<br/>See [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) for further details.
 
-- Install EMQX Operator: For details, please refer to: [Install EMQX Operator](./getting-started.md)
+- Install EMQX Operator.<br/>Please refer to [Install EMQX Operator](../getting-started/getting-started.md) for further details.
 
-## Quickly Deploy an EMQX Cluster
+## Deploy EMQX Cluster Quickly
 
-The following is the relevant configuration of EMQX custom resources.
+The following is the relevant configuration of an EMQX Custom Resource (CR).
 
-+ Save the following content as a YAML file and deploy it via the `kubectl apply` command
++ Save the following content as a YAML file and deploy it with `kubectl apply`.
 
   ```yaml
   # Configure EBS StorageClass with WaitForFirstConsumer binding mode
@@ -37,7 +39,7 @@ The following is the relevant configuration of EMQX custom resources.
   metadata:
     name: emqx
   spec:
-    image: emqx/emqx-enterprise:@EE_VERSION@
+    image: emqx/emqx:@EE_VERSION@
     config:
       data: |
         license {
@@ -77,37 +79,44 @@ The following is the relevant configuration of EMQX custom resources.
         loadBalancerClass: service.k8s.aws/nlb
   ```
 
-+ Wait for EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure that `STATUS` is `Running`, this may take some time
++ Wait for EMQX cluster to become ready.
+
+  Check the status of EMQX cluster through `kubectl get` command, make sure that `STATUS` is `Ready`. This may take some time.
 
   ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+  $ kubectl get emqx
+  NAME   STATUS    AGE
+  emqx   Ready     55s
   ```
 
-+ Obtain Dashboard External IP of EMQX cluster and access EMQX console
++ Obtain external IP of the EMQX Dashboard and access it.
 
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
+  EMQX Operator will create a Service resource for the EMQX Dashboard according to the `dashboardServiceTemplate` configuration.
 
   ```bash
-  $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+  $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
   192.168.1.200
   ```
 
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
+  Access `http://192.168.1.200:18083` through the browser.
 
-## Use MQTTX application To Publish/Subscribe Messages
+  Use the default username `admin` and password `public` to log into the EMQX Dashboard.
 
-[MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers to more Quickly develop and debug MQTT services and applications.
+## Subscribe and Publish
 
-+ Obtain External IP of EMQX cluster
++ Get [MQTTX CLI](https://mqttx.app/cli) ready.
+
+  MQTTX CLI is an open source MQTT 5.0 command line client tool, designed to help developers to start using MQTT services and applications quickly.
+
++ Obtain the external IP of the EMQX TCP listener.
+
+  EMQX Operator will create a respective Service resource for the configured listeners.
 
   ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
+  external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
   ```
 
-+ Subscribe to news
++ Subscribe to messages.
 
   ```bash
   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
@@ -118,7 +127,7 @@ The following is the relevant configuration of EMQX custom resources.
   [10:00:25] › ✔ Subscribed to hello
   ```
 
-+ create a new terminal window and publish message
++ In a separate shell, connect to the EMQX cluster and publish a message.
 
   ```bash
   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
@@ -129,15 +138,15 @@ The following is the relevant configuration of EMQX custom resources.
   [10:00:58] › ✔ Message published
   ```
 
-+ View messages received in the subscribed terminal window
++ Observe the subscriber client receiving the message.
 
   ```bash
   [10:00:58] › payload: hello world
   ```
 
-## Terminate TLS Encryption With LoadBalancer
+## Terminate TLS Encryption with LoadBalancer
 
-On Amazon EKS, you can use the NLB to do TLS termination, which you can do in the following steps:
+On Amazon EKS, you can use the NLB to terminate TLS encryption. Follow these steps:
 
 1. Import relevant certificates in [AWS Console](https://us-east-2.console.aws.amazon.com/acm/home), then enter the details page by clicking the certificate ID, Then record the ARN information
 
@@ -159,4 +168,6 @@ On Amazon EKS, you can use the NLB to do TLS termination, which you can do in th
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "1883"
     ```
 
-    > The value of `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` is the ARN information we record in step 1.
+    :::tip
+    The value of `service.beta.kubernetes.io/aws-load-balancer-ssl-cert` is the ARN information recorded in step 1.
+    :::

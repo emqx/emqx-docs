@@ -1,4 +1,4 @@
-# Cluster Load Rebalancing (EMQX Enterprise)
+# Rebalance Cluster Load
 
 ## Task Target
 
@@ -37,7 +37,7 @@ spec:
      relSessThreshold: "1.1"
 ```
 
-> For Rebalance configuration, please refer to the document: [Rebalance reference](../api-reference.md#rebalancestrategy).
+> For Rebalance configuration, please refer to the document: [Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy).
 
 ## Test Load Rebalancing
 
@@ -97,7 +97,7 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
      "connection_eviction_rate": 10
 }
 ```
-> For a detailed description of the rebalanceStates field, please refer to the document: [rebalanceStates reference](../api-reference.md#rebalancestate).
+> For a detailed description of the rebalanceStates field, please refer to the document: [rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate).
 
 Wait for the Rebalance task to complete:
 

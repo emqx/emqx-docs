@@ -1,18 +1,18 @@
-# Enable Persistence In EMQX Cluster
+# Enable Persistence in EMQX Cluster
 
-## Task Target
+## Objective
 
-Configure EMQX 5.x cluster Core node persistence through `volumeClaimTemplates` field.
+Configure persistence for the set of Core nodes of an EMQX cluster through the `volumeClaimTemplates` field.
 
 ## Configure EMQX Cluster Persistence
 
-The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
+EMQX CRD `apps.emqx.io/v2beta1` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with [`PersistentVolumeClaimSpec`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#persistentvolumeclaimspec-v1-core) defined in the Kubernetes API.
 
-`apps.emqx.io/v2beta1 EMQX` supports configuration of EMQX cluster Core node persistence through `.spec.coreTemplate.spec.volumeClaimTemplates` field. The semantics and configuration of `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with `PersistentVolumeClaimSpec` of Kubernetes, and its configuration can refer to the document: [PersistentVolumeClaimSpec](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.25/#persistentvolumeclaimspec-v1-core).
+When you specify the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). As a result, when an EMQX Pod is deleted, the associated PV and PVC are retained, preserving EMQX runtime data.
 
-When the user configures the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator will mount the `/opt/emqx/data` directory in the EMQX container to [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) in the PV and PVC created, when the EMQX Pod is deleted, the PV and PVC will not be deleted, so as to achieve the purpose of saving EMQX runtime data. For more information about PV and PVC, refer to the document [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/).
+For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
 
-+ Save the following content as a YAML file and deploy it via the `kubectl apply` command
++ Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -20,7 +20,7 @@ When the user configures the `.spec.coreTemplate.spec.volumeClaimTemplates` fiel
   metadata:
     name: emqx
   spec:
-    image: emqx/emqx-enterprise:@EE_VERSION@
+    image: emqx/emqx:@EE_VERSION@
     config:
       data: |
         license {
@@ -44,72 +44,59 @@ When the user configures the `.spec.coreTemplate.spec.volumeClaimTemplates` fiel
         type: LoadBalancer
   ```
 
-  > `storageClassName` field indicates the name of the StorageClass. You can use the command `kubectl get storageclass` to get the StorageClass that already exists in the Kubernetes cluster, or you can create a StorageClass according to your own needs.
+  :::tip
+  Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
+  :::
 
-+ Wait for EMQX cluster to be ready, you can check the status of the EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
++ Wait for the EMQX cluster to become ready.
+
+  Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
   ```bash
   $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+  NAME   STATUS   AGE
+  emqx   Ready    10m
   ```
 
-+ Obtain the Dashboard External IP of the EMQX cluster and access the EMQX console
+## Verify Persistence
 
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
++ Create a test rule in the EMQX Dashboard.
 
   ```bash
-  $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-  192.168.1.200
+  external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
   ```
 
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
-
-## Verify EMQX Cluster Persistence
-
-Verification scheme: 1) Passed in the old EMQX Dashboard creates a test rule; 2) Deletes the old cluster; 3) Recreates the EMQX cluster,and checks whether the previously created rule exists through the Dashboard.
-
-+ Access EMQX Dashboard through browser to create test rules
-
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
-
-  Login EMQX Dashboard by accessing `http://${external_ip}:18083`, and click Data Integration → Rules to enter the page for creating rules. Let’s first click the button to add an action Add a response action for this rule, and then click Create to generate a rule, as shown in the following figure:
+  1. Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
+  2. Navigate to _Data Integration_ → _Rules_ to create a new rule.
+  3. Attach a simple action to this rule.
+  4. Click _Create_ to generate a rule, as shown in the following figure:
 
   ![](./assets/configure-emqx-persistent/emqx-core-action.png)
 
-  When our rule is successfully created, a rule record will appear on the page with the rule ID: emqx-persistent-test, as shown in the figure below:
+  Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
 
   ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
-+ delete old EMQX cluster
++ Delete the old EMQX cluster.
 
-  Execute the following command to delete the EMQX cluster:
+  Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
 
   ```bash
   $ kubectl delete -f emqx.yaml
-
   emqx.apps.emqx.io "emqx" deleted
-  # emqxenterprise.apps.emqx.io "emqx" deleted
   ```
 
-  > emqx-persistent.yaml is the YAML file used to deploy the EMQX cluster for the first time in this article, and this file does not need to be changed.
++ Re-deploy the EMQX cluster.
 
-+ Recreate the EMQX cluster
-
-  Execute the following command to recreate the EMQX cluster:
+  Run the following command to re-deploy the EMQX cluster:
 
   ```bash
   $ kubectl apply -f emqx.yaml
-
   emqx.apps.emqx.io/emqx created
-  # emqxenterprise.apps.emqx.io/emqx created
   ```
 
-  Wait for the EMQX cluster to be ready, and then access the EMQX Dashboard through the browser to check whether the previously created rules exist, as shown in the following figure:
+  Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
 
   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
 
-  It can be seen from the figure that the rule emqx-persistent-test created in the old cluster still exists in the new cluster, which means that the persistence we configured is in effect.
+  The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.

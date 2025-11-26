@@ -1,16 +1,16 @@
-# Change EMQX Configurations
+# Change EMQX Configuration
 
-## Task Target
+## Objective
 
-Change EMQX configuration by `config.data` in EMQX Custom Resource.
+Change the EMQX configuration using the `.spec.config.data` field in the EMQX Custom Resource.
 
 ## Configure EMQX Cluster
 
-The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5.0, EMQX adopts [HOCON](https://www.emqx.io/docs/en/v5.1/configuration/configuration.html#hocon-configuration-format) as the configuration file format.
+The EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for the complete configuration reference.
 
-`apps.emqx.io/v2beta1 EMQX` supports configuring EMQX cluster through `.spec.config.data` field. For config.data configuration, please refer to the document: [Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual).
+EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration-format) as the configuration file format.
 
-+ Save the following content as a YAML file and deploy it with the `kubectl apply` command
+- Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -18,9 +18,10 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
    metadata:
       name: emqx
    spec:
-      image: emqx/emqx-enterprise:5.10
+      image: emqx/emqx:@EE_VERSION@
       imagePullPolicy: IfNotPresent
       config:
+         # Configure a TCP listener named `test` listening on port 1884:
          data: |
             listeners.tcp.test {
                bind = "0.0.0.0:1884"
@@ -37,39 +38,26 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
             type: LoadBalancer
    ```
 
-   > In the `.spec.config.data` field, we have configured a TCP listener for the EMQX cluster. The name of this listener is: test, and the listening port is: 1884.
+   ::: tip
+   The content of the `.spec.config.data` field is supplied as [`emqx.conf` configuration file](../../../../configuration/configuration.md#immutable-configuration-file) to the EMQX container.
+   :::
 
-+ Wait for the EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
+- Wait for the EMQX cluster to become ready.
+
+  Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx
-   NAME   IMAGE                         STATUS    AGE
-   emqx   emqx/emqx-enterprise:5.10.0   Running   10m
+   NAME   STATUS   AGE
+   emqx   Ready    10m
    ```
-
-+ Obtain the Dashboard External IP of EMQX cluster and access EMQX console
-
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
-
-  ```bash
-  $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-  192.168.1.200
-  ```
-
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
 
 ## Verify Configuration
 
-+ View EMQX cluster listener information
+- View the EMQX listeners status.
 
    ```bash
    $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
-   ```
-
-   You can get a print similar to the following, which means that the listener named `test` configured by us has taken effect.
-
-   ```bash
    tcp:default
       listen_on: 0.0.0.0:1883
       acceptors: 16
@@ -85,3 +73,5 @@ The main configuration file of EMQX is `/etc/emqx.conf`. Starting from version 5
       current_conn: 0
       max_conns : 1024000
    ```
+
+   Here we can see that the new listener on port 1884 is running.
