@@ -67,8 +67,12 @@ EMQX provides fine-grained rate-limiting strategies per tag, allowing you to con
 | Subscribe Traffic Limit (bytes/s) | Bytes/sec    | Limits the message traffic a client can deliver per second.                          |
 | Maximum QoS Level                 | 0, 1, 2      | Limits the maximum QoS level that clients can use when publishing or subscribing to messages. |
 
-::: tip
-Apart from QoS level restrictions, if a restriction item has a value of empty or 0, it means that no restriction is imposed on that item.
+::: tip Note
+
+Except for the QoS level limit, if a restriction item is left empty or set to `0`, it means no restriction is applied to that item.
+
+For the **Maximum QoS Level**, setting the value to `0` does **not** mean “no restriction.” Instead, it limits the maximum QoS level for publishing and subscribing to QoS 0.
+
 :::
 
 ### Enforcement Mechanism
@@ -105,10 +109,12 @@ Under the **Client Tags** tab, all created tags are displayed in a list, includi
 
 - **View**: See tag names and the number of currently associated clients.
 - **Create**: Click **Add** to add new tags and configure rate-limiting policies. For detailed configuration descriptions, see [Configurable Limits](#configurable-limits).
-- **Manage**: Edit rate-limiting strategies or view the client list under a tag by clicking the **View Client List** button.
-  - All clients under this tag will have their rate limiting configuration updated immediately during the next rate limiting check.
+- **Manage**: Edit the rate-limiting policie of an existing tag, or click **View Client List** to check all clients associated with that tag .
+  
+  Once the rate limiting policy is modified, all clients under this tag will automatically update and apply the new configuration at the next rate limiting check.
 - **Delete**: Delete a tag that is no longer needed.
-  - After a tag is deleted, all clients that were originally under that tag will update their own tags to the `default` and immediately apply the rate limiting configuration of the `default` tag.
+  
+  After deletion, all clients previously associated with this tag will be reassigned to the `default` tag and immediately apply the rate limiting policy of the `default` tag.
 
 ### Client Search
 
