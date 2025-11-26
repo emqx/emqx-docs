@@ -104,8 +104,8 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 8. Select the **Upload Method**. The differences between the two methods are as follows:
 
-   - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to Azure Storage according to the preset object key and content. This method is suitable for storing binary or large text data. However, it may generate a large number of files.
-   - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to Azure Storage, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
+   - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to Azure Blob Storage according to the preset object key and content. This method is suitable for storing binary or large text data. However, it may generate a large number of files.
+   - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to Azure Blob Storage, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
 
    The configuration parameters differ for each method. Please configure according to the selected method:
 
@@ -138,12 +138,12 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      Note that if all placeholders marked as required are not used in the template, these placeholders will be automatically added to the Blob Name as path suffixes to avoid duplication. All other placeholders are considered invalid.
 
    - **Aggregation Type**: Defines the format of the data file used to store batched MQTT messages in Azure Storage. Supported values:
-      
-      - `CSV`: Data will be written to Azure Storage in comma-separated CSV format.
 
-      - `JSON Lines`: Data will be written to Azure Storage in [JSON Lines](https://jsonlines.org/) format.
+      - `CSV`: Data will be written to Azure Blob Storage in comma-separated CSV format.
+
+      - `JSON Lines`: Data will be written to Azure Blob Storage in [JSON Lines](https://jsonlines.org/) format.
       
-      - `parquet`: Data will be written to Azure Storage in [Apache Parquet](https://parquet.apache.org/) format, which is column-based and optimized for analytical queries over large datasets.
+      - `parquet`: Data will be written to Azure Blob Storage in [Apache Parquet](https://parquet.apache.org/) format, which is column-based and optimized for analytical queries over large datasets.
       
         > For detailed configuration options, including schema definition, compression, and row group settings, see [Parquet Format Options](#parquet-format-options).
       
@@ -181,7 +181,7 @@ This option defines how MQTT message fields are mapped to the columns in the Par
 
 You can choose one of the following options:
 
-- **Avro Schema That Lives in Schema Registry**: Use an existing [Avro schema](./schema-registry-example-avro.md) managed in EMQX [Schema Registry](./schema-registry). 
+- **Avro Schema That Lives in Schema Registry**: Use an existing [Avro schema](./schema-registry-example-avro.md) managed in EMQX [Schema Registry](./schema-registry.md). 
 
   When this option is chosen, you must also specify a **Schema Name**, which identifies the schema to use for serialization.
 

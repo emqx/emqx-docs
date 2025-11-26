@@ -60,7 +60,7 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 在添加 Azure Blob Storage 数据 Sink 之前，您需要创建相应的连接器。
 
-1. 转到 Dashboard **集成** -> **连接器** 页面。
+1. 转到 Dashboard **集成** -> **连接器**页面。
 2. 点击右上角的**创建**按钮。
 3. 选择 **Azure Blob Storage** 作为连接器类型，然后点击**下一步**。
 4. 输入连接器名称，名称应为大小写字母和数字的组合。在这里，输入 `my-azure`。
@@ -74,7 +74,7 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 ## 创建 Azure Blob Storage Sink 规则
 
-本节演示如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理结果写入 Azure Storage 中的 `iot-data` 容器。
+本节演示如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理结果写入 Azure Blob Storage 中的 `iot-data` 容器。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -105,8 +105,8 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 8. 选择 **上传方式**。两种方式的区别如下：
 
-   - **直接上传**：每次触发规则时，数据会根据预设的对象键和值直接上传到 Azure Storage。这种方式适合存储二进制或大型文本数据，但可能会生成大量文件。
-   - **聚合上传**：此方式将多个规则触发结果打包到一个文件（如 CSV 文件）中，并上传到 Azure Storage，适合存储结构化数据。它可以减少文件数量并提高写入效率。
+   - **直接上传**：每次触发规则时，数据会根据预设的对象键和值直接上传到 Azure Blog Storage。这种方式适合存储二进制或大型文本数据，但可能会生成大量文件。
+   - **聚合上传**：此方式将多个规则触发结果打包到一个文件（如 CSV 文件）中，并上传到 Azure Blob Storage，适合存储结构化数据。它可以减少文件数量并提高写入效率。
 
    每种方式的配置参数不同。请根据选择的方式进行配置：
 
@@ -140,11 +140,11 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
    - **聚合上传文件格式**：定义用于在 Azure Storage 中存储批量 MQTT 消息的数据文件格式。支持以下取值：
 
-     - `CSV`：数据将以逗号分隔的 CSV 格式写入 Azure Storage。
+     - `CSV`：数据将以逗号分隔的 CSV 格式写入 Azure Blob Storage。
 
-     - `JSON Lines`：数据将以 [JSON Lines](https://jsonlines.org/) 格式写入 Azure Storage。
+     - `JSON Lines`：数据将以 [JSON Lines](https://jsonlines.org/) 格式写入 Azure Blob Storage。
 
-     - `Parquet`: 数据将以 [Apache Parquet](https://parquet.apache.org/) 格式写入 Azure Storage。该格式是一种列式存储格式，专为大规模数据集的分析型查询进行优化。
+     - `Parquet`: 数据将以 [Apache Parquet](https://parquet.apache.org/) 格式写入 Azure Blob Storage。该格式是一种列式存储格式，专为大规模数据集的分析型查询进行优化。
 
        > 如需了解详细的配置选项（包括 **Schema 定义**、**压缩方式**和**行组大小设置**等），请参阅 [Parquet 格式选项](#parquet-格式选项)。
 
