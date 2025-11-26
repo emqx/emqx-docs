@@ -181,7 +181,7 @@ This option defines how MQTT message fields are mapped to the columns in the Par
 
 You can choose one of the following options:
 
-- **Avro Schema That Lives in Schema Registry**: Use an existing [Avro schema](./schema-registry-example-avro) managed in EMQX [Schema Registry](./schema-registry). 
+- **Avro Schema That Lives in Schema Registry**: Use an existing [Avro schema](./schema-registry-example-avro.md) managed in EMQX [Schema Registry](./schema-registry). 
 
   When this option is chosen, you must also specify a **Schema Name**, which identifies the schema to use for serialization.
 
