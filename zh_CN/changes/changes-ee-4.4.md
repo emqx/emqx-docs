@@ -32,7 +32,7 @@
   ... Not an INSERT statement or incorrect SQL syntax
   ```
 
-- 修复了l滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
+- 修复了滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
 
   ```
   [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
