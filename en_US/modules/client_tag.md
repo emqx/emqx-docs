@@ -109,7 +109,7 @@ Under the **Client Tags** tab, all created tags are displayed in a list, includi
 
 - **View**: See tag names and the number of currently associated clients.
 - **Create**: Click **Add** to add new tags and configure rate-limiting policies. For detailed configuration descriptions, see [Configurable Limits](#configurable-limits).
-- **Manage**: Edit the rate-limiting policie of an existing tag, or click **View Client List** to check all clients associated with that tag .
+- **Manage**: Edit the rate-limiting policies of an existing tag, or click **View Client List** to check all clients associated with that tag .
   
   Once the rate limiting policy is modified, all clients under this tag will automatically update and apply the new configuration at the next rate limiting check.
 - **Delete**: Delete a tag that is no longer needed.
