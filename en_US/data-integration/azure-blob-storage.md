@@ -14,7 +14,7 @@ EMQX utilizes rules engines and Sinks to forward device events and data to Azure
 1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
 2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
 3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Azure Blob Storage**: The rule triggers an action to write the message to Storage Container. Using the Azure Blob Storage Sink, users can extract data from processing results and send it to Blob Storage. Messages can be stored in text or binary format, or multiple lines of structured data can be aggregated into a single CSV or JSON Lines file, depending on the message content and the Sink configuration.
+4. **Writing to Azure Blob Storage**: The rule triggers an action to write the message to Storage Container. Using the Azure Blob Storage Sink, users can extract data from processing results and send it to Blob Storage. Messages can be stored in text or binary format, or multiple lines of structured data can be aggregated into a single CSV, JSON Lines, or Parquet file, depending on the message content and the Sink configuration.
 
 After events and message data are written to Storage Container, you can connect to Azure Blob Storage to read the data for flexible application development, such as:
 
@@ -102,7 +102,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. Set the **Container** by entering `iot-data`.
 
-9. Select the **Upload Method**. The differences between the two methods are as follows:
+8. Select the **Upload Method**. The differences between the two methods are as follows:
 
    - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to Azure Storage according to the preset object key and content. This method is suitable for storing binary or large text data. However, it may generate a large number of files.
    - **Aggregated Upload**: This method packages the results of multiple rule triggers into a single file (such as a CSV file) and uploads it to Azure Storage, making it suitable for storing structured data. It can reduce the number of files and improve write efficiency.
@@ -137,11 +137,17 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
      Note that if all placeholders marked as required are not used in the template, these placeholders will be automatically added to the Blob Name as path suffixes to avoid duplication. All other placeholders are considered invalid.
 
-   - **Aggregation Type**: Currently, CSV and JSON Lines are supported.
+   - **Aggregation Type**: Defines the format of the data file used to store batched MQTT messages in Azure Storage. Supported values:
+      
       - `CSV`: Data will be written to Azure Storage in comma-separated CSV format.
-      - `JSON Lines`: Data will be written to Azure Storage in [JSON Lines](https://jsonlines.org/) format.
 
-   - **Column Order** (applies only when the Aggregation Type is `CSV`): Adjust the order of rule result columns through a dropdown selection. The generated CSV file will first be sorted by the selected columns, with unselected columns sorted alphabetically following the selected columns.
+      - `JSON Lines`: Data will be written to Azure Storage in [JSON Lines](https://jsonlines.org/) format.
+      
+      - `parquet`: Data will be written to Azure Storage in [Apache Parquet](https://parquet.apache.org/) format, which is column-based and optimized for analytical queries over large datasets.
+      
+        > For detailed configuration options, including schema definition, compression, and row group settings, see [Parquet Format Options](#parquet-format-options).
+      
+   - **Column Order** (for `CSV`): Adjust the order of rule result columns through a dropdown selection. The generated CSV file will first be sorted by the selected columns, with unselected columns sorted alphabetically following the selected columns.
 
    - **Max Records**: When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
 
@@ -162,6 +168,79 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Azure Blob Storage Sink on the **Actions (Sink)** tab.
 
 You can also click **Integration** -> **Flow Designer** to view the topology. The topology visually shows how messages under the topic `t/#` are written into Azure Storage container after being parsed by the rule `my_rule`.
+
+### Parquet Format Options
+
+When the **Aggregation Type** is set to `parquet`, EMQX stores aggregated rule results in the Apache Parquet format, a columnar, compressed file format optimized for analytical workloads.
+
+This section describes all configurable options for the Parquet output format.
+
+#### Parquet Schema (Avro)
+
+This option defines how MQTT message fields are mapped to the columns in the Parquet file. EMQX uses the Apache Avro schema specification to describe the structure of the Parquet data.
+
+You can choose one of the following options:
+
+- **Avro Schema That Lives in Schema Registry**: Use an existing [Avro schema](./schema-registry-example-avro) managed in EMQX [Schema Registry](./schema-registry). 
+
+  When this option is chosen, you must also specify a **Schema Name**, which identifies the schema to use for serialization.
+
+  ::: tip
+
+  Use this option if you manage schemas centrally in a registry and want consistent schema evolution across multiple systems.
+
+  :::
+
+- **Avro Schema Defined**: Define the Avro schema directly within EMQX by entering the schema JSON structure in the **Schema Definition** field.
+
+  Example:
+
+  ```json
+  {
+    "type": "record",
+    "name": "MessageRecord",
+    "fields": [
+      {"name": "clientid", "type": "string"},
+      {"name": "timestamp", "type": "long"},
+      {"name": "payload", "type": "string"}
+    ]
+  }
+  ```
+
+::: tip
+
+Ensure that the field names and data types match the fields returned by your rule SQL. Incorrect or missing fields may cause serialization errors when writing to Parquet.
+
+:::
+
+#### Parquet Default Compression
+
+This option specifies the compression algorithm applied to Parquet data pages within each row group. Compression helps reduce storage space and can improve I/O efficiency when querying data.
+
+Supported values:
+
+| Value              | Description                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| `snappy` (default) | A balanced choice offering fast compression and decompression with good compression ratio. Recommended for most cases. |
+| `zstd`             | Provides a higher compression ratio with moderate CPU usage. Ideal for large-scale analytical data or long-term storage. |
+| `None`             | Disables compression. Suitable only for debugging or when compression is not desired. |
+
+#### Parquet Max Row Group Bytes
+
+This option specifies the maximum size (in bytes) for each Parquet row group, which is the fundamental unit of work for reading and writing data. Once the buffered data size exceeds this threshold, EMQX flushes the current row group and starts a new one.
+
+- **Default value:** `128 MB`
+
+Guidelines:
+
+- **Increase the value** to improve read performance for analytical queries, especially when using Athena or Spark.
+- **Reduce the value** to limit memory usage during writing or when using small datasets.
+
+::: tip
+
+Parquet readers load data at the row group level. Larger row groups typically reduce metadata overhead and improve analytical query performance.
+
+:::
 
 ## Test the Rule
 
