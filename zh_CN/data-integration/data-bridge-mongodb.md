@@ -10,7 +10,7 @@ MongoDB 数据集成是 EMQX 中的开箱即用功能，旨在弥合基于 MQTT 
 
 下图展示了 EMQX 与 MongoDB 之间数据集成的典型架构。
 
-<img src="./assets/mongdb_bridge_architecture.png" alt="mongdb_bridge_architecture" style="zoom:67%;" />
+<img src="./assets/mongodb_architecture.png" alt="mongodb_architecture" style="zoom:67%;" />
 
 将 MQTT 数据写入 MongoDB 的过程如下：
 
