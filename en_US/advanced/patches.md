@@ -37,9 +37,11 @@ Typically, it is:
 3. Load new files at runtime:
 
 ```bash
-$ emqx eval 'c:lm().'
-[{module, emqx},
-{module, emqx_rule_engine}]
+$ emqx eval 'c:l(emqx).'
+{module,emqx}
+
+$ emqx eval 'c:l(emqx_rule_engine).'
+{module,emqx_rule_engine}
 ```
 
 ## Rollback the Patched Modules
@@ -56,7 +58,9 @@ $ mv data/patches/emqx_rule_engine.beam /tmp/
 2. reload the beam files:
 
 ```bash
-$ emqx eval 'c:lm().'
-[{module, emqx},
-{module, emqx_rule_engine}]
+$ emqx eval 'c:l(emqx).'
+{module,emqx}
+
+$ emqx eval 'c:l(emqx_rule_engine).'
+{module,emqx_rule_engine}
 ```

@@ -24,7 +24,8 @@ Suppose you are going to deploy an EMQX cluster on two servers of s1.emqx.io, s2
 | emqx@s2.emqx.io or emqx@192.168.0.20 | s2.emqx.io    | 192.168.0.20 |
 
 ::: tip Tip
-The format of node name  is <Name@Host>, and Host must be an IP address or FQDN (host name. domain name)
+The format of node name is<Name@Host>, and Host must be an IP address or FQDN(`hostname.domain-name`)
+The format of FQDN is `hostname.domain-name`, and it cannot be a single-layer `hostname`. For example, `abc` is invalid, while `abc.local` is valid.
 :::
 
 ### Configure emqx@s1.emqx.io node

@@ -36,9 +36,11 @@ cp /path/to/patch/emqx_rule_engine.beam data/patches
 3. 加载新的 beam 文件:
 
 ```bash
-$ emqx eval 'c:lm().'
-[{module, emqx},
-{module, emqx_rule_engine}]
+$ emqx eval 'c:l(emqx).'
+{module,emqx}
+
+$ emqx eval 'c:l(emqx_rule_engine).'
+{module,emqx_rule_engine}
 ```
 
 ## 回滚补丁包
@@ -53,7 +55,9 @@ $ mv data/patches/emqx_rule_engine.beam /tmp/
 2. 重新加载 beam 文件:
 
 ```bash
-$ emqx eval 'c:lm().'
-[{module, emqx},
-{module, emqx_rule_engine}]
+$ emqx eval 'c:l(emqx).'
+{module,emqx}
+
+$ emqx eval 'c:l(emqx_rule_engine).'
+{module,emqx_rule_engine}
 ```

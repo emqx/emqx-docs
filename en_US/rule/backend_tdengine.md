@@ -81,11 +81,11 @@ insert into test.t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) values
 2. Now that the resource drop-down box is empty, you can create a TDengine resource by clicking on `Create` in the upper right corner:
 
 Create new TDengine Resource:
-</br>
+<br />
 TDEngine Username: root
-</br>
+<br />
 TDEngine password: taosdata
-</br>
+<br />
 
 <img src="./assets/rule-engine/TDengine/td_create_resource.png" alt="image" style="zoom:50%;" />
 

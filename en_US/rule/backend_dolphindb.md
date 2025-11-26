@@ -22,7 +22,7 @@ chmod +x ./dolphindb
 
 If the startup is successful and the correct output is obtained, it indicates that DolphinDB is successfully installed. Then use `<CRTL+D>` to close DolphinDB.
 
-Now, we need to open the publish / subscribe function of streamtable in dolphin dB and create relevant data tables to realize the function of EMQ x message storage and persistence:
+Now, we need to open the publish / subscribe function of streamtable in dolphin dB and create relevant data tables to realize the function of EMQX message storage and persistence:
 
 1. Modify the DolphinDB's configuration file `vim dolphindb.cfg` and add the following configuration items to enable the publish/subscribe function:
 ``` properties

@@ -111,7 +111,8 @@ EMQX 支持多种节点发现策略:
 | emqx@s1.emqx.io 或 emqx@192.168.0.10 | s1.emqx.io    | 192.168.0.10 |
 | emqx@s2.emqx.io 或 emqx@192.168.0.20 | s2.emqx.io    | 192.168.0.20 |
 
-**注意：** 节点名格式为 <Name@Host>, Host 必须是 IP 地址或 FQDN (主机名。域名)
+**注意：** 节点名格式为 <Name@Host>, Host 必须是 IP 地址或 FQDN。
+其中 FQDN 格式为：`主机名.域名`，不能是单层的 `主机名`。例如，`abc` 是不合法的，而 `abc.local` 是合法的。
 
 #### 配置 emqx@s1.emqx.io 节点
 
