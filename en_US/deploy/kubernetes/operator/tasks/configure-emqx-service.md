@@ -10,7 +10,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports:
 * Configuring the EMQX Dashboard Service through `.spec.dashboardServiceTemplate`.
 * Configuring the EMQX cluster listener Service through `.spec.listenersServiceTemplate`.
 
-Refer to the [respective documentation](../reference/v2-reference.md#emqxspec) for more details.
+Refer to the [respective documentation](../reference/v2beta1-reference.md#emqxspec) for more details.
 
 - Save the following as a YAML file and deploy it using `kubectl apply`.
 

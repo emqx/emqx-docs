@@ -16,7 +16,7 @@ Before you begin, you must have the following:
 
 - Install the Amazon EBS CSI driver on the cluster.<br/>See [Amazon EBS CSI driver](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html) for further details.
 
-- Install EMQX Operator.<br/>Please refer to [Install EMQX Operator](../getting-started/getting-started.md) for further details.
+- Install EMQX Operator.<br/>Please refer to [Install EMQX Operator](./getting-started.md) for further details.
 
 ## Deploy EMQX Cluster Quickly
 

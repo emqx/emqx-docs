@@ -38,7 +38,7 @@ spec:
     relSessThreshold: "1.1"
 ```
 
-> 关于 Rebalance 配置可以参考文档：[Rebalance reference](../api-reference.md#rebalancestrategy)。
+> 关于 Rebalance 配置可以参考文档：[Rebalance reference](../reference/v2beta1-reference.md#rebalancestrategy)。
 
 ## 测试集群负载重平衡
 
@@ -99,7 +99,7 @@ $ kubectl get rebalances rebalance-sample -o json | jq '.status.rebalanceStates'
 }
 ```
 
-> 关于 rebalanceStates 字段的详细描述可以参考文档：[rebalanceStates reference](../api-reference.md#rebalancestate)。
+> 关于 rebalanceStates 字段的详细描述可以参考文档：[rebalanceStates reference](../reference/v2beta1-reference.md#rebalancestate)。
 
 等待 Rebalance 任务完成:
 

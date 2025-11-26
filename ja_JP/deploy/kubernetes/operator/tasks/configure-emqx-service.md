@@ -8,7 +8,7 @@ Access the EMQX cluster through the Service of LoadBalancer type.
 
 The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
 
-Operator supports configuring EMQX cluster Dashboard Service through `.spec.dashboardServiceTemplate`, and configuring EMQX cluster listener Service through `.spec.listenersServiceTemplate`, its documentation can refer to [Service](../api-reference.md#emqxspec).
+Operator supports configuring EMQX cluster Dashboard Service through `.spec.dashboardServiceTemplate`, and configuring EMQX cluster listener Service through `.spec.listenersServiceTemplate`, its documentation can refer to [Service](../reference/v2beta1-reference.md#emqxspec).
 
 + Save the following content as a YAML file and deploy it via the `kubectl apply` command
 

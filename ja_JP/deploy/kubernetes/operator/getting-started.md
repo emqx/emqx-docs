@@ -82,7 +82,7 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
          }
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
+   For more details about the EMQX CRD, please check the [reference document](./reference/v2beta1-reference.md).
 
 2. Wait, and the EMQX cluster is running.
 
@@ -110,7 +110,7 @@ Alternatively, if you are interested in learning how to upgrade or uninstall EMQ
       image: emqx/emqx:@CE_VERSION@
    ```
 
-   For more details about the EMQX CRD, please check the [reference document](./api-reference.md).
+   For more details about the EMQX CRD, please check the [reference document](./reference/v2beta1-reference.md).
 
 2. Wait the EMQX cluster is running.
 

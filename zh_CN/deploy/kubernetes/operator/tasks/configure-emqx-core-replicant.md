@@ -23,7 +23,7 @@ EMQX 集群中至少要有一个 Core 节点，出于高可用的目的，EMQX O
 
 ## 部署 EMQX 集群
 
-`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.coreTemplate` 字段来配置 EMQX 集群 Core 节点，使用 `.spec.replicantTemplate` 字段来配置 EMQX 集群 Replicant 节点，更多信息请查看：[API 参考](../api-reference.md#emqxspec)。
+`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.coreTemplate` 字段来配置 EMQX 集群 Core 节点，使用 `.spec.replicantTemplate` 字段来配置 EMQX 集群 Replicant 节点，更多信息请查看：[API 参考](../reference/v2beta1-reference.md#emqxspec)。
 
 + 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
 

@@ -80,7 +80,7 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./api-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 
@@ -111,7 +111,7 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./api-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 

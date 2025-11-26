@@ -8,7 +8,7 @@
 
 下面是 EMQX Custom Resource 的相关配置，你可以根据希望部署的 EMQX 的版本来选择对应的 APIVersion，具体的兼容性关系，请参考 [EMQX Operator 兼容性](../operator.md):
 
-`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.dashboardServiceTemplate` 配置 EMQX 集群 Dashboard Service ，通过 `.spec.listenersServiceTemplate` 配置 EMQX 集群 listener Service，其文档可以参考：[Service](../api-reference.md#emqxspec)。
+`apps.emqx.io/v2beta1 EMQX` 支持通过 `.spec.dashboardServiceTemplate` 配置 EMQX 集群 Dashboard Service ，通过 `.spec.listenersServiceTemplate` 配置 EMQX 集群 listener Service，其文档可以参考：[Service](../reference/v2beta1-reference.md#emqxspec)。
 
 + 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
 
