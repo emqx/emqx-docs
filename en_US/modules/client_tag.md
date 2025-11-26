@@ -68,9 +68,7 @@ EMQX provides fine-grained rate-limiting strategies per tag, allowing you to con
 | Maximum QoS Level                 | 0, 1, 2      | Limits the maximum QoS level that clients can use when publishing or subscribing to messages. |
 
 ::: tip
-
-If a limit value is empty or set to `0`, that limit is **not applied**.
-
+Apart from QoS level restrictions, if a restriction item has a value of empty or 0, it means that no restriction is imposed on that item.
 :::
 
 ### Enforcement Mechanism
@@ -108,7 +106,9 @@ Under the **Client Tags** tab, all created tags are displayed in a list, includi
 - **View**: See tag names and the number of currently associated clients.
 - **Create**: Click **Add** to add new tags and configure rate-limiting policies. For detailed configuration descriptions, see [Configurable Limits](#configurable-limits).
 - **Manage**: Edit rate-limiting strategies or view the client list under a tag by clicking the **View Client List** button.
-- **Delete**: Delete a tag that is no longer needed. 
+  - All clients under this tag will have their rate limiting configuration updated immediately during the next rate limiting check.
+- **Delete**: Delete a tag that is no longer needed.
+  - After a tag is deleted, all clients that were originally under that tag will update their own tags to the `default` and immediately apply the rate limiting configuration of the `default` tag.
 
 ### Client Search
 
