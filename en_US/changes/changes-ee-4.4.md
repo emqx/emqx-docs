@@ -1,5 +1,63 @@
 # Releases
 
+## e4.4.33
+
+*Release Date: 2025-11-26*
+
+## Enhancements
+
+- Added rate limiting based on Tag.
+
+  Users can now use Tags returned by the HTTP authentication service to categorize clients and apply rate limits based on these categories.
+
+- Reduced memory consumption of the ACL cache feature.
+
+  Previously, when MQTT message payloads were large, the ACL cache feature consumed significant memory, with usage proportional to the number of MQTT sessions.
+
+- The username quota module now supports kicking all client connections for a specified username.
+
+- Improved user experience on the "Usage" page of the username quota module.
+
+  Previously, the "Usage" page automatically sorted usernames by session count, displaying those with the most sessions at the top. However, when there were many usernames, sorting caused long page load times and affected user experience. Now, a sort button has been added to the page, and sorting is only performed when the button is clicked.
+
+- Reduced system resource consumption of the username quota module during cluster node changes.
+
+  This optimization reduces unnecessary data synchronization operations when the module detects other nodes going offline, thereby lowering system resource usage.
+
+## Fixes
+
+- Fixed an issue where SQL multi-row insert syntax could not be used in MySQL and PostgreSQL actions. The following error message would appear in the logs:
+
+  ```
+  ... Not an INSERT statement or incorrect SQL syntax
+  ```
+
+- Fixed an issue where the LwM2M module failed to start during rolling upgrades. The following error message would appear in the logs:
+
+  ```
+  [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
+  ```
+
+- Fixed the default XML path error for the LwM2M module in EMQX environments installed via binary packages.
+
+- Fixed an issue where cached messages in Kafka Producer could not be sent after Kafka service recovery. The following error message would appear in the logs:
+
+  ```
+  [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
+  ```
+
+- Fixed an issue where the log tracing feature could become unusable after upgrading EMQX versions due to the loss of the `emqx_trace` remote table.
+
+  In certain upgrade scenarios, users might add a new-version EMQX node to a running cluster that includes older-version nodes, and later remove the old nodes. If an old node is stopped (e.g., using the `emqx stop` command) before being removed via the CLI or API, and if log tracing was previously enabled on that node, the log tracing module on the new node may fail due to missing access to the `emqx_trace` remote table.
+
+  This issue can also cause the `emqx ctl cluster force-leave <node>` command to fail.
+
+  This fix ensures that the log tracing module automatically restores the `emqx_trace` table during startup. Once the module is initialized, the `force-leave` command will also function correctly.
+
+- Fixed inaccurate rate limiting.
+
+  Corrected the implementation of the token bucket algorithm in rate limiting. Before the fix, the actual maximum achievable rate was always slightly higher than the configured value.
+
 ## e4.4.32
 
 *Release Date: 2025-07-30*
