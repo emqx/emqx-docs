@@ -9,7 +9,7 @@ Below are the step-by-step guides for migrating from specific platforms.
 * [AWS IoT Core](./migrate-from-aws-iot-core.md)
 * [Azure IoT Hub](./migrate-from-azure-iot-hub)
 * [HiveMQ](./migrate-from-hivemq)
-* Mosquitto *(coming soon)*
+* [Mosquitto](./migrate-from-mosquitto.md)
 
 ## General Migration Principles
 
