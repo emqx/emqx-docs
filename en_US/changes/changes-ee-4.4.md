@@ -4,7 +4,7 @@
 
 *Release Date: 2025-11-26*
 
-## Enhancements
+### Enhancements
 
 - Added rate limiting based on Tag.
 
@@ -24,7 +24,7 @@
 
   This optimization reduces unnecessary data synchronization operations when the module detects other nodes going offline, thereby lowering system resource usage.
 
-## Fixes
+### Fixes
 
 - Fixed an issue where SQL multi-row insert syntax could not be used in MySQL and PostgreSQL actions. The following error message would appear in the logs:
 
