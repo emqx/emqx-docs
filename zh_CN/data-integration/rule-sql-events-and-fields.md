@@ -347,6 +347,7 @@ FROM
 | username         | 消息目的用户名                                               |
 | peername         | 客户端的 IPAddress 和 Port                                   |
 | sockname         | emqx 监听的 IPAddress 和 Port                                |
+| connected_at | 客户端连接开始时间（单位：毫秒）。该时间戳表示当前会话建立的时间，有助于识别断开事件所属的连接会话。<br />此字段可确保延迟的断开事件不会覆盖较新的连接状态。 |
 | disconnected\_at | 客户端连接断开时间 (单位：毫秒)                              |
 | disconn\_props   | DISCONNECT Properties (仅适用于 MQTT 5.0)                    |
 | timestamp        | 事件触发时间 (单位：毫秒)                                    |
@@ -360,6 +361,7 @@ SELECT
   clientid,
   username,
   reason,
+  connected_at,
   disconnected_at,
   node
 FROM
@@ -373,6 +375,7 @@ FROM
   "username": "u_emqx",
   "reason": "normal",
   "node": "emqx@127.0.0.1",
+  "connected_at": 1645003578036,
   "disconnected_at": 1645003578536,
   "clientid": "c_emqx"
 }
