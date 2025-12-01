@@ -43,25 +43,27 @@ EMQX allows fine-grained control over how messages are distributed to subscriber
 
 ### Shared Subscription Dispatch Strategy
 
-The shared subscription dispatcher supports multiple strategies that influence how EMQX balances messages among subscribers:
+The Shared Subscription Dispatch Strategy determines how EMQX distributes messages among subscribers within a shared subscription group.
 
-- **`random`**: Selects a subscriber at random, providing evenly distributed but non-deterministic message routing.
+You can configure this using the `mqtt.shared_subscription_strategy` option.
 
-- **`round_robin`**: Circulates messages through subscribers in sequence to achieve predictable distribution.
+| Strategy                    | Description                                                  |
+| --------------------------- | ------------------------------------------------------------ |
+| **`random`**                | Randomly selects one subscriber in the group for each message. This provides even distribution overall but may not be deterministic. |
+| **`round_robin`** (default) | Messages are delivered to subscribers in turn within each shared subscription group. EMQX maintains a separate round-robin position for each publishing client, so messages from different publishers may still be delivered to the same subscriber consecutively. |
+| **`round_robin_per_group`** | Similar to `round_robin`, but the round-robin progress is tracked independently on each node. This means messages published from different nodes in a cluster may be delivered to the same subscriber. Useful for clustered deployments where each node handles separate publisher loads. |
+| **`sticky`**                | Continuously dispatches messages to the same subscriber until the subscriber disconnects or its session ends. This strategy helps avoid unnecessary re-processing or cross-client state sharing by keeping message flows on a single subscriber whenever possible.<br />The initial subscriber is determined by the `mqtt.shared_subscription_initial_sticky_pick` setting. |
+| **`local`**                 | Prefers delivering messages to subscribers connected to the same node where the message is processed. If no local subscribers exist, EMQX randomly selects a subscriber from the cluster. This reduces inter-node traffic and latency. |
+| **`hash_clientid`**         | Uses a hash of the publisher’s Client ID to consistently route all messages from that publisher to the same subscriber. This strategy provides deterministic routing for per-client data streams. |
+| **`hash_topic`**            | Uses a hash of the publishing topic to route all messages with the same topic name to the same subscriber. Useful for topic-based message sharding and stateful processing. |
 
-- **`round_robin_per_group`**: Applies round-robin selection independently within each shared subscription group, suitable for deployments where groups represent separate workloads.
-
-- **`sticky`**: Attempts to keep routing messages to the same subscriber until the subscriber disconnects. This strategy helps avoid unnecessary re-processing or cross-client state sharing by keeping message flows on a single subscriber whenever possible.
-
-  When using this strategy, EMQX also applies an **Initial Sticky Pick** rule to decide which subscriber becomes the initial target when no sticky association exists.
-
-- **`local`**, **`hash_topic`**, **`hash_clientid`**: These strategies apply deterministic routing rules. The `local` strategy prioritizes delivering messages to subscribers on the same cluster node where the message is processed, reducing cross-node traffic and latency. The `hash_topic` and `hash_clientid` strategies use hashing on the topic name or publisher Client ID to route messages consistently to a specific subscriber. These strategies are useful when messages need stable, predictable routing for stateful processing or sharding scenarios.
+> EMQX tracks dispatch state, such as round-robin positions or sticky subscriber assignments, per publisher connection. When a publishing client disconnects and reconnects, this state is reset and reinitialized.
 
 ### Initial Sticky Pick
 
-When the shared subscription strategy is set to `sticky`, EMQX must determine the first subscriber to associate with the incoming message flow. The **Shared Subscription Initial Sticky Pick** option defines how EMQX performs this initial selection.
+When the shared subscription strategy is set to `sticky`, EMQX determines the initial subscriber to receive the messages based on `mqtt.shared_subscription_initial_sticky_pick`.
 
-This allows you to control whether the system favors local subscribers, uses hashing for deterministic routing, or randomly selects a subscriber.
+This setting controls whether EMQX prefers local subscribers, uses hashing for deterministic routing, or selects randomly.
 
 ### Configure Dispatch Strategy via Dashboard
 
