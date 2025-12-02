@@ -98,16 +98,16 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 
      - `None`: No authentication.
      - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
-     - `OAuth`: 
+     - `OAuth`: Specify parameters to authenticate using [OAuth 2.0](https://oauth.net/2/).
      - `Basic Auth`: Requires selecting a **mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **username** and **password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab file**.
-   
+
      See [Authentication Method](#authentication-method) for details on each method.
-   
+
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-   
+
    - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
-   
+
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
 6. Click the **Create** button to complete the creation of the connector.
@@ -130,24 +130,21 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
 
   :::
 
-- **OAuth**: 
+- **OAuth**:
 
   This method requires:
 
-  - **OAuth Grant Type**:
+  - **OAuth Grant Type**: The OAuth 2.0 grant type (currently, only `client_credentials` is supported).
 
-  - **OAuth Token Endpoint URI**:
+  - **OAuth Token Endpoint URI**: The token endpoint to request the access token from.
 
-  - **OAuth Client ID**:
+  - **OAuth Client ID**: Client ID to use configured in the authentication server.
 
-  - **OAuth Client Secret**:
+  - **OAuth Client Secret**: Client Secret to use configured in the authentication server.
 
-  - **OAuth Request Scope**:
+  - **OAuth Request Scope**: (Optional) If needed, specify the scope to be sent with the token request.
 
-  - **SASL Extensions**:
-    - **Key**:
-
-    - **Value**:
+  - **SASL Extensions**: (Advanced) If needed, add any SASL extensions that the Kafka broker requires when authenticating with OAuth, as key-value pairs (e.g.: `logicalCluster`, `identityPoolId`, etc.).
 
 - **Basic Auth**: Uses a username and password for authentication.
 
@@ -294,7 +291,7 @@ To prevent leakage of other system environment variables, the names of environme
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
      --topic testtopic-in
-   
+
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
@@ -353,20 +350,20 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
 
 5. Enter the connection information for the source.
    - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
-   
+
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
-   
+
      - `None`: No authentication.
      - `authentication_msk_iam`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
      - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.
-   
+
      See the [Authentication Method](#authentication-method) for details on each method.
-     
+
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
-   
+
    - **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
-   
+
 6. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
 11. Click **Create**. You will be offered the option of creating an associated rule. See [Create a Rule with Kafka Consumer Source](#create-a-rule-with-kafka-consumer-source).
