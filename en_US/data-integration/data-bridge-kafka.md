@@ -98,15 +98,16 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 
      - `None`: No authentication.
      - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
+     - `OAuth`: 
      - `Basic Auth`: Requires selecting a **mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **username** and **password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab file**.
-
+   
      See [Authentication Method](#authentication-method) for details on each method.
-
+   
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
+   
    - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
-
+   
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
 6. Click the **Create** button to complete the creation of the connector.
@@ -128,6 +129,25 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
   MSK IAM authentication is supported only when EMQX is running on EC2 instances connecting to MSK clusters, as it relies on the AWS Metadata API.
 
   :::
+
+- **OAuth**: 
+
+  This method requires:
+
+  - **OAuth Grant Type**:
+
+  - **OAuth Token Endpoint URI**:
+
+  - **OAuth Client ID**:
+
+  - **OAuth Client Secret**:
+
+  - **OAuth Request Scope**:
+
+  - **SASL Extensions**:
+    - **Key**:
+
+    - **Value**:
 
 - **Basic Auth**: Uses a username and password for authentication.
 
