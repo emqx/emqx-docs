@@ -30,7 +30,7 @@
 
 在 macOS 系统中下载 EMQX 并使用 Zip 软件包安装。
 
-**[Kubernets 部署](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
+**[Kubernetes 部署](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
 使用 EMQX Operator 部署 EMQX。
 

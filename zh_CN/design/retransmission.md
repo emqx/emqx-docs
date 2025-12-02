@@ -145,4 +145,4 @@ MQTT 协议和 EMQX 将这个主题认为是 `有序的主题 (Ordered Topic)` �
 | max_mqueue_len    | integer  | >= 0            | 1000   | 消息队列长度                                            |
 | max_inflight      | integer  | >= 0            | 0      | 飞行窗口大小；默认 `0` 即无限制                         |
 | max_awaiting_rel  | integer  | >= 0            | 0      | 最大接收；默认 `0` 即无限制                             |
-| await_rel_timeout | durtaion | >  0            | 300s   | `最大接收` 中消息等待释放的最大超时时间；超过则直接丢弃 |
+| await_rel_timeout | duration | >  0            | 300s   | `最大接收` 中消息等待释放的最大超时时间；超过则直接丢弃 |

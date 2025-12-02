@@ -36,7 +36,7 @@ The operating limitations can be classified into:
 | Message Bytes                         | Default 1024KB, Max 256MB |
 | Maximum QoS                           | 2                         |
 | **MQTT Keepalive**                    |                           |
-| Maximun Keepalive                     | 65535 seconds             |
+| Maximum Keepalive                     | 65535 seconds             |
 | **MQTT Topic**                        |                           |
 | Number of topics                      | Unlimited                 |
 | Topic level                           | 65535                     |

@@ -94,7 +94,7 @@ Github Commit: [emqx/emqx-web-hook#3dd041](https://github.com/emqx/emqx-web-hook
 
 _Release Date: 2019-10-28_
 
-EMQX 3.2.4 is now available. This version mainly adds IPv6 support for Dashbaord and REST APIs, and fixes some bugs.
+EMQX 3.2.4 is now available. This version mainly adds IPv6 support for Dashboard and REST APIs, and fixes some bugs.
 
 Bug fixes:
 
@@ -118,7 +118,7 @@ Github Issue: [emqx/emqx#2937](https://github.com/emqx/emqx/issues/2937)
 
 Enhancements:
 
-- Support for IPv6 access to Dashbaord
+- Support for IPv6 access to Dashboard
 
 Github PR: [emqx/emqx-dashboard#161](https://github.com/emqx/emqx-dashboard/pull/161)
 
@@ -232,7 +232,7 @@ Github PR: [emqx/emqx#2696](https://github.com/emqx/emqx/pull/2696)
 
 Bug fixes:
 
-- Fix the issue that encouter crash when Websocket sessions go offline abnormally
+- Fix the issue that encounter crash when Websocket sessions go offline abnormally
 
 Github PR: [emqx/emqx#2697](https://github.com/emqx/emqx/pull/2697)
 
@@ -550,7 +550,7 @@ The EMQX 3.0.0 is now available. In this release, we have re-designed the ETS ta
 
 Enhancements:
 
-- Move addtional vm args to a separate vm.args file
+- Move additional vm args to a separate vm.args file
 
 Github PR: [emqx/emqx#2033](https://github.com/emqx/emqx/pull/2033) , [emqx/emqx#2057](https://github.com/emqx/emqx/pull/2057) , [emqx/emqx#2070](https://github.com/emqx/emqx/pull/2070)
 
@@ -896,7 +896,7 @@ Support node cookie value with = characters. (emq-relx#146)
 
 ### mochiweb
 
-Improve Req:get(peername) funciton to support x-forwarded-for and x-remote-port . (emqtt/mochiweb#9)
+Improve Req:get(peername) function to support x-forwarded-for and x-remote-port . (emqtt/mochiweb#9)
 
 ## 2.3.0 "Passenger's Log"
 
@@ -974,7 +974,7 @@ Newline character in emq.conf causing error;(emqttd#1000)
 
 Fix crash caused by duplicated PUBREC packet (emqttd#1004)
 
-Unload the 'session.created' and 'session.teminated' hooks (emq-plugin-template)
+Unload the 'session.created' and 'session.terminated' hooks (emq-plugin-template)
 
 ## 2.1.1
 

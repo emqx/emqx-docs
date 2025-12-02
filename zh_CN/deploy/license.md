@@ -32,7 +32,7 @@ EMQX 企业版 5.0 采用与之前版本不同格式的 License，申请时请�
 
 ### Dashboard 
 
-1. 打开 EMQX Dasboard，从左侧导航目录点击**系统设置 **-> **License**, 在 **License** 页面的**基础信息**区域，您可以看到 EMQX 当前 License 的基础信息，包括 License 连接配额使用情况、EMQX 版本信息和 License 签发信息等。
+1. 打开 EMQX Dashboard，从左侧导航目录点击**系统设置 **-> **License**, 在 **License** 页面的**基础信息**区域，您可以看到 EMQX 当前 License 的基础信息，包括 License 连接配额使用情况、EMQX 版本信息和 License 签发信息等。
 
 2. 点击**更新 License** 按钮，在弹出框中粘贴您的 License Key，点击提交即可。提交完成后页面数据将刷新，请确认新的 License 文件是否生效。
 

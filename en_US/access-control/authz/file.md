@@ -103,7 +103,7 @@ Where,
 
 - `type`: Data source types of authorizer; here is `file`.
 - `enable`: Whether to activate the authorizer; optional value: `true`, `false`.
-- `path`: Configuration file path; default value: `etc/acl.conf`. If file-based authorizer is editted through Dashboard or REST API, EMQX stores the new file to `data/authz/acl.conf` and stops reading the configuration in the original file.
+- `path`: Configuration file path; default value: `etc/acl.conf`. If file-based authorizer is edited through Dashboard or REST API, EMQX stores the new file to `data/authz/acl.conf` and stops reading the configuration in the original file.
 
 <!--For detailed parameter list, see [authz-file](../../configuration/configuration-manual.html#authz-file). Need to update the link later-->
 

@@ -37,7 +37,7 @@ EMQX 企业版 License 可以在 EMQ 官网免费申请：[申请 EMQX 企业版
         type: LoadBalancer
   ```
 
-  > `config.data` 字段里面的 `license.key` 表示 Licesne 内容，此例中 License 内容被省略，请用户自行填充。
+  > `config.data` 字段里面的 `license.key` 表示 License 内容，此例中 License 内容被省略，请用户自行填充。
 
 + 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
 

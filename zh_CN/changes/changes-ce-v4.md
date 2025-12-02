@@ -616,7 +616,7 @@
 
 - 规则引擎新增对超融合时空数据库 MatrixDB 的支持
 
-- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Altas 无缝对接
+- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Atlas 无缝对接
 
 - 新增在线 Trace 功能，用户可以在 Dashboard 上完成对客户端和主题的追踪操作，以及查看或下载追踪日志
 

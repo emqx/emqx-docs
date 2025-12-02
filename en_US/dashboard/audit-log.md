@@ -118,7 +118,7 @@ The following table shows the fields contained in the above log message samples.
 
 ### Operation Records from CLI or Erlang Console
 
-Audit logs that record operations from CLI or Erlang Console operatios include the executed command, called parameters, and other information. The log message format examples are as follows:
+Audit logs that record operations from CLI or Erlang Console operations include the executed command, called parameters, and other information. The log message format examples are as follows:
 
 ```bash
 {"time":1695866030977555,"level":"info","msg":"from_cli","from": "cli","node":"emqx@127.0.0.1","duration_ms":0,"cmd":"retainer","args":["clean", "t/1"]}

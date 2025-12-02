@@ -1776,7 +1776,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 规则引擎新增对超融合时空数据库 MatrixDB 的支持
 
-- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Altas 无缝对接
+- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Atlas 无缝对接
 
 - 新增在线 Trace 功能，用户可以在 Dashboard 上完成对客户端和主题的追踪操作，以及查看或下载追踪日志
 
@@ -1875,7 +1875,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
 
-- 修复以分页的方式获取 HTPT API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
+- 修复以分页的方式获取 HTTP API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
   在此修改之前，发送 'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' 请求
   到集群里的不同的 EMQX 节点，将返回不同的客户端列表。
 
@@ -1932,7 +1932,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修正了`/load_rebalance/{node}/evacuation/start`中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
 
-- 修复 mqtt_app 表内没有 boostrap user 里未导入用户的问题 [#1600](https://github.com/emqx/emqx-enterprise/pull/1600)。
+- 修复 mqtt_app 表内没有 bootstrap user 里未导入用户的问题 [#1600](https://github.com/emqx/emqx-enterprise/pull/1600)。
 
 - 修正了 `/load_rebalance/{node}/evacuation/start` 中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
 
@@ -2627,7 +2627,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修复规则引擎数据持久化到 Oracle 失败但成功计数仍然增加的问题
 - 修复规则引擎持久化数据到 Oracle 的动作（仅限同步操作）执行失败时无法触发备选动作的问题
-- 修复启用系统消息会导致规则引擎的 Kakfa 动作崩溃的问题
+- 修复启用系统消息会导致规则引擎的 Kafka 动作崩溃的问题
 - 修复规则引擎资源不可用时查询资源请求超时的问题
 - 创建规则时如果已经有使用相同 ID 的规则存在，现在规则引擎将报错而不是替换已有规则
 
@@ -2996,7 +2996,7 @@ EMQX 4.1.1 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-18*
 
-1. 内置预览版 license，无需在官网注册获取 licese 可以直接启动 emqx
+1. 内置预览版 license，无需在官网注册获取 license 可以直接启动 emqx
 2. 修改 license 过期策略，emqx 服务不停，但是新连接无法登录
 3. 规则引擎 添加 MQTT 订阅资源
 4. 规则引擎 MQTT 消息桥接支持 pool

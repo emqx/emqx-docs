@@ -140,7 +140,7 @@ Sample data to be republished:
 
 ### Test the Flow
 
-1. In the Flow Designer, click any node of the Flow to open an editting panel. Click the **Edit Flow** button at the end of the panel.
+1. In the Flow Designer, click any node of the Flow to open an editing panel. Click the **Edit Flow** button at the end of the panel.
 
 2. Click **Start Test** next to the **Save** button to open a bottom pop-up. 
 

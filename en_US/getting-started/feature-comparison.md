@@ -59,7 +59,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higer system flexibility and utilization<br>(Coming soon)</td>
+    <td> Higher system flexibility and utilization<br>(Coming soon)</td>
   </tr>
   <tr>
     <td><b>Cluster Linking</b></td>
@@ -299,7 +299,7 @@ This page lists features supported across different deployment types in detail.
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/cross_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td> Higer system stability and resource utilization</td>
+    <td> Higher system stability and resource utilization</td>
   </tr>
   <tr>
     <td><b>Autoscaling</b></td>
@@ -1224,7 +1224,7 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>EMQX dashboard is feature-rich.<br>Configs can be hot udpated through dashboard.</td>
+    <td>EMQX dashboard is feature-rich.<br>Configs can be hot updated through dashboard.</td>
   </tr>
   <tr>
     <td><b>Configuration</b></td>

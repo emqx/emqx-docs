@@ -78,11 +78,11 @@ See the table below for the supported event topic list.
 | [$events/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | Message dropped when delivering |
 | [$events/client_connected](#connection-complete-event-events-client-connected) | Connection complete             |
 | [$events/client_disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
-| [$events/client_connack](#connection-acknowlege-event-events-client-connack) | Connection acknowledged         |
+| [$events/client_connack](#connection-acknowledge-event-events-client-connack) | Connection acknowledged         |
 | [$events/client_check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
 | [$events/client_check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | Authentication check complete    |
 | [$events/session_subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
-| [$events/session_unsubscribed](#unsubcribe-event-events-session-unsubscribed) | Unsubscribe                     |
+| [$events/session_unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
 
@@ -140,7 +140,7 @@ This event topic can be used to trigger a rule when the message delivery is ackn
 
 ::: tip
 
-Only availabe for QOS 1 and QOS 2 messages.
+Only available for QOS 1 and QOS 2 messages.
 
 :::
 
@@ -371,7 +371,7 @@ Output:
 | `node`            | EMQX node where the event is triggered                       |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Connection Acknowlege Event ("$events/client_connack")
+### Connection Acknowledge Event ("$events/client_connack")
 
 This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client. 
 
@@ -596,7 +596,7 @@ Refer to the table below for fields that can be extracted.
 | `node`      | EMQX node where the event is triggered      |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Unsubcribe Event ("$events/session_unsubscribed")
+### Unsubscribe Event ("$events/session_unsubscribed")
 
 The rule is triggered when the terminal subscription is cancelled successfully.
 

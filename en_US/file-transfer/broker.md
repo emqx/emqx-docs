@@ -150,7 +150,7 @@ If any of these operations exceed the specified timeout, the MQTT client will re
 
 This section demonstrates how to enable the File Transfer feature and configure its functionalities on Dashboard.
 
-Go to the EMQX Dashboar and click **Management** -> **File Transfer**. On the File Transfer page, you can click the **Enable** toggle switch to enable the File Transfer feature. You can refer to the [General Settings](#general-settings) and [Advanced Settings](#advanced-settings) to configure the functionalities. After you complete the configuration, click **Save Changes**.
+Go to the EMQX Dashboard and click **Management** -> **File Transfer**. On the File Transfer page, you can click the **Enable** toggle switch to enable the File Transfer feature. You can refer to the [General Settings](#general-settings) and [Advanced Settings](#advanced-settings) to configure the functionalities. After you complete the configuration, click **Save Changes**.
 
 <img src="./assets/file-transfer-enable.png" alt="file-transfer-enable" style="zoom:67%;" />
 
