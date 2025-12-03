@@ -14,16 +14,16 @@ This page lists features supported across different deployment types in detail.
 | **Cluster Linking**              | ✅                                                | ❌                              | ✅                                  | Seamless connection of devices and application data          |
 | **Message Queue**                | ✅                                                | ❌                              | ✅                                  | Unified architecture for data transmission and analysis (Coming soon) |
 | **Stream Processing**            | ✅                                                | ❌                              | ✅                                  | Higher reliability and disaster recovery capabilities<br>(Coming soon) |
-| **Data Persistence**             | ✅ Built-in RocksDB backend or external databases | N/A                            | N/A                                | [Improved stability and reliability](https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html) |
-| **Schema Registry**              | ✅                                                | ❌                              | ✅                                  | [Schema Registry](https://docs.emqx.com/en/emqx/latest/data-integration/schema-registry.html) ensures data consistency and compatibility |
+| **Data Persistence**             | ✅ Built-in RocksDB backend or external databases | N/A                            | N/A                                | [Improved stability and reliability](../durability/durability_introduction.md) |
+| **Schema Registry**              | ✅                                                | ❌                              | ✅                                  | [Schema Registry](../data-integration/schema-registry.md) ensures data consistency and compatibility |
 | **Message Codec**                | ✅                                                | ❌                              | ✅                                  | Flexible message format conversion for:<br>JSON, Avro, Protobuf, Custom codec (HTTP/gRPC) |
 | **Schema Validation**            | ✅                                                | ✅                              | ✅                                  | Ensuring integrity and legality of messages                  |
-| **Rule Engine**                  | ✅                                                | ✅                              | ✅                                  | [SQL-based built-in Rule Engine and real-time data processing](https://docs.emqx.com/en/emqx/latest/data-integration/rules.html) |
-| **Flow Designer**                | ✅                                                | ❌                              | ✅                                  | [Easy orchestration of data integration](https://docs.emqx.com/en/emqx/latest/flow-designer/introduction.html) |
+| **Rule Engine**                  | ✅                                                | ✅                              | ✅                                  | [SQL-based built-in Rule Engine and real-time data processing](../data-integration/rules.md) |
+| **Flow Designer**                | ✅                                                | ❌                              | ✅                                  | [Easy orchestration of data integration](../flow-designer/introduction.md) |
 | **File Transfer**                | ✅                                                | ❌                              | ✅ In product roadmap               | Unified platform data transmission                           |
-| **Kafka Integration**            | ✅                                                | ✅                              | ✅                                  | [Stream MQTT Data into Apache Kafka](https://docs.emqx.com/en/emqx/latest/data-integration/data-bridge-kafka.html) |
+| **Kafka Integration**            | ✅                                                | ✅                              | ✅                                  | [Stream MQTT Data into Apache Kafka](../data-integration/data-bridge-kafka.md) |
 | **Enterprise Data Integrations** | ✅ 40+                                            | ✅                              | ✅ 40+                              | [Accelerate business development and delivery speed](https://www.emqx.com/en/integrations) |
-| **Troubleshooting**              | ✅                                                | ❌                              | ✅                                  | [Log Trace](https://docs.emqx.com/en/emqx/latest/observability/tracer.html)<br>[Slow Subscriptions](https://docs.emqx.com/en/emqx/latest/observability/slow-subscribers-statistics.html) |
+| **Troubleshooting**              | ✅                                                | ❌                              | ✅                                  | [Log Trace](../observability/tracer.md)<br>[Slow Subscriptions](../observability/slow-subscribers-statistics.md) |
 | **Cloud-Native & K8s**           | ✅                                                | N/A                            | N/A                                | [Reduce system deployment and management costs](https://www.emqx.com/en/deployments) |
 | **Edge Computing**               | ✅                                                | ✅                              | ✅                                  | Reduce data transmission latency and costs<br>[Neuron](https://www.emqx.com/en/products/neuronex)<br>[NanoMQ](https://www.emqx.com/en/products/nanomq) |
 
@@ -96,11 +96,11 @@ This page lists features supported across different deployment types in detail.
 
 | Authentication / Authorization       | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
 | ------------------------------------ | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **Username / Password**              | ✅                        | ✅                              | ✅                                  | [Password-Based Authentication](https://docs.emqx.com/en/emqx/latest/access-control/authn/pwoverview.html) |
-| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](https://docs.emqx.com/en/emqx/latest/access-control/authn/jwt.html) |
-| **MQTT 5.0 Enhanced Authentication** | ✅                        | N/A                            | N/A                                | [MQTT 5.0 Enhanced Authentication](https://docs.emqx.com/en/emqx/latest/access-control/authn/scram.html) |
+| **Username / Password**              | ✅                        | ✅                              | ✅                                  | [Password-Based Authentication](../access-control/authn/pwoverview.md) |
+| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](../access-control/authn/jwt.md)         |
+| **MQTT 5.0 Enhanced Authentication** | ✅                        | N/A                            | N/A                                | [MQTT 5.0 Enhanced Authentication](../access-control/authn/scram.md) |
 | **LDAP Authentication**              | ✅                        | ❌                              | ✅ In product roadmap               |                                                              |
-| **PSK Authentication**               | ✅                        | ❌                              | ✅                                  | [Enable PSK Authentication](https://docs.emqx.com/en/emqx/latest/network/psk-authentication.html#enable-psk-authentication) |
+| **PSK Authentication**               | ✅                        | ❌                              | ✅                                  | [Enable PSK Authentication](../network/psk-authentication.md#enable-psk-authentication) |
 | **X.509 Certificates**               | ✅                        | ✅ Managed by EMQX Cloud        | ✅                                  |                                                              |
 | **Fine-grained Access Control**      | ✅                        | ✅                              | ✅                                  |                                                              |
 | **Authentication Database Backends** | ✅                        | ❌                              | ✅                                  |                                                              |
@@ -157,22 +157,22 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 | **JSON Schema Validation** | ✅                        | ❌                              | ✅                                  |                                                              |
 | **Avro Validation**        | ✅                        | ❌                              | ✅                                  |                                                              |
 | **ProtoBuf Validation**    | ✅                        | ❌                              | ✅                                  |                                                              |
-| **Built-in Functions**     | ✅                        | ❌                              | ✅                                  | [Functions available in SQL statements, rich built-in libraries, support custom extensions](https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-builtin-functions.html) |
+| **Built-in Functions**     | ✅                        | ❌                              | ✅                                  | [Functions available in SQL statements, rich built-in libraries, support custom extensions](../data-integration/rule-sql-builtin-functions.md) |
 | **jq Functions**           | ✅                        | ❌                              | ✅                                  | Efficient JSON data processing                               |
-| **Event Trigger**          | ✅                        | ❌                              | ✅                                  | [Client events](https://docs.emqx.com/en/emqx/latest/data-integration/rule-sql-events-and-fields.html#mqtt-events), event-driven business development |
+| **Event Trigger**          | ✅                        | ❌                              | ✅                                  | [Client events](../data-integration/rule-sql-events-and-fields.md#mqtt-events), event-driven business development |
 | **Schema Validation**      | ✅                        | ❌                              | ✅                                  |                                                              |
 | **Message Transformation** | ✅                        | ❌                              | ✅                                  |                                                              |
 
 ## Extensibility
 
-| Extensibility                | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
-| ---------------------------- | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **Hooks**                    | ✅                        | N/A                            | N/A                                | [Hooks](https://docs.emqx.com/en/emqx/latest/extensions/hooks.html#hooks) |
-| **Plugins**                  | ✅                        | N/A                            | N/A                                | [Plugins](https://docs.emqx.com/en/emqx/latest/extensions/plugins.html#plugins) |
-| **Plugin Hot Loading**       | ✅                        | N/A                            | N/A                                |                                                              |
-| **Plugin Hot Configuration** | ✅                        | N/A                            | N/A                                |                                                              |
-| **Gateways**                 | ✅                        | N/A                            | N/A                                |                                                              |
-| **ExHooks / gRPC**           | ✅                        | N/A                            | N/A                                |                                                              |
+| Extensibility                | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                             |
+| ---------------------------- | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------- |
+| **Hooks**                    | ✅                        | N/A                            | N/A                                | [Hooks](../extensions/hooks.md#hooks)       |
+| **Plugins**                  | ✅                        | N/A                            | N/A                                | [Plugins](../extensions/plugins.md#plugins) |
+| **Plugin Hot Loading**       | ✅                        | N/A                            | N/A                                |                                             |
+| **Plugin Hot Configuration** | ✅                        | N/A                            | N/A                                |                                             |
+| **Gateways**                 | ✅                        | N/A                            | N/A                                |                                             |
+| **ExHooks / gRPC**           | ✅                        | N/A                            | N/A                                |                                             |
 
 ## Operability
 
