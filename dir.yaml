@@ -941,7 +941,7 @@
       title_ja: MCP over MQTT & Multimedia Service SDKs
       path: emqx-ai/sdks/overview
       collapsed: true
-      children: 
+      children:
         - title_en: Clients Compatible with Multimedia Services
           title_cn: 与多媒体服务适配的客户端
           title_ja: Clients Compatible with Multimedia Services
@@ -959,6 +959,12 @@
             - emqx-ai/sdks/mcp-sdk-paho-c
             - emqx-ai/sdks/mcp-sdk-python
             - emqx-ai/sdks/mcp-sdk-typescript
+    - title_en: Tutorials
+      title_cn: 教程
+      title_ja: チュートリアル
+      collapsed: true
+      children:
+        - emqx-ai/tutorials/quickstart-volcengine-voice
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
