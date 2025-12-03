@@ -12,10 +12,52 @@ Be familiar with the basic concepts of [Single Sign-On (SSO)](./sso.md).
 
 The EMQX Dashboard can integrate with identity services that support the SAML 2.0 protocol to enable SAML-based SSO, such as:
 
+- [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
 - [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
 Other identity providers are in the process of integration and will be supported in future versions.
+
+## Configure SSO by Integrating with Microsoft Entra ID
+
+This section guides you on how to use Microsoft Entra ID as an Identity Provider (IdP) and configure SSO. You need to complete configurations on both the Microsoft and EMQX Dashboard sides.
+
+### Step 1: Enable SAML SSO in EMQX Dashboard
+
+1. Go to **System** -> **SSO** in the Dashboard.
+2. Click the **Enable** button on the **SAML 2.0** card.
+3. On the configuration page, enter the following information:
+   - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
+   - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
+
+### Step 2: Register an application to integrate with Microsoft Entra ID
+
+1. Log in to the [MS Azure Portal](https://portal.azure.com/) as an administrator.
+2. Go to **Microsoft Entra ID** -> **Enterprise Applications** -> **New Application** and click **Create your own application**.
+
+<img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
+
+4. Enter the application name, for example, `EMQX Dashboard`, select **Integrate any other application you don't find in the gallery (Non-gallery)**, and click **Create**.
+
+<img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
+
+5. Click **Assign users and groups** to assign users and groups who can access the EMQX Dashboard application.
+6. Go to the **Single sign-on** tab, select **SAML**, and click the **Edit** button in the **Basic SAML Configuration** section.
+7. Configure the following information provided in the Dashboard in Step 1:
+
+   - **Identifier (Entity ID)**: Enter the **Metadata Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/metadata`.
+   - **Reply URL (Assertion Consumer Service URL)**: Enter the **SSO Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/acs`.
+
+   Other information is optional and can be configured based on your actual requirements.
+8. Click **Save** to save the configuration.
+
+### Step 3: Complete EMQX Dashboard configuration
+
+1. In Microsoft Entra ID, go to the **Single sign-on** tab of the created application, and copy **App Federation Metadata Url** in the **SAML Signing Certificate** section.
+
+<img src="./assets/entra_id_saml_metadata_url.png" alt="entra_id_saml_metadata_url" style="zoom:50%;" />
+
+2. In the Dashboard, paste the copied URL into the **SAML Metadata URL** in Step 1 and click **Update**.
 
 ## Configure SSO by Integrating with Okta 
 
