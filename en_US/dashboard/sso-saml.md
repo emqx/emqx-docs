@@ -37,19 +37,19 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 
 <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
 
-4. Enter the application name, for example, `EMQX Dashboard`, select **Integrate any other application you don't find in the gallery (Non-gallery)**, and click **Create**.
+3. Enter the application name, for example, `EMQX Dashboard`, select **Integrate any other application you don't find in the gallery (Non-gallery)**, and click **Create**.
 
 <img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
 
-5. Click **Assign users and groups** to assign users and groups who can access the EMQX Dashboard application.
-6. Go to the **Single sign-on** tab, select **SAML**, and click the **Edit** button in the **Basic SAML Configuration** section.
-7. Configure the following information provided in the Dashboard in Step 1:
+4. Click **Assign users and groups** to assign users and groups who can access the EMQX Dashboard application.
+5. Go to the **Single sign-on** tab, select **SAML**, and click the **Edit** button in the **Basic SAML Configuration** section.
+6. Configure the following information provided in the Dashboard in Step 1:
 
    - **Identifier (Entity ID)**: Enter the **Metadata Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/metadata`.
    - **Reply URL (Assertion Consumer Service URL)**: Enter the **SSO Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/acs`.
 
    Other information is optional and can be configured based on your actual requirements.
-8. Click **Save** to save the configuration.
+7. Click **Save** to save the configuration.
 
 ### Step 3: Complete EMQX Dashboard configuration
 
