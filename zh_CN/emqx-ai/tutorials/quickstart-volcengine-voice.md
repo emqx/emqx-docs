@@ -71,8 +71,6 @@ MQTT_PASSWORD=your_password
 2. 如页面顶部显示开通提示，点击开通服务（开通不产生费用，仅模型调用超出免费额度后计费）
 3. 如需实名认证，请先完成认证
 
-<!-- TODO: 添加阿里云百炼开通页面截图 -->
-
 #### 创建 API Key
 
 1. 进入 [密钥管理](https://bailian.console.aliyun.com/#/api-key) 页面
@@ -80,9 +78,6 @@ MQTT_PASSWORD=your_password
 3. 选择归属账号和业务空间（通常选择默认业务空间），填写描述后确定
 4. 点击 API Key 旁的复制图标获取密钥
 5. 将获取的 API Key 填入 `app/.env` 的 `DASHSCOPE_API_KEY`
-
-<!-- TODO: 添加创建 API Key 页面截图 -->
-<!-- TODO: 添加 API Key 创建成功后的复制界面截图 -->
 
 #### 使用其他模型服务（可选）
 
@@ -189,7 +184,7 @@ LLM_MODEL=your_model_name                       # 模型名称
 **重要**: 为保证完整体验本项目的 MCP over MQTT 功能，app 服务的 `/chat-stream` 端点**必须部署到公网可访问的 HTTPS 环境**，以便火山云服务回调。
 
 - **生产部署**（推荐）：将 app 部署到公网 HTTPS 地址（如 `https://your-domain.com/chat-stream`），确保 SSE 响应以 `data: [DONE]` 正确结束
-- **本地测试**：非公网环境，仅可通过 API 测试 LLM 推理与 MQTT over MCP 工具调用，无法完整的体验到火山云语音交互功能。
+- **本地测试**：非公网环境，仅可通过 API 测试 LLM 推理与 MCP over MQTT 工具调用，无法完整的体验到火山云语音交互功能。
 
 ## 快速教程：10 分钟搭建语音交互 + 设备控制演示
 
@@ -238,7 +233,7 @@ CUSTOM_LLM_API_KEY=your-strong-random-secret-key-here
 
 # ===== MQTT Broker 配置 =====
 # 来源：前置条件 "2. MQTT Broker"
-# 作用：连接 EMQX Broker，实现 MQTT over MCP 协议通信
+# 作用：连接 EMQX Broker，实现 MCP over MQTT 协议通信
 MQTT_BROKER_HOST=localhost        # EMQX Broker 地址
 MQTT_BROKER_PORT=1883             # MQTT 端口
 
