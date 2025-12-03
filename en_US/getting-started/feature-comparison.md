@@ -233,7 +233,7 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 | **MQTT & JMeter**       | ✅ JMeter Plugin          | ✅                              | ✅                                  | [GitHub - emqx/mqtt-jmeter: MQTT JMeter Plugin](https://github.com/emqx/mqtt-jmeter) |
 | **MQTT SDK for C**      | ✅ NanoSDK                | ✅                              | ✅                                  | [GitHub - nanomq/NanoSDK: MQTT 5.0-compliant SDK with QUIC support in NNG flavor](https://github.com/nanomq/NanoSDK) |
 | **MQTT Erlang SDK**     | ✅                        | ✅                              | ✅                                  | [GitHub - emqx/emqtt: Erlang MQTT 5.0 Client](https://github.com/emqx/emqtt) |
-| **MQTT iOS SDK**        | ✅                        | ✅                              | ✅                                  | [GitHub - emqx/CocoaMQTT: MQTT 5.0 client library for iOS and macOS written in Swift](https://github.com/emqx/CocoaMQTT)<br />[GitHub - emqx/swift-mqtt: An MQTT Client over TCP and QUIC protocol] |
+| **MQTT iOS SDK**        | ✅                        | ✅                              | ✅                                  | [GitHub - emqx/CocoaMQTT: MQTT 5.0 client library for iOS and macOS written in Swift](https://github.com/emqx/CocoaMQTT)<br />[GitHub - emqx/swift-mqtt: An MQTT Client over TCP and QUIC protocol](https://github.com/emqx/swift-mqtt) |
 | **MQTT QUIC Client**    | ✅                        | ✅                              | ✅                                  | [GitHub - emqx/quic: QUIC protocol for Erlang & Elixir](https://github.com/emqx/quic) |
 
 
