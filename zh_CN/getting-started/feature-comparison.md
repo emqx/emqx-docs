@@ -10,10 +10,9 @@
 | **MQTT over QUIC**     | ✅                                 | ✅                   | ✅               | 全球领先支持                                                 |
 | **MQTT 扩展**          | ✅                                 | ❌                   | ✅               | [共享订阅](https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-shared-subscription.html)<br>[排他订阅](https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-exclusive-subscription.html)<br>[延迟发布](https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-delayed-publish.html)<br>[自动订阅](https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-auto-subscription.html)<br>[主题重写](https://docs.emqx.com/zh/emqx/latest/messaging/mqtt-topic-rewrite.html)<br>更多个性化选项 |
 | **多协议网关**         | ✅                                 | ❌                   | ✅               | 更多行业设备接入                                             |
-| **多租户**             | ✅                                 | ❌                   | ✅               | 更高的系统灵活性和利用率                                     |
+| **多租户**             | ✅                                 | ❌                   | ✅               | 更高的系统灵活性和利用率（即将发布）                         |
 | **集群连接**           | ✅                                 | ❌                   | ✅               | 设备和应用数据的无缝连接                                     |
-| **事件历史**           | ✅                                 | ❌                   | ✅               | 客户端故障诊断和行为审计                                     |
-| **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构                                     |
+| **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构（即将发布）                         |
 | **流处理**             | ✅                                 | ❌                   | ✅               | 更高的可靠性和灾难恢复能力<br>（即将发布）                   |
 | **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](https://docs.emqx.com/zh/emqx/latest/durability/durability_introduction.html) |
 | **Schema Registry**    | ✅                                 | ❌                   | ✅               | [编解码](https://docs.emqx.com/zh/emqx/latest/data-integration/schema-registry.html)保证数据一致性和可兼容性 |
