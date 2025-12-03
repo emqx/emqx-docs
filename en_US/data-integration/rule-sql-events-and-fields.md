@@ -332,7 +332,7 @@ Refer to the table below for fields that can be selected from the received MQTT 
 
 This event topic can be used to trigger a rule when a client is disconnected.
 
-For example, you can use the statement below to extract data from the `"$events/client_disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, disconnect time, and EMQX node where the event is triggered.
+For example, you can use the statement below to extract data from the `"$events/client_disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, connection start time, disconnect time, and EMQX node where the event is triggered.
 
 Example:
 ```sql
@@ -340,6 +340,7 @@ SELECT
   clientid,
   username,
   reason,
+  connected_at,
   disconnected_at,
   node
 FROM
@@ -351,12 +352,11 @@ Output:
   "username": "u_emqx",
   "reason": "normal",
   "node": "emqx@127.0.0.1",
+  "connected_at": 1645003578036,
   "disconnected_at": 1645003578536,
   "clientid": "c_emqx"
 }
 ```
-
-
 
 | Field             | Explanation                                                  |
 | :---------------- | :----------------------------------------------------------- |
@@ -365,6 +365,7 @@ Output:
 | `username`        | Client username                                              |
 | `peername`        | IP Address and Port number                                   |
 | `sockname`        | IP Address and Port number listened by EMQX                  |
+| `connected_at` | Client connection start time (unit: ms). This timestamp represents when the current session was established and helps identify which connection session the disconnect event belongs to.<br />It ensures that delayed disconnect events do not overwrite newer connection states. |
 | `disconnected_at` | Client disconnection completion time (unit: ms)              |
 | `disconn_props`   | DISCONNECT Properties (MQTT 5.0 clients only)                |
 | `timestamp`       | Event trigger time (unit: ms)                                |
