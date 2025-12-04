@@ -20,11 +20,6 @@ EMQX utilizes the rule engine and Sink to forward device events and data to Snow
 
 4. **Writing to Snowflake**: The rule triggers an action that writes message data to Snowflake, either by batching messages into files and loading them via Stage and Pipe (aggregated mode), or by streaming them directly using the Snowpipe Streaming API (streaming mode).
 
-   ::: tip Note
-
-   Snowpipe Streaming is currently a [preview feature](https://docs.snowflake.com/en/release-notes/preview-features) in Snowflake. It is available only for accounts hosted on AWS.
-
-   :::
 
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
@@ -171,13 +166,13 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
      [ODBC]
      Trace=no
      TraceFile=
-
+     
      [ODBC Drivers]
      Snowflake = Installed
-
+     
      [ODBC Data Sources]
      snowflake = Snowflake
-
+     
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -347,19 +342,19 @@ This includes:
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-
+   
    -- Grant usage and read/write permissions
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- Aggregated mode requires access to stage and pipe
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- Streaming mode requires permissions on the streaming pipe
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-
+   
    -- Link role to the user and set it as default
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;

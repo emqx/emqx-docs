@@ -20,11 +20,6 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
 4. **写入 Snowflake**：规则触发一个动作，将消息数据写入 Snowflake。写入方式可以是将消息批量写入文件后，通过存储区 (Stage) 和 Pipe 加载到表中（聚合模式），也可以是通过 Snowpipe Streaming API 实时流式写入（流式模式）。
 
-   ::: tip Note
-
-   Snowpipe Streaming 当前是 Snowflake 的[预览功能](https://docs.snowflake.com/en/release-notes/preview-features)，仅适用于部署在 AWS 上的账户。
-
-   :::
 
 当事件和消息数据写入 Snowflake 后，可用于各种业务和技术用途，包括：
 
@@ -118,13 +113,13 @@ scripts/install-snowflake-driver.sh
      [ODBC]
      Trace=no
      TraceFile=
-
+     
      [ODBC Drivers]
      Snowflake = Installed
-
+     
      [ODBC Data Sources]
      snowflake = Snowflake
-
+     
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -293,19 +288,19 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-
+   
    -- 授权数据库和表的使用与读写权限
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- 聚合模式需要访问存储区和管道
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- 流式模式需要访问流式管道
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-
+   
    -- 将角色授予用户，并设置为默认角色
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
