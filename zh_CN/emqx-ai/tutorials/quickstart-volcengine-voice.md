@@ -2,6 +2,8 @@
 
 本文档介绍如何使用 Docker Compose 快速部署一个支持语音交互与设备控制的 AI 智能体演示系统。本项目通过 PC 端的浏览器模拟智能设备端（摄像头、表情、音量等硬件能力），展示 MCP over MQTT 协议如何实现 AI Agent 对设备的实时控制。系统集成火山云 RTC 实现语音通道，ASR/TTS 提供语音识别与合成，CustomLLM 模式对接自定义 AI Agent 服务完成多轮对话与工具调用。
 
+观看[演示视频](https://www.bilibili.com/video/BV1P2WTzBEu4/)了解 Demo 完整效果。
+
 ## 架构速览
 
 本系统由三个核心组件构成：

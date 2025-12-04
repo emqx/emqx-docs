@@ -2,6 +2,8 @@
 
 This document describes how to quickly deploy an AI agent demo system with voice interaction and device control using Docker Compose. The project simulates smart device capabilities (camera, expressions, volume control, etc.) through a PC browser, demonstrating how the MCP over MQTT protocol enables real-time AI Agent control of devices. The system integrates Volcengine RTC for voice channels, ASR/TTS for speech recognition and synthesis, and CustomLLM mode to connect to custom AI Agent services for multi-turn conversations and tool invocations.
 
+Watch the [demo video](https://youtu.be/x_RxJViZyLQ) to see the complete demo effect.
+
 ## Architecture Overview
 
 The system consists of three core components:
