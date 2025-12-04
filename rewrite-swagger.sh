@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## This script requres jq 1.6
+## This script requires jq 1.6
 
 set -euo pipefail
 

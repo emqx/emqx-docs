@@ -59,7 +59,7 @@ The final step is to configure the selected backend. Each backend has some conne
 
 #### Built-in Database
 
-For example, if you use the `Built-in Database`, you need to choose whether to use the Username or the Client ID, seting the encryption method of the password, etc. If you use the enhanced authentication of MQTT 5.0 and use the built-in database, you only need to configure the encryption method.
+For example, if you use the `Built-in Database`, you need to choose whether to use the Username or the Client ID, setting the encryption method of the password, etc. If you use the enhanced authentication of MQTT 5.0 and use the built-in database, you only need to configure the encryption method.
 
 For more details about Built-in Database, refer to [Use Built-in Database](../access-control/authn/mnesia.md).
 

@@ -128,7 +128,7 @@ Message 3:
 }
 ```
 
-### Split One Messsage into Separate Messages
+### Split One Message into Separate Messages
 
 The example code processes an input message containing multiple sensor measurements and splits it into separate messages for each sensor type. This is how it works:
 

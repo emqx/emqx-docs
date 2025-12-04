@@ -42,7 +42,7 @@ The data integration with Microsoft SQL Server offers a range of features and be
 
 ## Before You Start
 
-This section describes the preparations you need to complete before you start creating the Microsoft SQL Server data integration, including how to install and configure the ODBC driver, install and connect to the Microsoft SQL Server, ands create database and data tables.
+This section describes the preparations you need to complete before you start creating the Microsoft SQL Server data integration, including how to install and configure the ODBC driver, install and connect to the Microsoft SQL Server, and create database and data tables.
 
 ### Prerequisites
 

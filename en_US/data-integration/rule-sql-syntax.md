@@ -107,7 +107,7 @@ SELECT * FROM "t/#" WHERE payload.x.y = 1
 You can use the `and` and `or` operators to form complex boolean expressions in the WHERE-clause:
 
 ```sql
-SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temprature > 39
+SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temperature > 39
 ```
 
 ## The `FOREACH` Statement
@@ -177,7 +177,7 @@ FROM "t/#"
 
 Where,
 
-- The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array itmes `sensor` with the "`as nane`"-syntax.
+- The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array itmes `sensor` with the "`as name`"-syntax.
 - The `DO` clause specifies the fields to be included in the output:
   - `timestamp` is the timestamp from the input message's metadata.
   - `clientid` is the client ID from the input message's metadata.

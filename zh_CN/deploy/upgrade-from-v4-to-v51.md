@@ -43,7 +43,7 @@
 | emqx_bridge_mqtt | 数据桥接 - MQTT 桥接                          |
 | emqx_web_hook    | 数据桥接 - HTTP Server                        |
 | emqx_coap        | CoAP 网关                                     |
-| emqx_dashboard   | Dasboard                                      |
+| emqx_dashboard   | Dashboard                                      |
 | emqx_exhook      | ExHook 功能                                   |
 | emqx_exproto     | ExProto 网关                                  |
 | emqx_lwm2m       | LwM2M 网关                                    |
@@ -59,7 +59,7 @@
 
 ## HTTP API
 
-此前 Dashboard 中的**应用 (Appication)** 用于管理 API 访问凭证，现已更名为 **API 密钥 (API Key)**，且 Secret Key 仅在创建成功时返回一次，后续无法再次获得。
+此前 Dashboard 中的**应用 (Application)** 用于管理 API 访问凭证，现已更名为 **API 密钥 (API Key)**，且 Secret Key 仅在创建成功时返回一次，后续无法再次获得。
 
 1. 8081 端口已被合并至 18083 端口，所有 API 都通过 18083 端口提供。
 2. 不能使用 Dashboard 的用户名和密码进行 API 访问，**必须**使用 API 密钥创建的访问凭证。

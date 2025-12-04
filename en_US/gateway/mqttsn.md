@@ -113,7 +113,7 @@ In the **Basic Configuration** tab, you can customize your gateway ID, predefine
 
 By default, one UDP listener with the name of **default** is already configured on port `1884`, which allows a maximum of 1,000 connections per second, and support up to 1,024,000 concurrent connections. You can click **Settings** for more customized settings, click **Delete** to delete the listener, or click **+ Add Listener** to add a new listener.
 
-<img src="./assets/mqttsn-listerner.png" alt="MQTTSN listener" style="zoom:50%;" />
+<img src="./assets/mqttsn-listener.png" alt="MQTTSN listener" style="zoom:50%;" />
 
 Click **Add Listener** to open **Add Listener** page, where you can continue with the following configuration fields:
 

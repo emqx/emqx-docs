@@ -365,7 +365,7 @@ emqx_a -> topic:t/1 qos:0 nl:0 rh:0 rap:0
 
 ### subscriptions add \<ClientId\> \<Topic\> \<QoS\>
 
-Mannually add a subscription.
+Manually add a subscription.
 
 ```bash
 $ emqx ctl subscriptions add emqx_a t/1 1
@@ -1528,7 +1528,7 @@ Currently there are by default 5 registered gateways:
 * mqttsn
 * stomp
 
-EMQX is designed to be plugable, so that more gateways can be installed as pluginsand register to EMQX at runtime.
+EMQX is designed to be pluggable, so that more gateways can be installed as pluginsand register to EMQX at runtime.
 Once registered, a gateway can be managed with management APIs and CLIs (see `gateway` command below).
 
 ## gateway-clients

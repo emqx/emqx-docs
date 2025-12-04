@@ -6,7 +6,7 @@
 # - A doc node may have edition: ee for enterprise only content
 #
 # Grouping node
-# - Must have a 'title_en' (English), 'title_cn' (Chinese) is optional wehn no need to translate. e.g. FAQ
+# - Must have a 'title_en' (English), 'title_cn' (Chinese) is optional when no need to translate. e.g. FAQ
 # - Parent nodes must NOT have a 'path'
 #
 # Content node can be one of:

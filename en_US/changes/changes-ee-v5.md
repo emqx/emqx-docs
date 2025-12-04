@@ -1014,7 +1014,7 @@ Previously, if a node is force shutdown down while RPC channels are being establ
 
 - [#13736](https://github.com/emqx/emqx/pull/13736) Upgraded Kafka producer to support client re-authentication. See [kafka_protocol#122](https://github.com/kafka4beam/kafka_protocol/pull/122).
 
-  Also fixed below minor issuses:
+  Also fixed below minor issues:
 
   - `unexpected_info` error log in [PR#13727](https://github.com/emqx/emqx/pull/13727) and [wolff#74](https://github.com/kafka4beam/wolff/pull/74).
   - `einval` crash report of Kafka connection due to a race condition [kafka_protocol#124](https://github.com/kafka4beam/kafka_protocol/pull/124).
@@ -1088,7 +1088,7 @@ Please read [Known Issues of 5.8](./known-issues-5.8.md) before upgrade.
   ]
   ```
   
-  Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previousy, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
+  Expected values are now treated as templates, consistent with other authenticators, allowing for arbitrary expressions such as `${username}` and `${clientid}`. Previously, only fixed `"${username}"` `"${clientid}"` values were supported for interpolation.
   
   Improved the documentation for the `verify_claims` parameter.
 
@@ -1677,7 +1677,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
   Before this fix, when a listener config is updated with an unknown zone, for example `{"zone": "unknown"}`, the change would be accepted, causing all clients to crash when connected.
   After this fix, updating the listener with an unknown zone name will get a "Bad request" response.
 
-- [#13012](https://github.com/emqx/emqx/pull/13012) The MQTT listerners config option `access_rules` has been improved in the following ways:
+- [#13012](https://github.com/emqx/emqx/pull/13012) The MQTT listeners config option `access_rules` has been improved in the following ways:
 
   * The listener no longer crash with an incomprehensible error message if a non-valid access rule is configured. Instead a configuration error is generated.
   * One can now add several rules in a single string by separating them by comma (for example, "allow 10.0.1.0/24, deny all").
@@ -1688,7 +1688,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
 
 - [#13090](https://github.com/emqx/emqx/pull/13090) Attempting to start an action or source whose connector is disabled will no longer attempt to start the connector itself.
 
-- [#12871](https://github.com/emqx/emqx/pull/12871) Fixed startup process of evacuated node. Previously, if a node was evacuated and stoped without stopping evacuation, it would not start back.
+- [#12871](https://github.com/emqx/emqx/pull/12871) Fixed startup process of evacuated node. Previously, if a node was evacuated and stopped without stopping evacuation, it would not start back.
 
 - [#12888](https://github.com/emqx/emqx/pull/12888) Fixed License related configuration loss after importing backup data.
 
@@ -1799,7 +1799,7 @@ For more information about the Durable Sessions feature, see [MQTT Durable Sessi
   ```
   See [HOCON 0.42.0](https://github.com/emqx/hocon/releases/tag/0.42.0) release notes for details.
 
-- [#12520](https://github.com/emqx/emqx/pull/12520) Implemented log throttling. The feature reduces the volume of logged events that could potentially flood the system by dropping all but the first occurance of an event within a configured time window.
+- [#12520](https://github.com/emqx/emqx/pull/12520) Implemented log throttling. The feature reduces the volume of logged events that could potentially flood the system by dropping all but the first occurrence of an event within a configured time window.
   Log throttling is applied to the following log events that are critical yet prone to repetition:
 
   - `authentication_failure`
@@ -2101,7 +2101,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
 - [#12299](https://github.com/emqx/emqx/pull/12299) Exposed more metrics to improve observability:
 
-  Montior API:
+  Monitor API:
   - Added `retained_msg_count` field to `/api/v5/monitor_current`.
   - Added `license_quota` field to `/api/v5/monitor_current`
   - Added `retained_msg_count` and `node_uptime` fields to `/api/v5/monitor_current/nodes/{node}`.
@@ -2285,7 +2285,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
   - Bypassing network for the local calls.
 
-  - Avoid senstive data leaking in debug logs [#12202](https://github.com/emqx/emqx/pull/12202)
+  - Avoid sensitive data leaking in debug logs [#12202](https://github.com/emqx/emqx/pull/12202)
   
 - [#12111](https://github.com/emqx/emqx/pull/12111) Fixed an issue when API tokens were sometimes unavailable immediately after login due to race condition.
 
@@ -2452,7 +2452,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
   * In command `emqx ctl listeners` output, the `shutdown_count` counter is incremented
   when TLS handshake failure (`ssl_error`) or Malformed packet (`frame_error`) happens.
 - [#11661](https://github.com/emqx/emqx/pull/11661) Fixed log formatter when log.HANDLER.formatter is set to 'json'. The bug was introduced in v5.0.4 where the log line was no longer a valid JSON, but prefixed with timestamp string and level name.
-- [#11627](https://github.com/emqx/emqx/pull/11627) Fixed resources cleanup in HStreamdB bridge. Prior to this fix, HStreamDB bridge might report errors during bridge configuration updates, since hstreamdb client/producer were not stopped properly.
+- [#11627](https://github.com/emqx/emqx/pull/11627) Fixed resources cleanup in HStreamDB bridge. Prior to this fix, HStreamDB bridge might report errors during bridge configuration updates, since hstreamdb client/producer were not stopped properly.
 
 ## 5.2.1
 
@@ -2786,7 +2786,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 
 - [#11237](https://github.com/emqx/emqx/pull/11237) The `headers` default value in /prometheus API should be a map instead of a list.
 
-- [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug when the order of MQTT packets withing a WebSocket packet will be reversed.
+- [#11250](https://github.com/emqx/emqx/pull/11250) Fixed a bug when the order of MQTT packets within a WebSocket packet will be reversed.
 
 
 - [#11271](https://github.com/emqx/emqx/pull/11271) Ensured that the range of all percentage type configurations is from 0% to 100% in the REST API and configuration. For example, `sysom.os.sysmem_high_watermark=101%` is invalid now.
@@ -2888,7 +2888,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 -   [#10909](https://github.com/emqx/emqx/pull/10909) Removed the deprecated HTTP APIs for gateways.
 -   [#10908](https://github.com/emqx/emqx/pull/10908) Refactored the RocketMQ bridge to avoid resources leaks in case bridge crashed during initialization phase.
 -   [#10924](https://github.com/emqx/emqx/pull/10924) Refactored Influxdb bridge connector to avoid resource leaks in case bridge crashed during initialization phase.
--   [#10944](https://github.com/emqx/emqx/pull/10944) Improved the GCP PubSub bridge to avoid a potential issue that the bridge could fail to send messsages after node restart.
+-   [#10944](https://github.com/emqx/emqx/pull/10944) Improved the GCP PubSub bridge to avoid a potential issue that the bridge could fail to send messages after node restart.
 -   [#10933](https://github.com/emqx/emqx/pull/10933) Added support for configuring TCP keep-alive in MQTT/TCP and MQTT/SSL listeners.
 -   [#10948](https://github.com/emqx/emqx/pull/10948) Added `live_connections` field for some HTTP APIs, i.e:
     -   `/monitor_current`, `/monitor_current/nodes/{node}`
@@ -2949,7 +2949,7 @@ This check ensures that during the rolling upgrades, the replicant nodes can onl
 -   [#10951](https://github.com/emqx/emqx/pull/10951) Fixed the issue in MQTT-SN gateway when the `mountpoint` did not take effect on message publishing.
 -   [#10943](https://github.com/emqx/emqx/pull/10943) Deprecated UDP mcast mechanism for cluster discovery.
     This feature has been planed for deprecation since 5.0 mainly due to the lack of actual production use. This feature code is not yet removed in 5.1, but the document interface is demoted.
--   [#10902](https://github.com/emqx/emqx/pull/10902) Avoid syncing cluser.hocon file from the nodes running a newer version than the self-node.
+-   [#10902](https://github.com/emqx/emqx/pull/10902) Avoid syncing cluster.hocon file from the nodes running a newer version than the self-node.
     During cluster rolling upgrade, if an older version node has to restart due to whatever reason, if it copies the `cluster.hocon` file from a newer version node, it may fail to start. After this fix, the older version node will not copy the `cluster.hocon` file from a newer, so it will use its own `cluster.hocon` file to start.
 -   [#10967](https://github.com/emqx/emqx/pull/10967) Fixed error message formatting in rebalance API: previously they could be displayed as unclear dumps of internal Erlang structures.
     Added `wait_health_check` option to node evacuation CLI and API. This is a time interval when the node reports "unhealthy status" without beginning actual evacuation. We need this to allow a Load Balancer (if any) to remove the evacuated node from balancing and not forward (re)connecting clients to the evacuated node.
@@ -3166,7 +3166,7 @@ _Release Date: 2023-05-26_
 
 - [#10746](https://github.com/emqx/emqx/pull/10746) Add missing support of the event `$events/delivery_dropped` into the rule engine test API `rule_test`.
 
-- [#10747](https://github.com/emqx/emqx/pull/10747) Ported some time formating fixes in Rule-Engine functions from version 4.4.
+- [#10747](https://github.com/emqx/emqx/pull/10747) Ported some time formatting fixes in Rule-Engine functions from version 4.4.
 
 - [#10760](https://github.com/emqx/emqx/pull/10760) Fix "internal error 500" when getting bridge statistics page while a node is joining the cluster.
 

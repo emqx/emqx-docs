@@ -51,7 +51,7 @@ The data integration with IoTDB offers a range of features and benefits tailored
 
 - **Fast and Complex Querying**
 
-  IoTDB has rich query semantics, supporting time alignment for timeseries data accross devices and sensors, computation in timeseries field (frequency domain transformation) and rich aggregation function support in time dimension. It also deeply integrates with Apache Hadoop, Spark and Flink, providing more powerful analytics capabilities. EMQX seamlessly integrates with IoTDB, providing a unified solution for storing and analyzing MQTT data.
+  IoTDB has rich query semantics, supporting time alignment for timeseries data across devices and sensors, computation in timeseries field (frequency domain transformation) and rich aggregation function support in time dimension. It also deeply integrates with Apache Hadoop, Spark and Flink, providing more powerful analytics capabilities. EMQX seamlessly integrates with IoTDB, providing a unified solution for storing and analyzing MQTT data.
 
 ## Before You Start
 

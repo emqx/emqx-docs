@@ -104,7 +104,7 @@ In addition to the default settings, EMQX provides a variety of configuration op
   - **con**: The CoAP notification should be acknowledged by the client. 
   - **non**: The CoAP notification need not be acknowledged by the client. 
 
-- **Heatbeat**: Only needed if **Connection Required** is set to `true`, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
+- **Heartbeat**: Only needed if **Connection Required** is set to `true`, set the minimum heartbeat interval to keep the connection alive; default: 30s. 
 
 - **Enable Statistics**: Set whether to allow the Gateway to collect and report statistics; default: `true`, optional values: `true`, `false`.
 
@@ -242,7 +242,7 @@ After the connection is successfully created, you can use Dashboard, HTTP API or
 :::
 
 
-### Close Connnection
+### Close Connection
 
 Only available in `Connection Mode`.
 

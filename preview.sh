@@ -5,7 +5,7 @@ set -euo pipefail
 ## 1. render the markdown files for vuepress
 ## 2. serve the rendered HTML pages in a vuepress site
 ##
-## It takes one argument as the listner port number the
+## It takes one argument as the listener port number the
 ## port number which defaults to 8080
 
 PRODUCT="${1:-ce}" # ce or ee

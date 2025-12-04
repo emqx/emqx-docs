@@ -54,7 +54,7 @@ This section demonstrates how to create Log Trace rules by client ID, Topic, or 
 
 ### Trace by IP Address
 
-1. Select `IP Addess` from the drop-down list of **Type**.
+1. Select `IP Address` from the drop-down list of **Type**.
 
 2. Type the IP address to be traced.
 

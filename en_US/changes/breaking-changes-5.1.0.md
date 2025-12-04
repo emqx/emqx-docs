@@ -153,7 +153,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 | emqx_bridge_mqtt | Data Bridge - MQTT Bridge                                 |
 | emqx_web_hook    | Data Bridge - HTTP Server                                 |
 | emqx_coap        | CoAP Gateway                                              |
-| emqx_dashboard   | Dasboard                                                  |
+| emqx_dashboard   | Dashboard                                                  |
 | emqx_exhook      | ExHook                                                    |
 | emqx_exproto     | ExProto Gateway                                           |
 | emqx_lwm2m       | LwM2M Gateway                                             |

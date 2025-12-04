@@ -239,7 +239,7 @@ The configuration docs are generated from source code.
 Steps to  update:
 
 1. Re-build EMQX (opensource and enterprise edition)
-1. Copy the gnerated `md` files to this repo (see commands below)
+1. Copy the generated `md` files to this repo (see commands below)
 1. Rename the heading-1 of each file
     - Configuration Files (for en_US/admin/cfg-*.md)
     - 配置文件 (in zh_CN/admin/cfg-*.md)

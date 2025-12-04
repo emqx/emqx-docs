@@ -107,7 +107,7 @@ Flow 设计器是一个功能丰富且易于使用的工具，有助于用户更
    - `payload.device_id`：设置别名为 `device_id`。
    - `payload.temperature`：设置别名为 `temperature`。
    - `timestamp`：使用`时间与日期函数`中的 `format_date` 函数将发布过来的消息时间戳数值转换为可读的日期时间格式。设置别名为 `date`。
-     - `Time Unit`：选择 `milisecond`。
+     - `Time Unit`：选择 `millisecond`。
      - `Time Offset`：输入 `+08:00`。
      - `Data Format`：输入 `%Y-%m-%d %H:%M:%S.%6N%z`。参考[日期与时间转换函数](../data-integration/rule-sql-builtin-functions.md#format-date-unit-string-offset-string-integer-formatstring-string-time-integer-string)。
      - `Timestamp`：输入 `timestamp`。

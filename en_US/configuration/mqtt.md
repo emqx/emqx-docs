@@ -29,7 +29,7 @@ mqtt {
 
 Where, 
 
-| **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optinal Values** |
+| **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optional Values** |
 | ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------ |
 | `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                    |
 | `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`     |

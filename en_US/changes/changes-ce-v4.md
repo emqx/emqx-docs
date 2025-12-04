@@ -283,7 +283,7 @@ a node restart (and configuration change) is required.
   Meaning, if a plugin (or module) is restarted after initial boot, it may get ordered to the end of the list.
   With this config, you may set the order with a comma-speapated ACL or auth plugin names (or aliases).
   For example: `acl_order = jwt,http`, this will make sure `jwt` is always checked before `http`,
-  meaning if JWT is not found (or no `acl` cliam) for a client, then the ACL check will fallback to use the HTTP backend.
+  meaning if JWT is not found (or no `acl` claim) for a client, then the ACL check will fallback to use the HTTP backend.
 
 - Added configurations to enable more `client.disconnected` events (and counter bumps) [#9267](https://github.com/emqx/emqx/pull/9267).
   Prior to this change, the `client.disconnected` event (and counter bump) is triggered when a client
@@ -325,7 +325,7 @@ a node restart (and configuration change) is required.
   Note that the `id` in `POST /api/v4/rules` should be literals (not encoded) when creating a `rule` or `resource`.
   See docs [Create Rule](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-rules) [Create Resource](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-resources).
 
-- Calling 'DELETE /alarms/deactivated' now deletes deactived alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
+- Calling 'DELETE /alarms/deactivated' now deletes deactivated alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
 
 - When republishing messages or bridge messages to other brokers, check the validity of the topic and make sure it does not have topic wildcards [#9291](https://github.com/emqx/emqx/pull/9291).
 
@@ -352,7 +352,7 @@ a node restart (and configuration change) is required.
   published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
-  Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
+  Previously only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
   Find more about flapping detection in [EMQX document](https://docs.emqx.com/en/enterprise/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
@@ -525,7 +525,7 @@ a node restart (and configuration change) is required.
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
-- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closing the connection process
 - Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
 - Fix the issue that the subscriber's connection was disconnected due to the wrong user properties type in the message publishing API `api/v4/mqtt/publish`
 - Fix the issue that some authentication algorithms were unavailable due to the PostgreSQL driver not adapting to OTP 24
@@ -640,7 +640,7 @@ The compare base of this change set is 4.3.12
     providing the possibility to release EMQX on multiple Erlang/OTP versions
   * `centos` is renamed to `el`. This is mainly due to centos8 being dead (replaced with rockylinux8)
 
-- MongoDB authentication supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Altas
+- MongoDB authentication supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Atlas
 
 - Support dynamic modification of MQTT Keep Alive to adapt to different energy consumption strategies.
 
@@ -719,7 +719,7 @@ The compare base of this change set is 4.3.12
   Meaning, if a plugin (or module) is restarted after initial boot, it may get ordered to the end of the list.
   With this config, you may set the order with a comma-speapated ACL or auth plugin names (or aliases).
   For example: `acl_order = jwt,http`, this will make sure `jwt` is always checked before `http`,
-  meaning if JWT is not found (or no `acl` cliam) for a client, then the ACL check will fallback to use the HTTP backend.
+  meaning if JWT is not found (or no `acl` claim) for a client, then the ACL check will fallback to use the HTTP backend.
 
 - Added configurations to enable more `client.disconnected` events (and counter bumps) [#9267](https://github.com/emqx/emqx/pull/9267).
   Prior to this change, the `client.disconnected` event (and counter bump) is triggered when a client
@@ -757,7 +757,7 @@ The compare base of this change set is 4.3.12
   Note that the `id` in `POST /api/v4/rules` should be literals (not encoded) when creating a `rule` or `resource`.
   See docs [Create Rule](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-rules) [Create Resource](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-resources).
 
-- Calling 'DELETE /alarms/deactivated' now deletes deactived alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
+- Calling 'DELETE /alarms/deactivated' now deletes deactivated alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
 
 - When republishing messages or bridge messages to other brokers, check the validity of the topic and make sure it does not have topic wildcards [#9291](https://github.com/emqx/emqx/pull/9291).
 
@@ -953,7 +953,7 @@ The compare base of this change set is 4.3.12
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
-- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closing the connection process
 - Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
 - Fix the issue that the returned results did not match the query conditions when querying subscriptions with multiple conditions
 - Fix rule engine resource connection test not working
@@ -1194,7 +1194,7 @@ EMQX 4.3.8 is released now, it mainly includes the following changes:
 
   Github PR: [emqx#5436](https://github.com/emqx/emqx/pull/5436)
 
-> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Vesion](https://docs.emqx.com/en/enterprise/v4.3/faq/error.html#incorrect-openssl-version)
+> Note: Starting from this version, CentoOS 7 requires the use of openssl 1.1.1. For the installation method of openssl upgrade, please refer to: [FAQ - Incorrect OpenSSL Version](https://docs.emqx.com/en/enterprise/v4.3/faq/error.html#incorrect-openssl-version)
 
 ## 4.3.7
 

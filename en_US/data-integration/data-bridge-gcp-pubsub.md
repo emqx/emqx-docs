@@ -185,7 +185,7 @@ Before adding a GCP Pub/Sub Consumer Sink, you need to create a GCP Pub/Sub Cons
 
 ## Create a Rule with GCP Pub/Sub Consumer Source
 
-This section demonstrates how to create a rule in EMQX for consuming the message from GCP Pub/Sub and forwading the message to EMQX. You need to create and configure a Google PubSub Consumer source and add it to the rule as the data inputs. You also need to add a Republish action to the rule to forward the message from GCP Pub/Sub to EMQX.
+This section demonstrates how to create a rule in EMQX for consuming the message from GCP Pub/Sub and forwarding the message to EMQX. You need to create and configure a Google PubSub Consumer source and add it to the rule as the data inputs. You also need to add a Republish action to the rule to forward the message from GCP Pub/Sub to EMQX.
 
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules**.
 
@@ -206,7 +206,7 @@ This section demonstrates how to create a rule in EMQX for consuming the message
 9. Configure the following information for the source for consuming the message from GCP Pub/Sub to EMQX:
 
    - **GCP PubSub Topic**: Enter the topic name of the GCP Pub/Sub topic to be consumed from, for example, `my-iot-core`.
-   - **Maximum Messages to Pull**: Specifiy the maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
+   - **Maximum Messages to Pull**: Specify the maximum number of messages to retrieve from GCP PubSub in a single pull request. The actual number may be less than the specified value.
 
 10. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
