@@ -20,12 +20,6 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
 4. **写入 Snowflake**：规则触发一个动作，将消息数据写入 Snowflake。写入方式可以是将消息批量写入文件后，通过存储区 (Stage) 和 Pipe 加载到表中（聚合模式），也可以是通过 Snowpipe Streaming API 实时流式写入（流式模式）。
 
-   ::: tip Note
-
-   Snowpipe Streaming 当前是 Snowflake 的[预览功能](https://docs.snowflake.com/en/release-notes/preview-features)，仅适用于部署在 AWS 上的账户。
-
-   :::
-
 当事件和消息数据写入 Snowflake 后，可用于各种业务和技术用途，包括：
 
 - **数据归档**：将物联网数据安全地存储在 Snowflake 中进行长期归档，确保合规性和历史数据可用性。
@@ -64,7 +58,7 @@ EMQX 支持两种将数据发送到 Snowflake 的方式：
 | 上传模式 | 描述                                                         | 是否需要 ODBC |
 | -------- | ------------------------------------------------------------ | ------------- |
 | 聚合     | EMQX 将 MQTT 消息缓存在本地文件中，并上传至 Snowflake 的 Stage。然后由配置了 `COPY INTO` 语句的管道 (Pipe) 自动将这些文件加载到目标表中。更多详情可参考 [Snowflake Snowpipe 文档](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro)。 | 是            |
-| 流式     | 通过 Snowpipe Streaming API（仅支持 AWS）将数据实时发送至 Snowflake 表，逐行写入。 | 是            |
+| 流式     | 通过 Snowpipe Streaming API 将数据实时发送至 Snowflake 表，逐行写入。 | 是            |
 
 ### 初始化 Snowflake ODBC 驱动程序
 
@@ -118,13 +112,13 @@ scripts/install-snowflake-driver.sh
      [ODBC]
      Trace=no
      TraceFile=
-
+     
      [ODBC Drivers]
      Snowflake = Installed
-
+     
      [ODBC Data Sources]
      snowflake = Snowflake
-
+     
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -293,19 +287,19 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-
+   
    -- 授权数据库和表的使用与读写权限
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- 聚合模式需要访问存储区和管道
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- 流式模式需要访问流式管道
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-
+   
    -- 将角色授予用户，并设置为默认角色
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
@@ -368,7 +362,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 ## 创建 Snowflake Streaming 连接器
 
-如果您计划在 Snowflake Sink 中使用流式上传模式，则需要创建一个 Snowflake Streaming 连接器，以建立与 Snowflake 环境的连接。该连接器通过 HTTPS 和 Snowpipe Streaming REST API（仅支持 AWS）进行连接。
+如果您计划在 Snowflake Sink 中使用流式上传模式，则需要创建一个 Snowflake Streaming 连接器，以建立与 Snowflake 环境的连接。该连接器通过 HTTPS 和 Snowpipe Streaming REST API 进行连接。
 
 1. 进入 Dashboard **集成** -> **连接器**页面。
 
