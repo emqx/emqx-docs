@@ -201,6 +201,8 @@ cd mcp-ai-companion-demo
 
 这是最关键的步骤。我们需要将前置条件中获取的凭据正确填入三个服务的配置文件。请仔细阅读每个配置项的说明和来源。
 
+> **安全提示**：请勿将 `.env` 文件提交到 Git，建议添加到 `.gitignore`。
+
 #### 2.1 配置 app 服务（AI Agent 后端）
 
 **创建配置文件**：
@@ -229,7 +231,7 @@ CUSTOM_LLM_API_KEY=your-strong-random-secret-key-here
 
 # 生成示例（可在终端运行）：
 # openssl rand -base64 32
-# 或使用在线工具：https://www.random.org/strings/
+# python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 
 # ===== MQTT Broker 配置 =====
 # 来源：前置条件 "2. MQTT Broker"
@@ -262,10 +264,9 @@ PHOTO_UPLOAD_DIR=uploads          # 照片上传目录
 
   # 方法 2：使用 Python 生成
   python3 -c "import secrets; print(secrets.token_urlsafe(32))"
-
-  # 方法 3：使用在线工具
-  # https://www.random.org/strings/ (长度 32，字符集 Alphanumeric)
   ```
+
+  > **安全警告**：切勿使用在线工具生成密钥或将密钥提交到 Git，生产环境请使用环境变量或密钥管理服务。
 
 #### 2.2 配置 volc-server 服务（火山云代理）
 
