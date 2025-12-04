@@ -20,7 +20,6 @@ EMQX utilizes the rule engine and Sink to forward device events and data to Snow
 
 4. **Writing to Snowflake**: The rule triggers an action that writes message data to Snowflake, either by batching messages into files and loading them via Stage and Pipe (aggregated mode), or by streaming them directly using the Snowpipe Streaming API (streaming mode).
 
-
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
 - **Data Archiving**: Safely store IoT data in Snowflake for long-term archival, ensuring compliance and historical data availability.
@@ -59,7 +58,7 @@ EMQX supports two modes for sending data to Snowflake:
 | Mode       | Description                                                  | Requires ODBC |
 | ---------- | ------------------------------------------------------------ | ------------- |
 | Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
-| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | Yes           |
+| Streaming  | Sends data in real time via the Snowpipe Streaming API, writing rows directly to Snowflake tables. | Yes           |
 
 ### Initialize Snowflake ODBC Driver
 
@@ -418,7 +417,7 @@ You have now completed the connector creation and can proceed to create a rule a
 
 ## Create a Snowflake Streaming Connector
 
-If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API (AWS-only).
+If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API.
 
 1. Go to the Dashboard **Integration** -> **Connector** page.
 2. Click the **Create** button in the top right corner.
