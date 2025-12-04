@@ -22,6 +22,9 @@ jobs:
         sudo npm install -g markdownlint-cli
         markdownlint -c .github/workflows/markdown_config.json ./
 
+    - name: Spell Check Repo
+      uses: crate-ci/typos@v1.40.0
+
   directory_check:
     runs-on: ubuntu-latest
     steps:
