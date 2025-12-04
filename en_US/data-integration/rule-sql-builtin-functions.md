@@ -930,7 +930,7 @@ map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
 
-### map_get(Key: srting, Map: map, Default: any) -> any
+### map_get(Key: string, Map: map, Default: any) -> any
 
 Same as `map_get/2`, but when `Key` does not exist, the specified `Default` will be returned. Example:
 

@@ -350,7 +350,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#14451](https://github.com/emqx/emqx/pull/14451) Fixed handling of invalid input for timestamp columns in PostgreSQL action which caused a large crash report. Now, the system gracefully handles such errors and logs a more succinct and informative error message, improving clarity and ease of troubleshooting.
 
-- [#14552](https://github.com/emqx/emqx/pull/14552) Fixed Kafka producer `unexpected_id` crash after buffer overflow happend while Kafka service is down. This bug was introduced in EMQX Enterprise version 5.8.1.
+- [#14552](https://github.com/emqx/emqx/pull/14552) Fixed Kafka producer `unexpected_id` crash after buffer overflow happened while Kafka service is down. This bug was introduced in EMQX Enterprise version 5.8.1.
 
 - [#14560](https://github.com/emqx/emqx/pull/14560) Fixed an issue where Oracle Action would fail to perform health checks due to issues with complex SQL templates.
 

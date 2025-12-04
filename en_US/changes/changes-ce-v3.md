@@ -164,7 +164,7 @@ GitHub Commit: [emqx/emqx#9cdaa7](https://github.com/emqx/emqx/commit/9cdaa71a66
 
 Github Commit: [emqx/emqx#31671f](https://github.com/emqx/emqx/commit/31671f5ee5516e04ca6c648679f030b790c84fd9)
 
-- Fix the issue thar placeholder like '%c' in mountpoint doesn't take effect
+- Fix the issue that placeholder like '%c' in mountpoint doesn't take effect
 
 Github Commit: [emqx/emqx#58ba22](https://github.com/emqx/emqx/commit/58ba22dfc79ce81ac74fffae60a624d2238585ca)
 

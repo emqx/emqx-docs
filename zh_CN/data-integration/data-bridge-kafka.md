@@ -271,7 +271,7 @@ EMQX v5.7.2 引入了一项新功能，可以在 SQL 处理阶段将从设置的
 
 ## 创建 Kafka 消费者连接器
 
-在添加 Kafka Soure 前，您需要创建 Kafka 消费者连接器，以便 EMQX 与 Kafka 建立连接。
+在添加 Kafka Source 前，您需要创建 Kafka 消费者连接器，以便 EMQX 与 Kafka 建立连接。
 
 1. 进入 EMQX Dashboard，并点击 **集成** -> **连接器**。
 2. 点击页面右上角的 **创建**。
