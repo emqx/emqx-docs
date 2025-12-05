@@ -20,11 +20,15 @@ EMQX Operator includes, but is not limited to, the following features:
 
 The current EMQX Operator release series 2.2.x is compatible with the following EMQX versions:
 - EMQX Open Source & Enterprise 5.1.1 ~ 5.8.x
-- EMQX 5.9 & 5.10 (limited support)
-- EMQX 6.0 and higher (limited support)
+- EMQX 5.9 & 5.10 <sup>*</sup>
+- EMQX 6.0 and higher <sup>*</sup>
 
 The following API versions are supported:
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
 - apps.emqx.io/v2alpha1 (deprecated)
 - apps.emqx.io/v1beta4
 - apps.emqx.io/v1beta3 (deprecated)
+
+::: tip
+<sup>*</sup> Automatic management of Durable Storage replication is not supported for these versions, scheduled for the upcoming 2.3.0 release.
+:::
