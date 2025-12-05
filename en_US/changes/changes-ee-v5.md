@@ -572,7 +572,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#14192](https://github.com/emqx/emqx/pull/14192) Allowed will messages to be sent by the clients that disconnect because of authentication/authorization expiration. Previously, such clients could not send a will message because the sending occurred just after the authorization expiration, so the message could not pass the authorization rules.
 
-- [#14122](https://github.com/emqx/emqx/pull/14122) Fixed handling of `PUBACK` and `PUBREC`/`PUBCOMP` when the published message has QoS 2 and 1, repectively.
+- [#14122](https://github.com/emqx/emqx/pull/14122) Fixed handling of `PUBACK` and `PUBREC`/`PUBCOMP` when the published message has QoS 2 and 1, respectively.
 
   Prior to this fix, the broker would accept `PUBACK` and `PUBREC`/`PUBCOMP` packets from clients referencing packet identifiers that corresponded to messages with QoS 2 and 1, respectively. Now, the broker will disconnect clients that behave like this.
 
@@ -603,7 +603,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Note: while performing a rolling upgrade, this API may not list all existing clients until all nodes are migrated. As a workaround, if HTTP API requests are issued to old core nodes, all clients can be listed before all nodes are fully upgraded.
 
-- [#14182](https://github.com/emqx/emqx/pull/14182) Previously, if a delayed message was published via the `POST /publish` HTTP API, a 202 reponse with the reason code 16 ("no matching subscribers") would be returned. Now, a 200 response is sent along with the message identifier.
+- [#14182](https://github.com/emqx/emqx/pull/14182) Previously, if a delayed message was published via the `POST /publish` HTTP API, a 202 response with the reason code 16 ("no matching subscribers") would be returned. Now, a 200 response is sent along with the message identifier.
 
 #### MQTT Durable Sessions
 
@@ -676,7 +676,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, upon (re)starting the Connector, it would perform one `ListStreams` request for each worker in its connection pool.  Additionally, each periodic health check would do `ListStreams` for each worker.  The Action health check would do `DescribeStream` for each connection worker in the pool.
 
-  Now, the Connector no longer performs the initial `ListStreams` upon (re)starting.  Both Connector and Action attempt to check if at least one worker has a healthy response from their respective API requests: the request is attempted by each worker serially, and the Connector or Action is considered `connected` upon the first successful response received.  Thus, in the best case scenario, each Connector and each Action will do 1 API request each per health check, regardless of pool sizea.  In the worst case scenario, each worker in the pool might still perform one request each, if they fail to receive a sucessful response.
+  Now, the Connector no longer performs the initial `ListStreams` upon (re)starting.  Both Connector and Action attempt to check if at least one worker has a healthy response from their respective API requests: the request is attempted by each worker serially, and the Connector or Action is considered `connected` upon the first successful response received.  Thus, in the best case scenario, each Connector and each Action will do 1 API request each per health check, regardless of pool sizea.  In the worst case scenario, each worker in the pool might still perform one request each, if they fail to receive a successful response.
 
 - [#14767](https://github.com/emqx/emqx/pull/14767) Kafka producer now smoothly handles Kafka topic re-creation with fewer partitions.
   Previously, the lost partition producers may linger behind to retry and write large amount of error logs.
@@ -696,7 +696,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#15087](https://github.com/emqx/emqx/pull/15087) Fixed an issue with `hocon` library in which, if one had any string one-liner field that ended in a lone backslash, the configuration file would fail to be parsed later.
 
-#### Plugin and Extention
+#### Plugin and Extension
 
 - [#15073](https://github.com/emqx/emqx/pull/15073) Added a validator for the server URL in the `exhook` configuration. This ensures that only valid URLs can be saved. Invalid URLs will now trigger an error and prevent being saved, which helps avoid issues during the import process, where previously invalid URLs could be accepted.
 
@@ -704,7 +704,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#14826](https://github.com/emqx/emqx/pull/14826) Fixed the issue where the Exhook server's return of "IGNORE" was not taking effect.
 
-- [#15018](https://github.com/emqx/emqx/pull/15018) Fixed a bug with Exhook in which attemtping to import an invalid `exhook` configuration via the CLI would result in a crash with a `badarg` error.
+- [#15018](https://github.com/emqx/emqx/pull/15018) Fixed a bug with Exhook in which attempting to import an invalid `exhook` configuration via the CLI would result in a crash with a `badarg` error.
 
 - [#15108](https://github.com/emqx/emqx/pull/15108) ExHook now includes a built-in gRPC health check mechanism, ensuring that the connection status accurately reflects the actual availability of the external hook server.
 

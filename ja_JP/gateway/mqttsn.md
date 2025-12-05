@@ -113,7 +113,7 @@ MQTT-SN プロトコルはすでにパブリッシュ／サブスクライブの
 
 デフォルトでは、名前が **default** の UDP リスナーがポート `1884` で設定されており、1秒あたり最大1,000接続、最大1,024,000同時接続をサポートします。**Settings** をクリックすると詳細設定が可能で、**Delete** でリスナーの削除、**+ Add Listener** で新規リスナーの追加ができます。
 
-<img src="./assets/mqttsn-listerner.png" alt="MQTT-SN リスナー" style="zoom:50%;" />
+<img src="./assets/mqttsn-listener.png" alt="MQTT-SN リスナー" style="zoom:50%;" />
 
 **Add Listener** をクリックすると **Add Listener** ページが開き、以下の設定が行えます。
 

@@ -20,7 +20,7 @@ Dashboard で durable sessions のパラメータを設定できます。Dashboa
 | `durable_sessions.enable`                   | Enable Durable Sessions    | セッションの耐久性を有効化します。この設定はホットコンフィグレーションでは変更できず、設定ファイルで設定する必要があります。変更を反映するには EMQX ノードの再起動が必要です。 |
 | `durable_sessions.message_retention_period` | Message Retention Period   | Durable Sessions 内の MQTT メッセージの保持期間を定義します。注意：このパラメータはグローバル設定です。 |
 | `durable_sessions.batch_size`               | Message Query Batch Size   | Durable Sessions がストレージから消費するメッセージの最大バッチサイズを制御します。 |
-| `durable_sessions.idle_poll_interval`       | Idel Poll Interval         | Durable Sessions が新しいメッセージをストレージに問い合わせる頻度を制御します。新しいメッセージが見つかると、クライアントのインフライトキューに空きがあれば次のバッチを即座に取得します。 |
+| `durable_sessions.idle_poll_interval`       | Idle Poll Interval         | Durable Sessions が新しいメッセージをストレージに問い合わせる頻度を制御します。新しいメッセージが見つかると、クライアントのインフライトキューに空きがあれば次のバッチを即座に取得します。 |
 | `durable_sessions.heartbeat_interval`       | Session Heartbeat Interval | セッションメタデータを保存する間隔を指定します。              |
 | `durable_sessions.renew_streams_interval`   | -                          | セッションがストレージに新しいストリームを問い合わせる頻度を定義します。 |
 | `durable_sessions.session_gc_interval`      | Session GC Interval        | セッションをスキャンし、期限切れのものを削除する間隔を指定します。 |

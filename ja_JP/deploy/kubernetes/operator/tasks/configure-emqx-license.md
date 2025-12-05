@@ -34,7 +34,7 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
         type: LoadBalancer
   ```
 
-  > The `license.key` in the `config.data` field represents the Licesne content. In this example, the License content is omitted, please fill it in by the user.
+  > The `license.key` in the `config.data` field represents the License content. In this example, the License content is omitted, please fill it in by the user.
 
 + Wait for the EMQX cluster to be ready, you can check the status of the EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
 

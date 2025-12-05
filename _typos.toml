@@ -48,4 +48,4 @@ Sur = "Sur"
 iif = "iif"
 
 [files]
-extend-exclude = ["redocly", "cfg-manual-docgen"]
+extend-exclude = ["redocly", "cfg-manual-docgen", "hocon"]
