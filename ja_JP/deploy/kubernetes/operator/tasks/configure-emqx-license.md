@@ -1,4 +1,4 @@
-# Manage EMQX Enterprise License
+# Manage License
 
 ## Objective
 

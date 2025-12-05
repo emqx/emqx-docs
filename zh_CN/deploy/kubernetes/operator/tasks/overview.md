@@ -7,7 +7,7 @@
 **配置和设置**
 
 - License 文件和安全性
-  - [License 配置 (EMQX 企业版)](./configure-emqx-license.md)
+  - [管理 License](./configure-emqx-license.md)
   - [在 EMQX 中开启 TLS](./configure-emqx-tls.md)
 - 集群配置
   - [通过 EMQX Operator 修改 EMQX 配置](./configure-emqx-config.md)

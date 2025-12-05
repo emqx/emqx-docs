@@ -5,7 +5,7 @@ This chapter provides step-by-step instructions for performing common tasks and 
 ## Configuration and Setup
 
 - License and Security
-  - [License Configuration](./configure-emqx-license.md)
+  - [Manage License](./configure-emqx-license.md)
   - [Enable TLS for EMQX listeners](./configure-emqx-tls.md)
 - Cluster Configuration
   - [Change EMQX Configuration](./configure-emqx-config.md)

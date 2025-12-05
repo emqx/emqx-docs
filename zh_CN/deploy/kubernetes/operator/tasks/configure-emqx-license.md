@@ -1,4 +1,4 @@
-# License 配置 (EMQX 企业版)
+# 管理 License
 
 ## 任务目标
 
