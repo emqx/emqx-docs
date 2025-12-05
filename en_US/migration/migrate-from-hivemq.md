@@ -1,28 +1,30 @@
-# Migrating from HiveMQ to EMQX
+# Migrate from HiveMQ to EMQX
 
-This guide explains how to migrate an existing HiveMQ deployment to EMQX. It focuses on the common enterprise pattern where devices connect over TLS (port 8883) with either X.509 client certificates or username/password credentials managed by the HiveMQ Enterprise Security Extension (ESE). The objective is to replicate the connectivity, authentication, and data-integration behavior defined in `config.xml` and related HiveMQ extension files using EMQX’s HOCON-based configuration and dynamic rule engine.
+This guide describes how to migrate an existing HiveMQ deployment to EMQX. It focuses on the common enterprise pattern where devices connect over TLS (port 8883) with either X.509 client certificates or username/password credentials managed by the HiveMQ Enterprise Security Extension (ESE). The objective is to reproduce equivalent connectivity, authentication, and data integration behaviors in EMQX using HOCON configuration and the rule engine.
 
 ## Migration at a Glance
 
-The migration can be treated as three phases:
+The migration can be divided into three phases:
 
-1. **Inventory HiveMQ Assets** – Collect the TLS keystores, `config.xml`, ESE files, and extension properties that define listeners, authentication, clustering, and data pipelines.
-2. **Configure EMQX** – Translate HiveMQ settings into EMQX HOCON, convert keystores to PEM, recreate listener and cluster settings, and set up the authentication chain and rule engine.
-3. **Update Devices & Integrations** – Point devices to the EMQX endpoint, deploy the EMQX server CA, validate client identities, and migrate downstream integrations such as Kafka or Prometheus.
+1. **Inventory HiveMQ Assets**: Collect the TLS keystores, `config.xml`, ESE files, and extension properties that define listeners, authentication, clustering, and data pipelines.
+2. **Configure EMQX**: Translate HiveMQ settings into EMQX HOCON, convert keystores to PEM, recreate listener and cluster settings, and set up the authentication chain and rule engine.
+3. **Update Devices and Integrations**: Redirect devices to the EMQX endpoint, deploy the EMQX server CA certificates, validate client identities, and migrate downstream integrations such as Kafka or Prometheus.
+
+The following table summarizes key artifacts and their mapping between HiveMQ and EMQX:
 
 | **Parameter / Artifact** | **HiveMQ (Example)** | **EMQX (Example)** | **Notes** |
 | --- | --- | --- | --- |
 | Endpoint hostname | `mqtt.internal.example.com` (as configured in load balancer / Control Center) | `mqtt.example.com` (EMQX load balancer / VIP) | Update device firmware or deployment manifests. |
 | TLS assets | `conf/hivemq.jks` | `/etc/emqx/certs/server-cert.pem`, `/etc/emqx/certs/server-key.pem` | Convert JKS/PKCS12 to PEM with `keytool` + `openssl`. |
 | Client authentication | ESE file realm (`credentials.xml`) | `authentication = [{mechanism = password_based, backend = built_in_database}]` | Import user list via REST API or Dashboard. |
-| Client certificates | Stored as PEM in device fleet, validated by HiveMQ when mTLS enabled | Same device certs, EMQX listener `ssl_options.cacertfile = "device-ca.pem"` | No reprovisioning needed if devices already use your CA. |
+| Client certificates | Stored as PEM in device fleet, validated by HiveMQ when mTLS enabled | Same device certs, EMQX listener `ssl_options.cacertfile = "device-ca.pem"` | No reprovisioning needed if using the same CA. |
 | Cluster discovery | DNS or `extensions/*-discovery*/*.properties` | `cluster.discovery_strategy = dns` (or `static`, `etcd`, `k8s`) | Replace extension-based discovery with native EMQX strategy. |
-| Kafka integration | `extensions/hivemq-kafka-extension/kafka-configuration.xml` | EMQX connectors + rules + actions (`SELECT ... FROM "device/+/data"`) | Use EMQX Data Bridge instead of Java transformers. |
+| Kafka integration | `extensions/hivemq-kafka-extension/kafka-configuration.xml` | EMQX connectors + rules + actions (`SELECT ... FROM "device/+/data"`) | Use EMQX Data Integration instead of Java-based extensions for message transformation. |
 | Rate limiting / restrictions | `<restrictions>` block + Overload Protection | `listeners.*.max_connections`, `messages_rate`, `bytes_rate`, `limiter.*` | Configure per-listener quotas and global limiters. |
 
 ## Phase 1: Inventory HiveMQ Configuration Artifacts
 
-### 1. Collect TLS Keystores and Convert Them
+### Collect and Convert TLS Keystores
 
 1. Locate the keystore referenced in `<tls-tcp-listener>` (for example, `/opt/hivemq/conf/hivemq.jks`).
 2. Export the server certificate and key:
@@ -37,33 +39,35 @@ openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nokeys -out /tmp/server-cert.pem
 openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nocerts -out /tmp/server-key.pem
 ```
 
-3. Copy the resulting PEM files into `/etc/emqx/certs/` (or your container secret mount). Keep the device CA (`device-ca.pem`) that HiveMQ trusted for client certificates; EMQX will reuse it.
+3. Copy the resulting PEM files into `/etc/emqx/certs/` (or your container secret mount). Keep the device CA (`device-ca.pem`) trusted by HiveMQ; EMQX will reuse this certificate for mTLS validation.
 
-### 2. Export HiveMQ Configuration Files
+### Export HiveMQ Configuration Files
 
-- `conf/config.xml`: Listeners, restrictions, clustering, persistence, Control Center users.
-- `conf/logback.xml`: Logging targets (translate to EMQX `log` section).
-- `extensions/<name>/conf/*.xml` or `.properties`: Discovery, Kafka, Prometheus, custom auth.
-- `extensions/hivemq-enterprise-security-extension/enterprise-security-extension.xml`: Authentication realms and pipelines.
-- Any `credentials.xml` or custom user stores referenced by the ESE.
+Store the following artifacts in version control for traceability. Highlight environment-variable placeholders (e.g., `${ENV:HIVEMQ_PORT}`) so they can be remapped to EMQX’s double-underscore environment override syntax (`EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`).
 
-Store these artifacts in version control for traceability. Highlight environment-variable placeholders (e.g., `${ENV:HIVEMQ_PORT}`) so they can be remapped to EMQX’s double-underscore environment override syntax (`EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`).
+- `conf/config.xml`: Listeners, restrictions, clustering, persistence, Control Center users
+- `conf/logback.xml`: Logging targets (translate to EMQX `log` section)
+- `extensions/<name>/conf/*.xml` or `.properties`: Discovery, Kafka, Prometheus, custom auth
+- `extensions/hivemq-enterprise-security-extension/enterprise-security-extension.xml`: Authentication realms and pipelines
+- Any `credentials.xml` or custom user stores referenced by the ESE
 
-### 3. Classify Authentication Modes
+### Classify Authentication Modes
 
-Determine which of the following patterns you are using:
+Determine which authentication method you are using:
 
-- **Username/password** via file realm or SQL realm.
-- **X.509 client certificates** (mTLS) with CN = client ID.
-- **Hybrid** (e.g., TLS + SASL plugin). Each path maps to a specific EMQX authenticator chain.
+- **Username/password** via file realm or SQL realm
+- **X.509 client certificates** (mTLS) with CN = client ID
+- **Hybrid** (e.g., TLS + SASL plugin). 
+
+Each path maps to a specific EMQX authenticator chain.
 
 ## Phase 2: Configure EMQX to Mirror HiveMQ Baseline
 
-### 2.1 Recreate MQTT Listeners
+### Recreate MQTT Listeners
 
 Translate each `<tcp-listener>`, `<tls-tcp-listener>`, `<websocket-listener>` and `<tls-websocket-listener>` element into HOCON.
 
-For example, given this HiveMQ configuration that defines three listeners:
+Example HiveMQ configuration:
 
 ```xml
 <hivemq>
@@ -111,9 +115,9 @@ For example, given this HiveMQ configuration that defines three listeners:
 </hivemq>
 ```
 
-Translate to this EMQX configuration snippet:
+Equivalent EMQX configuration snippet:
 
-```
+```hocon
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
 }
@@ -136,9 +140,13 @@ listeners.wss.default {
 }
 ```
 
-To convert `truststore.jks` and `keystore.jks` to PEM, follow the steps in Section 1.1.
+To convert `truststore.jks` and `keystore.jks` to PEM, follow the steps in [Collect and Convert TLS Keystores](#collect-and-convert-tls-keystores).
 
-### 2.2 Map MQTT configuration options
+### Map MQTT Configuration Options
+
+HiveMQ settings such as queue size, QoS, and retained message behavior map directly to EMQX’s `mqtt` section.
+
+Example HiveMQ configuration:
 
 ```xml
 <queued-messages>
@@ -207,11 +215,11 @@ mqtt {
 }
 ```
 
-### 2.3 Map the `<restrictions>` block
+### Map the `<restrictions>` Block
 
 HiveMQ collects global limits under `<restrictions>`. EMQX splits these values between the global `mqtt` section and each listener.
 
-Here is an example HiveMQ configuration:
+Example HiveMQ configuration:
 
 ```xml
 <restrictions>
@@ -222,7 +230,7 @@ Here is an example HiveMQ configuration:
 </restrictions>
 ```
 
-And corresponding EMQX configuration snippet:
+Equivalent EMQX configuration snippet:
 
 ```hocon
 listeners.ssl.default {
@@ -238,11 +246,11 @@ mqtt {
 }
 ```
 
-### 2.4 Configure Clustering
+### Configure Clustering
 
 Replace HiveMQ discovery extension and other discovery methods with EMQX’s native strategies.
 
-For example, this cluster configuration:
+Example HiveMQ cluster configuration:
 
 ```xml
 <cluster>
@@ -268,7 +276,7 @@ For example, this cluster configuration:
 </cluster>
 ```
 
-corresponds to this EMQX configuration:
+Equivalent EMQX configuration:
 
 ```
 cluster {
@@ -282,24 +290,24 @@ cluster {
 }
 ```
 
-EMQX automatically assigns Erlang distribution port when more than one node runs on the same machine; no need to select `bind-port` manually.
+EMQX automatically assigns the Erlang distribution port when more than one node runs on the same machine; no need to select `bind-port` manually.
 
 For alternative discovery methods (etcd, Kubernetes, static files, etc.), see [Create and Manage Cluster](../deploy/cluster/create-cluster.md).
 
-### 2.5 Translate Authentication & Authorization
+### Translate Authentication and Authorization
 
 HiveMQ manages security through the Enterprise Security Extension (ESE), which defines **Realms** (data sources) and **Pipelines** (logic), or through legacy plugins. EMQX uses **Authentication Chains** (ordered backends) and **Authorization sources** (ACLs).
 
 | HiveMQ ESE Component | EMQX Equivalent | Migration Strategy |
 | :--- | :--- | :--- |
-| **File Realm** (`credentials.xml`) | [**Built-in Database**](../access-control/authn/mnesia.md) | Export users from HiveMQ, import via EMQX REST API. |
-| **SQL Realm** (JDBC) | [**MySQL**](../access-control/authn/mysql.md) / [**PostgreSQL**](../access-control/authn/postgresql.md) | Configure password based authenitcation with `mysql` or `postgresql` backend. Reuse existing user tables. |
-| **LDAP Realm** / AD | [**LDAP**](../access-control/authn/ldap.md) | Configure password based authentication with LDAP backend. Map HiveMQ DN patterns to EMQX filter templates. |
+| **File Realm** (`credentials.xml`) | [**Built-in Database**](../access-control/authn/mnesia.md) | Export HiveMQ users and import via the EMQX REST API. |
+| **SQL Realm** (JDBC) | [**MySQL**](../access-control/authn/mysql.md) / [**PostgreSQL**](../access-control/authn/postgresql.md) | Configure password-based authentication with a `mysql` or `postgresql` backend. Reuse existing user tables. |
+| **LDAP Realm** / AD | [**LDAP**](../access-control/authn/ldap.md) | Configure password-based authentication with an LDAP backend. Map HiveMQ DN patterns to EMQX filter templates. |
 | **OAuth / JWT** | [**JWT**](../access-control/authn/jwt.md) | Configure JWT authentication mechanism. Configure public keys or JWKS endpoint. |
-| **HTTP / Webhooks** | [**HTTP Server**](../access-control/authn/http.md) | Configure password based authentication with HTTP backend to delegate credentials to your external auth service. |
-| **X.509 Certs** | [**X.509**](../access-control/authn/x509.md) / [**mTLS**](../network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | Use `TLS` listener and mutual (two-way) authentication, reuse existing CA and client certificates. |
+| **HTTP / Webhooks** | [**HTTP Server**](../access-control/authn/http.md) | Configure password-based authentication with an HTTP backend to delegate credentials to your external auth service. |
+| **X.509 Certs** | [**X.509**](../access-control/authn/x509.md) / [**mTLS**](../network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | Use `TLS` listener and mutual (two-way) authentication, reusing existing CA and client certificates. |
 
-#### 2.5.1. Migrating File Realm Users
+#### Migrate File Realm Users
 
 **Source:** HiveMQ `conf/credentials.xml` (encrypted/hashed).
 **Destination:** EMQX Built-in Database.
@@ -314,13 +322,15 @@ curl -u admin:public -X POST \
   -d '{"user_id":"device-001","password":"StrongPass!"}'
 ```
 
-#### 2.5.2. Migrating External Integrations (SQL, LDAP, HTTP)
+#### Migrate External Integrations (SQL, LDAP, HTTP)
 
 Translate your `enterprise-security-extension.xml` pipelines into EMQX HOCON `authentication` blocks.
 
 **Example: SQL Realm to EMQX MySQL**
 
-HiveMQ uses a [fixed database schema](https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/ese.html#table_users) for its SQL realm. In contrast, EMQX allows you to [define your own schema and queries](https://docs.emqx.com/en/emqx/latest/access-control/authn/mysql.html). **This means you do not need to modify your existing MySQL or PostgreSQL database.** The EMQX configuration example below uses a query (`SELECT password_hash, salt ...`) that is specifically adapted to work with the standard HiveMQ `users` table structure.
+HiveMQ uses a [fixed database schema](https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/ese.html#table_users) for its SQL realm. In contrast, EMQX allows you to [define your own schema and queries](../access-control/authn/mysql.md). **This means you do not need to modify your existing MySQL or PostgreSQL database.** 
+
+The EMQX configuration example below uses a query (`SELECT password_hash, salt ...`) that is specifically adapted to work with the standard HiveMQ `users` table structure.
 
 Use the following EMQX configuration to authenticate against your existing HiveMQ MySQL database without modifying the schema:
 
@@ -365,11 +375,12 @@ authentication = [
 ]
 ```
 
-#### 2.5.3. Migrating Authorization (ACLs)
+#### Migrate Authorization (ACLs)
 
 HiveMQ defines access policies in `enterprise-security-extension.xml` (File Realm) or external databases. EMQX uses a flexible **Authorization Chain** supporting multiple backends simultaneously (File, Redis, MySQL, PostgreSQL, MongoDB, HTTP, etc).
 
 **HiveMQ XML Policy:**
+
 ```xml
 <permission>
     <topic>device/${clientid}/#</topic>
@@ -378,25 +389,26 @@ HiveMQ defines access policies in `enterprise-security-extension.xml` (File Real
 ```
 
 **EMQX Equivalent:**
+
 - [**File (`acl.conf`)**](../access-control/authz/file.md): `{allow, all, subscribe, ["device/${clientid}/#"]}.`
 - [**Built-in Database**](../access-control/authz/mnesia.md): Configure rules via Dashboard or API based on Client ID, Username, or Topic.
 - [**MySQL**](../access-control/authz/mysql.md): `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`.
 - [**PostgreSQL**](../access-control/authz/postgresql.md): `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`.
 
-For more information, please refer to the [**Authorization**](../access-control/authz/authz.md) documentation.
+For more information, refer to the [**Authorization**](../access-control/authz/authz.md) documentation.
 
-### 2.6 Configure Data Integration
+### Configure Data Integration
 
-HiveMQ relies on individual extensions (e.g., Kafka Extension) for data integration. In EMQX, all data integrations are built-in and enabled out of the box.
+HiveMQ relies on individual extensions (e.g., Kafka Extension) for data integration. In EMQX, all data integrations are built in and enabled out of the box.
 
-Before configuring specific bridges, familiarize yourself with these core concepts:
+Before configuring specific integrations, familiarize yourself with these core concepts:
 - [**Data Integration Overview**](../data-integration/data-bridges.md)
 - [**Rule Engine**](../data-integration/rules.md)
 - [**Flow Designer**](../flow-designer/introduction.md)
 
-#### 2.6.1 Example: Migrating Kafka Extension
+#### Example: Migrate Kafka Extension
 
-**HiveMQ Kafka Extension Configuration**
+HiveMQ Kafka extension configuration:
 ```xml
 <kafka-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="config.xsd">
@@ -431,9 +443,9 @@ Before configuring specific bridges, familiarize yourself with these core concep
 </kafka-configuration>
 ```
 
-**EMQX Equivalent**
+Equivalent EMQX configuration:
 
-```
+```hocon
 connectors {
   kafka_producer {
     cluster01 {
@@ -505,9 +517,9 @@ sources {
 }
 ```
 
-### 2.7 Configure Observability
+### Configure Observability
 
-#### 2.7.1 Prometheus
+#### Prometheus
 
 HiveMQ uses the "Prometheus Monitoring HiveMQ Extension". EMQX comes with native Prometheus support.
 
@@ -526,11 +538,11 @@ prometheus {
 
 Check out [Integrate with Prometheus](../observability/prometheus.md#integrate-with-prometheus) guide for more details.
 
-#### 2.7.2 Logging
+#### Logging
 
 HiveMQ uses `logback.xml` (Java standard). EMQX uses a built-in logging facility configured in HOCON.
 
-**HiveMQ (`logback.xml`):**
+HiveMQ (`logback.xml`) configuration:
 ```xml
 <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -555,7 +567,7 @@ HiveMQ uses `logback.xml` (Java standard). EMQX uses a built-in logging facility
 </appender>
 ```
 
-**EMQX Equivalent:**
+Equivalent EMQX configuration:
 ```hocon
 log {
   file {
@@ -575,31 +587,32 @@ log {
 }
 ```
 
-See [**Logs**](../observability/log.md) for configuring log levels, rotation, and formatters (text/JSON).
+See [Logs](../observability/log.md) for configuring log levels, rotation, and formatters (text/JSON).
 
-#### 2.7.3 Tracing
+#### Log Trace
 
-HiveMQ's "Trace Recordings" are often used to debug specific client sessions. EMQX provides a built-in **Trace** feature (Dashboard or CLI) to filter logs for specific Client IDs, Topics, or IPs in real-time.
+HiveMQ's "Trace Recordings" are often used to debug specific client sessions. EMQX provides a built-in **Log Trace** feature (Dashboard or CLI) to filter logs for specific Client IDs, Topics, or IPs in real-time.
 
-**Start a trace for a specific client:**
+To start a trace for a specific client, use the following command:
+
 ```bash
 emqx ctl trace start client device-001 trace.log
 ```
 
-See [**Trace**](../observability/tracer.md) for advanced debugging.
+See [Log Trace](../observability/tracer.md) for advanced debugging.
 
 ## Phase 3: Update Devices and Integrations
 
-### 3.1 Deploy EMQX Server CA to Devices
+### Deploy EMQX Server CA to Devices
 
 - If EMQX uses an internal CA, install `emqx-server-ca.pem` on each device (system trust store or application bundle).
 - If EMQX uses a public CA (e.g., Let’s Encrypt), no device action is needed.
 
-### 3.2 Update Device Connection Parameters
+### Update Device Connection Parameters
 
 **Example (mqtt-cli)**
 
-```
+```bash
 # Before (HiveMQ)
 mqtt pub -h mqtt.internal.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
@@ -613,7 +626,7 @@ mqtt pub -h mqtt.example.com -p 8883 \
 
 **Example (Python paho-mqtt with mTLS)**
 
-```
+```hocon
 client.tls_set(
     ca_certs="certs/emqx-server-ca.pem",
     certfile="certs/device-001.cert.pem",
@@ -625,7 +638,7 @@ client.connect("mqtt.example.com", 8883)
 
 Only the endpoint hostname and server CA file change. Device certificates and private keys continue to work if they were signed by the same CA referenced in EMQX `ssl_options.cacertfile`.
 
-### 3.3 Validate Integrations
+### Validate Integrations
 
 - Ensure Kafka topics receive messages by checking EMQX rule metrics (`emqx ctl rule show`).
 - Update monitoring dashboards to scrape EMQX metrics.
@@ -649,7 +662,7 @@ HiveMQ’s `$share/group/topic` syntax is fully supported by EMQX. If you previo
 
 HiveMQ relies on static XML plus extension-specific reload semantics. EMQX offers dynamic configuration APIs:
 
-```
+```bash
 curl -s -H "Authorization: Bearer $TOKEN" \
   -H "Content-type: application/json" \
   -X PUT "http://emqx-node:18083/api/v5/listeners/ssl:default" \
@@ -660,9 +673,11 @@ This writes to `data/configs/cluster.hocon`. Decide whether to keep configuratio
 
 ## Validation Checklist
 
+Before switching production traffic, verify:
+
 1. All EMQX listeners report `running` (`emqx ctl listeners list`).
 2. TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
-3. Device IDs in EMQX sessions match the original HiveMQ client IDs.
+3. Device IDs in EMQX sessions match original HiveMQ client IDs.
 4. ACLs enforce the same topic access you enforced in HiveMQ.
 5. Cluster nodes auto-heal after simulated network partitions.
 6. Kafka integration receives data without transformation regressions.
@@ -670,4 +685,8 @@ This writes to `data/configs/cluster.hocon`. Decide whether to keep configuratio
 
 ## Conclusion
 
-Migrating from HiveMQ to EMQX is primarily a configuration translation exercise: convert Java-centric artifacts (XML, JKS, extensions) into EMQX’s HOCON configuration, flexible Authentication Chains, and the Data Integration framework. By following the three phases—inventory, configure, and update—you can preserve device credentials, topic structures, and integration flows while gaining EMQX’s high-concurrency Erlang runtime and dynamic configuration capabilities. Plan the cutover, validate each listener and integration, and execute the migration with confidence.
+Migrating from HiveMQ to EMQX is primarily a configuration translation process: converting Java-centric artifacts (XML, JKS, extensions) into EMQX’s HOCON configuration, flexible Authentication Chains, and the Data Integration framework. 
+
+By following the three phases—inventory, configure, and update—you can preserve device credentials, topic structures, and integration flows while gaining EMQX’s high-concurrency Erlang runtime and dynamic configuration capabilities. 
+
+Plan the migration carefully, validate each listener and integration, and execute the cutover with confidence.

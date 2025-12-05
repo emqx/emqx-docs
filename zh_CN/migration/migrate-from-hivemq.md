@@ -1,31 +1,33 @@
-# Migrating from HiveMQ to EMQX
+# 从 HiveMQ 迁移到 EMQX
 
-This guide explains how to migrate an existing HiveMQ deployment to EMQX. It focuses on the common enterprise pattern where devices connect over TLS (port 8883) with either X.509 client certificates or username/password credentials managed by the HiveMQ Enterprise Security Extension (ESE). The objective is to replicate the connectivity, authentication, and data-integration behavior defined in `config.xml` and related HiveMQ extension files using EMQX’s HOCON-based configuration and dynamic rule engine.
+本指南介绍如何将现有的 HiveMQ 部署迁移到 EMQX。本文重点介绍一种常见的企业部署模式：设备通过 TLS（端口 8883）连接，并使用 HiveMQ Enterprise Security Extension（ESE）管理的 X.509 客户端证书或用户名/密码凭据。本文的目标是在 EMQX 中通过 HOCON 配置和规则引擎，实现与 HiveMQ 在连接性、身份验证和数据集成方面等效的行为。
 
-## Migration at a Glance
+## 迁移概览
 
-The migration can be treated as three phases:
+整个迁移过程可分为三个阶段：
 
-1. **Inventory HiveMQ Assets** – Collect the TLS keystores, `config.xml`, ESE files, and extension properties that define listeners, authentication, clustering, and data pipelines.
-2. **Configure EMQX** – Translate HiveMQ settings into EMQX HOCON, convert keystores to PEM, recreate listener and cluster settings, and set up the authentication chain and rule engine.
-3. **Update Devices & Integrations** – Point devices to the EMQX endpoint, deploy the EMQX server CA, validate client identities, and migrate downstream integrations such as Kafka or Prometheus.
+1. **盘点 HiveMQ 资产**：收集定义监听器、认证、集群和数据管道的 TLS 密钥库、`config.xml`、ESE 文件及扩展属性。
+2. **配置 EMQX**：将 HiveMQ 设置转换为 EMQX HOCON 配置，将密钥库转换为 PEM 格式，重建监听器和集群设置，并配置认证链与规则引擎。
+3. **更新设备与集成**：将设备连接指向 EMQX 端点，部署 EMQX 服务器 CA 证书，验证客户端身份，并迁移下游集成（如 Kafka 或 Prometheus）。
 
-| **Parameter / Artifact** | **HiveMQ (Example)** | **EMQX (Example)** | **Notes** |
-| --- | --- | --- | --- |
-| Endpoint hostname | `mqtt.internal.example.com` (as configured in load balancer / Control Center) | `mqtt.example.com` (EMQX load balancer / VIP) | Update device firmware or deployment manifests. |
-| TLS assets | `conf/hivemq.jks` | `/etc/emqx/certs/server-cert.pem`, `/etc/emqx/certs/server-key.pem` | Convert JKS/PKCS12 to PEM with `keytool` + `openssl`. |
-| Client authentication | ESE file realm (`credentials.xml`) | `authentication = [{mechanism = password_based, backend = built_in_database}]` | Import user list via REST API or Dashboard. |
-| Client certificates | Stored as PEM in device fleet, validated by HiveMQ when mTLS enabled | Same device certs, EMQX listener `ssl_options.cacertfile = "device-ca.pem"` | No reprovisioning needed if devices already use your CA. |
-| Cluster discovery | DNS or `extensions/*-discovery*/*.properties` | `cluster.discovery_strategy = dns` (or `static`, `etcd`, `k8s`) | Replace extension-based discovery with native EMQX strategy. |
-| Kafka integration | `extensions/hivemq-kafka-extension/kafka-configuration.xml` | EMQX connectors + rules + actions (`SELECT ... FROM "device/+/data"`) | Use EMQX Data Bridge instead of Java transformers. |
-| Rate limiting / restrictions | `<restrictions>` block + Overload Protection | `listeners.*.max_connections`, `messages_rate`, `bytes_rate`, `limiter.*` | Configure per-listener quotas and global limiters. |
+下表总结了 HiveMQ 与 EMQX 之间关键配置项和工件的映射关系：
 
-## Phase 1: Inventory HiveMQ Configuration Artifacts
+| **参数 / 工件** | **HiveMQ（示例）**                                           | **EMQX（示例）**                                             | **说明**                                                 |
+| --------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------------------------------------------------- |
+| 端点主机名      | `mqtt.internal.example.com`（在负载均衡器 / 控制中心中配置） | `mqtt.example.com`（EMQX 负载均衡 / VIP）                    | 更新设备固件或部署清单。                                 |
+| TLS 资产        | `conf/hivemq.jks`                                            | `/etc/emqx/certs/server-cert.pem`, `/etc/emqx/certs/server-key.pem` | 使用 `keytool` + `openssl` 将 JKS/PKCS12 转换为 PEM。    |
+| 客户端认证      | ESE 文件领域（`credentials.xml`）                            | `authentication = [{mechanism = password_based, backend = built_in_database}]` | 通过 REST API 或 Dashboard 导入用户列表。                |
+| 客户端证书      | 以 PEM 存储在设备端，当启用 mTLS 时由 HiveMQ 验证            | 使用相同设备证书，EMQX 监听器配置 `ssl_options.cacertfile = "device-ca.pem"` | 若使用相同 CA，无需重新签发。                            |
+| 集群发现        | DNS 或 `extensions/*-discovery*/*.properties`                | `cluster.discovery_strategy = dns`（或 `static`、`etcd`、`k8s`） | 使用 EMQX 原生发现策略替代扩展。                         |
+| Kafka 集成      | `extensions/hivemq-kafka-extension/kafka-configuration.xml`  | EMQX 连接器 + 规则 + 动作（`SELECT ... FROM "device/+/data"`） | 使用 EMQX 数据集成功能替代基于 Java 的扩展进行消息转换。 |
+| 限流 / 约束     | `<restrictions>` 块 + 过载保护                               | `listeners.*.max_connections`, `messages_rate`, `bytes_rate`, `limiter.*` | 配置监听器级与全局配额限制。                             |
 
-### 1. Collect TLS Keystores and Convert Them
+## 阶段一：盘点 HiveMQ 配置工件
 
-1. Locate the keystore referenced in `<tls-tcp-listener>` (for example, `/opt/hivemq/conf/hivemq.jks`).
-2. Export the server certificate and key:
+### 收集并转换 TLS 密钥库
+
+1. 找到 `<tls-tcp-listener>` 中引用的密钥库（例如 `/opt/hivemq/conf/hivemq.jks`）。
+2. 导出服务器证书与私钥：
 
 ```
 keytool -importkeystore \
@@ -37,33 +39,35 @@ openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nokeys -out /tmp/server-cert.pem
 openssl pkcs12 -in /tmp/hivemq.p12 -nodes -nocerts -out /tmp/server-key.pem
 ```
 
-3. Copy the resulting PEM files into `/etc/emqx/certs/` (or your container secret mount). Keep the device CA (`device-ca.pem`) that HiveMQ trusted for client certificates; EMQX will reuse it.
+1. 将生成的 PEM 文件复制到 `/etc/emqx/certs/`（或容器挂载的密钥路径）。保留 HiveMQ 信任的设备 CA（`device-ca.pem`），EMQX 将复用该证书进行 mTLS 验证。
 
-### 2. Export HiveMQ Configuration Files
+### 导出 HiveMQ 配置文件
 
-- `conf/config.xml`: Listeners, restrictions, clustering, persistence, Control Center users.
-- `conf/logback.xml`: Logging targets (translate to EMQX `log` section).
-- `extensions/<name>/conf/*.xml` or `.properties`: Discovery, Kafka, Prometheus, custom auth.
-- `extensions/hivemq-enterprise-security-extension/enterprise-security-extension.xml`: Authentication realms and pipelines.
-- Any `credentials.xml` or custom user stores referenced by the ESE.
+将以下文件保存到版本控制系统以便追踪，并标记环境变量占位符（例如 `${ENV:HIVEMQ_PORT}`），便于映射到 EMQX 的双下划线环境变量语法（例如 `EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`）。
 
-Store these artifacts in version control for traceability. Highlight environment-variable placeholders (e.g., `${ENV:HIVEMQ_PORT}`) so they can be remapped to EMQX’s double-underscore environment override syntax (`EMQX_LISTENERS__TCP__DEFAULT__BIND=0.0.0.0:1883`).
+- `conf/config.xml`：监听器、约束、集群、持久化、控制中心用户
+- `conf/logback.xml`：日志目标（对应 EMQX 的 `log` 配置）
+- `extensions/<name>/conf/*.xml` 或 `.properties`：发现、Kafka、Prometheus、自定义认证
+- `extensions/hivemq-enterprise-security-extension/enterprise-security-extension.xml`：认证领域与管道
+- 任意由 ESE 引用的 `credentials.xml` 或自定义用户存储
 
-### 3. Classify Authentication Modes
+### 分类认证模式
 
-Determine which of the following patterns you are using:
+确定当前使用的认证方式：
 
-- **Username/password** via file realm or SQL realm.
-- **X.509 client certificates** (mTLS) with CN = client ID.
-- **Hybrid** (e.g., TLS + SASL plugin). Each path maps to a specific EMQX authenticator chain.
+- **用户名/密码**（文件领域或 SQL 领域）
+- **X.509 客户端证书**（mTLS，使用 CN 作为客户端 ID）
+- **混合模式**（例如 TLS + SASL 插件）
 
-## Phase 2: Configure EMQX to Mirror HiveMQ Baseline
+每种模式都对应 EMQX 中特定的认证链配置。
 
-### 2.1 Recreate MQTT Listeners
+## 阶段二：配置 EMQX 以镜像 HiveMQ 基线
 
-Translate each `<tcp-listener>`, `<tls-tcp-listener>`, `<websocket-listener>` and `<tls-websocket-listener>` element into HOCON.
+### 重建 MQTT 监听器
 
-For example, given this HiveMQ configuration that defines three listeners:
+将 HiveMQ 的 `<tcp-listener>`、`<tls-tcp-listener>`、`<websocket-listener>` 和 `<tls-websocket-listener>` 元素转换为 HOCON 格式。
+
+**HiveMQ 配置示例：**
 
 ```xml
 <hivemq>
@@ -111,9 +115,9 @@ For example, given this HiveMQ configuration that defines three listeners:
 </hivemq>
 ```
 
-Translate to this EMQX configuration snippet:
+**等效的 EMQX 配置片段：**
 
-```
+```hocon
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
 }
@@ -136,9 +140,13 @@ listeners.wss.default {
 }
 ```
 
-To convert `truststore.jks` and `keystore.jks` to PEM, follow the steps in Section 1.1.
+要将 `truststore.jks` 和 `keystore.jks` 转换为 PEM 格式，请参照 收集并转换 TLS 密钥库 一节中的步骤。
 
-### 2.2 Map MQTT configuration options
+### 映射 MQTT 配置选项
+
+HiveMQ 中的设置（如消息队列大小、QoS 和保留消息行为）可直接映射到 EMQX 的 `mqtt` 配置段。
+
+**HiveMQ 配置示例：**
 
 ```xml
 <queued-messages>
@@ -188,14 +196,14 @@ To convert `truststore.jks` and `keystore.jks` to PEM, follow the steps in Secti
 </retained-messages>
 ```
 
-Corresponding EMQX configuration:
+**等效的 EMQX 配置：**
 
 ```hocon
 mqtt {
   max_mqueue_len          = 1000
   mqueue_priorities       = disabled
   max_topic_alias         = 5
-  message_expiry_interval = infinity   # 4294967296 in HiveMQ
+  message_expiry_interval = infinity   # HiveMQ 中为 4294967296
   session_expiry_interval = infinity
   max_packet_size         = "256MB"
   max_inflight            = 10
@@ -203,15 +211,15 @@ mqtt {
   wildcard_subscription   = true
   shared_subscription     = true
   retain_available        = true
-  # subscription_identifier is enabled by default
+  # subscription_identifier 默认启用
 }
 ```
 
-### 2.3 Map the `<restrictions>` block
+### 映射 `<restrictions>` 块
 
-HiveMQ collects global limits under `<restrictions>`. EMQX splits these values between the global `mqtt` section and each listener.
+HiveMQ 在 `<restrictions>` 中集中定义全局限制。在 EMQX 中，这些限制被拆分为全局 `mqtt` 配置和各监听器配置项。
 
-Here is an example HiveMQ configuration:
+**HiveMQ 配置示例：**
 
 ```xml
 <restrictions>
@@ -222,27 +230,27 @@ Here is an example HiveMQ configuration:
 </restrictions>
 ```
 
-And corresponding EMQX configuration snippet:
+**等效的 EMQX 配置片段：**
 
 ```hocon
 listeners.ssl.default {
   bind             = "0.0.0.0:8883"
   max_connections  = infinity
-  bytes_rate       = "0"        # 'incoming-bandwidth-throttling'
+  bytes_rate       = "0"        # 对应 'incoming-bandwidth-throttling'
   bytes_burst      = "0"
 }
 
 mqtt {
   max_clientid_len = 65535
-  idle_timeout     = "10s"      # no-connect-idle-timeout
+  idle_timeout     = "10s"      # 对应 no-connect-idle-timeout
 }
 ```
 
-### 2.4 Configure Clustering
+### 配置集群
 
-Replace HiveMQ discovery extension and other discovery methods with EMQX’s native strategies.
+将 HiveMQ 的发现扩展及其他发现方式替换为 EMQX 原生集群发现机制。
 
-For example, this cluster configuration:
+**HiveMQ 集群配置示例：**
 
 ```xml
 <cluster>
@@ -268,9 +276,9 @@ For example, this cluster configuration:
 </cluster>
 ```
 
-corresponds to this EMQX configuration:
+**等效的 EMQX 配置：**
 
-```
+```hocon
 cluster {
   discovery_strategy = static
   static {
@@ -282,47 +290,51 @@ cluster {
 }
 ```
 
-EMQX automatically assigns Erlang distribution port when more than one node runs on the same machine; no need to select `bind-port` manually.
+EMQX 在同一主机上运行多个节点时，会自动分配 Erlang 分布端口，无需手动设置 `bind-port`。
 
-For alternative discovery methods (etcd, Kubernetes, static files, etc.), see [Create and Manage Cluster](../deploy/cluster/create-cluster.md).
+若需使用其他发现方式（如 etcd、Kubernetes 或静态文件），请参见[创建与管理集群](../deploy/cluster/create-cluster.md)。
 
-### 2.5 Translate Authentication & Authorization
+### 翻译认证与授权配置
 
-HiveMQ manages security through the Enterprise Security Extension (ESE), which defines **Realms** (data sources) and **Pipelines** (logic), or through legacy plugins. EMQX uses **Authentication Chains** (ordered backends) and **Authorization sources** (ACLs).
+HiveMQ 通过 **Enterprise Security Extension (ESE)** 管理安全机制，该扩展定义了 **Realms（领域）**（数据源）和 **Pipelines（逻辑流程）**，也可能通过旧版插件进行身份验证。
 
-| HiveMQ ESE Component | EMQX Equivalent | Migration Strategy |
-| :--- | :--- | :--- |
-| **File Realm** (`credentials.xml`) | [**Built-in Database**](../access-control/authn/mnesia.md) | Export users from HiveMQ, import via EMQX REST API. |
-| **SQL Realm** (JDBC) | [**MySQL**](../access-control/authn/mysql.md) / [**PostgreSQL**](../access-control/authn/postgresql.md) | Configure password based authenitcation with `mysql` or `postgresql` backend. Reuse existing user tables. |
-| **LDAP Realm** / AD | [**LDAP**](../access-control/authn/ldap.md) | Configure password based authentication with LDAP backend. Map HiveMQ DN patterns to EMQX filter templates. |
-| **OAuth / JWT** | [**JWT**](../access-control/authn/jwt.md) | Configure JWT authentication mechanism. Configure public keys or JWKS endpoint. |
-| **HTTP / Webhooks** | [**HTTP Server**](../access-control/authn/http.md) | Configure password based authentication with HTTP backend to delegate credentials to your external auth service. |
-| **X.509 Certs** | [**X.509**](../access-control/authn/x509.md) / [**mTLS**](../network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | Use `TLS` listener and mutual (two-way) authentication, reuse existing CA and client certificates. |
+EMQX 则使用**认证链**（有序的后端模块）和**授权源**（ACL 访问控制列表）来实现类似功能。
 
-#### 2.5.1. Migrating File Realm Users
+| HiveMQ ESE 组件                                | 对应的 EMQX 组件                                             | 迁移策略                                                     |
+| ---------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **文件领域（File Realm）** (`credentials.xml`) | [**内置数据库（Built-in Database）**](../access-control/authn/mnesia.md) | 从 HiveMQ 导出用户数据，并通过 EMQX REST API 导入。          |
+| **SQL 领域（JDBC）**                           | [**MySQL**](../access-control/authn/mysql.md) / [**PostgreSQL**](../access-control/authn/postgresql.md) | 配置基于密码的认证机制，后端为 `mysql` 或 `postgresql`。可复用现有用户表结构。 |
+| **LDAP 领域 / Active Directory**               | [**LDAP**](../access-control/authn/ldap.md)                  | 配置基于密码的认证机制，后端为 LDAP。将 HiveMQ 的 DN 模式映射为 EMQX 的筛选模板。 |
+| **OAuth / JWT**                                | [**JWT**](../access-control/authn/jwt.md)                    | 配置 JWT 认证机制，指定公钥或 JWKS 端点。                    |
+| **HTTP / Webhooks**                            | [**HTTP Server**](../access-control/authn/http.md)           | 配置基于密码的 HTTP 后端认证，将凭证验证委托给外部认证服务。 |
+| **X.509 证书**                                 | [**X.509**](../access-control/authn/x509.md) / [**mTLS**](../network/emqx-mqtt-tls.md#enable-ssl-tls-with-two-way-authentication) | 使用 TLS 监听器和双向认证（mTLS），重用现有 CA 与客户端证书。 |
 
-**Source:** HiveMQ `conf/credentials.xml` (encrypted/hashed).
-**Destination:** EMQX Built-in Database.
+#### 迁移文件领域用户（File Realm Users）
 
-1. **Export:** Extract users from the HiveMQ File Realm (`credentials.xml`). This file typically contains hashed passwords and salts. You will need to parse this XML to generate a JSON or CSV import file for EMQX.
-2. **Import:** Use the EMQX REST API to create users. EMQX supports bulk import of users with password hashes (e.g., bcrypt, pbkdf2). See [Importing Users](../access-control/authn/user_management.md#importing-users) for file format details.
+**来源：** HiveMQ 的 `conf/credentials.xml` 文件（通常包含加密或哈希密码）。
+**目标：** EMQX 内置数据库（Built-in Database）。
+
+1. **导出用户数据：**
+    从 HiveMQ 的文件领域 (`credentials.xml`) 中提取用户信息。该文件通常包含哈希密码与盐值。需要编写脚本解析 XML，生成 EMQX 可导入的 JSON 或 CSV 文件。
+2. **导入到 EMQX：**
+    使用 EMQX 的 REST API 创建用户。EMQX 支持导入包含哈希密码（如 bcrypt、pbkdf2 等）的用户数据。详情参见[导入认证数据](../access-control/authn/user_management.md#导入认证数据)。
 
 ```bash
-# Example: Import a user with a plain password
+# 示例：导入一个带明文密码的用户
 curl -u admin:public -X POST \
   http://emqx-node:18083/api/v5/authentication/password_based:built_in_database/users \
   -d '{"user_id":"device-001","password":"StrongPass!"}'
 ```
 
-#### 2.5.2. Migrating External Integrations (SQL, LDAP, HTTP)
+#### 迁移外部集成认证（SQL、LDAP、HTTP）
 
-Translate your `enterprise-security-extension.xml` pipelines into EMQX HOCON `authentication` blocks.
+将 `enterprise-security-extension.xml` 中定义的认证管道（pipelines）转换为 EMQX 的 HOCON `authentication` 配置块。
 
-**Example: SQL Realm to EMQX MySQL**
+**示例：将 SQL 领域迁移至 EMQX MySQL 认证**
 
-HiveMQ uses a [fixed database schema](https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/ese.html#table_users) for its SQL realm. In contrast, EMQX allows you to [define your own schema and queries](https://docs.emqx.com/en/emqx/latest/access-control/authn/mysql.html). **This means you do not need to modify your existing MySQL or PostgreSQL database.** The EMQX configuration example below uses a query (`SELECT password_hash, salt ...`) that is specifically adapted to work with the standard HiveMQ `users` table structure.
+HiveMQ 的 SQL 领域使用一个 [固定数据库模式](https://docs.hivemq.com/hivemq-enterprise-security-extension/latest/ese.html#table_users)。而 EMQX 允许您 [自定义数据库模式和查询语句](../access-control/authn/mysql.md)，**因此无需修改现有的 MySQL 或 PostgreSQL 数据库结构。**
 
-Use the following EMQX configuration to authenticate against your existing HiveMQ MySQL database without modifying the schema:
+下方的 EMQX 配置示例使用查询语句 `SELECT password_hash, salt ...` 以匹配 HiveMQ 默认的 `users` 表结构。
 
 ```hocon
 authentication = [
@@ -342,7 +354,7 @@ authentication = [
 ]
 ```
 
-**Example: LDAP Realm**
+**示例：LDAP 领域迁移**
 
 ```hocon
 authentication = [
@@ -365,11 +377,12 @@ authentication = [
 ]
 ```
 
-#### 2.5.3. Migrating Authorization (ACLs)
+#### 迁移授权配置（ACLs）
 
-HiveMQ defines access policies in `enterprise-security-extension.xml` (File Realm) or external databases. EMQX uses a flexible **Authorization Chain** supporting multiple backends simultaneously (File, Redis, MySQL, PostgreSQL, MongoDB, HTTP, etc).
+HiveMQ 的访问控制策略（ACL）通常定义在 `enterprise-security-extension.xml`（文件领域）或外部数据库中。EMQX 提供了更灵活的**授权链**，可同时使用多个后端（File、Redis、MySQL、PostgreSQL、MongoDB、HTTP 等）。
 
-**HiveMQ XML Policy:**
+**HiveMQ XML 授权策略示例：**
+
 ```xml
 <permission>
     <topic>device/${clientid}/#</topic>
@@ -377,26 +390,33 @@ HiveMQ defines access policies in `enterprise-security-extension.xml` (File Real
 </permission>
 ```
 
-**EMQX Equivalent:**
-- [**File (`acl.conf`)**](../access-control/authz/file.md): `{allow, all, subscribe, ["device/${clientid}/#"]}.`
-- [**Built-in Database**](../access-control/authz/mnesia.md): Configure rules via Dashboard or API based on Client ID, Username, or Topic.
-- [**MySQL**](../access-control/authz/mysql.md): `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`.
-- [**PostgreSQL**](../access-control/authz/postgresql.md): `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl where clientid = ${clientid} and ipaddress = ${peerhost}`.
+**EMQX 等效配置示例：**
 
-For more information, please refer to the [**Authorization**](../access-control/authz/authz.md) documentation.
+- [**文件 ACL (`acl.conf`)**](../access-control/authz/file.md)：
+   `{allow, all, subscribe, ["device/${clientid}/#"]}.`
+- [**内置数据库（Mnesia）**](../access-control/authz/mnesia.md)：
+   可通过 Dashboard 或 API 基于客户端 ID、用户名或主题配置访问规则。
+- [**MySQL**](../access-control/authz/mysql.md)：
+   `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl WHERE clientid = ${clientid} AND ipaddress = ${peerhost};`
+- [**PostgreSQL**](../access-control/authz/postgresql.md)：
+   `SELECT action, permission, topic, ipaddress, qos, retain FROM mqtt_acl WHERE clientid = ${clientid} AND ipaddress = ${peerhost};`
 
-### 2.6 Configure Data Integration
+更多详情请参见[**授权**](../access-control/authz/authz.md)文档。
 
-HiveMQ relies on individual extensions (e.g., Kafka Extension) for data integration. In EMQX, all data integrations are built-in and enabled out of the box.
+### 配置数据集成
 
-Before configuring specific bridges, familiarize yourself with these core concepts:
-- [**Data Integration Overview**](../data-integration/data-bridges.md)
-- [**Rule Engine**](../data-integration/rules.md)
-- [**Flow Designer**](../flow-designer/introduction.md)
+HiveMQ 依赖独立扩展（例如 Kafka 扩展）实现数据集成功能；而在 EMQX 中，所有数据集成功能都是内置的，并且开箱即用。
 
-#### 2.6.1 Example: Migrating Kafka Extension
+在配置具体的数据集成之前，请先熟悉以下核心概念：
 
-**HiveMQ Kafka Extension Configuration**
+- [**数据集成概述**](../data-integration/data-bridges.md)
+- [**规则引擎**](../data-integration/rules.md)
+- [**可视化 Flow 设计器**](../flow-designer/introduction.md)
+
+#### 示例：迁移 Kafka 扩展
+
+**HiveMQ Kafka 扩展配置示例：**
+
 ```xml
 <kafka-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                      xsi:noNamespaceSchemaLocation="config.xsd">
@@ -431,9 +451,9 @@ Before configuring specific bridges, familiarize yourself with these core concep
 </kafka-configuration>
 ```
 
-**EMQX Equivalent**
+**等效的 EMQX 配置：**
 
-```
+```hocon
 connectors {
   kafka_producer {
     cluster01 {
@@ -505,15 +525,15 @@ sources {
 }
 ```
 
-### 2.7 Configure Observability
+### 配置可观测性
 
-#### 2.7.1 Prometheus
+#### Prometheus 监控
 
-HiveMQ uses the "Prometheus Monitoring HiveMQ Extension". EMQX comes with native Prometheus support.
+HiveMQ 通过 “Prometheus Monitoring HiveMQ Extension” 提供监控功能，而 EMQX 则原生支持 Prometheus，无需额外插件。
 
-Endpoint for Prometheus to scrape metrics is enabled by default: `http://emqx-node:18083/api/v5/prometheus/stats`.
+Prometheus 用于采集指标（即 *scrape*）的端点默认启用：`http://emqx-node:18083/api/v5/prometheus/stats`。
 
-If you want to use Pushgateway, it can be configured as follows:
+如果您希望使用 **Pushgateway** 模式，可以按如下方式配置：
 
 ```hocon
 prometheus {
@@ -524,13 +544,14 @@ prometheus {
 }
 ```
 
-Check out [Integrate with Prometheus](../observability/prometheus.md#integrate-with-prometheus) guide for more details.
+更多配置细节请参考[集成 Prometheus](../observability/prometheus.md)。
 
-#### 2.7.2 Logging
+#### 日志
 
-HiveMQ uses `logback.xml` (Java standard). EMQX uses a built-in logging facility configured in HOCON.
+HiveMQ 使用 `logback.xml`（Java 标准日志系统），EMQX 则使用基于 HOCON 的内置日志系统。
 
-**HiveMQ (`logback.xml`):**
+**HiveMQ (`logback.xml`) 配置示例：**
+
 ```xml
 <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -543,10 +564,10 @@ HiveMQ uses `logback.xml` (Java standard). EMQX uses a built-in logging facility
     <append>true</append>
 
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <!-- daily rollover -->
+        <!-- 每日轮转 -->
         <fileNamePattern>${hivemq.log.folder}/hivemq.%d{yyyy-MM-dd}.log</fileNamePattern>
 
-        <!-- keep 30 days' worth of history -->
+        <!-- 保留 30 天历史日志 -->
         <maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
@@ -555,7 +576,8 @@ HiveMQ uses `logback.xml` (Java standard). EMQX uses a built-in logging facility
 </appender>
 ```
 
-**EMQX Equivalent:**
+**等效的 EMQX 配置：**
+
 ```hocon
 log {
   file {
@@ -565,7 +587,6 @@ log {
       path = "/var/log/emqx/emqx.log"
       rotation_count = 30
       rotation_size = "50MB"
-
     }
   }
   console {
@@ -575,45 +596,46 @@ log {
 }
 ```
 
-See [**Logs**](../observability/log.md) for configuring log levels, rotation, and formatters (text/JSON).
+请参考[日志](../observability/log.md)文档，了解日志级别、轮转策略和格式（text/JSON）的配置方法。
 
-#### 2.7.3 Tracing
+#### 日志追踪
 
-HiveMQ's "Trace Recordings" are often used to debug specific client sessions. EMQX provides a built-in **Trace** feature (Dashboard or CLI) to filter logs for specific Client IDs, Topics, or IPs in real-time.
+HiveMQ 的 “Trace Recordings” 功能常用于调试特定客户端会话。EMQX 提供了内置的**日志追踪**功能，可通过 Dashboard 或 CLI 实时过滤特定客户端 ID、主题或 IP 的日志。
 
-**Start a trace for a specific client:**
+**示例：启动针对指定客户端的追踪**
+
 ```bash
 emqx ctl trace start client device-001 trace.log
 ```
 
-See [**Trace**](../observability/tracer.md) for advanced debugging.
+详细功能请参考[日志追踪](../observability/tracer.md)。
 
-## Phase 3: Update Devices and Integrations
+## 阶段三：更新设备与集成
 
-### 3.1 Deploy EMQX Server CA to Devices
+### 向设备部署 EMQX 服务器 CA（Deploy EMQX Server CA to Devices）
 
-- If EMQX uses an internal CA, install `emqx-server-ca.pem` on each device (system trust store or application bundle).
-- If EMQX uses a public CA (e.g., Let’s Encrypt), no device action is needed.
+- 如果 EMQX 使用内部 CA（自签名证书），则需要将 `emqx-server-ca.pem` 安装到每个设备的系统信任存储或应用程序包中。
+- 如果 EMQX 使用公共 CA（例如 Let’s Encrypt），则无需在设备上执行任何操作。
 
-### 3.2 Update Device Connection Parameters
+### 更新设备连接参数
 
-**Example (mqtt-cli)**
+**示例（使用 mqtt-cli 工具）**
 
-```
-# Before (HiveMQ)
+```bash
+# 迁移前（HiveMQ）
 mqtt pub -h mqtt.internal.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
   --cafile AmazonRootCA1.pem --topic device/001/data --message test
 
-# After (EMQX)
+# 迁移后（EMQX）
 mqtt pub -h mqtt.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
   --cafile emqx-server-ca.pem --topic device/001/data --message test
 ```
 
-**Example (Python paho-mqtt with mTLS)**
+**示例（使用 Python paho-mqtt 客户端并启用 mTLS）**
 
-```
+```hocon
 client.tls_set(
     ca_certs="certs/emqx-server-ca.pem",
     certfile="certs/device-001.cert.pem",
@@ -623,51 +645,70 @@ client.tls_set(
 client.connect("mqtt.example.com", 8883)
 ```
 
-Only the endpoint hostname and server CA file change. Device certificates and private keys continue to work if they were signed by the same CA referenced in EMQX `ssl_options.cacertfile`.
+迁移后，仅需更改的内容是**端点主机名**和**服务器 CA 文件**。如果设备证书和私钥仍由相同的 CA 签发（即 EMQX 配置中的 `ssl_options.cacertfile` 所引用的 CA），则设备证书和私钥可以继续正常使用，无需重新签发。
 
-### 3.3 Validate Integrations
+### 验证集成配置
 
-- Ensure Kafka topics receive messages by checking EMQX rule metrics (`emqx ctl rule show`).
-- Update monitoring dashboards to scrape EMQX metrics.
-- Reconfigure alerting systems (Splunk, ELK) to parse EMQX log format.
+- 检查 Kafka 主题是否能接收到消息，可通过查看 EMQX 规则引擎指标实现：
 
-## Advanced Migration Scenarios
+  ```bash
+  emqx ctl rule show
+  ```
 
-### Retained Messages and Sessions
+- 更新监控仪表盘，以便 Prometheus 能够采集EMQX 指标。
 
-HiveMQ persistence files cannot be imported directly. Use a migration script:
+- 重新配置告警系统（例如 Splunk、ELK），以便正确解析 EMQX 的日志格式。
 
-1. Keep HiveMQ running temporarily.
-2. Run a bridge client that subscribes to `#` on HiveMQ and republishes retained messages to EMQX.
-3. For queued QoS 1/2 messages, complete in-flight transactions before switching DNS.
+## 进阶迁移场景
 
-### Shared Subscriptions
+### 保留消息与会话
 
-HiveMQ’s `$share/group/topic` syntax is fully supported by EMQX. If you previously used `$queue/topic`, map it to `$share/queue/topic`. Tune `broker.shared_subscription_strategy` (e.g., `round_robin`, `hash_clientid`) to mimic the load-balancing behavior your consumers expect.
+HiveMQ 的持久化文件无法直接导入至 EMQX。建议通过以下脚本化迁移方式进行处理：
 
-### HTTP/API-Driven Configuration
+1. 暂时保持 HiveMQ 运行。
+2. 运行一个桥接客户端，订阅 HiveMQ 上的 `#` 主题，并将保留消息重新发布到 EMQX。
+3. 对于 QoS 1/2 的消息，确保所有在途事务完成后，再切换 DNS 指向。
 
-HiveMQ relies on static XML plus extension-specific reload semantics. EMQX offers dynamic configuration APIs:
+### 共享订阅
 
-```
+HiveMQ 的 `$share/group/topic` 语法在 EMQX 中完全受支持。如果之前使用 `$queue/topic`，可将其映射为 `$share/queue/topic`。
+
+此外，可以通过调整 `broker.shared_subscription_strategy`（例如 `round_robin` 或 `hash_clientid`）来模拟原有消费者期望的负载均衡行为。
+
+### 基于 HTTP/API 的动态配置
+
+HiveMQ 依赖静态 XML 文件和各扩展模块自身的重新加载机制。而 EMQX 提供了动态配置 API，可直接通过 HTTP 实时修改配置。
+
+**示例：使用 REST API 修改监听器配置**
+
+```bash
 curl -s -H "Authorization: Bearer $TOKEN" \
   -H "Content-type: application/json" \
   -X PUT "http://emqx-node:18083/api/v5/listeners/ssl:default" \
   -d '{"type": "ssl", "bind": "0.0.0.0:8883", "id": "ssl:default", "max_connections": 200000}'
 ```
 
-This writes to `data/configs/cluster.hocon`. Decide whether to keep configuration immutable (only `emqx.conf`) or adopt EMQX’s dual-layer model for per-environment overrides.
+该命令会将配置写入 `data/configs/cluster.hocon` 文件。在迁移策略上，您可以选择：
 
-## Validation Checklist
+- 继续保持配置不可变（仅通过 `emqx.conf` 管理），
+- 或采用 EMQX 的“双层配置模型”（即允许环境特定的动态配置覆盖）。
 
-1. All EMQX listeners report `running` (`emqx ctl listeners list`).
-2. TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
-3. Device IDs in EMQX sessions match the original HiveMQ client IDs.
-4. ACLs enforce the same topic access you enforced in HiveMQ.
-5. Cluster nodes auto-heal after simulated network partitions.
-6. Kafka integration receives data without transformation regressions.
-7. Metrics are visible in Prometheus.
+## 验证清单
 
-## Conclusion
+在将生产流量切换至 EMQX 之前，请确认以下检查项全部通过：
 
-Migrating from HiveMQ to EMQX is primarily a configuration translation exercise: convert Java-centric artifacts (XML, JKS, extensions) into EMQX’s HOCON configuration, flexible Authentication Chains, and the Data Integration framework. By following the three phases—inventory, configure, and update—you can preserve device credentials, topic structures, and integration flows while gaining EMQX’s high-concurrency Erlang runtime and dynamic configuration capabilities. Plan the cutover, validate each listener and integration, and execute the migration with confidence.
+1. 所有 EMQX 监听器均处于 `running` 状态（`emqx ctl listeners list`）。
+2. 对于启用 mTLS 的设备，TLS 握手验证应在提供或未提供客户端证书的情况下分别成功与失败。
+3. EMQX 会话中的设备 ID 与原 HiveMQ 客户端 ID 一致。
+4. ACL 规则与 HiveMQ 中的主题访问策略保持一致。
+5. 集群节点在模拟网络分区后能够自动恢复。
+6. Kafka 集成功能正常，消息传输无数据转换问题。
+7. Prometheus 能正常显示 EMQX 指标数据。
+
+## 总结
+
+从 HiveMQ 迁移至 EMQX 本质上是一个**配置转换过程**：将基于 Java 的配置工件（如 XML 文件、JKS 密钥库、扩展模块）转换为 EMQX 的 HOCON 配置格式、灵活的认证链以及内置的数据集成框架。
+
+通过遵循三个阶段：**盘点**、**配置** 与 **更新**，您可以在保留原有设备凭证、主题结构与集成逻辑的前提下，充分利用 EMQX 的高并发 Erlang 运行时和动态配置能力。
+
+请务必在执行迁移前仔细规划、验证每个监听器与集成配置，并在切换时保持信心与可回退策略。

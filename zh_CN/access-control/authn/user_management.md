@@ -19,7 +19,7 @@ MQTT 监听器认证数据管理 API： `/api/v5/listeners/{listener_id}/authent
 
 详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
 
-## 导入数据
+## 导入认证数据
 
 使用内置数据库的密码认证器支持从文件导入数据。
 

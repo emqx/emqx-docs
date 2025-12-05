@@ -1,4 +1,4 @@
-# Migrating from AWS IoT Core to EMQX
+# Migrate from AWS IoT Core to EMQX
 
 This page provides a comprehensive walkthrough for migrating IoT devices from AWS IoT Core to EMQX. It outlines the process for reconfiguring devices and the EMQX broker to ensure a seamless transition for an entire device fleet.
 
