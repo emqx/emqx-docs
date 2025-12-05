@@ -89,7 +89,7 @@ timeline
 
 ### Configure the Update Strategy
 
-- Create an `apps.emqx.io/v2beta1` EMQX CR and configure the update strategy.
+1. Create an `apps.emqx.io/v2beta1` EMQX CR and configure the update strategy.
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -116,14 +116,14 @@ timeline
       type: Recreate
   ```
 
-- Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
+2. Save the above content as `emqx-update.yaml` and deploy it using `kubectl apply`:
 
   ```bash
   $ kubectl apply -f emqx-update.yaml
   emqx.apps.emqx.io/emqx-ee created
   ```
 
-- Check the status of the EMQX cluster.
+3. Check the status of the EMQX cluster.
 
   Make sure that `STATUS` is `Ready`. This may take a while.
 
@@ -148,7 +148,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
 
 ### Trigger the upgrade
 
-- Any modifications made to the Pod template will trigger the upgrade strategy of EMQX Operator.
+1. Any modifications made to the Pod template will trigger the upgrade strategy of EMQX Operator.
 
   In this example, we trigger the upgrade by modifying the Pod's `ImagePullPolicy`.
 
@@ -157,7 +157,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   emqx.apps.emqx.io/emqx-ee patched
   ```
 
-- Check the status of the upgrade process.
+2. Check the status of the upgrade process.
 
   ```bash
   $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
@@ -196,7 +196,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   | `current_sessions`       | Current number of sessions on this node.                              |
   | `current_connected`      | Current number of connections on this node.                           |
 
-- Wait for the upgrade to complete.
+3. Wait for the upgrade to complete.
 
   ```bash
   $ kubectl get emqx

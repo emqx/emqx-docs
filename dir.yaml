@@ -192,10 +192,11 @@
                 - title_en: API Reference
                   title_cn: API Reference
                   title_ja: API Reference
+                  path: deploy/kubernetes/operator/reference/overview
                   collapsed: true
                   children:
-                    - title_en: apps.emqx.io/v2beta1
-                      path: deploy/kubernetes/operator/reference/v2beta1-reference
+                    - deploy/kubernetes/operator/reference/v2-reference
+                    - deploy/kubernetes/operator/reference/v2beta1-reference
             - title_en: EMQX Helm Chart
               title_cn: EMQX Helm Chart
               title_ja: EMQX Helm Chart

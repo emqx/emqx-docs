@@ -6,13 +6,15 @@ Configure persistence for the set of Core nodes of an EMQX cluster through the `
 
 ## Configure EMQX Cluster Persistence
 
-EMQX CRD `apps.emqx.io/v2beta1` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with [`PersistentVolumeClaimSpec`](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.32/#persistentvolumeclaimspec-v1-core) defined in the Kubernetes API.
+EMQX CRD `apps.emqx.io/v2beta1` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
+
+The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
 
 When you specify the `.spec.coreTemplate.spec.volumeClaimTemplates` field, EMQX Operator configures the `/opt/emqx/data` volume of the EMQX container to be backed by a Persistent Volume Claim (PVC), which provisions a Persistent Volume (PV) using a specified [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). As a result, when an EMQX Pod is deleted, the associated PV and PVC are retained, preserving EMQX runtime data.
 
 For more details about PVs and PVCs, refer to the [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) documentation.
 
-+ Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -48,7 +50,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
   Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
   :::
 
-+ Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready.
 
   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
@@ -60,16 +62,16 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 
 ## Verify Persistence
 
-+ Create a test rule in the EMQX Dashboard.
+1. Create a test rule in the EMQX Dashboard.
 
   ```bash
   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
   ```
 
-  1. Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
-  2. Navigate to _Data Integration_ → _Rules_ to create a new rule.
-  3. Attach a simple action to this rule.
-  4. Click _Create_ to generate a rule, as shown in the following figure:
+  - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
+  - Navigate to _Data Integration_ → _Rules_ to create a new rule.
+  - Attach a simple action to this rule.
+  - Click _Create_ to generate a rule, as shown in the following figure:
 
   ![](./assets/configure-emqx-persistent/emqx-core-action.png)
 
@@ -77,7 +79,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 
   ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
-+ Delete the old EMQX cluster.
+2. Delete the old EMQX cluster.
 
   Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
 
@@ -86,7 +88,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
   emqx.apps.emqx.io "emqx" deleted
   ```
 
-+ Re-deploy the EMQX cluster.
+3. Re-deploy the EMQX cluster.
 
   Run the following command to re-deploy the EMQX cluster:
 

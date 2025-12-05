@@ -16,7 +16,7 @@ Use ELK to collect EMQX cluster logs.
 
 Deploying a single-node Elasticsearch cluster is relatively simple. You can use the following YAML configuration file to quickly deploy an Elasticsearch cluster.
 
-- Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -173,7 +173,7 @@ Deploying a single-node Elasticsearch cluster is relatively simple. You can use 
   Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
   :::
 
-- Wait for Elasticsearch to be ready.
+2. Wait for Elasticsearch to be ready.
 
   Check the status of the Elasticsearch pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
@@ -187,7 +187,7 @@ Deploying a single-node Elasticsearch cluster is relatively simple. You can use 
 
 This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collected logs, and a `Service` of type `NodePort` to expose Kibana externally.
 
-- Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -247,7 +247,7 @@ This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collec
             protocol: TCP
   ```
 
-- Wait for Kibana to be ready.
+2. Wait for Kibana to be ready.
 
   Check the status of the Kibana pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
@@ -263,7 +263,7 @@ This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collec
 
 [Filebeat](https://www.elastic.co/beats/filebeat) is a lightweight log collection component that is part of the Elastic Stack and works seamlessly with Logstash, Elasticsearch, and Kibana.
 
-- Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -410,7 +410,7 @@ This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collec
             path: /etc/localtime
   ```
 
-- Wait for Filebeat to become ready.
+2. Wait for Filebeat to become ready.
 
   Check the status of Filebeat pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
@@ -427,7 +427,7 @@ Logstash is used for log processing and cleaning.
 
 In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html) of Logstash to collect logs and the [Ruby filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html) to filter logs. Logstash also provides many other input and filtering plugins that you can configure according to your business needs.
 
-- Save the following content as a YAML file and deploy it using `kubectl apply`.
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -569,7 +569,7 @@ In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/guid
       xpack.monitoring.elasticsearch.hosts: http://elasticsearch-logging:9200
   ```
 
-- Wait for Logstash to be ready.
+2. Wait for Logstash to be ready.
 
   Check the status of Logstash pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
@@ -586,16 +586,16 @@ To deploy an EMQX cluster, please refer to the document [Deploy EMQX](../getting
 
 ## Verify Log Collection
 
-- Log in to the Kibana interface, open the stack management module in the menu, and click on _Index Management_. You can see that there are already collected log indices.
+1. Log in to the Kibana interface, open the stack management module in the menu, and click on _Index Management_. You can see that log indices have already been collected.
 
   ![](./assets/configure-log-collection/index-manage.png)
 
-- To discover and view logs in Kibana, you need to create an index pattern. Select index patterns and click _Create_.
+2. To discover and view logs in Kibana, you need to create an index pattern. Select index patterns and click _Create_.
 
   ![](./assets/configure-log-collection/create-index-0.png)
 
   ![](./assets/configure-log-collection/create-index-1.png)
 
-- Finally, verify that the EMQX cluster logs are collected.
+3. Finally, verify that the EMQX cluster logs are collected.
 
   ![](./assets/configure-log-collection/log-collection.png)

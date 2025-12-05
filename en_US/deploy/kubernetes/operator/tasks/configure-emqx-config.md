@@ -10,7 +10,7 @@ The EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster throug
 
 EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration-format) as the configuration file format.
 
-- Save the following as a YAML file and deploy it using `kubectl apply`:
+1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
    apiVersion: apps.emqx.io/v2beta1
@@ -42,7 +42,7 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
    The content of the `.spec.config.data` field is supplied as [`emqx.conf` configuration file](../../../../configuration/configuration.md#immutable-configuration-file) to the EMQX container.
    :::
 
-- Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready.
 
   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
 
@@ -54,24 +54,24 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
 
 ## Verify Configuration
 
-- View the EMQX listeners status.
+View the EMQX listeners' status.
 
-   ```bash
-   $ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
-   tcp:default
-      listen_on: 0.0.0.0:1883
-      acceptors: 16
-      proxy_protocol : false
-      running: true
-      current_conn: 0
-      max_conns : 1024000
-   tcp:test
-      listen_on: 0.0.0.0:1884
-      acceptors: 16
-      proxy_protocol : false
-      running: true
-      current_conn: 0
-      max_conns : 1024000
-   ```
+```bash
+$ kubectl exec -it emqx-core-0 -c emqx -- emqx ctl listeners
+tcp:default
+   listen_on: 0.0.0.0:1883
+   acceptors: 16
+   proxy_protocol : false
+   running: true
+   current_conn: 0
+   max_conns : 1024000
+tcp:test
+   listen_on: 0.0.0.0:1884
+   acceptors: 16
+   proxy_protocol : false
+   running: true
+   current_conn: 0
+   max_conns : 1024000
+```
 
-   Here we can see that the new listener on port 1884 is running.
+Here we can see that the new listener on port 1884 is running.

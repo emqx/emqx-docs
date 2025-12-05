@@ -27,7 +27,7 @@ There must be at least one Core node in the EMQX cluster. For the purpose of hig
 
 EMQX CRD `apps.emqx.io/v2beta1` supports configuring Core nodes of the EMQX cluster through the `.spec.coreTemplate` field, and configuring Replicant nodes of the EMQX cluster through the `.spec.replicantTemplate` field.
 
-- Save the following content as a YAML file and deploy using `kubectl apply`.
+1. Save the following content as a YAML file and deploy using `kubectl apply`.
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -61,10 +61,10 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring Core nodes of the EMQX clus
   ```
 
   In the example above, the EMQX CR defines an EMQX cluster consisting of two Core nodes and three Replicant nodes.
-  
+
   Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
 
-- Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready.
 
   Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
 

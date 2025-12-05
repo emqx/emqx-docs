@@ -1,4 +1,4 @@
-# Monitor EMQX cluster by Prometheus and Grafana
+# Monitor EMQX Cluster by Prometheus and Grafana
 
 ## Objective
 
@@ -6,7 +6,7 @@ Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter) and monitor an EMQ
 
 ## Deploy Prometheus and Grafana
 
-* To learn more about Prometheus deployment, refer to [Prometheus](https://github.com/prometheus-operator/prometheus-operator) documentation.
+* To learn more about Prometheus deployment, refer to the [Prometheus](https://github.com/prometheus-operator/prometheus-operator) documentation.
 * To learn more about Grafana deployment, refer to [Grafana](https://grafana.com/docs/grafana/latest/setup-grafana/installation/kubernetes/) documentation.
 
 ## Deploy EMQX Cluster
@@ -44,7 +44,7 @@ emqx   Ready    10m
 
 ## Create API secret
 
-Prometheus is going to pull metrics from EMQX Dashboard API, so you need to sign in to the Dashboard to [create an API secret](../../../../dashboard/system.md#api-keys).
+Prometheus is going to pull metrics from the EMQX Dashboard API, so you need to sign in to the Dashboard to [create an API secret](../../../../dashboard/system.md#api-keys).
 
 ## Deploy [EMQX Exporter](https://github.com/emqx/emqx-exporter)
 
@@ -202,8 +202,9 @@ spec:
       #- default
 ```
 
-<p> `path` indicates the path of the indicator collection interface. In EMQX 5, the path is: `/api/v5/prometheus/stats`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx`.</p>
-<p> The value of targetLabel `cluster` represents the name of current cluster, make sure its uniqueness. </p>
+`path` indicates the path of the indicator collection interface. In EMQX 5, the path is: `/api/v5/prometheus/stats`. `selector.matchLabels` indicates the label of the matching Pod: `apps.emqx.io/instance: emqx`.
+
+The value of the targetLabel `cluster` represents the name of the current cluster. Make sure it is unique.
 
 Save the above content as `monitor.yaml` and execute the following command:
 

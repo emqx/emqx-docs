@@ -21,7 +21,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 :::: tabs type:card
 ::: tab apps.emqx.io/v2beta1
 
-+ 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
+1. 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它。
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -78,15 +78,15 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
         loadBalancerClass: service.k8s.aws/nlb
   ```
 
-+ 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
+2. 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间。
 
   ```bash
   $ kubectl get emqx
-  NAME   IMAGE              STATUS    AGE
-  emqx   emqx/emqx:latest   Running   18m
+  NAME   STATUS    AGE
+  emqx   Ready     55s
   ```
 
-+ 获取 EMQX 集群的 Dashboard External IP, 访问 EMQX 控制台
+3. 获取 EMQX 集群的 Dashboard External IP, 访问 EMQX 控制台。
 
   EMQX Operator 会创建两个 EMQX Service 资源，一个是 emqx-dashboard，一个是 emqx-listeners，分别对应 EMQX 控制台和 EMQX 监听端口。
 
@@ -101,7 +101,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 :::
 ::: tab apps.emqx.io/v1beta4
 
-+ 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
+1. 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它。
 
   ```yaml
   apiVersion: apps.emqx.io/v1beta4
@@ -151,7 +151,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
         loadBalancerClass: service.k8s.aws/nlb
   ```
 
-+ 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间
+2. 等待 EMQX 集群就绪，可以通过 `kubectl get` 命令查看 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这个可能需要一些时间。
 
   ```bash
   $ kubectl get emqxenterprises
@@ -159,7 +159,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
   emqx-ee   Running  26m
   ```
 
-+ 获取 EMQX 集群的 External IP, 访问 EMQX 控制台
+3. 获取 EMQX 集群的 External IP, 访问 EMQX 控制台。
 
   ```bash
   $ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
@@ -176,7 +176,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
 [MQTT X CLI](https://mqttx.app/zh/cli) 是一款开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发者在不需要使用图形化界面的基础上，也能更快的开发和调试 MQTT 服务与应用。
 
-+ 获取 EMQX 集群的 External IP
+1. 获取 EMQX 集群的 External IP。
 
   :::: tabs type:card
   ::: tab apps.emqx.io/v2beta1
@@ -195,7 +195,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
   :::
   ::::
 
-+ 订阅消息
+2. 订阅消息。
 
   ```bash
   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
@@ -206,7 +206,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
   [10:00:25] › ✔  Subscribed to hello
   ```
 
-+ 创建一个新的终端窗口并发布消息
+3. 创建一个新的终端窗口并发布消息。
 
   ```bash
   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
@@ -217,7 +217,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
   [10:00:58] › ✔  Message published
   ```
 
-+ 查看订阅终端窗口收到的消息
+4. 查看订阅终端窗口收到的消息。
 
   ```bash
   [10:00:58] › payload: hello world

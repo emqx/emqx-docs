@@ -59,8 +59,8 @@ spec:
 
   ```bash
   $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
+  NAME     STATUS    AGE
+  emqx     Running   10m
   ```
 
 获取 EMQX 集群的外部 IP 地址，并访问 EMQX 控制台。
@@ -79,35 +79,35 @@ $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].i
 
 MQTTX CLI 是一个开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发人员在没有 GUI 的情况下更快地开发和调试 MQTT 服务和应用程序。
 
-- 获取 EMQX 集群的外部 IP 地址
+1. 获取 EMQX 集群的外部 IP 地址。
 
     ```shell
     external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
     ```
 
-- 订阅消息
+2. 订阅消息。
 
     ```shell
     $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
-
+    
     [10:00:25] › …  Connecting...
     [10:00:25] › ✔  Connected
     [10:00:25] › …  Subscribing to hello...
     [10:00:25] › ✔  Subscribed to hello
     ```
 
-- 在新的终端窗口中发送消息
+3. 在新的终端窗口中发送消息。
 
     ```shell
     $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
-
+    
     [10:00:58] › …  Connecting...
     [10:00:58] › ✔  Connected
     [10:00:58] › …  Message Publishing...
     [10:00:58] › ✔  Message published
     ```
 
-- 在订阅的终端窗口中查看接收到的消息
+4. 在订阅的终端窗口中查看接收到的消息。
 
     ```shell
     [10:00:58] › payload: hello world

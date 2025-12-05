@@ -1,4 +1,4 @@
-# API Reference
+# API Reference (v2)
 
 ## Packages
 - [apps.emqx.io/v2](#appsemqxiov2)
@@ -423,5 +423,4 @@ _Appears in:_
 | `type` _string_ | Determines how cluster upgrade is performed.<br />* `Recreate`: Perform blue-green upgrade. | Recreate | Enum: [Recreate] <br /> |
 | `initialDelaySeconds` _integer_ | Number of seconds before connection evacuation starts. | 10 | Minimum: 0 <br /> |
 | `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Evacuation strategy settings. |  |  |
-
 

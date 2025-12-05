@@ -4,41 +4,41 @@
 
 Customize TLS certificates using the `extraVolumes` and `extraVolumeMounts` fields.
 
-## Create Secret Based On TLS Certificate
+## Create a Secret Based On TLS Certificate
 
-Secret is an object that contains a small amount of sensitive information such as passwords, tokens, or keys. In this article, we use secrets to store TLS certificate information, so we need to create one before creating the EMQX cluster.
+A secret is an object that contains a small amount of sensitive information, such as passwords, tokens, or keys. In this demonstration, we use secrets to store TLS certificate information, so we need to create one before creating the EMQX cluster.
 
 For more information, please refer to the [Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets) documentation.
 
-- Save the following as a YAML file and deploy it using the `kubectl apply` command:
+Save the following as a YAML file and deploy it using the `kubectl apply` command:
 
-  ```yaml
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: emqx-tls
-  type: kubernetes.io/tls
-  stringData:
-    ca.crt: |
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    tls.crt: |
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    tls.key: |
-      -----BEGIN RSA PRIVATE KEY-----
-      ...
-      -----END RSA PRIVATE KEY-----
-  ```
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: emqx-tls
+type: kubernetes.io/tls
+stringData:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+  tls.crt: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+  tls.key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    ...
+    -----END RSA PRIVATE KEY-----
+```
 
-  :::tip
-  In this example, the contents of the above three fields are omitted. Please fill them with your own certificate contents.
-  * `ca.crt` should contain the CA certificate.
-  * `tls.crt` should contain the server certificate.
-  * `tls.key` should contain the server private key.
-  :::
+:::tip
+In this example, the contents of the above three fields are omitted. Please fill them with your own certificate contents.
+* `ca.crt` should contain the CA certificate.
+* `tls.crt` should contain the server certificate.
+* `tls.key` should contain the server's private key.
+:::
 
 ## Configure EMQX Cluster
 
@@ -48,11 +48,11 @@ EMQX CRD `apps.emqx.io/v2beta1` provides the following fields to configure addit
 * `.spec.replicantTemplate.extraVolumes`
 * `.spec.replicantTemplate.extraVolumeMounts`
 
-In this article, we will use these fields to provide TLS certificates to the EMQX cluster.
+In this demonstration, we will use these fields to provide TLS certificates to the EMQX cluster.
 
 There are many types of Volumes. For information about Volumes, please refer to the [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret) documentation. Here we are using the `secret` volume type.
 
-- Save the following as a YAML file and deploy it using `kubectl apply`:
+1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -105,7 +105,7 @@ There are many types of Volumes. For information about Volumes, please refer to 
         type: LoadBalancer
   ```
 
-- Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready.
 
   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
 
@@ -119,13 +119,13 @@ There are many types of Volumes. For information about Volumes, please refer to 
 
 [MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool, designed to help developers quickly get started with MQTT services and applications.
 
-- Obtain the external IP of the EMQX listeners service.
+1. Obtain the external IP of the EMQX listeners service.
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
 
-- Subscribe to messages using MQTTX CLI.
+2. Subscribe to messages using MQTTX CLI.
 
   Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
 
@@ -137,7 +137,7 @@ There are many types of Volumes. For information about Volumes, please refer to 
   [10:00:25] › ✔ Subscribed to hello
   ```
 
-- In a separate terminal window, publish a message.
+3. In a separate terminal window, publish a message.
 
   ```bash
   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
@@ -147,7 +147,7 @@ There are many types of Volumes. For information about Volumes, please refer to 
   [10:00:58] › ✔ Message published
   ```
 
-- Observe the subscriber client receiving the message.
+4. Observe the subscriber client receiving the message.
 
   This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.
 

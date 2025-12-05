@@ -8,7 +8,7 @@ Modify the log level in the EMQX cluster.
 
 EMQX CRD `apps.emqx.io/v2beta1` supports configuring the log level of the EMQX cluster through `.spec.config.data`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for complete configuration reference.
 
-+ Save the following content as a YAML file and deploy it using `kubectl apply`:
+1. Save the following content as a YAML file and deploy it using `kubectl apply`:
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -32,7 +32,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the log level of the EMQX c
         type: LoadBalancer
   ```
 
-+ Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready.
 
   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
@@ -44,13 +44,13 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the log level of the EMQX c
 
 ## Verify Log Level
 
-+ Obtain the External IP of the EMQX cluster.
+1. Obtain the External IP of the EMQX cluster.
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
 
-+ Use MQTTX CLI to connect to the EMQX cluster.
+2. Use MQTTX CLI to connect to the EMQX cluster.
 
   [MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers start using MQTT services and applications more quickly.
 
@@ -60,7 +60,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the log level of the EMQX c
   [4/17/2023] [5:17:31 PM] › ✔ Connected
   ```
 
-+ View EMQX container logs.
+3. View EMQX container logs.
 
   ```bash
   $ kubectl logs emqx-core-0 -c emqx

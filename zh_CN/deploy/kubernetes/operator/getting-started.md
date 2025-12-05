@@ -6,7 +6,7 @@
 
 在部署 EMQX Operator 之前，请确认以下组件已经准备就绪：
 
-- 一个正在运行的 [Kubernetes 集群](https://kubernetes.io/docs/concepts/overview/)，关于 Kubernetes 的版本，请查看[如何选择 Kubernetes 版本](./operator.md)
+- 一个正在运行的 [Kubernetes](https://kubernetes.io/docs/concepts/overview/) 集群，版本需为 1.24 或更高。
 
 - 一个可以访问 Kubernetes 集群的 [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) 工具。您可以使用 `kubectl cluster-info` 命令检查 Kubernetes 集群的状态。
 
@@ -33,10 +33,6 @@
 
    或者按照 [cert-manager 安装指南](https://cert-manager.io/docs/installation/)来安装它。
 
-   ::: warning
-   如果您在 Google Kubernetes Engine（GKE） 上安装它。那么通过默认配置安装可能会导致 bootstraping 问题。所以通过增加 `--set global.leaderElection.namespace=cert-manager` 这个配置为 leader 选举使用不同的命名空间。查看 [cert-manager 兼容性](https://cert-manager.io/docs/installation/compatibility/)
-   :::
-
 2. 运行以下命令来安装 EMQX Operator。
 
    ```bash
@@ -51,7 +47,7 @@
 
    ```bash
    $ kubectl wait --for=condition=Ready pods -l "control-plane=controller-manager" -n emqx-operator-system
-
+   
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
@@ -71,7 +67,12 @@
    metadata:
       name: emqx-ee
    spec:
-      image: emqx/emqx-enterprise:5.8
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
    ```
 
    并使用 `kubectl apply` 命令来部署 EMQX。
@@ -80,17 +81,16 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)。
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 
    ```bash
    $ kubectl get emqx
-
-   NAME      IMAGE                        STATUS    AGE
-   emqx-ee   emqx/emqx-enterprise:5.8.6   Running   2m55s
+   NAME      STATUS    AGE
+   emqx-ee   Ready     2m55s
    ```
-:::
+   :::
 
 ::: tab EMQX Open Source 5
 
@@ -102,7 +102,7 @@
    metadata:
       name: emqx
    spec:
-      image: emqx/emqx:latest
+      image: emqx/emqx:@CE_VERSION@
    ```
 
    并使用 `kubectl apply` 命令来部署 EMQX。
@@ -111,17 +111,16 @@
    $ kubectl apply -f emqx.yaml
    ```
 
-   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)
+   关于 EMQX 自定义资源的更多信息，请查看 [API 参考](./reference/v2beta1-reference.md)。
 
 2. 检查 EMQX 集群状态，请确保 STATUS 为 Running，这可能需要一些时间等待 EMQX 集群准备就绪。
 
    ```bash
    $ kubectl get emqx
-
-   NAME   IMAGE              STATUS    AGE
-   emqx   emqx/emqx:latest   Running   2m55s
+   NAME      STATUS    AGE
+   emqx      Ready     2m55s
    ```
-:::
+   :::
 
 ::::
 
