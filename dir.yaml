@@ -141,12 +141,12 @@
                   path: deploy/kubernetes/operator/tasks/overview
                   collapsed: true
                   children:
-                    - title_en: Manage Enterprise License
-                      title_cn: 配置 License
-                      title_ja: Manage Enterprise License
+                    - title_en: Manage License
+                      title_cn: 管理 License
+                      title_ja: Manage License
                       path: deploy/kubernetes/operator/tasks/configure-emqx-license
                     - title_en: Enable TLS for Listeners
-                      title_cn: 在 EMQX 中开启 TLS
+                      title_cn: 为监听器启用 TLS
                       title_ja: Enable TLS for Listeners
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
                     - title_en: Change EMQX Configuration
@@ -162,7 +162,7 @@
                       title_ja: Enable Persistence
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
                     - title_en: Access EMQX Cluster through LoadBalancer
-                      title_cn: 通过 LoadBalancer 访问 EMQX Cluster
+                      title_cn: 通过 LoadBalancer 访问 EMQX 集群
                       title_ja: Access EMQX Cluster through LoadBalancer
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
                     - title_en: Perform Blue-Green Upgrade
@@ -182,7 +182,7 @@
                       title_ja: Monitor EMQX Cluster
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
                     - title_en: Rebalance Cluster Load
-                      title_cn: 负载均衡 EMQX 集群
+                      title_cn: 重新平衡集群负载
                       title_ja: Rebalance Cluster Load
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
