@@ -47,7 +47,7 @@ The operating limitations can be classified into:
 | Number of messages                    | Unlimited                 |
 | Total messages size                   | Unlimited                 |
 | **MQTT 5.0**                          |                           |
-| Number of User Properity              | 65535                     |
+| Number of User Properties             | 65535                     |
 | **MQTT Add-ons**                      |                           |
 | Number of topic rewrite rules         | 30                        |
 | Number of auto subscription rules     | 30                        |

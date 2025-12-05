@@ -5,6 +5,7 @@ extend-ignore-re = [
   "([A-Z0-9]{2,}-){2,}[A-Z0-9]+",  # cipher suites (PSK-3DES-EDE-CBC-SHA)
   "([A-Za-z]{2,}_){1,}[A-Za-z]+"   # snake_case config fields (may contain abbreviations)
 ]
+extend-ignore-words-re = ["^custome$"]
 
 [default.extend-words]
 # EMQX specific terms

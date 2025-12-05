@@ -1,6 +1,14 @@
 name: Check Docs
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - 'release-[0-9].[0-9]'
+      - 'release-[0-9].[0-9][0-9]'
+  pull_request:
+    branches:
+      - 'release-[0-9].[0-9]'
+      - 'release-[0-9].[0-9][0-9]'
 
 jobs:
   markdown_check:
@@ -13,6 +21,9 @@ jobs:
       run: |
         sudo npm install -g markdownlint-cli
         markdownlint -c .github/workflows/markdown_config.json ./
+
+    - name: Spell Check Repo
+      uses: crate-ci/typos@v1.40.0
 
   directory_check:
     runs-on: ubuntu-latest

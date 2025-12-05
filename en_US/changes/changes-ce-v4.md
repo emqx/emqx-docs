@@ -267,7 +267,7 @@ a node restart (and configuration change) is required.
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
@@ -703,7 +703,7 @@ The compare base of this change set is 4.3.12
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.

@@ -327,7 +327,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
    - **Key Encoding Mode** and **Value Encoding Mode**: Select the encoding mode for Kafka message key and message value.
 7. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
 
-   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
+   - Select `latest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
    - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
 8. Advanced settings (optional): See **Advanced Configurations.**
 9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.

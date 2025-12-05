@@ -177,7 +177,7 @@ FROM "t/#"
 
 Where,
 
-- The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array itmes `sensor` with the "`as name`"-syntax.
+- The `FOREACH`-clause specifies the `sensors` field in the input message's payload as the array to iterate over. It also names the array items `sensor` with the "`as name`"-syntax.
 - The `DO` clause specifies the fields to be included in the output:
   - `timestamp` is the timestamp from the input message's metadata.
   - `clientid` is the client ID from the input message's metadata.

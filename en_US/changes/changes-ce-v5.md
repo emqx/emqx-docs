@@ -3943,7 +3943,7 @@ _Release Date: 2022-07-07_
 
 ### Bug fixes
 
-- Websocket listener failed to read headers `X-Forwared-For` and `X-Forwarded-Port` [8415](https://github.com/emqx/emqx/pull/8415)
+- Websocket listener failed to read headers `X-Forwarded-For` and `X-Forwarded-Port` [8415](https://github.com/emqx/emqx/pull/8415)
 - Deleted `cluster_singleton` from MQTT bridge config document. This config is no longer applicable in 5.0 [8407](https://github.com/emqx/emqx/pull/8407)
 - Fix `emqx/emqx:latest` docker image publish to use the Erlang flavor, but not Elixir flavor [8414](https://github.com/emqx/emqx/pull/8414)
 - Changed the `exp` field in JWT auth to be optional rather than required to fix backwards compatability with 4.X releases. [8425](https://github.com/emqx/emqx/pull/8425)

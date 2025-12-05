@@ -1379,7 +1379,7 @@ a node restart (and configuration change) is required.
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
@@ -2061,7 +2061,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
   unacknowledged QoS1/QoS2 messages (defaults to 30s).
   Prior to this fix, unacknowledged messages buffered in the session are re-sent only once after session take-over, but not retried at configured interval.
 
-- Fix Rule-Engine action `Data to InfluxDB` exection failed since hot-upgrade from `e4.3.0..e4.3.10` to `e4.3.11..e4.3.17` [#1601](https://github.com/emqx/emqx-enterprise/pull/1601).
+- Fix Rule-Engine action `Data to InfluxDB` execution failed since hot-upgrade from `e4.3.0..e4.3.10` to `e4.3.11..e4.3.17` [#1601](https://github.com/emqx/emqx-enterprise/pull/1601).
 
 - Added validation for Kafka action parameters, Segment Bytes should not be greater than Max Bytes [#1608](https://github.com/emqx/emqx-enterprise/pull/1608).
 
@@ -2111,7 +2111,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
