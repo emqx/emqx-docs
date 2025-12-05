@@ -1,0 +1,51 @@
+[default]
+extend-ignore-re = [
+  "[A-Fa-f0-9]{8,}",                # hexadecimal tokens
+  "[A-Za-z0-9+/=]{12,}",           # base64-like random blobs
+  "([A-Z0-9]{2,}-){2,}[A-Z0-9]+",  # cipher suites (PSK-3DES-EDE-CBC-SHA)
+  "([A-Za-z]{2,}_){1,}[A-Za-z]+"   # snake_case config fields (may contain abbreviations)
+]
+extend-ignore-words-re = ["^custome$"]
+
+[default.extend-words]
+# EMQX specific terms
+emqx = "emqx"
+kuiper = "kuiper"
+neuron = "neuron"
+mqtt = "mqtt"
+suback = "suback"
+puback = "puback"
+qos = "qos"
+mosquitto = "mosquitto"
+alis = "alis"
+wxs = "wxs" 
+
+# Technical jargon
+k8s = "k8s"
+auth = "auth"
+repo = "repo"
+schemas = "schemas"
+
+# Ordinal numbers
+1st = "1st"
+2nd = "2nd"
+3rd = "3rd"
+
+# Words that appeared in false positives
+succee = "succee"
+smal = "smal"
+siz = "siz"
+iif = "iif"
+EACG = "EACG"
+EDE = "EDE"
+HPE = "HPE"
+AKS = "AKS"
+aks = "aks"
+TKE = "TKE"
+Sur = "Sur"
+
+[default.extend-identifiers]
+iif = "iif"
+
+[files]
+extend-exclude = ["redocly", "cfg-manual-docgen"]

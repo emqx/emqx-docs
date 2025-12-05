@@ -281,7 +281,7 @@ Check out the following links to learn more:
 
 **Blogs**:
 
-[MQTT and MongoDB: Crafting Seamless Synergy for IoT Data Mangement](https://www.emqx.com/en/blog/mqtt-and-mongodb-crafting-seamless-synergy-for-iot-data-mangement)
+[MQTT and MongoDB: Crafting Seamless Synergy for IoT Data Management](https://www.emqx.com/en/blog/mqtt-and-mongodb-crafting-seamless-synergy-for-iot-data-mangement)
 
 **Reports**:
 
