@@ -1,18 +1,22 @@
-# 采集 EMQX 的日志
+# 在 Kubernetes 中采集 EMQX 日志
 
-## 任务目标
+## 目标
 
 使用 ELK 收集 EMQX 集群日志。
 
 ## 部署 ELK
 
-ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简称，也被称为 Elastic Stack。[Elasticsearch](https://www.elastic.co/cn/elasticsearch/) 是一个基于 Lucene、分布式、通过 Restful 方式进行交互的近实时搜索平台框架，也被简称为：es。[Logstash](https://www.elastic.co/cn/logstash/) 是 ELK 的中央数据流引擎，用于从不同目标（文件/数据存储/MQ）收集的不同格式数据，经过过滤后支持输出到不同目的地（文件 /MQ/redis/elasticsearch/kafka 等）。[Kibana](https://www.elastic.co/cn/kibana/) 可以将 es 的数据通过页面展示出来，提供实时分析的功能。
+**ELK** 代表 Elasticsearch、Logstash 和 Kibana（也称为 Elastic Stack）：
+
+- [**Elasticsearch**](https://www.elastic.co/cn/elasticsearch/)：基于 Lucene 的分布式、近实时搜索和分析引擎，提供 REST API 与数据交互。
+- [**Logstash**](https://www.elastic.co/cn/logstash/)：用于从各种来源收集、转换和转发日志到不同目的地的主要数据流引擎。
+- [**Kibana**](https://www.elastic.co/cn/kibana/)：用于实时可视化和分析 Elasticsearch 数据的 Web 界面。
 
 ### 部署单节点 Elasticsearch
 
-部署单节点 Elasticsearch 的方法较简单，可以参考下面的 YAML 编排文件，快速部署一个 Elasticsearch 集群。
+部署单节点 Elasticsearch 集群相对简单。您可以使用以下 YAML 配置文件快速部署 Elasticsearch 集群。
 
-- 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
   ```yaml
   ---
@@ -164,9 +168,13 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
           requests:
             storage: 10Gi
   ```
-  > `storageClassName` 字段表示 `StorageClass` 的名称，可以使用命令 `kubectl get storageclass` 获取 Kubernetes 集群已经存在的 StorageClass，也可以根据自己需求自行创建 StorageClass。
+  :::tip
+  使用 `storageClassName` 字段选择合适的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 列出 Kubernetes 集群中已存在的 StorageClass，或根据您的需求创建 StorageClass。
+  :::
 
-- 等待 es 就绪，可以通过 `kubectl get` 命令查看 es pod 的状态，请确保 `STATUS` 为 `Running`
+2. 等待 Elasticsearch 就绪。
+
+  使用 `kubectl get` 命令检查 Elasticsearch Pod 的状态，并确保 `STATUS` 为 `Running`。
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=elasticsearch"
@@ -178,7 +186,7 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
 
 本文使用 `Deployment` 的方式部署 Kibana，对搜集到的日志进行可视化展示，`Service` 中使用的是 `NodePort`。
 
-- 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
   ```yaml
   ---
@@ -191,6 +199,7 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
       k8s-app: kibana
   spec:
     type: NodePort
+    ports:
     - port: 5601
       nodePort: 35601
       protocol: TCP
@@ -407,11 +416,13 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
   filebeat-vwrjn   1/1     Running   0          45m
   ```
 
-## 部署 Logstash 对日志进行清洗
+### 部署 Logstash
 
-这里主要是结合业务需要和对日志的二次利用，加入了 Logstash 进行日志清洗。本文使用 Logstash 的 [Beats Input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html) 插件来采集日志，使用 [Ruby filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html) 插件来过滤日志。Logstash 还提供很多其他输入和过滤插件供用户使用，大家可以根据自己的业务需求配置合适的插件。
+Logstash 用于日志处理和清洗。
 
-- 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它
+在本演练中，我们使用 Logstash 的 [Beats Input 插件](https://www.elastic.co/guide/cn/logstash/current/plugins-inputs-beats.html) 收集日志，使用 [Ruby filter 插件](https://www.elastic.co/guide/cn/logstash/current/plugins-filters-ruby.html) 过滤日志。Logstash 还提供了许多其他输入和过滤插件，您可以根据业务需求进行配置。
+
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
   ```yaml
   ---
@@ -564,19 +575,21 @@ ELK 是 Elasticsearch、Logstash、Kibana 三大开源框架首字母大写简�
 
 ## 部署 EMQX 集群
 
-部署 EMQX 集群可以参考文档 [部署 EMQX](../getting-started.md)
+要部署 EMQX 集群，请参阅文档 [部署 EMQX](../getting-started.md)。
 
 ## 验证日志采集
 
-- 首先登录 Kibana 界面，打开菜单中的 stack management 模块，点开索引管理，可以发现，已经有采集到的日志索引了
+1. 登录 Kibana 界面，打开菜单中的堆栈管理模块，点击 _Index Management_。您可以看到日志索引已经被采集。
 
   ![](./assets/configure-log-collection/index-manage.png)
 
-- 为了能够在 Kibana 中能够 discover 查看日志，因此需要设置一个索引匹配，选择 index patterns，然后点击创建
+2. 要在 Kibana 中发现和查看日志，您需要创建索引模式。选择索引模式并点击 _Create_。
 
   ![](./assets/configure-log-collection/create-index-0.png)
 
   ![](./assets/configure-log-collection/create-index-1.png)
+
+3. 最后，验证 EMQX 集群日志已被采集。
 
 - 最后验证是否采集到 EMQX 集群日志
 

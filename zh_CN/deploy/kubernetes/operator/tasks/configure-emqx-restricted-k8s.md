@@ -111,24 +111,24 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
 
 ## 配置 EMQX 集群
 
-1. 将以下内容保存为 YAML 文件，并通过 `kubectl apply` 命令部署：
+1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 命令部署：
 
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: EMQX
-metadata:
-  name: emqx
-  namespace: emqx
-spec:
-  image: ${REGISTRY}/emqx/emqx-enterprise:${EMQX_VERSION}
-  config:
-    data: |
-      license {
-        key = "..."
-      }
-```
+  ```yaml
+  apiVersion: apps.emqx.io/v2beta1
+  kind: EMQX
+  metadata:
+    name: emqx
+    namespace: emqx
+  spec:
+    image: ${REGISTRY}/emqx/emqx-enterprise:${EMQX_VERSION}
+    config:
+      data: |
+        license {
+          key = "..."
+        }
+  ```
 
-2. 等待 EMQX 集群就绪。可通过以下命令检查状态，请确保 `STATUS` 为 `Running`（可能需要一些时间）：
+2. 等待 EMQX 集群就绪，您可以通过 `kubectl get` 命令检查 EMQX 集群的状态，请确保 `STATUS` 为 `Running`，这可能需要一些时间。
 
 ```bash
 $ kubectl get emqx emqx

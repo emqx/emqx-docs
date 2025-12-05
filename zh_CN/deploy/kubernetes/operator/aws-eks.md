@@ -1,22 +1,26 @@
 # 在 Amazon EKS 中部署 EMQX
 
-EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）上部署 EMQX。Amazon EKS 是一种托管的 Kubernetes 服务，可让您轻松部署、管理和扩展容器化应用程序。EKS 提供了 Kubernetes 控制平面和节点组，自动处理节点替换、升级和修补。它支持 AWS 服务，如 Load Balancers、RDS 和 IAM，并与其他 Kubernetes 生态系统工具无缝集成。详情请查看 [什么是 Amazon EKS](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/what-is-eks.html)
+EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）上运行。Amazon EKS 是一种托管的 Kubernetes 服务，可简化容器化应用程序的部署、管理和扩展。EKS 提供了 Kubernetes 控制平面和节点组，自动处理节点替换、升级和修补。它支持 AWS 服务，如 Load Balancers、RDS 和 IAM，并与其他 Kubernetes 生态系统工具无缝集成。
+
+有关详细介绍，请参阅 [什么是 Amazon EKS](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/what-is-eks.html)。
 
 ## 前提条件
 
-在开始之前，您需要准备以下内容：
+在 EKS 上部署 EMQX 之前，请确保您已完成以下先决条件：
 
-- 开通 Amazon 容器服务，并创建一个 EKS 集群，具体请参考：[创建 Amazon EKS 集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started.html)
+- 创建 EKS 集群。<br/>有关更多详细信息，请参阅 [创建 Amazon EKS 集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started.html)。
 
-- 通过本地安装 kubectl 工具连接 EKS 集群：具体请参考：[使用 kubectl 连接集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)
+- 配置 kubectl 以连接到您的 EKS 集群。<br/>有关更多详细信息，请参阅 [使用 kubectl 连接集群](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/getting-started-console.html#eks-configure-kubectl)。
 
-- 在集群上部署 AWS Load Balancer Controller，具体请参考：[创建网络负载均衡器](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/network-load-balancing.html)
+- 在集群上部署 AWS Load Balancer Controller。<br/>有关更多详细信息，请参阅 [创建网络负载均衡器](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/network-load-balancing.html)。
 
-- 安装 EMQX Operator：具体请参考：[安装 EMQX Operator](./getting-started.md)
+- 在集群上安装 Amazon EBS CSI 驱动程序。<br/>有关更多详细信息，请参阅 [Amazon EBS CSI 驱动程序](https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/ebs-csi.html)。
 
-## 快速部署一个 EMQX 集群
+- 安装 EMQX Operator。<br/>有关更多详细信息，请参阅 [安装 EMQX Operator](./getting-started.md)。
 
-下面是 EMQX 自定义资源的相关配置。你可以根据你想部署的 EMQX 版本选择相应的 APIVersion。关于具体的兼容性关系，请参考 [EMQX 与 EMQX Operator 的兼容性列表](./operator.md)。
+## 快速部署 EMQX 集群
+
+以下示例演示了在 EKS 上部署的相关 EMQX 自定义资源（CR）配置。
 
 :::: tabs type:card
 ::: tab apps.emqx.io/v2beta1
@@ -92,7 +96,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+
   192.168.1.200
   ```
 
@@ -163,7 +167,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ kubectl get svc emqx-ee -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
+
   192.168.1.200
   ```
 
@@ -199,7 +203,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
-  
+
   [10:00:25] › …  Connecting...
   [10:00:25] › ✔  Connected
   [10:00:25] › …  Subscribing to hello...
@@ -210,7 +214,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 
   ```bash
   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
-  
+
   [10:00:58] › …  Connecting...
   [10:00:58] › ✔  Connected
   [10:00:58] › …  Message Publishing...
