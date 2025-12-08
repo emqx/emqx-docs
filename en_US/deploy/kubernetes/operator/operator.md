@@ -16,7 +16,7 @@ EMQX Operator includes, but is not limited to, the following features:
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## EMQX and EMQX Operator compatibility
+## EMQX and EMQX Operator Compatibility
 
 The current EMQX Operator release series 2.2.x is compatible with the following EMQX versions:
 - EMQX Open Source & Enterprise 5.1.1 ~ 5.8.x

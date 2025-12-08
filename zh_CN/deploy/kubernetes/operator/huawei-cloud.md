@@ -89,7 +89,7 @@ EMQX Operator 支持在华为云容器引擎（Cloud Container Engine，简称 C
 
 3. 获取 EMQX 集群的 External IP，访问 EMQX 控制台。
 
-  EMQX Operator 会创建两个 EMQX Service 资源，一个是 `emqx-dashboard`，一个是 `emqx-listeners`，分别对应 EMQX 控制台和 EMQX 监听端口。
+EMQX Operator 会创建两个 EMQX Service 资源，一个是 `emqx-dashboard`，一个是 `emqx-listeners`，分别对应 EMQX 控制台和 EMQX 监听端口。
 
   ```bash
   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'

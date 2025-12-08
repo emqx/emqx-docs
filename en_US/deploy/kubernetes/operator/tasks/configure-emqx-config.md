@@ -42,9 +42,7 @@ EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration
    The content of the `.spec.config.data` field is supplied as [`emqx.conf` configuration file](../../../../configuration/configuration.md#immutable-configuration-file) to the EMQX container.
    :::
 
-2. Wait for the EMQX cluster to become ready.
-
-  Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
+2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
    $ kubectl get emqx emqx

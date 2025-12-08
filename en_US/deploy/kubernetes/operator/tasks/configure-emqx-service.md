@@ -14,87 +14,87 @@ Refer to the [respective documentation](../reference/v2beta1-reference.md#emqxsp
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  ::: tip
-  By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
+   ::: tip
 
-  Users can configure new or existing listeners through `.spec.config.data`, or manage them through the EMQX Dashboard.
+   By default, EMQX starts an MQTT TCP listener `tcp-default` on port 1883 and a Dashboard HTTP listener on port 18083.
 
-  EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
-  :::
+   Users can configure new or existing listeners through `.spec.config.data`, or manage them through the EMQX Dashboard.
+
+   EMQX Operator automatically reflects the default listener information in the Service resources. When there is a conflict between the Service configured by the user and the listener configured by EMQX (name or port fields are repeated), EMQX Operator prioritizes the user configuration.
+
+   :::
 
 2. Wait for the EMQX cluster to become ready.
 
-  Check the status of the EMQX cluster with `kubectl get` and make sure that `STATUS` is `Ready`. This may take some time.
+   Check the status of the EMQX cluster with `kubectl get` and make sure that `STATUS` is `Ready`. This may take some time.
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## Add New Listener through EMQX Dashboard
 
 1. Add a new listener.
 
-  Open the EMQX Dashboard and navigate to _Configuration_ → _Listeners_.
+   - Open the EMQX Dashboard and navigate to **Management** -> **Listeners**.
 
-  Click the _Add Listener_ button to add a listener with the name `test` and port `1884`, as shown in the following figure:
+   - Click the **Add Listener** to add a new listener with the name `test` and port `1884`, as shown in the following figure:
 
-  <div style="text-align:center">
-  <img src="./assets/configure-service/emqx-add-listener.png" style="zoom: 50%;" />
-  </div>
+     ![emqx-add-listener](./assets/configure-service/emqx-add-listener.png)
 
-  Then click the _Add_ button to create the listener, as shown in the following figure:
+   - Click **Add** to create the listener. As shown in the following figure, the new listener has been created.
 
-  <img src="./assets/configure-service/emqx-listeners.png" style="zoom:50%;" />
-
-  As seen in the figure, the new listener has been created.
+     ![emqx-listeners](./assets/configure-service/emqx-listeners.png)
 
 2. Check if the new listener is reflected in the Service.
 
-  ```bash
-  kubectl get svc
-  
-  NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                                         AGE
-  emqx-dashboard   NodePort   10.105.110.235   <none>        18083:32012/TCP                                 13m
-  emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
-  ```
+   ```bash
+   kubectl get svc
+   
+   NAME             TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)                                         AGE
+   emqx-dashboard   NodePort   10.105.110.235   <none>        18083:32012/TCP                                 13m
+   emqx-listeners   NodePort   10.106.1.58      <none>        1883:32010/TCP,1884:30763/TCP                   12m
+   ```
 
-  From this output, we can see that the newly added listener on port 1884 has been reflected in the `emqx-listeners` Service resource.
+   This output shows that the newly added listener on port 1884 has been reflected in the `emqx-listeners` Service resource.
 
 ## Connect to the New Listener Using MQTTX
 
 1. Obtain the external IP of the EMQX listeners service.
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-  ```
+   ```bash
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
 2. Connect to the new listener using MQTTX CLI.
 
-  ```bash
-  $ mqttx conn -h ${external_ip} -p 1884
-  
-  [4/17/2023] [5:17:31 PM] › … Connecting...
-  [4/17/2023] [5:17:31 PM] › ✔ Connected
-  ```
+   ```bash
+   $ mqttx conn -h ${external_ip} -p 1884
+   
+   [4/17/2023] [5:17:31 PM] › … Connecting...
+   [4/17/2023] [5:17:31 PM] › ✔ Connected
+   ```
+
+   

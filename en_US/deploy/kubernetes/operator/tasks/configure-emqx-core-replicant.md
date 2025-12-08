@@ -29,50 +29,48 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring Core nodes of the EMQX clus
 
 1. Save the following content as a YAML file and deploy using `kubectl apply`.
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        replicas: 2
-        resources:
-          requests:
-            cpu: 250m
-            memory: 512Mi
-    replicantTemplate:
-      spec:
-        replicas: 3
-        resources:
-          requests:
-            cpu: 250m
-            memory: 1Gi
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         replicas: 2
+         resources:
+           requests:
+             cpu: 250m
+             memory: 512Mi
+     replicantTemplate:
+       spec:
+         replicas: 3
+         resources:
+           requests:
+             cpu: 250m
+             memory: 1Gi
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  In the example above, the EMQX CR defines an EMQX cluster consisting of two Core nodes and three Replicant nodes.
+   In the example above, the EMQX CR defines an EMQX cluster consisting of two Core nodes and three Replicant nodes.
 
-  Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
+   Core nodes require a minimum of 512Mi of memory, and Replicant nodes require a minimum of 1Gi of memory. You can adjust these constraints according to the actual business load. Typically, Replicant nodes accept all client requests, so the resources required by Replicant nodes may be higher to accommodate many concurrent connections.
 
-2. Wait for the EMQX cluster to become ready.
+2. Wait for the EMQX cluster to become ready. Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
 
-  Check the status of the EMQX cluster with `kubectl get`, ensuring that `STATUS` is `Ready`. This may take some time.
-
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## Verify EMQX Cluster
 

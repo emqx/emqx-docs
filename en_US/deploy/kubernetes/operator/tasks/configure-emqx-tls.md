@@ -54,66 +54,66 @@ There are many types of Volumes. For information about Volumes, please refer to 
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
-      data: |
-        listeners.ssl.default {
-          bind = "0.0.0.0:8883"
-          ssl_options {
-            cacertfile = "/mounted/cert/ca.crt"
-            certfile = "/mounted/cert/tls.crt"
-            keyfile = "/mounted/cert/tls.key"
-            gc_after_handshake = true
-            handshake_timeout = 5s
-          }
-        }
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        extraVolumes:
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            mountPath: /mounted/cert
-    replicantTemplate:
-      spec:
-        extraVolumes:
-          # Create a `secret` volume type named `emqx-tls`:
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            # Directory where the TLS certificate is mounted to EMQX nodes:
-            mountPath: /mounted/cert
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
+       data: |
+         listeners.ssl.default {
+           bind = "0.0.0.0:8883"
+           ssl_options {
+             cacertfile = "/mounted/cert/ca.crt"
+             certfile = "/mounted/cert/tls.crt"
+             keyfile = "/mounted/cert/tls.key"
+             gc_after_handshake = true
+             handshake_timeout = 5s
+           }
+         }
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         extraVolumes:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             mountPath: /mounted/cert
+     replicantTemplate:
+       spec:
+         extraVolumes:
+           # Create a `secret` volume type named `emqx-tls`:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             # Directory where the TLS certificate is mounted to EMQX nodes:
+             mountPath: /mounted/cert
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
 2. Wait for the EMQX cluster to become ready.
 
-  Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
+   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
 
-  ```bash
-  $ kubectl get emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+   ```bash
+   $ kubectl get emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## Verify TLS Connection using MQTTX
 
@@ -121,36 +121,40 @@ There are many types of Volumes. For information about Volumes, please refer to 
 
 1. Obtain the external IP of the EMQX listeners service.
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
+   ```bash
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
+   ```
 
 2. Subscribe to messages using MQTTX CLI.
 
-  Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
+   Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
 
-  ```bash
-  mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
-  [10:00:25] › … Connecting...
-  [10:00:25] › ✔ Connected
-  [10:00:25] › … Subscribing to hello...
-  [10:00:25] › ✔ Subscribed to hello
-  ```
+   ```bash
+   mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
+   [10:00:25] › … Connecting...
+   [10:00:25] › ✔ Connected
+   [10:00:25] › … Subscribing to hello...
+   [10:00:25] › ✔ Subscribed to hello
+   ```
 
 3. In a separate terminal window, publish a message.
 
-  ```bash
-  mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
-  [10:00:58] › … Connecting...
-  [10:00:58] › ✔ Connected
-  [10:00:58] › … Message Publishing...
-  [10:00:58] › ✔ Message published
-  ```
+   ```bash
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
+   ```
 
 4. Observe the subscriber client receiving the message.
 
-  This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.
+   ```bash
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
+   ```
 
-  ```bash
-  [10:00:58] › payload: hello world
-  ```
+   This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.

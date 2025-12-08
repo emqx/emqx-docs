@@ -16,89 +16,94 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        volumeClaimTemplates:
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 20Mi
-          accessModes:
-            - ReadWriteOnce
-        replicas: 3
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         volumeClaimTemplates:
+           storageClassName: standard
+           resources:
+             requests:
+               storage: 20Mi
+           accessModes:
+             - ReadWriteOnce
+         replicas: 3
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  :::tip
-  Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
-  :::
+   ::: tip
+
+   Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) for EMQX data. Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
+
+   :::
 
 2. Wait for the EMQX cluster to become ready.
 
-  Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
+   Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## Verify Persistence
 
 1. Create a test rule in the EMQX Dashboard.
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-  ```
+   ```bash
+   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-  - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
-  - Navigate to _Data Integration_ → _Rules_ to create a new rule.
-  - Attach a simple action to this rule.
-  - Click _Create_ to generate a rule, as shown in the following figure:
+     - Log in to the EMQX Dashboard at `http://${external_ip}:18083`.
 
-  ![](./assets/configure-emqx-persistent/emqx-core-action.png)
+     - Navigate to **Integration** -> **Rules** to create a new rule.
 
-  Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
+     - Attach a simple action to this rule.
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
+     - Click **Save** to generate a rule, as shown in the following figure:
+
+       ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
+
+   Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
+
+   ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
 2. Delete the old EMQX cluster.
 
-  Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
+   Run the following command to delete the EMQX cluster, where `emqx.yaml` is the file you used to deploy the cluster earlier:
 
-  ```bash
-  $ kubectl delete -f emqx.yaml
-  emqx.apps.emqx.io "emqx" deleted
-  ```
+   ```bash
+   $ kubectl delete -f emqx.yaml
+   emqx.apps.emqx.io "emqx" deleted
+   ```
 
 3. Re-deploy the EMQX cluster.
 
-  Run the following command to re-deploy the EMQX cluster:
+   Run the following command to re-deploy the EMQX cluster:
 
-  ```bash
-  $ kubectl apply -f emqx.yaml
-  emqx.apps.emqx.io/emqx created
-  ```
+   ```bash
+   $ kubectl apply -f emqx.yaml
+   emqx.apps.emqx.io/emqx created
+   ```
 
-  Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
+4. Wait for the EMQX cluster to be ready. Access the EMQX Dashboard through your browser to verify that the previously created rule still exists, as shown in the following figure:
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
 
-  The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.
+   The `emqx-persistent-test` rule created in the old cluster still exists in the new cluster, which confirms that the persistence configuration is working correctly.

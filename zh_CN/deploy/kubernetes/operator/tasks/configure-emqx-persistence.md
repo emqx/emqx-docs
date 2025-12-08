@@ -16,89 +16,90 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.coreTemplate.spec.volumeClai
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx:@EE_VERSION@
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        volumeClaimTemplates:
-          storageClassName: standard
-          resources:
-            requests:
-              storage: 20Mi
-          accessModes:
-            - ReadWriteOnce
-        replicas: 3
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         volumeClaimTemplates:
+           storageClassName: standard
+           resources:
+             requests:
+               storage: 20Mi
+           accessModes:
+             - ReadWriteOnce
+         replicas: 3
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+   ```
 
-  :::tip
-  使用 `storageClassName` 字段为 EMQX 数据选择合适的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 列出 Kubernetes 集群中已存在的 StorageClass，或根据您的需求创建 StorageClass。
-  :::
+   ::: tip
 
-2. 等待 EMQX 集群就绪。
+   使用 `storageClassName` 字段为 EMQX 数据选择合适的 [StorageClass](https://kubernetes.io/zh-cn/docs/concepts/storage/storage-classes/)。运行 `kubectl get storageclass` 列出 Kubernetes 集群中已存在的 StorageClass，或根据您的需求创建 StorageClass。
 
-  使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+   :::
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   STATUS   AGE
-  emqx   Ready    10m
-  ```
+2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## 验证持久化
 
 1. 在 EMQX Dashboard 中创建测试规则。
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
-  ```
+   ```bash
+   external_ip=$(kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-  - 在 `http://${external_ip}:18083` 登录 EMQX Dashboard。
-  - 导航到 _Data Integration_ → _Rules_ 创建新规则。
-  - 为此规则附加简单动作。
-  - 点击 _Create_ 生成规则，如下图所示：
+   - 在 `http://${external_ip}:18083` 登录 EMQX Dashboard。
 
-  ![](./assets/configure-emqx-persistent/emqx-core-action.png)
+   - 导航到**集成** -> **规则**创建新规则。
 
-  规则创建成功后，页面上会出现一条 ID 为 `emqx-persistent-test` 的相应记录，如下图所示：
+   - 为此规则附加简单动作。
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
+     ![](./assets/configure-emqx-persistent/emqx-core-action.png)
+
+   - 点击**保存**生成规则。规则创建成功后，页面上会出现一条 ID 为 `emqx-persistent-test` 的相应记录，如下图所示：
+
+     ![](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
 2. 删除旧 EMQX 集群。
 
-  运行以下命令删除 EMQX 集群，其中 `emqx.yaml` 是您之前用于部署集群的文件：
+   运行以下命令删除 EMQX 集群，其中 `emqx.yaml` 是您之前用于部署集群的文件：
 
-  ```bash
-  $ kubectl delete -f emqx.yaml
-  emqx.apps.emqx.io "emqx" deleted
-  ```
+   ```bash
+   $ kubectl delete -f emqx.yaml
+   emqx.apps.emqx.io "emqx" deleted
+   ```
 
 3. 重新部署 EMQX 集群。
 
-  运行以下命令重新部署 EMQX 集群：
+   运行以下命令重新部署 EMQX 集群：
 
-  ```bash
-  $ kubectl apply -f emqx.yaml
-  emqx.apps.emqx.io/emqx created
-  ```
+   ```bash
+   $ kubectl apply -f emqx.yaml
+   emqx.apps.emqx.io/emqx created
+   ```
 
-  等待 EMQX 集群就绪。通过浏览器访问 EMQX Dashboard 验证之前创建的规则是否仍然存在，如下图所示：
+4. 等待 EMQX 集群就绪。通过浏览器访问 EMQX Dashboard 验证之前创建的规则是否仍然存在，如下图所示：
 
-  ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
+   ![](./assets/configure-emqx-persistent/emqx-core-rule-new.png)
 
-  在旧集群中创建的 `emqx-persistent-test` 规则在新集群中仍然存在，这确认了持久化配置工作正常。
+   在旧集群中创建的 `emqx-persistent-test` 规则在新集群中仍然存在，这确认了持久化配置工作正常。

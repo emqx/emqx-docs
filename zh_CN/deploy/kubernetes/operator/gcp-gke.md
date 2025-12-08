@@ -11,9 +11,8 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
 
 - 用于连接到 GKE 集群的有效 `kubectl` 配置
   - 要使用本地 `kubectl` 安装连接，请参阅 [连接到 GKE 集群](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)。
-
-    要直接从 GCP 控制台使用 Cloud Shell 连接，请参阅 [使用 Cloud Shell 管理 GKE 集群](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster)。
-
+  - 要直接从 GCP 控制台使用 Cloud Shell 连接，请参阅 [使用 Cloud Shell 管理 GKE 集群](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster)。
+  
 - 在集群上安装 EMQX Operator
   - 有关更多详细信息，请参阅 [安装 EMQX Operator](./getting-started.md)。
 

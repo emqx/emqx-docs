@@ -20,11 +20,17 @@ EMQX Operator 包括但不限于以下功能：
 
 当前 EMQX Operator 2.2.x 版本系列与以下 EMQX 版本兼容：
 - EMQX 开源版和企业版 5.1.1 ~ 5.8.x
-- EMQX 5.9 和 5.10（有限支持）
-- EMQX 6.0 及更高版本（有限支持）
+- EMQX 5.9 和 5.10 <sup>*</sup>
+- EMQX 6.0 及更高版本 <sup>*</sup>
 
 支持以下 API 版本：
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
 - apps.emqx.io/v2alpha1（已弃用）
 - apps.emqx.io/v1beta4
 - apps.emqx.io/v1beta3（已弃用）
+
+::: tip
+
+<sup>*</sup> 这些版本暂不支持自动管理持久存储（Durable Storage）副本的功能，该功能计划在即将发布的 2.3.0 版本中提供。
+
+:::

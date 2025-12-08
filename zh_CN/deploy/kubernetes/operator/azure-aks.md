@@ -7,7 +7,7 @@ EMQX Operator 支持在 Azure Kubernetes Service (AKS) 上部署 EMQX。AKS 通�
 在 AKS 上部署 EMQX 之前，请确保满足以下先决条件：
 
 - Azure 订阅中的 AKS 集群
-  * 有关创建和配置 AKS 集群的指导，请参阅 [Azure Kubernetes Service 文档](https://learn.microsoft.com/zh-cn/azure/aks/)。
+  - 有关创建和配置 AKS 集群的指导，请参阅 [Azure Kubernetes Service 文档](https://learn.microsoft.com/zh-cn/azure/aks/)。
 
 - 用于连接到 AKS 集群的有效 `kubectl` 配置
   - 要使用本地安装的 `kubectl` 连接，请按照 [连接到 AKS 集群](https://learn.microsoft.com/zh-cn/azure/aks/learn/quick-kubernetes-deploy-cli) 中的说明操作。

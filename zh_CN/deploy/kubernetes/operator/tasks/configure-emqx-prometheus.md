@@ -11,36 +11,36 @@
 
 ## 部署 EMQX 集群
 
-EMQX 通过 [Prometheus 兼容的 HTTP API](../../../../observability/prometheus.md) 暴露各种指标。
+1. EMQX 通过 [Prometheus 兼容的 HTTP API](../../../../observability/prometheus.md) 暴露各种指标。
 
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: EMQX
-metadata:
-  name: emqx
-spec:
-  image: emqx/emqx:@EE_VERSION@
-  config:
-    data: |
-      license {
-        key = "..."
-      }
-```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+   ```
 
-将上述内容保存为 `emqx.yaml` 并执行以下命令部署 EMQX 集群：
+2. 将上述内容保存为 `emqx.yaml` 并执行以下命令部署 EMQX 集群：
 
-```bash
-$ kubectl apply -f emqx.yaml
-emqx.apps.emqx.io/emqx created
-```
+   ```bash
+   $ kubectl apply -f emqx.yaml
+   emqx.apps.emqx.io/emqx created
+   ```
 
-检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
+3. 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
 
-```bash
-$ kubectl get emqx emqx
-NAME   STATUS   AGE
-emqx   Ready    10m
-```
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
 ## 创建 API Secret
 

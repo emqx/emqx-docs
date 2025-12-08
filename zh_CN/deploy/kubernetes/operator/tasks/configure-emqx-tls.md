@@ -121,36 +121,34 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
 
 1. 获取 EMQX 监听器服务的外部 IP。
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
+   ```bash
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
+   ```
 
-2. 使用 MQTTX CLI 订阅消息。
+2. 使用 MQTTX CLI 订阅消息。连接到 TLS 监听器端口 8883，使用 `--insecure` 标志跳过证书验证。
 
-  连接到 TLS 监听器端口 8883，使用 `--insecure` 标志跳过证书验证。
-
-  ```bash
-  mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
-  [10:00:25] › … Connecting...
-  [10:00:25] › ✔ Connected
-  [10:00:25] › … Subscribing to hello...
-  [10:00:25] › ✔ Subscribed to hello
-  ```
+   ```bash
+   mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
+   [10:00:25] › … Connecting...
+   [10:00:25] › ✔ Connected
+   [10:00:25] › … Subscribing to hello...
+   [10:00:25] › ✔ Subscribed to hello
+   ```
 
 3. 在单独的终端窗口中发布消息。
 
-  ```bash
-  mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
-  [10:00:58] › … Connecting...
-  [10:00:58] › ✔ Connected
-  [10:00:58] › … Message Publishing...
-  [10:00:58] › ✔ Message published
-  ```
+   ```bash
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
+   ```
 
 4. 观察订阅客户端接收消息。
 
-  这表明发布者和订阅者客户端都通过 TLS 连接成功与代理通信。
+   ```bash
+   [10:00:58] › payload: hello world
+   ```
 
-  ```bash
-  [10:00:58] › payload: hello world
-  ```
+   这表明发布者和订阅者客户端都通过 TLS 连接成功与代理通信。
