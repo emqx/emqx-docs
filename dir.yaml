@@ -998,6 +998,16 @@
             - emqx-ai/sdks/mcp-sdk-paho-c
             - emqx-ai/sdks/mcp-sdk-python
             - emqx-ai/sdks/mcp-sdk-typescript
+- title_en: Migration Guide
+  title_cn: 迁移指南
+  title_ja: Migration Guide
+  path: migration/overview
+  collapsed: true
+  children:
+    - migration/migrate-from-aws-iot-core
+    - migration/migrate-from-azure-iot-hub
+    - migration/migrate-from-hivemq
+    - migration/migrate-from-mosquitto
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
