@@ -21,10 +21,11 @@ The following table summarizes the parameter changes required at a high level.
 | **Parameter** | **AWS IoT Core (Example)** | **EMQX (Example)** | **Notes** |
 | ------------- | -------------------------- | ------------------ | --------- |
 | **Endpoint Hostname**  | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com` | `mqtt.example.com` | Update device client code/firmware |
+| **Endpoint Port**  | `8883` (MQTT/TLS), `443` (MQTT/TLS or Websocket/TLS) | `8883` (MQTT/TLS), `8084` (Websocket/TLS) | No action if using port `8883`, otherwise will required device client code/firmware update |
 | **Device Certificate** | `device-001.cert.pem` | `device-001.cert.pem` | No change. The device continues using its existing certificate signed by your CA. |
 | **Device Private Key** | `device-001.key.pem` | `device-001.key.pem` | No change. The device continues using its existing private key. |
 | **Server Verification** (Device trusts Server) | Device client uses `AmazonRootCA1.pem` | Device client must be updated to use `emqx-server-ca.pem` | The client must trust the CA that issued the EMQX server's certificate. |
-| **Client Verification** (Server trusts Device) | AWS IoT Core trusts your registered CA | EMQX listener's `cacertfile` must be set to `your-ca.pem` | EMQX must be configured to trust the same CA you registered with AWS IoT Core.|
+| **Client Verification** (Server trusts Device) | AWS IoT Core trusts your registered CA | EMQX listener's `cacertfile` must be set to `your-ca.pem` and `verify` must be set to `verify_peer` | EMQX must be configured to trust the same CA you registered with AWS IoT Core.|
 
 ## Phase 1: Prepare Your CA Certificate
 
