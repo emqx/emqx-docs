@@ -1,4 +1,4 @@
-# Migrating from Mosquitto to EMQX
+# Migrate from Mosquitto to EMQX
 
 This guide outlines the process of migrating an existing Eclipse Mosquitto deployment to EMQX. It is designed for administrators seeking to move from a lightweight, single-instance broker to a scalable, distributed MQTT platform. The migration leverages EMQX’s compatibility with standard MQTT protocols and provides a clear path for transferring configuration, security credentials, and integration logic.
 
@@ -6,9 +6,9 @@ This guide outlines the process of migrating an existing Eclipse Mosquitto deplo
 
 The migration process consists of three main phases:
 
-1. **Inventory Mosquitto Assets** – Collect configuration files (`mosquitto.conf`), security artifacts (password files, ACLs, certificates), and understand the current data flow.
-2. **Configure EMQX** – Translate Mosquitto settings into EMQX’s HOCON configuration, import user credentials, and recreate access controls and data integrations using the Rule Engine.
-3. **Update Devices & Integrations** – Redirect devices to the EMQX cluster (often seamless due to port compatibility) and validate system behavior.
+1. **Inventory Mosquitto Assets**: Collect configuration files (`mosquitto.conf`), security artifacts (password files, ACLs, certificates), and understand the current data flow.
+2. **Configure EMQX**: Translate Mosquitto settings into EMQX’s configuration file (`emqx.conf`) in HOCON format, import user credentials, and recreate access controls and data integrations using the Rule Engine.
+3. **Update Devices & Integrations**: Redirect devices to the EMQX cluster (often seamless due to port compatibility) and validate system behavior.
 
 | Parameter / Artifact | Mosquitto (Example) | EMQX (Example) | Notes |
 | :--- | :--- | :--- | :--- |
@@ -21,7 +21,7 @@ The migration process consists of three main phases:
 
 ## Phase 1: Inventory Mosquitto Assets
 
-### 1. Collect Configuration and Certificates
+### Collect Configuration and Certificates
 
 Identify the locations of your key configuration files. These are typically defined in your `mosquitto.conf`:
 
@@ -31,7 +31,7 @@ Identify the locations of your key configuration files. These are typically defi
 
 Copy your certificate files (`server.crt`, `server.key`, `ca.crt`) to the EMQX node, typically under `/etc/emqx/certs/`.
 
-### 2. Analyze Authentication and Authorization
+### Analyze Authentication and Authorization
 
 Determine your authentication method:
 *   **Password File:** Most common. You will migrate these to EMQX's internal database.
@@ -39,11 +39,12 @@ Determine your authentication method:
 
 ## Phase 2: Configure EMQX to Mirror Mosquitto Baseline
 
-### 2.1 Recreate MQTT Listeners
+### Recreate MQTT Listeners
 
 Mosquitto defines listeners sequentially. EMQX groups them by type (TCP, SSL, WebSocket) in `emqx.conf`.
 
 **Mosquitto (`mosquitto.conf`):**
+
 ```properties
 # Default listener
 port 1883
@@ -71,20 +72,20 @@ listeners.ssl.default {
 }
 ```
 
-### 2.2 Map MQTT Configuration Options
+### Map MQTT Configuration Options
 
 Translate core protocol settings to ensure consistent client behavior.
 
 | Mosquitto Directive | EMQX HOCON Parameter | Description |
 | :--- | :--- | :--- |
-| `max_queued_messages` | `mqtt.max_mqueue_len` | Max offline messages buffered per client. |
+| `max_queued_messages` | `mqtt.max_mqueue_len` | Maximum offline messages buffered per client. |
 | `persistent_client_expiration` | `mqtt.session_expiry_interval` | Time to keep session state after disconnect. |
 | `message_size_limit` | `mqtt.max_packet_size` | Maximum allowed MQTT packet size. |
 | `log_dest file` | `log.file.enable = true` | Enables file logging. |
 
-**Note on Session Expiry:** Mosquitto handles session expiration globally. EMQX (MQTT 5.0) supports per-client session expiry intervals. For legacy MQTT 3.1.1 clients, you can set a global default in EMQX to match your Mosquitto policy.
+**Note:** Mosquitto handles session expiration globally, whereas EMQX (MQTT 5.0) supports per-client session expiry intervals. For legacy MQTT 3.1.1 clients, you can set a global default in EMQX to match your Mosquitto policy.
 
-### 2.3 Migrate Authentication
+### Migrate Authentication
 
 EMQX supports multiple authentication backends. For most Mosquitto migrations, the goal is to preserve existing credentials without requiring user password resets.
 
@@ -110,7 +111,7 @@ curl -v -u admin:public -X POST \
   "http://localhost:18083/api/v5/authentication/password_based:built_in_database/import_users?type=plain"
 ```
 * Replace `admin:public` with your Dashboard credentials.
-* Ensure the authenticator (`password_based:built_in_database`) exists, and matches your configuration.
+* Ensure the authenticator (`password_based:built_in_database`) exists and matches your configuration.
 
 #### Option 2: Import Mosquitto Password File (Advanced)
 
@@ -118,7 +119,7 @@ If you have a large number of users and only possess the `mosquitto.passwd` file
 
 **Step 1: Configure Authentication**
 
-Before importing data, configure the **Password-Based** authentication in EMQX using the **Built-in Database** backend. You must use the specific settings below to match Mosquitto's default hashing mechanism.
+Before importing data, configure the [password-based authentication](../access-control/authn/pwoverview.md) in EMQX using the [built-in database](../access-control/authn/mnesia.md) backend. You must use the specific settings below to match Mosquitto's default hashing mechanism.
 
 *   **Algorithm:** `pbkdf2`
 *   **Mac Fun:** `sha512`
@@ -153,6 +154,10 @@ lists:foreach(fun(Line) ->
 end, Lines)."
 ```
 
+##### Alternative: External Database
+
+For enterprise deployments requiring integration with existing user management systems, you can also migrate users to an external SQL database (MySQL, PostgreSQL). EMQX supports dynamic SQL queries, allowing flexible integration with various schema formats.
+
 #### Option 3: Mutual TLS (mTLS)
 
 If your Mosquitto setup relies on X.509 client certificates (Mutual TLS) for authentication, migration involves configuring the EMQX listeners to verify peer certificates.
@@ -179,11 +184,9 @@ listeners.ssl.default {
 * Ensure you copy the same CA certificate (`ca.crt`) used by Mosquitto to EMQX.
 * If `use_identity_as_username` was enabled, EMQX uses the Common Name (CN) as the username by default when `verify_peer` is active.
 
-#### Alternative: External Database
+### Migrate Authorization (ACLs)
 
-For enterprise deployments requiring integration with existing user management systems, you can also migrate users to an external SQL database (MySQL, PostgreSQL). EMQX supports dynamic SQL queries, allowing flexible integration with various schema formats.
-
-### 2.4 Migrate Authorization (ACLs)
+Once authentication is complete, migrate your topic-level access controls to match the original Mosquitto policy.
 
 Mosquitto’s ACL syntax is very similar to EMQX’s `acl.conf`.
 
@@ -203,13 +206,16 @@ pattern write devices/%u/data
 * Replace `%u` with `${username}` (or `${clientid}`).
 * Map `read` to `subscribe` and `write` to `publish`.
 
-### 2.5 Configure Data Integration (Replacing Bridges & Scripts)
+### Configure Data Integration (Replacing Bridges & Scripts)
 
-Mosquitto uses bridges to forward messages and external scripts (Python/Node.js) for data processing. EMQX replaces these with the built-in **Rule Engine**.
+Mosquitto uses bridges to forward messages and external scripts (Python/Node.js) for data processing. EMQX replaces these with the built-in [Rule Engine](../data-integration/rules.md) and [Data Integration](../data-integration/data-bridges.md).
+
+> The EMQX Rule Engine allows you to select, filter, and transform messages before forwarding them to external systems through Connectors.
 
 **Scenario: Forwarding Data to another Broker**
 Instead of `connection bridge_name` in `mosquitto.conf`:
-1. Create a **MQTT Bridge Connector** in EMQX Dashboard.
+
+1. Create an **MQTT Broker Connector** in the EMQX Dashboard.
 2. Create a **Rule** to select messages (e.g., `SELECT * FROM "#"`) and forward them to the connector.
 
 **Scenario: Replacing a Python Processing Script**
@@ -221,21 +227,32 @@ If you have a script that subscribes to `sensors/+/temp`, filters values > 30, a
     FROM "sensors/+/temp"
     WHERE temperature > 30
     ```
-3. **Add an Action:** Configure a Data Bridge (e.g., InfluxDB, HTTP) to write the result directly.
+3. **Add an Action:** Configure a Data Integration (e.g., InfluxDB, HTTP) to write the result directly.
 
 ## Phase 3: Update Devices and Integrations
 
-### 1. Update Client Connections
+### Update Client Connections
 
 Since EMQX uses standard MQTT ports (1883/8883), most devices do not need configuration changes if they connect via DNS. Update your DNS records to point `mqtt.yourdomain.com` to the EMQX cluster load balancer or IP.
 
-### 2. Verify Connectivity
+### Verify Connectivity
 
 Monitor the EMQX Dashboard to ensure devices are connecting.
-* Check **Connections** count.
+* Check the **Connections** count.
+
+  > You can verify connections using:
+  >
+  > ```bash
+  > emqx_ctl clients list
+  > ```
+  >
+  > Or check the Dashboard under **Monitoring** -> **Clients**.
+
 * Check **Logs** for authentication errors (often due to mismatched hashing algorithms or missing certificates).
 
 ## Advanced Migration Scenarios
+
+This section is optional and applies if you require a zero-downtime migration.
 
 ### Bridge-Transition Strategy (Zero Downtime)
 
@@ -255,8 +272,10 @@ To migrate without service interruption:
 
 ## Validation Checklist
 
+Before switching production traffic, verify:
+
 * [ ] **Listeners:** TCP (1883) and SSL (8883) ports are open and accepting connections.
-* [ ] **Auth:** Users can log in using existing credentials.
+* [ ] **Authentication:** Users can log in using existing credentials.
 * [ ] **ACLs:** Users are restricted to their specific topics.
 * [ ] **Data Flow:** Messages published by devices are received by subscribers/backend apps.
 * [ ] **Persistence:** Retained messages are available after broker restart (ensure `retain_available = true`).

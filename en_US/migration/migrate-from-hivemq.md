@@ -675,13 +675,13 @@ This writes to `data/configs/cluster.hocon`. Decide whether to keep configuratio
 
 Before switching production traffic, verify:
 
-1. All EMQX listeners report `running` (`emqx ctl listeners list`).
-2. TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
-3. Device IDs in EMQX sessions match original HiveMQ client IDs.
-4. ACLs enforce the same topic access you enforced in HiveMQ.
-5. Cluster nodes auto-heal after simulated network partitions.
-6. Kafka integration receives data without transformation regressions.
-7. Metrics are visible in Prometheus.
+- [ ] All EMQX listeners report `running` (`emqx ctl listeners list`).
+- [ ] TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
+- [ ] Device IDs in EMQX sessions match original HiveMQ client IDs.
+- [ ] ACLs enforce the same topic access you enforced in HiveMQ.
+- [ ] Cluster nodes auto-heal after simulated network partitions.
+- [ ] Kafka integration receives data without transformation regressions.
+- [ ] Metrics are visible in Prometheus.
 
 ## Conclusion
 

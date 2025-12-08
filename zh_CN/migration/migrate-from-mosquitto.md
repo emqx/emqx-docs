@@ -1,61 +1,64 @@
-# Migrating from Mosquitto to EMQX
+# 从 Mosquitto 迁移到 EMQX
 
-This guide outlines the process of migrating an existing Eclipse Mosquitto deployment to EMQX. It is designed for administrators seeking to move from a lightweight, single-instance broker to a scalable, distributed MQTT platform. The migration leverages EMQX’s compatibility with standard MQTT protocols and provides a clear path for transferring configuration, security credentials, and integration logic.
+本页介绍了如何将现有的 Eclipse Mosquitto 部署迁移到 EMQX。本指南适用于计划从轻量级单节点 MQTT Broker 升级至可扩展的分布式 MQTT 平台的系统管理员。迁移过程利用了 EMQX 对标准 MQTT 协议的兼容性，并提供了一个清晰的路径，用于迁移配置、安全认证信息和集成逻辑。
 
-## Migration at a Glance
+## 迁移概览
 
-The migration process consists of three main phases:
+迁移过程分为三个主要阶段：
 
-1. **Inventory Mosquitto Assets** – Collect configuration files (`mosquitto.conf`), security artifacts (password files, ACLs, certificates), and understand the current data flow.
-2. **Configure EMQX** – Translate Mosquitto settings into EMQX’s HOCON configuration, import user credentials, and recreate access controls and data integrations using the Rule Engine.
-3. **Update Devices & Integrations** – Redirect devices to the EMQX cluster (often seamless due to port compatibility) and validate system behavior.
+1. **盘点 Mosquitto 资源**：收集配置文件（`mosquitto.conf`）、安全文件（密码文件、ACL、证书），并了解当前数据流。
+2. **配置 EMQX**：将 Mosquitto 设置转换为 EMQX 的配置文件（`emqx.conf`，HOCON 格式），导入用户凭据，并使用规则引擎重建访问控制和数据集成逻辑。
+3. **更新设备与集成**：将设备连接重定向至 EMQX 集群（通常无需修改端口配置），并验证系统运行是否正常。
 
-| Parameter / Artifact | Mosquitto (Example) | EMQX (Example) | Notes |
-| :--- | :--- | :--- | :--- |
-| **Main Configuration** | `/etc/mosquitto/mosquitto.conf` | `/etc/emqx/emqx.conf` | EMQX uses hierarchical HOCON format. |
-| **Network Ports** | `1883` (TCP), `8883` (SSL) | `1883` (TCP), `8883` (SSL) | Standard ports match; no device reconfiguration usually needed. |
-| **User Credentials** | `/etc/mosquitto/passwd` | Built-in Database (Mnesia) | Import existing password hashes via API. |
-| **Access Control** | `/etc/mosquitto/acl_file` | `/etc/emqx/acl.conf` | Direct mapping of Allow/Deny rules. |
-| **Bridges** | `connection bridge_name` | Data Connectors & Rules | Replaces static bridges with dynamic data routing. |
-| **Persistence** | `mosquitto.db` | `data/` (Mnesia + RocksDB) | EMQX handles session persistence automatically. |
+| 参数 / 文件资源     | Mosquitto 示例                  | EMQX 示例                                   | 说明                                 |
+| ------------------- | ------------------------------- | ------------------------------------------- | ------------------------------------ |
+| **主配置文件**      | `/etc/mosquitto/mosquitto.conf` | `/etc/emqx/emqx.conf`                       | EMQX 使用分层的 HOCON 配置格式。     |
+| **网络端口**        | `1883` (TCP), `8883` (SSL)      | `1883` (TCP), `8883` (SSL)                  | 标准端口一致，通常无需修改设备配置。 |
+| **用户凭据**        | `/etc/mosquitto/passwd`         | 内置数据库（Mnesia）                        | 可通过 API 导入现有密码哈希值。      |
+| **访问控制**        | `/etc/mosquitto/acl_file`       | `/etc/emqx/acl.conf`                        | 可直接映射允许/拒绝规则。            |
+| **桥接（Bridges）** | `connection bridge_name`        | 数据连接器与规则（Data Connectors & Rules） | 使用动态数据路由替代静态桥接。       |
+| **持久化**          | `mosquitto.db`                  | `data/`（Mnesia + RocksDB）                 | EMQX 自动处理会话持久化。            |
 
-## Phase 1: Inventory Mosquitto Assets
+## 阶段一：盘点 Mosquitto 资源
 
-### 1. Collect Configuration and Certificates
+### 收集配置与证书文件
 
-Identify the locations of your key configuration files. These are typically defined in your `mosquitto.conf`:
+首先确定关键配置文件的位置，通常在 `mosquitto.conf` 中定义：
 
-* **Main Config:** `include_dir` or default `/etc/mosquitto/mosquitto.conf`.
-* **Certificates:** Look for `certfile`, `keyfile`, and `cafile` paths.
-* **Security:** Locate `password_file` and `acl_file`.
+- **主配置文件：** 通过 `include_dir` 引用，或默认位于 `/etc/mosquitto/mosquitto.conf`。
+- **证书文件：** 查找 `certfile`、`keyfile` 和 `cafile` 的路径。
+- **安全文件：** 查找 `password_file` 和 `acl_file`。
 
-Copy your certificate files (`server.crt`, `server.key`, `ca.crt`) to the EMQX node, typically under `/etc/emqx/certs/`.
+将证书文件（`server.crt`、`server.key`、`ca.crt`）复制到 EMQX 节点，一般放置于 `/etc/emqx/certs/`。
 
-### 2. Analyze Authentication and Authorization
+### 分析认证与授权机制
 
-Determine your authentication method:
-*   **Password File:** Most common. You will migrate these to EMQX's internal database.
-*   **Plugin (mosquitto-auth-plug):** If using SQL or LDAP, you will configure the corresponding EMQX authentication backend directly.
+确定当前的认证方式：
 
-## Phase 2: Configure EMQX to Mirror Mosquitto Baseline
+- **密码文件：** 最常见方式。可迁移到 EMQX 内部数据库。
+- **插件（mosquitto-auth-plug）：** 若使用 SQL 或 LDAP，需在 EMQX 中配置相应的认证后端。
 
-### 2.1 Recreate MQTT Listeners
+## 阶段二：配置 EMQX，使其与 Mosquitto 保持一致
 
-Mosquitto defines listeners sequentially. EMQX groups them by type (TCP, SSL, WebSocket) in `emqx.conf`.
+### 重建 MQTT 监听器
 
-**Mosquitto (`mosquitto.conf`):**
+Mosquitto 按顺序定义监听器，而 EMQX 按类型（TCP、SSL、WebSocket）在 `emqx.conf` 中分组定义。
+
+**Mosquitto (`mosquitto.conf`) 示例：**
+
 ```properties
-# Default listener
+# 默认监听器
 port 1883
 max_connections -1
 
-# SSL Listener
+# SSL 监听器
 listener 8883
 certfile /etc/mosquitto/certs/server.crt
 keyfile /etc/mosquitto/certs/server.key
 ```
 
-**EMQX (`emqx.conf`):**
+**EMQX (`emqx.conf`) 示例：**
+
 ```hocon
 listeners.tcp.default {
   bind = "0.0.0.0:1883"
@@ -71,37 +74,41 @@ listeners.ssl.default {
 }
 ```
 
-### 2.2 Map MQTT Configuration Options
+### 映射 MQTT 协议参数
 
-Translate core protocol settings to ensure consistent client behavior.
+将核心协议配置项进行对应转换，以保持客户端行为一致。
 
-| Mosquitto Directive | EMQX HOCON Parameter | Description |
-| :--- | :--- | :--- |
-| `max_queued_messages` | `mqtt.max_mqueue_len` | Max offline messages buffered per client. |
-| `persistent_client_expiration` | `mqtt.session_expiry_interval` | Time to keep session state after disconnect. |
-| `message_size_limit` | `mqtt.max_packet_size` | Maximum allowed MQTT packet size. |
-| `log_dest file` | `log.file.enable = true` | Enables file logging. |
+| Mosquitto 指令                 | EMQX HOCON 参数                | 说明                               |
+| ------------------------------ | ------------------------------ | ---------------------------------- |
+| `max_queued_messages`          | `mqtt.max_mqueue_len`          | 每个客户端的离线消息最大缓冲数量。 |
+| `persistent_client_expiration` | `mqtt.session_expiry_interval` | 断开连接后会话状态的保留时长。     |
+| `message_size_limit`           | `mqtt.max_packet_size`         | MQTT 报文的最大允许大小。          |
+| `log_dest file`                | `log.file.enable = true`       | 启用日志文件输出。                 |
 
-**Note on Session Expiry:** Mosquitto handles session expiration globally. EMQX (MQTT 5.0) supports per-client session expiry intervals. For legacy MQTT 3.1.1 clients, you can set a global default in EMQX to match your Mosquitto policy.
+**注意：** Mosquitto 仅支持全局会话过期时间，而 EMQX（MQTT 5.0）支持按客户端自定义会话过期时间。
+ 对于旧版 MQTT 3.1.1 客户端，可在 EMQX 中设置全局默认值以保持一致。
 
-### 2.3 Migrate Authentication
+### 迁移认证
 
-EMQX supports multiple authentication backends. For most Mosquitto migrations, the goal is to preserve existing credentials without requiring user password resets.
+EMQX 支持多种认证后端。在大多数从 Mosquitto 迁移的场景中，主要目标是**保留现有用户认证信息**，避免用户重置密码。
 
-#### Option 1: Recreate Users (Batch Import)
+#### 方案 1：重新创建用户（批量导入）
 
-If you have access to the original plain-text passwords, you can batch import them via the EMQX HTTP API.
+如果您能够获取原始的明文密码，可以通过 EMQX HTTP API 批量导入。
 
-**Batch Import CSV Format:**
-Create a file `users.csv` with the following columns:
+**批量导入 CSV 格式示例：**
+
+创建一个名为 `users.csv` 的文件，并包含以下列：
+
 ```csv
 user_id,password,is_superuser
 device001,secret123,false
 admin,adminPass,true
 ```
 
-**Import Command:**
-Use `curl` to upload the file. The `type=plain` parameter instructs EMQX to hash the passwords during import.
+**导入命令：**
+
+使用 `curl` 命令上传该文件。参数 `type=plain` 表示 EMQX 在导入过程中会自动对密码进行哈希处理。
 
 ```bash
 curl -v -u admin:public -X POST \
@@ -109,31 +116,32 @@ curl -v -u admin:public -X POST \
   -F "filename=@users.csv" \
   "http://localhost:18083/api/v5/authentication/password_based:built_in_database/import_users?type=plain"
 ```
-* Replace `admin:public` with your Dashboard credentials.
-* Ensure the authenticator (`password_based:built_in_database`) exists, and matches your configuration.
 
-#### Option 2: Import Mosquitto Password File (Advanced)
+- 将 `admin:public` 替换为你的 EMQX Dashboard 用户名与密码。
+- 确认认证器 (`password_based:built_in_database`) 已存在并与您的配置匹配。
 
-If you have a large number of users and only possess the `mosquitto.passwd` file (which contains hashed passwords), you can import them directly into EMQX's Built-in Database using an Erlang script.
+#### 方案 2：导入 Mosquitto 密码文件（高级）
 
-**Step 1: Configure Authentication**
+如果您拥有大量用户，并且仅持有 `mosquitto.passwd` 文件（其中包含已哈希的密码），可以通过 Erlang 脚本将这些用户数据直接导入到 EMQX 的内置数据库中。
 
-Before importing data, configure the **Password-Based** authentication in EMQX using the **Built-in Database** backend. You must use the specific settings below to match Mosquitto's default hashing mechanism.
+**步骤 1：配置认证机制**
 
-*   **Algorithm:** `pbkdf2`
-*   **Mac Fun:** `sha512`
-*   **Iterations:** 101
-*   **DK Length:** 32
+在导入数据之前，需要在 EMQX 中配置[基于密码的认证](../access-control/authn/pwoverview.md)，并使用[内置数据库后端](../access-control/authn/mnesia.md)。必须按照以下设置，以确保与 Mosquitto 默认的密码哈希算法保持一致：
 
-> **Note:** These parameters (`101` iterations, `sha512`) correspond exactly to Mosquitto's defaults. While they differ from EMQX's standard defaults (which prioritize stronger security), they are required to validate the imported credentials.
+- **算法 (Algorithm)：** `pbkdf2`
+- **MAC 函数 (MAC Function)：** `sha512`
+- **迭代次数 (Iterations)：** `101`
+- **密钥长度 (DK Length)：** `32`
 
-**Step 2: Copy Password File**
+> **注意：** 上述参数（`101` 次迭代，`sha512`）与 Mosquitto 默认配置完全一致。尽管这些参数与 EMQX 的默认安全配置（通常更为严格）不同，但在迁移时必须保持相同设置，以便验证原有密码哈希的有效性。
 
-Copy your `mosquitto.passwd` file to the EMQX server (e.g., `/tmp/mosquitto.passwd`) and ensure the `emqx` user has read permissions.
+**步骤 2：复制密码文件**
 
-**Step 3: Execute Import Script**
+将 `mosquitto.passwd` 文件复制到 EMQX 节点（例如 `/tmp/mosquitto.passwd`），并确保 `emqx` 系统用户对该文件具有读取权限。
 
-Run the following command on the EMQX node. This script reads the file, decodes the Base64 salt/hash, and inserts the user directly into the database.
+**步骤 3：执行导入脚本**
+
+在 EMQX 节点上运行以下命令。该脚本会读取 `mosquitto.passwd` 文件内容，解析并解码 Base64 格式的盐值（Salt）和哈希值（Hash），然后将用户记录直接写入数据库。
 
 ```bash
 emqx eval "
@@ -153,18 +161,25 @@ lists:foreach(fun(Line) ->
 end, Lines)."
 ```
 
-#### Option 3: Mutual TLS (mTLS)
+##### 可选方案：外部数据库
 
-If your Mosquitto setup relies on X.509 client certificates (Mutual TLS) for authentication, migration involves configuring the EMQX listeners to verify peer certificates.
+对于需要与现有用户管理系统集成的企业级部署，您也可以选择将用户数据迁移至外部 SQL 数据库（如 MySQL 或 PostgreSQL）。
+EMQX 支持动态 SQL 查询，可灵活适配不同的数据库架构与字段格式，从而无缝集成至企业现有的身份验证体系。
 
-**Mosquitto Config:**
+#### 方案 3：双向 TLS 认证（mTLS）
+
+如果您的 Mosquitto 部署使用 X.509 客户端证书（Mutual TLS）进行身份认证，那么在迁移至 EMQX 时，需要在 EMQX 的监听器中启用并配置客户端证书验证。
+
+**Mosquitto 配置示例：**
+
 ```properties
 require_certificate true
 use_identity_as_username true
 cafile /etc/mosquitto/ca.crt
 ```
 
-**EMQX Config:**
+**EMQX 配置示例：**
+
 ```hocon
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
@@ -176,91 +191,141 @@ listeners.ssl.default {
 }
 ```
 
-* Ensure you copy the same CA certificate (`ca.crt`) used by Mosquitto to EMQX.
-* If `use_identity_as_username` was enabled, EMQX uses the Common Name (CN) as the username by default when `verify_peer` is active.
+- 请确保将同一 CA 证书（`ca.crt`）复制到 EMQX 节点。
+- 若启用 `use_identity_as_username`，EMQX 将默认使用证书的 CN（Common Name）作为用户名。
 
-#### Alternative: External Database
+### 迁移授权（ACL）
 
-For enterprise deployments requiring integration with existing user management systems, you can also migrate users to an external SQL database (MySQL, PostgreSQL). EMQX supports dynamic SQL queries, allowing flexible integration with various schema formats.
+完成认证配置后，迁移主题级访问控制规则。
 
-### 2.4 Migrate Authorization (ACLs)
+Mosquitto 的 ACL 语法与 EMQX 的 `acl.conf` 非常相似。
 
-Mosquitto’s ACL syntax is very similar to EMQX’s `acl.conf`.
+**Mosquitto (`acl_file`) 示例：**
 
-**Mosquitto (`acl_file`):**
 ```properties
 user Alice
 topic read sensors/#
 pattern write devices/%u/data
 ```
 
-**EMQX (`acl.conf`):**
+**EMQX (`acl.conf`) 示例：**
+
 ```erlang
 {allow, {user, "Alice"}, subscribe, ["sensors/#"]}.
 {allow, all, publish, ["devices/${username}/data"]}.
 ```
 
-* Replace `%u` with `${username}` (or `${clientid}`).
-* Map `read` to `subscribe` and `write` to `publish`.
+- 将 `%u` 替换为 `${username}`（或 `${clientid}`）。
+- 将 `read` 映射为 `subscribe`， `write` 映射为 `publish`。
 
-### 2.5 Configure Data Integration (Replacing Bridges & Scripts)
+### 配置数据集成（替换 Bridges 与脚本）
 
-Mosquitto uses bridges to forward messages and external scripts (Python/Node.js) for data processing. EMQX replaces these with the built-in **Rule Engine**.
+Mosquitto 使用桥接功能实现消息转发，并使用外部脚本（Python/Node.js）进行数据处理。在 EMQX 中，这些功能可由内置的[规则引擎](../data-integration/rules.md)和[数据集成](../data-integration/data-bridges.md)替代。
 
-**Scenario: Forwarding Data to another Broker**
-Instead of `connection bridge_name` in `mosquitto.conf`:
-1. Create a **MQTT Bridge Connector** in EMQX Dashboard.
-2. Create a **Rule** to select messages (e.g., `SELECT * FROM "#"`) and forward them to the connector.
+> EMQX 规则引擎允许您在消息转发至外部系统之前，对消息进行筛选、过滤与转换，并通过连接器将结果输出到目标系统。
 
-**Scenario: Replacing a Python Processing Script**
-If you have a script that subscribes to `sensors/+/temp`, filters values > 30, and writes to a database:
-1. **Eliminate the script.**
-2. **Create a Rule:**
-    ```sql
-    SELECT payload.temp as temperature, topic, timestamp
-    FROM "sensors/+/temp"
-    WHERE temperature > 30
-    ```
-3. **Add an Action:** Configure a Data Bridge (e.g., InfluxDB, HTTP) to write the result directly.
+**场景 1：转发数据到另一 MQTT Broker**
 
-## Phase 3: Update Devices and Integrations
+代替 Mosquitto 中的 `connection bridge_name` 配置：
 
-### 1. Update Client Connections
+1. 在 EMQX Dashboard 中创建 **MQTT Broker 连接器**。
 
-Since EMQX uses standard MQTT ports (1883/8883), most devices do not need configuration changes if they connect via DNS. Update your DNS records to point `mqtt.yourdomain.com` to the EMQX cluster load balancer or IP.
+2. 创建一条**规则**：
 
-### 2. Verify Connectivity
+   ```sql
+   SELECT * FROM "#"
+   ```
 
-Monitor the EMQX Dashboard to ensure devices are connecting.
-* Check **Connections** count.
-* Check **Logs** for authentication errors (often due to mismatched hashing algorithms or missing certificates).
+   并将结果转发至该连接器。
 
-## Advanced Migration Scenarios
+**场景 2：替换 Python 处理脚本**
 
-### Bridge-Transition Strategy (Zero Downtime)
+假设您原本使用一个 Python 脚本，订阅 `sensors/+/temp` 主题，筛选出温度值大于 30 的数据，并将其写入数据库。
 
-To migrate without service interruption:
-1. **Deploy EMQX** alongside Mosquitto.
-2. **Bridge Mosquitto to EMQX:** Configure Mosquitto to forward all messages to EMQX.
-    ```properties
-    # mosquitto.conf
-    connection migrate_uplink
-    address emqx-server:1883
-    topic # out 0
-    topic # in 0
-    ```
-3. **Migrate Consumers:** Point your backend applications to EMQX. They will receive data from both EMQX-connected and Mosquitto-connected devices.
-4. **Migrate Devices:** Gradually move devices to the new EMQX endpoint.
-5. **Decommission:** Once Mosquitto has no connections, remove the bridge and shut it down.
+在 EMQX 中，可以通过规则引擎实现同样的逻辑，而无需外部脚本：
 
-## Validation Checklist
+1. 删除脚本。
 
-* [ ] **Listeners:** TCP (1883) and SSL (8883) ports are open and accepting connections.
-* [ ] **Auth:** Users can log in using existing credentials.
-* [ ] **ACLs:** Users are restricted to their specific topics.
-* [ ] **Data Flow:** Messages published by devices are received by subscribers/backend apps.
-* [ ] **Persistence:** Retained messages are available after broker restart (ensure `retain_available = true`).
+2. 创建规则：
 
-## Conclusion
+   ```sql
+   SELECT payload.temp as temperature, topic, timestamp
+   FROM "sensors/+/temp"
+   WHERE temperature > 30
+   ```
 
-Migrating from Mosquitto to EMQX provides a significant upgrade in scalability and reliability while maintaining protocol compatibility. By mapping your existing configuration and leveraging EMQX’s Rule Engine to replace external scripts and bridges, you can simplify your architecture and prepare your infrastructure for massive growth.
+3. 添加动作：配置一个数据集成，例如连接 InfluxDB 或 HTTP 服务，将筛选后的数据直接写入目标系统。
+
+## 阶段三：更新设备与集成
+
+### 更新客户端连接
+
+由于 EMQX 使用标准 MQTT 端口（`1883` / `8883`），如果您的设备是通过 DNS 域名进行连接的，通常无需修改设备配置。
+
+您只需更新 DNS 记录，将域名（例如 `mqtt.yourdomain.com`）指向 EMQX 集群的负载均衡器（Load Balancer）或集群节点的 IP 地址。
+
+### 验证连接状态
+
+通过 EMQX Dashboard 监控设备连接状态，确保客户端能够成功接入。
+
+- 查看连接数是否随设备上线而增加。
+
+  > 您也可以使用命令行工具验证连接状态：
+  >
+  > ```bash
+  > emqx_ctl clients list
+  > ```
+  >
+  > 或在 Dashboard 中通过菜单**监控** -> **客户端**查看连接详情。
+
+- 检查日志是否存在认证错误（例如密码哈希算法不匹配或缺少证书等问题）。
+
+## 高级迁移方案
+
+本节适用于希望实现不中断服务迁移的场景。
+
+### 桥接过渡策略（Zero Downtime）
+
+若希望在迁移过程中不中断服务，可按以下步骤进行：
+
+1. **并行部署 EMQX 与 Mosquitto。**
+
+   在现有 Mosquitto 实例旁部署 EMQX 节点，确保两者可正常通信。
+
+2. **配置 Mosquitto 桥接至 EMQX：**
+
+   在 Mosquitto 中设置桥接，将所有消息转发至 EMQX。在 `mosquitto.conf` 中添加以下配置：
+
+   ```properties
+   # mosquitto.conf
+   connection migrate_uplink
+   address emqx-server:1883
+   topic # out 0
+   topic # in 0
+   ```
+
+3. **迁移消费者：**
+
+   将后端应用程序或数据消费者的连接端点切换至 EMQX。 此时它们将同时接收来自 EMQX 连接设备与仍连接到 Mosquitto 的设备的数据。
+
+4. **逐步迁移设备：**
+
+   将终端设备逐步从 Mosquitto 的连接地址切换至 EMQX 的新接入点。
+
+5. **下线 Mosquitto：**
+
+   当确认 Mosquitto 已无活跃连接后，移除桥接配置并关闭 Mosquitto 服务。
+
+## 验证清单
+
+在切换生产环境流量之前，请确保以下项目均已验证通过：
+
+-  **监听器：** TCP（1883）与 SSL（8883）端口已开放并可正常接受连接。
+-  **认证：** 用户可使用原密码正常登录。
+-  **ACL：** 用户仅能访问授权主题。
+-  **数据流：** 设备发布的消息能被订阅端或后端应用正常接收。
+-  **持久化：** Broker 重启后保留消息可正常恢复（确保 `retain_available = true`）。
+
+## 总结
+
+从 Mosquitto 迁移至 EMQX，可在保持协议兼容的同时显著提升系统的可扩展性与可靠性。通过映射原有配置，并利用 EMQX 的规则引擎替代外部脚本与桥接机制，可有效简化系统架构，为大规模 MQTT 部署做好准备。
