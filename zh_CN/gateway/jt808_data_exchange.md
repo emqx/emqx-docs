@@ -251,7 +251,7 @@
 | :----------------: | :-----------: | :--------: | :----------------: |
 | 位置附加信息项列表 |     extra     |     -      |        map         |
 
-<!-- TODO: refine alarm mroe details -->
+<!-- TODO: refine alarm more details -->
 
 - 位置附加信息项列表, 在 `extra` 中
 
