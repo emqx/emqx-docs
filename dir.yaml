@@ -428,17 +428,6 @@
     - access-control/blacklist
     - access-control/flapping-detect
 
-- title_en: Migration Guides
-  title_cn: 迁移指南
-  title_ja: 移行ガイド
-  path: migration/overview
-  collapsed: true
-  children:
-    - migration/migrate-from-aws-iot-core
-    - migration/migrate-from-azure-iot-hub
-    - migration/migrate-from-hivemq
-    - migration/migrate-from-mosquitto
-
 - title_en: Rule Engine
   title_cn: 规则引擎
   title_ja: ルールエンジン
@@ -1000,7 +989,7 @@
             - emqx-ai/sdks/mcp-sdk-typescript
 - title_en: Migration Guide
   title_cn: 迁移指南
-  title_ja: Migration Guide
+  title_ja: 移行ガイド
   path: migration/overview
   collapsed: true
   children:
