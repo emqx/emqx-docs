@@ -274,11 +274,11 @@ To migrate without service interruption:
 
 Before switching production traffic, verify:
 
-* [ ] **Listeners:** TCP (1883) and SSL (8883) ports are open and accepting connections.
-* [ ] **Authentication:** Users can log in using existing credentials.
-* [ ] **ACLs:** Users are restricted to their specific topics.
-* [ ] **Data Flow:** Messages published by devices are received by subscribers/backend apps.
-* [ ] **Persistence:** Retained messages are available after broker restart (ensure `retain_available = true`).
+- **Listeners:** TCP (1883) and SSL (8883) ports are open and accepting connections.
+- **Authentication:** Users can log in using existing credentials.
+- **ACLs:** Users are restricted to their specific topics.
+- **Data Flow:** Messages published by devices are received by subscribers/backend apps.
+- **Persistence:** Retained messages are available after broker restart (ensure `retain_available = true`).
 
 ## Conclusion
 

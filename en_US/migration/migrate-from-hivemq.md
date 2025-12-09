@@ -309,8 +309,9 @@ HiveMQ manages security through the Enterprise Security Extension (ESE), which d
 
 #### Migrate File Realm Users
 
-**Source:** HiveMQ `conf/credentials.xml` (encrypted/hashed).
-**Destination:** EMQX Built-in Database.
+**Source:** HiveMQ `conf/credentials.xml` (encrypted/hashed)
+
+**Destination:** EMQX Built-in Database
 
 1. **Export:** Extract users from the HiveMQ File Realm (`credentials.xml`). This file typically contains hashed passwords and salts. You will need to parse this XML to generate a JSON or CSV import file for EMQX.
 2. **Import:** Use the EMQX REST API to create users. EMQX supports bulk import of users with password hashes (e.g., bcrypt, pbkdf2). See [Importing Users](../access-control/authn/user_management.md#importing-users) for file format details.
@@ -675,13 +676,13 @@ This writes to `data/configs/cluster.hocon`. Decide whether to keep configuratio
 
 Before switching production traffic, verify:
 
-- [ ] All EMQX listeners report `running` (`emqx ctl listeners list`).
-- [ ] TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
-- [ ] Device IDs in EMQX sessions match original HiveMQ client IDs.
-- [ ] ACLs enforce the same topic access you enforced in HiveMQ.
-- [ ] Cluster nodes auto-heal after simulated network partitions.
-- [ ] Kafka integration receives data without transformation regressions.
-- [ ] Metrics are visible in Prometheus.
+- All EMQX listeners report `running` (`emqx ctl listeners list`).
+- TLS handshake succeeds and fails when no client certificate is provided (for mTLS devices).
+- Device IDs in EMQX sessions match original HiveMQ client IDs.
+- ACLs enforce the same topic access you enforced in HiveMQ.
+- Cluster nodes auto-heal after simulated network partitions.
+- Kafka integration receives data without transformation regressions.
+- Metrics are visible in Prometheus.
 
 ## Conclusion
 

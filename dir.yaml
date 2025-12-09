@@ -993,10 +993,22 @@
   path: migration/overview
   collapsed: true
   children:
-    - migration/migrate-from-aws-iot-core
-    - migration/migrate-from-azure-iot-hub
-    - migration/migrate-from-hivemq
-    - migration/migrate-from-mosquitto
+    - title_en: AWS IoT Core
+      title_cn: AWS IoT Core
+      title_ja: AWS IoT Core
+      path: migration/migrate-from-aws-iot-core
+    - title_en: Azure IoT Hub
+      title_cn: Azure IoT Hub
+      title_ja: Azure IoT Hub
+      path: migration/migrate-from-azure-iot-hub
+    - title_en: HiveMQ
+      title_ch: HiveMQ
+      title_ja: HiveMQ
+      path: migration/migrate-from-hivemq
+    - title_en: Mosquitto
+      title_cn: Mosquitto
+      title_ja: Mosquitto
+      path: migration/migrate-from-mosquitto
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
