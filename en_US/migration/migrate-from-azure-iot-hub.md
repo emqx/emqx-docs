@@ -250,11 +250,11 @@ These are the parameter changes needed:
 
 ### Validation Checklist
 
-1. Device appears in EMQX Dashboard with `clientid = deviceId`.
-2. TLS handshake succeeds, and the device certificate is verified.
-3. The device can publish to authorized topics.
-4. The device can subscribe to authorized topics.
-5. No authentication errors in EMQX logs.
+- Device appears in EMQX Dashboard with `clientid = deviceId`.
+- TLS handshake succeeds, and the device certificate is verified.
+- The device can publish to authorized topics.
+- The device can subscribe to authorized topics.
+- No authentication errors in EMQX logs.
 
 ## Variations of the Standard Migration Path
 

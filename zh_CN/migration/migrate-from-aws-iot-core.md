@@ -16,13 +16,14 @@
 
 以下表格总结了所需变更的概览。
 
-| **参数**                         | **AWS IoT Core（示例）**                        | **EMQX（示例）**                                     | **说明**                                               |
-| -------------------------------- | ----------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------ |
-| **Endpoint 主机名**              | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com` | `mqtt.example.com`                                   | 更新设备端客户端代码/固件                              |
-| **设备证书**                     | `device-001.cert.pem`                           | `device-001.cert.pem`                                | 无需更改。设备继续使用由您的 CA 签发的现有证书。       |
-| **设备私钥**                     | `device-001.key.pem`                            | `device-001.key.pem`                                 | 无需更改。设备继续使用现有私钥。                       |
-| **服务器验证**（设备验证服务器） | 客户端使用 `AmazonRootCA1.pem`                  | 客户端需更新为使用 `emqx-server-ca.pem`              | 客户端必须信任签发 EMQX 服务器证书的 CA。              |
-| **客户端验证**（服务器验证设备） | AWS IoT Core 信任您注册的 CA                    | EMQX Listener 的 `cacertfile` 需设置为 `your-ca.pem` | EMQX 必须配置为信任您在 AWS IoT Core 中注册的相同 CA。 |
+| **参数**                         | **AWS IoT Core（示例）**                                   | **EMQX（示例）**                                             | **说明**                                                     |
+| -------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| **Endpoint 主机名**              | `agwba84cbf2pn-ats.iot.eu-west-1.amazonaws.com`            | `mqtt.example.com`                                           | 更新设备端客户端代码/固件                                    |
+| **Endpoint 端口**                | `8883`（MQTT/TLS）<pr />`443`（MQTT/TLS 或 WebSocket/TLS） | `8883`（MQTT/TLS）<pr />`8084`（WebSocket/TLS）              | 使用端口 `8883` 的设备无需修改。若设备通过 WebSocket（端口 `443`）连接，请将客户端代码或固件更新为使用 EMQX 的 `8084` 端口。 |
+| **设备证书**                     | `device-001.cert.pem`                                      | `device-001.cert.pem`                                        | 无需更改。设备继续使用由您的 CA 签发的现有证书。             |
+| **设备私钥**                     | `device-001.key.pem`                                       | `device-001.key.pem`                                         | 无需更改。设备继续使用现有私钥。                             |
+| **服务器验证**（设备验证服务器） | 客户端使用 `AmazonRootCA1.pem`                             | 客户端需更新为使用 `emqx-server-ca.pem`                      | 客户端必须信任签发 EMQX 服务器证书的 CA。                    |
+| **客户端验证**（服务器验证设备） | AWS IoT Core 信任您注册的 CA                               | EMQX Listener 的 `cacertfile` 需设置为 `your-ca.pem`，并将 `verify` 设置为 `verify_peer` | EMQX 必须配置为信任您在 AWS IoT Core 中注册的相同 CA。       |
 
 ## 阶段 1：准备您的 CA 证书
 
