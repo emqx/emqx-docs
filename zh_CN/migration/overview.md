@@ -7,7 +7,7 @@
 以下是针对特定平台的分步迁移指南：
 
 - [AWS IoT Core](./migrate-from-aws-iot-core.md)
-- [Azure IoT Hub](./migrate-from-azure-iot-hub)
+- [Azure IoT Hub](./migrate-from-azure-iot-hub.md)
 - [HiveMQ](./migrate-from-hivemq)
 - [Mosquitto](./migrate-from-mosquitto.md)
 
