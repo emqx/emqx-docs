@@ -56,7 +56,7 @@ Issuer 应当与您的组织 CA 匹配，而不是 AWS 的中间 CA。
 - [开启 SSL/TLS 连接](../network/emqx-mqtt-tls.md)
 - [获取 SSL/TLS 证书](../network/tls-certificate.md)
 
-**操作**：打开 EMQX 配置文件（如 `emqx.conf`），配置 SSL/TLS 监听器，或在 Dashboard 中通过**管理 **-> **监听器**配置：
+**操作**：打开 EMQX 配置文件（如 `emqx.conf`），配置 SSL/TLS 监听器，或在 Dashboard 中通过**管理**-> **监听器**配置：
 
 ```hocon
 listeners.ssl.default {
