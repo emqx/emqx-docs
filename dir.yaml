@@ -1002,7 +1002,7 @@
       title_ja: Azure IoT Hub
       path: migration/migrate-from-azure-iot-hub
     - title_en: HiveMQ
-      title_ch: HiveMQ
+      title_cn: HiveMQ
       title_ja: HiveMQ
       path: migration/migrate-from-hivemq
     - title_en: Mosquitto
