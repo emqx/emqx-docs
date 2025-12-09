@@ -30,16 +30,17 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
    - **Dashboard Address**: Ensure users can access the actual access address of the Dashboard, without specifying a specific path. For example, `http://localhost:18083`. This address will be automatically concatenated to generate the **SSO Address** and **Metadata Address** for IdP-side configuration.
    - **SAML Metadata URL**: Leave it temporarily blank and wait for Step 2 configuration.
 
-### Step 2: Register an application to integrate with Microsoft Entra ID
+### Step 2: Register an Application to Integrate with Microsoft Entra ID
 
 1. Log in to the [MS Azure Portal](https://portal.azure.com/) as an administrator.
+
 2. Go to **Microsoft Entra ID** -> **Enterprise Applications** -> **New Application** and click **Create your own application**.
 
-<img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
+   <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
 
 3. Enter the application name, for example, `EMQX Dashboard`, select **Integrate any other application you don't find in the gallery (Non-gallery)**, and click **Create**.
 
-<img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
+   <img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
 
 4. Click **Assign users and groups** to assign users and groups who can access the EMQX Dashboard application.
 5. Go to the **Single sign-on** tab, select **SAML**, and click the **Edit** button in the **Basic SAML Configuration** section.
@@ -51,13 +52,15 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
    Other information is optional and can be configured based on your actual requirements.
 7. Click **Save** to save the configuration.
 
-### Step 3: Complete EMQX Dashboard configuration
+### Step 3: Complete EMQX Dashboard Configuration
 
-1. In Microsoft Entra ID, go to the **Single sign-on** tab of the created application, and copy **App Federation Metadata Url** in the **SAML Signing Certificate** section.
+1. In Microsoft Entra ID, go to the **Single sign-on** tab of the created application, and copy **App Federation Metadata Url** in the **Token Signing Certificate** section.
 
-<img src="./assets/entra_id_saml_metadata_url.png" alt="entra_id_saml_metadata_url" style="zoom:50%;" />
+   <img src="./assets/entra_id_saml_metadata_url.png" alt="entra_id_saml_metadata_url" style="zoom:50%;" />
 
-2. In the Dashboard, paste the copied URL into the **SAML Metadata URL** in Step 1 and click **Update**.
+2. In the Dashboard, paste the copied URL into the **SAML Metadata URL** in Step 1.
+
+3. Click **Update** to finish the configuration.
 
 ## Configure SSO by Integrating with Okta 
 

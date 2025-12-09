@@ -15,7 +15,7 @@ The EMQX Dashboard can integrate with identity services that support the OIDC pr
 - [Microsoft Entra ID](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
 - [Okta](https://www.okta.com/)
 
-## Configure SSO by Integrating with Microsft Entra ID
+## Configure SSO by Integrating with Microsoft Entra ID
 
 This section guides you on how to use Microsoft Entra ID as an Identity Provider (IdP) and configure SSO. You need to complete configurations on both the Microsoft and EMQX Dashboard sides.
 
@@ -24,18 +24,19 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 1. In the EMQX Dashboard, navigate to **System** -> **SSO**.
 2. Click the **Enable** button on the **OIDC** card.
 
-### Step 2: Register an application to integrate with Microsoft Entra ID
+### Step 2: Register an Application to Integrate with Microsoft Entra ID
 
 1. Log in to the [MS Azure Portal](https://portal.azure.com/) as an administrator.
+
 2. Go to **Microsoft Entra ID** -> **Enterprise Applications** -> **New Application** and click **Create your own application**.
 
-<img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
+   <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
 
 3. Enter the application name, for example, `EMQX Dashboard`, select **Register an application to integrate with Microsoft Entra ID (App you're developing)**, and click **Create**.
 
-<img src="./assets/entra_id_oidc_app_parameters.png" alt="entra_id_oidc_app_parameters" style="zoom:50%;" />
+   <img src="./assets/entra_id_oidc_app_parameters.png" alt="entra_id_oidc_app_parameters" style="zoom:50%;" />
 
-4. On the **Register an application** page select which account types you want to be supported, and configure **Redirect URL** using the information provided by the EMQX Dashboard in **Step 1**:
+4. On the **Register an application** page, select which account types you want to be supported, and configure **Redirect URL** using the information provided by the EMQX Dashboard in **Step 1**:
 
    - **Redirect URL**: Select `Web` and enter the **Sign-in Redirect URI** provided in the Dashboard, such as `http://localhost:18083/api/v5/sso/oidc/callback`.
 
@@ -45,15 +46,18 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 
 1. On the configuration page, enter the following information:
    - **Provider**: Leave `Generic`.
+   
    - **Issuer URL**: This corresponds to **OpenID Connect metadata document**, which you can find in the **Endpoints** tab of application overview page in **Step 2**, but without `/.well-known/openid-configuration` part because EMQX adds this automatically, e.g.`https://login.microsoftonline.com/<tenant_id>/v2.0`, where `<tenant_id>` is your Directory (tenant) ID.
+   
    - **Client ID**: This corresponds to **Application (client) ID** found on the application overview page in **Step 2**.
-
-<img src="./assets/entra_id_oidc_app_config.png" alt="entra_id_oidc_app_config" style="zoom:50%;" />
-
+   
+     <img src="./assets/entra_id_oidc_app_config.png" alt="entra_id_oidc_app_config" style="zoom:50%;" />
+   
    - **Client Secret**: Use the secret value generated in **Step 2**.
-   - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate th **SSO Address** and **Metadata Address** for configuration on the IdP side.
-
-<img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
+   
+   - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate the **SSO Address** and **Metadata Address** for configuration on the IdP side.
+   
+     <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
 2. Click **Update** to finish the configuration.
 
