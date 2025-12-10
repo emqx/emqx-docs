@@ -39,26 +39,26 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
    <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
 
-3. 输入应用名称，例如 `EMQX Dashboard`，选择 **Integrate any other application you don't find in the gallery (Non-gallery)**，并点击 **Create**。
+3. 输入应用名称，例如 `EMQX Dashboard`，选择**集成未在库中找到的任何其他应用程序(非库)**，并点击**创建**。
 
    <img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
 
-4. 点击 **Assign users and groups** 以分配可以访问 EMQX Dashboard 应用的用户和组。
+4. 点击**分配用户和组**以分配可以访问 EMQX Dashboard 应用的用户和组。
 
-5. 进入 **Single sign-on** 标签页，选择 **SAML**，并点击 **Basic SAML Configuration** 区域中的 **Edit** 按钮。
+5. 进入**单一登录**标签页，选择 **SAML**，并点击**基本 SAML 配置**区域中的**编辑**按钮。
 
 6. 使用步骤 1 中 Dashboard 提供的地址配置以下信息：
 
-   - **Identifier (Entity ID)**：输入 Dashboard 提供的**元数据地址**，例如 `http://localhost:18083/api/v5/sso/saml/metadata`。
-   - **Reply URL (Assertion Consumer Service URL)**：输入 Dashboard 提供的**单点登录地址**，例如 `http://localhost:18083/api/v5/sso/saml/acs`。
+   - **标识符 (实体 ID)**：输入 Dashboard 提供的**元数据地址**，例如 `http://localhost:18083/api/v5/sso/saml/metadata`。
+   - **回复 URL (断言使用者服务 URL)**：输入 Dashboard 提供的**单点登录地址**，例如 `http://localhost:18083/api/v5/sso/saml/acs`。
 
    其他信息为可选项，可根据实际需求进行配置。
 
-7. 点击 **Save** 保存配置。
+7. 点击**保存**保存配置。
 
 ### 步骤 3：完成 EMQX Dashboard 配置
 
-1. 在 Microsoft Entra ID 中，进入创建的应用的 **Single sign-on** 标签页，并在 **Token Signing Certificate** 区域中复制 **App Federation Metadata Url**。
+1. 在 Microsoft Entra ID 中，进入创建的应用的**单一登录**标签页，并在**令牌签名证书**区域中复制**应用联合元数据 URL**。
 
    <img src="./assets/entra_id_saml_metadata_url.png" alt="entra_id_saml_metadata_url" style="zoom:50%;" />
 
