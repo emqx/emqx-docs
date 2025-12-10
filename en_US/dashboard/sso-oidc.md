@@ -96,7 +96,7 @@ For more detailed instructions, refer to the [Okta documentation](https://help.o
    - **Issuer URL**: This is the URL of your Okta authorization server, e.g., `https://example-org.okta.com`.
    - **Client ID**: Copy it from the application created in **Step 2**.
    - **Client Secret**: Copy it from the application created in **Step 2**.
-   - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate th **SSO Address** and **Metadata Address** for configuration on the IdP side.
+   - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate the **SSO Address** and **Metadata Address** for configuration on the IdP side.
 2. Click **Update** to finish the configuration.
 
 ## Login and User Management
