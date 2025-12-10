@@ -68,7 +68,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 ## 集成 Okta 身份服务配置 SSO
 
-本节将指导您如何使用 Okta 作为身份提供商（IdP）并配置单点登录，您需要分别完成身份提 IdP 侧与 EMQX Dashboard 侧的配置。
+本节将指导您如何使用 Okta 作为身份提供商（IdP）并配置单点登录，您需要分别完成身份提供商（IdP）侧与 EMQX Dashboard 侧的配置。
 
 ### 第 1 步：在  EMQX Dashboard 中启用 Okta
 1. 转到 Dashboard **系统设置** -> **单点登录**页面。
