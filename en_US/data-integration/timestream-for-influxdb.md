@@ -1,8 +1,6 @@
 # Ingest MQTT Data into AWS Timestream for InfluxDB
 
-[AWS Timestream for InfluxDB](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influxdb.html) is a fully managed time series database service that enables you to run InfluxDB 2.x workloads on AWS with simplified data ingestion and real-time analytics. It provides millisecond-level queries with automated backups, updates, and high availability, making it well-suited for IoT and real-time analytics. Existing InfluxDB 2.x APIs and tools work seamlessly with Amazon Timestream for InfluxDB.
-
-Starting from EMQX 6.1, EMQX adds native support for integrating with Amazon Timestream for InfluxDB in addition to existing support for InfluxDB Cloud, InfluxDB OSS, and InfluxDB Enterprise.
+[AWS Timestream for InfluxDB](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influxdb.html) is a fully managed time series database service that enables you to run InfluxDB 2.x workloads on AWS with simplified data ingestion and real-time analytics. Starting from EMQX 6.1, EMQX adds native support for integrating with Amazon Timestream for InfluxDB in addition to existing support for InfluxDB Cloud, InfluxDB OSS, and InfluxDB Enterprise.
 
 This page provides a comprehensive introduction to data integration between EMQX and Amazon Timestream for InfluxDB, along with practical instructions for configuring and validating the data flow.
 
@@ -10,19 +8,17 @@ This page provides a comprehensive introduction to data integration between EMQX
 
 Amazon Timestream for InfluxDB integration builds on EMQX’s real-time data processing and routing capabilities and combines them with Timestream’s fully managed, high-performance InfluxDB engine.
 
-Using the built-in [rule engine](./rules.md), EMQX can transform MQTT messages and write them directly into a Timestream for InfluxDB DB instance without requiring custom application code.
-
-Through the rule engine and the Timestream for InfluxDB Sink, EMQX forwards device data to an InfluxDB-compatible organization and bucket for storage and analysis. After ingestion, you can use the InfluxUI, Flux/InfluxQL queries, or visualization tools to analyze data in real time.
+Through the built-in [rule engine](./rules.md) and the Timestream for InfluxDB Sink, EMQX transforms MQTT messages and writes them directly into a Timestream for InfluxDB DB instance without requiring custom application code.
 
 The diagram below illustrates the typical data integration architecture between EMQX and Amazon Timestream for InfluxDB in an energy storage scenario.
 
-![MQTT to InfluxDB](/Users/emqx/Documents/GitHub/emqx-docs/en_US/data-integration/assets/mqtt-to-influxdb.jpg)
+![](./assets/mqtt-to-influxdb.jpg)
 
-EMQX and Amazon Timestream for InfluxDB together provide a scalable IoT data pipeline for real-time energy monitoring and analytics. EMQX serves as the IoT messaging layer, handling device connectivity and data routing, while Timestream for InfluxDB provides managed time series storage and query capabilities. The workflow is as follows:
+The integration provides a scalable IoT data pipeline for real-time energy monitoring and analytics. EMQX serves as the IoT messaging layer, handling device connectivity and data routing, while Timestream for InfluxDB provides managed time series storage and query capabilities. The workflow is as follows:
 
 1. **Message publication and reception**: Devices connect to EMQX over MQTT and publish telemetry (e.g., power usage, charge/discharge metrics). When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Message processing**: The rule engine matches topics and applies transformations such as filtering, field extraction, or data enrichment, preparing the payload for ingestion into the target Timestream for InfluxDB bucket.
-3. **Data ingestion into InfluxDB**: When a rule triggers the Timestream for InfluxDB Sink, EMQX writes the data using InfluxDB Line Protocol. Templates define how MQTT fields map to measurements, tags, and fields.
+3. **Data ingestion into InfluxDB**: When a rule triggers the Amazon Timestream Sink, EMQX writes the data using InfluxDB Line Protocol. Templates define how MQTT fields map to measurements, tags, and fields.
 
 Once stored in Timestream for InfluxDB, you can use Flux/InfluxQL queries, the InfluxUI, or tools like Grafana to visualize power metrics or integrate with business systems for monitoring and alerting.
 
@@ -31,7 +27,7 @@ Once stored in Timestream for InfluxDB, you can use Flux/InfluxQL queries, the I
 The Amazon Timestream for InfluxDB integration offers the following features and advantages:
 
 - **Efficient Data Processing**: EMQX handles large-scale IoT connections and high-throughput MQTT data, while Timestream for InfluxDB provides fast ingestion and millisecond-level query performance for real-time analytics.
-- **Message Transformation**: EMQX rules allow flexible filtering, extraction, and transformation of message data before writing it to Timestream for InfluxDB using InfluxDB Line Protocol.
+- **Message Transformation**: EMQX rules provide flexible filtering, extraction, and transformation of MQTT messages, allowing data to be formatted as either structured JSON mappings or custom InfluxDB Line Protocol templates before being written to Timestream for InfluxDB.
 - **Managed Scalability**: EMQX supports horizontal clustering for massive IoT deployments, and Timestream for InfluxDB provides managed instance scaling, automated backups, and seamless version updates.
 - **Rich Query Capabilities**: Timestream for InfluxDB supports the full InfluxDB 2.x query ecosystem, including Flux and InfluxQL, enabling powerful time-series analysis and integration with downstream tools.
 - **Optimized Storage**: Timestream for InfluxDB uses AWS-managed storage with preconfigured IOPS and throughput tiers, delivering efficient, cost-optimized performance for time-series data workloads.
@@ -60,15 +56,31 @@ Ensure you have an AWS account with permissions to create and manage Timestream 
 
 #### Create a Timestream for InfluxDB DB Instance
 
-Refer to the AWS official document for detailed instructions: [Create an InfluxDB DB Instance](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influx-getting-started-creating-db-instance.html#timestream-for-influx-getting-started-creating-db-instance-step2).
+1. Sign in to the AWS Management Console and open the Amazon Timestream for InfluxDB console at [https://console.aws.amazon.com/timestream/](https://console.aws.amazon.com/timestream/).
 
-After creation, AWS will assign a unique DB instance endpoint, such as:
+2. In the upper-right corner, choose the AWS Region where you want to create the DB instance.
 
-```
-c5vasdqn0b-3ksj4dla5nfjhi.timestream-influxdb.us-east-1.on.aws
-```
+3. In the navigation pane, select **InfluxDB Databases**.
 
-This endpoint will be required later when configuring the EMQX Connector.
+4. Click **Create InfluxDB database**.
+
+5. In **Engine settings**, choose the InfluxDB engine version for your deployment.
+
+   ::: tip Note
+
+   The engine version affects how you later obtain the credentials required for the EMQX Connector. Be sure to select the version that matches your workload and integration needs.
+
+   :::
+
+   <img src="./assets/timestream_engine_settings.png" alt="timestream_engine_settings" style="zoom:67%;" />
+
+   
+
+6. Complete the remaining configuration steps (deployment settings, storage options, networking, logging, etc.) according to your requirements. For detailed explanations of each option, refer to: [Create an InfluxDB DB Instance](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influx-getting-started-creating-db-instance.html#timestream-for-influx-getting-started-creating-db-instance-step2).
+
+After the database is created, open the instance details page to obtain the AWS-generated endpoint, such as: `c5vasdqn0b-3ksj4dla5nfjhi.timestream-influxdb.us-east-1.on.aws`.
+
+You will need this endpoint when configuring the EMQX Connector.
 
 #### Configure Network and Security Groups
 
@@ -82,9 +94,13 @@ If EMQX is deployed in the same VPC as the Timestream for InfluxDB instance, the
 
 For more details about connection requirements and security considerations, see the AWS documentation: [Connecting to an Amazon Timestream for InfluxDB DB instance](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influx-db-connecting.html).
 
-### Obtain InfluxDB Token, Organization, and Bucket
+#### Obtain InfluxDB Token, Organization, and Bucket
 
-1. Open the **InfluxUI** using the DB instance endpoint:
+Token and credential retrieval depend on the **InfluxDB engine version** selected when creating your Timestream for InfluxDB instance.
+
+##### Access Influx UI for InfluxDB v2 DB Instance
+
+1. Open the **Influx UI** using the DB instance endpoint:
 
    ```
    https://<endpoint>:8086
@@ -106,65 +122,70 @@ For more details about connection requirements and security considerations, see 
 
 4. Confirm the **Organization** and **Bucket** values configured for your instance. These values must match exactly when configuring EMQX.
 
-#### Required Connection Parameters
+Refer to the AWS official documentation for detailed instructions: [Access the InfluxDB UI](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influx-getting-started-creating-db-instance.html#timestream-for-influx-getting-started-creating-db-instance-step-3).
 
-When configuring the Amazon Timestream for InfluxDB Connector in EMQX, you will need the following parameters:
+##### Retrieve Authentication Token for **InfluxDB v3** DB Instances
 
-| Parameter        | Description                                                  |
-| ---------------- | ------------------------------------------------------------ |
-| **Endpoint**     | The host of your DB instance (AWS-generated endpoint), e.g. `xxxxxxx-yyyyyyyy.timestream-influxdb.<region>.on.aws`. |
-| **Port**         | Always **8086**, the InfluxDB API port.                      |
-| **Organization** | The InfluxDB organization name created in your DB instance.  |
-| **Bucket**       | The bucket where EMQX writes telemetry data.                 |
-| **Token**        | InfluxDB API token (operator token or personal access token). |
+InfluxDB v3 does not issue API tokens through the InfluxDB UI. Instead, AWS stores the authentication parameters, including the API token, in **AWS Secrets Manager** when the DB instance is created.
+
+1. Open the DB cluster details page in the Timestream console. Locate the field labeled: **Authentication properties Secret manager ARN**.
+
+   ![timestream_secret_arn](./assets/timestream_secret_arn.png)
+
+   This ARN points to the Secrets Manager entry that contains the credentials EMQX will use.
+
+2. Go to **AWS Secrets Manager** -> **Secrets** and search for the secret name shown (e.g., `READONLY-InfluxDB-auth-parameters-<cluster-id>`).
+
+3. Open the secret and switch to the **Plaintext** view to retrieve the secret contents.
+
+   ![timestream_secret_value](./assets/timestream_secret_value.png)
+
+### Required Connection Parameters
+
+When configuring the Amazon Timestream for InfluxDB Connector in EMQX, provide the following parameters according to the InfluxDB engine version used by your Timestream instance:
+
+| Parameter         | Description                                                  |
+| ----------------- | ------------------------------------------------------------ |
+| **Endpoint**      | The AWS-generated endpoint of your InfluxDB instance, for example: `xxxxxxx-yyyyyyyy.timestream-influxdb.<region>.on.aws` |
+| **Port**          | Always **8086**, the InfluxDB API endpoint port.             |
+| **Database Name** | (**InfluxDB v3**) The database name specified when creating the v3 DB instance. |
+| **Organization**  | (**InfluxDB v2**) The Organization name configured in the InfluxDB UI. |
+| **Bucket**        | (**InfluxDB v2**) The Bucket into which EMQX writes telemetry data. |
+| **Token**         | The authentication token used by EMQX:<br />**InfluxDB v2:** Personal access token created in the InfluxDB UI<br />**InfluxDB v3:** Token retrieved from AWS Secrets Manager (`token` field) |
 
 ## Create a Connector
 
-This section demonstrates how to create a Connector to connect the Sink to the AWS Timestream for InfluxDB DB instance.
+This section demonstrates how to create a Connector to connect the Sink to the AWS Timestream for the InfluxDB DB instance.
 
 1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
-
 2. Click **Create** in the top right corner of the page.
-
 3. On the **Create Connector** page, select **Amazon Timestream** from the **Data Persistence** type, and click **Next**.
-
 4. In the **Configuration** step, configure the following fields:
    - **Connector Name**: A name starting with a letter or number; letters, numbers, hyphens, and underscores are allowed.
       Example: `my_timestream`.
-   
-   - **Server Host**: Enter the endpoint and port of your Timestream for InfluxDB instance, for example:
+   - **Server Host**: Enter the endpoint and port of your Timestream for InfluxDB instance, for example: `<instance-endpoint>:8086`.
+   - **Version of InfluxDB**: Select the version that matches the configuration of your Timestream for InfluxDB instance:
+     - `v2` (default): Configure the **Token**, **Organization**, and **Bucket**: Provide the personal access token, organization name, and bucket name collected earlier in [Obtain InfluxDB Token, Organization, and Bucket](#obtain-influxdb-token-organization-and-bucket). These values must match your InfluxDB configuration exactly.
      
-     ```
-     <instance-endpoint>:8086
-     ```
-     
-   - **Type <!-- field name not decided -->**: `Timestream for InfluxDB`.
-     
-   - **Token**, **Organization**, and **Bucket**: Provide the personal access token, organization name, and bucket name collected earlier in [Obtain InfluxDB Token, Organization, and Bucket](#obtain-influxdb-token-organization-and-bucket). These values must match your InfluxDB configuration exactly.
+     - `v3`: Configure the **Database Name** and **Token**: Enter the database name you provided when creating the DB instance. Enter the secret value you retrieved in [Retrieve Secret Value for InfluxDB v3 DB Instance](#retrieve-secret-value-for-influxdb-v3-db-instance).
      
    - **TLS** (optional): Enable TLS if your Timestream for InfluxDB endpoint requires HTTPS (recommended). For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
-   
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Timestream InfluxDB DB instance.
-
 6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to InfluxDB. For detailed steps, see [Create a Rule with Amazon Timestream Sink](#create-a-rule-with-amazon-timestream-sink).
 
 ## Create a Rule with Amazon Timestream Sink
 
 This section demonstrates how to create a rule in EMQX to process messages from the source MQTT topic `t/#`  and send the processed results through a configured Sink to AWS Timestream for InfluxDB. 
 
+### Define Rule SQL
+
 1. Go to EMQX Dashboard, and click **Integration** -> **Rules** from the left navigation menu.
 
 2. Click **Create** on the top right corner of the page.
 
-3. On the Create Rule page, enter `my_rule` as the rule ID.
+3. On the **Create Rule** page, enter `my_rule` as the rule ID.
 
-4. Set the rules in the **SQL Editor**, for example, if you want to save the MQTT messages of the topic `t/#`  to Timestream for InfluxDB, you can use the SQL syntax below. 
-
-   ::: tip
-
-   If you want to specify your own SQL syntax, make sure that the fields selected (in the `SELECT` part) include all variables in the data format specified in the later configured Sink.
-
-   :::
+4. In the **SQL Editor**, configure the SQL statement. To forward all messages under topic `t/#`, use the SQL syntax below. 
 
    ```sql
    SELECT
@@ -173,45 +194,100 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      "t/#"
    ```
 
-   Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
+   ::: tip
 
-5. Click the + **Add Action** button to define an action that the rule will trigger. With this action, EMQX sends the data processed by the rule to Timestream for InfluxDB. 
+   If you write custom SQL, ensure the fields in the `SELECT` clause include all variables referenced later in the Sink’s data format.
 
-6. Select `Amazon Timestream` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a Sink if you have created one. This demonstration will create a new Sink.
+   :::
 
-7. Enter the name and description of the Sink in the form below.
+   > If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
-8. From the **Connector** dropdown box, select the `my_timestream` created before. You can also create a new Connector by clicking the button next to the dropdown box. For the configuration parameters, see [Create a Connector](#create-a-connector).
+### Append an Action (Sink) to the Rule
 
-9. Specify the **Time Precision**: Select `millisecond` by default. 
+After you define the rule SQL, you need to create an action with Amazon Timestream Sink that the rule will trigger. With this action, EMQX sends the data processed by the rule to Timestream for InfluxDB. 
 
-10. Select **Data Format** as `JSON` or `Line Protocol` for how data should be parsed and written into InfluxDB.
+#### Configure Basic Settings
 
-    - For JSON format, define data parsing method, including **Measurement**, **Timestamp**, **Fields,** and **Tags**. Note: All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them. The **Fields** field supports batch setting via a CSV file; for details, refer to [Batch Setting](#batch-setting).
-    - For Line Protocol format, specify a text-based format that provides the measurement, tag set, field set, timestamp of a data point, and placeholder supported according to the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax.
+1. On the **Create Rule** page, click + **Add Action** to define the output of the rule. 
 
-    ::: tip
+2. From the **Type of Action** dropdown, select `Amazon Timestream`.
 
-    - To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
-    - To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+   In the **Action** dropdown, keep the default `Create Action`.
 
-    :::
+   > You may select an existing Sink from the **Action** instead; this example creates a new one.
 
-11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+3. Enter a **Name** and an optional **Description**.
 
-12. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
+4. From the **Connector** dropdown, select `my_timestream` created before. You can also create a new Connector if needed. Refer to: [Create a Connector](#create-a-connector).
 
-13. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the InfluxDB server.
+5. Specify the **Time Precision** (default: `millisecond`). 
 
-14. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+#### Configure Data Format
 
-15. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+Select **Data Format** as `JSON` or `Line Protocol` for how EMQX should serialize data before writing it to Timestream for InfluxDB instance.
 
-Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Amazon Timestream Sink.
+##### JSON Format
 
-You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Amazon Timestream after parsing by the rule  `my_rule`.
+Use **JSON** format when you prefer structured configuration fields. You need to define structured fields that EMQX automatically converts into InfluxDB line protocol.
 
-### Batch Setting
+- **Measurement**: Specifies the measurement name, for example, `sensor_data`.
+
+  It also supports placeholders, for example:
+
+  - `${topic}`
+  - `${payload.measurement}`
+
+- **Timestamp**: (optional) A numeric or placeholder timestamp. If omitted, EMQX uses server time. 
+
+  Examples:
+
+  - `${timestamp}`
+  - `${payload.ts}`
+
+- **Fields**: Each field is a key–value pair. All key values can be variables or placeholders, and you can also follow the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.5/reference/syntax/line-protocol/) to set them.
+
+  Examples:
+
+  | Key   | Value               |
+  | ----- | ------------------- |
+  | temp  | `${payload.temp}`   |
+  | hum   | `${payload.hum}`    |
+  | count | `${payload.count}i` |
+
+  > **Batch Setting:**
+  > For large field lists (hundreds of fields), you may import them via CSV; refer to [Batch Setting](#batch-setting).
+
+- **Tags**: Tags must always be strings and are used for indexing or fast queries.
+
+  Examples:
+
+  | Key    | Value         |
+  | ------ | ------------- |
+  | device | `${clientid}` |
+  | region | `us-east`     |
+
+##### Line Protocol
+
+Use Line Protocol when you want full control over the final write syntax. Enter a template in the **Write Syntax** box, following the [InfluxDB line protocol](https://docs.influxdata.com/influxdb/v2.3/reference/syntax/line-protocol/) syntax:
+
+```
+<measurement>[,<tag-key>=<tag-value>...] <field-key>=<field-value>[,<field-key>=<field-value>...] <timestamp>
+```
+
+ For example:
+
+```bash
+sensor_data,device=${clientid},region=us-east temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
+```
+
+::: tip
+
+- To write a signed integer type value to InfluxDB 1.x or 2.x, add `i` as the type identifier after the placeholder, for example, `${payload.int}i`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+- To write an unsigned integer type value to InfluxDB 1.x or 2.x, add `u` as the type identifier after the placeholder, for example, `${payload.int}u`. See also [InfluxDB 1.8 write integer value](https://docs.influxdata.com/influxdb/v1.8/write_protocols/line_protocol_reference/#write-the-field-value-1-as-an-integer-to-influxdb).
+
+:::
+
+##### Batch Setting
 
 In InfluxDB, a data entry typically includes hundreds of fields, making the setup of data formats a challenging task. To address this, EMQX offers a feature for batch setting of fields.
 
@@ -237,17 +313,83 @@ When setting data formats via JSON, you can use the batch setting feature to imp
 
 4. After importing, you can further adjust the key-value pairs of fields in the **Fields** setting table.
 
+#### Finalize Action Creation
+
+1. Configure the **Fallback Actions** and **Advanced Settings** (optional):
+   - **Fallback Actions**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+   - **Advanced settings**:  See [Advanced Configurations](#advanced-configurations).
+2. Click **Test Connectivity** at the bottom of the **Add Action** pane to test if the Sink can be connected to the Timestream for InfluxDB instance.
+3. Click **Create** to complete the action creation. Once saved, the Sink appears under **Action Outputs** on the rule page.
+
+### Finalize Rule Creation
+
+On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+
+Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Amazon Timestream Sink.
+
+You can also click **Integration** -> **Flow Designer** to view the topology. It can be seen that the messages under topic `t/#`  are sent and saved to Amazon Timestream after parsing by the rule  `my_rule`.
+
 ## Test the Rule
 
-Use MQTTX  to send a message to topic  `t/1`  to trigger an online/offline event.
+After creating the integration, you can verify that EMQX successfully forwards MQTT messages to your Timestream for InfluxDB instance.
+
+### Publish a Test MQTT Message
+
+Use [MQTTX](https://mqttx.app/)  (or any MQTT client) to publish a message to the topic `t/1`, which matches the rule:
 
 ```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello Timestream for InfluxDB" }'
+mqttx pub -i emqx_c -t t/1 -m '{ "temp": "36.5", "hum": "70", "precip": "12" }'
 ```
 
-Check the running status of the Sink, there should be one new incoming and one new outgoing message.
+This message should trigger the rule and be sent to the configured Timestream for InfluxDB Sink.
 
-<!-- Check --> In the InfluxDB UI, you can confirm whether the message is written into the Timestrem for InfluxDB via the **Data Explorer** window.
+### Verify Sink Delivery Status in EMQX
+
+In EMQX Dashboard, click the rule name to enter the rule details page. You should expect one incoming message and one successfully delivered outgoing message.
+
+### Verify Data in Timestream for InfluxDB
+
+#### For InfluxDB v2 instances
+
+Use the InlufDB UI:
+
+1. Open the InfluxDB I `https://<endpoint>:8086`.
+
+2. Navigate to **Data Explorer**.
+
+3. Select the **Bucket** configured in the EMQX Sink.
+
+4. Query or browse recent data points. 
+
+   You should see a new point containing the following fields in the selected measurement.
+
+   - `temp`
+   - `hum`
+   - `precip`
+
+#### For InfluxDB v3 Instances
+
+InfluxDB v3 does not use a UI for data browsing. Use the InfluxDB v3 SQL Query API to verify the ingested data.
+
+Example request:
+
+```bash
+curl -G -k "https://<endpoint>:8181/api/v3/query_sql" \
+  --header "Authorization: Bearer <your-token>" \
+  --data-urlencode "db=<your-database-name>" \
+  --data-urlencode "q=SELECT * FROM sensor_data" \
+  --data-urlencode "format=jsonl"
+```
+
+Expected output contains:
+
+```json
+{"temp":36.5,"hum":70,"precip":12,"device":"myclient","region":"us-east", ... }
+```
+
+A successful response returns the inserted data in **JSONL** format. 
+
+Refer to the InfluxDB [API documentation]( https://docs.influxdata.com/influxdb3/core/api/v3/#tag/Quick-start) for more query examples:
 
 ## Advanced Configurations
 
