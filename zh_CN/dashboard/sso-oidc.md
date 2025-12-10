@@ -17,7 +17,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
 ## 通过集成 Microsoft Entra ID 配置 SSO
 
-本节将指导你如何使用 Microsoft Entra ID 作为身份提供方商（IdP）并配置 SSO。您需要分别完成 IdP 侧与 EMQX Dashboard 侧的配置。
+本节将指导你如何使用 Microsoft Entra ID 作为身份提供商（IdP）并配置 SSO。您需要分别完成 IdP 侧与 EMQX Dashboard 侧的配置。
 
 ### 步骤 1：在 EMQX Dashboard 中启用 OIDC
 
