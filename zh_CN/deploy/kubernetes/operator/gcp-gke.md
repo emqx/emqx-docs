@@ -1,118 +1,136 @@
-# 在 GCP 中部署 EMQX
+# 在 Google Kubernetes Engine 中部署 EMQX
 
-EMQX 是一款高性能的开源分布式物联网 MQTT 消息服务器，它提供了可靠、高效的消息传递功能。而 Google Kubernetes Engine （GKE）作为一种托管的 Kubernetes 服务，提供了便捷的容器化应用程序部署和管理能力。在本文中，我们将介绍如何利用 EMQX Operator 在 GCP GKE 上部署 EMQX，从而构建强大的物联网 MQTT 通信解决方案。
+EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简化了在 GCP 中部署托管 Kubernetes 集群的过程。使用 GKE，您可以将运维开销转移到 GCP。通过在 GKE 上部署 EMQX，您可以利用 Kubernetes 的可扩展性和灵活性，同时受益于托管服务的简单性和便利性。使用 GKE 上的 EMQX Operator，您可以轻松地在云中部署和管理 MQTT 代理，并专注于您的业务目标。
 
 ## 前提条件
 
-在开始之前，您必须具备以下条件：
+在 GKE 上部署 EMQX 之前，请确保满足以下先决条件：
 
-- 要在 Google Cloud Platform 上创建 GKE 集群，您需要在 GCP 订阅中启用 GKE 服务。您可以在 Google Kubernetes Engine 文档中找到有关如何执行此操作的更多信息。
+- Google Cloud Platform 上的 GKE 集群
+  - 您必须在项目中启用 GKE API。有关设置说明，请参阅 [Google Kubernetes Engine 文档](https://cloud.google.com/kubernetes-engine/)。
 
-- 要使用 kubectl 命令连接到 GKE 集群，您可以在本地计算机上安装 kubectl 工具，并获取集群的 KubeConfig 以连接到集群。或者，您可以通过 GCP 控制台使用 Cloud Shell 来使用 kubectl 管理集群。
+- 用于连接到 GKE 集群的有效 `kubectl` 配置
+  - 要使用本地 `kubectl` 安装连接，请参阅 [连接到 GKE 集群](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)。
+  - 要直接从 GCP 控制台使用 Cloud Shell 连接，请参阅 [使用 Cloud Shell 管理 GKE 集群](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster)。
+  
+- 在集群上安装 EMQX Operator
+  - 有关更多详细信息，请参阅 [安装 EMQX Operator](./getting-started.md)。
 
-  - 要使用 kubectl 连接到 GKE 集群，您需要在本地计算机上安装并配置 kubectl 工具。有关如何执行此操作的详细说明，请参阅 [连接到 GKE 集群](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl) 文档。
+  ::: warning 注意
 
-  - 要使用 Cloud Shell 连接到 GKE 集群，您可以直接使用 GCP 控制台中的 Cloud Shell 来连接到 GKE 集群并使用 kubectl 管理集群。有关如何连接到 Cloud Shell 并使用 kubectl 的详细说明，请参阅 [使用 Cloud Shell 管理 GKE 集群](https://cloud.google.com/code/docs/shell/create-configure-gke-cluster) 文档。
+  在 GKE 上使用默认设置安装 cert-manager 可能会导致引导问题。添加配置 `--set global.leaderElection.namespace=cert-manager` 以在领导者选举中使用不同的命名空间。有关详细信息，请参阅 [cert-manager 兼容性文档](https://cert-manager.io/docs/installation/compatibility/)。
 
-- 要安装 EMQX Operator，请参考 [安装 EMQX Operator](./getting-started.md)。
+  :::
 
 ## 快速部署 EMQX 集群
 
-以下是 EMQX 自定义资源的相关配置。您可以根据您希望部署的 EMQX 版本选择相应的 APIVersion。有关具体的兼容关系，请参阅 [EMQX Operator 兼容性](./operator.md)。
+以下示例显示了基本的 EMQX 自定义资源 (CR) 配置。
 
-  ::: warning
-  如果要请求 cpu 和 memory 资源，需要保证 cpu 大于等于 250m，memory 大于等于 512M
+1. 将以下文档保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
-  - [Autopilot 中的资源请求](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests?hl=zh-cn)
+    ::: warning 注意
+
+    如果指定 CPU 和内存限制，请确保至少 250m CPU 和 512Mi 内存。有关详细信息，请参阅 [Autopilot 中的资源请求](https://cloud.google.com/kubernetes-engine/docs/concepts/autopilot-resource-requests)。
+
     :::
 
-将以下内容保存为 YAML 文件，并使用 kubectl apply 命令进行部署。
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         volumeClaimTemplates:
+         ## 有关存储类的更多信息：https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
+           storageClassName: standard
+           resources:
+             requests:
+               storage: 10Gi
+           accessModes:
+           - ReadWriteOnce
+     dashboardServiceTemplate:
+       spec:
+         ## 有关负载均衡器的更多信息：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
+         type: LoadBalancer
+     listenersServiceTemplate:
+       spec:
+         ## 有关负载均衡器的更多信息：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
+         type: LoadBalancer
+   ```
 
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: EMQX
-metadata:
-  name: emqx
-spec:
-  image: emqx/emqx-enterprise:@EE_VERSION@
-  coreTemplate:
-    spec:
-      volumeClaimTemplates:
-      ## 关于存储类的更多信息：https://cloud.google.com/kubernetes-engine/docs/concepts/persistent-volumes#storageclasses
-        storageClassName: standard
-        resources:
-          requests:
-            storage: 10Gi
-        accessModes:
-        - ReadWriteOnce
-  dashboardServiceTemplate:
-    spec:
-      ## 关于负载均衡器的更多信息：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
-      type: LoadBalancer
-  listenersServiceTemplate:
-    spec:
-      ## 关于负载均衡器的更多信息：https://cloud.google.com/kubernetes-engine/docs/how-to/internal-load-balancing
-      type: LoadBalancer
-```
+2. 等待 EMQX 集群就绪。
 
-等待 EMQX 集群准备就绪。您可以使用 kubectl get 命令检查 EMQX 集群的状态。请确保状态为 Running，这可能需要一些时间。
+   使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
+   ```shell
+   $ kubectl get emqx
+   NAME   STATUS    AGE
+   emqx   Ready     1m2s
+   ```
 
-获取 EMQX 集群的外部 IP 地址，并访问 EMQX 控制台。
+3. 获取 EMQX Dashboard 的外部 IP。
 
-EMQX Operator 将创建两个 EMQX Service 资源，一个是 emqx-dashboard，另一个是 emqx-listeners，分别对应 EMQX 控制台和 EMQX 监听端口。
+   EMQX Operator 会根据 `dashboardServiceTemplate` 配置创建 Service 资源。
 
-```shell
-$ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
+   ```shell
+   $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
+   34.122.174.166
+   ```
 
-34.122.174.166
-```
+4. 在 `http://34.122.174.166:18083` 打开 Dashboard。
 
-通过在 Web 浏览器中打开 http://34.122.174.166:18083，访问 EMQX 控制台。使用默认的用户名和密码 admin/public 进行登录。
+   使用默认凭据登录：
 
-## 使用 MQTTX CLI 连接到 EMQX 集群发布/订阅消息
+    - **用户名：** `admin`
+    - **密码：** `public`
 
-MQTTX CLI 是一个开源的 MQTT 5.0 命令行客户端工具，旨在帮助开发人员在没有 GUI 的情况下更快地开发和调试 MQTT 服务和应用程序。
+## 订阅和发布
 
-- 获取 EMQX 集群的外部 IP 地址
+本演练使用 [MQTTX CLI](https://mqttx.app/zh/cli)，这是一款开源的 MQTT 5.0 命令行客户端工具，可帮助开发者快速测试 MQTT 服务和应用。
 
-    ```shell
-    external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-    ```
+1. 获取 EMQX TCP 监听器的外部 IP。
 
-- 订阅消息
+   EMQX Operator 会为每个配置的监听器自动创建 Service 资源。
 
-    ```shell
-    $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
+   ```shell
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-    [10:00:25] › …  Connecting...
-    [10:00:25] › ✔  Connected
-    [10:00:25] › …  Subscribing to hello...
-    [10:00:25] › ✔  Subscribed to hello
-    ```
+2. 订阅主题。
 
-- 在新的终端窗口中发送消息
+   ```shell
+   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
+   [10:00:25] › …  Connecting...
+   [10:00:25] › ✔  Connected
+   [10:00:25] › …  Subscribing to hello...
+   [10:00:25] › ✔  Subscribed to hello
+   ```
 
-    ```shell
-    $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
+3. 在单独的终端中，连接到 EMQX 集群并发布消息。
 
-    [10:00:58] › …  Connecting...
-    [10:00:58] › ✔  Connected
-    [10:00:58] › …  Message Publishing...
-    [10:00:58] › ✔  Message published
-    ```
+   ```shell
+   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
 
-- 在订阅的终端窗口中查看接收到的消息
+   [10:00:58] › …  Connecting...
+   [10:00:58] › ✔  Connected
+   [10:00:58] › …  Message Publishing...
+   [10:00:58] › ✔  Message published
+   ```
 
-    ```shell
-    [10:00:58] › payload: hello world
-    ```
+4. 观察订阅者接收消息。
 
-## 使用 LoadBalancer 进行 TLS 终结
+   ```shell
+   [10:00:58] › payload: hello world
+   ```
 
-由于 Google LoadBalancer 不支持 TCP 证书，请参阅这个[文档](https://github.com/emqx/emqx-operator/discussions/312)解决 TCP 证书卸载问题。
+## 关于使用 LoadBalancer 进行 TLS 卸载的说明
+
+在撰写本文时，Google LoadBalancer 不支持 TLS 到纯 TCP 流量的终止。请参阅此[讨论](https://github.com/emqx/emqx-operator/discussions/312)以了解可能的解决方案。
