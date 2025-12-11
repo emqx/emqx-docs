@@ -497,7 +497,7 @@ function_call(clientid, another_function_call(username))
 
 Variform 支持以下字面量：
 
-- 布尔值 ： `ture` 或者 `false`。
+- 布尔值 ： `true` 或者 `false`。
 - 整数：例如，`42`。
 - 浮点数：例如，`3.14`。
 - 字符串：单引号 `'` 或双引号 `"` 之间的 ASCII 字符。

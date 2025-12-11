@@ -48,7 +48,7 @@ sequenceDiagram
   P1 ->> Media: Realtime Image Analysis
   Media ->> Media: Image Analysis
   Media ->> P1: Image Analysis Result
-  P1 ->> P2: Summarize the Analysis Reuslt
+  P1 ->> P2: Summarize the Analysis Result
   P2 ->> P1: Summary
   P1 ->> Media: TTS and send to Device
   Media ->> Customer: WebRTC Audio

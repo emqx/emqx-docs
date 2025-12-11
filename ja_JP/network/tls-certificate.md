@@ -56,7 +56,7 @@ SSL/TLS証明書は、以下の2つの方法で取得できます。
    Country Name (2 letter code) [AU]: # 国・地域
    State or Province Name (full name) [Some-State]: # 州・県名
    Locality Name (eg, city) []: # 市区町村名
-   Organization Name (eg, company) [Internet Widgits Pty Ltd]: # 組織名（会社名）、例：EMQ
+   Organization Name (eg, company) [Internet Widgets Pty Ltd]: # 組織名（会社名）、例：EMQ
    Organizational Unit Name (eg, section) []: # 組織内の部門名、例：EMQX
    Common Name (e.g. server FQDN or YOUR name) []: # サーバーの完全修飾ドメイン名（FQDN）、例：mqtt.emqx.com
    ...
