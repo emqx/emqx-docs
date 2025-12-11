@@ -56,7 +56,7 @@ Use the CA certificate you just generated to issue a server certificate, which i
    Country Name (2 letter code) [AU]: # country/region
    State or Province Name (full name) [Some-State]: # state/province
    Locality Name (eg, city) []: # The city or locality
-   Organization Name (eg, company) [Internet Widgits Pty Ltd]: # The full name of the organization (or company name), e.g. EMQ
+   Organization Name (eg, company) [Internet Widgets Pty Ltd]: # The full name of the organization (or company name), e.g. EMQ
    Organizational Unit Name (eg, section) []: # The name of the department or division within the organization，e.g. EMQX
    Common Name (e.g. server FQDN or YOUR name) []: # The fully-qualified domain name (FQDN) of the server that will use the certificate, e.g. mqtt.emqx.com
    ...

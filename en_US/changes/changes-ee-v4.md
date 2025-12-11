@@ -1,5 +1,63 @@
 # EMQX Enterprise Version 4
 
+## e4.4.33
+
+*Release Date: 2025-11-26*
+
+### Enhancements
+
+- Added rate limiting based on Tag.
+
+  Users can now use Tags returned by the HTTP authentication service to categorize clients and apply rate limits based on these categories.
+
+- Reduced memory consumption of the ACL cache feature.
+
+  Previously, when MQTT message payloads were large, the ACL cache feature consumed significant memory, with usage proportional to the number of MQTT sessions.
+
+- The username quota module now supports kicking all client connections for a specified username.
+
+- Improved user experience on the "Usage" page of the username quota module.
+
+  Previously, the "Usage" page automatically sorted usernames by session count, displaying those with the most sessions at the top. However, when there were many usernames, sorting caused long page load times and affected user experience. Now, a sort button has been added to the page, and sorting is only performed when the button is clicked.
+
+- Reduced system resource consumption of the username quota module during cluster node changes.
+
+  This optimization reduces unnecessary data synchronization operations when the module detects other nodes going offline, thereby lowering system resource usage.
+
+### Bug Fixes
+
+- Fixed an issue where SQL multi-row insert syntax could not be used in MySQL and PostgreSQL actions. The following error message would appear in the logs:
+
+  ```
+  ... Not an INSERT statement or incorrect SQL syntax
+  ```
+
+- Fixed an issue where the LwM2M module failed to start during rolling upgrades. The following error message would appear in the logs:
+
+  ```
+  [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
+  ```
+
+- Fixed the default XML path error for the LwM2M module in EMQX environments installed via binary packages.
+
+- Fixed an issue where cached messages in Kafka Producer could not be sent after Kafka service recovery. The following error message would appear in the logs:
+
+  ```
+  [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
+  ```
+
+- Fixed an issue where the log tracing feature could become unusable after upgrading EMQX versions due to the loss of the `emqx_trace` remote table.
+
+  In certain upgrade scenarios, users might add a new-version EMQX node to a running cluster that includes older-version nodes, and later remove the old nodes. If an old node is stopped (e.g., using the `emqx stop` command) before being removed via the CLI or API, and if log tracing was previously enabled on that node, the log tracing module on the new node may fail due to missing access to the `emqx_trace` remote table.
+
+  This issue can also cause the `emqx ctl cluster force-leave <node>` command to fail.
+
+  This fix ensures that the log tracing module automatically restores the `emqx_trace` table during startup. Once the module is initialized, the `force-leave` command will also function correctly.
+
+- Fixed inaccurate rate limiting.
+
+  Corrected the implementation of the token bucket algorithm in rate limiting. Before the fix, the actual maximum achievable rate was always slightly higher than the configured value.
+
 ## e4.4.32
 
 *Release Date: 2025-07-30*
@@ -1321,7 +1379,7 @@ a node restart (and configuration change) is required.
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
@@ -1337,7 +1395,7 @@ a node restart (and configuration change) is required.
   Meaning, if a plugin (or module) is restarted after initial boot, it may get ordered to the end of the list.
   With this config, you may set the order with a comma-speapated ACL or auth plugin names (or aliases).
   For example: `acl_order = jwt,http`, this will make sure `jwt` is always checked before `http`,
-  meaning if JWT is not found (or no `acl` cliam) for a client, then the ACL check will fallback to use the HTTP backend.
+  meaning if JWT is not found (or no `acl` claim) for a client, then the ACL check will fallback to use the HTTP backend.
 
 - Added configurations to enable more `client.disconnected` events (and counter bumps) [#9267](https://github.com/emqx/emqx/pull/9267).
   Prior to this change, the `client.disconnected` event (and counter bump) is triggered when a client
@@ -1400,7 +1458,7 @@ a node restart (and configuration change) is required.
   Note that the `id` in `POST /api/v4/rules` should be literals (not encoded) when creating a `rule` or `resource`.
   See docs [Create Rule](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-rules) [Create Resource](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-resources).
 
-- Calling 'DELETE /alarms/deactivated' now deletes deactived alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
+- Calling 'DELETE /alarms/deactivated' now deletes deactivated alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
 
 - When republishing messages or bridge messages to other brokers, check the validity of the topic and make sure it does not have topic wildcards [#9291](https://github.com/emqx/emqx/pull/9291).
 
@@ -1432,7 +1490,7 @@ a node restart (and configuration change) is required.
   published when a client is denied connection [#8894](https://github.com/emqx/emqx/pull/8894).
 
 - More rigorous checking of flapping to improve stability of the system [#9045](https://github.com/emqx/emqx/pull/9045).
-  Previsouly only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
+  Previously only normal disconnects are counted, now the connection rejections (e.g. authentication failure) is also included.
   Find more about flapping detection in [EMQX document](https://docs.emqx.com/en/enterprise/v4.3/configuration/configuration.html#flapping-detect-policy)
 
 - QoS1 and QoS2 messages in session's buffer are re-dispatched to other members in the group
@@ -1464,7 +1522,7 @@ a node restart (and configuration change) is required.
 - Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
   The fix is to perform a PING query to make sure the service is alive.
 
-- Fix the redis-cluster resource prints too many error logs when redis servers are not avaliable.
+- Fix the redis-cluster resource prints too many error logs when redis servers are not available.
 
 - Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
 
@@ -1668,7 +1726,7 @@ a node restart (and configuration change) is required.
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
-- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closing the connection process
 - Fix the issue that the relevant hooks were not properly uninstalled when the module was disabled, resulting in abnormal functions
 - Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
 - Fix the issue that modules that were turned off in the backup file would be automatically enabled after restoring the backup
@@ -1831,7 +1889,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 
 - Rule engine adds support for MatrixDB
 
-- MongoDB integration supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Altas
+- MongoDB integration supports DNS SRV and TXT Records resolution, which can seamlessly connect with MongoDB Atlas
 
 - Supports trace online, users can complete the tracking operation of the client and topic on the Dashboard, and view or download the trace log
 
@@ -2003,7 +2061,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
   unacknowledged QoS1/QoS2 messages (defaults to 30s).
   Prior to this fix, unacknowledged messages buffered in the session are re-sent only once after session take-over, but not retried at configured interval.
 
-- Fix Rule-Engine action `Data to InfluxDB` exection failed since hot-upgrade from `e4.3.0..e4.3.10` to `e4.3.11..e4.3.17` [#1601](https://github.com/emqx/emqx-enterprise/pull/1601).
+- Fix Rule-Engine action `Data to InfluxDB` execution failed since hot-upgrade from `e4.3.0..e4.3.10` to `e4.3.11..e4.3.17` [#1601](https://github.com/emqx/emqx-enterprise/pull/1601).
 
 - Added validation for Kafka action parameters, Segment Bytes should not be greater than Max Bytes [#1608](https://github.com/emqx/emqx-enterprise/pull/1608).
 
@@ -2053,7 +2111,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 - Add a warning log if the ACL check failed for subscription [#9124](https://github.com/emqx/emqx/pull/9124).
   This is to make the ACL deny logging for subscription behave the same as for publish.
 
-- JWT ACL claim supports `all` action to imply the rules applie to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
+- JWT ACL claim supports `all` action to imply the rules apply to both `pub` and `sub` [#9044](https://github.com/emqx/emqx/pull/9044).
 
 - Added a log censor to avoid logging sensitive data [#9189](https://github.com/emqx/emqx/pull/9189).
   If the data to be logged is a map or key-value list which contains sensitive key words such as `password`, the value is obfuscated as `******`.
@@ -2069,7 +2127,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
   Meaning, if a plugin (or module) is restarted after initial boot, it may get ordered to the end of the list.
   With this config, you may set the order with a comma-speapated ACL or auth plugin names (or aliases).
   For example: `acl_order = jwt,http`, this will make sure `jwt` is always checked before `http`,
-  meaning if JWT is not found (or no `acl` cliam) for a client, then the ACL check will fallback to use the HTTP backend.
+  meaning if JWT is not found (or no `acl` claim) for a client, then the ACL check will fallback to use the HTTP backend.
 
 - Added configurations to enable more `client.disconnected` events (and counter bumps) [#9267](https://github.com/emqx/emqx/pull/9267).
   Prior to this change, the `client.disconnected` event (and counter bump) is triggered when a client
@@ -2121,7 +2179,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
   Note that the `id` in `POST /api/v4/rules` should be literals (not encoded) when creating a `rule` or `resource`.
   See docs [Create Rule](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-rules) [Create Resource](https://docs.emqx.com/en/enterprise/v4.4/advanced/http-api.html#post-api-v4-resources).
 
-- Calling 'DELETE /alarms/deactivated' now deletes deactived alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
+- Calling 'DELETE /alarms/deactivated' now deletes deactivated alarms on all nodes, including remote nodes, not just the local node [#9280](https://github.com/emqx/emqx/pull/9280).
 
 - When republishing messages or bridge messages to other brokers, check the validity of the topic and make sure it does not have topic wildcards [#9291](https://github.com/emqx/emqx/pull/9291).
 
@@ -2184,7 +2242,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 - Fixed Redis resource liveness problem issue. Prior to this fix, the resource is considered alive when connection can be established.
   The fix is to perform a PING query to make sure the service is alive.
 
-- Fix the redis-cluster resource prints too many error logs when Redis servers are not avaliable.
+- Fix the redis-cluster resource prints too many error logs when Redis servers are not available.
 
 - Fixed an internal Redis resource ID clashing. This clashing may cause resources in use getting deleted when deleting another resource.
 
@@ -2383,7 +2441,7 @@ EMQX Enterprise 4.4.0 mainly includes the following changes:
 - Fix the issue that the alarm was not cleared when the rule engine resource was deleted
 - Fix Dashboard HTTPS listener's `verify` option not taking effect
 - Fix the issue that messages were lost when the peer session was terminated during the delivery of QoS 1 messages through shared subscriptions
-- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closeing the connection process
+- Fix the issue that when the log tracer encounters large packets, the heap size grows too fast and triggers the policy of forcibly closing the connection process
 - Fix the issue that the relevant hooks were not properly uninstalled when the module was disabled, resulting in abnormal functions
 - Fix the issue that the MQTT-SN client would be disconnected when retransmitting QoS 2 messages
 - Fix the issue that modules that were turned off in the backup file would be automatically enabled after restoring the backup
@@ -2649,7 +2707,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 - Rule engine supports Kafka to add partitions
 - Rule engine supports offline message and auto-subscription using ClickHouse Storage
-- The batch and async mode is enabled by default for the actions of the rule engine, if the actions support batch and asnyc
+- The batch and async mode is enabled by default for the actions of the rule engine, if the actions support batch and async
 - Refactoring and improving the performance of data-to-InfluxDB
 - Using Kafka to send MQTTmessage to support the set payload format
 
@@ -2714,7 +2772,7 @@ Users planning to upgrade should be aware of the possibility that this change ma
 
 - Fix the issue that rule engine data persistence to Oracle failed but the success count still increased
 - Fix the issue that the alternate action could not be triggered when the action of the rule engine persisting data to Oracle (only synchronous operation) failed to execute
-- Fix the issue that enabling system messages would cause rule engine's Kakfa action to crash
+- Fix the issue that enabling system messages would cause rule engine's Kafka action to crash
 - Fix the issue of query resource request timeout when rule engine resource is unavailable
 - If a rule with the same ID already exists when creating a rule, , rule engine will now report an error instead of replacing the existing rule
 

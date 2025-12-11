@@ -359,7 +359,7 @@ is_empty(map_get('key', '{"key" : [1}')) = false
 
 ### bool(Term: boolean | integer | string) -> boolean
 
-将 `Term` 转换为 boolean 类型，Term 只能是 boolean 类型、integer 类型的 0 和 1，或者 string 类型的 ture 和 false。
+将 `Term` 转换为 boolean 类型，Term 只能是 boolean 类型、integer 类型的 0 和 1，或者 string 类型的 true 和 false。
 
 示例：
 
@@ -431,7 +431,7 @@ float2str(123456789.01234566, 8) = '123456789.01234566'
 
 将 `Term` 转换为 integer 类型。
 
-当 `Term` 为 boolean 类型时，ture 将被转换为数字 1，false 将被转换为数字 0。
+当 `Term` 为 boolean 类型时，true 将被转换为数字 1，false 将被转换为数字 0。
 
 当 `Term` 为 float 类型时，`Term` 将被向下舍入，转换为小于等于 `Term` 的最大整数。
 
@@ -930,7 +930,7 @@ map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
 
-### map_get(Key: srting, Map: map, Default: any) -> any
+### map_get(Key: string, Map: map, Default: any) -> any
 
 同 `map_get/2`，但 Key 不存在时，将返回指定的 Default。示例：
 

@@ -158,7 +158,7 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
 
 4. Set the **topic** to subscribe as `testtopic/#` in the **Subscription** section. Click the **Subscribe** button to finish the subscription. The topic `testtopic/#`  will be added to the table below.
 
-   <img src="./assets/Dashboad-Websocket-Client.png" alt="Dashboad-Websocket-Client" style="zoom:60%;" />
+   <img src="./assets/Dashboard-Websocket-Client.png" alt="Dashboard-Websocket-Client" style="zoom:60%;" />
 
    After the subscription, all messages matching the topic will be forwarded to this connection.
 
@@ -171,7 +171,7 @@ Follow the instructions below to connect, publish/subscribe, and view messages u
 
    Click the **Publish** button, and one record will be added to the **Published** section below. The message will be routed to all subscribers. As the publisher is also the receiver in this test, one new record will also be added to the **Received** section below.
 
-   <img src="./assets/Dashboad-Websocket-Client-receive.png" alt="Dashboad-Websocket-Client-receive " style="zoom:50%;" />
+   <img src="./assets/Dashboard-Websocket-Client-receive.png" alt="Dashboard-Websocket-Client-receive " style="zoom:50%;" />
 
 
 

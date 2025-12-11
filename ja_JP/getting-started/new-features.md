@@ -10,7 +10,7 @@ description: このセクションでは、EMQX 5.0および5.1で導入され�
 
 EMQX 5.0では、新しい[Mriaクラスターアーキテクチャ](../deploy/cluster/mria-introduction.md)を採用しています。このアーキテクチャにより、1つのEMQXクラスターで[1億の同時MQTT接続](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)をサポート可能となり、世界で最もスケーラブルなオープンソースMQTTブローカーとなっています。
 
-<img src="./assets/100m-benckmark.png" alt="1億接続ベンチマーク" style="zoom:50%;" />
+<img src="./assets/100m-benchmark.png" alt="1億接続ベンチマーク" style="zoom:50%;" />
 
 この明らかなスケーラビリティの向上に加え、Mriaクラスターアーキテクチャは大規模展開におけるブレインスプリットのリスクとその影響を低減し、より安定で信頼性の高いIoTデータアクセスサービスをクライアントに提供します。
 

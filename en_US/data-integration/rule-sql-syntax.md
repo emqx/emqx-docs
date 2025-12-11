@@ -107,7 +107,7 @@ SELECT * FROM "t/#" WHERE payload.x.y = 1
 You can use the `and` and `or` operators to form complex boolean expressions in the WHERE-clause:
 
 ```sql
-SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temprature > 39
+SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temperature > 39
 ```
 
 ## The `FOREACH` Statement
