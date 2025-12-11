@@ -31,7 +31,7 @@ Be aware that if the provided argument exceeds the stipulated range or employs a
 :::tip
 
 1. Some escape sequences need to be unescaped when used, see [unescape function](#unescapestring-string---string).
-2. Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Fucntion](./rule-sql-jq.md) section for more information.
+2. Since EMQX 5.0 version, EMQX also supports using  [jq Syntax](https://stedolan.github.io/jq/manual/) for complex data transformation, you may read the [jq Function](./rule-sql-jq.md) section for more information.
 
 :::
 
@@ -930,7 +930,7 @@ map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
 
-### map_get(Key: srting, Map: map, Default: any) -> any
+### map_get(Key: string, Map: map, Default: any) -> any
 
 Same as `map_get/2`, but when `Key` does not exist, the specified `Default` will be returned. Example:
 

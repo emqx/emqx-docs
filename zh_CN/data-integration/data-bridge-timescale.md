@@ -61,7 +61,7 @@ EMQX 支持与私有部署的 TimescaleDB 或与云上的 Timescale Service 集�
 4. 使用 `psql client` [连接到 service](https://docs.timescale.com/getting-started/latest/services/#connect-to-your-service)。
 
    ```bash
-   # 使用 servie URL 连接
+   # 使用 service URL 连接
    psql "postgres://tsdbadmin@xxxxx.xxxxx.tsdb.cloud.timescale.com:32541/tsdb?sslmode=require"
    # 输入使用步骤 2 中的密码
    Password for user tsdbadmin:

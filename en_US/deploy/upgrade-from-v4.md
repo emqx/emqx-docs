@@ -49,7 +49,7 @@ The previous official plugins have been migrated to EMQX as built-in functions. 
 | emqx_bridge_mqtt | Data Bridge - MQTT Bridge                                 |
 | emqx_web_hook    | Data Bridge - HTTP Server                                 |
 | emqx_coap        | CoAP Gateway                                              |
-| emqx_dashboard   | Dasboard                                                  |
+| emqx_dashboard   | Dashboard                                                  |
 | emqx_exhook      | ExHook                                                    |
 | emqx_exproto     | ExProto Gateway                                           |
 | emqx_lwm2m       | LwM2M Gateway                                             |
@@ -517,4 +517,4 @@ If you want to enable push-gateway, please refer to [Integrate with Prometheus](
 ## Gateway/Multi-Protocol Support
 
 Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the dashboard **Connections** page and in the `GET /clients` API.
-They can be found in **Extentions** -> **Gateways** section or listed with `GET /gateway/{name}/clients` API.
+They can be found in **Extensions** -> **Gateways** section or listed with `GET /gateway/{name}/clients` API.

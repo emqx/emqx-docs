@@ -155,7 +155,7 @@ EMQXをローカルにデプロイする前でも、EMQが提供する無料の�
 
 4. **Subscription**セクションでサブスクライブするトピックを`testtopic/#`に設定し、**Subscribe**ボタンをクリックしてサブスクライブを完了します。トピック`testtopic/#`が下のテーブルに追加されます。
 
-   <img src="./assets/Dashboad-Websocket-Client.png" alt="ダッシュボードWebSocketクライアント" style="zoom:60%;" />
+   <img src="./assets/Dashboard-Websocket-Client.png" alt="ダッシュボードWebSocketクライアント" style="zoom:60%;" />
 
    サブスクライブ後、トピックにマッチするすべてのメッセージがこの接続に転送されます。
 
@@ -168,4 +168,4 @@ EMQXをローカルにデプロイする前でも、EMQが提供する無料の�
 
    **Publish**ボタンをクリックすると、**Published**セクションに1件のレコードが追加されます。メッセージはすべてのサブスクライバーにルーティングされます。このテストではパブリッシャーも受信者なので、**Received**セクションにも新しいレコードが追加されます。
 
-   <img src="./assets/Dashboad-Websocket-Client-receive.png" alt="ダッシュボードWebSocketクライアント受信" style="zoom:50%;" />
+   <img src="./assets/Dashboard-Websocket-Client-receive.png" alt="ダッシュボードWebSocketクライアント受信" style="zoom:50%;" />
