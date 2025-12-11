@@ -27,7 +27,7 @@ This Flow leverages Gemini to analyze the overall context of multiple fields, su
 **Expected republished output (to `devices/device_1/reply`):**
 
 ```
-Critial Alert: Simultaneous severe vibration and high temperature detected, indicating an immediate critical equipment malfunction risk.
+Critical Alert: Simultaneous severe vibration and high temperature detected, indicating an immediate critical equipment malfunction risk.
 ```
 
 ## Create the Flow
@@ -135,7 +135,7 @@ Make sure you have a valid Gemini API Key.
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
 
-   - To view the running statistics and metrics of the **Gemini** node, exit the editting page, click the node to open the Edit panel and click the **Overview** tab.
+   - To view the running statistics and metrics of the **Gemini** node, exit the editing page, click the node to open the Edit panel and click the **Overview** tab.
 
      ![openai_node_statistics](./assets/gemini_node_statistics.png)
 
