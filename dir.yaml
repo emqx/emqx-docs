@@ -964,7 +964,10 @@
       title_ja: チュートリアル
       collapsed: true
       children:
-        - emqx-ai/tutorials/quickstart-volcengine-voice
+        #- title_en: Voice Services AI Agent 
+        - title_cn: 语音服务智能体
+        #- title_ja: Voice Services AI Agent
+        - path: emqx-ai/tutorials/quickstart-volcengine-voice
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
