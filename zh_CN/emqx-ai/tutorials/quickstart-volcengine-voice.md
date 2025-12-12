@@ -6,9 +6,9 @@
 
 ## 架构速览
 
-本系统由三个核心组件构成：
+### 核心组件
 
-### 组件概览
+本系统由三个核心组件构成：
 
 | 组件 | 角色 | 端口 | 主要功能 |
 |------|------|------|----------|
@@ -18,29 +18,44 @@
 
 ### 通信流程
 
-```text
-1. Web UI → volc-server: 请求场景配置和 RTC 凭据
-2. Web UI ↔ 火山云 RTC: 建立实时音视频连接（ASR/TTS）
-3. 火山云 → app: CustomLLM 回调 /chat-stream（SSE 流式返回）
-4. app ↔ Web UI: 通过 MQTT 调用 MCP 工具（摄像头/表情等）
-5. 火山云 → Web UI: TTS 合成语音回播
+```mermaid
+sequenceDiagram
+    autonumber
+    participant WebUI as Web UI
+    participant Volc as volc-server
+    participant RTC as 火山云 RTC
+    participant App as App
+    participant Cloud as 火山云
+
+    WebUI ->> Volc: 请求场景配置和 RTC 凭据
+
+    WebUI ->> RTC: 建立实时音视频连接
+    RTC ->> WebUI: 建立实时音视频连接
+    note over WebUI, RTC: ASR / TTS
+
+    Cloud ->> App: CustomLLM 回调 /chat-stream（SSE 流式返回）
+
+    App ->> WebUI: 通过 MQTT 调用 MCP 工具
+    WebUI ->> App: 摄像头 / 表情等
+
+    Cloud ->> WebUI: TTS 合成语音回播
 ```
 
-**核心能力**：
+### 核心能力
 
-- **MCP over MQTT 协议**：通过 EMQX Broker 实现 AI Agent 对设备的跨网络工具调用（摄像头、表情、音量控制）
-- **多模态理解**：集成 VLM 视觉大模型，支持"看看我手里拿的是什么"等视觉场景
-- **实时语音交互**：基于火山云 RTC + ASR/TTS，端到端语音识别与合成，低延迟响应
-- **并行处理架构**：工具调用与语音合成异步执行，用户体验流畅无阻塞
+- **MCP over MQTT 协议**：通过 EMQX Broker 实现 AI Agent 对设备的跨网络工具调用（摄像头、表情、音量控制）。
+- **多模态理解**：集成 VLM 视觉大模型，支持"看看我手里拿的是什么"等视觉场景。
+- **实时语音交互**：基于火山云 RTC + ASR/TTS，端到端语音识别与合成，低延迟响应。
+- **并行处理架构**：工具调用与语音合成异步执行，用户体验流畅无阻塞。
 
-## 前置条件
+## 前置准备
 
-### 1. Docker 环境
+### Docker 环境
 
 - **版本要求**：Docker 24+
 - **验证方式**：运行 `docker --version` 确认
 
-### 2. MQTT Broker
+### MQTT Broker
 
 本项目需要一个可访问的 EMQX Broker 供 Web 服务（MCP Server）和 app（MCP Client + AI Agent）容器连接。
 
@@ -63,23 +78,23 @@ MQTT_USERNAME=your_username
 MQTT_PASSWORD=your_password
 ```
 
-### 3. LLM API Key 获取
+### 获取 LLM API Key
 
 本项目默认使用阿里云百炼的 `qwen-flash` 模型。
 
 #### 开通阿里云百炼
 
-1. 访问 [阿里云百炼控制台](https://bailian.console.aliyun.com)
-2. 如页面顶部显示开通提示，点击开通服务（开通不产生费用，仅模型调用超出免费额度后计费）
-3. 如需实名认证，请先完成认证
+1. 访问 [阿里云百炼控制台](https://bailian.console.aliyun.com)。
+2. 如页面顶部显示开通提示，点击开通服务（开通不产生费用，仅模型调用超出免费额度后计费）。
+3. 如需实名认证，请先完成认证。
 
 #### 创建 API Key
 
-1. 进入 [密钥管理](https://bailian.console.aliyun.com/#/api-key) 页面
-2. 在 **API-Key** 页签下点击 **创建 API-KEY**
-3. 选择归属账号和业务空间（通常选择默认业务空间），填写描述后确定
-4. 点击 API Key 旁的复制图标获取密钥
-5. 将获取的 API Key 填入 `app/.env` 的 `DASHSCOPE_API_KEY`
+1. 进入 [密钥管理](https://bailian.console.aliyun.com/#/api-key) 页面。
+2. 在 **API-Key** 页签下点击 **创建 API-KEY**。
+3. 选择归属账号和业务空间（通常选择默认业务空间），填写描述后确定。
+4. 点击 API Key 旁的复制图标获取密钥。
+5. 将获取的 API Key 填入 `app/.env` 的 `DASHSCOPE_API_KEY`。
 
 #### 使用其他模型服务（可选）
 
@@ -99,7 +114,7 @@ LLM_MODEL=your_model_name                       # 模型名称
 
 不同的大模型服务可能延迟和费用差异较大，请根据实际需求选择合适的模型，最快延迟效果推荐使用默认的阿里云百炼 `qwen-flash`。
 
-### 4. 火山云凭据
+### 开通火山云服务并配置凭据
 
 #### 开通服务
 
@@ -107,11 +122,11 @@ LLM_MODEL=your_model_name                       # 模型名称
 
 **必需服务**:
 
-1. **RTC 服务** - [开通教程](https://www.volcengine.com/docs/6348/69865)
+- **RTC 服务** - [开通教程](https://www.volcengine.com/docs/6348/69865)
    - 开通后获取 `VOLC_RTC_APP_ID` 和 `VOLC_RTC_APP_KEY`
    - 获取地址: [RTC 控制台](https://console.volcengine.com/rtc/aigc/listRTC)
 
-2. **ASR/TTS 语音服务** - [豆包语音控制台](https://console.volcengine.com/speech/app)
+- **ASR/TTS 语音服务** - [豆包语音控制台](https://console.volcengine.com/speech/app)
    - 创建应用时选择:
      - **ASR**: 流式语音识别
      - **TTS**: 语音合成
@@ -121,7 +136,7 @@ LLM_MODEL=your_model_name                       # 模型名称
      - `VOLC_TTS_APP_TOKEN` - TTS 应用 Token
      - `VOLC_TTS_RESOURCE_ID` - TTS 资源 ID (根据所选语音线路)
 
-3. **账号凭据** - [密钥管理](https://console.volcengine.com/iam/keymanage/)
+- **账号凭据** - [密钥管理](https://console.volcengine.com/iam/keymanage/)
    - `VOLC_ACCESS_KEY_ID` - Access Key ID
    - `VOLC_SECRET_KEY` - Secret Access Key
 
@@ -131,20 +146,20 @@ LLM_MODEL=your_model_name                       # 模型名称
 
 **主账号调用**（推荐，配置简单）:
 
-1. 登录主账号 [RTC 控制台](https://console.volcengine.com/rtc)
-2. 进入 [跨服务授权](https://console.volcengine.com/rtc/aigc/iam)
-3. 点击 **一键开通跨服务授权** 配置 `VoiceChatRoleForRTC` 角色
-4. 使用主账号的 AK/SK 即可调用服务
+1. 登录主账号 [RTC 控制台](https://console.volcengine.com/rtc)。
+2. 进入 [跨服务授权](https://console.volcengine.com/rtc/aigc/iam)。
+3. 点击 **一键开通跨服务授权** 配置 `VoiceChatRoleForRTC` 角色。
+4. 使用主账号的 AK/SK 即可调用服务。
 
 **子账号调用**（可选，需额外配置）:
 
 为子账号添加调用实时对话式 AI 接口权限：
 
-1. 登录主账号 [RTC 控制台](https://console.volcengine.com/rtc)
-2. 前往 [跨服务授权](https://console.volcengine.com/rtc/aigc/iam)，点击 **为子账号添加权限**
-3. 找到需要授权的子账号，点击添加权限
+1. 登录主账号 [RTC 控制台](https://console.volcengine.com/rtc)。
+2. 前往 [跨服务授权](https://console.volcengine.com/rtc/aigc/iam)，点击 **为子账号添加权限**。
+3. 找到需要授权的子账号，点击添加权限。
 
-> 完整的 RTC 服务开通教程请参考: [实时对话式AI前置准备](https://www.volcengine.com/docs/6348/1315561)
+> 完整的 RTC 服务开通教程请参考: [实时对话式AI前置准备](https://www.volcengine.com/docs/6348/1315561)。
 
 #### LLM 配置
 
@@ -167,25 +182,25 @@ LLM_MODEL=your_model_name                       # 模型名称
 
 #### 快速获取参数
 
-**推荐方式**: 使用火山云官方 Demo 快速验证配置
+**推荐方式**: 使用火山云官方 Demo 快速验证配置。
 
-1. 访问 [实时对话式 AI Demo](https://console.volcengine.com/rtc/aigc/run)
-2. 跑通 Demo 后点击右上角 **接入 API** 按钮
-3. 复制参数配置代码，提取所需的凭据信息
+1. 访问 [实时对话式 AI Demo](https://console.volcengine.com/rtc/aigc/run)。
+2. 跑通 Demo 后点击右上角 **接入 API** 按钮。
+3. 复制参数配置代码，提取所需的凭据信息。
 
-### 5. 网络要求
+### 网络要求
 
 **端口开放**（默认配置，可在 Compose 文件中调整）：
 
-- `8080` - Web UI
-- `8081` - App 后端（SSE 端点）
-- `3002` - volc-server 代理（火山服务配置）
+- `8080`: Web UI
+- `8081`: App 后端（SSE 端点）
+- `3002`: volc-server 代理（火山服务配置）
 
 **可达性要求**：
 
 **重要**: 为保证完整体验本项目的 MCP over MQTT 功能，app 服务的 `/chat-stream` 端点**必须部署到公网可访问的 HTTPS 环境**，以便火山云服务回调。
 
-- **生产部署**（推荐）：将 app 部署到公网 HTTPS 地址（如 `https://your-domain.com/chat-stream`），确保 SSE 响应以 `data: [DONE]` 正确结束
+- **生产部署**（推荐）：将 app 部署到公网 HTTPS 地址（如 `https://your-domain.com/chat-stream`），确保 SSE 响应以 `data: [DONE]` 正确结束。
 - **本地测试**：非公网环境，仅可通过 API 测试 LLM 推理与 MCP over MQTT 工具调用，无法完整的体验到火山云语音交互功能。
 
 ## 快速教程：10 分钟搭建语音交互 + 设备控制演示
@@ -205,7 +220,7 @@ cd mcp-ai-companion-demo
 
 > **安全提示**：请勿将 `.env` 文件提交到 Git，建议添加到 `.gitignore`。
 
-#### 2.1 配置 app 服务（AI Agent 后端）
+#### 配置 app 服务（AI Agent 后端）
 
 **创建配置文件**：
 
@@ -263,14 +278,14 @@ PHOTO_UPLOAD_DIR=uploads          # 照片上传目录
   ```bash
   # 方法 1：使用 openssl 生成（推荐）
   openssl rand -base64 32
-
+  
   # 方法 2：使用 Python 生成
   python3 -c "import secrets; print(secrets.token_urlsafe(32))"
   ```
 
   > **安全警告**：切勿使用在线工具生成密钥或将密钥提交到 Git，生产环境请使用环境变量或密钥管理服务。
 
-#### 2.2 配置 volc-server 服务（火山云代理）
+#### 配置 volc-server 服务（火山云代理）
 
 **创建配置文件**：
 
@@ -317,13 +332,13 @@ VOLC_LLM_API_KEY=your-strong-random-secret-key-here  # 与 app 保持一致
 
 **配置检查清单**：
 
-- [ ] `VOLC_ACCESS_KEY_ID` 和 `VOLC_SECRET_KEY` 已从火山云控制台获取
-- [ ] `VOLC_RTC_APP_ID` 和 `VOLC_RTC_APP_KEY` 来自 RTC 控制台
-- [ ] `VOLC_ASR_APP_ID`、`VOLC_TTS_APP_ID`、`VOLC_TTS_APP_TOKEN`、`VOLC_TTS_RESOURCE_ID` 来自豆包语音控制台
-- [ ] `VOLC_LLM_API_KEY` 与 `app/.env` 的 `CUSTOM_LLM_API_KEY` 完全一致
-- [ ] 已完成前置条件中的"权限配置"（跨服务授权）
+- `VOLC_ACCESS_KEY_ID` 和 `VOLC_SECRET_KEY` 已从火山云控制台获取。
+- `VOLC_RTC_APP_ID` 和 `VOLC_RTC_APP_KEY` 来自 RTC 控制台。
+- `VOLC_ASR_APP_ID`、`VOLC_TTS_APP_ID`、`VOLC_TTS_APP_TOKEN`、`VOLC_TTS_RESOURCE_ID` 来自豆包语音控制台。
+- `VOLC_LLM_API_KEY` 与 `app/.env` 的 `CUSTOM_LLM_API_KEY` 完全一致。
+- 已完成前置条件中的"权限配置"（跨服务授权）。
 
-#### 2.3 配置 web 服务（前端 UI）
+#### 配置 web 服务（前端 UI）
 
 Web 服务使用**构建时**环境变量，默认配置已满足本地开发需求：
 
@@ -374,7 +389,7 @@ docker compose -f docker/docker-compose.web-volc.yml up --build
 
 **启动过程**：
 
-1. 构建镜像：`mcp-app`、`mcp-volc-server`、`mcp-web`
+1. 构建镜像：`mcp-app`、`mcp-volc-server`、`mcp-web`。
 2. 启动容器并监听端口：
    - `8080` - Web UI
    - `8081` - AI Agent 后端
@@ -384,47 +399,47 @@ docker compose -f docker/docker-compose.web-volc.yml up --build
 
 ### 步骤 4：功能验证
 
-#### 4.1 访问 Web UI
+#### 访问 Web UI
 
-打开浏览器访问：[http://localhost:8080](http://localhost:8080)
+打开浏览器访问：[http://localhost:8080](http://localhost:8080)。
 
 您将看到一个虚拟设备界面，包含对话机器人头像、语音，摄像头按钮等元素。
 
 ![web-ui-initial](./assets/web-ui-initial.png)
 
-#### 4.2 配置 MQTT 连接（首次使用）
+#### 配置 MQTT 连接（首次使用）
 
-1. 点击页面右上角的 **设置** 图标
+1. 点击页面右上角的 **设置** 图标。
 2. 在设置面板中填入 EMQX Broker 配置：
    - **服务器（Broker）**: `ws://localhost:8083/mqtt`（注意使用 WebSocket 端口 8083，非 MQTT 端口 1883）
    - **Username**: 如 EMQX 开启鉴权则填写用户名
    - **Password**: 如 EMQX 开启鉴权则填写密码
-3. 点击 **保存** 按钮
-4. 在弹出的确认对话框中点击 **确认**，页面将自动刷新并应用新配置，MQTT 连接将自动建立
+3. 点击 **保存** 按钮。
+4. 在弹出的确认对话框中点击 **确认**，页面将自动刷新并应用新配置，MQTT 连接将自动建立。
 
 ![mqtt-settings](./assets/mqtt-settings.png)
 
 > **说明**：
 >
-> - Device ID 由系统自动生成（格式：`web-ui-hardware-controller/{随机ID}`），无需手动配置
-> - MQTT 连接成功后，MCP 工具将自动注册并可供 AI Agent 调用
-> - 如连接失败，请检查 EMQX Broker 的 WebSocket 监听器是否启用（默认端口 8083）
+> - Device ID 由系统自动生成（格式：`web-ui-hardware-controller/{随机ID}`），无需手动配置。
+> - MQTT 连接成功后，MCP 工具将自动注册并可供 AI Agent 调用。
+> - 如连接失败，请检查 EMQX Broker 的 WebSocket 监听器是否启用（默认端口 8083）。
 
-#### 4.3 开始语音交互
+#### 开始语音交互
 
-1. 在页面底部中央找到三个圆形按钮（麦克风、扬声器、摄像头）
-2. 点击最左侧的 **麦克风按钮**（默认为灰色）
-3. 浏览器会请求麦克风权限，点击 **允许**
+1. 在页面底部中央找到三个圆形按钮（麦克风、扬声器、摄像头）。
+2. 点击最左侧的 **麦克风按钮**（默认为灰色）。
+3. 浏览器会请求麦克风权限，点击 **允许**。
 4. 系统自动初始化：
-   - 麦克风按钮显示连接动画
-   - 通过 volc-server 获取场景配置和 RTC Token
-   - 建立火山云 WebRTC 连接
-   - 初始化 ASR/TTS 语音服务
-   - 启动 CustomLLM 回调到 app 的 `/chat-stream` 端点
+   - 麦克风按钮显示连接动画。
+   - 通过 volc-server 获取场景配置和 RTC Token。
+   - 建立火山云 WebRTC 连接。
+   - 初始化 ASR/TTS 语音服务。
+   - 启动 CustomLLM 回调到 app 的 `/chat-stream` 端点。
 5. 连接成功后：
-   - 麦克风按钮变为紫色高亮状态
-   - 页面中央显示"嗨～我是 EMQ，很高兴见到你！"
-   - 对着麦克风说话即可开始语音交互
+   - 麦克风按钮变为紫色高亮状态。
+   - 页面中央显示"嗨～我是 EMQ，很高兴见到你！"。
+   - 对着麦克风说话即可开始语音交互。
 
 ![voice-connected](./assets/voice-connected.png)
 
@@ -438,22 +453,22 @@ docker compose -f docker/docker-compose.web-volc.yml up --build
 
 **语音识别与回复**：
 
-- 说"你好"或"给我说个小故事吧"测试基本对话
-- 页面中央对话框会实时显示 AI 回复文字
-- 同时播放 TTS 语音合成
+- 说"你好"或"给我说个小故事吧"测试基本对话。
+- 页面中央对话框会实时显示 AI 回复文字。
+- 同时播放 TTS 语音合成。
 
 **设备控制（MCP 工具调用）**：
 
-- 说 "看看我手里拿的是什么" → 触发摄像头拍照并进行视觉识别
-- 说 "把音量调到 80%" → 调整界面音量条
-- 说 "让表情变成开心" → 切换头像表情动画
-- 说 "把表情改成生气" → 再次切换表情
+- 说 "看看我手里拿的是什么" → 触发摄像头拍照并进行视觉识别。
+- 说 "把音量调到 80%" → 调整界面音量条。
+- 说 "让表情变成开心" → 切换头像表情动画。
+- 说 "把表情改成生气" → 再次切换表情。
 
 ![chat-example](./assets/chat-example.png)
 
 ![mcp-tool-example](./assets/mcp-tool-example.png)
 
-#### 4.4 验证成功标志
+#### 验证成功标志
 
 ✅ **语音交互正常**：
 
@@ -473,7 +488,7 @@ docker compose -f docker/docker-compose.web-volc.yml up --build
 - Web UI 浏览器的控制台中无 MQTT 连接错误
 - volc-server 日志显示成功回调 app
 
-#### 4.5 部分功能测试
+#### 部分功能测试
 
 如只想验证 UI 和火山云配置（不包含自定义 AI Agent）：
 
@@ -488,8 +503,8 @@ docker compose -f docker/docker-compose.web-volc.yml up --build volc-server web
 
 **使用火山方舟平台 LLM 进行对话**：
 
-1. 前往 [火山方舟控制台](https://console.volcengine.com/ark) 创建推理接入点或智能体应用
-2. 获取 `EndpointId`（推理接入点）或 `BotId`（智能体应用）
+1. 前往 [火山方舟控制台](https://console.volcengine.com/ark) 创建推理接入点或智能体应用。
+2. 获取 `EndpointId`（推理接入点）或 `BotId`（智能体应用）。
 3. 在 `volc-server/src/config.ts` 中配置 LLM：
 
    ```typescript
@@ -504,15 +519,56 @@ docker compose -f docker/docker-compose.web-volc.yml up --build volc-server web
    }
    ```
 
-4. 重启 volc-server 服务，即可使用火山方舟平台的 LLM 进行对话
+4. 重启 volc-server 服务，即可使用火山方舟平台的 LLM 进行对话。
 
 ### 步骤 5：停止服务
+
+在完成上述流程后，如果需要停止相关组件运行，可执行以下命令：
 
 ```bash
 docker compose -f docker/docker-compose.web-volc.yml down
 ```
 
 ## 常见问题与故障排查
+
+### 常见问题
+
+#### 服务启动问题
+
+| 问题           | 可能原因          | 解决方案                                                     |
+| -------------- | ----------------- | ------------------------------------------------------------ |
+| 容器启动失败   | 端口被占用        | 1. 使用 `lsof -i :8080` 查看占用进程 2. 修改 compose 端口映射 3. 重新执行 `docker compose up --build` |
+| 环境变量未生效 | .env 文件加载失败 | 1. 确认 `.env` 在正确目录 2. 检查文件权限 3. 重新构建镜像    |
+
+#### 火山云服务问题
+
+| 问题              | 可能原因            | 解决方案                                                     |
+| ----------------- | ------------------- | ------------------------------------------------------------ |
+| 停留在"AI 准备中" | 跨服务授权未配置    | 1. 检查"权限配置"是否完成 2. 确认服务已开通且有余额 3. 验证参数大小写 |
+| 401/403 错误      | AK/SK 或 Token 错误 | 1. 检查 `VOLC_ACCESS_KEY_ID`/`VOLC_SECRET_KEY` 2. 确认 Token 未过期 3. 验证跨服务授权 |
+| 子账号配额限制    | 默认配额不足        | 前往 [配额中心](https://console.volcengine.com/quota/productList/ParameterList?ProviderCode=iam) 提升配额 |
+
+#### LLM 请求问题
+
+| 问题               | 可能原因       | 解决方案                                                     |
+| ------------------ | -------------- | ------------------------------------------------------------ |
+| LLM 请求失败       | API Key 错误   | 1. 确认 `DASHSCOPE_API_KEY` 正确 2. 检查网络连接 3. 查看日志：`docker compose logs app` |
+| CustomLLM 回调失败 | 认证密钥不一致 | 1. 确认两处 `CUSTOM_LLM_API_KEY` 一致 2. 验证 `VOLC_LLM_URL` 地址 3. 检查 volc-server 能否访问 app |
+| HTTPS 回调失败     | 证书链不完整   | **必须使用 fullchain 证书**：`APP_SSL_CERTFILE` 指向 `fullchain.pem`（包含完整证书链），而非单个 `cert.pem`。火山云回调时需验证完整证书链，否则 SSL 握手失败 |
+
+#### MCP 工具调用问题
+
+| 问题           | 可能原因                   | 解决方案                                                     |
+| -------------- | -------------------------- | ------------------------------------------------------------ |
+| 工具不可用     | MQTT 连接或 device_id 问题 | 1. 查看浏览器控制台中 MQTT 状态 2. 确认 Device ID 一致 3. 增加 `MCP_TOOLS_WAIT_SECONDS=10` |
+| 摄像头拍照失败 | 权限未授予                 | 1. 检查浏览器摄像头权限 2. 点击允许访问 3. 刷新页面          |
+
+#### MQTT 连接问题
+
+| 问题            | 可能原因             | 解决方案                                                     |
+| --------------- | -------------------- | ------------------------------------------------------------ |
+| MQTT 连接失败   | Broker 配置错误      | 1. 确认 EMQX Broker 运行中 2. 检查 `MQTT_BROKER_HOST`/`PORT` 3. 验证鉴权信息 4. 测试网络连通性 |
+| Web UI 无法连接 | WebSocket 端口未开放 | 1. 确认 WebSocket 端口开放（默认 8083） 2. 使用 `ws://` 协议（如 `ws://localhost:8083/mqtt`） |
 
 ### 配置调整
 
@@ -537,14 +593,14 @@ services:
 
 #### 启用 HTTPS（生产环境）
 
-1. 准备证书文件（`fullchain.pem`、`privkey.pem`）
+1. 准备证书文件（`fullchain.pem`、`privkey.pem`）。
 
    > **重要**：必须使用 **fullchain**（完整证书链），而不是单个证书文件。火山云回调时需要验证完整的证书链，否则会导致 SSL 握手失败。
    >
    > - Let's Encrypt: 使用 `fullchain.pem`（包含证书 + 中间证书）
    > - 其他 CA: 确保证书文件包含完整证书链（服务器证书 + 中间证书）
 
-2. 将证书文件放到项目目录（如 `certs/` 文件夹）
+2. 将证书文件放到项目目录（如 `certs/` 文件夹）。
 
 3. 在 `app/.env` 中配置证书路径：
 
@@ -553,7 +609,7 @@ services:
    APP_SSL_KEYFILE=./certs/privkey.pem
    ```
 
-4. 修改 `volc-server/.env` 中的 `VOLC_LLM_URL` 为 HTTPS 地址（如 `https://your-domain.com:8081`）
+4. 修改 `volc-server/.env` 中的 `VOLC_LLM_URL` 为 HTTPS 地址（如 `https://your-domain.com:8081`）。
 
 #### 单独构建镜像
 
@@ -564,45 +620,6 @@ docker build -t mcp-web:local ./web
 docker build -t mcp-app:local ./app
 docker build -t volc-server:local ./volc-server
 ```
-
-### 常见问题
-
-#### 服务启动问题
-
-| 问题 | 可能原因 | 解决方案 |
-|------|----------|----------|
-| 容器启动失败 | 端口被占用 | 1. 使用 `lsof -i :8080` 查看占用进程 2. 修改 compose 端口映射 3. 重新执行 `docker compose up --build` |
-| 环境变量未生效 | .env 文件加载失败 | 1. 确认 `.env` 在正确目录 2. 检查文件权限 3. 重新构建镜像 |
-
-#### 火山云服务问题
-
-| 问题 | 可能原因 | 解决方案 |
-|------|----------|----------|
-| 停留在"AI 准备中" | 跨服务授权未配置 | 1. 检查"权限配置"是否完成 2. 确认服务已开通且有余额 3. 验证参数大小写 |
-| 401/403 错误 | AK/SK 或 Token 错误 | 1. 检查 `VOLC_ACCESS_KEY_ID`/`VOLC_SECRET_KEY` 2. 确认 Token 未过期 3. 验证跨服务授权 |
-| 子账号配额限制 | 默认配额不足 | 前往 [配额中心](https://console.volcengine.com/quota/productList/ParameterList?ProviderCode=iam) 提升配额 |
-
-#### LLM 请求问题
-
-| 问题 | 可能原因 | 解决方案 |
-|------|----------|----------|
-| LLM 请求失败 | API Key 错误 | 1. 确认 `DASHSCOPE_API_KEY` 正确 2. 检查网络连接 3. 查看日志：`docker compose logs app` |
-| CustomLLM 回调失败 | 认证密钥不一致 | 1. 确认两处 `CUSTOM_LLM_API_KEY` 一致 2. 验证 `VOLC_LLM_URL` 地址 3. 检查 volc-server 能否访问 app |
-| HTTPS 回调失败 | 证书链不完整 | **必须使用 fullchain 证书**：`APP_SSL_CERTFILE` 指向 `fullchain.pem`（包含完整证书链），而非单个 `cert.pem`。火山云回调时需验证完整证书链，否则 SSL 握手失败 |
-
-#### MCP 工具调用问题
-
-| 问题 | 可能原因 | 解决方案 |
-|------|----------|----------|
-| 工具不可用 | MQTT 连接或 device_id 问题 | 1. 查看浏览器控制台中 MQTT 状态 2. 确认 Device ID 一致 3. 增加 `MCP_TOOLS_WAIT_SECONDS=10` |
-| 摄像头拍照失败 | 权限未授予 | 1. 检查浏览器摄像头权限 2. 点击允许访问 3. 刷新页面 |
-
-#### MQTT 连接问题
-
-| 问题 | 可能原因 | 解决方案 |
-|------|----------|----------|
-| MQTT 连接失败 | Broker 配置错误 | 1. 确认 EMQX Broker 运行中 2. 检查 `MQTT_BROKER_HOST`/`PORT` 3. 验证鉴权信息 4. 测试网络连通性 |
-| Web UI 无法连接 | WebSocket 端口未开放 | 1. 确认 WebSocket 端口开放（默认 8083） 2. 使用 `ws://` 协议（如 `ws://localhost:8083/mqtt`） |
 
 ### 日志查看
 
