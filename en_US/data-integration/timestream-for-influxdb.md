@@ -12,7 +12,7 @@ Through the built-in [rule engine](./rules.md) and the Timestream for InfluxDB S
 
 The diagram below illustrates the typical data integration architecture between EMQX and Amazon Timestream for InfluxDB in an energy storage scenario.
 
-![](./assets/mqtt-to-influxdb.jpg)
+![timestream_for_influxdb](./assets/timestream_for_influxdb.png)
 
 The integration provides a scalable IoT data pipeline for real-time energy monitoring and analytics. EMQX serves as the IoT messaging layer, handling device connectivity and data routing, while Timestream for InfluxDB provides managed time series storage and query capabilities. The workflow is as follows:
 
@@ -56,7 +56,7 @@ Ensure you have an AWS account with permissions to create and manage Timestream 
 
 #### Create a Timestream for InfluxDB DB Instance
 
-1. Sign in to the AWS Management Console and open the Amazon Timestream for InfluxDB console at [https://console.aws.amazon.com/timestream/](https://console.aws.amazon.com/timestream/).
+1. Sign in to the AWS Management Console and open the [Amazon Timestream for InfluxDB console](https://console.aws.amazon.com/timestream/).
 
 2. In the upper-right corner, choose the AWS Region where you want to create the DB instance.
 
@@ -78,9 +78,7 @@ Ensure you have an AWS account with permissions to create and manage Timestream 
 
 6. Complete the remaining configuration steps (deployment settings, storage options, networking, logging, etc.) according to your requirements. For detailed explanations of each option, refer to: [Create an InfluxDB DB Instance](https://docs.aws.amazon.com/timestream/latest/developerguide/timestream-for-influx-getting-started-creating-db-instance.html#timestream-for-influx-getting-started-creating-db-instance-step2).
 
-After the database is created, open the instance details page to obtain the AWS-generated endpoint, such as: `c5vasdqn0b-3ksj4dla5nfjhi.timestream-influxdb.us-east-1.on.aws`.
-
-You will need this endpoint when configuring the EMQX Connector.
+7. After the database is created, open the instance details page to obtain the AWS-generated endpoint, such as: `c5vasdqn0b-3ksj4dla5nfjhi.timestream-influxdb.us-east-1.on.aws`. You will need this endpoint when configuring the EMQX Connector.
 
 #### Configure Network and Security Groups
 
@@ -171,7 +169,7 @@ This section demonstrates how to create a Connector to connect the Sink to the A
      
    - **TLS** (optional): Enable TLS if your Timestream for InfluxDB endpoint requires HTTPS (recommended). For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Timestream InfluxDB DB instance.
-6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to InfluxDB. For detailed steps, see [Create a Rule with Amazon Timestream Sink](#create-a-rule-with-amazon-timestream-sink).
+6. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules and Sink to specify the data to be forwarded to Timestream for InfluxDB. For detailed steps, see [Create a Rule with Amazon Timestream Sink](#create-a-rule-with-amazon-timestream-sink).
 
 ## Create a Rule with Amazon Timestream Sink
 
@@ -279,6 +277,13 @@ Use Line Protocol when you want full control over the final write syntax. Enter 
 ```bash
 sensor_data,device=${clientid},region=us-east temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
 ```
+
+**In this example:**
+
+- `sensor_data` represents the measurement.
+- `device` and `region` represent tags.
+- `temp`, `hum`, and `precip` represent fields.
+- `${timestamp}` represents the timestamp and is replaced at runtime.
 
 ::: tip
 
@@ -389,7 +394,7 @@ Expected output contains:
 
 A successful response returns the inserted data in **JSONL** format. 
 
-Refer to the InfluxDB [API documentation]( https://docs.influxdata.com/influxdb3/core/api/v3/#tag/Quick-start) for more query examples:
+Refer to the InfluxDB [API documentation]( https://docs.influxdata.com/influxdb3/core/api/v3/#tag/Quick-start) for more query examples.
 
 ## Advanced Configurations
 
@@ -397,11 +402,11 @@ This section delves deeper into the advanced configuration options available for
 
 | **Fields**            | **Descriptions**                                             | **Recommended Value** |
 | --------------------- | ------------------------------------------------------------ | --------------------- |
-| Start Timeout         | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Connector does not proceed with operations until it verifies that the connected resource, such as a database instance in Timestream for InfluxDB, is fully operational and ready to handle data transactions. | `5`                   |
-| Buffer Pool Size      | Specifies the number of buffer worker processes that will be allocated for managing data flow in egress-type bridges between EMQX and Timestream for InfluxDB. These worker processes are responsible for temporarily storing and handling data before it is sent to the target service. This setting is particularly relevant for optimizing performance and ensuring smooth data transmission in egress (outbound) scenarios. For Sinks that only deal with ingress (inbound) data flow, this option can be set to "0" as it is not applicable. | `4`                   |
-| Request TTL           | The "Request TTL" (Time To Live) configuration setting specifies the maximum duration, in seconds, that a request is considered valid once it enters the buffer. This timer starts ticking from the moment the request is buffered. If the request stays in the buffer for a period exceeding this TTL setting or if it is sent but does not receive a timely response or acknowledgment from Timestream for InfluxDB, the request is deemed to have expired. | `45`                  |
-| Health Check Interval | Specifies the time interval, in seconds, at which the Sink will perform automated health checks on the connection to Timestream for InfluxDB. | `15`                  |
-| Max Buffer Queue Size | Specifies the maximum number of bytes that can be buffered by each buffer worker in the Amazon Timestream Sink. Buffer workers temporarily store data before it is sent to Timestream for InfluxDB, serving as an intermediary to handle data flow more efficiently. Adjust the value according to your system's performance and data transfer requirements. | `1`                   |
-| Max Batch Size        | Specifies the maximum size of data batches that can be transmitted from EMQX to Timestream for InfluxDB in a single transfer operation. By adjusting the size, you can fine-tune the efficiency and performance of data transfer between EMQX and Timestream for InfluxDB.<br />If the "Max Batch Size" is set to `1`, data records are sent individually, without being grouped into batches. | `100`                 |
-| Query Mode            | Allows you to choose `asynchronous` or `synchronous` query modes to optimize message transmission based on different requirements. In asynchronous mode, writing to Timestream for InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Timestream for InfluxDB. | `Async`               |
-| Inflight Window       | An "in-flight query" refers to a query that has been initiated but has not yet received a response or acknowledgment. This setting controls the maximum number of in-flight queries that can exist simultaneously when the Sink is communicating with Timestream for InfluxDB.<br/>When the **Query Mode** is set to `async` (asynchronous), the "Inflight Window" parameter gains special importance. If it is crucial for messages from the same MQTT client to be processed in strict order, you should set this value to 1. | `100`                 |
+| Start Timeout         | The maximum time (in seconds) the Connector waits for the target resource (such as a Timestream for InfluxDB instance) to become healthy during startup. If the resource is not ready within this time, the creation request fails. | `5`                   |
+| Buffer Pool Size      | The number of buffer worker processes used to handle outgoing data before it is sent to Timestream for InfluxDB. Increasing this value can improve throughput under high write load. For ingress-only scenarios, this can be set to `0`. | `4`                   |
+| Request TTL           | The maximum time (in seconds) a write request can remain in the buffer. If the request is not successfully sent or acknowledged within this period, it is discarded as expired. | `45`                  |
+| Health Check Interval | The interval (in seconds) at which the Sink checks the connectivity and health of the Timestream for InfluxDB endpoint. | `15`                  |
+| Max Buffer Queue Size | The maximum amount of data (in bytes) that each buffer worker can hold while waiting to be sent. Increase this value if bursts of data cause temporary backpressure. | `1`                   |
+| Max Batch Size        | The maximum number of records sent in a single write request. Larger batch sizes improve throughput but may increase latency. Setting this to `1` disables batching and sends records individually. | `100`                 |
+| Query Mode            | Controls whether write operations are performed asynchronously or synchronously. In `Async` mode, writing to Timestream for InfluxDB does not block the MQTT message publish process. However, this might result in clients receiving messages ahead of their arrival in Timestream for InfluxDB. | `Async`               |
+| Inflight Window       | The maximum number of write requests that can be in progress simultaneously. When **Query Mode** is set to `Async`, this setting controls concurrency. To guarantee strict ordering for messages from the same MQTT client, set this value to `1`. | `100`                 |
