@@ -165,7 +165,7 @@ This section demonstrates how to create a Connector to connect the Sink to the A
    - **Version of InfluxDB**: Select the version that matches the configuration of your Timestream for InfluxDB instance:
      - `v2` (default): Configure the **Token**, **Organization**, and **Bucket**: Provide the personal access token, organization name, and bucket name collected earlier in [Obtain InfluxDB Token, Organization, and Bucket](#obtain-influxdb-token-organization-and-bucket). These values must match your InfluxDB configuration exactly.
      
-     - `v3`: Configure the **Database Name** and **Token**: Enter the database name you provided when creating the DB instance. Enter the secret value you retrieved in [Retrieve Secret Value for InfluxDB v3 DB Instance](#retrieve-secret-value-for-influxdb-v3-db-instance).
+     - `v3`: Configure the **Database Name** and **Token**: Enter the database name you provided when creating the DB instance. Enter the secret value you retrieved in [Retrieve Secret Value for InfluxDB v3 DB Instance](#retrieve-authentication-token-for-influxdb-v3-db-instances).
      
    - **TLS** (optional): Enable TLS if your Timestream for InfluxDB endpoint requires HTTPS (recommended). For detailed information on TLS connection options, see [TLS for External Resource Access](../network/overview.md#enabling-tls-for-external-resource-access).
 5. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Timestream InfluxDB DB instance.
