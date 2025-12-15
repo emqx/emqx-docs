@@ -169,7 +169,7 @@ InfluxDB v3 不通过 UI 创建 Token。AWS 会在实例创建时，将认证信
    - **服务器地址**：输入 Timestream for InfluxDB 实例的访问地址和端口，例如：`<实例端点>:8086`。
    - **InfluxDB版本**：选择与 Timestream for InfluxDB 实例配置一致的 InfluxDB 版本：
      - **v2**（默认）：需要配置 **Token**、**组织**和 **Bucket**。请填写在[获取 InfluxDB Token、组织与 Bucket](#获取-influxdb-令牌-组织与-bucket)中获取的个人访问令牌、组织名称和 Bucket 名称，这些值必须与InfluxDB中的配置完全一致。
-     - **v3**：需要配置**数据库名字**和 **Token**。数据库名称为创建 v3 数据库实例时指定的名称，Token 请填写在[获取 InfluxDB v3 实例的 Secret 值](#influxdb-v3-从-aws-secret-manager-获取)中从 AWS Secrets Manager 获取的密钥内容。
+     - **v3**：需要配置**数据库名字**和 **Token**。数据库名称为创建 v3 数据库实例时指定的名称，Token 请填写在[获取 InfluxDB v3 实例的 Secret 值](#influxdb-v3从-aws-secrets-manager-获取)中从 AWS Secrets Manager 获取的密钥内容。
    - **启用TLS**（可选）：如果你的 Timestream for InfluxDB 端点使用 HTTPS（推荐），请开启 TLS。有关 TLS 配置的详细说明，请参考[启用 TLS 加密访问外部资源](../network/overview.md#enabling-tls-for-external-resource-access)。
 5. 在点击**创建**之前，可以先点击**测试连接**，验证连接器是否能够成功连接到 Timestream for InfluxDB 实例。
 6. 点击页面底部的**创建**按钮完成连接器创建。在弹出的对话框中，你可以选择**返回连接器列表**，或点击**创建规则**继续创建规则和Sink，以指定要转发到 Timestreams for InfluxDB 的数据。具体操作请参考[创建 Amazon Timestream Sink 规则](#创建-amazon-timestream-sink-规则)。
