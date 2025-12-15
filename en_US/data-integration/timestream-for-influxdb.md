@@ -358,7 +358,7 @@ In EMQX Dashboard, click the rule name to enter the rule details page. You shoul
 
 Use the InfluxDB UI:
 
-1. Open the InfluxDB I `https://<endpoint>:8086`.
+1. Open the InfluxDB UI `https://<endpoint>:8086`.
 
 2. Navigate to **Data Explorer**.
 
