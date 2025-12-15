@@ -356,7 +356,7 @@ In EMQX Dashboard, click the rule name to enter the rule details page. You shoul
 
 #### For InfluxDB v2 instances
 
-Use the InlufDB UI:
+Use the InfluxDB UI:
 
 1. Open the InfluxDB I `https://<endpoint>:8086`.
 
