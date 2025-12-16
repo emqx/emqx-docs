@@ -614,7 +614,7 @@ emqx ctl trace start client device-001 trace.log
 
 ### 向设备部署 EMQX 服务器 CA（Deploy EMQX Server CA to Devices）
 
-- 如果 EMQX 使用内部 CA（自签名证书），则需要将 `emqx-server-ca.pem` 安装到每个设备的系统信任存储或应用程序包中。
+- 如果 EMQX 使用内部 CA（自签名证书），则需要将 `device-ca.pem` 安装到每个设备的系统信任存储或应用程序包中。
 - 如果 EMQX 使用公共 CA（例如 Let’s Encrypt），则无需在设备上执行任何操作。
 
 ### 更新设备连接参数
@@ -625,19 +625,19 @@ emqx ctl trace start client device-001 trace.log
 # 迁移前（HiveMQ）
 mqtt pub -h mqtt.internal.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile AmazonRootCA1.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 
 # 迁移后（EMQX）
 mqtt pub -h mqtt.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile emqx-server-ca.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 ```
 
 **示例（使用 Python paho-mqtt 客户端并启用 mTLS）**
 
 ```hocon
 client.tls_set(
-    ca_certs="certs/emqx-server-ca.pem",
+    ca_certs="certs/device-ca.pem",
     certfile="certs/device-001.cert.pem",
     keyfile="certs/device-001.key.pem",
     tls_version=ssl.PROTOCOL_TLS_CLIENT

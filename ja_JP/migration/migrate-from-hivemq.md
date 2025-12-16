@@ -592,7 +592,7 @@ See [**Trace**](../observability/tracer.md) for advanced debugging.
 
 ### 3.1 Deploy EMQX Server CA to Devices
 
-- If EMQX uses an internal CA, install `emqx-server-ca.pem` on each device (system trust store or application bundle).
+- If EMQX uses an internal CA, install `device-ca.pem` on each device (system trust store or application bundle).
 - If EMQX uses a public CA (e.g., Let’s Encrypt), no device action is needed.
 
 ### 3.2 Update Device Connection Parameters
@@ -603,12 +603,12 @@ See [**Trace**](../observability/tracer.md) for advanced debugging.
 # Before (HiveMQ)
 mqtt pub -h mqtt.internal.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile AmazonRootCA1.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 
 # After (EMQX)
 mqtt pub -h mqtt.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile emqx-server-ca.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 ```
 
 **Example (Python paho-mqtt with mTLS)**
