@@ -42,20 +42,35 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 ## Message Queue Concepts
 
 - **Queue Name**
+  
    An MQTT topic or topic filter that identifies the queue. Messages published to matching topics are automatically enqueued.
+   
 - **Queue Declaration**
+  
    The process of creating a durable queue and defining its behavior through configurable properties.
+   
 - **Queue Deletion**
+  
    The removal of a queue along with all its stored messages.
+   
 - **Last-Value Semantics**
+  
    An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the `queue key` from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
+   
 - **Topic Prefix**
+  
    Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
+   
 - **Queue Properties**
+  
    Customizable settings that control queue behavior, such as message retention time and dispatch strategy.
+   
 - **Quality of Service (QoS)**
+  
    All messages in Message Queues are delivered with QoS 1 (at-least-once), regardless of the QoS level used when publishing or subscribing. This ensures reliable message delivery and unifies the queue's delivery behavior.
+   
 - **Message Persistence**
+  
    Messages are retained even when no subscribers are connected. By default, queues apply last-value semantics. For regular queues (without a key expression), messages are stored in the order received.
 
 ## How Message Queue Works
@@ -66,18 +81,12 @@ The Message Queue feature in EMQX is implemented as a loosely coupled extension 
 
 The following main components are involved:
 
-- **Message Queue Registry**
-  Manages the lifecycle of all message queues. Responsible for creating, deleting, and looking up queues.
-- **Message Queue Message DB**
-  Stores the actual messages published to queues and is built on EMQX’s [Durable Storage](../durability/durability_introduction.md#durable-storage-architecture).
-- **Message Queue State Storage**
-  Persists consumption progress and queue metadata (e.g., TTL, properties).
-- **Message Queue Consumer**
-  Retrieves messages from the queue and dispatches them to connected subscribers based on the dispatch strategy.
-- **Message Queue Subscription Registry**
-  Tracks which channels (clients) are subscribed to which queues. Stores subscription state in each channel’s context.
-- **Message Queue Hooks**
-  Hook into publish and subscribe events to intercept messages and route them to queues or consumers.
+- **Message Queue Registry**: Manages the lifecycle of all message queues. Responsible for creating, deleting, and looking up queues.
+- **Message Queue Message DB**: Stores the actual messages published to queues and is built on EMQX’s [Durable Storage](../durability/durability_introduction.md#durable-storage-architecture).
+- **Message Queue State Storage**: Persists consumption progress and queue metadata (e.g., TTL, properties).
+- **Message Queue Consumer**: Retrieves messages from the queue and dispatches them to connected subscribers based on the dispatch strategy.
+- **Message Queue Subscription Registry**: Tracks which channels (clients) are subscribed to which queues. Stores subscription state in each channel’s context.
+- **Message Queue Hooks**: Hook into publish and subscribe events to intercept messages and route them to queues or consumers.
 
 ### Message Queue Data Flow Diagram
 
