@@ -606,7 +606,7 @@ See [Log Trace](../observability/tracer.md) for advanced debugging.
 
 ### Deploy EMQX Server CA to Devices
 
-- If EMQX uses an internal CA, install `emqx-server-ca.pem` on each device (system trust store or application bundle).
+- If EMQX uses an internal CA, install `device-ca.pem` on each device (system trust store or application bundle).
 - If EMQX uses a public CA (e.g., Let’s Encrypt), no device action is needed.
 
 ### Update Device Connection Parameters
@@ -617,19 +617,19 @@ See [Log Trace](../observability/tracer.md) for advanced debugging.
 # Before (HiveMQ)
 mqtt pub -h mqtt.internal.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile AmazonRootCA1.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 
 # After (EMQX)
 mqtt pub -h mqtt.example.com -p 8883 \
   -u device-001 -pw StrongPass! \
-  --cafile emqx-server-ca.pem --topic device/001/data --message test
+  --cafile device-ca.pem --topic device/001/data --message test
 ```
 
 **Example (Python paho-mqtt with mTLS)**
 
 ```hocon
 client.tls_set(
-    ca_certs="certs/emqx-server-ca.pem",
+    ca_certs="certs/device-ca.pem",
     certfile="certs/device-001.cert.pem",
     keyfile="certs/device-001.key.pem",
     tls_version=ssl.PROTOCOL_TLS_CLIENT
@@ -688,6 +688,6 @@ Before switching production traffic, verify:
 
 Migrating from HiveMQ to EMQX is primarily a configuration translation process: converting Java-centric artifacts (XML, JKS, extensions) into EMQX’s HOCON configuration, flexible Authentication Chains, and the Data Integration framework. 
 
-By following the three phases—inventory, configure, and update—you can preserve device credentials, topic structures, and integration flows while gaining EMQX’s high-concurrency Erlang runtime and dynamic configuration capabilities. 
+By following the three phases: inventory, configure, and update, you can preserve device credentials, topic structures, and integration flows while gaining EMQX’s high-concurrency Erlang runtime and dynamic configuration capabilities. 
 
 Plan the migration carefully, validate each listener and integration, and execute the cutover with confidence.
