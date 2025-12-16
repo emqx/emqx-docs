@@ -1,6 +1,8 @@
 # 快速开始：基于 EMQ + 火山云语音服务搭建智能体
 
-本文档介绍如何使用 Docker Compose 快速部署一个支持语音交互与设备控制的 AI 智能体演示系统。本项目通过 PC 端的浏览器模拟智能设备端（摄像头、表情、音量等硬件能力），展示 MCP over MQTT 协议如何实现 AI Agent 对设备的实时控制。系统集成火山云 RTC 实现语音通道，ASR/TTS 提供语音识别与合成，CustomLLM 模式对接自定义 AI Agent 服务完成多轮对话与工具调用。
+本文介绍如何使用 Docker Compose 部署一个 AI Agent 演示项目，该项目使用 WebRTC 实现语音交互，使用 MCP over MQTT 协议控制设备。
+
+本项目通过一个在浏览器中运行的智能玩偶形象来模拟设备，以展示如何使用 MCP over MQTT 协议访问设备端的拍照、表情切换、音量调节等能力。项目集成了[火山引擎实时对话式 AI](https://www.volcengine.com/product/veRTC/ConversationalAI)，通过 WebRTC 技术实现低延迟的语音交互体验，并使用火山引擎提供的 `CustomLLM` 模式对接自定义的 AI Agent 服务，实现多轮对话与工具调用。
 
 观看[演示视频](https://www.bilibili.com/video/BV1P2WTzBEu4/)了解 Demo 完整效果。
 
@@ -10,11 +12,11 @@
 
 本系统由三个核心组件构成：
 
-| 组件 | 角色 | 端口 | 主要功能 |
-|------|------|------|----------|
-| **web** | MCP Server | 8080 | 前端 UI，暴露硬件控制工具（摄像头拍照/表情/音量） |
-| **app** | MCP Client + AI Agent | 8081 | 提供 `/chat-stream` 端点，处理 LLM/VLM 推理与 MCP 工具调用 |
-| **volc-server** | 火山云代理 | 3002 | 管理 RTC 房间/Token，配置 CustomLLM 地址，让火山服务能够请求至 app |
+| 组件            | 角色                  | 端口 | 主要功能                                                           |
+|-----------------|-----------------------|------|--------------------------------------------------------------------|
+| **web**         | MCP Server            | 8080 | 前端 UI，模拟硬件提供 MCP 工具（摄像头拍照/表情切换/音量控制）     |
+| **app**         | MCP Client + AI Agent | 8081 | 提供 `/chat-stream` 端点，处理 LLM/VLM 推理与 MCP 工具调用         |
+| **volc-server** | 火山云代理            | 3002 | 管理 RTC 房间/Token，配置 CustomLLM 地址，让火山服务能够请求至 app |
 
 ### 通信流程
 
@@ -43,17 +45,16 @@ sequenceDiagram
 
 ### 核心能力
 
-- **MCP over MQTT 协议**：通过 EMQX Broker 实现 AI Agent 对设备的跨网络工具调用（摄像头、表情、音量控制）。
-- **多模态理解**：集成 VLM 视觉大模型，支持"看看我手里拿的是什么"等视觉场景。
-- **实时语音交互**：基于火山云 RTC + ASR/TTS，端到端语音识别与合成，低延迟响应。
-- **并行处理架构**：工具调用与语音合成异步执行，用户体验流畅无阻塞。
+- **MCP over MQTT 协议**：通过 EMQX Broker 实现 AI Agent 对设备的跨网络工具调用（摄像头、表情切换、音量控制）。
+- **多模态理解**：集成 VLM 视觉大模型，实现 “看看我手里拿的是什么” 等视觉场景。
+- **实时语音交互**：基于火山云 RTC 以及其提供的 ASR/TTS，实现低延迟的语音识别与合成。
 
 ## 前置准备
 
 ### Docker 环境
 
 - **版本要求**：Docker 24+
-- **验证方式**：运行 `docker --version` 确认
+- **验证方式**：可以通过 `docker --version` 确认
 
 ### MQTT Broker
 
@@ -80,7 +81,7 @@ MQTT_PASSWORD=your_password
 
 ### 获取 LLM API Key
 
-本项目默认使用阿里云百炼的 `qwen-flash` 模型。
+本项目将使用阿里云百炼的 `qwen-flash` 模型作为演示，也支持接入其他符合 OpenAI 接口规范的模型服务。
 
 #### 开通阿里云百炼
 
