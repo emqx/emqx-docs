@@ -928,30 +928,9 @@
       children:
         - emqx-ai/mcp-over-mqtt/architecture
         - emqx-ai/mcp-over-mqtt/specification
-    - title_en: Multimedia Server
-      title_cn: 多媒体服务器
-      title_ja: Multimedia Server
-      path: emqx-ai/multimedia-ai/overview
-      collapsed: true
-      children:
-        - emqx-ai/multimedia-ai/architecture
-        - emqx-ai/multimedia-ai/message-protocol
-    - title_en: MCP over MQTT & Multimedia Service SDKs
-      title_cn: MCP over MQTT 和多媒体服务 SDK
-      title_ja: MCP over MQTT & Multimedia Service SDKs
-      path: emqx-ai/sdks/overview
-      collapsed: true
-      children:
-        - title_en: Clients Compatible with Multimedia Services
-          title_cn: 与多媒体服务适配的客户端
-          title_ja: Clients Compatible with Multimedia Services
-          path: emqx-ai/sdks/multimedia-ai/overview
-          collapsed: true
-          children:
-            - emqx-ai/sdks/multimedia-ai/webrtc-typescript
-        - title_en: MCP over MQTT SDKs
-          title_cn: MCP over MQTT SDKs
-          title_ja: MCP over MQTT SDKs
+        - title_en: SDKs
+          title_cn: SDKs
+          title_ja: SDKs
           collapsed: true
           children:
             - emqx-ai/sdks/mcp-sdk-erlang
@@ -959,15 +938,69 @@
             - emqx-ai/sdks/mcp-sdk-paho-c
             - emqx-ai/sdks/mcp-sdk-python
             - emqx-ai/sdks/mcp-sdk-typescript
-    - title_en: Tutorials
-      title_cn: 教程
-      title_ja: チュートリアル
+            - emqx-ai/sdks/mcp-sdk-kotlin
+    - title_en: MCP Bridge
+      title_cn: MCP 桥接
+      title_ja: MCP ブリッジ
+      path: emqx-ai/mcp-bridge/overview
       collapsed: true
       children:
-        - title_en: Voice Services AI Agent 
-          title_cn: 语音服务智能体
-          title_ja: Voice Services AI Agent
-          path: emqx-ai/tutorials/quickstart-volcengine-voice
+        - emqx-ai/mcp-bridge/quick-start
+    - title_en: Realtime Audio & Video AI
+      title_cn: 实时音视频 AI
+      title_ja: リアルタイム音声＆ビデオAI
+      collapsed: true
+      children:
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: クイックスタート
+          collapsed: true
+          children:
+            - emqx-ai/rtc-services/volcengine-rtc/quick-start
+        - title_en: RTC Services
+          title_cn: RTC 服务
+          title_ja: RTCサービス
+          collapsed: true
+          children:
+            - title_en: Volcengine RTC
+              title_cn: 火山引擎 RTC
+              title_ja: Volcengine RTC
+              path: emqx-ai/rtc-services/volcengine-rtc/overview
+              collapsed: true
+              children:
+                - emqx-ai/rtc-services/volcengine-rtc/installation-and-testing
+                - emqx-ai/rtc-services/volcengine-rtc/api
+                - title_en: Scenarios
+                  title_cn: 场景样例
+                  title_ja: シナリオ
+                  collapsed: true
+                  children:
+                    - emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
+                    - emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-chat
+                    - emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-control-hardware
+            - title_en: GPT-Realtime
+              title_cn: GPT-Realtime
+              title_ja: GPT-Realtime
+              path: emqx-ai/rtc-services/gpt-realtime/overview
+              collapsed: true
+              children:
+                - emqx-ai/rtc-services/gpt-realtime/quick-start
+            # - title_en: EMQX Multimedia Server
+            #   title_cn: EMQX 多媒体服务器
+            #   title_ja: EMQX Multimedia Server
+            #   path: emqx-ai/multimedia-ai/overview
+            #   collapsed: true
+            #   children:
+            #     - emqx-ai/multimedia-ai/quick-start
+            #     - emqx-ai/multimedia-ai/architecture
+            #     - emqx-ai/multimedia-ai/message-protocol
+            #     - title_en: SDKs
+            #       title_cn: SDKs
+            #       title_ja: SDKs
+            #       collapsed: true
+            #       path: emqx-ai/sdks/multimedia-ai/overview
+            #       children:
+            #         - emqx-ai/sdks/multimedia-ai/webrtc-typescript
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
