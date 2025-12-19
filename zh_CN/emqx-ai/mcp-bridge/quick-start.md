@@ -52,7 +52,7 @@ mcp = FastMCP(
     log_level="DEBUG",
     mqtt_server_description="A simple FastMCP server that controls a light device. You can turn the light on and off, and change its brightness.",
     mqtt_client_id = "abc123",
-    mqtt_options={
+    mqtt_options= {
         "username": "aaa",
         "host": "localhost",
         "port": 1883,
