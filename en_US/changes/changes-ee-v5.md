@@ -1,5 +1,60 @@
 # EMQX Enterprise Version 5
 
+## 5.10.3
+
+### Enhancements
+
+- [#16456](https://github.com/emqx/emqx/pull/16456) Support TLS 1.3 session ticket resumption.
+
+  EMQX now supports TLS 1.3 session resumption using stateless session tickets, allowing clients to resume TLS sessions without server-side session state storage.
+
+  Node-level configuration: `node.tls_stateless_tickets_seed` is the secret key seed for generating TLS 1.3 stateless session tickets.
+  Listener-level configuration: `listeners.ssl.<name>.ssl_options.session_tickets` enables TLS 1.3 session resumption using stateless session tickets.
+  Possible values are `disabled` (default), `stateless`, and `stateless_with_cert` (includes certificate information).
+
+  Session tickets are only generated when `node.tls_stateless_tickets_seed` is configured (non-empty) and `session_tickets` is enabled in listener SSL options.
+  If `session_tickets` is enabled but `node.tls_stateless_tickets_seed` is empty, session tickets will not be generated and an error log will be emitted when starting the listener.
+
+- [#16324](https://github.com/emqx/emqx/pull/16324) Supports end-to-end tracing of messages published via HTTP API.
+
+- [#16220](https://github.com/emqx/emqx/pull/16220) Added the `jt808.frame.parse_unknown_message` option, enabling the JT808 gateway to transparently forward unknown messages.
+
+- [#16135](https://github.com/emqx/emqx/pull/16135) Added two new metrics and corresponding rates for the `GET /monitor_current` HTTP API: `rules_matched` and `actions_executed`.  They track the number of rules that matched and action execution rate (i.e., success + failure), respectively.
+
+### Bug Fixes
+
+- [#16452](https://github.com/emqx/emqx/pull/16452) Upgraded `gen_rpc` to `3.5.1`.
+
+  Prior to the `gen_rpc` upgrade, EMQX may experience long tail of crash logs due to connect timeout if a peer node is unreachable.
+  The new version `gen_rpc` no longer has the long tail and converted crash logs to more readable `error` logs,
+  and the frequent log `"failed_to_connect_server"` is also throttled to avoid spamming.
+
+
+- [#16418](https://github.com/emqx/emqx/pull/16418) Reduced the volume of logs generated when a resource exception occurs (`resource_exception`).  These logs are now throttled, and some potentially large terms are redacted from it.
+
+- [#16415](https://github.com/emqx/emqx/pull/16415) Upgrade Apache Pulsar client to 2.1.2.
+
+  When Pulsar producer action's `batch_size` is configured to `1`, the producer will now encode single messages instead of single-element batch.
+  This should make consumers to share load using Key Share strategy.
+
+- [#16383](https://github.com/emqx/emqx/pull/16383) Previously, when using IoTDB Connector with its RestAPI driver, credentials would not be checked during health checks.  Now, we send a no-op query during IoTDB connector health-check.  This allows to detect misconfiguration of client credentials early.
+
+- [#16349](https://github.com/emqx/emqx/pull/16349) Fixed a crash in MQTT v5 connections caused by a type mismatch when processing the request-response-information property.
+
+- [#16336](https://github.com/emqx/emqx/pull/16336) Fixed a race condition which may cause timeout when testing connectivity or stopping a connector from the dashboard.
+
+- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Link garbage-collection logic that could accidentally remove live routes from the internal routing table in the proces of cleaning up stale route replication state. This problem occured only when multiple independent Cluster Links were set up, and some of these links went down for relatively long periods of time.
+
+- [#16304](https://github.com/emqx/emqx/pull/16304) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
+
+- [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Link route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
+
+- [#16263](https://github.com/emqx/emqx/pull/16263) Previously, the Kafka source connector performed health checks by verifying partition leader connectivity for all partitions.
+  In a clustered deployment, each EMQX node is assigned only a subset of partitions, causing leader connections for unassigned partitions to remain idle.
+  Since Kafka closes idle connections after a timeout (10 minutes by default), this behavior could trigger false connectivity alarms.
+
+  The health check now verifies leader connectivity only for the partitions assigned to the current EMQX node, preventing unnecessary idle connections and false alarms.
+
 ## 5.10.2
 
 *Release Date: 2025-11-11*
