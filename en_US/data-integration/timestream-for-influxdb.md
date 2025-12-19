@@ -18,7 +18,7 @@ The integration provides a scalable IoT data pipeline for real-time energy monit
 
 1. **Message publication and reception**: Devices connect to EMQX over MQTT and publish telemetry (e.g., power usage, charge/discharge metrics). When EMQX receives these messages, it initiates the matching process within its rules engine.  
 2. **Message processing**: The rule engine matches topics and applies transformations such as filtering, field extraction, or data enrichment, preparing the payload for ingestion into the target Timestream for InfluxDB bucket.
-3. **Data ingestion into InfluxDB**: When a rule triggers the Amazon Timestream Sink, EMQX writes the data using InfluxDB Line Protocol. Templates define how MQTT fields map to measurements, tags, and fields.
+3. **Data ingestion into Timestream**: When a rule triggers the Amazon Timestream Sink, EMQX writes the data using InfluxDB Line Protocol. Templates define how MQTT fields map to measurements, tags, and fields.
 
 Once stored in Timestream for InfluxDB, you can use Flux/InfluxQL queries, the InfluxUI, or tools like Grafana to visualize power metrics or integrate with business systems for monitoring and alerting.
 
