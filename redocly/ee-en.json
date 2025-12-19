@@ -4264,7 +4264,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -7316,13 +7316,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -10769,7 +10779,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -23692,7 +23702,7 @@
           },
           "response_information": {
             "default": "",
-            "description": "UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.<br/>To disable this feature, input <code>\"\"</code> in the text box below. Only applicable to MQTT 5.0 clients.",
+            "description": "MQTT v5 Response Information (Optional).<br/>Specifies a string returned to clients in the `CONNACK` packet if requested.<br/>The server passes this value as-is and does automatically add it to Access Control (ACL) rules.<br/>It is intended solely to help publishers and subscribers establish their own topic contract<br/> (e.g., a topic prefix). Leave blank to disable.",
             "type": "string"
           },
           "shared_subscription": {
@@ -26447,7 +26457,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -30733,67 +30743,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -30805,43 +30755,25 @@
               },
               {
                 "enum": [
-                  "couchbase"
+                  "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "sqlserver"
+                  "mysql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "iotdb"
+                  "mongodb"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
+                  "opents"
                 ],
                 "type": "string"
               },
@@ -30859,7 +30791,49 @@
               },
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
@@ -30871,13 +30845,91 @@
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
                 ],
                 "type": "string"
               },
@@ -30895,37 +30947,7 @@
               },
               {
                 "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -30937,25 +30959,13 @@
               },
               {
                 "enum": [
-                  "tablestore"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
+                  "clickhouse"
                 ],
                 "type": "string"
               }
@@ -31922,6 +31932,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -32144,6 +32158,10 @@
           },
           "authorization.deny": {
             "description": "Number of Authorization deny",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -33895,13 +33913,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -34828,6 +34856,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -34866,6 +34898,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -36677,7 +36713,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -39517,7 +39553,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "6A97B73A3E91F22E",
             "type": "string"
           },
           "status": {
@@ -40485,7 +40521,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -41492,7 +41528,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -44885,7 +44921,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -52643,6 +52679,10 @@
       },
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
+          "actions_executed": {
+            "description": "Number of Action executions (failures + successes) in the last sample window.",
+            "type": "integer"
+          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -52665,6 +52705,10 @@
           },
           "received": {
             "description": "Received messages in the last sample window.",
+            "type": "integer"
+          },
+          "rules_matched": {
+            "description": "Number of Rules that matched their where clauses in the last sample window.",
             "type": "integer"
           },
           "sent": {
@@ -53831,6 +53875,11 @@
             "description": "The maximum length of the JT/T 808 frame.",
             "minimum": 0,
             "type": "integer"
+          },
+          "parse_unknown_message": {
+            "default": true,
+            "description": "Whether to process and forward unrecognized Message IDs. <br/><br/>- <code>true</code>: Unrecognized Message IDs are processed, and their body is encoded in Base64 and forwarded.<br/><br/>- <code>false</code>: An error is reported and logged when an unrecognized Message ID is received.<br/><br/>Default is true.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -56507,13 +56556,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -56567,6 +56626,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -56601,6 +56664,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -59432,6 +59499,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -59654,6 +59725,10 @@
           },
           "authorization.deny": {
             "description": "Number of Authorization deny",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -60609,13 +60684,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -61684,13 +61769,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -62663,7 +62758,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.2"
+    "version": "5.10.3-alpha.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -70377,8 +70472,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -70387,8 +70482,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -75295,39 +75390,39 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "influxdb",
-                      "pulsar",
-                      "greptimedb",
-                      "mongodb",
+                      "iotdb",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
+                      "influxdb",
+                      "sqlserver",
+                      "hstreamdb",
+                      "greptimedb",
                       "azure_event_hub_producer",
                       "kafka_producer",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "sqlserver",
+                      "pulsar",
+                      "mongodb",
                       "confluent_producer",
-                      "hstreamdb",
                       "kinesis",
                       "redis",
+                      "datalayers",
+                      "s3tables",
                       "s3",
                       "doris",
-                      "s3tables",
-                      "datalayers",
                       "opents",
                       "mqtt",
-                      "tablestore",
-                      "oracle",
-                      "tdengine",
                       "clickhouse",
                       "couchbase",
-                      "azure_blob_storage",
+                      "tdengine",
                       "snowflake",
+                      "oracle",
+                      "azure_blob_storage",
                       "timescale",
+                      "tablestore",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75339,39 +75434,39 @@
                       "rocketmq",
                       "rabbitmq",
                       "cassandra",
-                      "influxdb",
-                      "pulsar",
-                      "greptimedb",
-                      "mongodb",
+                      "iotdb",
+                      "gcp_pubsub_producer",
                       "syskeeper_forwarder",
+                      "influxdb",
+                      "sqlserver",
+                      "hstreamdb",
+                      "greptimedb",
                       "azure_event_hub_producer",
                       "kafka_producer",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "sqlserver",
+                      "pulsar",
+                      "mongodb",
                       "confluent_producer",
-                      "hstreamdb",
                       "kinesis",
                       "redis",
+                      "datalayers",
+                      "s3tables",
                       "s3",
                       "doris",
-                      "s3tables",
-                      "datalayers",
                       "opents",
                       "mqtt",
-                      "tablestore",
-                      "oracle",
-                      "tdengine",
                       "clickhouse",
                       "couchbase",
-                      "azure_blob_storage",
+                      "tdengine",
                       "snowflake",
+                      "oracle",
+                      "azure_blob_storage",
                       "timescale",
+                      "tablestore",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -85591,7 +85686,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "6A97B73A3E91F22E",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93799,7 +93894,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "6A97B73A3E91F22E",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93884,7 +93979,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "6A97B73A3E91F22E",
             "in": "path",
             "name": "site",
             "required": true,

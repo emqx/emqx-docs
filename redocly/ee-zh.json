@@ -7324,6 +7324,16 @@
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
           },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
+          },
           "verify": {
             "default": "verify_none",
             "description": "启用或禁用对等验证。",
@@ -30733,127 +30743,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -30865,7 +30755,67 @@
               },
               {
                 "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               },
@@ -30877,13 +30827,103 @@
               },
               {
                 "enum": [
-                  "clickhouse"
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
                 ],
                 "type": "string"
               },
@@ -30901,31 +30941,7 @@
               },
               {
                 "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
+                  "iotdb"
                 ],
                 "type": "string"
               },
@@ -30937,25 +30953,19 @@
               },
               {
                 "enum": [
-                  "tablestore"
+                  "kinesis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "clickhouse"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
+                  "rabbitmq"
                 ],
                 "type": "string"
               }
@@ -31922,6 +31932,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
@@ -32144,6 +32158,10 @@
           },
           "authorization.deny": {
             "description": "授权拒绝的次数",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -33903,6 +33921,16 @@
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
           },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
+          },
           "verify": {
             "default": "verify_none",
             "description": "启用或禁用对等验证。",
@@ -34828,6 +34856,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "在采样时集群中的会话总数。当 `broker.session_history_retain` 设置为大于 `0s` 的持续时间时，包括已过期的会话。只能表示一个近似值。",
             "type": "integer"
@@ -34866,6 +34898,10 @@
           },
           "retained_msg_count": {
             "description": "在采样时保留的消息数。只能表示一个近似值。",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -39517,7 +39553,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "45EFAA289A8B5E7F",
+            "example": "A774742CB2DA0CB0",
             "type": "string"
           },
           "status": {
@@ -52643,6 +52679,10 @@
       },
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
+          "actions_executed": {
+            "description": "Number of Action executions (failures + successes) in the last sample window.",
+            "type": "integer"
+          },
           "connections": {
             "description": "在采样时的连接数。只能表示一个近似值。",
             "type": "integer"
@@ -52665,6 +52705,10 @@
           },
           "received": {
             "description": "在最后一个采样窗口中接收的消息。",
+            "type": "integer"
+          },
+          "rules_matched": {
+            "description": "Number of Rules that matched their where clauses in the last sample window.",
             "type": "integer"
           },
           "sent": {
@@ -53831,6 +53875,11 @@
             "description": "JT/T 808 帧的最大长度。",
             "minimum": 0,
             "type": "integer"
+          },
+          "parse_unknown_message": {
+            "default": true,
+            "description": "Whether to process and forward unrecognized Message IDs. <br/><br/>- <code>true</code>: Unrecognized Message IDs are processed, and their body is encoded in Base64 and forwarded.<br/><br/>- <code>false</code>: An error is reported and logged when an unrecognized Message ID is received.<br/><br/>Default is true.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -56515,6 +56564,16 @@
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
           },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
+          },
           "verify": {
             "default": "verify_none",
             "description": "启用或禁用对等验证。",
@@ -56567,6 +56626,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "在采样时集群中的会话总数。当 `broker.session_history_retain` 设置为大于 `0s` 的持续时间时，包括已过期的会话。只能表示一个近似值。",
             "type": "integer"
@@ -56601,6 +56664,10 @@
           },
           "retained_msg_count": {
             "description": "在采样时保留的消息数。只能表示一个近似值。",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -59432,6 +59499,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "接收到的 UNSUBSCRIBE 数据包中取消订阅失败的数量",
             "minimum": 0,
@@ -59654,6 +59725,10 @@
           },
           "authorization.deny": {
             "description": "授权拒绝的次数",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -60616,6 +60691,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -61692,6 +61777,16 @@
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
           },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
+          },
           "verify": {
             "default": "verify_none",
             "description": "启用或禁用对等验证。",
@@ -62663,7 +62758,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.2"
+    "version": "5.10.3-alpha.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -75292,42 +75387,42 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
-                      "influxdb",
-                      "pulsar",
-                      "greptimedb",
-                      "mongodb",
-                      "gcp_pubsub_producer",
                       "iotdb",
-                      "sqlserver",
-                      "kafka_producer",
-                      "confluent_producer",
                       "azure_event_hub_producer",
-                      "syskeeper_forwarder",
+                      "influxdb",
                       "hstreamdb",
+                      "sqlserver",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "syskeeper_forwarder",
+                      "mongodb",
+                      "confluent_producer",
+                      "kafka_producer",
                       "kinesis",
                       "redis",
-                      "doris",
-                      "s3tables",
                       "datalayers",
                       "opents",
                       "s3",
+                      "doris",
+                      "s3tables",
                       "mqtt",
-                      "tablestore",
-                      "tdengine",
                       "clickhouse",
-                      "timescale",
                       "couchbase",
-                      "azure_blob_storage",
-                      "oracle",
+                      "tdengine",
                       "snowflake",
+                      "azure_blob_storage",
+                      "timescale",
+                      "tablestore",
+                      "oracle",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75336,42 +75431,42 @@
                   "items": {
                     "enum": [
                       "http",
-                      "rocketmq",
                       "rabbitmq",
+                      "rocketmq",
                       "cassandra",
-                      "influxdb",
-                      "pulsar",
-                      "greptimedb",
-                      "mongodb",
-                      "gcp_pubsub_producer",
                       "iotdb",
-                      "sqlserver",
-                      "kafka_producer",
-                      "confluent_producer",
                       "azure_event_hub_producer",
-                      "syskeeper_forwarder",
+                      "influxdb",
                       "hstreamdb",
+                      "sqlserver",
+                      "greptimedb",
+                      "gcp_pubsub_producer",
+                      "pulsar",
+                      "syskeeper_forwarder",
+                      "mongodb",
+                      "confluent_producer",
+                      "kafka_producer",
                       "kinesis",
                       "redis",
-                      "doris",
-                      "s3tables",
                       "datalayers",
                       "opents",
                       "s3",
+                      "doris",
+                      "s3tables",
                       "mqtt",
-                      "tablestore",
-                      "tdengine",
                       "clickhouse",
-                      "timescale",
                       "couchbase",
-                      "azure_blob_storage",
-                      "oracle",
+                      "tdengine",
                       "snowflake",
+                      "azure_blob_storage",
+                      "timescale",
+                      "tablestore",
+                      "oracle",
                       "disk_log",
-                      "elasticsearch",
                       "matrix",
-                      "pgsql",
+                      "elasticsearch",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -85591,7 +85686,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "45EFAA289A8B5E7F",
+            "example": "A774742CB2DA0CB0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93799,7 +93894,7 @@
           },
           {
             "description": "Site ID",
-            "example": "45EFAA289A8B5E7F",
+            "example": "A774742CB2DA0CB0",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93884,7 +93979,7 @@
           },
           {
             "description": "Site ID",
-            "example": "45EFAA289A8B5E7F",
+            "example": "A774742CB2DA0CB0",
             "in": "path",
             "name": "site",
             "required": true,
