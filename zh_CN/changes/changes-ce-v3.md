@@ -888,7 +888,7 @@ Support node cookie value with = characters. (emq-relx#146)
 
 ### mochiweb
 
-Improve Req:get(peername) funciton to support x-forwarded-for and x-remote-port . (emqtt/mochiweb#9)
+Improve Req:get(peername) function to support x-forwarded-for and x-remote-port . (emqtt/mochiweb#9)
 
 ## 2.3.0 "Passenger's Log"
 
@@ -966,7 +966,7 @@ Newline character in emq.conf causing error;(emqttd#1000)
 
 Fix crash caused by duplicated PUBREC packet (emqttd#1004)
 
-Unload the 'session.created' and 'session.teminated' hooks (emq-plugin-template)
+Unload the 'session.created' and 'session.terminated' hooks (emq-plugin-template)
 
 ## 2.1.1
 

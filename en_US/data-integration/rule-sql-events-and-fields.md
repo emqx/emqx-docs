@@ -78,11 +78,11 @@ See the table below for the supported event topic list.
 | [$events/message/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | Message dropped when delivering |
 | [$events/client/connected](#connection-complete-event-events-client-connected) | Connection complete             |
 | [$events/client/disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
-| [$events/client/connack](#connection-acknowlege-event-events-client-connack) | Connection acknowledged         |
+| [$events/client/connack](#connection-acknowledge-event-events-client-connack) | Connection acknowledged         |
 | [$events/auth/check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
 | [$events/auth/check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | Authentication check complete    |
 | [$events/session/subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
-| [$events/session/unsubscribed](#unsubcribe-event-events-session-unsubscribed) | Unsubscribe                     |
+| [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
 
@@ -165,7 +165,7 @@ This event topic can be used to trigger a rule when the message delivery is ackn
 
 ::: tip
 
-Only availabe for QOS 1 and QOS 2 messages.
+Only available for QOS 1 and QOS 2 messages.
 
 :::
 
@@ -357,6 +357,7 @@ Refer to the table below for fields that can be selected from the received MQTT 
 
 This event topic can be used to trigger a rule when a client is disconnected.
 
+
 For example, you can use the statement below to extract data from the `"$events/client/disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, disconnect time, and EMQX node where the event is triggered.
 
 Example:
@@ -365,6 +366,7 @@ SELECT
   clientid,
   username,
   reason,
+  connected_at,
   disconnected_at,
   node
 FROM
@@ -376,12 +378,11 @@ Output:
   "username": "u_emqx",
   "reason": "normal",
   "node": "emqx@127.0.0.1",
+  "connected_at": 1645003578036,
   "disconnected_at": 1645003578536,
   "clientid": "c_emqx"
 }
 ```
-
-
 
 | Field             | Explanation                                                  |
 | :---------------- | :----------------------------------------------------------- |
@@ -390,13 +391,14 @@ Output:
 | `username`        | Client username                                              |
 | `peername`        | IP Address and Port number                                   |
 | `sockname`        | IP Address and Port number listened by EMQX                  |
+| `connected_at` | Client connection start time (unit: ms). This timestamp represents when the current session was established and helps identify which connection session the disconnect event belongs to.<br />It ensures that delayed disconnect events do not overwrite newer connection states. |
 | `disconnected_at` | Client disconnection completion time (unit: ms)              |
 | `disconn_props`   | DISCONNECT Properties (MQTT 5.0 clients only)                |
 | `timestamp`       | Event trigger time (unit: ms)                                |
 | `node`            | EMQX node where the event is triggered                       |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Connection Acknowlege Event ("$events/client/connack")
+### Connection Acknowledge Event ("$events/client/connack")
 
 This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client.
 
@@ -621,7 +623,7 @@ Refer to the table below for fields that can be extracted.
 | `node`      | EMQX node where the event is triggered      |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Unsubcribe Event ("$events/session/unsubscribed")
+### Unsubscribe Event ("$events/session/unsubscribed")
 
 The rule is triggered when the terminal subscription is cancelled successfully.
 

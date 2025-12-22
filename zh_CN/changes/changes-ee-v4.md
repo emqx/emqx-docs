@@ -1,5 +1,63 @@
 # EMQX 企业版 v4 版本
 
+## e4.4.33
+
+*发布日期: 2025-11-26*
+
+### 增强
+
+- 新增基于 Tag 的速率限制功能。
+
+  现在用户可以使用 HTTP 认证服务返回的 Tag 来对客户端进行分类，并根据分类进行速率限制。
+
+- 降低 ACL 缓存功能的内存消耗。
+
+  此前，当 MQTT 消息的 payload 较大时，ACL 缓存功能会消耗较高的内存，内存的消耗大小与 MQTT 会话数目正相关。
+
+- 用户名配额模块支持踢除指定用户名的所有客户端连接。
+
+- 优化用户名配额模块的 “使用详情” 页面的用户体验。
+
+  此前，用户名配额模块的 “使用详情” 页面在加载时会自动对用户名按照会话数进行排序，会话数最多的用户名会出现在列表的最前面。但是，当用户名数量较多时，排序操作会导致页面加载时间过长，影响用户体验。现在 “使用详情” 页面上增加了一个排序按钮，只有在点击排序按钮时，才会进行排序。
+
+- 降低集群节点变化时，用户名配额模块的系统资源消耗。
+
+  此优化减少了用户名配额模块在检测到其他节点掉线时的不必要的数据同步操作，从而降低了系统资源消耗。
+
+### 修复
+
+- 修复了 MySQL，PostgreSQL 动作中无法使用 SQL 多行插入语法的问题。日志中会看到如下错误信息：
+
+  ```
+  ... Not an INSERT statement or incorrect SQL syntax
+  ```
+
+- 修复了滚动升级过程中，LwM2M 模块启动失败的问题。日志中会看到如下错误信息：
+
+  ```
+  [error] init_module_failure, module: emqx_module_proto_lwm2m, reason: {badkey,<<"coap_max_block_size">>}, ...
+  ```
+
+- 修复了使用二进制包安装的 EMQX 环境中，LwM2M 模块的默认 XML 路径错误的问题。
+
+- 修复了在 Kafka 服务故障恢复之后，Kafka Producer 缓存的消息无法继续发送的问题。日志中会看到如下错误信息：
+
+  ```
+  [warning] your-kafka-topic replayq_overflow_dropped_number_of_requests 2444
+  ```
+
+- 修复了升级 EMQX 版本之后，日志追踪功能可能因为丢失 `emqx_trace` 远程表而无法使用的问题。
+
+  在某些升级场景中，用户可能会先将新版本的 EMQX 节点加入到运行中的旧版本集群中，然后再移除旧节点。 如果用户在通过 CLI 或 API 移除旧节点之前，先通过 `emqx stop` 命令或其他方式手动停止了旧版本节点，且该节点曾启用过日志追踪功能，则新版本节点上的日志追踪模块可能因无法访问 `emqx_trace` 远程表而发生异常。
+
+  此外，该问题还可能导致 `emqx ctl cluster force-leave <node>` 命令无法正常执行。
+
+  修复后，日志追踪模块会在启动时修复 `emqx_trace` 表，同时 `force-leave` 命令不可用的问题也会在日志追踪模块启动后得到解决。
+
+- 修复了速率限制不精准的问题。
+
+  修复了速率限制中令牌桶算法的实现错误。修复前，实际能达到的最大速率总是略大于给定配置。
+
 ## e4.4.32
 
 *发布日期: 2025-07-30*
@@ -1776,7 +1834,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 规则引擎新增对超融合时空数据库 MatrixDB 的支持
 
-- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Altas 无缝对接
+- MongoDB 集成支持 DNS SRV 和 TXT Records 解析，可以与 MongoDB Atlas 无缝对接
 
 - 新增在线 Trace 功能，用户可以在 Dashboard 上完成对客户端和主题的追踪操作，以及查看或下载追踪日志
 
@@ -1875,7 +1933,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修复使用 Redis 离线消息功能时，EMQX 以相反顺序向客户端发送离线消息的问题。
 
-- 修复以分页的方式获取 HTPT API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
+- 修复以分页的方式获取 HTTP API 获取客户端列表时，同样的请求发送到不同的 EMQX 节点返回的结果不一致的问题。
   在此修改之前，发送 'GET http://localhost:8081/api/v4/clients?_page=1&_limit=1000' 请求
   到集群里的不同的 EMQX 节点，将返回不同的客户端列表。
 
@@ -1932,7 +1990,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修正了`/load_rebalance/{node}/evacuation/start`中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
 
-- 修复 mqtt_app 表内没有 boostrap user 里未导入用户的问题 [#1600](https://github.com/emqx/emqx-enterprise/pull/1600)。
+- 修复 mqtt_app 表内没有 bootstrap user 里未导入用户的问题 [#1600](https://github.com/emqx/emqx-enterprise/pull/1600)。
 
 - 修正了 `/load_rebalance/{node}/evacuation/start` 中错误的rpc错误信息 [#1572](https://github.com/emqx/emqx-enterprise/pull/1572)。
 
@@ -2627,7 +2685,7 @@ EMQX 4.4.0 现已正式发布，主要包含以下改动:
 
 - 修复规则引擎数据持久化到 Oracle 失败但成功计数仍然增加的问题
 - 修复规则引擎持久化数据到 Oracle 的动作（仅限同步操作）执行失败时无法触发备选动作的问题
-- 修复启用系统消息会导致规则引擎的 Kakfa 动作崩溃的问题
+- 修复启用系统消息会导致规则引擎的 Kafka 动作崩溃的问题
 - 修复规则引擎资源不可用时查询资源请求超时的问题
 - 创建规则时如果已经有使用相同 ID 的规则存在，现在规则引擎将报错而不是替换已有规则
 
@@ -2996,7 +3054,7 @@ EMQX 4.1.1 is released now, it mainly includes the following changes:
 
 *发布日期: 2020-07-18*
 
-1. 内置预览版 license，无需在官网注册获取 licese 可以直接启动 emqx
+1. 内置预览版 license，无需在官网注册获取 license 可以直接启动 emqx
 2. 修改 license 过期策略，emqx 服务不停，但是新连接无法登录
 3. 规则引擎 添加 MQTT 订阅资源
 4. 规则引擎 MQTT 消息桥接支持 pool

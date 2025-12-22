@@ -917,7 +917,7 @@ map_get('msg', json_decode('{"msg": "hello"}')) = 'hello'
 map_get('data', json_decode('{"msg": "hello"}')) = undefined
 ```
 
-### map_get(Key: srting, Map: map, Default: any) -> any
+### map_get(Key: string, Map: map, Default: any) -> any
 
 `map_get/2` と同様ですが、`Key` が存在しない場合は指定した `Default` を返します。例：
 

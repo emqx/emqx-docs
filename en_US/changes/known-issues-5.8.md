@@ -40,4 +40,3 @@
 | Since version | Issue                                                        | Workaround | Status            |
 | ------------- | ------------------------------------------------------------ | ---------- | ----------------- |
 | 5.0.0         | **Node Crash Race Condition**<br />If a node shuts down while RPC channels are being established, it may cause the peer node to crash. | -          | Resolved in 5.8.1 |
-

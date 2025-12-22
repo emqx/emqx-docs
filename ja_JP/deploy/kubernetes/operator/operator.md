@@ -1,24 +1,30 @@
 # EMQX Operator Overview
 
-The EMQX Operator provides [Kubernetes](https://kubernetes.io/) native deployment and management of [EMQX](https://www.emqx.io/), including EMQX Broker and EMQX Enterprise. The purpose of this project is to simplify and automate the configuration of the EMQX cluster.
+The EMQX Operator provides native [Kubernetes](https://kubernetes.io/) support for deploying and managing [EMQX](https://www.emqx.io/) clusters. Its primary goal is to simplify and automate the lifecycle management of EMQX in Kubernetes environments.
 
-The EMQX Operator includes, but is not limited to, the following features:
+EMQX Operator requires Kubernetes 1.24 or higher.
 
-* **Simplified Deployment**: Declare EMQX clusters with EMQX custom resources and deploy them quickly. For more details, please check [Getting Started](./getting-started.md).
+EMQX Operator includes, but is not limited to, the following features:
 
-* **Manage EMQX Cluster**: Automate operations and maintenance for EMQX, including cluster upgrades, runtime data persistence, updating Kubernetes resources based on the status of EMQX, etc. For more details, please check [Manage EMQX](./tasks/overview.md).
+* **Simplified Deployment**: Declare EMQX clusters with EMQX custom resources and deploy them quickly.
+
+    For more details, see the [Getting Started](./getting-started.md) guide.
+
+* **Cluster Management**: Automate operations and maintenance of EMQX clusters, including cluster upgrades with workload migrations, runtime data persistence, keeping Kubernetes managed resources up to date, etc.
+
+    For more details, see the [Manage EMQX](./tasks/overview.md) section.
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## How to Selector Kubernetes Version
+## EMQX and EMQX Operator compatibility
 
-The EMQX Operator requires a Kubernetes cluster of version `>=1.24`.
+The current EMQX Operator release series 2.2.x is compatible with the following EMQX versions:
+- EMQX Open Source & Enterprise 5.1.1 ~ 5.8.x
+- EMQX 5.9 & 5.10 (limited support)
+- EMQX 6.0 and higher (limited support)
 
-| Kubernetes Versions     | EMQX Operator Compatibility                                  | Notes                                                        |
-| ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1.24 or higher          | All functions supported                                      |                                                              |
-| 1.22 (included) ～ 1.23 | Supported, except [MixedProtocolLBService](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) | EMQX cluster can only use one protocol in `LoadBalancer` type of Service, for example TCP or UDP. |
-| 1.21 (included) ～ 1.22 | Supported, except  [pod-deletion-cost](https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#pod-deletion-cost) | When using EMQX Core + Replicant mode cluster, updating the EMQX cluster cannot accurately delete Pods. |
-| 1.20 (included) ～ 1.21 | Supported, manual `.spec.ports[].nodePort` assignment required if using `NodePort` type of Service | For more details, please refer to [Kubernetes changelog](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#bug-or-regression-4). |
-| 1.16 (included) ～ 1.20 | Supported, not recommended due to lack of testing            |                                                              |
-| Lower than 1.16         | Not supported                                                | `apiextensions/v1` APIVersion is not supported.               |
+The following API versions are supported:
+- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
+- apps.emqx.io/v2alpha1 (deprecated)
+- apps.emqx.io/v1beta4
+- apps.emqx.io/v1beta3 (deprecated)

@@ -38,7 +38,7 @@ In addition to providing real-time statistics, the bottom of the page also provi
 
 ### Messages
 
-The number of messages is the statistics of the number of data transferred between clients or devices, and on the page includes the incomming, outgoing and dropped messages.
+The number of messages is the statistics of the number of data transferred between clients or devices, and on the page includes the incoming, outgoing and dropped messages.
 
 In the lower part of the overview page, you can see a visual chart of the number of messages, and view the historical and current number of messages by time change (the time format: YYYY/MM/DD HH:mm), which allows users to better monitor dynamically the real-time changes of all messages within the current EMQX cluster. Hovering over the chart and clicking the icon in the top right corner allows you to enlarge the chart.
 

@@ -10,7 +10,56 @@
 
 ## 支持的 OIDC 身份服务
 
-EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基于 OIDC 的单点登录，例如 [Okta](https://www.okta.com/)。
+EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基于 OIDC 的单点登录，例如
+
+- [Microsoft Entra ID](https://www.microsoft.com/zh-cn/security/business/identity-access/microsoft-entra-id)
+- [Okta](https://www.okta.com/)
+
+## 通过集成 Microsoft Entra ID 配置 SSO
+
+本节将指导你如何使用 Microsoft Entra ID 作为身份提供商（IdP）并配置 SSO。您需要分别完成 IdP 侧与 EMQX Dashboard 侧的配置。
+
+### 步骤 1：在 EMQX Dashboard 中启用 OIDC
+
+1. 在 EMQX Dashboard 中，导航到**系统设置** -> **单点登录**。
+2. 点击 **OIDC** 卡片上的**启用**按钮。
+
+### 步骤 2：注册一个应用以集成 Microsoft Entra ID
+
+1. 以管理员身份登录 [MS Azure Portal](https://portal.azure.com/)。
+
+2. 进入 **Microsoft Entra ID** -> **企业应用程序** -> **新建应用程序**并点击**创建你自己的应用程序**。
+
+   <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
+
+3. 输入应用名称，例如 `EMQX Dashboard`，选择**注册应用程序以将其与 Microsoft Entra ID (你正在部署的应用)集成**，然后点击**创建**。
+
+   <img src="./assets/entra_id_oidc_app_parameters.png" alt="entra_id_oidc_app_parameters" style="zoom:50%;" />
+
+4. 在**注册应用程序**页面中，选择你希望支持的账户类型，并根据 EMQX Dashboard 在**步骤 1** 中提供的信息配置**重定向 URL**：
+
+   - **重定向 URL**：选择 `Web` 并输入 Dashboard 提供的**登录重定向地址**，例如 `http://localhost:18083/api/v5/sso/oidc/callback`。
+
+5. 进入**证书和密码** -> **客户端密码**标签页，点击**新建客户端密码**，输入描述信息，选择过期时间，并点击**添加**。复制生成的密码值，因为你将在**步骤 3**中用到它。
+
+### 步骤 3：完成 EMQX Dashboard 配置
+
+1. 在配置页面中，输入以下信息：
+   - **提供商**：保持为 `通用`。
+   
+   - **签发者 URL**：对应 **OpenID Connect 元数据文档**，你可以在**步骤 2** 的应用概览页面的**终结点**标签中找到它，但需要去掉 `/.well-known/openid-configuration` 部分，因为 EMQX 会自动添加，例如 `https://login.microsoftonline.com/<tenant_id>/v2.0`，其中 `<tenant_id>` 是你的 目录(租户) ID。
+   
+   - **Client ID**：对应**步骤 2** 中应用概览页面上的**应用程序(客户端) ID**。
+   
+     <img src="./assets/entra_id_oidc_app_config.png" alt="entra_id_oidc_app_config" style="zoom:50%;" />
+   
+   - **Client Secret**：使用在**步骤 2** 中生成的客户端密码值。
+   
+   - **Dashboard 地址**：输入用户可以访问 Dashboard 的基础 URL，例如 `http://localhost:18083`。此地址会被自动组合以生成用于在 IdP 侧配置的 **SSO 地址**和**元数据地址**。
+
+<img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
+
+2. 点击**更新**以完成配置。
 
 ## 集成 Okta 身份服务配置 SSO
 
