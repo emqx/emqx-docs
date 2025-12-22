@@ -2,13 +2,25 @@
 
 This page walks you through the practical usage of the Message Stream feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
+## Enable Message Stream Feature
+
+Message Stream is **disabled by default**. Before creating or using any message streams, you must enable the feature in the Dashboard.
+
+1. Navigate to **Message Stream** in the left menu.
+2. If Message Stream is not enabled, you will see a prompt indicating that the feature is disabled.
+3. Click **Settings** to open the **Message Stream** settings page.
+4. Toggle **Enable Message Stream** to **On**.
+5. Click **Save Changes**.
+
+Once enabled, the Message Stream feature becomes available immediately, and you can start creating and managing streams.
+
 ## Manually Create Message Streams via Dashboard
 
 Message streams must be explicitly created before they can store or replay messages. You can create and manage message streams either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
 
 1. Navigate to **Message Stream** in the left menu.
 
-2. Click **Create** to open the **Create Message Stream** dialog.
+2. Click **Create Stream** to open the **Create Message Stream** dialog.
 
 3. Configure the following options:
 
@@ -17,11 +29,11 @@ Message streams must be explicitly created before they can store or replay messa
      > Clients consume messages from the stream by subscribing to a stream topic in the `$s/<timestamp>/<topic_filter>` format.
 
    - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
-      
+     
    - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
-      
+     
    - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
-      
+     
       The extracted key serves different purposes depending on the stream type:
         - For **Last-Value** message streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
       
@@ -40,8 +52,8 @@ Message streams must be explicitly created before they can store or replay messa
       :::
       
    - **Limiter**: Configure limits for each shard of the stream to control storage usage:
-      
-      - **Max Shard Message Count**: (Optional) Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow unlimited messages (`infinity`).
+     
+      - **Max Shard Message Count**: (Optional) Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
      - **Max Shard Message Bytes**: (Optional) Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
      
       These limits are persisted to durable storage and work together with the retention period.
@@ -53,6 +65,12 @@ Once created, the Message Stream becomes active immediately. Messages published 
 ## Automatically Create Message Streams via Dashboard
 
 Message streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+
+::: tip Note
+
+Automatic stream creation is available only when the Message Stream feature is enabled globally.
+
+:::
 
 The streams may be auto-created either as regular streams or last-value semantics streams. 
 
