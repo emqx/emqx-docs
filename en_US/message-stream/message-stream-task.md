@@ -53,8 +53,8 @@ Message streams must be explicitly created before they can store or replay messa
       
    - **Limiter**: Configure limits for each shard of the stream to control storage usage:
      
-      - **Max Shard Message Count**: (Optional) Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
-     - **Max Shard Message Bytes**: (Optional) Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
+      - **Max Shard Message Count**: Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
+     - **Max Shard Message Bytes**: Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
      
       These limits are persisted to durable storage and work together with the retention period.
 

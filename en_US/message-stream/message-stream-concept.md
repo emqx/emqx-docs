@@ -25,6 +25,9 @@ Message Stream extends MQTT with durable message storage and replay. It allows c
 
   A logical resource identified by an MQTT topic filter and managed with an explicit lifecycle. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
 
+  - **Regular Message Stream**: A regular message stream stores all matching messages without overwriting historical data. Consumers can replay all messages published after any given point in time by subscribing with a timestamp.
+  - **Last-Value Message Stream**: A last-value message stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
+
 - **Topic Filter**
 
   An MQTT topic filter, such as `sensors/+/data`, that determines which published messages are captured into a stream. Only matching messages are ingested, and a single message may belong to multiple streams.
@@ -35,7 +38,7 @@ Message Stream extends MQTT with durable message storage and replay. It allows c
 
 - **Key Expression**
 
-  A user-defined expression evaluated on each incoming message to extract a key. The expression may reference message content or metadata. The extracted key determines per-key ordering and enables Last-Value semantics, where newer messages overwrite older ones with the same key.
+  A user-defined expression evaluated on each incoming message to extract a key. The expression may reference message content or metadata. The extracted key is used to guarantee message ordering within a storage partition. When Last-Value semantics are enabled for the message stream, the key also defines the overwrite scope: newer messages with the same key replace older ones.
 
 ## Message Streams Architecture
 
@@ -50,7 +53,7 @@ External Subscription is an EMQX mechanism that connects external message source
 ### Main Components
 
 - **Streams Registry**: Manages the lifecycle of Message Streams and maintains stream metadata and indexes. It uses a Mnesia table to efficiently look up streams by topic filter.
-- **Streams Message Database**: Provides durable storage for stream messages and is built on top of EMQX [Durable Storage](../design/durable-storage.md#design-for-durable-storage). It persists messages, enforces retention limits, applies Last-Value semantics when enabled, and supports efficient message retrieval until messages expire according to retention policies.
+- **Streams Message Database**: Provides durable storage for stream messages and is built on top of EMQX [Durable Storage](../design/durable-storage.md). It persists messages, enforces retention limits, applies Last-Value semantics when enabled, and supports efficient message retrieval until messages expire according to retention policies.
 - **Streams ExtSub Handler**: Integrates Message Streams with MQTT client sessions. It retrieves messages from Durable Storage and delivers them to subscribing clients through the External Subscription framework.
 
 ### Message Stream Data Flow Diagram
@@ -120,7 +123,7 @@ Message Stream provides a set of core capabilities that define how messages are 
 
 - **Last-Value Semantics**
 
-  A stream may enable Last-Value semantics. Messages with the same key overwrite earlier messages. Only the most recent message per key is retained. Messages without a resolved key are stored normally.
+  A stream may enable Last-Value semantics. Messages with the same key overwrite earlier messages. Only the latest value is retained. Messages without a resolved key are stored normally.
 
 - **MQTT-Native Delivery**
 

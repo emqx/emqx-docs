@@ -1,163 +1,154 @@
-# Message Stream User Guide
+# 消息流用户指南
 
-This page walks you through the practical usage of the Message Stream feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
+本页面将引导你了解 EMQX 中消息流功能的实际使用方式，包括如何创建消息流、配置其行为，以及通过 Dashboard、REST API 或配置文件对消息流进行管理。
 
-## Enable Message Stream Feature
+## 启用消息流功能
 
-Message Stream is **disabled by default**. Before creating or using any message streams, you must enable the feature in the Dashboard.
+消息流功能默认是关闭的。在创建或使用任何消息流之前，必须先在 Dashboard 中启用该功能。
 
-1. Navigate to **Message Stream** in the left menu.
-2. If Message Stream is not enabled, you will see a prompt indicating that the feature is disabled.
-3. Click **Settings** to open the **Message Stream** settings page.
-4. Toggle **Enable Message Stream** to **On**.
-5. Click **Save Changes**.
+1. 在左侧菜单中进入**消息流**。
+2. 如果消息流尚未启用，页面会显示提示信息，说明该功能当前处于关闭状态。
+3. 点击**设置**，进入**消息流**设置页面。
+4. 将**启用消息流**切换为**开启**。
+5. 点击**保存修改**。
 
-Once enabled, the Message Stream feature becomes available immediately, and you can start creating and managing streams.
+启用后，消息流功能将立即生效，你可以开始创建和管理消息流。
 
-## Manually Create Message Streams via Dashboard
+## 通过 Dashboard 手动创建消息流
 
-Message streams must be explicitly created before they can store or replay messages. You can create and manage message streams either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
+消息流在存储或回放消息之前，必须被显式创建。你可以通过手动或自动方式创建和管理消息流。关于自动创建的详细说明，请参见[通过 Dashboard 自动创建消息流](#通过-dashboard-自动创建消息流)。
 
-1. Navigate to **Message Stream** in the left menu.
+1. 在左侧菜单中进入**消息流**。
 
-2. Click **Create Stream** to open the **Create Message Stream** dialog.
+2. 点击**创建消息流**，打开**创建消息流**对话框。
 
-3. Configure the following options:
+3. 配置以下选项：
 
-   - **Topic Filter**: Enter the topic or topic filter (for example, `t/1` or `sensors/+/data`) that defines which published messages are captured into the stream. All messages published to topics matching this filter will be stored in the stream.
+   - **主题过滤器**：输入主题或主题过滤器（例如 `t/1` 或 `sensors/+/data`），用于定义哪些已发布的消息会被捕获到该消息流中。所有发布到与该过滤器匹配的 MQTT 主题的消息，都会被存储到消息流中。
 
-     > Clients consume messages from the stream by subscribing to a stream topic in the `$s/<timestamp>/<topic_filter>` format.
+     > 客户端通过订阅 `$s/<timestamp>/<topic_filter>` 格式的主题来消费消息流中的消息。
 
-   - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
-     
-   - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
-     
-   - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
-     
-      The extracted key serves different purposes depending on the stream type:
-        - For **Last-Value** message streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
-      
-        - For **regular** message streams, the key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, preserving per-key ordering while enabling parallel storage across shards.
-      
-          ::: tip
-      
-          For regular message streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
-      
-          :::
-      
-      ::: tip
-      
-      The Stream Key Expression is similar to the Queue Key Expression in Message Queue. See [Queue Key Expression](../message-queue/message-queue-task.md/#queue-key-expression) for examples of key extraction.
-      
-      :::
-      
-   - **Limiter**: Configure limits for each shard of the stream to control storage usage:
-     
-      - **Max Shard Message Count**: (Optional) Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
-     - **Max Shard Message Bytes**: (Optional) Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
-     
-      These limits are persisted to durable storage and work together with the retention period.
+   - **数据保留期**：指定消息在消息流中保留的时间长度。超过该保留期的消息将被自动删除，从而限制消息可被回放的时间范围。
 
-4. Click **Create** to save the Message Stream.
+   - **最后值语义**：启用后，消息流将只保留每个键对应的最新一条消息。当具有相同键的新消息写入时，旧消息会被覆盖。这非常适合设备状态、配置等状态型数据场景。
 
-Once created, the Message Stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
+   - **流键表达式**（必填）：用于从每条进入消息流的消息中提取键值的表达式。默认值为 `message.from`，表示使用消息发布者的客户端 ID。该字段支持使用 [Variform 表达式](../configuration/configuration.md#variform-表达式)进行配置。
 
-## Automatically Create Message Streams via Dashboard
+     提取出的键在不同类型的消息流中承担不同角色：
 
-Message streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+     - 对于**最后值消息流**，该键作为主键使用。具有相同键的消息会相互覆盖，消息流中始终只保留该键对应的最新一条消息。
 
-::: tip Note
+     - 对于**常规消息流**，该键作为**分片键**使用，用于决定消息会被写入哪个存储分片。具有相同键的消息会被路由到同一个分片，从而在实现多分片并行存储的同时，保证按键的消息顺序性。
 
-Automatic stream creation is available only when the Message Stream feature is enabled globally.
+       ::: tip
 
-:::
+       对于常规消息流，应避免使用常量或低基数的表达式作为流键表达式，否则可能导致所有消息写入同一个分片，形成写入热点并影响性能。
 
-The streams may be auto-created either as regular streams or last-value semantics streams. 
-
-::: tip Note
-
-To ensure proper stream behavior, you can enable auto create either **Regular Message Stream** or **Last Value Message Stream**, but not both at the same time.
-
-:::
-
-### Auto Create Last Value Message Stream
-
-This option is turned on by default in the **Message Stream** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
-
-1. Navigate to **Management** -> **MQTT Settings** -> **Message Stream** tab.
-
-2. By default, **Enable Auto Create Message Stream** is enabled and **Last Value Message Stream** type is selected.
-
-   Configure the following:
-
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value message streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
-
-3. Click **Save Changes**.
-
-When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Stream** list.
-### Auto Create Regular Message Stream
-
-This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
-
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
-
-2. By default, **Enable Auto Create Message Stream** is enabled. Select **Regular Message Stream** type.
-
-3. Configure the following:
-
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). 
-
-     In Regular message streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
-
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
-
-4. Click **Save Changes**.
-
-## Configure Message Stream Settings
-
-This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
-
-### Dashboard
-
-You can update Message Stream settings directly from the EMQX Dashboard without restarting the broker. This is useful for adjusting system-wide Message Stream behavior at runtime.
-
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
-
-2. Configure the following options:
-
-   - **Enable Message Stream**: Enables or disables the Message Stream feature globally. When disabled, no message streams can be created or used.
-
-   - **Max Stream Count**: Sets the maximum number of message streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
-
-   - **GC Interval**: Specifies how often expired stream messages are cleaned up. The default value is `1` hour.
-
-   - **Regular Stream Retention Period**: Defines the default retention period for regular (non–Last-Value) message streams. Messages older than this duration are automatically removed. The default is `7` days.
-
-   - **Enable Auto Create Message Stream**: Enables automatic creation of message streams when clients subscribe to stream topics and no matching stream exists.
-
-   - **Auto Create Message Stream Type**: Specifies the type of message streams to create automatically:
-
-     - **Last Value Message Stream** (default): Automatically creates streams with Last-Value semantics enabled.
-     - **Regular Message Stream**: Automatically creates streams that retain all messages without overwriting.
-
-   - **Stream Key Expression**: Defines the key expression used for automatically created streams when Last-Value semantics are enabled. The default value is `message.from`. This expression determines how keys are extracted for per-key ordering and overwriting behavior.
-
-   - **Data Retention Period**: Specifies the retention period for automatically created streams. Messages older than this period are removed automatically.
-
-   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a message stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`). 
-
-   - **Max Shard Message Count**: Limits the maximum number of messages in each shard of a message stream. You can enable this option to set a limit, or leave it disabled to allow unlimited messages (`infinity`).
+       :::
 
      ::: tip
 
-     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all message streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a message stream scales with the number of shards and the replication factor. 
+     流键表达式与消息队列中的队列键表达式用法类似。关于如何从消息中提取键值的更多示例，请参见[队列键表达式](../message-queue/message-queue-task.md/#队列键表达式)。
 
      :::
 
-3. After making changes, click **Save Changes** to apply the new settings.
+   - **消息限制**：用于限制消息流中每个分片的存储使用情况：
 
-The updated configuration takes effect immediately and applies to all existing and newly created message streams where applicable.
+     - **最大分片消息数量**：限制每个分片中可保留的最大消息条数。你可以启用该选项并设置具体数值，或保持关闭以允许无限数量（`infinity`）。
+     - **最大分片消息字节数**：限制每个分片中消息的最大总字节数。你可以启用该选项并设置具体大小（例如 `200MB`），或保持关闭以允许无限存储（`infinity`）。
+
+     这些限制会持久化到持久化存储中，并与数据保留期共同生效。
+
+   4. 点击**创建**保存消息流。
+
+   创建完成后，消息流将立即生效。发布到与配置的主题过滤器匹配的主题上的消息，会按照保留策略和限制规则进行存储，并可被客户端通过订阅进行回放。
+
+## 通过 Dashboard 自动创建消息流
+
+当客户端订阅 `$s/` 前缀的主题时，EMQX 可以自动创建对应的消息流，从而实现无需手动配置的动态消息流创建。
+
+::: tip 注意
+
+只有在全局启用了消息流功能后，自动创建消息流功能才可用。
+
+:::
+
+自动创建的消息流可以是**常规消息流**或**最后值消息流**。
+
+::: tip 注意
+
+为了确保消息流行为清晰可控，自动创建时只能启用**常规消息流**或**最后值消息流**其中之一，不能同时启用。
+
+:::
+
+### 自动创建最后值消息流
+
+该选项在 **MQTT 配置** -> **消息流**页面中默认开启。启用后，当客户端订阅不存在的消息流时，EMQX 会自动创建支持最后值语义的消息流。
+
+1. 进入**管理** -> **MQTT 配置** -> **消息流**。
+2. 默认情况下，**启用自动创建消息流**已开启，且已选中**最后值消息流**类型。
+3. 配置以下选项：
+   - **流键表达式**（必填）：定义如何从每条消息中提取唯一键（默认：`message.from`）。在最后值消息流中，该键作为主键使用，具有相同键的消息会覆盖旧消息。
+   - **数据保留期**：指定消息在消息流中保留的时间。
+4. 点击**保存修改**。
+
+当客户端订阅 `$s/<timestamp>/test` 这样的主题时，EMQX 会自动创建一个最后值消息流，并在**消息流** 列表中显示。
+
+### 自动创建常规消息流
+
+如果你希望消息流保留所有消息、不进行覆盖，可以选择自动创建常规消息流。
+
+1. 进入**管理** -> **MQTT 配置** -> **消息流**。
+2. 保持**启用自动创建消息流**为开启状态，并选择**常规消息流**类型。
+3. 配置以下选项：
+   - **流键表达式**（必填）：定义如何从消息中提取键值（默认：`message.from`）。在常规消息流中，该键用于决定消息写入的存储分片，有助于在保证按键顺序的同时实现负载分布。
+   - **数据保留期**：指定消息在消息流中的保留时间。
+4. 点击**保存修改**。
+
+## 配置消息流全局设置
+
+本节介绍如何配置作用于**所有消息流**的全局设置。这些设置用于控制消息保留、清理周期、内部行为以及自动创建策略。你可以通过 Dashboard、REST API 或配置文件进行配置。
+
+### Dashboard
+
+你可以直接在 EMQX Dashboard 中修改消息流的全局设置，无需重启 EMQX。
+
+1. 进入**管理** -> **MQTT 配置** -> **消息流**。
+
+2. 配置以下选项：
+
+   - **启用消息流**：全局启用或禁用消息流功能。禁用后，无法创建或使用任何消息流。
+
+   - **最大消息流数**：限制集群中允许存在的消息流数量，用于防止过度创建导致资源耗尽。
+
+   - **垃圾回收间隔**：指定清理过期消息的周期，默认值为 `1 小时`。
+
+   - **常规消息流保留期**：常规（非最后值）消息流的默认消息保留时间，默认值为 `7 天`。
+
+   - **启用自动创建消息流**：当客户端订阅消息流主题且对应消息流不存在时，是否自动创建。
+
+   - **自动创建消息流类型**：
+
+     - **最后值消息流**（默认）
+     - **常规消息流**
+
+   - **流键表达式**：为自动创建的消息流指定流键表达式（默认：`message.from`）。
+
+   - **数据保留期**：自动创建消息流的消息保留时间。
+
+   - **最大分片消息字节数**：限制每个分片可存储的最大消息数据量。
+
+   - **最大分片消息数量**：限制每个分片可存储的最大消息条数。
+
+     ::: tip
+
+     分片数量由持久化存储的全局配置决定，并适用于所有消息流。上述限制是按[分片](../design/durable-storage.md#分片-shard)生效的，不考虑副本因子。在规划磁盘容量时，需要同时考虑分片数量和副本因子。
+
+     :::
+
+3. 点击**保存修改**。
+
+修改后的配置会立即生效，并作用于现有和新创建的消息流（适用的情况下）。
 
 ### REST API
 

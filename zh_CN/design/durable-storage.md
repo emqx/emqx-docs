@@ -177,4 +177,5 @@ DS 维护两个订阅者池：
 
 - **[MQTT 会话持久化](../durability/durability_introduction.md)**：基于 DS 的会话状态与消息持久化机制。
 - **[消息队列](../message-queue/message-queue-concept.md)**：内置的 MQTT 消息队列功能，提供消息顺序投递、消费进度管理以及跨 EMQX 集群的高可用性。
+- **[消息流](../message-stream/message-stream-concept.md)**：基于 DS 的持久化消息流与重放机制，支持按主题过滤器持续存储 MQTT 消息，并通过时间戳订阅实现历史消息回放。
 - **[共享订阅](../messaging/mqtt-shared-subscription.md)**：一种负载均衡的订阅机制，将消息在同一订阅组内的多个订阅者之间进行分发。
