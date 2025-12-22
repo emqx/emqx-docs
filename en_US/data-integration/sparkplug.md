@@ -29,7 +29,7 @@ The Sparkplug B encoding and decoding functions can be used to perform a wide va
 
 * [Create Rules](./rule-get-started.md)
 * [Rule Engine SQL Language](./rule-sql-syntax.md)
-* [The Rule Engine JQ Fuction](./rule-sql-jq.md)
+* [The Rule Engine JQ Function](./rule-sql-jq.md)
 * [Full Description of the JQ Programming Language](https://stedolan.github.io/jq/manual/)
 
 ### spb_decode

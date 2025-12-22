@@ -80,7 +80,7 @@ service HookProvider {
 其中 HookProvider 部分：
 
 - `OnProviderLoaded`：定义 HookProvider 如何被加载，返回需要挂载的钩子列表。仅在该列表中的钩子会被回调到 HookProivder 服务。
-- `OnProviderUnloaded`：通知用户该 HookProvier 已经从 emqx 中卸载。
+- `OnProviderUnloaded`：通知用户该 HookProvider 已经从 emqx 中卸载。
 
 钩子事件部分：
 

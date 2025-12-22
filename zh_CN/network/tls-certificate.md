@@ -56,7 +56,7 @@ openssl req -new -key server.key -out server.csr
   Country Name (2 letter code) [AU]: # 国家/地区
   State or Province Name (full name) [Some-State]: # 省/市
   Locality Name (eg, city) []: # 城市
-  Organization Name (eg, company) [Internet Widgits Pty Ltd]: # 组织机构（或公司名），如 EMQ
+  Organization Name (eg, company) [Internet Widgets Pty Ltd]: # 组织机构（或公司名），如 EMQ
   Organizational Unit Name (eg, section) []: # 机构部门，如 EMQX
   Common Name (e.g. server FQDN or YOUR name) []: # 通用名称，此处应当设置为服务器域名如 mqtt.emqx.com
   ...

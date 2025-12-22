@@ -106,7 +106,7 @@ SELECT * FROM "t/#" WHERE payload.x.y = 1
 `WHERE` 句では `and` と `or` 演算子を使って複雑なブール式を作成できます。
 
 ```sql
-SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temprature > 39
+SELECT * FROM "t/#" WHERE payload.name = "sensor_1" and payload.temperature > 39
 ```
 
 ## `FOREACH` ステートメント

@@ -95,8 +95,7 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$s/<timstamp>/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Stream** list.
-
+When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Stream** list.
 ### Auto Create Regular Message Stream
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.

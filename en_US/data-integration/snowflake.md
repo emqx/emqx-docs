@@ -20,12 +20,6 @@ EMQX utilizes the rule engine and Sink to forward device events and data to Snow
 
 4. **Writing to Snowflake**: The rule triggers an action that writes message data to Snowflake, either by batching messages into files and loading them via Stage and Pipe (aggregated mode), or by streaming them directly using the Snowpipe Streaming API (streaming mode).
 
-   ::: tip Note
-
-   Snowpipe Streaming is currently a [preview feature](https://docs.snowflake.com/en/release-notes/preview-features) in Snowflake. It is available only for accounts hosted on AWS.
-
-   :::
-
 After events and message data are written to the Snowflake, they can be accessed for a variety of business and technical purposes, including:
 
 - **Data Archiving**: Safely store IoT data in Snowflake for long-term archival, ensuring compliance and historical data availability.
@@ -64,7 +58,7 @@ EMQX supports two modes for sending data to Snowflake:
 | Mode       | Description                                                  | Requires ODBC |
 | ---------- | ------------------------------------------------------------ | ------------- |
 | Aggregated | EMQX buffers MQTT messages into local files, then uploads them to a Snowflake stage. A pipe, configured with a `COPY INTO` statement, automatically loads those staged files into a target table. For more details, see [Snowflake Snowpipe Documentation](https://docs.snowflake.com/en/user-guide/data-load-snowpipe-intro). | Yes           |
-| Streaming  | Sends data in real time via the Snowpipe Streaming API (AWS-only), writing rows directly to Snowflake tables. | Yes           |
+| Streaming  | Sends data in real time via the Snowpipe Streaming API, writing rows directly to Snowflake tables. | Yes           |
 
 ### Initialize Snowflake ODBC Driver
 
@@ -171,13 +165,13 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
      [ODBC]
      Trace=no
      TraceFile=
-
+     
      [ODBC Drivers]
      Snowflake = Installed
-
+     
      [ODBC Data Sources]
      snowflake = Snowflake
-
+     
      [Snowflake]
      Driver = /opt/snowflake/snowflakeodbc/lib/universal/libSnowflake.dylib
      EOF
@@ -347,19 +341,19 @@ This includes:
 
    ```sql
    CREATE OR REPLACE ROLE snowpipe;
-
+   
    -- Grant usage and read/write permissions
    GRANT USAGE ON DATABASE testdatabase TO ROLE snowpipe;
    GRANT USAGE ON SCHEMA testdatabase.public TO ROLE snowpipe;
    GRANT INSERT, SELECT ON testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- Aggregated mode requires access to stage and pipe
    GRANT READ, WRITE ON STAGE testdatabase.public.emqx TO ROLE snowpipe;
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqx TO ROLE snowpipe;
-
+   
    -- Streaming mode requires permissions on the streaming pipe
    GRANT OPERATE, MONITOR ON PIPE testdatabase.public.emqxstreaming TO ROLE snowpipe;
-
+   
    -- Link role to the user and set it as default
    GRANT ROLE snowpipe TO USER snowpipeuser;
    ALTER USER snowpipeuser SET DEFAULT_ROLE = snowpipe;
@@ -423,7 +417,7 @@ You have now completed the connector creation and can proceed to create a rule a
 
 ## Create a Snowflake Streaming Connector
 
-If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API (AWS-only).
+If you plan to use the streaming upload mode in your Snowflake Sink, you need to create a Snowflake Streaming Connector to establish the connection with your Snowflake environment. This connector uses HTTPS and the Snowpipe Streaming REST API.
 
 1. Go to the Dashboard **Integration** -> **Connector** page.
 2. Click the **Create** button in the top right corner.

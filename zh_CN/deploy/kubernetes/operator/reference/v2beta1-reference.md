@@ -1,4 +1,4 @@
-# API Reference
+# API Reference (v2beta1)
 
 ## Packages
 - [apps.emqx.io/v2beta1](#appsemqxiov2beta1)
@@ -607,5 +607,4 @@ _Appears in:_
 | `type` _string_ |  | Recreate | Enum: [Recreate] <br /> |
 | `initialDelaySeconds` _integer_ | Number of seconds before evacuation connection start. |  |  |
 | `evacuationStrategy` _[EvacuationStrategy](#evacuationstrategy)_ | Number of seconds before evacuation connection timeout. |  |  |
-
 

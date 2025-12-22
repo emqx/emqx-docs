@@ -1,24 +1,36 @@
-# EMQX Operator 简介
+# EMQX Operator 概述
 
-EMQX Broker/Enterprise 是一个云原生的 MQTT 消息中间件。 我们提供了 EMQX Kubernetes Operator 来帮助您在 Kubernetes 的环境上快速创建和管理 EMQX Broker/Enterprise 集群。 它可以大大简化部署和管理 EMQX 集群的流程，对于管理和配置的知识要求也更低。它把部署和管理的工作变成一种低成本的、标准化的、可重复性的能力。
+EMQX Operator 为部署和管理 [EMQX](https://www.emqx.io/) 集群提供原生 [Kubernetes](https://kubernetes.io/) 支持。其主要目标是简化和自动化 Kubernetes 环境中 EMQX 的生命周期管理。
+
+EMQX Operator 要求 Kubernetes 1.24 或更高版本。
 
 EMQX Operator 包括但不限于以下功能：
 
-* **简化 EMQX 部署**：通过 EMQX 自定义资源声明 EMQX 集群，并快速的部署，更多的内容，请查看[快速开始](./getting-started.md)。
+* **简化部署**：通过 EMQX 自定义资源声明 EMQX 集群并快速部署。
 
-* **管理 EMQX 集群**：对 EMQX 进行自动化运维操作，包括集群升级、运行时数据持久化、根据 EMQX 的状态更新 Kubernetes 的资源等，更多的内容，请查看[管理 EMQX 集群](./tasks/overview.md)。
+    更多详细信息，请参阅[快速开始](./getting-started.md)指南。
+
+* **集群管理**：自动化 EMQX 集群的运维操作，包括带工作负载迁移的集群升级、运行时数据持久化、保持 Kubernetes 管理的资源处于最新状态等。
+
+    更多详细信息，请参阅[管理 EMQX](./tasks/overview.md)部分。
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## 如何选择 Kubernetes 版本
+## EMQX 和 EMQX Operator 兼容性
 
-EMQX Operator 要求 Kubernetes 集群的版本号  `>=1.24`。
+当前 EMQX Operator 2.2.x 版本系列与以下 EMQX 版本兼容：
+- EMQX 开源版和企业版 5.1.1 ~ 5.8.x
+- EMQX 5.9 和 5.10 <sup>*</sup>
+- EMQX 6.0 及更高版本 <sup>*</sup>
 
-| Kubernetes 版本      | EMQX Operator 兼容性                                         | 注释                                                         |
-| -------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 1.24 更高            | 支持所有功能                                                 |                                                              |
-| 1.22 ( 包含) ～ 1.23 | 支持，但是不包含 [MixedProtocolLBService](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/) | EMQX 集群只能在 LoadBalancer 类型的 Service 中使用一个协议，例如 TCP 或 UDP。 |
-| 1.21 ( 包含) ～ 1.22 | 支持，但是不包含 [Pod 删除开销](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/replicaset/#pod-deletion-cost) | EMQX Core + Replicant 模式集群时，更新 EMQX 集群无法准确的删除 Pod。 |
-| 1.20 ( 包含) ～ 1.21 | 支持，但是如果使用 `NodePort`  类型的 Service，需要手动管理  `.spec.ports[].nodePort` | 更多的详情，请查看 [Kubernetes changelog](https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/CHANGELOG-1.20.md#bug-or-regression-4)。 |
-| 1.16 ( 包含) ～ 1.20 | 支持，但是不推荐，因为缺乏足够的测试                         |                                                              |
-| 低于 1.16            | 不支持                                                       | 低于 1.16 版本的 Kubernetes 不支持 `apiextensions/v1` APIVersion。 |
+支持以下 API 版本：
+- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
+- apps.emqx.io/v2alpha1（已弃用）
+- apps.emqx.io/v1beta4
+- apps.emqx.io/v1beta3（已弃用）
+
+::: tip
+
+<sup>*</sup> 这些版本暂不支持自动管理持久存储（Durable Storage）副本的功能，该功能计划在即将发布的 2.3.0 版本中提供。
+
+:::

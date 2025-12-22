@@ -28,7 +28,7 @@ listeners.ssl.default {
     certfile = "/etc/emqx/certs/server.pem"
     # PEM format file containing the private key corresponding to the SSL/TLS certificate
     keyfile = "/etc/emqx/certs/server.key"
-    # Must verify peer certificats
+    # Must verify peer certificates
     verify = verify_peer
     # Force the client to send a non-empty certificate, otherwise fail the TLS handshake.
     fail_if_no_peer_cert = true

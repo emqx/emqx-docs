@@ -131,7 +131,7 @@ Make sure you have a valid OpenAI API Key.
 
    - If the test results are unsuccessful, error messages will be displayed accordingly.
    
-   - To view the running statistics and metrics of the **OpenAI** node, exit the editting page, click the node to open the Edit panel and click the **Overview** tab.
+   - To view the running statistics and metrics of the **OpenAI** node, exit the editing page, click the node to open the Edit panel and click the **Overview** tab.
    
      ![openai_node_statistics](./assets/openai_node_statistics.png)
 

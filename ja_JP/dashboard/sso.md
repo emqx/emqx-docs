@@ -2,7 +2,7 @@
 
 シングルサインオン（SSO）は、ユーザーが複数のアプリケーションやシステムに対して、ユーザー名やパスワードなどの単一の認証情報でログインできる認証機構です。各アプリケーションで個別に認証を行う必要がありません。EMQXダッシュボードでSSO機能を有効にすると、ユーザーは企業アカウントの認証情報を使って簡単にログインできます。これにより、組織はユーザーのIDと権限を一元管理でき、ユーザー管理の手間を軽減します。この機能は企業のデータやシステムのセキュリティを強化しつつ、ユーザーの利便性も向上させます。
 
-EMQXは、LDAP（Lightweight Directory Access Protocol）およびSAML 2.0（Security Assertion Markup Language）標準に基づくSSO機能を実装しており、[OpenLDAP](https://www.openldap.org/)、[Azure AD (Microsoft Entra ID)](https://azure.microsoft.com/en-in/products/active-directory)、[Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/)などの主要なIDサービスとの連携をサポートしています。
+EMQXは、LDAP（Lightweight Directory Access Protocol）、SAML 2.0（Security Assertion Markup Language）標準、およびOpenID Connect (OIDC) に基づくSSO機能を実装しており、[OpenLDAP](https://www.openldap.org/)、[Azure AD (Microsoft Entra ID)](https://azure.microsoft.com/en-in/products/active-directory)、[Okta](https://www.okta.com/)、[OneLogin](https://www.onelogin.com/)などの主要なIDサービスとの連携をサポートしています。
 
 ## LDAPベースのSSO
 
@@ -16,6 +16,12 @@ EMQXダッシュボードは、SAMLをサポートするIDプロバイダー（I
 
 SAML SSOでは、ユーザーはIDプロバイダーで一度認証するだけで済みます。IDプロバイダーはユーザー情報を含むSAMLアサーションを生成し、EMQXダッシュボードに送信します。ダッシュボードはこのSAMLアサーションを受け取り、検証に成功するとユーザーのセッション情報を作成しログインを許可します。SAMLはクロスドメイン認証・認可を可能にし、複数のアプリケーション間でのシームレスな連携をサポートします。企業は既存のSAML IDシステムにEMQXを容易に組み込み、ユーザーは安全かつ便利にEMQXサービスを利用できます。
 
+## OIDCベースのSSO
+
+EMQXダッシュボードは、OIDCをサポートするIDプロバイダー（IdP）サービスとの連携を可能にします。OIDCはOAuth 2.0プロトコル上に構築されたID層であり、ユーザーのID検証とユーザー情報取得のための標準化された方法を提供します。
+
+OIDC SSOでは、ユーザーはIDプロバイダーで認証を行い、IDプロバイダーはユーザー情報を含むIDトークンをEMQXダッシュボードに返します。ダッシュボードはこのIDトークンを受け取り、検証に成功するとユーザーのセッション情報を作成しログインを許可します。OIDCは現代的なRESTfulな認証アプローチを提供し、最新のIDサービスとの統合を容易にし、EMQXサービスへの安全で便利なアクセスを実現します。
+
 ## 設定と利用のワークフロー
 
 1. 管理者がダッシュボードでSSOを設定・有効化します。設定後、ログインページにSSOの入口が表示されます。  
@@ -26,7 +32,8 @@ SAML SSOでは、ユーザーはIDプロバイダーで一度認証するだけ�
 
 ## 設定例
 
-以下はLDAPおよびSAML 2.0に基づくSSOの設定例です。
+以下はLDAP、SAML 2.0、およびOIDCに基づくSSOの設定例です。
 
 - [LDAPシングルサインオンの設定](./sso-ldap.md)  
 - [SAMLシングルサインオンの設定](./sso-saml.md)
+- [OIDCシングルサインオンの設定](./sso-oidc.md)
