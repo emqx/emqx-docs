@@ -22,7 +22,6 @@ You can configure the parameters for durable sessions in the Dashboard. Click **
 | `durable_sessions.batch_size`               | Message Query Batch Size    | Controls the maximum size of message batches consumed from the storage by durable sessions. |
 | `durable_sessions.checkpoint_interval`      | Session Checkpoint Interval | Specifies the interval for saving session metadata.          |
 
-
 The following parameters can be overridden per [zone](../configuration/configuration.md#zone-override):
 
 - `durable_sessions.enable`

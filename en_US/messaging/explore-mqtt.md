@@ -29,7 +29,7 @@ For more information, see [Will Message](./mqtt-will-message.md) and [Use of MQT
 
 2. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
-3. Configue the new connection.
+3. Configure the new connection.
 
    In **General** section, fill in the general information of the client.
 
@@ -103,7 +103,7 @@ The illustration below shows how a retained message is received.
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
-2. Configue the new connection.
+2. Configure the new connection.
 
    In **General** section, fill in the general information of the client.
 
@@ -186,7 +186,7 @@ For more information on shared subscription, see [Shared Subscription](./mqtt-sh
 
 1. Start the MQTTX Client. Click the **New Connection** to create an MQTT connection.
 
-2. Configue the new connection.
+2. Configure the new connection.
 
    In **General** section, fill in the general information of the client.
 
@@ -204,7 +204,7 @@ For more information on shared subscription, see [Shared Subscription](./mqtt-sh
 
 4. Select the connection named "Subscriber1" in the **Connections** pane. Click the **New Subscription** button to create a subscription.
 
-   To form a group for mutiple subscribers, you need to add prefix and group name before the subscribed topic `$share/{group}`. In this test example, set the **Topic** name to `$share/a/t/1`.
+   To form a group for multiple subscribers, you need to add prefix and group name before the subscribed topic `$share/{group}`. In this test example, set the **Topic** name to `$share/a/t/1`.
 
    - The prefix `$share` indicates this is a shared subscription.
    - `{group}` can be a customed name. Set to `a` in this example.

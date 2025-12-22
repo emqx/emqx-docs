@@ -54,8 +54,8 @@ EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for on
      - If set to `false`, verification of the client's identity fails only if the client sends an invalid certificate (An empty certificate is considered to be valid). The SSL/TLS connection will be rejected.
    - **Intermediate Certificate Depth**: The allowed maximum depth of certification path; the default value is `10`.
    - **Key Password**: Type the password if the private key file is password-protected.
-   - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toogle switch. For more information, see [OCSP Stapling](./ocsp.md).
-   - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toogle switch. For more information, see [CRL Check](./crl.md).
+   - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toggle switch. For more information, see [OCSP Stapling](./ocsp.md).
+   - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toggle switch. For more information, see [CRL Check](./crl.md).
 
 3. After you complete the editing, click the **Update** button.
 

@@ -521,7 +521,7 @@ The following steps assume that you run both EMQX and HStreamDB on the local mac
    - **HStreamDB Stream Name**: Enter the name of the Streams you created before.
      - For client message storage, enter `mqtt_message`.
      - For event recording, enter `mqtt_connect`.
-   - **HStreamDB Partition Key**: Sepecify the partition key that is used to determine where data will be stored within the HStreamDB's various partitions or nodes. For example, you can enter `${topic]}` to ensure that messages of the same topic are written into HStreamDB in order. If not specified, a default key is used and data will be mapped to some default shard.
+   - **HStreamDB Partition Key**: Specify the partition key that is used to determine where data will be stored within the HStreamDB's various partitions or nodes. For example, you can enter `${topic]}` to ensure that messages of the same topic are written into HStreamDB in order. If not specified, a default key is used and data will be mapped to some default shard.
    - **HStreamDB gRPC Timeout**: Specify the maximum amount of time the system will wait for a response from the HStreamDB server when a gRPC request is made. The default value is `30` seconds.
    - **Enable TLS**: You can click the toggle switch to enable the TLS connection if required. When TLS is enabled, disable **TLS Verify**. Upload the certificates and key generated under the `tls-deploy/ca` directory:
      - Upload `ca/hstream.crt` to **TLS Cert**.

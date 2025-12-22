@@ -22,7 +22,7 @@ License 类型，可能会有不同的限制：
     license update <License> # 更新 license，<License> 为 license 字符串
 ```
 
-您还可以通过 Dashboard 来更新 License。有关如何申请 Licnese 以及通过 Dashboard 更新 License，请参见[使用 EMQX 企业版 License](../deploy/license.md)。
+您还可以通过 Dashboard 来更新 License。有关如何申请 License 以及通过 Dashboard 更新 License，请参见[使用 EMQX 企业版 License](../deploy/license.md)。
 
 ## 为什么共享订阅时收不到保留消息？
 

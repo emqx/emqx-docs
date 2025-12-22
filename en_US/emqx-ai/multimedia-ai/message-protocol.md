@@ -229,7 +229,7 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
         "id": "3",
         "method": "tts_and_send_start",
         "params": {
-            // The deivce ID to send the audio to
+            // The device ID to send the audio to
             "device_id": "device_id",
             // 
             "task_id": "aaa",
@@ -246,7 +246,7 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
             "id": "4",
             "method": "tts_and_send",
             "params": {
-                // The deivce ID to send the audio to
+                // The device ID to send the audio to
                 "device_id": "device_id",
                 // 
                 "task_id": "aaa",
@@ -258,7 +258,7 @@ The multimedia proxy interacts with AI agents using a simple JSON RPC 2.0 based 
             "id": "5",
             "method": "tts_and_send",
             "params": {
-                // The deivce ID to send the audio to
+                // The device ID to send the audio to
                 "device_id": "device_id",
                 // 
                 "task_id": "aaa",

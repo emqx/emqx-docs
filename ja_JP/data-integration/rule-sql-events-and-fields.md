@@ -78,11 +78,11 @@ EMQXのルールを使ってイベントトピックからデータを抽出し�
 | [$events/message/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | 配信時のメッセージ破棄          |
 | [$events/client/connected](#connection-complete-event-events-client-connected) | 接続完了                      |
 | [$events/client/disconnected](#disconnect-event-events-client-disconnected) | 切断                          |
-| [$events/client/connack](#connection-acknowlege-event-events-client-connack) | 接続応答                      |
+| [$events/client/connack](#connection-acknowledge-event-events-client-connack) | 接続応答                      |
 | [$events/auth/check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | 認可チェック完了               |
 | [$events/auth/check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | 認証チェック完了               |
 | [$events/session/subscribed](#subscriber-event-events-session-subscribed) | サブスクライブ完了             |
-| [$events/session/unsubscribed](#unsubcribe-event-events-session-unsubscribed) | サブスクライブ解除完了         |
+| [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | サブスクライブ解除完了         |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | システムアラーム発動           |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | システムアラーム解除           |
 

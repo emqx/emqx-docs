@@ -394,7 +394,7 @@ backend = mongodb
   
 - `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
 
-- `r_mode` is availalable only for `rs` type.
+- `r_mode` is available only for `rs` type.
 
 - `pool` is changed to `pool_size`.
 
@@ -1156,7 +1156,7 @@ type = mongodb
   - For `rs`, `sharded` to `servers`
   - For `single` to `server`
 - `srv_record`, `username`, `password`, `auth_source`, `database`, `w_mode`, `topology`, `collection` are retained.
-- `r_mode` is availalable only for `rs` type.
+- `r_mode` is available only for `rs` type.
 - `pool` is changed to `pool_size`.
 - `ssl.*` is changed to common SSL options. Refer to [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
 - `auth_query.selector` is changed to `filter`. The filter should not be a string, but the whole selector data structure.  `${var`}-style [placeholders](../access-control/authn/authn.md#authentication-placeholders) may be used in selector values.

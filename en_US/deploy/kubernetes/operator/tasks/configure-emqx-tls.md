@@ -1,156 +1,160 @@
 # Enable TLS In EMQX
 
-## Task Target
+## Objective
 
-Customize TLS certificates via the `extraVolumes` and `extraVolumeMounts` fields.
+Customize TLS certificates using the `extraVolumes` and `extraVolumeMounts` fields.
 
-## Create Secret Based On TLS Certificate
+## Create a Secret Based On TLS Certificate
 
-Secret is an object that contains a small amount of sensitive information such as passwords, tokens, or keys. For its documentation, please refer to: [Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets). In this article, we use Secret to save TLS certificate information, so we need to create Secret based on TLS certificate before creating EMQX cluster.
+A secret is an object that contains a small amount of sensitive information, such as passwords, tokens, or keys. In this demonstration, we use secrets to store TLS certificate information, so we need to create one before creating the EMQX cluster.
 
-+ Save the following as a YAML file and deploy it with the `kubectl apply` command
+For more information, please refer to the [Secret](https://kubernetes.io/docs/concepts/configuration/secret/#working-with-secrets) documentation.
 
-  ```yaml
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: emqx-tls
-  type: kubernetes.io/tls
-  stringData:
-    ca.crt: |
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    tls.crt: |
-      -----BEGIN CERTIFICATE-----
-      ...
-      -----END CERTIFICATE-----
-    tls.key: |
-      -----BEGIN RSA PRIVATE KEY-----
-      ...
-      -----END RSA PRIVATE KEY-----
-  ```
+Save the following as a YAML file and deploy it using the `kubectl apply` command:
 
-  > `ca.crt` indicates the content of the CA certificate, `tls.crt` indicates the content of the server certificate, and `tls.key` indicates the content of the server private key. In this example, the contents of the above three fields are omitted, please fill them with the contents of your own certificate.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: emqx-tls
+type: kubernetes.io/tls
+stringData:
+  ca.crt: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+  tls.crt: |
+    -----BEGIN CERTIFICATE-----
+    ...
+    -----END CERTIFICATE-----
+  tls.key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    ...
+    -----END RSA PRIVATE KEY-----
+```
+
+:::tip
+In this example, the contents of the above three fields are omitted. Please fill them with your own certificate contents.
+* `ca.crt` should contain the CA certificate.
+* `tls.crt` should contain the server certificate.
+* `tls.key` should contain the server's private key.
+:::
 
 ## Configure EMQX Cluster
 
-The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
+EMQX CRD `apps.emqx.io/v2beta1` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
+* `.spec.coreTemplate.extraVolumes`
+* `.spec.coreTemplate.extraVolumeMounts`
+* `.spec.replicantTemplate.extraVolumes`
+* `.spec.replicantTemplate.extraVolumeMounts`
 
-`apps.emqx.io/v2beta1 EMQX` supports `.spec.coreTemplate.extraVolumes` and `.spec.coreTemplate.extraVolumeMounts` and `.spec.replicantTemplate.extraVolumes` and `.spec.replicantTemplate.extraVolumeMounts` fields to EMQX The cluster configures additional volumes and mount points. In this article, we can use these two fields to configure TLS certificates for the EMQX cluster.
+In this demonstration, we will use these fields to provide TLS certificates to the EMQX cluster.
 
-There are many types of Volumes. For the description of Volumes, please refer to the document: [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret). In this article we are using the `secret` type.
+There are many types of Volumes. For information about Volumes, please refer to the [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/#secret) documentation. Here we are using the `secret` volume type.
 
-+ Save the following as a YAML file and deploy it with the `kubectl apply` command
+1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-  spec:
-    image: emqx/emqx-enterprise:@EE_VERSION@
-    config:
-      data: |
-        listeners.ssl.default {
-          bind = "0.0.0.0:8883"
-          ssl_options {
-            cacertfile = "/mounted/cert/ca.crt"
-            certfile = "/mounted/cert/tls.crt"
-            keyfile = "/mounted/cert/tls.key"
-            gc_after_handshake = true
-            handshake_timeout = 5s
-          }
-        }
-        license {
-          key = "..."
-        }
-    coreTemplate:
-      spec:
-        extraVolumes:
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            mountPath: /mounted/cert
-    replicantTemplate:
-      spec:
-        extraVolumes:
-          - name: emqx-tls
-            secret:
-              secretName: emqx-tls
-        extraVolumeMounts:
-          - name: emqx-tls
-            mountPath: /mounted/cert
-    dashboardServiceTemplate:
-      spec:
-        type: LoadBalancer
-    listenersServiceTemplate:
-      spec:
-        type: LoadBalancer
-  ```
-
-  > The `.spec.coreTemplate.extraVolumes` field configures the volume type as: secret, and the name as: emqx-tls.
-
-  > The `.spec.coreTemplate.extraVolumeMounts` field configures the directory where the TLS certificate is mounted to EMQX: `/mounted/cert`.
-
-  > The `.spec.config.data` field configures the TLS listener certificate path. For more TLS listener configurations, please refer to the document: [Configuration Manual](../../../../configuration/configuration.md).
-
-+ Wait for EMQX cluster to be ready, you can check the status of EMQX cluster through the `kubectl get` command, please make sure that `STATUS` is `Running`, this may take some time
-
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
-
-+ Obtain the External IP of EMQX cluster and access EMQX console
-
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
-
-   ```bash
-   $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
-   192.168.1.200
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       # Configure the TLS listener certificates mounted from the `emqx-tls` volume:
+       data: |
+         listeners.ssl.default {
+           bind = "0.0.0.0:8883"
+           ssl_options {
+             cacertfile = "/mounted/cert/ca.crt"
+             certfile = "/mounted/cert/tls.crt"
+             keyfile = "/mounted/cert/tls.key"
+             gc_after_handshake = true
+             handshake_timeout = 5s
+           }
+         }
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         extraVolumes:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             mountPath: /mounted/cert
+     replicantTemplate:
+       spec:
+         extraVolumes:
+           # Create a `secret` volume type named `emqx-tls`:
+           - name: emqx-tls
+             secret:
+               secretName: emqx-tls
+         extraVolumeMounts:
+           - name: emqx-tls
+             # Directory where the TLS certificate is mounted to EMQX nodes:
+             mountPath: /mounted/cert
+     dashboardServiceTemplate:
+       spec:
+         type: LoadBalancer
+     listenersServiceTemplate:
+       spec:
+         type: LoadBalancer
    ```
 
-   Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
+2. Wait for the EMQX cluster to become ready.
 
-## Verify TLS Connection Using MQTTX CLI
+   Check the status of the EMQX cluster using `kubectl get`, and make sure that `STATUS` is `Ready`. This may take a while.
 
-[MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers to more Quickly develop and debug MQTT services and applications.
+   ```bash
+   $ kubectl get emqx
+   NAME   STATUS   AGE
+   emqx   Ready    10m
+   ```
 
-+ Obtain the External IP of EMQX cluster
+## Verify TLS Connection using MQTTX
 
-  ```bash
-  external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
-  ```
+[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool, designed to help developers quickly get started with MQTT services and applications.
 
-+ Subscribe to messages using MQTTX CLI
+1. Obtain the external IP of the EMQX listeners service.
 
-  ```bash
-  mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
+   ```bash
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
+   ```
 
-  [10:00:25] › … Connecting...
-  [10:00:25] › ✔ Connected
-  [10:00:25] › … Subscribing to hello...
-  [10:00:25] › ✔ Subscribed to hello
-  ```
+2. Subscribe to messages using MQTTX CLI.
 
-+ Create a new terminal window and publish a message using the MQTTX CLI
+   Connect to the TLS listener port 8883, using the `--insecure` flag to skip certificate verification.
 
-  ```bash
-  mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   ```bash
+   mqttx sub -h ${external_ip} -p 8883 -t "hello" -l mqtts --insecure
+   [10:00:25] › … Connecting...
+   [10:00:25] › ✔ Connected
+   [10:00:25] › … Subscribing to hello...
+   [10:00:25] › ✔ Subscribed to hello
+   ```
 
-  [10:00:58] › … Connecting...
-  [10:00:58] › ✔ Connected
-  [10:00:58] › … Message Publishing...
-  [10:00:58] › ✔ Message published
-  ```
+3. In a separate terminal window, publish a message.
 
-+ View messages received in the subscribed terminal window
+   ```bash
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
+   ```
 
-  ```bash
-  [10:00:58] › payload: hello world
-  ```
+4. Observe the subscriber client receiving the message.
+
+   ```bash
+   mqttx pub -h ${external_ip} -p 8883 -t "hello" -m "hello world" -l mqtts --insecure
+   [10:00:58] › … Connecting...
+   [10:00:58] › ✔ Connected
+   [10:00:58] › … Message Publishing...
+   [10:00:58] › ✔ Message published
+   ```
+
+   This indicates that both the publisher and subscriber clients successfully communicate with the broker over a TLS connection.
