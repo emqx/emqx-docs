@@ -85,6 +85,7 @@ See the table below for the supported event topic list.
 | [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
+| $event/client/keepalive | Sent heartbeat packets |
 
 ::: tip
 
@@ -753,6 +754,10 @@ Refer to the table below for fields that can be extracted.
 | `activated_at`   | Unix timestamp (µs) when the alarm was activated             |
 | `deactivated_at` | Unix timestamp (µs) when the alarm was deactivated           |
 | `node`           | The EMQX node where the event was triggered                  |
+
+### Client Keepalive Event ("$events/client/keepalive")
+
+
 
 ## Data Bridges
 
