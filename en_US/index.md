@@ -9,13 +9,13 @@ As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://w
 
 - [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
 - [**Business-Critical Reliability**](./deploy/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
-- [**Data Security**](https://www.emqx.com/en/use-cases/mqtt-security): End-to-end data encryption and fine-grained access control to protect your data.
+- [**Data Security**](./access-control/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
 - [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
 - [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 - [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
-- [**Cloud-Native & K8s**](https://www.emqx.com/en/emqx-kubernetes-operator): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator** and **Terraform**.
+- [**Cloud-Native & K8s**](./deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
 
 ## Main Components
 
