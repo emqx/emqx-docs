@@ -1,6 +1,6 @@
 # Integrate with Redis
 
-EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to Redis running in three different modes, which are Single, [Redis Sentinel](https://redis.io/docs/manual/sentinel/), and [Redis Cluster](https://redis.io/docs/manual/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and the configuration file. 
+EMQX supports integrating with Redis for password authentication. EMQX Redis authenticator currently supports connecting to Redis running in three different modes, which are Single, [Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/), and [Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/). This section gives detailed instructions on the data schema supported and on how to configure with EMQX Dashboard and the configuration file.
 
 ::: tip Prerequisite:
 
@@ -10,7 +10,7 @@ Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 
 ## Data Schema and Query Statement
 
-Redis authentication works with credentials stored as [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) with predefined field names: 
+Redis authentication works with credentials stored as [Redis hashes](https://redis.io/docs/latest/develop/data-types/hashes/) with predefined field names: 
 
 - `password_hash`: required; password (in plain text or hashed) stored in the database; 
 - `salt`: optional; `salt = ""` or just remove this field to indicate no salt value will be added; 

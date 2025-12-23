@@ -1,0 +1,117 @@
+name: Check Links
+
+on:
+  pull_request:
+    branches:
+      - 'release-[0-9].[0-9]'
+      - 'release-[0-9].[0-9][0-9]'
+  # Scheduled run to catch link rot (every Sunday at midnight UTC)
+  schedule:
+    - cron: '0 0 * * 0'
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Restore lychee cache
+        uses: actions/cache@v4
+        with:
+          path: .lycheecache
+          key: cache-lychee-${{ github.sha }}
+          restore-keys: cache-lychee-
+
+      - name: Check external links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --cache
+            --max-cache-age 1d
+            --config .lychee.toml
+            './en_US/**/*.md'
+            './zh_CN/**/*.md'
+            './ja_JP/**/*.md'
+          # Set to false initially to allow reviewing results without blocking PRs
+          # Change to true once the link checker is tuned and stable
+          fail: false
+          # Output file for the report
+          output: ./lychee-report.md
+          # Use the .lychee.toml config file
+          lycheeVersion: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload link check report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lychee-report
+          path: ./lychee-report.md
+          retention-days: 30
+
+      # Post results as a PR comment (only on pull requests)
+      - name: Post results to PR
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = './lychee-report.md';
+
+            if (!fs.existsSync(reportPath)) {
+              console.log('No report file found');
+              return;
+            }
+
+            const report = fs.readFileSync(reportPath, 'utf8');
+
+            // Only post if there are issues found
+            if (report.includes('🔗 0 Total') || report.includes('Total: 0')) {
+              console.log('No link issues found, skipping comment');
+              return;
+            }
+
+            // Truncate if too long (GitHub comment limit is 65536 chars)
+            const maxLength = 60000;
+            let body = '## 🔗 Link Check Results\n\n';
+
+            if (report.length > maxLength) {
+              body += report.substring(0, maxLength);
+              body += '\n\n... (report truncated, see full report in artifacts)';
+            } else {
+              body += report;
+            }
+
+            // Find existing comment to update
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('🔗 Link Check Results')
+            );
+
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: body
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+            }

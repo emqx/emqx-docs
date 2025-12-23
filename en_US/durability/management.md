@@ -54,7 +54,7 @@ Batching is configured using the following parameters under `durable_storage.<DS
 
 #### Storage Layout Configuration
 
-Storage layout determines how EMQX organizes data on disk. Setting `durable_storage.<DS>.layout.type` parameter can change the layout used by the new [generations](./durability_introduction.html#generation). This change does not affect existing generations. The configuration of each layout type varies and is contained under the `durable_storage.<DS>.layout` sub-tree. Currently, the `wildcard_optimized` layout type is available.
+Storage layout determines how EMQX organizes data on disk. Setting `durable_storage.<DS>.layout.type` parameter can change the layout used by the new [generations](./durability_introduction.md#generation). This change does not affect existing generations. The configuration of each layout type varies and is contained under the `durable_storage.<DS>.layout` sub-tree. Currently, the `wildcard_optimized` layout type is available.
 
 ##### Configuration of `wildcard_optimized` Layout Type
 

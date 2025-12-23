@@ -44,8 +44,8 @@ This section covers the necessary preparations before creating Lindorm Data Inte
 
 Before integration, ensure you have created a Lindorm instance and configured network access:
 
-1. Log in to Alibaba Cloud Console and [create a Lindorm instance](https://help.aliyun.com/zh/lindorm/getting-started/create-an-instance).
-2. [Configure whitelist access](https://help.aliyun.com/zh/lindorm/getting-started/configure-a-whitelist) to allow EMQX host IP access.
+1. Log in to Alibaba Cloud Console and [create a Lindorm instance](https://www.alibabacloud.com/help/en/lindorm/getting-started/create-an-instance).
+2. [Configure whitelist access](https://www.alibabacloud.com/help/en/lindorm/getting-started/configure-a-whitelist) to allow EMQX host IP access.
 3. Depending on EMQX deployment methods, choose the appropriate Lindorm connection method:
    - If EMQX is deployed on Alibaba Cloud ECS or VPC, use Lindorm's internal VPC access address for better stability and low latency.
    - If EMQX is deployed in local data centers or other clouds:
@@ -53,7 +53,7 @@ Before integration, ensure you have created a Lindorm instance and configured ne
      - Use the public SQL endpoint (typically port `33060`).
      - Add EMQX host's public IP to Lindorm's whitelist.
 
-For details, refer to the [official connection guide](https://help.aliyun.com/zh/lindorm/getting-started/connect-to-an-instance) and [JDBC connection for TSDB engine](https://help.aliyun.com/zh/lindorm/user-guide/use-the-jdbc-driver-for-lindorm-to-connect-to-and-use-lindormtsdb?spm=a2c4g.11186623.0.0.73395a0fPp3qp7#task-2079050).
+For details, refer to the [official connection guide](https://www.alibabacloud.com/help/en/lindorm/getting-started/connect-to-an-instance) and [JDBC connection for TSDB engine](https://www.alibabacloud.com/help/en/lindorm/user-guide/use-the-jdbc-driver-for-lindorm-to-connect-to-and-use-lindormtsdb).
 
 ### Create Database and Table
 
