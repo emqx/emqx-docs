@@ -1,6 +1,6 @@
 # 消息流用户指南
 
-本页面将引导你了解 EMQX 中消息流功能的实际使用方式，包括如何创建消息流、配置其行为，以及通过 Dashboard、REST API 或配置文件对消息流进行管理。
+本页面将引导您了解 EMQX 中消息流功能的实际使用方式，包括如何创建消息流、配置其行为，以及通过 Dashboard、REST API 或配置文件对消息流进行管理。
 
 ## 启用消息流功能
 
@@ -12,11 +12,11 @@
 4. 将**启用消息流**切换为**开启**。
 5. 点击**保存修改**。
 
-启用后，消息流功能将立即生效，你可以开始创建和管理消息流。
+启用后，消息流功能将立即生效，您可以开始创建和管理消息流。
 
 ## 通过 Dashboard 手动创建消息流
 
-消息流在存储或回放消息之前，必须被显式创建。你可以通过手动或自动方式创建和管理消息流。关于自动创建的详细说明，请参见[通过 Dashboard 自动创建消息流](#通过-dashboard-自动创建消息流)。
+消息流在存储或回放消息之前，必须被显式创建。您可以通过手动或自动方式创建和管理消息流。关于自动创建的详细说明，请参见[通过 Dashboard 自动创建消息流](#通过-dashboard-自动创建消息流)。
 
 1. 在左侧菜单中进入**消息流**。
 
@@ -54,8 +54,8 @@
 
    - **消息限制**：用于限制消息流中每个分片的存储使用情况：
 
-     - **最大分片消息数量**：限制每个分片中可保留的最大消息条数。你可以启用该选项并设置具体数值，或保持关闭以允许无限数量（`infinity`）。
-     - **最大分片消息字节数**：限制每个分片中消息的最大总字节数。你可以启用该选项并设置具体大小（例如 `200MB`），或保持关闭以允许无限存储（`infinity`）。
+     - **最大分片消息数量**：限制每个分片中可保留的最大消息条数。您可以启用该选项并设置具体数值，或保持关闭以允许无限数量（`infinity`）。
+     - **最大分片消息字节数**：限制每个分片中消息的最大总字节数。您可以启用该选项并设置具体大小（例如 `200MB`），或保持关闭以允许无限存储（`infinity`）。
 
      这些限制会持久化到持久化存储中，并与数据保留期共同生效。
 
@@ -96,7 +96,7 @@
 
 ### 自动创建常规消息流
 
-如果你希望消息流保留所有消息、不进行覆盖，可以选择自动创建常规消息流。
+如果您希望消息流保留所有消息、不进行覆盖，可以选择自动创建常规消息流。
 
 1. 进入**管理** -> **MQTT 配置** -> **消息流**。
 2. 保持**启用自动创建消息流**为开启状态，并选择**常规消息流**类型。
@@ -107,11 +107,11 @@
 
 ## 配置消息流全局设置
 
-本节介绍如何配置作用于**所有消息流**的全局设置。这些设置用于控制消息保留、清理周期、内部行为以及自动创建策略。你可以通过 Dashboard、REST API 或配置文件进行配置。
+本节介绍如何配置作用于**所有消息流**的全局设置。这些设置用于控制消息保留、清理周期、内部行为以及自动创建策略。您可以通过 Dashboard、REST API 或配置文件进行配置。
 
 ### Dashboard
 
-你可以直接在 EMQX Dashboard 中修改消息流的全局设置，无需重启 EMQX。
+您可以直接在 EMQX Dashboard 中修改消息流的全局设置，无需重启 EMQX。
 
 1. 进入**管理** -> **MQTT 配置** -> **消息流**。
 
@@ -152,15 +152,15 @@
 
 ### REST API
 
-You can configure global Message Stream settings programmatically using the EMQX REST API. This is useful for automation, infrastructure-as-code workflows, or managing large deployments.
+您可以通过 EMQX 的 REST API 以编程方式配置消息流（Message Stream）的全局设置。
 
-To update Message Stream global settings, send a `PUT` request to the following endpoint:
+要更新消息流的全局配置，请向以下接口发送一个 `PUT` 请求：
 
-```
+```bash
 PUT /api/v5/message_streams/config
 ```
 
-**Request example**:
+**请求示例**:
 
 ```
 curl -s -u key:secret \
@@ -174,13 +174,13 @@ curl -s -u key:secret \
   }'
 ```
 
-### Configuration File
+### 配置文件
 
-You can configure global Message Stream settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
+您可以通过编辑 EMQX 的配置文件来配置消息流的全局设置。这种方式适用于在系统启动时定义默认行为，或在以配置文件作为主要管理手段的环境中统一管理相关设置。
 
-**Configuration example**:
+**配置示例**：
 
-Message Stream settings are defined under the `streams` section of the EMQX configuration file (`emqx.conf`).
+消息流相关的配置项定义在 EMQX 配置文件（`emqx.conf`）的 `streams` 配置段中。
 
 ```hocon
 streams {
@@ -190,22 +190,22 @@ streams {
 }
 ```
 
-#### Configuration Options
+#### 配置项说明
 
-- **gc_interval**: Controls how often expired messages are removed from Message Streams. This setting affects the garbage collection cycle for stream storage.
-- **regular_stream_retention_period**: Specifies the default maximum retention period for regular message streams. Messages older than this duration are automatically deleted.
-- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$s/` topic and the corresponding stream does not yet exist.
+- **gc_interval**：控制消息流中过期消息被清理的频率。该配置项影响消息流存储的垃圾回收（GC）周期。
+- **regular_stream_retention_period**：指定常规消息流的默认最大消息保留时间。超过该时长的消息会被自动删除。
+- **check_stream_status_interval**：当客户端订阅 `$s/` 前缀的消息流主题且对应消息流尚不存在时，用于控制订阅端重试查找消息流的时间间隔。
 
-All duration values use standard time units, such as `s` (seconds), `m` (minutes), `h` (hours), and `d` (days).
+所有时间相关的配置值均支持标准时间单位，例如 `s`（秒）、`m`（分钟）、`h`（小时）和 `d`（天）。
 
-#### Durable Storage Configuration
+#### 持久存储配置
 
-Message Stream messages are stored using EMQX Durable Storage. Storage-related settings for Message Stream are configured under the `durable_storage.streams_messages` section.
+消息流中的消息数据通过 EMQX 的持久存储进行保存。与消息流相关的存储配置位于 `durable_storage.streams_messages` 配置段下。
 
 ```hocon
 durable_storage {
-    ## Settings for the database storing Message Stream messages.
-    ## See Durable Storage configuration for more details.
+    ## 用于存储消息流消息的数据存储配置
+    ## 更多信息请参见持久存储相关配置说明
     streams_messages {
         transaction {
             flush_interval = 100
@@ -216,23 +216,23 @@ durable_storage {
 }
 ```
 
-These settings control how Message Stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
+这些配置项用于控制消息流数据写入持久存储时的行为，包括事务批处理和刷新机制。在大多数情况下，默认配置已经能够满足需求，除非您需要针对存储性能进行专项调优，否则无需修改。
 
-## Manage Message Stream via REST API
+## 通过 REST API 管理消息流
 
-EMQX provides REST APIs for managing message streams. You can use these APIs to create, update, list, query, and delete message streams, as well as configure global Message Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
+EMQX 提供了一组 REST API 用于管理消息流。您可以使用这些 API 来创建、更新、列出、查询和删除消息流，以及配置消息流的全局设置。这对于自动化运维、与外部系统集成以及大规模管理消息流非常有用。
 
-::: tip Note
+::: tip 注意
 
-All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the Message Stream API reference.
+所有 REST API 操作都需要具备相应的认证信息和访问权限。有关请求和响应参数的完整说明，请参阅 [API 文档](../admin/api.md)的”消息流“部分。
 
 :::
 
-All examples below assume basic authentication using an API key and secret.
+以下示例均假设使用 API Key 和 Secret 进行基本认证。
 
-### Create a Message Stream
+### 创建消息流
 
-To create a new message stream, send a `POST` request to the streams endpoint and specify the stream configuration in the request body.
+要创建一个新的消息流，请向消息流接口发送一个 `POST` 请求，并在请求体中指定消息流的配置信息。
 
 ```bash
 curl -s -u key:secret \
@@ -245,11 +245,11 @@ curl -s -u key:secret \
   }' | jq
 ```
 
-The response includes the details of the newly created stream, including its `topic_filter`.
+响应结果中包含新创建的消息流的详细信息，包括其 `topic_filter`。
 
-### List Message Streams
+### 列出消息流
 
-To retrieve a list of existing message streams, send a `GET` request to the streams endpoint.
+要获取当前已存在的消息流列表，请向消息流接口发送一个 `GET` 请求。
 
 ```bash
 curl -s -u key:secret \
@@ -258,7 +258,7 @@ curl -s -u key:secret \
   http://localhost:18083/api/v5/message_streams/streams | jq
 ```
 
-The response contains a list of streams and pagination metadata.
+响应中返回消息流列表以及分页相关的元数据信息。
 
 ```bash
 {
@@ -273,9 +273,9 @@ The response contains a list of streams and pagination metadata.
 }
 ```
 
-### Update a Message Stream
+### 更新消息流
 
-To update an existing message stream, send a `PUT` request to the stream resource identified by its topic filter. The topic filter must be URL-encoded.
+要更新一个已有的消息流，请向由其主题过滤器标识的消息流资源发送一个 `PUT` 请求。主题过滤器需要进行 URL 编码。
 
 ```bash
 curl -s -u key:secret \
@@ -288,20 +288,20 @@ curl -s -u key:secret \
   }' | jq
 ```
 
-The response returns the updated stream configuration.
+响应结果会返回更新后的消息流配置信息。
 
-### Delete a Message Stream
+### 删除消息流
 
-To delete a Message Stream, send a `DELETE` request to the stream resource identified by its URL-encoded topic filter.
+要删除一个消息流，请向由 URL 编码后的主题过滤器标识的消息流资源发送一个 `DELETE` 请求。
 
-```
+```bash
 curl -s -u key:secret \
   -X DELETE \
   http://localhost:18083/api/v5/message_streams/streams/t1%2F%23
 ```
 
-Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
+消息流被删除后，将不再接收新的消息，其已存储的数据也会按照内部清理规则逐步移除。
 
-### Configure Message Stream Global Settings
+### 配置消息流全局设置
 
-See [Configure Message Stream Settings -RESP API](#rest-api).
+请参见[配置消息流全局设置 - REST API](#rest-api)。

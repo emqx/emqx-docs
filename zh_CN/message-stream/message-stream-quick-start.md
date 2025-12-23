@@ -1,154 +1,153 @@
-# Message Stream Quick Start
+# 消息流快速开始
 
-This page walks you through how to use the Message Stream feature in EMQX 6.1. You’ll use MQTTX to simulate clients, create and manage message streams from the EMQX Dashboard, and experience how messages can be stored, replayed, and compacted.
+本页面将引导您在 EMQX 6.1 中快速体验消息流功能。你将使用 MQTTX 模拟客户端，通过 EMQX Dashboard 创建和管理消息流，并了解消息是如何被持久化存储、按时间回放以及通过最后值语义进行压缩的。
 
-## Objectives
+## 目标
 
-This quick start demonstrates how EMQX Message Stream can:
+本快速入门将演示 EMQX 消息流如何实现以下能力：
 
-- Persist messages independently of subscriber availability
-- Support timestamp-based replay
-- Enable Last-Value semantics for state-oriented messaging
+- 在订阅者不在线的情况下持久化存储消息
+- 支持基于时间戳的消息回放
+- 通过最后值语义（Last-Value semantics）支持状态型消息场景
 
-## Prerequisites
+## 前置条件
 
-Before starting, ensure you have:
+开始之前，请确保你已具备以下条件：
 
-- EMQX 6.1+ running
-- [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
-- Access to the EMQX Dashboard (default: `http://localhost:18083`)
+- 正在运行的 EMQX 6.1 或更高版本
+- 已安装 [MQTTX](https://mqttx.app/)（或任何支持 MQTT 5.0 的客户端）
+- 可访问 EMQX Dashboard（默认地址：`http://localhost:18083`）
 
-## Test Message Stream Basic Features (Regular Stream)
+## 测试消息流的基础功能（常规消息流）
 
-This section demonstrates how Message Stream stores messages and allows consumers to replay historical data.
+本节将演示消息流如何存储消息，并允许消费者回放历史数据。
 
-### Prerequisite
+### 前置检查
 
-Before starting, ensure that the Message Stream feature is enabled and that the auto-creation behavior will not interfere with this example.
+在开始之前，请确保消息流功能已启用，并且自动创建行为不会影响本示例。
 
-1. Go to **Message Stream** in the left menu.
+1. 在左侧导航栏中点击**消息流**。
 
-2. If Message Stream is disabled, click **Settings**. You will be redirected to the **Management** -> **MQTT Settings** -> **Message Stream** page.
+2. 如果消息流功能处于禁用状态，点击**设置**，系统将跳转到**管理** -> **MQTT 设置** -> **消息流**页面。
 
-3. Toggle the **Enable Message Stream** switch on.
+3. 将**启用消息流**开关切换为开启状态。
 
-4. Verify the auto-create settings to ensure a **regular Message Stream** is used:
+4. 检查自动创建配置，确保使用的是**常规消息流**：
 
-   - **Enable Auto Create Message Stream** is disabled, or
+   - **启用自动创建消息流**已关闭，或
+   - **自动创建消息流类型**设置为**常规消息流**
 
-   - **Auto Create Message Stream Type** is set to **Regular Message Stream**
+   > 这样可以避免消息流被自动创建为最后值消息流，否则具有相同流键的消息流只会保留最新一条消息。
 
-   > This prevents the stream from being auto-created as a Last-Value Message Stream, which would retain only the most recent message per key.
+5. 如有修改，点击**保存更改**使配置生效。
 
-4. If you make any changes, click **Save Changes** to apply them.
+<img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
 
-   <img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
+### 步骤 1：创建消息流
 
-### Step 1: Create a Message Stream
+1. 在左侧导航栏中点击**消息流**。
+2. 在页面中点击**创建消息流**，或点击右上角的**创建**按钮。
+3. 在**创建消息流**对话框中配置以下参数：
+   - **主题过滤器**：`demo/stream`
+   - **数据保留时间**：`1` 天
+   - **最后值语义**：关闭
+   - **流键表达式**：`message.from`
+4. 点击**创建**。
 
-1. Navigate to **Message Stream** in the left menu.
+![create_message_stream](./assets/create_message_stream.png)
 
-2. Click **Create Stream** on the page, or click **Create** in the upper-right corner.
+### 步骤 2：发布消息
 
-3. In the **Create Message Stream** dialog, configure the following settings:
-   - **Topic Filter**: `demo/stream`
-   - **Data Retention Period**: `1` day
-   - **Last-Value Semantics**: Disabled
-   - **Stream Key Expression**: `message.from`
+使用 MQTTX 模拟一个发布端客户端：
 
-4. Click **Create**.
+1. 打开 MQTTX，创建一个客户端（例如 `publisher`）。
 
-   ![create_message_stream](./assets/create_message_stream.png)
+2. 连接到 EMQX（`mqtt://localhost:1883`）。
 
-### Step 2: Publish Messages
+3. 以 QoS 1 向主题 `demo/stream` 发布多条消息。
 
-Use MQTTX to simulate a client acting as a **publisher**:
-
-1. Open MQTTX and create a client (for example, `publisher`).
-2. Connect to EMQX (`mqtt://localhost:1883`).
-3. Publish several messages to the topic `demo/stream` with QoS 1.
-
-Examples:
-
-```
-Topic: demo/stream
-QoS: 1
-Payload: {"value": 1}
-Payload: {"value": 2}
-Payload: {"value": 3}
-```
-
-Since this is a regular stream, **all messages are stored** in the stream.
-
-### Step 3: Replay All Messages from the Stream
-
-Now simulate a **consumer** that replays stored messages.
-
-1. Open a second MQTTX client (for example, `consumer`).
-
-2. Connect to EMQX.
-
-3. Subscribe to the stream topic using the earliest timestamp:
+   示例：
 
    ```
-   Topic: $s/0/demo/stream
+   Topic: demo/stream
    QoS: 1
+   Payload: {"value": 1}
+   Payload: {"value": 2}
+   Payload: {"value": 3}
+   ```
+
+由于这是一个**常规消息流**，所有消息都会被完整存储。
+
+### 步骤 3：回放消息流中的所有消息
+
+接下来模拟一个消费端客户端，用于回放已存储的消息。
+
+1. 打开第二个 MQTTX 客户端（例如 `consumer`）。
+
+2. 连接到 EMQX。
+
+3. 使用最早时间戳订阅消息流主题：
+
+   ```
+   Topic：$s/0/demo/stream
+   QoS：1
    ```
 
    ![subscribe_to_stream_topic](./assets/subscribe_to_stream_topic.png)
 
-**Expected Behavior**:
- You should receive all previously published messages, in publish order:
+**预期行为**：
 
-```
+您将按发布顺序收到之前发布的所有消息：
+
+```json
 {"value": 1}
 {"value": 2}
 {"value": 3}
 ```
 
-This confirms that:
+这表明：
 
-- The stream is a regular message stream.
-- Timestamp-based replay is working correctly.
-- No messages were compacted or overwritten.
+- 当前消息流为常规消息流。
+- 基于时间戳的消息回放工作正常。
+- 消息未发生覆盖或压缩。
 
 ![replay_messages](./assets/replay_messages.png)
 
-## Replay Messages from Different Positions
+## 从不同位置回放消息
 
-Message Streams allow consumers to control where message replay starts by specifying a timestamp when subscribing.
+消息流允许消费者在订阅时通过指定时间戳来控制回放的起始位置。
 
-1. Publish additional messages from the `publisher` client:
+1. 使用 `publisher` 客户端继续发布新消息：
 
-   ```
+   ```json
    {"value": 4}
    {"value": 5}
    ```
 
-2. In a new MQTTX client, subscribe to the stream using a later timestamp:
+2. 在一个新的 MQTTX 客户端中，使用较新的时间戳订阅消息流：
 
    ```
-   Topic: $s/1766383734000/demo/stream
+   Topic: $s/1766477011000/demo/stream
    QoS: 1
    ```
 
-   In this example, `1766383734000` is a Unix timestamp in milliseconds. Only messages published **at or after** this time are delivered to the subscriber.
+   在该示例中，`1766477011000` 是一个毫秒级的 Unix 时间戳。只有在该时间点及之后发布的消息才会被投递给订阅者。
 
    ::: tip
 
-   - The timestamp must be a Unix timestamp in milliseconds.
-   - Use `0` to replay from the earliest available message.
-   - Use a later timestamp to replay only newer messages.
+   - 时间戳必须为毫秒级 Unix 时间戳。
+   - 使用 `0` 可从最早的可用消息开始回放。
+   - 使用较大的时间戳可仅回放较新的消息。
 
-   You can obtain the current timestamp in milliseconds using:
+   您可以通过以下方式获取当前的毫秒级时间戳：
 
-   - **Linux / macOS**:
+   - **Linux / macOS**：
 
      ```
      date +%s000
      ```
 
-   - **JavaScript**:
+   - **JavaScript**：
 
      ```
      Date.now()
@@ -156,75 +155,75 @@ Message Streams allow consumers to control where message replay starts by specif
 
    :::
 
-3. Click **Confirm**. Only messages published **at or after** the specified timestamp are delivered.
+3. 点击**确认**。此时只会收到在指定时间戳之后发布的消息。
 
-   ![replay_message_from_different_positions](./assets/replay_message_from_different_positions.png)
+![replay_message_from_different_positions](./assets/replay_message_from_different_positions.png)
 
-This demonstrates consumer-controlled replay, where different consumers can independently read the same message stream from different points in time without affecting each other.
+这表明由消费者控制的消息回放机制：不同的消费者可以从不同的时间点独立地读取同一条消息流的数据，且彼此之间互不影响。
 
-## Test Last-Value Semantics
+## 测试最后值语义
 
-This section demonstrates how **Last-Value Message Streams** keep only the latest message per key, which is useful for representing state.
+本节将演示最后值消息流如何仅保留每个 key 对应的最新消息，适用于状态型数据场景。
 
-### Step 1: Delete the Existing Stream
+### 步骤 1：删除已有消息流
 
-1. Navigate to **Message Stream** in the Dashboard.
-2. Locate the stream with the topic filter `demo/stream`.
-3. Click **Delete** and confirm.
+1. 在 EMQX 控制台中进入**消息流**页面。
+2. 找到主题过滤器为 `demo/stream` 的消息流。
+3. 点击**删除**并确认。
 
-### Step 2: Create a Last-Value Message Stream
+### 步骤 2：创建最后值消息流
 
-1. Click **Create** on the **Message Stream** page.
-2. Configure the following settings:
-   - **Topic Filter**: `device/state`
-   - **Data Retention Period**: `1` day
-   - **Last-Value Semantics**: Enabled
-   - **Stream Key Expression**: `message.from`
-3. Click **Create**.
+1. 在**消息流**页面点击**创建**。
+2. 配置以下参数：
+   - **主题过滤器**：`device/state`
+   - **数据保留时间**：`1` 天
+   - **最后值语义**：开启
+   - **流键表达式**：`message.from`
+3. 点击**创建**。
 
-The stream is now configured to retain only the latest message per key.
+该消息流现已配置为：对使用相同键的消息流仅保留其中最新一条消息。
 
-### Step 3: Publish State Updates
+### 步骤 3：发布状态更新
 
-1. In MQTTX, use a client with ID `device-1`.
+1. 在 MQTTX 中使用客户端 ID 为 `device-1` 的客户端。
 
-2. Publish messages to `device/state`:
-
-   | Field   | Value                  |
-   | ------- | ---------------------- |
-   | Topic   | `device/state`         |
-   | QoS     | 1                      |
-   | Payload | `{"status": "online"}` |
-
-3. Publish another message from the same client:
+2. 向 `device/state` 发布消息：
 
    ```
-   {"status": "offline"}
-   ```
-
-Because the **Stream Key Expression** is `message.from`, both messages share the same key. The second message overwrites the first.
-
-### Step 4: Subscribe to the Stream
-
-1. Open a new MQTTX client (for example, `monitor`).
-
-2. Subscribe to the stream topic:
-
-   ```
-   Topic: $s/0/device/state
+   Topic: device/state
    QoS: 1
+   Payload: {"status": online}
+   ```
+
+3. 使用同一个客户端再发布一条消息：
+
+   ```json
+   {"status": offline}
+   ```
+
+由于**流键表达式**设置为 `message.from`，这两条消息具有相同的键，后发布的消息会覆盖先前发布的消息。
+
+### 步骤 4：订阅消息流
+
+1. 打开一个新的 MQTTX 客户端（例如 `monitor`）。
+
+2. 订阅消息流主题：
+
+   ```
+   Topic：$s/0/device/state
+   QoS：1
    ```
 
    ![stream_topic_last_value](./assets/stream_topic_last_value.png)
 
-**Expected Behavior**:
+**预期行为**：
 
-Only the most recent message is delivered:
+只会收到最新的一条消息：
 
 ```
-{"status": "offline"}
+{"status": offline}
 ```
+
+这表明消息流通过最后值语义支持状态型消息模式。
 
 ![replay_message_last_value](./assets/replay_message_last_value.png)
-
-This demonstrates how Message Streams support state-oriented messaging patterns using Last-Value semantics.

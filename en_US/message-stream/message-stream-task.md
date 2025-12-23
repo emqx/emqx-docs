@@ -161,7 +161,7 @@ The updated configuration takes effect immediately and applies to all existing a
 
 ### REST API
 
-You can configure global Message Stream settings programmatically using the EMQX REST API. This is useful for automation, infrastructure-as-code workflows, or managing large deployments.
+You can configure global Message Stream settings programmatically using the EMQX REST API.
 
 To update Message Stream global settings, send a `PUT` request to the following endpoint:
 
@@ -233,7 +233,7 @@ EMQX provides REST APIs for managing message streams. You can use these APIs to 
 
 ::: tip Note
 
-All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the Message Stream API reference.
+All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "Message Stream" section in [REST API](../admin/api.md).
 
 :::
 

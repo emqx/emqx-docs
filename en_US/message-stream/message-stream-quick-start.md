@@ -65,18 +65,20 @@ Before starting, ensure that the Message Stream feature is enabled and that the 
 Use MQTTX to simulate a client acting as a **publisher**:
 
 1. Open MQTTX and create a client (for example, `publisher`).
+
 2. Connect to EMQX (`mqtt://localhost:1883`).
+
 3. Publish several messages to the topic `demo/stream` with QoS 1.
 
-Examples:
+   Examples:
 
-```
-Topic: demo/stream
-QoS: 1
-Payload: {"value": 1}
-Payload: {"value": 2}
-Payload: {"value": 3}
-```
+   ```
+   Topic: demo/stream
+   QoS: 1
+   Payload: {"value": 1}
+   Payload: {"value": 2}
+   Payload: {"value": 3}
+   ```
 
 Since this is a regular stream, **all messages are stored** in the stream.
 
@@ -128,11 +130,11 @@ Message Streams allow consumers to control where message replay starts by specif
 2. In a new MQTTX client, subscribe to the stream using a later timestamp:
 
    ```
-   Topic: $s/1766383734000/demo/stream
+   Topic: $s/1766477011000/demo/stream
    QoS: 1
    ```
 
-   In this example, `1766383734000` is a Unix timestamp in milliseconds. Only messages published **at or after** this time are delivered to the subscriber.
+   In this example, `1766477011000` is a Unix timestamp in milliseconds. Only messages published **at or after** this time are delivered to the subscriber.
 
    ::: tip
 
@@ -156,7 +158,7 @@ Message Streams allow consumers to control where message replay starts by specif
 
    :::
 
-3. Click **Confirm**. Only messages published **at or after** the specified timestamp are delivered.
+3. Click **Confirm**. Only messages published at or after the specified timestamp are delivered.
 
    ![replay_message_from_different_positions](./assets/replay_message_from_different_positions.png)
 
@@ -164,7 +166,7 @@ This demonstrates consumer-controlled replay, where different consumers can inde
 
 ## Test Last-Value Semantics
 
-This section demonstrates how **Last-Value Message Streams** keep only the latest message per key, which is useful for representing state.
+This section demonstrates how Last-Value Message Streams keep only the latest message per key, which is useful for representing state.
 
 ### Step 1: Delete the Existing Stream
 
@@ -182,7 +184,7 @@ This section demonstrates how **Last-Value Message Streams** keep only the lates
    - **Stream Key Expression**: `message.from`
 3. Click **Create**.
 
-The stream is now configured to retain only the latest message per key.
+The stream is now configured to retain only the latest message in streams with the same key.
 
 ### Step 3: Publish State Updates
 
@@ -190,16 +192,16 @@ The stream is now configured to retain only the latest message per key.
 
 2. Publish messages to `device/state`:
 
-   | Field   | Value                  |
-   | ------- | ---------------------- |
-   | Topic   | `device/state`         |
-   | QoS     | 1                      |
-   | Payload | `{"status": "online"}` |
+   ```
+   Topic: device/state
+   QoS: 1
+   Payload: {"status": online}
+   ```
 
 3. Publish another message from the same client:
 
-   ```
-   {"status": "offline"}
+   ```json
+   {"status": offline}
    ```
 
 Because the **Stream Key Expression** is `message.from`, both messages share the same key. The second message overwrites the first.
@@ -222,9 +224,9 @@ Because the **Stream Key Expression** is `message.from`, both messages share the
 Only the most recent message is delivered:
 
 ```
-{"status": "offline"}
+{"status": offline}
 ```
 
-![replay_message_last_value](./assets/replay_message_last_value.png)
-
 This demonstrates how Message Streams support state-oriented messaging patterns using Last-Value semantics.
+
+![replay_message_last_value](./assets/replay_message_last_value.png)
