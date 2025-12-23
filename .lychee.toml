@@ -68,8 +68,11 @@ timeout = 30
 # Maximum number of retries for failed requests
 max_retries = 3
 
+# Retry wait time in seconds between retries
+retry_wait_time = 5
+
 # Maximum number of concurrent requests
-max_concurrency = 10
+max_concurrency = 1
 
 # Don't check fragments/anchors (they're generated during build from headers)
 # Only verify that the target file exists
@@ -89,3 +92,6 @@ require_https = false
 
 # Follow redirects
 max_redirects = 10
+
+# Respect robots.txt to avoid being blocked
+include_verbatim = false
