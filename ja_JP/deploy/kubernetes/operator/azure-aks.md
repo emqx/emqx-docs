@@ -1,114 +1,124 @@
 # Deploy EMQX on Azure Kubernetes Service
 
-EMQX Operator supports deploying EMQX on Azure Kubernetes Service(AKS). AKS simplifies deploying a managed Kubernetes cluster in Azure by offloading the operational overhead to Azure. As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. When you create an AKS cluster, a control plane is automatically created and configured. This control plane is provided at no cost as a managed Azure resource abstracted from the user. You only pay for and manage the nodes attached to the AKS cluster.
+EMQX Operator supports deploying EMQX on Azure Kubernetes Service (AKS). AKS simplifies deploying a managed Kubernetes cluster in Azure by offloading the operational overhead to Azure. As a hosted Kubernetes service, Azure handles critical tasks, like health monitoring and maintenance. When an AKS cluster is created, Azure automatically provisions and manages the Kubernetes control plane at no additional cost.
 
 ## Before You Begin
-Before you begin, you must have the following:
 
-- To create an AKS cluster on Azure, you first need to activate the AKS service in your Azure subscription. Refer to the [Azure Kubernetes Service](https://learn.microsoft.com/en-us/azure/aks/) documentation for more information.
+Before deploying EMQX on AKS, ensure the following prerequisites are met:
 
-- To connect to an AKS cluster using kubectl commands, you can install the kubectl tool locally and obtain the cluster's KubeConfig to connect to the cluster. Alternatively, you can use Cloud Shell through the Azure portal to manage the cluster with kubectl.
-  - To connect to an AKS cluster using kubectl, you need to install and configure the kubectl tool on your local machine. Refer to the [Connect to an AKS cluster](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli) documentation for detailed instructions on how to do this.
-  - To connect to an AKS cluster using CloudShell, use Azure CloudShell to connect to the AKS cluster and manage the cluster using kubectl. Refer to the [Manage an AKS cluster in Azure CloudShell](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli) documentation for detailed instructions on how to connect to Azure CloudShell and use kubectl.
+- An AKS cluster in your Azure subscription
+  * Refer to the [Azure Kubernetes Service documentation](https://learn.microsoft.com/en-us/azure/aks/) for guidance on creating and configuring an AKS cluster.
 
+- A working `kubectl` configuration for connecting to the AKS cluster
+  - To connect using the locally installed `kubectl`, follow the instructions in [Connect to an AKS cluster](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli).
+  - To connect using Azure Cloud Shell, see [Manage an AKS cluster in Azure CloudShell](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-portal?tabs=azure-cli).
 
-- To install EMQX Operator, please refer to [Install EMQX Operator](./getting-started.md)
+- EMQX Operator installed on the cluster
+  - Refer to [Install EMQX Operator](./getting-started.md) for installation details.
+  
 
+## Deploy EMQX Cluster Quickly
 
-## Quickly Deploy an EMQX Cluster
+The following example shows a basic configuration for an EMQX Custom Resource (CR).
 
-Here are the relevant configurations for EMQX Custom Resource. You can choose the corresponding APIVersion based on the version of EMQX you wish to deploy. For specific compatibility relationships, please refer to [EMQX Operator Compatibility](./operator.md):
+1. Save it as a YAML file and deploy with `kubectl apply`.
 
-```yaml
-apiVersion: apps.emqx.io/v2beta1
-kind: EMQX
-metadata:
-  name: emqx
-spec:
-  image: emqx/emqx-enterprise:@EE_VERSION@
-  config:
-    data: |
-      license {
-        key = "..."
-      }
-  coreTemplate:
-    spec:
-      volumeClaimTemplates:
-        ## more information about storage classes: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
-        storageClassName: default
-        resources:
-          requests:
-            storage: 10Gi
-        accessModes:
-        - ReadWriteOnce
-  dashboardServiceTemplate:
-    spec:
-      ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
-      type: LoadBalancer
-  listenersServiceTemplate:
-    spec:
-      ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
-      type: LoadBalancer
-```
+   ```yaml
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+   spec:
+     image: emqx/emqx:@EE_VERSION@
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+     coreTemplate:
+       spec:
+         volumeClaimTemplates:
+           ## more information about storage classes: https://learn.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes
+           storageClassName: default
+           resources:
+             requests:
+               storage: 10Gi
+           accessModes:
+           - ReadWriteOnce
+     dashboardServiceTemplate:
+       spec:
+         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         type: LoadBalancer
+     listenersServiceTemplate:
+       spec:
+         ## more information about load balancer: https://learn.microsoft.com/en-us/azure/aks/load-balancer-standard
+         type: LoadBalancer
+   ```
 
-Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster using the `kubectl get` command. Please ensure that the STATUS is `Running` which may take some time.
+2. Wait for the EMQX cluster to become ready.
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
+   Check the cluster status using `kubectl get` and verify that the `STATUS` is `Ready`. A startup may take some time.
 
-Get the External IP of the EMQX cluster and access the EMQX console.
+   ```shell
+   $ kubectl get emqx
+   NAME   STATUS    AGE
+   emqx   Ready     1m5s
+   ```
 
-The EMQX Operator will create two EMQX Service resources, one is `emqx-dashboard`, and the other is `emqx-listeners`, corresponding to the EMQX console and EMQX listening port, respectively.
+3. Retrieve the external IP of the EMQX Dashboard and access it.
 
-```shell
-$ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
+   The EMQX Operator automatically creates a Service based on the `dashboardServiceTemplate` configuration.
 
-20.245.230.91
-```
+   ```shell
+   $ kubectl get svc emqx-dashboard -o json | jq -r '.status.loadBalancer.ingress[0].ip'
+   20.245.230.91
+   ```
 
-Access the EMQX console by opening a web browser and visiting http://20.245.230.91:18083. Login using the default username and password `admin/public`.
+4. Open the Dashboard at `http://20.245.230.91:18083`.
 
-## Connect to EMQX Cluster to Publish/Subscribe Messages Using MQTTX CLI
+    Log in with the default credentials:
 
-[MQTTX CLI](https://mqttx.app/cli) is an open-source MQTT 5.0 command-line client tool designed to help developers develop and debug MQTT services and applications faster without the need for a GUI.
+     - **Username:** `admin`
+     - **Password:** `public`
 
-- Retrieve the External IP of the EMQX cluster
+## Use MQTTX to Subscribe and Publish
 
-```shell
-external_ip=$(kubectl get svc emqx -o json | jq '.status.loadBalancer.ingress[0].ip')
-```
+This walkthrough uses [MQTTX CLI](https://mqttx.app/cli), an open-source MQTT 5.0 command-line client tool that helps developers quickly test the MQTT services and applications.
 
-- Subscribe to messages
+1. Obtain the external IP of the EMQX TCP listener.
 
-```shell
-$ mqttx sub -t 'hello' -h ${external_ip} -p 1883
+   The EMQX Operator automatically creates a Service resource for each configured listener.
 
-[10:00:25] › …  Connecting...
-[10:00:25] › ✔  Connected
-[10:00:25] › …  Subscribing to hello...
-[10:00:25] › ✔  Subscribed to hello
-```
+   ```shell
+   external_ip=$(kubectl get svc emqx-listeners -o json | jq -r '.status.loadBalancer.ingress[0].ip')
+   ```
 
-- Create a new terminal window and send a message
+2. Subscribe to a topic.
 
-```shell
-$ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
+   ```shell
+   $ mqttx sub -t 'hello' -h ${external_ip} -p 1883
+   [10:00:25] › …  Connecting...
+   [10:00:25] › ✔  Connected
+   [10:00:25] › …  Subscribing to hello...
+   [10:00:25] › ✔  Subscribed to hello
+   ```
 
-[10:00:58] › …  Connecting...
-[10:00:58] › ✔  Connected
-[10:00:58] › …  Message Publishing...
-[10:00:58] › ✔  Message published
-```
+3. In another terminal, connect to the EMQX cluster and publish a message.
 
-- View messages received in the subscription terminal window
+   ```shell
+   $ mqttx pub -t 'hello' -h ${external_ip} -p 1883 -m 'hello world'
+   [10:00:58] › …  Connecting...
+   [10:00:58] › ✔  Connected
+   [10:00:58] › …  Message Publishing...
+   [10:00:58] › ✔  Message published
+   ```
 
-```shell
-[10:00:58] › payload: hello world
-```
+4. Observe the subscriber receiving the message.
 
-## About LoadBalancer Offloading TLS
+   ```shell
+   [10:00:58] › payload: hello world
+   ```
 
-Since Azure LoadBalancer does not support TCP certificates, please refer to this [document](https://github.com/emqx/emqx-operator/discussions/312) to resolve TCP certificate offloading issues.
+## Notes on TLS Offloading with LoadBalancer
+
+As an L3/L4 load balancer, Azure LoadBalancer does not support TLS termination. Please refer to this [discussion](https://github.com/emqx/emqx-operator/discussions/312) to understand possible workarounds.
