@@ -152,14 +152,12 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
 
   - **SASL Extensions**: (advanced, optional) 
 
-  - Additional key-value pairs sent as SASL extensions during authentication.
-     These are required by some Kafka providers (for example, Confluent Cloud) to pass metadata such as:
+  - Additional key-value pairs sent as SASL extensions during authentication. These are required by some Kafka providers (for example, Confluent Cloud) to pass metadata such as:
 
     - `logicalCluster`
     - `identityPoolId`
 
     The required extensions and their values depend on the Kafka cluster and OAuth provider configuration. For a complete description of OAuth / OIDC authentication in Confluent Cloud, refer to the [official documentation](https://docs.confluent.io/cloud/current/security/authenticate/workload-identities/identity-providers/oauth/overview.html).
-
 - **Basic Auth**: Uses a username and password for authentication.
 
   When this method is selected, you must provide:
