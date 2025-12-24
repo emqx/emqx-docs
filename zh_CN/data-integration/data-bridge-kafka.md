@@ -102,7 +102,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
      - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式，连接支持 OAuth 或 OIDC 的 Kafka 集群。
      - `基础认证`：使用用户名和密码进行身份认证。需要选择 SASL 机制（`plain`、`scram_sha_256` 或 `scram_sha_512`）。
      - `Kerberos`：使用 Kerberos（GSSAPI）进行身份认证。需要指定 Kerberos Principal 和 Kerberos keytab 文件。
-     
+
      有关每种认证方式的详细说明，请参见[认证方式](#认证方式)。
      
    - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
