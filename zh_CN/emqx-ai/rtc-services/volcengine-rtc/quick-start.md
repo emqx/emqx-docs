@@ -1,8 +1,6 @@
 # 使用 EMQX + 火山引擎 RTC 构建实时语音智能体
 
-本指南介绍如何使用 Docker Compose 部署一个 AI Agent 演示项目，该项目使用 WebRTC 实现语音交互，使用 MCP over MQTT 协议控制设备。
-
-本项目通过一个在浏览器中运行的智能玩偶形象来模拟设备，以展示如何使用 MCP over MQTT 协议访问设备端的拍照、表情切换、音量调节等能力。项目集成了[火山引擎 RTC](https://www.volcengine.com/product/veRTC/ConversationalAI)，通过 WebRTC 技术实现低延迟的语音交互体验，并使用火山引擎提供的 `CustomLLM` 模式对接自定义的 AI Agent 服务，实现多轮对话与工具调用。
+该文档介绍如何使用 Docker Compose 部署 AI Agent 演示项目。项目通过浏览器中的智能玩偶模拟智能设备，演示如何使用[火山引擎 RTC](https://www.volcengine.com/product/veRTC/ConversationalAI) 实现低延迟语音交互，通过 MCP over MQTT 协议调用设备端能力（拍照、表情切换、音量调节等），并使用火山引擎 `CustomLLM` 模式对接自定义 AI Agent 服务实现多轮对话与工具调用，展示从语音对话到设备控制的完整流程。
 
 观看[演示视频](https://www.bilibili.com/video/BV1P2WTzBEu4/)了解 Demo 完整效果。
 
@@ -39,8 +37,7 @@
 
 ### 1. Docker 环境
 
-- **版本要求**：Docker 24+
-- **验证方式**：运行 `docker --version` 确认
+Docker 24+（运行 `docker --version` 确认版本）。
 
 ### 2. MQTT Broker
 
@@ -51,23 +48,18 @@
 - **自建部署**：参考 [EMQX 安装文档](https://docs.emqx.com/zh/emqx/latest/deploy/install.html)
 - **托管服务**：使用 [EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/)
 
-**默认配置**：
+**配置示例**：
 
 ```bash
-MQTT_BROKER_HOST=localhost
-MQTT_BROKER_PORT=1883
-```
-
-**如需认证**，添加：
-
-```bash
-MQTT_USERNAME=your_username
-MQTT_PASSWORD=your_password
+MQTT_BROKER_HOST=localhost        # EMQX Broker 地址
+MQTT_BROKER_PORT=1883             # MQTT 端口
+MQTT_USERNAME=your_username       # 用户名（如需认证）
+MQTT_PASSWORD=your_password       # 密码（如需认证）
 ```
 
 ### 3. LLM API Key
 
-项目默认使用阿里云百炼 `qwen-flash` 模型。
+项目通过火山引擎 CustomLLM 模式接入自定义 AI Agent，默认使用阿里云百炼 `qwen-flash` 模型。
 
 #### 开通阿里云百炼
 
@@ -102,8 +94,6 @@ LLM_MODEL=your_model_name                       # 模型名称
 不同 LLM 服务的延迟和成本差异较大，请根据需求选择。为获得最佳延迟，推荐使用默认的阿里云百炼 `qwen-flash`。
 
 ### 4. 火山引擎凭证
-
-#### 开通服务
 
 本项目需要多个火山引擎服务。请访问 [火山引擎控制台](https://console.volcengine.com/home) 注册并登录。
 
@@ -318,11 +308,13 @@ VOLC_LLM_API_KEY=your-strong-random-secret-key-here  # 与 app 保持一致
 
 **配置检查清单**：
 
-- [ ] `VOLC_ACCESS_KEY_ID` 和 `VOLC_SECRET_KEY` 已从火山引擎控制台获取
-- [ ] `VOLC_RTC_APP_ID` 和 `VOLC_RTC_APP_KEY` 已从 RTC 控制台获取
-- [ ] `VOLC_ASR_APP_ID`、`VOLC_TTS_APP_ID`、`VOLC_TTS_APP_TOKEN`、`VOLC_TTS_RESOURCE_ID` 已从豆包语音控制台获取
-- [ ] `VOLC_LLM_API_KEY` 与 `app/.env` 的 `CUSTOM_LLM_API_KEY` 完全一致
-- [ ] 已完成前置准备中的"权限配置"（跨服务授权）
+| 检查项 | 配置内容 | 获取来源 |
+|--------|----------|----------|
+| 火山引擎凭证 | `VOLC_ACCESS_KEY_ID`、`VOLC_SECRET_KEY` | 火山引擎控制台 |
+| RTC 应用配置 | `VOLC_RTC_APP_ID`、`VOLC_RTC_APP_KEY` | RTC 控制台 |
+| 语音服务配置 | `VOLC_ASR_APP_ID`、`VOLC_TTS_APP_ID`、`VOLC_TTS_APP_TOKEN`、`VOLC_TTS_RESOURCE_ID` | 豆包语音控制台 |
+| LLM 密钥同步 | `VOLC_LLM_API_KEY` | 需与 `app/.env` 的 `CUSTOM_LLM_API_KEY` 完全一致 |
+| 权限配置 | 跨服务授权 | 完成前置准备中的"权限配置" |
 
 #### 2.3 配置 web 服务（前端 UI）
 
@@ -419,60 +411,19 @@ docker compose -f docker/docker-compose.web-volc.yml logs -f app
 
 #### 4.3 开始语音交互
 
-1. 找到页面底部中央的三个圆形按钮（麦克风、扬声器、摄像头）
-2. 点击最左侧的**麦克风按钮**（默认灰色）
-3. 浏览器会请求麦克风权限，点击**允许**
-4. 系统自动初始化：
-   - 麦克风按钮显示连接动画
-   - 通过 volc-server 获取场景配置和 RTC Token
-   - 建立火山引擎 WebRTC 连接
-   - 初始化 ASR/TTS 语音服务
-   - 启动 CustomLLM 回调 app 的 `/chat-stream` 端点
-5. 连接成功后：
-   - 麦克风按钮变为紫色（高亮）
-   - 页面中央显示"你好，我是 EMQ 机器人，打开麦克风开始对话吧！"
-   - 对着麦克风说话即可开始语音交互
-
-**控制按钮说明**：
-
-- **麦克风按钮**（左）：灰色 = 未连接，紫色 = 已连接且麦克风启用，再次点击可禁用麦克风（保持连接）
-- **扬声器按钮**（中）：控制 TTS 语音播放静音/取消静音
-- **摄像头按钮**（右）：启用/禁用本地摄像头预览（用于拍照工具调用）
+点击页面底部的**麦克风按钮**，允许浏览器麦克风权限后，系统自动建立 RTC 连接。连接成功后麦克风按钮变为紫色，即可开始语音对话。
 
 **测试建议**：
 
-**语音识别和响应**：
-
 - 说"你好"或"给我讲个故事"测试基本对话
-- 页面中央的对话框会实时显示 AI 回复文本
-- TTS 语音合成会同步播放
-
-**设备控制（MCP 工具调用）**：
-
-- 说"我手里拿的是什么" → 触发摄像头拍照和视觉识别
-- 说"把音量调到 80%" → 调整界面音量条
-- 说"换个开心的表情" → 切换头像表情动画
-- 说"换个生气的表情" → 再次切换表情
+- 说"我手里拿的是什么"触发拍照和视觉识别
+- 说"把音量调到 80%"或"换个开心的表情"测试设备控制
 
 #### 4.4 成功验证指标
 
-✅ **语音交互正常**：
-
-- ASR 正确将语音转写为文本
-- LLM 流式返回对话响应
-- TTS 播放语音回复
-
-✅ **MCP 工具调用正常**：
-
-- 摄像头拍照成功并在界面显示
-- 表情根据指令实时切换
-- 音量调整立即生效
-
-✅ **日志无报错**：
-
-- app 日志显示 LLM 和工具调用成功
-- Web UI 浏览器控制台无 MQTT 连接错误
-- volc-server 日志显示回调 app 成功
+- **语音交互**：ASR 转写正确、LLM 流式响应、TTS 播放正常
+- **MCP 工具调用**：拍照、表情切换、音量调整均生效
+- **日志无报错**：app、volc-server、浏览器控制台均无错误
 
 #### 4.5 部分功能测试
 

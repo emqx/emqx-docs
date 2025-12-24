@@ -975,9 +975,9 @@
                   title_ja: シナリオ
                   collapsed: true
                   children:
-                    - emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
                     - emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-chat
                     - emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-control-hardware
+                    - emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
             - title_en: GPT-Realtime
               title_cn: GPT-Realtime
               title_ja: GPT-Realtime

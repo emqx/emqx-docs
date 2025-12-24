@@ -78,15 +78,6 @@ EMQX MCP AI 语音助手使用 CustomLLM 模式，以便实现 MCP 工具调用�
 
 火山引擎语音服务按使用量计费，各计费项均提供免费试用额度。详见 [对话式 AI 实时计费](https://www.volcengine.com/docs/6348/1392584)。
 
-## 下一步
-
-- [安装与测试指南](./installation-and-testing.md) - 部署服务并验证配置
-- [API 文档](./api.md) - 接口详细说明
-- 场景示例
-  - [纯语音对话](./scenarios/voice-chat.md)
-  - [语音控制硬件](./scenarios/voice-control-hardware.md)
-  - [设备触发语音](./scenarios/device-triggered-voice.md)
-
 ## 相关资源
 
 - [火山引擎实时对话式 AI 文档](https://www.volcengine.com/docs/6348/1310537)

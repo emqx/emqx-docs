@@ -345,14 +345,6 @@ AI 回复会通过远端音频流播放。确保：
 | 如何使用第三方模型 / Coze Bot | 在 LLMConfig 中配置对应的模型参数，Mode 设为 `CustomLLM` 并填写回调地址 |
 | 对话无反馈 | 检查 LLM 配置是否正确，CustomLLM 模式需确保回调服务正常运行 |
 
-## 下一步
-
-- [API 文档](./api.md) - 详细接口说明
-- 场景示例
-  - [纯语音对话](./scenarios/voice-chat.md)
-  - [语音控制硬件](./scenarios/voice-control-hardware.md)
-  - [设备触发语音](./scenarios/device-triggered-voice.md)
-
 ## 相关资源
 
 - [火山引擎实时音视频快速入门](https://www.volcengine.com/docs/6348/1310553)

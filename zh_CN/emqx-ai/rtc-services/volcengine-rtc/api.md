@@ -2,8 +2,6 @@
 
 本文档介绍火山引擎实时对话式 AI 的核心 API，包括 StartVoiceChat、UpdateVoiceChat、StopVoiceChat 及相关配置参数。
 
----
-
 ## StartVoiceChat
 
 启动语音会话，返回 RTC 连接凭证。
@@ -91,8 +89,6 @@
 
 官方文档：[StartVoiceChat](https://www.volcengine.com/docs/6348/1404673)
 
----
-
 ## StopVoiceChat
 
 停止语音会话，释放资源。
@@ -121,8 +117,6 @@
 ```
 
 官方文档：[StopVoiceChat](https://www.volcengine.com/docs/6348/1404672)
-
----
 
 ## UpdateVoiceChat
 
@@ -200,8 +194,6 @@
 
 官方文档：[UpdateVoiceChat](https://www.volcengine.com/docs/6348/1404671)
 
----
-
 ## ASRConfig
 
 语音识别配置：
@@ -269,8 +261,6 @@
   }
 }
 ```
-
----
 
 ## TTSConfig
 
@@ -344,8 +334,6 @@
   }
 }
 ```
-
----
 
 ## LLMConfig
 
@@ -421,8 +409,6 @@
 }
 ```
 
----
-
 ## CustomLLM 回调
 
 使用 CustomLLM 模式时，火山引擎会将用户语音识别结果回调到自定义服务。
@@ -487,8 +473,6 @@ data: [DONE]
 
 官方文档：[CustomLLM 接入](https://www.volcengine.com/docs/6348/1399966)
 
----
-
 ## RTC Token
 
 客户端加入 RTC 房间需要 Token。Token 由服务端使用 AppKey 生成。
@@ -529,8 +513,6 @@ const tokenString = token.serialize()
 ```
 
 Token 生成库参考 [安装与测试 - 生成 RTC Token](./installation-and-testing.md#生成-rtc-token)。
-
----
 
 ## 错误码
 
@@ -580,8 +562,6 @@ Token 生成库参考 [安装与测试 - 生成 RTC Token](./installation-and-te
 | `InvalidToken` | RTC Token 无效或过期 |
 
 官方文档：[公共错误码](https://www.volcengine.com/docs/6369/68677)
-
----
 
 ## 相关资源
 
