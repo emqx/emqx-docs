@@ -74,7 +74,7 @@ EMQX 为设备提供完善的“实时上下文基础设施”：
 
 #### 扩展阅读
 
-- [使用 EMQX 构建感知 -> 控制反馈能力](https://emqx.com/zh/docs/)
+- [使用 EMQX 构建感知 -> 控制反馈能力](rtc-services/volcengine-rtc/scenarios/device-triggered-voice.md)
 
 ### 听得到、看得见、说得出：音、视频流数据接入与处理
 
@@ -88,8 +88,7 @@ WebRTC 是实时音视频交互领域的核心技术，其低延迟、高兼容�
 
 #### 扩展阅读：
 
-- [基于火山引擎构建视频接入](https://emqx.com/zh/docs/)
-- [基于火山引擎构建视频处理](https://emqx.com/zh/docs/)
+- [基于火山引擎构建音视频接入](rtc-services/volcengine-rtc/overview.md)
 
 ### 能理解：接入 LLM / VLM
 
@@ -97,8 +96,8 @@ LLM 负责语言理解与生成，VLM 负责视觉与语言的融合。它们让
 
 扩展阅读：
 
-- [阿里千问模型](https://emqx.com/zh/docs/)
-- [火山云豆包大模型](https://emqx.com/zh/docs/)
+- [阿里千问模型](https://www.aliyun.com/product/tongyi)
+- [火山云豆包大模型](https://www.volcengine.com/product/doubao)
 
 ### 能行动：MCP 设备控制 - AI 与设备的桥梁
 
