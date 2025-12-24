@@ -172,12 +172,14 @@ confluent kafka topic consume -b testtopic-in
 
 在添加 Confluent Sink 前，您需要创建 Confluent 生产者连接器，以便 EMQX 与 Confluent Cloud 建立连接。
 
-1. 进入 EMQX Dashboard，并点击 **集成** -> **连接器**。
+1. 进入 EMQX Dashboard，并点击**集成** -> **连接器**。
 2. 点击页面右上角的**创建**，在连接器选择页面，选择 **Confluent 生产者**，点击下一步。
 3. 输入名称与描述，例如 `my-confluent`，名称用于 Confluent Sink 关联选择连接器，要求在集群中唯一。
 4. 配置连接到 Confluent Cloud 所需的参数：
-   - 主机列表：对应 Confluent 集群设置页面中的 Endpoints 信息。
-   - 用户名与密码：填入您之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret。
+   - **主机列表**：填写 Confluent Cloud 集群设置页面中 **Endpoints** 部分提供的连接地址。
+   - **认证**：选择 Confluent Cloud 集群所需的认证方式：
+     - **基础认证**： 填写**用户名**和**密码**，分别对应之前用 Confluent Cloud CLI 创建的 API 密钥和 Secret。
+     - **OAuth**：根据 Confluent Cloud 的 OAuth / OIDC 配置填写 OAuth 相关参数，包括 Token 端点、客户端 ID 和客户端密钥。OAuth 的配置方式与 Kafka 连接器相同，有关各参数的详细说明，请参见[认证方式](./data-bridge-kafka.md#认证方式)。
    - 将其他选项保留为默认值，或根据您的业务需求进行配置。
 5. 点击**创建**按钮完成连接器的创建。
 
@@ -187,13 +189,13 @@ confluent kafka topic consume -b testtopic-in
 
 本节演示了如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Confluent Sink 发送处理结果以产生数据到 Confluent 的 `testtopic-in` 主题。
 
-1. 进入 EMQX Dashboard，并点击 **集成** -> **规则**。
+1. 进入 EMQX Dashboard，并点击**集成** -> **规则**。
 
 2. 点击页面右上角的**创建**。
 
 3. 输入一个规则 ID，例如 `my_rule`。
 
-4. 如果您想将主题 `t/#` 的 MQTT 消息转发到 Confluent，可以在 **SQL 编辑器** 中输入以下语句。
+4. 如果您想将主题 `t/#` 的 MQTT 消息转发到 Confluent，可以在 **SQL 编辑器**中输入以下语句。
 
    注意：如果您想指定自己的 SQL 语法，请确保在 `SELECT` 部分包含了 Sink 所需的所有字段。
 
@@ -204,7 +206,7 @@ confluent kafka topic consume -b testtopic-in
      "t/#"
    ```
 
-   注意：如果您是初学者，可以点击 **SQL 示例** 和 **启用测试** 学习和测试 SQL 规则。
+   注意：如果您是初学者，可以点击 **SQL 示例** 和**启用测试**学习和测试 SQL 规则。
 
 5. 点击 + **添加动作** 按钮来定义规则触发的动作。从**动作类型**下拉列表中选择 **Confluent 生产者**，保持**动作**下拉框为默认的`创建动作`选项，您也可以从**动作**下拉框中选择一个之前已经创建好的 Confluent 生产者动作。此处我们创建一个全新的 Sink 并添加到规则中。
 
@@ -216,7 +218,7 @@ confluent kafka topic consume -b testtopic-in
 
    - **Kafka 主题名称**：输入 `testtopic-in`。从 EMQX v5.7.2 开始，该字段还支持设置 Kafka 动态主题，详见[配置 Kafka 动态主题](./data-bridge-kafka.md#配置-kafka-动态主题)。
 
-   - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型** 下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
+   - **Kafka Headers**：输入与 Kafka 消息相关的元数据或上下文信息（可选）。占位符的值必须是一个对象。您可以从 **Kafka Headers 值编码类型**下拉列表中选择 Header 的值编码类型。您还可以通过点击 **添加** 来添加更多键值对。
 
    - **消息的键**：Kafka 消息键。在此输入一个字符串，可以是纯字符串或包含占位符 (${var}) 的字符串。
 
@@ -229,8 +231,8 @@ confluent kafka topic consume -b testtopic-in
 
 10. **高级设置（可选）**：请参阅 [高级配置](#高级配置)。
 
-11. 点击 **创建** 按钮完成 Sink 的创建，创建成功后页面将回到**创建规则**，新的 Sink 将添加到规则动作中。
-12. 点击 **创建** 按钮完成整个规则创建。
+11. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到**创建规则**，新的 Sink 将添加到规则动作中。
+12. 点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Confluent 生产者 Sink。
 
@@ -256,7 +258,7 @@ confluent kafka topic consume -b testtopic-in
 
 ## 高级配置
 
-本节描述了一些高级配置选项，这些选项可以优化您的连接器与 Sink/Source 性能，并根据您的特定场景定制操作，在创建对应的对象时，您可以展开 **高级设置** 并根据业务需求配置以下设置。
+本节描述了一些高级配置选项，这些选项可以优化您的连接器与 Sink/Source 性能，并根据您的特定场景定制操作，在创建对应的对象时，您可以展开**高级设置**并根据业务需求配置以下设置。
 
 ### 连接器配置
 

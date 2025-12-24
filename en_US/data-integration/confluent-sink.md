@@ -173,12 +173,23 @@ confluent kafka topic consume -b testtopic-in
 Before adding a Confluent Sink action, you need to create a Confluent producer connector to establish a connection between EMQX and Confluent Cloud.
 
 1. Go to the EMQX Dashboard and click **Integration** -> **Connectors**.
+
 2. Click **Create** in the top right corner of the page, select **Confluent Producer** on the connector selection page, and click **Next**.
+
 3. Enter a name and description, such as `my-confluent`. The name is used to associate the Confluent Sink with the connector and must be unique within the cluster.
+
 4. Configure the parameters required to connect to Confluent Cloud:
-   - **Bootstrap Hosts**: Corresponds to the Endpoints information on the Confluent cluster settings page.
-   - **Username** and **Password**: Enter the API key and Secret you created earlier with the Confluent Cloud CLI.
+   - **Bootstrap Hosts**: Enter the endpoint information from the **Endpoints** section on the Confluent Cloud cluster settings page.
+   
+   - **Authentication**: Select the authentication method required by your Confluent Cloud cluster:
+     - **Basic auth**: Enter the **Username** and **Password**, which correspond to the API Key and API Secret created in Confluent Cloud.
+     
+     - **OAuth**: Configure the OAuth parameters according to your Confluent Cloud OAuth/OIDC settings, including the token endpoint, client ID, and client secret. 
+     
+       The OAuth configuration is the same as for Kafka connectors; see [Authentication Method](./data-bridge-kafka.md#authentication-method) for details on each parameter.
+     
    - Leave other options as default or configure them according to your business needs.
+   
 5. Click the **Create** button to complete the creation of the connector.
 
 Once created, the connector will automatically connect to Confluent Cloud. Next, you need to create a rule based on this connector to forward data to the Confluent cluster configured in the connector.
