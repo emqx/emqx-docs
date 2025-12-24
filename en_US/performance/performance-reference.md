@@ -1,6 +1,8 @@
 # Test Scenarios and Results for Reference
 
-This page provides an in-depth analysis of the performance of the EMQX in various scenarios by using XMeter to conduct performance tests. We explore EMQX's capabilities under different conditions, including varying Quality of Service (QoS) levels, Payload sizes, publish-subscribe models, and the impact of MQTT message bridging. Through rigorous testing and measurement, we aim to offer insights into EMQX's behavior and help users optimize its deployment for IoT applications.
+This page presents a detailed performance analysis of EMQX based on a series of benchmark tests conducted under various scenarios. The evaluation examines EMQX’s behavior and capabilities across different conditions, including varying Quality of Service (QoS) levels, payload sizes, publish–subscribe models, and the impact of MQTT message bridging.
+
+Through rigorous testing and measurement, these results provide practical insights into how EMQX performs in real-world environments and offer guidance to help users optimize their EMQX deployments for IoT applications.
 
 ## Test Environment
 
@@ -13,7 +15,7 @@ All tests in this section are based on the open-source edition of **EMQX v5.1.6*
 - **Maximum Packets Per Second**: 800,000 PPS
 - **OS**: CentOS 7.9
 
-Except for the fan-in scenario where 20 test clients are used to send and receive messages, the number of test clients in other scenarios was 10.
+Except for the fan-in scenario, where 20 test clients are used to send and receive messages, the number of test clients in other scenarios was 10.
 
 ## Test Scenarios and Results
 

@@ -1560,15 +1560,15 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
   <tr>
     <td><b>MQTT Load Testing</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>XMeter - The world’s #1 MQTT load testing tool</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
   </tr>
   <tr>
     <td><b>MQTT &amp; JMeter</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> JMeter Plugin</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter Plugin</a></td>
@@ -1608,6 +1608,7 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 </tbody>
 </table>
 </div>
+
 
 ## Support Services
 
