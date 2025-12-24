@@ -33,7 +33,7 @@ The data integration with Apache Kafka brings the following features and benefit
 
 - **Dependable and bi-directional IoT data messaging:**  The data communication between Kafka and resource-limited IoT devices running on unpredictable mobile networks can be processed under the MQTT protocol that excels in messaging in uncertain networks. EMQX not only batch forwards MQTT messages to Kafka but also subscribes to Kafka messages from backend systems and delivers them to connected IoT clients.
 - **Payload transformation**: Message payload can be processed by the defined SQL rules during the transmission. For example, payloads containing some real-time metrics such as total message count, successful/failed delivery count, and message rate can go through data extraction, filtering, enrichment, and transformation before the messages are ingested into Kafka.
-- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kakfa topics by the configured kafka integration. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
+- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kafka topics by the configured kafka integration. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
 - **Flexible partition selection strategy**: Supports forwarding messages to the same Kafka partition based on MQTT topics or clients.
 - **Processing capabilities in high-throughput situations**: EMQX Kafka producer supports both synchronous and asynchronous writing modes, allowing you to differentiate between real-time priority and performance priority for data writing strategies and enabling flexible balancing between latency and throughput according to different scenarios.
 - **Runtime metrics**: Supports viewing runtime metrics for each Sink and Source, such as total messages, success/failure counts, current rate, etc.
@@ -389,7 +389,7 @@ This section demonstrates how to create a rule in EMQX to further process the me
    - **Key Encoding Mode** and **Value Encoding Mode**: Select the encoding mode for Kafka message key and message value.
 7. **Offset Reset Policy**: Select the policy for resetting the offset where Kafaka consumers start to read from a Kafka topic partition when there is no consumer’s offset or the offset becomes invalid.
 
-   - Select `lastest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
+   - Select `latest` if you want the consumer to start reading messages from the latest offset, skipping messages that were produced before the consumer started.
    - Select `earliest` if you want the consumer to start reading messages from the beginning of the partition, including messages that were produced before the consumer started, that is, to read all the historical data in a topic.
 8. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
 9. Before clicking **Create**, you can click **Test Connectivity** to test if the Source can be connected to the Kafka server.

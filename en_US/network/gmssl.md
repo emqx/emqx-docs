@@ -1,3 +1,3 @@
 # CN Cipher SSL
 
-This feature is currently not availble in the global version.
+This feature is currently not available in the global version.

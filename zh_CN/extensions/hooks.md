@@ -111,7 +111,7 @@ EMQX 的认证授权就是按照该逻辑进行实现的，以 [多语言钩子�
 
 接下来 [挂载点](#hookpoint)，[回调函数](#callback) 两节中，对于钩子的所有操作都是依赖于 [emqx](https://github.com/emqx/emqx) 提供的 Erlang 代码级的 API。他们是整个钩子逻辑实现的基础。
 
-- 如需寻求钩子与其他语言的应用，参见： [Multipe-Language-Support](./exhook.md)
+- 如需寻求钩子与其他语言的应用，参见： [Multiple-Language-Support](./exhook.md)
 
 ## 钩子列表
 

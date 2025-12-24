@@ -2,7 +2,7 @@
 
 ## e5.4.0
 
-- [#11998](https://github.com/emqx/emqx/pull/11998) 停止发布 MacOS 11（BigSur）版本的软件包。
+- [#11998](https://github.com/emqx/emqx/pull/11998) 停止发布 MacOS 11（Big Sur）版本的软件包。
 - [#12129](https://github.com/emqx/emqx/pull/12129) 将默认试用 License 规格从 100 并发连接调整至 25 并发连接。 
 - [#12112](https://github.com/emqx/emqx/pull/12112) 停止支持基于 UDP 多播的集群策略。
 - [#10976](https://github.com/emqx/emqx/pull/10976) 修复了共享订阅中的主题过滤重叠处理。

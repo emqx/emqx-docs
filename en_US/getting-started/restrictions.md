@@ -36,7 +36,7 @@ The operating limitations can be classified into:
 | Message Bytes                         | Default 1024KB, Max 256MB |
 | Maximum QoS                           | 2                         |
 | **MQTT Keepalive**                    |                           |
-| Maximun Keepalive                     | 65535 seconds             |
+| Maximum Keepalive                     | 65535 seconds             |
 | **MQTT Topic**                        |                           |
 | Number of topics                      | Unlimited                 |
 | Topic level                           | 65535                     |
@@ -47,7 +47,7 @@ The operating limitations can be classified into:
 | Number of messages                    | Unlimited                 |
 | Total messages size                   | Unlimited                 |
 | **MQTT 5.0**                          |                           |
-| Number of User Properity              | 65535                     |
+| Number of User Properties             | 65535                     |
 | **MQTT Add-ons**                      |                           |
 | Number of topic rewrite rules         | 30                        |
 | Number of auto subscription rules     | 30                        |

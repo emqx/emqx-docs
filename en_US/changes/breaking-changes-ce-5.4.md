@@ -4,7 +4,7 @@
 
 - [#11994](https://github.com/emqx/emqx/pull/11994) Stopped releasing packages for Windows.
 
-- [#11998](https://github.com/emqx/emqx/pull/11998) Stopped releasing packages for MacOS 11 (BigSur).
+- [#11998](https://github.com/emqx/emqx/pull/11998) Stopped releasing packages for MacOS 11 (Big Sur).
 
 - [#12112](https://github.com/emqx/emqx/pull/12112) Stopped supporting UDP multicast based clustering strategy.
 

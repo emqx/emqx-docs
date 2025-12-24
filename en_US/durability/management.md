@@ -20,7 +20,7 @@ You can configure the parameters for durable sessions in the Dashboard. Click **
 | `durable_sessions.enable`                   | Enable Durable Sessions    | Enables session durability. This configuration item cannot be modified through hot configuration; you need to set it in the configuration file. Note: Restart of the EMQX node is required for changes to take effect. |
 | `durable_sessions.message_retention_period` | Message Retention Period   | Defines the retention period of MQTT messages in durable sessions. Note: this parameter is global. |
 | `durable_sessions.batch_size`               | Message Query Batch Size   | Controls the maximum size of message batches consumed from the storage by durable sessions. |
-| `durable_sessions.idle_poll_interval`       | Idel Poll Interval         | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
+| `durable_sessions.idle_poll_interval`       | Idle Poll Interval         | Controls the frequency of querying the storage for new messages by durable sessions. If new messages are found, the next batch is retrieved immediately if the client's in-flight queue has space. |
 | `durable_sessions.heartbeat_interval`       | Session Heartbeat Interval | Specifies the interval for saving session metadata.          |
 | `durable_sessions.renew_streams_interval`   | -                          | Defines how often sessions query the storage for new streams. |
 | `durable_sessions.session_gc_interval`      | Session GC Interval        | Specifies the interval for sweeping through sessions and deleting expired ones. |
@@ -40,7 +40,7 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 | Parameter                                 | Description                                                  |
 | ----------------------------------------- | ------------------------------------------------------------ |
 | `durable_storage.<DS>.data_dir`           | Directory in the file system where EMQX stores the data.     |
-| `durable_storage.<DS>.n_shards`           | [Numer of shards](./managing-replication.md#number-of-shards). |
+| `durable_storage.<DS>.n_shards`           | [Number of shards](./managing-replication.md#number-of-shards). |
 | `durable_storage.<DS>.n_sites`            | [Number of sites](./managing-replication.md#number-of-sites). |
 | `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard. |
 | `durable_storage.<DS>.local_write_buffer` | Contains parameters related to message buffering. See [Local Write Buffer Configuration](#local-write-buffer-configuration). |
