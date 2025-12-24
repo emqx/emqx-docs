@@ -1577,15 +1577,15 @@
   <tr>
     <td><b>MQTT 负载测试工具</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>XMeter - 世界第一的 MQTT 负载测试工具。</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
+    <td></td>
   </tr>
   <tr>
     <td><b>MQTT &amp; JMeter</b></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> JMeter 插件</td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> XMeter</td>
+    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td><a href="https://github.com/emqx/mqtt-jmeter">GitHub - emqx/mqtt-jmeter: MQTT JMeter 插件</a></td>
@@ -1625,6 +1625,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 ## 客户支持服务
