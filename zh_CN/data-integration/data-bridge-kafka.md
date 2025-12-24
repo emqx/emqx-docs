@@ -1,6 +1,8 @@
 # 将 MQTT 数据传输到 Apache Kafka
 
-[Apache Kafka](https://kafka.apache.org/) 是一个广泛使用的开源分布式事件流处理平台，能够处理应用程序和系统之间数据流的实时传输。然而，Kafka 并不是为边缘物联网通信构建的，Kafka 客户端需要稳定的网络连接和更多的硬件资源。在物联网领域，设备和应用程序生成的数据使用轻量级 MQTT 协议传输。EMQX 与 Kafka/[Confluent](https://www.confluent.io/) 的集成使用户能够无缝地将 MQTT 数据流入或流出 Kafka。MQTT 数据流被引入 Kafka 主题，确保实时处理、存储和分析。反过来，Kafka 主题的数据可以被 MQTT 设备消费，实现及时处理。
+[Apache Kafka](https://kafka.apache.org/) 是一个广泛使用的开源分布式事件流处理平台，能够处理应用程序和系统之间数据流的实时传输。然而，Kafka 并不是为边缘物联网通信构建的，Kafka 客户端需要稳定的网络连接和更多的硬件资源。在物联网领域，设备和应用程序生成的数据使用轻量级 MQTT 协议传输。
+
+EMQX 与 Kafka/[Confluent](https://www.confluent.io/) 的集成使用户能够无缝地将 MQTT 数据流入或流出 Kafka。MQTT 数据流被引入 Kafka 主题，确保实时处理、存储和分析。反过来，Kafka 主题的数据可以被 MQTT 设备消费，实现及时处理。
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
@@ -8,7 +10,7 @@
 
 ## 工作原理
 
-Apache Kafka 数据集成是 EMQX 的开箱即用功能，能够在基于 MQTT 的物联网数据和 Kafka 强大的数据处理能力之间架起桥梁。通过内置的[规则引擎](./rules.md)组件，集成简化了两个平台之间的数据流和处理过程，无需复杂编码。
+Apache Kafka 数据集成是 EMQX 的一项内置功能，用于将基于 MQTT 的物联网数据传输到 Kafka，以支持后续的数据处理与分析。通过内置的[规则引擎](./rules.md)，EMQX 无需编写自定义代码即可实现数据的过滤、转换和路由。
 
 下图展示了 EMQX 与 Kafka 的数据集成在汽车物联网中的典型架构。
 
@@ -16,15 +18,15 @@ Apache Kafka 数据集成是 EMQX 的开箱即用功能，能够在基于 MQTT �
 
 将数据流入或流出 Apache Kafka 需要分别创建 Kafka Sink（向 Kafka 发送消息）和 Kafka Source（从 Kafka 接收消息）。以 Sink 为例，其工作流程如下：
 
-1. **消息发布和接收**：连接车辆的物联网设备通过 MQTT 协议成功连接到 EMQX，并通过 MQTT 定期发布包含状态数据的消息。当 EMQX 收到这些消息时，它启动其规则引擎内的匹配过程。
-2. **消息数据处理**：通过内置规则引擎与消息服务器的协同工作，这些 MQTT 消息可以根据主题匹配规则进行处理。当消息到达并通过规则引擎时，规则引擎将评估针对该消息事先定义好的处理规则。如果任何规则指定消息载荷转换，则应用这些转换，例如转换数据格式、过滤特定信息或使用额外上下文丰富载荷。
+1. **消息发布和接收**：连接车辆的物联网设备通过 MQTT 协议连接到 EMQX，并通过 MQTT 定期发布包含状态数据的消息。EMQX 收到消息后启动其规则引擎内的匹配过程。
+2. **消息数据处理**：命中的规则会对消息进行处理，包括对消息负载进行过滤、转换或增强。
 3. **发送到 Kafka**：规则引擎中定义的规则触发将消息转发到 Kafka 的动作。使用 Kafka Sink，MQTT 主题被映射到预定义的 Kafka 主题，所有处理过的消息和数据被写入 Kafka 主题。
 
-车辆数据被输入到 Kafka 后，您可以灵活地访问和利用这些数据：
+数据写入 Kafka 后，可以通过多种方式进行消费和处理：
 
-- 您的服务可以直接与 Kafka 客户端集成，从特定主题消费实时数据流，实现定制化的业务处理。
-- 利用 Kafka Streams 进行流处理，并通过在内存中聚合和相关联车辆状态进行实时监控。
-- 通过使用 Kafka Connect 组件，您可以选择各种连接器将数据输出到外部系统，如 MySQL、ElasticSearch，以进行存储。
+- 后端服务可直接从 Kafka 主题中消费实时数据流。
+- 使用 Kafka Streams 进行实时聚合、关联和分析处理。
+- 通过 Kafka Connect 将数据写入 MySQL、Elasticsearch 等外部系统，用于存储和进一步处理。
 
 ## 特性与优势
 
@@ -97,9 +99,10 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
    
      - `无`：无需认证。
      - `AWS IAM for MSK`：适用于将 EMQX 部署在 EC2 实例上，并连接到 AWS MSK 集群的场景。
-     - `基础认证`：需要选择一个**认证方法**（`plain`、`scram_sha_256` 或 `scram_sha_512`），并填写**用户名**和**密码**。
-     - `Kerberos`：需要指定 **Kerberos Principal** 和 **Kerberos Keytab 文件**路径。
-   
+     - `OAuth`：使用基于 [OAuth 2.0](https://oauth.net/2/) 的认证方式，连接支持 OAuth 或 OIDC 的 Kafka 集群。
+     - `基础认证`：使用用户名和密码进行身份认证。需要选择 SASL 机制（`plain`、`scram_sha_256` 或 `scram_sha_512`）。
+     - `Kerberos`：使用 Kerberos（GSSAPI）进行身份认证。需要指定 Kerberos Principal 和 Kerberos keytab 文件。
+     
      有关每种认证方式的详细说明，请参见[认证方式](#认证方式)。
      
    - 如果您想建立加密连接，请点击 **启用 TLS** 开关。有关 TLS 连接的更多信息，请参见 [启用 TLS 加密访问外部资源](../network/overview.md/#启用-tls-加密访问外部资源)。
@@ -125,6 +128,29 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
   MSK IAM 认证仅适用于运行在 EC2 实例上的 EMQX 节点连接到 MSK 集群，因为该方式依赖于 AWS Metadata API。
 
   :::
+
+- **OAuth**：使用基于 OAuth 2.0 的身份认证方式，将 EMQX 连接到支持 OAuth 或 OIDC 的 Kafka 集群（例如 Confluent Cloud，或启用了 OAuth 的自建 Kafka 集群）。
+
+  在该模式下，EMQX 作为 OAuth 2.0 客户端，定期从 OAuth 授权服务器获取访问令牌，并通过 SASL/OAUTHBEARER 机制使用该令牌向 Kafka Broker 进行身份认证。
+
+  该认证方式需要配置以下参数：
+
+  - **OAuth Grant Type**：用于获取访问令牌的 OAuth 2.0 授权类型。当前仅支持 `client_credentials`。
+
+  - **OAuth Token Endpoint URI**：OAuth/OIDC 提供方的令牌端点地址。EMQX 会向该地址发送请求以获取访问令牌。
+
+  - **OAuth Client ID**：在 OAuth 授权服务器中注册的客户端 ID。
+
+  - **OAuth Client Secret**：与客户端 ID 对应的客户端密钥。EMQX 在请求访问令牌时使用该密钥进行身份验证。
+
+  - **OAuth Request Scope**（可选）：如果 OAuth 提供方要求，可指定在令牌请求中携带的 scope。若未指定，则不会在请求中发送 scope 参数。
+
+  - **SASL Extensions**（高级，可选）：在认证过程中作为 SASL 扩展发送的额外键值对。某些 Kafka 服务提供方（例如 Confluent Cloud）要求通过这些扩展参数传递额外的元数据，例如：
+
+    - `logicalCluster`
+    - `identityPoolId`
+
+    具体需要哪些扩展参数及其取值，取决于 Kafka 集群及 OAuth 提供方的配置。有关 Confluent Cloud 中 OAuth / OIDC 认证的完整说明，请参考其[官方文档](https://docs.confluent.io/cloud/current/security/authenticate/workload-identities/identity-providers/oauth/overview.html)。
 
 - **基础认证**：通过用户名和密码进行认证。
 
