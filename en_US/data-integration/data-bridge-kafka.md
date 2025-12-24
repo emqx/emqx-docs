@@ -103,8 +103,7 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
      - `AWS IAM for MSK`: Used for connecting to Amazon MSK clusters when EMQX is deployed on Amazon EC2 instances.
      - `OAuth`: Uses [OAuth 2.0](https://oauth.net/2/)–based authentication to connect to Kafka clusters that support OAuth or OIDC.
      - `Basic Auth`:  Uses a username and password for authentication. Requires selecting a mechanism (`plain`, `scram_sha_256`, or `scram_sha_512`).
-     - `Kerberos`: Uses Kerberos (GSSAPI) for authentication. Requires specifying a Kerberos principal and
-           a Kerberos keytab file.
+     - `Kerberos`: Uses Kerberos (GSSAPI) for authentication. Requires specifying a Kerberos principal and a Kerberos keytab file.
    
      See [Authentication Method](#authentication-method) for details on each method.
    
