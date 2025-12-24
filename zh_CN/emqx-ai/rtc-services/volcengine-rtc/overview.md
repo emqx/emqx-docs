@@ -82,7 +82,10 @@ EMQX MCP AI 语音助手使用 CustomLLM 模式，以便实现 MCP 工具调用�
 
 - [安装与测试指南](./installation-and-testing.md) - 部署服务并验证配置
 - [API 文档](./api.md) - 接口详细说明
-- [场景示例](./scenarios/) - 纯语音对话、设备控制、多媒体交互
+- 场景示例
+  - [纯语音对话](./scenarios/voice-chat.md)
+  - [语音控制硬件](./scenarios/voice-control-hardware.md)
+  - [设备触发语音](./scenarios/device-triggered-voice.md)
 
 ## 相关资源
 

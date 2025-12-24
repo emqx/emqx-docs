@@ -4,7 +4,7 @@
 
 ## 前置准备
 
-开始集成前，请确保已完成火山引擎服务开通和凭证配置。详细步骤参考[快速开始 - 火山引擎凭证](../../quickstart-emq-volc.md#4-火山引擎凭证)。
+开始集成前，请确保已完成火山引擎服务开通和凭证配置。详细步骤参考[快速开始 - 火山引擎凭证](./quick-start.md#4-火山引擎凭证)。
 
 需要准备的凭证：
 
@@ -348,7 +348,10 @@ AI 回复会通过远端音频流播放。确保：
 ## 下一步
 
 - [API 文档](./api.md) - 详细接口说明
-- [场景示例](./scenarios/) - 典型应用场景
+- 场景示例
+  - [纯语音对话](./scenarios/voice-chat.md)
+  - [语音控制硬件](./scenarios/voice-control-hardware.md)
+  - [设备触发语音](./scenarios/device-triggered-voice.md)
 
 ## 相关资源
 
