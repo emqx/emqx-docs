@@ -154,7 +154,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
         :::
 
-      - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
+      - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.3.x/Basic-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
 
 10. Configure the **Write Data** to specify the ways to generate IoTDB data from MQTT messages.
 

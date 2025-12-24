@@ -2,7 +2,7 @@
 
 [Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) and [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) are all client libraries in C language (MQTT C Client) under the Eclipse Paho project, and are full-featured MQTT clients written in ANSI C.
 
-Eclipse Paho Embedded C can be used on the desktop operating system, but mainly for embedded environments such as  [mbed](http://mbed.org/), [Arduino](http://www.arduino.cc/) and [FreeRTOS](http://freertos.org/) .
+Eclipse Paho Embedded C can be used on the desktop operating system, but mainly for embedded environments such as  [mbed](https://os.mbed.com/), [Arduino](https://arduino.cc/) and [FreeRTOS](https://freertos.org/) .
 
 The client has synchronous/asynchronous APIs, which start with MQTTClient and MQTTAsync:
 

@@ -2,7 +2,7 @@
 
 [OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) is an open communication protocol that connects charging stations with central management systems, aiming to provide a unified communication standard for electric vehicle charging infrastructure. The OCPP gateway acts as a protocol translator, bridging the gap between OCPP and MQTT protocols, thus enabling clients that use these protocols to communicate with each other.
 
-EMQX has added a protocol gateway for [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/), capable of connecting to charging station equipment of various brands that comply with the OCPP specifications. It integrates with management systems (Central System) through rule engines, data integration, REST APIs, and other methods, helping users quickly build electric vehicle charging infrastructures.
+EMQX has added a protocol gateway for [OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6), capable of connecting to charging station equipment of various brands that comply with the OCPP specifications. It integrates with management systems (Central System) through rule engines, data integration, REST APIs, and other methods, helping users quickly build electric vehicle charging infrastructures.
 
 This page introduces how to configure and use the OCPP gateway in EMQX.
 
@@ -192,7 +192,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **TCP Settings**
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
+- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: `false`, optional values: `true`, `false`.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers.
