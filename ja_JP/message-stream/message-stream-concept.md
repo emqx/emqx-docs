@@ -96,7 +96,7 @@ The following diagram shows the data flow between the Message Stream components:
 
 ### Subscribing and Consuming Flow
 
-1. A client subscribes to a stream topic (`$s/<timesstamp>/<topic_filter>`).
+1. A client subscribes to a stream topic (`$s/<timestamp>/<topic_filter>`).
 2. The External Subscription framework handles the subscription and initializes a Streams ExtSub handler for the stream topic.
 3. The handler retrieves messages from Durable Storage according to the specified timestamp and retention rules.
 4. Retrieved messages are passed to the External Subscription framework. 
