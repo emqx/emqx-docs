@@ -887,7 +887,7 @@
         - message-queue/message-queue-quick-start
     - title_en: Message Stream
       title_cn: 消息流
-      title_ja: Message Queue
+      title_ja: Message Stream
       path: message-stream/message-stream-concept
       collapsed: true
       children:
