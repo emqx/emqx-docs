@@ -4,7 +4,7 @@ This page walks you through the practical usage of the Message Queue feature in 
 
 ## Manually Create Message Queues via Dashboard
 
-Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queues via Dashboard](#automatically-create-message-queue-via-dashboard).
+Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
 
 1. Navigate to **Message Queue** in the left menu.
 
