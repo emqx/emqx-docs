@@ -951,12 +951,7 @@
       title_ja: リアルタイム音声＆ビデオAI
       collapsed: true
       children:
-        - title_en: Quick Start
-          title_cn: 快速开始
-          title_ja: クイックスタート
-          collapsed: true
-          children:
-            - emqx-ai/rtc-services/volcengine-rtc/quick-start
+        - emqx-ai/rtc-services/volcengine-rtc/quick-start
         - title_en: RTC Services
           title_cn: RTC 服务
           title_ja: RTCサービス

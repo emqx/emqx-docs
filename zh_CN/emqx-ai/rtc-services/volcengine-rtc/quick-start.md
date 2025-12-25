@@ -18,12 +18,28 @@
 
 ### 通信流程
 
-```text
-1. Web UI → volc-server: 请求场景配置和 RTC 凭证
-2. Web UI ↔ 火山引擎 RTC: 建立实时音视频连接（ASR/TTS）
-3. 火山引擎 → app: CustomLLM 回调 /chat-stream（SSE 流式响应）
-4. app ↔ Web UI: 通过 MQTT 调用 MCP 工具（摄像头/表情等）
-5. 火山引擎 → Web UI: TTS 合成语音播放
+```mermaid
+sequenceDiagram
+    autonumber
+    participant WebUI as Web UI
+    participant Volc as volc-server
+    participant RTC as 火山云 RTC
+    participant App as App
+    participant Cloud as 火山云
+
+    WebUI ->> Volc: 请求场景配置和 RTC 凭据
+
+    WebUI ->> RTC: 建立实时音视频连接
+    RTC ->> WebUI: 建立实时音视频连接
+    note over WebUI, RTC: ASR / TTS
+
+    Cloud ->> App: CustomLLM 回调 /chat-stream（SSE 流式返回）
+
+    App ->> WebUI: 通过 MQTT 调用 MCP 工具
+    WebUI ->> App: 摄像头 / 表情等
+
+    Cloud ->> WebUI: TTS 合成语音回播
+
 ```
 
 **核心能力**：
@@ -253,10 +269,10 @@ PHOTO_UPLOAD_DIR=uploads          # 照片上传目录
   ```bash
   # 方法 1：使用 openssl 生成（推荐）
   openssl rand -base64 32
-
+  
   # 方法 2：使用 Python 生成
   python3 -c "import secrets; print(secrets.token_urlsafe(32))"
-
+  
   # 方法 3：使用在线工具
   # https://www.random.org/strings/（长度 32，字符集 Alphanumeric）
   ```

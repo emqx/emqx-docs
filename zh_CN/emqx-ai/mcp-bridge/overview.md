@@ -75,7 +75,7 @@ graph LR
     subgraph EMQX["EMQX"]
         direction BT
         MB[MCP Bridge Plugin]
-        CM[User Provided Module<br>Tools: tool1,tool2,...]
+        CM[User-Provided Module<br>Tools: tool1,tool2,...]
         MB --> |MQTT| D1
         MB -.-> |MQTT| D2
         MB -.-> |MQTT| D3
@@ -84,13 +84,13 @@ graph LR
     subgraph TSDB["Time Series Database"]
         R1[Records:<br>t1,device1,status1<br>t2,device2,status2<br>...]
     end
-    subgraph "User Defined Service"
+    subgraph "User-Defined Service"
         UDS[HTTP API]
         
     end
     CM --> |query| TSDB
     TSDB --> |result| CM
-    CM --> |Get device of<br>userid=ee| UDS
+    CM --> |Get the device of<br>userid=ee| UDS
     UDS --> |Device 1| CM
 ```
 
