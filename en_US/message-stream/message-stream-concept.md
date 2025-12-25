@@ -60,35 +60,7 @@ External Subscription is an EMQX mechanism that connects external message source
 
 The following diagram shows the data flow between the Message Stream components:
 
-```ascii
-+-----------------------+
-| Message Stream DS DB  |
-+-----------------------+
-      ^      ^
-      |      |
-      |      |
-      |      |          Subscription on topic data
-      |      |  
-      |      +-------------------------------------+  +--------------------------------+
-      |                                            |  | Client Connection              |
-                                                   |  | (Subscribing channel)          |
-      | Write transaction                          |  | +----------------------------+ |
-      |                                            |  | | ExtSub                     | |
-      |                                            |  | | +------------------------+ | |
-      |                                            |  | | | Streams ExtSub Handler | | |
-+---------------------------+                      +----->|                        | | |
-| Client Connection         |
-|(Publishing channel)       |                         | | +----------------|-------+ | |
-|                           |                         | +------------------|---------+ |
-+---------------------------+                         +--------------------|-----------+
-      |                                                                    |
-      |                                                             Stream |
-      |                                                             lookup V
-      |                                                                  +--------------------------+
-      |        Fast stream lookup in the index                           | Streams Registry         |
-      +----------------------------------------------------------------> |                          |
-                                                                         +--------------------------+
-```
+![streams_data_flow](./assets/streams_data_flow.png)
 
 ### Publishing Flow
 
