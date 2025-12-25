@@ -140,6 +140,8 @@ After defining the SQL rule, add an action to write the selected data into EMQX 
      >
      > - To write a signed integer value, append `i` after the placeholder, for example: `${payload.int}i`.
      > - To write an unsigned integer value, append `u` after the placeholder, for example: `${payload.int}u`.
+     > - If you do not add a suffix, whole-number values are interpreted as signed integers by default, and values containing a decimal point are interpreted as floating-point numbers.
+     > - Use `i` when the value may be negative or must be stored as a signed integer, and use `u` for non-negative values that should be stored as unsigned integers (for example, counters, IDs, or monotonically increasing metrics).
 
    - **Time Precision**: Select the time precision for timestamps. The default value is `millisecond`.
 
