@@ -53,8 +53,8 @@ Message streams must be explicitly created before they can store or replay messa
       
    - **Limiter**: Configure limits for each shard of the stream to control storage usage:
      
-      - **Max Shard Message Count**: (Optional) Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
-     - **Max Shard Message Bytes**: (Optional) Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
+      - **Max Shard Message Count**: Sets the maximum number of messages retained in each shard of the stream. You can enable this option and provide a value, or leave it disabled to allow an unlimited number of messages (`infinity`).
+     - **Max Shard Message Bytes**: Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
      
       These limits are persisted to durable storage and work together with the retention period.
 
@@ -91,11 +91,11 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
    Configure the following:
 
    - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value message streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Stream** list.
+When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
 ### Auto Create Regular Message Stream
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
@@ -110,13 +110,13 @@ This option can be enabled manually if you prefer regular streams where messages
 
      In Regular message streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
 
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 4. Click **Save Changes**.
 
 ## Configure Message Stream Settings
 
-This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
+This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
 ### Dashboard
 
@@ -161,7 +161,7 @@ The updated configuration takes effect immediately and applies to all existing a
 
 ### REST API
 
-You can configure global Message Stream settings programmatically using the EMQX REST API. This is useful for automation, infrastructure-as-code workflows, or managing large deployments.
+You can configure global Message Stream settings programmatically using the EMQX REST API.
 
 To update Message Stream global settings, send a `PUT` request to the following endpoint:
 
@@ -233,7 +233,7 @@ EMQX provides REST APIs for managing message streams. You can use these APIs to 
 
 ::: tip Note
 
-All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the Message Stream API reference.
+All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "Message Stream" section in [REST API](../admin/api.md).
 
 :::
 

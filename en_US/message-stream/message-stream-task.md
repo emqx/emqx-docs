@@ -91,11 +91,11 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
    Configure the following:
 
    - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value message streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Stream** list.
+When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
 ### Auto Create Regular Message Stream
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
@@ -110,13 +110,13 @@ This option can be enabled manually if you prefer regular streams where messages
 
      In Regular message streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
 
-   - **Data Retention Period**: Specifies how long messages should be retained in the queue.
+   - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 4. Click **Save Changes**.
 
 ## Configure Message Stream Settings
 
-This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
+This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
 ### Dashboard
 
