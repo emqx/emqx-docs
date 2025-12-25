@@ -4,7 +4,7 @@ EMQX Tables is a native, fully managed time-series data storage service built in
 
 Powered by GreptimeDB, EMQX Tables integrates seamlessly with EMQX Broker and supports InfluxDB Line Protocol, enabling efficient storage, querying, and visualization of telemetry data. To learn more, see the [EMQX Tables Overview](https://docs.emqx.com/en/cloud/latest/emqx_tables/emqx_tables_overview.html).
 
-Starting from EMQX 6.1, an EMQX Tables connector and Sink are provided, allowing on-premise EMQX Enterprise deployments to securely write MQTT data into an EMQX Tables deployment hosted in EMQX Cloud for centralized querying and processing.
+Starting from EMQX Enterprise 6.1, an EMQX Tables connector and Sink are provided, allowing on-premise EMQX Enterprise deployments to securely write MQTT data into an EMQX Tables deployment hosted in EMQX Cloud for centralized querying and processing.
 
 ![enterprise_tables_integration](./assets/enterprise_tables_integration.png)
 
