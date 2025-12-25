@@ -12,7 +12,7 @@ This page walks you through ingesting MQTT data from EMQX Enterprise into EMQX T
 
 - Establishing network connectivity between EMQX Enterprise and EMQX Tables
 - Creating an EMQX Tables connector
-- Creating a rule with an InfluxDB Line Protocol writer
+- Creating a rule with an EMQX Tables action
 - Testing data ingestion and querying results
 
 ## Prerequisites
