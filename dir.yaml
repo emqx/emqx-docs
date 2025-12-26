@@ -951,7 +951,7 @@
         - title_en: Quick Start
         - title_cn: 快速开始
         - title_ja: Quick Start
-        - path: emqx-ai/mcp-bridge/quick-start
+          path: emqx-ai/mcp-bridge/quick-start
     - title_en: Realtime Audio & Video AI
       title_cn: 实时音视频 AI
       title_ja: リアルタイム音声＆ビデオAI
