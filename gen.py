@@ -43,6 +43,7 @@ def is_edition_match(i, ce_or_ee):
         return True
 
 def read_title_from_md(lang, path):
+    #print(f"Reading title from {path} for lang {lang}", file=sys.stderr)
     if lang == 'en':
         dir = 'en_US'
     elif lang == 'cn':
@@ -119,7 +120,6 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(content, Loader=yaml.FullLoader)
-
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
     move_manual('ja', EDITION)
