@@ -755,9 +755,53 @@ Refer to the table below for fields that can be extracted.
 | `deactivated_at` | Unix timestamp (µs) when the alarm was deactivated           |
 | `node`           | The EMQX node where the event was triggered                  |
 
-### Client Keepalive Event ("$events/client/keepalive")
+### Client Keepalive (PING) Event ("$events/client/ping")
 
+This event topic can be used to trigger a rule when EMQX receives a `PINGREQ` packet from a connected MQTT client, indicating that a client heartbeat has been successfully received.
 
+It is mainly used for diagnostics and troubleshooting. While `$events/client/disconnected` explains why a client was disconnected (for example, `keepalive_timeout`), the `"$events/client/ping"` event provides direct evidence that EMQX actually received heartbeat packets from the client, helping to distinguish client- or network-side issues from broker-side problems.
+
+For example, to extract data from the `"$events/client/ping"` event topic that includes the client ID, username, negotiated keepalive interval, event trigger time, and the EMQX node where the event was triggered, you can use the statement below:
+
+**Example:**
+
+```sql
+SELECT
+  clientid,
+  username,
+  keepalive,
+  timestamp,
+  node
+FROM
+  "$events/client/ping"
+```
+
+**Output:**
+
+```sql
+{
+  "clientid": "c_emqx",
+  "username": "u_emqx",
+  "keepalive": 60,
+  "timestamp": 1645003800123,
+  "node": "emqx@127.0.0.1"
+}
+```
+
+Refer to the table below for fields that can be extracted from the Client PING event.
+
+| Field          | Explanation                                                  |
+| -------------- | ------------------------------------------------------------ |
+| `clientid`     | Client ID                                                    |
+| `username`     | Client username                                              |
+| `peername`     | Client IP address and port                                   |
+| `sockname`     | IP address and port listened by EMQX                         |
+| `proto_name`   | Protocol name                                                |
+| `proto_ver`    | Protocol version                                             |
+| `keepalive`    | Negotiated MQTT keepalive interval                           |
+| `timestamp`    | Event trigger time (unit: ms)                                |
+| `node`         | EMQX node where the event was triggered                      |
+| `client_attrs` | [Client attributes](../client-attributes/client-attributes.md) |
 
 ## Data Bridges
 
