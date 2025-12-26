@@ -949,8 +949,8 @@
       collapsed: true
       children:
         - title_en: Quick Start
-        - title_cn: 快速开始
-        - title_ja: Quick Start
+          title_cn: 快速开始
+          title_ja: Quick Start
           path: emqx-ai/mcp-bridge/quick-start
     - title_en: Realtime Audio & Video AI
       title_cn: 实时音视频 AI
