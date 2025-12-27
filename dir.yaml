@@ -760,6 +760,7 @@
             - dashboard/connections/connections
             - dashboard/subscriptions/overview
             - dashboard/retained
+            - dashboard/namespace
             - dashboard/delay-pub
             - dashboard/alarm_dashboard
         - title_en: Access Control
