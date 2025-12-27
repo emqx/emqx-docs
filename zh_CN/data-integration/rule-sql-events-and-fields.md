@@ -100,6 +100,7 @@ FROM
 | [客户端取消订阅成功事件](#客户端取消订阅成功事件-events-session-unsubscribed) | $events/session/unsubscribed        | 取消订阅                 |
 | [系统告警激活事件](#告警激活事件-events-sys-alarm-activated) | $events/sys/alarm_activated         | 系统告警激活             |
 | [系统告警解除事件](#告警解除事件-events-sys-alarm-deactivated) | $events/sys/alarm_deactivated       | 系统告警解除             |
+| [客户端 Keepalive（PING）事件](#客户端-keepaliveping-事件-events-client-ping) | $events/client/ping | 收到 `PINGREQ` 报文 |
 
 ::: tip
 

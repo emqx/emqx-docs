@@ -85,7 +85,7 @@ See the table below for the supported event topic list.
 | [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
-| $event/client/keepalive | Sent heartbeat packets |
+| [$events/client/ping](#client-keepalive-ping-event-events-client-ping) | Receive `PINGREQ` packets |
 
 ::: tip
 
