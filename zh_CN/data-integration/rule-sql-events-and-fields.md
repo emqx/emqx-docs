@@ -741,6 +741,54 @@ FROM
 | `deactivated_at` | Unix 时间戳（微秒），表示告警被解除的时间                    |
 | `node`           | 触发事件的 EMQX 节点                                         |
 
+### 客户端 Keepalive（PING）事件（"$events/client/ping"）
+
+当 EMQX 接收到已连接 MQTT 客户端发送的 `PINGREQ` 报文时，将触发该事件主题，表示客户端心跳已被成功接收。
+
+该事件主要用于诊断和故障排查。`$events/client/disconnected` 用于说明客户端为何断开连接（例如 `keepalive_timeout`），而 `"$events/client/ping"` 事件则提供了 EMQX 实际接收到客户端心跳报文的直接证据，有助于区分客户端或网络侧问题与 Broker 侧问题。
+
+例如，如需从 `"$events/client/ping"` 事件主题中提取客户端 ID、用户名、协商的 keepalive 间隔、事件触发时间以及触发事件的 EMQX 节点信息，可使用如下 SQL 语句：
+
+**示例：**
+
+```sql
+SELECT
+  clientid,
+  username,
+  keepalive,
+  timestamp,
+  node
+FROM
+  "$events/client/ping"
+```
+
+**输出：**
+
+```json
+{
+  "clientid": "c_emqx",
+  "username": "u_emqx",
+  "keepalive": 60,
+  "timestamp": 1645003800123,
+  "node": "emqx@127.0.0.1"
+}
+```
+
+下表列出了 Client PING 事件中可提取的字段说明。
+
+| 字段           | 说明                                                    |
+| -------------- | ------------------------------------------------------- |
+| `clientid`     | 客户端 ID                                               |
+| `username`     | 客户端用户名                                            |
+| `peername`     | 客户端 IP 地址和端口                                    |
+| `sockname`     | EMQX 监听的 IP 地址和端口                               |
+| `proto_name`   | 协议名称                                                |
+| `proto_ver`    | 协议版本                                                |
+| `keepalive`    | 协商后的 MQTT keepalive 间隔                            |
+| `timestamp`    | 事件触发时间（单位：毫秒）                              |
+| `node`         | 触发该事件的 EMQX 节点                                  |
+| `client_attrs` | [客户端属性](../client-attributes/client-attributes.md) |
+
 ## Source
 
 规则使用 `$bridges/` 开头的主题来表示 Source 的消息或事件。格式为：`$bridges/<type>:<name>`。
