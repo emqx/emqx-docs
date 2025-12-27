@@ -778,7 +778,7 @@ FROM
 
 **Output:**
 
-```sql
+```json
 {
   "clientid": "c_emqx",
   "username": "u_emqx",
