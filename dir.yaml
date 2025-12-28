@@ -813,6 +813,7 @@
       children:
         - multi-tenancy/create-namespace
         - multi-tenancy/configure-manage-namespace
+        - multi-tenance/namespace-global-settings
         - multi-tenancy/namespace-quick-start
     - title_en: Logs and Observability
       title_cn: 日志及可观测性
