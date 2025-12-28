@@ -2,9 +2,9 @@
 
 本节将引导您使用 [MQTTX 客户端](https://mqttx.app/zh)连接 EMQX，并快速体验命名空间功能的关键能力：租户识别、客户端与主题隔离，和 ACL 隔离。
 
-## 启用命名空间来源（生成 `tns` 属性）
+## **启用命名空间来源（生成** **`tns`** **属性）**
 
-要使用命名空间功能，首先需要配置**命名空间来源**，用于从客户端连接信息中识别客户端所属的命名空间，并生成 `tns`（租户命名空间）属性。
+要使用命名空间功能，首先需要启用命名空间。通过配置**命名空间来源**，EMQX 可以从客户端连接信息中识别命名空间标识，并在客户端连接时自动创建对应的命名空间。
 
 ### 通过配置文件启用
 
@@ -73,7 +73,7 @@ mqtt.namespace_as_mountpoint = true
 
 1. 在 Dashboard 中导航到**管理** -> **命名空间** -> **设置**。
 2. 启用以下配置项：
-   - **客户端 ID 隔离**
+   - **客户端 ID 隔离**，默认值为`concat([client_attrs.tns, '-', clientid])`。
    - **将命名空间作为挂载点**
 3. 点击**确定**保存设置。
 
@@ -105,9 +105,10 @@ mqtt.namespace_as_mountpoint = true
 3. 在**监控** -> **客户端**页面查看：
 
    - 客户端 A 的订阅主题变为 `tenantA/test/topic`。
-
-
-   - 客户端 B 的发布主题变为 `tenantB/test/topic`。
+   
+   
+      - 客户端 B 的发布主题变为 `tenantB/test/topic`。
+   
 
 ![namespace_client_list](./assets/namespace_client_list.png)
 

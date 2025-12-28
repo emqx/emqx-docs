@@ -1,29 +1,53 @@
 # Configure and Manage Namespaces
 
-You can configure and manage namespaces using either the Dashboard or the REST API.
+You can configure and manage namespaces using the Dashboard and REST API, including setting session limits, rate limits, and managing connected clients.
 
-## Rate Limiters for a Namespace
+## Namespace Rate Limits
 
-Namespace configuration mainly includes setting a maximum session count and rate limiters. Before configuring rate limiters, it's important to understand the types and purposes of rate limiters in a namespace. For specific configuration options, refer to [Configure and Manage Namespaces via Dashboard](#configure-and-manage-namespaces-via-dashboard).
+Namespace configuration mainly includes maximum session limits and rate limiters. Before configuring rate limiters, it is recommended to understand the different types of rate limiters available for namespaces and their scope of effect.
 
-You can configure rate limiters for each namespace to control traffic and message flow for specific client groups. These namespace-level limiters work alongside EMQX’s existing rate limiters (for zones and listeners), depending on the type used.
+For details on how to configure specific options, see [Configure and Manage Namespaces via Dashboard](#configure-and-manage-namespaces-via-dashboard).
 
-### Types of Rate Limiters
+Namespace rate limiters can be used to control message traffic and bandwidth usage for clients within a specific namespace. They can work together with existing EMQX rate-limiting mechanisms (such as zone-level or listener-level rate limiters), depending on the type of rate limiter configured.
 
-In a managed namespace, there are two types of rate limiters:
+### Rate Limiter Types
 
-**Tenant rate limiters**: Assign tokens that are **shared** across all clients within a namespace (NS). When this type of limiter is configured, it composes with any existing zone-level rate limiters, meaning both the zone and the namespace tenant rate limiters apply to clients simultaneously.
+There are two types of rate limiters available for managed namespaces:
 
-**Client rate limiters**: Assign tokens that are **dedicated** to each client within the NS. When this type of limiter is configured, it replaces any existing listener-level rate limiters, meaning the listener rate limiters are ignored while the namespace client limiter takes effect.
+#### Tenant Rate Limiter
 
-Both limiter types can define limits for:
+The tenant rate limiter allocates shared tokens across all clients within the same namespace.
 
-- **Message rate limits**: The maximum number of messages a client or tenant can publish over a given time period.
-- **Byte throughput limits**: The maximum allowed size for message payloads over time.
+When this limiter is enabled:
 
-::: tip
+- The limit applies to the entire namespace
+- It works together with existing zone-level rate limiters
+- Clients must satisfy both the zone-level and namespace-level limits
 
-For more details, refer to the [Rate Limit](../rate-limit/rate-limit.md) documentation.
+This type is suitable for scenarios where the overall traffic of a tenant needs to be controlled.
+
+#### Client Rate Limiter
+
+The client rate limiter allocates dedicated tokens to each client within a namespace.
+
+When this limiter is enabled:
+
+- The limit applies to individual clients
+- It overrides listener-level rate limiters
+- Listener-level rate limits are ignored, and only the namespace client rate limiter is applied
+
+This type is suitable for scenarios that require fine-grained control over individual client behavior.
+
+### Supported Limiting Dimensions
+
+Both tenant and client rate limiters support the following dimensions:
+
+- **Message rate limit**: The maximum number of messages that a client or tenant can publish within a specified period
+- **Byte throughput limit**: The maximum effective payload size that can be transmitted within a specified period
+
+:::
+
+For more details about the rate-limiting mechanism, see [Rate Limiting](../rate-limit/rate-limit.md).
 
 :::
 
