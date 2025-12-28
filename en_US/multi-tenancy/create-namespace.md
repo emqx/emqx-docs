@@ -53,6 +53,6 @@ Automatic namespace creation is only allowed when `multi_tenancy.allow_only_mana
 
 When this configuration is set to `true`, only explicitly created namespaces are allowed, and automatic namespace creation is disabled.
 
-You can also control this behavior from the Dashboard using the **[Allow Only Explicitly Created Namespaces](./namespace-global-settings#allow-only-explicitly-created-namespaces)** setting.
+You can also control this behavior from the Dashboard using the **[Allow Only Explicitly Created Namespaces](./namespace-global-settings.md#allow-only-explicitly-created-namespaces)** setting.
 
 :::
