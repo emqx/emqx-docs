@@ -14,7 +14,7 @@ To enable the corresponding isolation capabilities, you must explicitly turn the
 
 :::
 
-![namespace_gloabal_settings](./assets/namespace_gloabal_settings.png)
+![namespace_global_settings](./assets/namespace_global_settings.png)
 
 ## Allow Only Explicitly Created Namespaces
 
