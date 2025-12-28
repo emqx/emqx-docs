@@ -8,7 +8,7 @@ Global namespace settings can be managed through the Dashboard at: **Management 
 
 ::: tip Note
 
-To preserve backward compatibility, most global namespace settings in EMQX 6., such as Client ID Isolation, Namespace as Mountpoint, and Mount Prefix for Authorization, are disabled by default.
+To preserve backward compatibility, most global namespace settings in EMQX 6.1, such as Client ID Isolation, Namespace as Mountpoint, and Mount Prefix for Authorization, are disabled by default.
 
 To enable the corresponding isolation capabilities, you must explicitly turn them on under **Namespace Related Configurations**.
 
