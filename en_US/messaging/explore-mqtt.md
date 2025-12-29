@@ -7,7 +7,7 @@ This section introduces how to use these features and verify them using [MQTTX C
 
 :::tip Prerequisites:
 
-- Knowledge about [publish and subscribe](./mqtt-publish-and-subscribe.md)
+- Knowledge about [publish and subscribe](./publish-and-subscribe.md)
   :::
 
 ## Will Message

@@ -9,13 +9,13 @@ As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://w
 
 - [**Massive Scale**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): Scale horizontally to 20+ nodes in a single cluster for 100M MQTT connections.
 - [**Business-Critical Reliability**](./deploy/cluster/mria-introduction.md): Ensure no data loss with built-in RocksDB data persistence.
-- [**Data Security**](https://www.emqx.com/en/use-cases/mqtt-security): End-to-end data encryption and fine-grained access control to protect your data.
+- [**Data Security**](./access-control/security-guide.md): End-to-end data encryption and fine-grained access control to protect your data.
 - [**Multiple protocols support**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT, QUIC, CoAP, Stomp, LwM2M, and more
 - [**Fully MQTT 5.0**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): EMQX is **fully** compliant with both **MQTT 5.0 and 3.x** standards, providing better scalability, security, and reliability.
 - [**High Performance**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): Ingest and process millions of MQTT messages efficiently per second per node.
 - [**Low Latency**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time): Guarantee sub-millisecond latency in message delivery with the soft real-time runtime.
 - [**Complete Observability**](./dashboard/introduction.md): Monitoring, alerting, and advanced end-to-end analysis with real-time MQTT tracing.
-- [**Cloud-Native & K8s**](https://www.emqx.com/en/emqx-kubernetes-operator): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator** and **Terraform**.
+- [**Cloud-Native & K8s**](./deploy/kubernetes/kubernetes.md): Can be easily deployed on-premises or in public clouds using **Kubernetes Operator**.
 
 ## Main Components
 
@@ -173,76 +173,108 @@ EMQX Enterprise allows message issuance through MQTT messages, REST APIs, and So
 
 ## Industry Solutions
 
-EMQX Enterprise offers versatile IoT solutions across various industries, ensuring reliable data connectivity, efficient transmission, and flexible processing to drive innovation and operational excellence.
+EMQX Enterprise provides versatile IoT solutions across industries, delivering reliable real-time connectivity for mission-critical applications. From connected vehicles to smart manufacturing, EMQX powers innovation at scale.
 
-### Automotive
+### Automotive & Connected Vehicles
 
-#### Internet of Vehicle and Telematics Service Provider
+EMQX powers the future of software-defined vehicles (SDVs), connecting 30+ million vehicles across 100+ car models for 5 of the 10 largest automobile companies worldwide. The platform provides the real-time data backbone for mission-critical V2X and telematics applications, with [MQTT over QUIC](./mqtt-over-quic/introduction.md) optimized for unstable network conditions.
 
-The future of TSP platforms is to be "data-driven" and "service-oriented". To succeed, the TSP platform needs to ensure reliable connections with cars, efficient data transmission, and flexible data processing. EMQX is essential to make a robust, high-performance, and easy-to-maintain data infrastructure. [**Learn More →**](https://www.emqx.com/en/blog/revolutionizing-tsp-platforms)
+![architecture_vehicle_to_cloud](./assets/architecture-v2c.svg)
 
-![use_case_5](./assets/use_case_5.png)
+- **Connected Cars & SDVs**: Enable remote diagnostics, bidirectional command and control, and over-the-air (OTA) updates across global fleets. [**Learn More →**](https://www.emqx.com/en/solutions/internet-of-vehicles)
+- **Fleet Telematics**: Real-time geo-location tracking, usage-based insurance (UBI), and predictive maintenance with ultra-low latency data streams. [**Learn More →**](https://www.emqx.com/en/solutions/fleet-telematics)
+- **EV Charging Networks**: Scalable MQTT connectivity for charging station management, smart charging, and vehicle-to-grid (V2G) applications.
+- **Automotive Manufacturing**: Unify data from factory floors by connecting robots, PLCs, and sensors for continuous monitoring and quality assurance. [**Learn More →**](https://www.emqx.com/en/solutions/industrial-iot)
 
+SAIC Volkswagen relies on EMQX to power their next-generation IoV platform for over 1.6 million connected vehicles, supporting remote control and real-time data monitoring. [**Read Case Study →**](https://www.emqx.com/en/customers/saic-volkswagen)
 
+### Transportation & Logistics
 
-#### Smart Cockpit and In-Vehicle Infotainment
+In an industry where every second counts, EMQX provides real-time fleet visibility, reliable data transmission over unstable networks, and geo-distributed deployment to minimize latency. The platform connects hundreds of thousands of vehicles and devices to a single, unified backbone.
 
-Based on EMQ's cloud-side end-to-end collaborative software architecture, we help car manufacturers build the core capabilities of the smart cockpit with vehicle-cloud collaboration. [**Learn More →**](https://www.emqx.com/en/use-cases/smart-cockpit)
+![architecture-transportation-logistics](./assets/architecture-transportation-logistics.svg)
 
-![use_case_6](./assets/use_case_6.png)
+- **Fleet Management**: Track vehicle location, monitor driver behavior, and optimize routes in real time to reduce fuel costs and improve delivery times. [**Learn More →**](https://www.emqx.com/en/solutions/fleet-management)
+- **Smart Urban Transport**: Process massive amounts of traffic data for real-time analysis and intelligent transportation systems.
+- **V2X Communication**: Enable Vehicle-to-Everything communication for enhanced safety, traffic efficiency, and autonomous driving applications. [**Learn More →**](https://www.emqx.com/en/solutions/software-defined-vehicles)
+- **Cold Chain Monitoring**: Monitor temperature and humidity of sensitive cargo in real time to ensure compliance and prevent spoilage.
 
-#### Electric Vehicle Charging Network
+The Shenzhen Urban Transport Planning Center (SUTPC) uses EMQX to process data from over 1.7 million vehicles, enabling real-time traffic analysis and intelligent transportation systems. [**Read Case Study →**](https://www.emqx.com/en/customers/sutpc)
 
-EV Power uses EMQX to empower the charging piles operation platform, solving the problems of scattered equipment areas that are difficult to control, harsh deployment environments, etc. [**Learn More →**](https://www.emqx.com/en/customers/ev-power)
+### Manufacturing & IIoT
 
-![use_case_7](./assets/use_case_7.png)
+EMQX connects all machines, systems, and applications from the factory floor to the cloud, bridging OT and IT with an AI-native data backbone. With support for 100+ industrial protocols including Modbus, OPC-UA, and Siemens S7, EMQX enables a [Unified Namespace (UNS)](https://www.emqx.com/en/solutions/unified-namespace) architecture with Sparkplug B for true plug-and-play interoperability.
 
-### Traffic and Transportation
+![architecture-manufacturing](./assets/architecture-manufacturing.svg)
 
-#### Logistics Asset Management
+- **Predictive Maintenance**: Use real-time sensor data and AI to predict machine failures, prevent unplanned downtime, and extend equipment life.
+- **OEE Optimization**: Boost factory output by tracking Overall Equipment Effectiveness in real time, manufacturers report up to 25% increase in OEE and 40% reduction in downtime.
+- **Quality & Traceability**: Detect quality deviations the moment they occur, monitor production parameters in real-time, and enable full product traceability.
+- **Live Performance Monitoring**: Visualize your entire production line with live dashboards using EMQX [metrics and observability](./observability/overview.md) features, with integration to Prometheus and Datadog.
 
-EMQ provides a comprehensive data-driven solution for logistics asset management with capabilities to collect, transmit, and process data. This helps companies monitor their assets in real-time and gain useful information, leading to informed decisions for management and improved competitiveness. [**Learn More →**](https://www.emqx.com/en/blog/a-data-driven-solution-for-logistics-asset-tracking-and-maintenance)
+Leading semiconductor fabs use EMQX to unify equipment data, handling 3.5M+ data tags per plant with 100ms collection rates and 100% data integrity for precision manufacturing. [**Learn More →**](https://www.emqx.com/en/solutions/industrial-iot)
 
-![use_case_8](./assets/use_case_8.png)
+### Energy & Utilities
 
-#### Fleet Management
+EMQX powers the modern energy grid, connecting 10M+ endpoints with sub-100ms latency for critical grid control and protection applications. The platform bridges legacy OT protocols with modern IT systems using [multi-protocol gateways](./gateway/gateway.md).
 
-With the logistics industry's complex and dynamic nature, effective monitoring, scheduling, and optimization of vehicle fleets are essential throughout the transportation and delivery processes. The timely and reliable delivery of goods, cost optimization, and customer satisfaction heavily rely on efficient fleet management practices. [**Learn More →**](https://www.emqx.com/en/blog/how-emqx-revolutionizes-logistics-fleet-management)
+![architecture-energy-utilities](./assets/architecture-energy-utilities.svg)
 
-<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
+**Smart Grid & Renewables**
+- **Grid Balancing**: Integrate distributed energy resources (DERs) and respond to supply/demand changes in real time for grid stability.
+- **EV Charging Management**: Build scalable EV charging networks with smart charging and vehicle-to-grid (V2G) capabilities.
+- **Predictive Asset Maintenance**: Monitor substations, transformers, and renewable assets in real time to predict failures and optimize maintenance.
 
-#### Vehicle to Everything Communication (V2X)
+**Oil & Gas**
+- **Remote Asset Monitoring**: Monitor and control remote assets such as wellheads, pumps, and pipelines in real time.
+- **Pipeline Leak Detection**: Instantly detect and locate leaks by analyzing real-time pressure and flow data from sensors.
 
-[V2X (vehicle-to-everything)](https://www.emqx.com/en/blog/what-is-v2x-and-the-future-of-vehicle-to-everything-connectivity) is a communication technology that enables vehicles to exchange data with various elements in their environment, including other vehicles (V2V), pedestrians (V2P), infrastructure (V2I), and networks (V2N). CVIS(Cooperative Vehicle-Infrastructure System) is a promising direction of the intelligent transportation system that requires V2X technology integrating with various sensor technologies, cloud computing, edge computing, and traffic control. See how EMQX plays an important role in the whole picture. [**Learn More →**](https://www.emqx.com/en/blog/enhancing-v2x-connectivity-with-emq)
+Huabei Oilfield Company uses EMQX to connect over 40,000 data collection points, enabling real-time monitoring and intelligent analysis of their oilfield operations. [**Read Case Study →**](https://www.emqx.com/en/customers/huabei-oilfield-company)
 
-![use_case_10](./assets/use_case_10.png)
+### Healthcare
 
-### Manufacturing and IIoT
+EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./access-control/security-guide.md). The platform provides HIPAA-ready security features including [TLS/SSL encryption](./network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
 
-EMQ smart factory solution is designed to establish comprehensive data collection, transmission, distribution, and other mechanisms. This solution empowers factories to rapidly deploy a wide array of intelligent applications, including equipment health management, optimization of energy consumption equipment, production monitoring and analysis, product quality traceability, parameter optimization in the supply chain, predictive maintenance, and defect detection. [**Learn More →**](https://www.emqx.com/en/blog/data-infrastructure-for-smart-factory)
+![architecture-healthcare](./assets/architecture-healthcare.svg)
 
-![use_case_11](./assets/use_case_11.png)
+- **Remote Patient Monitoring (RPM)**: Continuously monitor patients' vital signs and health status from their homes, enabling early intervention and reducing hospital readmissions.
+- **Medical Device Integration**: Connect and integrate data from infusion pumps, ventilators, and lab equipment for a unified view of patient care.
+- **Smart Hospital Automation**: Automate hospital operations from tracking medical assets to optimizing patient flow and environmental conditions.
+- **Telehealth & Telemedicine**: Enable real-time communication and data exchange between patients and healthcare providers for remote consultations.
 
-### Oil and Gas
+### Financial Services
 
-EMQ provides IoT data collection solutions for the oil industry that support real-time data collection and cloud-side collaborative management of oilfield IoT terminal devices. [**Learn More →**](https://www.emqx.com/en/use-cases/oil-extraction-transportation)
+EMQX powers real-time financial applications with millisecond-level latency, bank-grade security, and 7×24 continuous service. The platform has provided more than five years of stable operation for enterprise-level financial users.
 
-![use_case_12](./assets/use_case_12.png)
+![architecture-financial](./assets/architecture-financial.svg)
 
-### Finance and Payment
+- **Real-Time POS Monitoring**: Connect millions of POS terminals to monitor transaction data and device status in real time, enabling proactive maintenance.
+- **Fraud Detection**: Instantly analyze transaction data as it occurs to detect and prevent fraudulent activity before it impacts customers.
+- **Modern Payment Systems**: Build reliable, low-latency infrastructure for mobile payments, digital wallets, and real-time clearing and settlement.
+- **Market Data Distribution**: Reliably distribute real-time market data such as stock quotes and trades to thousands of clients with minimal latency.
 
-EMQ financial payment industry solutions help customers realize 7*24h continuous service, and it has continuously provided more than five years of stable operation and service for enterprise-level users. [**Learn More →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
+[**Read Case Study →**](https://www.emqx.com/en/customers/emqx-in-finance-and-payment-iot)
 
-![use_case_13](./assets/use_case_13.png)
+### Telecommunications
 
-### Energy and Utilities
+EMQX provides carrier-grade scalability for 5G IoT services, supporting 100+ million concurrent device connections on a single platform. The platform enables seamless IT/OT/CT integration with multi-protocol support including MQTT, CoAP, and LwM2M.
 
-Leveraging EMQ's technological leadership in IoT messaging middleware and SGITG's strengths in national grid technology and markets, the two companies are working closely together to create next-generation power IoT products. [**Learn More →**](https://www.emqx.com/en/customers/sgitg-sgcc)
+![architecture-telecom](./assets/architecture-telecom.svg)
 
-### Carrier
+- **5G IoT Platform**: Reliably connect hundreds of millions of IoT devices over 5G networks, providing a stable foundation for value-added services.
+- **Network Monitoring**: Continuously monitor the health and performance of network infrastructure in real time to proactively identify and resolve issues.
+- **Smart City Backbone**: Build the data backbone for smart cities, connecting traffic systems, public transportation, utilities, and emergency services.
 
-Through in-depth cooperation with EMQ, E-Surfing IoT has built CTWing into the world's largest group-level NB-IoT device access platform. The cumulative number of connected devices on this IoT platform has reached millions. [**Learn More →**](https://www.emqx.com/en/customers/china-telecom)
+China Telecom, one of the world's largest telecom providers, uses EMQX to power their national IoT platform CTWing, supporting over 100 million concurrent device connections. [**Read Case Study →**](https://www.emqx.com/en/customers/china-telecom)
 
-### Consumer Electronics and AIoT
+### Retail & Consumer IoT
 
-An IoT data access platform based on EMQX provides a stable and efficient data access service for an intelligent service robot company, helping it to reach more than 5000 end customers. [**Learn More →**](https://www.emqx.com/en/customers/intelligent-service-robot-aiot)
+EMQX connects millions of retail devices and consumer IoT endpoints, enabling real-time data movement for omnichannel experiences, smart home automation, and interactive applications.
+
+![architecture-retail](./assets/architecture-retail.svg)
+
+- **Smart Retail**: Power real-time inventory management, POS monitoring, personalized customer engagement, and dynamic pricing across all store locations. Connect thousands of self-service kiosks ensuring seamless customer experiences even during peak hours.
+- **Smart Home**: Connect millions of smart home devices with a scalable [pub/sub messaging](./messaging/introduction.md) backbone, enabling home automation, energy monitoring, and integration with platforms like Alexa and Google Assistant.
+- **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
+
+Signify (formerly Philips Lighting) uses EMQX to power global smart lighting solutions, ensuring reliable real-time control for millions of connected lights. JAGAT, a location-based social app, handles millions of users with EMQX for reliable real-time messaging. [**Read Case Study →**](https://www.emqx.com/en/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)

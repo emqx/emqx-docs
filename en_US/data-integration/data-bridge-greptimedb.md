@@ -58,7 +58,7 @@ This section describes the preparations you need to complete before you start to
      --user-provider=static_user_provider:cmd:greptime_user=greptime_pwd
    ```
 
-2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/deployments/authentication/static).
+2. The `user-provider` parameter configures the GreptimeDB authentication. You can configure it by file. For more information, refer to the [documentation](https://docs.greptime.com/user-guide/deployments-administration/authentication/static/).
 3. With GreptimeDB running, visit [http://localhost:4000/dashboard](http://localhost:4000/dashboard) to use the GreptimeDB dashboard. The username and password are `greptime_user` and `greptime_pwd`.
 
 ## Create a Connector

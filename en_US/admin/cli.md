@@ -313,6 +313,46 @@ $ emqx ctl clients kick emqx_c
 ok
 ```
 
+### clients stats --file <path/to/file.csv>
+Dumps per-client statistics to a CSV file, allowing system administrators to observe client activity and identify top-k busy clients.
+
+```bash
+$ emqx ctl clients stats path/to/file.csv
+```
+
+**Arguments:**
+
+- Path to the output CSV file.
+- `--batch` option controls how many clients to be processed in one batch. A smaller value reduces resource usage but increases the total execution time. (default is `1000`).
+- `--sleep` option controls the pause duration (in milliseconds) between processing batches. Increasing this value can further reduce system impact at the cost of longer execution time. (default is `10ms`).
+
+**Output Format:**
+
+The generated CSV file will contain the following columns:
+
+```sql
+timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, awaiting_rel_cnt, mqueue_len, mqueue_dropped
+```
+
+Descriptions of each field:
+
+- `timestamp`: UNIX timestamp in milliseconds when the data was collected
+- `clientid`: MQTT client ID
+- `recv_oct`: Total bytes received from the client
+- `recv_cnt`: Number of received messages (or message fragments)
+- `send_oct`: Total bytes sent to the client
+- `send_cnt`: Number of sent MQTT packets.
+- `subscriptions_cnt`: Number of subscriptions held by the client
+- `awaiting_rel_cnt`: Number of QoS 2 messages awaiting PUBREL
+- `mqueue_len`: Length of the client’s in-memory session message queue
+- `mqueue_dropped`: Number of messages dropped from the in-memory session message queue
+
+**Notes:**
+
+- The command is designed for observability, not real-time telemetry.
+- To avoid performance degradation, it throttles Erlang Term Storage (ETS) scans by sleeping periodically (e.g., 10ms every 1000 records).
+- The resulting CSV can be used for offline analysis, visualizations, or further automated processing.
+
 ## topics
 
 This command is to view all subscribed topics in current system.
