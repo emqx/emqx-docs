@@ -8,7 +8,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Feature Highlights
 
-EMQX 6.1.0 introduces Message Stream, enhanced namespace capabilities, new data intgrations, and centralized certificate management.
+EMQX 6.1.0 introduces Message Stream, enhanced namespace capabilities, new data integrations, and centralized certificate management.
 
 **Message Stream**
 
