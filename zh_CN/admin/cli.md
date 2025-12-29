@@ -280,7 +280,7 @@ Automatic cluster discovery enabled.
 
 查看当前连接到 EMQX 的所有客户端。此命令可用于监控活跃客户端及连接数量。
 
-:::tip 提示
+::: tip 提示
 
 如果系统中连接了大量客户端，执行 `list` 命令可能会耗费较多时间和资源。
 
@@ -309,6 +309,45 @@ Client(emqx_c, username=undefined, peername=127.0.0.1:59441, clean_start=true, k
 $ emqx ctl clients kick emqx_c
 ok
 ```
+
+### clients stats --file <path/to/file.csv>
+
+将每个客户端的统计信息导出为 CSV 文件，便于系统管理员观察客户端活动，并识别 Top-k 最繁忙的客户端。
+
+```bash
+$ emqx ctl clients stats --file path/to/file.csv
+```
+
+**参数说明：**
+
+- 输出 CSV 文件的路径。
+
+**输出格式：**
+
+生成的 CSV 文件将包含以下列：
+
+```sql
+timestamp, clientid, recv_oct, recv_cnt, send_oct, send_cnt, subscriptions_cnt, awaiting_rel_cnt, mqueue_len, mqueue_dropped
+```
+
+各字段含义如下：
+
+- `timestamp`：数据采集时的 UNIX 时间戳（毫秒）
+- `clientid`：MQTT 客户端 ID
+- `recv_oct`：客户端接收的总字节数
+- `recv_cnt`：接收到的消息数量（或消息片段）
+- `send_oct`：发送给客户端的总字节数
+- `send_cnt`：发送的 MQTT 报文数量
+- `subscriptions_cnt`：客户端持有的订阅数量
+- `awaiting_rel_cnt`：等待 PUBREL 的 QoS 2 消息数量
+- `mqueue_len`：客户端内存会话消息队列的长度
+- `mqueue_dropped`：从客户端内存会话消息队列中被丢弃的消息数量
+
+**注意事项：**
+
+- 该命令用于观测性分析，并非实时遥测工具。
+- 为避免性能下降，命令在扫描 ETS（Erlang Term Storage，Erlang 数据存储）表时会定期休眠（例如每处理 1000 条记录休眠 10 毫秒）。
+- 生成的 CSV 文件可用于离线分析、可视化展示或进一步的自动化处理。
 
 ## topics
 

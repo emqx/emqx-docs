@@ -52,8 +52,8 @@ Before you proceed, make sure you have the following:
 
 ### Create a Time Series Table
 
-1. Log in to the [Tablestore console](https://account.alibabacloud.com/login/login.htm?spm=5176.12901015-2.0.0.1a364b84fgwsH6).
-2. Create a time series model instance. Provide a name for the instance, such as `emqx-demo`. For detailed instructions on creating an instance, refer to the [Tablestore official documentation](https://www.alibabacloud.com/help/en/tablestore/getting-started/use-timeseries-model-in-tablestore-console?spm=a2c63.p38356.help-menu-27278.d_1_2_0.6d7d5e92tyvDzj#section-247-wkm-e7a).
+1. Log in to the [Tablestore console](https://account.alibabacloud.com/login/login.htm).
+2. Create a time series model instance. Provide a name for the instance, such as `emqx-demo`. For detailed instructions on creating an instance, refer to the [Tablestore official documentation](https://www.alibabacloud.com/help/en/tablestore/product-overview/activate-service-and-create-a-instance).
 3. Navigate to the **Instance Management** page.
 4. In the **Instance Details** tab, select **Time Series Tables** and click the **Create Time Series Table** button.
 5. Configure the time series table information, providing a name for the table, such as `timeseries_demo_with_data`. Click **Confirm**.

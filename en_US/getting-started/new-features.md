@@ -113,4 +113,4 @@ For complete information about what's deprecated and breaking changes, see [Inco
 
 ## EMQX 5.x Series
 
-For a complete list of features and updates in EMQX 5.x, please refer to: [EMQX 5.10 Documentation – What's New](https://docs.emqx.com/en/emqx/5.10/getting-started/new-features.html).
+For a complete list of features and updates in EMQX 5.x, please refer to: [EMQX 5.10 Documentation – What's New](https://docs.emqx.com/en/emqx/v5.10/getting-started/new-features.html).

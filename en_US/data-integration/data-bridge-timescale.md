@@ -51,13 +51,13 @@ EMQX supports integration with self-deployed TimescaleDB or Timescale Service on
 :::: tabs 
 ::: tab Timescale Service
 
-1. If you do not have a Timescale account, create an account by referring to [Create your Timescale account](https://docs.timescale.com/getting-started/latest/services/#create-your-timescale-account).
+1. If you do not have a Tiger Cloud account, create an account by referring to [Create your Tiger Cloud account](https://www.tigerdata.com/docs/getting-started/latest/services#create-your-timescale-account).
 
-2. Log in to Timescale portal and [Create Timescale service](https://docs.timescale.com/getting-started/latest/services/#create-your-first-service). Save the password for your service.
+2. Log in to Tiger Data portal and [Create a Tiger Cloud service](https://www.tigerdata.com/docs/getting-started/latest/services#create-your-first-service). Save the password for your service.
 
 3. Get the connection information from the service overview page. The fields required by EMQX include **Database name**, **Host**, **Port,** and **Username**.
 
-4. [Connect to service](https://docs.timescale.com/getting-started/latest/services/#connect-to-your-service) with `psql client`.
+4. [Connect to service](https://www.tigerdata.com/docs/getting-started/latest/services#connect-to-your-service) with `psql client`.
 
    ```bash
    # Connect to service by service URL

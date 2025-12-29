@@ -278,7 +278,7 @@ authentication = [
 
 #### Redis
 
-1. Only supports [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` or `password` (compatible with 4.x) as the password field name.
+1. Only supports [Redis Hashes](https://redis.io/docs/latest/develop/data-types/hashes/) data structure and `HGET`, `HMGET` query commands. The commands must return `password_hash` or `password` (compatible with 4.x) as the password field name.
 2. Remove standalone super-user query command. If you need to give clients super-user permissions, please add the `is_superuser` field to the Redis query command.
 
 ::: details

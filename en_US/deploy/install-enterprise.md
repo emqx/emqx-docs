@@ -4,7 +4,7 @@ EMQX releases the corresponding Docker image and the installation packages for d
 
 :::tip
 
-Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
+Besides the above deployment methods, you are also welcome to try our [EMQX Cloud](https://www.emqx.com/en/cloud), a fully managed MQTT service for IoT. You only need to [register for an account](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/) before starting your MQTT services and connecting your IoT devices to any cloud with zero need for infrastructure maintenance.
 :::
 
 These pages provide instructions to install the EMQX Enterprise.
