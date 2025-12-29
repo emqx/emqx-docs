@@ -114,7 +114,7 @@ In deployments that include multiple durable storage databases, these databases 
 
 Database groups address this issue by:
 
-- Allowing multiple databases to share a common disk usage limits
+- Allowing multiple databases to share a common disk usage limit
 - Enforcing write admission control before data is persisted
 - Providing a foundation for group-level observability
 
