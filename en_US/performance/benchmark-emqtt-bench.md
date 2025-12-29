@@ -1,25 +1,27 @@
 # Performance Test with eMQTT-Bench
 
-After you deploy the EMQX either in a single mode or in an EMQX cluster, you can test the performance of your deployment to know the system capability. This section introduces how to install and use the [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to do the performance test. The eMQTT-Bench is a concise and powerful MQTT protocol benchmark tool written with Erlang. If you need testing services with large-scale scenarios and in-depth customization, the test service [XMeter](https://www.xmeter.net/) is recommended.
+After you deploy EMQX, either in single mode or as an EMQX cluster, you can evaluate its performance to understand the system’s capacity and behavior under load. This section explains how to install and use [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to conduct performance testing.
+
+eMQTT-Bench is a lightweight yet powerful MQTT benchmarking tool written in Erlang, designed to simulate large numbers of clients and measure key performance metrics such as throughput and latency. For large-scale testing scenarios or advanced, customized benchmarking requirements, please contact us at [sales@emqx.io](mailto:sales@emqx.io).
 
 ## Install eMQTT-Bench
 
 There are three options for installing the eMQTT-Bench:
 
-- Run the docker image
+- Run the Docker image
 - Download and install the binary package
 - Build from the source code
 
 ### Docker Image
 
-You can install the benchmark tool by running the `emqtt-bench` docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
+You can install the benchmark tool by running the `emqtt-bench` Docker image pushed to [hub.docker.com](https://hub.docker.com/r/emqx/emqtt-bench/tags). The `:latest` tag is updated with each new version:
 
 ```bash
 docker run -it emqx/emqtt-bench:latest
 Usage: emqtt_bench pub | sub | conn [--help]
 ```
 
-Note that the docker image name uses hyphen '-', while the binary script name uses with underscore '_'.
+Note that the Docker image name uses hyphen '-', while the binary script name uses underscore '_'.
 
 ### Binary Package
 
