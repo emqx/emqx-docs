@@ -4,7 +4,7 @@ EMQX は各リリースごとに対応する Docker イメージおよび各種 
 
 :::tip
 
-上記のデプロイ方法に加えて、完全マネージド型の IoT 向け MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウド接続にあたり、インフラの保守は不要で、[アカウント登録](https://www.emqx.com/en/signup?continue=https://www.emqx.com/en/cloud)のみでご利用いただけます。
+上記のデプロイ方法に加えて、完全マネージド型の IoT 向け MQTT サービスである[EMQX Cloud](https://www.emqx.com/en/cloud)もぜひお試しください。MQTT サービスの開始や IoT デバイスのクラウド接続にあたり、インフラの保守は不要で、[アカウント登録](https://accounts.emqx.com/signup?continue=https://cloud-intl.emqx.com/console/)のみでご利用いただけます。
 :::
 
 以下のページでは EMQX Enterprise のインストール手順を案内しています。

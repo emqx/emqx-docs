@@ -144,5 +144,4 @@ Stomp 协议完全兼容发布订阅的消息模式，Stomp 网关使用：
 
 ## 客户端库
 
-- [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
 - [stomp.py](https://github.com/jasonrbriggs/stomp.py)

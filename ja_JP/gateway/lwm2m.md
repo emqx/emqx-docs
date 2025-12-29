@@ -96,7 +96,7 @@ gateway.lwm2m {
 :::
 
 LwM2M ゲートウェイは UDP および DTLS タイプのリスナーのみをサポートしています。  
-設定可能なパラメータの完全なリストは次を参照してください：[Gateway Configuration - Listeners](../configuration/configuration-manual.html)
+設定可能なパラメータの完全なリストは次を参照してください：[Gateway Configuration - Listeners](../configuration/configuration-manual.md)
 
 
 ## 認証

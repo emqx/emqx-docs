@@ -50,7 +50,7 @@ rule_engine {
 或者使用 `${clientid}` 来获取发送消息的客户端 ID 等等。
 规则支持的事件类型以及可用字段请参见：[事件主题和可用字段](./rule-sql-events-and-fields.md)
 
-关于内置动作的细节，详见 [内置动作](./rule-actions.md)
+关于内置动作的细节，详见 [内置动作](./rules.md)
 
 ### 引用 Sink 作为动作
 

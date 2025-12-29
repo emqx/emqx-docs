@@ -425,7 +425,7 @@ This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collec
 
 Logstash is used for log processing and cleaning.
 
-In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html) of Logstash to collect logs and the [Ruby filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html) to filter logs. Logstash also provides many other input and filtering plugins that you can configure according to your business needs.
+In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats) of Logstash to collect logs and the [Ruby filter plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby) to filter logs. Logstash also provides many other input and filtering plugins that you can configure according to your business needs.
 
 1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
