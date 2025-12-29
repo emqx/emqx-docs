@@ -8,11 +8,12 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Feature Highlights
 
-EMQX 6.1.0 introduces Message Stream, enhanced namespace capabilities, new data integrations, and centralized certificate management.
+EMQX 6.1.0 introduces Message Streams, enhanced namespace capabilities, new data integrations, and centralized certificate management.
 
-**Message Stream**
+**Message Streams**
 
-EMQX Stream provide durable collections of messages identified by a topic filter, with explicit lifecycle management. Messages matching a stream's topic filter are automatically appended, enabling consumption with ordering guarantees and support for multiple consumers. Clients can subscribe to streams using the special topic format `$s/<timestamp>/topic/filter` to consume messages from a specific point in time.
+EMQX Message Streams feature provide durable collections of messages identified by a topic filter, with explicit lifecycle management. Messages matching a stream's topic filter are automatically appended, enabling consumption with ordering guarantees and support for multiple consumers. Clients can subscribe to streams using the special topic format `$s/<timestamp>/topic/filter` to consume messages from a specific point in time.
+
 
 **Enhanced Namespace Capabilities**
 
@@ -38,7 +39,7 @@ Added centralized certificate management via HTTP API, allowing certificates to 
 
 #### Message Queue and Stream
 
-- [#16326](https://github.com/emqx/emqx/pull/16326) Implemented Message Stream.
+- [#16326](https://github.com/emqx/emqx/pull/16326) Implemented Message Streams.
 
   Message Streams are durable collections of messages identified by a topic filter.
   They have an explicit lifecycle, and any published message that matches the Stream's topic filter is automatically appended to the stream.
