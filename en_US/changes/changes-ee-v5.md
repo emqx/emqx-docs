@@ -30,7 +30,7 @@
 
 - [#16336](https://github.com/emqx/emqx/pull/16336) Fixed a race condition which may cause timeout when testing connectivity or stopping a connector from the dashboard.
 
-- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Link garbage-collection logic that could accidentally remove live routes from the internal routing table in the proces of cleaning up stale route replication state. This problem occured only when multiple independent Cluster Links were set up, and some of these links went down for relatively long periods of time.
+- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Link garbage-collection logic that could accidentally remove live routes from the internal routing table in the process of cleaning up stale route replication state. This problem occurred only when multiple independent Cluster Links were set up, and some of these links went down for relatively long periods of time.
 
 - [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Link route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
 
