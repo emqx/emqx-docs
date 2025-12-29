@@ -16,7 +16,7 @@ EMQXでは、ネームスペースを作成する方法が2つあります。明
 ダッシュボードで素早くネームスペースを作成するには：
 
 1. ダッシュボードの左メニューから **Management** -> **Namespace** に移動します。  
-2. **Create** をクリックし、表示される **Create Namespace** ダイアログでネームスペース名を入力します。他のオプションはデフォルトのままで構いません。最大セッション数やレート制限の設定詳細は [Configure and Manage Namespaces via Dashboard](./configure-manage-namespace) を参照してください。  
+2. **Create** をクリックし、表示される **Create Namespace** ダイアログでネームスペース名を入力します。他のオプションはデフォルトのままで構いません。最大セッション数やレート制限の設定詳細は [Configure and Manage Namespaces via Dashboard](./configure-manage-namespace.md) を参照してください。  
 3. **Create** をクリックすると、新しく作成したネームスペースが一覧に表示されます。
 
 ### REST APIでのネームスペース作成

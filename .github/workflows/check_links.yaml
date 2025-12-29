@@ -31,7 +31,6 @@ jobs:
           args: >-
             --no-progress
             --cache
-            --max-cache-age 1d
             --config .lychee.toml
             './en_US/**/*.md'
             './zh_CN/**/*.md'

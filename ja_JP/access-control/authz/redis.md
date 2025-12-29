@@ -17,7 +17,7 @@
 - `qos`（オプション）：現在のルールが適用されるQoSレベルを指定します。値は `0`、`1`、`2` のいずれか、または複数のQoSレベルを指定する数値配列です。デフォルトはすべてのQoSレベルです。
 - `retain`（オプション）：ルールが保持メッセージをサポートするかどうかを指定します。値は `true` または `false` です。デフォルトは保持メッセージを許可します。
 
-例えば、ルールは[Redisのハッシュ](https://redis.io/docs/manual/data-types/#hashes)として保存できます。
+例えば、ルールは[Redisのハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存できます。
 
 ユーザー `emqx_u` にトピック `t/1` のサブスクライブ権限を追加する例：
 

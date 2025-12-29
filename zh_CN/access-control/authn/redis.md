@@ -1,6 +1,6 @@
 # 使用 Redis 进行密码认证
 
-作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、[Redis Cluster](https://redis.io/docs/manual/scaling/)，本节将介绍如何进行相关配置。
+作为密码认证方式的一种，EMQX 支持通过集成 Redis 进行密码认证。EMQX 支持三种 Redis 部署模式：单节点、[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)、[Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)，本节将介绍如何进行相关配置。
 
 ::: tip 前置准备
 
@@ -9,7 +9,7 @@
 
 ## 数据结构与查询指令
 
-Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) 存储认证数据，用户需要提供一个查询指令模板，且确保查询结果包含以下字段：
+Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/latest/develop/data-types/hashes/) 存储认证数据，用户需要提供一个查询指令模板，且确保查询结果包含以下字段：
 
 - `password_hash`: 必需，数据库中的明文或散列密码字段
 - `salt`: 可选，为空或不存在时视为空盐（`salt = ""`）
@@ -51,7 +51,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 
 - **服务器地址**：填入 Redis 服务器地址 (`host:port`) ；当部署模式选为 Sentinel 或 Cluster，您需在此提供所有相关 Redis 服务器的地址，不同地址之间以 `,` 分隔，格式为 `host1:port1,host2:port2,...`。
 
-- **Sentinel 名字**（仅需在**部署模式**设置为 **Sentinel** 时设置）：指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)。
+- **Sentinel 名字**（仅需在**部署模式**设置为 **Sentinel** 时设置）：指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)。
 
 - **数据库**：整数，用于指定 Redis 数据库的 Index。
 

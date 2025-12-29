@@ -11,7 +11,7 @@ EMQX 将主题重写、代理订阅等功能通过内置模块的形式提供，
 | `emqx_mod_rewrite`       | [主题重写](../messaging/mqtt-topic-rewrite.md)     |
 | `emqx_mod_presence`      | 上下线通知                                         |
 
-EMQX 为内置模块提供了[命令行接口](../admin/cli.md#endpoint-modules)和 [HTTP API](./http-api.md#endpoint-modules)，用户可以很轻松地通过这些接口来启停模块，例如：
+EMQX 为内置模块提供了[命令行接口](../admin/cli.md)和 [HTTP API](../admin/api.md)，用户可以很轻松地通过这些接口来启停模块，例如：
 
 ```bash
 $ ./emqx_ctl modules load emqx_mod_delayed

@@ -9,7 +9,7 @@ Redis Authorizer 支持客户端的权限列表存储在 Redis 数据库中。
 
 ## 数据结构与查询指令
 
-Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-types/#hashes) 存储权限数据，用户需要提供一个查询指令模板，且确保查询结果包含以下数据：
+Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/latest/develop/data-types/hashes/) 存储权限数据，用户需要提供一个查询指令模板，且确保查询结果包含以下数据：
 
 - `topic`: 用于指定当前规则适用的主题，可以使用主题过滤器和[主题占位符](./authz.md#主题占位符)。
 - `action`: 用于指定当前规则适用于哪些操作，可选值有 `publish`、`subscribe` 和 `all`。
@@ -108,7 +108,7 @@ Standalone Redis:
 }
 ```
 
-[Redis Sentinel](https://redis.io/docs/manual/sentinel/):
+[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/):
 
 ```hcl
 {
@@ -125,7 +125,7 @@ Standalone Redis:
 }
 ```
 
-[Redis Cluster](https://redis.io/docs/manual/scaling/):
+[Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/):
 
 ```hcl
 {
@@ -144,8 +144,8 @@ Standalone Redis:
 可选值为 `single`、 `cluster` 和 `sentinel`，分别对应 Redis 的 3 种部署类型：
 
 1. Standalone Redis
-2. [Redis Cluster](https://redis.io/docs/manual/scaling/)
-3. [Redis Sentinel](https://redis.io/docs/manual/sentinel/)
+2. [Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)
+3. [Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)
 
 ### cmd
 
@@ -157,7 +157,7 @@ Standalone Redis:
 
 ### password
 
-可选的字符串类型配置。指定用于 Redis [认证](https://redis.io/docs/manual/security/#authentication) 的密码。
+可选的字符串类型配置。指定用于 Redis [认证](https://redis.io/docs/latest/operate/oss_and_stack/management/security/#authentication) 的密码。
 
 ### auto_reconnect
 
@@ -169,7 +169,7 @@ Standalone Redis:
 
 ### ssl
 
-用于 [安全连接至 Redis](https://redis.io/docs/manual/security/encryption/) 的标准 SSL options。<!--(../../configuration/configuration.md#tls-ciphers)。-->
+用于 [安全连接至 Redis](https://redis.io/docs/latest/operate/oss_and_stack/management/security/encryption/) 的标准 SSL options。<!--(../../configuration/configuration.md#tls-ciphers)。-->
 
 ### Standalone Redis options (`redis_type = single`).
 
@@ -191,4 +191,4 @@ Standalone Redis:
 
 #### sentinel
 
-必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的 [主服务器名称](https://redis.io/docs/manual/sentinel/#configuring-sentinel)。
+必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的 [主服务器名称](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/#configuring-sentinel)。

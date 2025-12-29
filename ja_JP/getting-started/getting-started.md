@@ -27,12 +27,6 @@ EMQXは、[Docker](../deploy/install-docker.md)での実行、[EMQX Kubernetes O
 
 上記以外のプラットフォームについては、[EMQ](https://www.emqx.com/en/contact)までお問い合わせください。
 
-<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
-
-また、[EMQX Terraform](https://www.emqx.com/en/emqx-terraform)を使ってクラウド上にワンクリックでデプロイすることも可能です。例として、[Alibaba Cloud](https://github.com/emqx/tf-alicloud)や[AWS](https://github.com/emqx/tf-aws)があります。
-
-<!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
-
 ### Dockerを使ったEMQXのインストール
 
 コンテナによるデプロイは、EMQXを素早く試す最も簡単な方法です。本クイックスタートガイドでは、Dockerを使ったEMQXのインストールと起動方法を説明します。

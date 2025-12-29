@@ -2,7 +2,7 @@
 
 [Eclipse Paho C](https://www.eclipse.org/paho/clients/c/) 与 [Eclipse Paho Embedded C](https://www.eclipse.org/paho/clients/c/embedded/) 均为 Eclipse Paho 项目下的 C 语言客户端库（MQTT C Client），均为使用 ANSI C 编写的功能齐全的 MQTT 客户端。
 
-Eclipse Paho Embedded C 可以在桌面操作系统上使用，但主要针对 [mbed](http://mbed.org/)，[Arduino](http://www.arduino.cc/)和 [FreeRTOS](http://freertos.org/) 等嵌入式环境。
+Eclipse Paho Embedded C 可以在桌面操作系统上使用，但主要针对 [mbed](http://mbed.org/)，[Arduino](https://arduino.cc/)和 [FreeRTOS](http://freertos.org/) 等嵌入式环境。
 
 该客户端有同步/异步两种 API ，分别以 MQTTClient 和 MQTTAsync 开头：
 
