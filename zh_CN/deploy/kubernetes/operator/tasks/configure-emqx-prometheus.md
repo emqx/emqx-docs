@@ -126,7 +126,7 @@ emqx-exporter-856564c95-j4q5v   Running  8m33s
 
 ## 配置 Prometheus Monitor
 
-Prometheus Operator 使用 [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#podmonitor) 和 [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/design.md#servicemonitor) CRD 来定义如何动态监控一组 Pod 或服务。
+Prometheus Operator 使用 [PodMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#podmonitor) 和 [ServiceMonitor](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/getting-started/design.md#servicemonitor) CRD 来定义如何动态监控一组 Pod 或服务。
 
 ```yaml
 apiVersion: monitoring.coreos.com/v1

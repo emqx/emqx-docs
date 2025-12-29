@@ -171,7 +171,7 @@ API は大幅に変更され、一部は互換性を持たせています。以�
 
 - クラスター作成のための `mcast` 探索戦略は非推奨となり、削除予定です。  
 - サービス探索の設定が変更され、`cluster.discovery` は **cluster.discovery_strategy** に変更されました。  
-- 新機能：[cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.html#cluster-autodiscovery)。  
+- 新機能：[cluster call](https://docs.emqx.com/en/enterprise/v5.0/configuration/configuration-manual.md#cluster-autodiscovery)。
 - 内部 DB にオプションの [最終的整合性](../design/clustering.md#data-consistency) が追加されました。
 
 ## MQTT

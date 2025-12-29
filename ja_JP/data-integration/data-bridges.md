@@ -101,8 +101,8 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
-- [Lindorm](./lindorm)
-- [Doris](./apache-doris)
+- [Lindorm](./lindorm.md)
+- [Doris](./apache-doris.md)
 
 **NoSQL**
 

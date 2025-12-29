@@ -24,7 +24,7 @@
 | **Kafka 集成**         | ✅                                 | ✅                   | ✅               | [将 MQTT 数据传输到 Apache Kafka](../data-integration/data-bridge-kafka.md) |
 | **企业级数据集成**     | ✅ 40+                             | ✅                   | ✅ 40+           | [提升业务开发和发布速度](https://www.emqx.com/zh/integrations) |
 | **故障排查**           | ✅                                 | ❌                   | ✅               | [日志追踪 (Trace)](../observability/tracer.md)<br>[慢订阅统计](../observability/slow-subscribers-statistics.md) |
-| **Cloud-Native & K8s** | ✅                                 | N/A                 | N/A             | [降低系统部署和管理成本](https://www.emqx.com/zh/deployments) |
+| **Cloud-Native & K8s** | ✅                                 | N/A                 | N/A             | [降低系统部署和管理成本](../deploy/kubernetes/kubernetes.md) |
 | **边缘计算**           | ✅                                 | ✅                   | ✅               | 降低数据传输延迟和成本<br>[Neuron](https://www.emqx.com/zh/products/neuronex)<br>[NanoMQ](https://www.emqx.com/zh/products/nanomq) |
 
 ## 可扩展性与性能
@@ -206,9 +206,8 @@
 
 | 云原生与 K8S            | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                                   |
 | ----------------------- | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
-| **Docker**              | ✅               | N/A                 | N/A             | [emqx - Official Image \| Docker Hub](https://hub.docker.com/_/emqx)<br>[Docker](https://hub.docker.com/r/emqx/emqx) |
+| **Docker**              | ✅               | N/A                 | N/A             | [Docker Hub](https://hub.docker.com/r/emqx/emqx-enterprise) |
 | **Kubernetes Operator** | ✅               | N/A                 | N/A             | [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) |
-| **Terraform**           | ✅               | N/A                 | N/A             | [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform)     |
 
 ## 云平台支持
 
