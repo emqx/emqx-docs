@@ -1,13 +1,13 @@
 # Message Stream User Guide
 
-This page walks you through the practical usage of the Message Stream feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
+This page walks you through the practical usage of the Message Streams feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
-## Enable Message Stream Feature
+## Enable Message Streams Feature
 
-Message Stream is **disabled by default**. Before creating or using any message streams, you must enable the feature in the Dashboard.
+The Message Streams feature is **disabled by default**. Before creating or using any message streams, you must enable the feature in the Dashboard.
 
 1. Navigate to **Message Stream** in the left menu.
-2. If Message Stream is not enabled, you will see a prompt indicating that the feature is disabled.
+2. If the feature is not enabled, you will see a prompt indicating that the feature is disabled.
 3. Click **Settings** to open the **Message Stream** settings page.
 4. Toggle **Enable Message Stream** to **On**.
 5. Click **Save Changes**.
@@ -80,7 +80,7 @@ To ensure proper stream behavior, you can enable auto create either **Regular Me
 
 :::
 
-### Auto Create Last Value Message Stream
+### Auto Create Last Value Message Streams
 
 This option is turned on by default in the **Message Stream** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
@@ -96,7 +96,7 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
 3. Click **Save Changes**.
 
 When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
-### Auto Create Regular Message Stream
+### Auto Create Regular Message Streams
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
 
@@ -114,7 +114,7 @@ This option can be enabled manually if you prefer regular streams where messages
 
 4. Click **Save Changes**.
 
-## Configure Message Stream Settings
+## Configure Message Streams Settings
 
 This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
@@ -161,7 +161,7 @@ The updated configuration takes effect immediately and applies to all existing a
 
 ### REST API
 
-You can configure global Message Stream settings programmatically using the EMQX REST API.
+You can configure global Message Streams settings programmatically using the EMQX REST API.
 
 To update Message Stream global settings, send a `PUT` request to the following endpoint:
 
@@ -185,7 +185,7 @@ curl -s -u key:secret \
 
 ### Configuration File
 
-You can configure global Message Stream settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
+You can configure global Message Streams settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
 
 **Configuration example**:
 
@@ -209,7 +209,7 @@ All duration values use standard time units, such as `s` (seconds), `m` (minutes
 
 #### Durable Storage Configuration
 
-Message Stream messages are stored using EMQX Durable Storage. Storage-related settings for Message Stream are configured under the `durable_storage.streams_messages` section.
+Stream messages are stored using EMQX Durable Storage. Storage-related settings for Message Stream are configured under the `durable_storage.streams_messages` section.
 
 ```hocon
 durable_storage {
@@ -227,7 +227,7 @@ durable_storage {
 
 These settings control how Message Stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
 
-## Manage Message Stream via REST API
+## Manage Message Streams via REST API
 
 EMQX provides REST APIs for managing message streams. You can use these APIs to create, update, list, query, and delete message streams, as well as configure global Message Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
 
@@ -311,6 +311,6 @@ curl -s -u key:secret \
 
 Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
 
-### Configure Message Stream Global Settings
+### Configure Message Streams Global Settings
 
-See [Configure Message Stream Settings -RESP API](#rest-api).
+See [Configure Message Streams Settings -RESP API](#rest-api).

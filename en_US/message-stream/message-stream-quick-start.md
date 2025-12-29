@@ -4,7 +4,7 @@ This page walks you through how to use the Message Stream feature in EMQX 6.1. Y
 
 ## Objectives
 
-This quick start demonstrates how EMQX Message Stream can:
+This quick start demonstrates how EMQX Message Streams can:
 
 - Persist messages independently of subscriber availability
 - Support timestamp-based replay
@@ -18,13 +18,13 @@ Before starting, ensure you have:
 - [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
 - Access to the EMQX Dashboard (default: `http://localhost:18083`)
 
-## Test Message Stream Basic Features (Regular Stream)
+## Test Message Streams Basic Features (Regular Stream)
 
-This section demonstrates how Message Stream stores messages and allows consumers to replay historical data.
+This section demonstrates how Message Streams stores messages and allows consumers to replay historical data.
 
 ### Prerequisite
 
-Before starting, ensure that the Message Stream feature is enabled and that the auto-creation behavior will not interfere with this example.
+Before starting, ensure that the Message Streams feature is enabled and that the auto-creation behavior will not interfere with this example.
 
 1. Go to **Message Stream** in the left menu.
 

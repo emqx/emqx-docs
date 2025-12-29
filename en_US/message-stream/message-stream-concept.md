@@ -1,8 +1,8 @@
 # Message Stream
 
-EMQX 6.1 introduces the Message Stream, a streaming and replay feature that extends MQTT’s real-time publish/subscribe model with persistent, replayable message streams. It enables Kafka-like streaming capabilities while preserving MQTT semantics.
+EMQX 6.1 introduces the Message Streams, a streaming and replay feature that extends MQTT’s real-time publish/subscribe model with persistent, replayable message streams. It enables Kafka-like streaming capabilities while preserving MQTT semantics.
 
-This page provides a complete overview of the Message Stream feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
+This page provides a complete overview of the Message Streams feature in EMQX, covering its design motivation, key concepts, internal architecture, message flow, and real-world application scenarios.
 
 ## What Is a Message Stream?
 
@@ -17,7 +17,7 @@ MQTT is optimized for real-time messaging, but it has inherent limitations:
 - Reprocessing past data requires external systems.
 - Maintaining an ordered, replayable message history is difficult.
 
-Message Stream extends MQTT with durable message storage and replay. It allows consumers to read historical messages and retrieve the latest state of devices without changing how MQTT clients publish or subscribe.
+Message Streams extends MQTT with durable message storage and replay. It allows consumers to read historical messages and retrieve the latest state of devices without changing how MQTT clients publish or subscribe.
 
 ## Message Stream Key Concepts
 
@@ -58,7 +58,7 @@ External Subscription is an EMQX mechanism that connects external message source
 
 ### Message Stream Data Flow Diagram
 
-The following diagram shows the data flow between the Message Stream components:
+The following diagram shows the data flow between the Message Streams components:
 
 ![streams_data_flow](./assets/streams_data_flow.png)
 
@@ -77,9 +77,9 @@ The following diagram shows the data flow between the Message Stream components:
 4. Retrieved messages are passed to the External Subscription framework. 
 5. The ExtSub application delivers messages to the client via standard MQTT delivery.
 
-## Message Stream Core Features
+## Message Streams Core Features
 
-Message Stream provides a set of core capabilities that define how messages are stored, ordered, retained, and delivered for replay-based consumption.
+Message Streams provide a set of core capabilities that define how messages are stored, ordered, retained, and delivered for replay-based consumption.
 
 - **Timestamp-Based Replay**
 
@@ -111,7 +111,7 @@ Message Stream provides a set of core capabilities that define how messages are 
 
 ## Next Steps
 
-Now that you understand the Message Stream fundamentals, explore how to put them into practice:
+Now that you understand the Message Streams fundamentals, explore how to put them into practice:
 
 - [Create and Configure a Stream](./message-stream-task.md): Learn how to declare streams via Dashboard or REST API, and set last-value semantics and retention policies.
 - [Quick Start Tutorial](./message-stream-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.
