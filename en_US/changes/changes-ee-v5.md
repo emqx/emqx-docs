@@ -1,5 +1,132 @@
 # EMQX Enterprise Version 5
 
+## 5.8.9
+
+### Enhancements
+
+- [#15944](https://github.com/emqx/emqx/pull/15944) Improved the information returned when a resource is marked as `disconnected` for the following Connectors: LDAP, Syskeeper, IoTDB, Snowflake (aggregated), JWKS Authentication.
+
+- [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
+
+- [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of MQTT Connector to allow specifying usernames and passwords associated with each clientid.
+
+### Bug Fixes
+
+- [#16452](https://github.com/emqx/emqx/pull/16452) Upgraded `gen_rpc` to `3.5.1`.
+
+  Prior to the `gen_rpc` upgrade, EMQX may experience long tail of crash logs due to connect timeout if a peer node is unreachable.
+  The new version `gen_rpc` no longer has the long tail and converted crash logs to more readable `error` logs,
+  and the frequent log `"failed_to_connect_server"` is also throttled to avoid spamming.
+
+
+- [#16415](https://github.com/emqx/emqx/pull/16415) Upgrade Apache Pulsar client to 2.1.2.
+
+  When Pulsar producer action's `batch_size` is configured to `1`, the producer will now encode single messages instead of single-element batch.
+  This should make consumers to share load using Key Share strategy.
+
+- [#16383](https://github.com/emqx/emqx/pull/16383) Previously, when using IoTDB Connector with its RestAPI driver, credentials would not be checked during health checks.  Now, we send a no-op query during IoTDB connector health-check.  This allows to detect misconfiguration of client credentials early.
+
+- [#16349](https://github.com/emqx/emqx/pull/16349) Fixed a crash in MQTT v5 connections caused by a type mismatch when processing the request-response-information property.
+
+- [#16336](https://github.com/emqx/emqx/pull/16336) Fixed a race condition which may cause timeout when testing connectivity or stopping a connector from the dashboard.
+
+- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Link garbage-collection logic that could accidentally remove live routes from the internal routing table in the proces of cleaning up stale route replication state. This problem occured only when multiple independent Cluster Links were set up, and some of these links went down for relatively long periods of time.
+
+- [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Link route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
+
+- [#16263](https://github.com/emqx/emqx/pull/16263) Previously, the Kafka source connector performed health checks by verifying partition leader connectivity for all partitions.
+  In a clustered deployment, each EMQX node is assigned only a subset of partitions, causing leader connections for unassigned partitions to remain idle.
+  Since Kafka closes idle connections after a timeout (10 minutes by default), this behavior could trigger false connectivity alarms.
+
+  The health check now verifies leader connectivity only for the partitions assigned to the current EMQX node, preventing unnecessary idle connections and false alarms.
+
+- [#16237](https://github.com/emqx/emqx/pull/16237) When disabling OIDC SSO, some logs related to it might still be printed.  This has been fixed.
+
+- [#16217](https://github.com/emqx/emqx/pull/16217) Fixed an issue where OIDC callback could fail to find the session during login in a multi-node cluster.
+
+- [#16138](https://github.com/emqx/emqx/pull/16138) Fix redis cluster failover issue.
+
+  Previously, EMQX’s Redis cluster client only refreshed the cluster topology when regular queries (e.g., GET) failed. However, periodic PING commands did not trigger a refresh when they failed.
+  This could cause the connector to remain in a “connecting” state and keep using outdated topology information if no new queries were made after a failover.
+  With this fix, failed `PING` responses now trigger a cluster topology refresh, ensuring that connector management promptly recovers and updates its view of the Redis cluster after failovers.
+
+- [#16081](https://github.com/emqx/emqx/pull/16081) Fixed an issue where, if a client used extended authentication mechanisms and memory sessions, they could crash with an `session_stepdown_request_exception` error and `calling_self` reason.
+
+  e.g.:
+
+  ```
+  2025-09-24T07:13:08.973954+08:00 [error] clientid: someclientid, msg: session_stepdown_request_exception, peername: 127.0.0.1:41782, username: admin, error: exit, reason: calling_self, stacktrace: [{gen_server,call,3,[{file,"gen_server.erl"},{line,1222}]},{emqx_cm,request_stepdown,4,[{file,"emqx_cm.erl"},{line,427}]},{emqx_cm,do_takeover_begin,2,[{file,"emqx_cm.erl"},{line,398}]},{emqx_cm,takeover_session,2,[{file,"emqx_cm.erl"},{line,384}]},{emqx_cm,takeover_session_begin,2,[{file,"emqx_cm.erl"},{line,305}]},{emqx_session_mem,open,4,[{file,"emqx_session_mem.erl"},{line,210}]},{emqx_session,open,3,[{file,"emqx_session.erl"},{line,263}]},{emqx_cm,'-open_session/4-fun-1-',4,[{file,"emqx_cm.erl"},{line,290}]},{emqx_cm_locker,trans,2,[{file,"emqx_cm_locker.erl"},{line,32}]},{emqx_channel,post_process_connect,2,[{file,"emqx_channel.erl"},{line,575}]},{emqx_connection,with_channel,3,[{file,"emqx_connection.erl"},{line,852}]},{emqx_connection,process_msg,2,[{file,"emqx_connection.erl"},{line,470}]},{emqx_connection,process_msgs,2,[{file,"emqx_connection.erl"},{line,462}]},{emqx_connection,handle_recv,3,[{file,"emqx_connection.erl"},{line,406}]},{proc_lib,wake_up,3,[{file,"proc_lib.erl"},{line,340}]}], action: {takeover,'begin'}, ...
+  ```
+
+- [#16043](https://github.com/emqx/emqx/pull/16043) Fix log details for Kafka data integration when "not_all_kafka_partitions_connected" happened.
+
+- [#16028](https://github.com/emqx/emqx/pull/16028) Fixed rule engine `jq` function memory leak.
+
+  Previously if `jq` built-in function `index` is used (e.g. `.key | index("name")`), it would result in memory leak.
+
+- [#15967](https://github.com/emqx/emqx/pull/15967) Avoid a rapid increase in memory usage caused by Mnesia transaction blocking when cleaning a large number of audit logs.
+
+- [#15963](https://github.com/emqx/emqx/pull/15963) Avoid excessive audit logs from remote console.
+
+- [#15910](https://github.com/emqx/emqx/pull/15910) Fixed an issue with Connectors where a pool of workers could fail to recover from a failure if multiple workers crashed simultaneously in large worker pools.
+
+  Connectors affected and fixed:
+
+  - MySQL
+  - PostgreSQL
+  - Oracle
+  - SQLServer
+  - TDEngine
+  - Cassandra
+  - Dynamo
+  - HTTP
+  - Couchbase
+  - GCP PubSub
+  - Snowflake
+
+  Upgraded `gun` and related dependencies to 2.1.0.
+
+- [#15906](https://github.com/emqx/emqx/pull/15906) Upgraded Kafka producer library Wolff from 4.0.12 to 4.0.13`, which adds handling for the record_list_too_large error in ProduceResponse.
+
+- [#15902](https://github.com/emqx/emqx/pull/15902) Upgrade MQTT client library to 1.13.8
+
+  This improves MQTT bridge connectivity with:
+  - Connector will automatically reconnect when peer broker does not reply PINGRESP.
+  - Bridge over TLS failure is more promptly handled if connection breaks while waiting for CONNACK.
+
+- [#15899](https://github.com/emqx/emqx/pull/15899) Improved memory usage: authorization (authz) cache is now cleared immediately when a client disconnects, reducing unnecessary memory consumption.
+
+- [#15872](https://github.com/emqx/emqx/pull/15872) Eliminate warning log 'unclean_terminate' when disconnected after CONNACK is sent with a non-zero reason code.
+
+- [#15866](https://github.com/emqx/emqx/pull/15866) Upgrade Kafka producer lib wollf to 4.0.12 to improve handling of temporarily missing partitions in Kafka metadata responses.
+
+  In rare race conditions, Kafka may return an incomplete partition list.
+  Previously, this was only handled when a topic was recreated with fewer partitions, but not when partitions were temporarily missing.
+  This gap could cause the partition producer to stall and block shutdown indefinitely.
+
+- [#15863](https://github.com/emqx/emqx/pull/15863) Fix license quota alarm text.
+
+- [#15844](https://github.com/emqx/emqx/pull/15844) Added validation to forbid adding empty usernames to the built-in database authenticator.  Such users cannot be deleted via the HTTP API later, since they mess up the API path.
+
+  If you have such an user and wish to delete it, run the following in an EMQX console:
+
+  ```erlang
+  mria:transaction(emqx_authn_shard, fun() -> mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write) end).
+  ```
+
+- [#15836](https://github.com/emqx/emqx/pull/15836) Enriched the returned information when a Kafka Consumer Source fails to be added, for example, due to denied topic ACLs.
+
+- [#15827](https://github.com/emqx/emqx/pull/15827) Fixed atom and process leaks in the GreptimeDB driver.
+
+  Fixed a `function_clause` error that could arise if certain incorrect write syntaxes were used in GreptimeDB Actions.
+
+- [#15826](https://github.com/emqx/emqx/pull/15826) Previously, if the user used in a Kafka Consumer Connector did not have permissions to read the special `____emqx_consumer_probe` group used for health checks, the health check would fail.  Now, if the Kafka broker returns an ACL denied response, the connection is considered healthy.
+
+- [#15818](https://github.com/emqx/emqx/pull/15818) Corrected handling of `{allow|deny, all}` ACL rules.
+
+  Previously, these rules were internally translated to match `#`, which incorrectly failed to match topics prefixed with `$` (e.g. `$testtopic/1`) due to MQTT spec restrictions.
+  Now, a special internal value is used to ensure `{allow|deny, all}` rules correctly match any topic, including `$`-prefixed ones.
+
 ## 5.8.8
 
 *Release Date: 2025-09-04*

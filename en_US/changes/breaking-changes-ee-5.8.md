@@ -1,5 +1,9 @@
 # Incompatible Changes in EMQX 5.8
 
+## e5.8.9
+
+- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
+
 ## e5.8.6
 
 - [#14802](https://github.com/emqx/emqx/pull/14802) Starting from this version, plugin installation via the REST API or Dashboard requires explicit permission. Users must obtain this permission using the following CLI command before installing.

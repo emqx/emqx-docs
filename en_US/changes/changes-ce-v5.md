@@ -1,5 +1,15 @@
 # EMQX Open Source Version 5
 
+## 5.8.9
+
+### Bug Fixes
+
+- [#15884](https://github.com/emqx/emqx/pull/15884) Resolve an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long left the cluster.
+
+  Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
+
+- [#14674](https://github.com/emqx/emqx/pull/14674) Limit number and size of RocksDB info log files created by EMQX durable storage.
+
 ## 5.8.8
 
 *Release Date: 2025-09-04*
