@@ -52,9 +52,9 @@ External Subscription is an EMQX mechanism that connects external message source
 
 ### Main Components
 
-- **Streams Registry**: Manages the lifecycle of Message Streams and maintains stream metadata and indexes. It uses a Mnesia table to efficiently look up streams by topic filter.
+- **Streams Registry**: Manages the lifecycle of message streams and maintains stream metadata and indexes. It uses a Mnesia table to efficiently look up streams by topic filter.
 - **Streams Message Database**: Provides durable storage for stream messages and is built on top of EMQX [Durable Storage](../design/durable-storage.md). It persists messages, enforces retention limits, applies Last-Value semantics when enabled, and supports efficient message retrieval until messages expire according to retention policies.
-- **Streams ExtSub Handler**: Integrates Message Streams with MQTT client sessions. It retrieves messages from Durable Storage and delivers them to subscribing clients through the External Subscription framework.
+- **Streams ExtSub Handler**: Integrates message streams with MQTT client sessions. It retrieves messages from Durable Storage and delivers them to subscribing clients through the External Subscription framework.
 
 ### Message Stream Data Flow Diagram
 
