@@ -255,7 +255,7 @@ See EMQX OpenAPI schema for more information.
 
 ### Database Group APIs
 
-In addition to replica management APIs, EMQX 6.1 introduces database-group–related APIs for operators and advanced tooling.
+In addition to replica management APIs, EMQX 6.1 introduces database-group-related APIs for operators and advanced tooling.
 
 - `POST /ds/db_groups`: Creates a new durable storage database group.
 - `PUT /ds/db_groups/:group`: Updates configuration of an existing database group (for example, storage quota).
