@@ -113,5 +113,5 @@ MQTT Streams provide a set of core capabilities that define how messages are sto
 
 Now that you understand the MQTT Streams fundamentals, explore how to put them into practice:
 
-- [Create and Configure a Stream](./message-stream-task.md): Learn how to declare streams via Dashboard or REST API, and set last-value semantics and retention policies.
-- [Quick Start Tutorial](./message-stream-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.
+- [Create and Configure a Stream](./mqtt-stream-task.md): Learn how to declare streams via Dashboard or REST API, and set last-value semantics and retention policies.
+- [Quick Start Tutorial](./mqtt-stream-quick-start.md): Follow a step-by-step guide using MQTTX to simulate real-world publisher and subscriber scenarios.

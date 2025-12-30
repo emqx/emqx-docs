@@ -113,5 +113,6 @@ MQTT 消息流提供了一组核心能力，用于定义消息如何被存储、
 
 了解消息流基础后，你可以继续探索如何在实践中使用它：
 
-- [创建与配置 MQTT 消息流](./message-stream-task.md)：学习如何通过 Dashboard 或 REST API 声明消息流，并设置最后值语义与保留策略。
-- [快速开始教程](./message-stream-quick-start.md)：跟随基于 MQTTX 的分步指南，模拟真实的发布端与订阅端场景。
+- [创建与配置 MQTT 消息流](./mqtt-stream-task.md)：学习如何通过 Dashboard 或 REST API 声明消息流，并设置最后值语义与保留策略。
+- [快速开始教程](./mqtt-stream-quick-start.md)：跟随基于 MQTTX 的分步指南，模拟真实的发布端与订阅端场景。
+

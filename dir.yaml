@@ -888,11 +888,11 @@
     - title_en: MQTT Streams
       title_cn: MQTT 消息流
       title_ja: MQTT Streams
-      path: message-stream/message-stream-concept
+      path: mqtt-stream/mqtt-stream-concept
       collapsed: true
       children:
-        - message-stream/message-stream-task
-        - message-stream/message-stream-quick-start
+        - mqtt-stream/mqtt-stream-task
+        - mqtt-stream/mqtt-stream-quick-start
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       title_ja: MQTT over QUIC
