@@ -885,9 +885,9 @@
       children:
         - message-queue/message-queue-task
         - message-queue/message-queue-quick-start
-    - title_en: Message Stream
-      title_cn: 消息流
-      title_ja: Message Stream
+    - title_en: MQTT Streams
+      title_cn: MQTT 消息流
+      title_ja: MQTT Streams
       path: message-stream/message-stream-concept
       collapsed: true
       children:

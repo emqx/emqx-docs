@@ -1,22 +1,22 @@
-# Message Stream User Guide
+# MQTT Streams User Guide
 
-This page walks you through the practical usage of the Message Stream feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
+This page walks you through the practical usage of the MQTT Streams feature in EMQX, from creating streams to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
-## Enable Message Stream Feature
+## Enable MQTT Streams Feature
 
-Message Stream is **disabled by default**. Before creating or using any message streams, you must enable the feature in the Dashboard.
+The MQTT Streams feature is disabled by default. Before creating or using any streams, you must enable the feature in the Dashboard.
 
 1. Navigate to **Message Stream** in the left menu.
-2. If Message Stream is not enabled, you will see a prompt indicating that the feature is disabled.
+2. If the feature is not enabled, you will see a prompt indicating that the feature is disabled.
 3. Click **Settings** to open the **Message Stream** settings page.
 4. Toggle **Enable Message Stream** to **On**.
 5. Click **Save Changes**.
 
-Once enabled, the Message Stream feature becomes available immediately, and you can start creating and managing streams.
+Once enabled, the MQTT Stream feature becomes available immediately, and you can start creating and managing streams.
 
-## Manually Create Message Streams via Dashboard
+## Manually Create MQTT Streams via Dashboard
 
-Message streams must be explicitly created before they can store or replay messages. You can create and manage message streams either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
+MQTT streams must be explicitly created before they can store or replay messages. You can create and manage streams either manually or automatically. For details about automatic creation, see [Automatically Create Message Streams via Dashboard](#automatically-create-message-streams-via-dashboard).
 
 1. Navigate to **Message Stream** in the left menu.
 
@@ -35,13 +35,13 @@ Message streams must be explicitly created before they can store or replay messa
    - **Stream Key Expression**: Required. Defines the expression used to extract a key from each incoming message. The default value is `message.from`, which means the client ID of the message publisher. This field supports configuration using [Variform expressions](../configuration/configuration.md#variform-expressions).
      
       The extracted key serves different purposes depending on the stream type:
-        - For **Last-Value** message streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
+        - For **Last-Value** streams, the key acts as the primary key. Messages with the same key overwrite earlier ones, and only the most recent message per key is retained.
       
-        - For **regular** message streams, the key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, preserving per-key ordering while enabling parallel storage across shards.
+        - For **regular** streams, the key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, preserving per-key ordering while enabling parallel storage across shards.
       
           ::: tip
       
-          For regular message streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
+          For regular streams, avoid using constant or low-cardinality expressions, as this may cause messages to be written to a single shard and impact write performance.
       
           :::
       
@@ -58,13 +58,13 @@ Message streams must be explicitly created before they can store or replay messa
      
       These limits are persisted to durable storage and work together with the retention period.
 
-4. Click **Create** to save the Message Stream.
+4. Click **Create** to save the stream.
 
-Once created, the Message Stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
+Once created, the MQTT stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
 
-## Automatically Create Message Streams via Dashboard
+## Automatically Create MQTT Streams via Dashboard
 
-Message streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+MQTT streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
 
 ::: tip Note
 
@@ -80,7 +80,7 @@ To ensure proper stream behavior, you can enable auto create either **Regular Me
 
 :::
 
-### Auto Create Last Value Message Stream
+### Auto Create Last Value MQTT Streams
 
 This option is turned on by default in the **Message Stream** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
@@ -90,13 +90,13 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
 
    Configure the following:
 
-   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value message streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
+   - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). In Last-Value streams, this key acts as the primary key. Messages with the same key overwrite earlier messages, and only the most recent value is retained.
    - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 3. Click **Save Changes**.
 
 When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
-### Auto Create Regular Message Stream
+### Auto Create Regular MQTT Streams
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
 
@@ -108,35 +108,35 @@ This option can be enabled manually if you prefer regular streams where messages
 
    - **Stream Key Expression**: Required. Defines how to extract a unique key from each message (default: `message.from`). 
 
-     In Regular message streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
+     In Regular streams, this key is used as the sharding key to determine which storage shard a message is written to. Messages with the same key are routed to the same shard, helping preserve per-key ordering and distribute load across shards.
 
    - **Data Retention Period**: Specifies how long messages should be retained in the stream.
 
 4. Click **Save Changes**.
 
-## Configure Message Stream Settings
+## Configure MQTT Streams Settings
 
-This section explains how to configure global settings that apply to all message streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
+This section explains how to configure global settings that apply to all MQTT streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
 ### Dashboard
 
-You can update Message Stream settings directly from the EMQX Dashboard without restarting the broker. This is useful for adjusting system-wide Message Stream behavior at runtime.
+You can update MQTT Streams settings directly from the EMQX Dashboard without restarting the broker. This is useful for adjusting system-wide Message Stream behavior at runtime.
 
 1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
 
 2. Configure the following options:
 
-   - **Enable Message Stream**: Enables or disables the Message Stream feature globally. When disabled, no message streams can be created or used.
+   - **Enable Message Stream**: Enables or disables the Message Stream feature globally. When disabled, no streams can be created or used.
 
-   - **Max Stream Count**: Sets the maximum number of message streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
+   - **Max Stream Count**: Sets the maximum number of streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
 
    - **GC Interval**: Specifies how often expired stream messages are cleaned up. The default value is `1` hour.
 
-   - **Regular Stream Retention Period**: Defines the default retention period for regular (non–Last-Value) message streams. Messages older than this duration are automatically removed. The default is `7` days.
+   - **Regular Stream Retention Period**: Defines the default retention period for regular (non–Last-Value) streams. Messages older than this duration are automatically removed. The default is `7` days.
 
-   - **Enable Auto Create Message Stream**: Enables automatic creation of message streams when clients subscribe to stream topics and no matching stream exists.
+   - **Enable Auto Create Message Stream**: Enables automatic creation of streams when clients subscribe to stream topics and no matching stream exists.
 
-   - **Auto Create Message Stream Type**: Specifies the type of message streams to create automatically:
+   - **Auto Create Message Stream Type**: Specifies the type of streams to create automatically:
 
      - **Last Value Message Stream** (default): Automatically creates streams with Last-Value semantics enabled.
      - **Regular Message Stream**: Automatically creates streams that retain all messages without overwriting.
@@ -145,25 +145,25 @@ You can update Message Stream settings directly from the EMQX Dashboard without 
 
    - **Data Retention Period**: Specifies the retention period for automatically created streams. Messages older than this period are removed automatically.
 
-   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a message stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`). 
+   - **Max Shard Message Bytes**: Limits the amount of data that can be stored in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited storage (`infinity`). 
 
-   - **Max Shard Message Count**: Limits the maximum number of messages in each shard of a message stream. You can enable this option to set a limit, or leave it disabled to allow unlimited messages (`infinity`).
+   - **Max Shard Message Count**: Limits the maximum number of messages in each shard of a stream. You can enable this option to set a limit, or leave it disabled to allow unlimited messages (`infinity`).
 
      ::: tip
 
-     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all message streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a message stream scales with the number of shards and the replication factor. 
+     The number of [shards](../design/durable-storage.md#shard) is defined globally by the Durable Storage configuration and applies to all streams. This limit applies per shard and does not account for data replication. When planning storage capacity, note that the total disk usage of a stream scales with the number of shards and the replication factor. 
 
      :::
 
 3. After making changes, click **Save Changes** to apply the new settings.
 
-The updated configuration takes effect immediately and applies to all existing and newly created message streams where applicable.
+The updated configuration takes effect immediately and applies to all existing and newly created streams where applicable.
 
 ### REST API
 
-You can configure global Message Stream settings programmatically using the EMQX REST API.
+You can configure global MQTT Streams settings programmatically using the EMQX REST API.
 
-To update Message Stream global settings, send a `PUT` request to the following endpoint:
+To update MQTT Streams global settings, send a `PUT` request to the following endpoint:
 
 ```
 PUT /api/v5/message_streams/config
@@ -185,11 +185,11 @@ curl -s -u key:secret \
 
 ### Configuration File
 
-You can configure global Message Stream settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
+You can configure global MQTT Streams settings by editing the EMQX configuration file. This method is useful for defining default behavior at startup or managing settings in environments where configuration files are the primary control mechanism.
 
 **Configuration example**:
 
-Message Stream settings are defined under the `streams` section of the EMQX configuration file (`emqx.conf`).
+MQTT Streams settings are defined under the `streams` section of the EMQX configuration file (`emqx.conf`).
 
 ```hocon
 streams {
@@ -202,14 +202,14 @@ streams {
 #### Configuration Options
 
 - **gc_interval**: Controls how often expired messages are removed from Message Streams. This setting affects the garbage collection cycle for stream storage.
-- **regular_stream_retention_period**: Specifies the default maximum retention period for regular message streams. Messages older than this duration are automatically deleted.
+- **regular_stream_retention_period**: Specifies the default maximum retention period for regular streams. Messages older than this duration are automatically deleted.
 - **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$s/` topic and the corresponding stream does not yet exist.
 
 All duration values use standard time units, such as `s` (seconds), `m` (minutes), `h` (hours), and `d` (days).
 
 #### Durable Storage Configuration
 
-Message Stream messages are stored using EMQX Durable Storage. Storage-related settings for Message Stream are configured under the `durable_storage.streams_messages` section.
+Stream messages are stored using EMQX Durable Storage. Storage-related settings for MQTT streams are configured under the `durable_storage.streams_messages` section.
 
 ```hocon
 durable_storage {
@@ -225,23 +225,23 @@ durable_storage {
 }
 ```
 
-These settings control how Message Stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
+These settings control how MQTT stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
 
-## Manage Message Stream via REST API
+## Manage MQTT Streams via REST API
 
-EMQX provides REST APIs for managing message streams. You can use these APIs to create, update, list, query, and delete message streams, as well as configure global Message Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
+EMQX provides REST APIs for managing streams. You can use these APIs to create, update, list, query, and delete streams, as well as configure global MQTT Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
 
 ::: tip Note
 
-All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "Message Stream" section in [REST API](../admin/api.md).
+All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "MQTT Stream" section in [REST API](../admin/api.md).
 
 :::
 
 All examples below assume basic authentication using an API key and secret.
 
-### Create a Message Stream
+### Create a Stream
 
-To create a new message stream, send a `POST` request to the streams endpoint and specify the stream configuration in the request body.
+To create a new stream, send a `POST` request to the streams endpoint and specify the stream configuration in the request body.
 
 ```bash
 curl -s -u key:secret \
@@ -256,9 +256,9 @@ curl -s -u key:secret \
 
 The response includes the details of the newly created stream, including its `topic_filter`.
 
-### List Message Streams
+### List Streams
 
-To retrieve a list of existing message streams, send a `GET` request to the streams endpoint.
+To retrieve a list of existing streams, send a `GET` request to the streams endpoint.
 
 ```bash
 curl -s -u key:secret \
@@ -282,9 +282,9 @@ The response contains a list of streams and pagination metadata.
 }
 ```
 
-### Update a Message Stream
+### Update a Stream
 
-To update an existing message stream, send a `PUT` request to the stream resource identified by its topic filter. The topic filter must be URL-encoded.
+To update an existing stream, send a `PUT` request to the stream resource identified by its topic filter. The topic filter must be URL-encoded.
 
 ```bash
 curl -s -u key:secret \
@@ -299,7 +299,7 @@ curl -s -u key:secret \
 
 The response returns the updated stream configuration.
 
-### Delete a Message Stream
+### Delete a Stream
 
 To delete a Message Stream, send a `DELETE` request to the stream resource identified by its URL-encoded topic filter.
 
@@ -311,6 +311,6 @@ curl -s -u key:secret \
 
 Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
 
-### Configure Message Stream Global Settings
+### Configure MQTT Streams Global Settings
 
-See [Configure Message Stream Settings -RESP API](#rest-api).
+See [Configure MQTT Streams Settings -RESP API](#rest-api).
