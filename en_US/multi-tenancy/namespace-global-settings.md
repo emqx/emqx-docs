@@ -48,7 +48,7 @@ This setting defines the default maximum number of concurrent sessions for newly
 
 This setting applies only to namespaces created after the configuration takes effect. Existing namespaces are not affected and must be updated individually if needed.
 
-## Namespace Source
+## Namespace Source (Take Namespace From)
 
 The namespace source defines how EMQX determines the namespace to which a client belongs.
 
