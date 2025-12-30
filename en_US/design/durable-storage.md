@@ -166,5 +166,5 @@ Durable Storage serves as the core data foundation for several high-reliability 
 
 - **[MQTT Durable Sessions](../durability/durability_introduction.md)**: A DS-based mechanism for persisting session state and undelivered messages.
 - **[Message Queue](../message-queue/message-queue-concept.md)**: A built-in message queueing feature that provides ordered message delivery, message replay, and high availability across the EMQX cluster.
-- **[Message Stream](../message-stream/message-stream-concept.md)**: A DS-based persistent message streaming and replay mechanism that continuously stores MQTT messages matching topic filters and enables historical message replay.
+- **[MQTT Stream](../message-stream/message-stream-concept.md)**: A DS-based persistent message streaming and replay mechanism that continuously stores MQTT messages matching topic filters and enables historical message replay.
 - **[Shared Subscription](../messaging/mqtt-shared-subscription.md)**: A load-balancing subscription mechanism that distributes messages among multiple subscribers in the same group.
