@@ -760,6 +760,7 @@
             - dashboard/connections/connections
             - dashboard/subscriptions/overview
             - dashboard/retained
+            - dashboard/namespace
             - dashboard/delay-pub
             - dashboard/alarm_dashboard
         - title_en: Access Control
@@ -812,6 +813,7 @@
       children:
         - multi-tenancy/create-namespace
         - multi-tenancy/configure-manage-namespace
+        - multi-tenancy/namespace-global-settings
         - multi-tenancy/namespace-quick-start
     - title_en: Logs and Observability
       title_cn: 日志及可观测性
