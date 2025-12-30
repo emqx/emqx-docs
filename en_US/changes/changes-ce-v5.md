@@ -4,11 +4,11 @@
 
 ### Bug Fixes
 
-- [#15884](https://github.com/emqx/emqx/pull/15884) Resolve an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long left the cluster.
+- [#15884](https://github.com/emqx/emqx/pull/15884) Resolved an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long since left the cluster. 
 
-  Resolve a race condition that may lead to accumulating inconsistencies in the routing table and shared subscriptions state in the cluster when a large number of shared subscribers disconnect simultaneously.
+  This also fixes a race condition that could cause accumulating inconsistencies in the routing table and shared subscription state when a large number of shared subscribers disconnect simultaneously.
 
-- [#14674](https://github.com/emqx/emqx/pull/14674) Limit number and size of RocksDB info log files created by EMQX durable storage.
+- [#14674](https://github.com/emqx/emqx/pull/14674) Limited the number and size of RocksDB info log files created by EMQX durable storage.
 
 ## 5.8.8
 
