@@ -1,10 +1,10 @@
-# Message Stream Quick Start
+# MQTT Streams Quick Start
 
-This page walks you through how to use the Message Stream feature in EMQX 6.1. You’ll use MQTTX to simulate clients, create and manage message streams from the EMQX Dashboard, and experience how messages can be stored, replayed, and compacted.
+This page walks you through how to use the MQTT Streams feature in EMQX 6.1. You’ll use MQTTX to simulate clients, create and manage streams from the EMQX Dashboard, and experience how messages can be stored, replayed, and compacted.
 
 ## Objectives
 
-This quick start demonstrates how EMQX Message Streams can:
+This quick start demonstrates how EMQX MQTT Streams can:
 
 - Persist messages independently of subscriber availability
 - Support timestamp-based replay
@@ -18,13 +18,13 @@ Before starting, ensure you have:
 - [MQTTX](https://mqttx.app/) (or any MQTT 5.0-capable client)
 - Access to the EMQX Dashboard (default: `http://localhost:18083`)
 
-## Test Message Streams Basic Features (Regular Stream)
+## Test MQTT Streams Basic Features (Regular Stream)
 
-This section demonstrates how Message Streams stores messages and allows consumers to replay historical data.
+This section demonstrates how MQTT Streams stores messages and allows consumers to replay historical data.
 
 ### Prerequisite
 
-Before starting, ensure that the Message Streams feature is enabled and that the auto-creation behavior will not interfere with this example.
+Before starting, ensure that the MQTT Streams feature is enabled and that the auto-creation behavior will not interfere with this example.
 
 1. Go to **Message Stream** in the left menu.
 
@@ -44,7 +44,7 @@ Before starting, ensure that the Message Streams feature is enabled and that the
 
    <img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
 
-### Step 1: Create a Message Stream
+### Step 1: Create an MQTT Stream
 
 1. Navigate to **Message Stream** in the left menu.
 
@@ -110,7 +110,7 @@ Now simulate a **consumer** that replays stored messages.
 
 This confirms that:
 
-- The stream is a regular message stream.
+- The stream is a regular stream.
 - Timestamp-based replay is working correctly.
 - No messages were compacted or overwritten.
 
@@ -118,7 +118,7 @@ This confirms that:
 
 ## Replay Messages from Different Positions
 
-Message Streams allow consumers to control where message replay starts by specifying a timestamp when subscribing.
+MQTT Streams allow consumers to control where message replay starts by specifying a timestamp when subscribing.
 
 1. Publish additional messages from the `publisher` client:
 
@@ -162,11 +162,11 @@ Message Streams allow consumers to control where message replay starts by specif
 
    ![replay_message_from_different_positions](./assets/replay_message_from_different_positions.png)
 
-This demonstrates consumer-controlled replay, where different consumers can independently read the same message stream from different points in time without affecting each other.
+This demonstrates consumer-controlled replay, where different consumers can independently read the same stream from different points in time without affecting each other.
 
 ## Test Last-Value Semantics
 
-This section demonstrates how Last-Value Message Streams keep only the latest message per key, which is useful for representing state.
+This section demonstrates how Last-Value MQTT streams keep only the latest message per key, which is useful for representing state.
 
 ### Step 1: Delete the Existing Stream
 
@@ -227,6 +227,6 @@ Only the most recent message is delivered:
 {"status": offline}
 ```
 
-This demonstrates how Message Streams support state-oriented messaging patterns using Last-Value semantics.
+This demonstrates how MQTT Streams support state-oriented messaging patterns using Last-Value semantics.
 
 ![replay_message_last_value](./assets/replay_message_last_value.png)
