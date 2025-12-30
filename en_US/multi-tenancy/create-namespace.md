@@ -33,9 +33,9 @@ Replace `<namespace>` with the desired namespace ID. No request body is required
 
 In EMQX, namespaces can also be created automatically when clients connect.
 
-Automatic namespace creation is not based directly on the `client_attrs.tns` field itself, but instead depends on the **Namespace Source** configuration.
+Automatic namespace creation is not based directly on the `client_attrs.tns` field itself, but instead depends on the **[Take Namespace From](./namespace-global-settings)** configuration.
 
-When a client connects, EMQX evaluates the configured namespace source rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the corresponding namespace does not already exist, EMQX automatically creates it.
+When a client connects, EMQX evaluates the configured **Take Namespace From** rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the corresponding namespace does not already exist, EMQX automatically creates it.
 
 **Typical use cases**: This approach is suitable when client connections originate from trusted sources, the namespace identifier can be reliably derived from connection metadata, and namespaces need to be created dynamically for a large number of tenants or business units.
 

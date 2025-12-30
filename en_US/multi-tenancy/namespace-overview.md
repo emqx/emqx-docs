@@ -16,6 +16,8 @@ A Namespace in EMQX Enterprise is a mechanism used for logical isolation and res
 
 A namespace is identified by a special client attribute named `tns` (tenant namespace). This attribute is not created automatically; instead, it must be derived from client connection metadata, such as the username or Server Name Indication (SNI), through configuration.
 
+A namespace becomes effective once it is created, regardless of whether it is created explicitly via the Dashboard or REST API, or automatically during client connection based on a defined rule.
+
 > **Typical use cases include**: multiple business units sharing a cluster within an enterprise, tenant-level resource isolation management, centralized access control, etc.
 
 ### What Namespaces Can Achieve
@@ -96,30 +98,6 @@ However, isolation policies still need to be explicitly configured based on busi
   ```
 
   This allows authorization backends to receive topics with the mountpoint prefix.
-
-## Enable Namespaces
-
-To enable the namespace feature, you must first tell EMQX how to determine which namespace a client belongs to. This is done by configuring a namespace source rule that derives and sets the special client attribute `tns` (tenant namespace) from client connection information.
-
-### Enable Namespaces via Configuration File
-
-You can extract the `tns` attribute from the connection metadata, such as the client's username, SNI, or other fields.
-
-For example, to use the client's username as the namespace identifier, you can apply the following configuration:
-
-```
-mqtt.client_attrs_init = [{expression = username, set_as_attr = tns}]
-```
-
-### Enable Namespaces via Dashboard
-
-You can also enable namespaces using the EMQX Dashboard:
-
-1. Navigate to **Management** -> **MQTT Settings** -> **General** tab, and locate the **Client Attributes** section.
-2. Click **Add**, and fill in the following information:
-   - **Attribute**: `tns`
-   - **Attribute Expression**: For example, if you want to use the client's username as the namespace identifier, enter `username`. You may also use other variables. For more information on attribute expressions, refer to [Set Client Attributes](../client-attributes/client-attributes.md#set-client-attributes).
-3. Click **Save Changes**.
 
 ## Multi-Tenancy Capability Support
 

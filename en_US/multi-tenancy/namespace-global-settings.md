@@ -29,9 +29,9 @@ When this setting is enabled, EMQX validates the client’s namespace during the
   - Clients are allowed to connect to namespaces that have not been explicitly created.
   - If a namespace source is configured, EMQX may automatically create namespaces as needed.
 
-::: tip
+::: tip Note
 
-Before enabling this setting, ensure that **Namespace Source** is properly configured and that all valid clients can successfully resolve a namespace.
+Before disabling this setting, ensure that **Take Namespace From** is properly configured and that all valid clients can successfully resolve a namespace.
 
 Otherwise, clients may be rejected because their namespace cannot be resolved.
 
@@ -48,11 +48,17 @@ This setting defines the default maximum number of concurrent sessions for newly
 
 This setting applies only to namespaces created after the configuration takes effect. Existing namespaces are not affected and must be updated individually if needed.
 
-## Namespace Source (Take Namespace From)
+## Take Namespace From
 
-The namespace source defines how EMQX determines the namespace to which a client belongs.
+This setting specifies how EMQX determines which namespace a client belongs to.
 
-When a client connects, EMQX evaluates the configured namespace source rule and extracts a namespace identifier from the client’s connection metadata. The extracted value is stored in the client attribute `client_attrs.tns`.
+When a client connects, EMQX evaluates the configured **Take Namespace From** rule and extracts a namespace identifier from the client’s connection metadata (such as the username, SNI, or other attributes). The extracted value is stored as the client attribute `client_attrs.tns`.
+
+::: tip
+
+The **Take Namespace From** rule is defined using Variform expressions. For details on the syntax and available functions, see [Variform Expressions](../configuration/configuration.md#variform-expressions).
+
+:::
 
 This configuration is a prerequisite for the following features:
 
@@ -61,27 +67,22 @@ This configuration is a prerequisite for the following features:
 - Namespace-based Client ID isolation
 - Namespace-level session limits and rate limits
 
-If no namespace source is configured, clients will not be assigned to any namespace, and all namespace-related isolation and control features will remain inactive.
+If **Take Namespace From** is not configured, no `tns` attribute will be generated. In this case, clients will not be associated with any namespace, and all namespace-related isolation and control features will remain inactive.
 
 ### Example
 
-The following example extracts the namespace from the client username:
+The following example shows how to configure the **Take Namespace From** setting to extract the namespace identifier from the client username:
 
-```
+```text
 nth(1, tokens(username, '-'))
 ```
 
 With this configuration:
 
 - A client connects using the username `tenantA-user1`.
-- The namespace source rule extracts `tenantA`.
+- EMQX evaluates the defined setting and extracts `tenantA` from the username.
+- The extracted value is assigned to the client attribute `client_attrs.tns`.
 - `tenantA` becomes the namespace identifier for the client.
-
-::: tip
-
-Namespace source rules are defined using Variform expressions. For details on the syntax and available functions, see [Variform Expressions](../configuration/configuration.md#variform-expressions).
-
-:::
 
 ## Client ID Isolation
 
