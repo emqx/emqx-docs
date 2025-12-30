@@ -96,6 +96,83 @@ The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 - **Value:** An arbitrary binary blob.
 
+## Durable Storage Database Groups
+
+Starting from EMQX 6.1, Durable Storage introduces the concept of database groups to improve resource management and operational safety.
+
+A durable storage database group is a logical grouping that provides unified management of storage resources (such as disk space and memory buffers) for one or more durable storage databases on a node.
+
+Database groups are an operator-level abstraction designed primarily for managed and advanced deployments. They are not typically exposed to end users. By default, all Durable Storage databases belong to a single group, preserving the behavior of earlier releases.
+
+Database groups do not change the logical data model (shards, generations, slabs, or streams). Instead, they provide a resource governance layer on top of the existing storage architecture.
+
+### Design Motivation
+
+Persistent data in Durable Storage is stored in RocksDB Stored String Table (SST) files. While write-ahead logs are bounded in size, SST files may grow indefinitely as new data is written.
+
+In deployments that include multiple durable storage databases, these databases run on the same node and share physical disk resources. Without a unified resource governance mechanism, any single database may grow without bound, exhausting disk or memory resources and impacting the availability of the node and potentially the overall system.
+
+Database groups address this issue by:
+
+- Allowing multiple databases to share a common disk usage limit
+- Enforcing write admission control before data is persisted
+- Providing a foundation for group-level observability
+
+Each EMQX node enforces storage quotas independently. In a cluster, overall capacity must be assessed by aggregating per-node usage using external monitoring tools.
+
+### Database Group Model
+
+Each Durable Storage database belongs to exactly one database group. Multiple databases may belong to the same group, and all databases in a group must use the same storage backend.
+
+A database group owns and manages shared resources, including:
+
+- Disk usage of SST files (soft quota)
+- RocksDB write buffer (memtable) memory
+- RocksDB background thread pools
+
+Resource usage is tracked and enforced at the group level, not per database or per shard.
+
+Conceptually, database groups introduce the following hierarchy:
+
+```
+Database Group
+  └── Database (DB)
+        └── Shards
+              └── Slabs
+                    └── Streams
+                          └── TTV
+```
+
+## Storage Quota
+
+Durable Storage uses soft quotas as the primary mechanism for controlling disk usage.
+
+### Soft Quota Enforcement
+
+Storage quotas are enforced before write transactions are accepted by the Durable Storage leader:
+
+1. When a transaction containing writes is submitted, the leader checks the current SST disk usage of the database group.
+2. If accepting the transaction would exceed the configured quota, the transaction is rejected.
+3. Read-only transactions continue to be accepted.
+
+Quota enforcement occurs at the Durable Storage transaction layer and does not depend on the underlying storage engine entering a read-only state.
+
+This design ensures that:
+
+- Transactions exceeding the quota are rejected before being written to the WAL
+- Replication consistency is preserved across the cluster
+- Cleanup operations that reduce disk usage remain possible
+
+### Behavior When Quota Is Exceeded
+
+When a database group exceeds its storage usage:
+
+- Write operations are rejected
+- Read and replay operations continue to function
+- Cleanup operations that reduce disk usage are still allowed
+
+Quota enforcement decisions are evaluated independently on each node. If a node exceeds its available storage capacity, write operations routed to that node may be rejected, while other nodes continue to operate normally.
+
 ## Write Path
 
 Data writes to DS can use either **append-only mode** or **ACID transactions**.
