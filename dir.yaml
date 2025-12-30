@@ -957,32 +957,14 @@
       path: emqx-ai/mcp-over-mqtt/overview
       collapsed: true
       children:
-        - emqx-ai/mcp-over-mqtt/architecture
+        - title_en: Architecture
+          title_cn: 架构
+          title_ja: Architecture
+          path: emqx-ai/mcp-over-mqtt/architecture
         - emqx-ai/mcp-over-mqtt/specification
-    - title_en: Multimedia Server
-      title_cn: 多媒体服务器
-      title_ja: Multimedia Server
-      path: emqx-ai/multimedia-ai/overview
-      collapsed: true
-      children:
-        - emqx-ai/multimedia-ai/architecture
-        - emqx-ai/multimedia-ai/message-protocol
-    - title_en: MCP over MQTT & Multimedia Service SDKs
-      title_cn: MCP over MQTT 和多媒体服务 SDK
-      title_ja: MCP over MQTT & Multimedia Service SDKs
-      path: emqx-ai/sdks/overview
-      collapsed: true
-      children: 
-        - title_en: Clients Compatible with Multimedia Services
-          title_cn: 与多媒体服务适配的客户端
-          title_ja: Clients Compatible with Multimedia Services
-          path: emqx-ai/sdks/multimedia-ai/overview
-          collapsed: true
-          children:
-            - emqx-ai/sdks/multimedia-ai/webrtc-typescript
-        - title_en: MCP over MQTT SDKs
-          title_cn: MCP over MQTT SDKs
-          title_ja: MCP over MQTT SDKs
+        - title_en: SDKs
+          title_cn: SDKs
+          title_ja: SDKs
           collapsed: true
           children:
             - emqx-ai/sdks/mcp-sdk-erlang
@@ -990,6 +972,79 @@
             - emqx-ai/sdks/mcp-sdk-paho-c
             - emqx-ai/sdks/mcp-sdk-python
             - emqx-ai/sdks/mcp-sdk-typescript
+            - emqx-ai/sdks/mcp-sdk-kotlin
+    - title_en: MCP Bridge
+      title_cn: MCP 桥接
+      title_ja: MCP ブリッジ
+      path: emqx-ai/mcp-bridge/overview
+      collapsed: true
+      children:
+        - title_en: Quick Start
+          title_cn: 快速开始
+          title_ja: Quick Start
+          path: emqx-ai/mcp-bridge/quick-start
+    - title_en: Realtime Audio & Video AI
+      title_cn: 实时音视频 AI
+      title_ja: リアルタイム音声＆ビデオAI
+      collapsed: true
+      children:
+        - emqx-ai/rtc-services/volcengine-rtc/quick-start
+        - title_en: RTC Services
+          title_cn: RTC 服务
+          title_ja: RTCサービス
+          collapsed: true
+          children:
+            - title_en: Volcengine RTC
+              title_cn: 火山引擎 RTC
+              title_ja: Volcengine RTC
+              path: emqx-ai/rtc-services/volcengine-rtc/overview
+              collapsed: true
+              children:
+                - emqx-ai/rtc-services/volcengine-rtc/installation-and-testing
+                - emqx-ai/rtc-services/volcengine-rtc/api
+                - title_en: Scenarios
+                  title_cn: 场景样例
+                  title_ja: シナリオ
+                  collapsed: true
+                  children:
+                    - title_en: Pure Voice Conversation
+                      title_cn: 纯语音对话
+                      title_ja: Pure Voice Conversation
+                      path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-chat
+                    - title_en: Voice-Controlled Hardware
+                      title_cn: 语音控制硬件
+                      title_ja: Voice-Controlled Hardware
+                      path: emqx-ai/rtc-services/volcengine-rtc/scenarios/voice-control-hardware
+                    - title_en: Device-Initiated Voice Feedback
+                      title_cn: 设备感知语音反馈
+                      title_ja: Device_Initiated Voice Feedback
+                      path: emqx-ai/rtc-services/volcengine-rtc/scenarios/device-triggered-voice
+            - title_en: GPT-Realtime
+              title_cn: GPT-Realtime
+              title_ja: GPT-Realtime
+              path: emqx-ai/rtc-services/gpt-realtime/overview
+              collapsed: true
+              children:
+                - title_en: Build Real-Time Voice Agent
+                  title_cn: 构建实时语音智能体
+                  title_ja: Build Real-Time Voice Agent
+                  path: emqx-ai/rtc-services/gpt-realtime/quick-start
+            # - title_en: EMQX Multimedia Server
+            #   title_cn: EMQX 多媒体服务器
+            #   title_ja: EMQX Multimedia Server
+            #   path: emqx-ai/multimedia-ai/overview
+            #   collapsed: true
+            #   children:
+            #     - emqx-ai/multimedia-ai/quick-start
+            #     - emqx-ai/multimedia-ai/architecture
+            #     - emqx-ai/multimedia-ai/message-protocol
+            #     - title_en: SDKs
+            #       title_cn: SDKs
+            #       title_ja: SDKs
+            #       collapsed: true
+            #       path: emqx-ai/sdks/multimedia-ai/overview
+            #       children:
+            #         - emqx-ai/sdks/multimedia-ai/webrtc-typescript
 - title_en: Migration Guide
   title_cn: 迁移指南
   title_ja: 移行ガイド

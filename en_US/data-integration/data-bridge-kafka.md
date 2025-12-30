@@ -1,45 +1,48 @@
 # Stream MQTT Data into Apache Kafka
 
-[Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. However, Kafka is not built for edge IoT communication and Kafka clients require a stable network connection and more hardware resources. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Kafka](https://www.Kafka.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions.
+[Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform designed for high-throughput, real-time data processing. However, Kafka is not built for edge IoT communication, as Kafka clients require a stable network connection and high system resources. In IoT scenarios, devices commonly use the lightweight MQTT protocol to transmit data efficiently over unreliable networks.
+
+EMQX integrates MQTT with Kafka/[Confluent](https://www.confluent.io/) to enable seamless data streaming between IoT devices and backend systems. MQTT messages can be ingested into Kafka topics for real-time processing, storage, and analytics, while data from Kafka topics can also be consumed and delivered to MQTT clients to trigger timely actions.
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
 
-This page provides a comprehensive introduction to the data integration between EMQX and Kafka with practical instructions on how to create and validate the data integration.
+This page introduces the EMQX–Kafka data integration and provides step-by-step guidance on how to create and validate the integration.
 
 ## How It Works
 
-Apache Kafka data integration is an out-of-the box feature in EMQX designed to bridge the gap between MQTT-based IoT data and Kafka's powerful data processing capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of streaming and processing data between the two platforms, eliminating the need for complex coding.
+Apache Kafka data integration is a built-in feature in EMQX that streams MQTT-based IoT data into Kafka for downstream processing and analytics. By leveraging the built-in [rule engine](./rules.md), EMQX enables data filtering, transformation, and routing without requiring custom code.
 
-The diagram below illustrates a typical architecture of data integration between EMQX and Kafka used in automotive IoT.
+The diagram below illustrates a typical EMQX–Kafka integration architecture in an automotive IoT scenario.
 
 <img src="./assets/kafka_architecture.png" alt="kafka_architecture" style="zoom:67%;" />
 
 <!-- 将数据流入或流出 Apache Kafka 需要分别创建 Kafka Sink（向 Kafka 发送消息）和 Kafka Source（从 Kafka 接收消息）。以 Sink 为例，其工作流程如下： -->
-Streaming data into and out of Apache Kafka needs to create a Kafka Sink (to send messages to Kafka) and a Kafka Source (to receive messages from Kafka), respectively. Take the Sink as an example, the flow is as follows:
 
-1. **Message publication and reception**: IoT devices on connected vehicles establish successful connections to EMQX through the MQTT protocol and periodically publish messages containing status data via MQTT. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** With an embedded rule engine working together with the broker as a single component, these MQTT messages can be processed based on topic-matching rules. When a message arrives, it passes through the rule engine, which evaluates the defined rules for that message. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Bridging to Kafka:** The rule defined in the rule engine triggers the action of forwarding the messages to Kafka. Using the Kafka bridging functionality, MQTT topics are mapped to pre-defined Kafka topics, and all processed messages and data are written into Kafka topics.
+To stream data into or out of Apache Kafka, you create a Kafka Sink (for sending data to Kafka) or a Kafka Source (for consuming data from Kafka). The following describes the Kafka Sink workflow:
 
-After the vehicle data are ingested into Kafka, you can flexibly access and utilize the data:
+1. **Message ingestion**: IoT devices connected to vehicles establish MQTT connections to EMQX and periodically publish messages containing status data. When EMQX receives the messages, it initiates rule matching in the rule engine.
+2. **Rule-based processing**: Matching rules process the messages by filtering, transforming, or enriching the payload as defined.
+3. **Data forwarding to Kafka**: The rules defined in the rule engine trigger actions to forward messages to Kafka. Using a Kafka Sink, MQTT topics are mapped to predefined Kafka topics, and all processed messages and data are written to Kafka topics.
 
-- Your services can directly integrate with Kafka clients to consume real-time data streams from specific topics, enabling customized business processing.
-- Utilize Kafka Streams for stream processing, and perform real-time monitoring by aggregating and correlating vehicle statuses in memory.
-- By using Kafka Connect components, you can select various connectors to output data to external systems such as MySQL, ElasticSearch, for storage.
+Once data is ingested into Kafka, it can be consumed and processed in multiple ways:
+
+- Backend services consume real-time data streams directly from Kafka topics.
+- Kafka Streams can be used for real-time aggregation, correlation, and analytics.
+- Kafka Connect can forward data to external systems such as MySQL or Elasticsearch for storage and further processing.
 
 ## Features and Benefits
 
-The data integration with Apache Kafka brings the following features and benefits to your business:
+The data integration with Apache Kafka provides the following features and benefits:
 
-- **Dependable and bi-directional IoT data messaging:**  The data communication between Kafka and resource-limited IoT devices running on unpredictable mobile networks can be processed under the MQTT protocol that excels in messaging in uncertain networks. EMQX not only batch forwards MQTT messages to Kafka but also subscribes to Kafka messages from backend systems and delivers them to connected IoT clients.
-- **Payload transformation**: Message payload can be processed by the defined SQL rules during the transmission. For example, payloads containing some real-time metrics such as total message count, successful/failed delivery count, and message rate can go through data extraction, filtering, enrichment, and transformation before the messages are ingested into Kafka.
-- **Effective topic mapping:** Numerous IoT business topics can be mapped into Kafka topics by the configured kafka integration. EMQX supports the MQTT user property mapping to Kafka headers and adopts various flexible topic mapping methods, including one-to-one, one-to-many, many-to-many, and also includes support for MQTT topic filters (wildcards).
-- **Flexible partition selection strategy**: Supports forwarding messages to the same Kafka partition based on MQTT topics or clients.
-- **Processing capabilities in high-throughput situations**: EMQX Kafka producer supports both synchronous and asynchronous writing modes, allowing you to differentiate between real-time priority and performance priority for data writing strategies and enabling flexible balancing between latency and throughput according to different scenarios.
+- **Dependable and bi-directional IoT data messaging**: EMQX reliably forwards MQTT messages to Kafka and delivers Kafka messages from backend systems to connected IoT clients, even over unstable networks.
+- **Payload transformation**: Messages can be filtered, enriched, and transformed using SQL rules before being forwarded to Kafka.
+- **Effective topic mapping:** MQTT topics and user properties can be flexibly mapped to Kafka topics and headers, supporting one-to-one, one-to-many, and wildcard-based mappings.
+- **Flexible partition selection strategy**: Forwards messages to the same Kafka partition based on MQTT topics or clients.
+- **High-throughput processing**: Supports synchronous and asynchronous Kafka writes to balance latency and throughput for different workload scenarios.
 - **Runtime metrics**: Supports viewing runtime metrics for each Sink and Source, such as total messages, success/failure counts, current rate, etc.
 - **Dynamic configuration**: You can dynamically configure Sink and Source in the Dashboard or configuration file.
 
-These features enhance the integration capabilities and flexibility that help you establish an effective and robust IoT platform architecture. Your increasing volumes of IoT data can be transmitted under stable network connections and can be further stored and managed effectively.
+These capabilities help you build a scalable and resilient IoT data platform with efficient data ingestion and management.
 
 ## Before You Start
 
@@ -69,7 +72,7 @@ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properti
 bin/kafka-server-start.sh config/kraft/server.properties
 ```
 
-For detailed operation steps, you may refer to the [Quick Start section in Kafka Documentation](https://kafka.apache.org/documentation/#quickstart).
+For detailed operation steps, you may refer to the [Quick Start section in Kafka Documentation](https://kafka.apache.org/41/getting-started/quickstart/).
 
 ### Create Kafka Topics
 
@@ -96,17 +99,18 @@ Before adding a Kafka Sink action, you need to create a Kafka producer connector
 
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
 
-     - `None`: No authentication.
-     - `AWS IAM for MSK`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
-     - `Basic Auth`: Requires selecting a **mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **username** and **password**.
-     - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab file**.
-
+     - `None`: No authentication is required.
+     - `AWS IAM for MSK`: Used for connecting to Amazon MSK clusters when EMQX is deployed on Amazon EC2 instances.
+     - `OAuth`: Uses [OAuth 2.0](https://oauth.net/2/)–based authentication to connect to Kafka clusters that support OAuth or OIDC.
+     - `Basic Auth`:  Uses a username and password for authentication. Requires selecting a mechanism (`plain`, `scram_sha_256`, or `scram_sha_512`).
+     - `Kerberos`: Uses Kerberos (GSSAPI) for authentication. Requires specifying a Kerberos principal and a Kerberos keytab file.
+   
      See [Authentication Method](#authentication-method) for details on each method.
-
+   
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-
+   
    - **Advanced Settings** (optional): See [Advanced Configurations](#advanced-configurations).
-
+   
 5. Before clicking **Create**, you can click **Test Connection** to test that the connection to the Kafka server is successful.
 
 6. Click the **Create** button to complete the creation of the connector.
@@ -129,6 +133,30 @@ When creating a Kafka connector in EMQX, you can choose from several authenticat
 
   :::
 
+- **OAuth**: Uses OAuth 2.0–based authentication to connect EMQX to Kafka clusters that support OAuth or OIDC (such as Confluent Cloud or self-managed Kafka with OAuth enabled).
+
+  With this method, EMQX acts as an OAuth 2.0 client and periodically retrieves access tokens from an OAuth authorization server. These tokens are then used to authenticate with the Kafka broker via the SASL/OAUTHBEARER mechanism.
+
+  This method requires:
+
+  - **OAuth Grant Type**: The OAuth 2.0 grant type used to obtain access tokens. (currently, only `client_credentials` is supported).
+
+  - **OAuth Token Endpoint URI**: The token endpoint of the OAuth/OIDC provider. EMQX sends token requests to this endpoint to obtain access tokens.
+
+  - **OAuth Client ID**: The client identifier registered with the OAuth authorization server.
+
+  - **OAuth Client Secret**: The client secret associated with the OAuth client ID. This value is used to authenticate EMQX when requesting tokens.
+
+  - **OAuth Request Scope**: (optional) The scope to include in the token request, if required by the OAuth provider.
+
+  - **SASL Extensions**: (advanced, optional) 
+
+  - Additional key-value pairs sent as SASL extensions during authentication. These are required by some Kafka providers (for example, Confluent Cloud) to pass metadata such as:
+
+    - `logicalCluster`
+    - `identityPoolId`
+
+    The required extensions and their values depend on the Kafka cluster and OAuth provider configuration. For a complete description of OAuth / OIDC authentication in Confluent Cloud, refer to the [official documentation](https://docs.confluent.io/cloud/current/security/authenticate/workload-identities/identity-providers/oauth/overview.html).
 - **Basic Auth**: Uses a username and password for authentication.
 
   When this method is selected, you must provide:
@@ -333,16 +361,17 @@ Before adding a Kafka Source action, you need to create a Kafka consumer connect
 
 5. Enter the connection information for the source.
    - **Bootstrap Hosts**: Enter `127.0.0.1:9092`. Note: The demonstration assumes that you run both EMQX and Kafka on the local machine. If you have Kafka and EMQX running remotely, please adjust the settings accordingly.
-   
+
    - **Authentication**: Choose the authentication mechanism required by your Kafka cluster. The following methods are supported:
-   
+
      - `None`: No authentication.
      - `authentication_msk_iam`: For use with AWS MSK clusters when EMQX is deployed on EC2 instances.
+     - `OAuth`: Specify parameters to authenticate using [OAuth 2.0](https://oauth.net/2/).
      - `Basic Auth`: Requires selecting a **Mechanism** (`plain`, `scram_sha_256`, or `scram_sha_512`), and providing a **Username** and **Password**.
      - `Kerberos`: Requires specifying a **Kerberos Principal** and a **Kerberos Keytab File**.
    
      See the [Authentication Method](#authentication-method) for details on each method.
-     
+   
    - If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connections, see **TLS for External Resource Access**.
    
    - **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).

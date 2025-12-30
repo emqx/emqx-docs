@@ -77,7 +77,7 @@ For the latest security updates, installing `libcrypto` directly from your opera
 Extra Packages for Enterprise Linux (or EPEL) is a Fedora Special Interest Group that creates, maintains, and manages a high-quality set of additional packages for Enterprise Linux. Using CentOS 7 as an example:
 
 1. To install the RPM repos, execute `yum install epel-release`.
-1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel/#_el7 to ensure the yum repos are added, and try step 1 again.
+1. If failed to install, follow the instructions here: https://docs.fedoraproject.org/en-US/epel to ensure the yum repos are added, and try step 1 again.
 1. Execute `yum install openssl11` to install openssl-1.1.
 
 :::

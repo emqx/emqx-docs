@@ -770,7 +770,7 @@ Returns a string formatted according to `Format`. The `Format` string contains o
 
 The format of the control sequence is generally: `~F.P.PadModC`.
 
-Character `C` determines the type of control sequence to use. This is the only required field. `F`, `P`, `Pad` and `Mod` are all optional. For a detailed introduction to them, see: https://www.erlang.org/doc/man/io.html#fwrite-1.
+Character `C` determines the type of control sequence to use. This is the only required field. `F`, `P`, `Pad` and `Mod` are all optional. For a detailed introduction to them, see: https://www.erlang.org/doc/apps/stdlib/io.html#fwrite-1.
 
 Example:
 

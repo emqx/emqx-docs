@@ -102,8 +102,8 @@ EMQX supports data integrations with the following types of data systems:
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
-- [Lindorm](./lindorm)
-- [Doris](./apache-doris)
+- [Lindorm](./lindorm.md)
+- [Doris](./apache-doris.md)
 - [AlloyDB](./alloydb.md)
 - [CockroachDB](./cockroachdb.md)
 - [Redshift](./redshift.md)
@@ -208,7 +208,7 @@ Fallback actions can be used to:
 - All defined fallback actions will be triggered concurrently. EMQX does not attempt them one-by-one or stop at the first success.
 - Fallback actions share the same buffering mechanism as regular actions, meaning messages are retried up to their request TTL or if there is buffer overflow.
 - Fallback actions do **not** trigger further fallback actions. If a fallback action itself fails, its own configured fallback actions (if any) will **not** be triggered.
-- Processing of messages by fallback actions do not affect metrics of their primary actions or of the original rule that triggered the primary action.
+- Processing of messages by fallback actions does not affect metrics of their primary actions or of the original rule that triggered the primary action.
 
 #### Define a Fallback Action
 

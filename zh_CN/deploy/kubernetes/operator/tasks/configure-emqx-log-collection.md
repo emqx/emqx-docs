@@ -421,7 +421,7 @@
 
 Logstash 用于日志处理和清洗。
 
-在本演练中，我们使用 Logstash 的 [Beats Input 插件](https://www.elastic.co/guide/cn/logstash/current/plugins-inputs-beats.html) 收集日志，使用 [Ruby filter 插件](https://www.elastic.co/guide/cn/logstash/current/plugins-filters-ruby.html) 过滤日志。Logstash 还提供了许多其他输入和过滤插件，您可以根据业务需求进行配置。
+在本演练中，我们使用 Logstash 的 [Beats Input 插件](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats) 收集日志，使用 [Ruby filter 插件](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby) 过滤日志。Logstash 还提供了许多其他输入和过滤插件，您可以根据业务需求进行配置。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 

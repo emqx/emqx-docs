@@ -97,7 +97,7 @@ async def main():
             host="broker.emqx.io",
         )
     ) as client:
-        client.start()
+        await client.start()
         while True:
             ## Simulate other works while the MQTT transport client is running in the background...
             await anyio.sleep(20)

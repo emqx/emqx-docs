@@ -16,7 +16,7 @@ You can manually create namespaces through the Dashboard or the REST API. Explic
 To quickly create a namespace in the Dashboard:
 
 1. In the Dashboard's left menu, go to **Management** -> **Namespace**.
-2. Click **Create**. In the **Create Namespace** dialog that appears, enter the name of the namespace. Leave other options at their default values. For details on configuring maximum session count and rate limits, see [Configure and Manage Namespaces via Dashboard](./configure-manage-namespace).
+2. Click **Create**. In the **Create Namespace** dialog that appears, enter the name of the namespace. Leave other options at their default values. For details on configuring maximum session count and rate limits, see [Configure and Manage Namespaces via Dashboard](./configure-manage-namespace.md).
 3. Click **Create**. The newly created namespace will appear in the list.
 
 ### Create a Namespace via REST API
