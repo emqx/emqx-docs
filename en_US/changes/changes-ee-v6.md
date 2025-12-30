@@ -8,11 +8,11 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Feature Highlights
 
-EMQX 6.1.0 introduces Message Streams, enhanced namespace capabilities, new data integrations, and centralized certificate management.
+EMQX 6.1.0 introduces MQTT Streams, enhanced namespace capabilities, new data integrations, and centralized certificate management.
 
-**Message Streams**
+**MQTT Streams**
 
-EMQX Message Streams feature provide durable collections of messages identified by a topic filter, with explicit lifecycle management. Messages matching a stream's topic filter are automatically appended, enabling consumption with ordering guarantees and support for multiple consumers. Clients can subscribe to streams using the special topic format `$s/<timestamp>/topic/filter` to consume messages from a specific point in time.
+MQTT Streams feature provide durable collections of messages identified by a topic filter, with explicit lifecycle management. Messages matching a stream's topic filter are automatically appended, enabling consumption with ordering guarantees and support for multiple consumers. Clients can subscribe to streams using the special topic format `$s/<timestamp>/topic/filter` to consume messages from a specific point in time.
 
 
 **Enhanced Namespace Capabilities**
@@ -37,17 +37,17 @@ Added centralized certificate management via HTTP API, allowing certificates to 
 
 ### Enhancements
 
-#### Message Queue and Stream
+#### Message Queue and MQTT Stream
 
-- [#16326](https://github.com/emqx/emqx/pull/16326) Implemented Message Streams.
+- [#16326](https://github.com/emqx/emqx/pull/16326) Implemented MQTT Streams.
 
-  Message Streams are durable collections of messages identified by a topic filter.
+  MQTT Streams are durable collections of messages identified by a topic filter.
   They have an explicit lifecycle, and any published message that matches the Stream's topic filter is automatically appended to the stream.
   Streams allow consumption of messages with ordering guarantees and can be consumed multiple times.
   To consume messages from a stream, clients can subscribe to a special topic of the form
   `$s/<timestamp>/topic/filter`, where `topic/filter` refers to an existing stream. Subscribing with a timestamp allows consumption to begin at a specific point in time. The timestamp may be a Unix timestamp in microseconds or one of two special values: `earliest` or `latest`.
 
-- [#16454](https://github.com/emqx/emqx/pull/16454) For Message Queues and Streams, reconfigured garbage collection interval is now applied immediately. Previously, the new interval was applied only after the next garbage collection cycle.
+- [#16454](https://github.com/emqx/emqx/pull/16454) For Message Queues and MQTT Streams, reconfigured garbage collection interval is now applied immediately. Previously, the new interval was applied only after the next garbage collection cycle.
 
 #### Core MQTT Functionalities
 
