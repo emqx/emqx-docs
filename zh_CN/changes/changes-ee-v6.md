@@ -1,5 +1,200 @@
 # EMQX 企业版 v6 版本
 
+## 6.1.0
+
+*发布日期: 2025-12-30*
+
+在升级到 EMQX 6.1.0 之前，请务必查阅不兼容变更和已知问题。
+
+### 功能亮点
+
+EMQX 6.1.0 引入了 MQTT 消息流、增强的命名空间能力、新增数据集成以及集中式证书管理。
+
+**MQTT 消息流**
+
+MQTT 消息流提供了一种基于主题过滤器的持久化消息集合，并支持显式的生命周期管理。所有匹配消息流主题过滤器的消息都会自动追加到流中，从而支持具备顺序保证的消息消费，并允许多个消费者同时读取。
+
+客户端可以通过特殊主题格式 `$s/<timestamp>/topic/filter` 订阅消息流，从指定的时间点开始消费历史消息。
+
+**增强的命名空间能力**
+
+- 命名空间相关配置与隔离设置现已在 Dashboard 中集中管理。
+- 扩展了命名空间功能，支持命名空间级别的指标、认证和授权。
+- 新增命名空间级别的指标监控，涵盖消息、会话以及数据集成操作，并通过 Prometheus 端点对外暴露。
+- 内置的认证与授权后端现已支持命名空间级别的用户和规则，实现更完善的多租户隔离。
+- 新增基于客户端命名空间作为挂载点的自动主题隔离机制。
+
+**新增数据集成**
+
+- AWS Timestream for InfluxDB 连接器
+- EMQX Tables 连接器
+- InfluxDB API v3（适用于 InfluxDB 与 AWS Timestream 连接器）
+- Kafka 与 Confluent Producer 连接器支持 OAuth 认证
+- 聚合模式下的 Azure Blob Storage 与 S3 Action 新增 Parquet 文件格式支持
+
+**证书管理**
+
+新增通过 HTTP API 实现的集中式证书管理功能，证书可独立进行管理，并在监听器和连接器的 SSL 配置中进行引用。
+
+### 增强
+
+#### 消息队列与 MQTT 消息流
+
+- [#16326](https://github.com/emqx/emqx/pull/16326) 实现了消息流。MQTT 消息流是一种通过主题过滤器标识的持久化消息集合。消息流具有显式的生命周期管理，任何与消息流主题过滤器匹配的已发布消息都会自动追加到该消息流中。消息流支持具备顺序保证的消息消费，并且允许对同一消息流进行多次消费。
+
+  客户端可以通过订阅特殊主题格式 `$s/<timestamp>/topic/filter` 来消费消息流中的消息，其中 `topic/filter` 指向一个已存在的消息流。通过在订阅中指定时间戳，客户端可以从特定时间点开始消费消息。时间戳可以是微秒级的 Unix 时间戳，或以下两个特殊值之一：`earliest` 或 `latest`。
+
+- [#16454](https://github.com/emqx/emqx/pull/16454) 对于消息队列和消息流，重新配置的垃圾回收（GC）间隔现在会立即生效。此前，新配置的间隔仅会在下一次垃圾回收周期之后才生效。
+
+#### 核心 MQTT 功能
+
+- [#16099](https://github.com/emqx/emqx/pull/16099) 新增规则引擎事件：`$events/client/ping`。当客户端发送 `PINGREQ` 报文时触发该事件。
+
+#### 访问控制
+
+- [#16132](https://github.com/emqx/emqx/pull/16132) 新增用于集中管理证书的 HTTP API。
+- [#16154](https://github.com/emqx/emqx/pull/16154) 新增支持在监听器和客户端的 SSL 配置选项中引用受管证书文件。
+- [#16266](https://github.com/emqx/emqx/pull/16266) 新增 `authorization.include_mountpoint` 配置项。启用后，在进行授权校验之前，主题将自动加上监听器的挂载点前缀。
+- [#16272](https://github.com/emqx/emqx/pull/16272) 在使用内置授权后端时，新增对指定命名空间规则的支持。现在，属于某个命名空间的 MQTT 客户端在进行授权时，仅会使用该命名空间下的规则。
+- [#16345](https://github.com/emqx/emqx/pull/16345) 在使用内置认证后端时，新增对指定命名空间用户的支持。现在，属于某个命名空间的 MQTT 客户端在进行认证时，仅会使用其命名空间下的数据。
+
+#### 数据集成
+
+- [#15905](https://github.com/emqx/emqx/pull/15905) 对于 HTTP Action，HTTP 请求超时时间现在与 `resource_opts.request_ttl` 保持一致。此前，该值固定为 30 秒，且不可配置。
+- [#16169](https://github.com/emqx/emqx/pull/16169) 更新 `parquer` 依赖，以支持将 `timestamp` 类型的 Iceberg 数据编码为 Parquet 文件。
+- [#16179](https://github.com/emqx/emqx/pull/16179) 在 Azure Blob Storage 和 S3 Action 的聚合模式下，新增对写入 Parquet 文件的支持。
+- [#16267](https://github.com/emqx/emqx/pull/16267) EMQX 新增与 AWS Timestream for InfluxDB 数据集成。
+- [#16290](https://github.com/emqx/emqx/pull/16290) 在使用 Kafka 和 Confluent 生产者连接器时，新增对 OAuth 认证的支持。
+- [#16316](https://github.com/emqx/emqx/pull/16316) 调整了多个动作的默认批处理大小和时间参数。之前支持批处理操作的动作，其默认配置已被提高，使批处理行为成为默认行为。
+- [#16372](https://github.com/emqx/emqx/pull/16372) 为 InfluxDB 和 AWS Timestream 连接器新增对 InfluxDB API v3 的支持。
+- [#16396](https://github.com/emqx/emqx/pull/16396) EMQX 新增与 EMQX Tables 数据集成。
+
+#### 持久化存储
+
+- [#16136](https://github.com/emqx/emqx/pull/16136) 改进了持久化存储的资源管理和性能。
+
+  引入了持久化存储数据库组（durable storage database group）的概念。某些资源（例如 memtable 大小和磁盘使用配额）可以在同一组的成员之间共享。
+
+  新增以下指标（按数据库组统计）：
+
+  - `emqx_ds_disk_usage`：SST 文件的总大小
+  - `emqx_ds_write_buffer_memory_usage`：RocksDB 的 memtable 大小
+  - `emqx_ds_total_trash_size`：垃圾 SST 文件占用的磁盘空间
+
+  新增以下数据库组配置项：
+
+  - `durable_storage.db_groups.<group>.storage_quota`：SST 文件大小的软配额
+  - `durable_storage.db_groups.<group>.write_buffer_size`：最大 memtable 大小
+  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` 与 `durable_storage.db_groups.<group>.rocksdb_nthreads_low`：RocksDB 线程池大小
+
+  新增告警 `db_storage_quota_exceeded:<DB>`，当存储配额被超出时触发。更多信息请参考文档中的“存储配额”章节。
+
+  默认的会话检查点（checkpoint）间隔已更改为 15 秒。
+
+- [#16286](https://github.com/emqx/emqx/pull/16286) 优化了默认的持久化存储配置以降低 CPU 负载。该 PR 禁用了未使用订阅功能的数据库的订阅支持。
+
+#### 命名空间
+
+- [#16211](https://github.com/emqx/emqx/pull/16211) 新增对命名空间级别指标的初始支持。
+
+  - 接收的消息
+    - 数量
+    - 字节数
+  - 发送的消息
+    - 数量
+    - 字节数
+  - 会话数量
+  - 数据集成
+    - 触发的 Action 数量
+  - 数据库记录数
+  - AuthN 记录数
+  - AuthZ 记录数
+
+  位于受管命名空间中的客户端将更新上述命名空间指标，同时仍会更新全局指标。
+
+  这些指标以 Prometheus 格式暴露，可通过 `GET /prometheus/ns/stats` 端点采集。通过指定查询参数 `ns=NAMESPACE`，仅返回指定命名空间的数据；若省略该参数，则返回所有命名空间的数据。命名空间将作为标签添加到指标中。
+
+- [#16314](https://github.com/emqx/emqx/pull/16314) 全局管理员用户在列出命名空间资源（连接器 / Source / 动作 / 规则）时，默认可查看所有命名空间的资源。在执行 CRUD 操作时，可通过传递 `ns=NS` 查询参数聚焦于某一特定命名空间。若仅希望列出全局命名空间资源，可省略 `ns` 参数并传递 `only_global=true`。
+
+  命名空间资源现在会返回 `namespace` 字段，用于标识资源所属的命名空间；对于全局资源，该字段为 `null`，以区别于可能存在的名为 `"global"` 的命名空间。
+
+- [#16360](https://github.com/emqx/emqx/pull/16360) 新增 `GET /mt/ns/:ns/metrics` 接口，用于以 JSON 格式返回指定命名空间的指标数据。
+
+- [#16472](https://github.com/emqx/emqx/pull/16472) 新增配置项 `namespace_as_mountpoint`，用于启用基于客户端命名空间的自动主题隔离。
+
+  启用后，如果监听器未配置挂载点（mountpoint），EMQX 将使用客户端的命名空间（来自 `client_attrs.tns`）作为主题挂载点。
+
+  对于 PUBLISH、SUBSCRIBE、UNSUBSCRIBE 以及 Will 消息，主题会自动加上命名空间前缀；在向客户端投递消息时，该前缀会被移除。
+
+  如果监听器已配置挂载点，则该设置会被忽略，以确保现有配置优先生效。
+
+#### 可观测性
+
+- [#16135](https://github.com/emqx/emqx/pull/16135) 为 `GET /monitor_current` HTTP API 新增两个指标及其对应速率：`rules_matched` 和 `actions_executed`，分别用于统计规则匹配次数以及动作的执行速率（成功与失败之和）。
+- [#16213](https://github.com/emqx/emqx/pull/16213) 将 MQTT 客户端 ID 添加为进程标签，使崩溃日志（包括最大堆内存和强制关闭错误）中包含客户端 ID，便于故障排查。
+
+#### 性能
+
+- [#16368](https://github.com/emqx/emqx/pull/16368) 将底层运行时系统从 Erlang/OTP 27 升级至 Erlang/OTP 28。
+- [#16377](https://github.com/emqx/emqx/pull/16377) 减少了预分配的指标计数器数量，从而降低内存使用，尤其是在大量使用命名空间的集群中效果更明显。
+
+#### MQTT over QUIC
+
+- [#16133](https://github.com/emqx/emqx/pull/16133) MQTT over QUIC：新增基于数据报（datagram）的连接探测支持。
+
+  EMQX 现在支持客户端发送零长度的数据报包以测试连接可达性。客户端也可以发送非零长度的数据报包，但这些数据报将被 EMQX 忽略。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#16344](https://github.com/emqx/emqx/pull/16344) 修复了在处理 `request-response-information` 属性时，由于类型不匹配导致 MQTT v5 连接发生崩溃的问题。
+- [#16354](https://github.com/emqx/emqx/pull/16354) 将 MQTT v5 `request-response-information` 模式类型修复回移植（backport）到 6.0.x 发布分支。
+
+#### 访问控制
+
+- [#16308](https://github.com/emqx/emqx/pull/16308) 修复了在从 5.3.0 之前版本升级 EMQX 后，由于登录用户数据库记录不兼容，导致无法启用多因素认证（MFA）的问题。
+- [#16446](https://github.com/emqx/emqx/pull/16446) 修复了在使用 SCRAM 时认证器指标统计不正确的问题，其中每次认证尝试会将 “Total” 计数增加两次，而 “Success” 计数不会增加。
+
+#### 数据集成
+
+- [#16265](https://github.com/emqx/emqx/pull/16265) 健康检查现在仅验证分配给当前 EMQX 节点的分区的 leader 连接性，从而避免不必要的空闲连接和误报告警。
+
+  之前，Kafka Source 连接器会对所有分区执行 leader 连接性检查。在集群部署中，每个节点仅拥有部分分区，未分配分区的 leader 连接会保持空闲。由于 Kafka 会在连接空闲一段时间后关闭连接（默认 10 分钟），这可能导致错误的连接性告警。
+
+- [#16352](https://github.com/emqx/emqx/pull/16352) 将 Apache Pulsar 客户端升级至 2.1.2。当 Pulsar Producer Action 的 `batch_size` 配置为 `1` 时，生产者现在会对单条消息进行编码，而不是将其作为单元素批处理进行编码。这使得消费者可以使用 Key Share 策略进行负载分担。
+
+- [#16383](https://github.com/emqx/emqx/pull/16383) 之前，在使用 IoTDB Connector 的 RestAPI 驱动时，健康检查过程中不会校验凭据。现在，在 IoTDB 连接器健康检查期间会发送一个空操作（no-op）查询，从而能够及早发现客户端凭据配置错误的问题。
+
+#### 消息队列
+
+- [#16270](https://github.com/emqx/emqx/pull/16270) 修复了 EMQX 消息队列消费者在关闭处理流程中的一个问题。
+
+#### 集群
+
+- [#16453](https://github.com/emqx/emqx/pull/16453) 将 `gen_rpc` 升级至 `3.5.1`。
+
+  在升级 `gen_rpc` 之前，如果对端节点不可达，EMQX 可能会由于连接超时而产生大量延迟出现的崩溃日志。新的 `gen_rpc` 版本消除了这种长尾日志行为，并将崩溃日志转换为更易读的 `error` 日志，同时对频繁出现的 `"failed_to_connect_server"` 日志进行了限流处理，以避免日志刷屏。
+
+#### 集群连接
+
+- [#16269](https://github.com/emqx/emqx/pull/16269) 修复了集群连接路由复制协议恢复流程中的一个问题，该问题会在远端仍需要重新引导（re-bootstrap）的情况下错误地跳过该步骤。
+- [#16317](https://github.com/emqx/emqx/pull/16317) 修复了集群连接垃圾回收逻辑中的一个问题，该问题在清理过期路由复制状态时，可能会意外地将仍然有效的路由从内部路由表中移除。该问题仅在配置了多个相互独立的集群连接，且其中部分连接长时间不可用时才会发生。
+
+#### 可观测性
+
+- [#16417](https://github.com/emqx/emqx/pull/16417) 减少了在发生资源异常（`resource_exception`）时生成的日志数量。这些日志现在会被限流处理，同时会对其中一些可能体量较大的字段进行脱敏。
+- [#16434](https://github.com/emqx/emqx/pull/16434) 现在，清除某个告警名称将会在所有节点上同步清除该告警。此前，通过 HTTP API 强制停用告警时，并不会在所有节点上将其清除。
+
+#### 网关
+
+- [#16425](https://github.com/emqx/emqx/pull/16425) 改进了通过 HTTP API 创建或更新网关时返回的错误信息。
+
+#### 其他
+
+- [#16397](https://github.com/emqx/emqx/pull/16397) 在监听器启动前新增 TLS 证书校验。如果监听器配置了无效证书，将快速失败（fail-fast）。
+- [#16311](https://github.com/emqx/emqx/pull/16311) 更新了错误码，将拼写错误的 `REST_FAILED` 更正为 `RESET_FAILED`。
+
 ## 6.0.1
 
 *发布日期: 2025-11-11*
