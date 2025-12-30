@@ -62,10 +62,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/stomp' \
 
 ### クライアントライブラリ
 
-STOMP ゲートウェイを構築した後は、STOMP クライアントツールを使って接続テストを行い、正常に動作しているか確認できます。以下は推奨される STOMP クライアントツールの例です。
-
-- [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
-- [stomp.py](https://github.com/jasonrbriggs/stomp.py)
+STOMP ゲートウェイを構築した後は、STOMP クライアントツールを使って接続テストを行い、正常に動作しているか確認できます。例として [stomp.py](https://github.com/jasonrbriggs/stomp.py) があります。
 
 ### パブリッシュ／サブスクライブ
 

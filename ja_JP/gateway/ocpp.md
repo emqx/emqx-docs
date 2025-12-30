@@ -2,7 +2,7 @@
 
 [OCPP](https://www.openchargealliance.org/)（Open Charge Point Protocol）は、充電ステーションと中央管理システムを接続するためのオープンな通信プロトコルであり、電気自動車充電インフラの統一された通信標準を提供することを目的としています。OCPPゲートウェイはプロトコル変換器として機能し、OCPPとMQTTプロトコル間の橋渡しを行い、これらのプロトコルを使用するクライアント同士の通信を可能にします。
 
-EMQXは[OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/)向けのプロトコルゲートウェイを追加しており、OCPP仕様に準拠したさまざまなブランドの充電設備と接続可能です。ルールエンジン、データ統合、REST APIなどを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
+EMQXは[OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6)向けのプロトコルゲートウェイを追加しており、OCPP仕様に準拠したさまざまなブランドの充電設備と接続可能です。ルールエンジン、データ統合、REST APIなどを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
 
 本ページでは、EMQXにおけるOCPPゲートウェイの設定および利用方法を紹介します。
 

@@ -20,7 +20,7 @@ EMQX 节点之间有**两种不同的通道**进行通信。
 ### Erlang 分布式传输端口
 
 ::: tip
-EMQX 采用了传统的端口映射机制，**而非** [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/doc/man/epmd.html)。
+EMQX 采用了传统的端口映射机制，**而非** [Erlang Port Mapper Daemon, EPMD](https://www.erlang.org/docs/28/apps/erts/epmd_cmd)。
 :::
 
 Erlang 分布端口。`ListeningPort = BasePort + Offset`。

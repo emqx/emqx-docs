@@ -67,7 +67,6 @@ listeners.tcp.default {
 | [华为云](https://www.huaweicloud.com)     | 否                | 否                      | <https://www.huaweicloud.com/product/elb.html>              |
 | [阿里云](https://www.aliyun.com)          | 是                | 是                      | <https://www.aliyun.com/product/slb>                        |
 | [腾讯云](https://cloud.tencent.com)       | 是                | 否                      | <https://cloud.tencent.com/product/clb>                     |
-| [青云](https://qingcloud.com)             | 否                | 否                      | <https://docs.qingcloud.com/product/network/loadbalancer/>  |
 | [天翼云](https://www.ctyun.cn)            | 否                | 否                      | <https://www.ctyun.cn/products/elb>                         |
 | [UCloud](https://ucloud.cn)               | 否                | 否                      | <https://ucloud.cn/site/product/ulb.html>                   |
 | [AWS](https://aws.amazon.com)             | 是                | 是                      | <https://aws.amazon.com/cn/elasticloadbalancing/>           |

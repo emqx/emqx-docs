@@ -1,6 +1,6 @@
 # Redisとの統合
 
-EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は、現在シングルモード、[Redis Sentinel](https://redis.io/docs/manual/sentinel/)、および[Redis Cluster](https://redis.io/docs/manual/scaling/)の3つの異なるモードで稼働しているRedisへの接続をサポートしています。本章では、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
+EMQXはパスワード認証のためにRedisとの統合をサポートしています。EMQXのRedis認証機能は、現在シングルモード、[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)、および[Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)の3つの異なるモードで稼働しているRedisへの接続をサポートしています。本章では、サポートされているデータスキーマの詳細と、EMQXダッシュボードおよび設定ファイルでの設定方法について説明します。
 
 ::: tip 前提条件：
 
@@ -10,7 +10,7 @@ EMQXはパスワード認証のためにRedisとの統合をサポートして�
 
 ## データスキーマとクエリ文
 
-Redis認証は、あらかじめ定義されたフィールド名を持つ[Redisハッシュ](https://redis.io/docs/manual/data-types/#hashes)として保存された認証情報を使用します。
+Redis認証は、あらかじめ定義されたフィールド名を持つ[Redisハッシュ](https://redis.io/docs/latest/develop/data-types/hashes/)として保存された認証情報を使用します。
 
 - `password_hash`: 必須；データベースに保存されるパスワード（プレーンテキストまたはハッシュ化済み）  
 - `salt`: 任意；`salt = ""` またはこのフィールドを削除するとソルト値なしを示す  

@@ -490,7 +490,7 @@ EMQX 提供了大量关于与 Apache Kafka 的数据集成的学习资源。请�
 
 **基准测试报告：**
 
-- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/zh/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
+- [EMQX Enterprise Performance Benchmark Testing: Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
 
 **视频：**
 
