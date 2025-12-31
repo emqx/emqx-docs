@@ -2,6 +2,8 @@
 
 ## 5.8.9
 
+*Release Date: 2025-12-31*
+
 ### Bug Fixes
 
 - [#15884](https://github.com/emqx/emqx/pull/15884) Resolved an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long since left the cluster. 
