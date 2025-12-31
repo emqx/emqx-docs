@@ -394,7 +394,7 @@ Expected output contains:
 
 A successful response returns the inserted data in **JSONL** format. 
 
-Refer to the InfluxDB [API documentation]( https://docs.influxdata.com/influxdb3/core/api/v3/#tag/Quick-start) for more query examples.
+Refer to the InfluxDB [API documentation](https://docs.influxdata.com/influxdb3/core/api/v3/#tag/Quick-start) for more query examples.
 
 ## Advanced Configurations
 

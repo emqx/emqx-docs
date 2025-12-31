@@ -259,7 +259,7 @@ InfluxDB v3 不通过 UI 创建 Token。AWS 会在实例创建时，将认证信
   | hum    | `${payload.hum}`     |
   | precip | `${payload.precip}i` |
 
-  > 当字段数量较多时，可以点击**批量设置**，通过 CSV 文件一次性导入 Fields 配置，详见下方[批量设置](批量设置)。
+  > 当字段数量较多时，可以点击**批量设置**，通过 CSV 文件一次性导入 Fields 配置，详见下方[批量设置](#批量设置)。
 
 - **Tags**
 
