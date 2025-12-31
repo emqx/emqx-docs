@@ -6,6 +6,8 @@
 
 ### Enhancements
 
+- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia)
+
 - [#15944](https://github.com/emqx/emqx/pull/15944) Improved the information returned when a resource is marked as `disconnected` for the following Connectors: LDAP, Syskeeper, IoTDB, Snowflake (aggregated), JWKS Authentication.
 
 - [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.

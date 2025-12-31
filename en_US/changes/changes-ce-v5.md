@@ -6,6 +6,8 @@
 
 ### Enhancements
 
+- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia)
+
 - [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
 
 - [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of MQTT Connector to allow specifying usernames and passwords associated with each clientid.
