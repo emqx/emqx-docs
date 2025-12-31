@@ -6,7 +6,7 @@
 
 ### Enhancements
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia)
+- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia).
 
 - [#15944](https://github.com/emqx/emqx/pull/15944) Improved the information returned when a resource is marked as `disconnected` for the following Connectors: LDAP, Syskeeper, IoTDB, Snowflake (aggregated), JWKS Authentication.
 
@@ -30,7 +30,7 @@
 
 - [#15872](https://github.com/emqx/emqx/pull/15872) Eliminate warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
 
-- [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8
+- [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8.
 
   This improves MQTT bridge connectivity with:
 

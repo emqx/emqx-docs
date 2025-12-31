@@ -6,11 +6,11 @@
 
 ### Enhancements
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia)
+- [#16491](https://github.com/emqx/emqx/pull/16491) Start releasing packages for macOS 15 (Sequoia).
 
 - [#15911](https://github.com/emqx/emqx/pull/15911) Now, for the HTTP Action, the HTTP request timeout is taken to be the same as `resource_opts.request_ttl`.  Previously, it was a fixed, non-configurable value of 30 seconds.
 
-- [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of MQTT Connector to allow specifying usernames and passwords associated with each clientid.
+- [#15845](https://github.com/emqx/emqx/pull/15845) Extended the `static_clientids` configuration of the MQTT Connector to allow specifying usernames and passwords associated with each clientid.
 
 ### Bug Fixes
 
@@ -28,7 +28,7 @@
 
 - [#15872](https://github.com/emqx/emqx/pull/15872) Eliminate warning log `unclean_terminate` when disconnected after CONNACK is sent with a non-zero reason code.
 
-- [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8
+- [#15902](https://github.com/emqx/emqx/pull/15902) Upgraded MQTT client library to 1.13.8.
 
   This improves MQTT bridge connectivity with:
 

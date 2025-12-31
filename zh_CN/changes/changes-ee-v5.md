@@ -6,6 +6,7 @@
 
 ### 增强
 
+- [#16491](https://github.com/emqx/emqx/pull/16491) 开始为 macOS 15（Sequoia）发布安装包。
 - [#15944](https://github.com/emqx/emqx/pull/15944) 改进了当资源被标记为 `disconnected` 时返回的信息，适用于以下连接器：LDAP、Syskeeper、IoTDB、Snowflake（聚合模式）、JWKS 认证。
 - [#15911](https://github.com/emqx/emqx/pull/15911) 对于 HTTP 动作，HTTP 请求超时时间现在与 `resource_opts.request_ttl` 保持一致。此前该值为固定且不可配置的 30 秒。
 - [#15845](https://github.com/emqx/emqx/pull/15845) 扩展了 MQTT 连接器的 `static_clientids` 配置，支持为每个 clientid 指定对应的用户名和密码。

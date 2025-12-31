@@ -2,9 +2,9 @@
 
 ## e5.8.9
 
-- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
+- [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where the RocketMQ action was disregarding the given payload template and rendering the whole Rule output.
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura)
+- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura).
 
 ## e5.8.6
 

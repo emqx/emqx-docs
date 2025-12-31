@@ -2,7 +2,7 @@
 
 ## v5.8.9
 
-- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura)
+- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura).
 
 ## v5.8.6
 

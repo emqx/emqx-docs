@@ -7,6 +7,8 @@
 
 ### 增强
 
+- [#16491](https://github.com/emqx/emqx/pull/16491) 开始为 macOS 15（Sequoia）发布安装包。
+
 - [#15911](https://github.com/emqx/emqx/pull/15911) 对于 HTTP 动作，HTTP 请求超时时间现在与 `resource_opts.request_ttl` 保持一致。此前该值为固定且不可配置的 30 秒。
 
 - [#15845](https://github.com/emqx/emqx/pull/15845) 扩展了 MQTT 连接器的 `static_clientids` 配置，支持为每个 clientid 指定对应的用户名和密码。
@@ -64,9 +66,9 @@
 
 - [#16028](https://github.com/emqx/emqx/pull/16028) 修复了规则引擎 `jq` 函数的内存泄漏问题。之前，如果使用 `jq` 内置函数 `index`（例如 `.key | index("name")`），会导致内存泄漏。
 
-#### 耐用存储
+#### 持久存储
 
-- [#14674](https://github.com/emqx/emqx/pull/14674) 限制了 EMQX 持久化存储创建的 RocksDB info 日志文件的数量和大小。
+- [#14674](https://github.com/emqx/emqx/pull/14674) 限制了 EMQX 持久存储创建的 RocksDB info 日志文件的数量和大小。
 
 ## 5.8.8
 
