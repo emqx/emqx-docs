@@ -127,6 +127,10 @@
 - [#15963](https://github.com/emqx/emqx/pull/15963) 避免了由远程控制台产生的过量审计日志。
 - [#15863](https://github.com/emqx/emqx/pull/15863) 修复了 License 配额告警文本不正确的问题。
 
+#### 耐用存储
+
+- [#14674](https://github.com/emqx/emqx/pull/14674) 限制了 EMQX 持久化存储创建的 RocksDB info 日志文件的数量和大小。
+
 ## 5.8.8
 
 *发布日期：2025-09-04*

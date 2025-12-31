@@ -35,6 +35,10 @@
   - Connector will automatically reconnect when peer broker does not reply PINGRESP.
   - Bridge over TLS failure is more promptly handled if connection breaks while waiting for CONNACK.
 
+- [#15884](https://github.com/emqx/emqx/pull/15884) Resolved an issue where, in rare cases, the global routing table could indefinitely retain routing information for nodes that had long since left the cluster. 
+
+  This also fixes a race condition that could cause accumulating inconsistencies in the routing table and shared subscription state when a large number of shared subscribers disconnect simultaneously.
+
 #### Clustering
 
 - [#16452](https://github.com/emqx/emqx/pull/16452) Upgraded `gen_rpc` to `3.5.1`.
@@ -141,6 +145,10 @@
 - [#15967](https://github.com/emqx/emqx/pull/15967) Prevented rapid memory growth caused by Mnesia transaction blocking when cleaning up large volumes of audit logs.
 - [#15963](https://github.com/emqx/emqx/pull/15963) Reduced excessive audit log generation triggered by operations from the remote console.
 - [#15863](https://github.com/emqx/emqx/pull/15863) Fixed license quota alarm text.
+
+#### Durable Storage
+
+- [#14674](https://github.com/emqx/emqx/pull/14674) Limited the number and size of RocksDB info log files created by EMQX durable storage.
 
 ## 5.8.8
 
