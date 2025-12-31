@@ -159,7 +159,7 @@ EMQX 中的 Redshift 数据集成是一项开箱即用的功能，可以将基�
 
    ::: tip
 
-   如果是初学者，可以点击 **SQL 示例** 和**启用调试**来学习和测试 SQL 规则。
+   如果是初学者，可以点击 **SQL 示例**和**启用调试**来学习和测试 SQL 规则。
 
    :::
 
@@ -176,13 +176,19 @@ EMQX 中的 Redshift 数据集成是一项开箱即用的功能，可以将基�
    注意，这是一个[预处理 SQL](./data-bridges.md#sql-预处理)，字段不应当包含引号，SQL 末尾不要带分号 `;`。
 
    ```sql
-   INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
-     ${id},
-     ${clientid},
-     ${topic},
-     ${qos},
-     ${payload},
-     TO_TIMESTAMP((${timestamp} :: bigint)/1000)
+   INSERT INTO t_mqtt_msg (
+       msgid,
+       topic,
+       qos,
+       payload,
+       arrived
+   )
+   VALUES (
+       ${id},
+       ${topic},
+       ${qos},
+       ${payload},
+       timestamp 'epoch' + (${timestamp} :: bigint / 1000) * interval '1 second'
    )
    ```
 

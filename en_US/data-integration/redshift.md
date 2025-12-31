@@ -172,13 +172,19 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    Note: This is a [preprocessed SQL](./data-bridges.md#prepared-statement), so the fields should not be enclosed in quotation marks, and do not write a semicolon at the end of the statements.
 
    ```sql
-   INSERT INTO t_mqtt_msg(msgid, sender, topic, qos, payload, arrived) VALUES(
-     ${id},
-     ${clientid},
-     ${topic},
-     ${qos},
-     ${payload},
-     TO_TIMESTAMP((${timestamp} :: bigint)/1000)
+   INSERT INTO t_mqtt_msg (
+       msgid,
+       topic,
+       qos,
+       payload,
+       arrived
+   )
+   VALUES (
+       ${id},
+       ${topic},
+       ${qos},
+       ${payload},
+       timestamp 'epoch' + (${timestamp} :: bigint / 1000) * interval '1 second'
    )
    ```
 
