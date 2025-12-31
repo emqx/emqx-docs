@@ -128,7 +128,7 @@ Amazon Timestream for InfluxDB 集成具备以下特性与优势：
    令牌仅在创建时显示一次，请务必妥善保存。
    :::
 
-4. 确认**组织（Organization）**与 **Bucket** 名称，后续配置 EMQX 时需完全一致。
+4. 确认 **Organiazation** 与 **Bucket** 名称，后续配置 EMQX 时需完全一致。
 
 ##### InfluxDB v3：从 AWS Secrets Manager 获取
 
@@ -221,11 +221,11 @@ InfluxDB v3 不通过 UI 创建 Token。AWS 会在实例创建时，将认证信
 
 5. 设置**时间精度**，默认选择`毫秒`。
 
-### 配置数据格式
+#### 配置数据格式
 
 在**数据格式**中选择 `JSON` 或 `Line Protocol`，用于定义 EMQX 在将消息写入 AWS Timestream for InfluxDB 前，如何对数据进行序列化和转换。
 
-#### JSON
+##### JSON
 
 当您希望通过结构化配置来映射数据时，选择 `JSON` 格式。EMQX 会根据配置内容自动生成 InfluxDB Line Protocol 并写入数据库。
 
@@ -259,7 +259,7 @@ InfluxDB v3 不通过 UI 创建 Token。AWS 会在实例创建时，将认证信
   | hum    | `${payload.hum}`     |
   | precip | `${payload.precip}i` |
 
-  > 当字段数量较多时，可以点击**批量设置**，通过 CSV 文件一次性导入 Fields 配置，详见下方[批量设置](批量设置)。
+  > 当字段数量较多时，可以点击**批量设置**，通过 CSV 文件一次性导入 Fields 配置，详见下方[批量设置](#批量设置)。
 
 - **Tags**
 

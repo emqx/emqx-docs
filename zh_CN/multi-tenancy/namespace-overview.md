@@ -100,9 +100,7 @@ EMQX 拥有极高的灵活性，在命名空间功能实现之前，就已支持
 
 现在您已了解命名空间的基本概念及其功能，可以继续以下几个步骤，开始在 EMQX 中使用命名空间功能：
 
-- **[创建命名空间](./create-namespace.md)**
-  了解如何通过 Dashboard 或 REST API 显式创建命名空间，或基于客户端元数据自动创建命名空间。
-- **[配置与管理命名空间](./configure-manage-namespace.md)**
-  学习如何通过 Dashboard 或 REST API 设置速率限制、会话配额等命名空间相关配置。
-- **[快速体验命名空间功能](./namespace-quick-start.md)**
-  通过 MQTTX 实践操作，快速体验命名空间在客户端隔离、主题隔离等场景中的应用效果。
+- **[创建命名空间](./create-namespace.md)**: 了解如何通过 Dashboard 或 REST API 显式创建命名空间，或基于客户端元数据自动创建命名空间。
+- **[配置与管理命名空间](./configure-manage-namespace.md)**: 了解如何通过 Dashboard 或 REST API 设置速率限制、会话配额等命名空间相关配置。
+- **[命名空间全局设置](./namespace-global-settings.md)**：配置集群级别的命名空间行为，包括命名空间的解析方式、隔离机制、主题挂载点以及授权处理方式。
+- **[快速体验命名空间功能](./namespace-quick-start.md)**：通过 MQTTX 实践操作，快速体验命名空间在客户端隔离、主题隔离等场景中的应用效果。

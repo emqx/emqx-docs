@@ -60,7 +60,7 @@ External Subscription is an EMQX mechanism that connects external message source
 
 The following diagram shows the data flow between the MQTT Streams components:
 
-![streams_data_flow](./assets/streams_data_flow.png)
+![streams_data_flow](./assets/mqtt_streams_data_flow.png)
 
 ### Publishing Flow
 
