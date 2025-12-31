@@ -32,8 +32,6 @@ RTC tokens are generated using `AppKey` with the HMAC-SHA256 algorithm. Volcano 
 
 | Language      | Reference Implementation                                     |
 | ------------- | ------------------------------------------------------------ |
-| Go            | [AccessToken.go](https://github.com/volcengine/rtc-aigc-demo/blob/main/server/rtc-aigc-demo/internal/pkg/rtctoken/token.go) |
-| Python        | [access_token.py](https://github.com/volcengine/rtc-aigc-demo/blob/main/server/rtc-aigc-demo-python/src/rtctoken/access_token.py) |
 | Node.js / Bun | [token.ts](https://github.com/emqx/mcp-ai-companion-demo/tree/volcengine/rtc/volc-server/src/lib/token.ts) |
 
 ```
