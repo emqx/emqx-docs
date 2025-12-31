@@ -4,7 +4,7 @@ This section introduces the design principles of some key EMQX features, includi
 
 - [Clustering](./clustering.md)
 
-  EMQX has demonstrated impressive performance on a single node, as evidenced by our benchmark tests which achieved millions of connections.
+  EMQX has demonstrated impressive performance on a single node, as evidenced by our benchmark tests, which achieved millions of connections.
   However, to ensure reliability and availability, EMQX must scale out by forming a cluster.
   This chapter discusses the complexities involved in MQTT broker clustering and how EMQX is specifically designed to overcome these challenges.
 
@@ -16,4 +16,8 @@ This section introduces the design principles of some key EMQX features, includi
 
   Message Retransmission is part of the MQTT protocol specification. This section will introduce the basic configuration, protocol specification, and design.
 
-More topics will be updated soon, stay tuned.
+- [Durable Storage](./durable-storage.md)
+
+  Durable Storage provides a high-reliability persistence foundation for MQTT data in EMQX. This page explains the design of the Durable Storage subsystem, including its storage architecture, data partitioning model, replication strategy, quota enforcement, and read/write paths, which together enable reliable message storage, replay, and consistency guarantees across the cluster.
+
+More topics will be updated soon. Stay tuned.

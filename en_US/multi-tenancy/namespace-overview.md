@@ -129,9 +129,8 @@ In addition, starting from EMQX 6.0, namespace isolation has been fully implemen
 
 Now that you understand what namespaces are and what they can achieve, here are the next steps to start using them in EMQX:
 
-- **[Create Namespaces](./create-namespace.md)**
-  Learn how to create namespaces explicitly via the Dashboard or REST API, or automatically based on client metadata.
-- **[Configure and Manage Namespaces](./configure-manage-namespace.md)**
-  Set rate limits and session quotas using either the Dashboard or REST API.
-- **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**
-  Follow a hands-on guide using MQTTX to quickly try out namespace-based client and topic isolation.
+- **[Create Namespaces](./create-namespace.md)**: Learn how to create namespaces explicitly via the Dashboard or REST API, or automatically based on client metadata.
+- **[Configure and Manage Namespaces](./configure-manage-namespace.md)**: Set rate limits and session quotas using either the Dashboard or REST API.
+- **[Namespace Global Settings](./namespace-global-settings.md)**: Configure cluster-wide namespace behaviors, including namespace resolution, isolation mechanisms, topic mount points, and authorization handling.
+- **[Quick Start: Experience Namespaces](./namespace-quick-start.md)**: Follow a hands-on guide using MQTTX to try out namespace-based client and topic isolation quickly.
+

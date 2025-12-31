@@ -528,6 +528,10 @@
       title_cn: AWS S3 Tables
       title_ja: AWS S3 テーブル
       path: data-integration/s3-tables
+    - title_en: AWS Timestream
+      title_cn: AWS Timestream
+      title_ja: AWS Timestream
+      path: data-integration/timestream-for-influxdb
     - title_en: Azure Blob Storage
       title_cn: Azure Blob Storage
       title_ja: Azure Blob Storage
@@ -576,6 +580,11 @@
       title_cn: Elasticsearch
       title_ja: Elasticsearch
       path: data-integration/elasticsearch
+    - title_en: EMQX Tables
+      title_cn: EMQX Tables
+      title_ja: EMQX Tables
+      path: data-integration/emqx-tables
+      lang: en
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       title_ja: GCP PubSub
@@ -1154,10 +1163,16 @@
       path: design/overview
       collapsed: true
       children:
-        - design/clustering
+        - title_en: EMQX Clustering
+          title_cn: EMQX 集群
+          title_ja: EMQX Clustering
+          path: design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
-        - design/durable-storage
+        - title_en: Durable Storage
+          title_cn: 持久存储
+          title_ja: Durable Storage
+          path: design/durable-storage
       # - design/design
       # - title_en: SDK & Tools
       #   title_cn: SDK 与工具
@@ -1209,8 +1224,8 @@
       title_ja: MQTT リーズンコード
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
+- title_en: Release Notes
+  title_cn: 版本发布历史
   title_ja: EMQX エンタープライズ版リリースノート
   collapsed: true
   path: changes/all-changes-ee
