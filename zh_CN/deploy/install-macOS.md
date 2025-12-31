@@ -4,8 +4,8 @@
 
 支持的操作系统：
 
+- macOS 15
 - macOS 14
-- macOS 13
 
 如果您想安装不同版本或在不同系统中安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
 
