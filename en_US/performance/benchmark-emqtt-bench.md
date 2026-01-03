@@ -1,8 +1,8 @@
 # Performance Test with eMQTT-Bench
 
-After you deploy EMQX, either in single mode or as an EMQX cluster, you can evaluate its performance to understand the system’s capacity and behavior under load. This section explains how to install and use [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to conduct performance testing.
+After you deploy EMQX, either in single mode or as an EMQX cluster, you can evaluate its performance to understand the system’s capacity and behavior under load. This section explains how to install and use [eMQTT-Bench](https://www.emqx.com/en/try?product=emqtt-bench) to conduct performance testing. 
 
-eMQTT-Bench is a lightweight yet powerful MQTT benchmarking tool written in Erlang, designed to simulate large numbers of clients and measure key performance metrics such as throughput and latency. For large-scale testing scenarios or advanced, customized benchmarking requirements, please contact us at [sales@emqx.io](mailto:sales@emqx.io).
+eMQTT-Bench is a lightweight yet powerful MQTT benchmarking tool written in Erlang, designed to simulate large numbers of clients and measure key performance metrics such as throughput and latency. For large-scale testing scenarios or advanced, customized benchmarking requirements, please contact us at sales@emqx.io.
 
 ## Install eMQTT-Bench
 
