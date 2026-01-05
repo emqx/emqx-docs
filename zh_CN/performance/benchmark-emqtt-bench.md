@@ -2,7 +2,7 @@
 
 部署 EMQX（无论是单机模式还是 EMQX 集群）后，您可以对其性能进行评估，以了解系统的容量以及在负载下的运行表现。本节将介绍如何安装和使用 [eMQTT-Bench](https://www.emqx.com/zh/try?product=emqtt-bench) 进行性能测试。
 
-eMQTT-Bench 是一款使用 Erlang 编写的轻量级但功能强大的 MQTT 性能基准测试工具，可用于模拟大量客户端，并衡量吞吐量、延迟等关键性能指标。对于大规模测试场景或需要深度定制的性能测试需求，请通过 [sales@emqx.io](mailto:sales@emqx.io) 与我们联系。
+eMQTT-Bench 是一款使用 Erlang 编写的轻量级但功能强大的 MQTT 性能基准测试工具，可用于模拟大量客户端，并衡量吞吐量、延迟等关键性能指标。对于大规模测试场景或需要深度定制的性能测试需求，请通过 sales@emqx.io 与我们联系。
 
 ## 安装eMQTT-Bench
 

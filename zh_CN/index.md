@@ -8,7 +8,7 @@ EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布
 
 ## 产品优势
 
-- [**海量连接**](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)：单节点支持 500 万 MQTT 设备连接，集群可水平扩展至支持 1 亿并发的 MQTT 连接。
+- [**海量连接**](https://www.emqx.com/zh/blog/reaching-100m-mqtt-connections-with-emqx-5-0)：单节点稳定支持 150 万 MQTT 设备连接，集群可水平扩展至支持 1 亿并发的 MQTT 连接。
 - [**高可靠**](./deploy/cluster/mria-introduction.md)：弹性伸缩，无单点故障。内置 RocksDB 可靠地持久化 MQTT 消息，确保无数据损失。
 - [**数据安全**](./access-control/security-guide.md)：端到端数据加密（支持国密），细粒度访问控制，保障数据安全，满足企业合规需求。
 - [**多协议**](https://www.emqx.com/zh/blog/iot-protocols-mqtt-coap-lwm2m)：支持 MQTT、HTTP、QUIC、WebSocket、LwM2M/CoAP 或专有协议连接任何设备。
