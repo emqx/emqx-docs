@@ -22,11 +22,11 @@
 代理服务负责：
 - 使用 `AppKey` 生成 RTC Token
 - 使用 `AccessKey` 调用火山引擎 OpenAPI
-- 将 Token 和房间信息返回给客户端
+- 将 `Token` 和房间信息返回给客户端
 
 ### 生成 RTC Token
 
-Token 使用 `AppKey` 通过 HMAC-SHA256 算法生成。火山引擎提供各语言的生成库：
+`Token` 使用 `AppKey` 通过 HMAC-SHA256 算法生成：
 
 | 语言 | 参考实现 |
 |------|----------|
@@ -71,7 +71,7 @@ const openApiRequestData = {
   },
   headers: {
     Host: 'rtc.volcengineapi.com',
-    'Content-type': 'application/json',
+    'Content-Type': 'application/json',
   },
   body,
 }

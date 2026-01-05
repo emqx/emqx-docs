@@ -25,8 +25,8 @@
 | `AppId` | string | 是 | RTC 应用 ID |
 | `RoomId` | string | 是 | 房间 ID |
 | `TaskId` | string | 是 | 任务 ID，用于标识会话 |
-| `AgentConfig` | object | 是 | 智能体配置，见下方 |
-| `Config` | object | 是 | 会话配置，包含 ASR、TTS、LLM 等参数，见下方 |
+| `AgentConfig` | object | 是 | 智能体配置，详见 [AgentConfig](#agentconfig) |
+| `Config` | object | 是 | 会话配置，包含 ASR、TTS、LLM 等参数，详见 [Config](#config) |
 
 ### AgentConfig
 
@@ -70,7 +70,7 @@
 成功时 `Result` 为空对象，失败时 `ResponseMetadata.Error` 包含错误信息。
 
 ::: tip 注意
-`StartVoiceChat` 用于在已有房间中启动 AI 智能体，**不返回** RTC Token。Token 需要服务端使用 `AppKey` 自行生成，参考 [生成 RTC Token](./installation-and-testing.md#生成-rtc-token)。
+`StartVoiceChat` 用于在已有房间中启动 AI 智能体。
 :::
 
 官方文档：[StartVoiceChat](https://www.volcengine.com/docs/6348/1404673)
