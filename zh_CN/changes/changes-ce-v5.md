@@ -1,5 +1,75 @@
 # EMQX 开源版 v5 版本
 
+## 5.8.9
+
+*发布日期：2025-12-31*
+
+
+### 增强
+
+- [#16491](https://github.com/emqx/emqx/pull/16491) 开始为 macOS 15（Sequoia）发布安装包。
+
+- [#15911](https://github.com/emqx/emqx/pull/15911) 对于 HTTP 动作，HTTP 请求超时时间现在与 `resource_opts.request_ttl` 保持一致。此前该值为固定且不可配置的 30 秒。
+
+- [#15845](https://github.com/emqx/emqx/pull/15845) 扩展了 MQTT 连接器的 `static_clientids` 配置，支持为每个 clientid 指定对应的用户名和密码。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#16349](https://github.com/emqx/emqx/pull/16349) 修复了在处理 request-response-information 属性时，由类型不匹配导致 MQTT v5 连接崩溃的问题。
+
+- [#16081](https://github.com/emqx/emqx/pull/16081) 修复了一个问题：当客户端使用扩展认证机制并启用内存会话（memory sessions）时，可能会因 `session_stepdown_request_exception` 错误并伴随 `calling_self` 原因而发生崩溃。
+
+  例如：
+
+  ```
+  2025-09-24T07:13:08.973954+08:00 [error] clientid: someclientid, msg: session_stepdown_request_exception, peername: 127.0.0.1:41782, username: admin, error: exit, reason: calling_self, stacktrace: [{gen_server,call,3,[{file,"gen_server.erl"},{line,1222}]},{emqx_cm,request_stepdown,4,[{file,"emqx_cm.erl"},{line,427}]},{emqx_cm,do_takeover_begin,2,[{file,"emqx_cm.erl"},{line,398}]},{emqx_cm,takeover_session,2,[{file,"emqx_cm.erl"},{line,384}]},{emqx_cm,takeover_session_begin,2,[{file,"emqx_cm.erl"},{line,305}]},{emqx_session_mem,open,4,[{file,"emqx_session_mem.erl"},{line,210}]},{emqx_session,open,3,[{file,"emqx_session.erl"},{line,263}]},{emqx_cm,'-open_session/4-fun-1-',4,[{file,"emqx_cm.erl"},{line,290}]},{emqx_cm_locker,trans,2,[{file,"emqx_cm_locker.erl"},{line,32}]},{emqx_channel,post_process_connect,2,[{file,"emqx_channel.erl"},{line,575}]},{emqx_connection,with_channel,3,[{file,"emqx_connection.erl"},{line,852}]},{emqx_connection,process_msg,2,[{file,"emqx_connection.erl"},{line,470}]},{emqx_connection,process_msgs,2,[{file,"emqx_connection.erl"},{line,462}]},{emqx_connection,handle_recv,3,[{file,"emqx_connection.erl"},{line,406}]},{proc_lib,wake_up,3,[{file,"proc_lib.erl"},{line,340}]}], action: {takeover,'begin'}, ...
+  ```
+
+- [#15872](https://github.com/emqx/emqx/pull/15872) 消除了在发送带有非零原因码的 CONNACK 之后断开连接时出现的 `unclean_terminate` 警告日志。
+
+- [#15902](https://github.com/emqx/emqx/pull/15902) 将 MQTT 客户端库升级至 1.13.8。
+
+  该升级改进了 MQTT Bridge 的连接稳定性，包括：
+
+  - 当对端 broker 未回复 PINGRESP 时，连接器会自动重连。
+  - 当在等待 CONNACK 的过程中连接中断时，TLS Bridge 能够更及时地处理连接失败。
+
+- [#15884](https://github.com/emqx/emqx/pull/15884) 修复了一个在少数情况下可能出现的问题：全局路由表会无限期地保留已长期离开集群节点的路由信息。
+
+  同时修复了一个竞态条件，该竞态条件可能在大量共享订阅客户端同时断开连接时，导致集群中的路由表和共享订阅状态逐渐累积不一致。
+
+#### 集群
+
+- [#16452](https://github.com/emqx/emqx/pull/16452) 将 `gen_rpc` 升级至 `3.5.1`。
+
+  在升级 `gen_rpc` 之前，如果对端节点不可达，EMQX 可能会因连接超时而产生大量尾部崩溃日志。新版本的 `gen_rpc` 不再存在该问题，并将崩溃日志转换为更易读的 `error` 日志，同时还对频繁出现的 `"failed_to_connect_server"` 日志进行了限流，以避免日志刷屏。
+
+#### 安全与认证
+
+- [#15844](https://github.com/emqx/emqx/pull/15844) 增加了校验，禁止在内置数据库认证器中添加空用户名由于空用户名会破坏 API 路径结构，这类用户此前无法通过 HTTP API 删除。
+
+  如果已经存在此类用户并希望将其删除，可以在 EMQX 控制台中运行以下命令：
+
+  ```
+  mria:transaction(emqx_authn_shard, fun() ->
+      mnesia:delete(emqx_authn_mnesia, {'mqtt:global',<<>>}, write)
+  end).
+  ```
+
+- [#15818](https://github.com/emqx/emqx/pull/15818) 修正了 `{allow|deny, all}` ACL 规则的处理逻辑。之前，这些规则在内部被转换为匹配 `#`，由于 MQTT 规范限制，无法匹配以 `$` 开头的主题（例如 `$testtopic/1`）。现在使用了特殊的内部值，以确保 `{allow|deny, all}` 规则能够正确匹配所有主题，包括以 `$` 开头的主题。
+
+- [#15899](https://github.com/emqx/emqx/pull/15899) 改进了内存使用方式：客户端断开连接时会立即清空授权（authz）缓存，从而减少不必要的内存消耗。
+
+#### 规则引擎
+
+- [#16028](https://github.com/emqx/emqx/pull/16028) 修复了规则引擎 `jq` 函数的内存泄漏问题。之前，如果使用 `jq` 内置函数 `index`（例如 `.key | index("name")`），会导致内存泄漏。
+
+#### 持久存储
+
+- [#14674](https://github.com/emqx/emqx/pull/14674) 限制了 EMQX 持久存储创建的 RocksDB info 日志文件的数量和大小。
+
 ## 5.8.8
 
 *发布日期：2025-09-04*
