@@ -11,7 +11,7 @@ For installation on other systems or to install other versions, visit the [EMQX 
 ## Install EMQX Enterprise
 
 1. Go to the download site and select the [**macOS** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
-2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as needed.
+2. Select the latest version `@EE_VERSION@`. From the **Package Type** dropdown, select the `zip` package according to the macOS version and CPU architecture as you need.
 3. Click the link below to download. You can also follow the command instructions on the page.
 
 ## Start and Stop EMQX

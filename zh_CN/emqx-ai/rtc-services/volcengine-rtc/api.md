@@ -2,13 +2,21 @@
 
 本文档介绍火山引擎实时对话式 AI 的核心 API，包括 StartVoiceChat、UpdateVoiceChat、StopVoiceChat 及相关配置参数。
 
+## API 概览
+
+| API | 说明 |
+|-----|------|
+| [StartVoiceChat](#startvoicechat) | 启动 AI 语音会话，在指定房间中创建 AI 智能体 |
+| [StopVoiceChat](#stopvoicechat) | 停止语音会话，释放 AI 智能体资源 |
+| [UpdateVoiceChat](#updatevoicechat) | 更新进行中的语音会话（打断、自定义播报等） |
+
+所有 API 均需要使用 AccessKey 进行 V4 签名，参考 [认证代理服务](./installation-and-testing.md#认证代理服务)。
+
 ## StartVoiceChat
 
-启动语音会话，返回 RTC 连接凭证。
+启动 AI 语音会话，在指定房间中创建 AI 智能体。
 
 **请求地址**：`POST https://rtc.volcengineapi.com?Action=StartVoiceChat&Version=2024-12-01`
-
-**请求头**：需要使用 AccessKey 进行签名，参考 [认证代理服务](./installation-and-testing.md#认证代理服务)。
 
 ### 请求参数
 
@@ -17,8 +25,8 @@
 | `AppId` | string | 是 | RTC 应用 ID |
 | `RoomId` | string | 是 | 房间 ID |
 | `TaskId` | string | 是 | 任务 ID，用于标识会话 |
-| `AgentConfig` | object | 是 | 智能体配置 |
-| `Config` | object | 是 | 会话配置，包含 ASR、TTS、LLM 等参数 |
+| `AgentConfig` | object | 是 | 智能体配置，详见 [AgentConfig](#agentconfig) |
+| `Config` | object | 是 | 会话配置，包含 ASR、TTS、LLM 等参数，详见 [Config](#config) |
 
 ### AgentConfig
 
@@ -26,38 +34,22 @@
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `TargetUserId` | string[] | 是 | 目标用户 ID 列表 |
-| `UserId` | string | 是 | 智能体用户 ID |
-| `WelcomeMessage` | string | 否 | 欢迎语 |
-| `EnableConversationStateCallback` | boolean | 否 | 启用会话状态回调 |
-| `AnsMode` | number | 否 | 降噪模式（0-3） |
-| `VoicePrint` | object | 否 | 声纹识别配置 |
-
-**VoicePrint 配置**：
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `Mode` | number | 声纹识别模式（0: 关闭, 1: 开启） |
-| `IdList` | string[] | 声纹 ID 列表 |
+| `TargetUserId` | string[] | 是 | 目标用户 ID 列表，即客户端用户 ID |
+| `UserId` | string | 是 | 智能体用户 ID（AI Bot 的身份标识） |
+| `WelcomeMessage` | string | 否 | 欢迎语，会话开始时自动播报 |
+| `EnableConversationStateCallback` | boolean | 否 | 启用会话状态回调，用于接收 listening/thinking/speaking 状态 |
+| `AnsMode` | number | 否 | AI 降噪模式（0: 关闭, 1: 低, 2: 中, 3: 高，推荐 3） |
+| `VoicePrint` | object | 否 | 声纹识别配置：`Mode`（0: 关闭, 1: 开启）、`IdList`（声纹 ID 列表） |
 
 ### Config
 
-会话配置，包含以下子配置：
-
-```json
-{
-  "ASRConfig": { ... },
-  "TTSConfig": { ... },
-  "LLMConfig": { ... },
-  "InterruptMode": 0
-}
-```
+会话配置：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
-| `ASRConfig` | object | 语音识别配置 |
-| `TTSConfig` | object | 语音合成配置 |
-| `LLMConfig` | object | 大模型配置 |
+| `ASRConfig` | object | 语音识别配置，详见 [ASRConfig](#asrconfig) |
+| `TTSConfig` | object | 语音合成配置，详见 [TTSConfig](#ttsconfig) |
+| `LLMConfig` | object | 大模型配置，详见 [LLMConfig](#llmconfig) |
 | `InterruptMode` | number | 打断模式（0: 语义打断, 1: 手动打断） |
 
 ### 响应
@@ -71,27 +63,21 @@
     "Service": "rtc",
     "Region": "cn-north-1"
   },
-  "Result": {
-    "AppId": "your-app-id",
-    "RoomId": "room-uuid",
-    "UserId": "user-uuid",
-    "Token": "rtc-token..."
-  }
+  "Result": {}
 }
 ```
 
-| 字段 | 说明 |
-|------|------|
-| `Result.AppId` | RTC 应用 ID |
-| `Result.RoomId` | RTC 房间 ID |
-| `Result.UserId` | RTC 用户 ID |
-| `Result.Token` | RTC 访问令牌（24 小时有效） |
+成功时 `Result` 为空对象，失败时 `ResponseMetadata.Error` 包含错误信息。
+
+::: tip 注意
+`StartVoiceChat` 用于在已有房间中启动 AI 智能体。
+:::
 
 官方文档：[StartVoiceChat](https://www.volcengine.com/docs/6348/1404673)
 
 ## StopVoiceChat
 
-停止语音会话，释放资源。
+停止语音会话，释放 AI 智能体资源。
 
 **请求地址**：`POST https://rtc.volcengineapi.com?Action=StopVoiceChat&Version=2024-12-01`
 
@@ -99,9 +85,9 @@
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `AppId` | string | 是 | RTC 应用 ID |
-| `RoomId` | string | 是 | 房间 ID |
-| `TaskId` | string | 是 | 任务 ID |
+| `AppId` | string | 是 | RTC 应用 ID，与 StartVoiceChat 一致 |
+| `RoomId` | string | 是 | 房间 ID，与 StartVoiceChat 一致 |
+| `TaskId` | string | 是 | 任务 ID，与 StartVoiceChat 一致 |
 
 ### 响应
 
@@ -115,6 +101,8 @@
   "Result": {}
 }
 ```
+
+成功时 `Result` 为空对象，失败时 `ResponseMetadata.Error` 包含错误信息。
 
 官方文档：[StopVoiceChat](https://www.volcengine.com/docs/6348/1404672)
 
@@ -192,9 +180,15 @@
 }
 ```
 
+成功时 `Result` 为空对象，失败时 `ResponseMetadata.Error` 包含错误信息。
+
 官方文档：[UpdateVoiceChat](https://www.volcengine.com/docs/6348/1404671)
 
-## ASRConfig
+## 配置参数详解
+
+以下配置用于 `StartVoiceChat` 的 `Config` 参数。
+
+### ASRConfig
 
 语音识别配置：
 
@@ -207,7 +201,7 @@
 | `TurnDetectionMode` | number | 否 | 轮次检测模式 |
 | `InterruptConfig` | object | 否 | 打断配置 |
 
-### ProviderParams
+**ProviderParams**：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
@@ -218,9 +212,7 @@
 | `boosting_table_id` | string | 热词表 ID |
 | `correct_table_id` | string | 纠错表 ID |
 
-### VADConfig
-
-语音活动检测配置：
+**VADConfig**（语音活动检测）：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
@@ -231,9 +223,7 @@
 | `Sensitivity` | number | 灵敏度 |
 | `AIVAD` | boolean | 是否启用 AI VAD |
 
-### InterruptConfig
-
-打断配置：
+**InterruptConfig**（打断配置）：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
@@ -262,7 +252,7 @@
 }
 ```
 
-## TTSConfig
+### TTSConfig
 
 语音合成配置：
 
@@ -272,7 +262,7 @@
 | `ProviderParams` | object | 是 | 提供商参数 |
 | `IgnoreBracketText` | number[] | 否 | 忽略的括号类型 |
 
-### ProviderParams
+**ProviderParams**：
 
 | 参数 | 类型 | 说明 |
 |------|------|------|
@@ -291,14 +281,25 @@
 
 **audio 配置**：
 
-| 参数 | 类型 | 说明 | 范围 |
-|------|------|------|------|
-| `voice_type` | string | 音色类型 | 见下方音色列表 |
-| `speed_ratio` | number | 语速比例 | 0.5-2.0，默认 `1.0` |
-| `pitch_ratio` | number | 音调比例 | 0.5-2.0，默认 `1.0` |
-| `volume_ratio` | number | 音量比例 | 0.5-2.0，默认 `1.0` |
-| `emotion` | string | 情感类型 | `happy`、`sad`、`angry`、`neutral` |
-| `emotion_strength` | number | 情感强度 | 0.0-1.0，默认 `0.8` |
+不同 TTS 模式下的参数略有不同：
+
+| 参数 | 类型 | 说明 | 适用模式 |
+|------|------|------|----------|
+| `voice_type` | string | 音色类型 | 所有模式 |
+| `volume_ratio` | number | 音量比例（0.5-2.0） | 所有模式 |
+| `speed_ratio` | number | 语速比例（0.5-2.0） | standard |
+| `pitch_ratio` | number | 音调比例（0.5-2.0） | standard |
+| `speech_ratio` | number | 语速比例（0.5-2.0） | bigtts |
+| `pitch_rate` | number | 音调变化率 | bigtts |
+| `speech_rate` | number | 语速变化率 | bidirection |
+| `emotion` | string | 情感类型：`happy`、`sad`、`angry`、`neutral` | 支持情感的音色 |
+| `emotion_strength` | number | 情感强度（0.0-1.0） | 配合 emotion 使用 |
+
+::: tip TTS 模式说明
+- `standard`：标准模式，使用 `speed_ratio`、`pitch_ratio`
+- `bigtts`：大模型 TTS，使用 `speech_ratio`、`pitch_rate`
+- `bidirection`：双向流式，使用 `speech_rate`，支持 `Additions` 配置
+:::
 
 **常用音色**：
 
@@ -335,7 +336,7 @@
 }
 ```
 
-## LLMConfig
+### LLMConfig
 
 大模型配置：
 
@@ -353,21 +354,10 @@
 | `MaxTokens` | number | 否 | 最大生成 token 数，默认 `256` |
 | `HistoryLength` | number | 否 | 保留的历史轮数，默认 `15` |
 | `EnableRoundId` | boolean | 否 | 启用轮次 ID |
-| `VisionConfig` | object | 否 | 视觉理解配置 |
+| `VisionConfig` | object | 否 | 视觉理解配置：`Enable`（是否启用）、`SnapshotConfig`（截图配置） |
 | `Custom` | string | 否 | 自定义参数（JSON 字符串），透传给 CustomLLM |
 
-### VisionConfig
-
-视觉理解配置：
-
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| `Enable` | boolean | 是否启用视觉理解 |
-| `SnapshotConfig` | object | 截图配置 |
-
-### UserPrompts
-
-预设对话历史，用于引导对话风格：
+**UserPrompts**（预设对话历史）：
 
 ```json
 [
@@ -568,4 +558,3 @@ Token 生成库参考 [安装与测试 - 生成 RTC Token](./installation-and-te
 - [安装与测试](./installation-and-testing.md)
 - [火山引擎实时对话式 API 文档](https://www.volcengine.com/docs/6348/1315560) - 官方完整文档
 - [火山引擎实时音视频文档](https://www.volcengine.com/docs/6348)
-

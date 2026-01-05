@@ -4,8 +4,7 @@ This document explains how to integrate Volcano Engine speech services and compl
 
 ## Prerequisites
 
-Before starting integration, make sure you have enabled the required Volcano Engine services and configured credentials. For detailed steps, see
- Quick Start – Volcano Engine Credentials.
+Before starting integration, make sure you have enabled the required Volcano Engine services and configured credentials. For detailed steps, see [Quick Start – Volcano Engine Credentials](./quick-start.md#4-volcano-engine-credentials).
 
 Required credentials:
 
@@ -24,29 +23,29 @@ The proxy service is responsible for:
 
 - Generating RTC tokens using `AppKey`
 - Calling Volcano Engine OpenAPI using `AccessKey`
-- Returning tokens and room information to the client
+- Returning `Token` and room information to the client
 
 ### Generating an RTC Token
 
-RTC tokens are generated using `AppKey` with the HMAC-SHA256 algorithm. Volcano Engine provides reference implementations in multiple languages:
+`Token` is generated using `AppKey` with the HMAC-SHA256 algorithm:
 
 | Language      | Reference Implementation                                     |
 | ------------- | ------------------------------------------------------------ |
 | Node.js / Bun | [token.ts](https://github.com/emqx/mcp-ai-companion-demo/tree/volcengine/rtc/volc-server/src/lib/token.ts) |
 
-```
+```typescript
 import { AccessToken, Privileges } from './rtctoken'
 
 const token = new AccessToken(appId, appKey, roomId, userId)
 token.addPrivilege(Privileges.PrivPublishStream, expireTime)
-const tokenString = token.serialize() // Return to the client
+const tokenString = token.serialize()  // Return to the client
 ```
 
 ### Calling Volcano Engine OpenAPI
 
-APIs such as `StartVoiceChat` and `StopVoiceChat` must be signed using `AccessKeyId` and `SecretKey`. The official OpenAPI SDK handles signing automatically:
+APIs such as `StartVoiceChat` and `StopVoiceChat` require V4 signing using `AccessKeyId` and `SecretKey`. The official OpenAPI SDK provides a `Signer` class to generate the required headers:
 
-```
+```bash
 # Node.js / Bun
 npm install @volcengine/openapi
 
@@ -55,45 +54,79 @@ pip install volcengine-python-sdk
 
 # Go
 go get github.com/volcengine/volc-sdk-golang
+```
+
+```typescript
 // Node.js example
 import { Signer } from '@volcengine/openapi'
 
-const signer = new Signer(
-  {
-    accessKeyId: process.env.ACCESS_KEY_ID,
-    secretKey: process.env.SECRET_KEY,
-  },
-  'rtc'
-)
+const body = { AppId: appId, RoomId: roomId, /* ... */ }
 
-const response = await signer.fetch('https://rtc.volcengineapi.com', {
+// Build the request data
+const openApiRequestData = {
+  region: 'cn-north-1',
   method: 'POST',
-  query: { Action: 'StartVoiceChat', Version: '2024-12-01' },
-  body: { AppId: appId, RoomId: roomId, ... },
+  params: {
+    Action: 'StartVoiceChat',
+    Version: '2024-12-01',
+  },
+  headers: {
+    Host: 'rtc.volcengineapi.com',
+    'Content-Type': 'application/json',
+  },
+  body,
+}
+
+// Create Signer and add authorization headers
+const signer = new Signer(openApiRequestData, 'rtc')
+signer.addAuthorization({
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretKey: process.env.SECRET_KEY,
 })
-// response includes Token, RoomId, UserId, etc., which are returned to the client
+
+// Send the request (headers now include the signature)
+const response = await fetch(
+  'https://rtc.volcengineapi.com?Action=StartVoiceChat&Version=2024-12-01',
+  {
+    method: 'POST',
+    headers: openApiRequestData.headers,
+    body: JSON.stringify(body),
+  }
+)
 ```
 
-For detailed signing rules, see
- [Volcano Engine V4 Signature Algorithm](https://www.volcengine.com/docs/6369/67269).
+For detailed signing rules, see [Volcano Engine V4 Signature Algorithm](https://www.volcengine.com/docs/6369/67269).
 
 ### Example API Design
 
 The proxy service should expose APIs for client use:
 
-```
-// Start a voice session – returns token and room info
+```typescript
+// Get scene configuration – returns Token and room info
+GET /api/scenes
+Response: {
+  scenes: [{
+    id: string,
+    rtcConfig: { appId: string, roomId: string, userId: string, token: string }
+  }]
+}
+
+// Start a voice session
 POST /api/voice/start
 Request:  { sceneId: string }
-Response: { roomId: string, token: string, userId: string, appId: string }
+Response: { success: boolean }
 
 // Stop a voice session
 POST /api/voice/stop
-Request:  { roomId: string }
+Request:  { sceneId: string }
 Response: { success: boolean }
 ```
 
-Internally, these endpoints call the Volcano Engine OpenAPI (`StartVoiceChat`, `StopVoiceChat`) and pass the returned token and related information back to the client.
+Server-side implementation notes:
+
+- **Scene configuration**: The server generates a `roomId` (UUID) and `userId` for each scene at initialization, and uses `AppKey` to generate the corresponding RTC Token (valid for 24 hours). Clients retrieve this information via `/api/scenes` to join the RTC room.
+- **Token usage**: Clients pass the Token to the RTC SDK's `joinRoom` method for authentication.
+- **Starting/stopping voice sessions**: The server looks up the scene configuration by `sceneId`, retrieves `roomId` and other parameters, then calls the Volcano Engine OpenAPI (`StartVoiceChat`, `StopVoiceChat`).
 
 ## Web Integration
 
@@ -103,7 +136,7 @@ Volcano Engine provides the `@volcengine/rtc` SDK for Web integration. The inter
 
 ### Install the SDK
 
-```
+```bash
 npm install @volcengine/rtc
 ```
 
@@ -111,40 +144,45 @@ For AI noise reduction, the SDK includes the `@volcengine/rtc/extension-ainr` ex
 
 ### Basic Integration Flow
 
-#### 1. Call the Server API to Get a Token
+#### 1. Get Scene Configuration
 
-Before using the RTC SDK, call the server API to start a voice session and retrieve the token and room information:
+Before using the RTC SDK, call the server API to get the scene configuration, including the Token and room information:
 
-```
-const response = await fetch('/api/voice/start', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ sceneId: 'your-scene-id' }),
-})
+```typescript
+// Call the server API to get scene configuration
+const response = await fetch('/api/scenes')
+const { scenes } = await response.json()
 
-const { appId, roomId, token, userId } = await response.json()
+// Select the target scene
+const scene = scenes.find(s => s.id === 'your-scene-id') || scenes[0]
+const { appId, roomId, token, userId } = scene.rtcConfig
 ```
 
 #### 2. Create the RTC Engine
 
-```
+```typescript
 import VERTC, { RoomProfileType, MediaType } from '@volcengine/rtc'
 
+// Create engine instance using the appId from the server
 const engine = VERTC.createEngine(appId)
 ```
 
 #### 3. Register Event Listeners
 
-```
+```typescript
+// Listen for errors
 engine.on(VERTC.events.onError, (event) => {
   console.error('RTC error:', event.errorCode)
 })
 
+// Listen for remote user publishing stream (AI voice response)
 engine.on(VERTC.events.onUserPublishStream, async (event) => {
   const { userId, mediaType } = event
+  // Subscribe to remote audio stream
   await engine.subscribeStream(userId, mediaType)
 })
 
+// Listen for binary messages (subtitles, status, etc.)
 engine.on(VERTC.events.onRoomBinaryMessageReceived, (event) => {
   const { message } = event
   // message is an ArrayBuffer in TLV format
@@ -154,12 +192,13 @@ engine.on(VERTC.events.onRoomBinaryMessageReceived, (event) => {
 
 #### 4. Join the Room
 
-```
+```typescript
+// Use token, roomId, userId from step 1 to join the room
 await engine.joinRoom(
   token,
   roomId,
   {
-    userId,
+    userId: userId,
     extraInfo: JSON.stringify({
       call_scene: 'RTC-AIGC',
       user_name: userId,
@@ -175,41 +214,69 @@ await engine.joinRoom(
 
 #### 5. Start the Microphone and Publish Audio
 
-```
+```typescript
+// Start microphone capture
 await engine.startAudioCapture()
+
+// Publish audio stream to the room
 await engine.publishStream(MediaType.AUDIO)
+```
+
+#### 6. Start Voice Session
+
+After publishing the audio stream, call the server API to start the AI voice session:
+
+```typescript
+// Start voice session
+await fetch('/api/voice/start', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ sceneId: scene.id }),
+})
 ```
 
 At this point, voice interaction begins. User speech is recognized by ASR, processed by the LLM, and played back via TTS.
 
-#### 6. Leave the Room
+#### 7. Leave the Room
 
-```
+```typescript
+// Stop publishing
 await engine.unpublishStream(MediaType.AUDIO)
+
+// Stop capture
 await engine.stopAudioCapture()
+
+// Leave the room
 await engine.leaveRoom()
+
+// Destroy the engine
 VERTC.destroyEngine(engine)
 
+// Call server API to stop the voice session
 await fetch('/api/voice/stop', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ roomId }),
+  body: JSON.stringify({ sceneId: scene.id }),
 })
 ```
 
 ### AI Noise Reduction (Optional)
 
-The RTC SDK includes built-in AI noise reduction:
+The Volcano Engine RTC SDK includes built-in AI noise reduction extension to effectively filter environmental noise:
 
-```
+```typescript
 import RTCAIAnsExtension, { AnsMode } from '@volcengine/rtc/extension-ainr'
 
+// Create and register extension
 const aiAnsExtension = new RTCAIAnsExtension()
 engine.registerExtension(aiAnsExtension)
 
+// Check if supported
 const supported = await aiAnsExtension.isSupported()
 if (supported) {
+  // Set noise reduction mode: LOW / MEDIUM / HIGH
   await aiAnsExtension.setAnsMode(AnsMode.MEDIUM)
+  // Enable noise reduction
   aiAnsExtension.enable()
 }
 ```
@@ -218,20 +285,19 @@ if (supported) {
 
 After subscribing to a remote stream, you can obtain a `MediaStream` for playback:
 
-```
+```typescript
 import { StreamIndex } from '@volcengine/rtc'
 
-const audioTrack = engine.getRemoteStreamTrack(
-  userId,
-  StreamIndex.STREAM_INDEX_MAIN,
-  'audio'
-)
+// Get remote user's audio track
+const audioTrack = engine.getRemoteStreamTrack(userId, StreamIndex.STREAM_INDEX_MAIN, 'audio')
 
+// Create MediaStream and play
 const stream = new MediaStream()
 if (audioTrack) {
   stream.addTrack(audioTrack)
 }
 
+// Bind to audio element for playback
 const audioElement = document.querySelector('audio')
 audioElement.srcObject = stream
 ```
@@ -265,7 +331,9 @@ Embedded Linux, RTOS, Android, and other hardware platforms are supported. Hardw
 
 ### Verify RTC Connection
 
-```
+After successfully joining a room, you can confirm via events:
+
+```typescript
 engine.on(VERTC.events.onUserJoined, (event) => {
   console.log('User joined:', event.userInfo.userId)
 })
@@ -304,7 +372,7 @@ AI responses are played via the remote audio stream. Ensure that:
 | --------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | StartVoiceChat fails                    | Signature error or missing parameters                        | Verify API signature and required parameters                 |
 | `The task has been started` error       | Repeated calls with fixed RoomId/UserId                      | Call StopVoiceChat first, then StartVoiceChat again          |
-| Stuck at “AI preparing”                 | Permissions missing / parameter errors / insufficient balance | 1) Check console permissions 2) Verify parameter types and casing 3) Ensure services are enabled and account balance is sufficient |
+| Stuck at "AI preparing"                 | Permissions missing / parameter errors / insufficient balance | 1) Check console permissions 2) Verify parameter types and casing 3) Ensure services are enabled and account balance is sufficient |
 | Digital avatar stuck in preparing state | Concurrency limit or configuration error                     | Verify avatar AppId/Token and ensure concurrency limits are not exceeded |
 
 #### Devices and Media
