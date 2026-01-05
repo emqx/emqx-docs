@@ -1,5 +1,10 @@
 # EMQX 5.8 中的不兼容变更
 
+## e5.8.9
+
+- [#16062](https://github.com/emqx/emqx/pull/16062) 修复了 RocketMQ 动作忽略所配置的 payload 模板、而直接渲染整个规则输出的问题。
+- [#16491](https://github.com/emqx/emqx/pull/16491) 停止为 macOS 13（Ventura）发布安装包。
+
 ## e5.8.6
 
 - [#14802](https://github.com/emqx/emqx/pull/14802) 从此版本开始，通过 REST API 或 Dashboard 安装插件需要显式授权。

@@ -6,7 +6,6 @@
 
 - macOS 15
 - macOS 14
-- macOS 13
 
 如果您希望安装其他版本或在其他操作系统中进行安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
 
