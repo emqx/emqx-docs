@@ -9,7 +9,7 @@ This page explains:
 - How managed certificates work (EMQX 6.1+).
 - How EMQX supports multiple certificates and Automated Certificate Management Environment (ACME) automation.
 
-For details on enabling TLS on specific listeners, see [Enable SSL/TLS Connection](./emqx-mqtt-tls.md).
+For details on enabling TLS on specific listeners, see [Enable SSL/TLS Connections](./emqx-mqtt-tls.md).
 
 ## Overview
 
@@ -428,4 +428,4 @@ EMQX supports rotating SSL/TLS certificates without restarting. By default, EMQX
 
 Once you obtain the SSL/TLS certificates, you can enable the client's SSL/TLS connections. You can also update the certificates when they are expired.
 
-- [Enable SSL/TLS Connection](./emqx-mqtt-tls.md)
+- [Enable SSL/TLS Connections](./emqx-mqtt-tls.md)

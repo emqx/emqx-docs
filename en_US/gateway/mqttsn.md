@@ -140,13 +140,13 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **DTLS Settings** (for DTLS listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+You can set whether to enable **TLS Verify** by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading it with the **Select File** button. For details, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
 - **DTLS Versions**: Set the DTLS versions supported, default, **dtlsv1.2** and **dtlsv1**. 
 - **Fail If No Peer Cert**: Set whether EMQX will reject the connection if the client sends an empty certificate, default: **false**, optional values: **true**, **false**. 
-- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default, **10**.
+- **Intermediate Certificate Depth**: Set the maximum number of non-self-issued intermediate certificates that can be included in a valid certification path following the peer certificate, default: **10**.
 - **Key Password**: Set the user's password, used only when the private key is password-protected. 
 
 ### Configure Authentication
@@ -161,9 +161,9 @@ The client information generation rules are as follows:
 
 This part takes the Dashboard as an example to illustrate how to do the authentication configuration. 
 
-On the **Gateways** page, locate **MQTT-SN** and click **Setup** in the **Actions** column and click **Authentication** to enter the **Authentication** tab. 
+On the **Gateways** page, locate **MQTT-SN** and click **Setup** in the **Actions** column, and click **Authentication** to enter the **Authentication** tab. 
 
-Click **Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then in the **Configuration** tab, you can set the authentication rules. 
+Click **Create Authentication**, choose **Password-Based** as the **Mechanism**, and select **HTTP Server** as the **Backend**. Then, in the **Configuration** tab, you can set the authentication rules. 
 
 ![mqttsn authentication](./assets/mqttsn-authn-config.png)
 

@@ -1,4 +1,4 @@
-# Enable SSL/TLS Connection
+# Enable SSL/TLS Connections
 
 EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. The SSL/TLS encryption functionality encrypts network connections at the transport layer, enhancing the security of communication data while ensuring its integrity.
 
@@ -44,7 +44,12 @@ For a complete guide on obtaining, managing, and using SSL/TLS certificates in E
 
 By default, EMQX enables an SSL/TLS listener on port `8883` and configures it for one-way authentication, where the client verifies the server certificate, but the server does not verify the client's certificate.
 
-You can configure the SSL/TLS listener via the Dashboard or configuration files to replace certificates and adjust other TLS-related settings.
+You can configure the SSL/TLS listener via the Dashboard or via the configuration file. In both cases, EMQX supports two certificate provisioning methods:
+
+- File-based certificates (traditional PEM files)
+- Managed certificates (introduced in EMQX 6.1)
+
+Choose the method that best fits your deployment and operational model.
 
 ### Enable via Dashboard
 
@@ -107,53 +112,72 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
 1. Place your private SSL/TLS certificate files in the `etc/certs` directory of EMQX.
 
-2. Open the configuration file `base.hocon` (located in either the `./etc` or `/etc/emqx/etc` directory depending on your installation method). 
+2. Open the configuration file `base.hocon` (located in either the `./etc` or `/etc/emqx/etc` directory, depending on your installation method). 
 
-3. Modify the `listeners.ssl.default` configuration group. Replace the certificate files with your own certificate files.
+3. Modify the `listeners.ssl.default` configuration group. 
 
-   If you need to enable one-way authentication, add `verify = verify_none`:
+   - Use certificates stored as files on disk. Replace the certificate files with your own. To enable one-way authentication, add `verify = verify_none`:
 
-```bash
-listeners.ssl.default {
-  bind = "0.0.0.0:8883"
-  ssl_options {
-    # PEM file containing the trusted CA (certificate authority) certificates that the listener uses to verify the authenticity of the client certificates.
-    # For one-way authentication, the file content can be empty.
-    cacertfile = "etc/certs/rootCAs.pem"
-    # PEM file containing the SSL/TLS certificate chain for the listener.
-    # If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the listener certificate to form a chain.
-    certfile = "etc/certs/server-cert.pem"
-    # PEM file containing the private key corresponding to the SSL/TLS certificate.
-    keyfile = "etc/certs/server-key.pem"
-    # Set `verify_peer` to verify the authenticity of the client certificates. Must be set to 'verify_peer' for two-way authentication (mTLS).
-    # Set 'verify_none' to allow any client to connect, regardless of the client certificate.
-    verify = verify_none
-    # If set to `true`, the handshake fails if the client does not have a certificate to send. Must be set to `true` for two-way authentication (mTLS).
-    # If set to `false`, it fails only if the client sends an invalid certificate (an empty certificate is considered valid). i.e. one-way authentication.
-    fail_if_no_peer_cert = true
-  }
-}
-```
+     ```hocon
+     listeners.ssl.default {
+       bind = "0.0.0.0:8883"
+       
+       ssl_options {
+         cacertfile = "etc/certs/rootCAs.pem"
+         certfile = "etc/certs/server-cert.pem"
+         keyfile = "etc/certs/server-key.pem"
+         
+         verify = verify_none
+         fail_if_no_peer_cert = true
+       }
+     }
+     ```
 
-### EMQX v4 configuration
+     **Configuration details:**
 
-**In the EMQX, the default listening port of `mqtt:ssl` is 8883.**
+     - **`cacertfile`**: Path to the PEM file containing trusted CA certificates used to verify client certificates. For one-way authentication, this file may be empty or contain no CA certificates.
+     - **`certfile`**: Path to the PEM file containing the server’s SSL/TLS certificate chain. If the server certificate used by the listener is not issued directly by a root CA, append any intermediate CA certificates after the server certificate in `certfile` to form a complete chain.
+     - **`keyfile`**: Path to the PEM file containing the private key corresponding to the server certificate.
+     - **`verify`**: Controls whether EMQX verifies client certificates:
+       - `verify_none`: Client certificates are not verified (one-way authentication).
+       - `verify_peer`: Client certificates are verified (required for two-way authentication / mTLS).
+     - **`fail_if_no_peer_cert`**: Determines handshake behavior when a client does not present a certificate:
+       - `false`: Allows connections without a client certificate, and rejects the connection only if a certificate is presented but is invalid (one-way authentication).
+       - `true`: Rejects connections if the client does not provide a certificate (required for mTLS).
 
-Copy the file `emqx.pem`, `emqx.key` and `ca.pem` generated by OpenSSL tool into the directory `etc/certs/` of EMQX, and refer the following configuration to modify `base.hocon`:
+   - Use certificates managed centrally via EMQX and referenced by name.
 
-```shell
-## listener.ssl.$name is the IP address and port that the MQTT/SSL
-## Value: IP:Port | Port
-listener.ssl.external = 8883
+     > Managed certificate bundles must be created in advance via the Dashboard or HTTP API. The listener configuration only references existing managed certificates.
 
-# PEM file containing the private key corresponding to the SSL/TLS certificate.
-listener.ssl.external.keyfile = etc/certs/emqx.key
+     ```
+     listeners.ssl.default {
+       bind = "0.0.0.0:8883"
+     
+       ssl_options {
+         certs = [
+           {
+             namespace = "global"
+             name = "example-cert-1"
+             sni  = "example.com"
+           },
+           {
+             namespace = "global"
+             name = "example-cert-2"
+             sni  = "api.example.com"
+           }
+         ]
+     
+         # One-way authentication
+         verify = verify_none
+         fail_if_no_peer_cert = false
+       }
+     }
+     ```
 
-# PEM file containing the SSL/TLS certificate chain for the listener.
-        fail_if_no_peer_cert = false
-      }
-    }
-```
+     When multiple managed certificates are configured:
+
+     - EMQX selects the certificate based on the client’s SNI.
+     - If no SNI match is found, the first certificate entry is used as the default.
 
 4. Restart EMQX to apply the configuration.
 
@@ -188,7 +212,7 @@ Two-way authentication is an extension of one-way authentication, where EMQX is 
 
 In addition to this, you will need to generate certificates for the client. For specific operations, refer to [Issue Client Certificates](./tls-certificate.md#issue-client-certificates).
 
-For the Dashboard method, you can choose to **Enable** under **TLS Verify**, and configure the **Fail if No Peer Cert** option to `true` to enforce two-way authentication.
+For the Dashboard method, you can choose to **Enable** under **Verify Peer**, and configure the **Force Verify Peer Certificate** option to `true` to enforce two-way authentication.
 
 You can also add the following configuration to the `listeners.ssl.default` configuration group in the configuration file:
 

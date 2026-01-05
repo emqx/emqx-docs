@@ -201,7 +201,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **SSL Settings** (for wss listeners only)
 
-You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+You can set whether to enable the TLS Verify by setting the toggle switch. But before that, you need to configure the related **TLS Cert**, **TLS Key**, and **CA Cert** information, either by entering the content of the file or uploading with the **Select File** button. For details, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
 
 Then you can continue to set:
 
