@@ -36,7 +36,7 @@ EMQX provides comprehensive SSL/TLS capability support, enabling both one-way an
 
 Before enabling SSL/TLS, you must prepare SSL/TLS certificates for authenticating and securing connections.
 
-EMQX supports both traditional file-based certificates and managed certificates (EMQX 6.1+), which provide centralized management, reuse across listeners and connectors, and optional automatic issuance with Automated Certificate Management Environment (ACME).
+EMQX supports both traditional path-based certificates and managed certificates (EMQX 6.1+), which provide centralized management, reuse across listeners and connectors, and optional automatic issuance with Automated Certificate Management Environment (ACME).
 
 For a complete guide on obtaining, managing, and using SSL/TLS certificates in EMQX, see [SSL/TLS Certificates](./tls-certificate.md).
 
@@ -46,8 +46,8 @@ By default, EMQX enables an SSL/TLS listener on port `8883` and configures it fo
 
 You can configure the SSL/TLS listener via the Dashboard or via the configuration file. In both cases, EMQX supports two certificate provisioning methods:
 
-- File-based certificates (traditional PEM files)
-- Managed certificates (introduced in EMQX 6.1)
+- Path-based certificates (traditional PEM files): certificates referenced directly by file paths in configuration.
+- Managed certificates (introduced in EMQX 6.1): certificates managed as reusable resources and referenced by name.
 
 Choose the method that best fits your deployment and operational model.
 
@@ -67,10 +67,10 @@ Choose the method that best fits your deployment and operational model.
    #### Certificate Source
 
    - **Certificate Source**: Choose how server certificates are provided:
-     - **Enter Manually**: Use traditional file-based certificates.
+     - **Enter Manually**: Use traditional path-based certificates.
      - **Select from Managed Certs**: Use managed certificate bundles (EMQX 6.1+).
 
-   ##### Enter Manually (File-Based Certificates)
+   ##### Enter Manually (Path-Based Certificates)
 
    When **Enter Manually** is selected, configure the following fields:
 
@@ -85,8 +85,6 @@ Choose the method that best fits your deployment and operational model.
 
    - **Managed Cert Bundle Name**: Select an existing managed certificate bundle. To create a new bundle, click **Create Managed Certs**. For details, see [Create Managed Certificates via Dashboard](./tls-certificate.md#create-managed-certificates-via-dashboard).
 
-     > Managed certificate bundles can also be created and managed via HTTP API. For details, see [Managed Certificates API](./tls-certificate.md#managed-certificates-via-http-api).
-
    - **SNI** (optional): The Server Name Indication value used to match this certificate when multiple certificates are configured on the same listener.
 
    You can click the **+** button to add multiple managed certificate entries. 
@@ -95,7 +93,7 @@ Choose the method that best fits your deployment and operational model.
 
    #### TLS Protocol and Security Options
 
-   - **SSL Versions**: Supported TLS versions. The default values are `tlsv1.3` and `tlsv1.2`.
+   - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suites are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
    - **Cipher Suites**: Optional. Specify allowed cipher suites if required.
    - **CACert Depth**: The maximum allowed depth of the certificate chain. Default value: `10`.
    - **Key File Passphrase**: Password for the private key file, if encrypted.
@@ -103,7 +101,7 @@ Choose the method that best fits your deployment and operational model.
       See [OCSP Stapling](./ocsp.md).
    - **Enable CRL Check**: Disabled by default. Enable this option to verify whether certificates have been revoked.
       See [CRL Check](./crl.md).
-
+   
 4. After completing the configuration, click **Update** to apply the changes.
 
 ### Enable via Configuration File
@@ -116,7 +114,7 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
 3. Modify the `listeners.ssl.default` configuration group. 
 
-   - Use certificates stored as files on disk. Replace the certificate files with your own. To enable one-way authentication, add `verify = verify_none`:
+   - If you use certificates stored as files on disk, replace the certificate files with your own. To enable one-way authentication, add `verify = verify_none`:
 
      ```hocon
      listeners.ssl.default {
@@ -145,7 +143,7 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
        - `false`: Allows connections without a client certificate, and rejects the connection only if a certificate is presented but is invalid (one-way authentication).
        - `true`: Rejects connections if the client does not provide a certificate (required for mTLS).
 
-   - Use certificates managed centrally via EMQX and referenced by name.
+   - If you use certificates managed centrally via EMQX and referenced by name, see the configuration example below:
 
      > Managed certificate bundles must be created in advance via the Dashboard or HTTP API. The listener configuration only references existing managed certificates.
 
@@ -180,6 +178,8 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
      - If no SNI match is found, the first certificate entry is used as the default.
 
 4. Restart EMQX to apply the configuration.
+
+After completing the SSL/TLS configuration, you can connect to EMQX using an MQTT client.
 
 ## Test Client Connection with One-way Authentication
 

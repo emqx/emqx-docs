@@ -1,31 +1,25 @@
 # SSL/TLS Certificates
 
-SSL/TLS certificates are used by EMQX to establish secure connections for MQTT, WebSocket, and HTTP-based services. They provide authentication, confidentiality, and data integrity for network communication.
+SSL/TLS certificates are a core part of EMQX’s security architecture. They provide authentication, encryption, and data integrity for network communication. In EMQX, SSL/TLS certificates are required for establishing secure connections for the following scenarios:
 
-This page explains:
-
-- How to obtain SSL/TLS certificates.
-- How certificates are managed and reused in EMQX.
-- How managed certificates work (EMQX 6.1+).
-- How EMQX supports multiple certificates and Automated Certificate Management Environment (ACME) automation.
-
-For details on enabling TLS on specific listeners, see [Enable SSL/TLS Connections](./emqx-mqtt-tls.md).
-
-## Overview
-
-In EMQX, TLS certificates are required for:
-
-- MQTT over TLS (MQTTS)
-- MQTT over WebSocket Secure (WSS)
-- HTTPS / Dashboard access
-- TLS-enabled connectors (for example, data integrations)
+- MQTT connections over TLS (MQTTS)
+- MQTT connections over WebSocket Secure (WSS)
+- HTTPS services and Dashboard access
+- TLS-enabled external connections (for example, data integrations)
 
 Starting from EMQX 6.1, certificates are treated as reusable resources rather than simple file paths. EMQX supports two certificate management approaches:
 
-1. File-based certificates (traditional)
-2. Managed certificates (recommended, EMQX 6.1+)
+1. Path-based certificates (traditional): certificates referenced directly by file paths in configuration.
+2. Managed certificates (EMQX 6.1+): certificates managed as reusable resources and referenced by name.
 
 Both approaches use standard PEM-encoded files and are fully compatible with EMQX’s SSL/TLS implementation.
+
+This page covers the following topics:
+
+- Obtaining SSL/TLS certificates
+- Managing and reusing certificates in EMQX
+- Using managed certificates (EMQX 6.1+)
+- Supporting multiple certificates and automation with the Automated Certificate Management Environment (ACME)
 
 ## Obtain SSL/TLS Certificates
 
@@ -39,13 +33,13 @@ You can obtain TLS certificates in the following ways:
 
     Certificates issued by your own Certificate Authority (CA). These are recommended only for testing or controlled environments, as they are not trusted by default.
 
-- **Certificates issued by a trusted CA**
+- **Apply or purchace certificates issued by a trusted CA**
 
    Certificates obtained from a public or enterprise CA, such as:
 
-   - Let’s Encrypt
+   - [Let's Encrypt](https://letsencrypt.org/)
    - Cloud providers (for example, Huawei Cloud, Tencent Cloud)
-   - Commercial CAs (for example, DigiCert)
+   - Commercial CAs (for example, [DigiCert](https://www.digicert.com/))
 
    For production and enterprise deployments, certificates with OV or higher assurance levels are generally recommended.
 
@@ -141,15 +135,15 @@ The steps are similar to issuing server certificates, except that:
 
 After certificates are obtained, EMQX supports two ways to manage and reference them.
 
-### File-Based Certificates
+### Path-Based Certificates
 
-File-based certificates are configured by specifying explicit file paths in listener or connector SSL options, such as:
+Path-based certificates are configured by specifying explicit file paths in listener or connector SSL options, such as:
 
 - `certfile`
 - `keyfile`
 - `cacertfile`
 
-With file-based certificates:
+With path-based certificates:
 
 - Certificate files are managed entirely by the user or external tooling.
 - Listeners reference certificate files directly.
@@ -157,7 +151,7 @@ With file-based certificates:
 
 EMQX provides sample certificates in the `etc/certs` directory for testing purposes only.
 
-File-based certificates remain fully supported and are compatible with all EMQX versions.
+Path-based certificates remain fully supported and are compatible with all EMQX versions.
 
 ### Managed Certificates
 
@@ -172,7 +166,7 @@ Managed certificates can be reused across multiple resources, including:
 
 They can be created and managed via the Dashboard or HTTP API, and are stored on disk under the EMQX data directory: `data/certs2/`.
 
-Internally, EMQX continues to use file-based PEM paths when interfacing with Erlang/OTP’s SSL library, ensuring:
+Internally, EMQX continues to use path-based PEM paths when interfacing with Erlang/OTP’s SSL library, ensuring:
 
 - Full backward compatibility with existing TLS behavior
 - Automatic certificate reload
