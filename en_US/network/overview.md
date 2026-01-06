@@ -82,8 +82,8 @@ authentication {
 - **`certfile`**: Path to a PEM format file containing the SSL/TLS certificate chain for the client to present. If the certificate is not directly issued by a root CA, the intermediate CA certificates should be appended after the client certificate to form a complete chain.
 - **`keyfile`**: Path to a PEM format private key corresponding to the client certificate specified by `certfile`.
 - **`verify`**: Controls server certificate verification behavior:
-  - `verify_peer`: Verify the server’s certificate chain.
-  - `verify_none`: Do not verify the server’s certificate.
+  - **`verify_peer`**: Verify the server’s certificate chain.
+  - **`verify_none`**: Do not verify the server’s certificate.
 
 Managed certificates can also be referenced in configuration files for external resources, following the same certificate management model used by listeners. For more details about configuration options, see [Enable SSL/TLS with One-Way Authentication](./emqx-mqtt-tls.md#enable-via-configuration-file) listeners via configuration file.
 

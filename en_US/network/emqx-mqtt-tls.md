@@ -147,12 +147,12 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
 
      > Managed certificate bundles must be created in advance via the Dashboard or HTTP API. The listener configuration only references existing managed certificates.
 
-     ```
+     ```hocon
      listeners.ssl.default {
        bind = "0.0.0.0:8883"
      
        ssl_options {
-         certs = [
+         managed_certs = [
            {
              namespace = "global"
              name = "example-cert-1"

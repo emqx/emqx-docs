@@ -152,7 +152,7 @@ EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管
        bind = "0.0.0.0:8883"
      
        ssl_options {
-         certs = [
+         managed_certs = [
            {
              namespace = "global"
              name = "example-cert-1"
