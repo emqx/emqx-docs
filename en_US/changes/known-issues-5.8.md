@@ -4,7 +4,7 @@
 
 | Since version | Issue                                                        | Workaround                                                   | Status            |
 | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
-| 5.8.9         | **Cannot set static client IDs for MQTT connector from the dashboard** | Set static client IDs for each node from config.   |  |
+| 5.8.9         | **Cannot set static client IDs for MQTT connector from the Dashboard** | Set static client IDs for each node from config.   |  |
 
 ## e5.8.8
 
