@@ -429,7 +429,7 @@ EMQX automatically reloads updated certificate files:
 
 Managed certificates are updated by modifying the certificate bundle.
 
-To update a managed certificate, pload a new certificate, private key, or CA certificate to the existing managed certificate bundle using the Dashboard, or the Managed Certificates API.
+To update a managed certificate, upload a new certificate, private key, or CA certificate to the existing managed certificate bundle using the Dashboard, or the Managed Certificates API.
 
 Once the bundle is updated:
 
