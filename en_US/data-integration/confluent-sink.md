@@ -306,7 +306,7 @@ EMQX provides a wealth of learning resources on data integration with Confluent/
 
 - [Building Connected Vehicle Streaming Data Pipelines with MQTT and Kafka](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
 - [MQTT and Kafka | IoT Messaging and Stream Data Integration Practice](https://www.emqx.com/en/blog/mqtt-and-kafka)
-- [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
+- [MQTT Performance Benchmark Testing: EMQX-Kafka Integration](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
 **Benchmark Reports:**
 
