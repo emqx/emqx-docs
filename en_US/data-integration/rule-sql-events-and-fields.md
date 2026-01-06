@@ -790,18 +790,20 @@ FROM
 
 Refer to the table below for fields that can be extracted from the Client PING event.
 
-| Field          | Explanation                                                  |
-| -------------- | ------------------------------------------------------------ |
-| `clientid`     | Client ID                                                    |
-| `username`     | Client username                                              |
-| `peername`     | Client IP address and port                                   |
-| `sockname`     | IP address and port listened by EMQX                         |
-| `proto_name`   | Protocol name                                                |
-| `proto_ver`    | Protocol version                                             |
-| `keepalive`    | Negotiated MQTT keepalive interval                           |
-| `timestamp`    | Event trigger time (unit: ms)                                |
-| `node`         | EMQX node where the event was triggered                      |
-| `client_attrs` | [Client attributes](../client-attributes/client-attributes.md) |
+| Field             | Explanation                                |
+|-------------------|--------------------------------------------|
+| `clientid`        | Client ID                                  |
+| `clean_start`     | MQTT clean_start                           |
+| `username`        | Client username                            |
+| `peername`        | Client IP address and port                 |
+| `sockname`        | IP address and port listened by EMQX       |
+| `proto_name`      | Protocol name                              |
+| `proto_ver`       | Protocol version                           |
+| `keepalive`       | Negotiated MQTT keepalive interval         |
+| `timestamp`       | Event trigger time (unit: ms)              |
+| `node`            | EMQX node where the event was triggered    |
+| `conn_props`      | CONNECT Properties (MQTT 5.0 clients only) |
+| `expiry_interval` | MQTT session expiration time               |
 
 ## Data Bridges
 
