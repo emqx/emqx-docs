@@ -775,20 +775,22 @@ FROM
 }
 ```
 
-下表列出了 Client PING 事件中可提取的字段说明。
+请参考下表了解 Client PING 事件中可提取的字段。
 
-| 字段           | 说明                                                    |
-| -------------- | ------------------------------------------------------- |
-| `clientid`     | 客户端 ID                                               |
-| `username`     | 客户端用户名                                            |
-| `peername`     | 客户端 IP 地址和端口                                    |
-| `sockname`     | EMQX 监听的 IP 地址和端口                               |
-| `proto_name`   | 协议名称                                                |
-| `proto_ver`    | 协议版本                                                |
-| `keepalive`    | 协商后的 MQTT keepalive 间隔                            |
-| `timestamp`    | 事件触发时间（单位：毫秒）                              |
-| `node`         | 触发该事件的 EMQX 节点                                  |
-| `client_attrs` | [客户端属性](../client-attributes/client-attributes.md) |
+| 字段              | 说明                               |
+| ----------------- | ---------------------------------- |
+| `clientid`        | 客户端 ID                          |
+| `clean_start`     | MQTT clean_start 标志              |
+| `username`        | 客户端用户名                       |
+| `peername`        | 客户端 IP 地址和端口               |
+| `sockname`        | EMQX 监听的 IP 地址和端口          |
+| `proto_name`      | 协议名称                           |
+| `proto_ver`       | 协议版本                           |
+| `keepalive`       | 协商后的 MQTT keepalive 间隔       |
+| `timestamp`       | 事件触发时间（单位：毫秒）         |
+| `node`            | 触发该事件的 EMQX 节点             |
+| `conn_props`      | CONNECT 属性（仅 MQTT 5.0 客户端） |
+| `expiry_interval` | MQTT 会话过期时间                  |
 
 ## Source
 
