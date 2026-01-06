@@ -99,7 +99,7 @@ This section displays event-related metrics for the cluster or a node, including
 
 ### Rules and Actions (Sink)
 
-This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and  actions (sinks) are executed.
+This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and actions (sinks) are executed.
 
 These metrics are useful for assessing rule effectiveness, monitoring downstream data flows, and evaluating overall data integration usage.
 
