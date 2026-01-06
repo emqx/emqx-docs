@@ -101,7 +101,7 @@ The metric data covers 4 aspects: bytes, packets, messages, and events. In the c
 
 ### Rules and Actions (Sink)
 
-This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and  actions (sinks) are executed.
+This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and actions (sinks) are executed.
 
 ![rule-action-metrics](./assets/rule-action-metrics.png)
 
