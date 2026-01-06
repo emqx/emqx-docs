@@ -371,7 +371,7 @@ ACME integrates directly with managed certificates.
 When ACME is enabled:
 
 1. EMQX acts as an ACME client and requests certificates from the configured ACME CA.
-2. Certificates are renewed automatically renewed before expiration. 
+2. Certificates are automatically renewed before expiration. 
 3. The generated files are written into the managed certificates directory. The bundle contains:
    - `key.pem`
    - `chain.pem`
