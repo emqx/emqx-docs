@@ -36,7 +36,7 @@ EMQX provides comprehensive SSL/TLS capability support, enabling both one-way an
 
 Before enabling SSL/TLS, you must prepare SSL/TLS certificates for authenticating and securing connections.
 
-EMQX supports both traditional path-based certificates and managed certificates (EMQX 6.1+), which provide centralized management, reuse across listeners and connectors, and optional automatic issuance with Automated Certificate Management Environment (ACME).
+EMQX supports both traditional path-based certificates and managed certificates (EMQX 6.1+), which provide centralized management, reuse across listeners and connectors.
 
 For a complete guide on obtaining, managing, and using SSL/TLS certificates in EMQX, see [SSL/TLS Certificates](./tls-certificate.md).
 
