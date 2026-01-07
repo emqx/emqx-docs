@@ -319,7 +319,7 @@ Supported file types:
 Upload a certificate file under a specified namespace：
 
 ```
-POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|acc-key
+POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|key-password
 ```
 
 Upload a certificate file in the global namespace：
