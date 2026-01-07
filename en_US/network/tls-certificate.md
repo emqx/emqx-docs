@@ -43,7 +43,7 @@ You can obtain TLS certificates in the following ways:
 
    For production and enterprise deployments, certificates with OV or higher assurance levels are generally recommended.
 
-<!--- **Automatic issuance using ACME**-->
+<!-- **Automatic issuance using ACME**-->
 
 <!--EMQX can automatically obtain and renew server certificates using the ACME protocol (for example, Let’s Encrypt).-->
 
@@ -215,9 +215,6 @@ A managed certificate bundle may contain the following files:
 | `ca.pem`           | Optional | Root CA bundle used for validating peers          |
 | `key-password.pem` | Optional | Key to decrypt the private key if it's encrypted. |
 
-<!--> **Note**:-->
-
-<!--> Not all files are required in every scenario. For example, `acc-key.pem` is present only when the certificate is issued or managed via ACME.-->
 
 #### Multiple Certificates with SNI
 
