@@ -257,9 +257,9 @@ listeners.ssl.default {
 }
 ```
 
-## Create and Manage Managed Certificates
+## Create and Manage Managed Certificate Bundles
 
-This section covers the creation and management of managed certificate bundles using the Dashboard and REST API.
+This section covers the creation and management of managed certificate bundles using the Dashboard and REST API. Once created, the certificate bundle becomes available for selection and can be reused by multiple listeners or connectors.
 
 ### Create Certificate Bundles via Dashboard
 
@@ -273,11 +273,11 @@ You can create managed certificate bundles directly from the Dashboard.
 
    - **Name** (required): A unique name for the managed certificate bundle.
 
-   - **Namespace**: Controls whether the managed certificate bundle is created in the global namespace or in a specific tenant namespace. 
+   - **Namespace**: Controls whether the managed certificate bundle is created in the global namespace or a specific tenant namespace. 
 
-     The switch is disabled by default, which means the certificate bundle is created in the global (`global`) namespace. When enabled, you can select a specific namespace and create the certificate bundle within that namespace.
+     By default, the switch is off, and the bundle is created in the global (`global`) namespace. When enabled, you can select a tenant namespace and create the bundle within that namespace.
 
-     - Global administrators can create certificate bundles in the `global` namespace or in any tenant (non-global) namespace.
+     - Global administrators can create certificate bundles in the `global` namespace or any tenant (non-global) namespace.
      - Namespace-scoped users can create certificate bundles only within their own namespace.
 
    - **TLS Cert** (required): The server certificate in PEM format. You can paste the certificate content directly or click **Select file** to upload a file. The certificate should include the complete certificate chain if required by clients.
@@ -293,11 +293,6 @@ You can create managed certificate bundles directly from the Dashboard.
 
 5. Click **Create** to save the managed certificate bundle.
 
-Once created, the certificate bundle becomes available for selection and can be reused by multiple listeners or connectors.
-
-> **Note**
-> Managed certificate bundles are stored on disk and automatically reloaded by EMQX. Updating a managed certificate does not require restarting EMQX or its listeners.
-
 ### Manage Certificate Bundles via Dashboard
 
 After a certificate bundle is created, it appears in the certificates list in the Dashboard, where you can view and manage all managed certificate bundles.
@@ -310,6 +305,8 @@ From this page, you can:
 - View certificate bundles in the selected namespace.
 - Edit a certificate bundle to update certificate contents, private keys, or CA certificates.
 - Delete a certificate bundle that is no longer needed.
+
+Managed certificate bundles are stored on disk and automatically reloaded by EMQX. Updating a managed certificate does not require restarting EMQX.
 
 ![certificate_bundle_list](./assets/certificate_bundle_list.png)
 
@@ -326,7 +323,7 @@ Supported file types:
 - `key`: private key
 - `chain`: certificate chain (excluding root CA)
 - `ca`: CA certificate bundle
-- `acc-key`: ACME account private key (server certificates only)
+- `key-password`: Key to decrypt the private key
 
 Upload a certificate file under a specified namespace：
 

@@ -18,7 +18,7 @@ SSL/TLS 证书是 EMQX 安全体系的重要组成部分，用于在通信过程
 
 - 如何获取 SSL/TLS 证书  
 - EMQX 中证书的管理
-- EMQX 如何支持多证书配置以及自动化证书管理环境（Automated Certificate Management Environment， ACME）
+- EMQX 如何支持多证书配置<!--以及自动化证书管理环境（Automated Certificate Management Environment， ACME）-->
 - 更新 SSL/TLS 证书
 
 ## 获取 SSL/TLS 证书
@@ -43,9 +43,9 @@ SSL/TLS 证书是 EMQX 安全体系的重要组成部分，用于在通信过程
 
   在生产环境和企业级部署中，通常建议使用 OV（组织验证）或更高级别的证书，以获得更高的安全保障。
 
-- **使用 ACME 自动签发证书**
+<!--- **使用 ACME 自动签发证书**-->
 
-  EMQX 支持通过 ACME 协议（例如 Let’s Encrypt）自动获取并续期服务器证书。
+  <!--EMQX 支持通过 ACME 协议（例如 Let’s Encrypt）自动获取并续期服务器证书。-->
 
 ### 创建自签名 CA 证书
 
@@ -201,14 +201,16 @@ mqtt.example.com
 tenant1/certs1
 ```
 
-一个托管证书包可能包含以下文件：
+托管证书包可能包含以下文件：
 
-- `key.pem`（必需）：私钥
-- `chain.pem`（必需）：证书链（不包含根 CA）
-- `ca.pem`（可选）：用于验证对端证书的根 CA 证书包
-- `acc-key.pem`（可选）：ACME 账户私钥（仅用于 TLS 服务器证书）
+| 文件名             | 是否必需 | 说明                                 |
+| ------------------ | -------- | ------------------------------------ |
+| `key.pem`          | 是       | 私钥                                 |
+| `chain.pem`        | 是       | 证书链（不包含根 CA）                |
+| `ca.pem`           | 可选     | 用于校验对端证书的根 CA 证书集合     |
+| `key-password.pem` | 可选     | 用于解密私钥的密钥（当私钥被加密时） |
 
-并非所有场景都需要上述所有文件。例如，`acc-key.pem` 仅在证书通过 ACME 签发或管理时才会存在。
+<!--并非所有场景都需要上述所有文件。例如，`acc-key.pem` 仅在证书通过 ACME 签发或管理时才会存在。-->
 
 #### 使用 SNI 的多证书支持
 
@@ -229,19 +231,18 @@ SNI 是 TLS 的一种扩展，允许客户端在 TLS 握手过程中、在安全
 
 ##### 示例
 
-```
+```hocon
 listeners.ssl.default {
   bind = "0.0.0.0:8883"
 
   ssl_options {
     managed_certs = [
       {
-        certs_bundle_name = "default-cert"
-        certs_namespace = "global"
+        bundle_name = "default-cert"
+        sni = "example.com"
       },
       {
-        certs_bundle_name = "mqtt-example-com"
-        certs_namespace = "global"
+        bundle_name = "example-cert-1"
         sni = "mqtt.example.com"
       }
     ]
@@ -249,35 +250,58 @@ listeners.ssl.default {
 }
 ```
 
-## 创建和管理托管证书
+## 创建和管理托管证书包
 
-本节介绍了如何通过 Dashboard 和 REST API 创建和管理托管证书。
+本节介绍了如何通过 Dashboard 和 REST API 创建和管理托管证书包。证书包创建完成后即可被选择，并可在多个监听器或连接器之间复用。
 
-### 通过 Dashboard 创建托管证书
+### 通过 Dashboard 创建托管证书包
 
 你可以直接通过 Dashboard 创建托管证书包。
 
-1. 进入**管理** -> **监听器**（或任何支持选择托管证书的页面）。
-2. 在配置监听器时，将**证书来源**设置为**从托管证书中选择**。
-3. 点击**托管证书包名称**下拉框旁的**创建托管证书**。
+1. 进入**管理** -> **证书**。
+
+2. 点击**创建**。
+
 4. 在**创建托管证书**面板中，填写以下信息：
    - **名称**（必填）：托管证书包的唯一名称。
-   - **命名空间**：托管证书包所在的命名空间。
-     - 全局用户只能在 `global` 命名空间下创建证书。
-     - 命名空间用户只能在其所属命名空间中创建证书。
+   
+   - **命名空间**：用于控制托管证书包是创建在全局命名空间还是某个租户命名空间中。
+     
+     默认情况下，该开关处于关闭状态，表示证书包将创建在全局（`global`）命名空间中。开启后，您可以选择一个租户命名空间，并在该命名空间下创建证书包。
+     
+      - 全局管理员可以在 `global` 命名空间或任意租户（非全局）命名空间中创建证书包。
+      - 命名空间级用户只能在其所属的命名空间中创建证书包。
+     
    - **TLS Cert**（必填）：PEM 格式的服务器证书，可直接粘贴或上传文件。如客户端有要求，应包含完整证书链。
+   
    - **TLS Key**（必填）：与服务器证书对应的私钥（PEM 格式）。
+   
    - **私钥密码**：可选。如果私钥被加密，需要填写对应密码。
+   
    - **CA Cert**：可选。PEM 格式的 CA 证书，通常在双向 TLS 认证或被需要 CA 证书的连接器复用时使用。
+   
 5. 点击**创建**保存托管证书包。
 
-证书包创建完成后即可被选择，并可在多个监听器或连接器之间复用。
+### 通过 Dashboard 管理托管证书包
 
-托管证书包存储在磁盘上，并由 EMQX 自动重新加载。更新托管证书无需重启 EMQX 或其监听器。
+创建证书包后，它会显示在 Dashboard 的证书列表中，您可以在此集中查看和管理所有托管证书包。
 
-### 通过 REST API 管理证书
+- 使用页面顶部的命名空间下拉框，在全局（global）命名空间与指定的租户（非全局）命名空间之间切换，证书列表会根据所选命名空间自动更新。
+- 每个证书包都会显示其**名称**以及可用的**操作**。
 
-除了 Dashboard，EMQX 还提供 REST API 用于管理 TLS 证书文件。通过 API 创建的托管证书与通过 Dashboard 创建的证书完全一致，并可通过相同方式被监听器和连接器引用。
+在该页面中，您可以：
+
+- 查看当前命名空间下的证书包；
+- 编辑证书包，以更新证书内容、私钥或 CA 证书；
+- 删除不再需要的证书包。
+
+托管证书包存储在磁盘上，并由 EMQX 自动重新加载。更新托管证书无需重启 EMQX。
+
+![certificate_bundle_list](./assets/certificate_bundle_list.png)
+
+### 通过 REST API 管理托管证书包
+
+除了 Dashboard，EMQX 还提供 REST API 用于管理托管证书包。通过 API 创建的托管证书包与通过 Dashboard 创建的证书包完全一致，并可通过相同方式被监听器和连接器引用。
 
 #### 上传证书文件
 
@@ -286,35 +310,35 @@ listeners.ssl.default {
 - `key`：私钥
 - `chain`：证书链（不包含根 CA）
 - `ca`：CA 证书包
-- `acc-key`：ACME 账户私钥（仅用于服务器证书）
+- `key-password`：用于解密私钥的密钥
 
 上传到指定命名空间：
 
 ```
-POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|acc-key
+POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|key-password
 ```
 
 上传到全局命名空间：
 
 ```
-POST /certs/global/name/:NAME?file=key|chain|ca|acc-key
+POST /certs/global/name/:NAME?file=key|chain|ca|key-password
 ```
 
-#### 列出托管证书
+#### 列出托管证书包
 
-- 列出指定命名空间下的证书：
+- 列出指定命名空间下的证书包：
 
   ```
   GET /certs/ns/:NAMESPACE
   ```
 
-- 列出全局命名空间下的证书：
+- 列出全局命名空间下的证书包：
 
   ```
   GET /certs/global/list
   ```
 
-#### 删除托管证书
+#### 删除托管证书包
 
 - 从指定命名空间删除：
 
@@ -328,7 +352,7 @@ POST /certs/global/name/:NAME?file=key|chain|ca|acc-key
   DELETE /certs/global/name/:NAME
   ```
 
-## 使用 ACME 自动签发托管证书
+<!--## 使用 ACME 自动签发托管证书
 
 EMQX 支持通过 ACME 协议（例如 Let’s Encrypt）自动签发和续期服务器端 TLS 证书。该功能是可选的，适用于客户端通过 TLS 直接连接到 EMQX、并且使用公网可访问域名的部署场景。当 TLS 由负载均衡器终止，或仅使用私有/内部主机名时，则不适合使用该功能。
 
@@ -376,6 +400,8 @@ acme.domains = ["mqtt1.example.com", "mqtt2.example.com"]
 acme.cert_dir = "${EMQX_MANAGED_CERTS_DIR}"
 ```
 
+-->
+
 ## 更新 SSL/TLS 证书
 
 为确保连接的安全性，SSL/TLS 证书必须在过期之前进行更新。在 EMQX 中，证书的更新方式取决于所使用的证书管理方式。
@@ -408,7 +434,7 @@ EMQX 会自动重新加载更新后的证书文件：
 
 托管证书被设计为可复用资源。更新某个证书包会影响所有引用该证书包的资源。
 
-### 使用 ACME 自动续期（仅适用于托管证书）
+<!--### 使用 ACME 自动续期（仅适用于托管证书）
 
 对于通过 ACME 签发的托管证书：
 
@@ -420,7 +446,7 @@ EMQX 会自动重新加载更新后的证书文件：
 
 - 无需手动上传证书。
 - 监听器继续引用同一个托管证书包。
-- 证书轮换过程不会中断服务连接。
+- 证书轮换过程不会中断服务连接。-->
 
 ## 下一步
 

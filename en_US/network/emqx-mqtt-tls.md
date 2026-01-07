@@ -81,9 +81,9 @@ Choose the method that best fits your deployment and operational model.
 
    When **Select from Managed Certs** is selected:
 
-   - **Namespace**: The namespace where the managed certificate bundle is stored (for example, `global`).
+   - **Namespace**: The namespace where the managed certificate bundle is stored (default: `global`).
 
-   - **Managed Cert Bundle Name**: Select an existing managed certificate bundle. To create a new bundle, click **Create Managed Certs**. For details, see [Create Managed Certificates via Dashboard](./tls-certificate.md#create-managed-certificates-via-dashboard).
+   - **Managed Cert Bundle Name**: Select an existing managed certificate bundle. To create a new bundle, click **Create Managed Certs**. For details, see [Create Certificate Bundles via Dashboard](./tls-certificate.md#create-certificate-bundles-via-dashboard).
 
    - **SNI** (optional): The Server Name Indication value used to match this certificate when multiple certificates are configured on the same listener.
 

@@ -36,7 +36,7 @@ EMQX 提供了非常完整的 SSL/TLS 能力支持，支持通过 X.509 证书�
 
 在启用 SSL/TLS 连接之前，您需要准备 SSL/TLS 证书，用于对连接进行身份验证并保障通信安全。
 
-EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管证书（EMQX 6.1+）。托管证书提供集中化管理能力，可在多个监听器和[连接器](../data-integration/connector.md)之间复用，并支持通过自动证书管理环境（Automated Certificate Management Environment，ACME）实现可选的自动证书签发。
+EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管证书（EMQX 6.1+）。托管证书提供集中化管理能力，可在多个监听器和[连接器](../data-integration/connector.md)之间复用<!--，并支持通过自动证书管理环境（Automated Certificate Management Environment，ACME）实现可选的自动证书签发-->。
 
 有关在 EMQX 中获取、管理和使用 SSL/TLS 证书的完整指南，包括托管证书的使用方式，请参阅 [SSL/TLS 证书](./tls-certificate.md)。
 
@@ -84,8 +84,8 @@ EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管
 
    当选择**从托管证书中选择**时：
 
-   - **命名空间**：托管证书所在的命名空间（例如：`全局`）。
-   - **托管证书包名称**：选择一个已有的托管证书包。若需创建新的证书包，可点击**创建托管证书**。详情请参考：[通过 Dashboard 创建托管证书](./tls-certificate.md#通过-dashboard-创建托管证书)。
+   - **命名空间**：托管证书所在的命名空间（默认：`全局`）。
+   - **托管证书包名称**：选择一个已有的托管证书包。若需创建新的证书包，可点击**创建托管证书**。详情请参考：[通过 Dashboard 创建托管证书包](./tls-certificate.md#通过-dashboard-创建托管证书包)。
    - **SNI**（可选）：用于在同一监听器上配置多个证书时，根据客户端请求的 SNI 值匹配对应证书。
 
    你可以点击 “**+**” 按钮添加多个托管证书条目。当配置了多个证书时：
@@ -147,6 +147,8 @@ EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管
 
      > 托管证书包需要事先通过 Dashboard 或 HTTP API 创建。监听器配置中只需引用已存在的托管证书。
 
+     **示例：引用全局（global）命名空间中的证书**
+     
      ```hocon
      listeners.ssl.default {
        bind = "0.0.0.0:8883"
@@ -154,13 +156,11 @@ EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管
        ssl_options {
          managed_certs = [
            {
-             namespace = "global"
-             name = "example-cert-1"
+             bundle_name = "example-cert-1"
              sni  = "example.com"
            },
            {
-             namespace = "global"
-             name = "example-cert-2"
+             bundle_name = "example-cert-2"
              sni  = "api.example.com"
            }
          ]
@@ -172,8 +172,33 @@ EMQX 同时支持传统的基于文件路径的证书管理方式，以及托管
      }
      ```
 
-     当配置了多个托管证书时：
+     > 当引用全局（global）命名空间中的托管证书时，`namespace` 字段需要省略。如果省略 `namespace`，EMQX 会默认使用全局命名空间。
 
+     **示例：引用非全局（租户）命名空间中的证书**
+     
+     ```hocon
+     listeners.ssl.default {
+       bind = "0.0.0.0:8883"
+     
+       ssl_options {
+         managed_certs = [
+           {
+             namespace = "tenant-a"
+             bundle_name = "mqtt-cert"
+             sni       = "mqtt.tenant-a.example.com"
+           }
+         ]
+     
+         verify = verify_none
+         fail_if_no_peer_cert = false
+       }
+     }
+     ```
+     
+     > 当使用创建在非全局（租户）命名空间中的托管证书时，必须显式指定 `namespace` 字段。
+     
+     当配置了多个托管证书时：
+     
      - EMQX 会根据客户端发送的 SNI 动态选择匹配的证书。
      - 如果没有匹配到 SNI，则使用列表中的第一个证书作为默认证书。
 
