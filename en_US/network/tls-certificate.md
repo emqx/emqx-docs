@@ -18,7 +18,7 @@ This page covers the following topics:
 
 - Obtaining SSL/TLS certificates
 - Managing certificates in EMQX
-- Supporting multiple certificates and automation with the Automated Certificate Management Environment (ACME)
+- Supporting multiple certificates
 - Updating SSL/TLS Certificates
 
 ## Obtain SSL/TLS Certificates
