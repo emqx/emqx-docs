@@ -143,37 +143,61 @@ You can also enable the SSL/TLS connection by modifying the `listeners.ssl.defau
        - `false`: Allows connections without a client certificate, and rejects the connection only if a certificate is presented but is invalid (one-way authentication).
        - `true`: Rejects connections if the client does not provide a certificate (required for mTLS).
 
-   - If you use certificates managed centrally via EMQX and referenced by name, see the configuration example below:
+   - If you use certificates managed centrally via EMQX and referenced by name, see the configuration examples below:
 
      > Managed certificate bundles must be created in advance via the Dashboard or HTTP API. The listener configuration only references existing managed certificates.
 
-     ```hocon
+     **Example: referencing certificates in the global namespace**
+     
+     ```
      listeners.ssl.default {
        bind = "0.0.0.0:8883"
      
        ssl_options {
          managed_certs = [
            {
-             namespace = "global"
-             name = "example-cert-1"
+             bundle_name = "example-cert-1"
              sni  = "example.com"
            },
            {
-             namespace = "global"
-             name = "example-cert-2"
+             bundle_name = "example-cert-2"
              sni  = "api.example.com"
            }
          ]
      
-         # One-way authentication
          verify = verify_none
          fail_if_no_peer_cert = false
        }
      }
      ```
-
+     
+     > When referencing managed certificates in the global namespace, the `namespace` field must be omitted. The global namespace is used by default.
+     
+     **Example: referencing certificates in a non-global (tenant) namespace**
+     
+     ```
+     listeners.ssl.default {
+       bind = "0.0.0.0:8883"
+     
+       ssl_options {
+         managed_certs = [
+           {
+             namespace = "tenant-a"
+             bundle_name = "mqtt-cert"
+             sni       = "mqtt.tenant-a.example.com"
+           }
+         ]
+     
+         verify = verify_none
+         fail_if_no_peer_cert = false
+       }
+     }
+     ```
+     
+     > When using managed certificates created in a non-global (tenant) namespace, the `namespace` field must be specified explicitly.
+     
      When multiple managed certificates are configured:
-
+     
      - EMQX selects the certificate based on the client’s SNI.
      - If no SNI match is found, the first certificate entry is used as the default.
 

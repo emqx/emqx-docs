@@ -43,9 +43,9 @@ You can obtain TLS certificates in the following ways:
 
    For production and enterprise deployments, certificates with OV or higher assurance levels are generally recommended.
 
-- **Automatic issuance using ACME**
+<!--- **Automatic issuance using ACME**-->
 
-    EMQX can automatically obtain and renew server certificates using the ACME protocol (for example, Let’s Encrypt).
+<!--EMQX can automatically obtain and renew server certificates using the ACME protocol (for example, Let’s Encrypt).-->
 
 ### Create Self-Signed CA Certificates
 
@@ -157,7 +157,7 @@ Path-based certificates remain fully supported and are compatible with all EMQX 
 
 Starting from EMQX 6.1, EMQX introduces managed certificates, a centralized mechanism for managing TLS certificate files that can be reused across multiple components.
 
-Managed certificates can be reused across multiple resources, including:
+Managed certificates can be referenced and reused across multiple resources, including:
 
 - MQTT SSL listeners
 - WSS listeners
@@ -208,16 +208,16 @@ tenant1/certs1
 
 A managed certificate bundle may contain the following files:
 
-| File name     | Required | Description                                             |
-| ------------- | -------- | ------------------------------------------------------- |
-| `key.pem`     | Yes      | Private key                                             |
-| `chain.pem`   | Yes      | Certificate chain (excluding the root CA)               |
-| `ca.pem`      | Optional | Root CA bundle used for validating peers                |
-| `acc-key.pem` | Optional | ACME account private key (TLS server certificates only) |
+| File name          | Required | Description                                       |
+| ------------------ | -------- | ------------------------------------------------- |
+| `key.pem`          | Yes      | Private key                                       |
+| `chain.pem`        | Yes      | Certificate chain (excluding the root CA)         |
+| `ca.pem`           | Optional | Root CA bundle used for validating peers          |
+| `key-password.pem` | Optional | Key to decrypt the private key if it's encrypted. |
 
-> **Note**:
->
-> Not all files are required in every scenario. For example, `acc-key.pem` is present only when the certificate is issued or managed via ACME.
+<!--> **Note**:-->
+
+<!--> Not all files are required in every scenario. For example, `acc-key.pem` is present only when the certificate is issued or managed via ACME.-->
 
 #### Multiple Certificates with SNI
 
@@ -245,12 +245,11 @@ listeners.ssl.default {
   ssl_options {
     managed_certs = [
       {
-        certs_bundle_name = "default-cert"
-        certs_namespace = "global"
+        bundle_name = "default-cert"
+        sni = "example.com"
       },
       {
-        certs_bundle_name = "mqtt-example-com"
-        certs_namespace = "global"
+        bundle_name = "example-cert-1"
         sni = "mqtt.example.com"
       }
     ]
@@ -262,26 +261,24 @@ listeners.ssl.default {
 
 This section covers the creation and management of managed certificate bundles using the Dashboard and REST API.
 
-### Create Managed Certificates via Dashboard
+### Create Certificate Bundles via Dashboard
 
 You can create managed certificate bundles directly from the Dashboard.
 
-1. Go to **Management** -> **Listeners** (or any page that allows you to select managed certificates).
+1. Go to **Management** -> **Certificate**.
 
-2. When configuring a listener, set **Certificate Source** to **Select from Managed Certs**.
-
-3. Click **Create Managed Certs** next to **Managed Cert Bundle Name**.
+2. Click **+ Create**.
 
 4. In the **Create Managed Certs** panel, provide the following information:
 
    - **Name** (required): A unique name for the managed certificate bundle.
 
-   - **Namespace**: The namespace in which the managed certificate bundle is created.
+   - **Namespace**: Controls whether the managed certificate bundle is created in the global namespace or in a specific tenant namespace. 
 
-     The available namespace options depend on the current user:
+     The switch is disabled by default, which means the certificate bundle is created in the global (`global`) namespace. When enabled, you can select a specific namespace and create the certificate bundle within that namespace.
 
-     - Global users can create certificates only in the `global` namespace.
-     - Namespace users can create certificates only within their own namespace.
+     - Global administrators can create certificate bundles in the `global` namespace or in any tenant (non-global) namespace.
+     - Namespace-scoped users can create certificate bundles only within their own namespace.
 
    - **TLS Cert** (required): The server certificate in PEM format. You can paste the certificate content directly or click **Select file** to upload a file. The certificate should include the complete certificate chain if required by clients.
 
@@ -301,7 +298,22 @@ Once created, the certificate bundle becomes available for selection and can be 
 > **Note**
 > Managed certificate bundles are stored on disk and automatically reloaded by EMQX. Updating a managed certificate does not require restarting EMQX or its listeners.
 
-### Manage Certificates via REST API
+### Manage Certificate Bundles via Dashboard
+
+After a certificate bundle is created, it appears in the certificates list in the Dashboard, where you can view and manage all managed certificate bundles.
+
+- Use the namespace drop-down at the top to switch between the global namespace and specific tenant (non-global) namespaces. The list updates automatically based on the selected namespace.
+- Each certificate bundle is displayed with its **Name** and available **Actions**.
+
+From this page, you can:
+
+- View certificate bundles in the selected namespace.
+- Edit a certificate bundle to update certificate contents, private keys, or CA certificates.
+- Delete a certificate bundle that is no longer needed.
+
+![certificate_bundle_list](./assets/certificate_bundle_list.png)
+
+### Manage Certificate Bundles via REST API
 
 In addition to the Dashboard, EMQX provides an REST API for managing TLS certificate files. Managed certificates created via the API are identical to those created via the Dashboard and can be referenced by listeners and connectors in the same way.
 
@@ -325,10 +337,10 @@ POST /certs/ns/:NAMESPACE/name/:NAME?file=key|chain|ca|key-password
 Upload a certificate file in the global namespace：
 
 ```
-POST /certs/global/name/:NAME?file=key|chain|ca|acc-key
+POST /certs/global/name/:NAME?file=key|chain|ca|key-password
 ```
 
-#### List Managed Certificates
+#### List Certificate Bundles
 
 List managed certificate bundles in a namespace:
 
@@ -342,7 +354,7 @@ List manged certificate bundles in the global namespace:
 GET /certs/global/list
 ```
 
-#### Delete Managed Certificates
+#### Delete Certificate Bundles
 
 Delete an entire managed certificate bundle from a namespace:
 
@@ -356,7 +368,7 @@ Delete an entire managed certificate bundle from the global namespace:
 DELETE /certs/global/name/:NAME
 ```
 
-## Automatic Certificate Issuance with ACME (Managed Certificates)
+<!--## Automatic Certificate Issuance with ACME (Managed Certificates)
 
 EMQX supports automatic issuance and renewal of server-side TLS certificates through the ACME protocol (for example, Let’s Encrypt). This feature is optional and is intended for deployments where clients connect directly to EMQX over TLS using publicly accessible domain names. It is not suitable when TLS is terminated by a load balancer or when only private or internal hostnames are used.
 
@@ -406,6 +418,8 @@ acme.domains = ["mqtt1.example.com", "mqtt2.example.com"]
 acme.cert_dir = "${EMQX_MANAGED_CERTS_DIR}"
 ```
 
+-->
+
 ## Update SSL/TLS Certificates
 
 SSL/TLS certificates must be updated before they expire to maintain secure connections. How certificates are updated in EMQX depends on the certificate management method in use.
@@ -438,7 +452,7 @@ Once the bundle is updated:
 
 Managed certificates are designed to be reusable. Updating a bundle affects all resources that reference it.
 
-### Automatic Renewal with ACME (Managed Certificates Only)
+<!--### Automatic Renewal with ACME (Managed Certificates Only)
 
 For managed certificates issued using ACME:
 
@@ -450,7 +464,7 @@ After ACME is enabled and configured:
 
 - No manual certificate upload is required.
 - Listeners continue to reference the same managed certificate bundle.
-- Certificate rotation occurs without service interruption.
+- Certificate rotation occurs without service interruption.-->
 
 ## Next Steps
 
