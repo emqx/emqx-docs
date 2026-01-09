@@ -556,6 +556,8 @@ Below are the functions that can be used in the expressions:
   - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - [base64_encode(Data, 'no_padding')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (since 6.0.2)
   - [base64_encode(Data, 'no_padding', 'urlsafe')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (since 6.0.2)
+  - `json_value(Data, Path)`: Extract values from JSON strings using a dot-separated path to navigate nested structures. For example, if `username` is a JSON object, you can access a field with `json_value(username, 'shop.floor')`. (since 6.0.2)
+  - `jwt_value(Data, Path)`: Decode JWT token payloads and extract claim values using a dot-separated path. For example, if `password` is a JWT with a customized claim, you can access the nested value with `jwt_value(password, 'client_attrs.unitid')`. (since 6.0.2)
   - `int2hexstr(Integer)`: Encode an integer to hex string. e.g. 15 as 'F' (uppercase).
 - **Hash functions**:
   - `hash(Algorithm, Data)`: Algorithm can be one of: md4 | md5, sha (or sha1) | sha224 | sha256 | sha384 | sha512 | sha3_224 | sha3_256 | sha3_384 | sha3_512 | shake128 | shake256 | blake2b | blake2s

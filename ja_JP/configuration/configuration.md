@@ -537,6 +537,8 @@ EMQXはルールエンジンの文字列関数に似た豊富な文字列、配�
   - [base64_encode(Data)](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string)
   - [base64_encode(Data, 'no_padding')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (6.0.2 から)
   - [base64_encode(Data, 'no_padding', 'urlsafe')](../data-integration/rule-sql-builtin-functions.md#base64-encode-data-string-bytes-string) (6.0.2 から)
+  - `json_value(Data, Path)`：ドット区切りのパスを使用して、JSON文字列から値を抽出し、ネストされた構造をナビゲートします。例えば、`username` がJSONオブジェクトの場合、`json_value(username, 'shop.floor')` でフィールドにアクセスできます。 (6.0.2 から)
+  - `jwt_value(Data, Path)`：JWTトークンのペイロードをデコードし、ドット区切りのパスを使用してクレーム値を抽出します。例えば、`password` がカスタムクレームを持つJWTの場合、`jwt_value(password, 'client_attrs.unitid')` でネストされた値にアクセスできます。 (6.0.2 から)
   - `int2hexstr(Integer)`：整数を16進文字列に変換（例：15 → 'F'）
 - **ハッシュ関数**：
   - `hash(Algorithm, Data)`：アルゴリズムはmd4、md5、sha（sha1）、sha224、sha256、sha384、sha512、sha3_224、sha3_256、sha3_384、sha3_512、shake128、shake256、blake2b、blake2sのいずれか
