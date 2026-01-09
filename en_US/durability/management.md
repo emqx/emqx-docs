@@ -47,9 +47,9 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 
 Starting from EMQX 6.1, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance.
 
-Database groups allow multiple durable storage databases to be governed together with shared resource limits, without changing their logical data model. This feature is primarily intended for operators and managed deployments.
+Database groups enable multiple durable storage databases to be managed together with shared resource limits, without modifying their logical data models. This feature is primarily intended for operators and managed deployments.
 
-By default, all durable storage databases belong to a single database group, preserving the behavior of earlier releases.
+By default, each durable storage database belongs to a database group named after the database itself, and each such group contains only that single database, preserving the behavior of earlier releases.
 
 Database groups are configured under the `durable_storage.db_groups` namespace.
 

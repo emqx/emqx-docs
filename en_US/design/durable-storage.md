@@ -100,11 +100,11 @@ The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 Starting from EMQX 6.1, Durable Storage introduces the concept of database groups to improve resource management and operational safety.
 
-A durable storage database group is a logical grouping that provides unified management of storage resources (such as disk space and memory buffers) for one or more durable storage databases on a node.
+A database group provides unified management of storage resources, such as disk space and memory buffers, for one or more durable storage databases on a node.
 
-Database groups are an operator-level abstraction designed primarily for managed and advanced deployments. They are not typically exposed to end users. By default, all Durable Storage databases belong to a single group, preserving the behavior of earlier releases.
+Database groups are an operator-level abstraction intended for managed and advanced deployments and are not typically exposed to end users. By default, each durable storage database is assigned to its own database group, named after the database, preserving the behavior of earlier releases.
 
-Database groups do not change the logical data model (shards, generations, slabs, or streams). Instead, they provide a resource governance layer on top of the existing storage architecture.
+Database groups do not change how data is structured or accessed. The logical data model (shards, generations, slabs, or streams) remains unchanged. They operate solely as a resource governance layer. Even when a group contains a single database, it establishes a consistent and extensible boundary for quota enforcement and resource accounting.
 
 ### Design Motivation
 
@@ -152,26 +152,26 @@ Durable Storage uses soft quotas as the primary mechanism for controlling disk u
 Storage quotas are enforced before write transactions are accepted by the Durable Storage leader:
 
 1. When a transaction containing writes is submitted, the leader checks the current SST disk usage of the database group.
-2. If accepting the transaction would exceed the configured quota, the transaction is rejected.
+2. The leader rejects the transaction if accepting it would exceed the quota. If the leader accepts the transaction, it is replicated and applied consistently across all replicas.
 3. Read-only transactions continue to be accepted.
 
 Quota enforcement occurs at the Durable Storage transaction layer and does not depend on the underlying storage engine entering a read-only state.
 
 This design ensures that:
 
-- Transactions exceeding the quota are rejected before being written to the WAL
-- Replication consistency is preserved across the cluster
-- Cleanup operations that reduce disk usage remain possible
+- Transactions exceeding the quota are rejected before being written to the WAL.
+- Replication consistency is preserved across the cluster.
+- Cleanup operations that reduce disk usage remain possible.
 
 ### Behavior When Quota Is Exceeded
 
 When a database group exceeds its storage usage:
 
-- Write operations are rejected
-- Read and replay operations continue to function
-- Cleanup operations that reduce disk usage are still allowed
+- Write operations are rejected by the leader node.
+- Read and replay operations continue to function normally.
+- Cleanup operations that reduce disk usage are still allowed.
 
-Quota enforcement decisions are evaluated independently on each node. If a node exceeds its available storage capacity, write operations routed to that node may be rejected, while other nodes continue to operate normally.
+Quota enforcement is performed **only on the leader node** of each shard. Followers do not independently enforce quotas or make admission decisions, ensuring replica consistency and preventing divergence.
 
 ## Write Path
 
