@@ -59,49 +59,33 @@ Choose the method that best fits your deployment and operational model.
 
 3. Configure the following SSL/TLS settings:
 
-   #### Authentication
-
    - **Verify Peer**: Disabled by default for one-way authentication. When disabled, EMQX does not verify client certificates.
+   
    - **Force Verify Peer Certificate**: Only applicable when **Verify Peer** is enabled. For one-way authentication, this option should remain disabled.
-
-   #### Certificate Source
-
+   
    - **Certificate Source**: Choose how server certificates are provided:
-     - **Enter Manually**: Use traditional path-based certificates.
-     - **Select from Managed Certs**: Use managed certificate bundles (EMQX 6.1+).
-
-   ##### Enter Manually (Path-Based Certificates)
-
-   When **Enter Manually** is selected, configure the following fields:
-
-   - **TLS Cert**: Path to the server certificate file.
-   - **TLS Key**: Path to the private key file.
-
-   ##### Select from Managed Certs (EMQX 6.1+)
-
-   When **Select from Managed Certs** is selected:
-
-   - **Namespace**: The namespace where the managed certificate bundle is stored (default: `global`).
-
-   - **Managed Cert Bundle Name**: Select an existing managed certificate bundle. To create a new bundle, click **Create Managed Certs**. For details, see [Create Certificate Bundles via Dashboard](./tls-certificate.md#create-certificate-bundles-via-dashboard).
-
-   - **SNI** (optional): The Server Name Indication value used to match this certificate when multiple certificates are configured on the same listener.
-
-   You can click the **+** button to add multiple managed certificate entries. 
-
-   When multiple certificates are configured, EMQX selects the certificate dynamically based on the client’s SNI. If no SNI matches, the first certificate in the list is used as the default.
-
-   #### TLS Protocol and Security Options
-
+   
+     - **Enter Manually**: Use traditional path-based certificates. Configure the following fields:
+   
+       - **TLS Cert**: Path to the server certificate file.
+       - **TLS Key**: Path to the private key file.
+   
+     - **Select from Managed Certs**: Use managed certificate bundles (EMQX 6.1+). Configure the following fields:
+   
+       - **Namespace**: The namespace where the managed certificate bundle is stored (default: `global`).
+       - **Managed Cert Bundle Name**: Select an existing managed certificate bundle. To create a new bundle, click **Create Managed Certs**. For details, see [Create Certificate Bundles via Dashboard](./tls-certificate.md#create-certificate-bundles-via-dashboard).
+       - **SNI** (optional): The Server Name Indication value used to match this certificate when multiple certificates are configured on the same listener.
+   
+       You can click the **+** button to add multiple managed certificate entries. 
+   
+       When multiple certificates are configured, EMQX selects the certificate dynamically based on the client’s SNI. If no SNI matches, the first certificate in the list is used as the default.
+   
    - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suites are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
    - **Cipher Suites**: Optional. Specify allowed cipher suites if required.
    - **CACert Depth**: The maximum allowed depth of the certificate chain. Default value: `10`.
    - **Key File Passphrase**: Password for the private key file, if encrypted.
-   - **Enable OCSP Stapling**: Disabled by default. Enable this option if you need to check certificate revocation status via OCSP.
-      See [OCSP Stapling](./ocsp.md).
-   - **Enable CRL Check**: Disabled by default. Enable this option to verify whether certificates have been revoked.
-      See [CRL Check](./crl.md).
-   
+   - **Enable OCSP Stapling**: Disabled by default. Enable this option if you need to check certificate revocation status via OCSP. See [OCSP Stapling](./ocsp.md).
+   - **Enable CRL Check**: Disabled by default. Enable this option to verify whether certificates have been revoked. See [CRL Check](./crl.md).
 4. After completing the configuration, click **Update** to apply the changes.
 
 ### Enable via Configuration File
