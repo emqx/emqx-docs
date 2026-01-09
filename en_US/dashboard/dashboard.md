@@ -99,8 +99,14 @@ The metric data covers 4 aspects: bytes, packets, messages, and events. In the c
 
 ![image](./assets/metrics-1.png)
 
+### Rules and Actions (Sink)
+
+This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and actions (sinks) are executed.
+
+![rule-action-metrics](./assets/rule-action-metrics.png)
+
 ### Messaging
 
-The four cards below provide statistics on the data generated during message transmission, such as statistics on traffic sent and received (in bytes), statistics on the number of packets, the number of messages and the number of messages delivered.
+The four cards below provide statistics on the data generated during message transmission, such as statistics on traffic sent and received (in bytes), statistics on the number of packets, the number of messages, and the number of messages delivered.
 
 ![image](./assets/metrics-2.png)
