@@ -158,7 +158,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/deployments">システムのデプロイおよび管理コスト削減</a></td>
+    <td><a href="https://docs.emqx.com/en/emqx/latest/deploy/kubernetes/kubernetes.html">システムのデプロイおよび管理コスト削減</a></td>
   </tr>
   <tr>
     <td><b>エッジコンピューティング</b></td>
@@ -170,6 +170,7 @@
 </tbody>
 </table>
 </div>
+
 
 
 
