@@ -1360,10 +1360,10 @@ Decode `Data` from base64 format with optional parameters to control decoding be
 
 **Options:**
 
-- **`no_padding`**: Decode without expecting padding characters (`=`). Useful when decoding strings that don't have padding.
-- **`urlsafe`**: Use URL-safe base64 decoding. Replaces `-` with `+` and `_` with `/` before decoding.
+- **`no_padding`**: Decode without expecting padding characters (`=`). This is useful when working with Base64 strings that omit padding.
+- **`urlsafe`**: Use URL-safe base64 decoding. Before decoding, `+` is replaced with `-` and `/` is replaced with `_`.
 
-You can use these options individually or combine them. When combining options, the order doesn't matter.
+You can use these options individually or combine them. When multiple options are provided, their order does not affect the result.
 
 **Examples:**
 
@@ -1396,10 +1396,10 @@ Encode `Data` to base64 format with optional parameters to control encoding beha
 
 **Options:**
 
-- **`no_padding`**: Encode without padding characters (`=`). Useful when you need to remove padding from encoded strings.
-- **`urlsafe`**: Use URL-safe base64 encoding. Replaces `+` with `-` and `/` with `_`, making the encoded string safe to use in URLs without encoding.
+- **`no_padding`**: Encode without padding characters (`=`). This is useful when you need to remove padding from encoded strings.
+- **`urlsafe`**: Use URL-safe base64 encoding. Before encoding, `+` is replaced with `-` and `/` is replaced with `_`, allowing the encoded string to be used directly in URLs without additional encoding.
 
-You can use these options individually or combine them. When combining options, the order doesn't matter.
+You can use these options individually or combine them. When multiple options are provided, their order does not affect the result.
 
 **Examples:**
 
