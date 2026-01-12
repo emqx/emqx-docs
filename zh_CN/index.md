@@ -15,7 +15,7 @@ EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布
 - [**全面支持 MQTT 5.0 标准**](https://www.emqx.com/zh/blog/introduction-to-mqtt-5)：100% 符合 MQTT 5.0 和 3.x 标准，具有更好的可扩展性、安全性和可靠性。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput)：单节点支持每秒实时接收、处理与分发数百万条的 MQTT 消息。[毫秒级](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-message-latency-response-time)消息交付时延。
 - [**易运维**](./dashboard/introduction.md)：图形化配置、操作与管理，实时监测运行状态。支持 MQTT 跟踪进行端到端问题分析。
-- [**云原生**](https://www.emqx.com/zh/emqx-kubernetes-operator)：通过 Kubernetes Operator 和 Terraform，可以轻松地在企业内部和公共云中进行部署。
+- [**云原生**](./deploy/kubernetes/kubernetes.md)：通过 Kubernetes Operator 和 Terraform，可以轻松地在企业内部和公共云中进行部署。
 
 ## 核心组件
 
@@ -174,74 +174,108 @@ EMQX 企业版允许通过 MQTT 消息、REST API 以及 Kafka 进行消息下�
 
 EMQX 企业版为各行各业提供多功能的物联网解决方案，确保可靠的数据连接、高效的传输和灵活的处理，助力创新与卓越运营。
 
-### 汽车行业
+### 汽车与车联网
 
-#### 车联网及车联网服务提供商
+EMQX 正在赋能软件定义汽车（Software-Defined Vehicles，SDV）的未来，已为全球 5 家十大汽车制造商中的企业连接了 30,000,000+ 辆汽车，覆盖 100+ 款车型。该平台为关键任务型 V2X 与车载信息服务（Telematics）应用提供实时数据骨干，并通过基于 QUIC 的 MQTT 针对不稳定网络环境进行了优化。
 
-TSP 平台的未来应当是“数据驱动”和“服务导向”的。为了取得成功，TSP 平台必须保障与汽车的稳定连接、数据传输的高效率及数据处理的灵活性。在此基础上，EMQX 对于打造一个坚固、高效且易于维护的数据基础设施发挥着至关重要的作用。[**了解更多 →**](https://www.emqx.com/zh/blog/revolutionizing-tsp-platforms)
+![architecture-v2c](./assets/architecture-v2c.svg)
 
-![use_case_5](./assets/use_case_5.png)
+- **联网汽车与 SDV**：支持远程诊断、双向命令与控制，以及面向全球车队的空中升级（OTA）。[**了解更多 →**](https://www.emqx.com/zh/solutions/internet-of-vehicles)
+- **车队信息服务（Fleet Telematics）**：通过超低延迟的数据流实现实时地理位置跟踪、基于使用情况的保险（UBI）以及预测性维护。[**了解更多 →**](https://www.emqx.com/zh/solutions/fleet-telematics)
+- **电动汽车充电网络**：为充电站管理、智能充电以及车网互动（V2G）应用提供可扩展的 MQTT 连接能力。
+- **汽车制造**：通过连接机器人、PLC 与传感器，统一工厂车间数据，实现持续监控与质量保障。[**了解更多 →**](https://www.emqx.com/zh/solutions/industrial-iot)
 
-
-
-#### 智能驾驶舱与车载信息娱乐系统
-
-依托 EMQ 的云端端到端协同软件架构，我们帮助汽车制造商构建以车云协作为核心能力的智能驾驶舱。[**了解更多 →**](https://www.emqx.com/zh/use-cases/smart-cockpit)
-
-![use_case_6](./assets/use_case_6.png)
-
-#### 电动车充电网络
-
-EV Power 利用 EMQX 赋能充电桩运营平台，解决设备区域分散难以控制、部署环境恶劣等问题。[**了解更多 →**](https://www.emqx.com/zh/customers/ev-power)
-
-![use_case_7](./assets/use_case_7.png)
+上汽大众依托 EMQX 构建其下一代车联网（IoV）平台，支持超过 160 万辆联网汽车，实现远程控制与实时数据监控。[**阅读案例 →**](https://www.emqx.com/zh/customers/saic-volkswagen)
 
 ### 交通运输
 
-#### 物流资产管理
+在一个分秒必争的行业中，EMQX 提供实时车队可视化、在不稳定网络环境下依然可靠的数据传输能力，以及地理分布式部署以最大程度降低延迟。该平台可将数十万车辆与设备连接至统一的数据骨干。
 
-EMQX 提供一个全面的数据驱动解决方案，用于物流资产管理，具备数据收集、传输和处理的能力。这有助于企业实时监控其资产，并获取有用信息，从而做出明智的管理决策，并提高竞争力。[**了解更多 →**](https://www.emqx.com/zh/blog/a-data-driven-solution-for-logistics-asset-tracking-and-maintenance)
+![architecture-transportation-logistics](./assets/architecture-transportation-logistics.svg)
 
-![use_case_8](./assets/use_case_8.png)
+- **车队管理**：实时跟踪车辆位置、监控驾驶行为并优化路线，以降低燃油成本并提升交付效率。[**了解更多 →**](https://www.emqx.com/zh/solutions/fleet-management)
+- **智慧城市交通**：处理海量交通数据，实现实时分析与智能交通系统。
+- **V2X 通信**：支持车与万物（Vehicle-to-Everything）通信，提升行车安全、交通效率及自动驾驶应用能力。[**了解更多 →**](https://www.emqx.com/zh/solutions/software-defined-vehicles)
+- **冷链监控**：实时监测敏感货物的温度与湿度，确保合规并防止货损。
 
-#### 车队管理
+深圳市城市交通规划设计研究中心（SUTPC）使用 EMQX 处理来自超过 170 万辆车辆的数据，实现实时交通分析与智能交通系统。[**阅读案例 →**](https://www.emqx.com/zh/customers/sutpc)
 
-鉴于物流行业的复杂和动态性质，有效地监控、调度和优化车队在运输和交付过程中至关重要。及时可靠的货物交付、成本优化和顾客满意度都严重依赖于高效的车队管理实践。[**了解更多 →**](https://www.emqx.com/zh/blog/how-emqx-revolutionizes-logistics-fleet-management)
+## 制造业与工业物联网（IIoT）
 
-<img src="./assets/use_case_9.png" alt="design_9" style="zoom:70%;" />
+EMQX 连接从工厂车间到云端的所有机器、系统与应用，通过 AI 原生的数据主干打通 OT 与 IT。平台支持包括 Modbus、OPC-UA、Siemens S7 在内的 100+ 种工业协议，并通过 Sparkplug B 实现统一命名空间（UNS）架构，真正实现即插即用的互操作性。
 
-#### 车辆与一切通信 (V2X)
+![architecture-manufacturing](./assets/architecture-manufacturing.svg)
 
-[V2X (车辆与一切通信)](https://www.emqx.com/zh/blog/what-is-v2x-and-the-future-of-vehicle-to-everything-connectivity)是一种通信技术，使车辆能够与其环境中的各种元素交换数据，包括其他车辆（V2V）、行人（V2P）、基础设施（V2I）和网络（V2N）。合作车辆基础设施系统（CVIS）代表了智能交通系统的一个前景广阔的发展方向，其需整合V2X技术、各类传感器技术、云计算、边缘计算以及交通控制技术。探索 EMQX 在这一整体架构中所扮演的重要角色。[**了解更多 →**](https://www.emqx.com/zh/blog/enhancing-v2x-connectivity-with-emq)
+- **预测性维护**：利用实时传感器数据与 AI 预测设备故障，防止非计划停机并延长设备使用寿命。
+- **OEE 优化**：通过实时跟踪设备综合效率（OEE）提升工厂产出，制造商报告 OEE 提升最高达 25%，停机时间减少 40%。
+- **质量与可追溯性**：在质量偏差发生的第一时间进行检测，实时监控生产参数，实现完整的产品可追溯性。
+- **实时性能监控**：结合 EMQX 的[指标与可观测性](./observability/overview.md)能力，通过实时仪表板可视化整条生产线，并可集成 Prometheus 与 Datadog。
 
-![use_case_10](./assets/use_case_10.png)
-
-### 制造业与 IIoT
-
-EMQ 智能工厂解决方案旨在建立全面的数据收集、传输、分发等机制。这一解决方案使工厂能够迅速部署广泛的智能应用，包括设备健康管理、能源消耗设备的优化、生产监控与分析、产品质量追溯、供应链中的参数优化、预测性维护和缺陷检测。[**了解更多 →**](https://www.emqx.com/zh/blog/data-infrastructure-for-smart-factory)
-
-![use_case_11](./assets/use_case_11.png)
-
-### 石油与天然气
-
-EMQ 为石油行业提供物联网数据收集解决方案，支持油田物联网终端设备的实时数据收集和云端协同管理。[**了解更多 →**](https://www.emqx.com/zh/use-cases/oil-extraction-transportation)
-
-![use_case_12](./assets/use_case_12.png)
-
-### 金融与支付
-
-EMQ 的金融支付行业解决方案帮助客户实现7*24小时连续服务，已为企业级用户提供了5年以上的稳定运营和服务。[**了解更多 →**](https://www.emqx.com/zh/customers/emqx-in-finance-and-payment-iot)
-
-![use_case_13](./assets/use_case_13.png)
+领先的半导体晶圆厂使用 EMQX 统一设备数据，每个工厂处理 350 万以上数据标签，采集周期达 100ms，并保持 100% 的数据完整性，以支撑高精度制造。[**了解更多 →**](https://www.emqx.com/zh/solutions/industrial-iot)
 
 ### 能源与公用事业
 
-利用 EMQ 在物联网消息中间件技术方面的领先优势以及 SGITG 在国家电网技术和市场方面的实力，两家公司正紧密合作开发下一代电力物联网产品。[**了解更多 →**](https://www.emqx.com/zh/customers/sgitg-sgcc)
+EMQX 为现代能源电网提供支撑，连接 1,000 万以上终端节点，在关键电网控制与保护应用中实现低于 100ms 的延迟。平台通过多协议网关将传统 OT 协议与现代 IT 系统进行桥接。
 
-### 运营商
+![architecture-energy-utilities](./assets/architecture-energy-utilities.svg)
 
-通过与 EMQ 的深入合作，天翼物联网已将 CTWing 建设成为全球最大的集团级 NB-IoT 设备接入平台，该物联网平台的累计连接设备数量已达数百万。[**了解更多 →**](https://www.emqx.com/zh/customers/china-telecom)
+#### 智能电网与可再生能源
 
-### 消费电子与AIoT
+- **电网平衡**：集成分布式能源资源（DER），实时响应供需变化，确保电网稳定性。
+- **电动汽车充电管理**：构建具备智能充电与车网互动（V2G）能力的可扩展 EV 充电网络。
+- **资产预测性维护**：实时监测变电站、变压器及可再生能源资产，预测故障并优化维护策略。
 
-基于 EMQX 的物联网数据访问平台为一家智能服务机器人公司提供了稳定高效的数据访问服务，帮助其服务超过5000名终端客户。[**了解更多 →**](https://www.emqx.com/zh/customers/intelligent-service-robot-aiot)
+#### 石油与天然气
+
+- **远程资产监控**：实时监控并控制井口、泵站与管道等远程资产。
+- **管道泄漏检测**：通过分析传感器实时采集的压力与流量数据，即时检测并定位泄漏。
+
+华北油田公司使用 EMQX 连接超过 40,000 个数据采集点，实现油田生产运行的实时监控与智能分析。[**阅读案例 →**](https://www.emqx.com/zh/customers/huabei-oilfield-company)
+
+### 医疗健康
+
+EMQX 通过可扩展且[安全的数据主干](./access-control/security-guide.md)，支持实时患者监护、医疗设备集成以及下一代远程医疗解决方案。平台提供符合 HIPAA 要求的安全特性，包括 TLS/SSL 加密、强认证机制以及细粒度访问控制，以保护敏感的患者数据。
+
+![architecture-healthcare](./assets/architecture-healthcare.svg)
+
+- **远程患者监护（RPM）**：持续监测患者居家环境下的生命体征与健康状态，实现早期干预并减少再入院率。
+- **医疗设备集成**：连接并整合输液泵、呼吸机与实验室设备数据，形成统一的患者护理视图。
+- **智慧医院自动化**：从医疗资产追踪到患者流转与环境条件优化，实现医院运营自动化。
+- **远程医疗与远程诊疗**：支持患者与医疗服务提供者之间的实时通信与数据交换，实现远程会诊。
+
+### 金融服务
+
+EMQX 为实时金融应用提供毫秒级延迟、银行级安全性以及 7×24 小时连续服务。平台已为企业级金融用户提供超过五年的稳定运行。
+
+![architecture-financial](./assets/architecture-financial.svg)
+
+- **实时 POS 监控**：连接数百万 POS 终端，实时监控交易数据与设备状态，实现主动运维。
+- **欺诈检测**：在交易发生的瞬间进行分析，在影响客户之前识别并阻止欺诈行为。
+- **现代支付系统**：为移动支付、数字钱包以及实时清结算构建可靠、低延迟的基础设施。
+- **行情数据分发**：以极低延迟将股票报价、成交数据等实时行情可靠分发至数千客户端。
+
+[**阅读案例 →**](https://www.emqx.com/zh/customers/emqx-in-finance-and-payment-iot)
+
+### 电信运营商
+
+EMQX 为 5G 物联网服务提供运营商级可扩展能力，单个平台支持 1 亿以上设备并发连接。平台支持 MQTT、CoAP、LwM2M 等多协议，实现 IT / OT / CT 的无缝融合。
+
+![architecture-telecom](./assets/architecture-telecom.svg)
+
+- **5G IoT 平台**：通过 5G 网络可靠连接数亿物联网设备，为增值服务提供稳定基础。
+- **网络监控**：实时持续监控网络基础设施的健康状态与性能，主动发现并解决问题。
+- **智慧城市数据主干**：构建智慧城市的数据基础设施，连接交通系统、公共交通、公用事业与应急服务。
+
+中国电信作为全球最大的电信运营商之一，使用 EMQX 构建其国家级物联网平台 CTWing，支持超过 1 亿设备并发连接。[**阅读案例 →**](https://www.emqx.com/zh/customers/china-telecom)
+
+### 零售与消费级物联网
+
+EMQX 连接数百万零售设备与消费级物联网终端，为全渠道体验、智能家居自动化与交互式应用实现实时数据流转。
+
+![architecture-retail](./assets/architecture-retail.svg)
+
+- **智慧零售**：为实时库存管理、POS 监控、个性化客户互动及动态定价提供支持，覆盖所有门店。在高峰时段也能确保数千台自助终端的无缝用户体验。
+- **智能家居**：通过可扩展的[发布/订阅](./messaging/introduction.md)消息主干连接数百万智能家居设备，实现家庭自动化、能源监控，并与 Alexa、Google Assistant 等平台集成。
+- **游戏与社交**：为在线游戏与社交应用构建超低延迟通信能力，支持数百万并发用户的游戏内聊天、实时通知与直播活动。
+
+昕诺飞（原飞利浦照明）使用 EMQX 构建全球智能照明解决方案，确保数百万灯具的可靠实时控制。基于位置的社交应用 JAGAT 使用 EMQX 处理数百万用户的实时消息。[**阅读案例 →**](https://www.emqx.com/zh/customers/how-jagat-achieved-seamless-social-interaction-with-emqx)
