@@ -63,6 +63,20 @@ Choose the method that best fits your deployment and operational model.
    
    - **Force Verify Peer Certificate**: Only applicable when **Verify Peer** is enabled. For one-way authentication, this option should remain disabled.
    
+   - **Session Tickets**: Enable TLS 1.3 session resumption. Clients can reuse a previously established TLS session during reconnection by presenting encrypted session tickets issued by the server, avoiding a full TLS handshake and reducing latency and CPU usage.
+   
+     - **`disabled`**: Disable session tickets (default). A full TLS handshake is performed for every connection.
+     - **`stateless`**: Enable stateless session tickets. The server does not store session state, improving reconnection performance. TLS client certificate information is not available after session resumption, making this option suitable when certificate-based authentication or authorization is not required.
+     - **`stateless_with_cert`**: Enable stateless session tickets with certificate information included. Certificate information remains available after session resumption, suitable for certificate-based authentication (such as mTLS), but with slightly increased network bandwidth usage.
+   
+     ::: tip Note
+   
+     Session tickets are supported only with TLS 1.3 and only in stateless mode to ensure scalability in clustered environments. EMQX does not support stateful session resumption for TLS 1.2.
+   
+     EMQX also does not support client early data (0-RTT). Clients must wait until the TLS handshake is complete before sending MQTT data.
+   
+     :::
+   
    - **Certificate Source**: Choose how server certificates are provided:
    
      - **Enter Manually**: Use traditional path-based certificates. Configure the following fields:
@@ -81,11 +95,17 @@ Choose the method that best fits your deployment and operational model.
        When multiple certificates are configured, EMQX selects the certificate dynamically based on the client’s SNI. If no SNI matches, the first certificate in the list is used as the default.
    
    - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suites are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
+   
    - **Cipher Suites**: Optional. Specify allowed cipher suites if required.
+   
    - **CACert Depth**: The maximum allowed depth of the certificate chain. Default value: `10`.
+   
    - **Key File Passphrase**: Password for the private key file, if encrypted.
+   
    - **Enable OCSP Stapling**: Disabled by default. Enable this option if you need to check certificate revocation status via OCSP. See [OCSP Stapling](./ocsp.md).
+   
    - **Enable CRL Check**: Disabled by default. Enable this option to verify whether certificates have been revoked. See [CRL Check](./crl.md).
+   
 4. After completing the configuration, click **Update** to apply the changes.
 
 ### Enable via Configuration File
