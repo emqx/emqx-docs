@@ -132,7 +132,7 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 回到 EMQX Dashboard 的**监控** -> **集群概览**，可以看到**连接数**、**主题数**、和**订阅数**部分数据的变化，在下方的可视化窗格，还可以看到这段时间流入的消息数量曲线。
 
-![emqx-dashboard_ee](./assets/emqx-dashboard_ee.png)
+<img src="./assets/view_metrics_dashboard.png" alt="emqx-dashboard_ee" style="zoom:150%;" />
 
 ## 下一步
 
