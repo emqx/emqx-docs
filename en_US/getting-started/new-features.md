@@ -6,27 +6,7 @@ description: This section lists the new features introduced in EMQX 5.2 and late
 
 This page highlights major new features supported in the current release. Note that it does not list every feature provided by EMQX.
 
-## EMQX 6.1.0 (Latest)
-
-### MQTT Streams
-
-MQTT Streams introduce a persistent, replayable streaming model to EMQX, extending MQTT’s real-time publish/subscribe paradigm with durable message storage and consumer-controlled replay.
-
-Unlike traditional MQTT delivery, which is transient and depends on subscriber availability, MQTT Streams continuously capture messages matching a topic filter into a persistent stream. Consumers can subscribe to a stream using a timestamp-based topic format (`$s/<timestamp>/<topic_filter>`) to replay historical messages from any point in time, independent of when the messages were originally published.
-
-This allows EMQX to natively support historical message replay, event tracing, and state recovery based on stored messages, without requiring external streaming systems.
-
-#### Feature Highlights
-
-- **Durable Message Streams**: Persist MQTT messages by topic filter with configurable retention.
-- **Timestamp-Based Replay**: Consumers specify a timestamp when subscribing to replay messages starting from a chosen point in time.
-- **Regular and Last-Value Streams**: Support both full event streams and, when Last-Value semantics are enabled, compacted streams that retain only the latest message per key.
-- **Per-Key Ordering**: Messages sharing the same stream key are delivered in strict publish order.
-- **MQTT-Native Design**: Requires no changes to existing MQTT publishers or clients.
-
-MQTT Streams make EMQX suitable for both real-time messaging and stream processing workloads, reducing architectural complexity and enabling new classes of IoT and event-driven applications.
-
-Learn more in the [MQTT Streams documentation](../mqtt-stream/mqtt-stream-concept.md).
+## EMQX 6.0.0 (Latest)
 
 ### Message Queue
 

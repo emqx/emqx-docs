@@ -200,7 +200,7 @@ EMQX 正在赋能软件定义汽车（Software-Defined Vehicles，SDV）的未�
 
 深圳市城市交通规划设计研究中心（SUTPC）使用 EMQX 处理来自超过 170 万辆车辆的数据，实现实时交通分析与智能交通系统。[**阅读案例 →**](https://www.emqx.com/zh/customers/sutpc)
 
-## 制造业与工业物联网（IIoT）
+### 制造业与工业物联网（IIoT）
 
 EMQX 连接从工厂车间到云端的所有机器、系统与应用，通过 AI 原生的数据主干打通 OT 与 IT。平台支持包括 Modbus、OPC-UA、Siemens S7 在内的 100+ 种工业协议，并通过 Sparkplug B 实现统一命名空间（UNS）架构，真正实现即插即用的互操作性。
 
