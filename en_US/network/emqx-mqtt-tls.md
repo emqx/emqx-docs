@@ -2,7 +2,7 @@
 
 EMQX can establish secure connections via SSL/TLS when accepting the access of an MQTT Client. The SSL/TLS encryption functionality encrypts network connections at the transport layer, enhancing the security of communication data while ensuring its integrity.
 
-This page introduces the funtionalities and advantages of the SSL/TLS connection and how to establish an SSL/TLS connection between the client and EMQX. 
+This page introduces the functionalities and advantages of the SSL/TLS connection and how to establish an SSL/TLS connection between the client and EMQX. 
 
 ## Safety Benefits
 
@@ -42,19 +42,40 @@ EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for on
 
 ### Enable via Dashboard
 
-1. Go to EMQX Dashboard. Click **Management** -> **Listeners** from the left navigation menu.
+1. Go to the EMQX Dashboard. Click **Management** -> **Listeners** from the left navigation menu.
 
 2. On the **Listeners** page, click **default** from the **Name** column of the SSL listener. 
 
    - **TLS Verify**: Disabled by default for one-way authentication.
-   - **TLS Cert**, **TLS Key** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
+
+   - **Session Tickets**: Enable TLS 1.3 session resumption. Clients can reuse a previously established TLS session during reconnection by presenting encrypted session tickets issued by the server, avoiding a full TLS handshake and reducing latency and CPU usage.
+
+     - **`disabled`**: Disable session tickets (default). A full TLS handshake is performed for every connection.
+     - **`stateless`**: Enable stateless session tickets. The server does not store session state, improving reconnection performance. TLS client certificate information is not available after session resumption, making this option suitable when certificate-based authentication or authorization is not required.
+     - **`stateless_with_cert`**: Enable stateless session tickets with certificate information included. Certificate information remains available after session resumption, suitable for certificate-based authentication (such as mTLS), but with slightly increased network bandwidth usage.
+
+     ::: tip Note
+
+     Session tickets are supported only with TLS 1.3 and only in stateless mode to ensure scalability in clustered environments. EMQX does not support stateful session resumption for TLS 1.2.
+
+     EMQX also does not support client early data (0-RTT). Clients must wait until the TLS handshake is complete before sending MQTT data.
+
+     :::
+
+   - **TLS Cert**, **TLS Key,** and **CA Cert**: Replace the current certificate files with your private certificate files by clicking the **Reset** button.
+
    - **SSL Versions**: All TLS/DTLS versions are supported. The default values are `tlsv1.3` and `tlsv1.2`. If PSK cipher suits are used for PSK authentication, make sure to configure `tlsv1.2` , `tlsv1.1` and `tlsv1` here. For more information on PSK authentication, see [Enable PSK Authentication](./psk-authentication.md).
+
    - **Fail If No Peer Cert**: Used together with **TLS Verify** is enabled. Set to `false` by default.
      - If set to `true`, verification of the client's identity fails if the client sends an empty certificate. The SSL/TLS connection will be rejected.
      - If set to `false`, verification of the client's identity fails only if the client sends an invalid certificate (An empty certificate is considered to be valid). The SSL/TLS connection will be rejected.
+     
    - **Intermediate Certificate Depth**: The allowed maximum depth of certification path; the default value is `10`.
+
    - **Key Password**: Type the password if the private key file is password-protected.
+
    - **Enable OCSP Stapling**: Disabled by default; If you need to obtain the revocation status of SSL/TLS certificates, you can enable it by clicking the toggle switch. For more information, see [OCSP Stapling](./ocsp.md).
+
    - **Enable CRL Check**: Disabled by default; If you need to verify whether connecting client certificates are not revoked, you can enable it by clicking the toggle switch. For more information, see [CRL Check](./crl.md).
 
 3. After you complete the editing, click the **Update** button.
