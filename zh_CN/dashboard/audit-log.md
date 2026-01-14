@@ -45,7 +45,7 @@ log.audit {
 
 审计日志启用后，您可以在 Dashboard **系统设置** -> **审计日志** 页面中查看审计日志的内容。
 
-![EMQX 审计日志列表](./assets/audit-log-list.png)
+![EMQX 审计日志列表](./assets/audit_log_list.png)
 
 ### 搜索过滤
 
