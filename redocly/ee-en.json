@@ -4487,7 +4487,91 @@
             "oneOf": [
               {
                 "enum": [
-                  "syskeeper_forwarder"
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mqtt"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
                 ],
                 "type": "string"
               },
@@ -4499,13 +4583,121 @@
               },
               {
                 "enum": [
-                  "azure_event_hub_producer"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "dynamo"
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tdengine"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
                 ],
                 "type": "string"
               },
@@ -4523,7 +4715,13 @@
               },
               {
                 "enum": [
-                  "azure_blob_storage"
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
                 ],
                 "type": "string"
               },
@@ -4535,19 +4733,7 @@
               },
               {
                 "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -4559,193 +4745,7 @@
               },
               {
                 "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tdengine"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "emqx_tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "elasticsearch"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               }
@@ -4780,6 +4780,12 @@
       },
       "actions_and_sources.metrics": {
         "properties": {
+          "aggregated_upload_failure": {
+            "type": "integer"
+          },
+          "aggregated_upload_success": {
+            "type": "integer"
+          },
           "dropped": {
             "type": "integer"
           },
@@ -6599,7 +6605,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -6688,7 +6694,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -6751,7 +6757,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -10398,7 +10404,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -16722,7 +16728,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -25672,7 +25678,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -28051,7 +28057,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -31206,13 +31212,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -31299,8 +31315,8 @@
             "description": "Backend type.",
             "enum": [
               "ldap",
-              "oidc",
-              "saml"
+              "saml",
+              "oidc"
             ],
             "type": "string"
           },
@@ -32235,13 +32251,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32387,13 +32413,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -33130,7 +33166,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -38281,7 +38317,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "3A789E256B38E28A",
             "type": "string"
           },
           "status": {
@@ -40647,7 +40683,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -41113,13 +41149,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -41424,13 +41470,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -44233,7 +44289,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -54742,6 +54798,15 @@
             "description": "A template to map OIDC user information to a Dashboard name, its default value is `${sub}`.",
             "type": "string"
           },
+          "name_var_source": {
+            "default": "userinfo",
+            "description": "From which source to extract information to construct the Dashboard username.  Defaults to `userinfo`.<br/><br/>- `userinfo`: Utilizes the response from the `/userinfo` endpoint.<br/>- `id_token`: Utilizes the claims contained in the access token.",
+            "enum": [
+              "userinfo",
+              "id_token"
+            ],
+            "type": "string"
+          },
           "preferred_auth_methods": {
             "default": [
               "client_secret_post",
@@ -56426,7 +56491,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.0"
+    "version": "6.1.1-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -56442,100 +56507,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "bigquery",
-                      "tdengine",
-                      "couchbase",
-                      "snowflake_streaming",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "s3",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "rabbitmq",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
-                      "clickhouse",
-                      "datalayers",
-                      "pulsar",
-                      "mqtt",
+                      "syskeeper_forwarder",
                       "snowflake",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
+                      "oracle",
                       "aws_timestream",
-                      "azure_blob_storage",
+                      "azure_event_hub_producer",
+                      "rocketmq",
                       "iotdb",
                       "cockroachdb",
-                      "dynamo",
-                      "azure_event_hub_producer",
+                      "pulsar",
+                      "rabbitmq",
+                      "emqx_tables",
+                      "confluent_producer",
+                      "couchbase",
+                      "sqlserver",
+                      "elasticsearch",
+                      "bigquery",
+                      "tablestore",
+                      "disk_log",
+                      "s3tables",
+                      "mysql",
+                      "doris",
+                      "timescale",
+                      "tdengine",
+                      "influxdb",
+                      "cassandra",
+                      "datalayers",
+                      "greptimedb",
+                      "http",
                       "alloydb",
-                      "syskeeper_forwarder"
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "redshift",
+                      "mqtt",
+                      "opents",
+                      "mongodb",
+                      "kafka_producer",
+                      "dynamo",
+                      "gcp_pubsub_producer",
+                      "matrix",
+                      "pgsql",
+                      "snowflake_streaming",
+                      "s3",
+                      "redis",
+                      "kinesis"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "bigquery",
-                      "tdengine",
-                      "couchbase",
-                      "snowflake_streaming",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "s3",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "rabbitmq",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
-                      "clickhouse",
-                      "datalayers",
-                      "pulsar",
-                      "mqtt",
+                      "syskeeper_forwarder",
                       "snowflake",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
+                      "oracle",
                       "aws_timestream",
-                      "azure_blob_storage",
+                      "azure_event_hub_producer",
+                      "rocketmq",
                       "iotdb",
                       "cockroachdb",
-                      "dynamo",
-                      "azure_event_hub_producer",
+                      "pulsar",
+                      "rabbitmq",
+                      "emqx_tables",
+                      "confluent_producer",
+                      "couchbase",
+                      "sqlserver",
+                      "elasticsearch",
+                      "bigquery",
+                      "tablestore",
+                      "disk_log",
+                      "s3tables",
+                      "mysql",
+                      "doris",
+                      "timescale",
+                      "tdengine",
+                      "influxdb",
+                      "cassandra",
+                      "datalayers",
+                      "greptimedb",
+                      "http",
                       "alloydb",
-                      "syskeeper_forwarder"
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "redshift",
+                      "mqtt",
+                      "opents",
+                      "mongodb",
+                      "kafka_producer",
+                      "dynamo",
+                      "gcp_pubsub_producer",
+                      "matrix",
+                      "pgsql",
+                      "snowflake_streaming",
+                      "s3",
+                      "redis",
+                      "kinesis"
                     ],
                     "type": "string"
                   },
@@ -74663,6 +74728,15 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -75008,6 +75082,15 @@
                 "key_password"
               ],
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -81372,7 +81455,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -82955,7 +83038,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -84768,7 +84851,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -85995,7 +86078,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -87567,7 +87650,7 @@
                     }
                   },
                   "snowflake": {
-                    "summary": "Snowflake Aggregated Connector",
+                    "summary": "Snowflake Connector",
                     "value": {
                       "account": "myorg-myaccount",
                       "description": "My connector",
@@ -89139,7 +89222,7 @@
                   }
                 },
                 "snowflake": {
-                  "summary": "Snowflake Aggregated Connector",
+                  "summary": "Snowflake Connector",
                   "value": {
                     "account": "myorg-myaccount",
                     "description": "My connector",
@@ -89962,7 +90045,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "3A789E256B38E28A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90024,7 +90107,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "3A789E256B38E28A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90433,7 +90516,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "3A789E256B38E28A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90518,7 +90601,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "3A789E256B38E28A",
             "in": "path",
             "name": "site",
             "required": true,
@@ -101729,8 +101812,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -114362,8 +114445,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -114375,10 +114458,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.login"
+                    "$ref": "#/components/schemas/sso.login"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.login"
+                    "$ref": "#/components/schemas/dashboard.login"
                   },
                   {
                     "$ref": "#/components/schemas/sso.login"
@@ -114631,8 +114714,8 @@
                   "items": {
                     "enum": [
                       "ldap",
-                      "oidc",
-                      "saml"
+                      "saml",
+                      "oidc"
                     ],
                     "type": "string"
                   },
@@ -114819,8 +114902,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -114876,8 +114959,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -114890,10 +114973,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -114950,8 +115033,8 @@
             "schema": {
               "enum": [
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -114963,10 +115046,10 @@
               "schema": {
                 "oneOf": [
                   {
-                    "$ref": "#/components/schemas/dashboard.saml"
+                    "$ref": "#/components/schemas/sso.oidc"
                   },
                   {
-                    "$ref": "#/components/schemas/sso.oidc"
+                    "$ref": "#/components/schemas/dashboard.saml"
                   },
                   {
                     "$ref": "#/components/schemas/sso.ldap"
@@ -114983,10 +115066,10 @@
                 "schema": {
                   "oneOf": [
                     {
-                      "$ref": "#/components/schemas/dashboard.saml"
+                      "$ref": "#/components/schemas/sso.oidc"
                     },
                     {
-                      "$ref": "#/components/schemas/sso.oidc"
+                      "$ref": "#/components/schemas/dashboard.saml"
                     },
                     {
                       "$ref": "#/components/schemas/sso.ldap"
@@ -116249,8 +116332,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }
@@ -116340,8 +116423,8 @@
               "enum": [
                 "local",
                 "ldap",
-                "oidc",
-                "saml"
+                "saml",
+                "oidc"
               ],
               "type": "string"
             }

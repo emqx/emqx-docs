@@ -4487,187 +4487,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "alloydb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cockroachdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mqtt"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "tablestore"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "pgsql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redshift"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "bigquery"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kinesis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
                 ],
                 "type": "string"
               },
@@ -4679,31 +4499,13 @@
               },
               {
                 "enum": [
-                  "disk_log"
+                  "snowflake_streaming"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
+                  "pgsql"
                 ],
                 "type": "string"
               },
@@ -4715,19 +4517,91 @@
               },
               {
                 "enum": [
+                  "mongodb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "opents"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "doris"
+                  "mqtt"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "couchbase"
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "greptimedb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cassandra"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
                 ],
                 "type": "string"
               },
@@ -4739,13 +4613,139 @@
               },
               {
                 "enum": [
-                  "emqx_tables"
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "emqx_tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               }
@@ -4780,6 +4780,12 @@
       },
       "actions_and_sources.metrics": {
         "properties": {
+          "aggregated_upload_failure": {
+            "type": "integer"
+          },
+          "aggregated_upload_success": {
+            "type": "integer"
+          },
           "dropped": {
             "type": "integer"
           },
@@ -10373,7 +10379,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -15716,42 +15722,42 @@
       "bridge_kafka.auth_oauth_client_credentials": {
         "properties": {
           "client_id": {
-            "description": "Client ID used to request a token from the OAuth server.",
+            "description": "用于从 OAuth 服务器请求令牌的客户端 ID。",
             "type": "string"
           },
           "client_secret": {
-            "description": "Client secret used to request a token from the OAuth server.",
+            "description": "用于从 OAuth 服务器请求令牌的客户端密钥。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "endpoint_uri": {
-            "description": "The URI for the OAuth token endpoint that will generate the access token.",
+            "description": "生成访问令牌的 OAuth 令牌端点的 URI。",
             "type": "string"
           },
           "extensions": {
             "default": {},
-            "description": "If necessary, specify the extensions to be passed down to the SASL handshake.",
+            "description": "如果需要，指定要传递到 SASL 握手的扩展。",
             "example": {},
             "type": "object"
           },
           "grant_type": {
             "default": "client_credentials",
-            "description": "OAuth grant type",
+            "description": "OAuth 授权类型",
             "enum": [
               "client_credentials"
             ],
             "type": "string"
           },
           "mechanism": {
-            "description": "SASL authentication mechanism",
+            "description": "SASL 认证机制",
             "enum": [
               "oauth"
             ],
             "type": "string"
           },
           "scope": {
-            "description": "If necessary, specify the `scope` to be provided when requesting the OAuth access token.",
+            "description": "如果需要，指定在请求 OAuth 访问令牌时提供的 `scope`。",
             "type": "string"
           }
         },
@@ -16697,7 +16703,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -24848,50 +24854,50 @@
       "confluent.auth_oauth_client_credentials": {
         "properties": {
           "client_id": {
-            "description": "Client ID used to request a token from the OAuth server.",
+            "description": "用于从 OAuth 服务器请求令牌的客户端 ID。",
             "type": "string"
           },
           "client_secret": {
-            "description": "Client secret used to request a token from the OAuth server.",
+            "description": "用于从 OAuth 服务器请求令牌的客户端密钥。",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
           },
           "endpoint_uri": {
-            "description": "The URI for the OAuth token endpoint that will generate the access token.",
+            "description": "生成访问令牌的 OAuth 令牌端点的 URI。",
             "type": "string"
           },
           "extensions": {
             "default": {},
-            "description": "If necessary, specify the extensions to be passed down to the SASL handshake.",
+            "description": "如果需要，指定要传递到 SASL 握手的扩展。",
             "example": {},
             "type": "object"
           },
           "grant_type": {
             "default": "client_credentials",
-            "description": "OAuth grant type",
+            "description": "OAuth 授权类型",
             "enum": [
               "client_credentials"
             ],
             "type": "string"
           },
           "identity_pool_id": {
-            "description": "Confluent Identity Pool ID to be used in SASL extensions when connecting.",
+            "description": "连接时在 SASL 扩展中使用的 Confluent 身份池 ID。",
             "type": "string"
           },
           "logical_cluster": {
-            "description": "Confluent Cluster ID to be used in SASL extensions when connecting.",
+            "description": "连接时在 SASL 扩展中使用的 Confluent 集群 ID。",
             "type": "string"
           },
           "mechanism": {
-            "description": "SASL authentication mechanism",
+            "description": "SASL 认证机制",
             "enum": [
               "oauth"
             ],
             "type": "string"
           },
           "scope": {
-            "description": "If necessary, specify the `scope` to be provided when requesting the OAuth access token.",
+            "description": "如果需要，指定在请求 OAuth 访问令牌时提供的 `scope`。",
             "type": "string"
           }
         },
@@ -25647,7 +25653,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -25825,7 +25831,7 @@
         "properties": {
           "default_compression": {
             "default": "snappy",
-            "description": "The default algorithm to use for compressing data pages in Parquet row groups.",
+            "description": "用于压缩 Parquet 行组中的数据页的默认算法。",
             "enum": [
               "none",
               "zstd",
@@ -25835,12 +25841,12 @@
           },
           "max_row_group_bytes": {
             "default": "128MB",
-            "description": "The size above which row groups are flushed.  The actual triggering of row group flushes uses estimates of the buffered data sizes, since the actual output may differ in size from the raw input data size.",
+            "description": "行组刷新时的大小。行组刷新的实际触发使用缓冲数据大小的估计，因为实际输出可能与原始输入数据大小不同。",
             "example": "32MB",
             "type": "string"
           },
           "schema": {
-            "description": "The schema to be used for the Parquet files, in Avro format.",
+            "description": "用于 Parquet 文件的 Schema，采用 Avro 格式。",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/connector_aggregator.parquet_schema_avro_ref"
@@ -25851,7 +25857,7 @@
             ]
           },
           "type": {
-            "description": "Use [Parquet](https://parquet.apache.org/docs/) for encoding data files.",
+            "description": "使用 [Parquet](https://parquet.apache.org/docs/) 编码数据文件。",
             "enum": [
               "parquet"
             ],
@@ -25867,11 +25873,11 @@
       "connector_aggregator.parquet_schema_avro_inline": {
         "properties": {
           "def": {
-            "description": "Avro schema definition in JSON format.",
+            "description": "JSON 格式的 Avro Schema 定义。",
             "type": "string"
           },
           "type": {
-            "description": "Avro schema defined inline.",
+            "description": "内联定义的 Avro Schema。",
             "enum": [
               "avro_inline"
             ],
@@ -25887,11 +25893,11 @@
       "connector_aggregator.parquet_schema_avro_ref": {
         "properties": {
           "name": {
-            "description": "Avro schema name that lives in Schema Registry.",
+            "description": "存储在 Schema Registry 中的 Avro Schema 名称。",
             "type": "string"
           },
           "type": {
-            "description": "Avro schema that lives in Schema Registry.",
+            "description": "存储在 Schema Registry 中的 Avro Schema。",
             "enum": [
               "avro_ref"
             ],
@@ -28026,7 +28032,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": false,
@@ -28424,7 +28430,7 @@
           },
           "influxdb_type": {
             "default": "influxdb_api_v2",
-            "description": "InfluxDB HTTP API V2 协议。支持 Influxdb v2.0 以及之后的版本。",
+            "description": "InfluxDB 的协议。支持 InfluxDB v2.0 直到 v3.0。",
             "enum": [
               "influxdb_api_v2"
             ],
@@ -28457,7 +28463,7 @@
           },
           "influxdb_type": {
             "default": "influxdb_api_v3",
-            "description": "InfluxDB's protocol. Support InfluxDB v3.0 and after.",
+            "description": "InfluxDB 的协议。支持 InfluxDB v3.0 及之后的版本。",
             "enum": [
               "influxdb_api_v3"
             ],
@@ -31175,7 +31181,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -31213,6 +31219,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32075,7 +32091,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -32201,7 +32217,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -32242,6 +32258,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32356,7 +32382,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -32394,6 +32420,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32638,11 +32674,11 @@
       "emqx.managed_certs": {
         "properties": {
           "bundle_name": {
-            "description": "The name of the managed certificate file bundle.",
+            "description": "托管证书文件捆绑包的名称。",
             "type": "string"
           },
           "namespace": {
-            "description": "The namespace under which the certificate file bundle lives.  Omit this field to target the global namespace.",
+            "description": "证书文件捆绑包所在的命名空间。省略此字段以定位全局命名空间。",
             "type": "string"
           }
         },
@@ -32654,15 +32690,15 @@
       "emqx.managed_certs_server": {
         "properties": {
           "bundle_name": {
-            "description": "The name of the managed certificate file bundle.",
+            "description": "托管证书文件捆绑包的名称。",
             "type": "string"
           },
           "namespace": {
-            "description": "The namespace under which the certificate file bundle lives.  Omit this field to target the global namespace.",
+            "description": "证书文件捆绑包所在的命名空间。省略此字段以定位全局命名空间。",
             "type": "string"
           },
           "sni": {
-            "description": "If this is set, it's used during dynamic certificate selection based on the SNI sent from the client.",
+            "description": "如果设置了此项，则在基于客户端发送的 SNI 进行动态证书选择时使用。",
             "type": "string"
           }
         },
@@ -32689,7 +32725,7 @@
           },
           "clientid_override": {
             "default": "disabled",
-            "description": "单行表达式，用于解析一组预定义的字符串函数（类似于规则引擎 SQL 语句）。<br/>该表达式可以是一个函数调用，并且可以使用嵌套调用作为其参数，或者是直接的变量引用。<br/>目前，它不支持用户自定义变量绑定（如 var a=1）或用户自定义函数。<br/><br/>例如，提取以点（.）分隔的用户名前缀的表达式：nth(1, tokens(username, '.'))。<br/><br/>预绑定的变量包括：<br/>- `clientid`：原始 MQTT 客户端 ID。<br/>- `username`：MQTT 客户端的用户名。<br/>- `client_attrs.{NAME}`：通过 client_attrs_init 配置初始化的客户端属性。<br/><br/>对于通过 TLS 直接连接或通过启用了 proxy-protocol (v2) 的负载均衡器连接的客户端，还可以使用以下额外变量：<br/>- `cn`：客户端 TLS 证书的通用名称（Common Name）。<br/>- `dn`：客户端 TLS 证书的可分辨名称（Distinguished Name，即主题）。<br/>- `peersni`：客户端发送的 TLS 服务器名称指示（Server Name Indication, SNI）。<br/><br/>您可以在 EMQX 文档中阅读更多关于 variform 表达式的内容。",
+            "description": "使用 Variform 表达式覆盖客户端 ID。<br/>例如：`concat(client_attrs.tns, '-', clientid)` 添加命名空间作为前缀。<br/>这允许不同命名空间的客户端使用相同的客户端 ID 连接而不冲突。<br/>有关表达式语法，请参阅 EMQX 文档。",
             "oneOf": [
               {
                 "type": "string"
@@ -32881,7 +32917,7 @@
           },
           "namespace_as_mountpoint": {
             "default": false,
-            "description": "Uses the client's namespace as a topic mountpoint. This setting is ignored if the listener already has a `mountpoint` configured.<br/>When enabled, EMQX isolates topics by:<br/>  - Prepending the namespace to topics in PUBLISH, SUBSCRIBE, UNSUBSCRIBE, and Will messages.<br/>  - Stripping this prefix from messages delivered to the client.<br/>Example (Namespace `n1`):<br/>  - Client subscribes to `sensors/#` -> Broker registers `n1/sensors/#`.<br/>  - Broker routes `n1/sensors/data` -> Client receives `sensors/data`.",
+            "description": "使用客户端的命名空间作为主题挂载点。如果监听器已经配置了 `mountpoint`，则忽略此设置。<br/>启用后，EMQX 通过以下方式隔离主题：<br/>  - 在 PUBLISH、SUBSCRIBE、UNSUBSCRIBE 和 Will 消息中将命名空间作为前缀添加到主题。<br/>  - 从发送给客户端的消息中去除此前缀。<br/>示例（命名空间 `n1`）：<br/>  - 客户端订阅 `sensors/#` -> Broker 注册 `n1/sensors/#`。<br/>  - Broker 路由 `n1/sensors/data` -> 客户端接收 `sensors/data`。",
             "type": "boolean"
           },
           "peer_cert_as_clientid": {
@@ -32912,7 +32948,7 @@
           },
           "response_information": {
             "default": "",
-            "description": "UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。<br/>如希望禁用此功能，请在下方的文字框中输入<code>\"\"</code>；仅适用于 MQTT 5.0 客户端。",
+            "description": "UTF-8 字符串，用于创建响应主题，例如，如果设置为 <code>reqrsp/</code>，发布者/订阅者将使用主题前缀 <code>reqrsp/</code> 进行通信。<br/>要禁用此功能，请在下方的文本框中留空。仅适用于 MQTT 5.0 客户端。",
             "type": "string"
           },
           "retain_available": {
@@ -33105,7 +33141,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -34159,7 +34195,7 @@
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
           "actions_executed": {
-            "description": "Number of Action executions (failures + successes) in the last sample window.",
+            "description": "在最后一个采样窗口中执行的动作次数（失败 + 成功）。",
             "type": "integer"
           },
           "connections": {
@@ -34187,7 +34223,7 @@
             "type": "integer"
           },
           "rules_matched": {
-            "description": "Number of Rules that matched their where clauses in the last sample window.",
+            "description": "在最后一个采样窗口中匹配其条件的规则数量。",
             "type": "integer"
           },
           "sent": {
@@ -34233,7 +34269,7 @@
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
           "actions_executed_rate": {
-            "description": "Action execution rate in the last sampling window.",
+            "description": "最后一个采样窗口中的动作执行率。",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -34273,7 +34309,7 @@
             "type": "integer"
           },
           "rules_matched_rate": {
-            "description": "Rule match rate in the last sampling window.",
+            "description": "最后一个采样窗口中的规则匹配率。",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -34322,7 +34358,7 @@
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
           "actions_executed_rate": {
-            "description": "Action execution rate in the last sampling window.",
+            "description": "最后一个采样窗口中的动作执行率。",
             "type": "integer"
           },
           "cluster_sessions": {
@@ -34366,7 +34402,7 @@
             "type": "integer"
           },
           "rules_matched_rate": {
-            "description": "Rule match rate in the last sampling window.",
+            "description": "最后一个采样窗口中的规则匹配率。",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -38281,7 +38317,7 @@
         "properties": {
           "site": {
             "description": "站点的标识符。",
-            "example": "6BBB84FCC99A4B3A",
+            "example": "32B7D489DC491BDB",
             "type": "string"
           },
           "status": {
@@ -40622,7 +40658,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -41079,7 +41115,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -41120,6 +41156,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -41393,7 +41439,7 @@
             "type": "string"
           },
           "managed_certs": {
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored.",
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。",
             "oneOf": [
               {
                 "items": {
@@ -41431,6 +41477,16 @@
             "default": true,
             "description": "SSL 参数重新协商是一种允许客户端和服务器动态重新协商 SSL 连接参数的功能。<br/>RFC 5746 定义了一种更安全的方法。通过启用安全的重新协商，您就失去了对不安全的重新协商的支持，从而容易受到 MitM 攻击。",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -44208,7 +44264,7 @@
           },
           "managed_certs": {
             "$ref": "#/components/schemas/emqx.managed_certs",
-            "description": "Reference to certificate file bundle managed by EMQX.<br/><br/>If this option is used, `cacertfile`, `certfile`, `keyfile` and `password` will be ignored."
+            "description": "EMQX 管理的证书文件捆绑包的引用。<br/><br/>如果使用此选项，`cacertfile`、`certfile`、`keyfile` 和 `password` 将被忽略。"
           },
           "middlebox_comp_mode": {
             "default": true,
@@ -47837,7 +47893,7 @@
           },
           "is_lastvalue": {
             "default": true,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               true
             ],
@@ -47884,7 +47940,7 @@
           },
           "is_lastvalue": {
             "default": false,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               false
             ],
@@ -47925,7 +47981,7 @@
           },
           "is_lastvalue": {
             "default": true,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               true
             ],
@@ -47977,7 +48033,7 @@
           },
           "is_lastvalue": {
             "default": true,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               true
             ],
@@ -48029,7 +48085,7 @@
           },
           "is_lastvalue": {
             "default": false,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               false
             ],
@@ -48075,7 +48131,7 @@
           },
           "is_lastvalue": {
             "default": false,
-            "description": "指示消息是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
+            "description": "指示消息队列是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同队列键的先前消息。",
             "enum": [
               false
             ],
@@ -49169,7 +49225,7 @@
         "properties": {
           "rate": {
             "default": "1/5s",
-            "description": "Maximum request rate when requesting data from all namespaces.  Requests for specific namespaces are not rate limited.",
+            "description": "从所有命名空间请求数据时的最大请求速率。对特定命名空间的请求不受速率限制。",
             "type": "string"
           }
         },
@@ -49238,7 +49294,7 @@
           },
           "namespaced_metrics_limiter": {
             "$ref": "#/components/schemas/prometheus.namespaced_metrics_limiter",
-            "description": "Rate limiter options for namespace metrics scraping endpoint."
+            "description": "命名空间指标抓取端点的速率限制选项。"
           },
           "push_gateway": {
             "$ref": "#/components/schemas/prometheus.push_gateway",
@@ -54742,6 +54798,15 @@
             "description": "将 OIDC 用户信息映射到 Dashboard 名称的模板，默认值是 `${sub}`。",
             "type": "string"
           },
+          "name_var_source": {
+            "default": "userinfo",
+            "description": "From which source to extract information to construct the Dashboard username.  Defaults to `userinfo`.<br/><br/>- `userinfo`: Utilizes the response from the `/userinfo` endpoint.<br/>- `id_token`: Utilizes the claims contained in the access token.",
+            "enum": [
+              "userinfo",
+              "id_token"
+            ],
+            "type": "string"
+          },
           "preferred_auth_methods": {
             "default": [
               "client_secret_post",
@@ -54818,28 +54883,28 @@
               "lastvalue": {},
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic."
+            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
           },
           "enable": {
             "default": false,
-            "description": "Enable Message Streams feature.",
+            "description": "启用消息流功能。",
             "type": "boolean"
           },
           "gc_interval": {
             "default": "1h",
-            "description": "The interval at which the Message Streams will clean up expired messages.",
+            "description": "消息流清理过期消息的间隔。",
             "example": "32s",
             "type": "string"
           },
           "max_stream_count": {
             "default": 1000,
-            "description": "Maximum number of Message Streams that can be created.",
+            "description": "可以创建的最大消息流数量。",
             "minimum": 0,
             "type": "integer"
           },
           "regular_stream_retention_period": {
             "default": "7d",
-            "description": "The maximum retention period of messages in regular Message Streams.",
+            "description": "常规消息流中消息的最大保留期。",
             "example": "32s",
             "type": "string"
           }
@@ -54859,28 +54924,28 @@
               "lastvalue": {},
               "regular": false
             },
-            "description": "Settings for automatically creating the Message Stream if it does not exist<br/>when subscribing to the queue topic."
+            "description": "在订阅队列主题时，如果消息流不存在，自动创建的设置。"
           },
           "enable": {
             "default": false,
-            "description": "Enable Message Streams feature.",
+            "description": "启用消息流功能。",
             "type": "boolean"
           },
           "gc_interval": {
             "default": "1h",
-            "description": "The interval at which the Message Streams will clean up expired messages.",
+            "description": "消息流清理过期消息的间隔。",
             "example": "32s",
             "type": "string"
           },
           "max_stream_count": {
             "default": 1000,
-            "description": "Maximum number of Message Streams that can be created.",
+            "description": "可以创建的最大消息流数量。",
             "minimum": 0,
             "type": "integer"
           },
           "regular_stream_retention_period": {
             "default": "7d",
-            "description": "The maximum retention period of messages in regular Message Streams.",
+            "description": "常规消息流中消息的最大保留期。",
             "example": "32s",
             "type": "string"
           }
@@ -54896,7 +54961,7 @@
         "properties": {
           "lastvalue": {
             "default": {},
-            "description": "Last-Value Message Stream settings for automatic creation",
+            "description": "最后值消息流自动创建的设置",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_lastvalue"
@@ -54911,7 +54976,7 @@
           },
           "regular": {
             "default": false,
-            "description": "Regular Message Stream settings for automatic creation",
+            "description": "常规消息流自动创建的设置",
             "oneOf": [
               {
                 "$ref": "#/components/schemas/streams.auto_create_regular"
@@ -54935,13 +55000,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -54950,7 +55015,7 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           }
         },
         "required": [
@@ -54963,13 +55028,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -54978,7 +55043,7 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           }
         },
         "required": [
@@ -54991,7 +55056,7 @@
         "properties": {
           "max_shard_message_bytes": {
             "default": "infinity",
-            "description": "The maximum number of bytes in a shard for the Message Stream. The number of shards is configured<br/>for all Message Streams in the Durable Storage settings. Note that this limit is not aware of the replication factor.<br/>So the total byte limit for the Message Stream is `n_shards * replication_factor * max_shard_message_bytes`.",
+            "description": "消息流中分片的最大字节数。分片数量在持久存储设置中为所有消息流配置。注意，此限制不考虑复制因子。因此，消息流的总字节限制为 `n_shards * replication_factor * max_shard_message_bytes`。",
             "oneOf": [
               {
                 "example": "32MB",
@@ -55007,7 +55072,7 @@
           },
           "max_shard_message_count": {
             "default": "infinity",
-            "description": "The maximum number of messages in a shard for the Message Stream. The number of shards is configured<br/>for all Message Streams in the Durable Storage settings.<br/>The total count limit for the Message Stream is `n_shards * max_shard_message_count`.",
+            "description": "消息流中分片的最大消息数。分片数量在持久存储设置中为所有消息流配置。消息流的总计数限制为 `n_shards * max_shard_message_count`。",
             "oneOf": [
               {
                 "minimum": 1,
@@ -55032,13 +55097,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": true,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               true
             ],
@@ -55046,7 +55111,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55055,10 +55120,10 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           },
           "topic_filter": {
-            "description": "The filter used to determine which messages are getting into the message stream.",
+            "description": "用于确定哪些消息进入消息流的过滤器。",
             "type": "string"
           }
         },
@@ -55074,13 +55139,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": true,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               true
             ],
@@ -55088,7 +55153,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55097,10 +55162,10 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           },
           "topic_filter": {
-            "description": "The filter used to determine which messages are getting into the message stream.",
+            "description": "用于确定哪些消息进入消息流的过滤器。",
             "type": "string"
           }
         },
@@ -55116,13 +55181,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": true,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               true
             ],
@@ -55130,7 +55195,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55139,7 +55204,7 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           }
         },
         "required": [
@@ -55153,13 +55218,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": false,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               false
             ],
@@ -55167,7 +55232,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55176,10 +55241,10 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           },
           "topic_filter": {
-            "description": "The filter used to determine which messages are getting into the message stream.",
+            "description": "用于确定哪些消息进入消息流的过滤器。",
             "type": "string"
           }
         },
@@ -55195,13 +55260,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": false,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               false
             ],
@@ -55209,7 +55274,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55218,10 +55283,10 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           },
           "topic_filter": {
-            "description": "The filter used to determine which messages are getting into the message stream.",
+            "description": "用于确定哪些消息进入消息流的过滤器。",
             "type": "string"
           }
         },
@@ -55237,13 +55302,13 @@
         "properties": {
           "data_retention_period": {
             "default": "7d",
-            "description": "The period for which data is retained in the Message Queue.",
+            "description": "消息队列中数据保留的时间段。",
             "example": "32s",
             "type": "string"
           },
           "is_lastvalue": {
             "default": false,
-            "description": "Indicates if the Message Stream has Last-Value semantics. Last-Value semantics means that<br/>messages overwrite previous messages with the same stream key in the same topic.",
+            "description": "指示消息流是否具有最后值语义。最后值语义意味着消息覆盖同一主题中具有相同流键的先前消息。",
             "enum": [
               false
             ],
@@ -55251,7 +55316,7 @@
           },
           "key_expression": {
             "default": "message.from",
-            "description": "The expression used to determine the key of the message for Last-Value Message Queues.",
+            "description": "用于确定最后值消息队列中消息键的表达式。",
             "type": "string"
           },
           "limits": {
@@ -55260,7 +55325,7 @@
               "max_shard_message_bytes": "infinity",
               "max_shard_message_count": "infinity"
             },
-            "description": "The byte size and count limits for an individual Message Stream."
+            "description": "单个消息流的字节大小和计数限制。"
           }
         },
         "required": [
@@ -56426,7 +56491,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.0"
+    "version": "6.1.1-rc.1"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -56442,100 +56507,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "tdengine",
-                      "couchbase",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "s3",
-                      "bigquery",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
-                      "clickhouse",
-                      "datalayers",
-                      "pulsar",
-                      "mqtt",
-                      "snowflake",
-                      "rabbitmq",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
-                      "snowflake_streaming",
-                      "aws_timestream",
-                      "azure_blob_storage",
                       "syskeeper_forwarder",
-                      "iotdb",
-                      "cockroachdb",
-                      "dynamo",
+                      "snowflake",
+                      "oracle",
+                      "gcp_pubsub_producer",
+                      "aws_timestream",
                       "azure_event_hub_producer",
-                      "alloydb"
+                      "rocketmq",
+                      "iotdb",
+                      "kafka_producer",
+                      "cockroachdb",
+                      "pulsar",
+                      "dynamo",
+                      "rabbitmq",
+                      "emqx_tables",
+                      "confluent_producer",
+                      "couchbase",
+                      "elasticsearch",
+                      "tablestore",
+                      "disk_log",
+                      "s3tables",
+                      "mysql",
+                      "doris",
+                      "timescale",
+                      "tdengine",
+                      "influxdb",
+                      "cassandra",
+                      "datalayers",
+                      "greptimedb",
+                      "http",
+                      "kinesis",
+                      "alloydb",
+                      "azure_blob_storage",
+                      "bigquery",
+                      "clickhouse",
+                      "redshift",
+                      "sqlserver",
+                      "mqtt",
+                      "opents",
+                      "mongodb",
+                      "matrix",
+                      "pgsql",
+                      "snowflake_streaming",
+                      "redis",
+                      "s3"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "tdengine",
-                      "couchbase",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "s3",
-                      "bigquery",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
-                      "clickhouse",
-                      "datalayers",
-                      "pulsar",
-                      "mqtt",
-                      "snowflake",
-                      "rabbitmq",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
-                      "snowflake_streaming",
-                      "aws_timestream",
-                      "azure_blob_storage",
                       "syskeeper_forwarder",
-                      "iotdb",
-                      "cockroachdb",
-                      "dynamo",
+                      "snowflake",
+                      "oracle",
+                      "gcp_pubsub_producer",
+                      "aws_timestream",
                       "azure_event_hub_producer",
-                      "alloydb"
+                      "rocketmq",
+                      "iotdb",
+                      "kafka_producer",
+                      "cockroachdb",
+                      "pulsar",
+                      "dynamo",
+                      "rabbitmq",
+                      "emqx_tables",
+                      "confluent_producer",
+                      "couchbase",
+                      "elasticsearch",
+                      "tablestore",
+                      "disk_log",
+                      "s3tables",
+                      "mysql",
+                      "doris",
+                      "timescale",
+                      "tdengine",
+                      "influxdb",
+                      "cassandra",
+                      "datalayers",
+                      "greptimedb",
+                      "http",
+                      "kinesis",
+                      "alloydb",
+                      "azure_blob_storage",
+                      "bigquery",
+                      "clickhouse",
+                      "redshift",
+                      "sqlserver",
+                      "mqtt",
+                      "opents",
+                      "mongodb",
+                      "matrix",
+                      "pgsql",
+                      "snowflake_streaming",
+                      "redis",
+                      "s3"
                     ],
                     "type": "string"
                   },
@@ -71581,7 +71646,7 @@
                     },
                     "include_mountpoint": {
                       "default": false,
-                      "description": "When enabled, the target topics and topic filters are prefixed by the topic mountpoint before being matched against ACL rules or by authorization backends.",
+                      "description": "启用后，目标主题和主题过滤器在与 ACL 规则或授权后端匹配之前，会被主题挂载点前缀。",
                       "type": "boolean"
                     },
                     "no_match": {
@@ -71639,7 +71704,7 @@
                   },
                   "include_mountpoint": {
                     "default": false,
-                    "description": "When enabled, the target topics and topic filters are prefixed by the topic mountpoint before being matched against ACL rules or by authorization backends.",
+                    "description": "启用后，目标主题和主题过滤器在与 ACL 规则或授权后端匹配之前，会被主题挂载点前缀。",
                     "type": "boolean"
                   },
                   "no_match": {
@@ -71681,7 +71746,7 @@
                     },
                     "include_mountpoint": {
                       "default": false,
-                      "description": "When enabled, the target topics and topic filters are prefixed by the topic mountpoint before being matched against ACL rules or by authorization backends.",
+                      "description": "启用后，目标主题和主题过滤器在与 ACL 规则或授权后端匹配之前，会被主题挂载点前缀。",
                       "type": "boolean"
                     },
                     "no_match": {
@@ -74571,7 +74636,7 @@
     },
     "/certs/global/list": {
       "get": {
-        "description": "List all bundles in global namespace.",
+        "description": "列出全局命名空间中的所有捆绑包。",
         "parameters": [],
         "responses": {
           "200": {
@@ -74612,7 +74677,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -74638,7 +74703,7 @@
     },
     "/certs/global/name/{name}": {
       "delete": {
-        "description": "Delete a global namespace bundle.",
+        "description": "删除全局命名空间捆绑包。",
         "parameters": [
           {
             "example": "bundle1",
@@ -74663,6 +74728,15 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -74681,7 +74755,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -74705,7 +74779,7 @@
         ]
       },
       "get": {
-        "description": "List all files in a global namespace bundle.",
+        "description": "列出全局命名空间捆绑包中的所有文件。",
         "parameters": [
           {
             "example": "bundle1",
@@ -74767,7 +74841,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bundle not found.",
+                      "description": "未找到捆绑包。",
                       "type": "string"
                     }
                   },
@@ -74789,7 +74863,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -74813,7 +74887,7 @@
         ]
       },
       "post": {
-        "description": "Upload a file to a global namespace bundle.",
+        "description": "上传文件到全局命名空间捆绑包。",
         "parameters": [
           {
             "example": "bundle1",
@@ -74850,7 +74924,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bad request.",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -74872,7 +74946,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -74898,7 +74972,7 @@
     },
     "/certs/ns/{namespace}/list": {
       "get": {
-        "description": "List all bundles in a managed namespace.",
+        "description": "列出托管命名空间中的所有捆绑包。",
         "parameters": [
           {
             "example": "ns1",
@@ -74949,7 +75023,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -74975,7 +75049,7 @@
     },
     "/certs/ns/{namespace}/name/{name}": {
       "delete": {
-        "description": "Delete a managed namespace bundle.",
+        "description": "删除托管命名空间捆绑包。",
         "parameters": [
           {
             "example": "ns1",
@@ -75009,6 +75083,15 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -75027,7 +75110,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -75051,7 +75134,7 @@
         ]
       },
       "get": {
-        "description": "List all files in a managed namespace bundle.",
+        "description": "列出托管命名空间捆绑包中的所有文件。",
         "parameters": [
           {
             "example": "ns1",
@@ -75122,7 +75205,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bundle not found.",
+                      "description": "未找到捆绑包。",
                       "type": "string"
                     }
                   },
@@ -75144,7 +75227,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -75168,7 +75251,7 @@
         ]
       },
       "post": {
-        "description": "Upload a file to a managed namespace bundle.",
+        "description": "上传文件到托管命名空间捆绑包。",
         "parameters": [
           {
             "example": "ns1",
@@ -75214,7 +75297,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bad request.",
+                      "description": "错误请求。",
                       "type": "string"
                     }
                   },
@@ -75236,7 +75319,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Internal error.  Generally, indicates a problem with file permissions.",
+                      "description": "内部错误。通常表示文件权限问题。",
                       "type": "string"
                     }
                   },
@@ -89962,7 +90045,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "6BBB84FCC99A4B3A",
+            "example": "32B7D489DC491BDB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90024,7 +90107,7 @@
         "parameters": [
           {
             "description": "站点的标识符。",
-            "example": "6BBB84FCC99A4B3A",
+            "example": "32B7D489DC491BDB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90433,7 +90516,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "6BBB84FCC99A4B3A",
+            "example": "32B7D489DC491BDB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90518,7 +90601,7 @@
           },
           {
             "description": "站点的标识符。",
-            "example": "6BBB84FCC99A4B3A",
+            "example": "32B7D489DC491BDB",
             "in": "path",
             "name": "site",
             "required": true,
@@ -102438,7 +102521,7 @@
     },
     "/message_streams/config": {
       "get": {
-        "description": "Get streams config.",
+        "description": "获取流配置。",
         "parameters": [],
         "responses": {
           "200": {
@@ -102470,7 +102553,7 @@
         ]
       },
       "put": {
-        "description": "Update streams config.",
+        "description": "更新流配置。",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -102527,7 +102610,7 @@
     },
     "/message_streams/streams": {
       "get": {
-        "description": "List message streams with pagination.",
+        "description": "分页列出消息流。",
         "parameters": [
           {
             "$ref": "#/components/parameters/public.cursor"
@@ -102583,7 +102666,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Bad cursor",
+                      "description": "错误的游标",
                       "type": "string"
                     }
                   },
@@ -102605,7 +102688,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用",
                       "type": "string"
                     }
                   },
@@ -102630,7 +102713,7 @@
         ]
       },
       "post": {
-        "description": "Create a new message stream.",
+        "description": "创建新的消息流。",
         "parameters": [],
         "requestBody": {
           "content": {
@@ -102691,7 +102774,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Cannot create message stream",
+                      "description": "无法创建消息流",
                       "type": "string"
                     }
                   },
@@ -102713,7 +102796,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用",
                       "type": "string"
                     }
                   },
@@ -102740,10 +102823,10 @@
     },
     "/message_streams/streams/{topic_filter}": {
       "delete": {
-        "description": "Delete message stream.",
+        "description": "删除消息流。",
         "parameters": [
           {
-            "description": "Topic filter",
+            "description": "主题过滤器",
             "in": "path",
             "name": "topic_filter",
             "required": true,
@@ -102755,7 +102838,7 @@
         ],
         "responses": {
           "204": {
-            "description": "Message stream deleted successfully"
+            "description": "消息流删除成功"
           },
           "400": {
             "content": {
@@ -102769,7 +102852,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Invalid message stream",
+                      "description": "无效的消息流",
                       "type": "string"
                     }
                   },
@@ -102791,7 +102874,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Message stream not found",
+                      "description": "未找到消息流",
                       "type": "string"
                     }
                   },
@@ -102813,7 +102896,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用",
                       "type": "string"
                     }
                   },
@@ -102838,10 +102921,10 @@
         ]
       },
       "get": {
-        "description": "Get message stream.",
+        "description": "获取消息流。",
         "parameters": [
           {
-            "description": "Topic filter",
+            "description": "主题过滤器",
             "in": "path",
             "name": "topic_filter",
             "required": true,
@@ -102887,7 +102970,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Message stream not found",
+                      "description": "未找到消息流",
                       "type": "string"
                     }
                   },
@@ -102909,7 +102992,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用",
                       "type": "string"
                     }
                   },
@@ -102934,10 +103017,10 @@
         ]
       },
       "put": {
-        "description": "Update message stream.",
+        "description": "更新消息流。",
         "parameters": [
           {
-            "description": "Topic filter",
+            "description": "主题过滤器",
             "in": "path",
             "name": "topic_filter",
             "required": true,
@@ -103046,7 +103129,7 @@
                       "type": "string"
                     },
                     "message": {
-                      "description": "Service unavailable",
+                      "description": "服务不可用",
                       "type": "string"
                     }
                   },
@@ -106659,7 +106742,7 @@
     },
     "/mt/ns/{ns}/metrics": {
       "get": {
-        "description": "Get namespace metrics.",
+        "description": "获取命名空间指标。",
         "parameters": [
           {
             "example": "ns1",
@@ -109029,7 +109112,7 @@
     },
     "/prometheus/namespaced_stats": {
       "get": {
-        "description": "Get Prometheus Namespaced Metrics",
+        "description": "获取 Prometheus 命名空间指标",
         "parameters": [
           {
             "$ref": "#/components/parameters/emqx_prometheus_api.mode"
@@ -115078,7 +115161,7 @@
     },
     "/status": {
       "get": {
-        "description": "节点的健康检查 API，返回当前节点状态信息。<br/><br/>如果 EMQX 应用程序已经启动并运行，返回状态代码 200，否则返回 503。<br/><br/>这个 API 是在 v5.0.10 中引入的。GET `/status` 端点（没有 `/api/...` 前缀）也是这个端点的一个别名。 这个别名从 v5.0.0 开始就有了。自 v5.0.25 和 e5.0.4 开始，可以通过指定 'format' 参数来得到 JSON 格式的信息。",
+        "description": "作为节点的健康检查。<br/>返回描述节点和应用程序状态的响应。<br/><br/>此端点不需要认证。<br/><br/>如果 EMQX 应用程序已启动并运行，则返回状态码 200，否则返回 503。<br/>GET `/status` 端点（没有 `/api/...` 前缀）也是这个端点的一个别名，并且以相同方式工作。<br/><br/>您还可以使用 `format` 参数获取 JSON 格式的信息。",
         "parameters": [
           {
             "description": "指定返回的内容格式。使用 'text'（默认）则返回自由格式的字符串； 'json' 则返回 JSON 格式。",
