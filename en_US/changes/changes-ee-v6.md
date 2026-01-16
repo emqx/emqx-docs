@@ -31,7 +31,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Session tickets are generated only when `node.tls_stateless_tickets_seed` is configured (non-empty), and `session_tickets` is enabled in listener SSL options.
   - If `session_tickets` is enabled but `node.tls_stateless_tickets_seed` is empty, session tickets will not be generated and an error log will be emitted when starting the listener.
 
-  This PR also included a fix for the TLS 1.2 session resumption configuration: previously, the `reuse_sessions` option for SSL listener did not take effect, i.e. EMQX always tried to enable TLS 1.2 session resumption. It is now possible to turn it off. Please note that TLS 1.2 session resumption will be disabled by default starting version 6.2.0.
+  This PR also included a fix for the TLS 1.2 session resumption configuration. Previously, the `reuse_sessions` option for SSL listener did not take effect, i.e. EMQX always tried to enable TLS 1.2 session resumption. It is now possible to turn it off. Please note that TLS 1.2 session resumption will be disabled by default starting version 6.2.0.
 
 #### Rule Engine
 
@@ -168,7 +168,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16397](https://github.com/emqx/emqx/pull/16397) Added TLS certificate and key file validation before listener startup.
 
-  Added some basic validations when parsing the SSL listener config, and error level log is raised if invalid PEM files are found. For example: `invalid_pem_file_ignored` and `bad_keyfile_ignored`. This makes troubleshooting easier as admin is able to observe error when starting/reconfiguring, instead of troubleshooting TLS handshake failures.
+  EMQX now performs basic validation when parsing SSL listener configuration and emits error-level logs if invalid PEM files are detected (for example, `invalid_pem_file_ignored` and `bad_keyfile_ignored`). This makes troubleshooting easier as administrators can observe errors when starting/reconfiguring, instead of troubleshooting TLS handshake failures.
 
 #### Access Control
 
