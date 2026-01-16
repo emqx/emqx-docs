@@ -8,30 +8,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 ### Enhancements
 
-#### Durable Storage
-
-- [#16136](https://github.com/emqx/emqx/pull/16136) Improved resource management and performance for durable storage.
-
-  Introduced a concept of a durable storage database group. Certain resources (such as memtable size and disk usage quota) can be shared between the group members.
-  
-  Added the following new metrics (per DB group):
-  
-  - `emqx_ds_disk_usage`: Total size of SST files
-  - `emqx_ds_write_buffer_memory_usage`: RocksDB memtable size
-  - `emqx_ds_total_trash_size`: Disk usage by trash SST files
-  
-  Added the following group configurations:
-  
-  - `durable_storage.db_groups.<group>.storage_quota`: Soft quota for the SST files size
-  - `durable_storage.db_groups.<group>.write_buffer_size`: Maximum memtable size
-  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` and `durable_storage.db_groups.<group>.rocksdb_nthreads_low`: Size of RocksDB thread pools.
-  
-  Added a new alarm that is raised when the quota is exceeded: `db_storage_quota_exceeded:<DB>`. Please refer to the "Storage Quota" section of the documentation for more details.
-
-  Default session checkpoint interval has been changed to 15s.
-
-- [#16286](https://github.com/emqx/emqx/pull/16286) Optimized the default durable storage settings to reduce CPU load. This PR disables subscriptions for DBs that don't use them.
-
 #### Security
 
 - [#16461](https://github.com/emqx/emqx/pull/16461) EMQX now supports TLS 1.3 session resumption using stateless session tickets, allowing clients to resume TLS connections without requiring server-side session state.
@@ -49,11 +25,13 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     - `disabled` (default)
     - `stateless`
     - `stateless_with_cert` (includes certificate information in the ticket)
-  
+
   **Notes**
 
   - Session tickets are generated only when `node.tls_stateless_tickets_seed` is configured (non-empty), and `session_tickets` is enabled in listener SSL options.
   - If `session_tickets` is enabled but `node.tls_stateless_tickets_seed` is empty, session tickets will not be generated and an error log will be emitted when starting the listener.
+
+  This PR also included a fix for the TLS 1.2 session resumption configuration: previously, the `reuse_sessions` option for SSL listener did not take effect, i.e. EMQX always tried to enable TLS 1.2 session resumption. It is now possible to turn it off. Please note that TLS 1.2 session resumption will be disabled by default starting version 6.2.0.
 
 #### Rule Engine
 
@@ -93,7 +71,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
   ```
 
-- [#16533](https://github.com/emqx/emqx/pull/16533) Added two new Variform expression helper functions, `json_value` and `jwt_value`, for extracting values from JSON data and JWT tokens using dot-separated key paths.
+- [#16533](https://github.com/emqx/emqx/pull/16533) Added two new variadic expression helper functions, `json_value` and `jwt_value`, for extracting values from JSON data and JWT tokens using dot-separated key paths.
 
   - `json_value` extracts values from JSON binary strings by navigating nested objects with a dot-separated key path.
   - `jwt_value` decodes the payload of a JWT and extracts claim values using the same dot-separated path syntax.
@@ -103,11 +81,35 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - If `username` contains a JSON object, you can access a nested field with `json_value(username, 'shop.floor')`.
   - If `password` contains a JWT with a customized claim, you can access a nested value with `jwt_value(password, 'client_attrs.unitid')`.
 
-#### Smart Data Hub
-
 - [#16539](https://github.com/emqx/emqx/pull/16539) Added support for tracking Sparkplug B metric aliases when using the `spb_decode` Rule Engine function.
 
   After a device or Edge of Network (EoN) node publishes its `NBIRTH` or `DBIRTH` messages, EMQX records the alias-to-name mappings defined in those messages. When `spb_decode` is later applied to `NDATA` or `DDATA` messages from the same session, the original metric names are automatically restored and included in the decoded output.
+
+  Note: when executing fallback actions, the mapping is not available in the environment where they run. This means that, if a fallback action republishes the undecoded `DDATA`/`NDATA` payload to a Sparkplug B `DDATA`/`NDATA` topic, the metric `name` fields will not be populated by the alias mapping.
+
+#### Durable Storage
+
+- [#16136](https://github.com/emqx/emqx/pull/16136) Improved resource management and performance for durable storage.
+
+  Introduced a concept of a durable storage database group. Certain resources (such as memtable size and disk usage quota) can be shared between the group members.
+
+  Added the following new metrics (per DB group):
+
+  - `emqx_ds_disk_usage`: Total size of SST files
+  - `emqx_ds_write_buffer_memory_usage`: RocksDB memtable size
+  - `emqx_ds_total_trash_size`: Disk usage by trash SST files
+
+  Added the following group configurations:
+
+  - `durable_storage.db_groups.<group>.storage_quota`: Soft quota for the SST files size
+  - `durable_storage.db_groups.<group>.write_buffer_size`: Maximum memtable size
+  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` and `durable_storage.db_groups.<group>.rocksdb_nthreads_low`: Size of RocksDB thread pools.
+
+  Added a new alarm that is raised when the quota is exceeded: `db_storage_quota_exceeded:<DB>`. Please refer to the "Storage Quota" section of the documentation for more details.
+
+  Default session checkpoint interval has been changed to 15s.
+
+- [#16286](https://github.com/emqx/emqx/pull/16286) Optimized the default durable storage settings to reduce CPU load. This PR disables subscriptions for DBs that don't use them.
 
 #### Performance
 
@@ -118,31 +120,20 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 #### Core MQTT Functionalities
 
 - [#16354](https://github.com/emqx/emqx/pull/16354) Fixed a crash in MQTT v5 connections caused by a type mismatch when processing the request-response-information property.
+
 - [#16515](https://github.com/emqx/emqx/pull/16515) Fixed an issue where WebSocket connections could crash when the broker sent messages exceeding the client-advertised `Maximum-Packet-Size`.
 
-#### Clustering
-
-- [#16465](https://github.com/emqx/emqx/pull/16465) Upgraded `gen_rpc` to `3.5.1`.
-
-  Before the `gen_rpc` upgrade, EMQX may experience a long tail of crash logs due to a connect timeout if a peer node is unreachable. The new version of gen_rpc no longer has the long tail and has converted crash logs to more readable error logs. Additionally, the frequent log `"failed_to_connect_server"` is also throttled to avoid spamming.
-
-- [#16544](https://github.com/emqx/emqx/pull/16544) Improved the robustness of the cluster autoclean procedure. Previously, if the autoclean feature was disabled during the initial startup of a node, it would not be activated after subsequent configuration changes.
-
-#### Cluster Linking
-
-- [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Linking route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
-
-- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Linking garbage-collection logic that could incorrectly remove active routes from the internal routing table while cleaning up stale route replication state.
-
-  This issue could occur only in setups with multiple independent Cluster Links, where some links remained down for extended periods.
-
 #### Data Integration
-
-- [#16352](https://github.com/emqx/emqx/pull/16352) Upgraded Apache Pulsar client to 2.1.2. When Pulsar producer action's `batch_size` is configured to `1`, the producer will now encode single messages instead of single-element batch. This should allow consumers to share load using Key Share strategy.
 
 - [#16265](https://github.com/emqx/emqx/pull/16265) The health check now verifies leader connectivity only for the partitions assigned to the current EMQX node, preventing unnecessary idle connections and false alarms.
 
   Previously, the Kafka source connector checked leader connectivity for all partitions. In clustered deployments, each node owns only a subset of partitions, leaving connections to unassigned partition leaders idle. Because Kafka closes idle connections after a timeout (10 minutes by default), this could result in false connectivity alarms.
+
+- [#16542](https://github.com/emqx/emqx/pull/16542) Fixed an issue where Kafka producer connections could disconnect prematurely when Kafka was overloaded, leading to excessive produce request retries.
+
+  The produce request timeout is now automatically set to at least twice the metadata request timeout, with a minimum of 30 seconds. This reduces unnecessary reconnections and retries when metadata requests take longer than expected, especially when the metadata request timeout is configured to a small value.
+
+- [#16352](https://github.com/emqx/emqx/pull/16352) Upgraded Apache Pulsar client to 2.1.2. When Pulsar producer action's `batch_size` is configured to `1`, the producer will now encode single messages instead of single-element batch. This should allow consumers to share load using Key Share strategy.
 
 - [#16383](https://github.com/emqx/emqx/pull/16383) Improved the IoTDB Connector health check when using the REST API driver.
 
@@ -152,13 +143,32 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Previously, when an MQTT Source’s Connector recovered from a connection loss, its topics were not re-subscribed, causing the Source to stop working until the Connector was restarted. The Source now automatically re-subscribes upon reconnect.
 
-- [#16542](https://github.com/emqx/emqx/pull/16542) Fixed an issue where Kafka producer connections could disconnect prematurely when Kafka was overload, leading to excessive produce request retries.
 
-  The produce request timeout is now automatically set to at least twice the metadata request timeout, with a minimum of 30 seconds. This reduces unnecessary reconnections and retries when metadata requests take longer than expected, especially when the metadata request timeout is configured to a small value.
+#### Clustering
 
-#### Security
+- [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Linking route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
+
+- [#16317](https://github.com/emqx/emqx/pull/16317) Fixed an issue in Cluster Linking garbage-collection logic that could incorrectly remove active routes from the internal routing table while cleaning up stale route replication state.
+
+  This issue could occur only in setups with multiple independent Cluster Links, where some links remained down for extended periods.
+
+- [#16465](https://github.com/emqx/emqx/pull/16465) Upgraded `gen_rpc` to `3.5.1`.
+
+  Before the `gen_rpc` upgrade, EMQX may experience a long tail of crash logs due to a connect timeout if a peer node is unreachable. The new version of gen_rpc no longer has the long tail and has converted crash logs to more readable error logs. Additionally, the frequent log `"failed_to_connect_server"` is also throttled to avoid spamming.
+
+- [#16544](https://github.com/emqx/emqx/pull/16544) Improved the robustness of the cluster autoclean procedure. Previously, if the autoclean feature was disabled during the initial startup of a node, it would not be activated after subsequent configuration changes.
+
+#### Upgrade
+
+- [#16308](https://github.com/emqx/emqx/pull/16308) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
+
+#### Configuration Management
 
 - [#16397](https://github.com/emqx/emqx/pull/16397) Added TLS certificate and key file validation before listener startup.
+
+  Added some basic validations when parsing the SSL listener config, and error level log is raised if invalid PEM files are found. For example: `invalid_pem_file_ignored` and `bad_keyfile_ignored`. This makes troubleshooting easier as admin is able to observe error when starting/reconfiguring, instead of troubleshooting TLS handshake failures.
+
+#### Access Control
 
 - [#16423](https://github.com/emqx/emqx/pull/16423) Added support for verifying the JWT `aud` (audience) claim during authentication.
 
@@ -170,8 +180,6 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - The verification also fails if the `aud` claim is missing when it is configured in `verify_claims`.
 
 - [#16459](https://github.com/emqx/emqx/pull/16459) Fixed the issue in SCRAM authentication HTTP API. Previously, incorrect user ID was returned for the created user in the user creation API call.
-
-- [#16308](https://github.com/emqx/emqx/pull/16308) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
 
 #### Observability
 
@@ -268,7 +276,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 #### Data Integration
 
-- [#16010](https://github.com/emqx/emqx/pull/16010) Fixed an issue where a Republish Fallback Action could fail with a `function_clause` error if the originating rule's SQL did not include the `metadata` field from the rule environment. 
+- [#16010](https://github.com/emqx/emqx/pull/16010) Fixed an issue where a Republish Fallback Action could fail with a `function_clause` error if the originating rule's SQL did not include the `metadata` field from the rule environment.
 
   Example error log:
 
@@ -423,7 +431,7 @@ New `cluster.description` configuration option allows users to set and display c
 
 #### Data Integration
 
-- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX supports data integration with BigQuery. 
+- [#15418](https://github.com/emqx/emqx/pull/15418) EMQX supports data integration with BigQuery.
 
 - [#15401](https://github.com/emqx/emqx/pull/15401) Added support for the Snowpipe Streaming upload mode in the Snowflake Action.
   *Note: Snowpipe Streaming is currently a* [*preview feature*](https://docs.snowflake.com/en/release-notes/preview-features) *and is only available for Snowflake accounts hosted on AWS.*
@@ -440,7 +448,7 @@ New `cluster.description` configuration option allows users to set and display c
 
 - [#15649](https://github.com/emqx/emqx/pull/15649) EMQX supports data integration with AWS AlloyDB, CockroachDB, and AWS Redshift.
 
-- [#15635](https://github.com/emqx/emqx/pull/15635) Added new `key` and `tag` template fields in the RocketMQ Action, allowing customization of the message's key and tag. Also, introduced a new `key_dispatch` option for the `Produce Strategy` field. 
+- [#15635](https://github.com/emqx/emqx/pull/15635) Added new `key` and `tag` template fields in the RocketMQ Action, allowing customization of the message's key and tag. Also, introduced a new `key_dispatch` option for the `Produce Strategy` field.
 
 - [#15621](https://github.com/emqx/emqx/pull/15621) Now, `access_key_id` and `secret_access_key` are optional fields for the S3 Tables Connector.  If omitted, they'll be obtained from the Instance Metadata Service v2 APIs from the EC2 instance where EMQX is deployed.
 
@@ -570,7 +578,7 @@ New `cluster.description` configuration option allows users to set and display c
 
   ```protobuf
   syntax = "proto3";
-  
+
   message test {
   map<string, string> args = 1;
   }
