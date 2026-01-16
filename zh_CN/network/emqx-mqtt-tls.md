@@ -58,6 +58,8 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 
      会话票据仅适用于 TLS 1.3，且仅支持无状态（stateless）机制，以保证在集群环境中的可扩展性。EMQX 不支持 TLS 1.2 的有状态会话恢复。
 
+     要生成会话票据，必须将节点级配置项 `node.tls_stateless_tickets_seed` 设置为一个非空字符串（例如：`node.tls_stateless_tickets_seed = "averysecuresecret"`）。如果在监听器中启用了会话票据，但未设置该配置项，则不会生成会话票据。
+
      此外，EMQX 不支持客户端早期数据（0-RTT），客户端必须在 TLS 握手完成后才能发送 MQTT 数据。
 
      :::
@@ -80,7 +82,6 @@ EMQX 默认在 `8883` 端口启用了 SSL/TLS 监听器并设置其为单向认�
 
 3. 完成编辑后，点击**更新**。
 
-   <img src="./assets/edit-listener.png" alt="edit-listener" style="zoom:40%;" />
 
 ### 通过配置文件配置
 
