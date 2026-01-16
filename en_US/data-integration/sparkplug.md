@@ -99,7 +99,7 @@ When alias mapping is enabled, EMQX processes Sparkplug B messages as follows:
 
 ### Configure Alias Mapping
 
-Alias mapping is disabled by default and must be explicitly enabled.
+Alias mapping is enabled by default. If you do not want EMQX to track and restore Sparkplug B metric aliases, you can disable it in the configuration file:
 
 ```hocon
 schema_registry {
@@ -109,7 +109,7 @@ schema_registry {
 }
 ```
 
-> **Note**
+> **Note**:
 >
 > - Only NBIRTH / DBIRTH messages received while alias mapping is enabled are used to build alias mappings.
 > - If a client has already sent birth messages before this option is enabled, the client must resend NBIRTH / DBIRTH messages for alias mapping to take effect.
@@ -131,13 +131,11 @@ This example demonstrates how to use EMQX Dashboard and MQTTX to convert alias-o
 
 #### Step 1: Create a Rule in EMQX Dashboard
 
-1. Open **EMQX Dashboard**.
+1. Click **Integration** -> **Rules** from the Dashboard left menu.
 
-2. In the left navigation menu, click **Integration** -> **Rules**.
+2. Click **+ Create** to create a new rule.
 
-3. Click **+ Create** to create a new rule.
-
-4. In the **SQL Editor**, enter:
+3. In the **SQL Editor**, enter:
 
    ```sql
    SELECT
@@ -150,18 +148,20 @@ This example demonstrates how to use EMQX Dashboard and MQTTX to convert alias-o
    > - The rule matches all Sparkplug B DDATA messages.
    > - `spb_decode(payload)` decodes the Sparkplug B payload. When alias mapping is enabled, automatically restores metric names from aliases.
 
-5. Click **+ Add Action**.
+4. Click **+ Add Action** to append an action to the rule.
 
-6. Select **Republish**.
+5. Select **Republish** as the type of action.
 
-7. Configure the action:
+6. Configure the action:
 
    - **Topic**: `decoded/sparkplug/data`
    - **Payload**: `${decoded}`
 
-8. Click **Add**.
+7. Click **Add**.
 
-9. Click **Create** to complete rule creation.
+8. Click **Save** to complete rule creation.
+
+   ![sparkplugb_alias_mapping_create_rule](./assets/sparkplugb_alias_mapping_create_rule.png)
 
 #### Step 2: Prepare a Subscriber with MQTTX
 
@@ -184,13 +184,13 @@ The payloads below are shown as logical JSON for readability. When publishing re
        {
          "name": "Device/Temperature",
          "alias": 0,
-         "datatype": "Float",
+         "datatype": 9,
          "value": 72.5
        },
        {
          "name": "Device/Pressure",
          "alias": 1,
-         "datatype": "Float",
+         "datatype": 9,
          "value": 101.3
        }
      ]
@@ -199,6 +199,7 @@ The payloads below are shown as logical JSON for readability. When publishing re
 
    > **Notes**:
    >
+   > - In Sparkplug B, `datatype` is defined as an unsigned integer. The value `9` represents the Float data type, as specified by the Sparkplug B specification.
    > - EMQX records the alias-to-name mappings at this point.
    > - This step **must be performed before sending DDATA**.
 

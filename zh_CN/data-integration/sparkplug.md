@@ -95,7 +95,7 @@ Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为
 
 ### 配置 Alias 映射
 
-Alias 映射功能默认关闭，需要显式启用。
+Alias 映射功能默认启用。如果您不希望 EMQX 跟踪并还原 Sparkplug B 指标的 alias，可以在配置文件中将其关闭：
 
 ```hocon
 schema_registry {
@@ -105,7 +105,7 @@ schema_registry {
 }
 ```
 
-> **注意**
+> **注意**：
 >
 > - 只有在该配置启用期间接收到的 NBIRTH / DBIRTH 消息才会被用于建立 alias 映射。
 > - 如果在启用该配置之前客户端已经发送过 birth 消息，需要客户端重新发送 NBIRTH / DBIRTH 才能生效。
@@ -128,6 +128,7 @@ schema_registry {
 #### Step 1：在 EMQX Dashboard 创建规则
 
 1. 点击 EMQX Dashboard 左侧菜单中的**集成** -> **规则**。
+
 2. 点击 **+ 创建**以创建新规则。
 
 3. 配置 SQL。在 **SQL 编辑器**中输入以下内容：
@@ -142,20 +143,22 @@ schema_registry {
    >
    > - 该规则匹配所有 Sparkplug B DDATA 消息。
    > - `spb_decode(payload)`：解码 Sparkplug B payload。在 alias mapping 启用的情况下，自动将 `alias` 还原为对应的 `name`。
-   
-3. 点击 **+ 添加动作**。
 
-4. 选择**消息重发布**。
+4. 点击 **+ 添加动作**，为规则添加触发的动作。
 
-5. 填写以下配置：
+5. 选择**消息重发布**作为动作类型。
+
+6. 填写以下配置：
 
    - **主题**：`decoded/sparkplug/data`
 
    - **Payload**：`${decoded}`
-   
-6. 点击**添加**。
 
-4. 在创建规则页面点击**创建**。
+7. 点击**添加**。
+
+8. 在创建规则页面点击**保存**。
+
+   ![sparkplugb_alias_mapping_create_rule](./assets/sparkplugb_alias_mapping_create_rule.png)
 
 #### Step 2：使用 MQTTX 准备订阅者
 
@@ -178,13 +181,13 @@ schema_registry {
        {
          "name": "Device/Temperature",
          "alias": 0,
-         "datatype": "Float",
+         "datatype": 9,
          "value": 72.5
        },
        {
          "name": "Device/Pressure",
          "alias": 1,
-         "datatype": "Float",
+         "datatype": 9,
          "value": 101.3
        }
      ]
@@ -193,6 +196,7 @@ schema_registry {
 
    > 说明：
    >
+   > - 在 Sparkplug B 中，`datatype` 被定义为一个无符号整数。根据 Sparkplug B 规范，数值 `9` 表示 **Float** 数据类型。
    > - EMQX 会在此时记录 alias -> name 映射。
    > - 该步骤**必须先于 DDATA 执行**。
 
