@@ -82,7 +82,7 @@ Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为
 
    alias 映射与 MQTT 客户端会话关联，并按 Sparkplug B 语义进行隔离：
 
-   - 节点（NBIRTH / NDATA）与 设备（DBIRTH / DDATA）各自维护独立映射。
+   - 节点（NBIRTH / NDATA）与设备（DBIRTH / DDATA）各自维护独立映射。
    - 不同客户端之间的映射互不影响。
 
 3. **增强 spb_decode**
