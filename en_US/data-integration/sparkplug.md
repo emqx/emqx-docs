@@ -23,7 +23,7 @@ Please use the updated `spb_encode` and `spb_decode` functions instead.
 
 ## Sparkplug B Functions
 
-EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `spb_encode` and `spb_decode`.  The [Practical Examples](#practical-examples) section helps you to understand how to use these functions in different scenarios.
+EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `spb_encode` and `spb_decode`.  The [practical examples](#examples-for-using-spb_decode-and-spb_encode) helps you to understand how to use these functions in different scenarios.
 
 The Sparkplug B encoding and decoding functions can be used to perform a wide variety of tasks due to the flexibility of the rule engine and its `jq` function. To learn more about the rule engine and its `jq` function, refer to the following pages:
 
