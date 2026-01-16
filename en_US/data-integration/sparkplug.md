@@ -146,7 +146,7 @@ This example demonstrates how to use EMQX Dashboard and MQTTX to convert alias-o
    > **Note**:
    >
    > - The rule matches all Sparkplug B DDATA messages.
-   > - `spb_decode(payload)` decodes the Sparkplug B payload. When alias mapping is enabled, automatically restores metric names from aliases.
+   > - `spb_decode(payload)` decodes the Sparkplug B payload and, when alias mapping is enabled, automatically restores metric names from aliases.
 
 4. Click **+ Add Action** to append an action to the rule.
 
