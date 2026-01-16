@@ -56,9 +56,9 @@ EMQX, by default, enables the SSL/TLS listener on port `8883` and sets it for on
 
      ::: tip Note
 
-     Session tickets are supported only with TLS 1.3 and only in stateless mode to ensure scalability in clustered environments. EMQX does not support stateful session resumption for TLS 1.2.
-
      To generate session tickets, you must configure the node-level option `node.tls_stateless_tickets_seed` with a non-empty string value (for example, `node.tls_stateless_tickets_seed = "averysecuresecret"`). If session tickets are enabled on the listener but this option is not configured, session tickets will not be generated.
+
+     Session tickets are supported only with TLS 1.3 and only in stateless mode to ensure scalability in clustered environments. EMQX does not support stateful session resumption for TLS 1.2.
 
      EMQX also does not support client early data (0-RTT). Clients must wait until the TLS handshake is complete before sending MQTT data.
 
