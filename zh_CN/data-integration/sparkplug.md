@@ -12,7 +12,7 @@ Sparkplug B 采用明确定义的 payload 结构来标准化数据通信。它�
 
 EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 的高级支持。使用 Schema Registry，您可以为多种数据格式（包括 Sparkplug B）创建自定义编码器和解码器。通过在 registry 中定义[适当的 Sparkplug B schema](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto)，您可以在 EMQX 的规则引擎中使用 `schema_decode` 和 `schema_encode` 函数访问和处理符合指定格式的数据。
 
-此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`spb_encode`  和`spb_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
+此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`spb_encode`  和 `spb_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
 
 :::: tip
 
