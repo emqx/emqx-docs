@@ -104,7 +104,7 @@ Alias mapping is enabled by default. If you do not want EMQX to track and restor
 ```hocon
 schema_registry {
   sparkplugb {
-    enable_alias_mapping = true
+    enable_alias_mapping = false
   }
 }
 ```
