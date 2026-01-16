@@ -111,8 +111,8 @@ schema_registry {
 
 > **Note**:
 >
-> - Only NBIRTH / DBIRTH messages received while alias mapping is enabled are used to build alias mappings.
-> - If a client has already sent birth messages before this option is enabled, the client must resend NBIRTH / DBIRTH messages for alias mapping to take effect.
+> - Alias mappings are created only from NBIRTH / DBIRTH messages received while alias mapping is enabled.
+> - If a client has already sent its birth messages, it must reconnect and publish NBIRTH / DBIRTH again for alias mapping to apply.
 
 ### Alias Mapping Example
 

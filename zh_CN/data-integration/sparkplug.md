@@ -100,15 +100,15 @@ Alias 映射功能默认启用。如果您不希望 EMQX 跟踪并还原 Sparkpl
 ```hocon
 schema_registry {
   sparkplugb {
-    enable_alias_mapping = true
+    enable_alias_mapping = false
   }
 }
 ```
 
 > **注意**：
 >
-> - 只有在该配置启用期间接收到的 NBIRTH / DBIRTH 消息才会被用于建立 alias 映射。
-> - 如果在启用该配置之前客户端已经发送过 birth 消息，需要客户端重新发送 NBIRTH / DBIRTH 才能生效。
+> - 只有在 alias mapping 启用期间接收到的 NBIRTH / DBIRTH 消息，才会用于创建 alias 映射。
+> - 如果客户端已经发送过 birth 消息，则需要先重新连接，并再次发布 NBIRTH / DBIRTH 消息，alias mapping 才会生效。
 
 ### Alias 映射使用示例
 
