@@ -47,7 +47,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
     Enables TLS 1.3 session resumption. Supported values:
 
     - `disabled` (default)
-  - `stateless`
+    - `stateless`
     - `stateless_with_cert` (includes certificate information in the ticket)
   
   **Notes**
