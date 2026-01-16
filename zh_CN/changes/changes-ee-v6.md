@@ -124,6 +124,8 @@
 
 - [#16515](https://github.com/emqx/emqx/pull/16515) 修复了当 Broker 发送的消息超过客户端声明的 `Maximum-Packet-Size` 时，WebSocket 连接可能发生崩溃的问题。
 
+- [#16569](https://github.com/emqx/emqx/pull/16569) 修复了一个罕见的竞态条件，该问题可能导致在高系统负载下用于抖动检测的 `emqx_flapping` 进程崩溃。
+
 #### 数据集成
 
 - [#16265](https://github.com/emqx/emqx/pull/16265) 健康检查现在仅验证分配给当前 EMQX 节点的分区的 leader 连接性，从而避免不必要的空闲连接和误报告警。
