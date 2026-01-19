@@ -22,7 +22,7 @@ EMQX provides a series of observability-related features to help with system mon
 
   [Prometheus](https://prometheus.io/) is the monitoring solution open-sourced by SoundCloud, featuring its support for multidimensional data models, flexible query language, and powerful alarm management. EMQX supports integrating with Prometheus to collect system metrics and pushing metrics to `pushgateway`.
 
-- [Integrate with Datadog](./datadog)
+- [Integrate with Datadog](./datadog.md)
 
   [Datadog](https://www.datadoghq.com/) is an observability platform that provides unified, real-time observability and security solutions for applications. EMQX supports the integration of Datadog to help you understand the EMQX operating status, monitor and troubleshoot system performance issues, and view EMQX metrics on the Datadog console.
 

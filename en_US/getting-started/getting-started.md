@@ -27,12 +27,6 @@ EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX
 
 For other platforms not listed above, you can [contact EMQ](https://www.emqx.com/en/contact) for support.
 
-<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
-
-In addition, you can also deploy EMQX with one click through [EMQX Terraform](https://www.emqx.com/en/emqx-terraform) on the cloud, for example, [Alibaba Cloud](https://github.com/emqx/tf-alicloud) and [AWS](https://github.com/emqx/tf-aws).
-
-<!-- TODO @wivwiv Update Terraform link when EMQX Terraform 5.0 document ready -->
-
 ### Install EMQX Using Docker
 
 Container deployment is the quickest way to start exploring EMQX. This quick start guide shows you how to install and run EMQX through Docker. 

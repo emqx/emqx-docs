@@ -22,19 +22,18 @@ The levels are defined from development perspectives and are only for recommenda
 
 :::
 
-| **Alarm**                           | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
-| :---------------------------------- | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
-| high_system_memory_usage            | Warning  | System memory usage is too high                              | "System memory usage is higher than ~p%"     | `os_mon.sysmem_high_watermark = 70%`                         |
-| high_process_memory_usage           | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%      | `os_mon.procmem_high_watermark = 5%`                         |
-| high_cpu_usage                      | Warning  | CPU usage is too high                                        | ~p% cpu usage                                | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
-| too_many_processes                  | Warning  | Too many processes                                           | ~p% process usage                            | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
-| license_quota                       | Warning  | License exceeds quota                                        | License: the number of connections exceeds % | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
-| license_expiry                      | Critical | License expired                                              | License will be expired at %                 | -                                                            |
-| mnesia_transaction_manager_overload | Warning  | mnesia overloaded; mailbox size: N                           | mailbox size = N                             | `sysmon.mnesia_tm_mailbox_threshold = 500`                   |
-| broker_pool_overload                | Warning  | broker pool overloaded; mailbox size: N                      | mailbox size = N                             | `sysmon.broker_pool_mailbox_threshold = 500`                 |
-| partition                           | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
-| resource                            | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
-| conn_congestion                     | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
+| **Alarm**                 | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
+| :------------------------ | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
+| high_system_memory_usage  | Warning  | System memory usage is too high                              | "System memory usage is higher than ~p%"     | `os_mon.sysmem_high_watermark = 70%`                         |
+| high_process_memory_usage | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%      | `os_mon.procmem_high_watermark = 5%`                         |
+| high_cpu_usage            | Warning  | CPU usage is too high                                        | ~p% cpu usage                                | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
+| too_many_processes        | Warning  | Too many processes                                           | ~p% process usage                            | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
+| license_quota             | Warning  | License exceeds quota                                        | License: the number of connections exceeds % | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
+| license_expiry            | Critical | License expired                                              | License will be expired at %                 | -                                                            |
+| license_tps               | Warning  | TPS usage exceeds licensed limit                             | License: TPS limit (e.g., 10) exceeded       | -                                                            |
+| partition                 | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
+| resource                  | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
+| conn_congestion           | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
 
 ## Get Alarms
 
@@ -45,6 +44,8 @@ Additionally, you can subscribe to system topics via MQTT to receive real-time n
 ### View Alarms on Dashboard
 
 On the EMQX Dashboard, click **Monitoring** -> **Alarms**. Then, select the **Active** or **History** tab to view a list of currently active alarms and historical alarms.
+
+For a complete guide to managing alarms using the EMQX Dashboard, see [Alarms](../dashboard/alarm_dashboard.md).
 
 <img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
 

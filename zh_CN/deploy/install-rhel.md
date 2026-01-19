@@ -5,10 +5,8 @@
 支持的 CentOS/RHEL 版本：
 
 - Amazon Linux 2023
-- Amazon Linux 2
 - Rocky Linux 9 (RHEL 9)
 - Rocky Linux 8 (RHEL 8)
-- CentOS 7 (RHEL 7)
 
 下文将以 CentOS 8 系统为例演示如何下载最新版 EMQX。如希望在其他系统中进行安装或希望安装其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取详细安装信息。
 

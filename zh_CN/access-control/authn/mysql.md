@@ -55,8 +55,8 @@ SELECT password_hash, salt, is_superuser FROM mqtt_user WHERE username = ${usern
 
 ## 通过 Dashboard 配置
 
-1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**.
-2. 在**客户端认证**页面，点击**+ 创建**。
+1. 在 EMQX Dashboard 页面上点击左侧导航栏的**访问控制** -> **客户端认证**。
+2. 在**客户端认证**页面，点击**创建**。
 3. 依次选择**认证方式**为 `Password-Based`，**数据源**为 `MySQL`，点击**下一步**进入**配置参数**页签：
 
 <img src="./assets/authn-mysql.png" alt="Authentication with mysql" style="zoom:67%;" />

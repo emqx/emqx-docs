@@ -114,7 +114,7 @@ For detailed information on how to use message transformation through the REST A
 
 ### Create Decode / Encode Schemas
 
-For more information on how to create decoder and encoder schemas, see the [Schema Registry](./schema-registry) section.
+For more information on how to create decoder and encoder schemas, see the [Schema Registry](./schema-registry.md) section.
 
 ## Statistics and Indicators
 

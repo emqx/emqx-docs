@@ -186,9 +186,21 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 7. 从**连接器**下拉框中选择刚刚创建的 `my_rocketmq`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 在 **RocketMQ 主题**字段中输入 `TopicTest`。
+8. 填写以下 RocketMQ 特定配置项：
 
-9. **消息模版**设置为默认值，即为空；模版为空时将会将整个消息转发给 RocketMQ，实际值为 JSON 模版数据。
+   - **RocketMQ 主题**：输入消息将被转发到的 RocketMQ 主题，例如：`TopicTest`。
+   - **标签**（可选）：用于动态分配 RocketMQ 消息标签的模板字段。该字段支持使用规则 SQL 结果中的字段作为占位符，例如 `${msg_type}` 或 `${clientid}`。如果留空，则消息不包含标签。
+   - **索引**（可选）：用于为每条消息指定 RocketMQ Key 的模板字段。索引可用于消息追踪或去重，例如 `${device_id}` 或 `${username}`。此字段同样支持规则 SQL 结果中的占位符。
+
+9. 在**消息模板**字段中，可以自定义发送到 RocketMQ 的消息 payload 结构：
+
+   > 该字段默认值为空，若保持为空，整个消息将被转发到 RocketMQ。
+
+   模板可以是包含占位符的任意有效字符串，例如：
+   - `${id}`, `${username}`, `${clientid}`, `${timestamp}`
+   - `{"id": ${id}, "username": ${username}}`
+
+   实际值可以是普通字符串，也可以是 JSON 格式的模板字符串。系统会在运行时替换其中的占位符为规则 SQL 中的字段值。
 
 10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
@@ -198,9 +210,9 @@ docker run --rm -e NAMESRV_ADDR=host.docker.internal:9876 apache/rocketmq:4.9.4 
 
 13. 点击**添加**按钮完成 Sink 创建，新建的 Sink 将被添加到**动作输出**列表中。
 
-14. 回到创建规则页面，对配置的信息进行确认，点击**创建**。一条规则应该出现在规则列表中。
+14. 在创建规则页面，对配置的信息进行确认，点击**保存**。一条规则应该出现在规则列表中。
 
-现在您已成功创建了通过 RocketMQ Sink 将数据转发到 RocketMQ 的规则，同时在**规则**页面的**动作(Sink)** 标签页看到新建的 RocketMQ Sink。
+现在您已成功创建了通过 RocketMQ Sink 将数据转发到 RocketMQ 的规则，同时在**规则**页面的**动作 (Sink)** 标签页看到新建的 RocketMQ Sink。
 
 您还可以点击 **集成** -> **Flow 设计器**可以查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 RocketMQ 中。
 

@@ -174,7 +174,7 @@ Click **+ Add Listener** to open **Add Listener** page, where you can continue w
 
 **TCP Settings**
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
+- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **TCP_NODELAY**: Set the TCP_NODELAY flag for the connections; default: `false`.
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers; default: `true`.<!--not quite sure what this means-->

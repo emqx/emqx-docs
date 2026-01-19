@@ -255,7 +255,7 @@ authentication = [
 
 #### Redis 变动
 
-1. 仅支持 [Redis Hashes](https://redis.io/docs/manual/data-types/#hashes) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password` (兼容 4.x) 作为密码字段名；
+1. 仅支持 [Redis Hashes](https://redis.io/docs/latest/develop/data-types/hashes/) 数据结构与 `HGET`、`HMGET` 查询命令，必须使用 `password_hash` 或 `password` (兼容 4.x) 作为密码字段名；
 2. 移除单独的超级用户 (superuser) 查询命令，如需超级用户功能请在 Redis 查询命令中添加 `is_superuser` 字段。
 
 ```shell

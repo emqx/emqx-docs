@@ -1,18 +1,14 @@
 # Change EMQX Log Level
 
-## Task Target
+## Objective
 
-Modify the log level of EMQX cluster.
+Modify the log level in the EMQX cluster.
 
 ## Configure EMQX Cluster
 
-The following is the relevant configuration of EMQX Custom Resource. You can choose the corresponding APIVersion according to the version of EMQX you want to deploy. For the specific compatibility relationship, please refer to [EMQX Operator Compatibility](../operator.md):
+EMQX CRD `apps.emqx.io/v2beta1` supports configuring the log level of the EMQX cluster through `.spec.config.data`. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for complete configuration reference.
 
-`apps.emqx.io/v2beta1 EMQX` supports configuration of EMQX cluster log level through `.spec.config.data`. The configuration of config.data can refer to the document: [Configuration Manual](https://www.emqx.io/docs/en/v5.1/configuration/configuration-manual.html#configuration-manual).
-
-> This field is only allowed to be configured when creating an EMQX cluster, and does not support updating. If you need to modify the cluster log level after creating EMQX, please modify it through EMQX Dashboard.
-
-+ Save the following content as a YAML file and deploy it with the kubectl apply command
+1. Save the following content as a YAML file and deploy it using `kubectl apply`:
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
@@ -20,8 +16,9 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
   metadata:
     name: emqx
   spec:
-    image: emqx/emqx-enterprise:@EE_VERSION@
+    image: emqx/emqx:@EE_VERSION@
     config:
+      # Enable debug logging:
       data: |
         log.console.level = debug
         license {
@@ -35,54 +32,39 @@ The following is the relevant configuration of EMQX Custom Resource. You can cho
         type: LoadBalancer
   ```
 
-  > The `.spec.config.data` field configures the EMQX cluster log level to `debug`.
+2. Wait for the EMQX cluster to become ready.
 
-+ Wait for the EMQX cluster to be ready, you can check the status of the EMQX cluster through the kubectl get command, please make sure that `STATUS` is Running, this may take some time
-
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
-
-+ EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
+  Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
   ```bash
-  $ kubectl get svc emqx-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-
-  192.168.1.200
+  $ kubectl get emqx
+  NAME   STATUS   AGE
+  emqx   Ready    10m
   ```
-
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
 
 ## Verify Log Level
 
-[MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers to more Quickly develop and debug MQTT services and applications.
-
-+ Obtain the External IP of EMQX cluster
+1. Obtain the External IP of the EMQX cluster.
 
   ```bash
   external_ip=$(kubectl get svc emqx-listeners -o json | jq '.status.loadBalancer.ingress[0].ip')
   ```
 
-+ Use MQTTX CLI to connect to EMQX cluster
+2. Use MQTTX CLI to connect to the EMQX cluster.
+
+  [MQTTX CLI](https://mqttx.app/cli) is an open source MQTT 5.0 command line client tool, designed to help developers start using MQTT services and applications more quickly.
 
   ```bash
   $ mqttx conn -h ${external_ip} -p 1883
-
   [4/17/2023] [5:17:31 PM] › … Connecting...
   [4/17/2023] [5:17:31 PM] › ✔ Connected
   ```
 
-+ Use the command line to view EMQX cluster log information
+3. View EMQX container logs.
 
   ```bash
   $ kubectl logs emqx-core-0 -c emqx
-  ```
-
-  You can get a print similar to the following, which means that EMQX has received a CONNECT message from the client and replied a CONNACK message to the client:
-
-  ```bash
+  ...
   2023-04-17T09:11:35.993031+00:00 [debug] msg: mqtt_packet_received, mfa: emqx_channel:handle_in/2, line: 360, peername: 218.190.230.144:59457, clientid: mqttx_322680d9, packet: CONNECT(Q0, R0, D0, ClientId=mqttx_322680d9, ProtoName=MQTT, ProtoVsn=5, CleanStart=true, KeepAlive=30, Username=undefined, Password=), tag: MQTT
   2023-04-17T09:11:35.997066+00:00 [debug] msg: mqtt_packet_sent, mfa: emqx_connection:serialize_and_inc_stats_fun/1, line: 872, peername: 218.190.230.144:59457, clientid: mqttx_322680d9, packet: CONNACK(Q0, R0, D0, AckFlags=0, ReasonCode=0), tag: MQTT
   ```

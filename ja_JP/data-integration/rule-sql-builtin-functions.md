@@ -1331,6 +1331,33 @@ base64_decode('aGVsbG8=') = 'hello'
 bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```
 
+### base64_decode(Data: string, Option1: string, ...) -> bytes | string
+
+::: tip
+
+このオプションパラメータを持つ関数は EMQX 6.0.2 から導入されました。
+
+:::
+
+オプションパラメータを使用してデコード動作を制御しながら、`Data` をBase64形式からデコードします。
+
+**オプション：**
+
+- **`no_padding`**：パディング文字（`=`）を期待せずにデコードします。パディングがない文字列をデコードする場合に便利です。
+- **`urlsafe`**：URLセーフなBase64デコードを使用します。デコード前に `-` を `+` に、`_` を `/` に置き換えます。
+
+これらのオプションは個別に使用することも、組み合わせて使用することもできます。オプションを組み合わせる場合、順序は関係ありません。
+
+**例：**
+
+```sql
+-- URLセーフなBase64をデコード
+SELECT base64_decode(payload, 'urlsafe') as decoded FROM "t/#"
+
+-- パディングなしのURLセーフなBase64をデコード
+SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
+```
+
 ### base64_encode(Data: binary | string) -> string
 
 `Data` をBase64形式にエンコードします。例：
@@ -1338,6 +1365,36 @@ bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```bash
 base64_encode('hello') = 'aGVsbG8='
 base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
+```
+
+### base64_encode(Data: binary | string, Option1: string, ...) -> string
+
+::: tip
+
+このオプションパラメータを持つ関数は EMQX 6.0.2 から導入されました。
+
+:::
+
+オプションパラメータを使用してエンコード動作を制御しながら、`Data` をBase64形式にエンコードします。
+
+**オプション：**
+
+- **`no_padding`**：パディング文字（`=`）なしでエンコードします。エンコードされた文字列からパディングを削除する必要がある場合に便利です。
+- **`urlsafe`**：URLセーフなBase64エンコードを使用します。`+` を `-` に、`/` を `_` に置き換えることで、エンコードされた文字列をエンコードせずにURLで安全に使用できます。
+
+これらのオプションは個別に使用することも、組み合わせて使用することもできます。オプションを組み合わせる場合、順序は関係ありません。
+
+**例：**
+
+```sql
+-- パディングなしでエンコード
+SELECT base64_encode(payload, 'no_padding') as encoded FROM "t/#"
+
+-- URLセーフな文字でエンコード
+SELECT base64_encode(payload, 'urlsafe') as encoded FROM "t/#"
+
+-- 両方のオプション（パディングなしとURLセーフ）でエンコード
+SELECT base64_encode(payload, 'no_padding', 'urlsafe') as encoded FROM "t/#"
 ```
 
 ### json_decode(Data: string) -> array | map

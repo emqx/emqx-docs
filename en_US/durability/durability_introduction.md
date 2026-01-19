@@ -4,12 +4,6 @@ EMQX includes a Durable Sessions feature, which allows MQTT sessions and message
 
 This page introduces the concepts, principles, and usage of session persistence in EMQX.
 
-::: warning Important Notice
-
-This feature is available starting from EMQX v5.7.0. However, it does not yet support the persistence of shared subscription sessions, which is planned to be implemented in future versions.
-
-:::
-
 ## Basic Concepts
 
 Before learning the Durable Sessions feature in EMQX, it's essential to understand some basic concepts about EMQX.
@@ -18,7 +12,7 @@ Before learning the Durable Sessions feature in EMQX, it's essential to understa
 
 **Session**: A session is a lightweight process within EMQX created for every client connection. Sessions implement behaviors prescribed to the broker by MQTT Standard, including initial connection, subscribing and unsubscribing to topics, and message dispatching.
 
-**Durable Storage**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
+**Durable Storage (DS)**: Durable storage is an internal database within EMQX. Sessions may use it to save their state and MQTT messages sent to the topics. Database engine powering durable storage uses [RocksDB](https://rocksdb.org/) to save the data on disk, and [Raft algorithm](https://raft.github.io/) to consistently replicate data across the cluster. It is important not to confuse durable storage with **Durable Sessions**.
 
 ### Session Expiry Interval
 
@@ -115,7 +109,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Using [MQTTX CLI](https://mqttx.app/cli) as an example, which defaults to using MQTT 5.0 protocol, add the `--no-clean` option to set `Clean Start = false`, and specify the client ID as `emqx_c`. Connect to EMQX and subscribe to the `t/1` topic:
 
    ```bash
-   mqttx sub -t t/1 -i emqx_c --no-clean
+   mqttx sub -t t/1 -i emqx_c --no-clean -q 1
    ```
 
 3. Disconnect the client, and the session will be retained.
@@ -129,7 +123,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Using MQTTX CLI again, use the `bench` command to repeatedly publish messages to the `t/1` topic with one client:
 
    ```bash
-   mqttx bench pub -t t/1 -c 1
+   mqttx bench pub -t t/1 -c 1 -q 1
    ```
 
    According to the MQTT protocol, even if the `emqx_c` client is offline, the messages for the `t/1` topic it subscribed to will be saved in the client queue and will be delivered when it reconnects.
@@ -141,7 +135,7 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
    Try connecting to EMQX with the same client ID `emqx_c` and using the `--no-clean` option to set `Clean Start = false`:
 
    ```bash
-   mqttx sub -t t/1 -i emqx_c --no-clean
+   mqttx sub -t t/1 -i emqx_c --no-clean -q 1
    ```
 
    The messages received during the offline period will be delivered to the current client:
@@ -165,33 +159,43 @@ Even if durable sessions are not enabled, following steps 2-4 will still retain 
 
 ## Durable Storage Architecture
 
-The database engine powering EMQX's builtin durability facilities organizes data into a hierarchical structure comprising storages, shards, generations, and streams.
+Durable Sessions rely on the Durable Storage for persisting session state and messages. To understand how this storage layer is structured and operates, refer to the *Architecture: Backends and Storage Hierarchy* section in [Design for Durable Storage](../design/durable-storage.md).
 
-![Diagram of EMQX durable storage sharding](./assets/emqx_ds_sharding.png)
+## How Durable Storage Supports Durable and Shared Subscription Sessions
 
-### Storage
+Durable Storage is the backbone for durable sessions and shared subscription sessions in EMQX.
 
-Storage encapsulates all data of a certain type, such as MQTT messages or MQTT sessions.
+### Durable Sessions
 
-### Shard
+Durable Sessions are implemented on top of the DS database engine. When a client connects with a **non-zero session expiry interval**, EMQX stores the session state in DS.
 
-Messages are segregated by clients and stored in shards based on the publisher's client ID. The number of shards is determined by [n_shards](./managing-replication.md#number-of-shards) configuration parameter during the initial startup of EMQX. A shard is also a unit of replication. Each shard is consistently replicated the number of times specified by `durable_storage.messages.replication_factor` across different nodes, ensuring identical message sets in each replica.
+- **Message persistence:**
 
-### Generation
+  When a durable session subscribes to a topic filter with QoS > 0, this topic filter is marked as "durable" in the EMQX's routing table. Messages published to any topic marked this way are saved to the DS in addition to being delivered to regular clients.
 
-Messages within a shard are segmented into generations corresponding to specific time frames. New messages are written to the current generation, while previous generations are read-only. EMQX cleans up old MQTT messages by deleting old generations in their entirety. The retention period for old MQTT messages is determined by the `durable_sessions.message_retention_period` parameter.
+- **Progress tracking:**
 
-Generations can organize data differently according to the storage layout specification. Currently, only one layout is supported, optimized for high throughput of wildcard and single-topic subscriptions. Future updates will introduce layouts optimized for different workloads.
+  Durable sessions read messages from DS using *iterators*, lightweight markers that track how far the session has progressed within each durable storage stream. This allows message replay to resume reliably after disconnection or node restart.
 
-The storage layout for new generations is configured by the `durable_storage.messages.layout` parameter, with each layout engine defining its own configuration parameters.
+- **Efficient storage:**
 
-### Stream
+  Messages are stored only once per DS replica, regardless of how many durable sessions subscribe to the topic, minimizing storage overhead.
 
-Messages in each shard and generation are split into streams. Streams serve as units of message serialization in EMQX. Streams can contain messages from multiple topics. Various storage layouts can employ different strategies for mapping topics into streams.
+### Shared Subscription Sessions
 
-Durable sessions fetch messages in batches from the streams, with batch size adjustable via the `durable_sessions.batch_size` parameter.
+Starting from EMQX v6.0, DS also supports the persistence of shared subscription sessions. Shared subscriptions rely on DS to maintain consistent message distribution across a subscriber group.
 
-## Durable Storages Across Cluster
+- **Iterator management:**
+
+  A designated shared subscription leader manages iterator sets for the group. It assigns iterators to members to ensure coordinated consumption.
+
+- **Replay and rebalancing:**
+
+  Sessions subscribing to a shared topic communicate with the leader, which lends them iterators for message replay. Updated iterators are reported back. If a client disconnects or the group is rebalanced, the leader revokes the iterators and redistributes them to other members, ensuring consumption continuity and load distribution.
+
+These mechanisms ensure load balancing, message ordering, and fault tolerance across the entire subscription group.
+
+## Durable Storage Across Cluster
 
 Each node within an EMQX cluster is assigned a unique *Site ID*, which serves as a stable identifier, independent of the Erlang node name (`emqx@...`). Site IDs are persistent, and they are randomly generated at the first startup of the node. This stability maintains the integrity of the data, especially in scenarios where nodes might undergo name modifications or reconfigurations.
 
@@ -213,3 +217,8 @@ To learn how to configure and manage the Durable Sessions feature, as well as ho
 
 - [Configure and Manage Durable Sessions](./management.md)
 - [Manage Data Replication](./managing-replication.md)
+
+## More Information
+
+For a deeper understanding of the design principles behind MQTT Durable Sessions, see [Design for Durable Storage](../design/durable-storage.md).
+

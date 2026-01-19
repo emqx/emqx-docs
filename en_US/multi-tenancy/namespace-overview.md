@@ -40,6 +40,19 @@ Namespaces are identified by a special client attribute `tns` (tenant namespace)
 
   Namespaces provide a clean boundary for collecting metrics such as connection count and message throughput per tenant, essential for capacity planning and operational insight.
 
+- **Admin User Isolation**
+   
+  Starting from EMQX 6.0, namespaces are extended to Dashboard, CLI, and API users through [namespaced roles](../dashboard/system.md/#namespaced-roles).
+  
+  - Admin users can be created with roles restricted to a specific namespace, e.g., `ns:team_a::administrator`.
+  - Namespaced users only see and operate on resources within their assigned namespace.
+   - Cluster-level configurations not yet namespace-aware are visible but read-only for namespaced users, and only modifiable by global administrators.
+   - This ensures secure, tenant-specific administrative access alongside data isolation.
+   
+- **Multi-Tenant Management**
+
+  System administrators can manage multiple namespaces within the same cluster, while each tenant operates in a self-contained environment with isolated resources and user permissions.
+
 ### Isolation Mechanisms
 
 EMQX offers high flexibility and has supported various isolation methods even before the namespace feature. The namespace feature provides a unified tenant identifier field (`client_attrs.tns`), allowing configurations like client ID and topic mount points to be organized and managed around unified tenant information.
@@ -94,12 +107,18 @@ You can also enable namespaces using the EMQX Dashboard:
 
 ## Multi-Tenancy Roadmap
 
+The following features are being rolled out progressively:
+
 - Unify management namespaces and MQTT namespaces.
-- Implement isolation for rules, actions/data sources, and connectors.
 - Implement isolation for built-in database authentication.
 - Implement isolation for built-in database authorization.
 - Implement quota isolation for retained messages.
 - Implement isolation for Prometheus metrics.
+
+::: tip Update
+
+As of EMQX 6.0, isolation for Rules, Actions, Sources, and Connectors has been fully implemented and is no longer part of the roadmap.
+:::
 
 ## What's Next
 
