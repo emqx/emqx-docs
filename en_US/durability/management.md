@@ -45,7 +45,7 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 
 #### Database Groups Configuration
 
-Starting from EMQX 6.1, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance.
+Starting from EMQX 6.0.2, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance.
 
 Database groups enable multiple durable storage databases to be managed together with shared resource limits, without modifying their logical data models. This feature is primarily intended for operators and managed deployments.
 
@@ -390,7 +390,7 @@ Counts the number of times the Raft server turned into a candidate / follower / 
 
 Frequent state changes are a sign of instability. Consider checking the logs for details.
 
-### Database Group Metrics (EMQX 6.1+)
+### Database Group Metrics
 
 The following Prometheus metrics provide node-level visibility into durable storage database groups:
 
