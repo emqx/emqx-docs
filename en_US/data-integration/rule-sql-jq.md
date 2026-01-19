@@ -1,10 +1,10 @@
 # jq Functions
 
-[jq](https://stedolan.github.io/jq/) is a powerful command-line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html). 
+[jq](https://jqlang.org) is a powerful command-line tool and programming language designed primarily for transforming and querying data encoded as [JSON](https://www.json.org/json-en.html). 
 
-EMQX rules allow users to define SQL-like rules to process and route messages. These rules can include jq functions to perform complex transformations on JSON payloads as they pass through the broker. 
+EMQX rules allow users to define SQL-like rules to process and route messages. These rules can include jq functions to perform complex transformations on JSON payloads as they pass through the broker.
 
-If you are new to jq function, you can refer to the [Reference](#references) section to speedily get started. 
+If you are new to jq language, you can refer to the [Reference](#references) section to get started quickly.
 
 ::: tip
 
@@ -212,7 +212,6 @@ FROM "car/measurements"
 
 If you are new to the jq function, the following materials are recommended: 
 
--  [jq documentation](https://stedolan.github.io/jq/manual/)
+- [jq documentation](https://jqlang.org/manual/v1.8/)
 - [Online jq programming playground](https://jqplay.org/)
 - [EMQX's jq introduction video](https://www.youtube.com/watch?v=_GwF8zvhNcQ)
-
