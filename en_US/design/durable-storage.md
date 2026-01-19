@@ -98,7 +98,7 @@ The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 ## Durable Storage Database Groups
 
-Starting from EMQX 6.1, Durable Storage introduces the concept of database groups to improve resource management and operational safety.
+Starting from EMQX 6.0.2, Durable Storage introduces the concept of database groups to improve resource management and operational safety.
 
 A database group provides unified management of storage resources, such as disk space and memory buffers, for one or more durable storage databases on a node.
 
