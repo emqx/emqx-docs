@@ -203,12 +203,12 @@ The Shenzhen Urban Transport Planning Center (SUTPC) uses EMQX to process data f
 
 ### Manufacturing & IIoT
 
-EMQX connects all machines, systems, and applications from the factory floor to the cloud, bridging OT and IT with an AI-native data backbone. With support for 100+ industrial protocols including Modbus, OPC-UA, and Siemens S7, EMQX enables a [Unified Namespace (UNS)](https://www.emqx.com/en/solutions/unified-namespace) architecture with Sparkplug B for true plug-and-play interoperability.
+EMQX connects all machines, systems, and applications from the factory floor to the cloud, bridging OT and IT with an AI-native data backbone. With support for 100+ industrial protocols, including Modbus, OPC-UA, and Siemens S7, EMQX enables a [Unified Namespace (UNS)](https://www.emqx.com/en/solutions/unified-namespace) architecture with Sparkplug B for true plug-and-play interoperability.
 
 ![architecture-manufacturing](./assets/architecture-manufacturing.svg)
 
 - **Predictive Maintenance**: Use real-time sensor data and AI to predict machine failures, prevent unplanned downtime, and extend equipment life.
-- **OEE Optimization**: Boost factory output by tracking Overall Equipment Effectiveness in real time, manufacturers report up to 25% increase in OEE and 40% reduction in downtime.
+- **OEE Optimization**: Boost factory output by tracking Overall Equipment Effectiveness in real time. Manufacturers report up to 25% increase in OEE and 40% reduction in downtime.
 - **Quality & Traceability**: Detect quality deviations the moment they occur, monitor production parameters in real-time, and enable full product traceability.
 - **Live Performance Monitoring**: Visualize your entire production line with live dashboards using EMQX [metrics and observability](./observability/overview.md) features, with integration to Prometheus and Datadog.
 
@@ -233,7 +233,7 @@ Huabei Oilfield Company uses EMQX to connect over 40,000 data collection points,
 
 ### Healthcare
 
-EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./access-control/security-guide.md). The platform provides HIPAA-ready security features including [TLS/SSL encryption](./network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
+EMQX enables real-time patient monitoring, medical device integration, and next-generation telehealth solutions with a scalable, [secure data backbone](./access-control/security-guide.md). The platform provides HIPAA-ready security features, including [TLS/SSL encryption](./network/overview.md), robust authentication, and fine-grained access control to protect sensitive patient data.
 
 ![architecture-healthcare](./assets/architecture-healthcare.svg)
 
@@ -265,7 +265,7 @@ EMQX provides carrier-grade scalability for 5G IoT services, supporting 100+ mil
 - **Network Monitoring**: Continuously monitor the health and performance of network infrastructure in real time to proactively identify and resolve issues.
 - **Smart City Backbone**: Build the data backbone for smart cities, connecting traffic systems, public transportation, utilities, and emergency services.
 
-China Telecom, one of the world's largest telecom providers, uses EMQX to power their national IoT platform CTWing, supporting over 100 million concurrent device connections. [**Read Case Study →**](https://www.emqx.com/en/customers/china-telecom)
+China Telecom, one of the world's largest telecom providers, uses EMQX to power its national IoT platform CTWing, supporting over 100 million concurrent device connections. [**Read Case Study →**](https://www.emqx.com/en/customers/china-telecom)
 
 ### Retail & Consumer IoT
 
@@ -273,7 +273,7 @@ EMQX connects millions of retail devices and consumer IoT endpoints, enabling re
 
 ![architecture-retail](./assets/architecture-retail.svg)
 
-- **Smart Retail**: Power real-time inventory management, POS monitoring, personalized customer engagement, and dynamic pricing across all store locations. Connect thousands of self-service kiosks ensuring seamless customer experiences even during peak hours.
+- **Smart Retail**: Power real-time inventory management, POS monitoring, personalized customer engagement, and dynamic pricing across all store locations. Connect thousands of self-service kiosks, ensuring seamless customer experiences even during peak hours.
 - **Smart Home**: Connect millions of smart home devices with a scalable [pub/sub messaging](./messaging/introduction.md) backbone, enabling home automation, energy monitoring, and integration with platforms like Alexa and Google Assistant.
 - **Gaming & Social**: Build responsive online games and social apps with ultra-low latency communication for millions of concurrent users, supporting in-game chat, real-time notifications, and live events.
 
