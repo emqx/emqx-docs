@@ -248,17 +248,6 @@ ok
 
 有关更多信息，请参阅 EMQX OpenAPI schema。
 
-### 数据库组 API
-
-除副本管理相关 API 之外，EMQX 6.1 还引入了数据库组相关的 API，用于支持运维人员和高级工具进行管理。
-
-- `POST /ds/db_groups`：创建一个新的持久存储数据库组。
-- `PUT /ds/db_groups/:group`：更新指定数据库组的配置（例如存储配额）。
-- `GET /ds/db_groups`：列出所有数据库组。
-- `GET /ds/db_groups/:group`：获取指定数据库组的详细信息及其当前资源使用情况。
-
-这些 API 主要面向运维级管理场景，在部分部署环境中可能不会对外暴露。
-
 ## 指标
 
 以下 Prometheus 指标与持久会话相关：

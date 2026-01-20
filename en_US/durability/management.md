@@ -253,17 +253,6 @@ The following REST API endpoints are available for managing and monitoring the b
 
 See EMQX OpenAPI schema for more information.
 
-### Database Group APIs
-
-In addition to replica management APIs, EMQX 6.1 introduces database-group-related APIs for operators and advanced tooling.
-
-- `POST /ds/db_groups`: Creates a new durable storage database group.
-- `PUT /ds/db_groups/:group`: Updates configuration of an existing database group (for example, storage quota).
-- `GET /ds/db_groups`: Lists all database groups.
-- `GET /ds/db_groups/:group`: Retrieves details and current resource usage of a database group.
-
-These APIs are intended for operator-level management and may not be exposed in all deployments.
-
 ## Metrics
 
 The following Prometheus metrics are relevant to durable sessions:
