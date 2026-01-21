@@ -1306,8 +1306,15 @@
             "type": "string"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -2847,6 +2854,54 @@
         },
         "type": "object"
       },
+      "bridge_iotdb.action_parameters_data_tree": {
+        "properties": {
+          "data_type": {
+            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
+            "enum": [
+              "text",
+              "boolean",
+              "int32",
+              "int64",
+              "float",
+              "double"
+            ],
+            "type": "string"
+          },
+          "measurement": {
+            "description": "Measurement. Placeholders in format of ${var} is supported",
+            "type": "string"
+          },
+          "timestamp": {
+            "default": "now",
+            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "now",
+                  "now_ms",
+                  "now_ns",
+                  "now_us"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "value": {
+            "description": "Value. Placeholders in format of ${var} is supported",
+            "type": "string"
+          }
+        },
+        "required": [
+          "data_type",
+          "measurement",
+          "value"
+        ],
+        "type": "object"
+      },
       "confluent.put_bridge_v2": {
         "properties": {
           "connector": {
@@ -2950,8 +3005,15 @@
             "type": "array"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -2992,6 +3054,45 @@
           "name",
           "parameters",
           "type"
+        ],
+        "type": "object"
+      },
+      "bridge_iotdb.action_parameters_table": {
+        "properties": {
+          "data": {
+            "description": "IoTDB action parameter data",
+            "items": {
+              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_table"
+            },
+            "type": "array"
+          },
+          "is_aligned": {
+            "default": false,
+            "description": "Whether to align the timeseries",
+            "type": "boolean"
+          },
+          "max_retries": {
+            "default": 2,
+            "description": "HTTP request max retry times if failed.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "table": {
+            "description": "The name of the IoTDB table to which the data will be written.",
+            "type": "string"
+          },
+          "write_to_table": {
+            "default": true,
+            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
+            "enum": [
+              true
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "table"
         ],
         "type": "object"
       },
@@ -4264,7 +4365,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -7316,13 +7417,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -8063,6 +8174,22 @@
           "name",
           "parameters",
           "type"
+        ],
+        "type": "object"
+      },
+      "iotdb.sql_dialect_tree": {
+        "properties": {
+          "dialect": {
+            "default": "tree",
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "enum": [
+              "tree"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "dialect"
         ],
         "type": "object"
       },
@@ -10769,7 +10896,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -12350,6 +12477,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -13055,51 +13193,24 @@
         ],
         "type": "object"
       },
-      "bridge_iotdb.action_parameters_data": {
+      "iotdb.sql_dialect_table": {
         "properties": {
-          "data_type": {
-            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
+          "database": {
+            "description": "The name of the IoTDB database to connect to.",
+            "type": "string"
+          },
+          "dialect": {
+            "default": "table",
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
             "enum": [
-              "text",
-              "boolean",
-              "int32",
-              "int64",
-              "float",
-              "double"
+              "table"
             ],
-            "type": "string"
-          },
-          "measurement": {
-            "description": "Measurement. Placeholders in format of ${var} is supported",
-            "type": "string"
-          },
-          "timestamp": {
-            "default": "now",
-            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "now",
-                  "now_ms",
-                  "now_ns",
-                  "now_us"
-                ],
-                "type": "string"
-              }
-            ]
-          },
-          "value": {
-            "description": "Value. Placeholders in format of ${var} is supported",
             "type": "string"
           }
         },
         "required": [
-          "data_type",
-          "measurement",
-          "value"
+          "database",
+          "dialect"
         ],
         "type": "object"
       },
@@ -14381,6 +14492,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -15284,6 +15406,44 @@
             "type": "integer"
           }
         },
+        "type": "object"
+      },
+      "bridge_iotdb.action_parameters_tree": {
+        "properties": {
+          "data": {
+            "description": "IoTDB action parameter data",
+            "items": {
+              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_tree"
+            },
+            "type": "array"
+          },
+          "device_id": {
+            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
+            "type": "string"
+          },
+          "is_aligned": {
+            "default": false,
+            "description": "Whether to align the timeseries",
+            "type": "boolean"
+          },
+          "max_retries": {
+            "default": 2,
+            "description": "HTTP request max retry times if failed.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "write_to_table": {
+            "default": false,
+            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
+            "enum": [
+              false
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data"
+        ],
         "type": "object"
       },
       "audit.audit": {
@@ -22265,8 +22425,15 @@
             "type": "string"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -23692,7 +23859,7 @@
           },
           "response_information": {
             "default": "",
-            "description": "UTF-8 string, for creating the response topic, for example, if set to <code>reqrsp/</code>, the publisher/subscriber will communicate using the topic prefix <code>reqrsp/</code>.<br/>To disable this feature, input <code>\"\"</code> in the text box below. Only applicable to MQTT 5.0 clients.",
+            "description": "MQTT v5 Response Information (Optional).<br/>Specifies a string returned to clients in the `CONNACK` packet if requested.<br/>The server passes this value as-is and does automatically add it to Access Control (ACL) rules.<br/>It is intended solely to help publishers and subscribers establish their own topic contract<br/> (e.g., a topic prefix). Leave blank to disable.",
             "type": "string"
           },
           "shared_subscription": {
@@ -26447,7 +26614,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -30733,163 +30900,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "disk_log"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "hstreamdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "datalayers"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "cassandra"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "dynamo"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rabbitmq"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_blob_storage"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "confluent_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "couchbase"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "sqlserver"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "iotdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "gcp_pubsub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "azure_event_hub_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3tables"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
                 ],
                 "type": "string"
               },
@@ -30901,13 +30912,127 @@
               },
               {
                 "enum": [
-                  "kinesis"
+                  "disk_log"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_blob_storage"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "datalayers"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "sqlserver"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "tablestore"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
                   "pgsql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rabbitmq"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "couchbase"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "azure_event_hub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "elasticsearch"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "hstreamdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kinesis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "confluent_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -30925,7 +31050,55 @@
               },
               {
                 "enum": [
-                  "oracle"
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "http"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redis"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "s3tables"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "gcp_pubsub_producer"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "rocketmq"
                 ],
                 "type": "string"
               },
@@ -30937,25 +31110,19 @@
               },
               {
                 "enum": [
-                  "tablestore"
+                  "doris"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "pulsar"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
+                  "cassandra"
                 ],
                 "type": "string"
               }
@@ -31501,6 +31668,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -31544,6 +31712,17 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -31922,6 +32101,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -32144,6 +32327,10 @@
           },
           "authorization.deny": {
             "description": "Number of Authorization deny",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -33895,13 +34082,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -34828,6 +35025,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current_node": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -34866,6 +35067,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -35834,36 +36039,6 @@
         },
         "type": "object"
       },
-      "bridge_iotdb.action_parameters": {
-        "properties": {
-          "data": {
-            "description": "IoTDB action parameter data",
-            "items": {
-              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data"
-            },
-            "type": "array"
-          },
-          "device_id": {
-            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
-            "type": "string"
-          },
-          "is_aligned": {
-            "default": false,
-            "description": "Whether to align the timeseries",
-            "type": "boolean"
-          },
-          "max_retries": {
-            "default": 2,
-            "description": "HTTP request max retry times if failed.",
-            "minimum": 0,
-            "type": "integer"
-          }
-        },
-        "required": [
-          "data"
-        ],
-        "type": "object"
-      },
       "bridge_dynamo.action_parameters": {
         "properties": {
           "hash_key": {
@@ -36677,7 +36852,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -38205,6 +38380,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -38238,6 +38414,17 @@
             "default": {},
             "description": "Resource options."
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -38255,6 +38442,64 @@
         },
         "required": [
           "base_url"
+        ],
+        "type": "object"
+      },
+      "bridge_iotdb.action_parameters_data_table": {
+        "properties": {
+          "column_category": {
+            "description": "Column category, required to construct an insert request to an IoTDB table. Valid values include:<br/>- <code>tag</code><br/>- <code>field</code><br/>- <code>attribute</code>",
+            "enum": [
+              "tag",
+              "field",
+              "attribute"
+            ],
+            "type": "string"
+          },
+          "data_type": {
+            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
+            "enum": [
+              "text",
+              "boolean",
+              "int32",
+              "int64",
+              "float",
+              "double"
+            ],
+            "type": "string"
+          },
+          "measurement": {
+            "description": "Measurement. Placeholders in format of ${var} is supported",
+            "type": "string"
+          },
+          "timestamp": {
+            "default": "now",
+            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "now",
+                  "now_ms",
+                  "now_ns",
+                  "now_us"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "value": {
+            "description": "Value. Placeholders in format of ${var} is supported",
+            "type": "string"
+          }
+        },
+        "required": [
+          "column_category",
+          "data_type",
+          "measurement",
+          "value"
         ],
         "type": "object"
       },
@@ -39517,7 +39762,7 @@
         "properties": {
           "site": {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "28949D9531337A1D",
             "type": "string"
           },
           "status": {
@@ -40485,7 +40730,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -41492,7 +41737,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -44885,7 +45130,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -52297,6 +52542,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -52643,6 +52899,10 @@
       },
       "emqx_dashboard_monitor_api.sampler": {
         "properties": {
+          "actions_executed": {
+            "description": "Number of Action executions (failures + successes) in the last sample window.",
+            "type": "integer"
+          },
           "connections": {
             "description": "Number of connections at the time of sampling. Can only represent an approximation.",
             "type": "integer"
@@ -52665,6 +52925,10 @@
           },
           "received": {
             "description": "Received messages in the last sample window.",
+            "type": "integer"
+          },
+          "rules_matched": {
+            "description": "Number of Rules that matched their where clauses in the last sample window.",
             "type": "integer"
           },
           "sent": {
@@ -53831,6 +54095,11 @@
             "description": "The maximum length of the JT/T 808 frame.",
             "minimum": 0,
             "type": "integer"
+          },
+          "parse_unknown_message": {
+            "default": true,
+            "description": "Whether to process and forward unrecognized Message IDs. <br/><br/>- <code>true</code>: Unrecognized Message IDs are processed, and their body is encoded in Base64 and forwarded.<br/><br/>- <code>false</code>: An error is reported and logged when an unrecognized Message ID is received.<br/><br/>Default is true.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -56507,13 +56776,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -56567,6 +56846,10 @@
       },
       "emqx_dashboard_monitor_api.sampler_current": {
         "properties": {
+          "actions_executed_rate": {
+            "description": "Action execution rate in the last sampling window.",
+            "type": "integer"
+          },
           "cluster_sessions": {
             "description": "Total number of sessions in the cluster at the time of sampling. It includes expired sessions when `broker.session_history_retain` is set to a duration greater than `0s`. Can only represent an approximation.",
             "type": "integer"
@@ -56601,6 +56884,10 @@
           },
           "retained_msg_count": {
             "description": "Number of retained messages at the time of sampling. Can only represent an approximation.",
+            "type": "integer"
+          },
+          "rules_matched_rate": {
+            "description": "Rule match rate in the last sampling window.",
             "type": "integer"
           },
           "sent_msg_rate": {
@@ -59432,6 +59719,10 @@
             "minimum": 0,
             "type": "integer"
           },
+          "rules.matched": {
+            "minimum": 0,
+            "type": "integer"
+          },
           "packets.unsubscribe.error": {
             "description": "Number of received UNSUBSCRIBE packet with failed unsubscriptions",
             "minimum": 0,
@@ -59654,6 +59945,10 @@
           },
           "authorization.deny": {
             "description": "Number of Authorization deny",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "actions.executed": {
             "minimum": 0,
             "type": "integer"
           },
@@ -60609,13 +60904,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -61684,13 +61989,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -61770,6 +62085,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -61806,6 +62122,17 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -62663,7 +62990,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "5.10.2"
+    "version": "5.10.3-rc.2"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -70377,8 +70704,8 @@
                     "summary": "Source types",
                     "value": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ]
                   }
@@ -70387,8 +70714,8 @@
                   "items": {
                     "enum": [
                       "rabbitmq",
-                      "kafka_consumer",
                       "gcp_pubsub_consumer",
+                      "kafka_consumer",
                       "mqtt"
                     ],
                     "type": "string"
@@ -75292,42 +75619,42 @@
                     "summary": "Action Types",
                     "value": [
                       "http",
+                      "cassandra",
                       "rocketmq",
                       "rabbitmq",
-                      "cassandra",
+                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "influxdb",
-                      "pulsar",
                       "greptimedb",
                       "mongodb",
-                      "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "kafka_producer",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "sqlserver",
                       "confluent_producer",
                       "hstreamdb",
-                      "kinesis",
-                      "redis",
-                      "s3",
+                      "azure_event_hub_producer",
+                      "iotdb",
+                      "sqlserver",
+                      "pulsar",
                       "doris",
-                      "s3tables",
-                      "datalayers",
                       "opents",
+                      "s3tables",
+                      "redis",
+                      "kinesis",
+                      "s3",
+                      "datalayers",
                       "mqtt",
-                      "tablestore",
                       "oracle",
-                      "tdengine",
-                      "clickhouse",
                       "couchbase",
-                      "azure_blob_storage",
                       "snowflake",
+                      "tablestore",
                       "timescale",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "tdengine",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ]
                   }
@@ -75336,42 +75663,42 @@
                   "items": {
                     "enum": [
                       "http",
+                      "cassandra",
                       "rocketmq",
                       "rabbitmq",
-                      "cassandra",
+                      "syskeeper_forwarder",
+                      "gcp_pubsub_producer",
+                      "kafka_producer",
                       "influxdb",
-                      "pulsar",
                       "greptimedb",
                       "mongodb",
-                      "syskeeper_forwarder",
-                      "azure_event_hub_producer",
-                      "kafka_producer",
-                      "gcp_pubsub_producer",
-                      "iotdb",
-                      "sqlserver",
                       "confluent_producer",
                       "hstreamdb",
-                      "kinesis",
-                      "redis",
-                      "s3",
+                      "azure_event_hub_producer",
+                      "iotdb",
+                      "sqlserver",
+                      "pulsar",
                       "doris",
-                      "s3tables",
-                      "datalayers",
                       "opents",
+                      "s3tables",
+                      "redis",
+                      "kinesis",
+                      "s3",
+                      "datalayers",
                       "mqtt",
-                      "tablestore",
                       "oracle",
-                      "tdengine",
-                      "clickhouse",
                       "couchbase",
-                      "azure_blob_storage",
                       "snowflake",
+                      "tablestore",
                       "timescale",
+                      "azure_blob_storage",
+                      "clickhouse",
+                      "tdengine",
                       "disk_log",
                       "elasticsearch",
                       "matrix",
-                      "pgsql",
                       "mysql",
+                      "pgsql",
                       "dynamo"
                     ],
                     "type": "string"
@@ -85591,7 +85918,7 @@
         "parameters": [
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "28949D9531337A1D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -86199,73 +86526,6 @@
                   },
                   {
                     "acceptors": 16,
-                    "bind": "22214",
-                    "dtls_options": {
-                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
-                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
-                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
-                      "fail_if_no_peer_cert": false,
-                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
-                      "user_lookup_fun": "emqx_tls_psk:lookup",
-                      "verify": "verify_none",
-                      "versions": [
-                        "dtlsv1.2",
-                        "dtlsv1"
-                      ]
-                    },
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "dtls-psk",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "dtls"
-                  },
-                  {
-                    "acceptors": 16,
-                    "authentication": {
-                      "backend": "built_in_database",
-                      "mechanism": "password_based",
-                      "password_hash_algorithm": {
-                        "name": "sha256"
-                      },
-                      "user_id_type": "username"
-                    },
-                    "bind": "22215",
-                    "max_conn_rate": 1000,
-                    "max_connections": 1024000,
-                    "name": "tcp-with-authn",
-                    "node_status": [
-                      {
-                        "node": "emqx@127.0.0.1",
-                        "status": {
-                          "current_connections": 10,
-                          "max_connections": 1024000,
-                          "running": true
-                        }
-                      }
-                    ],
-                    "status": {
-                      "current_connections": 10,
-                      "max_connections": 1024000,
-                      "running": true
-                    },
-                    "type": "tcp"
-                  },
-                  {
-                    "acceptors": 16,
                     "bind": "33043",
                     "max_conn_rate": 1000,
                     "max_connections": 1024000,
@@ -86366,6 +86626,73 @@
                       "piggyback": "single",
                       "supported_subprotocols": "ocpp1.6"
                     }
+                  },
+                  {
+                    "acceptors": 16,
+                    "bind": "22214",
+                    "dtls_options": {
+                      "cacertfile": "${EMQX_ETC_DIR}/certs/cacert.pem",
+                      "certfile": "${EMQX_ETC_DIR}/certs/cert.pem",
+                      "ciphers": "RSA-PSK-AES256-GCM-SHA384,RSA-PSK-AES256-CBC-SHA384,RSA-PSK-AES128-GCM-SHA256,RSA-PSK-AES128-CBC-SHA256,RSA-PSK-AES256-CBC-SHA,RSA-PSK-AES128-CBC-SHA",
+                      "fail_if_no_peer_cert": false,
+                      "keyfile": "${EMQX_ETC_DIR}/certs/key.pem",
+                      "user_lookup_fun": "emqx_tls_psk:lookup",
+                      "verify": "verify_none",
+                      "versions": [
+                        "dtlsv1.2",
+                        "dtlsv1"
+                      ]
+                    },
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "dtls-psk",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "dtls"
+                  },
+                  {
+                    "acceptors": 16,
+                    "authentication": {
+                      "backend": "built_in_database",
+                      "mechanism": "password_based",
+                      "password_hash_algorithm": {
+                        "name": "sha256"
+                      },
+                      "user_id_type": "username"
+                    },
+                    "bind": "22215",
+                    "max_conn_rate": 1000,
+                    "max_connections": 1024000,
+                    "name": "tcp-with-authn",
+                    "node_status": [
+                      {
+                        "node": "emqx@127.0.0.1",
+                        "status": {
+                          "current_connections": 10,
+                          "max_connections": 1024000,
+                          "running": true
+                        }
+                      }
+                    ],
+                    "status": {
+                      "current_connections": 10,
+                      "max_connections": 1024000,
+                      "running": true
+                    },
+                    "type": "tcp"
                   }
                 ],
                 "schema": {
@@ -93799,7 +94126,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "28949D9531337A1D",
             "in": "path",
             "name": "site",
             "required": true,
@@ -93884,7 +94211,7 @@
           },
           {
             "description": "Site ID",
-            "example": "F105ED96E9BE7F74",
+            "example": "28949D9531337A1D",
             "in": "path",
             "name": "site",
             "required": true,
