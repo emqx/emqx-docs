@@ -42,7 +42,7 @@ In this example, the contents of the above three fields are omitted. Please fill
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2beta1` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
+EMQX CRD `apps.emqx.io/v2` provides the following fields to configure additional volumes and mount points for the EMQX cluster:
 * `.spec.coreTemplate.extraVolumes`
 * `.spec.coreTemplate.extraVolumeMounts`
 * `.spec.replicantTemplate.extraVolumes`
@@ -55,7 +55,7 @@ There are many types of Volumes. For information about Volumes, please refer to 
 1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

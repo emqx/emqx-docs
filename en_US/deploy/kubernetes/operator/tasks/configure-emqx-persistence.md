@@ -6,7 +6,7 @@ Configure persistence for the set of Core nodes of an EMQX cluster through the `
 
 ## Configure EMQX Cluster Persistence
 
-EMQX CRD `apps.emqx.io/v2beta1` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
+EMQX CRD `apps.emqx.io/v2` supports configuring persistence of each core node data through `.spec.coreTemplate.spec.volumeClaimTemplates`. 
 
 The definition and semantics of the `.spec.coreTemplate.spec.volumeClaimTemplates` field are consistent with those of `PersistentVolumeClaimSpec` defined in the Kubernetes API.
 
@@ -17,7 +17,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
 1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx
@@ -34,7 +34,7 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
            storageClassName: standard
            resources:
              requests:
-               storage: 20Mi
+               storage: 1Gi
            accessModes:
              - ReadWriteOnce
          replicas: 3
