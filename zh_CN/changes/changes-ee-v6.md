@@ -195,6 +195,195 @@ MQTT 消息流提供了一种基于主题过滤器的持久化消息集合，并
 - [#16397](https://github.com/emqx/emqx/pull/16397) 在监听器启动前新增 TLS 证书校验。如果监听器配置了无效证书，将快速失败（fail-fast）。
 - [#16311](https://github.com/emqx/emqx/pull/16311) 更新了错误码，将拼写错误的 `REST_FAILED` 更正为 `RESET_FAILED`。
 
+## 6.0.2
+
+*发布日期: 2026-01-16*
+
+在升级到 EMQX 6.0.2 之前，请务必查阅不兼容变更和已知问题。
+
+### 增强
+
+#### 安全
+
+- [#16461](https://github.com/emqx/emqx/pull/16461) EMQX 现已支持通过无状态会话票据实现 TLS 1.3 会话恢复，使客户端无需在服务端保存会话状态即可恢复 TLS 连接。
+
+  **配置说明**
+
+  - **节点级配置**：`node.tls_stateless_tickets_seed`，用于生成 TLS 1.3 无状态会话票据的密钥种子。
+  - **监听器级配置**：`listeners.ssl.<name>.ssl_options.session_tickets`，用于启用 TLS 1.3 会话恢复，支持以下取值：
+    - `disabled`（默认）
+    - `stateless`
+    - `stateless_with_cert`（在会话票据中包含证书信息）
+
+  **注意事项**
+
+  - 只有在同时满足以下条件时才会生成会话票据：
+    - 已配置 `node.tls_stateless_tickets_seed`（且值非空）
+    - 在监听器的 SSL 选项中启用了 `session_tickets`
+  - 如果启用了 `session_tickets`，但 `node.tls_stateless_tickets_seed` 为空，则不会生成会话票据，并且在监听器启动时会输出错误日志。
+
+  此 PR 还修复了 TLS 1.2 会话恢复配置的问题：之前，SSL 监听器的 `reuse_sessions` 选项未生效，即 EMQX 总是尝试启用 TLS 1.2 会话恢复。现在可以将其关闭。请注意，从 6.2.0 版本开始，TLS 1.2 会话恢复将默认禁用。
+
+#### 规则引擎
+
+- [#16524](https://github.com/emqx/emqx/pull/16524) 增强了规则引擎 SQL 中的 Base64 编码与解码函数，新增对填充控制和 URL 安全模式的支持。
+
+  `base64_encode` 和 `base64_decode` 函数现已支持可选参数，用于控制编码和解码行为：
+
+  - **`no_padding`**：在编码或解码时不使用填充字符（`=`）。适用于需要移除 Base64 填充，或解码不包含填充字符的 Base64 字符串的场景。
+  - **`urlsafe`**：使用 URL 安全的 Base64 编码/解码方式，将 `+` 替换为 `-`，`/` 替换为 `_`，使编码结果可直接用于 URL 而无需额外转义。
+
+  这些选项可以单独使用，也可以任意组合使用，参数顺序不影响结果。
+
+  **规则 SQL 示例：**
+
+  不使用填充字符进行编码：
+
+  ```sql
+  SELECT base64_encode(payload, 'no_padding') AS encoded FROM "t/#"
+  ```
+
+  使用 URL 安全字符进行编码：
+
+  ```sql
+  SELECT base64_encode(payload, 'urlsafe') AS encoded FROM "t/#"
+  ```
+
+  同时使用无填充和 URL 安全选项进行编码：
+
+  ```sql
+  SELECT base64_encode(payload, 'no_padding', 'urlsafe') AS encoded FROM "t/#"
+  ```
+
+  解码 URL 安全的 Base64 字符串：
+
+  ```sql
+  SELECT base64_decode(payload, 'urlsafe') AS decoded FROM "t/#"
+  ```
+
+  解码不带填充的 URL 安全 Base64 字符串：
+
+  ```sql
+  SELECT base64_decode(payload, 'urlsafe', 'no_padding') AS decoded FROM "t/#"
+  ```
+
+- [#16533](https://github.com/emqx/emqx/pull/16533) 新增两个可变参数表达式辅助函数 `json_value` 和 `jwt_value`，用于通过点分隔的键路径从 JSON 数据和 JWT tokens 中提取值。
+
+  - **`json_value`**：通过点分隔的键路径遍历嵌套结构，从 JSON 二进制字符串中提取字段值。
+  - **`jwt_value`**：对 JWT 的 payload 进行解码，并使用相同的点分隔路径语法提取声明值。
+
+  **示例：**
+
+  - 如果 `username` 包含一个 JSON 对象，可以通过以下方式访问其中的嵌套字段：`json_value(username, 'shop.floor')`。
+  - 如果 `password` 包含一个带有自定义声明的 JWT，可以通过以下方式提取嵌套值：`jwt_value(password, 'client_attrs.unitid')`。
+
+- [#16539](https://github.com/emqx/emqx/pull/16539) 支持在规则引擎函数 `spb_decode` 中跟踪 Sparkplug B 指标别名（metric alias）。
+
+  当设备或边缘节点（Edge of Network，EoN）发布其 `NBIRTH` 或 `DBIRTH` 消息后，EMQX 会记录这些消息中定义的指标别名与名称的映射关系。随后，对来自同一会话的 `NDATA` 或 `DDATA` 消息应用 `spb_decode` 时，系统会自动还原原始的指标名称，并将其包含在解码结果中。
+
+  注意：在执行回退动作时，映射关系在运行环境中不可用。这意味着，如果回退动作将未解码的 `DDATA`/`NDATA` 负载重新发布到 Sparkplug B `DDATA`/`NDATA` 主题，指标 `name` 字段将不会通过别名映射填充。
+
+#### 持久存储
+
+- [#16136](https://github.com/emqx/emqx/pull/16136) 改进了持久存储的资源管理和性能。
+
+  引入了持久存储数据库组（durable storage database group）的概念。某些资源（例如 memtable 大小和磁盘使用配额）可以在同一组的成员之间共享。
+
+  新增以下指标（按数据库组统计）：
+
+  - `emqx_ds_disk_usage`：SST 文件的总大小
+  - `emqx_ds_write_buffer_memory_usage`：RocksDB 的 memtable 大小
+  - `emqx_ds_total_trash_size`：垃圾 SST 文件占用的磁盘空间
+
+  新增以下数据库组配置项：
+
+  - `durable_storage.db_groups.<group>.storage_quota`：SST 文件大小的软配额
+  - `durable_storage.db_groups.<group>.write_buffer_size`：最大 memtable 大小
+  - `durable_storage.db_groups.<group>.rocksdb_nthreads_high` 与 `durable_storage.db_groups.<group>.rocksdb_nthreads_low`：RocksDB 线程池大小
+
+  新增告警 `db_storage_quota_exceeded:<DB>`，当存储配额被超出时触发。更多信息请参考文档中的“存储配额”章节。
+
+  默认的会话检查点（checkpoint）间隔已更改为 15 秒。
+
+- [#16286](https://github.com/emqx/emqx/pull/16286) 优化了默认的持久化存储配置以降低 CPU 负载。该 PR 禁用了未使用订阅功能的数据库的订阅支持。
+
+#### 性能
+
+- [#16413](https://github.com/emqx/emqx/pull/16413) 通过减少对 MQTT 会话进程的冗余监控，提升了订阅处理性能。
+
+### 修复
+
+#### 核心 MQTT 功能
+
+- [#16354](https://github.com/emqx/emqx/pull/16354) 修复了在处理 `request-response-information` 属性时，由于类型不匹配导致 MQTT v5 连接发生崩溃的问题。
+- [#16515](https://github.com/emqx/emqx/pull/16515) 修复了当 Broker 发送的消息超过客户端声明的 `Maximum-Packet-Size` 时，WebSocket 连接可能发生崩溃的问题。
+- [#16569](https://github.com/emqx/emqx/pull/16569) 修复了一个罕见的竞态条件，该问题可能导致在高系统负载下用于抖动检测的 `emqx_flapping` 进程崩溃。
+
+#### 数据集成
+
+- [#16265](https://github.com/emqx/emqx/pull/16265) 健康检查现在仅验证分配给当前 EMQX 节点的分区的 leader 连接性，从而避免不必要的空闲连接和误报告警。
+
+  之前，Kafka Source 连接器会对所有分区执行 leader 连接性检查。在集群部署中，每个节点仅拥有部分分区，未分配分区的 leader 连接会保持空闲。由于 Kafka 会在连接空闲一段时间后关闭连接（默认 10 分钟），这可能导致错误的连接性告警。
+
+- [#16542](https://github.com/emqx/emqx/pull/16542) 修复了当 Kafka 过载时 Kafka 生产者连接可能过早断开的问题，该问题会导致大量生产请求重试。
+
+  现在，生产请求的超时时间会自动设置为至少为元数据请求超时时间的两倍，且最小值为 30 秒。这在元数据请求耗时超出预期时可以减少不必要的重连和重试，尤其是在元数据请求超时时间被配置为较小值的情况下。
+
+- [#16352](https://github.com/emqx/emqx/pull/16352) 将 Apache Pulsar 客户端升级至 2.1.2。当 Pulsar Producer 动作的 `batch_size` 配置为 `1` 时，生产者现在会对单条消息进行编码，而不是将其作为单元素批处理进行编码。这使得消费者可以使用 Key Share 策略进行负载分担。
+
+- [#16383](https://github.com/emqx/emqx/pull/16383) 改进了在使用 REST API 驱动时 IoTDB 连接器的健康检查。
+
+  之前，健康检查过程中不会校验客户端凭据。现在，健康检查会发送一个轻量级的空操作（no-op）查询，从而可以及早发现客户端凭据配置错误的问题。
+
+- [#16507](https://github.com/emqx/emqx/pull/16507) 修复了 MQTT Source 在其连接器重新连接后停止接收消息的问题。
+
+  之前，当 MQTT Source 的连接器从连接丢失中恢复后，其订阅主题不会被重新订阅，导致 Source 在连接器重启之前无法继续工作。现在，Source 会在重新连接时自动重新订阅。
+
+#### 集群
+
+- [#16269](https://github.com/emqx/emqx/pull/16269) 修复了集群连接路由复制协议恢复流程中的一个问题，该问题会在远端仍需要重新引导（re-bootstrap）的情况下错误地跳过该步骤。
+
+- [#16317](https://github.com/emqx/emqx/pull/16317) 修复了集群连接垃圾回收逻辑中的一个问题，该问题可能会在清理过期的路由复制状态时，错误地将仍然有效的路由从内部路由表中移除。
+
+  该问题仅会出现在存在多个相互独立的集群连接部署场景中，并且其中部分连接长时间处于断开状态时。
+
+- [#16465](https://github.com/emqx/emqx/pull/16465) 将 `gen_rpc` 升级至 `3.5.1`。
+
+  在升级 `gen_rpc` 之前，如果对端节点不可达，EMQX 可能会由于连接超时而产生大量延迟出现的崩溃日志。新的 `gen_rpc` 版本消除了这种长尾日志行为，并将崩溃日志转换为更易读的 `error` 日志，同时对频繁出现的 `"failed_to_connect_server"` 日志进行了限流处理，以避免日志刷屏。
+
+- [#16544](https://github.com/emqx/emqx/pull/16544) 提升了集群自动清理流程的健壮性。此前，如果在节点初次启动时禁用了 autoclean 功能，后续即使修改配置也无法将其激活。
+
+#### 升级
+
+- [#16308](https://github.com/emqx/emqx/pull/16308) 修复了一个问题：由于登录用户数据库记录不兼容，从早于 5.3.0 的版本升级 EMQX 后，无法启用多因素认证（MFA）。
+
+#### 配置管理
+
+- [#16397](https://github.com/emqx/emqx/pull/16397) 在监听器启动之前新增了 TLS 证书和私钥文件校验。
+
+  在解析 SSL 监听器配置时新增了一些基本校验，如果发现无效的 PEM 文件，会输出错误级别的日志。例如：`invalid_pem_file_ignored` 和 `bad_keyfile_ignored`。这使得管理员能够在启动/重新配置时观察到错误，而不是在排查 TLS 握手失败时才发现问题。
+
+#### 访问控制
+
+- [#16423](https://github.com/emqx/emqx/pull/16423) 新增了在认证过程中校验 JWT `aud`（audience）声明的支持。
+
+  当在 `verify_claims` 中配置了 `aud` 声明时，JWT 必须包含有效的 `aud` 值，且支持字符串和数组两种格式：
+
+  - 如果 `aud` 为字符串，则必须与配置的值完全匹配。
+  - 如果 `aud` 为数组，则数组中至少有一个元素与配置的值匹配。
+  - 空字符串或空数组将导致校验失败。
+  - 当在 `verify_claims` 中配置了 `aud`，但 JWT 中缺少该声明时，也会导致校验失败。
+
+- [#16459](https://github.com/emqx/emqx/pull/16459) 修复了 SCRAM 认证 HTTP API 中的一个问题。此前，在用户创建 API 调用中，返回的已创建用户的用户 ID 不正确。
+
+#### 可观测性
+
+- [#16417](https://github.com/emqx/emqx/pull/16417) 降低了 `resource_exception` 事件产生的日志量。当发生资源异常时生成的日志现在会被限流，并且会对可能较大的项进行脱敏处理，以防止日志输出过多。
+
+- [#16537](https://github.com/emqx/emqx/pull/16537) 修复了由某些 `gen_rpc` 错误消息触发的日志格式化器崩溃问题。
+
+  之前，当 `gen_rpc` 记录特定错误（例如传输超时）时，EMQX 可能会因出现 “FORMATTER CRASH” 错误而崩溃。现在，日志格式化器可以安全地处理这些错误消息而不会导致崩溃。
+
 ## 6.0.1
 
 *发布日期: 2025-11-11*
