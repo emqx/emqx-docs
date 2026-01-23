@@ -32,6 +32,8 @@
 
 `<DS>` 占位符代表 "durable storage"。当前，`<DS>` 的可用参数为 `message`。
 
+#### 持久存储关键参数
+
 | 参数                                      | 描述                                                         |
 | ----------------------------------------- | ------------------------------------------------------------ |
 | `durable_storage.n_sites`                 | 设置[站点数量](./managing-replication.md#站点-site-数量)。   |
@@ -40,6 +42,21 @@
 | `durable_storage.<DS>.replication_factor` | 设置[复制因子](./managing-replication.md#复制因子-replication-factor)以确定每个分片的副本数量。 |
 | `durable_storage.<DS>.transaction`        | 包含与消息缓冲相关的参数。请参阅[缓冲机制](#缓冲机制)。      |
 | `durable_storage.<DS>.layout`             | 包含控制 EMQX 如何在磁盘上布局数据的参数。请参阅[存储布局配置](#存储布局配置)。 |
+
+#### 数据库组配置
+
+自 EMQX 6.0.2 起，持久存储引入了[数据库组](../design/durable-storage.md/#持久存储数据库组)，用于支持节点级别的资源治理。数据库组允许对多个持久存储数据库进行统一治理，并共享资源使用限制，而不会改变其逻辑数据模型。
+
+默认情况下，每个持久存储数据库都属于一个以该数据库自身命名的数据库组，并且每个这样的数据库组只包含这一个数据库，从而保持与早期版本一致的行为。
+
+数据库组通过 `durable_storage.db_groups` 命名空间进行配置。
+
+| 参数                                                      | 说明                                               |
+| --------------------------------------------------------- | -------------------------------------------------- |
+| `durable_storage.db_groups.<group>.storage_quota`         | 该数据库组中所有 SST 文件磁盘使用量的软配额上限。  |
+| `durable_storage.db_groups.<group>.write_buffer_size`     | 该数据库组中 RocksDB memtable 的最大合计内存大小。 |
+| `durable_storage.db_groups.<group>.rocksdb_nthreads_high` | RocksDB 高优先级后台线程池的线程数量。             |
+| `durable_storage.db_groups.<group>.rocksdb_nthreads_low`  | RocksDB 低优先级后台线程池的线程数量。             |
 
 #### 缓冲机制
 
@@ -354,3 +371,21 @@ ok
 统计 Raft 服务器角色切换（如变为 candidate、follower、leader）的次数。
 
 频繁的状态变化可能是系统不稳定的信号。建议查看日志获取详细信息。
+
+### 数据库组指标
+
+以下 Prometheus 指标用于在节点级别观测持久存储数据库组的资源使用情况：
+
+#### `emqx_ds_disk_usage`
+
+该数据库组中所有数据库所使用的 SST 文件的总磁盘大小。
+
+#### `emqx_ds_write_buffer_memory_usage`
+
+该数据库组中 RocksDB memtable 使用的内存总量。
+
+#### `emqx_ds_total_trash_size`
+
+等待删除的过期 SST 文件所占用的磁盘空间。
+
+这些指标以节点和数据库组为维度进行上报。在集群部署中，运维人员可以通过外部监控系统对各节点的指标进行汇总，以评估集群整体的存储容量。

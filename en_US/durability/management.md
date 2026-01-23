@@ -32,6 +32,8 @@ The following parameters can be overridden per [zone](../configuration/configura
 
 The `<DS>` placeholder stands for "durable storage".  Currently, the available parameter for `<DS>` is `message`.
 
+#### Core Durable Storage Parameters
+
 | Parameter                                 | Description                                                  |
 | ----------------------------------------- | ------------------------------------------------------------ |
 | `durable_storage.n_sites`                 | [Number of sites](./managing-replication.md#number-of-sites). |
@@ -40,6 +42,21 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 | `durable_storage.<DS>.replication_factor` | [Replication factor](./managing-replication.md#replication-factor) determines the number of replicas for each shard. |
 | `durable_storage.<DS>.transaction`        | Contains parameters related to message buffering. See [Buffering](#buffering). |
 | `durable_storage.<DS>.layout`             | Contains parameters that control how EMQX lays out data on disk. See [Storage Layout Configuration](#storage-layout-configuration). |
+
+#### Database Groups Configuration
+
+Starting from EMQX 6.0.2, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance. Database groups enable multiple durable storage databases to be managed together with shared resource limits, without modifying their logical data models.
+
+By default, each durable storage database belongs to a database group named after the database itself, and each such group contains only that single database, preserving the behavior of earlier releases.
+
+Database groups are configured under the `durable_storage.db_groups` namespace.
+
+| Parameter                                                 | Description                                            |
+| --------------------------------------------------------- | ------------------------------------------------------ |
+| `durable_storage.db_groups.<group>.storage_quota`         | Soft quota for total SST file disk usage of the group. |
+| `durable_storage.db_groups.<group>.write_buffer_size`     | Maximum combined RocksDB memtable size for the group.  |
+| `durable_storage.db_groups.<group>.rocksdb_nthreads_high` | Number of high-priority RocksDB background threads.    |
+| `durable_storage.db_groups.<group>.rocksdb_nthreads_low`  | Number of low-priority RocksDB background threads.     |
 
 #### Buffering
 
@@ -359,3 +376,21 @@ Normally, each replica should always have the same timestamp. If this is not the
 Counts the number of times the Raft server turned into a candidate / follower / leader.
 
 Frequent state changes are a sign of instability. Consider checking the logs for details.
+
+### Database Group Metrics
+
+The following Prometheus metrics provide node-level visibility into durable storage database groups:
+
+#### `emqx_ds_disk_usage`
+
+Total size of SST files used by all databases in the group.
+
+#### `emqx_ds_write_buffer_memory_usage`
+
+Total RocksDB memtable memory used by the group.
+
+#### `emqx_ds_total_trash_size`
+
+Disk usage of obsolete SST files pending deletion.
+
+These metrics are reported per node and per database group. In clustered deployments, operators may aggregate metrics externally to assess cluster-wide capacity.

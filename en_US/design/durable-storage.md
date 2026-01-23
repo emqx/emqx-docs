@@ -96,6 +96,64 @@ The minimal storage unit, representing a single MQTT message. Each TTV includes:
 
 - **Value:** An arbitrary binary blob.
 
+## Durable Storage Database Groups
+
+Starting from EMQX 6.0.2, Durable Storage introduces the concept of database groups to improve resource management and operational safety.
+
+A database group provides unified management of storage resources, such as disk space and memory buffers, for one or more durable storage databases on a node. By default, each durable storage database is assigned to its own database group, named after the database, preserving the behavior of earlier releases.
+
+Database groups do not change how data is structured or accessed. The logical data model (shards, generations, slabs, or streams) remains unchanged. They operate solely as a governance layer for resource management. Even when a group contains a single database, it establishes a consistent and extensible boundary for quota enforcement and resource accounting.
+
+### Design Motivation
+
+Persistent data in Durable Storage is stored in RocksDB Stored String Table (SST) files. While write-ahead logs are bounded in size, SST files may grow indefinitely as new data is written.
+
+Database groups are introduced to provide explicit control over RAM and disk usage for durable storage databases running on the same node, establishing clear boundaries for resource consumption.
+
+Database groups address this issue by:
+
+- Allowing multiple databases to share a common disk usage limit
+- Enforcing write admission control before data is persisted
+- Providing a foundation for group-level observability
+
+Database groups limit resource usage for all durable storage shards that have replicas on a given node. RAM limits are enforced locally on the node and apply directly to the total memory consumption of the group. Disk limits constrain the SST files written by local replicas. Because data is replicated, disk usage represents physical storage consumption rather than logical data size.
+
+### Database Group Model
+
+Each Durable Storage database belongs to exactly one database group. Multiple databases may belong to the same group, and all databases in a group must use the same storage backend.
+
+A database group owns and manages shared resources, including:
+
+- Disk usage of SST files (soft quota)
+- RocksDB write buffer (memtable) memory
+- RocksDB background thread pools
+
+Resource usage is tracked and enforced at the group level, not per database or per shard.
+
+Conceptually, database groups introduce the following hierarchy:
+
+```
+Database Group
+  └── Database (DB)
+        └── Shards
+              └── Slabs
+                    └── Streams
+                          └── TTV
+```
+
+### Storage Quota
+
+Durable Storage uses soft quotas as the primary mechanism for controlling disk usage.
+
+#### Soft Quota Enforcement
+
+Storage quotas are enforced before write transactions are accepted by the Durable Storage leader:
+
+1. When a transaction containing writes is submitted, the leader checks the current SST disk usage of the database group.
+2. The leader rejects the transaction if accepting it would exceed the quota. If the leader accepts the transaction, it is replicated and applied consistently across all replicas.
+3. Read-only transactions continue to be accepted.
+4. Transactions that only delete data are also accepted.
+
 ## Write Path
 
 Data writes to DS can use either **append-only mode** or **ACID transactions**.
