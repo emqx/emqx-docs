@@ -2,6 +2,8 @@
 
 随着应用场景的丰富和 MQTT 协议的不断发展，EMQX 也在不断引入新的功能，以满足物联网应用中愈加复杂的需求。本章节将重点探讨 EMQX 的高级功能，主要涵盖以下内容：
 
+- [消息队列](../message-queue/message-queue-concept.md) 提供内置的消息队列机制，实现可靠的消息缓冲，解耦消息生产者与消费者，并在突发流量或客户端临时离线等场景下提升系统的可靠性与韧性。
+- [MQTT 消息流](../mqtt-stream/mqtt-stream-concept.md) 为 MQTT 数据提供流处理能力，使你能够将 MQTT 消息作为有序消息流进行持久化、回放和处理，适用于实时分析和事件驱动型应用。
 - [MQTT over QUIC](./introduction.md) 介绍了 EMQX 中的这一开创性功能，以及如何在 EMQX 中启用该功能。
 - [集群连接](../cluster-linking/introduction.md) 介绍了一项新功能，可以连接多个独立的集群，并促进分散在不同地理位置的集群之间的客户端通信。
 - [基于 MQTT 的文件传输](../file-transfer/introduction.md) 让您了解如何将大文件通过 MQTT 协议传输到 EMQX。

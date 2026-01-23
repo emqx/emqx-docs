@@ -241,4 +241,4 @@ EMQ との深い協力により、イーサーフィング IoT は CTWing を世
 
 ### 家電・AIoT
 
-EMQX ベースの IoT データアクセスプラットフォームは、インテリジェントサービスロボット企業に安定かつ効率的なデータアクセスサービスを提供し、5000以上のエンドカスタマーへのリーチを支援しています。[**詳細はこちら →**](https://www.emqx.com/en/customers/intelligent-service-robot-aiot)
+EMQX ベースの IoT データアクセスプラットフォームは、インテリジェントサービスロボット企業に安定かつ効率的なデータアクセスサービスを提供し、5000以上のエンドカスタマーへのリーチを支援しています。[**詳細はこちら →**](https://www.emqx.com/en/customers/how-signify-and-emqx-are-redefining-smart-lighting)
