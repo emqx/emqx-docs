@@ -8,43 +8,43 @@ This page introduces how to integrate EMQX with Apache IoTDB and provides step-b
 
 ## How It Works
 
-The Apache IoTDB data integration is an out-of-the-box feature in EMQX designed to bridge the gap between raw MQTT-based time series data and IoTDB's powerful data storage capabilities. With a built-in [rule engine](./rules.md) component, the integration simplifies the process of ingesting data from EMQX to IoTDB for storage and query, eliminating the need for complex coding.
+The Apache IoTDB data integration is a built-in feature of EMQX that enables MQTT-based time-series data to be ingested into Apache IoTDB without additional coding. By leveraging EMQX’s built-in [rule engine](./rules.md), the integration simplifies data filtering, transformation, and forwarding for efficient storage and querying in IoTDB.
 
-The diagram below illustrates a typical architecture of data integration between EMQX and IoTDB. <!-- This image needs to be modified to be IoTDB specific-->
+The following diagram illustrates a typical data integration architecture between EMQX and IoTDB. <!-- This image needs to be modified to be IoTDB specific-->
 
 <img src="./assets/IoTDB_bridge_architecture.png" alt="IoTDB_bridge_architecture" style="zoom:67%;" />
 
 The workflow of the data integration is as follows:
 
-1. **Message publication and reception**: Devices, whether they are part of connected vehicles, IIoT systems, or energy management platforms, establish successful connections to EMQX through the MQTT protocol and send messages via MQTT based on their operational states, readings, or triggered events. When EMQX receives these messages, it initiates the matching process within its rules engine.
-2. **Message data processing:** When a message arrives, it passes through the rule engine and is then processed by the rule defined in EMQX. The rules, based on predefined criteria, determine which messages need to be routed to IoTDB. If any rules specify payload transformations, those transformations are applied, such as converting data formats, filtering out specific information, or enriching the payload with additional context.
-3. **Data buffering**: EMQX provides an in-memory message buffer to prevent data loss when the IoTDB is unavailable. Data is temporarily held in the buffer, and may be offloaded to disk to prevent memory overload. Note that data is not preserved if the data integration or the EMQX node is restarted.
-4. **Data ingestion into IoTDB**: Once the rule engine identifies a message for IoTDB storage, it triggers an action of forwarding the messages to IoTDB. Processed data will be seamlessly written into the IoTDB in a time series manner.
-5. **Data Storage and Utilization**: With the data now stored in IoTDB, businesses can harness its querying power for various use cases. For instance, in the realm of connected vehicles, this stored data can inform fleet management systems about vehicle health, optimize route planning based on real-time metrics, or track assets. Similarly, in IIoT settings, the data might be used to monitor machinery health, forecast maintenance, or optimize production schedules.
+1. **Message publication and reception**: Devices connect to EMQX over MQTT and publish messages containing telemetry data, status updates, or event information. The rule engine evaluates incoming messages.
+2. **Rule-based processing:** Messages that match defined rules are selected for further processing. Optional transformations can be applied, such as filtering fields, converting data formats, or enriching payloads.
+3. **Data buffering**: To improve reliability, EMQX buffers messages in memory when IoTDB is temporarily unavailable. If necessary, buffered data can be offloaded to disk to avoid memory pressure. Buffered data is not retained if the integration or EMQX node restarts.
+4. **Data ingestion into IoTDB**: For matched rules, EMQX triggers the IoTDB Sink to forward processed data and write it into IoTDB as time-series data.
+5. **Data Storage and Utilization**: Once stored in IoTDB, the data can be queried and analyzed for downstream applications such as device monitoring, asset tracking, predictive maintenance, and operational optimization.
 
 ## Features and Benefits
 
 The data integration with IoTDB offers a range of features and benefits tailored to ensure effective data handling and storage:
 
-- **Efficient Data Collection**
+- **No-Code IoT Data Pipeline**
 
-  By integrating EMQX with IoTDB, IoT time-series data can be efficiently collected through the lightweight MQTT messaging protocol from IoT devices with limited resources and ingested into the database, ensuring reliable and efficient data collection.
+  Build a complete MQTT-to-time-series data pipeline between EMQX and Apache IoTDB using built-in rules and sinks, without custom code or external services.
 
-- **Flexible Data Transformation**
+- **Flexible Mapping from MQTT to IoTDB Models**
 
-  EMQX provides a powerful SQL-based Rule Engine, allowing organizations to pre-process data before storing it in IoTDB. It supports various data transformation mechanisms, such as filtering, routing, aggregation, and enrichment, enabling organizations to shape the data according to their needs.
+  Support both Tree and Table data models, allowing MQTT data to be written to IoTDB in a structure that matches your device modeling and query requirements.
 
-- **Scalability and High Throughput**
+- **Decoupled Ingestion and Storage**
 
-  EMQX is architected for horizontal scalability, effortlessly managing the surging message traffic generated by an ever-expanding fleet of IoT devices. This solution effortlessly adapts to expanding data volumes and supports high-concurrency access. As a result, IoT time-series workloads can effortlessly manage the increasing requirements of data ingestion, storage, and processing as IoT deployments scale to unprecedented levels.
+  EMQX absorbs bursty, high-frequency MQTT traffic while IoTDB focuses on durable time-series storage, improving system stability and resilience.
 
-- **Optimized Time-Series Storage**:
+- **Production-Ready Scalability**
 
-  IoTDB provides optimized storage for time-stamped data. It leverages time-partitioning, compression, and data retention policies to efficiently store and manage large volumes of time-series data. This ensures a minimal storage footprint while maintaining high performance, which is essential for IoT workloads that generate massive amounts of time-series data.
+  The integration scales horizontally with device count and data volume, making it suitable for large-scale IoT, IIoT, and energy scenarios.
 
-- **Fast and Complex Querying**
+- **Analytics-Ready Time-Series Data**
 
-  IoTDB has rich query semantics, supporting time alignment for timeseries data across devices and sensors, computation in timeseries field (frequency domain transformation) and rich aggregation function support in time dimension. It also deeply integrates with Apache Hadoop, Spark and Flink, providing more powerful analytics capabilities. EMQX seamlessly integrates with IoTDB, providing a unified solution for storing and analyzing MQTT data.
+  Data written to IoTDB can be directly queried, aggregated, and analyzed, or integrated with big data engines for advanced analytics and long-term insights.
 
 ## Before You Start
 
