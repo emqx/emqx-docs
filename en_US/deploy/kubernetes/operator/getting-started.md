@@ -59,6 +59,18 @@ Once the Operator is running, you can proceed to deploy EMQX.
 
    Make sure the `STATUS` is `Ready`. It may take some time for the EMQX cluster to become ready.
 
+## Troubleshooting
+
+EMQX Operator exposes limited number of events to the Kubernetes API.
+```sh
+kubectl get events --sort-by=.lastTimestamp
+```
+
+Alternatively, if EMQX resources fail to reach `Ready` status condition, consult the controller manager logs for more details:
+```sh
+kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-operator-system
+```
+
 ## Deploy on Public Cloud
 
 Use the following guides to deploy EMQX on managed Kubernetes services using the EMQX Operator:
