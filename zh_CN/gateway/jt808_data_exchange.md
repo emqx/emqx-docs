@@ -372,7 +372,7 @@ Json 结构示例
 - **状态位新增**: bit6（紧急刹车系统采集的前撞预警）、bit7（车道偏移预警）、bit22（车辆处于行驶状态）
 - **附加信息新增**: 0x05（胎压）、0x06（车厢温度）
 
-<!-- TODO: refine alarm mroe details -->
+<!-- TODO: refine alarm more details -->
 
 - 位置附加信息项列表, 在 `extra` 中
 
