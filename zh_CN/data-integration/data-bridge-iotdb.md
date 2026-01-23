@@ -85,7 +85,7 @@ docker run -d --name iotdb-service \
 
 ## 创建 IoTDB 连接器
 
-要创建 Apache IoTDB 数据集成，需要先创建一个连接器，用于将 Apache IoTDB Sink 连接到 Apache IoTDB 服务器。以下步骤假定 EMQX 和 ApacheIoTDB 均在本地运行。如果您在远程运行 Apache IoTDB 和 EMQX，请根据实际情况调整相应配置。
+要创建 Apache IoTDB 数据集成，需要先创建一个连接器，用于将 Apache IoTDB Sink 连接到 Apache IoTDB 服务器。以下步骤假定 EMQX 和 Apache IoTDB 均在本地运行。如果您在远程运行 Apache IoTDB 和 EMQX，请根据实际情况调整相应配置。
 
 EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
