@@ -1149,7 +1149,7 @@ example:
 | 音频采样率 | rate          | byte       | integer            |
 
 
-#### 单条存储多媒体j叔叔检索上传命令 `"msg_id": 34821` 0x8805
+#### 单条存储多媒体数据检索上传命令 `"msg_id": 34821` 0x8805
 
 | Field     | Json Key name | Value Type | Value Type in Json |
 |:---------:|:-------------:|:----------:|:------------------:|
