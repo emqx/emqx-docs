@@ -8,14 +8,14 @@
 - **2013 版本**: 消息头属性 bit14 = 0，终端手机号为 BCD[6]（12 位），消息头长度 12/16 字节
 - **2019 版本**: 消息头属性 bit14 = 1，终端手机号为 BCD[10]（20 位），消息头长度 17/21 字节
 
-在 Json 数据交换中，2019 版本的消息会在 `header` 中包含 `proto_ver` 字段标识协议版本。
+在 JSON 数据交换中，2019 版本的消息会在 `header` 中包含 `proto_ver` 字段标识协议版本。
 
 ## 约定
 
-- Payload 采用 Json 格式进行组装
-- Json Key 采用全小写格式命名
+- Payload 采用 JSON 格式进行组装
+- JSON Key 采用全小写格式命名
 
-Json 结构示例
+JSON 结构示例
 
 ## 终端到服务器
 ```json
@@ -53,7 +53,7 @@ Json 结构示例
 ```
 
 ## 数据类型对照表
-| JT808 Defined Type | In Json Type | Comment    |
+| JT808 Defined Type | In JSON Type | Comment    |
 |:------------------:|:------------:|:----------:|
 | BYTE               | integer      | in decimal |
 | WORD               | integer      | in decimal |
@@ -68,21 +68,21 @@ Json 结构示例
 
 #### JT/T 808-2013 消息头
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 消息 ID      | msg_id        | word       | integer            |
 | 数据加密方式 | encrypt       | word       | integer            |
 | 终端手机号   | phone         | bcd(6)     | string             |
 | 消息流水号   | msg_sn        | word       | integer            |
 
-| Optional Field | Json Key name | Value Type | Value Type in JSON |
+| Optional Field | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 消息总包数     | frag_total    | word       | integer            |
 | 消息包序号     | frag_sn       | word       | integer            |
 
 #### JT/T 808-2019 消息头
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 消息 ID      | msg_id        | word       | integer            |
 | 数据加密方式 | encrypt       | word       | integer            |
@@ -90,7 +90,7 @@ Json 结构示例
 | 终端手机号   | phone         | bcd(10)    | string             |
 | 消息流水号   | msg_sn        | word       | integer            |
 
-| Optional Field | Json Key name | Value Type | Value Type in JSON |
+| Optional Field | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 消息总包数     | frag_total    | word       | integer            |
 | 消息包序号     | frag_sn       | word       | integer            |
@@ -102,7 +102,7 @@ Json 结构示例
 
 #### 终端通用应答 `"msg_id": 1` 0x0001
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 应答流水号 | seq           | word       | integer            |
 | 应答 ID    | id            | word       | integer            |
@@ -111,7 +111,7 @@ Json 结构示例
 
 #### 平台通用应答 `"msg_id": 32769` 0x8001
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 应答流水号 | seq           | word       | integer            |
 | 应答 ID    | id            | word       | integer            |
@@ -120,14 +120,14 @@ Json 结构示例
 
 #### 终端心跳 `"msg_id": 2` 0x0002
 
-空 Json
+空 JSON
 
 
 #### 服务器补传分包请求 `"msg_id": 32771` 0x8003
 
 ##### JT/T 808-2013
 
-| Field          | Json Key name | Value Type     | Value Type in Json |
+| Field          | JSON Key name | Value Type     | Value Type in JSON |
 |:--------------:|:-------------:|:--------------:|:------------------:|
 | 原始消息流水号 | seq           | word           | integer            |
 | 重传包总数     | length        | byte           | integer            |
@@ -135,7 +135,7 @@ Json 结构示例
 
 ##### JT/T 808-2019
 
-| Field          | Json Key name | Value Type     | Value Type in Json |
+| Field          | JSON Key name | Value Type     | Value Type in JSON |
 |:--------------:|:-------------:|:--------------:|:------------------:|
 | 原始消息流水号 | seq           | word           | integer            |
 | 重传包总数     | length        | word           | integer            |
@@ -146,7 +146,7 @@ Json 结构示例
 
 #### 查询服务器时间应答 `"msg_id": 32772` 0x8004 (2019 新增)
 
-| Field | Json Key name | Value Type | Value Type in Json |
+| Field | JSON Key name | Value Type | Value Type in JSON |
 |:-----:|:-------------:|:----------:|:------------------:|
 | 年    | year          | word       | integer            |
 | 月    | month         | byte       | integer            |
@@ -160,7 +160,7 @@ Json 结构示例
 
 ##### JT/T 808-2013
 
-| Field     | Json Key name  | Value Type | Value Type in Json |
+| Field     | JSON Key name  | Value Type | Value Type in JSON |
 |:---------:|:--------------:|:----------:|:------------------:|
 | 省域 ID   | province       | word       | integer            |
 | 市县域 ID | city           | word       | integer            |
@@ -172,7 +172,7 @@ Json 结构示例
 
 ##### JT/T 808-2019
 
-| Field     | Json Key name  | Value Type | Value Type in Json |
+| Field     | JSON Key name  | Value Type | Value Type in JSON |
 |:---------:|:--------------:|:----------:|:------------------:|
 | 省域 ID   | province       | word       | integer            |
 | 市县域 ID | city           | word       | integer            |
@@ -187,31 +187,31 @@ Json 结构示例
 
 #### 终端注册应答 `"msg_id": 33024` 0x8100
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 应答流水号 | seq           | word       | integer            |
 | 结果       | result        | byte       | integer            |
 
 只有成功后才有此字段
 
-| Optional Field | Json Key name | Value Type | Value Type in JSON |
+| Optional Field | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|---------------|------------|--------------------|
 | 鉴权码         | auth_code     | string     | string             |
 
 
 #### 终端注销 `"msg_id": 3` 0x0003
 
-空 Json
+空 JSON
 
 
 #### 查询服务器时间请求 `"msg_id": 4` 0x0004 (2019 新增)
 
-空 Json
+空 JSON
 
 
 #### 终端补传分包请求 `"msg_id": 5` 0x0005 (2019 新增)
 
-| Field          | Json Key name | Value Type     | Value Type in Json |
+| Field          | JSON Key name | Value Type     | Value Type in JSON |
 |:--------------:|:-------------:|:--------------:|:------------------:|
 | 原始消息流水号 | seq           | word           | integer            |
 | 重传包总数     | length        | word           | integer            |
@@ -222,13 +222,13 @@ Json 结构示例
 
 ##### JT/T 808-2013
 
-| Field  | Json Key name | Value Type | Value Type in Json |
+| Field  | JSON Key name | Value Type | Value Type in JSON |
 |:------:|:-------------:|:----------:|:------------------:|
 | 鉴权码 | code          | string     | string             |
 
 ##### JT/T 808-2019
 
-| Field        | Json Key name    | Value Type | Value Type in Json |
+| Field        | JSON Key name    | Value Type | Value Type in JSON |
 |:------------:|:----------------:|:----------:|:------------------:|
 | 鉴权码长度   | code_len         | byte       | integer            |
 | 鉴权码       | code             | string     | string             |
@@ -241,7 +241,7 @@ Json 结构示例
 
 #### 设置终端参数 `"msg_id": 33027` 0x8103
 
-| Field      | Json Key name | Value Type | Value Type in Json                                     |
+| Field      | JSON Key name | Value Type | Value Type in JSON                                     |
 |:----------:|:-------------:|:----------:|:------------------------------------------------------:|
 | 参数总数   | length        | byte       | integer                                                |
 | 参数项列表 | params        | list       | list of id and value. `[{"id":ID, "value": VAL}, ...]` |
@@ -254,7 +254,7 @@ Json 结构示例
 
 参数值的 JSON 类型根据参数 ID 对应的数据类型决定:
 
-| 参数 ID 范围    | 数据类型 | Value Type in Json     | 说明                                    |
+| 参数 ID 范围    | 数据类型 | Value Type in JSON     | 说明                                    |
 |-----------------|----------|------------------------|-----------------------------------------|
 | BYTE 类型参数   | byte     | integer                | 如 0x0084, 0x0090~0x0095                |
 | WORD 类型参数   | word     | integer                | 如 0x0031, 0x0081~0x0082                |
@@ -281,12 +281,12 @@ Json 结构示例
 
 #### 查询终端参数 `"msg_id": 33028` 0x8104
 
-空 Json
+空 JSON
 
 
 #### 查询指定终端参数 `"msg_id": 33030` 0x8106
 
-| Field        | Json Key name | Value Type     | Value Type in Json               |
+| Field        | JSON Key name | Value Type     | Value Type in JSON               |
 |:------------:|:-------------:|:--------------:|:--------------------------------:|
 | 参数总数     | length        | byte           | integer                          |
 | 参数 ID 列表 | ids           | byte(2*length) | list of id. `[1, 2, 3, 4, ...]` |
@@ -296,7 +296,7 @@ Json 结构示例
 
 #### 查询终端应答参数 `"msg_id": 260` 0x0104
 
-| Field        | Json Key name | Value Type | Value Type in Json                                     |
+| Field        | JSON Key name | Value Type | Value Type in JSON                                     |
 |:------------:|:-------------:|:----------:|:------------------------------------------------------:|
 | 应答流水号   | seq           | word       | integer                                                |
 | 应答参数个数 | length        | byte       | integer                                                |
@@ -307,7 +307,7 @@ Json 结构示例
 
 #### 终端控制 `"msg_id": 33029 ` 0x8105
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 命令字   | command       | byte       | integer            |
 | 命令参数 | param         | string     | string             |
@@ -315,14 +315,14 @@ Json 结构示例
 
 #### 查询终端属性 `"msg_id": 33031` 0x8107
 
-空 Json
+空 JSON
 
 
 #### 查询终端属性应答 `"msg_id": 263` 0x0107
 
 ##### JT/T 808-2013
 
-| Field             | Json Key name    | Value Type | Value Type in Json |
+| Field             | JSON Key name    | Value Type | Value Type in JSON |
 |:-----------------:|:----------------:|:----------:|:------------------:|
 | 终端类型          | type             | word       | integer            |
 | 制造商 ID         | manufacture      | byte(5)    | string             |
@@ -336,7 +336,7 @@ Json 结构示例
 
 ##### JT/T 808-2019
 
-| Field             | Json Key name    | Value Type | Value Type in Json |
+| Field             | JSON Key name    | Value Type | Value Type in JSON |
 |:-----------------:|:----------------:|:----------:|:------------------:|
 | 终端类型          | type             | word       | integer            |
 | 制造商 ID         | manufacture      | byte(11)   | string             |
@@ -355,7 +355,7 @@ Json 结构示例
 
 #### 下发终端升级包 `"msg_id": 33032` 0x8108
 
-| Field          | Json Key name | Value Type | Value Type in Json     |
+| Field          | JSON Key name | Value Type | Value Type in JSON     |
 |:--------------:|:-------------:|:----------:|:----------------------:|
 | 升级类型       | type          | byte       | integer                |
 | 制造商 ID      | manufacturer  | byte(5)    | string                 |
@@ -367,7 +367,7 @@ Json 结构示例
 
 #### 终端升级结果通知 `"msg_id": 264` 0x0108
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 升级类型 | type          | byte       | integer            |
 | 升级结果 | result        | byte       | integer            |
@@ -375,7 +375,7 @@ Json 结构示例
 
 #### 位置信息汇报 `"msg_id": 512` 0x0200
 
-| Field                | Json Key name | Value Type | Value Type in Json |
+| Field                | JSON Key name | Value Type | Value Type in JSON |
 |:--------------------:|:-------------:|:----------:|:------------------:|
 | 报警标志             | alarm         | dword      | integer            |
 | 状态                 | status        | dword      | integer            |
@@ -386,7 +386,7 @@ Json 结构示例
 | 方向                 | direction     | word       | integer            |
 | 时间                 | time          | bcd(6)     | string             |
 
-| Optional Field     | Json Key name | Value Type | Value Type in JSON |
+| Optional Field     | JSON Key name | Value Type | Value Type in JSON |
 |:------------------:|:-------------:|:----------:|:------------------:|
 | 位置附加信息项列表 | extra         | -          | map                |
 
@@ -401,7 +401,7 @@ Json 结构示例
 
 - 位置附加信息项列表, 在 `extra` 中
 
-| Field (附加信息描述)              | Json Key name   | Value Type | Value Type in Json     |
+| Field (附加信息描述)              | JSON Key name   | Value Type | Value Type in JSON     |
 |:---------------------------------:|:---------------:|:----------:|:----------------------:|
 | 里程                              | mileage         | dword      | integer                |
 | 油量                              | fuel_meter      | word       | integer                |
@@ -422,18 +422,18 @@ Json 结构示例
 
 - 超速报警附加信息(长度1或5), 置于 map `overspeed_alarm` 内
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 位置类型 | type          | byte       | integer            |
 
-| Optional Field | Json Key name | Value Type | Value Type in JSON |
+| Optional Field | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 区域或路段 ID  | id            | dword      | integer            |
 
 
 - 进出区域/路线报警附加信息, 置于 map `in_out_alarm` 内
 
-| Field         | Json Key name | Value Type | Value Type in Json |
+| Field         | JSON Key name | Value Type | Value Type in JSON |
 |:-------------:|:-------------:|:----------:|:------------------:|
 | 位置类型      | type          | byte       | integer            |
 | 区域或路段 ID | id            | dword      | integer            |
@@ -441,7 +441,7 @@ Json 结构示例
 
 - 路段行驶时间不足/过长报警附加信息, 置于 map `path_time_alarm` 内
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 路段 ID      | id            | dword      | integer            |
 | 路段行驶时间 | time          | word       | integer            |
@@ -449,21 +449,21 @@ Json 结构示例
 
 - IO 状态位, 置于 map `io_status` 内
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 深度休眠状态 | deep_sleep    | 1 bit      | integer            |
 | 休眠状态     | sleep         | 1 bit      | integer            |
 
 - 模拟量, 置于 map  `analog` 内
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 模拟量 0 | ad0           | 16 bits    | integer            |
 | 模拟量 1 | ad1           | 16 bits    | integer            |
 
 - 扩展车辆信号状态位, 置于 map `extra` 内
 
-| Field        | Json Key name   | Value Type | Value Type in Json                         |
+| Field        | JSON Key name   | Value Type | Value Type in JSON                         |
 |:------------:|:---------------:|:----------:|:------------------------------------------:|
 | 信号         | signal          | - 2 bits   | map, `{"low_beam": VAL, "high_beam": VAL}` |
 | 右转向灯信号 | right_turn      | 1 bit      | integer                                    |
@@ -482,7 +482,7 @@ Json 结构示例
 
 - 信号状态, 置于 map `signal` 内
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 近光灯信号 | low_beam      | 1 bit      | integer            |
 | 远光灯信号 | high_beam     | 1 bit      | integer            |
@@ -559,12 +559,12 @@ example:
 
 #### 位置信息查询 `"msg_id": 33281` 0x8201
 
-空 Json
+空 JSON
 
 
 #### 位置信息查询应答 `"msg_id": 513` 0x0201
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 应答流水号   | seq           | word       | integer            |
 | 位置信息汇报 | params        | -          | map                |
@@ -572,7 +572,7 @@ example:
 
 #### 临时位置跟踪控制 `"msg_id": 33282` 0x8202
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 时间间隔       | period        | word       | integer            |
 | 跟踪位置有效期 | expiry        | dword      | integer            |
@@ -580,7 +580,7 @@ example:
 
 #### 人工确认报警消息 `"msg_id": 33283` 0x8203
 
-| Field            | Json Key name | Value Type | Value Type in Json |
+| Field            | JSON Key name | Value Type | Value Type in JSON |
 |:----------------:|:-------------:|:----------:|:------------------:|
 | 报警消息流水号   | seq           | word       | integer            |
 | 人工确认报警类型 | type          | dword      | integer            |
@@ -588,21 +588,21 @@ example:
 
 #### 服务器向终端发起链路检测请求 `"msg_id": 33284` 0x8204 (2019 新增)
 
-空 Json
+空 JSON
 
 
 #### 文本信息下发 `"msg_id": 33536` 0x8300
 
 ##### JT/T 808-2013
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 标志     | flag          | byte       | integer            |
 | 文本信息 | text          | string     | string             |
 
 ##### JT/T 808-2019
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 标志     | flag          | byte       | integer            |
 | 文本类型 | text_type     | byte       | integer            |
@@ -613,7 +613,7 @@ example:
 
 #### 事件设置 `"msg_id": 33537` 0x8301
 
-| Field        | Json Key name | Value Type | Value Type in Json                                                |
+| Field        | JSON Key name | Value Type | Value Type in JSON                                                |
 |:------------:|:-------------:|:----------:|:-----------------------------------------------------------------:|
 | 设置类型     | type          | byte       | integer                                                           |
 | 设置总数     | length        | byte       | integer                                                           |
@@ -625,14 +625,14 @@ example:
 
 #### 事件报告 `"msg_id": 769` 0x0301
 
-| Field   | Json Key name | Value Type | Value Type in Json |
+| Field   | JSON Key name | Value Type | Value Type in JSON |
 |:-------:|:-------------:|------------|:------------------:|
 | 事件 ID | id            | byte       | integer            |
 
 
 #### 提问下发 `"msg_id": 33538` 0x8302
 
-| Field        | Json Key name | Value Type | Value Type in Json                                             |
+| Field        | JSON Key name | Value Type | Value Type in JSON                                             |
 |:------------:|:-------------:|:----------:|:--------------------------------------------------------------:|
 | 标志         | flag          | byte       | integer                                                        |
 | 问题内容长度 | length        | byte       | integer                                                        |
@@ -646,7 +646,7 @@ example:
 
 #### 提问应答 `"msg_id": 770` 0x0302
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 应答流水号 | seq           | word       | integer            |
 | 答案 ID    | id            | byte       | integer            |
@@ -654,7 +654,7 @@ example:
 
 #### 信息点播菜单设置 `"msg_id": 33539` 0x8303
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 设置类型     | type          | byte       | integer            |
 | 信息项总数   | length        | byte       | integer            |
@@ -666,7 +666,7 @@ example:
 
 #### 信息点播/取消 `"msg_id": 771` 0x0303
 
-| Field         | Json Key name | Value Type | Value Type in Json |
+| Field         | JSON Key name | Value Type | Value Type in JSON |
 |:-------------:|:-------------:|:----------:|:------------------:|
 | 信息类型      | id            | byte       | integer            |
 | 点拨/取消标志 | flag          | byte       | integer            |
@@ -674,7 +674,7 @@ example:
 
 #### 信息服务 `"msg_id": 33540` 0x8304
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 信息类型 | type          | byte       | integer            |
 | 信息长度 | length        | word       | integer            |
@@ -683,7 +683,7 @@ example:
 
 #### 电话回拨 `"msg_id": 33792` 0x8400
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 标志     | type          | byte       | integer            |
 | 电话号码 | phone         | string     | string             |
@@ -691,7 +691,7 @@ example:
 
 #### 设置电话本 `"msg_id": 33793` 0x8401
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 设置类型   | type          | byte       | integer            |
 | 联系人总数 | length        | byte       | integer            |
@@ -712,13 +712,13 @@ example:
 
 ##### JT/T 808-2013
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 标志控制 | flag          | byte       | integer            |
 
 ##### JT/T 808-2019
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 控制标志     | flag          | word       | integer            |
 | 控制类型数量 | length        | byte       | integer            |
@@ -731,7 +731,7 @@ example:
 
 #### 车辆控制应答 `"msg_id": 1280` 0x0500
 
-| Field              | Json Key name | Value Type | Value Type in Json |
+| Field              | JSON Key name | Value Type | Value Type in JSON |
 |:------------------:|:-------------:|:----------:|:------------------:|
 | 应答流水号         | seq           | word       | integer            |
 | 位置信息汇报消息体 | location      | map        | map of location    |
@@ -741,7 +741,7 @@ example:
 
 ##### JT/T 808-2013
 
-| Field        | Json Key name      | Value Type | Value Type in Json |
+| Field        | JSON Key name      | Value Type | Value Type in JSON |
 |:------------:|:------------------:|:----------:|:------------------:|
 | 设置属性     | type               | byte       | integer            |
 | 区域总数     | length             | byte       | integer            |
@@ -758,7 +758,7 @@ example:
 
 ##### JT/T 808-2019 新增字段
 
-| Field          | Json Key name       | Value Type | Value Type in Json |
+| Field          | JSON Key name       | Value Type | Value Type in JSON |
 |:--------------:|:-------------------:|:----------:|:------------------:|
 | 夜间最高速度   | night_max_speed     | word       | integer            |
 | 区域名称长度   | name_len            | word       | integer            |
@@ -788,7 +788,7 @@ example:
 
 #### 删除圆形区域 `"msg_id": 34305` 0x8601
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 区域数       | length        | byte       | integer            |
 | 区域 ID 列表 | ids           | list       | list of id.        |
@@ -801,7 +801,7 @@ example:
 
 ##### JT/T 808-2013
 
-| Field        | Json Key name      | Value Type | Value Type in Json       |
+| Field        | JSON Key name      | Value Type | Value Type in JSON       |
 |:------------:|:------------------:|:----------:|:------------------------:|
 | 设置属性     | type               | byte       | integer                  |
 | 区域总数     | length             | byte       | integer                  |
@@ -819,7 +819,7 @@ example:
 
 ##### JT/T 808-2019 新增字段
 
-| Field          | Json Key name       | Value Type | Value Type in Json |
+| Field          | JSON Key name       | Value Type | Value Type in JSON |
 |:--------------:|:-------------------:|:----------:|:------------------:|
 | 夜间最高速度   | night_max_speed     | word       | integer            |
 | 区域名称长度   | name_len            | word       | integer            |
@@ -830,7 +830,7 @@ example:
 
 #### 删除矩形区域 `"msg_id": 34307` 0x8603
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 区域数       | length        | byte       | integer            |
 | 区域 ID 列表 | ids           | list       | list of id.        |
@@ -841,7 +841,7 @@ example:
 
 ##### JT/T 808-2013
 
-| Field        | Json Key name      | Value Type | Value Type in Json |
+| Field        | JSON Key name      | Value Type | Value Type in JSON |
 |:------------:|:------------------:|:----------:|:------------------:|
 | 区域 ID      | id                 | dword      | integer            |
 | 区域属性     | flag               | word       | integer            |
@@ -856,7 +856,7 @@ example:
 
 ##### JT/T 808-2019 新增字段
 
-| Field          | Json Key name       | Value Type | Value Type in Json |
+| Field          | JSON Key name       | Value Type | Value Type in JSON |
 |:--------------:|:-------------------:|:----------:|:------------------:|
 | 夜间最高速度   | night_max_speed     | word       | integer            |
 | 区域名称长度   | name_len            | word       | integer            |
@@ -867,7 +867,7 @@ example:
 
 #### 删除多边形区域 `"msg_id": 34309` 0x8605
 
-| Field        | Json Key name | Value Type | Value Type in Json |
+| Field        | JSON Key name | Value Type | Value Type in JSON |
 |:------------:|:-------------:|:----------:|:------------------:|
 | 区域数       | length        | byte       | integer            |
 | 区域 ID 列表 | ids           | list       | list of id.        |
@@ -878,7 +878,7 @@ example:
 
 ##### JT/T 808-2013
 
-| Field            | Json Key name      | Value Type | Value Type in Json |
+| Field            | JSON Key name      | Value Type | Value Type in JSON |
 |:----------------:|:------------------:|:----------:|:------------------:|
 | 路线 ID          | id                 | dword      | integer            |
 | 路线属性         | flag               | word       | integer            |
@@ -899,7 +899,7 @@ example:
 
 ##### JT/T 808-2019 新增字段
 
-| Field            | Json Key name         | Value Type | Value Type in Json |
+| Field            | JSON Key name         | Value Type | Value Type in JSON |
 |:----------------:|:---------------------:|:----------:|:------------------:|
 | 路段夜间最高速度 | night_max_speed       | word       | integer            |
 | 路线名称长度     | name_len              | word       | integer            |
@@ -910,7 +910,7 @@ example:
 
 #### 删除路线 `"msg_id": 34311` 0x8607
 
-| Field    | Json Key name | Value Type | Value Type in Json |
+| Field    | JSON Key name | Value Type | Value Type in JSON |
 |:--------:|:-------------:|:----------:|:------------------:|
 | 路线数   | length        | byte       | integer            |
 | 路线列表 | ids           | list       | list of id         |
@@ -919,7 +919,7 @@ example:
 
 #### 查询区域或路线数据 `"msg_id": 34312` 0x8608 (2019 新增)
 
-| Field      | Json Key name | Value Type     | Value Type in Json |
+| Field      | JSON Key name | Value Type     | Value Type in JSON |
 |:----------:|:-------------:|:--------------:|:------------------:|
 | 查询类型   | type          | byte           | integer            |
 | 查询数量   | length        | dword          | integer            |
@@ -930,7 +930,7 @@ example:
 
 #### 查询区域或路线数据应答 `"msg_id": 1544` 0x0608 (2019 新增)
 
-| Field          | Json Key name | Value Type             | Value Type in Json |
+| Field          | JSON Key name | Value Type             | Value Type in JSON |
 |:--------------:|:-------------:|:----------------------:|:------------------:|
 | 查询类型       | type          | byte                   | integer            |
 | 区域/路线数量  | length        | dword                  | integer            |
@@ -941,7 +941,7 @@ example:
 
 #### 行驶记录数据采集命令 `"msg_id": 34560` 0x8700
 
-| Field  | Json Key name | Value Type             | Value Type in Json |
+| Field  | JSON Key name | Value Type             | Value Type in JSON |
 |:------:|:-------------:|:----------------------:|:------------------:|
 | 命令字 | command       | byte                   | integer            |
 | 数据块 | param         | string(base64 encoded) | string             |
@@ -949,7 +949,7 @@ example:
 
 #### 行驶记录数据上传 `"msg_id": 1792` 0x0700
 
-| Field      | Json Key name | Value Type             | Value Type in Json |
+| Field      | JSON Key name | Value Type             | Value Type in JSON |
 |:----------:|:-------------:|:----------------------:|:------------------:|
 | 应答流水号 | seq           | word                   | integer            |
 | 命令字     | command       | byte                   | integer            |
@@ -958,7 +958,7 @@ example:
 
 #### 行驶记录参数下传命令 `"msg_id": 34561` 0x8701
 
-| Field  | Json Key name | Value Type             | Value Type in Json |
+| Field  | JSON Key name | Value Type             | Value Type in JSON |
 |:------:|:-------------:|:----------------------:|:------------------:|
 | 命令字 | command       | byte                   | integer            |
 | 数据块 | param         | string(base64 encoded) | string             |
@@ -966,7 +966,7 @@ example:
 
 #### 电子运单上报 `"msg_id": 1793` 0x0701
 
-| Field        | Json Key name | Value Type             | Value Type in Json |
+| Field        | JSON Key name | Value Type             | Value Type in JSON |
 |:------------:|:-------------:|:----------------------:|:------------------:|
 | 电子运单长度 | length        | dword                  | integer            |
 | 电子运单内容 | data          | string(base64 encoded) | string             |
@@ -974,14 +974,14 @@ example:
 
 #### 上报驾驶员身份信息请求 `"msg_id": 34562` 0x8702
 
-空 Json
+空 JSON
 
 
 #### 驾驶员身份信息采集上报 `"msg_id": 1794` 0x0702
 
 ##### JT/T 808-2013
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 状态           | status        | byte       | integer            |
 | 时间           | time          | string     | string             |
@@ -993,7 +993,7 @@ example:
 
 ##### JT/T 808-2019 新增字段
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 驾驶员身份证号 | id_card       | string     | string             |
 
@@ -1002,7 +1002,7 @@ example:
 
 #### 定位数据批量上传 `"msg_id": 1796` 0x0704
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 位置数据类型   | type          | byte       | integer            |
 | 数据项个数     | length        | word       | integer            |
@@ -1011,7 +1011,7 @@ example:
 
 #### CAN 总线数据上传 `"msg_id": 1797` 0x0705
 
-| Field                | Json Key name | Value Type | Value Type in Json     |
+| Field                | JSON Key name | Value Type | Value Type in JSON     |
 |:--------------------:|:-------------:|:----------:|:----------------------:|
 | 数据项个数           | length        | word       | integer                |
 | CAN 总线数据接收时间 | time          | bcd(5)     | integer                |
@@ -1025,7 +1025,7 @@ example:
 
 #### 多媒体时间信息上传 `"msg_id": 2048` 0x0800
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 多媒体数据 ID  | id            | dword      | integer            |
 | 多媒体类型     | type          | byte       | integer            |
@@ -1036,7 +1036,7 @@ example:
 
 #### 多媒体数据上传 `"msg_id": 2049` 0x0801
 
-| Field          | Json Key name | Value Type | Value Type in Json     |
+| Field          | JSON Key name | Value Type | Value Type in JSON     |
 |:--------------:|:-------------:|:----------:|:----------------------:|
 | 多媒体 ID      | id            | dword      | integer                |
 | 多媒体类型     | type          | byte       | integer                |
@@ -1050,7 +1050,7 @@ example:
 
 #### 多媒体数据上传应答 `"msg_id": 34816` 0x8800
 
-| Field          | Json Key name | Value Type | Value Type in Json |
+| Field          | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 多媒体 ID      | mm_id         | dword      | integer            |
 | 重传包总数     | length        | byte       | integer            |
@@ -1059,7 +1059,7 @@ example:
 
 #### 摄像头立即拍摄命令 `"msg_id": 34817` 0x8801
 
-| Field             | Json Key name | Value Type | Value Type in Json |
+| Field             | JSON Key name | Value Type | Value Type in JSON |
 |:-----------------:|:-------------:|:----------:|:------------------:|
 | 通道 ID           | channel_id    | byte       | integer            |
 | 拍摄命令          | command       | word       | integer            |
@@ -1077,7 +1077,7 @@ example:
 
 #### 摄像头立即拍摄应答 `"msg_id": 2053` 0x0805
 
-| Field          | Json Key name | Value Type     | Value Type in Json |
+| Field          | JSON Key name | Value Type     | Value Type in JSON |
 |:--------------:|:-------------:|:--------------:|:------------------:|
 | 应答流水号     | seq           | word           | integer            |
 | 结果           | result        | byte           | integer            |
@@ -1087,7 +1087,7 @@ example:
 
 #### 存储多媒体数据检索 `"msg_id": 34818` 0x8802
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 多媒体类型 |               | byte       |                    |
 | 通道 ID    |               | byte       |                    |
@@ -1100,7 +1100,7 @@ example:
 
 ##### JT/T 808-2013
 
-| Field            | Json Key name | Value Type | Value Type in Json    |
+| Field            | JSON Key name | Value Type | Value Type in JSON    |
 |:----------------:|:-------------:|:----------:|:---------------------:|
 | 应答流水号       | seq           | word       | integer               |
 | 多媒体数据项总数 | length        | word       | integer               |
@@ -1113,7 +1113,7 @@ example:
 
 ##### JT/T 808-2019
 
-| Field            | Json Key name | Value Type | Value Type in Json    |
+| Field            | JSON Key name | Value Type | Value Type in JSON    |
 |:----------------:|:-------------:|:----------:|:---------------------:|
 | 应答流水号       | seq           | word       | integer               |
 | 多媒体数据项总数 | length        | word       | integer               |
@@ -1129,7 +1129,7 @@ example:
 
 #### 存储多媒体数据上传命令 `"msg_id": 34819` 0x8803
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 多媒体类型 | type          | byte       | integer            |
 | 通道 ID    | channel       | byte       | integer            |
@@ -1141,7 +1141,7 @@ example:
 
 #### 录音开始命令 `"msg_id": 34820` 0x8804
 
-| Field      | Json Key name | Value Type | Value Type in Json |
+| Field      | JSON Key name | Value Type | Value Type in JSON |
 |:----------:|:-------------:|:----------:|:------------------:|
 | 录音命令   | command       | byte       | integer            |
 | 录音时间   | time          | word       | integer            |
@@ -1151,7 +1151,7 @@ example:
 
 #### 单条存储多媒体数据检索上传命令 `"msg_id": 34821` 0x8805
 
-| Field     | Json Key name | Value Type | Value Type in Json |
+| Field     | JSON Key name | Value Type | Value Type in JSON |
 |:---------:|:-------------:|:----------:|:------------------:|
 | 多媒体 ID | id            | dword      | integer            |
 | 删除标志  | flag          | byte       | integer            |
@@ -1159,7 +1159,7 @@ example:
 
 #### 数据下行透传 `"msg_id": 35072` 0x8900
 
-| Field        | Json Key name | Value Type | Value Type in Json     |
+| Field        | JSON Key name | Value Type | Value Type in JSON     |
 |:------------:|:-------------:|:----------:|:----------------------:|
 | 透传消息类型 | type          | byte       | integer                |
 | 透传消息内容 | data          | binary     | string(base64 encoded) |
@@ -1167,7 +1167,7 @@ example:
 
 #### 数据上行透传 `"msg_id": 2304` 0x0900
 
-| Field        | Json Key name | Value Type | Value Type in Json     |
+| Field        | JSON Key name | Value Type | Value Type in JSON     |
 |:------------:|:-------------:|:----------:|:----------------------:|
 | 透传消息类型 | type          | byte       | integer                |
 | 透传消息内容 | data          | binary     | string(base64 encoded) |
@@ -1175,7 +1175,7 @@ example:
 
 #### 数据压缩上报 `"msg_id": 2305` 0x0901
 
-| Field        | Json Key name | Value Type | Value Type in Json     |
+| Field        | JSON Key name | Value Type | Value Type in JSON     |
 |:------------:|:-------------:|:----------:|:----------------------:|
 | 压缩消息长度 | length        | dword      | integer                |
 | 压缩消息体   | data          | binary     | string(base64 encoded) |
@@ -1183,7 +1183,7 @@ example:
 
 #### 平台 RSA 公钥 `"msg_id": 35328` 0x8A00
 
-| Field | Json Key name | Value Type | Value Type in Json     |
+| Field | JSON Key name | Value Type | Value Type in JSON     |
 |:-----:|:-------------:|:----------:|:----------------------:|
 | e     | e             | dword      | integer                |
 | n     | n             | byte(128)  | string(base64 encoded) |
@@ -1191,7 +1191,7 @@ example:
 
 #### 终端 RSA 公钥 `"msg_id": 2560` 0x0A00
 
-| Field | Json Key name | Value Type | Value Type in Json     |
+| Field | JSON Key name | Value Type | Value Type in JSON     |
 |:-----:|:-------------:|:----------:|:----------------------:|
 | e     | e             | dword      | integer                |
 | n     | n             | byte(128)  | string(base64 encoded) |
