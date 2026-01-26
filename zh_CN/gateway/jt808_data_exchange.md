@@ -487,8 +487,7 @@ JSON 结构示例
 | 近光灯信号 | low_beam      | 1 bit      | integer            |
 | 远光灯信号 | high_beam     | 1 bit      | integer            |
 
-例
-example:
+示例如下：
 ```json
 {
   "header" : {
