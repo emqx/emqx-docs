@@ -15,9 +15,9 @@
 - Payload 采用 JSON 格式进行组装
 - JSON Key 采用全小写格式命名
 
-JSON 结构示例
+## JSON 结构示例
 
-## 终端到服务器
+### 终端到服务器
 ```json
 {
   "header" : {
@@ -35,7 +35,7 @@ JSON 结构示例
 }
 ```
 
-## 服务器到终端
+### 服务器到终端
 ```json
 {
   "header": {
@@ -95,8 +95,10 @@ JSON 结构示例
 | 消息总包数     | frag_total    | word       | integer            |
 | 消息包序号     | frag_sn       | word       | integer            |
 
-- `proto_ver` 字段仅在 2019 版本协议中出现，当前协议版本号为 1
-- 存在 `frag_total` 与 `frag_sn` 时表示消息体为长消息，进行分包处理
+**注意**：
+
+- `proto_ver` 字段仅在 2019 版本协议中出现，当前协议版本号为 1。
+- 存在 `frag_total` 与 `frag_sn` 时表示消息体为长消息，进行分包处理。
 
 ### 消息体字段对照表
 
@@ -127,11 +129,11 @@ JSON 结构示例
 
 ##### JT/T 808-2013
 
-| Field          | JSON Key name | Value Type     | Value Type in JSON |
-|:--------------:|:-------------:|:--------------:|:------------------:|
-| 原始消息流水号 | seq           | word           | integer            |
-| 重传包总数     | length        | byte           | integer            |
-| 重传包 ID 列表 | ids           | byte(2*length) | list of integer    |
+|     Field      | JSON Key name |   Value Type   | Value Type in JSON |
+| :------------: | :-----------: | :------------: | :----------------: |
+|   重传包总数   |    length     |      byte      |      integer       |
+| 重传包 ID 列表 |      ids      | byte(2*length) |  list of integer   |
+| 原始消息流水号 |      seq      |      word      |      integer       |
 
 ##### JT/T 808-2019
 
@@ -141,7 +143,7 @@ JSON 结构示例
 | 重传包总数     | length        | word           | integer            |
 | 重传包 ID 列表 | ids           | byte(2*length) | list of integer    |
 
-- 2019 版本将重传包总数由 BYTE 改为 WORD
+**注意**：2019 版本将重传包总数由 BYTE 改为 WORD。
 
 
 #### 查询服务器时间应答 `"msg_id": 32772` 0x8004 (2019 新增)
@@ -182,7 +184,7 @@ JSON 结构示例
 | 车牌颜色  | color          | byte       | integer            |
 | 车辆标识  | license_number | string     | string             |
 
-- 2019 版本扩展了制造商 ID（5→11）、终端型号（20→30）、终端 ID（7→30）字段长度
+**注意**：2019 版本扩展了制造商 ID（5 -> 11）、终端型号（20 -> 30）、终端 ID（7 -> 30）字段长度。
 
 
 #### 终端注册应答 `"msg_id": 33024` 0x8100
@@ -192,7 +194,7 @@ JSON 结构示例
 | 应答流水号 | seq           | word       | integer            |
 | 结果       | result        | byte       | integer            |
 
-只有成功后才有此字段
+只有成功后才有此字段：
 
 | Optional Field | JSON Key name | Value Type | Value Type in JSON |
 |:--------------:|---------------|------------|--------------------|
@@ -236,7 +238,7 @@ JSON 结构示例
 | 软件版本号长度| sw_version_len  | byte       | integer            |
 | 软件版本号   | sw_version       | string     | string             |
 
-- 2019 版本新增鉴权码长度、终端 IMEI、软件版本号等字段
+**注意**：2019 版本新增鉴权码长度、终端 IMEI、软件版本号等字段。
 
 
 #### 设置终端参数 `"msg_id": 33027` 0x8103
@@ -291,7 +293,7 @@ JSON 结构示例
 | 参数总数     | length        | byte           | integer                          |
 | 参数 ID 列表 | ids           | byte(2*length) | list of id. `[1, 2, 3, 4, ...]` |
 
-参数 ID 列表中元素为 integer
+参数 ID 列表中元素为 integer。
 
 
 #### 查询终端应答参数 `"msg_id": 260` 0x0104
@@ -348,7 +350,9 @@ JSON 结构示例
 | GNSS 模块属性     | gnss_prop        | byte       | integer            |
 | 通信模块属性      | comm_prop        | byte       | integer            |
 
-- 2019 版本扩展了制造商 ID（5→11）、终端型号（20→30）、终端 ID（7→30）字段长度
+**注意**：
+
+- 2019 版本扩展了制造商 ID（5 -> 11）、终端型号（20 -> 30）、终端 ID（7 -> 30）字段长度
 - 终端类型新增 bit8（支持/连接挂车）
 - 终端硬件版本号长度、终端固件版本号长度，将被用于二进制报文解析，不向上暴露
 
@@ -393,7 +397,7 @@ JSON 结构示例
 ##### JT/T 808-2019 变更
 
 - **报警标志新增**: bit15（违规行驶报警）、bit16（胎压预警）、bit17（右转盲区异常报警）
-- **报警标志变更**: bit29（碰撞预警→碰撞侧翻报警）、bit31（非法开门报警→保留）
+- **报警标志变更**: bit29（碰撞预警 -> 碰撞侧翻报警）、bit31（非法开门报警 -> 保留）
 - **状态位新增**: bit6（紧急刹车系统采集的前撞预警）、bit7（车道偏移预警）、bit22（车辆处于行驶状态）
 - **附加信息新增**: 0x05（胎压）、0x06（车厢温度）
 
@@ -401,24 +405,23 @@ JSON 结构示例
 
 - 位置附加信息项列表, 在 `extra` 中
 
-| Field (附加信息描述)              | JSON Key name   | Value Type | Value Type in JSON     |
-|:---------------------------------:|:---------------:|:----------:|:----------------------:|
-| 里程                              | mileage         | dword      | integer                |
-| 油量                              | fuel_meter      | word       | integer                |
-| 行驶记录功能获取的速度            | speed           | word       | integer                |
-| 需要人工确认报警事件的 ID         | alarm_id        | word       | integer                |
-| 胎压 (2019 新增)                  | tire_pressure   | -          | string(base64 encoded) |
-| 车厢温度 (2019 新增)              | carriage_temp   | word       | integer                |
-| 超速报警附加信息(长度1或5)        | overspeed_alarm | -          | map                    |
-| 进出区域/路线报警附加信息         | in_out_alarm    | -          | map                    |
-| 路段行驶时间不足/过长报警附加信息 | path_time_alarm | -          | map                    |
-| 扩展车辆信号状态位                | 见状态位附表    | -          | -                      |
-| IO 状态位                         | io_status       | -          | map                    |
-| 模拟量                            | analog          | -          | map                    |
-| 无线通信网络信号强度              | rssi            | byte       | integer                |
-| GNSS 定位卫星数                   | gnss_sat_num    | byte       | integer                |
-| 后续自定义信息长度                | custome         | -          | string(base64 encoded) |
-| ## TODO 自定义区域                |                 |            |                        |
+|       Field (附加信息描述)        |  JSON Key name  | Value Type |   Value Type in JSON   |
+| :-------------------------------: | :-------------: | :--------: | :--------------------: |
+|               里程                |     mileage     |   dword    |        integer         |
+|               油量                |   fuel_meter    |    word    |        integer         |
+|      行驶记录功能获取的速度       |      speed      |    word    |        integer         |
+|     需要人工确认报警事件的 ID     |    alarm_id     |    word    |        integer         |
+|         胎压 (2019 新增)          |  tire_pressure  |     -      | string(base64 encoded) |
+|       车厢温度 (2019 新增)        |  carriage_temp  |    word    |        integer         |
+|    超速报警附加信息(长度1或5)     | overspeed_alarm |     -      |          map           |
+|     进出区域/路线报警附加信息     |  in_out_alarm   |     -      |          map           |
+| 路段行驶时间不足/过长报警附加信息 | path_time_alarm |     -      |          map           |
+|        扩展车辆信号状态位         |  见状态位附表   |     -      |           -            |
+|             IO 状态位             |    io_status    |     -      |          map           |
+|              模拟量               |     analog      |     -      |          map           |
+|       无线通信网络信号强度        |      rssi       |    byte    |        integer         |
+|          GNSS 定位卫星数          |  gnss_sat_num   |    byte    |        integer         |
+|        后续自定义信息长度         |     custome     |     -      | string(base64 encoded) |
 
 - 超速报警附加信息(长度1或5), 置于 map `overspeed_alarm` 内
 
@@ -607,7 +610,7 @@ JSON 结构示例
 | 文本类型 | text_type     | byte       | integer            |
 | 文本信息 | text          | string     | string             |
 
-- 2019 版本新增文本类型字段，标志位 bit0-1 含义变更
+**注意**： 2019 版本新增文本类型字段，标志位 bit0-1 含义变更。
 
 
 #### 事件设置 `"msg_id": 33537` 0x8301
@@ -725,7 +728,7 @@ JSON 结构示例
 | 控制类型 ID  | type_id       | byte       | integer            |
 | 控制类型参数 | param         | binary     | string(base64 encoded) |
 
-- 2019 版本消息结构完全重构为控制类型数量+控制类型列表
+**注意**：2019 版本消息结构完全重构为控制类型数量+控制类型列表。
 
 
 #### 车辆控制应答 `"msg_id": 1280` 0x0500
@@ -763,7 +766,7 @@ JSON 结构示例
 | 区域名称长度   | name_len            | word       | integer            |
 | 区域名称       | name                | string     | string             |
 
-- 2019 版本在区域项中新增夜间最高速度、区域名称长度、区域名称字段
+**注意**：2019 版本在区域项中新增夜间最高速度、区域名称长度、区域名称字段。
 
 区域列表示例
 ```json
@@ -787,11 +790,11 @@ JSON 结构示例
 
 #### 删除圆形区域 `"msg_id": 34305` 0x8601
 
-| Field        | JSON Key name | Value Type | Value Type in JSON |
-|:------------:|:-------------:|:----------:|:------------------:|
-| 区域数       | length        | byte       | integer            |
-| 区域 ID 列表 | ids           | list       | list of id.        |
-| 区域 ID 1~n  | -             | dword      | integer            |
+|    Field     | JSON Key name | Value Type | Value Type in JSON |
+| :----------: | :-----------: | :--------: | :----------------: |
+|    区域数    |    length     |    byte    |      integer       |
+| 区域 ID 列表 |      ids      |    list    |     list of id     |
+| 区域 ID 1~n  |       -       |   dword    |      integer       |
 
 `[ID1, ID2, ...]`
 
@@ -824,16 +827,16 @@ JSON 结构示例
 | 区域名称长度   | name_len            | word       | integer            |
 | 区域名称       | name                | string     | string             |
 
-- 2019 版本在区域项中新增夜间最高速度、区域名称长度、区域名称字段
+**注意**：2019 版本在区域项中新增夜间最高速度、区域名称长度、区域名称字段。
 
 
 #### 删除矩形区域 `"msg_id": 34307` 0x8603
 
-| Field        | JSON Key name | Value Type | Value Type in JSON |
-|:------------:|:-------------:|:----------:|:------------------:|
-| 区域数       | length        | byte       | integer            |
-| 区域 ID 列表 | ids           | list       | list of id.        |
-| 区域 ID 1~n  | -             | dword      | integer            |
+|    Field     | JSON Key name | Value Type | Value Type in JSON |
+| :----------: | :-----------: | :--------: | :----------------: |
+|    区域数    |    length     |    byte    |      integer       |
+| 区域 ID 列表 |      ids      |    list    |     list of id     |
+| 区域 ID 1~n  |       -       |   dword    |      integer       |
 
 
 #### 设置多边形区域 `"msg_id": 34308` 0x8604
@@ -861,16 +864,16 @@ JSON 结构示例
 | 区域名称长度   | name_len            | word       | integer            |
 | 区域名称       | name                | string     | string             |
 
-- 2019 版本新增夜间最高速度、区域名称长度、区域名称字段
+**注意**：2019 版本新增夜间最高速度、区域名称长度、区域名称字段。
 
 
 #### 删除多边形区域 `"msg_id": 34309` 0x8605
 
-| Field        | JSON Key name | Value Type | Value Type in JSON |
-|:------------:|:-------------:|:----------:|:------------------:|
-| 区域数       | length        | byte       | integer            |
-| 区域 ID 列表 | ids           | list       | list of id.        |
-| 区域 ID 1~n  | -             | dword      | integer            |
+|    Field     | JSON Key name | Value Type | Value Type in JSON |
+| :----------: | :-----------: | :--------: | :----------------: |
+|    区域数    |    length     |    byte    |      integer       |
+| 区域 ID 列表 |      ids      |    list    |     list of id     |
+| 区域 ID 1~n  |       -       |   dword    |      integer       |
 
 
 #### 设置路线 `"msg_id": 34310` 0x8606
@@ -904,7 +907,7 @@ JSON 结构示例
 | 路线名称长度     | name_len              | word       | integer            |
 | 路线名称         | name                  | string     | string             |
 
-- 2019 版本在路段中新增路段夜间最高速度，以及路线名称长度、路线名称字段
+**注意**：2019 版本在路段中新增路段夜间最高速度，以及路线名称长度、路线名称字段。
 
 
 #### 删除路线 `"msg_id": 34311` 0x8607
@@ -996,7 +999,7 @@ JSON 结构示例
 |:--------------:|:-------------:|:----------:|:------------------:|
 | 驾驶员身份证号 | id_card       | string     | string             |
 
-- 2019 版本新增驾驶员身份证号字段
+**注意**：2019 版本新增驾驶员身份证号字段。
 
 
 #### 定位数据批量上传 `"msg_id": 1796` 0x0704
@@ -1045,8 +1048,6 @@ JSON 结构示例
 | 位置信息汇报   | location      | byte(28)   | map                    |
 | 多媒体数据包   | multimedia    | binary     | string(base64 encoded) |
 
-
-
 #### 多媒体数据上传应答 `"msg_id": 34816` 0x8800
 
 | Field          | JSON Key name | Value Type | Value Type in JSON |
@@ -1071,7 +1072,7 @@ JSON 结构示例
 | 饱和度            | saturate      | byte       | integer            |
 | 色度              | chromaticity  | byte       | integer            |
 
-- 2019 版本分辨率字段新增 0x00（最低质量压缩）和 0xFF（最高质量压缩）取值
+**注意**：2019 版本分辨率字段新增 0x00（最低质量压缩）和 0xFF（最高质量压缩）取值。
 
 
 #### 摄像头立即拍摄应答 `"msg_id": 2053` 0x0805
@@ -1123,7 +1124,7 @@ JSON 结构示例
 | 事件项编码       | event         | byte       | integer               |
 | 位置信息汇报     | location      | variable   | map                   |
 
-- 2019 版本位置信息汇报消息体由固定 28 字节改为可变长度
+**注意**：2019 版本位置信息汇报消息体由固定 28 字节改为可变长度。
 
 
 #### 存储多媒体数据上传命令 `"msg_id": 34819` 0x8803
