@@ -1,5 +1,9 @@
 # Incompatible Changes in EMQX 5.10
 
+## 5.10.3
+
+- [#16491](https://github.com/emqx/emqx/pull/16491) Stop releasing packages for macOS 13 (Ventura).
+
 ## 5.10.2
 
 - [#16062](https://github.com/emqx/emqx/pull/16062) Fixed an issue where RocketMQ actions ignored the configured payload template and sent the entire rule output instead.
