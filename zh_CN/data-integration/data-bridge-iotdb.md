@@ -101,7 +101,7 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
    - **描述**：（可选）填写连接器的简要说明。
    - **驱动**：选择用于连接 IoTDB 的协议。
      - `REST API`：在 **IoTDB REST 服务基础 URL** 中输入 IoTDB REST 服务地址，例如 `http://localhost:18080`。
-     - `Thrift 协议`：在**服务器地址**中输入 IoTDB Thrift 服务器地址。
+     - `Thrift 协议`：在**服务器地址**中输入 IoTDB Thrift 服务器地址，例如：`localhost:6667`
    - **SQL 方言**：选择 EMQX 向 IoTDB 写入设备数据时使用的数据模型。
      - `树模型`：将数据写入为分层的时序路径，适用于基于路径的设备和测量点管理。
      - `表模型`：将数据写入关系表中，适用于按设备类型或设备类别管理数据。
