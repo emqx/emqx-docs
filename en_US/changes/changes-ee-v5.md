@@ -1,5 +1,82 @@
 # EMQX Enterprise Version 5
 
+## 5.10.3
+
+### Enhancements
+
+- [#16627](https://github.com/emqx/emqx/pull/16627) Add GBK character encoding support for JT/T 808 gateway.
+
+  The JT/T 808 protocol specifies GBK encoding for STRING type fields. A new `frame.string_encoding` configuration option is added:
+  - `utf8` (default): Pass through strings as-is (backward-compatible)
+  - `gbk`: Convert GBK-encoded strings from devices to UTF-8 for MQTT, and UTF-8 from MQTT to GBK for devices
+
+  This affects string fields including license plates, driver names, text messages, area names, and client parameters.
+  MQTT payloads always use UTF-8 encoding regardless of this setting.
+
+- [#16625](https://github.com/emqx/emqx/pull/16625) Added configuration options `idp_signs_envelopes` and `idp_signs_assertions` to SAML SSO backend to control signature verification behavior.
+
+  Previously, SAML signature verification was not working correctly because the IdP certificate fingerprint was not being extracted from metadata and passed to esaml for verification.
+
+  Both options default to `false` for backwards compatibility with existing configurations. Users who want to enable signature verification should explicitly set these to `true` when their IdP is configured to sign SAML responses.
+
+- [#16596](https://github.com/emqx/emqx/pull/16596) Add JT/T 808 protocol 2019 support.
+
+- [#16511](https://github.com/emqx/emqx/pull/16511) Supported the IoTDB Table Model in the data integration.
+
+- [#16456](https://github.com/emqx/emqx/pull/16456) Support TLS 1.3 session ticket resumption.
+
+  EMQX now supports TLS 1.3 session resumption using stateless session tickets, allowing clients to resume TLS sessions without server-side session state storage.
+
+  Node-level configuration: `node.tls_stateless_tickets_seed` is the secret key seed for generating TLS 1.3 stateless session tickets.
+  Listener-level configuration: `listeners.ssl.<name>.ssl_options.session_tickets` enables TLS 1.3 session resumption using stateless session tickets.
+  Possible values are `disabled` (default), `stateless`, and `stateless_with_cert` (includes certificate information).
+
+  Session tickets are only generated when `node.tls_stateless_tickets_seed` is configured (non-empty) and `session_tickets` is enabled in listener SSL options.
+  If `session_tickets` is enabled but `node.tls_stateless_tickets_seed` is empty, session tickets will not be generated and an error log will be emitted when starting the listener.
+
+- [#16324](https://github.com/emqx/emqx/pull/16324) Supports end-to-end tracing of messages published via HTTP API.
+
+- [#16220](https://github.com/emqx/emqx/pull/16220) Added the `jt808.frame.parse_unknown_message` option, enabling the JT808 gateway to transparently forward unknown messages.
+
+- [#16135](https://github.com/emqx/emqx/pull/16135) Added two new metrics and corresponding rates for the `GET /monitor_current` HTTP API: `rules_matched` and `actions_executed`.  They track the number of rules that matched and action execution rate (i.e., success + failure), respectively.
+
+### Bug Fixes
+
+- [#16622](https://github.com/emqx/emqx/pull/16622) Fixed an issue where, if an Action used async query mode and its Connector was disconnect after more than one health check, its Fallback Actions could be triggered twice.
+
+- [#16618](https://github.com/emqx/emqx/pull/16618) The Kafka request timeout is now automatically set to at least twice the metadata request timeout (with a minimum of 30 seconds),
+  reducing unnecessary reconnections and retries when metadata requests take longer than expected.
+  This is especially beneficial when metadata request timeout is configured to a small value.
+
+- [#16609](https://github.com/emqx/emqx/pull/16609) Fixed JT/T 808 gateway parameter setting (0x8103) and query response (0x0104) message handling for CAN bus ID parameters (0x0110~0x01FF), which should use BYTE[8] data type with base64 encoding in JSON instead of string type.
+
+- [#16606](https://github.com/emqx/emqx/pull/16606) Fixed CoAP Gateway working in connection mode over DTLS.
+
+- [#16585](https://github.com/emqx/emqx/pull/16585) Fixes the issue of GreptimeDB TLS connection failure.
+
+- [#16543](https://github.com/emqx/emqx/pull/16543) Improve robustness of cluster autoclean procedure.
+
+  Previously, if autoclean feature was disabled during initial start of the node, it would never activate after configuration change.
+  This fix resolves this issue.
+
+- [#16535](https://github.com/emqx/emqx/pull/16535) Fixed formatter crash when logging gen_rpc errors.
+
+  Prior to this fix, EMQX would crash with "FORMATTER CRASH" errors when gen_rpc logged certain error messages (e.g., transmission timeout errors). The formatter now handles these error messages correctly without crashing.
+
+- [#16514](https://github.com/emqx/emqx/pull/16514) Fixed a bug that caused WebSocket connections to crash when receiving broker messages larger than the client’s advertised `Maximum-Packet-Size`.
+
+- [#16507](https://github.com/emqx/emqx/pull/16507) Previously, when an MQTT Source's Connector recovered after losing its connection, topics would not be re-subscribed and the Source would stop working until the Connector itself was restarted.  Now, the Source will re-subscribe upon reconnect.
+
+- [#16418](https://github.com/emqx/emqx/pull/16418) Reduced the volume of logs generated when a resource exception occurs (`resource_exception`).  These logs are now throttled, and some potentially large terms are redacted from it.
+
+- [#16304](https://github.com/emqx/emqx/pull/16304) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
+
+- [#16489](https://github.com/emqx/emqx/pull/16489) Fix error that the following rule functions always return 'undefined'
+   - msgid/0, qos/0, topic/0, topic/1, flags/0, flag/1,
+   - clientid/0, username/0, peerhost/0, payload/0, payload/1.
+
+  These functions were correct in v4, but they were broken during the v5 refactor.
+
 ## 5.10.2
 
 *Release Date: 2025-11-11*
