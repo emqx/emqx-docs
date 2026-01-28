@@ -66,7 +66,9 @@
 
 - [#16263](https://github.com/emqx/emqx/pull/16263) 健康检查现在仅验证分配给当前 EMQX 节点的分区的 leader 连通性，从而避免不必要的空闲连接和误报警。
 
-  之前，Kafka Consumer 连接器会检查所有分区的 leader 连通性。在集群部署中，每个节点只拥有部分分区，其余未分配分区的 leader 连接会保持空闲。由于 Kafka 会在超时后（默认 10 分钟）关闭空闲连接，这可能导致错误的连通性告警。
+  之前，Kafka 消费者连接器会检查所有分区的 leader 连通性。在集群部署中，每个节点只拥有部分分区，其余未分配分区的 leader 连接会保持空闲。由于 Kafka 会在超时后（默认 10 分钟）关闭空闲连接，这可能导致错误的连通性告警。
+
+- [#16618](https://github.com/emqx/emqx/pull/16618) Kafka 的请求超时时间现在会自动设置为至少是元数据请求超时时间的两倍（最小为 30 秒）。当元数据请求耗时超出预期时，这可以减少不必要的重连和重试，尤其是在将元数据请求超时时间配置得较小的情况下，效果更为明显。
 
 - [#16336](https://github.com/emqx/emqx/pull/16336) 修复了在通过控制台测试连通性或停止连接器时，可能因竞争条件导致超时的问题。
 
@@ -84,6 +86,8 @@
 
 - [#16585](https://github.com/emqx/emqx/pull/16585) 修复了 GreptimeDB TLS 连接失败的问题。
 
+- [#16622](https://github.com/emqx/emqx/pull/16622) 修复了一个问题：当某个使用异步查询模式的动作在其连接器经历多次健康检查失败后发生断开时，可能会导致其回退动作被触发两次。
+
 #### 集群
 
 - [#16269](https://github.com/emqx/emqx/pull/16269) 修复了集群连接路由复制协议恢复流程中的一个问题：在远端仍然需要重新引导（re-bootstrap）的情况下，错误地跳过了该步骤。
@@ -94,17 +98,36 @@
 
   在升级 `gen_rpc` 之前，如果某个对端节点不可达，EMQX 可能会因连接超时而产生大量延迟出现的崩溃日志。新版 `gen_rpc` 不再存在这种长尾问题，并将崩溃日志转换为更易读的 `error` 日志，同时还对频繁出现的 `"failed_to_connect_server"` 日志进行了限流，以避免日志刷屏。
 
+- [#16543](https://github.com/emqx/emqx/pull/16543) 提升了集群自动清理流程的健壮性。此前，如果在节点首次启动时禁用了自动清理功能，即使之后通过配置变更启用了该功能，自动清理也不会生效。
+
+#### 安全
+
+- [#16625](https://github.com/emqx/emqx/pull/16625) 为 SAML SSO 后端新增 `idp_signs_envelopes` 和 `idp_signs_assertions` 配置选项，用于控制签名校验，而此前该功能未能正常工作。为保持向后兼容，这两个选项默认值均为 `false`；当 IdP 对 SAML 响应进行签名时，用户需要显式将其设置为 `true`。
+
 #### 访问控制
 
 - [#16304](https://github.com/emqx/emqx/pull/16304) 修复了由于登录用户数据库记录不兼容，导致从 5.3.0 之前版本升级 EMQX 后无法启用多因素认证（MFA）的问题。
+- [#16541](https://github.com/emqx/emqx/pull/16541) 修复了一个问题：在将 OIDC issuer URL 保存到配置文件时，系统会自动将其规范化为以斜杠（`/`）结尾，导致当 OIDC 提供方的 discovery 文档返回的 issuer 不带结尾斜杠时，出现 issuer 不匹配错误。
 
 #### 可观测性
 
 - [#16418](https://github.com/emqx/emqx/pull/16418) 减少了在发生资源异常（`resource_exception`）时生成的日志数量。这些日志现在已被限流，并且其中一些可能体积较大的字段内容已被脱敏处理。
+- [#16535](https://github.com/emqx/emqx/pull/16535) 修复了在记录 `gen_rpc` 错误日志时格式化器崩溃的问题。此前，当 `gen_rpc` 记录某些错误消息（例如传输超时错误）时，EMQX 会出现 `"FORMATTER CRASH"` 错误并导致进程崩溃。现在，格式化器已能够正确处理这些错误消息，不再发生崩溃。
 
 #### 网关
 
 - [#16609](https://github.com/emqx/emqx/pull/16609) 修复了 JT/T 808 网关在处理参数设置（0x8103）和查询应答（0x0104）消息时，对 CAN 总线 ID 参数（0x0110~0x01FF）的处理问题。这些参数应在 JSON 中使用 Base64 编码的 BYTE[8] 数据类型，而不是字符串类型。
+
+- [#16606](https://github.com/emqx/emqx/pull/16606) 修复了 CoAP 网关在基于 DTLS 的连接模式下无法正常工作的问题。
+
+- [#16627](https://github.com/emqx/emqx/pull/16627) 为 JT/T 808 网关新增 GBK 字符编码支持。
+
+  JT/T 808 协议规定 STRING 类型字段应使用 GBK 编码。为此新增了 `frame.string_encoding` 配置选项：
+
+  - `utf8`（默认）：字符串按原样透传（向后兼容）。
+  - `gbk`：将来自设备的 GBK 编码字符串转换为 UTF-8 用于 MQTT，将来自 MQTT 的 UTF-8 字符串转换为 GBK 用于设备。
+
+  该配置会影响所有字符串字段，包括车牌号、驾驶员姓名、文本消息、区域名称以及客户端参数。无论该配置如何设置，MQTT 负载始终使用 UTF-8 编码。
 
 ## 5.10.2
 

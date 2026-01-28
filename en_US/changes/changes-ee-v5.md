@@ -66,7 +66,9 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16263](https://github.com/emqx/emqx/pull/16263) The health check now verifies leader connectivity only for the partitions assigned to the current EMQX node, preventing unnecessary idle connections and false alarms.
 
-  Previously, the Kafka Consumer connector checked leader connectivity for all partitions. In clustered deployments, each node owns only a subset of partitions, leaving connections to unassigned partition leaders idle. Because Kafka closes idle connections after a timeout (10 minutes by default), this could result in false connectivity alarms.
+  Previously, the Kafka consumer connector checked leader connectivity for all partitions. In clustered deployments, each node owns only a subset of partitions, leaving connections to unassigned partition leaders idle. Because Kafka closes idle connections after a timeout (10 minutes by default), this could result in false connectivity alarms.
+
+- [#16618](https://github.com/emqx/emqx/pull/16618) The Kafka request timeout is now automatically set to at least twice the metadata request timeout (with a minimum of 30 seconds), reducing unnecessary reconnections and retries when metadata requests take longer than expected. This is especially beneficial when metadata request timeout is configured to a small value.
 
 - [#16336](https://github.com/emqx/emqx/pull/16336) Fixed a race condition which may cause timeout when testing connectivity or stopping a connector from the dashboard.
 
@@ -84,6 +86,8 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
 - [#16585](https://github.com/emqx/emqx/pull/16585) Fixed an issue with GreptimeDB TLS connection failures.
 
+- [#16622](https://github.com/emqx/emqx/pull/16622) Fixed an issue where an action using async query mode could trigger its fallback actions twice if its connector disconnected after multiple health check failures.
+
 #### Clustering
 
 - [#16269](https://github.com/emqx/emqx/pull/16269) Fixed an issue in the Cluster Link route replication protocol recovery sequence where re-bootstrapping was incorrectly skipped even though the remote side needed it.
@@ -94,17 +98,36 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
 
   Prior to the `gen_rpc` upgrade, EMQX may experience a long tail of crash logs due to connection timeout if a peer node is unreachable. The new version of `gen_rpc` no longer has the long tail and converts crash logs to more readable `error` logs, and the frequent log `"failed_to_connect_server"` is also throttled to avoid log spamming.
 
+- [#16543](https://github.com/emqx/emqx/pull/16543) Improved robustness of cluster autoclean procedure. Previously, if the autoclean feature was disabled during the initial start of the node, it would never activate after a configuration change.
+
+#### Security
+
+- [#16625](https://github.com/emqx/emqx/pull/16625) Added `idp_signs_envelopes` and `idp_signs_assertions` options to the SAML SSO backend to control signature verification, which was previously not functioning correctly. Both options default to `false` for backward compatibility and must be explicitly enabled when the IdP signs SAML responses.
+
 #### Access Control
 
 - [#16304](https://github.com/emqx/emqx/pull/16304) Fixed an issue where Multi-Factor Authentication (MFA) could not be enabled after upgrading EMQX from versions earlier than 5.3.0 due to incompatible login-user database records.
+- [#16541](https://github.com/emqx/emqx/pull/16541) Fixed an issue where OIDC issuer URLs were automatically normalized with a trailing slash when saved to the configuration file, causing issuer mismatch errors when the OIDC provider's discovery document returned the issuer without a trailing slash.
 
 #### Observability
 
 - [#16418](https://github.com/emqx/emqx/pull/16418) Reduced the volume of logs generated when a resource exception occurs (`resource_exception`). These logs are now throttled, and some potentially large terms are redacted from them.
+- [#16535](https://github.com/emqx/emqx/pull/16535) Fixed formatter crash when logging `gen_rpc` errors. Previously, EMQX would crash with "FORMATTER CRASH" errors when `gen_rpc` logged certain error messages (e.g., transmission timeout errors). The formatter now handles these error messages correctly without crashing.
 
 #### Gateway
 
 - [#16609](https://github.com/emqx/emqx/pull/16609) Fixed JT/T 808 gateway parameter setting (0x8103) and query response (0x0104) message handling for CAN bus ID parameters (0x0110~0x01FF), which should use BYTE[8] data type with base64 encoding in JSON instead of string type.
+
+- [#16606](https://github.com/emqx/emqx/pull/16606) Fixed CoAP Gateway working in connection mode over DTLS.
+
+- [#16627](https://github.com/emqx/emqx/pull/16627) Added GBK character encoding support for JT/T 808 gateway.
+
+  The JT/T 808 protocol specifies GBK encoding for STRING type fields. A new `frame.string_encoding` configuration option is added:
+
+  - `utf8` (default): Pass through strings as-is (backward-compatible).
+  - `gbk`: Convert GBK-encoded strings from devices to UTF-8 for MQTT, and UTF-8 from MQTT to GBK for devices.
+
+  This affects string fields, including license plates, driver names, text messages, area names, and client parameters. MQTT payloads always use UTF-8 encoding regardless of this setting.
 
 ## 5.10.2
 
