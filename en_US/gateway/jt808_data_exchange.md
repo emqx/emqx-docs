@@ -234,14 +234,13 @@ Empty JSON
 
 ##### JT/T 808-2019
 
-|  Parameter ID Range  | Data Type |   Value Type in JSON    |                   Description                    |
-| :------------------: | :-------: | :---------------------: | :----------------------------------------------: |
-|   BYTE-type params   |   byte    |         integer         |            e.g. 0x0084, 0x0090–0x0095            |
-|   WORD-type params   |   word    |         integer         |            e.g. 0x0031, 0x0081–0x0082            |
-|  DWORD-type params   |   dword   |         integer         |        e.g. 0x0001–0x0007, 0x0018–0x001C         |
-|  STRING-type params  |  string   |         string          |    e.g. 0x0010–0x0017, 0x0040–0x0049, 0x0083     |
-|    0x0110–0x01FF     |  byte[8]  | string (base64 encoded) |  CAN bus ID independent acquisition parameters   |
-| Other unknown params |  byte[n]  | string (base64 encoded) | Reserved parameters or vendor-defined parameters |
+|           Field            | JSON Key name  | Value Type | Value Type in JSON |
+| :------------------------: | :------------: | :--------: | :----------------: |
+| Authentication code length |    code_len    |    byte    |      integer       |
+|    Authentication code     |      code      |   string   |       string       |
+|       Terminal IMEI        |      imei      |  byte(15)  |       string       |
+|  Software version length   | sw_version_len |    byte    |      integer       |
+|      Software version      |   sw_version   |   string   |       string       |
 
 **Note**: The 2019 version adds fields such as authentication code length, terminal IMEI, and software version information.
 
