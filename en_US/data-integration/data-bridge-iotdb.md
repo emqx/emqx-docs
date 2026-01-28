@@ -87,10 +87,14 @@ You can find more information about running [IoTDB in Docker on Docker Hub](http
 
 IoTDB supports two data models: Tree Model and Table Model.  Before creating a database, confirm the **SQL Dialect** (Tree or Table) to be used in the Connector and Sink, and create the corresponding database accordingly.
 
+- For the **Tree Model**, only a database is required.
+- For the **Table Model**, you must first create a database, then create tables for data ingestion.
+
 For detailed steps, see the IoTDB User Guide:
 
 - [Create a database for the Tree Model](https://iotdb.apache.org/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-create-database)
 - [Create a database for the Table Model](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-create-a-database)
+- [Create tables for the Table Model](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Table-Management_apache.html#_1-1-create-a-table)
 
 ## Create an IoTDB Connector
 

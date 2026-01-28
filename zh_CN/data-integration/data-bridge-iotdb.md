@@ -87,10 +87,14 @@ docker run -d --name iotdb-service \
 
 IoTDB 支持两种数据建模方式：树模型和表模型。  在创建数据库前，请先确认后续在连接器和 Sink 中使用的 **SQL 方言**（树模型或表模型），并根据所选模型创建对应的数据库。
 
+- 对于**树模型**，只需创建数据库即可。
+- 对于**表模型**，在创建数据库后，还需要创建表用于数据写入。
+
 具体步骤请参考 IoTDB 用户手册：
 
 - [树模型创建数据库](https://iotdb.apache.org/zh/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
 - [表模型创建数据库](https://iotdb.apache.org/zh/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
+- [表模型创建表](https://iotdb.apache.org/zh/UserGuide/latest-Table/Basic-Concept/Table-Management_apache.html#_1-1-%E5%88%9B%E5%BB%BA%E8%A1%A8)
 
 ## 创建 IoTDB 连接器
 
