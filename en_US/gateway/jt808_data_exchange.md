@@ -1148,10 +1148,10 @@ Empty JSON
 
 #### Data Compression Report `"msg_id": 2305` 0x0901
 
-|           Field           | JSON Ke | Value Type |   Value Type in JSON   |
-| :-----------------------: | :-----: | :--------: | :--------------------: |
-| Compressed Message Length | length  |   dword    |        integer         |
-|  Compressed Message Body  |  data   |   binary   | string(base64 encoded) |
+|           Field           | JSON Key | Value Type |   Value Type in JSON   |
+| :-----------------------: | :------: | :--------: | :--------------------: |
+| Compressed Message Length | length   |   dword    |        integer         |
+|  Compressed Message Body  | data     |   binary   | string(base64 encoded) |
 
 #### Platform RSA Public Key `"msg_id": 35328` 0x8A00
 
