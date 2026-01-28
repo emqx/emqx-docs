@@ -157,7 +157,7 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
    :::
 
-5. 为规则添加一个 Apache IoTDB Sink，用于将处理后的数据写入 IoTDB。详细步骤请参见[添加 Apache IoTDB Sink](#add-an-apache-iotdb-sink)。
+5. 为规则添加一个 Apache IoTDB Sink，用于将处理后的数据写入 IoTDB。详细步骤请参见[添加 Apache IoTDB Sink](#添加-apache-iotdb-sink)。
 6. 在**创建规则**页面中，确认配置信息后点击**保存**创建规则。
 
 规则创建完成后，将显示在**规则**列表中。点击**动作（Sink）**页签可查看该规则关联的 IoTDB Sink。
