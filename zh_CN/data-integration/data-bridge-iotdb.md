@@ -256,7 +256,7 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
    | attribute       | now       | hum         | text      | ${payload.hum}    |                                                              |
    | attribute       | now       | status      | text      | ${payload.status} |                                                              |
 
-   - **Column Category**: 列的数据模型，可选值：tag、field、attribute。tag 必须是字符串，推荐选择 filed 或者 attribute。
+   - **Column Category**: 列的数据模型，可选值：tag、field、attribute。tag 必须是字符串，推荐选择 field 或者 attribute。
    - **Timestamp**: 支持使用 ${var} 格式的占位符，要求是时间戳格式。也可以使用以下特殊字符插入系统时间：
      - now: 当前毫秒级时间戳
      - now_ms: 当前毫秒级时间戳
