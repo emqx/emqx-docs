@@ -424,7 +424,7 @@ Empty JSON
 |              Speed from Driving Record Function              |        speed         |    word    |         integer         |
 |        ID of Alarm Events Needing Manual Confirmation        |       alarm_id       |    word    |         integer         |
 |                Tire Pressure (Added in 2019)                 |    tire_pressure     |     -      | string (base64 encoded) |
-|             Carriage Temperature (Added in 2019)             |     carriage_tem     |    word    |         integer         |
+|             Carriage Temperature (Added in 2019)             |     carriage_temp    |    word    |         integer         |
 |    Overspeed Alarm Additional Information (Length 1 or 5)    |   overspeed_alarm    |     -      |           map           |
 |      Entry/Exit Area/Route Alarm Additional Information      |     in_out_alarm     |     -      |           map           |
 | Route Travel Time Too Short/Too Long Alarm Additional Information |   path_time_alarm    |     -      |           map           |
