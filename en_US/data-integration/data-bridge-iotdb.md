@@ -78,10 +78,19 @@ docker run -d --name iotdb-service \
               -e dn_schema_region_consensus_port=10750 \
               -e dn_data_region_consensus_port=10760 \
               -e dn_rpc_port=6667 \
-              apache/iotdb:1.1.0-standalone
+              apache/iotdb:2.0.5-standalone
 ```
 
 You can find more information about running [IoTDB in Docker on Docker Hub](https://hub.docker.com/r/apache/iotdb).
+
+### Create a Database
+
+IoTDB supports two data models: Tree Model and Table Model.  Before creating a database, confirm the **SQL Dialect** (Tree or Table) to be used in the Connector and Sink, and create the corresponding database accordingly.
+
+For detailed steps, see the IoTDB User Guide:
+
+- [Create a database for the Tree Model](https://iotdb.apache.org/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-create-database)
+- [Create a database for the Table Model](https://iotdb.apache.org/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-create-a-database)
 
 ## Create an IoTDB Connector
 
@@ -106,6 +115,7 @@ EMQX supports communication with IoTDB through the REST API or Thrift protocol.
    - **SQL Dialect**: Select the IoTDB data model that determines how EMQX writes device data into IoTDB.
      - `Tree Model`: Writes data as hierarchical time-series paths, suitable for path-based device and measurement management.
      - `Table Model`: Writes data into relational tables, suitable for managing device data by device type or category.
+   - **Database Name**: When the **SQL Dialect** is set to `Table Model`, you must specify the name of the database to connect to.
    - **Username** and **Password**: Enter credentials used by EMQX to authenticate with the Apache IoTDB server.
    - **IoTDB Version**: Select the version of your Apache IoTDB deployment.
    - **Enable TLS**: Enable this option to establish an encrypted connection to the Apache IoTDB server. For more information, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
@@ -166,10 +176,9 @@ You can also go to **Integrations** -> **Flow Designer** to view the topology gr
 
       * **SQL Dialect**: Select how the Apache IoTDB Sink writes data into IoTDB. This option must be consistent with the SQL dialect selected in the Connector.
 
-        * **Tree Model**: Writes data as time-series paths in IoTDB. Each Sink record is inserted into a device path, with measurements written as individual time series under that device.
-      * **Table Model**: Writes data into IoTDB relational tables. Each Sink record is inserted as a row in the specified table, with fields mapped to table columns.
-          * **Table**: The name of the IoTDB table to which the data will be written.
-
+        * `Tree Model`: Writes data as time-series paths in IoTDB. Each Sink record is inserted into a device path, with measurements written as individual time series under that device. When selecting this model, you can specify the **Device ID** field.
+        * `Table Model`: Writes data into IoTDB relational tables. Each Sink record is inserted as a row in the specified table, with fields mapped to table columns. When selecting this model, you must specify the **Table** field.
+        
       * **Device ID** (optional): Enter a specific device ID to be used as the device name for forwarding and inserting timeseries data into the IoTDB instance.
 
         :::tip
@@ -186,6 +195,8 @@ You can also go to **Integrations** -> **Flow Designer** to view the topology gr
 
         :::
 
+      - **Table**: The name of the IoTDB table to which the data will be written.
+
       - **Align Timeseries**: Disabled by default. Once enabled, the timestamp columns of a group of aligned timeseries are stored only once in IoTDB, rather than duplicating them for each individual timeseries within the group. For more information, see [Aligned timeseries](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries).
 
       - Configure the **Write Data** to specify the ways to generate IoTDB data from MQTT messages.
@@ -194,18 +205,18 @@ You can also go to **Integrations** -> **Flow Designer** to view the topology gr
 
         For example, consider this template:
 
-        | Timestamp | Measurement | Data Type | Value    |
-        | --------- | ----------- | --------- | -------- |
-        |           | index       | INT32     | ${index} |
-        |           | temperature | FLOAT     | ${temp}  |
-
-        :::tip
-
-        `Timestamp` and `Value` support placeholder syntax to fill it with variables.
-
-        If the `Timestamp` is omitted, it will be automatically filled with the current system time in milliseconds.
-
+        ::: tip Note
+        
+        The **Column Category** only appears when you select `Table Model` as the SQL dialect.
+        
         :::
+        
+        | Column Category | Timestamp | Measurement | Data Type | Value    |
+        | --------------- | --------- | ----------- | --------- | -------- |
+        | field           |           | index       | INT32     | ${index} |
+        |                 |           | temperature | FLOAT     | ${temp}  |
+
+        `Timestamp` and `Value` support placeholder syntax to fill it with variables. If the `Timestamp` is omitted, it will be automatically filled with the current system time in milliseconds.
 
         Then, your MQTT message can be structured as follows:
 
@@ -232,13 +243,20 @@ When configuring **Write Data**, you can use the batch setting feature to import
 
 2. Follow the instructions to download the batch setting template file, then fill in the data writing configuration in the template file. The default template file content is as follows:
 
-   | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
-   | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
-   | now       | temp        | float     | ${payload.temp}   | Fields, values, and data types are mandatory. Available data type options include: boolean, int32, int64, float, double, text |
-   | now       | hum         | float     | ${payload.hum}    |                                                              |
-   | now       | status      | boolean   | ${payload.status} |                                                              |
-   | now       | clientid    | test      | ${clientid}       |                                                              |
+   ::: tip Note
 
+   Below is the default template for `Table Model`.  The **Column Category** column is not available in `Tree Model`.
+
+   :::
+
+   | Column Category | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
+   | --------------- | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
+   | tag             | now       | clientid    | text      | ${clientid}       |                                                              |
+   | field           | now       | temp        | float     | ${payload.temp}   | Fields, values, and data types are mandatory. Available data type options include: boolean, int32, int64, float, double, text |
+   | attribute       | now       | hum         | text      | ${payload.hum}    |                                                              |
+   | attribute       | now       | status      | text      | ${payload.status} |                                                              |
+
+   - **Column Category**: The data model of the column. Supported values are `tag`, `field`, and `attribute`. `tag` must be a string; `field` or `attribute` is recommended.
    - **Timestamp**: Supports placeholders in ${var} format, requiring timestamp format. You can also use the following special characters to insert system time:
      - now: Current millisecond timestamp
      - now_ms: Current millisecond timestamp
@@ -290,7 +308,10 @@ You can use the built-in WebSocket client in the EMQX dashboard to test your Apa
       ::: tip
      
       The `Write Data` template is:
-          ```now, "temp", float, "${payload.value}"```
+     
+     ```
+      now, "temp", float, "${payload.value}"
+     ```
      
       :::
      

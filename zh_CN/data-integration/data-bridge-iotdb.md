@@ -78,10 +78,19 @@ docker run -d --name iotdb-service \
               -e dn_schema_region_consensus_port=10750 \
               -e dn_data_region_consensus_port=10760 \
               -e dn_rpc_port=6667 \
-              apache/iotdb:1.1.0-standalone
+              apache/iotdb:2.0.5-standalone
 ```
 
 有关如何通过 Docker 运行 IoTDB 的更多信息，请参阅： [IoTDB in Docker on Docker Hub](https://hub.docker.com/r/apache/iotdb)。
+
+### 创建数据库
+
+IoTDB 支持两种数据建模方式：树模型和表模型。  在创建数据库前，请先确认后续在连接器和 Sink 中使用的 **SQL 方言**（树模型或表模型），并根据所选模型创建对应的数据库。
+
+具体步骤请参考 IoTDB 用户手册：
+
+- [树模型创建数据库](https://iotdb.apache.org/zh/UserGuide/latest/Basic-Concept/Operate-Metadata_apache.html#_1-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
+- [表模型创建数据库](https://iotdb.apache.org/zh/UserGuide/latest-Table/Basic-Concept/Database-Management_apache.html#_1-1-%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93)
 
 ## 创建 IoTDB 连接器
 
@@ -101,15 +110,15 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
    - **描述**：（可选）填写连接器的简要说明。
    - **驱动**：选择用于连接 IoTDB 的协议。
      - `REST API`：在 **IoTDB REST 服务基础 URL** 中输入 IoTDB REST 服务地址，例如 `http://localhost:18080`。
-     - `Thrift 协议`：在**服务器地址**中输入 IoTDB Thrift 服务器地址，例如：`localhost:6667`
+     - `Thrift 协议`：在**服务器地址**中输入 IoTDB Thrift 服务器地址，例如：`localhost:6667`。
    - **SQL 方言**：选择 EMQX 向 IoTDB 写入设备数据时使用的数据模型。
-     - `树模型`：将数据写入为分层的时序路径，适用于基于路径的设备和测量点管理。
+     - `树模型`：将数据写入为分层的时序路径，适用于基于路径的设备和测点管理。
      - `表模型`：将数据写入关系表中，适用于按设备类型或设备类别管理数据。
+   - **数据库名字**：当 **SQL 方言**选择表模型时，需要配置所连接到的数据库名称。
    - **用户名**和**密码**：输入 EMQX 用于认证 Apache IoTDB 服务器的凭据。
    - **IoTDB 版本**：选择 Apache IoTDB 的部署版本。此处，选择 `v2.0.x`。
-   - **启用 TLS**：启用该选项以建立与 Apache IoTDB 服务器之间的加密连接。更多信息请参见 [启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
+   - **启用 TLS**：启用该选项以建立与 Apache IoTDB 服务器之间的加密连接。更多信息请参见[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。
    - 如需进行可选调优配置，请参见**高级设置**，详见[高级设置](#高级设置)。
-   - **数据库**：当 **SQL 方言** 选择表模型时，需要配置所连接到的数据库名称。
 
 5. （可选）点击**测试连接**，验证连接器是否能够成功连接到 Apache IoTDB 服务器。
 
@@ -165,10 +174,9 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
    - **SQL 方言**：选择 Apache IoTDB Sink 向 IoTDB 写入数据的方式。该选项必须与连接器中配置的 SQL 方言保持一致，否则数据将无法写入。
 
-     - **树模型**：以时序路径的形式向 IoTDB 写入数据。每条 Sink 记录会写入一个设备路径，测点作为该设备下的独立时间序列。
-     - **表模型**：将数据写入 IoTDB 的关系表中。每条 Sink 记录对应表中的一行数据，字段映射为表中的列。
-       - **表**：指定写入数据的 IoTDB 表名。
-
+     - `树模型`：以时序路径的形式向 IoTDB 写入数据。每条 Sink 记录会写入一个设备路径，测点作为该设备下的独立时间序列。当选择此模型，您可以填写**设备 ID** 字段。
+     - `表模型`：将数据写入 IoTDB 的关系表中。每条 Sink 记录对应表中的一行数据，字段映射为表中的列。当选择此模型，您必须填写**表**字段。
+     
    - **设备 ID**（可选）：指定用于写入时序数据的设备名称。
 
      ::: tip
@@ -185,26 +193,28 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
      :::
 
+   - **表**：指定写入数据的 IoTDB 表名。
+
    - **对齐时间序列**：默认禁用。启用后，一组对齐的时序数据的时间戳列将在 IoTDB 中仅存储一次，而不是在该组内的每个单独时序数据中重复存储。有关更多信息，请参见[对齐时序数据](https://iotdb.apache.org/UserGuide/V1.1.x/Data-Concept/Data-Model-and-Terminology.html#aligned-timeseries)。
 
 6. 为 Sink 配置**写入数据**以指定从 MQTT 消息生成 IoTDB 数据的方式。
 
-   您可以在**写入数据** 中定义一个模板，包括所需的每行的上下文信息。当提供此模板时，系统将通过应用它到MQTT 消息来生成 IoTDB 数据。写入数据的模版支持通过 CSV 文件批量设置，详细说明请参考[批量设置](#批量设置)。
+   您可以在**写入数据**中定义一个模板，包括所需的每行的上下文信息。当提供此模板时，系统将通过应用它到MQTT 消息来生成 IoTDB 数据。写入数据的模版支持通过 CSV 文件批量设置，详细说明请参考[批量设置](#批量设置)。
 
    例如，使用以下模板：
 
-   | 时间戳 | 字段        | 数据类型 | 值       |
-   | ------ | ----------- | -------- | -------- |
-   |        | index       | INT32    | ${index} |
-   |        | temperature | FLOAT    | ${temp}  |
+   ::: tip 注意
 
-   ::: tip
-
-   每列支持占位符语法以用变量填充。如果省略时间戳，它将自动填充为当前系统时间（毫秒）。
+   **列类别**列仅适用于 SQL 方言为表类型的情况。
 
    :::
 
-   然后，您的 MQTT 消息将如下所示：
+   | 列类别 | 时间戳 | 字段        | 数据类型 | 值       |
+   | ------ | ------ | ----------- | -------- | -------- |
+   | field  |        | index       | INT32    | ${index} |
+   |        |        | temperature | FLOAT    | ${temp}  |
+
+   每列支持占位符语法以用变量填充。如果省略时间戳，它将自动填充为当前系统时间（毫秒）。然后，您的 MQTT 消息将如下所示：
 
    ```json
    {
@@ -223,19 +233,26 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
 在 Apache IoTDB 中，可能需要同时写入数百条数据，在 Dashboard 上进行配置是具有挑战性的工作。为了解决这个问题，EMQX 提供了批量设置数据写入的功能。
 
-当配置 **写入数据** 时，您可以使用批量设置功能，从 CSV 文件中导入要进行插入操作的字段。
+当配置**写入数据**时，您可以使用批量设置功能，从 CSV 文件中导入要进行插入操作的字段。
 
-1. 点击 **写入数据** 表格的 **批量设置** 按钮，打开 **导入批量设置** 弹窗。
+1. 点击**写入数据**表格的**批量设置**按钮，打开**导入批量设置**弹窗。
 
 2. 根据指引，先下载批量设置模板文件，然后在模板文件中填入数据写入配置，默认的模板文件内容如下：
 
-   | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
-   | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
-   | now       | temp        | float     | ${payload.temp}   | 字段、值、数据类型是必填选项，数据类型可选的值为 boolean、 int32、 int64、 float、 double、 text |
-   | now       | hum         | float     | ${payload.hum}    |                                                              |
-   | now       | status      | boolean   | ${payload.status} |                                                              |
-   | now       | clientid    | text      | ${clientid}       |                                                              |
+   ::: tip 注意
 
+   以下为 **SQL 方言**设置为`表模型`时的默认模板。  当 **SQL 方言**设置为`树模型`时，不包含 **Column Category** 列。
+
+   :::
+
+   | Column Category | Timestamp | Measurement | Data Type | Value             | Remarks (Optional)                                           |
+   | --------------- | --------- | ----------- | --------- | ----------------- | ------------------------------------------------------------ |
+   | tag             | now       | clientid    | text      | ${clientid}       |                                                              |
+   | field           | now       | temp        | float     | ${payload.temp}   | 字段、值、数据类型是必填选项，数据类型可选的值为 boolean、 int32、 int64、 float、 double、 text |
+   | attribute       | now       | hum         | text      | ${payload.hum}    |                                                              |
+   | attribute       | Now       | status      | text      | ${payload.status} |                                                              |
+
+   - **Column Category**: 列的数据模型，可选值：tag、field、attribute。tag 必须是字符串，推荐选择 filed 或者 attribute。
    - **Timestamp**: 支持使用 ${var} 格式的占位符，要求是时间戳格式。也可以使用以下特殊字符插入系统时间：
      - now: 当前毫秒级时间戳
      - now_ms: 当前毫秒级时间戳
@@ -249,8 +266,8 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
 
    注意，仅支持 1M 以内的 CSV 格式文件，文件中数据不能超过 2000 行。
 
-3. 将填好的模板文件保存并上传到 **导入批量设置** 弹窗中，点击**导入**完成批量设置。
-4. 导入完成后，您可以在 **写入数据** 表格中对数据进行进一步的调整。
+3. 将填好的模板文件保存并上传到**导入批量设置**弹窗中，点击**导入**完成批量设置。
+4. 导入完成后，您可以在**写入数据**表格中对数据进行进一步的调整。
 
 ## 测试规则
 
@@ -287,7 +304,10 @@ EMQX 支持通过 REST API 或 Thrift 协议与 IoTDB 通信。
       ::: tip
 
       `Write Data` 的模版为：
-          ```now, "temp", float, "${payload.value}"```
+
+     ```
+     now, "temp", float, "${payload.value}"
+     ```
 
       :::
 
