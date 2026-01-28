@@ -145,7 +145,7 @@ Empty JSON
 | Total Number of Re-transmission Packages |  length  |      byte      |      integer       |
 |     Re-transmission Package ID List      |   ids    | byte(2*length) |  list of integer   |
 
-##### T/T 808-2019
+##### JT/T 808-2019
 
 |                  Field                   | JSON Key |   Value Type   | Value Type in JSON |
 | :--------------------------------------: | :------: | :------------: | :----------------: |
