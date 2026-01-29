@@ -20,19 +20,18 @@ EMQX 提供内置的监控和告警功能，用于监视内部状态变化，如
 
 :::
 
-| **告警**                            | 级别 | 描述                                               | **详情**                | **阈值**                                                     |
-| ----------------------------------- | ---- | -------------------------------------------------- | ----------------------- | ------------------------------------------------------------ |
-| high_system_memory_usage            | 警告 | 系统内存使用过高                                   | "系统内存使用高于 ~p%"  | `os_mon.sysmem_high_watermark = 70%`                         |
-| high_process_memory_usage           | 警告 | 单个 Erlang 进程内存使用过高（占系统内存的百分比） | 进程内存使用高于 ~p%    | `os_mon.procmem_high_watermark = 5%`                         |
-| high_cpu_usage                      | 警告 | CPU 使用率过高                                     | ~p% CPU 使用率          | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
-| too_many_processes                  | 警告 | 进程过多                                           | ~p% 进程使用率          | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
-| license_quota                       | 警告 | License 超过配额                                   | License：连接数超过 %   | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
-| license_expiry                      | 严重 | License 过期                                       | License 将于 % 过期     | -                                                            |
-| mnesia_transaction_manager_overload | 警告 | mnesia 事务管理器过载；邮箱消息数量：N             | mailbox size = N        | `sysmon.mnesia_tm_mailbox_threshold = 500`                   |
-| broker_pool_overload                | 警告 | broker 消息处理池过载；邮箱消息数量：N             | mailbox size = N        | `sysmon.broker_pool_mailbox_threshold = 500`                 |
-| partition                           | 严重 | 节点发生分区                                       | 节点发生分区 ~s         | -                                                            |
-| resource                            | 严重 | 资源断开连接                                       | 资源 ~s（~s）已断开连接 | -                                                            |
-| conn_congestion                     | 严重 | 连接过程拥塞                                       | 连接拥塞                | -                                                            |
+| **告警**                  | 级别 | 描述                                               | **详情**                           | **阈值**                                                     |
+| ------------------------- | ---- | -------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------ |
+| high_system_memory_usage  | 警告 | 系统内存使用过高                                   | "系统内存使用高于 ~p%"             | `os_mon.sysmem_high_watermark = 70%`                         |
+| high_process_memory_usage | 警告 | 单个 Erlang 进程内存使用过高（占系统内存的百分比） | 进程内存使用高于 ~p%               | `os_mon.procmem_high_watermark = 5%`                         |
+| high_cpu_usage            | 警告 | CPU 使用率过高                                     | ~p% CPU 使用率                     | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
+| too_many_processes        | 警告 | 进程过多                                           | ~p% 进程使用率                     | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
+| license_quota             | 警告 | License 超过配额                                   | License：连接数超过 %              | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
+| license_expiry            | 严重 | License 过期                                       | License 将于 % 过期                | -                                                            |
+| License_tps               | 警告 | TPS 使用量超过 License 限制                        | License: TPS 限制（例如 10）已超出 | -                                                            |
+| partition                 | 严重 | 节点发生分区                                       | 节点发生分区 ~s                    | -                                                            |
+| resource                  | 严重 | 资源断开连接                                       | 资源 ~s（~s）已断开连接            | -                                                            |
+| conn_congestion           | 严重 | 连接过程拥塞                                       | 连接拥塞                           | -                                                            |
 
 ## 获取告警信息
 
@@ -43,6 +42,8 @@ EMQX 提供多种方式获取告警并查看详细信息。其中一种方式是
 ### 在 Dashboard 中查看告警
 
 在 EMQX Dashboard 上，点击**监控** -> **告警**。选择**当前告警**或**历史告警**页签，您可以查看当前活动的告警和历史告警列表。
+
+要了解如何通过 EMQX Dashboard 管理告警，请参见[告警](../dashboard/alarm_dashboard.md)。
 
 <img src="./assets/view-alarms.png" alt="view-alarms" style="zoom:50%;" />
 
@@ -79,7 +80,7 @@ EMQX 提供多种方式获取告警并查看详细信息。其中一种方式是
 
 <img src="./assets/view-alarms-api.png" alt="view-alarms-api" style="zoom:45%;" />
 
-### 通过 Webhook 集成发送告警事件通知
+### 集成 Webhook 发送告警事件通知
 
 从 EMQX 版本 5.8.5 开始，规则引擎支持两个新的客户端事件：[系统告警激活事件](../data-integration/rule-sql-events-and-fields.md#alarm-activated-event-events-sys-alarm-activated)和[系统告警解除事件](../data-integration/rule-sql-events-and-fields.md#alarm-deactivated-event-events-sys-alarm-deactivated)。这些事件允许您通过 Webhook 集成，将告警活动的通知发送到外部 HTTP 服务。
 

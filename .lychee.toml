@@ -1,0 +1,99 @@
+# Lychee link checker configuration
+# https://lychee.cli.rs/
+
+# Exclude all private IPs from checking.
+# Equivalent to setting `exclude_private`, `exclude_link_local`, and
+# `exclude_loopback` to true.
+exclude_all_private = true
+
+# Domains to exclude from checking
+# - Login/signup pages that redirect or require auth
+# - Known dynamic or rate-limited endpoints
+exclude = [
+  # Auth/signup pages
+  "^https://accounts\\.emqx\\.com",
+  "^https://cloud-intl\\.emqx\\.com",
+
+  # internal
+  "^http://otel-collector",
+
+  # GitHub edit links (may have branch-specific paths)
+  "^https://github\\.com/emqx/emqx-docs/edit/",
+
+  # GitHub pull requests and issues (auto-generated in changelogs, too many to check)
+  "^https://github\\.com/emqx/emqx/pull/",
+  "^https://github\\.com/emqx/emqx/issues/",
+
+  # @CE_VERSION@ and @EE_VERSION@ macro
+  "@CE_VERSION@",
+  "@EE_VERSION@",
+  "@EE_MINOR_VERSION@",
+  "@CE_MINOR_VERSION@",
+
+  # mqttx web client
+  "^https://mqttx.app/web-client",
+
+  # these just fail
+  "^https://couchbase.com/",
+  "^https://docs.datalayers.cn/datalayers/latest/development-guide/writing-with-influxdb-line-protocol.html",
+  "^https://docs.datalayers.cn/datalayers/latest/getting-started/docker.html",
+
+  # URLs that are templates with placeholders
+  "\\$\\{",
+  "\\{\\{",
+  "<.*>",
+]
+
+# File patterns to exclude from checking
+exclude_path = [
+  # Generated/vendored content
+  "node_modules",
+  ".git",
+  # Configuration manual (auto-generated, may have stale links)
+  "cfg-manual-docgen",
+  "hocon",
+  "^[a-z][a-z]_[A-Z][A-Z]/changes",
+  "^[a-z][a-z]_[A-Z][A-Z]/extensions/lang-lua.md"
+]
+
+# Accept these HTTP status codes as valid
+accept = ["200", "418", "429"]
+
+# Timeout per request in seconds
+timeout = 30
+
+# Maximum number of retries for failed requests
+max_retries = 3
+
+# Retry wait time in seconds between retries
+retry_wait_time = 5
+
+# Maximum number of concurrent requests
+# Set to '1' to avoid being throttled by e.g. Github
+max_concurrency = 1
+
+# Don't check fragments/anchors (they're generated during build from headers)
+# Only verify that the target file exists
+include_fragments = false
+
+# User agent to use for requests (some sites block default/bot user agents)
+user_agent = "Mozilla/5.0 (compatible; lychee-link-checker; +https://github.com/lycheeverse/lychee)"
+
+# Cache results to speed up subsequent runs
+cache = true
+
+# Maximum cache age in seconds (1 day)
+max_cache_age = "7d"
+
+# Don't require HTTPS (some legitimate sites still use HTTP)
+require_https = false
+
+# Follow redirects
+max_redirects = 5
+
+# Check links inside `<code>` and `<pre>` blocks as well as Markdown code
+# blocks.
+include_verbatim = false
+
+# Fallback extensions to apply when a URL does not specify one.
+fallback_extensions = ["md"]

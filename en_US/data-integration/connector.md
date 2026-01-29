@@ -10,7 +10,7 @@ Taking MySQL Sink as an example, the relationship between the connector, rules, 
 
 ![EMQX Connector Concept](./assets/connector-sink.jpg)
 
-### Features and Advantages
+### Features and Benefits
 
 When creating Sinks/Sources, users can choose an existing connector without worrying about the details of the underlying connection. The benefits of this design are:
 

@@ -23,7 +23,7 @@ Please use the updated `spb_encode` and `spb_decode` functions instead.
 
 ## Sparkplug B Functions
 
-EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `spb_encode` and `spb_decode`.  The [Practical Examples](#practical-examples) section helps you to understand how to use these functions in different scenarios.
+EMQX provides two rule engine SQL functions for encoding and decoding Sparkplug B data: `spb_encode` and `spb_decode`.  The [practical examples](#examples-for-using-spb_decode-and-spb_encode) helps you to understand how to use these functions in different scenarios.
 
 The Sparkplug B encoding and decoding functions can be used to perform a wide variety of tasks due to the flexibility of the rule engine and its `jq` function. To learn more about the rule engine and its `jq` function, refer to the following pages:
 
@@ -62,7 +62,190 @@ from t
 
 In the example above, `payload` refers to the data that you wish to encode into a Sparkplug B message.
 
-## Practical Examples
+## Sparkplug B Alias Mapping
+
+The Sparkplug B specification allows devices to assign a numeric `alias` to each metric when they come online (by sending NBIRTH / DBIRTH messages). For subsequent data updates (sent as NDATA / DDATA messages), devices may publish only the `alias` instead of the full metric name (`name`) to reduce message size and network overhead.
+
+To interpret these alias-only updates correctly, the receiver must keep track of Sparkplug B session state so that each alias can be resolved back to its original metric name.
+
+In practice, EMQX acts as a central processing and distribution hub for Sparkplug B data. Using the Rule Engine, EMQX forwards decoded data to non-Sparkplug B clients, including standard MQTT clients and data platforms. These downstream systems typically do not implement Sparkplug B state management, which makes alias-only data difficult to consume.
+
+Starting with EMQX 6.0.2, the `spb_decode` function has been enhanced to support Sparkplug B alias mapping. This enhancement allows EMQX to automatically restore metric names during decoding, making the resulting data easier for downstream systems to consume.
+
+### How Sparkplug B Alias Mapping Works
+
+When alias mapping is enabled, EMQX processes Sparkplug B messages as follows:
+
+1. **Process NBIRTH / DBIRTH messages**
+
+   When a client publishes NBIRTH or DBIRTH messages, EMQX examines the metrics in the payload and records alias-to-name mappings for metrics that define both fields.
+
+2. **Maintain mappings per session**
+
+   Alias mappings are maintained per MQTT client session and follow Sparkplug B semantics:
+
+   - Node-level metrics (NBIRTH / NDATA) and device-level metrics (DBIRTH / DDATA) are tracked separately.
+   - Mappings from different clients are fully isolated and do not interfere with each other.
+
+3. **Enhance `spb_decode` output**
+
+   When the Rule Engine invokes `spb_decode` on NDATA or DDATA messages, and a metric contains an `alias` but no `name`, EMQX automatically restores the corresponding metric name using the previously recorded mapping.
+
+   As a result, decoded messages always include clear and readable metric names, making them suitable for rule processing, transformation, and forwarding.
+
+4. **Clean up on session end**
+
+   When a client disconnects, its associated alias mappings are removed. EMQX does not preserve or restore Sparkplug B state after the session ends.
+
+### Configure Alias Mapping
+
+Alias mapping is enabled by default. If you do not want EMQX to track and restore Sparkplug B metric aliases, you can disable it in the configuration file:
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_alias_mapping = false
+  }
+}
+```
+
+> **Note**:
+>
+> - Alias mappings are created only from NBIRTH / DBIRTH messages received while alias mapping is enabled.
+> - If a client has already sent its birth messages, it must reconnect and publish NBIRTH / DBIRTH again for alias mapping to apply.
+
+### Alias Mapping Example
+
+This example demonstrates how to use EMQX Dashboard and MQTTX to convert alias-only DDATA messages into JSON data containing full metric names, and forward the result to non-Sparkplug B clients.
+
+#### Objective
+
+- **Sparkplug B device**: declares `name + alias` in DBIRTH and publishes only `alias` in DDATA.
+- **EMQX**: uses `spb_decode` to automatically restore metric names.
+- **Downstream subscribers**: receive standard JSON messages without needing Sparkplug B knowledge.
+
+#### Prerequisites
+
+- EMQX 6.0.2 or later, with Sparkplug B alias mapping enabled (`enable_alias_mapping = true`)
+- [MQTTX](https://mqttx.app/)
+
+#### Step 1: Create a Rule in EMQX Dashboard
+
+1. Click **Integration** -> **Rules** from the Dashboard left menu.
+
+2. Click **+ Create** to create a new rule.
+
+3. In the **SQL Editor**, enter:
+
+   ```sql
+   SELECT
+     spb_decode(payload) AS decoded
+   FROM "spBv1.0/+/DDATA/+/+"
+   ```
+
+   > **Note**:
+   >
+   > - The rule matches all Sparkplug B DDATA messages.
+   > - `spb_decode(payload)` decodes the Sparkplug B payload and, when alias mapping is enabled, automatically restores metric names from aliases.
+
+4. Click **+ Add Action** to append an action to the rule.
+
+5. Select **Republish** as the type of action.
+
+6. Configure the action:
+
+   - **Topic**: `decoded/sparkplug/data`
+   - **Payload**: `${decoded}`
+
+7. Click **Add**.
+
+8. Click **Save** to complete rule creation.
+
+   ![sparkplugb_alias_mapping_create_rule](./assets/sparkplugb_alias_mapping_create_rule.png)
+
+#### Step 2: Prepare a Subscriber with MQTTX
+
+1. Open MQTTX and create a new connection to the EMQX broker.
+2. Subscribe to the topic: `decoded/sparkplug/data`.
+
+This subscriber represents a **non-Sparkplug B client** that expects plain JSON data.
+
+#### Step 3: Simulate a Sparkplug B Device with MQTTX
+
+The payloads below are shown as logical JSON for readability. When publishing real messages, use Sparkplug B Protobuf encoding (Base64).
+
+1. Send DBIRTH (declare aliases) to the topic: `spBv1.0/group1/DBIRTH/eon1/device1`.
+
+   **Logical payload (example)**
+
+   ```json
+   {
+     "metrics": [
+       {
+         "name": "Device/Temperature",
+         "alias": 0,
+         "datatype": 9,
+         "value": 72.5
+       },
+       {
+         "name": "Device/Pressure",
+         "alias": 1,
+         "datatype": 9,
+         "value": 101.3
+       }
+     ]
+   }
+   ```
+
+   > **Notes**:
+   >
+   > - In Sparkplug B, `datatype` is defined as an unsigned integer. The value `9` represents the Float data type, as specified by the Sparkplug B specification.
+   > - EMQX records the alias-to-name mappings at this point.
+   > - This step **must be performed before sending DDATA**.
+
+2. Send DDATA (alias only) to the topic: `spBv1.0/group1/DDATA/eon1/device1`.
+
+   **Logical payload (example)**
+
+   ```json
+   {
+     "metrics": [
+       { "alias": 0, "value": 73.1 },
+       { "alias": 1, "value": 100.9 }
+     ]
+   }
+   ```
+
+#### Step 4: Verify the Decoded Result
+
+In MQTTX, the subscriber to `decoded/sparkplug/data` will receive:
+
+```json
+{
+  "metrics": [
+    {
+      "alias": 0,
+      "name": "Device/Temperature",
+      "value": 73.1
+    },
+    {
+      "alias": 1,
+      "name": "Device/Pressure",
+      "value": 100.9
+    }
+  ]
+}
+```
+
+You can observe that:
+
+- The original DDATA message did **not** include `name`.
+- `spb_decode` automatically restored:
+  - `"Device/Temperature"`
+  - `"Device/Pressure"`
+- Downstream subscribers do not need to maintain Sparkplug B state or interpret aliases.
+
+## Examples for Using `spb_decode` and `spb_encode`
 
 This section provides practical examples for handling Sparkplug B messages using the `spb_decode` and `spb_encode` functions. Note that the examples given are just a small subset of what you can do.
 

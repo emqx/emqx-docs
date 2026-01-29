@@ -88,7 +88,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /> 内蔵RocksDBバックエンドまたは外部データベース</td>
     <td>N/A</td>
     <td>N/A</td>
-    <td> <a href="https://docs.emqx.com/en/emqx/latest/durability/durability_introduction.html">安定性と信頼性の向上</a></td>
+    <td> <a href="../durability/durability_introduction.md">安定性と信頼性の向上</a></td>
   </tr>
   <tr>
     <td><b>スキーマレジストリ</b></td>
@@ -1276,7 +1276,7 @@
     <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
     <td>N/A</td>
     <td>N/A</td>
-    <td><a href="https://hub.docker.com/_/emqx">emqx - Official Image | Docker Hub</a><a href="https://hub.docker.com/r/emqx/emqx">Docker</a></td>
+    <td><a href="https://hub.docker.com/r/emqx/emqx-enterprise">Docker Hub</a></td>
   </tr>
   <tr>
     <td><b>Kubernetesオペレーター</b></td>
@@ -1284,13 +1284,6 @@
     <td>N/A</td>
     <td>N/A</td>
     <td><a href="https://www.emqx.com/en/emqx-kubernetes-operator">EMQX Kubernetes Operator</a></td>
-  </tr>
-  <tr>
-    <td><b>Terraform</b></td>
-    <td><img src="./assets/check_mark_64.png" style="zoom:40%;" /></td>
-    <td>N/A</td>
-    <td>N/A</td>
-    <td><a href="https://www.emqx.com/en/emqx-terraform">EMQX Terraform</a></td>
   </tr>
 </tbody>
 </table>

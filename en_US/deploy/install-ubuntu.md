@@ -6,7 +6,6 @@ Supported versions:
 
 - Ubuntu 24.04
 - Ubuntu 22.04
-- Ubuntu 20.04
 
 ## Install with Apt Package Manager
 
@@ -38,7 +37,7 @@ EMQX supports installation via deb packages or tar.gz packages. For installation
 
 1. Go to the official download page and select the [**Ubuntu** tab](https://www.emqx.com/en/downloads-and-install/enterprise?os=Ubuntu).
 2. Select the latest version `@EE_VERSION@` and select the `deb` package according to the required version and CPU architecture in the **Package Type** dropdown.
-3. Click the link below for downloading. You can also follow the command-line guide steps for downloading and installing.
+3. Click the link below to download. You can also follow the command-line guide steps for downloading and installing.
 
 #### Start EMQX
 

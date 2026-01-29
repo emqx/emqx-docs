@@ -10,9 +10,9 @@ This page lists features supported across different deployment types in detail.
 | **MQTT over QUIC**               | ✅                                                | ✅                              | ✅                                  | Globally pioneering support<br>In development for Cloud      |
 | **MQTT Add-ons**                 | ✅                                                | ❌                              | ✅                                  | [Shared subscription](../messaging/mqtt-shared-subscription.md)<br>[Exclusive subscription](../messaging/mqtt-exclusive-subscription.md)<br>[Delayed publish](../messaging/mqtt-delayed-publish.md)<br>[Auto-subscription](../messaging/mqtt-auto-subscription.md)<br>[Topic rewrite](../messaging/mqtt-topic-rewrite.md)<br>More customization options |
 | **Multi-protocol Gateways**      | ✅                                                | ❌                              | ✅                                  | More industry device access                                  |
-| **Multi-tenancy**                | ✅                                                | ❌                              | ✅                                  | Higher system flexibility and utilization (Coming soon)      |
+| **Multi-tenancy**                | ✅                                                | ❌                              | ✅                                  | Higher system flexibility and utilization                    |
 | **Cluster Linking**              | ✅                                                | ❌                              | ✅                                  | Seamless connection of devices and application data          |
-| **Message Queue**                | ✅                                                | ❌                              | ✅                                  | Unified architecture for data transmission and analysis (Coming soon) |
+| **Message Queue**                | ✅                                                | ❌                              | ✅                                  | Unified architecture for data transmission and analysis      |
 | **Stream Processing**            | ✅                                                | ❌                              | ✅                                  | Higher reliability and disaster recovery capabilities<br>(Coming soon) |
 | **Data Persistence**             | ✅ Built-in RocksDB backend or external databases | N/A                            | N/A                                | [Improved stability and reliability](../durability/durability_introduction.md) |
 | **Schema Registry**              | ✅                                                | ❌                              | ✅                                  | [Schema Registry](../data-integration/schema-registry.md) ensures data consistency and compatibility |
@@ -24,7 +24,7 @@ This page lists features supported across different deployment types in detail.
 | **Kafka Integration**            | ✅                                                | ✅                              | ✅                                  | [Stream MQTT Data into Apache Kafka](../data-integration/data-bridge-kafka.md) |
 | **Enterprise Data Integrations** | ✅ 40+                                            | ✅                              | ✅ 40+                              | [Accelerate business development and delivery speed](https://www.emqx.com/en/integrations) |
 | **Troubleshooting**              | ✅                                                | ❌                              | ✅                                  | [Log Trace](../observability/tracer.md)<br>[Slow Subscriptions](../observability/slow-subscribers-statistics.md) |
-| **Cloud-Native & K8s**           | ✅                                                | N/A                            | N/A                                | [Reduce system deployment and management costs](https://www.emqx.com/en/deployments) |
+| **Cloud-Native & K8s**           | ✅                                                | N/A                            | N/A                                | [Reduce system deployment and management costs](../deploy/kubernetes/kubernetes.md) |
 | **Edge Computing**               | ✅                                                | ✅                              | ✅                                  | Reduce data transmission latency and costs<br>[Neuron](https://www.emqx.com/en/products/neuronex)<br>[NanoMQ](https://www.emqx.com/en/products/nanomq) |
 
 ## Scalability and Performance
@@ -97,7 +97,7 @@ This page lists features supported across different deployment types in detail.
 | Authentication / Authorization       | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
 | ------------------------------------ | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
 | **Username / Password**              | ✅                        | ✅                              | ✅                                  | [Password-Based Authentication](../access-control/authn/pwoverview.md) |
-| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](../access-control/authn/jwt.md)         |
+| **JWT**                              | ✅                        | ❌                              | ✅                                  | [JWT Authentication](../access-control/authn/jwt.md) |
 | **MQTT 5.0 Enhanced Authentication** | ✅                        | N/A                            | N/A                                | [MQTT 5.0 Enhanced Authentication](../access-control/authn/scram.md) |
 | **LDAP Authentication**              | ✅                        | ❌                              | ✅ In product roadmap               |                                                              |
 | **PSK Authentication**               | ✅                        | ❌                              | ✅                                  | [Enable PSK Authentication](../network/psk-authentication.md#enable-psk-authentication) |
@@ -206,9 +206,8 @@ As EMQX evolves, it supports an expanding range of data integrations, including 
 
 | Cloud Native & K8s      | Self-Hosted (Enterprise) | MQTT as a Service (Serverless) | MQTT as a Service (Dedicated Flex) | Notes and Links                                              |
 | ----------------------- | ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------------------------------------ |
-| **Docker**              | ✅                        | N/A                            | N/A                                | [emqx - Official Image \| Docker Hub](https://hub.docker.com/_/emqx)<br>[Docker](https://hub.docker.com/r/emqx/emqx) |
+| **Docker**              | ✅                        | N/A                            | N/A                                | [Docker Hub](https://hub.docker.com/r/emqx/emqx-enterprise) |
 | **Kubernetes Operator** | ✅                        | N/A                            | N/A                                | [EMQX Kubernetes Operator](https://www.emqx.com/en/emqx-kubernetes-operator) |
-| **Terraform**           | ✅                        | N/A                            | N/A                                | [EMQX Terraform](https://www.emqx.com/en/emqx-terraform)     |
 
 ## Cloud Platform Availability
 

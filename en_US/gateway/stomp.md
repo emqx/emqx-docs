@@ -62,10 +62,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/stomp' \
 
 ### Client Libraries
 
-After establishing the STOMP gateway, you can use the STOMP client tools to test the connections and ensure everything works as expected. Below are some of the recommended STOMP client tools. 
-
-- [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
-- [stomp.py](https://github.com/jasonrbriggs/stomp.py)
+After establishing the STOMP gateway, you can use the STOMP client tools to test the connections and ensure everything works as expected, for example [stomp.py](https://github.com/jasonrbriggs/stomp.py).
 
 ### Publish/Subscribe
 
@@ -128,7 +125,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **TCP Settings** 
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
+- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **TCP_NODELAY**: Set whether to enable the `TCP_NODELAY` flat for the connection, that is, whether the client needs to wait for the acknowledgment of the previous data before sending additional data; default: **false**, optional values: **true**, **false**. 
 - **SO_REUSEADDR**: Set whether to allow local reuse of port numbers. <!--not quite sure what this means-->

@@ -14,7 +14,7 @@ Topic rewriting only applies to the actual topics when it comes to client subscr
 
 For example, when a client subscribes/unsubscribes to a shared subscription topic filter like `$share/group/t/1` or `$queue/t/2`, it will only attempt to match and rewrite `t/1` or `t/2`, ignoring `$share/group/` and `$queue/`.
 
-For more information about shared subscriptions and `$queue`, please refer to [Shared Subscriptions](./mqtt-shared-subscription).
+For more information about shared subscriptions and `$queue`, please refer to [Shared Subscriptions](./mqtt-shared-subscription.md).
 
 :::
 

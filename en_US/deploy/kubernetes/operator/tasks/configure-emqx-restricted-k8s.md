@@ -108,27 +108,29 @@ kubectl -n emqx wait --for=condition=Ready pods -l "control-plane=controller-man
 
 ## Configure EMQX Cluster
 
-+ Save the following content as a YAML file and deploy it with the `kubectl apply` command
+1. Save the following content as a YAML file and deploy it with the `kubectl apply` command:
 
-  ```yaml
-  apiVersion: apps.emqx.io/v2beta1
-  kind: EMQX
-  metadata:
-    name: emqx
-    namespace: emqx
-  spec:
-    image: ${REGISTRY}/emqx/emqx-enterprise:${EMQX_VERSION}
-    config:
-      data: |
-        license {
-          key = "..."
-        }
-  ```
+   ```bash
+   apiVersion: apps.emqx.io/v2beta1
+   kind: EMQX
+   metadata:
+     name: emqx
+     namespace: emqx
+   spec:
+     image: ${REGISTRY}/emqx/emqx-enterprise:${EMQX_VERSION}
+     config:
+       data: |
+         license {
+           key = "..."
+         }
+   ```
 
-+ Wait for the EMQX cluster to be ready, you can check the status of EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
+2. Wait for the EMQX cluster to be ready. You can check the status of the EMQX cluster through `kubectl get` command. Make sure `STATUS` is `Running`. This may take some time.
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                                             STATUS    AGE
-  emqx   my.private.registry/emqx/emqx-enterprise:5.10.0   Running   10m
-  ```
+   ```bash
+   $ kubectl get emqx emqx
+   NAME   IMAGE                                             STATUS    AGE
+   emqx   my.private.registry/emqx/emqx-enterprise:5.10.0   Running   10m
+   ```
+
+   

@@ -154,7 +154,7 @@ This section demonstrates how to create a rule to specify the data to be saved i
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
 
-You can also click **Integration** -> **Flow Designer** to view the topology and you can that the messages under topic `/devices/+/events` are sent and saved to GCP Pub/Sub after parsing by rule `my_rule`.
+You can also click **Integration** -> **Flow Designer** to view the topology and you can see that the messages under topic `/devices/+/events` are sent and saved to GCP Pub/Sub after parsing by rule `my_rule`.
 
 ## Test the Producer Rule
 
