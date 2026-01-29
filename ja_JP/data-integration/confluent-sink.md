@@ -294,7 +294,7 @@ EMQXはConfluent/Kafkaとのデータ連携に関する豊富な学習リソー�
 
 - [MQTTとKafkaを使ったコネクテッドビークルのストリーミングデータパイプライン構築](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
 - [MQTTとKafka｜IoTメッセージングとストリームデータ連携の実践](https://www.emqx.com/en/blog/mqtt-and-kafka)
-- [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka連携](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
+- [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka連携](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
 **ベンチマークレポート:**
 

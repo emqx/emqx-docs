@@ -2,11 +2,9 @@
 
 This page walks you through the practical usage of the Message Queue feature in EMQX, from creating queues to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
-## Manually Create Message Queue via Dashboard
+## Manually Create Message Queues via Dashboard
 
-Message Queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queue via Dashboard](#automatically-create-message-queue-via-dashboard).
-
-To create a new Message Queue manually using the EMQX Dashboard:
+Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queues via Dashboard](#automatically-create-message-queues-via-dashboard).
 
 1. Navigate to **Message Queue** in the left menu.
 
@@ -120,9 +118,9 @@ Queue Key Expressions are evaluated against the following message structure:
 
 </details>
 
-## Automatically Create Message Queue via Dashboard
+## Automatically Create Message Queues via Dashboard
 
-Starting from EMQX 6.0.1, Message Queues can be automatically created when clients subscribe to a `$q/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
+Starting from EMQX 6.0.1, message queues can be automatically created when clients subscribe to a `$q/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
 
 The queues may be auto-created either as regular queues or last-value semantics queues. 
 
@@ -163,13 +161,11 @@ This option can be enabled manually if you prefer regular queues where messages 
 
 ## Configure Message Queue Settings
 
-This section explains how to configure global settings that apply to all Message Queues in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
+This section explains how to configure global settings that apply to all message queues in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
 ### Dashboard
 
 You can update Message Queue settings directly from the EMQX Dashboard without restarting the broker. This is useful for making changes to system-wide behavior at runtime.
-
-To configure global settings for Message Queues via the Dashboard:
 
 1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
 
@@ -232,7 +228,7 @@ mq {
   Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
 - **`max_queue_count`**: (Optional) Sets the maximum number of queues that can be created.
 
-## Manage Message Queue via REST API
+## Manage Message Queues via REST API
 
 EMQX provides a set of REST APIs to manage the lifecycle of Message Queues, including creation, retrieval, update, and deletion.
 

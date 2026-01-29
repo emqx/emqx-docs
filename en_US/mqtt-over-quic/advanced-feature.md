@@ -2,6 +2,8 @@
 
 As MQTT brokers evolve, EMQX stays ahead of the curve, introducing new features and capabilities to meet the complex demands of IoT applications. This chapter delves into the following powerful features: 
 
+- [Message Queue](../message-queue/message-queue-concept.md) introduces a built-in message queuing mechanism that enables reliable message buffering, decoupling of producers and consumers, and improved resilience for scenarios involving burst traffic or temporarily offline clients.
+- [MQTT Streams](../mqtt-stream/mqtt-stream-concept.md) provides a stream-processing capability for MQTT data, allowing you to persist, replay, and process MQTT messages as ordered streams for real-time analytics and event-driven applications.
 - [MQTT over QUIC](./introduction.md) introduces this groundbreaking feature in EMQX and explains how to enable it in EMQX.
 - [Cluster Linking](../cluster-linking/introduction.md) introduces the feature that connects multiple, separate clusters and facilitates client communication on geographically dispersed clusters.
 - [MQTT-based File Transfer](../file-transfer/introduction.md) provides insights into transferring large files to EMQX using the MQTT protocol.
