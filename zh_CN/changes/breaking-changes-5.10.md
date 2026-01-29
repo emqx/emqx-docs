@@ -1,5 +1,9 @@
 # EMQX 5.10 中的不兼容变更
 
+## 5.10.3
+
+- [#16491](https://github.com/emqx/emqx/pull/16491) 停止为 macOS 13（Ventura）发布安装包。
+
 ## 5.10.2
 
 - [#16062](https://github.com/emqx/emqx/pull/16062) 修复了一个问题：RocketMQ 动作忽略了配置的 payload 模板，错误地发送了整个规则的输出结果。
