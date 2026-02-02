@@ -344,7 +344,7 @@ done
 
 ## 验证 curl 是否支持 MQTT
 
-```powershell
+```bash
 curl --version | grep -i mqtt
 ```
 
