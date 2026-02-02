@@ -104,7 +104,7 @@ If no port is specified, curl uses the default:
 When subscribing to a topic, curl outputs raw MQTT message data in the following format:
 
 ```
-[2 bytes: topic length] [topic] [payload]
+[2 bytes: topic length (big-endian)] [topic string] [payload]
 ```
 
 For example, a message `"hello"` on the topic `curl/test` appears as:
@@ -171,10 +171,12 @@ Output format:
 [curl/test] hello
 ```
 
-This parser works as follows:
+This parser uses a simplified approach suitable for demonstration purposes.
+
+It works as follows:
 
 1. The stream is split on null bytes.
-2. The topic length is extracted from the first byte (valid for topics shorter than 256 bytes).
+2. The topic length is derived from the lower byte of the two-byte topic length field. This approach is valid only for topics shorter than 256 bytes, where the high byte is zero.
 3. The topic string and payload are extracted using the length prefix.
 4. Each message is printed as `[topic] payload`.
 
@@ -224,28 +226,28 @@ To publish, use curl's `-d` (data) flag with the message payload.
 
 ### Basic Publish (Unencrypted)
 
-```powershell
+```bash
 curl -d "Hello from curl" \
   mqtt://broker.emqx.io/curl/test
 ```
 
 ### Secure Publish with MQTTS (curl ≥ 8.19.0)
 
-```powershell
+```bash
 curl -d "Secure message from curl" \
   mqtts://broker.emqx.io/curl/test
 ```
 
 ### Publish JSON Payloads
 
-```powershell
+```bash
 curl -d '{"sensor_id":"temp-001","value":23.5}' \
   mqtt://broker.emqx.io/sensors/temperature
 ```
 
 ### Publish with Authentication
 
-```powershell
+```bash
 curl -u "username:password" \
   -d '{"status":"online"}' \
   mqtts://your-broker.emqxsl.com/devices/status
@@ -344,7 +346,7 @@ For advanced MQTT features, use [MQTTX CLI](https://mqttx.app/cli) or EMQX clien
 
 ## Verify MQTT Support in curl
 
-```powershell
+```bash
 curl --version | grep -i mqtt
 ```
 

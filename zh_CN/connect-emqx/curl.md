@@ -104,7 +104,7 @@ mqtt[s]://[user:password@]broker[:port]/topic
 当订阅主题时，curl 会按如下格式输出原始 MQTT 消息数据：
 
 ```
-[2 bytes: topic length] [topic] [payload]
+[2 bytes: topic length (big-endian)] [topic string] [payload]
 ```
 
 例如，在主题 `curl/test` 上收到的消息 `"hello"` 会显示为：
@@ -171,12 +171,14 @@ curl -sN mqtt://broker.emqx.io/curl/test | \
 [curl/test] hello
 ```
 
-该解析器的工作方式如下：
+该解析器采用了一种适用于演示场景的简化处理方式。
+
+其工作流程如下：
 
 1. 将数据流按空字节（null bytes）进行切分。
-2. 从第一个字节中提取主题长度（对主题长度小于 256 字节的情况有效）。
+2. 从主题长度字段的两个字节中，取其低字节作为主题长度。该方式仅在主题长度小于 256 字节、且高字节为 0 的情况下有效。
 3. 使用长度前缀提取主题字符串与 payload。
-4. 将每条消息按 `[topic] payload` 格式打印。
+4. 将每条消息按 `[topic] payload` 格式输出。
 
 ### 保存原始输出以便检查
 
@@ -224,28 +226,28 @@ mqtt_subscribe "mqtt://broker.emqx.io/curl/test"
 
 ### 基础发布（未加密）
 
-```powershell
+```bash
 curl -d "Hello from curl" \
   mqtt://broker.emqx.io/curl/test
 ```
 
 ### 使用 MQTTS 的安全发布（curl ≥ 8.19.0）
 
-```powershell
+```bash
 curl -d "Secure message from curl" \
   mqtts://broker.emqx.io/curl/test
 ```
 
 ### 发布 JSON Payloads
 
-```powershell
+```bash
 curl -d '{"sensor_id":"temp-001","value":23.5}' \
   mqtt://broker.emqx.io/sensors/temperature
 ```
 
 ### 使用认证发布
 
-```powershell
+```bash
 curl -u "username:password" \
   -d '{"status":"online"}' \
   mqtts://your-broker.emqxsl.com/devices/status
