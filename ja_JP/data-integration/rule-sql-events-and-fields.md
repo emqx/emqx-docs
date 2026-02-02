@@ -362,11 +362,20 @@ FROM
 | `username`          | クライアントのユーザー名                                                                                |
 | `peername`          | クライアントのIPアドレスとポート番号                                                                   |
 | `sockname`          | EMQXがリッスンしているIPアドレスとポート番号                                                           |
+| `connected_at`      | クライアント接続開始時刻（単位：ミリ秒）。このタイムスタンプは現在のセッションが確立された時刻を表し、切断イベントが属する接続セッションを識別するのに役立ちます。<br />これにより、遅延した切断イベントが新しい接続状態を上書きしないようになります。 |
 | `disconnected_at`   | クライアントの切断完了時刻（単位：ミリ秒）                                                             |
 | `disconn_props`     | DISCONNECTプロパティ（MQTT 5.0クライアントのみ）                                                        |
 | `timestamp`         | イベント発生時刻（単位：ミリ秒）                                                                       |
 | `node`              | イベントが発生したEMQXノード                                                                            |
 | `client_attrs`      | [クライアント属性](../client-attributes/client-attributes.md)                                          |
+
+::: tip クライアントプレゼンス状態の構築
+
+切断イベントと接続イベントのタイムスタンプに基づいて外部でMQTTクライアントのプレゼンス状態を構築する場合、`reason`が`takenover`または`discarded`の切断イベントをフィルタリングすることが重要です（つまり、`WHERE reason != 'takenover' AND reason != 'discarded'`）。
+
+これは、クライアントが再接続した場合、`disconnected_at`タイムスタンプが`connected_at`タイムスタンプより後になる可能性があるためです。EMQX 5.9.0より前のバージョンでは、ほとんどの場合`disconnected_at < connected_at`でした。EMQX 5.9.0以降では、ほとんどの場合`disconnected_at > connected_at`です。これらのイベントをフィルタリングすることで、正確なプレゼンス状態の追跡が保証されます。
+
+:::
 
 ### 接続応答イベント ("$events/client_connack")
 

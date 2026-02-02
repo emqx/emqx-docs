@@ -372,6 +372,14 @@ Output:
 | `node`            | EMQX node where the event is triggered                       |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
+::: tip Building Client Presence State
+
+If you are building MQTT client presence state externally based on timestamps of disconnected and connected events, it's important to filter out disconnected events when the `reason` is either `takenover` or `discarded` (i.e., `WHERE reason != 'takenover' AND reason != 'discarded'`).
+
+This is because the `disconnected_at` timestamp can be later than the `connected_at` timestamp in the event of a client reconnect. In EMQX versions before 5.9.0, `disconnected_at < connected_at` in most cases. Starting from EMQX 5.9.0, `disconnected_at > connected_at` in most cases. Filtering out these events ensures accurate presence state tracking.
+
+:::
+
 ### Connection Acknowledge Event ("$events/client_connack")
 
 This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client. 

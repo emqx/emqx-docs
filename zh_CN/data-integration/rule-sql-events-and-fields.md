@@ -354,6 +354,14 @@ FROM
 | node             | 事件触发所在节点                                             |
 | client_attrs        | [客户端属性](../client-attributes/client-attributes.md) |
 
+::: tip 构建客户端在线状态
+
+如果您基于断开和连接事件的时间戳在外部构建 MQTT 客户端在线状态，请务必过滤掉 `reason` 为 `takenover` 或 `discarded` 的断开事件（即 `WHERE reason != 'takenover' AND reason != 'discarded'`）。
+
+这是因为在客户端重连的情况下，`disconnected_at` 时间戳可能会晚于 `connected_at` 时间戳。在 EMQX 5.9.0 之前的版本中，大多数情况下 `disconnected_at < connected_at`。从 EMQX 5.9.0 开始，大多数情况下 `disconnected_at > connected_at`。过滤掉这些事件可确保在线状态跟踪的准确性。
+
+:::
+
 示例
 
 ```sql
