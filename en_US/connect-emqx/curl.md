@@ -1,6 +1,6 @@
 # Use curl with EMQX
 
-Curl is a widely used command-line tool for data transfer and automation. Since 2020, curl has supported the MQTT protocol, and starting from curl 8.19.0 (expected March 2026), it also supports MQTTS (MQTT over TLS).
+curl is a widely used command-line tool for data transfer and automation. Since 2020, curl has supported the MQTT protocol, and starting from curl 8.19.0 (expected March 2026), it also supports MQTTS (MQTT over TLS).
 
 With curl, developers can connect to EMQX, publish messages, and subscribe to topics directly from the command line, without installing any language-specific MQTT client SDKs. This makes curl a convenient choice for quick testing, scripting, and IoT prototyping.
 
@@ -15,7 +15,7 @@ This page explains how to use curl with EMQX for MQTT and MQTTS communication, i
 
 Check your installed curl version:
 
-```
+```bash
 curl --version
 ```
 
@@ -67,9 +67,11 @@ When using curl with EMQX Enterprise, a connection is established automatically 
 
 For example, the following command connects to EMQX Enterprise and subscribes to a topic in a single step:
 
-```powershell
+```bash
 curl -N mqtts://your-enterprise-broker.example.com/curl/test
 ```
+
+> **Note:** MQTTS (`mqtts://`) requires curl 8.19.0 or later. For curl versions 7.70.0 to 8.18.x, use `mqtt://` instead.
 
 > **Note**
 >
@@ -84,6 +86,13 @@ curl uses a URL-based syntax for MQTT operations:
 ```
 mqtt[s]://[user:password@]broker[:port]/topic
 ```
+
+Where:
+- `mqtt[s]` indicates the protocol (`mqtt` or `mqtts`)
+- `[user:password@]` is optional authentication
+- `broker` is the broker hostname or IP address
+- `[:port]` is the optional port number
+- `/topic` is the MQTT topic path
 
 | Component        | Description                   | Example                  |
 | ---------------- | ----------------------------- | ------------------------ |
@@ -113,6 +122,8 @@ For example, a message `"hello"` on the topic `curl/test` appears as:
 curl/testhello
 ```
 
+The output is a binary format where the topic name and payload are concatenated together, making it difficult to read without parsing.
+
 This output is binary and not human-readable by default. See [Parse MQTT Messages](#parse-mqtt-messages) below for conversion examples.
 
 ## Subscribe to Topics
@@ -121,7 +132,7 @@ Subscribing keeps the connection open and prints incoming messages to `stdout`.
 
 ### Basic Subscription (Unencrypted)
 
-```powershell
+```bash
 curl -N mqtt://broker.emqx.io/curl/test
 ```
 
@@ -129,15 +140,15 @@ The `-N` option disables output buffering, allowing messages to appear immediate
 
 ### Secure Subscription with MQTTS (curl ≥ 8.19.0)
 
-```powershell
+```bash
 curl -N mqtts://broker.emqx.io/curl/test
 ```
 
 ### Subscription with Authentication
 
-```powershell
+```bash
 curl -N -u "username:password" \
-  mqtts://your-broker.emqxsl.com/curl/test
+  mqtts://your-broker.example.com/curl/test
 ```
 
 ## Parse MQTT Messages
@@ -186,13 +197,13 @@ To better understand the binary structure of MQTT messages, you can save the raw
 
 Save the output:
 
-```powershell
+```bash
 curl -sN mqtt://broker.emqx.io/curl/test > messages.bin
 ```
 
 Inspect the file using `hexdump`:
 
-```
+```bash
 hexdump -C messages.bin
 ```
 
@@ -214,7 +225,7 @@ mqtt_subscribe() {
 
 Usage example:
 
-```
+```bash
 mqtt_subscribe "mqtt://broker.emqx.io/curl/test"
 ```
 
@@ -250,7 +261,7 @@ curl -d '{"sensor_id":"temp-001","value":23.5}' \
 ```bash
 curl -u "username:password" \
   -d '{"status":"online"}' \
-  mqtts://your-broker.emqxsl.com/devices/status
+  mqtts://your-broker.example.com/devices/status
 ```
 
 ## Relevant curl Options
@@ -278,7 +289,7 @@ The following table summarizes curl command-line options used throughout this do
 ```bash
 curl --cacert /path/to/ca.crt \
   -d "TLS verified message" \
-  mqtts://your-broker.emqxsl.com/secure/topic
+  mqtts://your-broker.example.com/secure/topic
 ```
 
 ### Mutual TLS (mTLS)
@@ -288,7 +299,7 @@ curl --cacert /path/to/ca.crt \
   --cert /path/to/client.crt \
   --key /path/to/client.key \
   -d "mTLS message" \
-  mqtts://your-broker.emqxsl.com/secure/topic
+  mqtts://your-broker.example.com/secure/topic
 ```
 
 > Use `-k` to skip certificate verification for testing only.
@@ -297,7 +308,7 @@ curl --cacert /path/to/ca.crt \
 
 ### Broker Connectivity Testing
 
-```powershell
+```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
@@ -350,11 +361,11 @@ For advanced MQTT features, use [MQTTX CLI](https://mqttx.app/cli) or EMQX clien
 curl --version | grep -i mqtt
 ```
 
-If the command produces output containing `mqtt` or `mqtts`, your curl build includes MQTT support. If MQTT is missing, you may need to:
+If the command produces output containing `mqtt` (or `mqtts` for curl ≥ 8.19.0), your curl build includes MQTT support. If MQTT is missing, you may need to:
 
-- Upgrade curl
+- Upgrade curl to version 7.70.0 or later
 - Install a build with MQTT enabled
-- Compile curl with `--enable-mqtt`
+- Compile curl from source with `--enable-mqtt`
 
 ## Troubleshooting
 
@@ -381,7 +392,7 @@ This section lists common issues when using curl with EMQX and how to resolve th
   - MQTTS: `8883`
 - Check network connectivity using verbose mode:
 
-```powershell
+```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
@@ -401,7 +412,7 @@ curl -v mqtt://broker.emqx.io/curl/test
 
 - Verify protocol support:
 
-```powershell
+```bash
 curl --version
 ```
 
@@ -426,15 +437,15 @@ Ensure `mqtt` (and `mqtts` for TLS) appears in the **Protocols** list.
 
 - Specify the CA certificate explicitly:
 
-```powershell
+```bash
 curl --cacert /path/to/ca.crt \
-  mqtts://your-broker.emqxsl.com/topic
+  mqtts://your-broker.example.com/topic
 ```
 
 - For testing only, skip verification (not recommended for production):
 
-```powershell
-curl -k mqtts://your-broker.emqxsl.com/topic
+```bash
+curl -k mqtts://your-broker.example.com/topic
 ```
 
 ### No Messages Received When Subscribing
@@ -453,7 +464,7 @@ curl -k mqtts://your-broker.emqxsl.com/topic
 
 - Always use `-N` for subscriptions:
 
-```powershell
+```bash
 curl -N mqtt://broker.emqx.io/curl/test
 ```
 
@@ -475,9 +486,9 @@ curl -N mqtt://broker.emqx.io/curl/test
 
 - Verify credentials:
 
-```powershell
+```bash
 curl -u "username:password" \
-  mqtts://your-broker.emqxsl.com/topic
+  mqtts://your-broker.example.com/topic
 ```
 
 - Check authentication and ACL configuration in EMQX.

@@ -15,7 +15,7 @@ curl 是一款广泛使用的命令行工具，用于数据传输与自动化。
 
 检查您已安装的 curl 版本：
 
-```
+```bash
 curl --version
 ```
 
@@ -73,9 +73,11 @@ curl --version
 
 例如，下面的命令会在一步中连接到 EMQX Enterprise 并订阅某个主题：
 
-```
+```bash
 curl -N mqtts://your-enterprise-broker.example.com/curl/test
 ```
+
+> **注意：** MQTTS (`mqtts://`) 需要 curl 8.19.0 或更高版本。对于 curl 7.70.0 到 8.18.x 版本，请使用 `mqtt://`。
 
 ## 了解 curl 的 MQTT URL Scheme
 
@@ -84,6 +86,13 @@ curl 使用基于 URL 的语法来执行 MQTT 操作：
 ```
 mqtt[s]://[user:password@]broker[:port]/topic
 ```
+
+其中：
+- `mqtt[s]` 表示协议（`mqtt` 或 `mqtts`）
+- `[user:password@]` 是可选的认证信息
+- `broker` 是 Broker 主机名或 IP 地址
+- `[:port]` 是可选的端口号
+- `/topic` 是 MQTT 主题路径
 
 | 组成部分         | 说明                              | 示例                     |
 | ---------------- | --------------------------------- | ------------------------ |
@@ -113,6 +122,8 @@ mqtt[s]://[user:password@]broker[:port]/topic
 curl/testhello
 ```
 
+输出是二进制格式，主题名称和 payload 连接在一起，不进行解析难以阅读。
+
 该输出是二进制格式，默认不可读。下面的[解析 MQTT 消息](#解析-mqtt-消息)提供了转换为可读格式的示例。
 
 ## 订阅主题
@@ -121,7 +132,7 @@ curl/testhello
 
 ### 基础订阅（未加密）
 
-```
+```bash
 curl -N mqtt://broker.emqx.io/curl/test
 ```
 
@@ -129,15 +140,15 @@ curl -N mqtt://broker.emqx.io/curl/test
 
 ### 使用 MQTTS 的安全订阅（curl ≥ 8.19.0）
 
-```
+```bash
 curl -N mqtts://broker.emqx.io/curl/test
 ```
 
 ### 使用认证的订阅
 
-```
+```bash
 curl -N -u "username:password" \
-  mqtts://your-broker.emqxsl.com/curl/test
+  mqtts://your-broker.example.com/curl/test
 ```
 
 ## 解析 MQTT 消息
@@ -186,13 +197,13 @@ curl -sN mqtt://broker.emqx.io/curl/test | \
 
 保存输出：
 
-```powershell
+```bash
 curl -sN mqtt://broker.emqx.io/curl/test > messages.bin
 ```
 
 使用 `hexdump` 检查文件：
 
-```
+```bash
 hexdump -C messages.bin
 ```
 
@@ -214,7 +225,7 @@ mqtt_subscribe() {
 
 用法示例：
 
-```
+```bash
 mqtt_subscribe "mqtt://broker.emqx.io/curl/test"
 ```
 
@@ -250,7 +261,7 @@ curl -d '{"sensor_id":"temp-001","value":23.5}' \
 ```bash
 curl -u "username:password" \
   -d '{"status":"online"}' \
-  mqtts://your-broker.emqxsl.com/devices/status
+  mqtts://your-broker.example.com/devices/status
 ```
 
 ## curl 相关选项
@@ -278,7 +289,7 @@ curl -u "username:password" \
 ```bash
 curl --cacert /path/to/ca.crt \
   -d "TLS verified message" \
-  mqtts://your-broker.emqxsl.com/secure/topic
+  mqtts://your-broker.example.com/secure/topic
 ```
 
 ### 双向 TLS（mTLS）
@@ -288,7 +299,7 @@ curl --cacert /path/to/ca.crt \
   --cert /path/to/client.crt \
   --key /path/to/client.key \
   -d "mTLS message" \
-  mqtts://your-broker.emqxsl.com/secure/topic
+  mqtts://your-broker.example.com/secure/topic
 ```
 
 > `-k` 仅用于测试时跳过证书校验。
@@ -297,7 +308,7 @@ curl --cacert /path/to/ca.crt \
 
 ### Broker 连通性测试
 
-```
+```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
@@ -350,11 +361,11 @@ done
 curl --version | grep -i mqtt
 ```
 
-如果命令输出中包含 `mqtt` 或 `mqtts`，则您的 curl 构建包含 MQTT 支持。如果缺少 MQTT，您可能需要：
+如果命令输出中包含 `mqtt`（或 curl ≥ 8.19.0 时的 `mqtts`），则您的 curl 构建包含 MQTT 支持。如果缺少 MQTT，您可能需要：
 
-- 升级 curl
+- 升级 curl 到 7.70.0 或更高版本
 - 安装启用了 MQTT 的 curl 构建版本
-- 使用 `--enable-mqtt` 编译 curl
+- 从源码编译 curl 时使用 `--enable-mqtt`
 
 ## 故障排查
 
@@ -381,7 +392,7 @@ curl --version | grep -i mqtt
   - MQTTS：`8883`
 - 使用 verbose 模式检查网络连通性：
 
-```powershell
+```bash
 curl -v mqtt://broker.emqx.io/curl/test
 ```
 
@@ -401,7 +412,7 @@ curl -v mqtt://broker.emqx.io/curl/test
 
 - 验证协议支持：
 
-```powershell
+```bash
 curl --version
 ```
 
@@ -426,15 +437,15 @@ curl --version
 
 - 显式指定 CA 证书：
 
-```powershell
+```bash
 curl --cacert /path/to/ca.crt \
-  mqtts://your-broker.emqxsl.com/topic
+  mqtts://your-broker.example.com/topic
 ```
 
 - 仅测试时可跳过校验（生产不推荐）：
 
-```powershell
-curl -k mqtts://your-broker.emqxsl.com/topic
+```bash
+curl -k mqtts://your-broker.example.com/topic
 ```
 
 ### 订阅时收不到消息
@@ -453,7 +464,7 @@ curl -k mqtts://your-broker.emqxsl.com/topic
 
 - 订阅时始终使用 `-N`：
 
-```powershell
+```bash
 curl -N mqtt://broker.emqx.io/curl/test
 ```
 
@@ -475,9 +486,9 @@ curl -N mqtt://broker.emqx.io/curl/test
 
 - 核对认证信息：
 
-```powershell
+```bash
 curl -u "username:password" \
-  mqtts://your-broker.emqxsl.com/topic
+  mqtts://your-broker.example.com/topic
 ```
 
 - 检查 EMQX 的认证与 ACL 配置。
