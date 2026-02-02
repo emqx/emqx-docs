@@ -27,7 +27,7 @@ Ensure that `mqtt` (and `mqtts` for curl ≥ 8.19.0) appears in the **Protocols*
 
 ## MQTT Broker Setup
 
-You need an MQTT broker to connect to. This guide uses EMQX Enterprise, which supports both MQTT and MQTTS.
+You need an MQTT broker to connect to. This guide uses EMQX, which supports both MQTT and MQTTS.
 
 ### EMQX Public Broker (Testing)
 
@@ -70,6 +70,12 @@ For example, the following command connects to EMQX Enterprise and subscribes to
 ```powershell
 curl -N mqtts://your-enterprise-broker.example.com/curl/test
 ```
+
+> **Note**
+>
+> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated).
+>
+> The curl MQTT/MQTTS usage remains the same. Use the broker address, ports, and authentication information provided by EMQX Cloud.
 
 ## Understand curl MQTT URL Scheme
 
@@ -354,7 +360,7 @@ This section lists common issues when using curl with EMQX and how to resolve th
 
 ### Connection Refused or Timeout
 
-**Symptoms**
+**Description**
 
 - `Connection refused`
 - `Failed to connect to broker`
@@ -366,7 +372,7 @@ This section lists common issues when using curl with EMQX and how to resolve th
 - Network firewall blocking MQTT/MQTTS ports
 - Broker is not running or is not listening on the specified port
 
-**Resolution**
+**Solution**
 
 - Verify the broker address and port:
   - MQTT: `1883`
@@ -379,17 +385,17 @@ curl -v mqtt://broker.emqx.io/curl/test
 
 ### MQTT or MQTTS Not Supported by curl
 
-**Symptoms**
+**Description**
 
 - `Protocol "mqtt" not supported`
 - `Unknown protocol`
 
 **Possible causes**
 
-- curl built without MQTT support
+- curl was built without MQTT support
 - curl version is too old
 
-**Resolution**
+**Solution**
 
 - Verify protocol support:
 
@@ -403,7 +409,7 @@ Ensure `mqtt` (and `mqtts` for TLS) appears in the **Protocols** list.
 
 ### TLS Handshake or Certificate Errors (MQTTS)
 
-**Symptoms**
+**Description**
 
 - `SSL certificate problem`
 - `TLS handshake failed`
@@ -414,7 +420,7 @@ Ensure `mqtt` (and `mqtts` for TLS) appears in the **Protocols** list.
 - Missing or incorrect CA certificate
 - Broker uses a private or self-signed certificate
 
-**Resolution**
+**Solution**
 
 - Specify the CA certificate explicitly:
 
@@ -431,7 +437,7 @@ curl -k mqtts://your-broker.emqxsl.com/topic
 
 ### No Messages Received When Subscribing
 
-**Symptoms**
+**Description**
 
 - Subscription command runs, but no output is displayed
 
@@ -441,7 +447,7 @@ curl -k mqtts://your-broker.emqxsl.com/topic
 - No messages published to the topic
 - Topic name mismatch
 
-**Resolution**
+**Solution**
 
 - Always use `-N` for subscriptions:
 
@@ -453,7 +459,7 @@ curl -N mqtt://broker.emqx.io/curl/test
 
 ### Authentication Failed
 
-**Symptoms**
+**Description**
 
 - Connection closes immediately
 - Authorization or authentication errors in broker logs
@@ -463,7 +469,7 @@ curl -N mqtt://broker.emqx.io/curl/test
 - Incorrect username or password
 - ACL restrictions on the topic
 
-**Resolution**
+**Solution**
 
 - Verify credentials:
 
