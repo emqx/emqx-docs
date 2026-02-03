@@ -59,6 +59,10 @@ Refer to your EMQX Enterprise listener, authentication, and TLS configuration wh
 - Replace `broker.emqx.io` with your EMQX Enterprise broker address in all examples when testing against your own deployment.
 - Ensure the corresponding MQTT or MQTTS listener is enabled in EMQX Enterprise before connecting.
 
+> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated).
+>
+> The curl MQTT/MQTTS usage remains the same. Use the broker address, ports, and authentication information provided by EMQX Cloud.
+
 ### Connect to EMQX Enterprise with curl
 
 In MQTT, clients establish a connection to the broker as part of an operation, such as subscribing to a topic or publishing a message. There is no separate “connect” command.
@@ -71,13 +75,7 @@ For example, the following command connects to EMQX Enterprise and subscribes to
 curl -N mqtts://your-enterprise-broker.example.com/curl/test
 ```
 
-> **Note:** MQTTS (`mqtts://`) requires curl 8.19.0 or later. For curl versions 7.70.0 to 8.18.x, use `mqtt://` instead.
-
-> **Note**
->
-> In addition to self-managed EMQX Enterprise deployments, you can also use curl to connect to the fully managed MQTT service [EMQX Cloud](https://docs.emqx.com/en/cloud/latest/overview.html) (Serverless or Dedicated).
->
-> The curl MQTT/MQTTS usage remains the same. Use the broker address, ports, and authentication information provided by EMQX Cloud.
+> **Note**: MQTTS (`mqtts://`) requires curl 8.19.0 or later. For curl versions 7.70.0 to 8.18.x, use `mqtt://` instead.
 
 ## Understand curl MQTT URL Scheme
 
@@ -88,25 +86,13 @@ mqtt[s]://[user:password@]broker[:port]/topic
 ```
 
 Where:
-- `mqtt[s]` indicates the protocol (`mqtt` or `mqtts`)
-- `[user:password@]` is optional authentication
-- `broker` is the broker hostname or IP address
-- `[:port]` is the optional port number
-- `/topic` is the MQTT topic path
-
-| Component        | Description                   | Example                  |
-| ---------------- | ----------------------------- | ------------------------ |
-| `mqtt://`        | MQTT over TCP                 | `mqtt://broker.emqx.io`  |
-| `mqtts://`       | MQTT over TLS (curl ≥ 8.19.0) | `mqtts://broker.emqx.io` |
-| `user:password@` | Optional authentication       | `admin:secret@`          |
-| `broker`         | Broker hostname               | `broker.emqx.io`         |
-| `:port`          | Optional port                 | `:1883`, `:8883`         |
-| `/topic`         | MQTT topic                    | `/sensor/temperature`    |
-
-If no port is specified, curl uses the default:
-
-- `1883` for `mqtt://`
-- `8883` for `mqtts://`
+- `mqtt[s]` indicates the protocol (`mqtt` or `mqtts`).
+- `[user:password@]` is optional authentication.
+- `broker` is the broker hostname or IP address.
+- `[:port]` is the optional port number. If no port is specified, curl uses the default:
+  - `1883` for `mqtt://`
+  - `8883` for `mqtts://`
+- `/topic` is the MQTT topic path, for example, `/sensor/temperature`.
 
 ## curl MQTT Output Format
 

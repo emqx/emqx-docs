@@ -59,8 +59,6 @@ curl --version
 - 当您针对自己的部署进行测试时，请将所有示例中的 `broker.emqx.io` 替换为您 EMQX Enterprise 的 Broker 地址。
 - 连接前请确保在 EMQX Enterprise 中已启用相应的 MQTT 或 MQTTS 监听器。
 
-> **说明**
->
 > 除了自托管的 EMQX Enterprise 部署外，您也可以使用 curl 连接全托管的 MQTT 服务：[EMQX Cloud](https://docs.emqx.com/zh/cloud/latest/overview.html)（Serverless 或 Dedicated）。
 >
 > curl 的 MQTT/MQTTS 用法保持一致，仅需使用 EMQX Cloud 提供的 Broker 地址、端口及认证信息。
@@ -88,25 +86,13 @@ mqtt[s]://[user:password@]broker[:port]/topic
 ```
 
 其中：
-- `mqtt[s]` 表示协议（`mqtt` 或 `mqtts`）
-- `[user:password@]` 是可选的认证信息
-- `broker` 是 Broker 主机名或 IP 地址
-- `[:port]` 是可选的端口号
-- `/topic` 是 MQTT 主题路径
-
-| 组成部分         | 说明                              | 示例                     |
-| ---------------- | --------------------------------- | ------------------------ |
-| `mqtt://`        | 基于 TCP 的 MQTT                  | `mqtt://broker.emqx.io`  |
-| `mqtts://`       | 基于 TLS 的 MQTT（curl ≥ 8.19.0） | `mqtts://broker.emqx.io` |
-| `user:password@` | 可选的认证信息                    | `admin:secret@`          |
-| `broker`         | Broker 主机名                     | `broker.emqx.io`         |
-| `:port`          | 可选端口                          | `:1883`、`:8883`         |
-| `/topic`         | MQTT 主题                         | `/sensor/temperature`    |
-
-如果未指定端口，curl 将使用默认端口：
-
-- `mqtt://` 使用 `1883`
-- `mqtts://` 使用 `8883`
+- `mqtt[s]` 表示协议（`mqtt` 或 `mqtts`）。
+- `[user:password@]` 为可选的认证信息。
+- `broker` 为 Broker 主机名或 IP 地址。
+- `[:port]` 为可选的端口号。如果未指定端口，curl 将使用默认端口：
+  - `mqtt://` 使用 `1883`
+  - `mqtts://` 使用 `8883`
+- `/topic` 为 MQTT 主题路径，例如：`/sensor/temperature`。
 
 ## curl 的 MQTT 输出格式
 
