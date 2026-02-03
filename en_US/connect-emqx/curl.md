@@ -156,9 +156,14 @@ To make subscription output readable, pipe curl output through a shell parser:
 ```bash
 curl -sN mqtt://broker.emqx.io/curl/test | \
   while IFS= read -r -d $'\0' d; do
-    [ -n "$d" ] && \
-      l=$(printf "%d" "'${d:0:1}") && \
-      echo "[${d:1:$l}] ${d:1+$l}"
+    [ -z "$d" ] && continue
+
+    # curl's MQTT subscribe output is: 2-byte topic length (MSB,LSB), topic, payload.
+    # This loop uses NUL (0x00) as a delimiter, so we are seeing the LSB first and
+    # implicitly using MSB=0 (works for topic lengths 0..255).
+    lsb=$(printf "%d" "'${d:0:1}")
+    topic_len=$((lsb))
+    echo "[${d:1:$topic_len}] ${d:$((1 + topic_len))}"
   done
 ```
 
