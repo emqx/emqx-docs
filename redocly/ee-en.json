@@ -4487,13 +4487,7 @@
             "oneOf": [
               {
                 "enum": [
-                  "syskeeper_forwarder"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "alloydb"
+                  "emqx_tables"
                 ],
                 "type": "string"
               },
@@ -4505,19 +4499,19 @@
               },
               {
                 "enum": [
-                  "dynamo"
+                  "redis"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "cockroachdb"
+                  "elasticsearch"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "iotdb"
+                  "syskeeper_forwarder"
                 ],
                 "type": "string"
               },
@@ -4529,19 +4523,7 @@
               },
               {
                 "enum": [
-                  "aws_timestream"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "influxdb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "timescale"
+                  "oracle"
                 ],
                 "type": "string"
               },
@@ -4553,7 +4535,7 @@
               },
               {
                 "enum": [
-                  "snowflake"
+                  "greptimedb"
                 ],
                 "type": "string"
               },
@@ -4565,25 +4547,19 @@
               },
               {
                 "enum": [
-                  "pulsar"
+                  "rabbitmq"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "datalayers"
+                  "s3"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "clickhouse"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "rocketmq"
+                  "mongodb"
                 ],
                 "type": "string"
               },
@@ -4595,25 +4571,25 @@
               },
               {
                 "enum": [
-                  "http"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "pgsql"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "rabbitmq"
+                  "http"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "redshift"
+                  "bigquery"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "aws_timestream"
                 ],
                 "type": "string"
               },
@@ -4625,7 +4601,55 @@
               },
               {
                 "enum": [
-                  "gcp_pubsub_producer"
+                  "pulsar"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "snowflake"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "influxdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "alloydb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "mysql"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "iotdb"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "timescale"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "redshift"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "kafka_producer"
                 ],
                 "type": "string"
               },
@@ -4643,79 +4667,19 @@
               },
               {
                 "enum": [
-                  "mysql"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "mongodb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "redis"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
                   "disk_log"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "confluent_producer"
+                  "gcp_pubsub_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "kafka_producer"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "oracle"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "s3"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "greptimedb"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "matrix"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "opents"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "doris"
-                ],
-                "type": "string"
-              },
-              {
-                "enum": [
-                  "snowflake_streaming"
+                  "rocketmq"
                 ],
                 "type": "string"
               },
@@ -4727,25 +4691,61 @@
               },
               {
                 "enum": [
+                  "snowflake_streaming"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "doris"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "opents"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "dynamo"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "matrix"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
                   "tdengine"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "bigquery"
+                  "confluent_producer"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "emqx_tables"
+                  "datalayers"
                 ],
                 "type": "string"
               },
               {
                 "enum": [
-                  "elasticsearch"
+                  "clickhouse"
+                ],
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "cockroachdb"
                 ],
                 "type": "string"
               }
@@ -4780,6 +4780,12 @@
       },
       "actions_and_sources.metrics": {
         "properties": {
+          "aggregated_upload_failure": {
+            "type": "integer"
+          },
+          "aggregated_upload_success": {
+            "type": "integer"
+          },
           "dropped": {
             "type": "integer"
           },
@@ -6599,7 +6605,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -6688,7 +6694,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -6751,7 +6757,7 @@
           },
           "verify_claims": {
             "default": {},
-            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.",
+            "description": "A list of custom claims to validate. The allowed formats are the following:<br/>A map where claim names are map keys and expected values are map values:<br/> <code>{ claim_name = \"${username}\", ...}</code>.<br/><br/>A list of maps with <code>name</code> (claim name) and <code>value</code> (expected claim value) keys:<br/> <code>[{name = \"claim_name\", value = \"${username}\"}, ...]</code>.<br/><br/>Values can use the following placeholders:<br/>- <code>${username}</code>: Will be replaced at runtime with <code>Username</code> used by the client when connecting<br/>- <code>${clientid}</code>: Will be replaced at runtime with <code>Client ID</code> used by the client when connecting<br/><br/>Authentication will verify that the value of claims in the JWT (taken from the Password field) matches what is required in <code>verify_claims</code>.<br/><br/>Special handling for <code>aud</code> (audience) claim:<br/>The <code>aud</code> claim supports both string and array formats in the JWT token:<br/>- If <code>aud</code> is a string, it must exactly match the expected value.<br/>- If <code>aud</code> is an array, at least one element in the array must match the expected value.<br/>- Empty string or empty array will fail verification.<br/>- When <code>aud</code> is configured in <code>verify_claims</code>, the JWT token must include a valid <code>aud</code> claim.",
             "example": {},
             "type": "object"
           }
@@ -10398,7 +10404,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -15323,37 +15329,65 @@
         ],
         "type": "object"
       },
-      "bridge_iotdb.action_parameters": {
+      "bridge_iotdb.action_parameters_data_table": {
         "properties": {
-          "data": {
-            "description": "IoTDB action parameter data",
-            "items": {
-              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data"
-            },
-            "type": "array"
-          },
-          "device_id": {
-            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
+          "column_category": {
+            "description": "Column category, required to construct an insert request to an IoTDB table. Valid values include:<br/>- <code>tag</code><br/>- <code>field</code><br/>- <code>attribute</code>",
+            "enum": [
+              "tag",
+              "field",
+              "attribute"
+            ],
             "type": "string"
           },
-          "is_aligned": {
-            "default": false,
-            "description": "Whether to align the timeseries",
-            "type": "boolean"
+          "data_type": {
+            "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
+            "enum": [
+              "text",
+              "boolean",
+              "int32",
+              "int64",
+              "float",
+              "double"
+            ],
+            "type": "string"
           },
-          "max_retries": {
-            "default": 2,
-            "description": "HTTP request max retry times if failed.",
-            "minimum": 0,
-            "type": "integer"
+          "measurement": {
+            "description": "Measurement. Placeholders in format of ${var} is supported",
+            "type": "string"
+          },
+          "timestamp": {
+            "default": "now",
+            "description": "Timestamp. Placeholders in format of ${var} is supported, can be:<br/><br/>- now: use the current time in milliseconds<br/>- now_ms: same as above<br/>- now_us: use the current time in microseconds<br/>- now_ns: use the current time in nanoseconds<br/>- any integer: use the value directly as the timestamp<br/>- Placeholder: use the value from the payload as the timestamp",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "enum": [
+                  "now",
+                  "now_ms",
+                  "now_ns",
+                  "now_us"
+                ],
+                "type": "string"
+              }
+            ]
+          },
+          "value": {
+            "description": "Value. Placeholders in format of ${var} is supported",
+            "type": "string"
           }
         },
         "required": [
-          "data"
+          "column_category",
+          "data_type",
+          "measurement",
+          "value"
         ],
         "type": "object"
       },
-      "bridge_iotdb.action_parameters_data": {
+      "bridge_iotdb.action_parameters_data_tree": {
         "properties": {
           "data_type": {
             "description": "Data Type, can be:<br/><br/>- text<br/>- boolean<br/>- int32<br/>- int64<br/>- float<br/>- double",
@@ -15398,6 +15432,83 @@
           "data_type",
           "measurement",
           "value"
+        ],
+        "type": "object"
+      },
+      "bridge_iotdb.action_parameters_table": {
+        "properties": {
+          "data": {
+            "description": "IoTDB action parameter data",
+            "items": {
+              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_table"
+            },
+            "type": "array"
+          },
+          "is_aligned": {
+            "default": false,
+            "description": "Whether to align the timeseries",
+            "type": "boolean"
+          },
+          "max_retries": {
+            "default": 2,
+            "description": "HTTP request max retry times if failed.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "table": {
+            "description": "The name of the IoTDB table to which the data will be written.",
+            "type": "string"
+          },
+          "write_to_table": {
+            "default": true,
+            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
+            "enum": [
+              true
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "table"
+        ],
+        "type": "object"
+      },
+      "bridge_iotdb.action_parameters_tree": {
+        "properties": {
+          "data": {
+            "description": "IoTDB action parameter data",
+            "items": {
+              "$ref": "#/components/schemas/bridge_iotdb.action_parameters_data_tree"
+            },
+            "type": "array"
+          },
+          "device_id": {
+            "description": "The IoTDB device ID this data should be inserted for.<br/>If left empty, the MQTT message payload must contain a `device_id` field,<br/>or EMQX's rule-engine SQL must produce a `device_id` field.",
+            "type": "string"
+          },
+          "is_aligned": {
+            "default": false,
+            "description": "Whether to align the timeseries",
+            "type": "boolean"
+          },
+          "max_retries": {
+            "default": 2,
+            "description": "HTTP request max retry times if failed.",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "write_to_table": {
+            "default": false,
+            "description": "Whether to write the data to IoTDB table or timeseries.<br/>Note: When it's true, the connector must also have \"SQL Dialect\" set to \"table\".",
+            "enum": [
+              false
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data"
         ],
         "type": "object"
       },
@@ -15532,8 +15643,15 @@
             "type": "array"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -15612,8 +15730,15 @@
             "type": "string"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -15674,8 +15799,15 @@
             "type": "array"
           },
           "parameters": {
-            "$ref": "#/components/schemas/bridge_iotdb.action_parameters",
-            "description": "IoTDB action parameters"
+            "description": "IoTDB action parameters",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_table"
+              },
+              {
+                "$ref": "#/components/schemas/bridge_iotdb.action_parameters_tree"
+              }
+            ]
           },
           "resource_opts": {
             "$ref": "#/components/schemas/bridge_iotdb.action_resource_opts",
@@ -16722,7 +16854,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -25672,7 +25804,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -28051,7 +28183,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -28551,7 +28683,7 @@
             "type": "array"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28635,7 +28767,7 @@
             "type": "string"
           },
           "username": {
-            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The username of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific username associated with the static clientid.",
             "type": "string"
           }
         },
@@ -28703,7 +28835,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28772,7 +28904,7 @@
             "type": "string"
           },
           "username": {
-            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The username of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific username associated with the static clientid.",
             "type": "string"
           }
         },
@@ -28836,7 +28968,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -28898,7 +29030,7 @@
             "type": "array"
           },
           "username": {
-            "description": "The username of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The username of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific username associated with the static clientid.",
             "type": "string"
           }
         },
@@ -28979,7 +29111,7 @@
             "type": "string"
           },
           "password": {
-            "description": "The password of the MQTT protocol.  Note that if static clientids are used, this option is ignored.",
+            "description": "The password of the MQTT protocol.  When using static clientids, this value is used if defined, and if there is no specific password associated with the static clientid.",
             "example": "R4ND0M/S∃CЯ∃T",
             "format": "password",
             "type": "string"
@@ -31206,13 +31338,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32235,13 +32377,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -32387,13 +32539,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -33130,7 +33292,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -38281,7 +38443,7 @@
         "properties": {
           "site": {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "FBE25D533BC25F99",
             "type": "string"
           },
           "status": {
@@ -40647,7 +40809,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -41113,13 +41275,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -41424,13 +41596,23 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
             "default": true,
             "description": "Whether to reject TLS renegotiation attempts that are not compliant with [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt).<br/><br/>By default, `secure_renegotiate` is set to `true`, which forces secure renegotiation.<br/>If set to `false`, secure renegotiation will still be used, but will fall back to insecure renegotiation if the peer does not support [RFC 5746](http://www.ietf.org/rfc/rfc5746.txt), which increases the risk of a MitM attack.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
+          },
+          "session_tickets": {
+            "default": "disabled",
+            "description": "Enable TLS 1.3 session resumption using stateless session tickets.<br/><br/>Possible values:<br/><br/>- `disabled`: Disable session tickets (default).<br/>- `stateless`: Enable stateless session tickets. The server sends encrypted tickets that clients can use to resume sessions without storing session state on the server.<br/>- `stateless_with_cert`: Enable stateless session tickets with certificate information included. This allows session resumption even when the server certificate changes, but increases network bandwidth usage as each ticket includes certificate data.<br/><br/>Note: EMQX only supports stateless session tickets without support for client early data (0-RTT).<br/>The number of tickets sent after a full handshake is controlled by the config `node.tls_server_session_tickets_amount`.<br/>The seed key is configured at `node.tls_stateless_tickets_seed`.",
+            "enum": [
+              "disabled",
+              "stateless",
+              "stateless_with_cert"
+            ],
+            "type": "string"
           },
           "verify": {
             "default": "verify_none",
@@ -42955,6 +43137,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -42998,6 +43181,17 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -43117,6 +43311,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -43222,6 +43427,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -43258,6 +43464,17 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -43355,6 +43572,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -43445,6 +43673,7 @@
             "default": "v1.3.x",
             "description": "The version of the IoTDB system to connect to.",
             "enum": [
+              "v2.0.x",
               "v1.3.x",
               "v1.1.x",
               "v1.0.x",
@@ -43477,6 +43706,17 @@
             "$ref": "#/components/schemas/bridge_http.connector_resource_opts",
             "default": {},
             "description": "Resource options."
+          },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
           },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
@@ -43561,6 +43801,17 @@
             "description": "The address of the IoTDB Thrift server (host:port)",
             "type": "string"
           },
+          "sql": {
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_table"
+              },
+              {
+                "$ref": "#/components/schemas/iotdb.sql_dialect_tree"
+              }
+            ]
+          },
           "ssl": {
             "$ref": "#/components/schemas/emqx.ssl_client_opts",
             "default": {
@@ -43589,6 +43840,43 @@
           "password",
           "server",
           "username"
+        ],
+        "type": "object"
+      },
+      "iotdb.sql_dialect_table": {
+        "properties": {
+          "database": {
+            "description": "The name of the IoTDB database to connect to.",
+            "type": "string"
+          },
+          "dialect": {
+            "default": "table",
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "enum": [
+              "table"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "database",
+          "dialect"
+        ],
+        "type": "object"
+      },
+      "iotdb.sql_dialect_tree": {
+        "properties": {
+          "dialect": {
+            "default": "tree",
+            "description": "IoTDB supports two time-series data models (SQL dialects),<br/>both managing devices and measurement points.<br/>- Tree: Manages data in a hierarchical path manner, where one path corresponds to one measurement point of a device.<br/>- Table: Manages data in a relational table manner, where one table corresponds to a category of devices.",
+            "enum": [
+              "tree"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "dialect"
         ],
         "type": "object"
       },
@@ -44233,7 +44521,7 @@
           },
           "reuse_sessions": {
             "default": true,
-            "description": "Enable TLS session reuse.<br/><br/>Has no effect when TLS version is configured (or negotiated) to 1.3",
+            "description": "Enable TLS 1.2 session resumption for TLS client.<br/>It has no effect when TLS version is configured (or negotiated) to 1.3.",
             "type": "boolean"
           },
           "secure_renegotiate": {
@@ -54742,6 +55030,15 @@
             "description": "A template to map OIDC user information to a Dashboard name, its default value is `${sub}`.",
             "type": "string"
           },
+          "name_var_source": {
+            "default": "userinfo",
+            "description": "From which source to extract information to construct the Dashboard username.  Defaults to `userinfo`.<br/><br/>- `userinfo`: Utilizes the response from the `/userinfo` endpoint.<br/>- `id_token`: Utilizes the claims contained in the access token.",
+            "enum": [
+              "userinfo",
+              "id_token"
+            ],
+            "type": "string"
+          },
           "preferred_auth_methods": {
             "default": [
               "client_secret_post",
@@ -56426,7 +56723,7 @@
   },
   "info": {
     "title": "EMQX Enterprise API",
-    "version": "6.1.0"
+    "version": "6.1.1-rc.3"
   },
   "openapi": "3.0.0",
   "paths": {
@@ -56442,100 +56739,100 @@
                   "types": {
                     "summary": "Action Types",
                     "value": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "bigquery",
-                      "tdengine",
-                      "couchbase",
-                      "snowflake_streaming",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "s3",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "rabbitmq",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
+                      "cockroachdb",
                       "clickhouse",
                       "datalayers",
-                      "pulsar",
-                      "mqtt",
-                      "snowflake",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
-                      "aws_timestream",
-                      "azure_blob_storage",
-                      "iotdb",
-                      "cockroachdb",
+                      "confluent_producer",
+                      "tdengine",
+                      "matrix",
                       "dynamo",
-                      "azure_event_hub_producer",
+                      "opents",
+                      "doris",
+                      "snowflake_streaming",
+                      "couchbase",
+                      "rocketmq",
+                      "gcp_pubsub_producer",
+                      "disk_log",
+                      "kinesis",
+                      "cassandra",
+                      "kafka_producer",
+                      "redshift",
+                      "timescale",
+                      "iotdb",
+                      "mysql",
                       "alloydb",
-                      "syskeeper_forwarder"
+                      "influxdb",
+                      "snowflake",
+                      "pulsar",
+                      "sqlserver",
+                      "aws_timestream",
+                      "bigquery",
+                      "http",
+                      "pgsql",
+                      "tablestore",
+                      "mongodb",
+                      "s3",
+                      "rabbitmq",
+                      "mqtt",
+                      "greptimedb",
+                      "s3tables",
+                      "oracle",
+                      "azure_blob_storage",
+                      "syskeeper_forwarder",
+                      "elasticsearch",
+                      "redis",
+                      "azure_event_hub_producer",
+                      "emqx_tables"
                     ]
                   }
                 },
                 "schema": {
                   "items": {
                     "enum": [
-                      "elasticsearch",
-                      "emqx_tables",
-                      "bigquery",
-                      "tdengine",
-                      "couchbase",
-                      "snowflake_streaming",
-                      "doris",
-                      "opents",
-                      "matrix",
-                      "greptimedb",
-                      "s3",
-                      "oracle",
-                      "kafka_producer",
-                      "confluent_producer",
-                      "disk_log",
-                      "redis",
-                      "mongodb",
-                      "mysql",
-                      "kinesis",
-                      "cassandra",
-                      "gcp_pubsub_producer",
-                      "sqlserver",
-                      "redshift",
-                      "rabbitmq",
-                      "pgsql",
-                      "http",
-                      "tablestore",
-                      "rocketmq",
+                      "cockroachdb",
                       "clickhouse",
                       "datalayers",
-                      "pulsar",
-                      "mqtt",
-                      "snowflake",
-                      "s3tables",
-                      "timescale",
-                      "influxdb",
-                      "aws_timestream",
-                      "azure_blob_storage",
-                      "iotdb",
-                      "cockroachdb",
+                      "confluent_producer",
+                      "tdengine",
+                      "matrix",
                       "dynamo",
-                      "azure_event_hub_producer",
+                      "opents",
+                      "doris",
+                      "snowflake_streaming",
+                      "couchbase",
+                      "rocketmq",
+                      "gcp_pubsub_producer",
+                      "disk_log",
+                      "kinesis",
+                      "cassandra",
+                      "kafka_producer",
+                      "redshift",
+                      "timescale",
+                      "iotdb",
+                      "mysql",
                       "alloydb",
-                      "syskeeper_forwarder"
+                      "influxdb",
+                      "snowflake",
+                      "pulsar",
+                      "sqlserver",
+                      "aws_timestream",
+                      "bigquery",
+                      "http",
+                      "pgsql",
+                      "tablestore",
+                      "mongodb",
+                      "s3",
+                      "rabbitmq",
+                      "mqtt",
+                      "greptimedb",
+                      "s3tables",
+                      "oracle",
+                      "azure_blob_storage",
+                      "syskeeper_forwarder",
+                      "elasticsearch",
+                      "redis",
+                      "azure_event_hub_producer",
+                      "emqx_tables"
                     ],
                     "type": "string"
                   },
@@ -74663,6 +74960,15 @@
               ],
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
           }
         ],
         "responses": {
@@ -75008,6 +75314,15 @@
                 "key_password"
               ],
               "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "force_delete",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
             }
           }
         ],
@@ -89962,7 +90277,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "FBE25D533BC25F99",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90024,7 +90339,7 @@
         "parameters": [
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "FBE25D533BC25F99",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90433,7 +90748,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "FBE25D533BC25F99",
             "in": "path",
             "name": "site",
             "required": true,
@@ -90518,7 +90833,7 @@
           },
           {
             "description": "The identifier of the site.",
-            "example": "5C5008CAD0B849DC",
+            "example": "FBE25D533BC25F99",
             "in": "path",
             "name": "site",
             "required": true,
