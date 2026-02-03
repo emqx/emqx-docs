@@ -79,10 +79,10 @@ For more details about PVs and PVCs, refer to the [Persistent Volumes](https://k
      - Click **Save** to generate a rule, as shown in the following figure:
 
        ![emqx-core-action](./assets/configure-emqx-persistent/emqx-core-action.png)
-
-   Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
-
-   ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
+    
+       Once the rule is created successfully, a corresponding record with `emqx-persistent-test` ID will appear on the page, as shown in the figure below:
+    
+       ![emqx-core-rule-old](./assets/configure-emqx-persistent/emqx-core-rule-old.png)
 
 2. Delete the old EMQX cluster.
 

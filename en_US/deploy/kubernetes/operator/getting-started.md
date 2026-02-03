@@ -18,7 +18,7 @@ Before deploying EMQX Operator, ensure that the following components are ready:
    $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   This command will download latest 2.3.x release, install cluster-wide EMQX CRDs and deploy controller services into a separate `emqx-operator-system` namespace.
+   This command will download the latest 2.3.x release, install cluster-wide EMQX CRDs and deploy controller services into a separate `emqx-operator-system` namespace.
 
 2. Wait till EMQX Operator is ready:
 
@@ -61,7 +61,7 @@ Once the Operator is running, you can proceed to deploy EMQX.
 
 ## Troubleshooting
 
-EMQX Operator exposes limited number of events to the Kubernetes API.
+EMQX Operator exposes a limited number of events to the Kubernetes API.
 ```sh
 kubectl get events --sort-by=.lastTimestamp
 ```

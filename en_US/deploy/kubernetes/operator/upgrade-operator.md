@@ -2,11 +2,11 @@
 
 This page provides instructions on how to upgrade EMQX Operator to the latest version, 2.3.0.
 
-## Upgrading from EMQX Operator 2.2.x
+## Upgrade from EMQX Operator 2.2.x to 2.3.0
 
-1. Before starting the upgrade process, make sure you are using the `v2beta1` API version for your EMQX custom resources, as EMQX Operator 2.3.0 does not support API versions older than `v2beta1`.
+1. Before starting the upgrade process, make sure that all EMQX custom resources are using the `v2beta1` API version. EMQX Operator 2.3.0 does not support API versions earlier than `v2beta1`.
 
-   If you are using `v2alpha1` or `v1beta4` API versions, you need to update your EMQX custom resources to use the `v2beta1` API version. Most of the time, you can simply patch the API version field to `v2beta1`.
+   If your resources are still using `v2alpha1` or `v1beta4` API versions, update them to `v2beta1`. In most cases, this can be done by patching the `apiVersion` field:
 
    ```sh
    kubectl patch emqx emqx --type=merge -p '{"apiVersion":"apps.emqx.io/v2beta1"}'
@@ -36,3 +36,4 @@ This page provides instructions on how to upgrade EMQX Operator to the latest ve
    ```
 
 5. Deploy the new EMQX Operator by following the [installation steps](./getting-started.md).
+

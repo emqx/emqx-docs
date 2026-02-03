@@ -20,9 +20,9 @@ EMQX Operator includes, but is not limited to, the following features:
 
 ### EMQX Operator 2.3.x
 
-The current EMQX Operator release series 2.3.x is fully compatible with the following EMQX versions:
-- EMQX 5.9 & 5.10
-- EMQX 6.0 and higher
+The EMQX Operator 2.3.x release series is fully compatible with the following EMQX versions:
+- EMQX 5.9 and 5.10
+- EMQX 6.0 and later
 
 The following API versions are supported:
 - [apps.emqx.io/v2](./reference/v2-reference.md)
@@ -32,8 +32,8 @@ The following API versions are supported:
 
 #### EMQX Operator 2.2.x
 
-EMQX Operator release series 2.2.x is compatible with the following EMQX versions:
-- EMQX Open Source & Enterprise 5.1.1 ~ 5.8.x
+EMQX Operator 2.2.x release series is compatible with the following EMQX versions:
+- EMQX Open Source & Enterprise 5.1.1 – 5.8.x
 - EMQX 5.9 & 5.10 (limited support<sup>*</sup>)
 - EMQX 6.0 and higher (limited support<sup>*</sup>)
 

@@ -6,7 +6,7 @@
 
 ## 配置 EMQX 集群持久化
 
-EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.coreTemplate.spec.volumeClaimTemplates` 配置每个 Core 节点数据的持久化。
+EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.coreTemplate.spec.volumeClaimTemplates` 配置每个 Core 节点数据的持久化。
 
 `.spec.coreTemplate.spec.volumeClaimTemplates` 字段的定义和语义与 Kubernetes API 中定义的 `PersistentVolumeClaimSpec` 一致。
 
@@ -17,7 +17,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.coreTemplate.spec.volumeClai
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx
@@ -34,7 +34,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.coreTemplate.spec.volumeClai
            storageClassName: standard
            resources:
              requests:
-               storage: 20Mi
+               storage: 1Gi
            accessModes:
              - ReadWriteOnce
          replicas: 3
