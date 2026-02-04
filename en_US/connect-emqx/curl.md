@@ -119,7 +119,7 @@ Subscribing keeps the connection open and prints incoming messages to `stdout`.
 ### Basic Subscription (Unencrypted)
 
 ```bash
-curl -N mqtt://broker.emqx.io/curl/test
+curl -N mqtt://broker.emqx.io/curl/test --output messages.bin
 ```
 
 The `-N` option disables output buffering, allowing messages to appear immediately.
@@ -127,14 +127,14 @@ The `-N` option disables output buffering, allowing messages to appear immediate
 ### Secure Subscription with MQTTS (curl ≥ 8.19.0)
 
 ```bash
-curl -N mqtts://broker.emqx.io/curl/test
+curl -N mqtts://broker.emqx.io/curl/test --output messages.bin
 ```
 
 ### Subscription with Authentication
 
 ```bash
 curl -N -u "username:password" \
-  mqtts://your-broker.example.com/curl/test
+  mqtts://your-broker.emqxsl.com/curl/test --output messages.bin
 ```
 
 ## Parse MQTT Messages

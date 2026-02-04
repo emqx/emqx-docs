@@ -119,7 +119,7 @@ curl/testhello
 ### 基础订阅（未加密）
 
 ```bash
-curl -N mqtt://broker.emqx.io/curl/test
+curl -N mqtt://broker.emqx.io/curl/test --output messages.bin
 ```
 
 `-N` 选项会禁用输出缓冲，使消息能够立即显示。
@@ -127,14 +127,14 @@ curl -N mqtt://broker.emqx.io/curl/test
 ### 使用 MQTTS 的安全订阅（curl ≥ 8.19.0）
 
 ```bash
-curl -N mqtts://broker.emqx.io/curl/test
+curl -N mqtts://broker.emqx.io/curl/test --output messages.bin
 ```
 
 ### 使用认证的订阅
 
 ```bash
 curl -N -u "username:password" \
-  mqtts://your-broker.example.com/curl/test
+  mqtts://your-broker.emqxsl.com/curl/test --output messages.bin
 ```
 
 ## 解析 MQTT 消息
