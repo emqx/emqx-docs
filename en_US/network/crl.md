@@ -28,3 +28,7 @@ listeners.ssl.default {
   }
 }
 ```
+
+## Caching
+
+EMQX caches the fetched CRLs to avoid excessive HTTP request to Distribution Point endpoints.  After a client connects and EMQX encounters a new CRL URL for the first time, it'll fetch the CRL from the Distribution Point in the client's certificate, and, by default, every 15 minutes refresh this CRL.
