@@ -14,6 +14,7 @@ This chapter explores the core concepts of MQTT, MQTT-specific features, and som
 - [Delayed Publish](../messaging/mqtt-delayed-publish.md)
 - [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
 - [Topic Rewrite](../messaging/mqtt-topic-rewrite.md)
+- [Use curl with EMQX](./curl.md)
 
 Additionally, this guide introduces EMQX's [MQTT Durable Session](../durability/durability_introduction.md) feature and provides steps for quickly experiencing this feature.
 
