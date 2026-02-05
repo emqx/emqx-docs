@@ -59,7 +59,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
    
 - **Topic Prefix**
   
-   Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
+   Queue subscriptions use the special `$queue/{topic}` prefix to distinguish them from regular MQTT subscriptions.
    
 - **Queue Properties**
   
@@ -105,7 +105,7 @@ The diagram below shows the data flow between major Message Queue components:
 
 1. A client subscribes to a topic.
 2. An MQ hook is triggered to handle the subscription.
-3. If the topic is a message queue topic (`$q/some/topic`), the hook initializes the subscription in the client session context and establishes a connection to the Message Queue Consumer.
+3. If the topic is a message queue topic (`$queue/some/topic`), the hook initializes the subscription in the client session context and establishes a connection to the Message Queue Consumer.
 4. If no consumer exists for the queue, a new Message Queue Consumer is started.
 5. The consumer restores message consumption progress and starts to fetch data from the message database.
 6. The consumer dispatches received messages to the subscriber client sessions based on the configured dispatch strategy.

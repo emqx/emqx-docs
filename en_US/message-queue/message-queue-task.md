@@ -6,15 +6,15 @@ This page walks you through the practical usage of the Message Queue feature in 
 
 Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queues via Dashboard](#automatically-create-message-queues-via-dashboard).
 
-1. Navigate to **Message Queue** in the left menu.
+1. Navigate to **Queues** in the left menu.
 
 2. Click the **Create** button on the page.
 
-3. In the **Create Message Queue** dialog, configure the following options:
+3. In the **Create Queue** dialog, configure the following options:
 
    - **Topic Filter**: Enter the topic or topic filter (e.g., `t/1`).  It defines which published messages are enqueued based on topic matching. A queue will collect all messages that match this topic filter.
 
-     To consume messages from the queue, clients must subscribe to the topic using the `$q/{Topic Filter}` format.
+     To consume messages from the queue, clients must subscribe to the topic using the `$queue/{Topic Filter}` format.
 
    - **Dispatch Strategy**: Select how messages should be distributed among subscribers. Available strategies include:
 
@@ -132,9 +132,9 @@ To ensure proper queue behavior, you can enable either **Auto Create Regular Mes
 
 ### Auto Create Last Value Semantics Queue
 
-This option is turned on by default in the **Message Queue** tab under **MQTT Settings**. It allows EMQX to automatically create queues that support Last-Value Semantics, where only the most recent message with a given key is retained.
+This option is turned on by default in the **Queues** tab under **MQTT Settings**. It allows EMQX to automatically create queues that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
-1. Navigate to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+1. Navigate to **Management** -> **MQTT Settings** -> **Queues** tab.
 
 2. By default, **Enable Auto Create Last Value Semantics Queue** is enabled.
 
@@ -152,7 +152,7 @@ When a client subscribes to a topic such as `$q/test`, EMQX will automatically c
 
 This option can be enabled manually if you prefer regular queues where messages are stored independently and not overwritten.
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+1. Go to **Management** -> **MQTT Settings** -> **Queues** tab.
 2. Turn on **Enable Auto Create Regular Message Queue**.
 3. Configure the following:
    - **Dispatch Strategy**: Determines how messages are distributed to subscribers (default: `Random`).
@@ -167,12 +167,12 @@ This section explains how to configure global settings that apply to all message
 
 You can update Message Queue settings directly from the EMQX Dashboard without restarting the broker. This is useful for making changes to system-wide behavior at runtime.
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Queue** tab.
+1. Go to **Management** -> **MQTT Settings** -> **Queues** tab.
 
-   Alternatively, you can click the **Settings** button in the top-right corner of the **Message Queue** page.
+   Alternatively, you can click the **Settings** button in the top-right corner of the **Queues** page.
 
-2. In the **Message Queue** panel, the following configuration options are available:
-   - **Enable Message Queue**: The message queue system is enabled by default and cannot be disabled via the Dashboard.
+2. In the **Queues** panel, the following configuration options are available:
+   - **Enable Queues**: The message queue system is enabled by default and cannot be disabled via the Dashboard.
 
      > To disable it, you must modify the configuration file directly.
 
@@ -225,7 +225,7 @@ mq {
 - **`regular_queue_retention_period`**:
   Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
 - **`find_queue_retry_interval`**:
-  Determines how frequently a subscriber retries to locate a queue when subscribing to a `$q/` topic that does not yet exist.
+  Determines how frequently a subscriber retries to locate a queue when subscribing to a `$queue/` topic that does not yet exist.
 - **`max_queue_count`**: (Optional) Sets the maximum number of queues that can be created.
 
 ## Manage Message Queues via REST API
