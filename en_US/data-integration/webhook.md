@@ -4,6 +4,15 @@ Webhook provides a way to integrate EMQX client messages and events with externa
 
 This page comprehensively introduces information related to Webhook, along with practical usage instructions.
 
+
+<video
+  src="./assets/webhook-integration.mp4"
+  autoplay
+  controls
+  muted
+  playsinline
+  style="width: 100%; border-radius: 8px;"></video>
+
 ## How It Works
 
 When a client publishes a message to a specific topic or performs certain actions, it triggers the Webhook. Webhook is compatible with all messages and events supported by the rule engine.
