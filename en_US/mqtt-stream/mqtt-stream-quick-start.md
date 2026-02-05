@@ -26,17 +26,17 @@ This section demonstrates how MQTT Streams stores messages and allows consumers 
 
 Before starting, ensure that the MQTT Streams feature is enabled and that the auto-creation behavior will not interfere with this example.
 
-1. Go to **Message Stream** in the left menu.
+1. Go to **Streams** in the left menu.
 
-2. If Message Stream is disabled, click **Settings**. You will be redirected to the **Management** -> **MQTT Settings** -> **Message Stream** page.
+2. If Message Stream is disabled, click **Settings**. You will be redirected to the **Management** -> **MQTT Settings** -> **Streams** page.
 
-3. Toggle the **Enable Message Stream** switch on.
+3. Toggle the **Enable Streams** switch on.
 
 4. Verify the auto-create settings to ensure a **regular Message Stream** is used:
 
    - **Enable Auto Create Message Stream** is disabled, or
 
-   - **Auto Create Message Stream Type** is set to **Regular Message Stream**
+   - **Auto Create Message Stream Type** is set to **Regular Message Stream**.
 
    > This prevents the stream from being auto-created as a Last-Value Message Stream, which would retain only the most recent message per key.
 
@@ -46,11 +46,11 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
 
 ### Step 1: Create an MQTT Stream
 
-1. Navigate to **Message Stream** in the left menu.
+1. Navigate to **Streams** in the left menu.
 
 2. Click **Create Stream** on the page, or click **Create** in the upper-right corner.
 
-3. In the **Create Message Stream** dialog, configure the following settings:
+3. In the **Create Stream** dialog, configure the following settings:
    - **Topic Filter**: `demo/stream`
    - **Data Retention Period**: `1` day
    - **Last-Value Semantics**: Disabled
@@ -93,7 +93,7 @@ Now simulate a **consumer** that replays stored messages.
 3. Subscribe to the stream topic using the earliest timestamp:
 
    ```
-   Topic: $s/0/demo/stream
+   Topic: $stream/0/demo/stream
    QoS: 1
    ```
 
@@ -130,7 +130,7 @@ MQTT Streams allow consumers to control where message replay starts by specifyin
 2. In a new MQTTX client, subscribe to the stream using a later timestamp:
 
    ```
-   Topic: $s/1766477011000/demo/stream
+   Topic: $stream/1766477011000/demo/stream
    QoS: 1
    ```
 
@@ -170,13 +170,13 @@ This section demonstrates how Last-Value MQTT streams keep only the latest messa
 
 ### Step 1: Delete the Existing Stream
 
-1. Navigate to **Message Stream** in the Dashboard.
+1. Navigate to **Streams** in the Dashboard.
 2. Locate the stream with the topic filter `demo/stream`.
 3. Click **Delete** and confirm.
 
 ### Step 2: Create a Last-Value Message Stream
 
-1. Click **Create** on the **Message Stream** page.
+1. Click **Create** on the **Streams** page.
 2. Configure the following settings:
    - **Topic Filter**: `device/state`
    - **Data Retention Period**: `1` day
@@ -213,7 +213,7 @@ Because the **Stream Key Expression** is `message.from`, both messages share the
 2. Subscribe to the stream topic:
 
    ```
-   Topic: $s/0/device/state
+   Topic: $stream/0/device/state
    QoS: 1
    ```
 

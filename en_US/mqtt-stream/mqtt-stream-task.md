@@ -6,10 +6,10 @@ This page walks you through the practical usage of the MQTT Streams feature in E
 
 The MQTT Streams feature is disabled by default. Before creating or using any streams, you must enable the feature in the Dashboard.
 
-1. Navigate to **Message Stream** in the left menu.
+1. Navigate to **Streams** in the left menu.
 2. If the feature is not enabled, you will see a prompt indicating that the feature is disabled.
-3. Click **Settings** to open the **Message Stream** settings page.
-4. Toggle **Enable Message Stream** to **On**.
+3. Click **Settings** to open the **Streams** settings page.
+4. Toggle **Enable Streams** to **On**.
 5. Click **Save Changes**.
 
 Once enabled, the MQTT Stream feature becomes available immediately, and you can start creating and managing streams.
@@ -18,9 +18,9 @@ Once enabled, the MQTT Stream feature becomes available immediately, and you can
 
 MQTT streams must be explicitly created before they can store or replay messages. You can create and manage streams either manually or automatically. For details about automatic creation, see [Automatically Create MQTT Streams via Dashboard](#automatically-create-mqtt-streams-via-dashboard).
 
-1. Navigate to **Message Stream** in the left menu.
+1. Navigate to **Streams** in the left menu.
 
-2. Click **Create Stream** to open the **Create Message Stream** dialog.
+2. Click **Create Stream** to open the **Create Stream** dialog.
 
 3. Configure the following options:
 
@@ -64,7 +64,7 @@ Once created, the MQTT stream becomes active immediately. Messages published to 
 
 ## Automatically Create MQTT Streams via Dashboard
 
-MQTT streams can be automatically created when clients subscribe to a `$s/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+MQTT streams can be automatically created when clients subscribe to a `$stream/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
 
 ::: tip Note
 
@@ -82,9 +82,9 @@ To ensure proper stream behavior, you can enable auto create either regular stre
 
 ### Auto Create Last-Value MQTT Streams
 
-This option is turned on by default in the **Message Stream** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
+This option is turned on by default in the **Streams** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
-1. Navigate to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+1. Navigate to **Management** -> **MQTT Settings** -> **Messages** tab.
 
 2. By default, **Enable Auto Create Message Stream** is enabled and **Last Value Message Stream** type is selected.
 
@@ -95,12 +95,12 @@ This option is turned on by default in the **Message Stream** tab under **MQTT S
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$s/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
+When a client subscribes to a topic such as `$stream/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
 ### Auto Create Regular MQTT Streams
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+1. Go to **Management** -> **MQTT Settings** -> **Streams** tab.
 
 2. By default, **Enable Auto Create Message Stream** is enabled. Select **Regular Message Stream** type.
 
@@ -122,11 +122,11 @@ This section explains how to configure global settings that apply to all MQTT st
 
 You can update MQTT Streams settings directly from the EMQX Dashboard without restarting the broker. This is useful for adjusting system-wide stream behavior at runtime.
 
-1. Go to **Management** -> **MQTT Settings** -> **Message Stream** tab.
+1. Go to **Management** -> **MQTT Settings** -> **Streams** tab.
 
 2. Configure the following options:
 
-   - **Enable Message Stream**: Enables or disables the MQTT Stream feature globally. When disabled, no streams can be created or used.
+   - **Enable Streams**: Enables or disables the MQTT Stream feature globally. When disabled, no streams can be created or used.
 
    - **Max Stream Count**: Sets the maximum number of streams that can exist in the cluster. This helps prevent excessive resource usage caused by uncontrolled stream creation.
 
@@ -203,7 +203,7 @@ streams {
 
 - **gc_interval**: Controls how often expired messages are removed from MQTT streams. This setting affects the garbage collection cycle for stream storage.
 - **regular_stream_retention_period**: Specifies the default maximum retention period for regular streams. Messages older than this duration are automatically deleted.
-- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$s/` topic and the corresponding stream does not yet exist.
+- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$stream/` topic and the corresponding stream does not yet exist.
 
 All duration values use standard time units, such as `s` (seconds), `m` (minutes), `h` (hours), and `d` (days).
 

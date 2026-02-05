@@ -34,7 +34,7 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
 
 - **Stream Subscription**
 
-  A special MQTT subscription used to consume messages from a stream. Clients subscribe using the `$s/<timestamp>/<topic_filter>` format. The timestamp specifies the replay starting point. Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
+  A special MQTT subscription used to consume messages from a stream. Clients subscribe using the `$stream/<timestamp>/<topic_filter>` format. The timestamp specifies the replay starting point. Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
 
 - **Key Expression**
 
@@ -71,7 +71,7 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 ### Subscribing and Consuming Flow
 
-1. A client subscribes to a stream topic (`$s/<timestamp>/<topic_filter>`).
+1. A client subscribes to a stream topic (`$stream/<timestamp>/<topic_filter>`).
 2. The External Subscription framework handles the subscription and initializes a Streams ExtSub handler for the stream topic.
 3. The handler retrieves messages from Durable Storage according to the specified timestamp and retention rules.
 4. Retrieved messages are passed to the External Subscription framework. 
