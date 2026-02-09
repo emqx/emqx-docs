@@ -47,7 +47,7 @@ listeners.ssl.default {
 其中：
 
 - `verify = verify_peer` 表示将启用对端验证。
-- `enable_crl_check = true` 表示启用CRL 检查。
+- `enable_crl_check = true` 表示启用 CRL 检查。
 
 ## CRL 缓存
 
