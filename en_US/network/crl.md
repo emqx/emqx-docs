@@ -1,12 +1,21 @@
 # CRL Check
 
-Since EMQX Open Source v5.0.22 and EMQX Enterprise v5.0.3, Certification Revocation List (CRL) Check is supported for MQTT SSL listeners.  Note that those do not include Secure WebSocket nor QUIC listeners: only listeners of type `ssl` support this feature.
+Starting with EMQX Open Source v5.0.22 and EMQX Enterprise v5.0.3, EMQX supports Certificate Revocation List (CRL) checks for MQTT SSL listeners. This feature is only available for listeners of type `ssl`. Secure WebSocket (`wss`) and QUIC listeners are not supported.
 
-With this feature enabled, EMQX will attempt to verify if connecting client certificates are not revoked according to the CRL Distribution Point described in the client's certificate, and deny connection to revoked client certificates during the SSL/TLS handshake phase of the connection.  Note that the CRL itself must contain the ["Issuing Distribution Point" extension](https://www.rfc-editor.org/rfc/rfc3280#section-5.2.5) in order for the revocation check to be enforced.
+When CRL checking is enabled, EMQX verifies whether a connecting client’s certificate has been revoked by consulting the CRL Distribution Point specified in the client certificate. If the certificate is listed as revoked, the connection is rejected during the SSL/TLS handshake phase.
 
-In order to enable this feature, we need to both enable the corresponding option in the listener and also set the `verify` option of the listener to `verify_peer`, so that the client must be checked against the CRL.
+> **Note**
+>
+> For CRL enforcement to work, the CRL must include the *Issuing Distribution Point* extension, as defined in [RFC 3280, Section 5.2.5](https://www.rfc-editor.org/rfc/rfc3280#section-5.2.5).
 
-Example configuration to enable CRL Check:
+## Enable CRL Check
+
+To enable CRL checking, you must:
+
+1. Enable the CRL check option on the SSL listener.
+2. Set the listener’s `verify` option to `verify_peer`, ensuring that client certificates are validated.
+
+The following example demonstrates how to configure an SSL listener with CRL checking enabled:
 
 
 ```hcl
@@ -28,3 +37,10 @@ listeners.ssl.default {
   }
 }
 ```
+
+## CRL Caching
+
+To avoid excessive HTTP requests to CRL Distribution Point endpoints, EMQX caches fetched CRLs locally.
+
+When a client connects, and EMQX detects a new CRL URL for the first time, it fetches the CRL from the Distribution Point in the client's certificate. By default, EMQX refreshes cached CRLs every 15 minutes to ensure revocation information remains up to date.
+
