@@ -248,7 +248,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 14. Click the **Create** button to complete the entire rule creation.
 
-![Kafka_producer_bridge](./assets/kafka_producer_bridge.png)
+![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 Now you have successfully created the rule, and you can see the newly created rule on the **Integration** -> **Rules** page, as well as the newly created Kafka Producer Sink on the **Actions(Sink)** tab.
 
