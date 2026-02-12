@@ -237,7 +237,7 @@ bin/kafka-topics.sh --create --topic testtopic-out --bootstrap-server localhost:
 
 您也可以点击 **集成** -> **Flow 设计器** 查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送并保存到 Kafka。
 
-![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 ### 配置 Kafka 动态主题
 
