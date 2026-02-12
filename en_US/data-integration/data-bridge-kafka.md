@@ -216,37 +216,29 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    > You may select an existing Sink from the **Action** instead; this example creates a new one.
 
-7. Enter the name and description of the Sink in the corresponding text boxes below.
+7. Enter a **Name** and an optional **Description**.
 
-8. Enter a **Name** and an optional **Description**.
+8. From the **Connector** dropdown box, select the `my-kafka` connector created before. You can also create a new connector if needed. Refer to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
 
-9. From the **Connector** dropdown box, select the `my-kafka` connector created before. You can also create a new connector if needed. Refer to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
+9. Configure the data-sending method for the Sink, including:
 
-10. Configure the data-sending method for the Sink, including:
+      - **Kafka Topic**: The target Kafka topic to which messages are published. Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details.
+      - **Kafka Headers**: Optional key-value metadata added to Kafka messages. Header values must resolve to an object. You can select how header values are encoded using the **Kafka Header Value Encode Type** dropdown and add multiple headers by clicking **Add**.
+      - **Message Key**: The key of the Kafka message, used for partitioning and message ordering. It can be a static string or include placeholders (for example, `${.clientid}`).
+      - **Message Value**: The Kafka message payload rendered from a template. It can be a static string or include placeholders (for example, `${.}`) to dynamically generate the value from the rule context. If the template resolves to `NULL` (for example, when the referenced field does not exist), a Kafka `NULL` value is produced instead of an empty string.
+      - **Message Timestamp**: The timestamp of the Kafka message. You can enter a fixed value or use a placeholder (for example, `${timestamp}`) to dynamically set the message timestamp from the rule output.
+      - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
+      - **Partitions Limit**: Limits the maximum number of partitions to which a producer can send messages. When enabled, the producer will only distribute messages among the specified number of partitions instead of all available partitions.
+      - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
-   - **Kafka Topic**: The target Kafka topic to which messages are published. Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details.
 
-   - **Kafka Headers**: Optional key-value metadata added to Kafka messages. Header values must resolve to an object. You can select how header values are encoded using the **Kafka Header Value Encode Type** dropdown and add multiple headers by clicking **Add**.
+10. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-   - **Message Key**: The key of the Kafka message, used for partitioning and message ordering. It can be a static string or include placeholders (for example, `${.clientid}`).
+11. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
 
-   - **Message Value**: The Kafka message payload rendered from a template. It can be a static string or include placeholders (for example, `${.}`) to dynamically generate the value from the rule context. If the template resolves to `NULL` (for example, when the referenced field does not exist), a Kafka `NULL` value is produced instead of an empty string.
+12. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
 
-   - **Message Timestamp**: The timestamp of the Kafka message. You can enter a fixed value or use a placeholder (for example, `${timestamp}`) to dynamically set the message timestamp from the rule output.
-
-   - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
-
-   - **Partitions Limit**: Limits the maximum number of partitions to which a producer can send messages. When enabled, the producer will only distribute messages among the specified number of partitions instead of all available partitions.
-
-   - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
-
-11. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
-
-12. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
-
-13. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
-
-14. Click the **Create** button to complete the entire rule creation.
+13. Click the **Create** button to complete the entire rule creation.
 
 ![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
