@@ -15,10 +15,9 @@ This chapter explores the core concepts of MQTT, MQTT-specific features, and som
 - [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
 - [Topic Rewrite](../messaging/mqtt-topic-rewrite.md)
 
-Beyond MQTT messaging features, the Developer Guide also covers different ways to connect to and interact with EMQX:
+In addition to MQTT messaging features, the Developer Guide also covers different ways to interact with EMQX:
 
 - [Use curl with EMQX](./curl.md)
-- [MQTT over WebSocket](./mqtt-over-websocket.md)
 
 The guide also introduces EMQX's [MQTT Durable Session](../durability/durability_introduction.md) feature and provides instructions for quickly trying it out.
 
