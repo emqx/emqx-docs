@@ -234,7 +234,6 @@
       # - messaging/neuron
     - durability/durability_introduction
     - connect-emqx/curl
-    - connect-emqx/mqtt-over-websocket
     - title_en: Client SDK
       title_cn: 客户端 SDK
       path: connect-emqx/introduction
@@ -667,6 +666,7 @@
   collapsed: true
   path: mqtt-over-quic/advanced-feature
   children:
+    - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       path: mqtt-over-quic/introduction
