@@ -230,7 +230,7 @@ Prometheus 将使用这些凭据抓取 EMQX 指标。
 
 要使 Prometheus 抓取 EMQX 指标，需要配置 Prometheus 服务器。
 
-将以下配置添加到 Prometheus 的配置文件（通常为安装目录中的 `prometheus.yml`），然后重启 Prometheus 服务。
+将以下配置添加到 Prometheus 的配置文件，然后重启 Prometheus 服务。
 
 ```yaml
 # prometheus.yaml

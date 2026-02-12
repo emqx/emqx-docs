@@ -245,7 +245,7 @@ Prometheus will use these credentials when scraping EMQX metrics.
 
 To enable Prometheus to scrape EMQX metrics, configure the Prometheus server.
 
-Add the following configuration to your Prometheus configuration file (typically `prometheus.yml` in the Prometheus installation directory), then restart the Prometheus service.
+Add the following configuration to your Prometheus configuration file, then restart the Prometheus service.
 
 ```yaml
 # prometheus.yaml
