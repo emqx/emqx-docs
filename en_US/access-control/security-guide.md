@@ -61,3 +61,6 @@ Securing the control plane protects the cluster from unauthorized configuration 
 - [ ] **Backup Strategy**: Schedule automated `emqx ctl data export` backups via cron and ensure external certificates are backed up separately.
 - [ ] **Audit and Observability**: Enable [audit logging](../dashboard/audit-log.md) and ship logs to external SIEM platforms (e.g., Splunk, ELK, [Datadog](../observability/datadog.md)) for anomaly detection.
 
+
+
+<!-- Add reference links to the blogs-->
