@@ -4,6 +4,8 @@ EMQX Enterprise natively supports MQTT over WebSocket through the built-in WebSo
 
 MQTT over WebSocket is functionally identical to MQTT over TCP/TLS. The only difference is the transport layer: MQTT packets are encapsulated inside WebSocket frames and transmitted over HTTP or HTTPS.
 
+Clients using MQTT over WebSocket can interoperate seamlessly with other MQTT clients connected to the same broker or cluster over TCP, TLS, or QUIC. Since the MQTT protocol remains unchanged, clients connected over different transports share the same topic namespace and routing behavior.
+
 This capability is particularly useful in environments where direct TCP connections are unavailable or restricted, such as web browsers and certain enterprise networks.
 
 ## Protocol Stack
