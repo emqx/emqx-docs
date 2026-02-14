@@ -12,14 +12,16 @@ This page highlights major new features supported in the current release. Note t
 
 MQTT Streams introduce a persistent, replayable streaming model to EMQX, extending MQTT’s real-time publish/subscribe paradigm with durable message storage and consumer-controlled replay.
 
-Unlike traditional MQTT delivery, which is transient and depends on subscriber availability, MQTT Streams continuously capture messages matching a topic filter into a persistent stream. Consumers can subscribe to a stream using a timestamp-based topic format (`$s/<timestamp>/<topic_filter>`) to replay historical messages from any point in time, independent of when the messages were originally published.
+Unlike traditional MQTT delivery, which is transient and depends on subscriber availability, MQTT Streams continuously capture messages matching a topic filter into a named persistent stream. Each stream is identified by a unique name and managed independently of its topic filter.
+
+Consumers subscribe using the `$stream/<name>` or `$stream/<name>/<topic_filter>` format. The replay starting point is specified through the MQTT 5 subscription property `stream-offset`, allowing clients to replay historical messages from a chosen position (for example, a specific timestamp, `earliest`, or `latest`).
 
 This allows EMQX to natively support historical message replay, event tracing, and state recovery based on stored messages, without requiring external streaming systems.
 
 #### Feature Highlights
 
-- **Durable Message Streams**: Persist MQTT messages by topic filter with configurable retention.
-- **Timestamp-Based Replay**: Consumers specify a timestamp when subscribing to replay messages starting from a chosen point in time.
+- **Durable Message Streams**: Persist MQTT messages into explicitly named streams with configurable retention policies.
+- **Offset-Based Replay**: Consumers control replay position using the `stream-offset` subscription property.
 - **Regular and Last-Value Streams**: Support both full event streams and, when Last-Value semantics are enabled, compacted streams that retain only the latest message per key.
 - **Per-Key Ordering**: Messages sharing the same stream key are delivered in strict publish order.
 - **MQTT-Native Design**: Requires no changes to existing MQTT publishers or clients.
@@ -32,14 +34,19 @@ Learn more in the [MQTT Streams documentation](../mqtt-stream/mqtt-stream-concep
 
 Message Queue unifies reliable, real-time MQTT publish/subscribe with asynchronous message queuing within EMQX, eliminating the need for external queuing services.
 
-Unlike traditional MQTT, which depends on subscriber availability, Message Queues decouple publishers and subscribers by buffering messages on the server. Messages matching a specified topic filter are stored persistently and can be consumed later using a special topic format: `$q/{topic_filter}`. This ensures reliable message delivery, even when clients are offline or the network is unstable.
+Unlike traditional MQTT, which depends on subscriber availability, Message Queues decouple publishers and subscribers by buffering messages on the server. Messages matching a configured topic filter are stored persistently in a named queue and can be consumed later using the `$queue/<name>` or `$queue/<name>/<topic_filter>` subscription format.
+
+Each queue is explicitly identified by a unique name, rather than by its topic filter. This allows queues to be managed, monitored, and addressed independently of their filtering rules.
+
+> If Message Queue is enabled, the `$queue/` prefix is reserved for Message Queue subscriptions and can no longer be used for shared subscriptions.
 
 <img src="./assets/message_queque.png" alt="message_queque" style="zoom:50%;" />
 
 This feature enables MQTT to handle both real-time and delayed workloads, simplifying IoT system architecture by removing the need for external queuing systems like Kafka or RabbitMQ. It’s ideal for scenarios where message durability, reliable delivery, and offline buffering are critical.
 
 #### Feature Highlights
-- **Unified Messaging Model**: Combines lightweight MQTT with enterprise-grade queuing in a single system.
+- **Named Persistent Queues**: Messages are stored in explicitly named queues with configurable behavior.
+- **Decoupled Delivery**: Publishers and subscribers are fully decoupled through server-side buffering.
 - **Offline Storage**: Messages are retained even when subscribers are disconnected.
 - **Last-Value Retention**: Optionally keep only the latest message per key (e.g., device ID), perfect for fast-changing data like sensor readings.
 - **Flexible Dispatch Strategies**: Choose from Random, Round Robin, or Least Inflight Subscriber to distribute messages efficiently.
