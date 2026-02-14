@@ -51,11 +51,12 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
 2. Click **Create Stream** on the page, or click **Create** in the upper-right corner.
 
 3. In the **Create Stream** dialog, configure the following settings:
+   - **Name**: `my_stream`
    - **Topic Filter**: `demo/stream`
    - **Data Retention Period**: `1` day
    - **Last-Value Semantics**: Disabled
    - **Stream Key Expression**: `message.from`
-
+   
 4. Click **Create**.
 
    ![create_message_stream](./assets/create_message_stream.png)
@@ -90,14 +91,16 @@ Now simulate a **consumer** that replays stored messages.
 
 2. Connect to EMQX.
 
-3. Subscribe to the stream topic using the earliest timestamp:
+3. Subscribe to the stream topic:
 
    ```
-   Topic: $stream/0/demo/stream
+   Topic: $stream/my_stream/demo/stream
    QoS: 1
    ```
 
    ![subscribe_to_stream_topic](./assets/subscribe_to_stream_topic.png)
+
+4. <!-- How to set "Subscription Property"? -->
 
 **Expected Behavior**:
  You should receive all previously published messages, in publish order:
