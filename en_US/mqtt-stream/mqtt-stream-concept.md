@@ -6,7 +6,17 @@ This page provides a complete overview of the MQTT Streams feature in EMQX, cove
 
 ## What Is an MQTT Stream?
 
-An MQTT Stream is a logical collection of MQTT messages that automatically collects messages matching a topic filter during its lifetime. It stores matching messages durably and allows clients to replay historical data by subscribing to a stream-specific topic.
+An MQTT Stream is a named logical resource that continuously collects MQTT messages matching its configured topic filter. Messages are stored durably according to the stream’s retention policy and can later be replayed by subscribing clients.
+
+Streams are identified by a unique name. The topic filter is part of the stream’s configuration but is not its identifier.
+
+Each stream has:
+
+- A unique name
+- A configured topic filter
+- A retention policy (time-based and/or size-based)
+- Optional Last-Value semantics
+- An explicit lifecycle (create, update, delete)
 
 ## Why Use MQTT Streams?
 
@@ -23,18 +33,57 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
 
 - **MQTT Stream**
 
-  A logical resource identified by an MQTT topic filter and managed with an explicit lifecycle. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
+  A logical resource identified and addressed by name, not by topic filter. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
 
-  - **Regular MQTT Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay all messages published after any given point in time by subscribing with a timestamp.
+  Stream names can contain only:
+
+  - Alphanumeric characters (`A–Z`, `a–z`, `0–9`)
+  - Underscores (`_`)
+  - Hyphens (`-`)
+  - Dots (`.`)
+
+  Two stream types are supported:
+
+  - **Regular MQTT Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay messages starting from a specified timestamp or offset using the `stream-offset` subscription property.
   - **Last-Value MQTT Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
 
 - **Topic Filter**
 
   An MQTT topic filter, such as `sensors/+/data`, that determines which published messages are captured into a stream. Only matching messages are ingested, and a single message may belong to multiple streams.
 
+  ::: tip
+
+  The topic filter is not the stream identifier. It is the configuration metadata of a named stream.
+
+  :::
+
 - **Stream Subscription**
 
-  A special MQTT subscription used to consume messages from a stream. Clients subscribe using the `$stream/<timestamp>/<topic_filter>` format. The timestamp specifies the replay starting point. Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
+  A special MQTT subscription used to consume messages from a stream. Clients subscribe using one of the following formats:
+
+    ```
+  SUBSCRIBE $stream/<name>
+  SUBSCRIBE $stream/<name>/<topic_filter>
+    ```
+
+    Where:
+
+    - `<name>` is the stream name (required).
+    - `<topic_filter>` is optional when subscribing to an existing stream.
+
+    Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
+
+- **Stream Offset (Replay Starting Point)**
+
+  The replay starting point is provided using the MQTT 5 User Subscription Property `stream-offset`, rather than being specified in the topic path.
+
+  The `stream-offset` property determines from where replay begins. For example:
+
+  - A timestamp
+  - A logical offset
+  - Special positions such as earliest or latest (if supported)
+
+  This change removes offset parsing from the topic string and aligns replay control with MQTT 5 properties.
 
 - **Key Expression**
 
@@ -52,7 +101,7 @@ External Subscription is an EMQX mechanism that connects external message source
 
 ### Main Components
 
-- **Streams Registry**: Manages the lifecycle of MQTT streams and maintains stream metadata and indexes. It uses a Mnesia table to efficiently look up streams by topic filter.
+- **Streams Registry**: Manages the lifecycle of MQTT streams and maintains stream metadata such as stream name, topic filter, retention policy, and key expression. It uses a Mnesia table to look up streams efficiently.
 - **Streams Message Database**: Provides durable storage for stream messages and is built on top of EMQX [Durable Storage](../design/durable-storage.md). It persists messages, enforces retention limits, applies Last-Value semantics when enabled, and supports efficient message retrieval until messages expire according to retention policies.
 - **Streams ExtSub Handler**: Integrates message streams with MQTT client sessions. It retrieves messages from Durable Storage and delivers them to subscribing clients through the External Subscription framework.
 
@@ -71,19 +120,29 @@ The following diagram shows the data flow between the MQTT Streams components:
 
 ### Subscribing and Consuming Flow
 
-1. A client subscribes to a stream topic (`$stream/<timestamp>/<topic_filter>`).
+1. A client subscribes to a stream topic (`$stream/<name>`, or `$stream/<name>/<topic_filter>`), optionally including the `stream-offset` subscription property.
+
+   ::: warning Deprecated
+
+   The legacy format `$s/<offset>/<topic_filter>` is supported for backward compatibility but is deprecated. For details, see [Compatibility Notes](#compatibility-notes).
+
+   :::
+
 2. The External Subscription framework handles the subscription and initializes a Streams ExtSub handler for the stream topic.
-3. The handler retrieves messages from Durable Storage according to the specified timestamp and retention rules.
+
+3. The handler retrieves messages from Durable Storage according to the specified `stream-offset` and retention rules.
+
 4. Retrieved messages are passed to the External Subscription framework. 
+
 5. The ExtSub application delivers messages to the client via standard MQTT delivery.
 
 ## MQTT Streams Core Features
 
 MQTT Streams provide a set of core capabilities that define how messages are stored, ordered, retained, and delivered for replay-based consumption.
 
-- **Timestamp-Based Replay**
+- **Offset-Based Replay**
 
-  MQTT streams support replay starting from a specified timestamp. Consumers choose the timestamp when subscribing. Messages published before the timestamp are skipped.
+  Replay starting position is specified using the `stream-offset` subscription property, not in the topic path. Messages published before the specified offset are skipped.
 
 - **Retention**
 
@@ -100,6 +159,27 @@ MQTT Streams provide a set of core capabilities that define how messages are sto
 - **MQTT-Native Delivery**
 
   Stream messages are delivered using standard MQTT mechanisms. Publishers do not need to change their behavior. Message delivery to subscribers is integrated through External Subscription.
+
+## Compatibility Notes
+
+This section describes compatibility considerations for existing deployments.
+
+### Named Streams
+
+- All streams are now explicitly named resources.
+- Stream names must follow the allowed character set rules.
+
+### Legacy Streams
+
+Previously created unnamed streams are automatically assigned names derived from their topic filters.
+
+The derived name is `/<topic_filter>`.
+
+### Deprecated Prefix
+
+The `$s` prefix for subscribing to streams is still supported for backward compatibility, but is deprecated.
+
+New deployments should use `$stream/<name>`.
 
 ## Typical Use Cases
 
