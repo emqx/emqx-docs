@@ -33,7 +33,7 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
 
 - **MQTT Stream**
 
-  A logical resource identified and addressed by name, not by topic filter. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
+  A logical resource identified and addressed by name, and managed with an explicit lifecycle. While active, it continuously stores matching messages within configured time or size limits. Stored messages can be replayed by subscribing consumers, without requiring any changes on the publishing side.
 
   Stream names can contain only:
 
@@ -44,8 +44,8 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
 
   Two stream types are supported:
 
-  - **Regular MQTT Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay messages starting from a specified timestamp or offset using the `stream-offset` subscription property.
-  - **Last-Value MQTT Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
+  - **Regular Stream**: A regular stream stores all matching messages without overwriting historical data. Consumers can replay messages starting from a specified timestamp or offset using the `stream-offset` subscription property.
+  - **Last-Value Stream**: A last-value stream enables [Last-Value semantics](#last-value-semantics). For messages with the same stream key, newer messages overwrite older ones, and the stream retains only the latest message associated with each key.
 
 - **Topic Filter**
 
@@ -83,7 +83,7 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
   - A logical offset
   - Special positions such as earliest or latest (if supported)
 
-  This change removes offset parsing from the topic string and aligns replay control with MQTT 5 properties.
+  This design removes offset parsing from the topic string and aligns replay control with MQTT 5 properties.
 
 - **Key Expression**
 

@@ -14,7 +14,7 @@ The MQTT Streams feature is disabled by default. Before creating or using any st
 
 Once enabled, the MQTT Stream feature becomes available immediately, and you can start creating and managing streams.
 
-## Manually Create MQTT Streams via Dashboard
+## Manually Create Streams via Dashboard
 
 MQTT streams must be explicitly created before they can store or replay messages. You can create and manage streams either manually or automatically. For details about automatic creation, see [Automatically Create MQTT Streams via Dashboard](#automatically-create-mqtt-streams-via-dashboard).
 
@@ -95,7 +95,7 @@ MQTT streams must be explicitly created before they can store or replay messages
 
 Once created, the MQTT stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.
 
-## Automatically Create MQTT Streams via Dashboard
+## Automatically Create Streams via Dashboard
 
 MQTT streams can be automatically created when clients subscribe to a `$stream/<name>`-prefixed topic. The `<name>` in the subscription becomes the stream name.
 
@@ -113,13 +113,13 @@ To ensure proper stream behavior, you can enable auto create either regular stre
 
 :::
 
-### Auto Create Last-Value MQTT Streams
+### Auto Create Last-Value Streams
 
 This option is turned on by default in the **Streams** tab under **MQTT Settings**. It allows EMQX to automatically create streams that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
 1. Navigate to **Management** -> **MQTT Settings** -> **Messages** tab.
 
-2. By default, **Enable Auto Create Message Stream** is enabled and **Last Value Message Stream** type is selected.
+2. By default, **Enable Auto Create Stream** is enabled and **Last Value Stream** type is selected.
 
    Configure the following:
 
@@ -129,7 +129,7 @@ This option is turned on by default in the **Streams** tab under **MQTT Settings
 3. Click **Save Changes**.
 
 When a client subscribes to a topic such as `$stream/my_stream/test`, EMQX will automatically create a last-value stream named `my_stream`, which will appear in the **Streams** list.
-### Auto Create Regular MQTT Streams
+### Auto Create Regular Streams
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
 
@@ -147,7 +147,7 @@ This option can be enabled manually if you prefer regular streams where messages
 
 4. Click **Save Changes**.
 
-## Configure MQTT Streams Settings
+## Configure Streams Settings
 
 This section explains how to configure global settings that apply to all MQTT streams in EMQX. These settings control message retention, cleanup intervals, internal stream behavior, and stream auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
@@ -169,10 +169,10 @@ You can update MQTT Streams settings directly from the EMQX Dashboard without re
 
    - **Enable Auto Create Message Stream**: Enables automatic creation of streams when clients subscribe to stream topics and no matching stream exists.
 
-   - **Auto Create Message Stream Type**: Specifies the type of streams to create automatically:
+   - **Auto Create Stream Type**: Specifies the type of streams to create automatically:
 
-     - **Last Value Message Stream** (default): Automatically creates streams with Last-Value semantics enabled.
-     - **Regular Message Stream**: Automatically creates streams that retain all messages without overwriting.
+     - **Last Value Stream** (default): Automatically creates streams with Last-Value semantics enabled.
+     - **Regular Stream**: Automatically creates streams that retain all messages without overwriting.
 
    - **Stream Key Expression**: Defines the key expression used for automatically created streams when Last-Value semantics are enabled. The default value is `message.from`. This expression determines how keys are extracted for per-key ordering and overwriting behavior.
 
@@ -260,7 +260,7 @@ durable_storage {
 
 These settings control how MQTT stream data is written to durable storage, including transaction batching and flush behavior. In most cases, the default values are sufficient and do not need adjustment unless you are tuning storage performance.
 
-## Manage MQTT Streams via REST API
+## Manage Streams via REST API
 
 EMQX provides REST APIs for managing streams. You can use these APIs to create, update, list, query, and delete streams, as well as configure global MQTT Stream settings. This is useful for automation, integration with external systems, and managing streams at scale.
 
@@ -346,6 +346,6 @@ curl -s -u key:secret \
 
 Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
 
-### Configure MQTT Streams Global Settings
+### Configure Streams Global Settings
 
-See [Configure MQTT Streams Settings -RESP API](#rest-api).
+See [Configure Streams Settings -RESP API](#rest-api).
