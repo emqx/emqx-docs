@@ -24,9 +24,42 @@ MQTT streams must be explicitly created before they can store or replay messages
 
 3. Configure the following options:
 
+   - **Name**: Required. Specifies the unique name of the stream. Stream names must contain only the following:
+
+     - Alphanumeric characters (`A–Z`, `a–z`, `0–9`)
+     - Underscores (`_`)
+     - Hyphens (`-`)
+     - Dots (`.`)
+
+     The stream is identified and managed by this name. Clients subscribe using:
+
+     ```
+     $stream/<name>
+     $stream/<name>/<topic_filter>
+     ```
+
    - **Topic Filter**: Enter the topic or topic filter (for example, `t/1` or `sensors/+/data`) that defines which published messages are captured into the stream. All messages published to topics matching this filter will be stored in the stream.
 
-     > Clients consume messages from the stream by subscribing to a stream topic in the `$s/<timestamp>/<topic_filter>` format.
+     > Clients consume messages by subscribing to:
+     >
+     > ```
+     > $stream/<name>
+     > $stream/<name>/<topic_filter>
+     > ```
+     >
+     > The `<topic_filter>` segment must match the stream’s configured topic filter.
+     >
+     > To replay historical messages, specify the MQTT 5 subscription property:
+     >
+     > ```
+     > stream-offset
+     > ```
+     >
+     > The `stream-offset` value can be:
+     >
+     > - A Unix timestamp in microseconds
+     > - `earliest`
+     > - `latest`
 
    - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
      
@@ -64,7 +97,7 @@ Once created, the MQTT stream becomes active immediately. Messages published to 
 
 ## Automatically Create MQTT Streams via Dashboard
 
-MQTT streams can be automatically created when clients subscribe to a `$stream/`-prefixed topic. This allows streams to be provisioned dynamically without manual setup.
+MQTT streams can be automatically created when clients subscribe to a `$stream/<name>`-prefixed topic. The `<name>` in the subscription becomes the stream name.
 
 ::: tip Note
 
@@ -95,7 +128,7 @@ This option is turned on by default in the **Streams** tab under **MQTT Settings
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$stream/<timestamp>/test`, EMQX will automatically create a last-value semantics stream, which will appear in the **Message Stream** list.
+When a client subscribes to a topic such as `$stream/my_stream/test`, EMQX will automatically create a last-value stream named `my_stream`, which will appear in the **Streams** list.
 ### Auto Create Regular MQTT Streams
 
 This option can be enabled manually if you prefer regular streams where messages are stored independently and not overwritten.
@@ -171,7 +204,7 @@ PUT /api/v5/message_streams/config
 
 **Request example**:
 
-```
+```bash
 curl -s -u key:secret \
   -X PUT \
   -H "Content-Type: application/json" \
@@ -203,7 +236,7 @@ streams {
 
 - **gc_interval**: Controls how often expired messages are removed from MQTT streams. This setting affects the garbage collection cycle for stream storage.
 - **regular_stream_retention_period**: Specifies the default maximum retention period for regular streams. Messages older than this duration are automatically deleted.
-- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$stream/` topic and the corresponding stream does not yet exist.
+- **check_stream_status_interval**: Determines how frequently a subscriber retries to find a stream when subscribing to a `$stream/<name>` topic and the corresponding stream does not yet exist.
 
 All duration values use standard time units, such as `s` (seconds), `m` (minutes), `h` (hours), and `d` (days).
 
@@ -249,6 +282,7 @@ curl -s -u key:secret \
   -H "Content-Type: application/json" \
   http://localhost:18083/api/v5/message_streams/streams \
   -d '{
+    "name": "my_stream",
     "topic_filter": "t1/#",
     "is_lastvalue": false
   }' | jq
@@ -273,6 +307,7 @@ The response contains a list of streams and pagination metadata.
 {
   "data": [
     {
+      "name": "my_stream",
       "topic_filter": "t1/#"
     }
   ],
@@ -284,13 +319,13 @@ The response contains a list of streams and pagination metadata.
 
 ### Update a Stream
 
-To update an existing stream, send a `PUT` request to the stream resource identified by its topic filter. The topic filter must be URL-encoded.
+To update an existing stream, send a `PUT` request to the stream resource identified by its name. The topic filter must be URL-encoded.
 
 ```bash
 curl -s -u key:secret \
   -X PUT \
   -H "Content-Type: application/json" \
-  http://localhost:18083/api/v5/message_streams/streams/t1%2F%23 \
+  http://localhost:18083/api/v5/message_streams/streams/my_stream \
   -d '{
     "key_expression": "message.from",
     "is_lastvalue": false
@@ -301,12 +336,12 @@ The response returns the updated stream configuration.
 
 ### Delete a Stream
 
-To delete a stream, send a `DELETE` request to the stream resource identified by its URL-encoded topic filter.
+To delete a stream, send a `DELETE` request to the stream resource identified by its name.
 
-```
+```bash
 curl -s -u key:secret \
   -X DELETE \
-  http://localhost:18083/api/v5/message_streams/streams/t1%2F%23
+  http://localhost:18083/api/v5/message_streams/streams/my_stream
 ```
 
 Once deleted, the stream stops collecting messages and its stored data is removed according to internal cleanup rules.
