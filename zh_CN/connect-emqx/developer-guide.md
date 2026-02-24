@@ -12,6 +12,9 @@
 - [自动订阅](../messaging/mqtt-auto-subscription.md)
 - [主题重写](../messaging/mqtt-topic-rewrite.md)
 - [通配符订阅](../messaging/mqtt-wildcard-subscription.md)
+
+除 MQTT 消息相关功能外，开发者指南还介绍了与 EMQX 进行交互的不同方式：
+
 - [使用 curl 连接 EMQX](./curl.md)
 
 此外，本指南中还介绍了EMQX 的 [MQTT 会话持久化](../durability/durability_introduction.md)功能，同时提供了快速体验该功能的步骤。

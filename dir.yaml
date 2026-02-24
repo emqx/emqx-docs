@@ -666,6 +666,7 @@
   collapsed: true
   path: mqtt-over-quic/advanced-feature
   children:
+    - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       path: mqtt-over-quic/introduction

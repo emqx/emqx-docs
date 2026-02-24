@@ -14,15 +14,18 @@ This chapter explores the core concepts of MQTT, MQTT-specific features, and som
 - [Delayed Publish](../messaging/mqtt-delayed-publish.md)
 - [Auto Subscribe](../messaging/mqtt-auto-subscription.md)
 - [Topic Rewrite](../messaging/mqtt-topic-rewrite.md)
+
+In addition to MQTT messaging features, the Developer Guide also covers different ways to interact with EMQX:
+
 - [Use curl with EMQX](./curl.md)
 
-Additionally, this guide introduces EMQX's [MQTT Durable Session](../durability/durability_introduction.md) feature and provides steps for quickly experiencing this feature.
+The guide also introduces EMQX's [MQTT Durable Session](../durability/durability_introduction.md) feature and provides instructions for quickly trying it out.
 
-EMQX's support of the MQTT protocol makes it compatible with most MQTT client libraries and SDKs. The developer guide provides [step-by-step instructions and code samples](./introduction.md) to help developers start building their MQTT projects quickly. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
+Thanks to its support for the MQTT protocol, EMQX is compatible with most MQTT client libraries and SDKs. This guide includes [step-by-step instructions and code samples](./introduction.md) to help developers start building their MQTT projects quickly. For a complete list of MQTT client SDKs and their comparison, see [MQTT client SDKs](https://www.emqx.com/en/mqtt-client-sdk).
 
 ::: tip
 
-Not all SDKs are displayed on the document.
+Not all SDKs are displayed in the document.
 
 :::
 
