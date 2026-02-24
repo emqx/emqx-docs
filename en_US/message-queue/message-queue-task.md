@@ -2,7 +2,7 @@
 
 This page walks you through the practical usage of the Message Queue feature in EMQX, from creating queues to configuring their behavior and managing them using the Dashboard, REST API, or configuration files.
 
-## Manually Create Message Queues via Dashboard
+## Manually Create Queues via Dashboard
 
 Message queues must be explicitly declared/created before they can store or dispatch messages. You can create message queues either manually or automatically. For details about automatic creation, see [Automatically Create Message Queues via Dashboard](#automatically-create-message-queues-via-dashboard).
 
@@ -12,9 +12,23 @@ Message queues must be explicitly declared/created before they can store or disp
 
 3. In the **Create Queue** dialog, configure the following options:
 
+   - **Name**: Specifies the unique name of the queue. Queue names may contain only the following:
+
+     - Alphanumeric characters (`A–Z`, `a–z`, `0–9`)
+     - Underscores (`_`)
+     - Hyphens (`-`)
+     - Dots (`.`)
+
+     The queue is identified and managed by this name.
+
+     Clients can consume messages using the following subscription formats:
+
+     - `$queue/<name>` is used when the queue already exists.
+     - `$queue/<name>/<topic_filter>` is optional when subscribing to an existing queue. It can be used when auto-creation is enabled. If the queue does not yet exist, EMQX uses the provided `<topic_filter>` to create it automatically.
+
    - **Topic Filter**: Enter the topic or topic filter (e.g., `t/1`).  It defines which published messages are enqueued based on topic matching. A queue will collect all messages that match this topic filter.
 
-     To consume messages from the queue, clients must subscribe to the topic using the `$queue/{Topic Filter}` format.
+     > The topic filter is part of the queue’s configuration but does not define the queue’s identity.
 
    - **Dispatch Strategy**: Select how messages should be distributed among subscribers. Available strategies include:
 
@@ -40,7 +54,7 @@ Message queues must be explicitly declared/created before they can store or disp
 
 4. Click **Create** to save the queue.
 
-The new queue will appear in the Message Queue list, showing its topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
+The new queue will appear in the Message Queue list, showing its name, topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
 
 ### Queue Key Expression
 
@@ -118,15 +132,20 @@ Queue Key Expressions are evaluated against the following message structure:
 
 </details>
 
-## Automatically Create Message Queues via Dashboard
+## Automatically Create Queues via Dashboard
 
-Starting from EMQX 6.0.1, message queues can be automatically created when clients subscribe to a `$q/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
+Message queues can be automatically created when clients subscribe to a `$queue/`-prefixed topic. This allows queues to be provisioned dynamically without manual setup.
 
-The queues may be auto-created either as regular queues or last-value semantics queues. 
+When auto-creation is enabled:
+
+- Subscribing to `$queue/<name>` works only if the queue already exists.
+- Subscribing to `$queue/<name>/<topic_filter>` allows EMQX to automatically create the queue using the provided `<topic_filter>` if it does not already exist.
+
+Queues may be auto-created either as regular queues or last-value semantics queues. 
 
 ::: tip Note
 
-To ensure proper queue behavior, you can enable either **Auto Create Regular Message Queue** or **Auto Create Last Value Semantics Queue**, but not both at the same time.
+To ensure proper queue behavior, you can enable either **Auto Create Regular Queue** or **Auto Create Last Value Semantics Queue**, but not both at the same time.
 
 :::
 
@@ -136,7 +155,7 @@ This option is turned on by default in the **Queues** tab under **MQTT Settings*
 
 1. Navigate to **Management** -> **MQTT Settings** -> **Queues** tab.
 
-2. By default, **Enable Auto Create Last Value Semantics Queue** is enabled.
+2. By default, **Enable Auto Create Queue** -> **Last Value Semantics Queue** is enabled.
 
    Configure the following:
 
@@ -146,20 +165,20 @@ This option is turned on by default in the **Queues** tab under **MQTT Settings*
 
 3. Click **Save Changes**.
 
-When a client subscribes to a topic such as `$q/test`, EMQX will automatically create a last-value semantics queue, which will appear in the **Message Queue** list.
+When a client subscribes to a topic such as `$queue/my_queue/test`, if `my_queue` does not already exist, EMQX automatically creates a Last-Value semantics queue named `my_queue` using `test` as its topic filter. The queue then appears in the **Queues** list.
 
-### Auto Create Regular Message Queue
+### Auto Create Regular Queue
 
 This option can be enabled manually if you prefer regular queues where messages are stored independently and not overwritten.
 
 1. Go to **Management** -> **MQTT Settings** -> **Queues** tab.
-2. Turn on **Enable Auto Create Regular Message Queue**.
+2. Turn on **Enable Auto Create Queue** -> **Regular Queue**.
 3. Configure the following:
    - **Dispatch Strategy**: Determines how messages are distributed to subscribers (default: `Random`).
    - **Data Retention Period**: Specifies how long messages should be retained in the queue.
 4. Click **Save Changes**.
 
-## Configure Message Queue Settings
+## Configure Queue Settings
 
 This section explains how to configure global settings that apply to all message queues in EMQX. These settings control message retention, cleanup intervals, internal queue behavior, and queue auto-creation behavior. You can configure them via the Dashboard, REST API, or configuration file.
 
@@ -172,9 +191,9 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
    Alternatively, you can click the **Settings** button in the top-right corner of the **Queues** page.
 
 2. In the **Queues** panel, the following configuration options are available:
-   - **Enable Queues**: The message queue system is enabled by default and cannot be disabled via the Dashboard.
+   - **Enable Queues**: Enable the Message Queue feature.
 
-     > To disable it, you must modify the configuration file directly.
+     >  You cannot disable Queues via the Dashboard. To disable it, you must modify the configuration file directly.
 
    - **Max Queue Count**: Sets the maximum number of queues that can be created.
 
@@ -182,18 +201,20 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
    - **Regular Queue Retention Period**: The maximum duration for which messages are retained in regular queues. Default is `7` days.
 
-   - **Find Queue Retry Interval**: When a client subscribes to a `$q/`-prefixed queue topic and the corresponding queue does not yet exist, this setting controls how often the client retries to find the queue. Default is `10` seconds.
+   - **Find Queue Retry Interval**: When a client subscribes to `$queue/<name>` and the corresponding queue is not found, this setting controls how frequently the subscriber retries to locate the queue. Default is `10` seconds.
 
-   - **Auto-Creation Options**: EMQX supports dynamic queue provisioning through auto-creation features.
+   - **Enable Auto Create Queue **: Enables automatic creation of queues when clients subscribe to queue topics and no matching queue exists.
 
-     - **Auto Create Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$q/` topic and no matching queue exists, EMQX will automatically create a queue with Last-Value Semantics enabled. 
+   - **Auto Create Queue Type**: Specifies the type of queues to create automatically:
+
+     - **Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$queue/<name>/<topic_filter>` topic and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled. 
 
        For details of the settings, see [Auto Create Last Value Semantics Queue](#auto-create-last-value-semantics-queue).
 
-     - **Auto Create Regular Message Queue**: Can be enabled as an alternative to the above. When enabled, EMQX will create regular (non-overwriting) queues automatically for `$q/` subscriptions.
+     - **Regular Queue**: When enabled, EMQX automatically creates regular (non-overwriting) queues for `$queue/<name>/<topic_filter>` subscriptions.
 
        For details of the settings, see [Auto Create Regular Message Queue](#auto-create-regular-message-queue).
-
+   
 3. After making changes, click **Save Changes** to apply the new settings.
 
 ### REST API
@@ -220,29 +241,36 @@ mq {
 
 #### Configuration Descriptions
 
-- **`gc_interval`**:
-  Defines the interval at which the Message Queues will clean up expired messages.
-- **`regular_queue_retention_period`**:
-  Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
-- **`find_queue_retry_interval`**:
-  Determines how frequently a subscriber retries to locate a queue when subscribing to a `$queue/` topic that does not yet exist.
+- **`gc_interval`**: Defines the interval at which the Message Queues will clean up expired messages.
+- **`regular_queue_retention_period`**: Sets the maximum time that messages are retained in a regular queue. After this period, messages will be purged.
+- **`find_queue_retry_interval`**: Determines how frequently a subscriber retries to locate a queue when subscribing to a `$queue/<name>` topic that is not yet found.
 - **`max_queue_count`**: (Optional) Sets the maximum number of queues that can be created.
 
-## Manage Message Queues via REST API
+## Manage Queues via REST API
 
 EMQX provides a set of REST APIs to manage the lifecycle of Message Queues, including creation, retrieval, update, and deletion.
 
-### Create a Message Queue
+::: tip Note
 
-Create a new message queue by specifying the topic filter and queue properties such as whether to enable Last-Value Semantics:
+All REST API operations require appropriate authentication and permissions. For detailed request and response schemas, refer to the "Message Queue" section in [REST API](../admin/api.md).
+
+:::
+
+All examples below assume basic authentication using an API key and secret.
+
+### Create a Queue
+
+Create a new message queue by specifying the queue name, topic filter, and queue properties such as whether to enable Last-Value Semantics:
 
 ```bash
 curl -s -u key:secret -X POST -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues \
--d '{"topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
+-d '{"name": "my_queue", "topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
-### List All Message Queues
+The response includes the details of the newly created queue, including its `name` and configuration.
+
+### List All Queues
 
 Retrieve the list of existing message queues:
 
@@ -251,29 +279,26 @@ curl -s -u key:secret -X GET -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues | jq
 ```
 
-### Update a Message Queue
+### Update a Queue
 
 Update the properties of an existing queue, such as its dispatch strategy:
 
 ```bash
 curl -s -u key:secret -X PUT -H "Content-Type: application/json" \
-http://localhost:18083/api/v5/message_queues/t1%2F%23 \
+http://localhost:18083/api/v5/message_queues/my_queue \
 -d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
-### Delete a Message Queue
+### Delete a Queue
 
 Remove a message queue and all messages retained in it:
 
 ```bash
 curl -s -u key:secret -X DELETE \
-http://localhost:18083/api/v5/message_queues/t1%2F%23
+http://localhost:18083/api/v5/message_queues/my_queue
 ```
 
-> **Note:**
->
-> - Topic filters in the URL must be URL-encoded (e.g., `t1/#` becomes `t1%2F%23`).
-> - Authentication is required (`key:secret`).
+Once deleted, the queue stops accepting new messages and its stored data is removed.
 
 ## FAQ and Troubleshooting
 

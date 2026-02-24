@@ -1,6 +1,6 @@
 # Message Queue Quick Start
 
-This page walks you through how to use the Message Queue feature in EMQX 6.0. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
+This page walks you through how to quickly use the Message Queue feature. You’ll use MQTTX to simulate clients, create and manage message queues from the EMQX Dashboard, and see how messages can be stored and delivered reliably.
 
 ## Objectives
 
@@ -22,15 +22,16 @@ Before starting, ensure you have:
 
 This section demonstrates how EMQX Message Queues persist and deliver messages. You will simulate MQTT clients using MQTTX, observe how messages are retained and dispatched even when subscribers are offline.
 
-### Step 1: Create a Message Queue
+### Step 1: Create a Queue
 
 1. Navigate to **Queues** in the left menu.
 2. Click the **Create** button in the upper-right corner of the page.
 
 3. In the **Create Queue** dialog, configure the following settings:
+   - **Name**: `my_queque`
    - **Topic Filter**: `demo/topic`
    - **Dispatch Strategy**: `Random`
-   - **Data Retention Period**: `1` day
+   - **Data Retention Period**: `7` day
    - **Last Value Semantics**: `Disabled`
 4. Click **Create**.
 
@@ -65,7 +66,7 @@ Use MQTTX to simulate a client as a **subscriber**:
 3. Subscribe to the queue topic:
 
    ```json
-   Topic: $queue/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
@@ -90,7 +91,7 @@ In this section, you will simulate multiple subscribers connected to the same Me
 3. Connect to EMQX and subscribe to the same queue topic:
 
    ```json
-   Topic: $queue/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
@@ -140,9 +141,10 @@ This removes the previous queue and its stored messages.
 
 1. On the **Queues** page, click **Create**.
 2. In the **Create Queue** dialog, configure the settings:
+   - **Name**: `my_queue`
    - **Topic Filter**: `device/config`
    - **Dispatch Strategy**: `Random` (or your choice)
-   - **Data Retention Period**: `1` day
+   - **Data Retention Period**: `7` day
    - **Last Value Semantics**: Toggle on
    - **Queue Key Expression**: `message.from` (or any field name you will use as key)
 3. Click **Create**.
@@ -184,7 +186,7 @@ Since the **Queue Key Expression** is set to `message.from`, EMQX will automatic
 3. Subscribe to the queue topic:
 
    ```json
-   Topic: $queue/device/config
+   Topic: $queue/my_queue/device/config
    QoS: 1
    ```
 
