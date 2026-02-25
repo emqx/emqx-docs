@@ -66,18 +66,19 @@ MQTT Streams extends MQTT with durable message storage and replay. It allows con
   SUBSCRIBE $stream/<name>/<topic_filter>
     ```
 
-    Where:
+   Where:
 
     - `<name>` is the stream name (required).
     - `<topic_filter>` is optional when subscribing to an existing stream.
+    - When auto-creation is enabled, `$stream/<name>/<topic_filter>` allows EMQX to create the stream using the provided topic filter if it does not already exist.
 
-    Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
+  Stream subscriptions operate independently of regular MQTT subscriptions and are delivered through the External Subscription mechanism.
 
 - **Stream Offset (Replay Starting Point)**
 
   The replay starting point is provided using the MQTT 5 User Subscription Property `stream-offset`, rather than being specified in the topic path.
 
-  The `stream-offset` property determines from where replay begins. For example:
+  The `stream-offset` property determines from where the replay begins. For example:
 
   - A timestamp
   - A logical offset

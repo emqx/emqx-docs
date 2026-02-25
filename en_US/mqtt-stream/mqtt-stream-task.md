@@ -31,36 +31,29 @@ MQTT streams must be explicitly created before they can store or replay messages
      - Hyphens (`-`)
      - Dots (`.`)
 
-     The stream is identified and managed by this name. Clients subscribe using:
-
-     ```
-     $stream/<name>
-     $stream/<name>/<topic_filter>
-     ```
+     The stream is identified and managed by this name. 
 
    - **Topic Filter**: Enter the topic or topic filter (for example, `t/1` or `sensors/+/data`) that defines which published messages are captured into the stream. All messages published to topics matching this filter will be stored in the stream.
-
-     > Clients consume messages by subscribing to:
+   
+     > Clients can consume messages using the following subscription formats:
      >
-     > ```
-     > $stream/<name>
-     > $stream/<name>/<topic_filter>
-     > ```
-     >
+     > - `$stream/<name>` is used when the stream already exists.
+     > - `$stream/<name>/<topic_filter>` is optional when subscribing to an existing stream. It can be used when auto-creation is enabled. If the stream does not yet exist, EMQX uses the provided `<topic_filter>` to create it automatically.
+     > 
      > The `<topic_filter>` segment must match the stream’s configured topic filter.
      >
      > To replay historical messages, specify the MQTT 5 subscription property:
      >
      > ```
-     > stream-offset
+     >stream-offset
      > ```
-     >
+     > 
      > The `stream-offset` value can be:
      >
      > - A Unix timestamp in microseconds
-     > - `earliest`
+     >- `earliest`
      > - `latest`
-
+     
    - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.
      
    - **Last-Value Semantics**: Enable this option to keep only the most recent message for each key. When enabled, a new message with the same key overwrites older messages with that key in the stream. This is useful for state-oriented data such as device status or configuration.
@@ -90,7 +83,7 @@ MQTT streams must be explicitly created before they can store or replay messages
      - **Max Shard Message Bytes**: Sets the maximum total size of messages retained in each shard of the stream. You can enable this option and specify a size (for example, `200MB`), or leave it disabled for unlimited storage (`infinity`).
      
       These limits are persisted to durable storage and work together with the retention period.
-
+   
 4. Click **Create** to save the stream.
 
 Once created, the MQTT stream becomes active immediately. Messages published to topics matching the configured topic filter are stored according to the retention and limiter settings and can be replayed by clients subscribing to the stream.

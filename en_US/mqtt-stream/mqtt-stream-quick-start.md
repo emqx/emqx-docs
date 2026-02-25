@@ -32,19 +32,19 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
 
 3. Toggle the **Enable Streams** switch on.
 
-4. Verify the auto-create settings to ensure a **regular Message Stream** is used:
+4. Verify the auto-create settings to ensure a **Regular Stream** is used:
 
-   - **Enable Auto Create Message Stream** is disabled, or
+   - **Enable Auto Create Streams** is disabled, or
 
-   - **Auto Create Message Stream Type** is set to **Regular Message Stream**.
+   - **Auto Create Stream Type** is set to **Regular Stream**.
 
-   > This prevents the stream from being auto-created as a Last-Value Message Stream, which would retain only the most recent message per key.
+   > This prevents the stream from being auto-created as a Last-Value Stream, which would retain only the most recent message per key.
 
 4. If you make any changes, click **Save Changes** to apply them.
 
    <img src="./assets/message_stream_settings.png" alt="message_stream_settings" style="zoom:67%;" />
 
-### Step 1: Create an MQTT Stream
+### Step 1: Create a Named Stream
 
 1. Navigate to **Streams** in the left menu.
 
@@ -53,10 +53,11 @@ Before starting, ensure that the MQTT Streams feature is enabled and that the au
 3. In the **Create Stream** dialog, configure the following settings:
    - **Name**: `my_stream`
    - **Topic Filter**: `demo/stream`
-   - **Data Retention Period**: `1` day
    - **Last-Value Semantics**: Disabled
    - **Stream Key Expression**: `message.from`
-   
+
+   Leave all other options at their default value.
+
 4. Click **Create**.
 
    ![create_message_stream](./assets/create_message_stream.png)
@@ -89,9 +90,18 @@ Now simulate a **consumer** that replays stored messages.
 
 1. Open a second MQTTX client (for example, `consumer`).
 
-2. Connect to EMQX.
+2. Set the **User Properties** in **Advanced** settings as follows:
 
-3. Subscribe to the stream topic:
+   - **Key**: `stream-offset`
+   - **Value**: `0` or `earliest`
+
+   With this setting, messages will be replayed from the start.
+
+   ![create_connection_user_properties](./assets/create_connection_user_properties.png)
+
+3. Connect to EMQX.
+
+4. Subscribe to the stream topic:
 
    ```
    Topic: $stream/my_stream/demo/stream
@@ -99,8 +109,6 @@ Now simulate a **consumer** that replays stored messages.
    ```
 
    ![subscribe_to_stream_topic](./assets/subscribe_to_stream_topic.png)
-
-4. <!-- How to set "Subscription Property"? -->
 
 **Expected Behavior**:
  You should receive all previously published messages, in publish order:
