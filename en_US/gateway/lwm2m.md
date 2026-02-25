@@ -814,11 +814,84 @@ Variables:
 - `{?ResourcePath}`: String, the requested fully resource path, i.e: `31024/11/1`.
 - `{?Value}`: the latest value of the resource.
 
+## Block-Wise Transfer
+
+The LwM2M protocol uses CoAP as its transport layer. Since CoAP runs over UDP, the size of a single datagram is limited by the network MTU (typically around 1500 bytes). When the data to be transmitted exceeds this limit, the transmission cannot be completed within a single CoAP packet. This may occur, for example, when pushing a firmware package (which may be hundreds of KB or even several MB) to a device, or when reading an object that contains a large number of resources.
+
+To address this limitation, CoAP defines the Block-Wise Transfer mechanism in [RFC 7959](https://datatracker.ietf.org/doc/html/rfc7959). This mechanism divides large payloads into fixed-size blocks and transfers them across multiple request/response exchanges. The receiving side reassembles these blocks into the complete payload.
+
+The LwM2M gateway in EMQX fully supports Block-Wise transfer. When enabled, the gateway automatically handles block segmentation and reassembly. On the MQTT side, complete payloads are delivered transparently, with block-level processing handled internally.
+
+### Transfer Directions
+
+Block-Wise transfer supports two directions:
+
+- **Block1 (Server -> Device)**
+
+  When the server writes large data to a device (for example, during firmware updates), EMQX automatically splits the payload into multiple Block1 segments and sends them sequentially to the device. For example, a 256-byte firmware payload with a block size of 16 bytes will be divided into 16 blocks and transmitted one by one.
+
+- **Block2 (Device -> Server)**
+
+  When the device generates a response that exceeds the single-packet size limit (for example, when reading the Device Object `/3/0`), the device sends the response in multiple Block2 segments. EMQX automatically reassembles all blocks into a complete message before forwarding it to MQTT.
+
+### Configuring Block-Wise Transfer
+
+Block-Wise transfer can be enabled and configured via the REST API or the configuration file.
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "lwm2m",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+
+:::
+
+::: tab Configuration 
+
+```properties
+gateway.lwm2m {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+
+:::
+
+::::
+
+The Block-Wise-related configuration options are described below:
+
+| Configuration Item            | Type       | Default  | Description                                                  |
+| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
+| `blockwise.enable`            | Boolean    | `true`   | Whether to enable Block-Wise transfer.                       |
+| `blockwise.max_block_size`    | Block Size | `1024`   | Maximum block size used in Block-Wise transfer. Available values: `16`, `32`, `64`, `128`, `256`, `512`, `1024`. |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | Maximum size of the reassembled message body.                |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Lifetime of the Block-Wise exchange state.                   |
+
+When properly configured, Block-Wise transfer ensures reliable large-payload transmission over UDP while maintaining full transparency for MQTT applications.
+
 ## User Interfaces
 
 - Detailed configuration options: [Gateway configuration - lwm2m (Opensource)](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [Gateway configuration - lwm2m (Enterprise)](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 - Detailed HTTP APIs Description: [REST API - Gateway](../admin/api.md)
 
-## Client libraries
+## Client Libraries
 
 - [wakaama](https://github.com/eclipse/wakaama)
