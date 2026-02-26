@@ -25,9 +25,9 @@
   - **命名规则**：名称仅限使用字母数字字符、下划线、连字符和点号。对于旧版本中创建的未命名实体，系统将自动采用其主题过滤器作为名称（并在前缀添加 `/`）。
   - **兼容性**：旧版接口 `$q`（v6.0.0）和 `$s`（v6.1.0）已被弃用，但为保持兼容性仍然可用。请注意，当启用消息队列功能时，`$queue` 前缀将不能再用于标准共享订阅。
 
-- [#16820](https://github.com/emqx/emqx/pull/16820) Added shorter API path aliases `/queues/*` and `/streams/*` for the Message Queue and Message Stream management APIs.
+- [#16820](https://github.com/emqx/emqx/pull/16820) 为消息队列和消息流管理 API 新增了更短的 API 路径别名 `/queues/*` 和 `/streams/*`。
 
-  The previous `/message_queues/*` and `/message_streams/*` paths remain functional for backward compatibility but are no longer shown in the API documentation.
+  之前的 `/message_queues/*` 和 `/message_streams/*` 路径仍然可用，以保持向后兼容性，但已不再在 API 文档中展示。
 
 #### Gateway
 
