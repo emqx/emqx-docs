@@ -358,7 +358,7 @@ Make sure to check the breaking changes and known issues before upgrading to EMQ
   - Empty string or empty array will fail verification.
   - Missing `aud` claim will fail verification when it is configured in `verify_claims`.
 
-- [#16459](https://github.com/emqx/emqx/pull/16459) Fixed the ussue in SCRAM authentication HTTP API. Previously, incorrect user ID was returned for the created user in the user creation API call.
+- [#16459](https://github.com/emqx/emqx/pull/16459) Fixed the issue in SCRAM authentication HTTP API. Previously, incorrect user ID was returned for the created user in the user creation API call.
 
 #### Data Integration
 
