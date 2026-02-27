@@ -1341,20 +1341,77 @@ subbits(hexstr2bin('9F4E58'), 1, 16, 'float', 'signed', 'big') = -0.007133483886
 
 ### base64_decode(Data: string) -> bytes | string
 
-Encode `Data` to base64 format. Example:
+Decode `Data` from base64 format. Example:
 
 ```bash
 base64_decode('aGVsbG8=') = 'hello'
 bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```
 
+### base64_decode(Data: string, Option1: string, ...) -> bytes | string
+
+::: tip
+
+This function with optional parameters has been introduced since EMQX 6.0.2.
+
+:::
+
+Decode `Data` from base64 format with optional parameters to control decoding behavior.
+
+**Options:**
+
+- **`no_padding`**: Decode without expecting padding characters (`=`). This is useful when working with Base64 strings that omit padding.
+- **`urlsafe`**: Decode input using the URL-safe Base64 variant (expecting `-` and `_` instead of `+` and `/`).
+
+You can use these options individually or combine them. When combining options, their order does not affect the result.
+
+**Examples:**
+
+```sql
+-- Decode URL-safe base64
+SELECT base64_decode(payload, 'urlsafe') as decoded FROM "t/#"
+
+-- Decode unpadded URL-safe base64
+SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
+```
+
 ### base64_encode(Data: binary | string) -> string
 
-Decode `Data` from base64 format. Example:
+Encode `Data` to base64 format. Example:
 
 ```bash
 base64_encode('hello') = 'aGVsbG8='
 base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
+```
+
+### base64_encode(Data: binary | string, Option1: string, ...) -> string
+
+::: tip
+
+This function with optional parameters has been introduced since EMQX 6.0.2.
+
+:::
+
+Encode `Data` to base64 format with optional parameters to control encoding behavior.
+
+**Options:**
+
+- **`no_padding`**: Encode without padding characters (`=`). This is useful when you need to remove padding from encoded strings.
+- **`urlsafe`**: Use the URL-safe Base64 variant, which encodes data using `-` and `_` instead of `+` and `/`, so the result can be embedded in URLs without further escaping.
+
+You can use these options individually or combine them. When combining options, their order does not affect the result.
+
+**Examples:**
+
+```sql
+-- Encode without padding
+SELECT base64_encode(payload, 'no_padding') as encoded FROM "t/#"
+
+-- Encode with URL-safe characters
+SELECT base64_encode(payload, 'urlsafe') as encoded FROM "t/#"
+
+-- Encode with both options (no padding and URL-safe)
+SELECT base64_encode(payload, 'no_padding', 'urlsafe') as encoded FROM "t/#"
 ```
 
 ### json_decode(Data: string) -> array | map

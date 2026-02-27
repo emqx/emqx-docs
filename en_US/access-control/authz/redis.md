@@ -64,8 +64,11 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 3. Follow the instructions below to configure the settings.
 
    - **Redis Mode**: Select how Redis is deployed, including `Single`, `Sentinel` and `Cluster`.
+
    - **Server**: Specify the server address that EMQX is to connect (`host:port`).
+
    - **Database**: Redis database name.
+
    - **Username**: Specify the Redis username to connect with. This field is required if your Redis instance uses [Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/#create-and-edit-user-acls-with-the-acl-setuser-command) (introduced in Redis 6.0) for authentication. If your Redis server uses the default user (with ACLs disabled or not enforced), you can leave this field blank.
 
      ::: tip
@@ -73,10 +76,22 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
      The `username` field is supported starting from EMQX 5.2.0. Ensure your deployment is running this version or later to use Redis ACL.
 
      :::
+     
    - **Password**: Specify the password for the Redis user. The field is required for connecting to Redis instances with authentication enabled.
 
      - If you have entered a username, this password must match the credentials configured in your Redis ACL settings.
      - If no username is provided, this password will be used to authenticate as the `default` user (if enabled).
+
+   - **Compatibility Mode**: Controls whether to enable compatibility with the EMQX 4.x Redis ACL data format.
+
+     - `Disabled (Default)`: Use the current rule format.
+     - `v4`: Enable compatibility with legacy EMQX 4.x Redis ACL data, allowing reuse of existing data without modification during upgrades.
+
+     ::: tip
+
+     This option is intended for upgrade scenarios where existing Redis ACL data created by EMQX 4.x must be reused without modification. For new deployments, it is recommended to keep this option disabled and use the current rule format.
+
+     :::
 
    - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. 
 
@@ -91,7 +106,7 @@ You can use EMQX Dashboard to configure how to use Redis for user authorization.
 
 You can configure the EMQX Redis authorizer with EMQX configuration items.
 
-The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. <!--For detailed configuration information, see: [redis_single](../../configuration/configuration-manual.html#authz:redis_single), [authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel), and [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster).-->
+The Redis authorizer is identified by type `redis`. The authorizer supports connecting to Redis running in 3 types of deployment modes. 
 
 Sample configuration:
 
@@ -99,7 +114,7 @@ Sample configuration:
 
 ::: tab Single
 
-```bash
+```hocon
 {
     type = redis
 
@@ -109,7 +124,8 @@ Sample configuration:
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -117,7 +133,7 @@ Sample configuration:
 
 ::: tab Sentinel
 
-```bash
+```hocon
 {
     type = redis
 
@@ -128,7 +144,8 @@ Sample configuration:
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -136,7 +153,7 @@ Sample configuration:
 
 ::: tab Cluster
 
-```bash
+```hocon
 {
     type = redis
 
@@ -145,9 +162,13 @@ Sample configuration:
 
     cmd = "HGETALL mqtt_user:${username}"
     password = public
+    
+    compatibility_mode = disabled
 }
 ```
 
 :::
 
 ::::
+
+> `compatibility_mode` can be set to `v4` when upgrading from EMQX 4.x and reusing legacy Redis ACL data.
