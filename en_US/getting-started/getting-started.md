@@ -93,7 +93,7 @@ To uninstall EMQX after your testing, simply delete the EMQX folder.
 
 Now that you have successfully started EMQX, you can continue to test the connection and message services with MQTTX.
 
-[MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. Users can quickly create connections and save multiple clients through a chat-style user interface of MQTTX. Users can also test the MQTT/MQTTS connection, and the subscription and the publication of MQTT messages.
+[MQTTX](https://mqttx.app) is an elegant cross-platform MQTT 5.0 desktop client, running on macOS, Linux, and Windows. Users can quickly create connections and save multiple clients through a chat-style user interface of MQTTX. Users can also test the MQTT/MQTTS connection, the subscription, and the publication of MQTT messages.
 
 This section introduces how to verify the connection with [MQTTX Web](https://mqttx.app/web), the browser-based MQTT 5.0 WebSocket client tool, with zero need to download or install any application.
 
@@ -108,23 +108,26 @@ The broker address and the port information should be prepared before testing th
 
 1. Click [MQTTX Web](https://mqttx.app/web-client#/recent_connections) to visit the browser-based MQTTX.
 
-2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configuration page:
+2. Configure and establish an MQTT connection. Click the **+ New Connection** button to open the connection configuration page.
 
-   - **Name**: Input a connection name, for example, `MQTTX_Test`.
+   - **Name**: Enter a connection name, for example, `MQTTX_Test`.
 
-   - **Host**
+   - **Host**:
 
-     - Select the protocol type via the drop-down list, for example, select `ws://` if the WebSockets protocol is adopted; MQTTX Web only supports Websockets protocol, to test the SSL/TLS connection, download [MQTTX desktop client](https://mqttx.app/);
-     - Fill in the EMQX address, for example, **emqx@127.0.0.1**;
-
-   - **Port**: for example, `8083` is for the WebSockets protocol;
-
-     Keep the default setting for the other fields or set it as your business needs. For a detailed explanation of different fields, see [MQTT User Manual - Connect](https://mqttx.app/docs/get-started).
+     - Select the protocol from the drop-down list. For example, choose `ws://` when using the WebSocket protocol.
+   
+       > MQTTX Web supports WebSocket connections only. To test SSL/TLS connections, download the [MQTTX desktop client](https://mqttx.app/).
+   
+     - Enter the EMQX address, for example, `127.0.0.1`.
+   
+   - **Port**: Enter the port number. For example, `8083` is commonly used for WebSocket connections.
+   
+   Leave the remaining fields at their default values, or adjust them according to your requirements. For a detailed explanation of each option, see [MQTT User Manual – Connect](https://mqttx.app/docs/get-started).
 
 
 3. Click the **Connect** button at the top right corner of the page.
 
-4. Test the publish/receive of messages: Click the send icon in the bottom right corner of the chat area, then the messages successfully sent will appear in the chat window above.
+4. Verify message publishing and receiving. Click the **Send** icon in the lower-right corner of the message area. Successfully sent messages will appear in the chat window above.
 
 ### Publish and Subscribe to Topics
 
@@ -142,7 +145,7 @@ If you want to continue the testing, such as one-way/two-way SSL authentication,
 
 On the Cluster Overview page in the EMQX Dashboard, you can check metrics such as **Connections**, **Topics**, **Subscriptions**, **Incoming Messages**, **Outgoing messages**, and **Dropped Messages**.
 
-![emqx-dashboard_ee](./assets/emqx-dashboard_ee.png)
+<img src="./assets/view_metrics_dashboard.png" alt="view_metrics_dashboard" style="zoom:150%;" />
 
 ## Next Steps
 

@@ -82,7 +82,7 @@ At the bottom of the page, the node status allows you to view authorization metr
 
 If you are using the built-in database, in the **Actions** column of the list page, clicking **Permissions** allows you to manage and configure authorization rules. You can differentiate clients by Client ID or username, or add authorization rules for all users.
 
-To configure an authorization rule, enter a topic that needs authorization configuration, select whether the permission applies when subscribing to or publishing messages to that topic, and set whether the permission should be allow or deny.
+To configure an authorization rule, enter a topic that needs authorization configuration, select whether the permission applies when subscribing to or publishing messages to that topic, and set whether the permission should be `allow` or `deny`.
 
 ![image](./assets/authz-users.png)
 

@@ -198,7 +198,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    ::: tip
 
-   If you are a beginner user, you can click **SQL Examples** and **Enable Test** to learn and test the SQL rule.
+   If you are a beginner user, you can click **SQL Examples** and **Try It Out** to learn and test the SQL rule.
 
    :::
 
@@ -208,39 +208,43 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    :::
 
-5. Click the + **Add Action** button to define the action triggered by the rule. From the **Type of Action** dropdown list, select `Kafka Producer`, keep the **Action** dropdown box to the default `Create Action` option, or choose a previously created Kafka Producer action from the **Action** dropdown box. This demonstration creates a new producer action and adds it to the rule.
+5. On the **Create Rule** page, click + **Add Action** to define the output of the rule.
 
-6. Enter the name and description of the Sink in the corresponding text boxes below.
+6. From the **Type of Action** dropdown, select `Kafka Producer`.
 
-7. In the **Connector** dropdown box, select the `my-kafka` connector you just created. You can also click the button next to the dropdown box to quickly create a new connector in the pop-up box, with the required configuration parameters referring to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
+   In the **Action** dropdown, keep the default `Create Action`.
 
-8. Configure the data-sending method for the Sink, including:
+   > You may select an existing Sink from the **Action** instead; this example creates a new one.
 
-   - **Kafka Topic**: Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details.
+7. Enter a **Name** and an optional **Description**.
 
-   - **Kafka Headers**: Enter metadata or context information related to Kafka messages (optional). The value of the placeholder must be an object. You can choose the encoding type for the header value from the **Kafka Header Value Encod Type** dropdown list. You can also add more key-value pairs by clicking **Add**.
+8. From the **Connector** dropdown box, select the `my-kafka` connector created before. You can also create a new connector if needed. Refer to [Create a Kafka Producer Connector](#create-a-kafka-producer-connector).
 
-   - **Message Key**: The key of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+9. Configure the data-sending method for the Sink, including:
 
-   - **Message Value**: The value of the Kafka message. Enter a string here, which can be a pure string or a string containing placeholders (${var}).
+      - **Kafka Topic**: The target Kafka topic to which messages are published. Enter `testtopic-in`. Starting from EMQX v5.7.2, this field also supports dynamic topics configuration. Refer to [Use Variable Templates](#use-variable-templates) for details.
+      - **Kafka Headers**: Optional key-value metadata added to Kafka messages. Header values must resolve to an object. You can select how header values are encoded using the **Kafka Header Value Encode Type** dropdown and add multiple headers by clicking **Add**.
+      - **Message Key**: The key of the Kafka message, used for partitioning and message ordering. It can be a static string or include placeholders (for example, `${.clientid}`).
+      - **Message Value**: The Kafka message payload rendered from a template. It can be a static string or include placeholders (for example, `${.}`) to dynamically generate the value from the rule context. If the template resolves to `NULL` (for example, when the referenced field does not exist), a Kafka `NULL` value is produced instead of an empty string.
+      - **Message Timestamp**: The timestamp of the Kafka message. You can enter a fixed value or use a placeholder (for example, `${timestamp}`) to dynamically set the message timestamp from the rule output.
+      - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
+      - **Partitions Limit**: Limits the maximum number of partitions to which a producer can send messages. When enabled, the producer will only distribute messages among the specified number of partitions instead of all available partitions.
+      - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
-   - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
 
-   - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
+10. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-9. **Fallback Actions** (Optional): If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+11. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
 
-10. **Advanced Settings** (optional): See [Advanced Configuration](#advanced-configuration).
+12. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
 
-11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+13. Click the **Create** button to complete the entire rule creation.
 
-12. Click the **Create** button to complete the entire rule creation.
+![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 Now you have successfully created the rule, and you can see the newly created rule on the **Integration** -> **Rules** page, as well as the newly created Kafka Producer Sink on the **Actions(Sink)** tab.
 
 You can also click **Integration** -> **Flow Designer** to view the topology. Through the topology, you can intuitively see that messages under topic `t/#` are sent and saved to Kafka after being parsed by rule `my_rule`.
-
-![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
 
 ### Configure Kafka Dynamic Topics
 
