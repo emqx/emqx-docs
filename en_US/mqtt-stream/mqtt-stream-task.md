@@ -42,13 +42,7 @@ MQTT streams must be explicitly created before they can store or replay messages
      > 
      > The `<topic_filter>` segment must match the stream’s configured topic filter.
      >
-     > To replay historical messages, specify the MQTT 5 subscription property:
-     >
-     > ```
-     >stream-offset
-     > ```
-     > 
-     > The `stream-offset` value can be:
+     > To replay historical messages, specify the MQTT 5 subscription property `stream-offset`. The value can be:
      >
      > - A Unix timestamp in microseconds
      >- `earliest`

@@ -255,7 +255,7 @@ topic: device/state, qos: 1, size: 21B, userProperties: [
 
 这表明 MQTT 消息流通过最后值语义支持状态型消息模式。
 
-# 自动创建流
+## 自动创建流
 
 在 EMQX 中，当客户端订阅 `$stream/` 前缀主题时，可以自动创建 MQTT 流，从而无需在 Dashboard 中手动创建。
 
