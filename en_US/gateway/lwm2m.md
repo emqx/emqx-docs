@@ -859,7 +859,7 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
 
 :::
 
-::: tab Configuration 
+::: tab Configuration
 
 ```properties
 gateway.lwm2m {
