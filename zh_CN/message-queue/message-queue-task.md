@@ -8,11 +8,11 @@
 
 通过 EMQX Dashboard 手动创建新消息队列的步骤如下：
 
-1. 在左侧菜单中进入**消息队列**页面。
+1. 在左侧菜单中进入**队列**页面。
 
 2. 点击页面中的**创建**按钮。
 
-3. 在**创建消息队列**对话框中，配置以下选项：
+3. 在**创建队列**对话框中，配置以下选项：
 
    - **名称**： 指定队列的唯一名称。队列名称仅允许包含以下字符：
 
@@ -220,7 +220,7 @@ message.headers.properties.'User-Property'.user-prop
 
      - **常规队列**：启用后，EMQX 会针对 `$queue/<name>/<topic_filter>` 的订阅自动创建常规（非覆盖型）队列。
 
-       有关详细设置，请参见 [自动创建常规消息队列](#自动创建常规消息队列)。
+       有关详细设置，请参见 [自动创建常规队列](#自动创建常规队列)。
 
 3. 修改完成后点击**保存修改**应用设置。
 
@@ -253,7 +253,7 @@ mq {
 - **`find_queue_retry_interval`**：当订阅者订阅 `$queue/<name>` 主题时未找到队列，订阅者重新尝试查找队列的周期。
 - **`max_queue_count`**：设置系统允许创建的最大队列数量。
 
-## 通过 REST API 管理消息队列
+## 通过 REST API 管理队列
 
 EMQX 提供一组 REST API 用于管理消息队列的生命周期，包括创建、查询、更新和删除。
 
@@ -265,7 +265,7 @@ EMQX 提供一组 REST API 用于管理消息队列的生命周期，包括创�
 
 以下示例均假设使用 API Key 和 Secret 进行基础认证。
 
-### 创建消息队列
+### 创建队列
 
 通过指定主题过滤器和队列属性（如是否启用最后值语义）来创建新队列：
 
@@ -275,16 +275,16 @@ http://localhost:18083/api/v5/message_queues \
 -d '{"name": "my_queue", "topic_filter": "t1/#", "is_lastvalue": false, "limits": {"max_shard_message_count": 10000, "max_shard_message_bytes": "200MB"}}' | jq
 ```
 
-### 列出所有消息队列
+### 列出所有队列
 
-获取所有已存在的消息队列列表：
+获取所有已存在的队列列表：
 
 ```bash
 curl -s -u key:secret -X GET -H "Content-Type: application/json" \
 http://localhost:18083/api/v5/message_queues | jq
 ```
 
-### 更新消息队列
+### 更新队列
 
 更新现有队列的属性，例如分发策略：
 
@@ -294,7 +294,7 @@ http://localhost:18083/api/v5/message_queues/my_queue \
 -d '{"dispatch_strategy": "least_inflight", "limits": {"max_shard_message_count": 5000, "max_shard_message_bytes": "100MB"}}' | jq
 ```
 
-### 删除消息队列
+### 删除队列
 
 删除指定队列及其所有已保留的消息：
 

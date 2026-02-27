@@ -28,7 +28,7 @@ This section demonstrates how EMQX Message Queues persist and deliver messages. 
 2. Click the **Create** button in the upper-right corner of the page.
 
 3. In the **Create Queue** dialog, configure the following settings:
-   - **Name**: `my_queque`
+   - **Name**: `my_queue`
    - **Topic Filter**: `demo/topic`
    - **Dispatch Strategy**: `Random`
    - **Data Retention Period**: `7` day

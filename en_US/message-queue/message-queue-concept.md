@@ -45,8 +45,6 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
   
    A unique identifier that explicitly identifies a Message Queue.
    
-   Starting from EMQX 6.1.1, queues are addressed by name, not by topic filter. The topic filter is part of the queue’s configuration, but does not define its identity.
-   
    Queue names may contain only:
    
    - Alphanumeric characters (`A–Z`, `a–z`, `0–9`)
@@ -54,7 +52,11 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
    - Hyphens (`-`)
    - Dots (`.`)
    
-   > The topic filter is configuration metadata and can be modified independently of the queue name.
+   ::: tip
+   
+   Starting from EMQX 6.1.1, queues are addressed by name, not by topic filter. The topic filter is part of the queue’s configuration, but does not define its identity.
+   
+   :::
    
 - **Topic Filter**
   
@@ -62,7 +64,7 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
    
    ::: tip
    
-   The topic filter is not the queue identifier. It is the configuration metadata of a named queue.
+   The topic filter is the configuration metadata of a named queue and cannot be modified after the queue creation.
    
    :::
    

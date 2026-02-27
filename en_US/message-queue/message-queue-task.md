@@ -54,7 +54,7 @@ Message queues must be explicitly declared/created before they can store or disp
 
 4. Click **Create** to save the queue.
 
-The new queue will appear in the Message Queue list, showing its name, topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
+The new queue will appear in the Queues list, showing its name, topic filter, dispatch strategy, last-value semantics status, and data retention period. You can edit queue settings or delete queues using the buttons in the **Actions** column.
 
 ### Queue Key Expression
 
@@ -149,7 +149,7 @@ To ensure proper queue behavior, you can enable either **Auto Create Regular Que
 
 :::
 
-### Auto Create Last Value Semantics Queue
+### Auto Create Last Value Semantics Queues
 
 This option is turned on by default in the **Queues** tab under **MQTT Settings**. It allows EMQX to automatically create queues that support Last-Value Semantics, where only the most recent message with a given key is retained.
 
@@ -167,7 +167,7 @@ This option is turned on by default in the **Queues** tab under **MQTT Settings*
 
 When a client subscribes to a topic such as `$queue/my_queue/test`, if `my_queue` does not already exist, EMQX automatically creates a Last-Value semantics queue named `my_queue` using `test` as its topic filter. The queue then appears in the **Queues** list.
 
-### Auto Create Regular Queue
+### Auto Create Regular Queues
 
 This option can be enabled manually if you prefer regular queues where messages are stored independently and not overwritten.
 
@@ -209,11 +209,11 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
      - **Last Value Semantics Queue** (enabled by default): When a client subscribes to a `$queue/<name>/<topic_filter>` topic and no matching queue exists, EMQX automatically creates a queue with Last-Value Semantics enabled. 
 
-       For details of the settings, see [Auto Create Last Value Semantics Queue](#auto-create-last-value-semantics-queue).
+       For details of the settings, see [Auto Create Last Value Semantics Queues](#auto-create-last-value-semantics-queues).
 
      - **Regular Queue**: When enabled, EMQX automatically creates regular (non-overwriting) queues for `$queue/<name>/<topic_filter>` subscriptions.
 
-       For details of the settings, see [Auto Create Regular Message Queue](#auto-create-regular-message-queue).
+       For details of the settings, see [Auto Create Regular Queues](#auto-create-regular-queues).
    
 3. After making changes, click **Save Changes** to apply the new settings.
 
