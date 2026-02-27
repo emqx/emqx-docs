@@ -203,7 +203,7 @@ You can update Message Queue settings directly from the EMQX Dashboard without r
 
    - **Find Queue Retry Interval**: When a client subscribes to `$queue/<name>` and the corresponding queue is not found, this setting controls how frequently the subscriber retries to locate the queue. Default is `10` seconds.
 
-   - **Enable Auto Create Queue **: Enables automatic creation of queues when clients subscribe to queue topics and no matching queue exists.
+   - **Enable Auto Create Queue**: Enables automatic creation of queues when clients subscribe to queue topics and no matching queue exists.
 
    - **Auto Create Queue Type**: Specifies the type of queues to create automatically:
 
