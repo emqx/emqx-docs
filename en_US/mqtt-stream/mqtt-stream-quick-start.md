@@ -266,7 +266,7 @@ topic: device/state, qos: 1, size: 21B, userProperties: [
 
 This demonstrates how MQTT Streams support state-oriented messaging patterns using Last-Value semantics.
 
-# Auto-Create Streams
+## Auto-Create Streams
 
 MQTT Streams in EMQX can be automatically created when a client subscribes to a `$stream/`-prefixed topic. This allows streams to be provisioned dynamically without manually creating them in the Dashboard.
 
