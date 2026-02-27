@@ -282,7 +282,7 @@ topic: device/state, qos: 1, size: 21B, userProperties: [
    mqttx sub -h 118.31.55.229 -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
    ```
 
-   与手动创建的流不同，自动创建流必须在订阅中包含过滤主题，改示例中为 `demo/auto`。
+   与手动创建的流不同，自动创建流必须在订阅中包含过滤主题，该示例中为 `demo/auto`。
 
    如果流不存在，EMQX 将：
 
