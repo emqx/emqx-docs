@@ -72,7 +72,7 @@ Use MQTTX CLI to simulate a publisher client.
 2. Connect to EMQX:
 
    ```bash
-   mqttx conn -h '118.31.55.229' -p 1883
+   mqttx conn -h 'localhost' -p 1883
    ```
 
 3. Publish several messages to the topic `demo/stream` with QoS 1.
@@ -80,9 +80,9 @@ Use MQTTX CLI to simulate a publisher client.
    Example commands:
 
    ```bash
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 1}'
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 2}'
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 3}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 1}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 2}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 3}'
    ```
 
    Expected output:
@@ -99,7 +99,7 @@ Since this is a regular stream, all published messages are stored in the stream 
 Now use MQTTX CLI to subscribe to the stream and replay messages from the beginning by setting the MQTT 5 subscription user property `stream-offset`.
 
 ```bash
-mqttx sub -t \$stream/my_stream  -q 1  -h 118.31.55.229 -up "stream-offset: 0"
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 0"
 ```
 
 **Expected Behavior**:
@@ -169,8 +169,8 @@ Multiply this value by 1000 to get the microseconds. Save this value. It will be
 Publish more messages to the stream:
 
 ```bash
-mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 4}'
-mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 5}'
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 4}'
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 5}'
 ```
 
 ### Step 3: Replay from the Recorded Timestamp
@@ -178,7 +178,7 @@ mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 5}'
 Subscribe to the stream using the saved timestamp as the `stream-offset`:
 
 ```bash
-mqttx sub -t \$stream/my_stream  -q 1  -h 118.31.55.229 -up "stream-offset: 1772162409000000"
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 1772162409000000"
 ```
 
 **Expected Behavior**:
@@ -237,9 +237,9 @@ Since the key expression is `message.from`, the stream is now configured to reta
 Now publish messages from the same client ID `-i device-1`.
 
 ```bash
-mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"status": "online"}'
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "online"}'
 
-mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
 ```
 
 Since the stream key expression is set to `message.from`, which extracts the client ID from the message metadata as the stream key, both messages share the same stream key. The second message overwrites the first.
@@ -249,7 +249,7 @@ Since the stream key expression is set to `message.from`, which extracts the cli
 Now subscribe to the stream and replay from the earliest position:
 
 ```bash
-mqttx sub -t '$stream/device_stream/device/state' -h '118.31.55.229' -p 1883 -q 1 -up "stream-offset: 0"
+mqttx sub -t '$stream/device_stream' -h 'localhost' -p 1883 -q 1 -up "stream-offset: 0"
 ```
 
 **Expected Behavior**:
@@ -290,7 +290,7 @@ This section demonstrates how to enable and test auto-created streams.
 6. Subscribe to trigger auto-creation using the following command:
 
    ```bash
-   mqttx sub -h 118.31.55.229 -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
+   mqttx sub -h localhost -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
    ```
 
    Unlike manually created streams, auto-created streams require the topic filter (`demo/auto` in this example) in the subscription.

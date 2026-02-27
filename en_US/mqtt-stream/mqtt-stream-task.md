@@ -45,7 +45,7 @@ MQTT streams must be explicitly created before they can store or replay messages
      > To replay historical messages, specify the MQTT 5 subscription property `stream-offset`. The value can be:
      >
      > - A Unix timestamp in microseconds
-     >- `earliest`
+     > - `earliest`
      > - `latest`
      
    - **Data Retention Period**: Specify how long messages are retained in the stream. Messages older than the configured retention period are automatically removed, which limits how far back messages can be replayed.

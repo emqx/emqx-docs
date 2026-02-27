@@ -67,15 +67,15 @@
 2. 连接到 EMQX：
 
    ```bash
-   mqttx conn -h '118.31.55.229' -p 1883
+   mqttx conn -h 'localhost' -p 1883
    ```
 
 3. 向主题 `demo/stream` 发布多条 QoS 1 消息：
 
    ```bash
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 1}'
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 2}'
-   mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 3}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 1}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 2}'
+   mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 3}'
    ```
 
    预期输出：
@@ -92,7 +92,7 @@
 使用 MQTTX CLI 订阅流，并通过设置 MQTT 5 订阅用户属性 `stream-offset` 从头开始回放。
 
 ```bash
-mqttx sub -t \$stream/my_stream  -q 1  -h 118.31.55.229 -up "stream-offset: 0"
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 0"
 ```
 
 **预期行为**：
@@ -160,14 +160,14 @@ Date.now()
 ### 步骤 2：发布新消息
 
 ```bash
-mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 4}'
-mqttx pub -t 'demo/stream' -h '118.31.55.229' -p 1883 -q 1 -m '{"value": 5}'
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 4}'
+mqttx pub -t 'demo/stream' -h 'localhost' -p 1883 -q 1 -m '{"value": 5}'
 ```
 
 ### 步骤 3：使用记录的时间戳回放
 
 ```bash
-mqttx sub -t \$stream/my_stream  -q 1  -h 118.31.55.229 -up "stream-offset: 1772162409000000"
+mqttx sub -t \$stream/my_stream  -q 1  -h localhost -up "stream-offset: 1772162409000000"
 ```
 
 **预期行为：**
@@ -226,9 +226,9 @@ topic: demo/stream, qos: 1, size: 12B, userProperties: [
 在 MQTTX 中使用客户端 ID 为 `device-1` 的客户端向 `device/state` 发布消息：
 
 ```bash
-mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"status": "online"}'
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "online"}'
 
-mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
+mqttx pub -t 'device/state' -h 'localhost' -p 1883 -q 1 -i device-1 -m '{"status": "offline"}'
 ```
 
 由于**流键表达式**设置为 `message.from`，即从消息元数据中提取客户端 ID 作为流键，因此两条消息具有相同流键，第二条消息将覆盖第一条。
@@ -238,7 +238,7 @@ mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"st
 使用以下命令订阅消息流：
 
 ```bash
-mqttx sub -t '$stream/device_stream' -h '118.31.55.229' -p 1883 -q 1 -up "stream-offset: 0"
+mqttx sub -t '$stream/device_stream' -h 'localhost' -p 1883 -q 1 -up "stream-offset: 0"
 ```
 
 **预期行为**：
@@ -279,7 +279,7 @@ topic: device/state, qos: 1, size: 21B, userProperties: [
 6. 使用以下命令订阅以触发自动创建：
 
    ```bash
-   mqttx sub -h 118.31.55.229 -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
+   mqttx sub -h localhost -p 1883 -q 1 -t '$stream/auto_stream/demo/auto' -up "stream-offset: earliest"
    ```
 
    与手动创建的流不同，自动创建流必须在订阅中包含过滤主题，该示例中为 `demo/auto`。
