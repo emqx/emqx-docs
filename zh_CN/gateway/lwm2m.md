@@ -21,7 +21,7 @@ EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关，也可以�
 ::: tab REST API
 
 ```bash
-curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
@@ -108,7 +108,7 @@ LwM2M 网关仅支持 [HTTP Server 认证](../access-control/authn/http.md)。
 ::: tab REST API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m/authentication' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
@@ -797,7 +797,7 @@ Block-Wise 传输支持两个方向：
 ::: tab REST API
 
 ```bash
-curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
