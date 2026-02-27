@@ -14,7 +14,7 @@
 1. EMQX 通过 [Prometheus 兼容的 HTTP API](../../../../observability/prometheus.md) 暴露各种指标。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

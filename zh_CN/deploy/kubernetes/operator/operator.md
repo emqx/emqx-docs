@@ -16,14 +16,32 @@ EMQX Operator 包括但不限于以下功能：
 
 <img src="./assets/architecture.png" style="zoom:20%;" />
 
-## EMQX 和 EMQX Operator 兼容性
+## EMQX 与 EMQX Operator 兼容性
 
-当前 EMQX Operator 2.2.x 版本系列与以下 EMQX 版本兼容：
-- EMQX 开源版和企业版 5.1.1 ~ 5.8.x
-- EMQX 5.9 和 5.10 <sup>*</sup>
-- EMQX 6.0 及更高版本 <sup>*</sup>
+### EMQX Operator 2.3.x
 
-支持以下 API 版本：
+EMQX Operator 2.3.x 版本系列与以下 EMQX 版本完全兼容：
+
+- EMQX 5.9 和 5.10
+- EMQX 6.0 及以上版本
+
+支持的 API 版本如下：
+
+- [apps.emqx.io/v2](./reference/v2-reference.md)
+- [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)（已弃用）
+
+### 历史版本
+
+#### EMQX Operator 2.2.x
+
+EMQX Operator 2.2.x 版本系列与以下 EMQX 版本兼容：
+
+- EMQX Open Source 与 Enterprise 5.1.1 – 5.8.x
+- EMQX 5.9 和 5.10（有限支持<sup>*</sup>）
+- EMQX 6.0 及以上版本（有限支持<sup>*</sup>）
+
+支持的 API 版本如下：
+
 - [apps.emqx.io/v2beta1](./reference/v2beta1-reference.md)
 - apps.emqx.io/v2alpha1（已弃用）
 - apps.emqx.io/v1beta4
@@ -31,6 +49,6 @@ EMQX Operator 包括但不限于以下功能：
 
 ::: tip
 
-<sup>*</sup> 这些版本暂不支持自动管理持久存储（Durable Storage）副本的功能，该功能计划在即将发布的 2.3.0 版本中提供。
+<sup>*</sup> 对于上述版本，不支持对持久化存储（Durable Storage）副本的自动化管理。
 
 :::

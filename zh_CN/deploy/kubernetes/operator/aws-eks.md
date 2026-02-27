@@ -28,7 +28,7 @@ EMQX Operator 支持在 Amazon 容器服务 EKS（Elastic Kubernetes Service）�
 1. 将下面的内容保存成 YAML 文件，并通过 `kubectl apply` 命令部署它。
 
   ```yaml
-  apiVersion: apps.emqx.io/v2beta1
+  apiVersion: apps.emqx.io/v2
   kind: EMQX
   metadata:
     name: emqx

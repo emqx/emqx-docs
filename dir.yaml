@@ -108,6 +108,7 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
+                - deploy/kubernetes/operator/upgrade-operator
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
                   title_ja: 在阿里云中部署 EMQX
