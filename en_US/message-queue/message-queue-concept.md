@@ -10,7 +10,7 @@ A Message Queue in EMQX is a named, durable server-side buffer that stores MQTT 
 
 Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$queue/<name>` or `$queue/<name>/topic_filter>` format.
 
-<img src="./assets/message_queque_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
+<img src="./assets/message_queue_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## Why Use Message Queue?
 

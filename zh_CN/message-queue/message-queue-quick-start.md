@@ -88,7 +88,7 @@ QoS: 1
 3. 连接到 EMQX，并订阅相同的队列主题：
 
    ```json
-   Topic: $queue/my_queque/demo/topic
+   Topic: $queue/my_queue/demo/topic
    QoS: 1
    ```
 
