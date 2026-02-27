@@ -235,7 +235,7 @@ mqttx pub -t 'device/state' -h '118.31.55.229' -p 1883 -q 1 -i device-1 -m '{"st
 
 ### 步骤 4：订阅消息流
 
-使用一下命令订阅消息流：
+使用以下命令订阅消息流：
 
 ```bash
 mqttx sub -t '$stream/device_stream' -h '118.31.55.229' -p 1883 -q 1 -up "stream-offset: 0"
