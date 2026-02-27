@@ -6,7 +6,7 @@ description: This section lists the new features introduced in EMQX 5.2 and late
 
 This page highlights major new features supported in the current release. Note that it does not list every feature provided by EMQX.
 
-## EMQX 6.1.0 (Latest)
+## EMQX 6.1.1 (Latest)
 
 ### MQTT Streams
 
@@ -40,7 +40,7 @@ Each queue is explicitly identified by a unique name, rather than by its topic f
 
 > If Message Queue is enabled, the `$queue/` prefix is reserved for Message Queue subscriptions and can no longer be used for shared subscriptions.
 
-<img src="./assets/message_queque.png" alt="message_queque" style="zoom:50%;" />
+<img src="./assets/message_queue_routing_overview.png" alt="message_queue_routing_overview" style="zoom:50%;" />
 
 This feature enables MQTT to handle both real-time and delayed workloads, simplifying IoT system architecture by removing the need for external queuing systems like Kafka or RabbitMQ. It’s ideal for scenarios where message durability, reliable delivery, and offline buffering are critical.
 
