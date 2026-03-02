@@ -4,6 +4,10 @@ Extension Protocol（ExProto）は、gRPC通信を用いて実装されたカス
 
 本ページでは、ExProtoゲートウェイの動作原理とEMQXにおけるExProtoゲートウェイの設定および利用方法を紹介します。
 
+::: warning
+ExProto ゲートウェイは EMQX `6.2.0` から非推奨であり、`v7` で削除予定です。
+:::
+
 <!--アーキテクチャの簡単な紹介-->
 
 ## ExProtoゲートウェイとgRPCサービスの動作

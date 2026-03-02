@@ -4,6 +4,10 @@ Extension Protocol (ExProto) 协议是一个基于 gRPC 通信实现的自定义
 
 本页介绍了如何在 EMQX 中配置和使用 ExProto 网关。
 
+::: warning
+ExProto 网关从 EMQX `6.2.0` 开始已弃用，并计划在 `v7` 中移除。
+:::
+
 <!--a brief introduction of the architecture-->
 
 ## ExProto 网关和 gRPC 服务的工作原理
@@ -311,7 +315,6 @@ curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/exproto/authentication' \
 下面的图表显示了此示例中连接和消息传递的顺序。
 
 <img src="./assets/exproto-sequence-diagram.png" alt="exproto-sequence-diagram" style="zoom:80%;" />
-
 
 
 

@@ -55,6 +55,10 @@
 
 详细的介绍可参考各个协议的文档。本节包含了以下这些常用网关的快速开始文档：
 
+::: warning
+ExProto 网关从 EMQX `6.2.0` 开始已弃用，并计划在 `v7` 中移除。
+:::
+
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
 - [CoAP](./coap.md)
