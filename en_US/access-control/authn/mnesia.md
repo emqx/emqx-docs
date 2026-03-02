@@ -52,8 +52,50 @@ Example:
       salt_position = "suffix"
    }
    user_id_type = "username"
+   bootstrap_file = "${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv"
+   bootstrap_type = "plain"
 }
 ```
+
+## Bootstrap Users from File at Startup
+
+`password_based:built_in_database` supports loading users from a local file during authenticator creation.
+
+- `bootstrap_file`:
+  - Default: `${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv`
+  - The default file shipped with EMQX uses CSV header:
+    ```txt
+    user_id,password,is_superuser
+    ```
+- `bootstrap_type`:
+  - Values: `plain` or `hash`
+  - Default: `plain`
+
+File format is determined by file extension:
+
+- `.csv`: header-based CSV.
+- `.json`: must be a JSON array of objects.
+
+`bootstrap_type = plain` requires fields:
+
+- `user_id`
+- `password`
+- `is_superuser` (optional, defaults to `false`)
+
+`bootstrap_type = hash` requires fields:
+
+- `user_id`
+- `password_hash`
+- `salt` (optional, defaults to empty string)
+- `is_superuser` (optional, defaults to `false`)
+
+Behavior details from EMQX 5.8 implementation:
+
+- Existing users are not overridden during bootstrap (`override = false`).
+- If `bootstrap_type = plain`, EMQX hashes `password` using current `password_hash_algorithm` before storing.
+- If `bootstrap_type = hash`, EMQX stores `password_hash` directly.
+- `is_superuser` is interpreted as `true` only when value is JSON boolean `true` or CSV/JSON string `"true"`; all other values are treated as `false`.
+- File parse/read errors only produce warning logs; authenticator creation still succeeds.
 
 ## Migrate from External Storage to EMQX Built-in Database
 

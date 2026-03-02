@@ -50,8 +50,50 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的密
       salt_position = "suffix"
    }
    user_id_type = "username"
+   bootstrap_file = "${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv"
+   bootstrap_type = "plain"
 }
 ```
+
+## 启动时从文件引导用户
+
+`password_based:built_in_database` 支持在创建认证器时，从本地文件导入用户。
+
+- `bootstrap_file`：
+  - 默认值：`${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv`
+  - EMQX 自带默认文件的 CSV 表头为：
+    ```txt
+    user_id,password,is_superuser
+    ```
+- `bootstrap_type`：
+  - 可选值：`plain` 或 `hash`
+  - 默认值：`plain`
+
+文件格式由扩展名决定：
+
+- `.csv`：带表头的 CSV 文件。
+- `.json`：必须是对象数组。
+
+当 `bootstrap_type = plain` 时，要求字段：
+
+- `user_id`
+- `password`
+- `is_superuser`（可选，默认 `false`）
+
+当 `bootstrap_type = hash` 时，要求字段：
+
+- `user_id`
+- `password_hash`
+- `salt`（可选，默认空字符串）
+- `is_superuser`（可选，默认 `false`）
+
+基于 EMQX 5.8 源码的行为细节：
+
+- 启动引导不会覆盖已有用户（`override = false`）。
+- `bootstrap_type = plain` 时，EMQX 会使用当前 `password_hash_algorithm` 对 `password` 做哈希后存储。
+- `bootstrap_type = hash` 时，EMQX 直接存储 `password_hash`。
+- 仅当 `is_superuser` 是 JSON 布尔 `true` 或字符串 `"true"` 时才会被识别为 `true`，其余值都按 `false` 处理。
+- 文件读取或解析失败只会记录 warning 日志，不会导致认证器创建失败。
 
 ## 迁移到内置数据库
 
