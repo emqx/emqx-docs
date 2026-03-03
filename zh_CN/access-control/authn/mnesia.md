@@ -139,4 +139,4 @@ EMQX 会直接存储 `password_hash`，不会再次进行哈希计算。
 
 如果需要将用户凭据从外部系统（例如 MySQL、LDAP 或其他 MQTT Broker）迁移到 EMQX 内置数据库，可以使用 Import Users API 进行批量上传。
 
-与 Bootstrap 不同，Import Users 在 EMQX 运行后执行，主要用于运行阶段的数据迁移。操作详情请参见 [Import Users](./user_management.md#importing-users)。
+与加载用户不同，导入用户在 EMQX 运行后执行，主要用于运行阶段的数据迁移。操作详情请参见 [导入用户](./user_management.md#导入用户)。
