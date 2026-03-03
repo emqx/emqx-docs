@@ -68,7 +68,7 @@ This mechanism is intended for initializing (seeding) users during deployment, s
 - Preparing initial data during first-time setup
 - Predefining an initial administrative account (by setting `is_superuser = true`)
 
-Bootstrap runs only once during authenticator creation. It is not intended for ongoing user management or large-scale runtime migration. For bulk import after EMQX is running, use [Import Users](./user_management.md#importing-users).
+Bootstrap runs only once during authenticator creation. It is not intended for ongoing user management or large-scale runtime migration. For bulk import after EMQX is running, use [Import Users](./user_management.md#import-users).
 
 ### Bootstrap Configuration
 
