@@ -8,8 +8,8 @@ Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conc
 
 The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the REST API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
 
-::: warning
-ExProto Gateway is deprecated starting from EMQX `6.2.0` and is planned to be removed in `v7`.
+::: warning Important Notice
+ExProto Gateway is deprecated as of EMQX 6.2.0 and is planned for removal in EMQX 7.
 :::
 
 - [MQTT-SN](./mqttsn.md)
