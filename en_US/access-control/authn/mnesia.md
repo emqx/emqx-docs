@@ -141,4 +141,4 @@ Important notes:
 
 To migrate user credentials from an external system (such as MySQL, LDAP, or another MQTT broker) to the EMQX built-in database, you can use the Import Users API to batch upload users.
 
-Unlike bootstrap, importing users is performed after EMQX is running and is intended for operational data migration. For operating details, see [Import Users](./user_management.md#importing-users).
+Unlike bootstrap, importing users is performed after EMQX is running and is intended for operational data migration. For operating details, see [Import Users](./user_management.md#import-users).
