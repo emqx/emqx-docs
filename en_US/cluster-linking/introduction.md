@@ -1,11 +1,5 @@
 # EMQX Cluster Linking
 
-::: tip
-
-The Cluster Linking feature is only available in the EMQX Enterprise edition.
-
-:::
-
 Cluster Linking is a feature that connects multiple, separate EMQX clusters, facilitating communication between clients on different, often geographically dispersed clusters. Compared to traditional MQTT bridging, Cluster Linking is more efficient, reliable, and scalable. It minimizes bandwidth requirements and tolerates network interruptions.
 
 This section introduces the Cluster Linking and how to use and configure the feature.
@@ -47,7 +41,7 @@ Cluster Linking shares some functionalities with MQTT Bridge. Below is a compari
 
 This section describes the Cluster Linking workflow in two different scenarios.
 
-### Replicate Messages from Remote cluster to Local Cluster
+### Replicate Messages from Remote Cluster to Local Cluster
 
 In this scenario, Cluster A acts as the local cluster and Cluster B as the remote cluster. Cluster A needs to replicate topics `t/#` and `c/1` from Cluster B.
 
@@ -73,7 +67,7 @@ In this scenario, Cluster A acts as the local cluster and Cluster B as the remot
    - Messages are pushed from Cluster B to Cluster A.
 7. **Unsubscription:**
    - Clients in Cluster A unsubscribe from topics.
-   - Delete route information push from Cluster A to Cluster B.
+   - Delete the route information push from Cluster A to Cluster B.
 8. **Completion:** The configuration process is complete.
 
 ### Migrate Old Cluster to New Cluster

@@ -40,7 +40,7 @@ In this method, you use API keys and secret keys as the username and password to
 
 ::: tip Note
 
-For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication. Note that role-based API credentials are available only in the EMQX Enterprise edition.
+For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user credentials to authenticate REST API requests. Instead, you need to create and use API keys for authentication.
 
 :::
 
@@ -48,7 +48,7 @@ For security reasons, starting from EMQX 5.0.0, you cannot use Dashboard user cr
 
 You can manually create API keys for authentication on the Dashboard by navigating to **System** -> **API Key**. For instructions, see [System - API Keys](../dashboard/system.md#api-keys).
 
-You can also create API keys using the bootstrap file method. Add the following configuration to the `emqx.conf` file to specify the file location:
+You can also create API keys using the bootstrap file method. Add the following configuration file to specify the file location:
 
 ```bash
 api_key = {
@@ -60,7 +60,7 @@ In the specified file, add multiple API keys in the format `{API Key}:{Secret Ke
 
 - **API Key**: Any string as the key identifier.
 - **Secret Key**: Use a random string as the secret key.
-- **Role (optional)**: Specify the key's [role](#roles-and-permissions), applicable only in the Enterprise edition.
+- **Role (optional)**: Specify the key's [role](#roles-and-permissions).
 
 For example:
 
@@ -74,9 +74,9 @@ API keys created this way are valid indefinitely.
 
 Each time EMQX starts, it will add the data set in the file to the API key list. If an API key already exists, its Secret Key and Role will be updated.
 
-#### Roles and Permissions (Enterprise Edition)
+#### Roles and Permissions
 
-In the EMQX Enterprise edition, the REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
+The REST API implements role-based access control. When creating an API key, you can assign one of the following three predefined roles:
 
 - **Administrator**: This role can access all resources and is the default value if no role is specified. The corresponding role identifier is `administrator`.
 - **Viewer**: This role can only view resources and data, corresponding to all GET requests in the REST API. The corresponding role identifier is `viewer`.

@@ -8,10 +8,12 @@ This Administration Guide is designed to assist administrators and operators in 
 - [MQTT Durable Sessions](../durability/management.md) guides you to configure the Durable Sessions feature and set parameters for data replicas for high availability.
 - [EMQX Dashboard](../dashboard/introduction.md) provides a comprehensive introduction to the built-in management console in EMQX. You will learn how to manage and monitor EMQX clusters, configure various features, and utilize the required functionalities.
 - [Single Sign-On (SSO)](../dashboard/sso.md) introduces the mainstream identity services that EMQX integrates with and guides how to configure the SSO based on these services.
+- [Multi-Factor Authentication (MFA)](../multi-factor-authn/multi-factor-authentication.md) explains how to set up and use MFA for the Dashboard login to enhance security.
 - [Audit Log](../dashboard/audit-log.md) introduces how to enable and configure the audit log to track important operation changes in your EMQX cluster in real-time.
 - [Rate Limit](../rate-limit/rate-limit.md) explains how to avoid system overload by configuring rate limiters for connection and messaging speed, ensuring system stability.
+- [Namespace](../multi-tenancy/namespace-overview.md) introduces the Namespace functions and how to configure isolated tenant-specific settings within a single EMQX cluster, such as rate limiters.
 - [Log and Observability](../observability/overview.md) introduces metric observation and monitoring features in EMQX, facilitating system monitoring and debugging.
 - [Backup and Restore](../operations/backup-restore.md) guides you on how to back up and restore EMQX data.
 - [Plugins and Extensions](../extensions/introduction.md) help you extend the functionality of EMQX by developing plugins.
-- [Telemetry](../telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product. The telemetry function is only for the EMQX Open Source edition.
+- [Telemetry](../telemetry/telemetry.md) explains how to share your usage information by enabling telemetry to help improve the product.
 

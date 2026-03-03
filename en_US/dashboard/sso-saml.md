@@ -38,9 +38,9 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
 3. On the **General Settings** tab, enter your application name, for example, `EMQX Dashboard`. Click **Next**.
 
-4. On the **Configure SAML** tab, configure the information provided in Dashboard in Step 1:
+4. On the **Configure SAML** tab, configure the information provided in the Dashboard in Step 1:
 
-   - **Single sign-on URL**: Enter the **SSO Address** provided in Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/acs`.
+   - **Single sign-on URL**: Enter the **SSO Address** provided in the Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/acs`.
    - **Audience URI (SP Entity ID)**: Enter the **Metadata Address** provided in Dashboard, for example, `http://localhost:18083/api/v5/sso/saml/metadata`.
 
    Other information is optional and can be configured based on your actual requirements.

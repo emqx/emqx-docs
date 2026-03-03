@@ -21,17 +21,13 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 - macOS
 - Linux
 
-如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可参考[源码编译安装](../deploy/install-source.md)（EMQX 开源版）或[联系我们](https://www.emqx.com/zh/contact)获取支持。
+如您需要 FreeBSD、国产硬件平台以及操作系统适配（如麒麟、深度、红旗等）或其他 Linux 发行版安装包，可以[联系我们](https://www.emqx.com/zh/contact)获取支持。
 
 此外，您还可通过 [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform) 在主流公有云上一键部署包含 EMQX Enterprise 集群在内的所有基础设施，如[阿里云](https://github.com/emqx/tf-alicloud)、[亚马逊云科技](https://github.com/emqx/tf-aws)。<!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
 ### 通过 Docker 容器运行
 
 容器化部署是体验 EMQX 的最快方式，本节将以容器化部署为例，带您快速开始使用 EMQX。
-
-:::: tabs type:card
-
-::: tab EMQX 企业版
 
 1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
 
@@ -49,45 +45,15 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
 
 ​       `public`
 
-:::
-
-::: tab EMQX 开源版
-
-1. 在命令行工具中输入如下命令，下载并运行最新版 EMQX。
-
-   运行此命令前，请确保 [Docker](https://www.docker.com/) 已安装且已启动。
-
-   ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
-   ```
-
-2. 通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
-
-​        默认用户名及密码：
-
-​       `admin`
-
-​       `public`
-
-<!--后续补上 dashboard的截图-->
-
-:::
-
-::::
-
 ### 通过安装包快速安装
 
-您也可以选择通过安装包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS13 amd64 为例演示如何下载并安装 EMQX。
+您也可以选择通过安装包的形式在本地进行安装部署，方便后续进行配置调整以及性能调优。以下步骤将以 macOS 15 arm64 为例演示如何下载并安装 EMQX。
 
 由于手动安装过程中涉及比较多的依赖项目，因此推荐在测试或热升级环境中采用安装包方式，**不建议**在生产环境中使用。
 
-:::: tabs type:card
-
-::: tab EMQX 企业版
-
 1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/enterprise?os=macOS)。
 
-2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
+2. 选择最新版本 `@EE_VERSION@`，在**安装包类型**中选择 `macOS 15 arm64 / zip`。
 
 3. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
 
@@ -117,50 +83,6 @@ EMQX 支持多种安装方式，比如[容器化部署](../deploy/install-docker
    ```
 
 后续如需卸载 EMQX，直接删除 EMQX 目录即可完成卸载。
-
-:::
-
-::: tab EMQX 开源版
-
-1. 前往 [EMQX 官方下载页面的 macOS 页签](https://www.emqx.com/zh/downloads-and-install/broker?os=macOS)。
-
-2. 选择最新版本 `@CE_VERSION@`，在**安装包类型**中选择 `macOS 13 amd64 / zip`。
-
-2. 直接点击下方的下载链接。您也可以参照页面中的命令指导步骤进行下载与安装。
-
-4. 运行以下命令启动 EMQX。
-
-   前台启动
-
-   ```bash
-   ./emqx/bin/emqx foreground
-   ```
-
-   或后台（不推荐）启动
-
-   ```bash
-   ./emqx/bin/emqx start
-   ```
-
-5. 现在您可通过浏览器访问 [http://localhost:18083/](http://localhost:18083/)（localhost 可替换为您的实际 IP 地址）以访问 [EMQX Dashboard](../dashboard/introduction.md) 管理控制台，进行设备连接与相关指标监控管理。
-
-   默认用户名及密码：
-
-   `admin`
-
-   `public`
-
-6. 运行以下命令停止 EMQX。
-
-   ```bash
-   ./emqx/bin/emqx stop
-   ```
-
-后续如需卸载 EMQX，直接删除 EMQX 目录即可完成卸载。
-
-:::
-
-::::
 
 ## 通过 MQTTX 快速验证
 [MQTTX](https://mqttx.app/zh) 是一款开源的跨平台 MQTT 5.0 客户端工具，它支持 macOS、Linux 并且支持自定义脚本模拟测试、MQTT 消息格式转换、日志记录等多个功能。您可通过 MQTTX 一键式的连接方式和图形界面，您可轻松测试 MQTT/TCP、MQTT/TLS、MQTT/WebSocket 连接。

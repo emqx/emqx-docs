@@ -1,11 +1,5 @@
 # Node Evacuation and Cluster Load Rebalancing
 
-::: tip Note
-
-The node evacuation and cluster load rebalancing are EMQX Enterprise features.
-
-:::
-
 MQTT is a stateful long-lived connection access protocol, meaning connections will not be easily disconnected once established. Therefore, upgrading, maintaining, and scaling cluster nodes will become more challenging. EMQX provides node evacuation and cluster load rebalancing functions to facilitate users' cluster operation and maintenance.
 
 ## Node Evacuation

@@ -1,11 +1,5 @@
 # License Configuration
 
-::: tip
-
-The license configuration applies to the EMQX Enterprise edition only.
-
-:::
-
 You can update your license by using `emqx ctl license update` command. The command will update the license file and reload the license. 
 
 ```bash
@@ -26,7 +20,7 @@ Where,
 
 If the license is configured via `'file://<license_file_path>'` notation, EMQX will be automatically reloading it every 2 minutes.
 
-Additionally, you can configure the settings for the license connection quota usage in the configuration file `emqx.conf`.
+Additionally, you can configure the settings for the license connection quota usage in the configuration file as follows:
 
 ```bash
 license {
@@ -46,12 +40,12 @@ After execution, you can run `emqx ctl license info` to confirm that the new lic
 
 ::: tip
 
-You can also configure the license file through the EMQX Dashboard. For how to configure the license via Dashboard, see [Work with License](../deploy/license.md). Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also configure the license file through the EMQX Dashboard. For how to configure the license via Dashboard, see [Work with License](../deploy/license.md). Once you have configured these items with the Dashboard, your settings will override the same configuration items in the config file.
 
 :::
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

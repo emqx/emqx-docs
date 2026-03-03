@@ -1,8 +1,12 @@
 # Cluster Settings
 
-EMQX provides hot configuration capabilities, which can dynamically modify the configuration at runtime without restarting the EMQX node. The EMQX Dashboard provides a visual configuration page for the hot configuration function, allowing you to easily modify the configuration of EMQX. The following configuration items are currently provided:
+EMQX provides hot configuration capabilities, which can dynamically modify the configuration at runtime without restarting the EMQX node. The EMQX Dashboard provides visual configuration pages with the hot configuration functions, allowing you to easily modify the configuration of EMQX. 
+
+The Cluster Settings module provides the following submodules:
 
 - MQTT Settings
+- Cluster
+- Namespace
 - Listeners
 - Logging
 - Monitoring
@@ -10,7 +14,7 @@ EMQX provides hot configuration capabilities, which can dynamically modify the c
 
 ## MQTT Settings
 
-Click **Management** -> **MQTT Settings** in the left menu to enter the MQTT protocol-related configuration page. In the MQTT Settings page, you can configure various MQTT-related parameters, including:
+The **MQTT Settings** page provides MQTT protocol-related configuration functions. On this page, you can configure various MQTT-related parameters, including:
 
 ### General
 
@@ -44,9 +48,27 @@ You can configure settings for the following fields in the **Force Shutdown** ta
 - **Max Heap Size**: Specifies the maximum allowed heap size for the system. If the heap size surpasses this limit, the system will initiate a forced shutdown to maintain stability. The default value is `32 MB`.
 - **Max Mailbox Size**: Defines the maximum allowed length for the mailbox message queue. If the queue exceeds this length, a forced shutdown will be triggered to prevent system overload. The default value is `1000`.
 
+## Cluster
+
+The **Cluster** configuration page allows you to manage EMQX cluster nodes, including viewing details, inviting new nodes, and removing existing ones.
+
+To view node details, click the node name. You will be redirected to the **Cluster View** page for detailed information.
+
+To invite a node, click **Invite**, enter the node's IP address or hostname in the **Node Name** field, and click **Confirm**.
+
+To remove a node, click **Remove**. A confirmation dialog will appear before the node is removed from the cluster.
+
+![cluster-node](./assets/cluster-node.png)
+
+EMQX also supports creating and managing clusters using Command Line Interface (CLI). For detailed information, see [Create and Manage Cluster](../deploy/cluster/create-cluster.md)
+
+## Namespace
+
+The Namespace feature in EMQX provides logical isolation for different client groups within a single cluster. You can manage namespaces on the **Namespace** page. For more detailed guidance on how to manage and configure namespaces, refer to the [Namespace](../multi-tenancy/namespace-overview.md).
+
 ## Listeners
 
-Click on **Management** -> **Listeners** in the left menu to enter the listeners page. This page displays a list of listeners by default. EMQX provides four common listeners:
+The **Listeners** displays a list of listeners by default. EMQX provides four common listeners:
 
 - TCP listener using port 1883
 - SSL/TLS secure connection listener using port 8883
@@ -59,7 +81,7 @@ Typically, you can use these default listeners by specifying the corresponding p
 
 ### Add Listener
 
-In the **Add Lisenter** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
+In the **Add Listener** pop-up panel, you will see a form for adding a listener, which contains the basic configuration items. You can enter a name for the listener to identify it, choose the listener type (TCP, SSL, WS, WSS), and enter the listener address (IP address and port number). Using the IP address can restrict the listener's access range, or you can directly specify a port number.
 
 ![image](./assets/config-listener-add.png)
 
@@ -75,13 +97,13 @@ Configuring rate limiting ensures the stability of the system and network when m
 
 For more detailed configuration on rate limiting, refer to [Rate Limit](../rate-limit/rate-limit.md).
 
-For more details on listener configuration, refer to [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and  [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+For more details on listener configuration, refer to [EMQX Enterprise Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 ### Manage Listeners
 
 After adding a listener, you can see it in the list. Click on the listener's name to enter the editing page, where you can modify or delete the listener configuration. Note that the listener name, type, and listener address cannot be modified in the settings.
 
-Click the **Delete** button in the editing page to remove the listener. When deleting a listener, you will need to enter the listener's name to confirm the deletion. You can also toggle the enable switch to enable or disable the listener. The list also shows the number of connections for each listener.
+Click the **Delete** button on the editing page to remove the listener. When deleting a listener, you will need to enter the listener's name to confirm the deletion. You can also toggle the enable switch to enable or disable the listener. The list also shows the number of connections for each listener.
 
 ::: tip Warning
 
@@ -91,13 +113,13 @@ Modifying and deleting listeners is a risky operation and should be done careful
 
 ## Logging
 
-Click **Management** -> **Logging** in the left menu to enter the log configuration page. This page includes tabs for **Console Log**, **File Log**, **Log Throttling**, and **Audit Log**.
+The **Logging** page includes tabs for **Console Log**, **File Log**, **Log Throttling**, and **Audit Log**.
 
 EMQX supports two types of log output: console log and file log. You can choose either or both types according to your needs. In the corresponding configuration page, you can enable or disable the log handler, set the log level, log format type, and for file logs, specify the log file path and log name. For more detailed configuration instructions on logs, refer to [Configure Logging via Dashboard](../observability/log.md#configure-logging-via-dashboard).
 
 In the **Log Throttling** tab page, you can configure the time window for log throttling. For more information on log throttling, refer to [Log Rate Limiting](../observability/log.md#log-throttling).
 
-In the **Audit Log** page, you can enable or disable the audit log feature in the EMQX Enterprise edition and configure it. For detailed configuration instructions, refer to [Audit Log](./audit-log.md).
+In the **Audit Log** page, you can enable or disable the audit log feature in the EMQX and configure it. For detailed configuration instructions, refer to [Audit Log](./audit-log.md).
 
 ## Monitoring
 
@@ -107,7 +129,7 @@ The Monitoring feature is only available in the EMQX Enterprise edition.
 
 :::
 
-Click on **Management** -> **Monitoring** in the left menu to enter the monitoring integration configuration page. This page contains two tabs:
+The **Monitoring** page contains two tabs:
 
 - **System**: Depending on the user's needs, the settings for the [Alarms](./diagnose.md#alarms) function, such as alarm thresholds, check intervals, etc., can be adjusted to a certain extent according to user needs.
 - **Integration**: Provides configuration for integration with third-party monitoring platforms.
@@ -135,11 +157,5 @@ Users can customize and modify the monitoring data in `Grafana` according to the
 For detailed configuration of OpenTelemetry and Datadog integration, refer to [Integrate with OpenTelemetry](../observability/opentelemetry/opentelemetry.md) and [Integrate with Datadog](../observability/datadog.md).
 
 ## Cluster Linking
-
-::: tip Note
-
-The Cluster Linking feature is only available in the EMQX Enterprise edition.
-
-:::
 
 The Cluster Linking feature allows multiple independent EMQX clusters to be connected, enabling clients in geographically dispersed clusters to communicate with each other. Users can create and configure cluster links on this page. For detailed guidance on creation and configuration, refer to [EMQX Cluster Linking](../cluster-linking/introduction.md).

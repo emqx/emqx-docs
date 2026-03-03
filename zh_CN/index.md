@@ -2,9 +2,9 @@
 
 EMQX 是一款「无限连接，任意集成，随处运行」的大规模分布式物联网接入平台，同时作为一个高性能、可扩展的 MQTT 消息服务器，它可以为物联网（IoT）应用提供可靠的实时消息传输和设备连接解决方案。EMQX 累计拥有来自 50 多个国家的 20,000 多家企业用户，连接全球超过 1 亿台物联网设备，服务企业数字化、实时化、智能化转型。
 
-[EMQX 企业版](https://www.emqx.com/zh/products/emqx)是 EMQX 的商业版本，单集群支持最高 1 亿 MQTT 并发连接，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
+作为一款商业版的自托管 MQTT 消息平台，[EMQX 企业版](https://www.emqx.com/zh/products/emqx)单集群支持最高 1 亿 MQTT 并发连接，单服务器的传输与处理吞吐量可达每秒百万级 MQTT 消息，同时保证毫秒级的低时延。通过强大的内置规则引擎和数据集成功能，EMQX 企业版可以对海量 IoT 数据进行实时数据处理、数据转换和路由，还可以将 IoT 数据无缝集成到各种后端数据库和分析工具中，助力企业快速构建关键业务的 IoT 平台与应用。
 
-<img src="./assets/emqx_platform.jpg" alt="emqx_platform" style="zoom:70%;" />
+<img src="./assets/emqx_platform.png" alt="emqx_platform" style="zoom:70%;" />
 
 ## 产品优势
 
@@ -67,50 +67,34 @@ EMQX 企业版提供图形化的管理系统 [Dashboard](./dashboard/introductio
 
 ## 部署模式和版本对比
 
-EMQX 有 4 种部署模式，包括两种云服务模式（EMQX Cloud Serverless 和 EMQX Cloud 专有版）和两种自托管模式（EMQX 开源版 和 EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
+EMQX 有三种部署模式，包括两种云服务模式（EMQX Serverless 和 EMQX 专有版）和一种自托管模式（EMQX 企业版）。以下表格列出了这些部署模式的对比，以帮助您根据业务需求进行选择。想进一步了解具体的功能对比，参考[功能对比](./getting-started/feature-comparison.md)。
 
 <table>
 <thead>
   <tr>
-     <th colspan="2">自托管模式</th>
+     <th colspan="1">自托管模式</th>
     <th colspan="2">云服务模式</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td>EMQX 开源版</td>
     <td>EMQX 企业版</td>
-    <td>EMQX Cloud Serverless</td>
-    <td>EMQX Cloud 专有版</td>
+    <td>EMQX Serverless</td>
+    <td>EMQX 专有版</td>
   </tr>
   <tr>
-    <td><a href="https://www.emqx.com/zh/try?product=broker">立即下载</a></td>
     <td><a href="https://www.emqx.com/zh/apply-licenses/emqx">免费试用</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">免费使用 Serverless</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">14 天免费试用</a></td>
   </tr>
   <tr>
-    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ 支持 Webhook 和 MQTT 数据桥接<br>✔️ 多协议网关支持，包括 MQTT-SN, STOMP 和 CoAP<br>✔️ 社区和论坛<br> </td>
-    <td>✔️ 商业许可证（商业源代码许可证）<br>✔️ 高可用副本持久存储<br>✔️ 先进集群架构、跨 IDC 集群<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 可视化 Flow 设计器<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息验证<br>✔️ 消息转换与编解码<br>✔️ 消息队列与流处理<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
+    <td>✔️ 商业源代码许可证（BSL）1.1<br>✔️ 高可用副本持久存储<br>✔️ 先进集群架构、跨 IDC 集群<br>✔️ 与 40 多种企业系统双向数据集成，包括 Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis 等<br>✔️ 可视化 Flow 设计器<br>✔️ 审计日志和单点登录<br>✔️ 基于角色的访问控制 （RBAC）<br>✔️ 文件传输<br>✔️ 消息验证<br>✔️ 消息转换与编解码<br>✔️ 消息队列与流处理<br>✔️ 多协议网关支持，包括额外支持 OCPP, JT/808 和 GBT32960<br>✔️ 7x24 技术支持<br> </td>
     <td>✔️ 即用即付<br>✔️ 每月免费的使用额度<br>✔️ 最高 1000 同时在线连接<br>✔️ 极速部署<br>✔️ 自动伸缩<br>✔️ 5x8 技术支持</td>
     <td>✔️ 14 天免费试用<br>✔️ 按小时计费<br>✔️ 主流云平台多区域部署<br>✔️ 多种连接规格可选，连接无上限<br>✔️ VPC 对等连接, 数据集成等更多功能<br>✔️ 40+ 种完备的数据集成链路<br>✔️ 7x24 技术支持<br> </td>
   </tr>
 </tbody>
 </table>
 
-以下列出了 EMQX 企业版和开源版的主要功能对比。
-
-|                          | **EMQX 企业版**                                              | **EMQX 开源版**                                              |
-| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| **定位**                 | 可靠且可扩展的企业级 MQTT 平台                               | 全球第一的开源 MQTT Broker                                   |
-| **伸缩性**               | 支持最多 100 个节点的集群<br />每个集群最多支持 1 亿个 MQTT 连接 | 支持最多 3 个节点的集群<br />在生产环境中支持最多 100,000 个连接 |
-| **性能**                 | 500 万 MQTT 消息每秒                                         | 10 万 MQTT 消息每秒                                          |
-| **可用性**               | 核心-副本集群                                                | 无主集群                                                     |
-| **可靠性**               | RocksDB 消息持久化，具备高可用副本                           | 会话持久化                                                   |
-| **延迟**                 | 1~5 毫秒                                                     | 1~5 毫秒                                                     |
-| **数据集成（开箱即用）** | 40+                                                          | 2                                                            |
-| **License**              | Commercial License (Business source license)                 | Apache Version 2.0                                           |
-| **技术支持**             | 7x24 全球支持                                                | 开源社区                                                     |
 
 ## 典型用例
 

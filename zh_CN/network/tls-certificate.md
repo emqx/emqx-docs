@@ -15,7 +15,7 @@
 
 :::
 
-1. 运行以下命令生成密钥对，该命令随即会提示您输入密钥保护密码，后续在生成、签发、验证证书时均需要此密码。请妥善相关密钥及密码。
+1. 运行以下命令生成密钥对，该命令随即会提示您输入密钥保护密码，后续在生成、签发、验证证书时均需要此密码。请妥善保管相关密钥及密码。
 
 ```bash
 openssl genrsa -des3 -out rootCA.key 2048
@@ -29,7 +29,7 @@ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 3650 -out rootCA.crt
 
 ## 签发服务器证书
 
-使用 CA 证书来签发服务器证书，用于验证服务器所有者的身份，服务器证书通常颁发给主机名、服务器名称或域名（如 [www.emqx.com](https://www.emqx.com/zh), localhot）。我们需要 CA 密钥（rootCA.key）、CA 证书（ rootCA.crt）和服务端 CSR （server.csr）生成服务器证书。
+使用 CA 证书来签发服务器证书，用于验证服务器所有者的身份，服务器证书通常颁发给主机名、服务器名称或域名（如 [www.emqx.com](https://www.emqx.com/zh), localhost）。我们需要 CA 密钥（rootCA.key）、CA 证书（ rootCA.crt）和服务端 CSR （server.csr）生成服务器证书。
 
 1. 运行以下命令生成服务器证书密钥对：
 

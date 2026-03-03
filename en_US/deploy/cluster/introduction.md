@@ -2,7 +2,13 @@
 
 EMQX Clustering refers to the deployment of multiple EMQX nodes working together as a unified system. These nodes automatically share client sessions, topic subscriptions, and routing information, enabling seamless message delivery and horizontal scalability.
 
-Compared to a standalone EMQX node, which handles all connections and data locally, a clustered setup distributes load across nodes, tolerates failures by rerouting traffic, and ensures continuous service even during node outages.
+::: tip Note
+
+Clustering is available during the trial period, but once the trial period ends, you will need to purchase a Commercial License to continue using it. Without a valid Commercial License, the clustering feature will be disabled after the trial period expires.
+
+:::
+
+This chapter introduces the [benefits of clustering](#reasons-for-clustering), the new [Mria and RLOG](./mria-introduction.md) architecture, how to [create a cluster manually or automatically](./create-cluster.md), how to [implement load balancing](./lb.md), and how to ensure [communication security](./security.md) within a cluster.
 
 This architecture is ideal for large-scale, mission-critical IoT and messaging platforms built on MQTT.
 

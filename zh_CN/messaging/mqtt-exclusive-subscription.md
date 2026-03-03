@@ -21,12 +21,10 @@
 
 ## 通过配置文件配置排它订阅
 
-排它订阅默认未开启，可在 `etc/emqx.conf` 中配置：
+排它订阅默认未开启，可在配置文件中加入：
 
 ```bash
-mqtt.exclusive_subscription {
-    enable = true
-}
+mqtt.exclusive_subscription.enable = true
 ```
 
 ## 使用 MQTTX Desktop 尝试排它订阅
@@ -40,7 +38,7 @@ mqtt.exclusive_subscription {
 
 1. 启动 EMQX 和 MQTTX Desktop。点击**新建连接**创建一个名为 `Demo` 的客户端连接作为发布者。
 
-   - 在**名称**栏中输入`Demo`。
+   - 在**名称**栏中输入 `Demo`。
    - 在本演示中，**服务器地址**使用本地主机 `127.0.0.1` 作为示例。
    - 其它设置保持默认，点击**连接**。
 

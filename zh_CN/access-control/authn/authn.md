@@ -63,36 +63,116 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 
 ## 认证链
 
-EMQX 允许创建多个认证器构成一条认证链，认证器将按照在链中的位置顺序执行，如果在当前认证器中未检索到身份凭证，将会切换至链上的下一个启用的认证器继续认证。
+EMQX 允许创建多个认证器构成一条认证链，认证器将按照在链中的位置顺序执行，如果在当前认证器中未检索到身份凭证，将会切换至链上的下一个启用的认证器继续认证。认证链中的每个认证器必须是不同类型的（例如，一个 HTTP，一个 LDAP，一个内置数据库）。
 
 ::: tip
 
-认证链中不允许出现多个相同类型的认证器。同时，只有 MQTT 协议支持认证链，网关仅支持使用单个认证器。
+当前，EMQX 仅支持为 MQTT 客户端创建认证链。网关不支持认证链，仅支持使用单个认证器。
 
 :::
 
-### 认证流程
+### 认证链的工作机制
 
-以密码认证为例，通常这会产生以下 2 种情况：
+当启用认证链后，EMQX 会按照配置的顺序依次执行认证器，直到认证成功或所有认证器都执行完毕。
 
-1. 当前认证器执行时检索到了匹配的认证信息，例如用户名一致：
-   - 密码完全匹配，则客户端认证通过，允许连接。
-   - 密码无法匹配，则客户端认证失败，拒绝连接。
-2. 当前认证器执行时没有检索到匹配的认证信息，例如数据源中没有查找到数据：
-   - 当前认证器之后还有认证器：忽略认证，交由下一认证器继续认证。
-   - 当前认证器已经是链中最后一个认证器：客户端认证失败，拒绝连接。
+以密码认证为例，其执行流程如下：
 
-::: tip
-
-请注意，某个认证器查找出错（如数据库错误）或未启用时，将继续执行下一个认证器。
-
-:::
+1. **评估调用条件（如已配置）：**
+    如果某个认证器配置了[调用条件](#认证器调用条件)，EMQX 会首先基于客户端属性信息（如 `listener`、`clientid`、`username` 等）评估该表达式。
+   - 若表达式计算结果为 `true`，则执行该认证器；
+   - 否则跳过此认证器。
+2. **执行认证器：**
+   - 如果找到了凭证且验证通过（如密码正确），则认证成功，允许客户端连接；
+   - 如果找到了凭证但验证失败，则拒绝连接；
+   - 如果未找到凭证，则继续尝试下一个认证器。
+3. **错误或禁用时跳过：**
+    如果认证器被禁用，或在执行过程中出现内部错误（如数据库不可用），该认证器也将被跳过。
+4. **回退行为：**
+    如果所有认证器都被跳过或均未能认证成功，EMQX 默认会拒绝客户端连接。
 
 ![EMQX 认证链](./assets/authn-chain.png)
 
-### 应用场景
+### 认证器调用条件
 
-用户可以创建多个认证器实现链式认证，某些场景下这是有益的，比如客户端数量多、连接速率很高的场景下，用户可能使用 Redis 作为链中的第一个认证器，与 HTTP Server 认证器搭配使用，借助 Redis 高性能优势提供缓存层以实现更高性能的认证能力。
+从 EMQX 5.9 开始，您可以为每个认证器配置一个调用条件，用于判断是否应触发该认证器来认证当前客户端。
+
+调用条件是一个 [Variform 表达式](../../configuration/configuration.md#variform-表达式)，可基于客户端属性信息（例如 `listener`, `username`, `clientid` 等）进行逻辑判断。如果表达式的计算结果不是 `true`，该认证器将被跳过。
+
+此功能在认证链中实现更灵活的认证逻辑。它允许对认证逻辑进行细粒度控制，例如根据客户端连接的不同监听器或客户端属性应用不同的认证器。这样，EMQX 只在合适的情况下调用认证器，避免了对外部系统的无谓请求。
+
+#### 调用条件中支持的客户端属性
+
+调用条件中支持的客户端属性包括：
+
+- `username`：客户端的用户名
+- `password`：客户端的密码
+- `clientid`：客户端的客户端 ID
+- `client_attrs.*`：客户端的自定义属性
+- `cert_common_name`：客户端 TLS 证书中的主体字段
+- `cert_subject`：客户端 TLS 证书中的公共名称（CN）
+- `peersni`：TLS 客户端发送的 SNI（服务器名称指示）
+- `listener`：监听器 ID（例如 `tcp:default`）
+- `zone`：关联的配置区
+
+#### 调用条件示例
+
+- 仅对通过 `tcp:default` 监听器连接的客户端启用 HTTP 认证器：
+
+  ```
+  str_eq(listener, 'tcp:default')
+  ```
+
+- 仅对通过 `ssl:default` 监听器连接的客户端启用 PostgreSQL 认证器：
+
+  ```
+  str_eq(listener, 'ssl:default')
+  ```
+
+## 外部资源缓存
+
+EMQX 提供认证结果缓存机制，用于提升性能并减少对外部认证后端（如 MySQL、MongoDB 和 Redis）的访问压力。该缓存功能会存储认证结果，避免重复查询外部资源，特别适用于高并发场景。
+
+::: tip 注意
+
+外部资源缓存仅针对外部数据源，对于本地数据源，如内置数据库等 EMQX 不进行缓存。
+
+:::
+
+### 外部资源缓存的工作原理
+
+外部资源缓存以节点为单位存储认证结果，这些缓存结果在同一节点上的所有客户端会话中共享，可有效避免对外部认证后端的重复查询。
+
+1. 客户端连接并触发认证操作。
+2. EMQX 检查缓存中是否已有对应的认证结果：
+   - 如果找到了有效的缓存结果，则视为**缓存命中**，无需访问外部后端；
+   - 如果未找到缓存结果，则视为**缓存未命中**，EMQX 会向外部后端发起查询。
+3. 从后端返回的认证结果将被存入缓存，用于后续请求，并计入**缓存写入**指标。
+
+该机制有助于降低认证延迟、减少外部资源调用，并在高负载下维持系统响应能力。
+
+### 启用并配置外部资源缓存
+
+您可以通过 EMQX Dashboard 启用并配置外部资源缓存：
+
+1. 进入**访问控制** -> **认证**页面。
+
+2. 点击页面右上角的**外部资源缓存设置**按钮，右侧将弹出设置面板。
+
+3. 在面板中，使用**启用外部资源缓存**开关启用或关闭缓存功能。启用后，您可以配置以下缓存参数：
+
+   | 字段名称         | 描述                                                      |
+   | ---------------- | --------------------------------------------------------- |
+   | **最大缓存数量** | 每个节点允许缓存的最大认证结果条数。默认值：`1,000,000`。 |
+   | **最大内存**     | 缓存允许使用的最大内存。默认值：`100 MB`。                |
+   | **缓存过期时间** | 每条缓存数据的有效时长。默认值：`1 分钟`。                |
+
+4. 点击**更新**以应用设置。
+
+以上配置将在整个集群范围内生效，确保所有节点行为一致。
+
+### 查看外部资源缓存状态
+
+<!--@include: ../monitor-cache-status.md-->
 
 ## 超级用户与权限
 
@@ -168,23 +248,25 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 目前 EMQX 支持以下占位符：
 
-- `${clientid}`: 将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
+- `${clientid}`：将在运行时被替换为客户端 ID。客户端 ID 一般由客户端在 `CONNECT` 报文中显式指定，如果启用了 `use_username_as_clientid` 或 `peer_cert_as_clientid`，则会在连接时被用户名、证书中的字段或证书内容所覆盖。
 
-- `${username}`: 将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
+- `${username}`：将在运行时被替换为用户名。用户名来自 `CONNECT` 报文中的 `Username` 字段。如果启用了 `peer_cert_as_username`，则会在连接时被证书中的字段或证书内容所覆盖。
 
-- `${password}`: 将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
+- `${password}`：将在运行时被替换为密码。密码来自 `CONNECT` 报文中的 `Password` 字段。
 
-- `${peerhost}`: 将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
+- `${peerhost}`：将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 
-- `${peerport}`: 它将在运行时被客户端的 IP 端口替换。
+- `${peerport}`：将在运行时被客户端的 IP 端口替换。
 
-- `${cert_subject}`: 将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+- `${peername}`：将在运行时被替换为客户端的 IP 地址和端口，格式为 `IP: PORT`。
 
-- `${cert_common_name}`: 将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+- `${cert_subject}`：将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
+
+- `${cert_common_name}`：将在运行时被替换为客户端 TLS 证书的通用名称（Common Name）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
 
 - `${client_attrs.NAME}`：某个客户端属性。`NAME` 将在运行时根据预定义配置替换为属性名称。有客户端属性的详细信息，请参见 [MQTT 客户端属性](../../client-attributes/client-attributes.md)。
 
-- `${zone}`: 在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于认证模板中，简化规则创建，并支持基于 Zone 的特定配置。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
+- `${zone}`：在运行时将替换为客户端的 Zone。`${zone}` 占位符可以直接用于认证模板中，简化规则创建，并支持基于 Zone 的特定配置。有关 Zone 的详细配置信息，请参见 [Zone 覆盖](../../configuration/configuration.md#zone-覆盖)。
 
   例如，以下 ACL 规则使用 `${zone}` 根据客户端的指定 zone 动态应用权限：
 
@@ -194,21 +276,19 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 ## 认证配置方式
 
-EMQX 提供了 3 种使用认证的配置方式，分别为：Dashboard、配置文件和 HTTP API。
+EMQX 提供了三种使用认证的配置方式，分别为：Dashboard、配置文件和 HTTP API。
 
-### Dashboard
+### 通过 Dashboard 配置认证
 
 Dashboard 底层调用了 HTTP API，提供了相对更加易用的可视化操作页面。在 Dashboard 中可以方便的查看认证器状态、调整认证器在认证链中的位置，如下图所示，我们已经成功添加了基于内置数据库和 JWT 两种认证机制。
 
 ![Dashboard 认证器列表](./assets/authn-dashboard-2.png)
 
-### 配置文件
+### 通过配置文件配置认证
 
 EMQX 支持为 MQTT 客户端配置多个认证器以组成认证链 <!--连接到对应概念-->，如以下代码示例中的 `authentication` 字段所示，认证器在数组中的顺序便是在认证链中执行的顺序：
 
 ```hcl
-# emqx.conf
-
 # Specific global authentication chain for all MQTT listeners
 authentication = [
   ...
@@ -236,7 +316,7 @@ gateway.stomp {
 
 不同类型的认证器有着不同的配置项要求。关于各配置项的具体配置方法，可参考配置说明文档 <!--连接到对应文件-->，其中包含了每种认证器的所有配置字段的详细说明。
 
-### HTTP API
+### 通过 HTTP API 配置认证
 
 <!-- TODO 链接到 API 文档具体 API 上-->
 
@@ -248,7 +328,7 @@ EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为�
 - `/api/v5/gateway/{protocol}/authentication`: 管理网关的全局认证
 - `/api/v5/gateway/{protocol}/listeners/{listener_id}/authentication`: 管理网关监听器认证
 
-#### **认证器 ID**
+#### 认证器 ID
 
 如果想要对指定认证器进行操作，则需要在上面这些端点后面追加一个认证器 ID，例如 `/api/v5/authentication/{id}`。为了便于维护，这里的 ID 并不是 EMQX 自动生成然后由 API 返回的，而是遵循了一套预先定义的规范：
 
@@ -288,9 +368,8 @@ EMQX 提供的认证 API 允许对认证链和认证器进行管理，例如为�
 PUT /api/v5/authentication/password_based%3Abuilt_in_database
 ```
 
-#### **数据操作 API**
+#### 数据操作 API
 
 对于通过内置数据库存储认证数据的认证方式，例如 [使用内置数据库进行密码认证](./mnesia.md) 和 [MQTT 5.0 增强认证](./scram.md)，EMQX 提供了相关的 HTTP API 来管理认证数据，如创建、更新、删除和查看等操作，具体可阅读 [通过 HTTP API 管理用户](./user_management.md)。
 
 详细的请求方式与参数请参考 [HTTP API](../../admin/api.md)。
-

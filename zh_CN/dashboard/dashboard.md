@@ -1,4 +1,4 @@
-# Dashboard 首页
+# Dashboard 首页概览
 
 登录成功后就可以进入到 EMQX Dashboard 的首页，即**集群概览**页面。该页面包含以下标签页：
 

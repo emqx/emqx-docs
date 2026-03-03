@@ -1,11 +1,5 @@
 # Alarm
 
-::: tip Note
-
-Alarm is an EMQX Enterprise feature.
-
-:::
-
 EMQX offers a built-in monitoring and alarm functionality for monitoring the internal state changes, such as CPU occupancy, system, and process memory occupancy, number of processes, rule engine resource status, and cluster partition and healing. EMQX triggers and records these changes when they exceed a threshold or deviate from expectations, and removes them from the list once they are restored.
 
 This page introduces the alarm information EMQX provides, how to obtain and check the detailed alarm information, and how to configure the alarm settings and thresholds in EMQX. The monitoring and alarm function keeps you notified of potential problems during operation. By configuring alarms and setting appropriate thresholds, you can make sure that EMQX remains secure, stable, and reliable.
@@ -16,7 +10,7 @@ The following table lists the alarms that can be triggered to indicate potential
 
 ::: tip
 
-Depending on the severance and impacts on the system, alarms can have 3 levels:
+Depending on the severity and impacts on the system, alarms can have 3 levels:
 
 - **Error**: Errors caused by user presets. The client can perceive the error and retry.
 
@@ -28,33 +22,19 @@ The levels are defined from development perspectives and are only for recommenda
 
 :::
 
-**Alarm list for EMQX Open Source edition:**
-
-| **Alarm**                           | Level    | Description                                                                        | **Details**                              | **Threshold**                                                              |
-|:------------------------------------|----------|:-----------------------------------------------------------------------------------|:-----------------------------------------|:---------------------------------------------------------------------------|
-| high_system_memory_usage            | Warning  | System memory usage is too high                                                    | "System memory usage is higher than ~p%" | `os_mon.sysmem_high_watermark = 70%`                                       |
-| high_process_memory_usage           | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%  | `os_mon.procmem_high_watermark = 5%`                                       |
-| high_cpu_usage                      | Warning  | CPU usage is too high                                                              | ~p% cpu usage                            | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%`         |
-| too_many_processes                  | Warning  | Too many processes                                                                 | ~p% process usage                        | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
-| mnesia_transaction_manager_overload | Warning  | mnesia overloaded; mailbox size: N                                                 | mailbox size = N                         | `sysmon.mnesia_tm_mailbox_threshold = 500`                                 |
-| broker_pool_overload                | Warning  | broker pool overloaded; mailbox size: N                                            | mailbox size = N                         | `sysmon.broker_pool_mailbox_threshold = 500`                               |
-| partition                           | Critical | Partition occurs at node                                                           | Partition occurs at node ~s              | -                                                                          |
-| resource                            | Critical | Resource is disconnected                                                           | Resource ~s(~s) is down                  | -                                                                          |
-| conn_congestion                     | Critical | Connection process congestion                                                      | connection congested                     | -                                                                          |
-
-**Alarm list for EMQX Enterprise edition:**
-
-| **Alarm**                 | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
-| :------------------------ | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
-| high_system_memory_usage  | Warning  | System memory usage is too high                              | "System memory usage is higher than ~p%"     | `os_mon.sysmem_high_watermark = 70%`                         |
-| high_process_memory_usage | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%      | `os_mon.procmem_high_watermark = 5%`                         |
-| high_cpu_usage            | Warning  | CPU usage is too high                                        | ~p% cpu usage                                | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
-| too_many_processes        | Warning  | Too many processes                                           | ~p% process usage                            | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
-| license_quota             | Warning  | License exceeds quota                                        | License: the number of connections exceeds % | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
-| license_expiry            | Critical | License expired                                              | License will be expired at %                 | -                                                            |
-| partition                 | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
-| resource                  | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
-| conn_congestion           | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
+| **Alarm**                           | Level    | Description                                                  | **Details**                                  | **Threshold**                                                |
+| :---------------------------------- | -------- | :----------------------------------------------------------- | :------------------------------------------- | :----------------------------------------------------------- |
+| high_system_memory_usage            | Warning  | System memory usage is too high                              | "System memory usage is higher than ~p%"     | `os_mon.sysmem_high_watermark = 70%`                         |
+| high_process_memory_usage           | Warning  | Single Erlang process memory usage is too high (percentage of system memory usage) | Process memory usage is higher than ~p%      | `os_mon.procmem_high_watermark = 5%`                         |
+| high_cpu_usage                      | Warning  | CPU usage is too high                                        | ~p% cpu usage                                | `os_mon.cpu_high_watermark = 80%` `os_mon.cpu_low_watermark = 60%` |
+| too_many_processes                  | Warning  | Too many processes                                           | ~p% process usage                            | `vm_mon.process_high_watermark = 80%` `vm_mon.process_low_watermark = 60%` |
+| license_quota                       | Warning  | License exceeds quota                                        | License: the number of connections exceeds % | `license.connection_high_watermark_alarm = 80%` `license.connection_low_watermark_alarm = 75%` |
+| license_expiry                      | Critical | License expired                                              | License will be expired at %                 | -                                                            |
+| mnesia_transaction_manager_overload | Warning  | mnesia overloaded; mailbox size: N                           | mailbox size = N                             | `sysmon.mnesia_tm_mailbox_threshold = 500`                   |
+| broker_pool_overload                | Warning  | broker pool overloaded; mailbox size: N                      | mailbox size = N                             | `sysmon.broker_pool_mailbox_threshold = 500`                 |
+| partition                           | Critical | Partition occurs at node                                     | Partition occurs at node ~s                  | -                                                            |
+| resource                            | Critical | Resource is disconnected                                     | Resource ~s(~s) is down                      | -                                                            |
+| conn_congestion                     | Critical | Connection process congestion                                | Connection congested                         | -                                                            |
 
 ## Get Alarms
 
@@ -87,7 +67,7 @@ Taking the alarm of high system memory usage as an example, you will receive an 
 
 <img src="./assets/alarm_activate_msg.png" alt="alarm massage" style="zoom:50%;" />
 
-One system multifunction will be repeatedly reported. That is, if one alarm on high CPU usage is activated, the system will not generate another alarm of the same type. The generated alarm will be automatically deactivated when the monitored metric returns to normal, or you can manually deactivate the alarm.
+Alarms will not be repeatedly reported. That is, if one alarm on high CPU usage is activated, the system will not generate another alarm of the same type. The generated alarm will be automatically deactivated when the monitored metric returns to normal, or you can manually deactivate the alarm.
 
 ### Get Alarms from Log
 
@@ -128,7 +108,7 @@ Alarm configuration includes configuring alarm settings and alarm thresholds. Al
 
 ### Configure Alarm Settings
 
-The settings for alarms can only be configured by modifying the configuration items in `emqx.conf` file. The following table lists the configuration items available for alarm setting configuration.
+The settings for alarms can only be configured by modifying the configuration items in the configuration file. The following table lists the configuration items available for alarm setting configuration.
 
 | Configuration Item    | Description                                                  | Default Value        | Optional Values |
 | --------------------- | ------------------------------------------------------------ | -------------------- | --------------- |
@@ -182,7 +162,7 @@ After you complete the configurations, click **Save Changes**.
 
 ### Configure Alarm Thresholds via Configuration Items
 
-You can also configure alarm thresholds by modifying the configuration items for alarm thresholds. The following configuration items are currently available to be modified in `emqx.conf` file:
+You can also configure alarm thresholds by modifying the configuration items for alarm thresholds. The following configuration items are currently available to be modified in the configuration file:
 
 | Configuration Item                | Description                                                  | Default Value |
 | --------------------------------- | ------------------------------------------------------------ | ------------- |
@@ -204,7 +184,7 @@ You can also configure alarm thresholds by modifying the configuration items for
 | sysmon.top.sample_interlval       | Check interval for top processes.                            | `2s`          |
 | sysmon.top.max_procs              | Stop collecting data when the number of processes in the VM exceeds this value. | `1000000`     |
 
-The EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in `emqx.conf` file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
+The EMQX Enterprise will raise an alarm when the license expires in less than 30 days, or if the number of connections exceeds the high watermark. You can adjust the high/low watermark for the number of connections by modifying the following configuration items in the configuration file. For more information on how to configure settings for the license, see [License](../configuration/license.md).
 
 | Configuration item                      | Description                                                  | Default value |
 | --------------------------------------- | ------------------------------------------------------------ | ------------- |

@@ -35,7 +35,7 @@
 
 ### 重传的对象
 
-首先，在了解 EMQX 对于重传机制的设计前，我们需要先确保你已经了解协议中 QoS 1 和 QoS 2 的传输过程，否则请参见 [MQTTv3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
+首先，在了解 EMQX 对于重传机制的设计前，我们需要先确保你已经了解协议中 QoS 1 和 QoS 2 的传输过程，否则请参见 [MQTT v3.1.1 - QoS 1: At least once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718101) 和 [MQTTv3.1.1 - QoS 2: Exactly once delivery](http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718102)。
 
 此处，仅作一个简单的回顾，用来说明不同 QoS 下重传的对象有哪些。
 
@@ -69,7 +69,7 @@ QoS 2 要求消息只送达一次；所以在实现它时，需要更复杂的�
 #2 Sender  <---------------  Receiver
                PUBREL
 #3 Sender  --------------->  Receiver       (*)
-               PUBCOM
+               PUBCOMP
 #4 Sender  <---------------  Receiver
 ```
 

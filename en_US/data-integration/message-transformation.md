@@ -1,13 +1,5 @@
 # Message Transformation
 
-::: tip Note
-
-Message Transformation is an EMQX Enterprise feature.
-
-:::
-
-## Overview
-
 Message Transformation allows you to modify and format messages based on user-defined rules before they are processed further or delivered to subscribers. This feature is highly customizable, supporting multiple encodings and advanced transformations.
 
 ## Workflow
@@ -38,25 +30,49 @@ This section demonstrates how to configure the message transformation feature an
 
 This section demonstrates how to create and configure a message transformation in the Dashboard.
 
-1. Go to Dashboard, and click **Integrations** -> **Message Transform** in the left navigation menu.
+1. Go to Dashboard, and click **Smart Data Hub** -> **Message Transform** in the left navigation menu.
+
 2. Click **Create** at the top right of the **Message Transform** page.
+
 3. On the Create Message Transform page, configure the following information:
    - **Name**: Enter the name of the transformation.
+   
    - **Message Source Topic**: Set the topics whose messages need to be transformed. Multiple topics or topic filters can be set.
+   
    - **Note** (optional): Enter any notes.
+   
    - **Message Format Transformation**:
-     - **Source Format**: Specifies the payload decoder to be applied to messages entering the transformation pipeline. The available options are `None` (no decoding), `JSON`, `Avro`, or `Protobuf`. These decoders convert the binary input payload into a structured map. If you select `Avro` or `Protobuf`, their schemas must first be defined in the [Schema Registry](./schema-registry.md). In a pipeline with multiple transformations, decoding is not required at each step. For example, if transformation `T1` has already decoded the payload, subsequent transformation `T2` can skip decoding, relying on the payload already being in the correct format.
-     - **Target Format**: Specifies the payload encoder to encode the final message payload at the end of the transformation pipeline as a binary value. The encoder options are the same as those for the **Source Format**: `None`, `JSON`, `Avro`, or `Protobuf`. Only the last transformation in the pipeline needs to ensure the payload is encoded as a binary value; intermediate transformations do not need to handle binary encoding.
+     - **Source Format**: Specifies the payload decoder to be applied to messages entering the transformation pipeline. The available options are:
+     
+       - `None` (no decoding)
+       - `JSON`
+       - `Avro`
+       - `Protobuf`
+       - `Custom (External HTTP)`
+     
+       These decoders convert the binary input payload into a structured map. If you select `Avro`, `Protobuf` or `Custom (External HTTP)`, make sure they have already been created in the [Schema Registry](./schema-registry.md). 
+     
+       In a pipeline with multiple transformations, decoding is not required at each step. For example, if transformation `T1` has already decoded the payload, subsequent transformation `T2` can skip decoding, relying on the payload already being in the correct format.
+     
+     - **Target Format**: Specifies the payload encoder to encode the final message payload at the end of the transformation pipeline as a binary value. The encoder options are the same as those for the **Source Format**. 
+     
+       Only the last transformation in the pipeline needs to ensure the payload is encoded as a binary value; intermediate transformations do not need to handle binary encoding.
+     
    - **Message Properties Transformation**:
+     
      - **Properties**: Specifies the destination where the transformed value, resulting from an expression, will be written. Valid destinations include `payload`, `topic`, `qos`, `retain` (to set the corresponding flag), and `user_property` (for the `User-Property` MQTT property). When using `user_property`, exactly one key must be specified under this field (e.g., `user_property.my_custom_prop`). The `payload` can either be used as-is, overwriting the entire message payload, or a specific nested key path can be designated, treating the payload like a nested JSON object (e.g., `payload.x.y`).
      - **Target Value**: Defines the value to be written to the configured property. This value can either be copied from other fields such as `qos`, `retain`, `topic`, `payload`, and `payload.x.y`, or it can be generated using a [variform expression](../configuration/configuration.md#variform-expressions).
+     
    - **Transformation Failure Operation**:
      - **Action After Failure**: Select the actions to perform if a transformation fails:
        - **Drop Message**: Terminate the publishing process and discard the message, returning a specific reason code for QoS 1 and QoS 2 messages via PUBACK.
        - **Disconnect and Drop Message**: Discard the message and disconnect the client that published it.
        - **Ignore**: Perform no additional action.
+     
    - **Output Logs**: Select whether to generate a log entry when a transformation fails; logging is enabled by default.
+   
    - **Logs Level**: Set the log output level; the default level is `warning`.
+   
 4. Click **Create** to complete the settings.
 
 You can test your transformation before creating it by clicking **Preview**. This opens a new pane where you can enter the context for the incoming message, such as QoS, payload, whether the retain flag is set, and the publisher's username and client ID, among other fields. After providing the necessary details, click **Execute Transformation** to run the transformation with the specified context and view the resulting output.

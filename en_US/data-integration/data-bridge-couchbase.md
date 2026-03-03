@@ -1,11 +1,5 @@
 # Ingest MQTT Data into Couchbase
 
-::: tip
-
-The Couchbase data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Couchbase](https://couchbase.com/) is a multipurpose, distributed database that combines the strengths of relational databases, including SQL and ACID transactions, with the versatility of JSON. Built on a foundation that is both highly performant and scalable, Couchbase is widely used across various industries for applications such as user profiles, dynamic product catalogs, generative AI applications, vector search, high-speed caching, and more.
 
 ## How It Works
@@ -139,9 +133,11 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
     Here, `${.id}` and `${.payload}` represent the MQTT message id and payload, respectively. EMQX will replace them with the corresponding content before forwarding the message.
 
-10. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the Couchbase server.
+11. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
+
+12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the Couchbase server.
 
 13. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
 

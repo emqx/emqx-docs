@@ -1,10 +1,10 @@
 # PSK 认证
 
-PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验证的认证方式。使用PSK认证，客户端和 EMQX 在建立安全连接之前必须预先共享相同的密钥。在客户端和 EMQX 之间建立 TLS 连接时以及在后续的通信中预共享密钥会对数据进行加密和解密。启用 PSK 认证后，客户端和 EMQX 可以相互验证，并在无需证书或证书颁发机构的情况下建立安全连接。
+PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验证的认证方式。使用 PSK 认证，客户端和 EMQX 在建立安全连接之前必须预先共享相同的密钥。在客户端和 EMQX 之间建立 TLS 连接时以及在后续的通信中，预共享密钥会对数据进行加密和解密。启用 PSK 认证后，客户端和 EMQX 可以相互验证，并在无需证书或证书颁发机构的情况下建立安全连接。
 
-本页介绍了如何在 EMQX 中启用 PSK 验证。
+本页介绍了如何在 EMQX 中启用 PSK 认证。
 
-1. 在任意目录下创建包含 PSK 身份和密钥的文件 `data/psk_file.txt`。
+1. 在任意目录下创建包含 PSK 身份凭据和密钥的文件 `data/psk_file.txt`。
 
    ::: tip
 
@@ -13,7 +13,7 @@ PSK（Pre-Shared Key）认证是一种基于预先共享的密钥进行身份验
    :::
 
    ```bash
-   # 以 PSKIdentity:SharedSecret 的格式设置认证凭证，每行一个数据
+   # 以 PSKIdentity:SharedSecret 的格式设置身份凭据，每行一个数据
    emqx_c:BA0DB2A3448345A3A13A91C2ADA44778
    emqx_a:A6FC9EDF62864125AAE7658BEAE6170C
    ```

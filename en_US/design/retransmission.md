@@ -27,7 +27,7 @@ There are two scenarios that will cause the message to be resent:
 1. After the PUBLISH packet is sent to the peer, and no response is received within the specified time, the packet is resent.
 2. While maintaining the session, after the client reconnects, EMQX will automatically resend the *unanswered message* to ensure the correct QoS process.
 
-It can be configured in `etc/emqx.conf`:
+It can be configured in config file:
 
 | Configuration Item | Type   | Optional Value | Default Value | Description |
 | -------------- | --------- | ------ | ------- | -------------- |
@@ -74,7 +74,7 @@ QoS 2 requires the message to be delivered only once; so when it is implemented,
 #2 Sender  <---------------  Receiver
                PUBREL
 #3 Sender  --------------->  Receiver       (*)
-               PUBCOM
+               PUBCOMP
 #4 Sender  <---------------  Receiver
 ```
 
@@ -141,7 +141,7 @@ In addition, if the user expects that QoS 1 and QoS 2 messages under all topics 
 
 ### Related Configuration
 
-This section lists all the configurations used in the above mechanism. They are all included in `etc/emqx.conf`:
+This section lists all the configurations used in the above mechanism. They are all included in config files:
 
 | Configuration | Type  | Optional Value | Default Value | Description                                          |
 | ----------------- | -------- | --------------- | ------ | ------------------------------------------------------- |

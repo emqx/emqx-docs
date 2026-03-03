@@ -1,11 +1,5 @@
 # Ingest MQTT Data into TDengine
 
-::: tip
-
-The TDengine data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [TDengine](https://tdengine.com/) is a big data platform, designed and optimized specifically for the Internet of Things (IoT) and Industrial Internet of Things (IIoT) scenarios. At its heart lies a high-performance time-series database, characterized by its cluster-oriented architecture, cloud-native design, and minimalistic approach. EMQX supports integration with TDengine, enabling massive data transmission, storage, analysis, and distribution from a large number of devices and data collectors. It provides real-time monitoring and early warning of business operation states, offering real-time business insights.
 
 This page provides a comprehensive introduction to the data integration between EMQX and TDengine with practical instructions on creating and validating the data integration.
@@ -192,13 +186,13 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      FROM
        "t/#"
    ```
-   
+
    ::: tip
 
    If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
    :::
-   
+
 4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to TDengine.
 
 5. Select `TDengine` from the **Type of Action** dropdown list. Keep the **Action** dropdown with the default `Create Action` value. You can also select a TDengine Sink if you have created one. This demonstration will create a new Sink.
@@ -219,26 +213,28 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    INSERT INTO t_mqtt_msg(ts, msgid, mqtt_topic, qos, payload, arrived) 
        VALUES (${ts}, '${id}', '${topic}', ${qos}, '${payload}', ${timestamp})
    ```
-   
+
    If a placeholder variable is undefined in the SQL template, you can toggle the **Undefined Vars as Null** switch above the **SQL template** to define the rule engine behavior:
-   
+
    - **Disabled** (default): The rule engine can insert the string `undefined` into the database.
-   
+
    - **Enabled**: Allow the rule engine to insert `NULL` into the database when a variable is undefined.
-   
+
      ::: tip
-   
+
      If possible, this option should always be enabled; disabling the option is only used to ensure backward compatibility.
-   
+
      :::
-   
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the TDengine. 
+
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule for the TDengine Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new TDengine Sink.
 

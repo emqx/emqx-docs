@@ -133,7 +133,7 @@ Standalone：
 
 ### password
 
-指定访问 MongodDB 数据库时使用的密码。
+指定访问 MongoDB 数据库时使用的密码。
 
 ### pool_size
 
@@ -179,7 +179,7 @@ MongoDB 服务器的 FQDN 或者 IP 地址和端口号
 
 该配置在授权中用不到。
 
-### MongoDB ReplicaSet模式
+### MongoDB ReplicaSet 模式
 
 #### servers
 

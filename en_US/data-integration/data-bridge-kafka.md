@@ -1,11 +1,5 @@
 # Stream MQTT Data into Apache Kafka
 
-::: tip
-
-The Kafka data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Apache Kafka](https://kafka.apache.org/) is a widely used open-source distributed event streaming platform that can handle the real-time transfer of data streams between applications and systems. However, Kafka is not built for edge IoT communication and Kafka clients require a stable network connection and more hardware resources. In the IoT realm, data generated from devices and applications are transmitted using the lightweight MQTT protocol. EMQX’s integration with Kafka/[Kafka](https://www.Kafka.io/) enables users to stream MQTT data seamlessly into or from Kafka. MQTT data streams are ingested into Kafka topics, ensuring real-time processing, storage, and analytics. Conversely, Kafka topics data can be consumed by MQTT devices, enabling timely actions.
 
 <img src="./assets/kafka_bridge.jpg" alt="kafka_bridge" style="zoom:67%;" />
@@ -156,11 +150,13 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
-9. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+10. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
 
-11. Click the **Create** button to complete the entire rule creation.
+11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+
+12. Click the **Create** button to complete the entire rule creation.
 
 Now you have successfully created the rule, and you can see the newly created rule on the **Integration** -> **Rules** page, as well as the newly created Kafka Producer Sink on the **Actions(Sink)** tab.
 

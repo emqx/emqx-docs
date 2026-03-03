@@ -12,13 +12,13 @@ The STOMP gateway is based on [Stomp v1.2](https://stomp.github.io/stomp-specifi
 
 ## Enable STOMP Gateway
 
-In EMQX 5.0, STOMP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `emqx.conf`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
+In EMQX 5, STOMP gateway can be configured and enabled through the Dashboard, HTTP API, and configuration file `base.hocon`. This section takes the configuration via Dashboard as an example to illustrate the operating steps. 
 
 On EMQX Dashboard, click **Management** -> **Gateways** on the left navigation menu. On the **Gateways** page, all supported gateways are listed. Locate **STOMP** and click **Setup** in the **Actions** column. Then, you will be directed to the **Initialize STOMP** page.
 
 ::: tip
 
-If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure with [`emqx.conf`](../configuration/configuration.md).
+If you are running EMQX in a cluster, the settings you made through the Dashboard or HTTP API will affect the whole cluster. If you only want to change the settings with one node, configure it in [`base.hocon`](../configuration/configuration.md).
 
 :::
 

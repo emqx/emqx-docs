@@ -52,7 +52,7 @@ FROM mqtt_acl
 
 ## 权限测试
 
-MySQL Authorizer 添加成功后完成后，向 MySQL 中添加权限数据，并使用 MQTTX CLI 连接到 EMQX 进行测试。
+成功添加 MySQL 授权器后，向 MySQL 中添加权限数据，并使用 MQTTX CLI 连接到 EMQX 进行测试。
 
 1. 用户名为 `emqx_u`、禁止发布到 `t/1` 主题的规则示例：
 
@@ -76,7 +76,7 @@ $ mqttx pub -u emqx_u -t t/1 -q 1 -m '{ "msg": "Can I publish it?" }'
 INSERT INTO mqtt_acl(username, permission, action, topic, retain) VALUES ('emqx_u', 'deny', 'publish', 't/2', 1);
 ```
 
-使用以下命令进行发布测试，测试结果表明仅保留消息没有发布权限：
+使用以下命令进行发布测试，测试结果表明仅对保留消息没有发布权限：
 
 ```bash
 # 可以发布成功
@@ -100,7 +100,7 @@ $ mqttx pub -u emqx_u -t t/2 -q 1 -r -m '{ "msg": "Can I publish it?" }'
 INSERT INTO mqtt_acl(username, permission, action, topic, qos) VALUES ('emqx_u', 'deny', 'subscribe', 't/3', 1);
 ```
 
-使用以下命令进行发布测试，测试结果表明仅保留消息没有发布权限：
+使用以下命令进行发布测试，测试结果表明仅对保留消息没有发布权限：
 
 ```bash
 # 指定 QoS0 时可以订阅成功

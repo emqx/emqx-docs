@@ -4,7 +4,7 @@ MQTT is a stateful protocol, which necessitates that the broker maintains state 
 
 EMQX is a highly scalable and fault-tolerant MQTT broker capable of operating in a clustered mode with multiple nodes. Clustering EMQX enhances the scalability, availability, reliability, and manageability of IoT messaging systems, making it a recommended approach for larger or mission-critical applications. This page explores the necessity of clustering MQTT brokers and how EMQX achieves this, enabling support for millions of unique wildcard subscribers within a single cluster.
 
-For detailed instructions on creating and running an EMQX 5.0 cluster, refer to [EMQX Cluster](../deploy/cluster/introduction.md).
+For detailed instructions on creating and running an EMQX v5 cluster, refer to [EMQX Cluster](../deploy/cluster/introduction.md).
 
 ## Key Aspects of Clustering
 
@@ -76,15 +76,15 @@ While our customers are not required to report their production deployment detai
 
 One of the major challenges of managing a large Mnesia cluster is the risk of a split-brain situation, which can occur when a network partition isolates nodes into multiple subclusters, with each subcluster believing it is the only active cluster. This risk is especially pronounced in large clusters, where the N^2 complexity of networking overheads can cause nodes to become less responsive under high load. In addition, head-of-line blocking in the Erlang distribution channel can delay the sending of heartbeat messages, further increasing the risk of a split-brain situation.
 
-In EMQX 5.0, we have greatly improved the cluster scalability by introducing [Mria](https://github.com/emqx/mria) (an enhanced version of Mnesia with async transaction log replication). Mria uses a new network topology that consists two type of node roles: `core` and `replicant` (sometimes referred to as `replica` for short).
+In EMQX v5, we have greatly improved the cluster scalability by introducing [Mria](https://github.com/emqx/mria) (an enhanced version of Mnesia with async transaction log replication). Mria uses a new network topology that consists two type of node roles: `core` and `replicant` (sometimes referred to as `replica` for short).
 
 <img src="./assets/mria-cluster.png" alt="Mnesia Cluster" style="zoom: 40%;" />
 
-In an EMQX Enterprise 5.0 cluster, the `core` nodes still form the same full-mesh network as in older versions. The `replicant` nodes, however, only connect to one or more core nodes, but not to each other.
+In an EMQX v5 cluster, the `core` nodes still form the same full-mesh network as in older versions. The `replicant` nodes, however, only connect to one or more core nodes, but not to each other.
 
 ### Core and Replicant Nodes
 
-The behavior of Core nodes is the same as that of Mnesia nodes in 4.x: Core nodes form a cluster in a fully connected manner, and each node can initiate transactions, hold locks, and so on. Therefore, EMQX 5.0 still requires Core nodes to be as reliable as possible in deployment.
+The behavior of Core nodes is the same as that of Mnesia nodes in 4.x: Core nodes form a cluster in a fully connected manner, and each node can initiate transactions, hold locks, and so on. Therefore, EMQX v5 still requires Core nodes to be as reliable as possible in deployment.
 
 Replicant nodes are no longer directly involved in the processing of transactions. But they connect to Core nodes and passively replicate data updates from Core nodes. Replicant nodes are not allowed to perform any write operations. Instead, it is handed over to the Core node for execution. In addition, because Replicants will replicate data from Core nodes, they have a complete local copy of data to achieve the highest efficiency of read operations, which helps to reduce the latency of EMQX routing.
 
@@ -109,7 +109,7 @@ Or you can, from the Dashboard, click a button to invite a new node to join the 
 
 With the help of the rich management interfaces, you can easily script the cluster management and make it part of your DevOps pipeline.
 
-In EMQX 5.0, the `replica` nodes are designed to be stateless, so they can be placed in an autoscaling group for better DevOps practices.
+In EMQX v5, the `replica` nodes are designed to be stateless, so they can be placed in an autoscaling group for better DevOps practices.
 
 ## Cluster Rebalance
 
@@ -117,7 +117,7 @@ When a node newly joins the cluster, it will start off with an empty state. With
 
 If the clients reconnect in a relatively short period of time, the cluster can reach balance quickly. If the clients are not reconnecting, the cluster may remain unbalanced for a long time.
 
-To address this issue, EMQX Enterprise (since version 4.4) introduced a new feature called "[Cluster Load Rebalancing](../deploy/cluster/rebalancing.md)". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
+To address this issue, EMQX (since version 4.4) introduced a new feature called "[Cluster Load Rebalancing](../deploy/cluster/rebalancing.md)". This feature allows the cluster to automatically rebalance the load by migrating the sessions from the overloaded nodes to the underloaded nodes.
 
 An extreme version of "rebalance" is "evacuation", in which all the sessions are migrated off the given node. This is useful when you want to remove a node from the cluster.
 
@@ -125,7 +125,7 @@ An extreme version of "rebalance" is "evacuation", in which all the sessions are
 
 At the scale of millions of concurrent connections, you have no choice but to scale horizontally, because there is simply no single machine that can handle that many connections.
 
-In EMQX 5.0, the `core`-`replica` clustering architecture allows us to scale the cluster to a much larger size.
+In EMQX v5, the `core`-`replica` clustering architecture allows us to scale the cluster to a much larger size.
 
 In our benchmark, we tested 50 million publishers plus 50 million wildcard subscribers in a 23-node cluster. You can read our [blog post](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0) to find more details.
 
@@ -156,4 +156,4 @@ When the feature is enabled, after the network partition has occurred and then r
 
 ## Summary
 
-In this article, we have introduced the new clustering architecture in EMQX 5.0. We have also discussed the key aspects of a production-ready MQTT broker cluster, including scalability, automatic failover, network partition tolerance, and so on. and how EMQX can help you achieve these goals.
+In this article, we have introduced the new clustering architecture in EMQX v5. We have also discussed the key aspects of a production-ready MQTT broker cluster, including scalability, automatic failover, network partition tolerance, and so on. and how EMQX can help you achieve these goals.

@@ -105,25 +105,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
    docker network create emqx-net
    ```
 
-2. 启动第一个节点，通过环境变量设置节点名。EMQX 默认的集群方式是手动集群，因此不需要进行额外设置。将节点添加到 Docker 网络中，并设置与节点 host 相同的网络别名。
-
-   对于 EMQX 开源版，使用以下命令：
-
-   ```bash
-   docker run -d \
-       --name emqx1 \
-       -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
-       --network emqx-net \
-       --network-alias node1.emqx.com \
-       -p 1883:1883 \
-       -p 8083:8083 \
-       -p 8084:8084 \
-       -p 8883:8883 \
-       -p 18083:18083 \
-       emqx/emqx:@CE_VERSION@
-   ```
-
-   对于 EMQX 企业版，使用以下命令：
+2. 启动第一个节点，通过环境变量设置节点名。EMQX 默认的集群方式是手动集群，因此不需要进行额外设置。将节点添加到 Docker 网络中，并设置与节点 host 相同的网络别名：
 
    ```bash
    docker run -d \
@@ -140,19 +122,6 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
    ```
    
 3. 当第一个节点启动完成后，启动第二个节点。新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
-
-   对于 EMQX 开源版，使用以下命令：
-
-   ```bash
-   docker run -d \
-       --name emqx2 \
-       -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
-       --network emqx-net \
-       --network-alias node2.emqx.com \
-       emqx/emqx:@CE_VERSION@
-   ```
-
-   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -188,26 +157,6 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
    还需要将节点加入到 Docker 网络中，并设置与节点 host 相同的网络别名。
 
-   对于 EMQX 开源版，使用以下命令：
-
-   ```bash
-   docker run -d \
-       --name emqx1 \
-       -e "EMQX_NODE_NAME=emqx@node1.emqx.com" \
-       -e "EMQX_CLUSTER__DISCOVERY_STRATEGY=static" \
-       -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
-       --network emqx-net \
-       --network-alias node1.emqx.com \
-       -p 1883:1883 \
-       -p 8083:8083 \
-       -p 8084:8084 \
-       -p 8883:8883 \
-       -p 18083:18083 \
-       emqx/emqx:@CE_VERSION@
-   ```
-
-   对于 EMQX 企业版，使用以下命令：
-
    ```bash
    docker run -d \
        --name emqx1 \
@@ -225,21 +174,6 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
    ```
    
 3. 当第一个节点启动完成后，启动第二个节点。集群方式以及新节点需要加入与第一个节点相同的网络，由于第一个节点已经占用了 1883 等端口，此处不再映射端口。
-
-   对于 EMQX 开源版，使用以下命令：
-
-   ```bash
-   docker run -d \
-       --name emqx2 \
-       -e "EMQX_NODE_NAME=emqx@node2.emqx.com" \
-       -e "EMQX_CLUSTER__DISCOVERY_STRATEGY=static" \
-       -e "EMQX_CLUSTER__STATIC__SEEDS=[emqx@node1.emqx.com,emqx@node2.emqx.com]" \
-       --network emqx-net \
-       --network-alias node2.emqx.com \
-       emqx/emqx:@CE_VERSION@
-   ```
-
-   对于 EMQX 企业版，使用以下命令：
 
    ```bash
    docker run -d \
@@ -311,6 +245,8 @@ Cluster status: #{running_nodes =>
    
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
+
+从 EMQX v5.9.0 开始，你还可以通过 Dashboard 邀请节点创建集群，详情参考[集群](../../dashboard/cluster_settings.md#集群)。
 
 ## 自动集群
 

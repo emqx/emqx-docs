@@ -32,7 +32,7 @@ After each command is published, command execution results can be obtained throu
 :::tip
 
 1. All file transfer commands are processed by the EMQX broker and are not sent to other MQTT clients.
-2. The asynchronous transfer mode is available in EMQX Enterprise version v5.3.2 and later.
+2. The asynchronous transfer mode is available in EMQX v5.3.2 and later.
 3. For MQTT v3.1/v3.1.1 clients, as PUBACK Reason Code is not available, it is recommended to use the asynchronous transfer mode.
 
 :::
@@ -156,7 +156,7 @@ Clients can obtain the actual operation results of commands via the `$file-respo
 ## Considerations
 
 1. If the client disconnects during file transfer, or needs to interrupt the transfer for higher priority message delivery, simply re-send the unacknowledged data blocks or commands after resuming file transfer. This method avoids retransmitting the entire file, enhancing transmission efficiency.
-2. As EMQX needs to assemble the file from received file segments and export it to configured storage, the `fin` command may take a longer time to process. During this time, the client can continue sending other commands while waiting for the `fin` command to complete. If a disconnection occurs during the `fin` command, the client can simply re-send the command to resume file transfer. If the file transfer has already been completed, EMQX will immediately reply with a successful transmission.
+2. As EMQX needs to assemble the file from received file segments and export it to the configured storage, the `fin` command may take a longer time to process. During this time, the client can continue sending other commands while waiting for the `fin` command to complete. If a disconnection occurs during the `fin` command, the client can simply re-send the command to resume file transfer. If the file transfer has already been completed, EMQX will immediately reply with a successful transmission.
 
 ## Client Code Examples
 

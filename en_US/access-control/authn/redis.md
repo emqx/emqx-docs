@@ -45,7 +45,9 @@ So, we can also configure `cmd` as `HMGET mqtt:${username} password salt is_supe
 
 You can use EMQX Dashboard to configure how to use Redis for password authentication. 
 
-In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu. On the **Authentication** page, click **Create** at the top right corner. Click to select **Password-Based** as **Mechanism**, and **Redis** as **Backend** to go to the **Configuration** tab, as shown below. 
+1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
+2. On the **Authentication** page, click **Create** in the top right corner.
+3. Click to select **Password-Based** as **Mechanism**, and **Redis** as **Backend** to go to the **Configuration** tab, as shown below. 
 
 <img src="./assets/authn-redis.png" alt="Authentication with redis" style="zoom:67%;" />
 

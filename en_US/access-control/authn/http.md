@@ -1,6 +1,6 @@
 # Use HTTP Service
 
-EMQX supports using external HTTP service for password authentication. After enabling, when a client initiates a connect request, EMQX will use the received information to construct an HTTP request and determine whether to accept the request based on the query result, achieving a complex authentication logic.
+EMQX supports using an external HTTP service for password authentication. After enabling, when a client initiates a connect request, EMQX will use the received information to construct an HTTP request and determine whether to accept the request based on the query result, achieving a complex authentication logic.
 
 ::: tip Prerequisite
 
@@ -13,7 +13,7 @@ Knowledge about [basic EMQX authentication concepts](../authn/authn.md)
 The authentication process is similar to an HTTP API call where EMQX, as the requesting client, constructs and initiates a request to the HTTP service in the format required by the "API", and the HTTP service returns the result as required by the "client".
 
 - The response encoding format `content-type` must be `application/json`.
-- The authentication result is marked by `result` in the body, option value: `allow`, `deny`, `ignore`.
+- The authentication result is marked by `result` in the body, with option value: `allow`, `deny`, `ignore`.
 - Superuser is marked by `is_superuser` in the body, option value: `true`, `false`.
 - Starting from EMQX v5.7.0, you can set [client attributes](../../client-attributes/client-attributes.md) using the optional `client_attrs` field. Note that both keys and values must be strings.
 - Starting from EMQX v5.8.0, you can set an optional `acl` field in the response body to specify the client's permissions. See [Access Control List (ACL)](./acl.md) for more information.
@@ -63,36 +63,36 @@ Due to the lack of expressiveness, it has been redesigned to make use of HTTP bo
 
 You can use EMQX Dashboard to finish the relevant configuration.
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **Password-Based** as **Mechanism**, and **HTTP Server** as **Backend**, this will lead us to the **Configuration** tab, as shown below.
+1. In the EMQX Dashboard, click **Access Control** -> **Authentication** from the left navigation menu.
+2. On the **Authentication** page, click **Create** in the top right corner.
+3. Click to select **Password-Based** as **Mechanism**, and **HTTP Server** as **Backend** to go to the **Configuration** tab, as shown below. 
 
 <img src="./assets/authn-http.png" alt="HTTP" style="zoom:67%;" />
 
-Follow the instructions below on how to configure the authentication:
+4. Follow the instructions below to configure the authentication backend:
 
-- **Method**: Select HTTP request method, optional values: `get`, `post`
+   - **Method**: Select HTTP request method, optional values: `get`, `post`
 
-  :::tip
+     :::tip
 
-  The `POST` method is recommended. When using the `GET` method, some sensitive information (such as plain text passwords) may be exposed via HTTP server logs. Also, for untrusted environments, please use HTTPS.
-   :::
+     The `POST` method is recommended. When using the `GET` method, some sensitive information (such as plain text passwords) may be exposed via HTTP server logs. Also, for untrusted environments, please use HTTPS.
+      :::
 
-- **URL**: Enter the URL address of the HTTP service.
-- **Headers** (optional): HTTP request header. You can add several headers. Keys and values support using [placeholders](./authn.md#authentication-placeholders).
-- **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+   - **URL**: Enter the URL address of the HTTP service.
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this HTTP Server authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authenticator Preconditions](./authn.md#authenticator-preconditions).
+   - **Headers** (optional): HTTP request header. You can add several headers. Keys and values support using [placeholders](./authn.md#authentication-placeholders).
+   - **Enable TLS**: Turn on the toggle switch if you want to enable TLS. For more information on enabling TLS, see [Network and TLS](../../network/overview.md).
+   - **Body**: Request template; for `POST` requests, it is sent as a JSON in the request body; for `GET` requests, it is encoded as a Query String in the URL. Mapping keys and values support using [placeholders](./authn.md#authentication-placeholders).
+   - **Advanced Settings**:
+     - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to an HTTP server. Default: `8`. 
 
-- **Body**: Request template; for `POST` requests, it is sent as a JSON in the request body; for `GET` requests, it is encoded as a Query String in the URL. Mapping keys and values support using [placeholders](./authn.md#authentication-placeholders).
+     - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour.
 
-- **Advanced Settings**:
+     - **HTTP Pipelining** (optional): Input a positive integer to specify the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
 
-  - **Pool size** (optional): Input an integer value to define the number of concurrent connections from an EMQX node to an HTTP server. Default: `8`. 
+     - **Request Timeout** (optional): Specify the waiting period before EMQX assumes the request is timed out. Units supported include milliseconds, second, minute, and hour.
 
-  - **Connect Timeout** (optional): Specify the waiting period before EMQX assumes the connection is timed out. Units supported include milliseconds, second, minute, and hour.
-
-  - **HTTP Pipelining** (optional): Input a positive integer to specify the maximum number of HTTP requests that can be sent without waiting for a response; default value: `100`.
-
-  - **Request Timeout** (optional): Specify the waiting period before EMQX assumes the request is timed out. Units supported include milliseconds, second, minute, and hour.
-
-After you finish the settings, click **Create**.
+5. After you finish the settings, click **Create**.
 
 ## Configure with Configuration Items
 

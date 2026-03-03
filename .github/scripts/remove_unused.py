@@ -24,6 +24,20 @@ if __name__ == '__main__':
     directory_config = json.load(r)
     markdown_files = get_markdown_file(directory_config['cn'], f'{docs_path}/zh_CN')
     markdown_files += get_markdown_file(directory_config['en'], f'{docs_path}/en_US')
+    markdown_files += get_markdown_file(directory_config['ja'], f'{docs_path}/ja_JP')
+
+    for file_path, dir_list, file_list in os.walk(docs_path):
+        for file_name in file_list:
+            if not file_name.endswith('.md'):
+                continue
+            with open(os.path.join(file_path, file_name), 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                for line in lines:
+                    if line.strip().startswith('<!--@include:'):
+                        include_file = line.split('<!--@include: ')[1].split('-->')[0]
+                        include_file_path = os.path.join(file_path, include_file)
+                        include_file_path = os.path.normpath(include_file_path)
+                        markdown_files.append(include_file_path)
 
     for file_path, dir_list, file_list in os.walk(docs_path):
         for file_name in file_list:

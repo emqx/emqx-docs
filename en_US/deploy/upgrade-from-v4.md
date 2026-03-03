@@ -182,7 +182,7 @@ For supported placeholders, please refer to:
 auth.mysql.auth_query = select password from mqtt_user where username = '%u' limit 1
 
 # 5.x
-# emqx.conf
+# emqx.conf (since 5.0) or base.hocon (since 5.9)
 authentication = [
   {
     ...

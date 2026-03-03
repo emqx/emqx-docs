@@ -1,11 +1,5 @@
 # Ingest MQTT Data into Microsoft SQL Server
 
-::: tip
-
-The Microsoft SQL Server data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [SQL Server](https://www.microsoft.com/en-us/sql-server/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with SQL Server, enabling you to save MQTT messages and client events to SQL Server. This facilitates the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP, CRM, and BI.
 
 This page provides a detailed overview of the data integration between EMQX and Microsoft SQL Server with practical instructions on creating and validating the data integration.
@@ -226,17 +220,36 @@ This section demonstrates how to create a Connector to connect the Sink to the M
 The following steps assume that you run both EMQX and Microsoft SQL Server on the local machine. If you have Microsoft SQL Server and EMQX running remotely, adjust the settings accordingly.
 
 1. Enter the EMQX Dashboard and click **Integration** -> **Connectors**.
+
 2. Click **Create** in the top right corner of the page.
+
 3. On the **Create Connector** page, select **Microsoft SQL Server** and then click **Next**.
+
 4. In the **Configuration** step, configure the following information:
    - **Connector name**: Enter a name for the connector, which should be a combination of upper and lower-case letters and numbers, for example: `my_sqlserver`.
+   
    - **Server Host**: Enter `127.0.0.1:1433`, or the URL if the Microsoft SQL Server is running remotely.
+   
+     ::: tip
+   
+     If you are using a Named Instance, you must explicitly specify the port number on which the instance runs. The driver connects to the instance using the provided port, and during health checks, EMQX attempts to infer the instance name.
+   
+     Specifying only the instance name (e.g., `MYSERVER\SQL2022`) in the Server Host field does not guarantee a connection to the correct instance. Therefore, always double-check the port configuration to ensure proper connectivity.
+   
+     :::
+   
    - **Database Name**: Enter `master`.
+   
    - **Username**: Enter `sa`.
+   
    - **Password**: Enter the preset password `mqtt_public1`, or use the actual password.
-   - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`
+   
+   - **SQL Server Driver Name**: Enter `ms-sql`, as the DSN Name configured in `odbcinst.ini`.
+   
 5. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+
 6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Microsoft SQL Server.
+
 7. Click the **Create** button at the bottom to complete the creation of the connector. In the pop-up dialog, you can click **Back to Connector List** or click **Create Rule** to continue creating rules with Sinks to specify the data to be forwarded to the Microsoft SQL Server and record client events. For detailed steps, see [Create a Rule with Microsoft SQL Server Sink for Message Storage](#create-a-rule-with-microsoft-sql-server-sink-for-message-storage) and [Create a Rule with Microsoft SQL Server Sink for Events Recording](#create-a-rule-with-microsoft-sql-server-sink-for-events-recording).
 
 ## Create a Rule with Microsoft SQL Server Sink for Message Storage
@@ -320,13 +333,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
 
      :::
 
-9. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Microsoft SQL Server.
+10. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Microsoft SQL Server.
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for the Microsoft SQL Server Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Microsoft SQL Server Sink.
 

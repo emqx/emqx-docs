@@ -11,7 +11,7 @@ This page mainly introduces how to enable the File Transfer feature in EMQX and 
 
 You can also enable and configure the File Transfer feature through the Dashboard. For detailed information, refer to [Enable and Configure File Transfer via Dashboard](#enable-and-configure-file-transfer-via-dashboard).
 
-This page also introduces how to manage exported files through REST API. For specific details, refer to [Manage Exported Files](#manage-exported-files).
+This page also introduces how to manage exported files through the REST API. For specific details, refer to [Manage Exported Files](#manage-exported-files).
 
 ## Enable File Transfer
 
@@ -58,7 +58,7 @@ file_transfer {
 }
 ```
 
-You need to set a reasonable configuration based on the expected file size, concurrent transmission number, and available disk space.
+You need to set a reasonable configuration based on the expected file size, concurrent transmissions, and the available disk space.
 
 ## Configure File Export
 
@@ -148,7 +148,7 @@ If any of these operations exceed the specified timeout, the MQTT client will re
 
 ## Enable and Configure File Transfer via Dashboard
 
-This section demonstrates how to enable the File Transfer feature and configure its functionalities on Dashboard.
+This section demonstrates how to enable the File Transfer feature and configure its functionalities on the Dashboard.
 
 Go to the EMQX Dashboard and click **Management** -> **File Transfer**. On the File Transfer page, you can click the **Enable** toggle switch to enable the File Transfer feature. You can refer to the [General Settings](#general-settings) and [Advanced Settings](#advanced-settings) to configure the functionalities. After you complete the configuration, click **Save Changes**.
 
@@ -164,13 +164,13 @@ You can configure the following general settings:
   - **Host**: The endpoint for the S3 service. For example, `s3.us-east-1.amazonaws.com`.
   - **Port**: The port used to connect to the S3 service, for example, `443`, indicating a secure HTTPS connection.
   - **Access Key ID** and **Secret Access Key**: Credentials required for accessing the S3 bucket. These should be securely stored.
-  - **Bucket**: The name of the S3 bucket where files are stored, for example `my-bucket`.
+  - **Bucket**: The name of the S3 bucket where files are stored, for example, `my-bucket`.
   - **Enable TLS**: Determine whether to use TLS (Transport Layer Security) for secure file transfers. For more information, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access).
-- **Files Root Directory**: Specify the root directory for file storage and need to be an absolute path. This directory is used for storing assembled files when `Local Storage` is selected as the file storage method.
+- **Files Root Directory**: Specify the root directory for file storage, which needs to be an absolute path. This directory is used for storing assembled files when `Local Storage` is selected as the file storage method.
 
 ### Advanced Settings
 
-Based on the file storage methods you have configured in general settings, there are different advanced settings for configuration.
+Based on the file storage methods you have configured in the general settings, there are different advanced settings for configuration.
 
 #### Local Storage
 

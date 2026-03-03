@@ -24,7 +24,7 @@ EMQX also offers you the option of enabling TLS when there is a need to access e
 
 <img src="./assets/enable-TLS-dashboard.png" alt="enable-TLS-dashboard" style="zoom:50%;" />
 
-In addition, you can add `ssl` options when you configure the features in the configuration file. For example, you can configure the `authentication` group in the `emqx.conf` by adding the following statement:
+In addition, you can add `ssl` options when you configure the features in the configuration file. For example, you can configure the `authentication` group in the configuration file by adding the following statement:
 
 ```bash
 authentication {

@@ -1,11 +1,5 @@
 # 将 MQTT 数据写入到 Redis
 
-::: tip
-
-Redis 数据集成是 EMQX 企业版功能。
-
-:::
-
 [Redis](https://redis.io/) 数据集成可以通过执行自定义 Redis 数据操作命令的方式，将 MQTT 消息和客户端事件存储到 Redis 中，借助 Redis 高性能与灵活数据结构，实现诸如消息暂存，发布订阅和消息丢弃行为的计数与统计等业务。
 
 本页详细介绍了 EMQX 与 Redis 的数据集成并提供了实用的规则和 Sink 创建指导。
@@ -117,14 +111,16 @@ OK
 
 6. 从**连接器**下拉框中选择刚刚创建的 `my_redis`。您也可以通过点击下拉框旁边的按钮创建一个新的连接器。有关配置参数，请参见[创建连接器](#创建连接器)。
 
-8. 配置 **Redis 命令模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割:
+7. 配置 **Redis 命令模板**：使用 Redis [HSET](https://redis.io/commands/hset/) 命令与 hash 数据结构存储消息，数据格式以 `clientid` 为 key，存储 `username`、`payload` 和`timestamp` 等字段。为了便于与 Redis 中其他 key 区分，我们使用 `emqx_messages` 前缀作为 key 的命名空间并用 `:` 分割:
 
    ```bash
    # HSET key filed value [field value...]
    HSET emqx_messages:${clientid} username ${username} payload ${payload} timestamp ${timestamp}
    ```
 
-9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+8. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+
+9. **高级配置（可选）**：根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 10. 点击**创建**前，您可点击**测试连接**按钮确保 Sink 能连接到 Redis 服务器。
 

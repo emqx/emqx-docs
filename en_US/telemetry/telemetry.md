@@ -1,40 +1,32 @@
 # Telemetry
 
-::: tip
+EMQ collects usage data for EMQX through its telemetry feature. This functionality helps us gain insights into how our user community interacts with EMQX, enabling us to understand usage patterns and continuously enhance our products. By sharing these metrics, you contribute to improving EMQX's performance and features.
 
-The telemetry is an EMQX Open Source edition feature.
+We prioritize your privacy. Telemetry data is anonymized and does not include personal or identifiable information, such as server models, hardware IDs, or IP addresses. This data is never shared with third parties.
 
-:::
+Telemetry is disabled by default for users with a Commercial License and enabled by default for the following license types:
 
-EMQ collects information about the usage of the EMQX Open Source edition through telemetry. This function is designed to provide EMQ with comprehensive information about users and communities, and an understanding of how the EMQX Open Source edition is used. Sharing these metrics with us can help us better understand how you use our products and can continuously help us improve our products.
+- EMQX Community
+- Education or Non-Profit
+- Trial
 
-It is important to note that telemetry data cannot and will not be used to identify or associate you personally. These statistics do not contain individual data, such as server model, hardware number, or IP address, and will never be shared with anyone else.
+These defaults can be overridden by configuring the `telemetry.enable` flag in the EMQX configuration file. For example, you can permanently disable the Telemetry through the configuration file:
 
-## Disabling Telemetry
-
-Telemetry is enabled by default. Some people may feel uncomfortable collecting such data. You can disable it in the simplest way before startup and during operation.
-
-### Disable Before Starting EMQX
-
-You can permanently disable telemetry through the configuration file `etc/emqx.conf`.
-
-```
+```bash
 telemetry.enable = false
 ```
 
-Or to disable telemetry in this boot via environment variables at startup:
+Alternatively, you can control telemetry behavior at startup using an environment variable:
 
 ```bash
 export EMQX_TELEMETRY__ENABLE=false && ./bin/emqx foreground
 ```
 
-### Disable While Running EMQX
-
-From Dashboard: click the Settings icon on the ribbon area, and turn off the **Enable telemetry** option to permanently disable telemetry.
+By customizing these settings, you have full control over whether telemetry data is collected.
 
 ## Telemetry Metrics
 
-We collect telemetry data that includes the following:
+We collect Telemetry data that includes the following:
 
 - Hardware specifications of the cluster (excluding hardware UUIDs)
 - Cluster topology
@@ -46,7 +38,7 @@ We collect telemetry data that includes the following:
 
 Telemetry data is reported through encrypted HTTP requests to `https://telemetry.emqx.io/api/telemetry`. The data is stored securely in our private environment and is not exposed to any public network.
 
-For telemetry data collection codes, please refer to [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
+For Telemetry data collection codes, please refer to [apps/emqx_telemetry/src/emqx_telemetry.erl](https://github.com/emqx/emqx/blob/master/apps/emqx_telemetry/src/emqx_telemetry.erl). If you have any questions, please click [Issues](http://github.com/emqx/emqx/issues) to contact us.
 
 The data transferred example is as follows：
 

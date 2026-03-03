@@ -4,7 +4,7 @@
 
 - 之前的 **规则** -> **动作** -> **资源** 流程已改为 **规则** -> **数据桥接**。
 
-   在 EMQX 4.4 中，有一个针对动作的配置实体，但是在EMQX 5.1中，为某个规则添加动作时，您必须首先创建一个数据桥接，并修改桥接的 SQL 模板以适应规则输出。
+   在 EMQX 4.4 中，有一个针对动作的配置实体，但是在 EMQX 5.1中，为某个规则添加动作时，您必须首先创建一个数据桥接，并修改桥接的 SQL 模板以适应规则输出。
 
    在 EMQX 5.1 中为规则配置动作（桥接）：
 
@@ -20,7 +20,7 @@
 
 - 在 EMQX 4.4 中的[获取订阅关系](https://docs.emqx.com/zh/enterprise/v4.4/rule/get_subs_from_redis.html)功能已被移除。
 
-- Tablestore，DolphinDB，Lindorm 和 SAP Event Mesh 的数据桥接不再支持，但 SAP Event Mesh 在产品路线图中。
+- DolphinDB，Lindorm 和 SAP Event Mesh 的数据桥接不再支持，但 SAP Event Mesh 在产品路线图中。
 
 - 作为资源类型的 `EMQX Bridge` 不再受支持。
 
@@ -29,7 +29,7 @@
 ## 通用的不兼容变更
 
 - 所有与 SSL 相关的配置选项（`ssl`，`cafile`，`keyfile`，`certfile`，`verify`）已更改为统一的结构和名称。例如，`ssl.cacertfile`，`ssl.certfile`，`ssl.keyfile`，`ssl.verify`等。
-- 没有与保存离线消息等效的功能，如将离线消息保存到外部数据库并在客户端订阅主题时检索它们（通过 `$events/session_subscribed` 事件和桥接规则动作）。
+- 没有与保存离线消息等效的功能，如将离线消息保存到外部数据库，并在客户端订阅主题时检索它们（通过 `$events/session_subscribed` 事件和桥接规则动作）。
 
 ## 功能和配置项的不兼容变更
 
@@ -86,7 +86,7 @@
   "Cluster" 模式的更改：
 
   - EMQX 5.1中没有 `database` 字段。
-  - EMQX 5.1中没有等效于 `ttl`（来自EMQX 4.4 的离线消息）的项。
+  - EMQX 5.1中没有等效于 `ttl`（来自 EMQX 4.4 的离线消息）的项。
 
 ### Postgres
 
@@ -131,7 +131,7 @@
   - EMQX 5.1 中没有与 `int_suffix` 对应的配置项； 类型直接在 `write_syntax` 中指定。
   - `measurement`，`timestamp`，`fields`，`tags` 改为 `write_syntax`。
 
-### Tablestore, DolphinDB, Lindorm, SAP Event Mesh
+### DolphinDB, Lindorm, SAP Event Mesh
 
 在 EMQX 5.1 中没有对应的数据桥接。
 
@@ -150,7 +150,7 @@
 ### HStreamDB
 
 - 配置项 `server` 更改为 `url`。
-- 以下配置项在EMQX 5.1中没有对应的配置项：
+- 以下配置项在 EMQX 5.1中没有对应的配置项：
   - `grpc_timeout`
   - `partition_key`
   - `grpc_flush_timeout`

@@ -1,11 +1,5 @@
 # Delayed Publish
 
-::: tip Note
-
-Delayed Publish is an EMQX Enterprise feature.
-
-:::
-
 Delayed Publish is an extended MQTT feature supported by EMQX. When a client publishes a message to EMQX with the topic prefix `$delayed/{DelayInteval}`, it triggers the delayed publish feature. The messages will be published after a period of time predefined by the user.
 
 The specific format of the delay-publish topic is as below:
@@ -15,13 +9,14 @@ $delayed/{DelayInterval}/{TopicName}
 ```
 
 - `$delayed`: Messages prefixed with `$delay` will be treated as messages that need to be delayed. The delay interval is determined by the content of the next topic level.
-- `{DelayInterval}`: Specify the time interval for delaying the publishing of this MQTT message with the unit of second. The maximum allowed interval is 4294967 seconds. If `{DelayInterval}` cannot be parsed as an integer number, EMQX will discard the message and the client will not receive any information.
+- `{DelayTime}`: Specify the time interval or timestamp for delaying the publishing of this MQTT message with the unit of seconds. If it's an interval, the maximum allowed interval is 42949669 seconds (about 497 days). If it's a timestamp, it cannot be earlier or later than 42949669 seconds from the current system time. The message is discarded if it fails to parse `{DelayTime}` as an integer or if it's not in the valid range.
 - `{TopicName}`: The topic name of the MQTT message.
 
 Example:
 
 - `$delayed/15/x/y`: Publish MQTT message to the topic `x/y` after 15 seconds
 - `$delayed/60/a/b`: Publish MQTT message to the topic `a/b` after 1 minute
+- `$delayed/1743490800/chat/id`: Publish message to the topic `chat/id` on April 1st, 2025 at 9:00 (Stockholm timezone).
 - `$delayed/3600/$SYS/topic`: Publish MQTT message to the topic  `$SYS/topic` after 1 hour
 
 ## Configure Delayed Publish via Dashboard

@@ -78,7 +78,7 @@ lwm2m.bind.dtls.1 = 0.0.0.0:5684
 In EMQX 5.x, all protocol gateways have the same format for the listener configuration. Take the Exproto gateway as an example:
 
 ```
-## etc/emqx.conf
+## etc/emqx.conf or base.hocon (since EMQX 5.9)
 gateway.exproto {
     listeners.tcp.default {
         bind = "0.0.0.0:7993"

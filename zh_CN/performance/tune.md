@@ -124,14 +124,38 @@ node.max_ports = 2097152
 
 ## EMQX 消息服务器参数
 
-设置 TCP 监听器的 Acceptor 池大小，最大允许连接数。
+### 监听器 Acceptor 参数
 
-例如，TCP 监听器可使用如下配置。
+为了优化连接处理能力，可以通过修改 `etc/emqx.conf` 配置文件，调整监听器 acceptor 池大小和 `max_connections` 限制。
+
+以 TCP 监听器为例：
 
 ```bash
-## TCP Listener
+## TCP 监听器配置
 listeners.tcp.$name.acceptors = 64
 listeners.tcp.$name.max_connections = 1024000
+```
+
+- `acceptors`：用于处理入站连接的 acceptor 进程数量。
+- `max_connections`：允许的最大并发连接数。
+
+### 分布式端口缓冲区大小
+
+对于拥有大量复制节点的大型集群，建议在核心节点上通过配置 `node.dist_buffer_size` 参数，调整分布式端口缓冲区大小。
+
+示例：
+
+```bash
+# 缓冲区大小（单位：KB），以下配置将最大值设置为约 2GB
+node.dist_buffer_size = 2097151
+```
+
+此项配置有助于核心节点在大量客户端同时重连时平稳应对流量高峰。
+
+如果您在日志中看到类似以下的告警信息，增大该缓冲区也能有效缓解相关问题：
+
+```
+[warning] msg: busy_dist_port ...
 ```
 
 ## 测试客户端设置

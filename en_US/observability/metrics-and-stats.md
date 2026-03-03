@@ -1,13 +1,13 @@
 # Statistics and Metrics
 
-EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions. 
+EMQX provides metrics monitoring functions, based on which the operation and maintenance personnel can monitor the current service status and troubleshoot possible system malfunctions.
 
-EMQX divides monitoring status into Statistics and Metrics. 
+EMQX divides monitoring status into Statistics and Metrics.
 
-- Statistics are integer-type gauges used to return a single value at the point of time the metric was requested. 
-- Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of bytes and messages sent or received.  
+- Statistics are integer-type gauges used to return a single value at the point of time the metric was requested.
+- Metrics are integer-type counters used to measure simple incrementing and decrementing numbers, such as the number of bytes and messages sent or received.
 
-EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-monitoring-status-via-rest-api) and [system topic](#get-monitoring-status-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md). 
+EMQX provides users with multiple ways to view statistics and metrics. Most directly, you can view these data on the EMQX Dashboard. When it is not convenient to access the Dashboard, you can also get the data through [REST API](#request-monitoring-status-via-rest-api) and [system topic](#get-monitoring-status-via-system-topics) messages. Additionally, you can easily integrate the monitoring functions with your own monitoring system, see [Integrate with Prometheus](./prometheus.md).
 
 ## View Statistics on Dashboard
 
@@ -91,7 +91,7 @@ You can see the event-related metrics for the cluster or node, such as [client c
 
 ### Messaging
 
-Scroll down the **Metrics** page, and you can see message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery). 
+Scroll down the **Metrics** page, and you can see message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery).
 
 <img src="./assets/dashboard-messaging-metrics-ee.png" alt="dashboard-messaging-metrics-ee" style="zoom:50%;" />
 
@@ -117,7 +117,6 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | packets.publish.inuse        | The number of received PUBLISH packets with occupied packet identifiers |
 | packets.publish.auth_error   | The number of received PUBLISH packets that failed the ACL check |
 | packets.publish.error        | The number of received PUBLISH packets that cannot be published |
-| packets.publish.dropped      | The number of PUBLISH packets that are discarded due to the receiving limit |
 | packets.puback.received      | The number of received PUBACK packets                        |
 | packets.puback.sent          | The number of sent PUBACK packets                            |
 | packets.puback.inuse         | The number of received PUBACK messages with occupied identifiers |
@@ -157,6 +156,8 @@ Scroll down the **Metrics** page, and you can see message-related metrics, inclu
 | messages.dropped                | The total number of messages dropped by EMQX before forwarding to the subscription process |
 | messages.dropped.no_subscribers | The number of messages dropped due to no subscribers  |
 | messages.dropped.await_pubrel_timeout | The number of messages dropped due to await PUBREL timeout |
+| messages.dropped.quota_exceeded | The number of messages dropped due to quota being exceeded (typically number of connections) |
+| messages.dropped.receive_maximum | The number of messages dropped due to Receive Maximum being reached |
 | messages.forward                | The number of messages forwarded to other nodes       |
 | messages.publish                | The number of messages published in addition to system messages |
 | messages.qos0.received          | The number of QoS 0 messages received from clients    |
@@ -193,10 +194,9 @@ You can configure system topic settings on Dashboard. Click **Management** -> **
 
 <img src="./assets/system-topic-setting.png" alt="system-topic-setting" style="zoom:40%;" />
 
-- **Messages publish interval**: Set the time interval for sending `$sys` topic. 
+- **Messages publish interval**: Set the time interval for sending `$sys` topic.
 - **Heartbeat interval**: Set the time interval for sending heartbeat messages.
 - **Client connected notification**: Enabled by default and event messages about client being connected will be published.
 - **Client disconnected notification**: Enabled by default and event messages about client being disconnected will be published.
 - **Client subscribed notification**: Disabled by default; When enabled, event messages about a client subscribing to a topic will be published.
 - **Client unsubscribed notification**: Disabled by default; When enabled, event messages about a client unsubscribing to a topic will be published.
-

@@ -1,11 +1,5 @@
 # 将 MQTT 数据导入 Snowflake
 
-::: tip
-
-Snowflake 数据集成是 EMQX 企业版功能。 
-
-:::
-
 [Snowflake](https://www.snowflake.com/en/) 是一个基于云的数据平台，提供高度可扩展且灵活的数据仓库、分析和安全数据共享解决方案。Snowflake 以其处理结构化和半结构化数据的能力而闻名，专为存储海量数据并提供快速查询性能设计，能够无缝集成各种工具和服务。
 
 本页面详细介绍了 EMQX 与 Snowflake 之间的数据集成，并为规则和 Sink 的创建提供了实用指南。
@@ -56,17 +50,70 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
 #### Linux
 
-运行以下脚本来安装 Snowflake ODBC 驱动程序并配置 `odbc.ini` 文件：
-
-```bash
-scripts/install-snowflake-driver.sh
-```
+EMQX 提供了一个[安装脚本](https://github.com/emqx/emqx/blob/master/scripts/install-snowflake-driver.sh)，仅适用用于在基于 Debian 的系统（如 Ubuntu）上快速部署 Snowflake ODBC 驱动，并配置所需的系统文件。
 
 ::: tip 注意
 
 该脚本仅用于测试环境，并非生产环境中 ODBC 驱动设置的推荐方式。请参考官方文档 [Installing for Linux](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux)。
 
 :::
+
+**执行安装脚本**
+
+将 `scripts/install-snowflake-driver.sh` 脚本复制到本地保存，同时添加执行权限并 sudo 执行脚本：
+
+```bash
+chmod a+x scripts/install-snowflake-driver.sh
+sudo ./scripts/install-snowflake-driver.sh
+```
+
+脚本将自动将 Snowflake ODBC 驱动 `.deb` 安装包 (如 `snowflake-odbc-3.4.1.x86_64.deb`) 下载到运行脚本的当前目录、完成驱动安装，并更新以下系统配置文件：
+
+- `/etc/odbc.ini`：添加 Snowflake 数据源配置
+- `/etc/odbcinst.ini`：注册 Snowflake 驱动路径
+
+**示例配置内容**
+
+运行以下命令查看 `/etc/odbc.ini` 文件配置：
+
+```
+emqx@emqx-0:~$ cat /etc/odbc.ini 
+
+[snowflake]
+Description=SnowflakeDB
+Driver=SnowflakeDSIIDriver
+Locale=en-US
+PORT=443
+SSL=on
+
+[ODBC Data Sources]
+snowflake = SnowflakeDSIIDriver
+```
+
+运行以下命令查看 `/etc/odbcinst.ini` 文件配置:
+
+```
+emqx@emqx-0:~$ cat /etc/odbcinst.ini 
+
+[ODBC Driver 18 for SQL Server]
+Description=Microsoft ODBC Driver 18 for SQL Server
+Driver=/opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.5.so.1.1
+UsageCount=1
+
+[ODBC Driver 17 for SQL Server]
+Description=Microsoft ODBC Driver 17 for SQL Server
+Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.10.so.6.1
+UsageCount=1
+
+[SnowflakeDSIIDriver]
+APILevel=1
+ConnectFunctions=YYY
+Description=Snowflake DSII
+Driver=/usr/lib/snowflake/odbc/lib/libSnowflake.so
+DriverODBCVer=03.52
+SQLLevel=1
+UsageCount=1
+```
 
 #### macOS
 
@@ -206,19 +253,47 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 在添加 Snowflake Sink 之前，您需要在 EMQX 中创建相应的连接器，以建立与 Snowflake 的连接。
 
-1. 进入 Dashboard **集成** -> **连接器** 页面。
+1. 进入 Dashboard **集成** -> **连接器**页面。
+
 2. 点击右上角的**创建**按钮。
+
 3. 选择 **Snowflake** 作为连接器类型，然后点击下一步。
+
 4. 输入连接器名称，由大小写字母和数字组成。这里输入 `my-snowflake`。
+
 5. 输入连接信息：
-   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
+   
    - **数据源名称**：输入 `snowflake`，与您在 ODBC 驱动设置中配置的 `.odbc.ini` 文件中的 DSN 名称相对应。
+   
+   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
+   
    - **用户名**：输入 `snowpipeuser`，这是之前设置过程中定义的用户名。
-   - **密码**：输入 `Snowpipeuser99`，这是之前设置过程中定义的密码。
+   
+   - **密码**：输入用于通过用户名和密码进行 ODBC 连接认证。此字段为可选项，用户可以选择：
+   
+     - 在此处填写密码，例如： `Snowpipeuser99`，这是之前设置过程中定义的密码。
+     - 或在系统的 `/etc/odbc.ini` 文件中配置；
+     - 如果使用密钥对认证，则无需提供密码。
+   
+     ::: tip
+   
+     使用密码或私钥进行身份验证，而不是两者兼用。如果此处未配置这两种方式，请确保在 `/etc/odbc.ini` 中设置了适当的凭证。
+   
+     :::
+   
+   - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
+     - **代理主机**：代理服务器的主机名或 IP 地址。
+     - **代理端口**：代理服务器使用的端口号。
+   - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径必须在集群的所有节点上保持一致。路径必须以 `file://` 开头，例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。
+   - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
+   
 6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。
+
 7. 高级配置（可选），请参考[高级设置](#高级设置)。
+
 8. 在点击**创建**之前，可以点击 **测试连接** 来测试连接器是否能够连接到 Snowflake。
+
 9. 点击页面底部的**创建**按钮，完成连接器创建。
 
 现在，您已经成功创建了连接器，可以继续创建规则和 Sink，以指定如何将数据写入 Snowflake。
@@ -278,11 +353,13 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    - **最大记录数**：设置触发聚合前的最大记录数。例如，您可以设置为 `1000`，在收集 1000 条记录后触发上传。当达到最大记录数时，单个文件的聚合将完成并上传，重置时间间隔。
    - **时间间隔**：设置触发聚合的时间间隔（秒）。例如，如果设置为 `60`，即使未达到最大记录数，也将在 60 秒后上传数据，并重置记录数。
 
-10. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
+10. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
-11. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
+11. 展开**高级设置**，根据需要配置高级设置选项（可选）。更多详细信息请参考[高级设置](#高级设置)。
 
-12. 返回规则创建页面，点击**创建**按钮完成整个规则创建过程。
+12. 其余设置保持默认值，点击**创建**按钮完成 Sink 创建。成功创建后，页面将返回到规则创建页面，并将新创建的 Sink 添加到规则动作中。
+
+13. 返回规则创建页面，点击**创建**按钮完成整个规则创建过程。
 
 现在，您已成功创建了规则。您可以在**规则**页面看到新创建的规则，并在 **动作 (Sink)** 标签页中查看新创建的 Snowflake Sink。
 

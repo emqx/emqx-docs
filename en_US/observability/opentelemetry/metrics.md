@@ -1,10 +1,4 @@
 # Integrate OpenTelemetry to View Metrics
-::: tip
-
-OpenTelemetry Integration is only available in the EMQX Enterprise edition after EMQX 5.8.3.
-
-:::
-
 EMQX has built-in support for pushing metrics directly to the OpenTelemetry Collector over the gRPC OTEL protocol. The Collector can then route, filter, and transform the data to any desired backend for storage and visualization.
 
 This page introduces how to integrate OpenTelemetry with EMQX through the Dashboard and view EMQX metrics through [Prometheus](../../observability/prometheus.md).
@@ -53,7 +47,7 @@ scrape_configs:
 
 ## Enable OpenTelemetry Metrics in EMQX
 
-You can use EMQX Dashboard or configuration file to configure EMQX's integration with OpenTelemetry metrics feature. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration for Metrics.
+You can use EMQX Dashboard or a configuration file to configure EMQX's integration with the OpenTelemetry metrics feature. In the EMQX Dashboard, click **Management** -> **Monitoring** on the left navigation menu, then click the **Integration** tab for the configuration for Metrics.
 
 Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs locally):
 
@@ -73,5 +67,5 @@ Add the configuration below to the EMQX `cluster.hocon` file (assuming EMQX runs
 
 ## Visualize EMQX Metrics in Prometheus
 
-The EMQX metrics can be viewed in Prometheus web console (http://otel-collector:9090):
+The EMQX metrics can be viewed in the Prometheus web console (http://otel-collector:9090):
 ![OpenTelemetry-Prometheus](./assets/opentelemetry-prometheus.png)

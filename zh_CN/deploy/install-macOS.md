@@ -7,7 +7,7 @@
 - macOS 15
 - macOS 14
 
-如果您想安装不同版本或在不同系统中安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
+如果您希望安装其他版本或在其他操作系统中进行安装，请访问 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)。
 
 ## 安装 EMQX
 
@@ -17,7 +17,7 @@
 
 ## 启动和停止 EMQX
 
-EMQX 可以以守护进程模式、前台模式或交互模式启动。请注意，默认配置下只能同时运行一个 EMQX 实例。
+EMQX 以守护进程模式、前台模式或交互模式启动。请注意，默认配置下只能同时运行一个 EMQX 实例。
 
 ```bash
 # 以守护进程模式启动

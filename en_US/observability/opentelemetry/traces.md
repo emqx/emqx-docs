@@ -1,10 +1,4 @@
 # Integrate OpenTelemetry Tracing
-::: tip
-
-OpenTelemetry Integration is only available in the EMQX Enterprise edition after EMQX 5.8.3.
-
-:::
-
 [OpenTelemetry tracing](https://opentelemetry.io/docs/concepts/signals/traces/) is a specification for tracing the flow of requests in a distributed system, allowing you to trace how requests flow through a distributed system and providing the ability to visualize and analyze the performance and behavior of requests. In the MQTT scenario, this concept can be used to trace requests across different participants in MQTT message transmission (Publisher - MQTT server - Subscriber).
 
 "Trace context" is a mechanism used in distributed tracing to track and identify requests or transactions that span multiple systems and services. In the [W3C Trace Context MQTT](https://w3c.github.io/trace-context-mqtt/) document, this concept is applied to the MQTT protocol to enable tracking of requests across different participants in MQTT message transmission. This allows system administrators or developers to understand how messages flow through the system.
@@ -107,7 +101,7 @@ This section guides you through enabling OpenTelemetry tracing in EMQX, demonstr
    }
    ```
 
-   You can also go to **Management** -> **Monitoring** in Dashboard to configure OpenTelemetry traces integration under the **Integration** tab on the page.
+   You can also go to **Management** -> **Monitoring** in the Dashboard to configure OpenTelemetry traces integration under the **Integration** tab on the page.
 
 2. Start the EMQX node, for example, a two-node cluster with the node names `emqx@127.0.0.1` and `emqx1@127.0.0.1`, to demonstrate the distributed tracing capabilities.
 
@@ -125,7 +119,7 @@ This section guides you through enabling OpenTelemetry tracing in EMQX, demonstr
      mqttx sub -t t/trace/test -h localhost -p 1884
      ```
 
-4. Publish a message with Trace Context by sending a message to the topic including a valid `traceparent` User-Property:
+4. Publish a message with Trace Context by sending a message to the topic, including a valid `traceparent` User-Property:
 
    ```bash
    mqttx pub -t t/trace/test -h localhost -p 1883 -up "traceparent: 00-cce3a024ca134a7cb4b41e048e8d98de-cef47eaa4ebc3fae-01"
@@ -150,7 +144,7 @@ In this example, EMQX traces two distinct types of spans:
 ## Manage Tracing Span Overload
 
 EMQX accumulates tracing spans and exports them periodically in batches.
-The exporting interval is controlled by the `opentelemetry.trace.scheduled_delay` parameter, which defaults to 5 second.
+The exporting interval is controlled by the `opentelemetry.trace.scheduled_delay` parameter, which defaults to 5 seconds.
 The batching trace spans processor incorporates an overload protection mechanism, allowing accumulating spans only up to a certain limit, which defaults to 2048 spans. You can configure this limit using the following configuration:
 
 ```bash
@@ -164,7 +158,7 @@ Once the `max_queue_size` limit is reached, new tracing spans will be dropped un
 ::: tip Note
 
 If a traced message is dispatched to a high number of subscribers (much higher than the value of `max_queue_size`),
-it is expected that only a small number of spans will be exported and most of the spans will be dropped by the overload protection.
+it is expected that only a small number of spans will be exported, and most of the spans will be dropped by the overload protection.
 
 Increasing `max_queue_size` should always be done with extra care, as it can affect performance and memory consumption.
 :::

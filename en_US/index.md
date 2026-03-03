@@ -1,9 +1,9 @@
 # EMQX Overview
 EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited connections, seamless integration, and anywhere deployment." As a high-performance, scalable MQTT message server, EMQX Enterprise provides reliable real-time message transmission and device connectivity solutions for IoT applications. EMQX has accumulated more than 20,000 corporate users from more than 50 countries, connecting more than 100 million IoT devices worldwide, serving enterprises' digital, real-time, and intelligent transformation.
 
-[EMQX Enterprise](https://www.emqx.com/en/products/emqx) is the commercial version of EMQX. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
+As a commercial self-hosted MQTT messaging platform, [EMQX Enterprise](https://www.emqx.com/en/products/emqx) supports up to 100 million concurrent MQTT connections per cluster. A single server can handle and process millions of MQTT messages per second, all while maintaining millisecond-level latency. With its robust built-in rule engine and data integration capabilities, EMQX Enterprise can perform real-time data processing, transformation, and routing for massive IoT data. It seamlessly integrates IoT data with various backend databases and analytics tools, enabling enterprises to rapidly build IoT platforms and applications with leading competitiveness.
 
-<img src="./assets/emqx_platform.jpg" alt="emqx_platform" style="zoom:70%;" />
+<img src="./assets/emqx_platform.png" alt="emqx_platform" style="zoom:70%;" />
 
 ## Key Benefits
 
@@ -19,7 +19,7 @@ EMQX is a large-scale distributed MQTT messaging platform that offers "unlimited
 
 ## Main Components
 
-EMQX Enterprise consists of multiple components that together build a powerful and scalable MQTT messaging platform. Here are the core components of EMQX Enterprise Edition:
+EMQX Enterprise consists of multiple components that together build a powerful and scalable MQTT messaging platform. Here are the core components of EMQX Enterprise:
 
 ### Device Connectivity
 
@@ -47,7 +47,7 @@ Through [TLS/SSL encryption](./network/overview.md) and [authentication](./acces
 
 EMQX Enterprise includes multiple client authentication mechanisms, including username/password, JWT, enhanced authentication, PSK, and X.509 certificates. It provides publish/subscribe authorization mechanisms based on ACLs. Authentication and authorization data can be integrated and managed through external enterprise security systems, such as LDAP, HTTP services, SQL, and NoSQL databases, allowing for flexible and diverse client security protection solutions.
 
-Additionally, the Enterprise Edition offers [audit logs](./dashboard/audit-log.md), role and permission management, and [single sign-on](./dashboard/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
+Additionally, the EMQX Enterprise offers [audit logs](./dashboard/audit-log.md), role and permission management, and [single sign-on](./dashboard/sso.md) to meet SOC 2 compliance requirements and GDPR data privacy protection. Its comprehensive security features help enterprises build trusted IoT applications that comply with industry security standards.
 
 ### Rule Engine and Data Integration
 
@@ -67,31 +67,28 @@ EMQX Enterprise provides a graphical management system called the [Dashboard](./
 
 ## Deployment Modes and Edition Comparison
 
-EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud Serverless and EMQX Dedicated Cloud) and two self-hosted options (EMQX Open Source and EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
+EMQ provides three deployment options for EMQX: two managed services (EMQX Serverless and EMQX Dedicated) and one self-hosted option (EMQX Enterprise). To help you choose the best deployment option for your requirements, the following table lists a comparison of feature support across different deployment types. For a comparison of supported features in detail, refer to [Feature Comparison](./getting-started/feature-comparison.md). 
 
 <table>
 <thead>
   <tr>
-    <th colspan="2">Self Hosted</th>
+    <th colspan="1">Self-Hosted</th>
     <th colspan="2">MQTT as a Service</th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td>EMQX Open Source</td>
     <td>EMQX Enterprise</td>
-    <td>EMQX Cloud Serverless</td>
-    <td>EMQX Dedicated Cloud</td>
+    <td>EMQX Serverless</td>
+    <td>EMQX Dedicated</td>
   </tr>
   <tr>
-    <td><a href="https://www.emqx.com/en/try?product=broker">Open Source Download</a></td>
     <td><a href="https://www.emqx.com/en/apply-licenses/emqx">Get a Free Trial License</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Get Started Free</a></td>
     <td><a href="https://accounts.emqx.com/signup?continue=https%3A%2F%2Fcloud-intl.emqx.com%2Fconsole%2Fdeployments%2F0%3Foper%3Dnew">Start a Free 14-Day Trial</a></td>
   </tr>
   <tr>
-    <td>✔️ Apache Version 2.0<br>✔️ MQTT over QUIC<br>✔️ Session storage in memory<br>✔️ Supports Webhook and MQTT data bridge.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Multi-protocol gateways, including MQTT-SN, STOMP and CoAP<br>✔️ Open source community<br> </td>
-    <td>✔️ Commercial license (Business source license)<br>✔️ MQTT over QUIC<br>✔️ Session persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
+    <td>✔️ Business Source License (BSL) 1.1<br>✔️ MQTT over QUIC<br>✔️ Session persistence in RocksDB<br>✔️ Data integration with 40+ enterprise systems, including Kafka/Confluent, Timescale, InfluxDB, PostgreSQL, Redis etc.<br>✔️ Audit log and single sign-on (SSO)<br>✔️ Role-Based Access Control (RBAC)<br>✔️ File transfer<br>✔️ Message codec<br>✔️ Multi-protocol gateways, with extra support on OCPP, JT/808 and GBT32960<br>✔️ 24/7 global technical support<br> </td>
     <td>✔️ Pay as you go<br>✔️ Free quota every month<br>✔️ 1000 maximum connections<br>✔️ Start deployment in seconds<br>✔️ Auto scaling<br>✔️ 8/5 global technical support</td>
     <td>✔️ 14-days free trial<br>✔️ Hourly billing<br>✔️ Multi-cloud regions worldwide<br>✔️ Flexible specifications<br>✔️ VPC peering, NAT gateway, load balance and more<br>✔️ Out-of-box integration with over 40+ cloud services<br>✔️ 24/7 global technical support<br> </td>
   </tr>
@@ -99,20 +96,6 @@ EMQ provides four deployment options for EMQX: two managed services (EMQX Cloud 
 </table>
 
 
-The following is a list of feature comparisons between EMQX Enterprise and Open Source edition.
-
-
-|                                   | **EMQX Platform**                                            | **EMQX Open Source**                                         |
-| :-------------------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- |
-| **Positioning**                   | The reliable and scalable enterprise MQTT Platform           | The World's #1 open source MQTT Broker                       |
-| **Scalability**                   | Up to 100 nodes cluster<br />Up to 100 million MQTT connections per cluster | Up to 3 nodes cluster<br />Up to 100,000 connections in production |
-| **Performance**                   | 5M+ MQTT messages per second                                 | 100,000 MQTT messages per second                             |
-| **Availability**                  | Core-Replica cluster                                         | Masterless cluster                                           |
-| **Reliability**                   | Data persistence in RocksDB with highly available replication | Session persistence                                          |
-| **Latency**                       | 1~5 millisecond                                              | 1~5 millisecond                                              |
-| **Integrations (Out-of-the-box)** | 40+                                                          | 2                                                            |
-| **License Model**                 | Commercial license (Business source license)                 | Apache Version 2.0                                           |
-| **Technical Support**             | 24/7 Global support                                          | Open source community                                        |
 
 ## Use Cases
 

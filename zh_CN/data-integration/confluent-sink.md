@@ -1,11 +1,5 @@
 # 将 MQTT 数据传输到 Confluent
 
-:::tip
-
-Confluent 数据集成是 EMQX 企业版的功能。
-
-:::
-
 [Confluent Cloud](https://www.confluent.io/) 基于 Apache Kafka，是一项弹性、可扩展、并完全托管的流式数据服务。EMQX 支持通过规则引擎与 Sink 实现与 Confluent 的数据集成，使您能够轻松将 MQTT 数据流式传输到 Confluent，实现数据的实时处理、存储和分析。
 
 ![EMQX Confluent Integration](./assets/confluent-integration.png)
@@ -231,10 +225,12 @@ confluent kafka topic consume -b testtopic-in
    - **分区选择策略**：选择生产者向 Kafka 分区分发消息的方式。
    - **压缩**：指定是否使用压缩算法压缩/解压 Kafka 消息中的记录。
 
-9. 高级设置（可选）：请参阅 [高级配置](#高级配置)。
+9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
-10. 点击 **创建** 按钮完成 Sink 的创建，创建成功后页面将回到**创建规则**，新的 Sink 将添加到规则动作中。
-11. 点击 **创建** 按钮完成整个规则创建。
+10. **高级设置（可选）**：请参阅 [高级配置](#高级配置)。
+
+11. 点击 **创建** 按钮完成 Sink 的创建，创建成功后页面将回到**创建规则**，新的 Sink 将添加到规则动作中。
+12. 点击 **创建** 按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Confluent 生产者 Sink。
 

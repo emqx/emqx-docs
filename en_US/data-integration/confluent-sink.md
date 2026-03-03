@@ -1,11 +1,5 @@
 # Stream MQTT Data into Confluent
 
-::: tip
-
-The Confluent data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Confluent Cloud](https://www.confluent.io/), based on Apache Kafka, is a resilient, scalable, and fully managed streaming data service. EMQX supports data integration with Confluent through its rule engine and Sink, enabling easy streaming of MQTT data into Confluent for real-time processing, storage, and analysis.
 
 ![EMQX Confluent Integration](./assets/confluent-integration.png)
@@ -227,11 +221,13 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    - **Partition Strategy**: Select how the producer distributes messages to Kafka partitions.
    - **Compression**: Specify whether to use compression algorithms to compress/decompress records in Kafka messages.
 
-9. Advanced Settings (Optional): Refer to [Advanced Configuration](#advanced-configuration).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+10. **Advanced Settings (Optional)**: Refer to [Advanced Configuration](#advanced-configuration).
 
-11. Click the **Create** button to complete the entire rule creation.
+11. Click the **Create** button to complete the creation of the Sink. Once created, the page will return to **Create Rule**, and the new Sink will be added to the rule actions.
+
+12. Click the **Create** button to complete the entire rule creation.
 
 Now you have successfully created the rule, and you can see the newly created rule on the **Integration** -> **Rules** page, as well as the newly created Confluent Producer Sink on the **Actions(Sink)** tab.
 

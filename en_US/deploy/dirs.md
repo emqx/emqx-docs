@@ -26,7 +26,8 @@ The `data` directory is recommended to be mounted on a high-performance hard dri
 
 Files in this directory are read-only.
 
-* `emqx.conf`: the bootstrapping config file for EMQX
+* `base.hocon`: The bootstrapping config file for EMQX for configs with lowest override priority
+* `emqx.conf`: The bootstrapping config file for EMQX for configs with highest override priority
 * `vm.args`: The boot arguments for Erlang virtual machine
 * `certs/`: X.509 keys are certificate files for EMQX SSL listeners or SSL clients when
   integrating with external systems. e.g., HTTPS client for webhooks

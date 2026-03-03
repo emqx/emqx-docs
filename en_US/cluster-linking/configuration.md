@@ -4,7 +4,7 @@ This page provides guidelines for configuring and managing the Cluster Linking f
 
 ## Configure and Manage Cluster Linking via Dashboard
 
-Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from the left menu. On the **Cluster Linking** page, click **Create** at the upper right corner to start creating cluster linking.
+Go to the EMQX Dashboard and click **Management** -> **Cluster Linking** from the left menu. On the **Cluster Linking** page, click **Create** in the upper right corner to start creating cluster linking.
 
 ![create_cluster_linking](./assets/create_cluster_linking.png)
 
@@ -16,12 +16,12 @@ On the configuration page, configure the settings of the following fields:
 - **Username**: Username for authentication to the remote cluster, if required.
 - **Password**: Password for authentication to the remote cluster, if required.
 - **Topics**: A list of MQTT topic filters that specify which messages the local cluster will receive from the remote cluster. By default, the topic list is empty. You can add topics by clicking the plus sign and remove topics to leave the list empty if needed. For more information, see [Configure Topics](#configure-topics).
-- **Enable TLS**: Enable this option if communication between clusters requires TLS encryption. Configure the settings such as SSL certificates.
+- **Enable TLS**: Enable this option if communication between clusters requires TLS encryption. Configure the settings, such as SSL certificates.
 - **Advanced Settings**: Configure additional settings such as MQTT protocol parameters.
 
-Click **Create** after you complete the setting. 
+Click **Create** after you complete the settings. 
 
-The new entry will appear on the Cluster Linkingbled by default. page and be ena The cluster linking list displays details such as cluster name, server address, topics, and enable status. You can modify the settings or delete an entry by clicking the **Settings** or **Delete** buttons in the **Actions** column.
+The new entry will appear on the Cluster Linking page and be enabled by default. The cluster linking list displays details such as cluster name, server address, topics, and enable status. You can modify the settings or delete an entry by clicking the **Settings** or **Delete** buttons in the **Actions** column.
 
 Clicking the cluster name takes you to the **Overview** tab, where you can monitor message transmission statistics and the execution status of the cluster linking.  To permanently remove the cluster linking entry, click the delete icon at the upper right corner of the page. Alternatively, you can temporarily disable the cluster linking by toggling the switch, retaining your configuration for future use.
 

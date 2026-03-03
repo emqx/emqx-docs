@@ -1,0 +1,21 @@
+name: PR Checks
+
+on:
+  pull_request:
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure milestone is set on the PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: check_milestone
+        run: |
+          PR_MILESTONE=$(gh --repo ${{ github.repository }} pr view ${{ github.event.pull_request.number }} --json milestone --jq '.milestone.title')
+          if [ -z "$PR_MILESTONE" ]; then
+            echo "No milestone set on the PR. Please set a milestone before merging."
+            exit 1
+          else
+            echo "Milestone is set to: $PR_MILESTONE"
+          fi

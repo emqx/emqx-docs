@@ -10,29 +10,29 @@
 
 以下页面为您提供 EMQX 企业版的安装指导。
 
-**[通过 Docker 运行](./install-docker-ce.md)**
+**[通过 Docker 运行](./install-docker.md)**
 
-使用官方 Docker 镜像快速安装和运行 EMQX，并使用 Docker Compose 实现集群搭建。
+使用官方 Docker 镜像快速安装和运行 EMQX 企业版，并使用 Docker Compose 实现集群搭建。
 
-**[在 Debian 上安装](./install-debian-ce.md)**
+**[在 Debian 上安装](./install-debian.md)**
 
-在 Debian 系统中下载 EMQX 并通过 deb 或 tar.gz 安装。
+在 Debian 系统中下载 EMQX 企业版并通过 deb 或 tar.gz 安装。
 
-**[在 Ubuntu 上安装](./install-ubuntu-ce.md)**
+**[在 Ubuntu 上安装](./install-ubuntu.md)**
 
-在 Ubuntu 系统中下载 EMQX 并通过 deb 或 tar.gz 安装。
+在 Ubuntu 系统中下载 EMQX 企业版并通过 deb 或 tar.gz 安装。
 
-**[在 CentOS/RHEL 上安装](./install-rhel-ce.md)**
+**[在 CentOS/RHEL 上安装](./install-rhel.md)**
 
-在 Ubuntu 系统中下载 EMQX 并通过 rpm 或 tar.gz 安装。
+在 Ubuntu 系统中下载 EMQX 企业版并通过 rpm 或 tar.gz 安装。
 
-**[在 macOS 上安装](./install-macOS-ce.md)**
+**[在 macOS 上安装](./install-macOS.md)**
 
-在 macOS 系统中下载 EMQX 并使用 Zip 软件包安装。
+在 macOS 系统中下载 EMQX 企业版并使用 Zip 软件包安装。
 
 **[Kubernetes 部署](https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html)**
 
-使用 EMQX Operator 部署 EMQX。
+使用 EMQX Operator 部署 EMQX 企业版。
 
 **[配置 License](./license.md)**
 

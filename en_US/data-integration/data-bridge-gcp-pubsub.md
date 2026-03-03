@@ -1,11 +1,5 @@
 # Ingest MQTT Data into GCP Pub/Sub
 
-::: tip
-
-The GCP Pub/Sub data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) is an asynchronous messaging service designed to achieve extremely high reliability and scalability. EMQX supports seamless integration with Google Cloud Pub/Sub for real-time extraction, processing, and analysis of MQTT data. It can push data to various Google Cloud services such as Cloud Functions, App Engine, Cloud Run, Kubernetes Engine, and Compute Engine. Alternatively, it can also distribute data from Google Cloud to MQTT, helping users rapidly build IoT applications on GCP.
 
 This page provides a comprehensive introduction to the data integration between EMQX and GCP Pub/Sub with practical instructions on creating and validating the data integration.
@@ -148,13 +142,15 @@ This section demonstrates how to create a rule to specify the data to be saved i
     - For **Attributes**, both keys and values may use placeholders of the form `${variable_name}`.  Such values will be extracted from the MQTT context.  If a key template resolves to an empty string, that key is omitted from the outgoing message to GCP Pub/Sub.
     - For **Ordering Key**, placeholders of the form `${variable_name}` may be used.  If the resolved value is an empty string, the `orderingKey` field will not be set for the GCP Pub/Sub outgoing message.
 
-12. Advanced settings (optional):  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+12. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-13. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP Pub/Sub server.
+13. **Advanced settings (optional)**:  For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-14. Click the **Create** button to complete the Sink configuration and you will see the new Sink appear under the **Action Outputs** tab.
+14. Before clicking **Create**, you can click **Test Connectivity** to test that the Connector can connect to the GCP Pub/Sub server.
 
-15. Back on the **Create Rule** page, click **Create** to create the rule.
+15. Click the **Create** button to complete the Sink configuration and you will see the new Sink appear under the **Action Outputs** tab.
+
+16. Back on the **Create Rule** page, click **Create** to create the rule. 
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new Google PubSub Producer Sink.
 

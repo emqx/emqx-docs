@@ -1,11 +1,5 @@
 # Sparkplug B
 
-::: tip 注意
-
-Schema Registry 是 EMQX 企业版功能。目前仅在 EMQX 企业版中支持对 Sparkplug B 数据格式的编解码。
-
-:::
-
 [Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) 是由 [Eclipse Foundation 的 TAHU 项目](https://www.eclipse.org/tahu/) 开发的开源规范，旨在为 MQTT 提供一套明确定义的 payload 和状态管理体系。其主要目标是在工业物联网领域实现互操作性和一致性。
 
 Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时控制系统和设备的 MQTT 命名空间。它通过封装结构化数据格式，包括指标、过程变量和设备状态信息，确保了标准化的数据传输，使其呈现为简洁易处理的格式。通过使用Sparkplug B，组织可以提高运营效率，避免数据孤岛，并在 MQTT 网络中实现设备间的无缝通信。
@@ -115,7 +109,7 @@ from t
 
 ### 提取数据
 
-假设您从一台设备获取了发送到主题 `my/sparkplug/topic` 上的消息，并希望仅将 `counter_group1/counter1_run` 指标转发到另一个名为 `intresting_counters/counter1_run_updates ` 的主题，且以 JSON 格式发送。以下步骤演示了如何通过在 EMQX Dashboard 中创建规则并使用 [MQTTX](https://mqttx.app/) 客户端工具测试规则来实现此任务。
+假设您从一台设备获取了发送到主题 `my/sparkplug/topic` 上的消息，并希望仅将 `counter_group1/counter1_run` 指标转发到另一个名为 `interesting_counters/counter1_run_updates ` 的主题，且以 JSON 格式发送。以下步骤演示了如何通过在 EMQX Dashboard 中创建规则并使用 [MQTTX](https://mqttx.app/) 客户端工具测试规则来实现此任务。
 
 #### 在 Dashboard 中创建规则
 
@@ -142,17 +136,17 @@ from t
 
    :::
 
-3. 在页面右侧点击**添加动作**。从**动作**下拉列表中选择 `消息重发布`。将`intresting_counters/counter1_run_updates `作为重新发布主题输入，并在 **Payload** 字段中输入 `${item}`。点击**添加**。
+3. 在页面右侧点击**添加动作**。从**动作**下拉列表中选择 `消息重发布`。将`interesting_counters/counter1_run_updates `作为重新发布主题输入，并在 **Payload** 字段中输入 `${item}`。点击**添加**。
 
 4. 在**创建规则**页面上，点击**创建**。您可以在规则列表中看到已创建的规则。
 
 #### 测试规则
 
-您可以使用 MQTTX 客户端工具模拟一个 MQTT 客户端，将 Sparkplug B 消息发布到主题 `my/sparkplug/topic`。然后，您可以验证该消息是否以 JSON 格式转换并转发到主题 `intresting_counters/counter1_run_updates`：
+您可以使用 MQTTX 客户端工具模拟一个 MQTT 客户端，将 Sparkplug B 消息发布到主题 `my/sparkplug/topic`。然后，您可以验证该消息是否以 JSON 格式转换并转发到主题 `interesting_counters/counter1_run_updates`：
 
 1. 打开 MQTTX 客户端桌面版并连接到 EMQX。有关使用 MQTTX 的详细信息，请参阅 [MQTTX](../messaging/publish-and-subscribe.md)。
 
-2. 创建新的订阅并订阅主题 `intresting_counters/counter1_run_updates`。
+2. 创建新的订阅并订阅主题 `interesting_counters/counter1_run_updates`。
 
 3. 在右下角的消息发送区域，将 `my/sparkplug/topic` 作为主题输入。选择 `Base64` 作为 payload 类型。
 

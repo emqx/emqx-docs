@@ -4,7 +4,7 @@ This page provides a step-by-step guide to quickly get started with the File Tra
 
 ## Upload a File and Store It on Local Disk
 
-1. Start EMQX with file transfer feature enabled by setting the following configuration in the EMQX configuration file `etc/emqx.conf`:
+1. Start EMQX with the file transfer feature enabled by setting the following configuration in the EMQX configuration file:
 
    ```bash
    file_transfer {
@@ -102,7 +102,7 @@ Before you start, you need to ensure that `s3cmd` is installed and configured co
 
 :::
 
-1. Start EMQX with file transfer feature enabled in config file `etc/emqx.conf` and configure the S3 bucket:
+1. Start EMQX with file transfer feature enabled in config file and configure the S3 bucket:
 
    ```bash
    file_transfer {

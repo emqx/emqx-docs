@@ -1,8 +1,6 @@
 # 数据集成
 
-作为一个 MQTT 消息平台，EMQX 通过 MQTT 协议连接物联网设备并实时传递消息。在此基础上，数据集成为 EMQX 引入了与外部数据系统的连接，从而以实现设备与其他业务系统的无缝集成。
-
-数据集成使用 Sink 与 Source 组件与外部数据系统连接，Sink 用于将消息发送到外部数据系统，例如 MySQL、Kafka 或 HTTP 服务等；而 Source 则用于从外部数据系统接收消息，例如 MQTT、Kafka 或 GCP PubSub。
+EMQX 是一个通过 MQTT 协议连接物联网设备并实时传递消息的 MQTT 消息平台。数据集成使用 Sink 与 Source 组件与外部数据系统连接，Sink 用于将消息发送到外部数据系统，例如 MySQL、Kafka 或 HTTP 服务等；而 Source 则用于从外部数据系统接收消息，例如 MQTT、Kafka 或 GCP PubSub。
 
 这一过程允许 EMQX 不仅仅局限于物联网设备之间的消息传递，还能够将设备产生的数据有机地融入到整个业务生态系统中，为物联网应用提供了更广泛的应用场景，使得设备与业务系统之间的交互更为丰富和多样化。
 
@@ -10,7 +8,7 @@
 
 - 自 EMQX v5.4.0 版本开始，原数据桥接按照数据流方向拆分并重命名为 Sink 与 Source。
 
-- 目前，EMQX 支持 MQTT 服务、Kafka 和 GCP PubSub 这三种外部数据系统作为 Source，其中，Kafka 和 GCP PubSub Source 仅在企业版中支持。
+- 目前，EMQX 支持 MQTT 服务、Kafka 和 GCP PubSub 这三种外部数据系统作为 Source。
 
 :::
 
@@ -18,7 +16,7 @@
 
 ## 工作原理
 
-EMQX 数据集成是一个开箱即用的功能。作为一个 MQTT 消息平台，EMQX 通过 MQTT 协议从物联网设备接收数据。借助内置的规则引擎，接收到的数据会被规则引擎中配置的规则处理。规则将触发一个动作，通过配置的 Sink/Source 将处理后的数据转发到外部数据系统。您可以在 Dashboard 上使用[规则](./rule-get-started.md)或[流设计器](../flow-designer/introduction.md)轻松创建规则、添加动作并创建 Sink/Source，无需任何编码工作。
+EMQX 数据集成是一个开箱即用的功能。作为一个 MQTT 消息平台，EMQX 通过 MQTT 协议从物联网设备接收数据。借助内置的规则引擎，接收到的数据会被规则引擎中配置的规则处理。规则将触发一个动作，通过配置的 Sink/Source 将处理后的数据转发到外部数据系统。您可以在 Dashboard 上使用[规则](./rule-get-started.md)或 [Flow 设计器](../flow-designer/introduction.md)轻松创建规则、添加动作并创建 Sink/Source，无需任何编码工作。
 
 ### 规则引擎
 
@@ -70,12 +68,12 @@ D1 -->|发布消息| E[客户端]
 
 ## 支持的集成
 
-目前，EMQX 开源版支持以下两种数据集成：
+目前，EMQX 支持与以下数据系统进行集成：
+
+**默认支持**
 
 - [MQTT Services](./data-bridge-mqtt.md)
 - [Webhook](./webhook.md)/[HTTP Server](./data-bridge-webhook.md)
-
-EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下这些数据系统的集成：
 
 **云服务**
 
@@ -98,6 +96,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
+- [Lindorm](./lindorm)
 
 **NoSQL**
 
@@ -124,6 +123,7 @@ EMQX 企业版除了 MQTT Services 和 Webhook/HTTP Server, 还支持与以下�
 - [Amazon S3](./s3.md)
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
+- [Disk Log](./disk-log.md)
 
 ## Sink 的特性
 
@@ -159,7 +159,7 @@ Sink 借助以下特性以增强易用性、进一步提高数据集成的性能
 
 #### 缓冲文件位置
 
-对于 Kafka Sink，磁盘缓存文件位于 `data/kafka` 下，其他 Sink 磁盘缓存文件位于 `data/resource_worker` 下。
+对于 Kafka Sink，磁盘缓存文件位于 `data/kafka` 下，其他 Sink 磁盘缓存文件位于 `data/bufs` 下。
 
 实际使用中可以根据情况将 `data` 目录挂载至高性能磁盘以提高吞吐能力。
 
@@ -180,6 +180,68 @@ INSERT INTO msg(topic, qos, payload) VALUES(${topic}, ${qos}, ${payload});
 ```
 
 除了自动推导字段类型外，SQL 预处理技术还能避免 SQL 注入以提高安全性。
+
+### 备选动作
+
+从 EMQX 5.9.0 起，您可以为任意一个动作配置一组备选动作。当主动作在处理消息时发生失败时，这些备选动作将会被触发。通过配置备选动作，您可以将失败的消息转发到其他目标（如另一个 Sink 或重发布动作），从而提升数据的可靠性和可观测性。
+
+备选动作的典型用途包括：
+
+- 将失败的消息转发到备用数据系统（例如另一个 Sink）；
+- 将失败的消息重发布到监控主题，用于故障排查或告警通知；
+- 在主动作发生临时故障时，减少消息丢失的风险。
+
+#### 主要特性
+
+- 仅当主动作处理消息失败时，备选动作才会被触发。失败情形包括投递失败、缓冲区溢出、请求超时（TTL 到期）等。
+- 无论其自身配置如何，所有备选动作始终以异步模式执行。
+- 所有配置的备选动作会同时被触发，EMQX 不会逐个尝试，也不会在第一个成功后停止。
+- 备选动作使用与主动作相同的缓冲机制，消息将在 TTL 到期前被多次尝试，或在缓冲溢出前排入队列。
+- 备选动作**不会**递归触发新的备选动作：如果某个备选动作自身失败，即使它也配置了备选动作，也不会继续执行。
+- 备选动作的执行不会影响主动作或其所属规则的运行统计数据，两者是相互独立的。
+
+#### 定义备选动作
+
+假设您有一个名为 `my_http` 的 HTTP 动作，并希望为其配置备选动作，同时已有一个名为 `fallback` 的 MQTT 动作。
+
+可以按如下方式配置备选逻辑：
+
+```hcl
+actions {
+  http {
+    my_http {
+      fallback_actions = [
+        {kind = reference, type = mqtt, name = fallback},
+        {
+          kind = republish,
+          args = {
+            topic = "fallback/republish/topic"
+            qos = 1
+            payload = "${payload}"
+          }
+        }
+      ]
+      # 其他配置省略
+    }
+  }
+  mqtt {
+    fallback {
+      fallback_actions = [
+        {kind = reference, type = mqtt, name = another_fallback}
+      ]
+      # 其他配置省略
+    }
+  }
+}
+```
+
+在上述示例中：
+
+- 如果 HTTP 动作 `my_http` 执行失败，消息将被：
+  - 转发至 MQTT 动作 `fallback`；
+  - 同时重发布至主题 `fallback/republish/topic`。
+- 如果 `fallback` 也执行失败，即使它配置了备选动作 `another_fallback`，该动作也**不会被触发**，因为备选动作不支持递归。
+- 只有当 `fallback` 作为其他规则中的主动作运行并失败时，才会触发其配置的备选动作 `another_fallback`。
 
 ## Sink 的状态与指标
 
@@ -238,7 +300,7 @@ EMQX 提供以下数据集成的运行统计指标：
 
 ::: tip
 
-请注意，`延迟回复` 不表示消息是否成功发送或发送失败，它是一种未知状态。它既可能成功插入外部数据系统，也可能插入失败，甚至在尝试建立与数据系统的连接时连接超时。 
+请注意，`延迟回复` 不表示消息是否成功发送或发送失败，它是一种未知状态。它既可能成功插入外部数据系统，也可能插入失败，甚至在尝试建立与数据系统的连接时连接超时。
 
 :::
 

@@ -18,7 +18,7 @@ This page introduces how to enable PSK authentication in EMQX.
    emqx_a:A6FC9EDF62864125AAE7658BEAE6170C
    ```
 
-2. Add the `psk_authentication` configuration group in the `emqx.conf` configuration file.
+2. Add the `psk_authentication` configuration group in the configuration file.
 
    ```bash
    psk_authentication {
@@ -27,7 +27,7 @@ This page introduces how to enable PSK authentication in EMQX.
    }
    ```
    
-3. Configure the SSL listener in the `emqx.conf` configuration file. Modify the `listeners.ssl.default` group by adding the following options. 
+3. Configure the SSL listener in the configuration file. Modify the `listeners.ssl.default` group by adding the following options. 
 
    - `ssl_options.versions`: Remove `tlsv1.3` support, since `tlsv1.3` version configuration suppresses PSK ciphers.
    - `ssl_options.ciphers`: Configure to use PSK cipher suits.

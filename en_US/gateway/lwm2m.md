@@ -15,7 +15,7 @@ In the current implementation, it has the following limitations:
 
 In EMQX 5.0, LwM2M gateways can be configured and enabled through the Dashboard.
 
-It can also be enabled via the HTTP API, and emqx.conf e.g:
+It can also be enabled via the HTTP API, or configuration file:
 
 :::: tabs type:card
 
@@ -92,7 +92,7 @@ gateway.lwm2m {
 
 
 ::: tip
-Configuring the gateway via emqx.conf requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
+Configuring the gateway in `base.hocon` requires changes on a per-node basis, but configuring it via Dashboard or the HTTP API will take effect across the cluster.
 :::
 
 The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
@@ -103,7 +103,7 @@ The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list
 Since the LwM2M protocol only given the Endpoint Name of Client, there is no Username and Password.
 Therefore, the LwM2M gateway only supports [HTTP Server Authentication](../access-control/authn/http.md).
 
-For example, to create an HTTP authentication for LwM2M gateway via HTTP API or emqx.conf:
+For example, to create an HTTP authentication for LwM2M gateway via HTTP API or configuration file:
 
 :::: tabs type:card
 

@@ -8,7 +8,7 @@
 - Debian 12
 - Debian 11
 
-如希望在其他支持系统中进行安装，或体验其他版本，请可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取安装信息。
+如希望在其他支持系统中进行安装，或体验其他版本，可前往 [EMQX 企业版下载页面](https://www.emqx.com/zh/downloads-and-install/enterprise)获取安装信息。
 
 ## 通过 deb 安装
 
@@ -26,7 +26,7 @@ sudo systemctl start emqx
 
 ### 卸载 EMQX
 
-服务完成后，可通过如下命令卸载 EMQX：
+安装完成后，可通过如下命令卸载 EMQX：
 
 ```shell
 sudo apt remove --purge emqx

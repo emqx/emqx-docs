@@ -31,29 +31,11 @@ If you are running a version earlier than 4.4.x, you must first upgrade through 
 
 You need to resolve all incompatibilities or conflicts with your current deployment before starting the upgrade. To identify the potential compatibility issues and breaking changes that may affect your applications and deployments, you can refer to [Incompatible Changes between EMQX 5.1 and EMQX 4.4](../changes/breaking-changes-5.1.0.md), and the following incompatible changes documents in later versions:
 
-:::: tabs type:card
-
-::: tab EMQX Enterprise
-
 - [Incompatible Changes in EMQX 5.4](../changes/breaking-changes-ee-5.4.md)
 - [Incompatible Changes in EMQX 5.5](../changes/breaking-changes-ee-5.5.md)
 - [Incompatible Changes in EMQX 5.6](../changes/breaking-changes-ee-5.6.md)
 - [Incompatible Changes in EMQX 5.7](../changes/breaking-changes-ee-5.7.md)
 - [Incompatible Changes in EMQX 5.8](../changes/breaking-changes-ee-5.8.md)
-
-:::
-
-::: tab EMQX Open Source
-
-- [Incompatible Changes in EMQX 5.4](../changes/breaking-changes-ce-5.4.md)
-- [Incompatible Changes in EMQX 5.5](../changes/breaking-changes-ce-5.5.md)
-- [Incompatible Changes in EMQX 5.6](../changes/breaking-changes-ce-5.6.md)
-- [Incompatible Changes in EMQX 5.7](../changes/breaking-changes-ce-5.7.md)
-- [Incompatible Changes in EMQX 5.8](../changes/breaking-changes-ce-5.8.md)
-
-:::
-
-::::
 
 It is also advisable to thoroughly test your application in a staging environment before deploying the upgrade to your production environment. This will help ensure a smooth transition and minimize any potential disruptions.
 
@@ -83,10 +65,6 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
 
 :::
 
-:::: tabs type:card
-
-::: tab EMQX Enterprise
-
 1. Download EMQX `@EE_VERSION@` packages.
 
    - **Use a Package Manager:** Check if your operating system's package manager offers the EMQX `@EE_VERSION@` binaries. If available, use the package manager to download and install the binaries.
@@ -107,35 +85,6 @@ To mitigate these pitfalls, read the latest version of EMQX documentation carefu
      A migration tool is available [here](https://github.com/emqx/emqx-data-converter/releases) to help migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@EE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition.  Be sure to inspect the generated configurations to check if they match expectations.
 
      :::
-
-:::
-
-::: tab EMQX Open Source
-
-1. Download EMQX `@CE_VERSION@` packages.
-
-   - **Use a Package Manager:** Check if your operating system's package manager offers the EMQX `@CE_VERSION@` binaries. If available, use the package manager to download and install the binaries.
-   - **Download Binaries Manually:** If the package manager does not provide the EMQX `@CE_VERSION@` binaries or network of the server is restricted, you can manually download them from the [official EMQX website.](https://www.emqx.com/en/downloads-and-install/broker)
-
-2. Deploy a new EMQX Cluster using the binaries. For detailed installation steps, refer to [Installation](../deploy/install.md). This ensures a clean installation of the latest version.
-
-3. Migrate EMQX cluster.
-
-   - Back up the configurations and data of your EMQX 4.4 cluster using the API or Dashboard.
-
-   - Convert the configuration files format from version 4.4 to the new format compatible with EMQX `@CE_VERSION@`.
-
-   - Restore the migrated configuration files to the EMQX `@CE_VERSION@` cluster using the command:  `emqx ctl data import <File>`.
-
-     ::: tip
-
-     A migration tool is available [here](https://github.com/emqx/emqx-data-converter/releases) to help migrate your configuration from the existing EMQX 4.4 cluster to the new EMQX `@CE_VERSION@` cluster. This tool aims to automate the migration procedure, ensuring a smooth transition.  Be sure to inspect the generated configurations to check if they match expectations.
-
-     :::
-
-:::
-
-::::
 
 4. Verify the new EMQX Cluster thoroughly to ensure that it functions as expected. Test its connectivity, messaging capabilities, and any other relevant functionalities to confirm that the upgrade was successful.
 

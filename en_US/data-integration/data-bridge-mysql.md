@@ -1,11 +1,5 @@
 # Ingest MQTT Data into MySQL
 
-::: tip
-
-The MySQL data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [MySQL](https://www.mysql.com/) is a widely used relational database with high reliability and stability, and can be quickly installed, configured and used. MySQL data integration can efficiently store MQTT messages in the MySQL database, and also supports real-time updating or deletion of data in MySQL through event triggering. With the help of MySQL data integration, you can easily implement functions such as message storage, device online/offline status update, and device behavior recording to achieve flexible IoT data storage and device management functions.
 
 This page introduces the data integration between EMQX and MySQL with practical instructions on creating and validating the data integration.
@@ -176,11 +170,13 @@ This demonstration assumes that you run both EMQX and MySQL on the local machine
 
      :::
 
-9. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+10. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
 
-11. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new MySQL Sink.
 

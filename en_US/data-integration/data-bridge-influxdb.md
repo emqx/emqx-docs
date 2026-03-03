@@ -1,10 +1,5 @@
 # Ingest MQTT Data into InfluxDB
 
-::: tip
-
-The InfluxDB data integration is an EMQX Enterprise edition feature. 
-:::
-
 [InfluxDB](https://www.influxdata.com/) is a database for storing and analyzing time series data. Its powerful data throughput capability and stable performance make it very suitable to be applied in the field of Internet of Things (IoT). EMQX now supports connection to mainstream versions of InfluxDB Cloud, InfluxDB OSS, or InfluxDB Enterprise. 
 
 This page provides a comprehensive introduction to the data integration between EMQX and InfluxDB with practical instructions on creating and validating the data integration.
@@ -131,13 +126,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
     :::
 
-11. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the InfluxDB server.
+12. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
 
-13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+13. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the InfluxDB server.
 
-14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+14. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+15. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new InfluxDB Sink.
 

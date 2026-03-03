@@ -2,6 +2,12 @@
 
 The release notes page for EMQX Enterprise provides a comprehensive and detailed record of updates, enhancements, and fixes included in each version of EMQX Enterprise.
 
+## v5.9
+
+- [5.9.2](./changes-ee-v5.md#_5-9-2): 2025-11-14
+- [5.9.1](./changes-ee-v5.md#_5-9-1): 2025-07-02
+- [5.9.0](./changes-ee-v5.md#_5-9-0): 2025-05-02
+
 ## v5.8
 
 - [5.8.9](./changes-ee-v5.md#_5-8-9): 2025-12-31

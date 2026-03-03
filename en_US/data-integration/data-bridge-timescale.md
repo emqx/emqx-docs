@@ -1,11 +1,5 @@
 # Ingest MQTT Data into TimescaleDB
 
-::: tip
-
-The TimescaleDB data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [TimescaleDB](https://www.timescale.com/) (Timescale) is a database specifically designed for storing and analyzing time-series data. Its exceptional data throughput and reliable performance make it an ideal choice for the Internet of Things (IoT) domain, providing efficient and scalable data storage and analysis solutions for IoT applications.
 
 This page provides a comprehensive introduction to the data integration between EMQX and TimescaleDB with practical instructions on creating and validating the data integration.
@@ -190,11 +184,13 @@ This section demonstrates how to create a rule in the Dashboard for processing m
       (NOW(), ${location}, ${temp}, ${humidity})
    ```
 
-9. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+10. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
 
-11. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+11. Click the **Add** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+12. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new TimescaleDB Sink. 
 

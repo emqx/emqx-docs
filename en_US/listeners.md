@@ -29,7 +29,7 @@ EMQX provides 4 Listeners by default, and they will occupy the following ports:
 
 The naming rule of the Listener configuration item is `listener.<Protocol>.<Listener Name>.xxx`, and `<Protocol>` is the protocol used by the Listener. `<Listener Name>` can be named arbitrarily, but it is recommended to use all lowercase words, and `xxx` is a specific configuration item. The `<Listener Name>` of Listeners with different protocols can be repeated.
 
-Due to the existence of the default configuration, we can quickly show how to add a new Listener. Taking TCP Listener as an example, we only need to add the following configuration in `emqx.conf`:
+Due to the existence of the default configuration, we can quickly show how to add a new Listener. Taking TCP Listener as an example, we only need to add the following configuration:
 
 ```
 listeners.tcp.demo.bind = "0.0.0.0:1883"

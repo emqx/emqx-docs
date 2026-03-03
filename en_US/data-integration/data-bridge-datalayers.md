@@ -1,11 +1,5 @@
 # Ingest MQTT Data to Datalayers
 
-::: tip
-
-The datalayers data integration is an EMQX Enterprise feature.
-
-:::
-
 Datalayers is a multi-modal, hyper-converged database designed for industries such as industrial IoT, IoV, energy, and more. With its powerful data throughput and stable performance, Datalayers is ideal for IoT applications. EMQX currently supports storing messages and data in Datalayers via Sink, facilitating data analysis and visualization.
 
 This page provides a detailed overview of EMQX’s data integration with Datalayers and offers practical guidance on creating rules and Sinks.
@@ -120,7 +114,7 @@ This section demonstrates how to create a rule in EMQX to process messages from 
    FROM
      "t/#"
    ```
-   
+
    ::: tip
 
    If you are new to SQL, you can click **SQL Examples** and **Enable Debug** to learn and test the results of the rule SQL.
@@ -157,13 +151,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
       devices,clientid=${clientid} temp=${payload.temp},hum=${payload.hum},precip=${payload.precip}i ${timestamp}
       ```
 
-11. Expand **Advanced Settings** and configure advanced options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can connect to the Datalayers server.
+12. Expand **Advanced Settings** and configure advanced options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
-13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink under the **Action Outputs** tab.
+13. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can connect to the Datalayers server.
 
-14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+14. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink under the **Action Outputs** tab.
+
+15. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule. You can see the new rule on the **Rules** page. Click the **Actions (Sink)** tab to see the new Datalayers Sink.
 

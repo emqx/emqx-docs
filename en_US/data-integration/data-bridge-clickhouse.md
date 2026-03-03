@@ -1,11 +1,5 @@
 # Ingest MQTT Data into ClickHouse 
 
-::: tip
-
-The ClickHouse data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [ClickHouse](https://clickhouse.com/) is a high-performance, column-oriented SQL database management system (DBMS) for online analytical processing (OLAP), that excels in processing and analyzing large volumes of data with minimal latency. It features excellent query performance, a flexible data model, and scalable distributed architecture, making it suitable for various data analytics scenarios. EMQX supports integration with ClickHouse, which enables you to ingest the MQTT messages and events data into ClickHouse for further analysis and processing.
 
 ## How It Works
@@ -151,13 +145,15 @@ This section demonstrates how to create a rule in Dashboard for processing messa
 
       :::
 
-11. Advanced settings (optional): See [Advanced Configurations](#advanced-configurations).
+11. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-12. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
+12. **Advanced settings (optional)**: See [Advanced Configurations](#advanced-configurations).
 
-13. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+13. Before clicking **Create**, you can click the **Test Connectivity** button to ensure that you can connect to the ClickHouse server.
 
-14. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
+14. Click the **Create** button to complete the Sink configuration. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+15. On the **Create Rule** page, verify the configured information and click the **Create** button to generate the rule. The rule you created is shown in the rule list and the **status** should be connected.
 
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you see the new ClickHouse Sink. 

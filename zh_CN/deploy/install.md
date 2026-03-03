@@ -6,11 +6,9 @@
 
 EMQX 每个版本会发布各个操作系统与平台程序包以及 Docker 镜像，并在 EMQX 官网提供下载，您可以点击以下链接下载：
 
-EMQX 开源版：<https://www.emqx.com/zh/downloads-and-install/broker>
-
 EMQX 企业版：<https://www.emqx.com/zh/downloads-and-install/enterprise>
 
-此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases)下载 alpha、beta、rc 等版本的安装包。
+此外，您还可在我们的 [GitHub Release 页面](https://github.com/emqx/emqx/releases) 下载 alpha、beta、rc 等版本的安装包。
 
 :::tip
 除了私有部署外，我们也提供了全托管的 EMQX Cloud 服务，您只需几步注册即可轻松体验 EMQX 提供的 MQTT 消息服务，欢迎前往 [EMQX Cloud 门户](https://cloud.emqx.com/)页面免费试用。
@@ -22,11 +20,11 @@ EMQX 可以跨平台的在多种操作系统和硬件平台上运行，以下是
 
 | 操作系统                          | 支持版本                 | x86_64/amd64 | arm64 |
 | :-------------------------------- | :----------------------- | :----------- | :---- |
-| Ubuntu     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是   | 是  |
-| Debian     | Debian 11<br />Debian 12<br />Debian 13 | 是   | 是  |
-| CentOS/RHEL  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是   | 是  |
-| Amazon Linux | Amazon Linux 2<br />Amazon Linux 2023            | 是   | 是  |
-| macOS       | macOS 14<br />macOS 15 | 是   | 是  |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | 是 | 是 |
+| [Debian](./install-debian.md)     | Debian 11<br />Debian 12<br />Debian 13          | 是 | 是 |
+| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | 是 | 是 |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | 是 | 是 |
+| [macOS](./install-macOS.md)       | macOS 14<br />macOS 15                           | 否 | 是 |
 
 <!-- ## 硬件规格
 

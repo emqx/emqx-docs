@@ -1,11 +1,5 @@
 # OCPP 协议网关
 
-::: tip
-
-OCPP 协议网关是 EMQX 企业版功能。
-
-:::
-
 [OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) 是一个连接充电桩与中央管理系统的开放通信协议，旨在为电动汽车充电基础设施提供统一的通信规范。OCPP 网关是一个消息协议转换器，它弥补了 OCPP 和 MQTT 协议之间的差距，因此使用这些协议的客户端能够相互通信。
 
 EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/) 版本的协议网关，能够接入符合 OCPP 规范的各品牌充电桩设备，并通过规则引擎与数据集成、REST API 等方式与管理系统（Central System）集成，帮助用户快速构建电动汽车充电基础设施。

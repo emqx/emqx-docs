@@ -85,7 +85,7 @@ mqttPubSubTopic: mqttuser0002/pubsub/#
 
 The given example defines a multi-valued attribute for each action. Each attribute can repeat zero or more times depending on how many topics are allowed for this action.
 
-Edit the LDAP configuration file `sladp.conf` to include the schema and LDIF file so that they will be loaded when the LDAP server is started. Below is an example `sladp.conf` file:
+Edit the LDAP configuration file `slapd.conf` to include the schema and LDIF file so that they will be loaded when the LDAP server is started. Below is an example `slapd.conf` file:
 
 ::: tip
 

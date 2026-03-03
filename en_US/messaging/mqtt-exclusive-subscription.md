@@ -18,12 +18,10 @@ Exclusive subscriptions must be prefixed with `$exclusive/`, in the above exampl
 
 ## Configure Exclusive Subscription via Configuration File
 
-The exclusive subscription is disabled by default. You can enable this feature in `etc/emqx.conf`.
+The exclusive subscription is disabled by default. You can enable this feature in configuration file:
 
 ```bash
-mqtt.exclusive_subscription {
-    enable = true
-}
+mqtt.exclusive_subscription.enable = true
 ```
 
 ## Try Exclusive Subscription with MQTTX Desktop

@@ -25,7 +25,7 @@ EMQX can be run with [Docker](../deploy/install-docker.md), installed with [EMQX
 - macOS
 - Linux
 
-For other platforms not listed above, you can try to [build and install with source code](../deploy/install-source.md) (for EMQX Open Source edition) or simply [contact EMQ](https://www.emqx.com/en/contact) for support.
+For other platforms not listed above, you can [contact EMQ](https://www.emqx.com/en/contact) for support.
 
 <!-- TODO @wivwiv Update K8s link when EMQX Terraform 5.0 document ready -->
 
@@ -36,10 +36,6 @@ In addition, you can also deploy EMQX with one click through [EMQX Terraform](ht
 ### Install EMQX Using Docker
 
 Container deployment is the quickest way to start exploring EMQX. This quick start guide shows you how to install and run EMQX through Docker. 
-
-:::: tabs type:card
-
-::: tab EMQX Enterprise
 
 1. To download and start the latest version of EMQX, enter the command below.
 
@@ -58,35 +54,9 @@ Container deployment is the quickest way to start exploring EMQX. This quick sta
 
    `public`
 
-:::
-
-::: tab EMQX Open Source
-
-1. To download and start the latest version of EMQX, enter the command below.
-
-   Ensure [Docker](https://www.docker.com/) is installed and running before you execute this command.
-
-   ```bash
-   docker run -d --name emqx -p 1883:1883 -p 8083:8083 -p 8084:8084 -p 8883:8883 -p 18083:18083 emqx/emqx:latest
-   ```
-
-2. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the  [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
-
-   Default user name and password:
-
-   `admin`
-
-   `public`
-
-   <!--后续补上 dashboard的截图-->
-
-:::
-
-::::
-
 ### Install EMQX Using Installation Package
 
-You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS13 amd64 as an example to illustrate the installation steps.
+You can also install EMQX using installation packages on a computer or VM and easily adjust the configurations or run performance tuning. The instructions below use macOS 15 (Sequoia) and arm64 architecture (Apple Silicon) as an example to illustrate the installation steps.
 
 ::: tip
 
@@ -94,13 +64,9 @@ Considering all the runtime dependencies, it is recommended to use installation 
 
 :::
 
-:::: tabs type:card
-
-::: tab EMQX Enterprise
-
 1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/enterprise?os=macOS).
 
-2. Select the latest version `@EE_VERSION@` and select `macOS 13 amd64 / zip` from **Package Type**.
+2. Select the latest version `@EE_VERSION@` and select `macOS 15 arm64 / zip` from **Package Type**.
 
 3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
 
@@ -128,45 +94,6 @@ Considering all the runtime dependencies, it is recommended to use installation 
 
 To uninstall EMQX after your testing, simply delete the EMQX folder.
 
-:::
-
-::: tab EMQX Open Source
-
-1. Go to the [macOS tab of the official download site](https://www.emqx.com/en/downloads-and-install/broker?os=macOS).
-
-2. Select the latest version `@CE_VERSION@` and select `macOS 13 amd64 / zip` from **Package Type**.
-
-3. Click the link below to download and install the package. You can also refer to the command instructions on the page.
-
-4. To run EMQX, enter:
-
-   ```bash
-   ./emqx/bin/emqx foreground
-   ```
-
-   This will start EMQX in an interactive shell. Closing the shell will stop EMQX.
-   Alternatively (but not recommended), you can also start EMQX in the background with the following command:
-
-   ```bash
-   ./emqx/bin/emqx start
-   ```
-
-5. Start your web browser and enter `http://localhost:18083/` ( `localhost` can be substituted with your IP address) in the address bar to access the [EMQX Dashboard](../dashboard/introduction.md), from where you can connect to your clients or check the running status.
-
-   The default user name and password are `admin` & `public`. You will be prompted to change the default password once logged in.
-
-6. To stop EMQX, enter:
-
-   ```bash
-   ./emqx/bin/emqx stop
-   ```
-
-To uninstall EMQX after your testing, delete the EMQX folder.
-
-:::
-
-::::
-
 
 ## Use MQTTX to Verify Connection
 
@@ -187,7 +114,7 @@ The broker address and the port information should be prepared before testing th
 
 1. Click [MQTTX Web](https://mqttx.app/web-client#/recent_connections) to visit the browser-based MQTTX.
 
-2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configure page:
+2. Configure and establish the MQTT connection. Click the **+ New Connection** button to enter the configuration page:
 
    - **Name**: Input a connection name, for example, `MQTTX_Test`.
 

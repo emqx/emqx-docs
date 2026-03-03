@@ -10,7 +10,7 @@ Developing plugins requires an understanding of EMQX and Erlang.
 
 ## Multilingual gRPC Hooks and Protocol Extension
 
-EMQX offers a multilingual extension combining [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) multilingual hooks and protocol extension.
+EMQX offers a multilingual extension combining multilingual [general-purpose Remote Procedure Calls (gRPC)](https://grpc.io/) hooks and protocol extension.
 
 Through multilingual extensions, users can write services in Python or Java and integrate them with EMQX through the gRPC channel, enabling features similar to plugins, such as Hooks processing or private TCP/UDP protocol parsing.
 

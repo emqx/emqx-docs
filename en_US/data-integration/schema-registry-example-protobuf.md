@@ -1,11 +1,5 @@
 # Schema Registry Example - Protobuf
 
-::: tip Note
-
-Schema Registry is an EMQX Enterprise feature.
-
-:::
-
 This page demonstrates how the schema registry and rule engine support message encoding and decoding in Protobuf format.
 
 ## Decoding Scenario

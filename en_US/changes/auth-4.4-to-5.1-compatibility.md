@@ -150,7 +150,7 @@ auth.redis.server = 127.0.0.1:6379
 auth.redis.pool = 8
 auth.redis.database = 0
 auth.redis.password = pass
-assword salt
+password salt
 auth.redis.auth_cmd = HMGET mqtt_user:%u password salt
 
 auth.redis.password_hash = salt,sha256
@@ -612,15 +612,15 @@ The authenticator will be ignored if the request fails or returns another status
 
 **Success response body (JSON):**
 
-| Name          | Type    | Required | Description             |
-| ------------- | ------- | -------- | ----------------------- |
-| result        | Enum    | true     | `allow | deny | ignore` |
-| is_supseruser | Boolean | false    |                         |
+| Name         | Type    | Required | Description             |
+| ------------ | ------- | -------- | ----------------------- |
+| result       | Enum    | true     | `allow | deny | ignore` |
+| is_superuser | Boolean | false    |                         |
 
 ```json
 {
   "result": "allow",
-  "is_supseruser": true
+  "is_superuser": true
 }
 ```
 

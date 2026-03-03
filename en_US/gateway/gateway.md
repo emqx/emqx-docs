@@ -2,19 +2,17 @@
 
 EMQX Multi-Protocol Gateway enables handling all non-MQTT protocol connections, authentication, and message sending and receiving. It provides a unified conceptual model for various protocols.
 
-Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different design and implementation differences, making it challenging to use them.
+Before EMQX 5.0, non-MQTT protocol access was implemented by separate protocol plugins. These plugins had different designs and implementations, making it challenging to use them.
 
 Starting from 5.0, EMQX offers the Multi-Protocol Gateway defines a unified conceptual and operational model to make it easier to use. 
 
-The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `emqx.conf`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
+The Multi-Protocol Gateway supports protocols such as MQTT-SN, STOMP, CoAP, LwM2M, etc. It can be enabled and configured directly in the Dashboard or managed using the HTTP API or `base.hocon`. On how to enable these gateways and how to customize the settings to better suit your business needs, you can click the link below for details. 
 
 - [MQTT-SN](./mqttsn.md)
 - [STOMP](./stomp.md)
 - [CoAP](./coap.md)
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
-
-The following gateways are only supported in the EMQX Enterprise edition:
 
 - [OCPP](./ocpp.md)
 - [GB/T 32960](./gbt32960.md)
@@ -29,7 +27,7 @@ EMQX Multi-Protocol Gateway defines a unified conceptual and operational model f
 Here's a brief overview of each component:
 
 - **Listener**: Support listener types: TCP, SSL, UDP, DTLS. Each gateway can create multiple listeners.
-- **Connection/Session**: Gateway creates a session for each accepted client connection, which manages the subscription list, deliver/receive queue, and retransmission logic of client messages.
+- **Connection/Session**: Gateway creates a session for each accepted client connection, which manages the subscription list, deliver/receive queue, and the retransmission logic of client messages.
 - **Publish/Subscribe**: Each type of gateway defines how to adapt to the MQTT protocol's PUB/SUB message model. Non-PUB/SUB protocols require configuring message topics and payloads, and each type of gateway may use a different message format.
 
 - **Authentication**: Each gateway can be configured with authenticators to use the client information for login authorization.
@@ -59,7 +57,7 @@ For protocols with a PUB/SUB concept, like [MQTT-SN](./mqttsn.md) and [Stomp](./
 For protocols without a PUB/SUB concept, such as [CoAP](./coap.md) and [LwM2M](./lwm2m.md), there are no definitions for topics, publishing, or subscribing. Here, the gateway must design the message content format, with each type potentially using a distinct format.
 
 - **CoAP**: The CoAP gateway uses the URI path and methods defined in the [Publish-Subscribe Broker for the CoAP](https://datatracker.ietf.org/doc/html/draft-ietf-core-coap-pubsub-09) standard. For details, see [Message Publish](./coap.md#message-publish), [Topic Subscribe](./coap.md#topic-subscribe), [Topic Unsubscribe](./coap.md#topic-unsubscribe).
-- **LwM2M**: The messaging model of LwM2M protocol is based on [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
+- **LwM2M**: The messaging model of LwM2M protocol is based on the [Resources Model and Operations](https://technical.openmobilealliance.org/OMNA/LwM2M/LwM2MRegistry.html). This is completely different from the Publish/Subscribe model of the MQTT protocol. For details, see [LwM2M Gateway - Message Format](./lwm2m.md#message-format).
 
 ### Authentications
 

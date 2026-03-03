@@ -57,7 +57,7 @@ Example:
 
 1. Select **Access Control** -> **Authentication** from the left navigation menu. 
 
-2. On the **Authentication** page, click **Create** at the top right corner. Click to select **JWT** as **Mechanism**, and click **Next**. Skip the Backend selection and go to the **Configuration** tab. 
+2. On the **Authentication** page, click **Create** in the top right corner. Click to select **JWT** as the **Mechanism**, and click **Next**. Skip the Backend selection and go to the **Configuration** tab. 
 
    <img src="./assets/authn-jwt.png" alt="JWT" style="zoom:67%;" />
 
@@ -74,6 +74,7 @@ Example:
      - `public-key`: Uses a private key to generate the JWT's signature and a public key for verification. Supported algorithms are RS256, RS384, RS512, ES256, ES384, and ES512. Configuration must include:
         - `Public Key`: Specify the public key in PEM format used to verify the signature.
 
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this JWT authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
    - **Disconnect After Expiration**: Configures whether to disconnect clients after their JWT expires, enabled by default.
    - **Payload**: Specify additional claims checks that the user wants to perform. Users can define multiple key-value pairs with the **Claim** and **Expacted Value** fields, where the key is used to find the corresponding claim in the JWT, so it needs to have the same name as the JWT claim to be checked, and the value is used to compare with the actual value of the claim. Currently, the placeholders supported are `${clientid}` and `${username}`. 
 

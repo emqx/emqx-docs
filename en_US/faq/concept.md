@@ -2,11 +2,10 @@
 
 ## Which products do we offer?
 
-EMQX has [3 products](https://www.emqx.com/en/products/emqx) in total. The different products support different number of connections, features, services, etc.
+EMQX has [two main product lines](https://www.emqx.com/en/products/emqx). Different products support different numbers of connections, features, services, etc.
 
-- EMQX Broker: EMQX open source version. It supports the popular IoT protocols MQTT, CoAP and LwM2M.
-- EMQX Enterprise: EMQX Enterprise version. It is based on the open source version, and adds data persistence (support Redis, MySQL, MongoDB, or PostgreSQL), data bridge to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment etc. It supports 1 million concurrent MQTT connections.
-- EMQX Cloud: [EMQX Cloud](https://www.emqx.com/cloud) is an MQTT middleware for the IoT from EMQ. As the world's first fully managed MQTT 5.0 public cloud service, EMQX Cloud provides a one-stop O&M colocation and a unique isolated environment for MQTT services. In the era of Internet of Everything, EMQX Cloud can help you quickly build industry applications and easily realize the collection, transmission, computation, and persistence of IoT data.
+- **EMQX Enterprise**: EMQX Enterprise is the commercial self-hosted edition of an MQTT messaging platform. It supports data persistence (supports Redis, MySQL, MongoDB or PostgreSQL), data integration to Kafka, LoRaWAN support, EMQX monitoring, Kubernetes deployment, etc. It supports 1 million concurrent MQTT connections.
+- **EMQX Cloud**: [EMQX Cloud](https://www.emqx.com/cloud) is our fully managed MQTT cloud service where EMQ handles all aspects of infrastructure deployment, maintenance, scaling, and upgrades. As the world's first fully managed MQTT 5.0 public cloud service, EMQX Cloud provides a one-stop O&M colocation and a unique isolated environment for MQTT services. In the era of Internet of Everything, EMQX Cloud can help you quickly build industry applications and easily realize the collection, transmission, computation and persistence of IoT data.
 
 ## What's a WebSocket? When to use a Websocket to connect to EMQX?
 

@@ -1,11 +1,5 @@
 # Schema Registry
 
-::: tip Note
-
-Schema Registry is an EMQX Enterprise feature.
-
-:::
-
 Because of the variety of IoT device terminals and the different coding formats used by various manufacturers, the need for a unified data format arises when accessing the IoT platform for device management by the applications on the platform.
 
 The Schema Registry manages the Schema used for coding and decoding, processes the encoding or decoding requests, and returns the results. The Schema Registry in collaboration with the rule engine can be adapted for device access and rule design in
@@ -16,10 +10,13 @@ EMQX Schema Registry currently supports codecs in the below formats:
 - [Avro](https://avro.apache.org)
 - [Protobuf](https://developers.google.com/protocol-buffers/)
 - [JSON Schema](https://json-schema.org/)
+- External HTTP server
 
 Avro and Protobuf are Schema-dependent data formats. The encoded data is binary and the decoded data is in [Map format](#rule-engine-internal-data-format-map). The decoded data can be used directly by the rule engine and other plugins. Schema Registry maintains Schema text for built-in encoding formats such as Avro and Protobuf.
 
 JSON schema can be used to validate if the input JSON object is following the schema definitions or if the JSON object output from the rule engine is valid before producing the data to downstream.
+
+External HTTP Server makes all decoding and encoding of payloads go through a configured black-box server that handles the logic.  It's useful for cases where one wishes to have custom encoding/decoding logic.
 
 The diagram below shows an example of a Schema Registry application. Multiple devices report data in different formats, which are decoded by Schema Registry into a uniform internal format and then forwarded to the backend application.
 
@@ -114,7 +111,7 @@ Starting with version 5.8.1, EMQX supports configuring an external Confluent Sch
 
 You can configure an external schema registry directly through the EMQX Dashboard, making it easy to manage your schema integration.
 
-Go to **Integration** -> **Schema Registry** on EMQX Dashboard. Select the **External** tab on the Schema page.
+Go to **Smart Data Hub** -> **Schema Registry** on EMQX Dashboard. Select the **External** tab on the Schema page.
 
 Click the **Create** button at the upper right corner. Configure the following fields:
 
@@ -206,7 +203,7 @@ select
 from 't'
 ```
 
-##### `schema_encode_and_tag` 
+##### `schema_encode_and_tag`
 
 This function uses a locally registered Avro schema, an external CSR schema name, and a subject to encode a payload (already in internal map format), and to tag the resulting payload with a schema ID.  The schema ID comes from registering the local schema to CSR.
 
@@ -223,7 +220,7 @@ select
 from 't'
 ```
 
-##### `schema_decode_tagged` 
+##### `schema_decode_tagged`
 
 This function uses a CSR name to decode a payload, assuming it is tagged with the schema ID retrieved from CSR.
 
@@ -235,4 +232,3 @@ select
   ) as decoded
 from 't'
 ```
-

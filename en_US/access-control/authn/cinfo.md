@@ -1,27 +1,26 @@
 # Client-Info Authentication
 
-::: tip Note
-
-The client-info authentication is only available in the EMQX Enterprise edition.
-
-:::
-
 Client-Info authentication (`cinfo` type) is a lightweight authentication mechanism that verifies client properties and attributes against user-defined rules. These rules make use of the Variform expressions to define matching conditions and determine the authentication outcome when a match is found. For example, to quickly block clients without a username, you can use the condition `str_eq(username, '')` with a result of `deny`.
 
 ## Configure Client-Info Authentication via Dashboard
 
-In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page. Click **Create** at the top right corner, then select **Client Info** as the **Mechanism**,  Client-Info authentication does not require selecting a backend, so you can proceed by clicking **Next** to enter the **Configure Parameters** step.
-
-1. Click **Add** in the **Checks**.
-   - In the **Match Conditions** input box, enter the Variform expression used to match client information. If there are multiple expressions, enter each on a new line. When all expressions return `true`, the authenticator will return the relevant result; otherwise, the current check will be skipped. The following variables are supported in the expressions:
-     - `username`: Username
-     - `clientid`: Client ID
-     - `client_attrs.*`: Client Attributes
-     - `peerhost`: Client IP
-     - `cert_subject`: TLS Certificate Subject
-     - `cert_common_name`: TLS Certificate Common Name
-   - Select `allow`, `ignore`, or `deny` from the **Result** dropdown menu.
-2. Click **Create** to complete the authentication configuration.
+1. In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page.
+2. Click **Create** at the top right corner, then select **Client Info** as the **Mechanism**. Client-Info authentication does not require selecting a backend, so you can proceed by clicking **Next** to enter the **Configure Parameters** step.
+3. Follow the instructions below to configure the backend:
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Client Info authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+   - Click **Add** in the **Checks**.
+     - In the **Match Conditions** input box, enter the Variform expression used to match client information. If there are multiple expressions, enter each on a new line. When all expressions return `true`, the authenticator will return the relevant result; otherwise, the current check will be skipped. The following variables are supported in the expressions:
+       - `username`: Username
+       - `clientid`: Client ID
+       - `client_attrs.*`: Client Attributes
+       - `peerhost`: Client IP
+       - `cert_subject`: TLS Certificate Subject
+       - `cert_common_name`: TLS Certificate Common Name
+     - From the **Result** dropdown menu, select the result to return if the match condition is true:
+       - `allow`: Allow the client to connect.
+       - `ignore`: Defer the authentication to the next authenticator in the chain.
+       - `deny`: Deny the client to connect.
+4. Click **Create** to complete the authentication configuration.
 
 ## Configure Client-Info Authentication via Configuration Items
 

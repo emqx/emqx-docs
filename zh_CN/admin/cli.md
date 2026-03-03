@@ -1557,23 +1557,18 @@ EMQX 的网关设计成可插拔。所以网关应用可以在启动/运行时�
 
 :::
 
-| 命令                   | 描述                |
-| ---------------------- | ------------------- |
-| license info           | 显示 License 信息。 |
-| license update License | 更新 License 信息。 |
-
 ### license info
 
 ```bash
 $ emqx ctl license info
-customer        : Evaluation
+customer        : Developer
 email           : contact@emqx.io
-deployment      : default
-max_connections : 100
-start_at        : 2023-01-09
-expiry_at       : 2028-01-08
-type            : trial
-customer_type   : 10
+deployment      : Development
+max_sessions    : 10000000
+start_at        : 2025-03-02
+expiry_at       : 2029-03-01
+type            : community
+customer_type   : 11
 expiry          : false
 ```
 
@@ -1584,6 +1579,14 @@ emqx ctl license update <YOUR_LICENSE_STRING>
 ```
 
 请将 `YOUR_LICENSE_STRING` 替换为实际的 License 字符串。
+
+### license update default
+
+恢复为默认社区版 License。
+
+```bash
+emqx ctl license update default
+```
 
 ## admins
 
@@ -1663,4 +1666,3 @@ Actions:
 ```
 
 注意，命令行仅仅用于查看，规则的创建和更新等管理操作必需要在控制台的界面中操作。
-

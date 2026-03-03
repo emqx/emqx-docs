@@ -1,10 +1,4 @@
 # Ingest MQTT Data into Azure Blob Storage
-::: tip
-
-The Azure Blob Storage data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Azure Blob Storage](https://azure.microsoft.com/en-us/products/storage/blobs/) is Microsoft's cloud-based object storage solution, designed specifically for handling large volumes of unstructured data. Unstructured data refers to data types that do not follow a specific data model or format, such as text files or binary data. EMQX can efficiently store MQTT messages in Blob Storage containers, providing a versatile solution for storing Internet of Things (IoT) data.
 
 This page provides a detailed introduction to the data integration between EMQX and Azure Blob Storage, and offers practical guidance on the rule and Sink creation.
@@ -20,7 +14,7 @@ EMQX utilizes rules engines and Sinks to forward device events and data to Azure
 1. **Device Connection to EMQX**: IoT devices trigger an online event upon successfully connecting via the MQTT protocol. The event includes device ID, source IP address, and other property information.
 2. **Device Message Publishing and Receiving**: Devices publish telemetry and status data through specific topics. EMQX receives the messages and compares them within the rules engine.
 3. **Rules Engine Processing Messages**: The built-in rules engine processes messages and events from specific sources based on topic matching. It matches corresponding rules and processes messages and events, such as data format transformation, filtering specific information, or enriching messages with context information.
-4. **Writing to Azure Blob Storage**: The rule triggers an action to write the message to Storage Container. Using the Azure Blob Storage Sink, users can extract data from processing results and send it to Blob Storage. Messages can be stored in text or binary format, or multiple lines of structured data can be aggregated into a single CSV file, depending on the message content and the Sink configuration.
+4. **Writing to Azure Blob Storage**: The rule triggers an action to write the message to Storage Container. Using the Azure Blob Storage Sink, users can extract data from processing results and send it to Blob Storage. Messages can be stored in text or binary format, or multiple lines of structured data can be aggregated into a single CSV or JSON Lines file, depending on the message content and the Sink configuration.
 
 After events and message data are written to Storage Container, you can connect to Azure Blob Storage to read the data for flexible application development, such as:
 
@@ -108,8 +102,6 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
 7. Set the **Container** by entering `iot-data`.
 
-8. Set the **Blob** by entering `iot-data-blob`.
-
 9. Select the **Upload Method**. The differences between the two methods are as follows:
 
    - **Direct Upload**: Each time the rule is triggered, data is uploaded directly to Azure Storage according to the preset object key and content. This method is suitable for storing binary or large text data. However, it may generate a large number of files.
@@ -145,17 +137,21 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
      Note that if all placeholders marked as required are not used in the template, these placeholders will be automatically added to the Blob Name as path suffixes to avoid duplication. All other placeholders are considered invalid.
 
-   - **Aggregation Type**: Currently, only CSV is supported. Data will be written to Azure Storage in comma-separated CSV format.
+   - **Aggregation Type**: Currently, CSV and JSON Lines are supported.
+      - `CSV`: Data will be written to Azure Storage in comma-separated CSV format.
+      - `JSON Lines`: Data will be written to Azure Storage in [JSON Lines](https://jsonlines.org/) format.
 
-   - **Column Order**: Adjust the order of rule result columns through a dropdown selection. The generated CSV file will first be sorted by the selected columns, with unselected columns sorted alphabetically following the selected columns.
+   - **Column Order** (applies only when the Aggregation Type is `CSV`): Adjust the order of rule result columns through a dropdown selection. The generated CSV file will first be sorted by the selected columns, with unselected columns sorted alphabetically following the selected columns.
 
    - **Max Records**: When the maximum number of records is reached, the aggregation of a single file will be completed and uploaded, resetting the time interval.
 
    - **Time Interval**: When the time interval is reached, even if the maximum number of records has not been reached, the aggregation of a single file will be completed and uploaded, resetting the maximum number of records.
 
-   ::: 
+   :::
 
    ::::
+
+10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
 11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 

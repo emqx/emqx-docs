@@ -1,16 +1,10 @@
 # Manage Data Replicas
 
-::: tip Note
-
-Managing Replication is an EMQX Enterprise feature.
-
-:::
-
 For an EMQX cluster, durable storage achieves high availability through multiple data replicas. If a node crashes, clients can immediately connect to a new node and recover data from the replicas on other nodes. This guide provides instructions on configuring data replication and ensuring high availability for durable storage. This guide consists of instructions for two scenarios: setting up a new EMQX cluster with durable storage and upgrading an existing cluster to enable durable storage.
 
 ## Initial Cluster Setup
 
-During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed in the runtime, and modifying them will not take any effect once the durable storage is initialized.
+During the initial setup of the cluster, several configuration parameters influence how durable storage is established and data replication starts. These parameters cannot be changed at runtime, and modifying them will not take any effect once the durable storage is initialized.
 
 ### Replication Factor
 

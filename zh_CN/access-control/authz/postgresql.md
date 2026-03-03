@@ -74,7 +74,7 @@ query = "SELECT permission, action, topic, qos, retain FROM mqtt_acl WHERE usern
 
 <!--详细配置请参考 [authz:postgresql](../../configuration/configuration-manual.html#authz:postgresql)。-->
 
-PostgreSQL authorizer 由 `type=postgresql` 标识。
+PostgreSQL 授权器由 `type=postgresql` 标识。
 
 配置示例：
 

@@ -88,7 +88,7 @@ EMQX 提供以下 REST API 供 Prometheus 采集系统指标：
 
 ::::
 
-更多 Prometheus pull 端点相关信息，请参考 [EMQX 开源版 API 文档](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)和 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
+更多 Prometheus pull 端点相关信息，请参考 [EMQX 企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
 :::tip 提示
 

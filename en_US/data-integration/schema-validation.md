@@ -1,11 +1,5 @@
 # Schema Validation
 
-::: tip Note
-
-Schema Validation is an EMQX Enterprise feature.
-
-:::
-
 EMQX includes built-in schema validation capabilities to ensure that only messages conforming to predefined data formats are published to subscribers from specified topics. Schema validation supports multiple schema formats such as JSON Schema, Protobuf, and Avro and built-in SQL statement validation. This page describes the schema validation feature and how to use it.
 
 ## Why Validate Data
@@ -52,7 +46,7 @@ This section demonstrates how to configure the schema validation feature and how
 
 This section demonstrates how to create and configure a schema validator in the Dashboard.
 
-1. Click on **Integrations** -> **Schema Validation** in the left navigation of the Dashboard.
+1. Click on **Smart Data Hub** -> **Schema Validation** in the left navigation of the Dashboard.
 2. Click **Create** at the top right of the **Schema Validation** page.
 3. On the Create Schema Validation page, configure the following settings:
    - **Name**: Enter the name of the validator.

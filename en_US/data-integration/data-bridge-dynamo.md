@@ -1,11 +1,5 @@
 # Ingest MQTT Data into DynamoDB
 
-::: tip
-
-The DynamoDB data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [DynamoDB](https://www.amazonaws.cn/en/dynamodb/) is a fully managed, high-performance, serverless key-value store database service on AWS. It is designed for applications that require fast, scalable, and reliable data storage. EMQX supports integration with DynamoDB, enabling you to save MQTT messages and client events to DynamoDB, facilitating the registration and management of IoT devices, as well as the long-term storage and real-time analysis of device data. Through the DynamoDB data integration, MQTT messages and client events can be stored in DynamoDB, and events can also trigger updates or deletions of data within DynamoDB, thereby enabling the recording of information such as device online status and connection history.
 
 This page provides a comprehensive introduction to the data integration between EMQX and DynamoDB with practical instructions on creating and validating the data integration.
@@ -209,13 +203,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      
        :::
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the server.
+10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the server.
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule for forwarding data through the DynamoDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new DynamoDB Sink.
 

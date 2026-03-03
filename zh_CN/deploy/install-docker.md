@@ -20,7 +20,7 @@
 
 ### Docker 部署注意事项
 
-1. 如果需要持久 Docker 容器 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
+1. 如果需要持久化 Docker 容器中生成的数据 ，请将以下目录挂载到容器外部，这样即使容器被删除数据也不会丢失：
 
    ```bash
    /opt/emqx/data
@@ -45,7 +45,7 @@
    
 2. Docker 内的 `localhost` 或 `127.0.0.1` 指向的是容器内部地址，如需访问宿主机地址请使用宿主机的真实 IP 或使用 [host 网络模式](https://docs.docker.com/network/host/)。如果您使用的是 Docker for Mac 或 Docker for Windows，可以使用 `host.docker.internal` 作为宿主机地址。
 
-3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 hostname 或者 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
+3. 由于 EMQX 使用 `data/mnesia/<节点名>` 作为数据存储目录，请使用 FQDN 等固定的信息作为节点名，避免因为节点名称变动导致数据丢失。
 
    对于单节点部署，需要使用 `EMQX_NODE_NAME` 环境变量配置节点名，格式为 `emqx@hostname`。您还应该设置容器主机名以保持一致，如上面示例所示。
 
@@ -134,8 +134,8 @@ Docker Compose 是一个用于编排和运行多容器的工具，下面将指�
 
 ## 下一步
 
-使用客户端连接到 EMQX，进行消息收发请参考[发布订阅操作](../messaging/publish-and-subscribe.md)。
+使用客户端连接到 EMQX，进行消息收发，请参考[发布订阅操作](../messaging/publish-and-subscribe.md)。
 
-配置 EMQX 参数及其他功能请参考 [配置文件手册](../configuration/configuration.md)。
+配置 EMQX 参数及其他功能，请参考[配置文件](../configuration/configuration.md)。
 
-将多个 EMQX 节点组建为一个集群请参考 [构建集群](./cluster/introduction.md)。
+将多个 EMQX 节点组建为一个集群，请参考[构建集群](./cluster/introduction.md)。

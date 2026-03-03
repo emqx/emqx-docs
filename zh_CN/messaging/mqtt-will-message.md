@@ -2,7 +2,7 @@
 
 EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消息，在客户端意外断开连接时，EMQX 将把遗嘱消息发送给相关的订阅者，以便订阅者可以得知并更新客户端状态。
 
-您可以使用客户端工具在 EMQX 中尝试此消息服务。本节介绍了如何使用 [MQTTX Desktop](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试遗嘱消息的发布和接收。
+您可以使用客户端工具在 EMQX 中尝试此消息服务。本节介绍了如何使用 [MQTTX Desktop ](https://mqttx.app/zh)和 [MQTTX CLI](https://mqttx.app/zh/cli) 来模拟客户端尝试遗嘱消息的发布和接收。
 
 :::tip 前置准备
 
@@ -15,7 +15,7 @@ EMQX 实现了 MQTT 的遗嘱消息功能。如果为客户端设置了遗嘱消
 
 1. 启动 EMQX 和 MQTTX Desktop。点击**新建连接**创建一个名为 `Demo` 的客户端连接作为发布者。
 
-   - 在**名称**栏中输入`Demo`。
+   - 在**名称**栏中输入 `Demo`。
    - 在本演示中，**服务器地址**使用本地主机 `127.0.0.1` 作为示例。
 
    ::: tip

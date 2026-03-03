@@ -1,19 +1,12 @@
 # Sparkplug B
 
-::: tip Note
-
-Schema Registry is an EMQX Enterprise feature. Currently, only the EMQX Enterprise supports the encoding and decoding of the Sparkplug B data format.
-
-:::
-
 [Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) is an open-source specification developed by the [Eclipse Foundation's TAHU project](https://www.eclipse.org/tahu/), designed to provide a well-defined payload and state management system for MQTT. The primary aim is to achieve interoperability and consistency within the industrial IoT sector.
 
 Sparkplug encoding scheme version B (Sparkplug B) defines the MQTT namespace for Supervisory Control and Data Acquisition (SCADA) systems, real-time control systems, and devices. It ensures standardized data transmission by encapsulating a structured data format that includes metrics, process variables, and device status information in a concise and easy-to-process format. By using Sparkplug B, organizations can improve their operational efficiency, avoid data silos, and enable seamless communication between devices within an MQTT network.
 
-This page guides you through the implementation of Sparkplug B in EMQX including data format, functions, and practical examples.
+This page guides you through the implementation of Sparkplug B in EMQX, including data format, functions, and practical examples.
 
 ## Sparkplug B Data Format
-
 
 Sparkplug B utilizes a well-defined payload structure to standardize data communication. At its core, it employs [Protocol Buffers (Protobuf)](https://developers.google.com/protocol-buffers) for structuring Sparkplug messages, resulting in lightweight, efficient, and flexible data interchange.
 
@@ -136,7 +129,7 @@ Suppose you get messages from a device on the topic `my/sparkplug/topic` and wan
    FROM "my/sparkplug/topic"
    ```
 
-   Here, `jq` function is used to iterate over the array of metrics and filter out the one with the name "`counter_group1/counter1_run`".
+   Here, the `jq` function is used to iterate over the array of metrics and filter out the one with the name "`counter_group1/counter1_run`".
 
    ::: tip
 
@@ -144,16 +137,16 @@ Suppose you get messages from a device on the topic `my/sparkplug/topic` and wan
 
    :::
 
-2. Click **+ Add Action** on the right side of the page. Select`Republish` from the **Action** drop-down list. Enter `intresting_counters/counter1_run_updates` as the republish topic and enter `${item}` in the **Payload** field for the action. Click **Add**.
-3.  Back on the **Create Rule** page, click **Create**. You can see a rule is created in the Rule list.
+2. Click **+ Add Action** on the right side of the page. Select `Republish` from the **Action** drop-down list. Enter `interesting_counters/counter1_run_updates` as the republish topic and enter `${item}` in the **Payload** field for the action. Click **Add**.
+3.  Back on the **Create Rule** page, click **Create**. You can see that a rule is created in the Rule list.
 
 #### Test the Rule
 
-You can simulate an MQTT client using the MQTTX client tool to publish the Sparkplug B message to the topic `my/sparkplug/topic`. Then, you can verify that the message is transformed and forwarded to the topic `intresting_counters/counter1_run_updates` as a JSON formatted message:
+You can simulate an MQTT client using the MQTTX client tool to publish the Sparkplug B message to the topic `my/sparkplug/topic`. Then, you can verify that the message is transformed and forwarded to the topic `interesting_counters/counter1_run_updates` as a JSON-formatted message:
 
-1. Open MQTTX client desktop and connect to the EMQX broker. For detailed information on working with the MQTTX, refer to [MQTTX Client](../messaging/publish-and-subscribe.md).
+1. Open the MQTTX client desktop and connect to the EMQX broker. For detailed information on working with the MQTTX, refer to the [MQTTX Client](../messaging/publish-and-subscribe.md).
 
-2. Create a new subscription and subscribe to the topic `intresting_counters/counter1_run_updates`.
+2. Create a new subscription and subscribe to the topic `interesting_counters/counter1_run_updates`.
 
 3. In the message-sending area at the lower right corner, enter `my/sparkplug/topic` as the topic. Select `Base64` as the payload type.
 
@@ -269,11 +262,11 @@ DO spb_encode(item) AS item
 FROM "my/sparkplug/topic"
 ```
 
-In the above rule, the `jq` function outputs an empty array if the value of the metric with the name `counter_group1/counter1_run` is 0 or smaller. This means that the message will not be forwarded to any of the actions connected to the rule, if the value is 0 or smaller.
+In the above rule, the `jq` function outputs an empty array if the value of the metric with the name `counter_group1/counter1_run` is 0 or smaller. This means that the message will not be forwarded to any of the actions connected to the rule if the value is 0 or smaller.
 
 ### Split Messages
 
-Consider a scenario where you want to split a Sparkplug B encoded message into multiple messages, with each metric in the metrics array is republished as a separate Sparkplug B encoded message. This can be accomplished with the following rule:
+Consider a scenario where you want to split a Sparkplug B encoded message into multiple messages, with each metric in the metrics array being republished as a separate Sparkplug B encoded message. This can be accomplished with the following rule:
 
 ```sql
 FOREACH
@@ -293,11 +286,11 @@ FROM "my/sparkplug/topic"
 
 In the above rule, the `jq` function outputs an array with multiple items (given that there is more than one item in the metrics array).
 All the actions connected to the rule will be triggered for each item in the array.
-With the rule above you need to set the payload in the republish action to `${output_payload}` as `output_payload` is the name we assigned to the Sparkplug B encoded message in the `DO` clause.
+With the rule above, you need to set the payload in the republish action to `${output_payload}` as `output_payload` is the name we assigned to the Sparkplug B encoded message in the `DO` clause.
 
 ### Split Messages and Send to Topics Based on Content
 
-Consider a scenario where you want to split a Sparkplug B encoded message but you also want to send each message to a different topic based on, for example, the metrics name. Suppose that the output topic name should be constructed by concatenating the strings `"my_metrics/"` with the name of the metric contained in the message. You can accomplish this with the following slightly modified code:
+Consider a scenario where you want to split a Sparkplug B encoded message, but you also want to send each message to a different topic based on, for example, the metrics name. Suppose that the output topic name should be constructed by concatenating the strings `"my_metrics/"` with the name of the metric contained in the message. You can accomplish this with the following slightly modified code:
 
 
 ```sql

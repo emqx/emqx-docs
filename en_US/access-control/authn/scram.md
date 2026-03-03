@@ -10,9 +10,13 @@ SCRAM authenticator only supports MQTT 5.0 connection.
 
 ## Configure with Dashboard
 
-On [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation tree to enter the **Authentication** page. Click **Create** at the top right corner, then click to select **SCRAM** as **Mechanism**, and **Built-in Database** as **Backend**. This will lead you to the **Configuration** tab.
-
-Set **Password Hash** as **sha256** or **sha512** and click **Create** to finish the settings.
+1. On the [EMQX Dashboard](http://127.0.0.1:18083/#/authentication), click **Access Control** -> **Authentication** on the left navigation menu.
+2. Click **Create** at the top right corner, then click to select **SCRAM** as **Mechanism**, and **Built-in Database** as **Backend**. This will lead you to the **Configuration** tab.
+3. Configure the following settings for the authentication backend:
+   - **Password Hash**: Select the password hash algorithm: `sha256` or `sha512`.
+   - **Iteration Count**: This parameter defines the number of iterations used in the SCRAM authentication process to hash the password. A higher iteration count increases security by making the hashing process more computationally expensive, thereby slowing down brute force attacks. The default value is `4096`. Adjusting this value can impact performance and security, so it should be configured based on your system's needs.
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Built-in Database authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
+4. Click **Create** to finish the settings.
 
 ## Configure with Configuration Items
 
@@ -35,3 +39,4 @@ where,
 ## Authentication Flow
 
 ![scram_workflow](./assets/scram_workflow.png)
+

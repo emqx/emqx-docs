@@ -2,7 +2,7 @@
 
 EMQX adopts a distributed storage schema and also introduces a cluster transfer feature to ensure the system's high availability.
 
-This page discusses how to backup your operating data and configuration files to prevent data losses in case of system malfunctions.
+This page discusses how to back up your operating data and configuration files to prevent data loss in case of system malfunctions.
 
 ## Function Description
 
@@ -11,7 +11,7 @@ EMQX provides CLI commands for data import and export to implement backup and re
 - In EMQX 4.x, a single JSON file was used to save all necessary data of EMQX configuration and the built-in database.
 - In EMQX 5.x, the exported data is compressed into a tar file format, allowing for more efficient and structured handling of potentially large amounts of user data.
 
-In addition to CLI commands, the EMQX Enterprise edition also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
+In addition to CLI commands, the EMQX Enterprise also offers a data backup and recovery page on the Dashboard, where you can perform data import and export operations.
 
 The data that EMQX supports for import and export includes:
 
@@ -28,11 +28,11 @@ The data that EMQX supports for import and export includes:
   - Blacklist data
   - Retained messages
 - SSL/TLS certificates stored in the EMQX data directory (`node.data_dir`)
-- Authorization acl.conf file stored in the EMQX data directory
+- Authorization `acl.conf` file stored in the EMQX data directory
 
 ::: tip Special Note
 
-1. The exported file only includes SSL/TLS certificates and acl.conf file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
+1. The exported file only includes SSL/TLS certificates and the `acl.conf` file stored in the EMQX data directory. If there are any certificates or acl.conf files located outside the data directory, manually copy them to the appropriate locations before importing data to ensure completeness and correctness.
 2. The exported file name format is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`.
 3. Starting from EMQX v5.7.1, even if the storage method of retained messages is configured as ram (memory), it will also be backed up.
 
@@ -47,7 +47,6 @@ Data can be exported from any running cluster node.
 To import data, the EMQX node must be running, and some conditions need to be met for the import operation to be successful:
 
 - If the [core node + replica node](../deploy/cluster/mria-introduction.md) mode is enabled, data import can only be performed on the core node. This will not affect the actual import behavior, as data will be replicated to all cluster nodes, including core and replica nodes. Operating on the core node ensures correct data import.
-- Data exported from an EMQX Enterprise Edition cluster cannot be imported into an EMQX open-source version cluster.
 - The data file cannot be renamed.
 
 If any of the above conditions are not met, the import process will be aborted, and a corresponding error message will be displayed.
@@ -63,12 +62,6 @@ Therefore, importing data into an EMQX cluster without clearing data may require
 :::
 
 ## Dashboard Example
-
-::: tip
-
-This section only applies to the EMQX Enterprise edition.
-
-:::
 
 This section explains how to perform data import and export operations on the Dashboard.
 
@@ -96,7 +89,7 @@ This section explains how to perform data import and export operations on the Da
 
 ## CLI Example
 
-This section shows how to import and export data using the command Line Interface.
+This section shows how to import and export data using the command-line interface.
 
 1. Export data. The file name format of the exported file is `emqx-export-YYYY-MM-DD-HH-mm-ss.sss.tar.gz`, and the export directory is `<EMQX data directory>/backup`:
 

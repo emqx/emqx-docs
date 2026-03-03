@@ -14,7 +14,7 @@ Knowledge about [basic EMQX authorization concepts](./authz.md)
 MySQL authorizer supports almost any storage schema. You can determine how to store credentials and access them as your business needs, for example, using one or multiple tables, views, etc.
 
 Users need to provide a query statement template and ensure the following fields are included:
-* `permission` value specifies the applied action if the rule matches. Should be one of `deny` or `allow`.
+* `permission` value specifies the applied action if the rule matches. It should be one of `deny` or `allow`.
 * `action` value specifies the request for which the rule is relevant. Should be one of `publish`, `subscribe`, or `all`.
 * `topic` value specifies the topic filter for topics relevant to the rule. Should be a string that supports wildcards and [topic placeholders](./authz.md#topic-placeholders).
 * `qos` (Optional) value specifies the QoS levels that the rule applies to. Value options are `0`, `1`, `2`. It can also be a string separated by `,` to specify multiple QoS levels, e.g. `0,1`. The default is all QoS levels.

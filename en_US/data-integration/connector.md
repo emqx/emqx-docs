@@ -12,9 +12,9 @@ Taking MySQL Sink as an example, the relationship between the connector, rules, 
 
 ### Features and Advantages
 
-When creating Sinks/Sources, users can choose an existing connector, without worrying about the details of the underlying connection. The benefits of this design are:
+When creating Sinks/Sources, users can choose an existing connector without worrying about the details of the underlying connection. The benefits of this design are:
 
-- Separating connection configuration from data processing and mapping configuration, making the design of data processing flows more modular and flexible.
+- Separating connection configuration from data processing and mapping configuration makes the design of data processing flows more modular and flexible.
 - The creation and configuration of connectors do not affect the design of data processing flows. If connection information needs to be changed, it can be modified in the connector, which helps simplify configuration and maintenance.
 - For some external data systems that need to connect to multiple Sinks/Sources, this can be achieved by creating a single connector, avoiding repetitive configuration work.
 
@@ -33,12 +33,6 @@ You can also create a connector during the process of creating a Sink/Source, wh
 2. Click the **Create** button in the top right corner of the page to enter the connector creation process.
 
 3. On the connector type selection page, select the required connector and click **Next** to fill in the connection parameters. Supported connectors can be referenced [here](./data-bridges.md#supported-integrations).
-
-   :::tip 
-
-   In the EMQX Open Source edition, only HTTP and MQTT connectors are supported. 
-
-   :::
 
    ![EMQX Select Connector](./assets/choose-connector-type.png)
 

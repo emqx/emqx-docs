@@ -7,13 +7,12 @@ Supported versions:
 - Ubuntu 24.04
 - Ubuntu 22.04
 - Ubuntu 20.04
-- Ubuntu 18.04
 
-## Install with Apt Source
+## Install with Apt Package Manager
 
-EMQX supports installing with Apt source to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with Apt source:
+EMQX supports installing with Apt Package Manager to provide our users with a convenient and reliable way to manage EMQX installation and updates. Here is how to install EMQX with apt:
 
-1. Download the EMQX repository:
+1. Install the EMQX apt repository:
 
    ```bash
    curl -s https://packagecloud.io/install/repositories/emqx/emqx-enterprise5/script.deb.sh | sudo bash
@@ -31,7 +30,7 @@ EMQX supports installing with Apt source to provide our users with a convenient 
    sudo systemctl start emqx
    ```
 
-## Install with Package
+## Manual package installation
 
 EMQX supports installation via deb packages or tar.gz packages. For installation on other supported systems or to try other versions, please visit the [EMQX Enterprise download site](https://www.emqx.com/en/downloads-and-install/enterprise) for installation information.
 

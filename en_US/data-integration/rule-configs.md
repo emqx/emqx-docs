@@ -1,6 +1,6 @@
 # Use Rules with Configuration Files
 
-By modifying the configuration file `emqx.conf`, you can configure rules before EMQX starts.
+By modifying the configuration file `base.hocon`, you can configure rules before EMQX starts.
 
 ## Structure of Rule Configuration
 
@@ -103,7 +103,7 @@ For details of data bridges, see [Data Integration](./data-bridges.md)
 We can use rules to handle messages with specific topics. 
 An example of a rule for processing mqtt messages is given below.
 
-Add the following configs to the end of the `emqx.conf` file, 
+Add the following configs to the end of the `base.hocon` file, 
 
 ```js
 rule_engine {
@@ -135,7 +135,7 @@ The rule first executes the SQL statement, selects the `qos` field from the mess
 
 The rule uses **event-topics** starting with **$events/** to process EMQX events. An example of a rule that handles the "client connected" event is given below.
 
-Add the following configs to the end of the `emqx.conf` file, 
+Add the following configs to the end of the `base.hocon` file, 
 
 ```js
 rule_engine {
@@ -157,7 +157,7 @@ For the event types supported by the rule and the available fields, see: [events
 
 Some data bridges (such as the MQTT bridge) can also be used as the data source of rules. Rules use **data bridge topics** starting with **$bridges/** to handle events triggered by data bridge. An example of a rule that uses "MQTT bridge" as a data source is given below.
 
-Add the following configs to the end of the `emqx.conf` file, 
+Add the following configs to the end of the `base.hocon` file, 
 
 ```js
 rule_engine {

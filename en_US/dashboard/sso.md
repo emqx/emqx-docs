@@ -1,11 +1,5 @@
 # Single Sign-On (SSO)
 
-::: tip
-
-The Single Sign-On (SSO) is an EMQX Enterprise edition feature.
-
-::: 
-
 Single Sign-On (SSO) is an authentication mechanism that allows users to log in to multiple applications or systems using a single set of credentials, such as a username and password, without the need for separate authentication in each application. When EMQX Dashboard enables the SSO feature, users can conveniently log in to the EMQX Dashboard using their enterprise account credentials. Organizations can centrally manage user identities and permissions and simplify their user management processes. This feature enhances the security of enterprise data and systems while ensuring user convenience.
 
 EMQX implements SSO functionality based on Lightweight Directory Access Protocol (LDAP) and the Security Assertion Markup Language (SAML) 2.0 standard, supporting integration with mainstream identity services such as [OpenLDAP](https://www.openldap.org/), [Azure AD (Microsoft Entra ID](https://azure.microsoft.com/en-in/products/active-directory), [Okta](https://www.okta.com/), [OneLogin](https://www.onelogin.com/), and more. 
@@ -14,7 +8,7 @@ EMQX implements SSO functionality based on Lightweight Directory Access Protocol
 
 EMQX Dashboard allows you to integrate LDAP for SSO. LDAP is an application-layer protocol to access and maintain distributed directory information services. It is a common authentication and authorization protocol for SSO solutions in enterprise environments.
 
-EMQX sends user LDAP credentials to the directory server for validation when using LDAP SSO. Upon successful validation, it creates user session information and logs the user into the Dashboard.
+EMQX sends the user's LDAP credentials to the directory server for validation when using LDAP SSO. Upon successful validation, it creates user session information and logs the user into the Dashboard.
 
 ## SAML-Based SSO
 
@@ -27,7 +21,7 @@ With SAML SSO, users only need to authenticate themselves once with the Identity
 1. Administrators configure and enable SSO in the Dashboard. Once configured, the EMQX Dashboard displays an SSO entry point on the login page.
 2. User information is configured on the Identity Provider (IdP) side.
 3. Users are guided to choose different Single Sign-On methods on the Dashboard login page.
-4. After successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard.
+4. After a successful login, EMQX Dashboard creates a session based on user information, allowing users to access the Dashboard.
 5. Administrators assign roles and permissions to different users. Users can access corresponding resources after refreshing their login.
 
 ## Configuration Examples

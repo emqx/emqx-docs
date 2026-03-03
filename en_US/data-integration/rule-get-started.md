@@ -56,7 +56,7 @@ On the **Add Action** page, select **Republish** from the **Type of Action** dro
 
 - **QoS**: Set the QoS of the republished message, "0" in this example;
 
-- **Retain**: Set whether to forward this message as a retained message, for this tutorial, keep the default setting, **false**;
+- **Retain**: Set whether to forward this message as a retained message; for this tutorial, keep the default setting, **false**;
 
 - **Payload**: Enter "${payload}", indicating the republished message will have the same payload as the original message, without any modifications.
 

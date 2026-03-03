@@ -325,7 +325,7 @@ As of EMQX Enterprise version 5.0.0, EMQX no longer provides [Auto subscription]
 
 ## Gateway
 
-In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules (only for the enterprise edition). However, in EMQX 5.0, we have introduced a new concept called Gateway.
+In EMQX 4.x, various protocols can be configured through corresponding Plugins and Modules. However, in EMQX 5.0, we have introduced a new concept called Gateway.
 
 Clients of other protocols than MQTT (LwM2M, CoAP, STOMP, MQTT-SN) are no longer listed as MQTT clients on the Dashboard **Connections** page and in the `GET /clients` API. They can be found in **Management** -> **Gateways** or listed with `GET /gateway/{name}/clients` API.
 

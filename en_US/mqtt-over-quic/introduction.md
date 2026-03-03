@@ -1,6 +1,6 @@
 # MQTT over QUIC
 
-The MQTT is designed to work on top of TCP protocol that provides a reliable, ordered, and lossless stream of bytes in both directions. However, in the field of the Internet of Vehicles (IoV), there is an increasing demand for real-time and efficient message transmission, and the limitations of TCP are becoming apparent. With the increasing interconnection of vehicles, sensors, and infrastructure, overcoming the bottlenecks of TCP transmission is essential for building a safer, smarter, and more agile transportation ecosystem.
+The MQTT is designed to work on top of the TCP protocol, which provides a reliable, ordered, and lossless stream of bytes in both directions. However, in the field of the Internet of Vehicles (IoV), there is an increasing demand for real-time and efficient message transmission, and the limitations of TCP are becoming apparent. With the increasing interconnection of vehicles, sensors, and infrastructure, overcoming the bottlenecks of TCP transmission is essential for building a safer, smarter, and more agile transportation ecosystem.
 
 To address this, EMQX 5.0 introduced the MQTT over Quick UDP Internet Connections (QUIC) protocol. While retaining compatibility with all MQTT protocol features, this protocol allows IoT clients to establish connections and communicate with EMQX via QUIC. This brings significant advantages to client connections. Clients using QUIC can improve connection and message throughput performance while reducing latency, especially in common scenarios like Internet of Vehicles (IoV), where weak networks, frequently changing links, and unstable network environments are prevalent. 
 
@@ -13,7 +13,7 @@ For now, MQTT over QUIC is not yet the standard protocol for MQTT, but it has th
 
 ## Introduction of QUIC
 
-QUIC is a new transport protocol that offers faster connection establishment speeds. It was originally developed by Google, and designed to overcome specific inefficiencies in TCP and TLS, which are traditional building blocks of network communication so as to meet the increasing demand for more efficient, secure, and low-latency protocols from clients. Later, it was adopted as a global standard by the Internet Engineering Task Force (IETF).
+QUIC is a new transport protocol that offers faster connection establishment speeds. It was originally developed by Google and designed to overcome specific inefficiencies in TCP and TLS, which are traditional building blocks of network communication, so as to meet the increasing demand for more efficient, secure, and low-latency protocols from clients. Later, it was adopted as a global standard by the Internet Engineering Task Force (IETF).
 
 By using a more efficient algorithm that allows for a quicker ramp-up of data transmission rates, it improves congestion control. Additionally, QUIC uses a stream-based multiplexing architecture that allows for independent transmission of data streams, which helps to avoid head-of-line blocking and can improve performance in high packet loss or delay scenarios.
 
@@ -28,7 +28,7 @@ MQTT over QUIC is particularly suitable for businesses with high requirements fo
 - A slow ramp-up of traffic due to a slow start using a congestion window 
 - Head of line blocking
   When a packet is lost, the whole transmission is blocked until it is recovered. This increases the latency significantly.
-- No awareness of the upper layer protocols
+- No awareness of the upper-layer protocols
   TCP treats all data transmission equally, without distinguishing between different types of data or businesses that may be using the same network connection.
 
 For more information on the features and benefits of MQTT over QUIC to enhance the user experience in weak and unstable network environments, see [Features and Benefits](./features-mqtt-over-quic.md).

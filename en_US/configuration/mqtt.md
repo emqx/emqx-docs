@@ -2,7 +2,7 @@
 
 [MQTT](https://mqtt.org/) is a standard messaging protocol for the Internet of Things (IoT). It is designed as an extremely lightweight publish/subscribe messaging transport that is ideal for connecting remote devices with a small code footprint and minimal network bandwidth. 
 
-EMQX is 100% MQTT 5.0 and 3.x compliant, this section will introduce the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
+EMQX is 100% MQTT 5.0 and 3.x compliant. This section introduces the basic configuration items for MQTT-related features, covering topics like basic MQTT settings, subscription settings, session settings, force shutdown settings, and forced garbage collection settings.
 
 ## Basic MQTT Configurations
 
@@ -10,7 +10,9 @@ This section will introduce the configuration settings that determine how the MQ
 
 :::tip
 
-You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
+If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
+This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
 
 :::
 
@@ -30,13 +32,13 @@ mqtt {
 Where, 
 
 | **Configuration Items** | Dashboard UI         | **Description**                                              | **Default value** | **Optional Values** |
-| ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------ |
-| `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                    |
-| `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`     |
-| `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` - `35`         |
-| `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                    |
-| `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` - `65535`      |
-| `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`    |
+| ----------------------- | -------------------- | ------------------------------------------------------------ | ----------------- | ------------------- |
+| `max_packet_size`       | Max Packet Size      | MQTT packets are used to send messages between MQTT clients and EMQX.<br /><br /> This sets the maximum MQTT packet size allowed. | `1MB`             |                     |
+| `max_clientid_len`      | Max Client ID Length | This sets the maximum length of an MQTT client ID.<br /><br />It can help to prevent clients from using excessively long client IDs that could cause issues. | `65535`           | `23` - `65535`      |
+| `max_topic_levels`      | Max Topic Levels     | MQTT topics are used to organize and categorize messages. <br /><br />This sets the maximum number of levels allowed in an MQTT topic. | `128`             | `1` - `35`          |
+| `max_qos_allowed`       | Max QoS              | QoS levels determine the level of reliability and delivery assurance for messages.<br /><br /> This sets maximum quality of service (QoS) level that is allowed for MQTT messages. |                   |                     |
+| `max_topic_alias`       | Max Topic Alias      | Topic aliases are a way to reduce the size of MQTT packets by using a shorter alias instead of the full topic name.<br /><br /> This sets the maximum number of topic aliases that can be used in an MQTT session. | `65535`           | `1` - `65535`       |
+| `retain_available`      | Retain Available     | Retained messages are used to store the last message published to a topic, so that new subscribers to the topic can receive the most recent message.<br /><br /> This sets whether to enable retained messages feature in MQTT. | `true`            | `true`, `false`     |
 
 ## Subscription Settings
 
@@ -46,7 +48,9 @@ This section introduces how to configure shared, wildcard, and exclusive subscri
 
 :::tip
 
-You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+You can also find the corresponding configuration items in the EMQX Dashboard (**Management** -> **MQTT Settings** -> **General**). Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
+If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
+This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
 
 :::
 
@@ -74,7 +78,7 @@ Where,
 
 The Delayed Publish feature allows clients to delay the publishing of a message to a topic for a specified amount of time. This feature is useful for scenarios where messages need to be published at specific times or when a certain condition is met.
 
-This section introduces how to enable delayed publishing and how to set the maximum of delayed messages allowed:
+This section introduces how to enable delayed publishing and how to set the maximum number of delayed messages allowed:
 
 **Example code:**
 
@@ -92,7 +96,7 @@ Where,
 
 ## Keep Alive Settings
 
-The Keep Alive is a Two Byte Integer, a time interval measured in seconds. It is a mechanism to ensure that an MQTT client and EMQX connection remain active even if no data is transmitted. When an MQTT client establishes a connection with EMQX, setting a non-zero value in the Keep Alive variable header field of the CONNECT packet can enable the Keep Alive mechanism between both parties. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive).
+The Keep Alive is a two-byte integer, a time interval measured in seconds. It is a mechanism to ensure that an MQTT client and EMQX connection remain active even if no data is transmitted. When an MQTT client establishes a connection with EMQX, setting a non-zero value in the Keep Alive variable header field of the CONNECT packet can enable the Keep Alive mechanism between both parties. For details about how Keep Alive works, see [What is the MQTT Keep Alive parameter for?](https://www.emqx.com/en/blog/mqtt-keep-alive).
 
 According to the MQTT 5.0 protocol, for clients with Keep Alive enabled, if the server does not receive an MQTT Control Packet from the client within 1.5 times the Keep Alive duration, it must close the network connection with the client. Therefore, EMQX introduces a configuration option `keepalive_multiplier` to periodically check clients' Keep Alive timeout status. The default value for `keepalive_multiplier` is `1.5`:
 
@@ -107,14 +111,14 @@ $$
 
 ## Session Settings
 
-In MQTT, a session refers to the connection between a client and a broker. As in EMQX, When a client connects to EMQX, it establishes a session that allows it to subscribe to topics and receive messages, as well as publish messages to EMQX.
+In MQTT, a session refers to the connection between a client and a broker. As in EMQX, when a client connects to EMQX, it establishes a session that allows it to subscribe to topics and receive messages, as well as publish messages to EMQX.
 
 This section introduces how to configure sessions.
 
 **Example code:**
 
 ```bash
-session {
+mqtt {
     max_subscriptions = infinity
     upgrade_qos = false
     max_inflight = 32
@@ -126,12 +130,10 @@ session {
     mqueue_priorities = disabled
     mqueue_default_priority = lowest
     mqueue_store_qos0 = true
-    
     force_shutdown {
       max_mailbox_size = 1000
       max_heap_size = 32MB
     }
-
     force_gc {
       count  =  16000
       bytes  =  16MB
@@ -163,12 +165,14 @@ Where,
 
 :::tip
 
-To Configure MQTT settings via Dashboard,  click **Management** -> **MQTT Settings** on the left navigation menu of the Dashboard. Once you have configured these items with the Dashboard, your settings will override the same configuration items in `emqx.conf`.
+To configure MQTT settings via Dashboard,  click **Management** -> **MQTT Settings** on the left navigation menu of the Dashboard. Once you have configured these items with the Dashboard, your settings will override the same configuration items in config files.
+If you want to configure MQTT from config files, it is recommended to use `base.hocon` instead of `emqx.conf`.
+This is because if the configuration is set in emqx.conf, any changes made through the Dashboard will only be temporary and will be lost when EMQX restarts.
 
 :::
 
 ::: tip
 
-EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

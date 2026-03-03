@@ -10,7 +10,7 @@ English | [简体中文](./README-CN.md)
 
 ---
 
-Welcome to the repo for [EMQX](https://github.com/emqx/emqx) documentation. This is the source for [https://docs.emqx.io/en/broker/latest/](https://docs.emqx.io/en/broker/latest/).
+Welcome to the repo for [EMQX](https://github.com/emqx/emqx) documentation. This is the source for [https://docs.emqx.com/en/emqx/latest/](https://docs.emqx.com/en/emqx/latest/).
 
 EMQX is a fully open-source, highly scalable, highly available distributed MQTT messaging broker for IoT, M2M, and Mobile applications that can handle tens of millions of concurrent clients.
 
@@ -26,14 +26,10 @@ See [EMQX Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a co
 ## Preview
 
 ```sh
-# for community
-./preview.sh ce 8080
-
-# for enterprise
 ./preview.sh ee 8080
 ```
 
-Now, open <http://localhost:8080/docs/en/latest/> or <http://localhost:8080/en/enterprise/latest/>, if dir.yaml has been updated, you can re-run the above command to update the docs.
+Now, open <http://localhost:8080/en/enterprise/latest/>, if dir.yaml has been updated, you can re-run the above command to update the docs.
 
 ## Release a New Version
 
@@ -41,17 +37,10 @@ Both community and enterprise edition documents are managed in the same repo and
 
 Opensource and Enterprise may have different content so they may release at different pace.
 
-### Cut a new release for community edition
+### Cut a New Release
 
 ```sh
-NEW_TAG="$(./cut-release.sh ce)"
-git push origin "${NEW_TAG}"
-```
-
-### Cut a New Release for Enterprise Edition
-
-```sh
-NEW_TAG="$(./cut-release.sh ee)"
+NEW_TAG="$(./cut-release.sh v5.9)"
 git push origin "${NEW_TAG}"
 ```
 

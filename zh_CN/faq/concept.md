@@ -6,17 +6,15 @@
 
 ## EMQX 有哪些产品？
 
-EMQX 产品系列目前主要包含以下 [3 款产品](https://www.emqx.com/zh/products/emqx)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
+EMQX 产品系列目前主要包含以下[两款主要产品](https://www.emqx.com/zh/products/emqx)，主要体现在支持的连接数量、产品功能和商业服务等方面的区别：
 
-- EMQX：EMQX 开源版，提供 MQTT 协议、CoAP 和 LwM2M 等常见物联网协议的支持；
+- **EMQX 企业版**：EMQX Enterprise 是一款商业版的自托管 MQTT 消息平台。它支持数据持久化（支持 Redis、MySQL、MongoDB 或 PostgreSQL）、与 Kafka 的数据集成、LoRaWAN 支持、EMQX 监控、Kubernetes 部署等功能；并可支持百万级并发 MQTT 连接。
 
-- EMQX Enterprise：EMQX 企业版，在开源版基础上，增加了数据持久化 Redis、MySQL、MongoDB 或 PostgreSQL，Sink 转发 Kafka，LoRaWAN 支持，监控管理，Kubernetes 部署等方面的支持；支持百万级并发连接；
+- **EMQX Cloud**：[EMQX Cloud](https://www.emqx.com/zh/cloud) 是我们提供的全托管 MQTT 云服务，由 EMQ 全面负责基础设施的部署、维护、扩展和升级。作为全球首个全托管的 MQTT 5.0 公有云服务，EMQX Cloud 提供了一站式运维代管、独有隔离环境的 MQTT 消息服务。在万物互联的时代，EMQX Cloud 可以帮助您快速构建面向物联网领域的行业应用，轻松实现物联网数据的采集、传输、计算和持久化。
 
-- EMQX Cloud：[EMQX Cloud](https://www.emqx.com/zh/cloud) 是 EMQ 公司推出的一款面向物联网领域的 MQTT 消息中间件产品。作为全球首个全托管的 MQTT 5.0 公有云服务，EMQX Cloud 提供了一站式运维代管、独有隔离环境的 MQTT 消息服务。在万物互联的时代，EMQX Cloud 可以帮助您快速构建面向物联网领域的行业应用，轻松实现物联网数据的采集、传输、计算和持久化。
+## EMQX 与 NB-IoT、LoRaWAN 的关系是什么？
 
-## EMQX 与 NB-IoT、LoRAWAN 的关系是什么？
-
-EMQX 是一个开源的 MQTT 消息服务器，并且 MQTT 是一个 TCP 协议栈上位于应用层的协议；而 NB-IoT 和 LoRAWAN 在 TCP 协议层处于物理层，负责物理信号的传输。因此两者在 TCP 协议栈的不同层次上，实现不同的功能。
+EMQX 是一个开源的 MQTT 消息服务器，并且 MQTT 是一个 TCP 协议栈上位于应用层的协议；而 NB-IoT 和 LoRaWAN 在 TCP 协议层处于物理层，负责物理信号的传输。因此两者在 TCP 协议栈的不同层次上，实现不同的功能。
 
 ## MQTT 协议与 HTTP 协议相比，有哪些优势?
 

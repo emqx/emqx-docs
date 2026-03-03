@@ -243,7 +243,7 @@ Content-Type: application/json
 }
 ```
 
-`GET` 请求的 Headers 不能包含 `Content-Type` Header。
+`GET` 请求的 Headers 不能包含 `content-type` Header。
 
 对于 `POST` 请求有以下默认 Headers：
 

@@ -151,7 +151,7 @@ auth.redis.server = 127.0.0.1:6379
 auth.redis.pool = 8
 auth.redis.database = 0
 auth.redis.password = pass
-assword salt
+password salt
 auth.redis.auth_cmd = HMGET mqtt_user:%u password salt
 
 auth.redis.password_hash = salt,sha256
@@ -615,15 +615,15 @@ backend = http
 
 **成功响应 body  (JSON)：**
 
-| 名称          | 类型    | 是否必须 | 描述                    |
-| ------------- | ------- | -------- | ----------------------- |
-| result        | Enum    | 是       | `allow | deny | ignore` |
-| is_supseruser | Boolean | 否       | 默认为 `false`          |
+| 名称         | 类型    | 是否必须 | 描述                    |
+| ------------ | ------- | -------- | ----------------------- |
+| result       | Enum    | 是       | `allow | deny | ignore` |
+| is_superuser | Boolean | 否       | 默认为 `false`          |
 
 ```json
 {
   "result": "allow",
-  "is_supseruser": true
+  "is_superuser": true
 }
 ```
 

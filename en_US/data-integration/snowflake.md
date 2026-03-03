@@ -1,11 +1,5 @@
 # Ingest MQTT Data into Snowflake
 
-::: tip
-
-The Snowflake data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Snowflake](https://www.snowflake.com/en/) is a cloud-based data platform that provides a highly scalable and flexible solution for data warehousing, analytics, and secure data sharing. Known for its ability to handle structured and semi-structured data, Snowflake is designed to store vast amounts of data while providing fast query performance and seamless integration with various tools and services.
 
 This page provides a detailed introduction to the data integration between EMQX and Snowflake, and offers practical guidance on the rule and Sink creation.
@@ -56,17 +50,70 @@ For more information, refer to the official [ODBC Driver](https://docs.snowflake
 
 #### Linux
 
-Run the following script to install the Snowflake ODBC driver and configure the `odbc.ini` file:
-
-```
-scripts/install-snowflake-driver.sh
-```
+EMQX provides an [installation script](https://github.com/emqx/emqx/blob/master/scripts/install-snowflake-driver.sh) designed specifically for the quick deployment of the Snowflake ODBC driver on Debian-based systems (such as Ubuntu), along with the required system configuration.
 
 ::: tip Note
 
 This script is for testing only, not a recommendation on how to set up the ODBC driver in production environments. You can refer to the official [installation instructions for Linux](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux).
 
 :::
+
+**Run the Installation Script**
+
+Copy the `scripts/install-snowflake-driver.sh` script to your local machine. Run `chmod a+x` to make the script executable, and run it with `sudo`:
+
+```bash
+chmod a+x scripts/install-snowflake-driver.sh
+sudo ./scripts/install-snowflake-driver.sh
+```
+
+The script automatically downloads the Snowflake ODBC `.deb` installation package (e.g., `snowflake-odbc-3.4.1.x86_64.deb`) to the current working directory. It then installs the driver and updates the following system configuration files:
+
+- `/etc/odbc.ini`: Adds the Snowflake data source configuration
+- `/etc/odbcinst.ini`: Registers the Snowflake driver path
+
+**Sample Configuration**
+
+Run the following command to view the configurations in the `/etc/odbc.ini` file:
+
+```
+emqx@emqx-0:~$ cat /etc/odbc.ini 
+
+[snowflake]
+Description=SnowflakeDB
+Driver=SnowflakeDSIIDriver
+Locale=en-US
+PORT=443
+SSL=on
+
+[ODBC Data Sources]
+snowflake = SnowflakeDSIIDriver
+```
+
+Run the following command to view the configurations in the  `/etc/odbcinst.ini` file:
+
+```
+emqx@emqx-0:~$ cat /etc/odbcinst.ini 
+
+[ODBC Driver 18 for SQL Server]
+Description=Microsoft ODBC Driver 18 for SQL Server
+Driver=/opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.5.so.1.1
+UsageCount=1
+
+[ODBC Driver 17 for SQL Server]
+Description=Microsoft ODBC Driver 17 for SQL Server
+Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.10.so.6.1
+UsageCount=1
+
+[SnowflakeDSIIDriver]
+APILevel=1
+ConnectFunctions=YYY
+Description=Snowflake DSII
+Driver=/usr/lib/snowflake/odbc/lib/libSnowflake.so
+DriverODBCVer=03.52
+SQLLevel=1
+UsageCount=1
+```
 
 #### macOS
 
@@ -114,7 +161,7 @@ To install and configure the Snowflake ODBC driver on macOS, follow these steps:
 
 ### Create a User Account and Database
 
-Once the Snowflake ODBC driver is installed, you need to set up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the connector and Sink in EMQX:
+Once the Snowflake ODBC driver is installed, you need to set up a user account, database, and related resources for data ingestion. The following credentials will be required later for configuring the Connector and Sink in EMQX:
 
 | Field                  | Value                                            |
 | ---------------------- | ------------------------------------------------ |
@@ -207,18 +254,46 @@ Once the ODBC driver is set up and the RSA key pair is generated, you can set up
 Before adding the Snowflake Sink, you need to create the corresponding connector in EMQX to establish the connection with Snowflake.
 
 1. Go to the Dashboard **Integration** -> **Connector** page.
+
 2. Click the **Create** button in the top right corner.
+
 3. Select **Snowflake** as the connector type and click next.
+
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
+
 5. Enter the connection information.
-   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
+   
    - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
+   
+   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
-   - **Password**: Enter `Snowpipeuser99`, as defined during the previous setup process.
+   
+   - **Password**: The password for authenticating with Snowflake via ODBC using username/password authentication. This field is optional:
+   
+     - You may enter the password here, e.g., `Snowpipeuser99`, as defined during the previous setup process;
+     - Or configure it in `/etc/odbc.ini`;
+     - If using key-pair authentication instead, leave this field blank.
+   
+     ::: tip
+   
+     Use either Password or Private Key for authentication, not both. If neither is configured here, ensure the appropriate credentials are set in `/etc/odbc.ini`.
+   
+     :::
+   
+   - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+     - **Proxy Host**: The hostname or IP address of the proxy server.
+     - **Proxy Port**: The port number used by the proxy server.
+   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example: `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
+   
 6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
-6. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
-6. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
+
+7. Advanced settings (optional): See [Advanced Settings](#advanced-settings).
+
+8. Before clicking **Create**, you can click **Test Connectivity** to test if the connector can connect to the Snowflake.
+
 7. Click the **Create** button at the bottom to complete the connector creation.
 
 You have now completed the connector creation and can proceed to create a rule and Sink to specify how the data will be written into Snowflake.
@@ -280,11 +355,13 @@ This section demonstrates how to create a rule in EMQX to process messages from 
 
    - **Time Interval**: Set the time interval (in seconds) at which aggregation occurs. For example, if set to `60`, data will be uploaded every 60 seconds even if the maximum number of records hasn’t been reached, resetting the maximum number of records.
 
-10. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
+10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+11. Expand **Advanced Settings** and configure the advanced setting options as needed (optional). For more details, refer to [Advanced Settings](#advanced-settings).
 
-12. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
+12. Use the default values for the remaining settings. Click the **Create** button to complete the Sink creation. After successful creation, the page will return to the rule creation, and the new Sink will be added to the rule actions.
+
+13. Back on the rule creation page, click the **Create** button to complete the entire rule creation process.
 
 You have now successfully created the rule. You can see the newly created rule on the **Rules** page and the new Snowflake Sink on the **Actions (Sink)** tab.
 

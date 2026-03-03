@@ -2,7 +2,7 @@
 
 MQTT (Message Queue Telemetry Transport) is the most commonly used lightweight messaging protocol for the IoT (Internet of Things). The protocol is based on a publish/subscribe (pub/sub) pattern for message communication. It allows devices and applications to exchange data in real-time using a simple and efficient message format, which minimizes network overhead and reduces power consumption.
 
-Served as an MQTT messaging platform, EMQX Enterprise provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt).
+Served as an MQTT messaging platform, EMQX provides full support to a complete set of MQTT messaging features. This section provides brief introductions to the core concepts of MQTT. You can learn further about each concept and more about MQTT by following the links to the [MQTT blog series](https://www.emqx.com/en/blog/category/mqtt).
 
 ## Publish/Subscribe Pattern
 

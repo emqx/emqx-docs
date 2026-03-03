@@ -1,6 +1,6 @@
 # Configure OpenLDAP and Microsoft Entra ID SSO
 
-This page explains configuring and using Single Sign-On (SSO) based on the Lightweight Directory Access Protocol (LDAP).
+This page explains how to configure and use Single Sign-On (SSO) based on the Lightweight Directory Access Protocol (LDAP).
 
 EMQX implements the LDAP-based SSO by integrating the directory services that support the LDAPv3 protocol with the EMQX Dashboard. The currently supported directory service providers are:
 

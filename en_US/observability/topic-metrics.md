@@ -1,12 +1,6 @@
 # Topic Metrics
 
-::: tip Note
-
-The Topic Metrics feature is only available in the EMQX Enterprise edition.
-
-:::
-
-The Topic Metrics feature in EMQX provides detailed statistics for a given topic, including the number of messages sent and received, message rate, and other relevant metrics. To access this feature, navigate to **Diagnostics Tools** -> **Topic Metrics** on the EMQX Dashboard. Alternatively, you can retrieve topic metrics through the REST API.
+The Topic Metrics feature in EMQX provides detailed statistics for a given topic, including the number of messages sent and received, message rate, and other relevant metrics. To access this feature, navigate to  **Diagnostics Tools** -> **Topic Metrics** on the EMQX Dashboard. Alternatively, you can retrieve topic metrics through the REST API.
 
 ## View Topic Metrics on Dashboard
 

@@ -28,7 +28,7 @@ sudo systemctl start emqx
 
 ### 卸载 EMQX
 
-服务完成后，可通过如下命令卸载 EMQX：
+安装完成后，可通过如下命令卸载 EMQX：
 
 ```shell
 sudo yum remove emqx

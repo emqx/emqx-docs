@@ -1,11 +1,11 @@
 # Integrate with Prometheus
 
-EMQX supports integration with third-party monitoring systems, such as [Prometheus](https://prometheus.io/). It is the monitoring solution open-sourced by SoundCloud. It offers a versatile set of features including support for multidimensional data models, flexible query language, and powerful alarm management.
+EMQX supports integration with third-party monitoring systems, such as [Prometheus](https://prometheus.io/). It is the monitoring solution open-sourced by SoundCloud. It offers a versatile set of features, including support for multidimensional data models, flexible query language, and powerful alarm management.
 
 Using a third-party monitoring system can bring the following advantages:
 
-- A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, you can get the monitoring information of the server host;
-- More intuitive monitoring report with figures and charts, such as using [Grafana dashboard](#use-grafana-to-visualize-EMQX-metrics) to visualize the EMQX metrics;
+- A complete monitoring system, where the monitoring data of EMQX will be integrated with that of the other systems. For example, you can get the monitoring information of the server host.
+- More intuitive monitoring report with figures and charts, such as using [Grafana dashboard](#use-grafana-to-visualize-EMQX-metrics) to visualize the EMQX metrics.
 - Various alarm notification options, such as using Prometheus Alertmanager to set up alarm rules and notification methods.
 
 EMQX supports two methods for integrating Prometheus metrics monitoring:
@@ -93,7 +93,7 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 ::::
 
-For more information about Prometheus pull endpoints, refer to the [EMQX Open Source API documentation](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) and [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
 ::: tip 
 
@@ -161,7 +161,7 @@ The Push mode currently only includes EMQX's basic metrics and counters from the
 
 :::
 
-You can also enable and configure the Pushgateway by adding the following configurations to `etc/emqx.conf`. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
+You can also enable and configure the Pushgateway by adding the following configuration to the configuration file. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
 
 ```bash
 prometheus {

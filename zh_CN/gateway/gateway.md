@@ -61,8 +61,6 @@
 - [LwM2M](./lwm2m.md)
 - [ExProto](./exproto.md)
 
-以下几种网关仅在 EMQX 企业版中支持：
-
 - [OCPP](./ocpp.md) 
 - [GB/T 32960](./gbt32960.md)
 - [JT/T 808](./jt808.md)
@@ -123,8 +121,8 @@ gateway.stomp {
 
 详细参考：
 
-- [EMQX 开源版 API - Gateway](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) 和 [EMQX 企业版 API - Gateway](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)
-- [EMQX 开源版配置文档-网关配置](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
+- [EMQX 企业版 API - Gateway](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)
+- [EMQX 企业版配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
 ::: tip
 通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。

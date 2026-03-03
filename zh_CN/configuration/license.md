@@ -1,11 +1,5 @@
 # License 配置
 
-::: tip
-
-License 的配置仅适用于 EMQX 企业版。
-
-:::
-
 您可以通过配置文件 `emqx.conf` 更新您的 License 文件并配置 License 连接配额使用的设置。配置完成后，您可以在 [EMQX 命令行工具](../admin/cli.md) 中运行 `emqx ctl license reload` 来重新加载 License。
 
 下面是配置 EMQX 企业版 License 设置的示例：
@@ -28,7 +22,7 @@ license {
 
 ::: tip
 
-EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+EMQX 提供了更多配置项以更好地满足定制化需求。详情请参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 :::
 

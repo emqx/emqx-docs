@@ -10,11 +10,11 @@
 
 ## EMQX 支持将 MQTT 消息保存到数据库吗？
 
-支持。你可以通过 **EMQX 企业版**的 [数据集成](../data-integration/data-bridges.md) 功能实现消息的持久化，EMQX 支持多种关系型、非关系型以及时序数据库，你可以按需选择。
+支持。你可以通过 EMQX 的 [数据集成](../data-integration/data-bridges.md) 功能实现消息的持久化，EMQX 支持多种关系型、非关系型以及时序数据库，你可以按需选择。
 
 ## EMQX 支持将 MQTT 消息转发到 Kafka 等消息队列吗？
 
-支持。你可以通过 **EMQX 企业版**的 [数据集成](../data-integration/data-bridges.md) 功能将消息转发给 Kafka、RabbitMQ 等消息队列。
+支持。你可以通过 EMQX 的 [数据集成](../data-integration/data-bridges.md) 功能将消息转发给 Kafka、RabbitMQ 等消息队列。
 
 ## EMQX 支持将 MQTT 消息转发到其他 MQTT 服务吗？
 
@@ -70,7 +70,7 @@ EMQX 或 MQTT 协议并没有直接对每个客户端的消息接收速率进行
 
 支持。EMQX 提供了 [命令行接口](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` 与 REST API `DELETE /clients/{clientid}`，允许用户手动踢除 MQTT 连接，用户也可以在 Dashboard 的客户端列表页完成此操作。
 
-详细的 REST API 使用，请参考[开源版 API 文档](https://docs.emqx.com/zh/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html)和[企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
+详细的 REST API 使用，请参考[企业版 API 文档](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html)。
 
 ## 我想监听设备的上下线事件，该怎么操作？
 

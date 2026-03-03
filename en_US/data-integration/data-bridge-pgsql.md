@@ -1,11 +1,5 @@
 # Ingest MQTT Data into PostgreSQL
 
-::: tip
-
-The PostgreSQL data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [PostgreSQL](https://www.postgresql.org/) is the world's most advanced open-source relational database, possessing robust data processing capabilities suitable for everything from simple applications to complex data tasks. EMQX supports integration with PostgreSQL, enabling efficient handling of real-time data streams from IoT devices. This integration supports large-scale data storage, precise querying, and complex data association analysis while ensuring data integrity. Leveraging EMQX's efficient message routing and PostgreSQL's flexible data model, it's easy to monitor device statuses, track events, and audit operations, providing businesses with deep data insights and robust business intelligence support.
 
 This page provides a comprehensive introduction to the data integration between EMQX and PostgreSQL with practical instructions on creating a rule and sink.
@@ -176,13 +170,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    )
    ```
 
-9. Advanced settings (optional): For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the PostgreSQL server.
+10. **Advanced settings (optional)**: For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the PostgreSQL server.
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 Now that you have successfully created the rule, you can click **Integration** -> **Rules** page to see the newly created rule and also see the newly created PostgreSQL Sink in the **Action (Sink)** tab.
 

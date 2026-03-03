@@ -1407,13 +1407,7 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### Schema Registry Functions
 
-::: tip
-
-The Schema Resigtry is an EMQX Enterprise edition feature.
-
-:::
-
-EMQX Enterprise also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md).
+EMQX also supports using `schema_encode` and `schema_decode` functions to decode and encode [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) and [Avro](https://avro.apache.org/) data according to a specified schema. You can read more about these functions in [Schema Registry](./schema-registry.md).
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
@@ -1433,7 +1427,7 @@ Decodes `Bin` using the specified Protobuf Schema. Create a schema in the Schema
 
 ### **Sparkplug B Functions**
 
-EMQX Enterprise also has special purpose functions for decoding and encoding Sparkplug B messages (`spb_decode` and `spb_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
+EMQX also has special purpose functions for decoding and encoding Sparkplug B messages (`spb_decode` and `spb_encode`). You can read more about the sparkplug functions in [Sparkplug B](./sparkplug.md).
 
 ## Date and Time Conversion Functions
 
@@ -1587,12 +1581,6 @@ unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:0
 ```
 
 ### MongoDB Time Functions
-
-::: tip
-
-Functions in this section applies to the EMQX Enterprise edition only.
-
-:::
 
 ### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 

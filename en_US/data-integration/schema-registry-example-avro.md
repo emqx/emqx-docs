@@ -1,11 +1,5 @@
 # Schema Registry Example - Avro
 
-::: tip Note
-
-Schema Registry is an EMQX Enterprise feature.
-
-:::
-
 This page demonstrates how the schema registry and rule engine support message encoding and decoding in Avro format.
 
 ## Decoding Scenario

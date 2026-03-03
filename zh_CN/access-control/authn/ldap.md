@@ -1,11 +1,5 @@
 # 使用 LDAP 进行密码认证
 
-::: tip 注意
-
-使用 LDAP 进行密码认证是 EMQX 企业版功能。
-
-:::
-
 [轻量级目录访问协议（LDAP）](https://ldap.com/) 是一种用于访问和管理目录信息的协议。EMQX 支持与 LDAP 服务器集成，用于密码认证。这种集成使用户能够使用其 LDAP 认证信息在 EMQX 中进行身份验证。
 
 ::: tip 前置准备
@@ -46,13 +40,13 @@ EMQX 的 LDAP 集成包括两种不同的密码认证方式：
 
 ::: tip 注意
 
-本节内容仅适用于使用"本地密码比对"的认证方式。如果您使用的是 “LDAP 绑定验证“方式，请跳过。
+本节内容仅适用于使用"本地密码比对"的认证方式。如果您使用的是 “LDAP 绑定验证”方式，请跳过。
 
 :::
 
 本节介绍了如何配置 LDAP 数据结构、创建并存储认证数据以用于密码验证。
 
-LDAP 数据结构定义了在 LDAP 目录中组织和存储认证数据的结构和规则。LDAP 认证器支持几乎所任何 LDAP 数据结构。 以下是用于 [OpenLDAP](https://www.openldap.org/) 的数据结构示例：
+LDAP 数据结构定义了在 LDAP 目录中组织和存储认证数据的结构和规则。LDAP 认证器支持几乎任何 LDAP 数据结构。 以下是用于 [OpenLDAP](https://www.openldap.org/) 的数据结构示例：
 
 ```sql
 
@@ -121,7 +115,7 @@ isSuperuser: TRUE
 userPassword:: e01ENX15YnNQR29hSzNuRHlpUXZ2ZWlDT0l3PT0=
 ```
 
-编辑 LDAP 配置文件 `sladp.conf`，使其包含数据结构和 LDIF 文件。在启动 LDAP 服务器时将引用数据结构。下面是一个示例`sladp.conf` 文件：
+编辑 LDAP 配置文件 `slapd.conf`，使其包含数据结构和 LDIF 文件。在启动 LDAP 服务器时将引用数据结构。下面是一个示例`slapd.conf` 文件：
 
 ::: tip 提示
 
@@ -169,7 +163,6 @@ directory       /usr/local/etc/openldap/data
 
      - **密码**：与**用户名**对应的明文密码，用于完成绑定操作。此密码应与 LDAP 配置中的 `rootpw` 实际值相对应。
 
-
    - 填写与认证相关的设置：
 
      - **基本 DN**：定义搜索操作的起始节点（即 base DN）。EMQX 会从该 DN 开始查找符合过滤器条件的用户条目。支持使用占位符（如 `${username}`）动态拼接客户端身份。有关更多信息，请参见 [RFC 4511搜索请求](https://datatracker.ietf.org/doc/html/rfc4511#section-4.5.1)。
@@ -180,9 +173,7 @@ directory       /usr/local/etc/openldap/data
 
        :::
 
-
      - **密码认证方式**：选择认证方式：`LDAP 绑定验证`（默认）或 `本地密码比对`。
-
 
      - **绑定密码**：指定 EMQX 用于向 LDAP 服务器认证自身的密码，在执行任何操作或查询之前必须进行此认证。它通过占位符 `${password}` 引用，在运行时将使用配置选项**密码**中定义的实际密码来解析。
 
@@ -191,6 +182,8 @@ directory       /usr/local/etc/openldap/data
 
 
      - **超级用户属性名**：当选择 `本地密码比对` 作为认证方法时，用来标识用户是否为超级用户的 LDAP 属性名称。此属性的值应为布尔值，如果缺失则等于 `false`。
+ 
+     - **调用条件**：一个 Variform 表达式，用于控制是否将此 LDAP 认证器应用于客户端连接。该表达式会根据客户端的属性（例如 `username`、`clientid`、`listener` 等）进行评估。如果表达式的结果为字符串 `"true"`，则会触发认证器。否则，认证器将被跳过。有关调用条件的更多信息，请参见[认证器调用条件](./authn.md#认证器调用条件)。
 
 
    - **启用 TLS**：如果要启用 TLS，请打开切换按钮。有关启用TLS的更多信息，请参见[网络和TLS](../../network/overview.md)。

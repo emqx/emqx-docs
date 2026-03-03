@@ -78,28 +78,28 @@ You can configure the SCRAM authenticator through the EMQX Dashboard.
 
    ![authn-scram-http](./assets/authn-scram-restapi.png)
 
-5. Configure the following settings:
+5. Configure the following settings for the backend:
 
-   - **HTTP Configuration**:
+   - **Method**: Select the HTTP request method (`GET` or `POST`). 
 
-     - **Method**: Select the HTTP request method (`GET` or `POST`). 
+     ::: tip
 
-       ::: tip
+     The `POST` method is recommended to avoid exposing sensitive information, such as passwords, in server logs. For untrusted environments, use HTTPS. 
 
-       The `POST` method is recommended to avoid exposing sensitive information, such as passwords, in server logs. For untrusted environments, use HTTPS. 
+     :::
 
-       :::
+   - **URL**: Enter the URL of the HTTP service.
 
-     - **URL**: Enter the URL of the HTTP service.
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this HTTP Server authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
 
-     - **Headers** (optional): Specify any additional HTTP request headers.
+   - **Headers** (optional): Specify any additional HTTP request headers.
 
    - **Authentication Configuration**:
 
      - **Password Hash**: Select the password hash algorithm (`sha256` or `sha512`).
      - **Enable TLS**: Enable TLS by toggling the switch. For more details on enabling TLS, see [TLS for External Resource Access](../../network/overview.md#tls-for-external-resource-access).
      - **Body**: Define the request template. For `POST` requests, it’s sent as JSON in the request body; for `GET` requests, it’s encoded as a Query String in the URL. Use [placeholders](./authn.md#authentication-placeholders) to map keys and values.
-
+   
    - **Advanced Settings**:
 
      - **Connection Pool size** (optional): Set the number (integer value) of concurrent connections from an EMQX node to the HTTP server. Default: `8`.
@@ -107,5 +107,5 @@ You can configure the SCRAM authenticator through the EMQX Dashboard.
      - **HTTP Pipelining** (optional): Enter a positive integer to specify the maximum number of HTTP requests that can be sent without waiting for a response. Default: `100`.
      - **Request Timeout** (optional): Specify the waiting period before EMQX assumes the request is timed out. Supported units: `milliseconds`, `second`, `minute`, `hour`.
      - **Iteration Count** (optional): Set the SCRAM iteration count. Default: `4096`.
-
+   
 6. After completing the configuration, click **Create** to finalize the settings.

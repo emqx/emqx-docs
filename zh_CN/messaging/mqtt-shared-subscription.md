@@ -111,7 +111,7 @@ EMQX 允许对共享订阅组内消息的分发方式进行精细控制。共享
    在**添加订阅**弹出窗口中：
 
    - 将 `Subscribe1` 和 `Subscriber2` 订阅的**主题**设为 `$share/a/t/1`。
-   - 将 `Subscriber3` 和 `Subscriber4`的**主题 **设为 `$share/b/t/1`。
+   - 将 `Subscriber3` 和 `Subscriber4`的**主题**设为 `$share/b/t/1`。
 
    在以上主题示例中，
 

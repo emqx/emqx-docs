@@ -1405,7 +1405,7 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### Schema Registry
 
-在 EMQX 企业版中， schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md)。
+Schema registry 提供了`schema_decode` 和 `schema_encode` 功能，可以为 [Protobuf (Protocol Buffers)](https://developers.google.com/protocol-buffers) 和 [Avro](https://avro.apache.org/) 格式的数据进行编解码。 关于功能详情，请见[编解码](./schema-registry.md)。
 
 ### schema_encode(SchemaID: string, Data: map) -> binary
 
@@ -1425,7 +1425,7 @@ sqlserver_bin2hexstr(str_utf16_le('你好')) = '0x604F7D59'
 
 ### Sparkplug B
 
-EMQX 企业版还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`spb_decode` 和`spb_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
+EMQX 还有专门用于解码和编码 Sparkplug B 消息的特殊用途函数（`spb_decode` 和`spb_encode`）。您可以在 [Sparkplug B](./sparkplug.md) 中了解有关 Sparkplug 函数的更多信息。
 
 ## 日期与时间函数
 
@@ -1579,12 +1579,6 @@ unix_ts_to_rfc3339(1708671600766, 'millisecond') = '2024-02-23T15:00:00.766+08:0
 ```
 
 ### 专用于 MongoDB 的时间函数
-
-::: tip
-
-本节内容仅适用于 EMQX 企业版。
-
-:::
 
 ### mongo_date() -> [MongoDB ISODate](https://www.mongodb.com/docs/manual/reference/method/Date/) | string
 

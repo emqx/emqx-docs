@@ -1,11 +1,5 @@
 # 将 MQTT 数据传输到 GCP Pub/Sub
 
-::: tip
-
-GCP Pub/Sub 数据集成是 EMQX 企业版功能。
-
-:::
-
 [Google Cloud Pub/Sub](https://cloud.google.com/pubsub?hl=en-us) 是一种异步消息传递服务，旨在实现极高的可靠性和可扩缩性。EMQX 支持与 Google Cloud Pub/Sub 的无缝集成，能够实时提取、处理和分析 MQTT 数据，并将数据推送到各类 Google Cloud 服务，如 Cloud Functions、App Engine、Cloud Run、Kubernetes Engine 和 Compute Engine 中，或将 Google Cloud 中的数据通过 MQTT 下发，帮助用户更快的基于 GCP 构建物联网应用。
 
 本页详细介绍了 EMQX 与 GCP Pub/Sub 的数据集成并提供了实用的规则和 Sink/Source 创建指导。
@@ -135,10 +129,11 @@ MQTT 消息数据写入到 GCP PusSub 后，您可以进行灵活的应用开发
     - 对于 **属性模版**，键和值都可以使用形式为 `${variable_name}` 的占位符。这些值将从 MQTT 上下文中提取。如果键模板解析为空字符串，则该键不会包含在传出到 GCP Pub/Sub 的消息中。
     - 对于 **排序键模版**，可以使用形式为 `${variable_name}` 的占位符。如果解析的值为空字符串，则不会为 GCP Pub/Sub 传出消息设置 `orderingKey` 字段。
 
-12. 高级设置（可选）：详细信息，请参见 [Sink 的特性](./data-bridges.md#sink-的特性)。
-13. 在点击 **创建** 之前，您可以点击 **测试连接性** 来测试连接器是否能连接到 GCP Pub/Sub 服务器。
-14. 点击 **创建** 按钮完成 Sink 配置，您将在 **动作输出** 标签下看到新的 Sink。
-15. 回到 **创建规则** 页面，点击 **创建** 来创建规则。
+12. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+13. **高级设置（可选）**：详细信息，请参见 [Sink 的特性](./data-bridges.md#sink-的特性)。
+14. 在点击 **创建** 之前，您可以点击 **测试连接性** 来测试连接器是否能连接到 GCP Pub/Sub 服务器。
+15. 点击 **创建** 按钮完成 Sink 配置，您将在 **动作输出** 标签下看到新的 Sink。
+16. 回到 **创建规则** 页面，点击 **创建** 来创建规则。
 
 您现在已成功创建了规则。您可以在 **集成** -> **规则** 页面看到新创建的规则。点击 **动作(Sink)** 标签，您可以看到新的 Google PubSub 生产者 Sink。
 

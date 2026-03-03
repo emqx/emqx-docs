@@ -39,14 +39,14 @@ EMQX 的 REST API 支持两种主要的认证方法：使用 API 密钥的基本
 在这种方法中，您通过使用 API 密钥和密钥作为用户名和密码来对 API 请求进行身份验证。EMQX 的 REST API 基于 HTTP 基本认证框架，要求提供这些凭据。使用 EMQX REST API 之前，您需要先创建一个 API 密钥。
 
 ::: tip 注意
-出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。请注意，基于角色的 API 凭据仅适用于 EMQX 企业版。
+出于安全考虑，从 EMQX 5.0.0 开始 Dashboard 用户凭据无法用于 REST API 认证。您需要创建并使用 API 密钥进行认证。
 :::
 
 #### 创建 API 密钥
 
 您可以在 Dashboard **系统设置** -> **API 密钥** 页面中手动创建用于认证的 API 密钥，详细操作请参考 [Dashboard - API 密钥](../dashboard/system.md#api-密钥)。
 
-您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `emqx.conf` 配置文件中添加以下配置，指定文件位置：
+您也可以通过 bootstrap 文件的方式创建 API 密钥。在 `base.hocon` 配置文件中添加以下配置，指定文件位置：
 
 ```bash
 api_key = {
@@ -58,7 +58,7 @@ api_key = {
 
 - **API Key**：任意字符串作为密钥标识。
 - **Secret Key**：使用随机字符串作为密钥。
-- **Role （可选）**：指定密钥的[角色](#角色与权限)，仅适用于企业版。
+- **Role （可选）**：指定密钥的[角色](#角色与权限)。
 
 例如：
 
@@ -70,7 +70,7 @@ foo:3CA92E5F-30AB-41F5-B3E6-8D7E213BE97E:publisher
 
 通过此方式创建的 API 密钥有效期为永久有效。
 
-每次 EMQX 启动时，会将文件中设置的数据将添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
+每次 EMQX 启动时，会将文件中设置的数据添加到 API 密钥列表中，如果存在相同的 API Key，则将更新其 Secret Key 与 Role。
 
 #### 角色与权限
 

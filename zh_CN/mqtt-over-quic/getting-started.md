@@ -9,8 +9,6 @@
 
 ## 环境要求
 
-在 CentOS 6、macOS 系统下并未包含 QUIC 编译，请自行从源码编译并在编译前指定环境变量 `BUILD_WITH_QUIC=1`，其他操作系统和平台则可以正常使用。
-
 测试环境推荐使用 Docker 镜像，以下命令通过环境变量启用 QUIC 监听器并映射 UDP 14567 作为接入端口：
 
 ```bash
@@ -22,7 +20,7 @@ docker run -d --name emqx \
   -e EMQX_LISTENERS__QUIC__DEFAULT__keyfile="etc/certs/key.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__certfile="etc/certs/cert.pem" \
   -e EMQX_LISTENERS__QUIC__DEFAULT__ENABLED=true \
-emqx/emqx:@CE_VERSION@
+emqx/emqx:@EE_VERSION@
 ```
 
 有关 Docker 安装更多内容请参考 [Docker 部署指南](../deploy/install-docker.md)。
@@ -116,9 +114,7 @@ NanoSDK 也提供 Java) 和 Python 的 binding：
 
 ![NanoMQ MQTT over QUIC bridge](./assets/nanomq-mqtt-bridge.png)
 
-1. 下载安装 NanoMQ：
-
-使用源码编译的方式
+1. 下载安装 NanoMQ，使用源码编译的方式：
 
 ```bash
 git clone https://github.com/emqx/nanomq.git
@@ -129,7 +125,7 @@ cmake -G Ninja -DNNG_ENABLE_QUIC=ON ..
 sudo ninja install
 ```
 
-2. 配置 MQTT over QUIC 桥接
+2. 配置 MQTT over QUIC 桥接。
 
 开启 QUIC 桥接功能的 NanoMQ 编译安装完成后，可以在配置文件`/etc/nanomq.conf`中配置 MQTT over QUIC 桥接功能，使用 `mqtt-quic` 作为 URL 前缀即是采用 QUIC 作为 MQTT 的传输层：
 

@@ -126,7 +126,7 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang VM Tuning
 
-Tune and optimize the Erlang VM in etc/emqx.conf file:
+Tune and optimize the Erlang VM in `etc/emqx.conf` file:
 
 ```bash
 ## Sets the maximum number of simultaneously existing ports for this system
@@ -135,15 +135,41 @@ node.max_ports = 2097152
 
 ## EMQX Tuning
 
-Tune the acceptor pool size and `max_connections` limit in `etc/emqx.conf`.
+### Listener Acceptor
 
-For example, for TCP listeners:
+Tune the acceptor pool size and `max_connections` limit in `etc/base.hocon`.
+
+To optimize connection handling, you can adjust the acceptor pool size and the `max_connections` limit in the `etc/emqx.conf` configuration file.
+
+For example, to configure TCP listeners:
 
 ```bash
 ## TCP Listener
 listeners.tcp.$name.acceptors = 64
 listeners.tcp.$name.max_connections = 1024000
 ```
+
+`acceptors`: The number of acceptor processes handling incoming connections.
+
+`max_connections`: The maximum number of concurrent connections allowed.
+
+### Distribution Port Buffer Size
+
+In large clusters with many replicant nodes, it is suggested to tune the distribution port buffer size by setting the `node.dist_buffer_size` parameter on core nodes.
+
+```bash
+# Buffer size in KB. The following sets the maximum to approximately 2 GB.
+node.dist_buffer_size=2097151
+```
+
+This adjustment helps core nodes better handle traffic spikes caused by mass client reconnections.
+
+Additionally, if you observe warning log messages like the following, increasing this buffer size can mitigate the issue:
+
+```
+[warning] msg: busy_dist_port ...
+```
+
 
 ## Client Machine Tuning
 

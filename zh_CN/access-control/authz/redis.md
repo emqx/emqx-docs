@@ -22,7 +22,7 @@ Redis 认证器支持使用 [Redis hashes](https://redis.io/docs/manual/data-typ
 HSET mqtt_acl:emqx_u t/1 subscribe
 ```
 
-由于 Redis 结构限制，使用 `qos` 与 `retain` 字段时，需要将除 `topic` 外的信息放到 JSON 字符串中，例如：
+由于 Redis 结构限制，使用 `qos` 与 `retain` 字段时，需要将除 `topic` 外的字段放到 JSON 字符串中，例如：
 
 - 添加用户名为 `emqx_u`，允许以 QoS1 和 QoS2 订阅 `t/2` 主题的权限数据：
 
@@ -43,7 +43,7 @@ cmd = "HGETALL mqtt_acl:${username}"
 ```
 
 ::: tip
-Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Authorizer 需要在白名单模式下使用。
+Redis 授权器中添加的所有规则都是**允许**规则，即 Redis Authorizer 需要在白名单模式下使用。
 :::
 
 ## 通过 Dashboard 配置
@@ -88,9 +88,9 @@ Redis Authorizer 中添加的所有规则都是**允许**规则，即 Redis Auth
 
 ## 使用配置项配置
 
-Redis authorizer 由 `type=redis` 标识。<!--详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
+Redis 授权器由 `type=redis` 标识。<!--详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
 
-Redis Authorizer 支持 3 种部署模式的 Redis。
+Redis 授权器支持 3 种部署模式的 Redis。
 
 Standalone Redis:
 
@@ -104,7 +104,6 @@ Standalone Redis:
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-    server = "127.0.0.1:6379"
 
 }
 ```

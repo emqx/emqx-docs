@@ -72,7 +72,7 @@ In addition to creating clusters manually, EMQX also supports DNS, etcd and othe
 
 Yes. EMQX provides the [Command Line Interface](../admin/cli.md#clients) `emqx ctl clients kick <Client ID>` and the [REST API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) `DELETE /clients/{clientid}`, allowing users to manually kick MQTT connections. Users can also complete this operation on the clients page of the Dashboard.
 
-For detailed instructions on the REST API, see [EMQX Open Source API](https://docs.emqx.com/en/emqx/v@CE_MINOR_VERSION@/admin/api-docs.html) and [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
+For detailed instructions on the REST API, see [EMQX Enterprise API](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
 ## I want to monitor the online and offline events of the device, how can I do it?
 

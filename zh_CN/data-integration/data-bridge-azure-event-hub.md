@@ -1,11 +1,5 @@
 # 将 MQTT 数据传输到 Azure Event Hubs
 
-::: tip
-
-Azure Event Hubs 数据集成是 EMQX 企业版功能。
-
-:::
-
 [Azure Event Hub](https://azure.microsoft.com/en-us/products/event-hubs) 是一个用于数据摄取的实时托管事件流平台。EMQX 与 Azure Event Hub 的集成为用户在高吞吐量情况下提供了可靠的数据传输和处理能力。Azure Event Hubs 可作为 EMQX 与 Azure 丰富的云服务应用之间的数据通道，将物联网数据集成到 Azure Blob Storage、Azure Stream Analytics 以及部署在 Azure 虚拟机上的各类应用和服务当中。目前， EMQX 支持使用 SASL/PLAIN 身份验证、通过与 Kafka 协议兼容的 Apache Kafka 终端点进行 Azure Event Hub 集成。
 
 本页详细介绍了 EMQX 与 Azure Event Hubs 的数据集成并提供了实用的规则和 Sink 创建指导。
@@ -121,13 +115,15 @@ EMQX 与 Azure Event Hubs 的数据集成可以为您的业务带来以下功能
 
    - **分区限制**：限制生产者能够发送消息的最大分区数量。默认为关闭，即可以发送到所有分区。
 
-9. 高级设置（可选）：根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
-10. 在点击**创建**之前，您可以点击**测试连接**测试 Sink 是否能够连接到 Azure Event Hubs 服务器。
+10. **高级设置（可选）**：根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
-11. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+11. 在点击**创建**之前，您可以点击**测试连接**测试 Sink 是否能够连接到 Azure Event Hubs 服务器。
 
-12. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+12. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+
+13. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Azure Event Hubs Sink。
 

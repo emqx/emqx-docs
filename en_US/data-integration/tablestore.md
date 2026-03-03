@@ -1,10 +1,5 @@
 # Ingest MQTT Data into Tablestore
 
-::: tip
-
-The Tablestore data integration is an EMQX Enterprise edition feature. 
-:::
-
 [Tablestore](https://www.alibabacloud.com/en/product/table-store/pricing?spm=a3c0i.29367734.6737026690.8.78847d3fcEhuVv&_p_lc=1) is a scalable, serverless database optimized for IoT scenarios. It offers a one-stop solution called IoTstore for managing time-series, structured, and semi-structured data. It is ideal for scenarios such as IoT, vehicle networking, risk control, messaging, and recommendation systems. Tablestore provides cost-effective, high-performance data storage, with millisecond-level queries, retrieval, and flexible data analysis capabilities. EMQX seamlessly integrates with Tablestore Cloud, Tablestore OSS, and Tablestore Enterprise, enabling efficient data management for IoT use cases.
 
 ## How It Works
@@ -166,13 +161,15 @@ This section demonstrates how to create a rule in EMQX to process messages from 
      - `MUM_IGNORE`: Ignores metadata updates, ensuring that metadata remains unchanged even if there are conflicting updates.
      - `MUM_NORMAL`: Performs a normal metadata update. If the metadata does not exist, it will be dynamically created before writing the data. If there is a conflict with existing metadata, it may be overwritten.
 
-10. Advanced settings (optional):  See [Advanced Configurations](#advanced-configurations).
+10. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-11. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the Tablestore server.
+11. **Advanced settings (optional)**:  See [Advanced Configurations](#advanced-configurations).
 
-12. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+12. Before clicking **Create**, you can click **Test Connectivity** to test if the Sink can be connected to the Tablestore server.
 
-13. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+13. Click **Create** to complete the Sink creation. Back on the **Create Rule** page, you will see the new Sink appear under the **Action Outputs** tab.
+
+14. On the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 Now you have successfully created the rule and you can see the new rule appear on the **Rule** page. Click the **Actions(Sink)** tab, you can see the new Tablestore Sink.
 

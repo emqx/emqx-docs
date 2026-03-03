@@ -1,11 +1,5 @@
 # Ingest MQTT Data into OpenTSDB
 
-::: tip
-
-The OpenTSDB data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [OpenTSDB](http://opentsdb.net/) is a scalable, distributed time series database. EMQX supports integration with OpenTSDB. You can save MQTT messages to OpenTSDB for subsequent analysis and retrieval.
 
 This page provides a comprehensive introduction to the data integration between EMQX and OpenTSDB with practical instructions on creating and validating the data integration.
@@ -127,13 +121,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    - **Tags**: Tags are used to describe additional information about the metric. Here, the tag is `"tags": {"host": "serverA"}`, indicating that this metric data comes from host `serverA`.
    - **Value**: This is the actual metric value. In this example, it is `"value": 12`, indicating the metric value is 12.
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the OpenTSDB server.
+10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the OpenTSDB server.
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule. 
 
 You have now successfully created the rule for forwarding data through the OpenTSDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new OpenTSDB Sink.
 

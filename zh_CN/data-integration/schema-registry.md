@@ -1,11 +1,5 @@
 # Schema Registry
 
-::: tip 注意
-
-Schema Registry 是 EMQX 企业版功能。
-
-:::
-
 物联网设备终端种类繁杂，各厂商使用的编码格式各异，所以在接入物联网平台的时候就产生了统一数据格式的需求，以便平台之上的应用进行设备管理。
 
 Schema Registry 管理编解码使用的 Schema、处理编码或解码请求并返回结果。Schema Registry 配合规则引擎，可适配各种场景的设备接入和规则设计。
@@ -109,7 +103,7 @@ SELECT json_decode(payload) AS p FROM "t/#" WHERE p.x = p.y
 
 您可以直接通过 EMQX Dashboard 配置外部 Schema Registry，方便地管理 Schema 集成。
 
-进入 EMQX Dashboard 的 **集成** -> **Schema** 页面。在 Schema 页面中选择 **外部 Schema** 选项卡。
+进入 EMQX Dashboard 的**数据智能中心** -> **Schema Registry** 页面。在 Schema 页面中选择 **外部 Schema** 选项卡。
 
 点击右上角的**创建**按钮，并配置以下字段：
 

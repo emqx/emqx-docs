@@ -1,6 +1,6 @@
 # 开发者指南
 
-开发者指南旨在帮助开发者们快速入门 EMQX，并构建应用程序。开发者指南将探讨 MQTT 的核心概念和功能以及 EMQX 的一些扩展功能，还会介绍如何在 EMQX Dashboard 中配置这些功能并使用客户端工具进行测试。具体将涵盖以下内容：
+开发者指南旨在帮助开发者快速入门 EMQX，并构建应用程序。开发者指南将探讨 MQTT 的核心概念和功能以及 EMQX 的一些扩展功能，还会介绍如何在 EMQX Dashboard 中配置这些功能并使用客户端工具进行测试。具体将涵盖以下内容：
 
 - [MQTT 核心概念](../messaging/mqtt-concepts.md)
 - [MQTT 客户端工具演示](../messaging/publish-and-subscribe.md)

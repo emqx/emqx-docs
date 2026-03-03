@@ -38,7 +38,7 @@ EMQX provides a series of observability-related features to help with system mon
 
 - [Log Trace](./tracer.md)
 
-  EMQX 5.x has added the Log Trace feature, allowing users only to enable debug level logs output for specific client IDs, topics or IPs in real-time.
+  EMQX 5.x has added the Log Trace feature, allowing users only to enable debug-level logs output for specific client IDs, topics or IPs in real-time.
 
 
 

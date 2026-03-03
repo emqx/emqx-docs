@@ -50,7 +50,6 @@ EMQX 将指标分为了 Metrics 与 Statistics 两种。
 | packets.publish.inuse        | 接收的报文标识符已被占用的 PUBLISH 报文数量                  |
 | packets.publish.auth_error   | 接收的未通过 ACL 检查的 PUBLISH 报文数量                     |
 | packets.publish.error        | 接收的无法被发布的 PUBLISH 报文数量                          |
-| packets.publish.dropped      | 超出接收限制而被丢弃的 PUBLISH 报文数量                      |
 | packets.puback.received      | 接收的 PUBACK 报文数量                                       |
 | packets.puback.sent          | 发送的 PUBACK 报文数量                                       |
 | packets.puback.inuse         | 接收的报文标识符已被占用的 PUBACK 报文数量                   |
@@ -89,6 +88,8 @@ EMQX 将指标分为了 Metrics 与 Statistics 两种。
 | messages.dropped                      | EMQX 内部转发到订阅进程前丢弃的消息总数                      |
 | messages.dropped.no_subscribers       | 由于没有订阅者而被丢弃的消息数量                             |
 | messages.dropped.await_pubrel_timeout | 由于等待 PUBREL 报文超时而被丢弃的消息数量                   |
+| messages.dropped.quota_exceeded       | 由于超出配额（通常是连接数）而被丢弃的消息数量               |
+| messages.dropped.receive_maximum      | 由于达到最大接收限制而被丢弃的消息数量                       |
 | messages.forward                      | 向其他节点转发的消息数量                                     |
 | messages.publish                      | 除系统消息外发布的消息数量                                   |
 | messages.qos0.received                | 接收来自客户端的 QoS 0 消息数量                              |

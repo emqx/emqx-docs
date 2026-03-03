@@ -1,11 +1,5 @@
 # MQTT 5.0 Enhanced Authentication - Kerberos
 
-::: tip
-
-The Kerberos Authentication is only available in the EMQX Enterprise edition.
-
-:::
-
 Kerberos is a network authentication protocol that uses "tickets" to allow nodes to securely prove their identity to one another over a non-secure network. It is designed to provide strong authentication for client/server applications through secret-key cryptography. 
 
 EMQX integrates Kerberos authentication following the SASL/GSSAPI mechanism from RFC 4422. The Generic Security Services Application Program Interface (GSSAPI) provides a standardized API that abstracts the details of the Kerberos protocol, allowing secure communication between the MQTT clients and the server without requiring the application to manage the specifics of the Kerberos authentication process.
@@ -56,23 +50,30 @@ To configure the Kerberos authenticator, you need a running KDC (Key Distributio
 
 EMQX can only support keytab files at the default location. You can configure the system default value by using the environment variable `KRB5_KTNAME` or by setting `default_keytab_name` in `/etc/krb5.conf`.
 
+::: tip Note
+
+The keytab file `/etc/krb5.conf` must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
+
+:::
+
 ## Configure via Dashboard
 
-In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page. Click **Create** at the top right corner, then select **GSSAPI** as the **Mechanism**, and **Kerberos** as the **Backend**. Click **Next** to go to the **Configuration** step.
+1. In the EMQX Dashboard, navigate to **Access Control** -> **Authentication** in the left menu to enter the **Authentication** page.
 
-1. Configure the following fields:
+2. Click **Create** at the top right corner, then select **GSSAPI** as the **Mechanism**, and **Kerberos** as the **Backend**.
+
+3. Click **Next** to go to the **Configuration** step.
+
+4. Configure the following fields:
 
    - **Principal**: Set Kerberos principal for the server to define the server's identity within the Kerberos authentication system. For example, `mqtt/cluster1.example.com@EXAMPLE.COM`. 
 
      Note: The realm in use must be configured in `/etc/krb5.conf` on EMQX nodes.
+   
+   - **Precondition**: A [Variform expression](../../configuration/configuration.md#variform-expressions) used to control whether this Kerberos authenticator should be applied to a client connection. The expression is evaluated against attributes from the client (such as `username`, `clientid`, `listener`, etc.). The authenticator will only be invoked if the expression evaluates to the string `"true"`. Otherwise, it will be skipped. For more information about the precondition, see [Authentication Preconditions](./authn.md#authentication-preconditions).
 
 
-   - **Keytab File**: Specify the path to the Kerberos keytab file.
-
-     Note: The keytab file must be located on the EMQX nodes, and the user running the EMQX service must have read permissions for the file.
-
-
-2. Click **Create** to complete the configuration.
+5. Click **Create** to complete the configuration.
 
 ## Configure via Configuration Items
 

@@ -1,11 +1,5 @@
 # 将 MQTT 数据写入到 Cassandra
 
-::: tip
-
-Cassandra 数据集成是 EMQX 企业版功能。
-
-:::
-
 [Apache Cassandra](https://cassandra.apache.org/_/index.html) 是一种流行的开源分布式 NoSQL 数据库管理系统，旨在处理大规模数据集并用于构建高吞吐量的应用程序。EMQX 与 Apache Cassandra 的集成提供了将消息和事件存储在 Cassandra 数据库中的能力，实现时间序列数据存储、设备注册和管理以及实时数据分析等功能。
 
 本页详细介绍了 EMQX 与 Cassandra 的数据集成并提供了实用的规则和 Sink 创建指导。
@@ -131,11 +125,13 @@ docker exec -it cassa cqlsh "-e \
    insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})
    ```
 
-9. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
+9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
 
-10. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+10. **高级配置（可选）**，根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md)。
 
-11. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+11. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
+
+12. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
 
 现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 Cassanadra Sink。
 

@@ -1,6 +1,6 @@
 # 客户端属性
 
-客户端属性是 EMQX 提供的一种机制，允许开发人员根据不同的应用场景需求，为 MQTT 客户端设置额外的属性。这些属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中，在实现灵活开发中发挥重要作用。通过利用客户端元数据，此功能还支持 MQTT 客户端识别的灵活模板化，这对于个性化客户端配置和简化的认证过程至关重要，增强了开发工作的适应性和效率。
+客户端属性是 EMQX 提供的一种机制，允许开发人员根据不同的应用场景需求，为 MQTT 客户端设置额外的属性。这些属性可以用于 EMQX 的认证授权、数据集成和 MQTT 扩展功能等功能中，在实现灵活开发中发挥重要作用。通过利用客户端元数据，此功能还支持 MQTT 客户端识别的灵活模板化，这对于个性化客户端配置和简化认证过程至关重要，增强了开发工作的适应性和效率。
 
 ## 工作流程
 
@@ -68,7 +68,7 @@ mqtt {
 - `user_property.*`：从 MQTT CONNECT 数据包的 User-Property 中提取属性值，例如 `user_property.foo`
 - `zone`：继承自 MQTT 监听器的 zone 名称
 
-更多客户端属性配置的详细信息，请参见 [EMQX 开源版配置手册](https://docs.emqx.com/zh/emqx/v@CE_VERSION@/hocon/)和 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
+更多客户端属性配置的详细信息，请参见 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)。
 
 ### 在客户端认证过程中设置
 

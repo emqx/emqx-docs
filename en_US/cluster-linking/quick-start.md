@@ -163,6 +163,6 @@ cluster {
 }
 ```
 
-As you can see, the configuration is almost identical to the previous one, except the `topics` field is empty. This means that `cluster-eu-west` is now not interested in _any_ messages from `cluster-us-east`. This makes the Cluster Link _asymmetrical_, which is useful for one-way message forwarding between clusters.
+As you can see, the configuration is almost identical to the previous one, except that the `topics` field is empty. This means that `cluster-eu-west` is now not interested in _any_ messages from `cluster-us-east`. This makes the Cluster Link _asymmetrical_, which is useful for one-way message forwarding between clusters.
 
 If you repeat the message publishing and subscribing steps outlined above, you will notice that the message published from `cluster-us-east` is not received by the subscriber on `cluster-eu-west`.

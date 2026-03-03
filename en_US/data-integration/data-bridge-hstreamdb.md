@@ -1,11 +1,5 @@
 # Stream MQTT Data into HStreamDB
 
-::: tip
-
-The HStreamDB data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [HStreamDB](https://hstream.io/) is an open-source streaming data platform that enables you to efficiently ingest, store, process, and distribute all real-time messages, events, and other data streams in one unified platform. Through EMQX's integration with HStreamDB, you can save MQTT messages and client events to HStreamDB, achieving large-scale IoT data collection, transmission, and storage, and enabling real-time processing, monitoring, and analysis of data streams using standard SQL and materialized views.
 
 This page provides a comprehensive introduction to the data integration between EMQX and HStreamDB with practical instructions on creating and validating the data integration.
@@ -576,13 +570,15 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    {"id": ${id}, "topic": "${topic}", "qos": ${qos}, "payload": "${payload}"}
    ```
 
-9. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
 
-10. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the HStreamDB server.
+10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see [Features of Sink](./data-bridges.md#features-of-sink).
 
-11. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the HStreamDB server.
 
-12. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
+12. Click the **Create** button to complete the Sink configuration. A new Sink will be added to the **Action Outputs.**
+
+13. Back on the **Create Rule** page, verify the configured information. Click the **Create** button to generate the rule.
 
 You have now successfully created the rule for forwarding data and recording online/offline status through the HStreamDB Sink. You can see the newly created rule on the **Integration** -> **Rules** page. Click the **Actions(Sink)** tab and you can see the new HStreamDB Sink.
 

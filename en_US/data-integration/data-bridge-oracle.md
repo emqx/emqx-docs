@@ -1,11 +1,5 @@
 # Ingest MQTT Data into Oracle Database
 
-::: tip
-
-The Oracle Database data integration is an EMQX Enterprise edition feature.
-
-:::
-
 [Oracle Database](https://www.oracle.com/database/) is one of the leading relational commercial database solutions, widely used in enterprises and organizations of various sizes and types. EMQX supports integration with Oracle Database, enabling you to save MQTT messages and client events to Oracle Database. This allows for the construction of complex data pipelines and analytical processes for data management and analysis, or for managing device connections and integrating with other enterprise systems such as ERP and CRM.
 
 This page provides a comprehensive introduction to the data integration between EMQX and Oracle Database with practical instructions on creating and validating the data integration.
@@ -134,7 +128,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    FROM
      "t/#"
    ```
-   
+
    Note: If you are a beginner user, click **SQL Examples** and **Enable Test** to learn and test the SQL rule. 
 
 4. Click the + **Add Action** button to define an action to be triggered by the rule. With this action, EMQX sends the data processed by the rule to Oracle Database. 
@@ -160,10 +154,10 @@ This section demonstrates how to create a rule in the Dashboard for processing m
      TO_TIMESTAMP('1970-01-01 00:00:00', 'YYYY-MM-DD HH24:MI:SS') + NUMTODSINTERVAL(${timestamp}/1000, 'SECOND')
    )
    ```
-   
-9. Leave other options as default.
 
-10. Advanced settings (optional):  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
+9. **Fallback Actions (Optional)**: If you want to improve reliability in case of message delivery failure, you can define one or more fallback actions. These actions will be triggered if the primary Sink fails to process a message. See [Fallback Actions](./data-bridges.md#fallback-actions) for more details.
+
+10. **Advanced settings (optional)**:  Choose whether to use **sync** or **async** query mode as needed. For details, see the relevant configuration information in [Features of Sink](./data-bridges.md#features-of-sink).
 
 11. Before clicking **Create**, you can click **Test Connectivity** to test that the Sink can be connected to the Oracle Database server.
 

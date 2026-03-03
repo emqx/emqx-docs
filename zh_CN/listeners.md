@@ -27,7 +27,7 @@ EMQX 默认提供 4 个监听器，它们将占用以下端口：
 
 监听器配置项的命名规则为 `listener.<Protocol>.<Listener Name>.xxx`， `<Protocol>` 即 Listener 使用的协议。 `<Listener Name>` 可以随意命名，但建议是全小写的英文单词， `xxx` 则是具体的配置项。不同协议的 Listener 的 `<Listener Name>` 可以重复。
 
-由于默认配置的存在，我们能够非常快速地添加新的监听器，以 TCP 监听器为例，我们只需要在 `emqx.conf` 中添加以下一条配置即可：
+由于默认配置的存在，我们能够非常快速地添加新的监听器，以 TCP 监听器为例，我们只需要在 `base.hocon` 中添加以下一条配置即可：
 
 ```
 listeners.tcp.demo.bind = "0.0.0.0:1883"

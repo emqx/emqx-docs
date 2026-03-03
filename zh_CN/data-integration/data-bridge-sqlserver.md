@@ -1,11 +1,5 @@
 # 将 MQTT 数据写入到 Microsoft SQL Server
 
-::: tip
-
-Microsoft SQL Server 数据集成是 EMQX 企业版功能。
-
-:::
-
 [SQL Server](https://www.microsoft.com/en-us/sql-server/) 是领先的关系型商业数据库解决方案之一，被广泛应用于各种规模和类型的企业和组织中。EMQX 支持与 SQL Server 集成，使您能够将 MQTT 消息和客户端事件保存到 SQL Server 以便于构建复杂的数据管道和分析流程实现数据管理和分析，或进行设备连接管理并与其他 ERP, CRM，BI 企业系统的集成。
 
 本页详细介绍了 EMQX 与 Microsoft SQL Server 的数据集成并提供了实用的规则和 Sink 创建指导。
@@ -226,18 +220,37 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
 在创建 Microsoft SQL Server Sink 之前，您需要创建一个连接器，以便 EMQX 与 Microsoft SQL Server 服务建立连接。以下示例假定您在本地机器上同时运行 EMQX 和 Microsoft SQL Server。如果您在远程运行 Microsoft SQL Server 和 EMQX，请相应地调整设置。
 
 1. 转到 Dashboard **集成** -> **连接器** 页面。点击页面右上角的**创建**。
+
 2. 在连接器类型中选择 **Microsoft SQL Server**，点击**下一步**。
+
 3. 在 **配置** 步骤，配置以下信息：
 
    - **连接器名称**：应为大写和小写字母及数字的组合，例如：`my_sqlserver`。
-   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口
+   
+   - **服务器地址**： `127.0.0.1:1433`，或使用实际的 Microsoft SQL Server 地址和端口。
+   
+     ::: tip
+   
+     如果您使用的是命名实例（Named Instance），则必须明确指定实例运行的端口号。驱动程序会使用提供的端口号连接到实例，在运行健康检查时，EMQX 会尝试推断实例名称。
+   
+     在服务器地址字段中仅指定实例名称（例如 `MYSERVER\SQL2022`）无法保证连接到正确的实例，因此请务必检查并确认端口配置，以确保连接正常。
+   
+     :::
+   
    - **数据库名字**： `master`
+   
    - **用户名**： `sa`
+   
    - **密码**： `mqtt_public1`
-   - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name
+   
+   - **SQL Server Driver 名称**： `ms-sql`，即您在 `odbcinst.ini` 中配置的 DSN Name。
+   
 4. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+
 5. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 Microsoft SQL Server 服务器。
+
 6. 点击**创建**按钮完成连接器创建。
+
 7. 在弹出的**创建成功**对话框中您可以点击**创建规则**，继续创建规则以指定需要写入 RocketMQ 的数据和需要记录的客户端事件。您也可以按照[创建消息存储 Sink 规则](#创建消息存储-sink-规则)和[创建事件记录 Sink 规则](#创建事件记录-sink-规则)章节的步骤来创建规则。
 
 ## 创建消息存储 Sink 规则
@@ -269,15 +282,15 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
    FROM
      "t/#"
    ```
-   
+
    :::
-   
+
    ::: tip
-   
+
    如果您初次使用 SQL，可以点击 **SQL 示例**和**启用调试**来学习和测试规则 SQL 的结果。
-   
+
    :::
-   
+
 4. 点击右侧的**添加动作**按钮，为规则在被触发的情况下指定一个动作。通过这个动作，EMQX 会将经规则处理的数据发送到 Microsoft SQL Server。
 
 5. 在**动作类型**下拉框中选择 `Microsoft SQL Server`，保持**动作**下拉框为默认的`创建动作`选项，您也可以选择一个之前已经创建好的 Microsoft SQL Server Sink。此示例将创建一个全新的 Sink 并添加到规则中。
@@ -299,22 +312,24 @@ Microsoft 提供的 Microsoft SQL Server 容器内已安装 `mssql-tools18`，�
       ```sql
    insert into dbo.t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, CONVERT(NVARCHAR(100), ${payload}) )
       ```
-   
+
    :::
-   
+
    如果在模板中使用未定义的占位符变量，您可以切换**未定义变量作为 NULL** 开关（位于 **SQL 模板** 上方）来定义规则引擎的行为：
-   
+
    - **关闭**（默认）：规则引擎可以将字符串 `undefined` 插入数据库。
-   
+
    - **启用**：允许规则引擎在变量未定义时将 `NULL` 插入数据库。
-   
+
      ::: tip
-   
+
      如果可能，应该始终启用此选项；禁用该选项仅用于确保向后兼容性。
-   
+
      :::
 
-10. 高级配置（可选），根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+9. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+
+10. **高级配置（可选）**：根据情况配置同步/异步模式，队列与批量等参数，详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
 
 11. 在点击**创建**按钮完成 Sink 创建之前，您可以使用**测试连接**来测试当前 Sink 到 Microsoft SQL Server 的连接是否成功。
 

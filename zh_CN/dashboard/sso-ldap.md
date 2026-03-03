@@ -41,7 +41,7 @@
 
 ### 配置 Microsoft Entra ID 实例
 
-在配置 Dashboard 中的 Microsoft Extra ID SSO 之前，您需要按照本节的说明配置 Microsoft Entry ID 实例以获取基本的 LDAP 服务器信息。
+在配置 Dashboard 中的 Microsoft Entra ID SSO 之前，您需要按照本节的说明配置 Microsoft Entra ID 实例以获取基本的 LDAP 服务器信息。
 
 1. 登录 [Azure 门户网站](https://portal.azure.com)，按照[此教程](https://learn.microsoft.com/zh-cn/entra/identity/domain-services/tutorial-create-instance)创建 Microsoft Entra 域服务。
 

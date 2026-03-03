@@ -14,20 +14,10 @@ on:
         type: string
         required: true
         description: 'EMQX version without v/e prefix'
-      repository:
-        type: choice
-        required: true
-        options:
-        - emqx/emqx
-        - emqx/emqx-platform
       run_id:
         type: string
         required: true
         description: 'The run id of the workflow that generates the schema dump'
-      docker_pull:
-        type: boolean
-        default: true
-        description: 'Pull official docker images'
 
 permissions:
   contents: read
@@ -37,7 +27,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       EMQX_VERSION: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.event.inputs.version }}
-      REPOSITORY: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.repository || github.event.inputs.repository }}
       RUN_ID: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.run-id || github.event.inputs.run_id }}
     permissions:
       contents: write
@@ -46,12 +35,22 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
+        with:
+          app-id: ${{ vars.AUTH_APP_ID }}
+          private-key: ${{ secrets.AUTH_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            emqx
+
       - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           pattern: "emqx*-schema-dump"
-          repository: ${{ env.REPOSITORY }}
+          repository: "emqx/emqx"
           run-id: ${{ env.RUN_ID }}
-          github-token: ${{ secrets.PAT_RO_WORKFLOWS }}
+          github-token: ${{ steps.app-token.outputs.token }}
           merge-multiple: true
 
       - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
@@ -78,6 +77,7 @@ jobs:
           set -euxo pipefail
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
           BASE_BRANCH="$(echo release-$(echo $EMQX_VERSION | cut -d '.' -f 1-2))"
           NEW_BRANCH="update-api-cfg-${EMQX_VERSION}"
           git fetch origin ${BASE_BRANCH}
@@ -85,59 +85,30 @@ jobs:
 
           VERSION=$(echo "${EMQX_VERSION}" | cut -d '-' -f 1)
           MINOR_VERSION=$(echo "${EMQX_VERSION}" | cut -d '.' -f 1-2)
-          sed -i "s/CE_VERSION=.*/CE_VERSION=${VERSION}/" ./current-version.env
-          sed -i "s/CE_MINOR_VERSION=.*/CE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
           sed -i "s/EE_VERSION=.*/EE_VERSION=${VERSION}/" ./current-version.env
           sed -i "s/EE_MINOR_VERSION=.*/EE_MINOR_VERSION=${MINOR_VERSION}/" ./current-version.env
           git add current-version.env
-          if [ "${DOCKER_PULL}" = true ]; then
-            EMQX_TAG="emqx/emqx:${EMQX_VERSION}"
-            EMQX_ENTERPRISE_TAG="emqx/emqx-enterprise:${EMQX_VERSION}"
-          else
-            EMQX_TAG=$(docker load < emqx-docker-*.tar.gz | sed 's/Loaded image: //g')
-            EMQX_ENTERPRISE_TAG=$(docker load < emqx-enterprise-docker-*.tar.gz | sed 's/Loaded image: //g')
-          fi
 
-          EMQX_API_PORT=18083
-          for edition in ce ee; do
-            case "${edition}" in
-              ce)
-                PROFILE=emqx
-                DOCKER_IMAGE=${EMQX_TAG}
-                ;;
-              ee)
-                PROFILE=emqx-enterprise
-                DOCKER_IMAGE=${EMQX_ENTERPRISE_TAG}
-                ;;
-            esac
-            for lang in en zh; do
-              CID=$(docker run -d -p $EMQX_API_PORT:18083 -e EMQX_dashboard__i18n_lang=${lang} "${DOCKER_IMAGE}")
-              SWAGGER_INPUT="/tmp/swagger-${edition}-${lang}.json"
-              TARGET_FILE="redocly/${edition}-${lang}.json"
-              # it takes some time for swagger to fully load
-              sleep 30
-              curl -o "${SWAGGER_INPUT}" http://127.0.0.1:$EMQX_API_PORT/api-docs/swagger.json
-              jq --indent 2 'del(.paths[] | .[] | select(.deprecated == true))' > "${TARGET_FILE}" < "${SWAGGER_INPUT}"
-              # replace docker ip 172.17.0.* with 127.0.0.1
-              sed -i 's/172\.17\.0\.\([0-9]\{1,3\}\)/127.0.0.1/g' "${TARGET_FILE}"
-              docker logs $CID
-              docker rm -f $CID
-              git add "${TARGET_FILE}"
-              cp "_build/docgen/${PROFILE}/schema-v2-${lang}.json" "hocon/hocon-${edition}-v${VERSION}-${lang}.json"
-              git add "hocon/hocon-${edition}-v${VERSION}-${lang}.json"
-              EMQX_API_PORT=$((EMQX_API_PORT + 1))
-            done
-          done
+          cp "_build/docgen/emqx-enterprise/schema-v2-en.json" "hocon/hocon-ee-v${VERSION}-en.json"
+          cp "_build/docgen/emqx-enterprise/schema-v2-zh.json" "hocon/hocon-ee-v${VERSION}-zh.json"
+          git add "hocon/hocon-ee-v${VERSION}-en.json"
+          git add "hocon/hocon-ee-v${VERSION}-zh.json"
 
-          git commit -m "chore($VERSION): update api and cfg manual"
+          DOCKER_IMAGE="emqx/emqx-enterprise:${EMQX_VERSION}"
+          ./update-api-docs.sh "${VERSION}" "${DOCKER_IMAGE}"
+
+          git add "redocly/ee-en.json"
+          git add "redocly/ee-zh.json"
+
+          git commit -m "chore(${VERSION}): update api docs and configuration manual"
           git push origin ${NEW_BRANCH}:${NEW_BRANCH}
-          for pr in $(gh pr list --state open --base ${BASE_BRANCH} --label update-api-cfg --search "update api and cfg manual ${VERSION} in:title" --repo ${{ github.repository }} --json number --jq '.[] | .number'); do
+          for pr in $(gh pr list --state open --base ${BASE_BRANCH} --label update-api-cfg --search "update api docs and configuration manual for ${VERSION} in:title" --repo ${{ github.repository }} --json number --jq '.[] | .number'); do
             gh pr close $pr --repo ${{ github.repository }} --delete-branch || true
           done
-          gh pr create --title "update api and cfg manual ${VERSION}" --body '' --base ${BASE_BRANCH} --head ${NEW_BRANCH} --label update-api-cfg --repo ${{ github.repository }}
+          gh pr create --title "update api docs and configuration manual for ${VERSION}" --body '' --base ${BASE_BRANCH} --head ${NEW_BRANCH} --label update-api-cfg --repo ${{ github.repository }}
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: "swagger"
           path: |
-            /tmp/swagger-*.json
+            redocly/*.json

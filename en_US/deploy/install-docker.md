@@ -3,11 +3,11 @@ description: This page introduces how to use the official Docker image to instal
 ---
 
 # Install EMQX Using Docker
-This page introduces how to use the official Docker image to install and run the EMQX Enterprise edition, and how to use Docker Compose to build an EMQX cluster.
+This page introduces how to use the official Docker image to install and run the EMQX Enterprise, and how to use Docker Compose to build an EMQX cluster.
 
 ## Use Docker to Run A Single EMQX Node
 
-This section will introduce how to use the Docker image to install the latest version of EMQX. For more information about EMQX official docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). 
+This section will introduce how to use the Docker image to install the latest version of EMQX. For more information about the EMQX official Docker image, see [Docker Hub - emqx/emqx-enterprise](https://hub.docker.com/r/emqx/emqx-enterprise). 
 
 1. To get the Docker image, run: 
 
@@ -48,7 +48,7 @@ This section will introduce how to use the Docker image to install the latest ve
    
 2. In Docker environments, `localhost` or `127.0.0.1` refers to the container's own internal network interface, not that of the host machine. To access services running on the host machine, use the host's IP address or use [host networking settings](https://docs.docker.com/network/host/). If you are using Docker for Mac or Docker for Windows, you can use `host.docker.internal` as the host address.
 
-3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a hostname or Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
+3. EMQX employs the `data/mnesia/<node_name>` directory for data storage. It's crucial to choose a stable identifier, such as a Fully Qualified Domain Name (FQDN), to serve as the node name. This practice avoids data loss caused by node name changes.
 
    To configure the node name for a single node deployment, use the `EMQX_NODE_NAME` environment variable with the format `emqx@hostname`. You should also set the container hostname to match, as shown in the example above.
 

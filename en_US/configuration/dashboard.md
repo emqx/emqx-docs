@@ -1,14 +1,19 @@
 # Dashboard Configuration
 
-The EMQX Dashboard is a web-based graphical interface that enables real-time management and monitoring of EMQX and its connected devices. You can configure the following settings for the Dashboard:
+The EMQX Dashboard is a web-based graphical interface that enables real-time management and monitoring of EMQX and its connected devices. 
+
+EMQX Dashboard configuration includes many configuration items. For example, you can enable the Swagger UI through the `swagger_support` configuration and configure a listener for the EMQX Dashboard to accept all incoming connections. In addition, the following common configuration items are also available:
 
 - `listeners`
 - `token_expired_time`
+- `password_expired_time`
+- `hwmark_expire_time`
 - `cors`
-- `swagger_support`
+- `default_password`
+- `unsuccessful_login_max_attempts`
+- `unsuccessful_login_duration`
+- `unsuccessful_login_interval`
 - `sso`
-
-For example, you can enable the Swagger UI and configure a listener for the EMQX Dashboard to accept all incoming connections. 
 
 Below is a sample Dashboard configuration:
 
@@ -30,10 +35,15 @@ dashboard {
     }
   }
   token_expired_time = 60m
+  password_expired_time = 0
   cors = false
   swagger_support = true
   default_password = jEdOgGS6vzQ
+  unsuccessful_login_max_attempts = 5
+  unsuccessful_login_lock_duration = 10m
+  unsuccessful_login_interval = 5m
   sso = {
+    # Normally, only one of `ldap`, `oidc`, or `smal` can be active at a time. Below is for the demonstration purposes.
     ldap = {
       enable = true
       backend = "ldap"
@@ -104,6 +114,14 @@ Where,
 
   JWT token expiration time. It is equivalent to "browser session expiration time". When a user logs in, EMQX generates a JWT token along with a refresh token. The session is automatically renewed before expiration. The default value is `60m`.
 
+- `hwmark_expire_time`
+
+  The time window for the highest watermark to expire. The default value is `7d`. After expiration, the dashboard will find the new highest watermark since the expiration time up to the current time.
+
+- `password_expired_time`
+
+  Set the expiration time for the user's password used to log in to the Dashboard, such as `1h`. After this time, the user must change their password when logging into the Dashboard. The default value `0` means the password never expires.
+
 - `cors`
 
   Support Cross-Origin Resource Sharing (CORS). If you want to allow dashboard APIs to be accessed from other domains (e.g., a custom frontend), you can set this to `true`.
@@ -116,12 +134,25 @@ Where,
 
   The password used to initialize the database record for `admin` user. NOTE: Changing this config after EMQX has booted for the first time has no effect. Once initialized, the default password `public` (which comes with the installation) must be changed from the Dashboard or CLI.
 
+
+- `unsuccessful_login_max_attempts`
+
+  Specifies the maximum number of failed login attempts allowed within a specific period. If the user exceeds this limit, their account will be temporarily locked. The default value is `5`.
+
+- `unsuccessful_login_duration`
+
+  Sets the duration (in minutes) for which the account will be locked after reaching the maximum number of unsuccessful login attempts. The default value is `10` minutes.
+
+- `unsuccessful_login_interval`
+
+  Defines the time window during which failed login attempts are counted towards the limit. For example, if set to `5`, the system will track the number of failed login attempts within a 5-minute period. The default value is `5` minutes.
+
 - `sso`
 
   Configure the [Single Sign-On (SSO)](../dashboard/sso.md) options. Only one of `ldap`, `oidc`, or `smal` can be active at a time. For detailed configuration descriptions, see the SSO section in the [Configuration Manual](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-dashboard-S-dashboard-sso).
 
 ::: tip
 
-EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::

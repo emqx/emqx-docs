@@ -40,11 +40,11 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
 
 ![安装 Datadog EMQX 集成](./assets/datadog-search-emqx-intergration.png)
 
-4. 安装完成后，切换到 **Configure** 标签页查看 EMQX 集成的配置指引，配置所需的操作均在 Datadog Agnet 上进行。
+4. 安装完成后，切换到 **Configure** 标签页查看 EMQX 集成的配置指引，配置所需的操作均在 Datadog Agent 上进行。
 
 ![配置 EMQX Datadog 集成](./assets/datadog-integration-configuration.png)
 
-## 在 Datadog Agnet 上添加并启用 EMQX 集成
+## 在 Datadog Agent 上添加并启用 EMQX 集成
 
 根据配置指引，在 Datadog Agent 上添加 EMQX 集成，以完成 EMQX 指标的采集与上报配置。
 
@@ -54,7 +54,7 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     datadog-agent integration install -t datadog-emqx==1.1.0
     ```
 
-2. 安装完成后，修改 Agnet 配置文件以启用 EMQX 集成。
+2. 安装完成后，修改 Agent 配置文件以启用 EMQX 集成。
 
     打开 Agent 配置目录（默认是 `/opt/datadog-agent/etc/conf.d/`），找到目录下的 `emqx.d` 目录，可以看到 `emqx.d` 目录下有一个示例配置文件 `conf.yaml.example`。
 
@@ -66,7 +66,7 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     
     ```
 
-    `openmetrics_endpoint` 选项是 Datadog Agnet 提取 OpenMetrics 格式的指标数据的地址，这里设置的是 EMQX 的 HTTP API 地址。实际使用中，请修改为 Datadog Agent 能够访问到的地址。
+    `openmetrics_endpoint` 选项是 Datadog Agent 提取 OpenMetrics 格式的指标数据的地址，这里设置的是 EMQX 的 HTTP API 地址。实际使用中，请修改为 Datadog Agent 能够访问到的地址。
 
     该 API 还支持通过 `mode` 查询参数指定拉取的指标范围，每个参数的含义如下：
     
@@ -103,11 +103,11 @@ EMQX 提供了开箱即用的 [Datadog 集成](https://docs.datadoghq.com/integ
     
     ```
 
-至此，您已经完成 Datadog Agnet 端的所有配置，Agent 将定期收集 EMQX 运行数据，并发送到 Datadog 中。接下来，我们到 Datadog 控制台中查看指标是否正确收集。
+至此，您已经完成 Datadog Agent 端的所有配置，Agent 将定期收集 EMQX 运行数据，并发送到 Datadog 中。接下来，我们到 Datadog 控制台中查看指标是否正确收集。
 
 ## 在 Datadog 控制台上查看 EMQX 指标
 
-Datadog Agnet 的 EMQX 集成提供了一个开箱即用的 Dashboard 图表，用于展示节点状态、消息状态信息，以及其他更深入的可观察性指标。我们可以通过以下步骤使用：
+Datadog Agent 的 EMQX 集成提供了一个开箱即用的 Dashboard 图表，用于展示节点状态、消息状态信息，以及其他更深入的可观察性指标。我们可以通过以下步骤使用：
 
 1. 菜单栏选择 **Integrations** → **Integrations** 打开集成页面。
 

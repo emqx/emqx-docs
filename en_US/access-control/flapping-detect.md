@@ -1,11 +1,5 @@
 # Flapping Detect
 
-::: tip Note
-
-Flapping Detect is an EMQX Enterprise feature.
-
-:::
-
 Based on the Banned Clients function, EMQX automatically bans frequently logging clients to prevent them from consuming server resources that may affect other clients. Those clients will be banned for a period of time.
 
 It should be noted that the automatic ban only bans the client by the client ID, not by the user name and IP address. A malicious client may still be able to attack if they change the client ID for each attempt.
@@ -25,7 +19,7 @@ This feature is disabled by default, and you can enable it via EMQX Dashboard or
 
 ## Enable Flapping Detect in Configuration File
 
-You can also enable the flapping detect feature by adding the following configuration to the `emqx.conf` file:
+You can also enable the flapping detect feature by adding the following configuration:
 
 ```bash
 flapping_detect {

@@ -18,11 +18,7 @@ def check_md_content(md_file):
         return
 
     md_content = re.sub(r'<!--([\s\S]*?)-->', '', open(md_file, 'r').read())
-
-    if 'ee' in directory_file:
-        md_content = re.sub(r'{% emqxce %}([\s\S]*?){% endemqxce %}', '', md_content)
-    else:
-        md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
+    md_content = re.sub(r'{% emqxee %}([\s\S]*?){% endemqxee %}', '', md_content)
 
     image_list = re.findall('(.*?)!\[(.*?)\]\((.*?)\)', md_content)
     url_list = re.findall('(.*?)\[(.*?)\]\((.*?)\)', md_content)
@@ -81,6 +77,7 @@ if __name__ == '__main__':
         config_dict = json.load(open(f'{docs_path}/{directory_file}'))
         md_file_list += get_md_files(config_dict['cn'], 'zh_CN')
         md_file_list += get_md_files(config_dict['en'], 'en_US')
+        md_file_list += get_md_files(config_dict['ja'], 'ja_JP')
 
         for file_path, dir_list, file_list in os.walk(docs_path):
             for file_name in file_list:

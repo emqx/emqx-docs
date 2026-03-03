@@ -4,7 +4,7 @@ In EMQX, a cluster is a group of EMQX nodes that work together to provide a high
 
 ## Configure Node Names
 
-Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated with `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for instance:
+Before starting the cluster creation step, let's first get familiar with the concept of node names in EMQX. EMQX nodes are identified by their names. A node name consists of two parts, node name and host, separated by `@`, for example, `emqx@s1.emqx.io`. The host part must either be the IP address or a fully qualified domain name (FQDN), such as `myhost.example.tld`, for instance:
 
 - For the EMQX node deployed on server `s1.emqx.io`, the node name should be `emqx@s1.emqx.io`;
 - If this server has a static IP (`192.168.0.10`), the node name should be `emqx@192.168.0.10`.
@@ -27,11 +27,11 @@ Where,
 
 ## Configure Cluster
 
-This section introduces how to configure an EMQX cluster. You can add the cluster configuration items either on a core or replicant node. If you are working on a replicant node, there are some configuration items, for example, `core_nodes`, that only take effect under certain preconditions:
+This section introduces how to configure an EMQX cluster. You can add the cluster configuration items either on a core or a replicant node. If you are working on a replicant node, there are some configuration items, for example, `core_nodes`, that only take effect under certain preconditions:
 
 - `node.db_backend` of the node is set to `rlog`, indicating the node uses `rlog` as the database backend. 
 - `node.role` is set to `replicant`, indicating this code functions as a replicant node. 
-- `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../deploy/cluster/create-cluster.md). 
+- `node.discovery_strategy` is set to `manual` or `static`, there is no need to set this configuration item if the automatic cluster discovery mechanism is used. For a detailed explanation of the node discovery strategy and the corresponding configuration items, see [Create Cluster](../deploy/cluster/create-cluster.md). 
 
 ```bash
 cluster {
@@ -63,7 +63,7 @@ Where,
 
 ::: tip
 
-EMQX offers more configuration items to serve customized needs better. For details, see the [EMQX Open Source Configuration Manual](https://docs.emqx.com/en/emqx/v@CE_VERSION@/hocon/) and [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
+EMQX offers more configuration items to better serve customized needs. For details, see the [EMQX Enterprise Configuration Manual for Enterprise](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/).
 
 :::
 

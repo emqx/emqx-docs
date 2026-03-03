@@ -42,7 +42,7 @@ In addition to load balancing deployment clusters, you can also use DNS round-ro
 
 After deploying LB, EMQX typically needs to obtain the actual source IP of the client or TLS certificate information. You will need to enable [Proxy Protocol](https://www.haproxy.com/blog/haproxy/proxy-protocol) configuration on the LB or enable relevant configurations to retrieve the real IP.
 
-If Proxy Protocol is enabled on the LB, the `proxy_protocol` configuration option must also be enabled on the corresponding listener in EMQX. For example, for a TCP 1883 listener, you can add the following configuration in `etc/emqx.conf`:
+If Proxy Protocol is enabled on the LB, the `proxy_protocol` configuration option must also be enabled on the corresponding listener in EMQX. For example, for a TCP 1883 listener, you can add the following in configuration file:
 
 ```bash
 listeners.tcp.default {
