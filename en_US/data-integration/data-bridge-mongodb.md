@@ -199,7 +199,7 @@ This section demonstrates how to create a rule in the Dashboard for processing m
    - Auto-derivation of the data type of "value" is not supported:
      - Characters need to be wrapped with `"`, otherwise, an error will be reported;
      - Values do not need to be wrapped, otherwise, they will be recognized as characters;
-     - For timestamp, date, and time types, if no special treatment is performed, they will be recognized as numeric or character types. To store them as date or time, use the `mongo_date` function in the rule SQL to process the fields. For details, see [Time and date functions](./rule-sql-builtin-functions.md#time-and-date-functions). (Note: Return values of `mongo_`-prefixed functions are only for MongoDB actions and cannot be used in other actions.)
+     - For timestamp, date, and time types, if no special handling is applied, they will be treated as numeric or character types. To store them as date or time, use the [MongoDB Time Functions](./rule-sql-builtin-functions.md#mongodb-time-functions) in the rule SQL. (Note: The return values of these functions are only valid for MongoDB actions and cannot be used in other actions.)
 
    - Nested objects are allowed when the value is a JSON object:
      - It is not allowed to use `"` to nest the value in the template, otherwise, it will cause an execution error;
