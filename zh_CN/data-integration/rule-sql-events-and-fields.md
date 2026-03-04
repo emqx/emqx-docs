@@ -77,7 +77,7 @@ FROM
 
 规则的 SQL 语句既可以处理消息(消息发布)，也可以处理事件(客户端上下线、客户端订阅等)。对于消息，FROM 子句后面直接跟主题名；对于事件，FROM 子句后面跟事件主题。
 
-事件主题以 `$events/` 开头，比如 `$events/client_connected`，`$events/session_subscribed`。
+事件主题以 `$events/` 开头，比如 `$events/client/connected`，`$events/session/subscribed`。
 
 ::: tip
 
@@ -87,21 +87,45 @@ FROM
 
 | 事件名称                                                     | 事件主题名                          | 释义                     |
 | ------------------------------------------------------------ | ----------------------------------- | ------------------------ |
-| [消息投递事件](#消息投递事件-events-message-delivered)       | $events/message_delivered           | 消息投递                 |
-| [消息确认事件](#消息确认事件-events-message-acked)           | $events/message_acked               | 消息确认                 |
-| [消息在转发的过程中被丢弃事件](#消息在转发的过程中被丢弃事件-events-message-dropped) | $events/message_dropped             | 消息在转发的过程中被丢弃 |
-| [消息在投递的过程中被丢弃事件](#消息在投递的过程中被丢弃事件-events-delivery-dropped) | $events/delivery_dropped            | 消息在投递的过程中被丢弃 |
-| [客户端连接成功事件](#客户端连接成功事件-events-client-connected) | $events/client_connected            | 连接完成                 |
-| [客户端连接断开事件](#客户端连接断开事件-events-client-disconnected) | $events/client_disconnected         | 连接断开                 |
-| [连接确认事件](#连接确认事件-events-client-connack)          | $events/client_connack              | 连接确认                 |
-| [鉴权完成事件](#鉴权完成事件-events-client-check-authz-complete) | $events/client_check_authz_complete | 鉴权完成                 |
-| [认证完成事件](#认证完成事件-events-client-check-authn-complete) | $events/client_check_authn_complete | 认证完成                 |
-| [客户端订阅成功事件](#客户端订阅成功事件-events-session-subscribed) | $events/session_subscribed          | 订阅                     |
-| [客户端取消订阅成功事件](#客户端取消订阅成功事件-events-session-unsubscribed) | $events/session_unsubscribed        | 取消订阅                 |
+| [消息投递事件](#消息投递事件-events-message-delivered)       | $events/message/delivered           | 消息投递                 |
+| [消息确认事件](#消息确认事件-events-message-acked)           | $events/message/acked               | 消息确认                 |
+| [消息在转发的过程中被丢弃事件](#消息在转发的过程中被丢弃事件-events-message-dropped) | $events/message/dropped             | 消息在转发的过程中被丢弃 |
+| [消息在投递的过程中被丢弃事件](#消息在投递的过程中被丢弃事件-events-delivery-dropped) | $events/message/delivery_dropped            | 消息在投递的过程中被丢弃 |
+| [客户端连接成功事件](#客户端连接成功事件-events-client-connected) | $events/client/connected            | 连接完成                 |
+| [客户端连接断开事件](#客户端连接断开事件-events-client-disconnected) | $events/client/disconnected         | 连接断开                 |
+| [连接确认事件](#连接确认事件-events-client-connack)          | $events/client/connack              | 连接确认                 |
+| [鉴权完成事件](#鉴权完成事件-events-client-check-authz-complete) | $events/auth/check_authz_complete | 鉴权完成                 |
+| [认证完成事件](#认证完成事件-events-client-check-authn-complete) | $events/auth/check_authn_complete | 认证完成                 |
+| [客户端订阅成功事件](#客户端订阅成功事件-events-session-subscribed) | $events/session/subscribed          | 订阅                     |
+| [客户端取消订阅成功事件](#客户端取消订阅成功事件-events-session-unsubscribed) | $events/session/unsubscribed        | 取消订阅                 |
 | [系统告警激活事件](#告警激活事件-events-sys-alarm-activated) | $events/sys/alarm_activated         | 系统告警激活             |
 | [系统告警解除事件](#告警解除事件-events-sys-alarm-deactivated) | $events/sys/alarm_deactivated       | 系统告警解除             |
 
-### 消息投递事件 ("$events/message_delivered")
+::: tip
+
+从 EMQX 5.10.0 开始，客户端事件主题采用了命名空间结构，将事件主题重新组织为逻辑清晰的分层结构。这一调整使事件主题的分类更加直观，便于后续的筛选、管理与扩展。
+
+为保证向后兼容，旧版事件主题仍然可用。但推荐在新配置中优先使用新的命名空间事件主题。下表展示了旧事件主题与新（命名空间）事件主题之间的对应关系：
+
+| 旧事件主题                              | 新事件主题                              |
+| :-------------------------------------- | :-------------------------------------- |
+| `$events/client_connected`              | `$events/client/connected`              |
+| `$events/client_disconnected`           | `$events/client/disconnected`           |
+| `$events/client_connack`                | `$events/client/connack`                |
+| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+| `$events/session_subscribed`            | `$events/session/subscribed`            |
+| `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+| `$events/message_delivered`             | `$events/message/delivered`             |
+| `$events/message_acked`                 | `$events/message/acked`                 |
+| `$events/message_dropped`               | `$events/message/dropped`               |
+| `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+| `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+| `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+:::
+
+### 消息投递事件 ("$events/message/delivered")
 
 当消息被放入底层socket时触发规则。
 
@@ -133,7 +157,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_delivered"
+  "$events/message/delivered"
 ```
 
 输出
@@ -149,7 +173,7 @@ FROM
 }
 ```
 
-### 消息确认事件 ("$events/message_acked")
+### 消息确认事件 ("$events/message/acked")
 
 当消息发送到客户端，并收到客户端回复的ack时触发规则，仅QOS1，QOS2会触发。
 
@@ -182,7 +206,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_acked"
+  "$events/message/acked"
 ```
 
 输出
@@ -198,7 +222,7 @@ FROM
 }
 ```
 
-### 消息在转发的过程中被丢弃事件 ("$events/message_dropped")
+### 消息在转发的过程中被丢弃事件 ("$events/message/dropped")
 
 当一条消息无任何订阅者时触发规则。
 
@@ -229,7 +253,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_dropped"
+  "$events/message/dropped"
 ```
 
 输出
@@ -244,7 +268,7 @@ FROM
 }
 ```
 
-### 消息在投递的过程中被丢弃事件 ("$events/delivery_dropped")
+### 消息在投递的过程中被丢弃事件 ("$events/message/delivery_dropped")
 
 当订阅者的消息队列已满时触发规则。
 
@@ -275,7 +299,7 @@ SELECT
   reason,
   topic,
   qos
-FROM "$events/delivery_dropped"
+FROM "$events/message/delivery_dropped"
 ```
 
 输出
@@ -290,7 +314,7 @@ FROM "$events/delivery_dropped"
 }
 ```
 
-### 客户端连接成功事件 ("$events/client_connected")
+### 客户端连接成功事件 ("$events/client/connected")
 
 当客户端连接成功时触发规则。
 
@@ -322,7 +346,7 @@ SELECT
   keepalive,
   is_bridge
 FROM
-  "$events/client_connected"
+  "$events/client/connected"
 ```
 
 输出
@@ -336,7 +360,7 @@ FROM
 }
 ```
 
-### 客户端连接断开事件 ("$events/client_disconnected")
+### 客户端连接断开事件 ("$events/client/disconnected")
 
 当客户端连接断开时触发规则。
 
@@ -365,7 +389,7 @@ SELECT
   disconnected_at,
   node
 FROM
-  "$events/client_disconnected"
+  "$events/client/disconnected"
 ```
 
 输出
@@ -381,7 +405,7 @@ FROM
 }
 ```
 
-### 连接确认事件 ("$events/client_connack")
+### 连接确认事件 ("$events/client/connack")
 
 当服务端向客户端发送CONNACK报文时触发规则，reason_code 包含各种错误原因代码。
 
@@ -448,7 +472,7 @@ SELECT
   reason_code,
   node
 FROM
-  "$events/client_connack"
+  "$events/client/connack"
 ```
 
 输出
@@ -463,7 +487,7 @@ FROM
 }
 ```
 
-### 鉴权完成事件 ("$events/client_check_authz_complete")
+### 鉴权完成事件 ("$events/auth/check_authz_complete")
 
 当客户端鉴权结束时触发规则。
 
@@ -492,7 +516,7 @@ SELECT
   authz_source,
   node
 FROM
-  "$events/client_check_authz_complete"
+  "$events/auth/check_authz_complete"
 ```
 
 输出
@@ -509,7 +533,7 @@ FROM
 }
 ```
 
-### 认证完成事件 ("$events/client_check_authn_complete")
+### 认证完成事件 ("$events/auth/check_authn_complete")
 
 当客户端认证结束时触发规则。
 
@@ -533,7 +557,7 @@ SELECT
   is_superuser,
   is_anonymous
 FROM
-  "$events/client_check_authn_complete"
+  "$events/auth/check_authn_complete"
 ```
 
 输出
@@ -548,7 +572,7 @@ FROM
 }
 ```
 
-### 客户端订阅成功事件 ("$events/session_subscribed")
+### 客户端订阅成功事件 ("$events/session/subscribed")
 
 当客户端订阅成功时触发规则。
 
@@ -573,7 +597,7 @@ SELECT
   topic,
   qos
 FROM
-  "$events/session_subscribed"
+  "$events/session/subscribed"
 ```
 
 输出
@@ -587,7 +611,7 @@ FROM
 }
 ```
 
-### 客户端取消订阅成功事件 ("$events/session_unsubscribed")
+### 客户端取消订阅成功事件 ("$events/session/unsubscribed")
 
 当客户端取消订阅成功时触发规则。
 
@@ -612,7 +636,7 @@ SELECT
   topic,
   qos
 FROM
-  "$events/session_unsubscribed"
+  "$events/session/unsubscribed"
 ```
 
 输出

@@ -132,5 +132,21 @@ To test if the Azure Event Hubs data integration works as you expected, you can 
 ```
 
 2. Click the name of the rule on the **Rule** page to view the statistics. Check the running status of the Sink and there should be 1 new outgoing message.
-
 3. Check whether messages are written into the configured Event Hub using any Kafka-compatible consumer. For more information about using the Kafka CLI, see [Use the Kafka CLI to Send and Receive Messages to/from Azure Event Hubs for Apache Kafka Ecosystem](https://github.com/Azure/azure-event-hubs-for-kafka/tree/master/quickstart/kafka-cli).
+
+## Advanced Configuration
+
+This section describes some advanced configuration options that can optimize the performance of your connectors and customize operations according to your specific scenario. When creating the corresponding object, you can expand **Advanced Settings** and configure the following settings according to your business needs.
+
+| Fields                            | Descriptions                                                 | Recommended Values |
+| --------------------------------- | ------------------------------------------------------------ | ------------------ |
+| Allow Auto Topic Creation         | (For Producer only) When enabled, EMQX allows automatic creation of a Kafka topic if it doesn’t exist when a client sends a metadata fetch request. | `Disabled`         |
+| Connect Timeout                   | The maximum time to wait for TCP connection establishment, which includes the authentication time if enabled. | `5` second         |
+| Start Timeout                     | Determines the maximum time interval, in seconds, that the Connector will wait for an auto-started resource to reach a healthy state before responding to resource creation requests. This setting helps ensure that the Sink does not proceed with operations until it verifies that the connected resource, such as a Confluent cluster, is fully operational and ready to handle data transactions. | `5` second         |
+| Health Check Interval             | The time interval for checking the running status of the Connector. | `15` second        |
+| Health Check Timeout              | Specify the timeout duration for the connector to perform automatic health checks on its connection with Azure Event Hubs. | `60` second        |
+| Min Metadata Refresh Interval     | The minimum time interval the client must wait before refreshing Azure Event Hubs Kafka broker and topic metadata. Setting this value too small may increase the load on the Kafka server unnecessarily. | `3` second         |
+| Metadata Request Timeout          | The maximum duration to wait when the bridge requests metadata from Kafka. | `5` second         |
+| Socket Send / Receive Buffer Size | Manages the size of socket buffers to optimize network transmission performance. | `1 ` MB            |
+| No Delay                          | Choose whether to have the system kernel send the TCP socket immediately or with a delay. Turning on the toggle switch enables "No Delay", allowing the system kernel to send immediately. Otherwise, there might be some delay when the content to be sent is minimal (default 40 milliseconds). | `Enabled`          |
+| TCP Keepalive                     | This configuration enables TCP keepalive mechanism for Kafka bridge connections to maintain ongoing connection validity, preventing connection disruptions caused by extended periods of inactivity. The value should be provided as a comma-separated list of three numbers in the format `Idle, Interval, Probes`:<br />Idle: This represents the number of seconds a connection must remain idle before the server initiates keep-alive probes. The default value on Linux is 7200 seconds.<br />Interval: The interval specifies the number of seconds between each TCP keep-alive probe. On Linux, the default is 75 seconds.<br />Probes: This parameter defines the maximum number of TCP keep-alive probes to send before considering the connection as closed if there's no response from the other end. The default on Linux is 9 probes.<br />For example, if you set the value to '240,30,5,' it means that TCP keepalive probes will be sent after 240 seconds of idle time, with subsequent probes sent every 30 seconds. If there are no responses for 5 consecutive probe attempts, the connection will be marked as closed. | `none`             |

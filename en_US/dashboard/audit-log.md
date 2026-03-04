@@ -12,7 +12,7 @@ You can enable the Audit Log feature and adjust the configuration parameters thr
 
 ### Enable Audit Log via Dashboard
 
-You can enable the audit log and modify the configuration parameters in the Dashboard by navigating to **Management** -> **Logging** -> **Audit Log**.
+To enable the audit log and modify the configuration parameters in the Dashboard, go to **Management** -> **Logging** -> **Audit Log**, or go to **System** -> **Audit Log**.
 
 <img src="./assets/audit_log_config.png" alt="Audit Log Configuration" style="zoom:50%;" />
 

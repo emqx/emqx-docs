@@ -2,11 +2,11 @@
 
 Rules in EMQX can process data from various data sources, including **MQTT Messages**, **MQTT Events**, or **Data Bridges**.
 
-As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [MQTT Messages](#mqtt-message), [MQTT Events](#mqtt-events), and [Data Bridges](#data-bridges). 
+As discussed in the [Rule Engine Syntax](./rule-sql-syntax.md) section, you can use the `FROM` clause to specify the data source and the corresponding fields can be referenced in the `SELECT` and `where` clauses. This section will introduce the fields for [MQTT Messages](#mqtt-message), [MQTT Events](#mqtt-events), and [Data Bridges](#data-bridges).
 
 ## MQTT Message
 
-You can use EMQX rules to handle message publishing, in this case, you need to specify the message topics with the `FROM` clause. 
+You can use EMQX rules to handle message publishing, in this case, you need to specify the message topics with the `FROM` clause.
 
 For example, in the following statement, you will select fields `payload.msg` (then rename as msg with the `AS` clause), `clientid`, `username`, `payload`, `topic`, and `qos` for any message published to topics following the pattern `t/#`.
 
@@ -58,7 +58,7 @@ Refer to the table below for fields that can be selected from the received MQTT 
 
 ## MQTT Events
 
-You can use EMQX rules to extract data from event topics to get event notifications, for example, client online and offline, client subscriptions, etc. The event topic starts with `"$events/"`, such as `"$events/client_connected"`, which can be specified in the `FROM` clause of the rule.
+You can use EMQX rules to extract data from event topics to get event notifications, for example, client online and offline, client subscriptions, etc. The event topic starts with `"$events/"`, such as `"$events/client/connected"`, which can be specified in the `FROM` clause of the rule.
 
 ::: tip
 
@@ -66,31 +66,56 @@ By default, clients are unable to subscribe directly to MQTT event messages. Thi
 
 :::
 
-See the table below for the supported event topic list. 
+See the table below for the supported event topic list.
 
 ### Event Topic List
 
 | Event topic name                                             | Explanation                     |
 | ------------------------------------------------------------ | :------------------------------ |
-| [$events/message_delivered](#message-delivery-event-events-message-delivered) | Message delivery                |
-| [$events/message_acked](#message-acknowledged-event-events-message-acked) | Message acknowledged            |
-| [$events/message_dropped](#message-dropped-when-routing-event-events-message-dropped) | Message dropped when routing    |
-| [$events/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | Message dropped when delivering |
-| [$events/client_connected](#connection-complete-event-events-client-connected) | Connection complete             |
-| [$events/client_disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
-| [$events/client_connack](#connection-acknowledge-event-events-client-connack) | Connection acknowledged         |
-| [$events/client_check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
-| [$events/client_check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | Authentication check complete    |
-| [$events/session_subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
-| [$events/session_unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
+| [$events/message/delivered](#message-delivery-event-events-message-delivered) | Message delivery                |
+| [$events/message/acked](#message-acknowledged-event-events-message-acked) | Message acknowledged            |
+| [$events/message/dropped](#message-dropped-when-routing-event-events-message-dropped) | Message dropped when routing    |
+| [$events/message/delivery_dropped](#message-dropped-when-delivering-event-events-delivery-dropped) | Message dropped when delivering |
+| [$events/client/connected](#connection-complete-event-events-client-connected) | Connection complete             |
+| [$events/client/disconnected](#disconnect-event-events-client-disconnected) | Disconnect                      |
+| [$events/client/connack](#connection-acknowledge-event-events-client-connack) | Connection acknowledged         |
+| [$events/auth/check_authz_complete](#authorization-check-complete-event-events-client-check-authz-complete) | Authorization check complete    |
+| [$events/auth/check_authn_complete](#authentication-check-complete-event-events-client-check-authn-complete) | Authentication check complete    |
+| [$events/session/subscribed](#subscriber-event-events-session-subscribed) | Subscribe                       |
+| [$events/session/unsubscribed](#unsubscribe-event-events-session-unsubscribed) | Unsubscribe                     |
 | [$events/sys/alarm_activated](#system-alarm-activated-event-events-sys-alarm-activated) | Alarm activated |
 | [$events/sys/alarm_deactivated](#system-alarm-deactivated-event-events-sys-alarm-deactivated) | Alarm deactivated |
 
-### Message Delivery Event ("$events/message_delivered")
+::: tip
+
+Starting from EMQX 5.10.0, namespaces have been introduced for event topics, reorganizing them into a logical, hierarchical structure. This enhancement improves the clarity, filtering, and management of event topics.
+
+For backward compatibility, the old event topics are still supported. However, it is recommended to use the new namespaced topics for all new configurations. See the table below for the mapping between old and new (namespaced) topics.
+
+| Previous event topic                    | New event topic                         |
+|:----------------------------------------|:----------------------------------------|
+| `$events/client_connected`              | `$events/client/connected`              |
+| `$events/client_disconnected`           | `$events/client/disconnected`           |
+| `$events/client_connack`                | `$events/client/connack`                |
+| `$events/client_check_authz_complete`   | `$events/auth/check_authz_complete`     |
+| `$events/client_check_authn_complete`   | `$events/auth/check_authn_complete`     |
+| `$events/session_subscribed`            | `$events/session/subscribed`            |
+| `$events/session_unsubscribed`          | `$events/session/unsubscribed`          |
+| `$events/message_delivered`             | `$events/message/delivered`             |
+| `$events/message_acked`                 | `$events/message/acked`                 |
+| `$events/message_dropped`               | `$events/message/dropped`               |
+| `$events/delivery_dropped`              | `$events/message/delivery_dropped`      |
+| `$events/message_transformation_failed` | `$events/message_transformation/failed` |
+| `$events/schema_validation_failed`      | `$events/schema_validation/failed`      |
+
+:::
+
+
+### Message Delivery Event ("$events/message/delivered")
 
 This event topic can be used to trigger a rule when a message is delivered to a client.
 
-For example, to extract data from the `"$events/message_delivered"` event topic that includes the following data fields, ID and username of the publisher, message topic, message QoS, EMQX node with the event triggered, and the time when the event was triggered, you can use the statement below:
+For example, to extract data from the `"$events/message/delivered"` event topic that includes the following data fields, ID and username of the publisher, message topic, message QoS, EMQX node with the event triggered, and the time when the event was triggered, you can use the statement below:
 
 Example:
 ```sql
@@ -102,7 +127,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_delivered"
+  "$events/message/delivered"
 ```
 Output:
 ```json
@@ -115,7 +140,7 @@ Output:
   "from_clientid": "c_emqx_1"
 }
 ```
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Code                  | Explanation                                             |
 | :-------------------- | :------------------------------------------------------ |
@@ -134,9 +159,9 @@ Below are detailed explanations of each field.
 | `publish_received_at` | Time when PUBLISH message reaches EMQX <br />(unit: ms) |
 | `node`                | EMQX node where the event triggered                     |
 
-### Message Acknowledged Event ("$events/message_acked")
+### Message Acknowledged Event ("$events/message/acked")
 
-This event topic can be used to trigger a rule when the message delivery is acknowledged. 
+This event topic can be used to trigger a rule when the message delivery is acknowledged.
 
 ::: tip
 
@@ -144,7 +169,7 @@ Only available for QOS 1 and QOS 2 messages.
 
 :::
 
-For example, to extract data from the `"$events/message_acked"` event topic that includes the following data fields, ID and username of the publisher, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below: <!--need to confirm the node part-->
+For example, to extract data from the `"$events/message/acked"` event topic that includes the following data fields, ID and username of the publisher, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below: <!--need to confirm the node part-->
 
 Example:
 ```sql
@@ -156,7 +181,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_acked"
+  "$events/message/acked"
 ```
 
 Output:
@@ -171,7 +196,7 @@ Output:
 }
 ```
 
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Code                  | Explanation                                       |
 | :-------------------- | :------------------------------------------------ |
@@ -191,11 +216,11 @@ Below are detailed explanations of each field.
 | `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms) |
 | `node`                | EMQX node where the event triggered               |
 
-### Message Dropped When Routing Event ("$events/message_dropped")
+### Message Dropped When Routing Event ("$events/message/dropped")
 
-This event topic can be used to trigger a rule when a message is dropped during routing. 
+This event topic can be used to trigger a rule when a message is dropped during routing.
 
-For example, to extract data from the `"$events/message_dropped"` event topic that includes the following data fields: drop reason, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below: 
+For example, to extract data from the `"$events/message/dropped"` event topic that includes the following data fields: drop reason, message topic, message QoS, EMQX node where the event triggered, and the time when the event was triggered, you can use the statement below:
 
 Example:
 ```sql
@@ -206,7 +231,7 @@ SELECT
   node,
   timestamp
 FROM
-  "$events/message_dropped"
+  "$events/message/dropped"
 ```
 Output:
 ```json
@@ -235,11 +260,11 @@ Output:
 | `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms)            |
 | `node`                | Node where the event is triggered                            |
 
-### Message Dropped When Delivering Event ("$events/delivery_dropped")
+### Message Dropped When Delivering Event ("$events/message/delivery_dropped")
 
-This event topic can trigger a rule when a message is dropped during delivery. 
+This event topic can trigger a rule when a message is dropped during delivery.
 
-For example, to extract data from the `"$events/delivery_dropped"` event topic that includes the following data fields: publisher ID and username, drop reason, message topic and QoS, you can use the statement below: 
+For example, to extract data from the `"$events/message/delivery_dropped"` event topic that includes the following data fields: publisher ID and username, drop reason, message topic and QoS, you can use the statement below:
 
 Example:
 ```sql
@@ -249,7 +274,7 @@ SELECT
   reason,
   topic,
   qos
-FROM "$events/delivery_dropped"
+FROM "$events/message/delivery_dropped"
 ```
 Output:
 ```json
@@ -261,7 +286,7 @@ Output:
   "from_clientid": "c_emqx_1"
 }
 ```
-Below are detailed explanations of each field. 
+Below are detailed explanations of each field.
 
 | Explanation           |                                                              |
 | :-------------------- | ------------------------------------------------------------ |
@@ -281,11 +306,11 @@ Below are detailed explanations of each field.
 | `publish_received_at` | Time when PUBLISH message reaches EMQX (unit: ms)            |
 | `node`                | EMQX node where the event is triggered                       |
 
-### Connection Complete Event ("$events/client_connected")
+### Connection Complete Event ("$events/client/connected")
 
 This event topic can be used to trigger a rule when a client is connected successfully.
 
-For example, to extract data from the `"$events/client_connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and whether the connected MQTT client is acting as a bridge, you can use the statement below: 
+For example, to extract data from the `"$events/client/connected"` event topic that includes the following data fields: client ID and username, keepalive interval, and whether the connected MQTT client is acting as a bridge, you can use the statement below:
 
 Example:
 ```sql
@@ -295,7 +320,7 @@ SELECT
   keepalive,
   is_bridge
 FROM
-  "$events/client_connected"
+  "$events/client/connected"
 ```
 Output:
 ```json
@@ -307,7 +332,7 @@ Output:
 }
 ```
 
-Refer to the table below for fields that can be selected from the received MQTT messages: 
+Refer to the table below for fields that can be selected from the received MQTT messages:
 
 | Field             | Explanation                                                  |
 | :---------------- | :----------------------------------------------------------- |
@@ -328,11 +353,12 @@ Refer to the table below for fields that can be selected from the received MQTT 
 | `node`            | EMQX node where the event is triggered                       |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Disconnect Event ("$events/client_disconnected")
+### Disconnect Event ("$events/client/disconnected")
 
 This event topic can be used to trigger a rule when a client is disconnected.
 
-For example, you can use the statement below to extract data from the `"$events/client_disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, connection start time, disconnect time, and EMQX node where the event is triggered.
+
+For example, you can use the statement below to extract data from the `"$events/client/disconnected"` event topic that includes the following data fields: client ID, username, disconnect reason, disconnect time, and EMQX node where the event is triggered.
 
 Example:
 ```sql
@@ -344,7 +370,7 @@ SELECT
   disconnected_at,
   node
 FROM
-  "$events/client_disconnected"
+  "$events/client/disconnected"
 ```
 Output:
 ```json
@@ -372,9 +398,9 @@ Output:
 | `node`            | EMQX node where the event is triggered                       |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Connection Acknowledge Event ("$events/client_connack")
+### Connection Acknowledge Event ("$events/client/connack")
 
-This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client. 
+This event topic can be used to trigger a rule when the EMQX sends a `CONNACK` packet to the client.
 
 Example:
 
@@ -385,7 +411,7 @@ SELECT
   reason_code,
   node
 FROM
-  "$events/client_connack"
+  "$events/client/connack"
 ```
 
 Output:
@@ -420,7 +446,7 @@ Refer to the table below for fields that can be extracted:
 
 [^*]: The MQTT v5.0 protocol renames the return code to a reason code, adding a reason code to indicate more types of errors ([Reason code and ACK - MQTT 5.0 new features](https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack)).
 
-Here is the reason code for MQTT v3.1.1 and MQTT v5.0. 
+Here is the reason code for MQTT v3.1.1 and MQTT v5.0.
 
 :::: tabs type:card
 
@@ -467,7 +493,7 @@ Here is the reason code for MQTT v3.1.1 and MQTT v5.0.
 
 ::::
 
-### Authorization Check Complete Event ("$events/client_check_authz_complete")
+### Authorization Check Complete Event ("$events/auth/check_authz_complete")
 
 This event topic can be used to trigger a rule when the authorization check for the client is complete.
 
@@ -483,7 +509,7 @@ SELECT
   authz_source,
   node
 FROM
-  "$events/client_check_authz_complete"
+  "$events/auth/check_authz_complete"
 ```
 
 Output:
@@ -515,7 +541,7 @@ Refer to the table below for fields that can be extracted.
 | `node`      | EMQX node where the event is triggered.                      |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Authentication Check Complete Event ("$events/client_check_authn_complete")
+### Authentication Check Complete Event ("$events/auth/check_authn_complete")
 
 This event topic can be used to trigger a rule when the authentication check for the client is complete.
 
@@ -529,7 +555,7 @@ SELECT
   is_superuser,
   is_anonymous
 FROM
-  "$events/client_check_authn_complete"
+  "$events/auth/check_authn_complete"
 ```
 
 Output:
@@ -556,7 +582,7 @@ Refer to the table below for fields that can be extracted.
 | `is_anonymous`    | Whether this client is a anonymous user                |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Subscriber Event ("$events/session_subscribed")
+### Subscriber Event ("$events/session/subscribed")
 
 This event topic can be used to trigger a rule when the client subscribes successfully.
 
@@ -569,7 +595,7 @@ SELECT
   topic,
   qos
 FROM
-  "$events/session_subscribed"
+  "$events/session/subscribed"
 ```
 
 Output:
@@ -597,7 +623,7 @@ Refer to the table below for fields that can be extracted.
 | `node`      | EMQX node where the event is triggered      |
 | `client_attrs`        | [Client attributes](../client-attributes/client-attributes.md) |
 
-### Unsubscribe Event ("$events/session_unsubscribed")
+### Unsubscribe Event ("$events/session/unsubscribed")
 
 The rule is triggered when the terminal subscription is cancelled successfully.
 
@@ -610,7 +636,7 @@ SELECT
   topic,
   qos
 FROM
-  "$events/session_unsubscribed"
+  "$events/session/unsubscribed"
 ```
 Output:
 ```json
@@ -736,8 +762,8 @@ Rules use topics prefixed by `$bridges/` to present messages or events triggered
 
 Where
 
--  `<type>:<name>` is the bridge Id, 
--  `<type>` is the bridge type, 
+-  `<type>:<name>` is the bridge Id,
+-  `<type>` is the bridge type,
 -  `<name>` is the bridge name.
 
 For example, the MQTT Bridge events can be referred to in the format of  `"$bridges/mqtt:*`. To set a rule for all messages sent by the MQTT data bridge named `my_mqtt_bridge`, you can use the statement below:

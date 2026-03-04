@@ -16,7 +16,7 @@ if sys.argv[1] != r'ce' and sys.argv[1] != r'ee':
 ## check if the 'lang' field matches expected input
 ## when no 'lang' is defined, it matches both 'en', 'cn' and 'ja'
 def is_lang_match(i, lang):
-    if 'lang' in i:
+    if isinstance(i, dict) and ('lang' in i):
         return i['lang'] == lang
     else:
         return True
@@ -43,6 +43,7 @@ def is_edition_match(i, ce_or_ee):
         return True
 
 def read_title_from_md(lang, path):
+    #print(f"Reading title from {path} for lang {lang}", file=sys.stderr)
     if lang == 'en':
         dir = 'en_US'
     elif lang == 'cn':
@@ -119,7 +120,6 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(content, Loader=yaml.FullLoader)
-
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
     move_manual('ja', EDITION)

@@ -71,7 +71,7 @@ ok
 可以在单个操作中执行一系列更改，以设置持久存储副本所在站点的集合。
 
 ```shell
-$ emqx ctl ds set_replicas messages <Site ID 1> <Site ID 2> ...
+$ emqx ctl ds set-replicas messages <Site ID 1> <Site ID 2> ...
 ```
 
 这种方法可以最大程度地减少站点之间的数据传输量，同时确保尽可能地维持复制因子。

@@ -6,11 +6,11 @@ MQTT-SN 网关基于 [MQTT-SN v1.2](https://www.oasis-open.org/committees/downlo
 
 EMQX 5.0 中，可以通过 Dashboard 配置并启用 MQTT-SN 网关。
 
-也可以通过 HTTP API 或 emqx.conf 来启用，例如：
+也可以通过 REST API 或 base.hocon 来启用，例如：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn' \
@@ -59,7 +59,7 @@ gateway.mqttsn {
 ::::
 
 ::: tip
-注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 HTTP API 管理则会在整个集群中生效。
+注：通过配置文件进行配置网关，需要在每个节点中进行配置；通过 Dashboard 或者 REST API 管理则会在整个集群中生效。
 :::
 
 MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数列表可以参考 [EMQX 企业版配置手册](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)中的网关配置 - 监听器。
@@ -73,11 +73,11 @@ MQTT-SN 网关支持 UDP, DTLS 类型的监听器，其完整可配置的参数�
 - Username：默认为空
 - Password：默认为空
 
-例如，通过 HTTP API 或 emqx.conf 为 MQTT-SN 网关创建一个 HTTP 认证：
+例如，通过 REST API 或 base.hocon 为 MQTT-SN 网关创建一个 HTTP 认证：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/mqttsn/authentication' \
@@ -148,7 +148,7 @@ MQTT-SN 协议已经定了发布/订阅的行为，MQTT-SN 网关未对其进行
 
 - 详细配置说明参考：[网关配置 - MQTT-SN 网关](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
-- 详细 HTTP API 接口参考：[HTTP API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
+- 详细 REST API 接口参考：[REST API - 网关](https://docs.emqx.com/zh/enterprise/v@EE_MINOR_VERSION@/admin/api-docs)
 
 ## 客户端库
 
