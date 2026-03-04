@@ -9,7 +9,11 @@ EMQX has [two main product lines](https://www.emqx.com/en/products/emqx). Differ
 
 ## What's a WebSocket? When to use a Websocket to connect to EMQX?
 
-WebSocket is a full-duplex communication protocol with an API supported by modern web browsers. A user can use the WebSocket API to create a dual direction communication channel between a web browser and a server. Through a WebSocket, the server can push messages to the web browser. EMQX provides support for WebSocket. This means that users can publish to MQTT topics and subscribe to MQTT topics from browsers.
+WebSocket is a full-duplex communication protocol with an API supported by modern web browsers. A user can use the WebSocket API to create a bidirectional communication channel between a web browser and a server. Through a WebSocket connection, the server can push messages to the browser in real time.
+
+EMQX supports MQTT over WebSocket, allowing users to publish and subscribe to MQTT topics directly from web browsers and other environments where raw TCP connections are not available.
+
+For more details about how MQTT over WebSocket works and how to configure it, see [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md).
 
 ## How does the EMQX achieve high concurrency and high availability?
 
