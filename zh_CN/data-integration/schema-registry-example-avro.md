@@ -10,11 +10,15 @@
 
 ### 创建 Schema
 
-1. 在 Dashboard 左侧导航栏中选择**数据集成** -> **Schema**。
+为了使规则引擎能够正确地解码或编码 Avro 消息，您需要先在 Schema Registry 中注册一个用于定义 Avro 消息结构的 Schema。
 
-2. 使用下面的参数创建一个 Avro Schema：
+1. 在 Dashboard 左侧导航栏中选择**数据智能中心** -> **Schema Registry**。
 
-   - **名称**：`avro_user`
+2. 在**内部 Schema** 页签下点击**创建**。
+
+3. 使用下面的参数创建一个 Avro Schema：
+
+   - **名称**：`avro_user`，名称将用于编解码函数中。
 
    - **类型**：`Avro`
 
@@ -32,7 +36,7 @@
      }
      ```
 
-3. 点击**创建**。
+4. 点击**创建**。
 
 <img src="./assets/avro_create1.png" alt="avro_create1"  />
 

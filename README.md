@@ -25,7 +25,22 @@ See [EMQX Documentation Contributing Guide](./CONTRIBUTING-EN.md) to become a co
 
 ## Preview
 
+
+1. Install uv if you don't have it: https://docs.astral.sh/uv/getting-started/installation/
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+2. Run the following commands to preview the docs in docker:
+
 ```sh
+# initialize uv
+uv init
+uv add PyYAML
+source .venv/bin/activate
+
+# start the docker daemon before running the following command
 ./preview.sh ee 8080
 ```
 

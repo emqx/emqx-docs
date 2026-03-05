@@ -97,6 +97,7 @@ D1 -->|发布消息| E[客户端]
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
 - [Lindorm](./lindorm)
+- [Doris](./apache-doris)
 
 **NoSQL**
 
@@ -121,6 +122,7 @@ D1 -->|发布消息| E[客户端]
 
 - [SysKeeper](./syskeeper.md)
 - [Amazon S3](./s3.md)
+- [Amazon S3 Tables](./s3-tables.md)
 - [Azure Blob Storage](./azure-blob-storage.md)
 - [Snowflake](./snowflake.md)
 - [Disk Log](./disk-log.md)

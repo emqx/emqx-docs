@@ -12,7 +12,7 @@ The Paho Java client library can be easily installed through the package managem
 <dependency>
   <groupId>org.eclipse.paho</groupId>
 	<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-	<version>1.2.2</version>
+       <version>1.2.5</version>
 </dependency>
 ```
 

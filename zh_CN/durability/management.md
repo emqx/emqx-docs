@@ -102,24 +102,45 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'    (x) down
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : (x) down :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7
-messages/1                        5C6028D6CE9459C7
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7
-messages/2                        5C6028D6CE9459C7
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7
-messages/5                        5C6028D6CE9459C7
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7
-messages/8                        5C6028D6CE9459C7
-messages/9                        5C6028D6CE9459C7
+.-------------.------------------.-------------.
+: DB/Shard    : Replicas         : Transitions :
+:-------------:------------------:-------------:
+:-messages/0--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/1--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/10-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/11-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/12-:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/2--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/3--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/4--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/5--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/6--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/7--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/8--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+:-messages/9--:------------------:-------------:
+:             : 5C6028D6CE9459C7 :             :
+`-------------`------------------`-------------`
 ```
 
 此命令输出包括： 
@@ -152,39 +173,55 @@ THIS SITE:
 D8894F95DC86DFDB
 
 SITES:
-5C6028D6CE9459C7    'emqx@n2.local'        up
-D8894F95DC86DFDB    'emqx@n1.local'        up
-F4E92DEA197C8EBC    'emqx@n3.local'        up
+.------------------.-------------------.----------.
+: Site             : Node              : Status   :
+:------------------:-------------------:----------:
+: 5C6028D6CE9459C7 : 'emqx@n2.local'   : up       :
+: D8894F95DC86DFDB : 'emqx@n1.local'   : up       :
+: F4E92DEA197C8EBC : 'emqx@n3.local'   : up       :
+`------------------`-------------------`----------`
 
 SHARDS:
-Shard                             Replicas
-messages/0                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/1                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/10                       5C6028D6CE9459C7
-messages/11                       5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/2                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/3                        5C6028D6CE9459C7
-messages/4                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/5                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/6                        5C6028D6CE9459C7
-messages/7                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/8                        5C6028D6CE9459C7      D8894F95DC86DFDB
-messages/9                        5C6028D6CE9459C7
-
-REPLICA TRANSITIONS:
-Shard                         Transitions
-messages/0                    +F4E92DEA197C8EBC
-messages/1                    +F4E92DEA197C8EBC
-messages/10                   +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/11                   +F4E92DEA197C8EBC
-messages/2                    +F4E92DEA197C8EBC
-messages/3                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/4                    +F4E92DEA197C8EBC
-messages/5                    +F4E92DEA197C8EBC
-messages/6                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
-messages/7                    +F4E92DEA197C8EBC
-messages/8                    +F4E92DEA197C8EBC
-messages/9                    +F4E92DEA197C8EBC  +D8894F95DC86DFDB
+.-------------.------------------.--------------------.
+: DB/Shard    : Replicas         : Transitions        :
+:-------------:------------------:--------------------:
+:-messages/0--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/1--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/10-:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/11-:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/2--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/3--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/4--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/5--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/6--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+:-messages/7--:------------------:-------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/8--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             : D8894F95DC86DFDB :                    :
+:-messages/9--:------------------:--------------------:
+:             : 5C6028D6CE9459C7 : + F4E92DEA197C8EBC :
+:             :                  : + D8894F95DC86DFDB :
+`-------------`------------------`--------------------`
 ```
 
 新的 `REPLICA TRANSITIONS` 部分列出了待处理的操作。一旦所有操作完成，此列表将为空。
@@ -251,3 +288,91 @@ ok
 这些计数器特定于 "wildcard optimized" 存储布局。它们衡量从本地存储消费数据的效率。`seek` 操作通常较慢，因此理想情况下 `emqx_ds_storage_bitfield_lts_counter_next` 的增长速度应快于 `seek`。
 
 增加 `durable_storage.messages.layout.epoch_bits` 参数可以帮助改善此比率。
+
+### `emqx_ds_raft_db_shards_num`
+
+持久存储数据库被划分的分片数量。
+
+### `emqx_ds_raft_db_sites_num`
+
+该指标跟踪某个持久存储数据库当前和已分配的副本节点（站点）数量。
+
+大多数情况下，“当前节点数”应等于“已分配节点数”。如果两者长时间不一致，可能说明副本迁移存在异常。
+
+### `emqx_ds_raft_shard_replication_factor`
+
+跟踪持久存储数据库分片的副本集中的副本数量。
+
+如果该数值低于配置的副本因子（replication factor），将存在数据持久性的风险。建议在更多节点间重新平衡副本。
+
+### `emqx_ds_raft_db_shards_online_num`
+
+跟踪当前节点上实际管理的持久存储数据库分片数量。
+
+该数值应等于当前分配给该节点的分片数量。如不一致，可能会影响可用性，请检查日志获取详细信息。
+
+### `emqx_ds_raft_shard_transition_queue_len`
+
+跟踪 DS 数据库分片处于等待状态的副本集变更（如添加或删除副本）任务数量。
+
+如果该值长时间不为 0，说明副本迁移可能存在问题。
+
+### `emqx_ds_raft_shard_transitions`
+
+统计某个分片副本集变更的开始 / 完成 / 跳过 / 失败的次数。
+
+失败（crashed）的次数应始终为 0。如不为 0，建议检查日志以获取错误信息。
+
+### `emqx_ds_raft_shard_transition_errors`
+
+统计在编排分片副本集变更过程中发生的瞬时错误数量。
+
+如果该计数持续增长，表示副本迁移出现问题。建议检查日志以查明原因。
+
+### `emqx_ds_raft_snapshot_reads`
+
+统计 DS 数据库分片作为快照源时，开始和完成快照读取的次数。
+
+### `emqx_ds_raft_snapshot_read_errors`
+
+统计 DS 数据库分片作为快照源时读取快照过程中发生的错误次数，这些错误会导致快照复制被中止。
+
+快照读取应无错误，如有异常，请查看日志查找可能的原因。
+
+### `emqx_ds_raft_snapshot_read_chunks`
+
+统计 DS 数据库分片作为快照传输源时读取并传输的快照数据块（chunk）数量。
+
+### `emqx_ds_raft_snapshot_read_chunk_bytes`
+
+统计 DS 数据库分片作为快照源读取的数据块总字节数。
+
+### `emqx_ds_raft_snapshot_writes`
+
+统计 DS 数据库分片作为快照接收方时，开始和完成快照写入的次数。
+
+### `emqx_ds_raft_snapshot_write_errors`
+
+统计 DS 数据库分片作为快照接收方时写入快照过程中发生的错误次数，这些错误会导致快照复制中止。
+
+该值通常不应增长，如有增长，请查看日志以获取详细信息。
+
+### `emqx_ds_raft_snapshot_write_chunks`
+
+统计 DS 数据库分片作为快照接收方时接收到并写入的数据块数量。
+
+### `emqx_ds_raft_snapshot_write_chunk_bytes`
+
+统计 DS 数据库分片作为快照接收方时写入的快照数据块总字节数。
+
+### `emqx_ds_raft_current_timestamp_us`
+
+跟踪分片服务器当前正在复制的最新操作时间戳（单位为微秒）。
+
+正常情况下，每个副本的时间戳应一致。如果不一致，可能表示复制机制存在问题。
+
+### `emqx_ds_raft_rasrv_state_changes`
+
+统计 Raft 服务器角色切换（如变为 candidate、follower、leader）的次数。
+
+频繁的状态变化可能是系统不稳定的信号。建议查看日志获取详细信息。

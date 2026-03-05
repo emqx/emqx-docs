@@ -138,12 +138,79 @@ EMQX 通过内置数据库为用户提供了一种低成本、开箱即用的授
   - `POST /authorization/sources/built_in_database/rules/all`：创建或替换适用于所有客户端/用户的全局规则。
   - 不支持 `PUT` 请求，仅支持使用 `POST` 来更新或创建所有规则。
 
-#### 示例：为用户创建规则
+#### 步骤 1：获取认证 Token
+
+你需要先通过 EMQX Dashboard 登录认证，以获取 API 访问所需的 Token：
 
 ```bash
-curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \
+  -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
-  -d '[
+  -d '{"username": "admin","password": "public"}' | jq -r ".token")
+```
+
+#### 步骤 2：创建内置数据库授权源
+
+在创建规则之前，请确保已创建内置数据库授权源：
+
+```bash
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "enable": true,
+        "max_rules": 100,
+        "type": "built_in_database"
+  }'
+```
+
+#### 步骤 3：创建授权规则
+
+你可以为以下对象创建规则：
+
+- **指定 client ID 的客户端**：
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/clients' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "clientid": "client1",
+      "rules": [
+        {
+          "action": "publish",
+          "permission": "allow",
+          "topic": "test/topic/1"
+        },
+        {
+          "action": "subscribe",
+          "permission": "allow",
+          "topic": "test/topic/2"
+        },
+        {
+          "action": "all",
+          "permission": "deny",
+          "topic": "eq test/#"
+        }
+      ]
+    }
+  ]'
+  ```
+
+- **指定用户名的客户端**：
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
     {
       "username": "user1",
       "rules": [
@@ -157,12 +224,13 @@ curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_datab
       ]
     }
   ]'
-```
+  ```
 
 #### 示例：为用户更新规则
 
 ```bash
 curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{
     "username": "user1",
@@ -182,6 +250,7 @@ curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_databa
 
 ```bash
 curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
   -H 'Content-Type: application/json' \
   -d '[
     {
