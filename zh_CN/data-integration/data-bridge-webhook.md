@@ -174,7 +174,7 @@ python3 http_server.py
 
    如果 Python HTTP 服务器正在运行，终端应显示类似以下内容：
 
-   ```python
+   ```text
    python3 http_server.py
     * Serving Flask app 'http_server'
     * Environment: production
