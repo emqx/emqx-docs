@@ -32,6 +32,8 @@ HTTP 协议是一个无状态的协议，每个 HTTP 请求为 TCP 短连接，�
 
 WebSocket 是一种基于 TCP 协议实现的，用于实现 Web 应用与 Web 服务端之间双向实时通信的协议。EMQX 支持 MQTT over WebSocket 连接，用户可以将 Web 浏览器、微信/抖音小程序接入 EMQX，实现主题订阅、消息发布等操作。
 
+有关 MQTT over WebSocket 的工作原理及其配置方法的更多详细信息，请参阅 [MQTT over WebSocket](../connect-emqx/mqtt-over-websocket.md)。
+
 ## EMQX 是如何实现支持大规模并发和高可用的？
 
 高并发和高可用是 EMQX 的设计目标，为了实现这些目标 EMQX 中应用了多种技术，比如：

@@ -13,6 +13,10 @@
 - [主题重写](../messaging/mqtt-topic-rewrite.md)
 - [通配符订阅](../messaging/mqtt-wildcard-subscription.md)
 
+除 MQTT 消息相关功能外，开发者指南还介绍了与 EMQX 进行交互的不同方式：
+
+- [使用 curl 连接 EMQX](./curl.md)
+
 此外，本指南中还介绍了EMQX 的 [MQTT 会话持久化](../durability/durability_introduction.md)功能，同时提供了快速体验该功能的步骤。
 
 由于 EMQX 支持 MQTT 协议，所以能够兼容大多数 MQTT 客户端库和 SDK。开发者指南提供了多种[代码示例](./introduction.md)，帮助开发者快速开始构建其 MQTT 项目。有关 MQTT 客户端 SDK 及其比较的完整列表，参见 [MQTT 客户端 & SDKs](https://www.emqx.com/zh/mqtt-client-sdk)。
