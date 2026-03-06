@@ -132,7 +132,7 @@ Click **Add Listener** to open **Add Listener** page, where you can continue wit
 
 **UDP Settings** 
 
-- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://erlang.org/doc/man/inet.html#setopts-2).
+- **ActiveN**: Set the `{active, N}` option for the socket, that is, the number of incoming packets the socket can actively process. For details, see [Erlang Documentation -  setopts/2](https://www.erlang.org/doc/apps/kernel/inet.html#setopts/2).
 - **Buffer**: Set the size of the buffer used to store incoming and outgoing packets, unit: KB.
 - **Receive Buffer**: Set the size of the receive buffer,  unit: KB.
 - **Send Buffer**: Set the size of the send buffer,  unit: KB. 

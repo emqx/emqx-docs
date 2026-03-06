@@ -51,7 +51,7 @@ Because the SQL statement uses `SELECT *` to output all the available fields, we
 
 For the event types supported by the rule and the available fields, see: [events and fields](./rule-sql-events-and-fields.md)
 
-For details of the built-in actions, see: [actions](./rule-actions.md)
+For details of the built-in actions, see: [actions](./rules.md)
 
 ### Reference Data Bridges as Actions
 

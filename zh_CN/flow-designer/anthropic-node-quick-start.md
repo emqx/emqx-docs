@@ -134,6 +134,6 @@
 
    - 若测试失败，页面会显示对应错误信息。
 
-   - 若需查看该 **Anthropic** 节点的运行统计，在 Flows 页面中点击节点，在弹出的编辑面板中点击**概览**选项卡。
+   - 若需查看该 **Anthropic** 节点的运行统计，退出编辑页面，在创建 Flow 页面中点击节点，在弹出的编辑面板中点击**概览**选项卡。
 
      ![anthropic_node_statis](./assets/anthropic_node_statistics.png)

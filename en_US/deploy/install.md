@@ -8,11 +8,11 @@ The table below lists the operating systems and versions that EMQX supports.
 
 | Operating system                  | Versions supported                      | x86_64/amd64 | arm64 |
 | :---------------------------------| :----------------------------------------------- | :-- | :-- |
-| [Ubuntu](./install-ubuntu.md)     | Ubuntu 18.04<br />Ubuntu 20.04<br />Ubuntu 22.04<br />Ubuntu 24.04 | Yes | Yes |
+| [Ubuntu](./install-ubuntu.md)     | Ubuntu 22.04<br />Ubuntu 24.04 | Yes | Yes |
 | [Debian](./install-debian.md)     | Debian 11<br />Debian 12<br />Debian 13 | Yes | Yes |
-| [CentOS/RHEL](./install-rhel.md)  | CentOS 7<br />Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
-| [Amazon Linux](./install-rhel.md) | Amazon Linux 2<br />Amazon Linux 2023            | Yes | Yes |
-| [macOS](./install-macOS.md)       | macOS 14<br />macOS 15 | Yes | Yes |
+| [CentOS/RHEL](./install-rhel.md)  | Rocky Linux 8<br />Rocky Linux 9   | Yes | Yes |
+| [Amazon Linux](./install-rhel.md) | Amazon Linux 2023              | Yes | Yes |
+| [macOS 14+](./install-macOS.md)   | macOS 14<br />macOS 15                           | No  | Yes |
 
 <!-- ## Hardware Specification
 
@@ -43,7 +43,7 @@ If you use the Linux operating system, it is recommended to make sure that UTF-8
 
 ::: tab Amazon Linux
 
-Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/amazon-linux-ami-basics.html#amazon-linux-cloud-init) configuration:
+Enable the UTF-8 locale with [`cloud-init`](https://docs.aws.amazon.com/linux/al2023/ug/cloud-init.html) configuration:
 
 ```bash
 cat <<EOF | sudo tee /etc/cloud/cloud.cfg.d/99_locale.cfg
@@ -68,7 +68,7 @@ sudo localectl set-locale LANG=C.UTF-8
 
 Enable the UTF-8 locale in two ways:
 
-- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/localectl.html) under systemd:
+- It is usually enabled by [`localectl`](https://www.freedesktop.org/software/systemd/man/latest/localectl.html) under systemd:
 
   ```bash
   sudo localectl set-locale LANG=C.UTF-8

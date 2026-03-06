@@ -101,8 +101,8 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 - [MySQL](./data-bridge-mysql.md)
 - [Oracle](./data-bridge-oracle.md)
 - [PostgreSQL](./data-bridge-pgsql.md)
-- [Lindorm](./lindorm)
-- [Doris](./apache-doris)
+- [Lindorm](./lindorm.md)
+- [Doris](./apache-doris.md)
 
 **NoSQL**
 
@@ -118,7 +118,6 @@ EMQXは以下の種類のデータシステムとのデータ統合をサポー�
 **メッセージキュー**
 
 - [Apache Kafka/Confluent](./data-bridge-kafka.md)
-- [HStreamDB](./data-bridge-hstreamdb.md)
 - [Pulsar](./data-bridge-pulsar.md)
 - [RabbitMQ](./data-bridge-rabbitmq.md)
 - [RocketMQ](./data-bridge-rocketmq.md)

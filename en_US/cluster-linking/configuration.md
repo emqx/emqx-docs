@@ -1,4 +1,4 @@
-# Configure Cluster Linking
+# Cluster Linking User Guide
 
 This page provides guidelines for configuring and managing the Cluster Linking feature through the EMQX Dashboard, configuration file, and REST API.
 

@@ -1,6 +1,6 @@
 # Sparkplug B
 
-[Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) 是由 [Eclipse Foundation 的 TAHU 项目](https://www.eclipse.org/tahu/) 开发的开源规范，旨在为 MQTT 提供一套明确定义的 payload 和状态管理体系。其主要目标是在工业物联网领域实现互操作性和一致性。
+[Sparkplug](https://www.eclipse.org/tahu/spec/sparkplug_spec.pdf) 是由 [Eclipse Foundation 的 TAHU 项目](https://www.eclipse.org/tahu/)开发的开源规范，旨在为 MQTT 提供一套明确定义的 payload 和状态管理体系。其主要目标是在工业物联网领域实现互操作性和一致性。
 
 Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时控制系统和设备的 MQTT 命名空间。它通过封装结构化数据格式，包括指标、过程变量和设备状态信息，确保了标准化的数据传输，使其呈现为简洁易处理的格式。通过使用Sparkplug B，组织可以提高运营效率，避免数据孤岛，并在 MQTT 网络中实现设备间的无缝通信。
 
@@ -10,9 +10,9 @@ Sparkplug B 定义了用于监控控制和数据采集（SCADA）系统、实时
 
 Sparkplug B 采用明确定义的 payload 结构来标准化数据通信。它的核心是使用 [Protocol Buffers（Protobuf）](https://developers.google.com/protocol-buffers)对 Sparkplug 消息进行结构化，从而实现轻量、高效和灵活的数据交换。
 
-EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 的高级支持。使用 Schema Registry，您可以为多种数据格式（包括 Sparkplug B）创建自定义编码器和解码器。通过在 registry 中定义 [适当的 Sparkplug B schema](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto)，您可以在 EMQX 的规则引擎中使用 `schema_decode` 和 `schema_encode` 函数访问和处理符合指定格式的数据。
+EMQX 通过 [Schema Registry](./schema-registry.md) 功能提供对 Sparkplug B 的高级支持。使用 Schema Registry，您可以为多种数据格式（包括 Sparkplug B）创建自定义编码器和解码器。通过在 registry 中定义[适当的 Sparkplug B schema](https://github.com/eclipse/tahu/blob/46f25e79f34234e6145d11108660dfd9133ae50d/sparkplug_b/sparkplug_b.proto)，您可以在 EMQX 的规则引擎中使用 `schema_decode` 和 `schema_encode` 函数访问和处理符合指定格式的数据。
 
-此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`spb_encode`  和`spb_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
+此外，EMQX 还提供对于 Sparkplug B 的内置支持，无需为该特定格式使用 schema registry。在 EMQX 中，`spb_encode`  和 `spb_decode` 函数已经可以直接使用，简化了在规则引擎内进行 Sparkplug B 消息的编码和解码。
 
 :::: tip
 
@@ -61,6 +61,186 @@ from t
 ```
 
 上面的示例中，`payload` 指的是要编码为 Sparkplug B 格式的消息数据。
+
+## Sparkplug B Alias 映射
+
+Sparkplug B 规范允许设备在上线（发送 NBIRTH / DBIRTH 消息）时为每个指标分配一个数字形式的 `alias`，并在后续数据上报（发送 NDATA / DDATA 消息）时仅发送 `alias` 而不再发送完整的指标名称（`name`），以减少带宽占用。这种机制要求接收方能够维护 Sparkplug B 的会话状态，以便将 alias 还原为对应的 metric 名称。
+
+在实际使用中，EMQX 经常被用作 Sparkplug B 数据的转换与分发中心，并通过规则引擎将数据转发给非 Sparkplug B 客户端（普通 MQTT 客户端、数据平台等）。这些下游系统通常不具备 Sparkplug B 客户端的状态管理能力，因此仅包含 alias 的数据消息难以直接使用。
+
+为了解决这一问题，EMQX 自 6.0.2 起对 `spb_decode` 进行了增强，支持 Sparkplug B alias 映射，使解码结果更易于下游系统使用。
+
+### Sparkplug B Alias 映射工作机制
+
+当启用 alias 映射后，EMQX 按以下流程处理 Sparkplug B 消息：
+
+1. **解析 NBIRTH / DBIRTH**
+
+   当客户端发布 NBIRTH 或 DBIRTH 消息时，EMQX 会解析其中的 metrics，并记录同时包含 `name` 和 `alias` 的 metric 映射关系。
+
+2. **按会话维护映射**
+
+   alias 映射与 MQTT 客户端会话关联，并按 Sparkplug B 语义进行隔离：
+
+   - 节点（NBIRTH / NDATA）与设备（DBIRTH / DDATA）各自维护独立映射。
+   - 不同客户端之间的映射互不影响。
+
+3. **增强 spb_decode**
+
+   当规则引擎对 NDATA / DDATA 消息调用 `spb_decode` 时，如果 metric 中仅包含 `alias` 而不包含 `name`，EMQX 会根据已记录的映射自动补充对应的 `name` 字段。解码后的数据始终包含清晰的 metric 名称，便于规则处理和数据转发。
+
+4. **会话结束即清理**
+
+   当客户端断开连接后，其对应的 alias 映射会被清理。EMQX 不会在会话结束后继续保留或恢复 Sparkplug B 的状态。
+
+### 配置 Alias 映射
+
+Alias 映射功能默认启用。如果您不希望 EMQX 跟踪并还原 Sparkplug B 指标的 alias，可以在配置文件中将其关闭：
+
+```hocon
+schema_registry {
+  sparkplugb {
+    enable_alias_mapping = false
+  }
+}
+```
+
+> **注意**：
+>
+> - 只有在 alias mapping 启用期间接收到的 NBIRTH / DBIRTH 消息，才会用于创建 alias 映射。
+> - 如果客户端已经发送过 birth 消息，则需要先重新连接，并再次发布 NBIRTH / DBIRTH 消息，alias mapping 才会生效。
+
+### Alias 映射使用示例
+
+本节使用 EMQX Dashboard 和 MQTTX 演示如何在启用 Sparkplug B alias 映射后，将仅包含 alias 的 DDATA 消息转换为包含完整 metric name 的 JSON 数据，并转发给非 Sparkplug B 客户端。
+
+#### 目标
+
+- **Sparkplug B 设备**：在 DBIRTH 中声明 `name + alias`，在 DDATA 中只发送 `alias`。
+- **EMQX**：使用 `spb_decode` 自动补全 metric name。
+- **下游订阅者**：接收到普通 JSON 消息，无需理解 Sparkplug B 协议。
+
+#### 前置条件
+
+- EMQX 版本为 6.0.2 及以上并且已启用 Sparkplug B alias 映射：`enable_alias_mapping = true`
+- [MQTTX](https://mqttx.app/zh)
+
+#### Step 1：在 EMQX Dashboard 创建规则
+
+1. 点击 EMQX Dashboard 左侧菜单中的**集成** -> **规则**。
+
+2. 点击 **+ 创建**以创建新规则。
+
+3. 配置 SQL。在 **SQL 编辑器**中输入以下内容：
+
+   ```sql
+   SELECT
+     spb_decode(payload) AS decoded
+   FROM "spBv1.0/+/DDATA/+/+"
+   ```
+
+   > 说明:
+   >
+   > - 该规则匹配所有 Sparkplug B DDATA 消息。
+   > - `spb_decode(payload)`：解码 Sparkplug B payload。在 alias mapping 启用的情况下，自动将 `alias` 还原为对应的 `name`。
+
+4. 点击 **+ 添加动作**，为规则添加触发的动作。
+
+5. 选择**消息重发布**作为动作类型。
+
+6. 填写以下配置：
+
+   - **主题**：`decoded/sparkplug/data`
+
+   - **Payload**：`${decoded}`
+
+7. 点击**添加**。
+
+8. 在创建规则页面点击**保存**。
+
+   ![sparkplugb_alias_mapping_create_rule](./assets/sparkplugb_alias_mapping_create_rule.png)
+
+#### Step 2：使用 MQTTX 准备订阅者
+
+1. 打开 MQTTX，新建连接并连接到 EMQX Broker。
+2. 订阅解码后的数据主题。在 MQTTX 中添加订阅主题：`decoded/sparkplug/data`。
+
+此订阅代表一个非 Sparkplug B 客户端，只期望接收普通 JSON 数据。
+
+#### Step 3：使用 MQTTX 模拟 Sparkplug B 设备
+
+以下示例中，payload 以逻辑 JSON 展示，实际发送时需使用 Sparkplug B protobuf 编码（Base64）。
+
+1. 发送 DBIRTH（声明 alias）主题：`spBv1.0/group1/DBIRTH/eon1/device1`。
+
+   逻辑 Payload（示意）
+
+   ```json
+   {
+     "metrics": [
+       {
+         "name": "Device/Temperature",
+         "alias": 0,
+         "datatype": 9,
+         "value": 72.5
+       },
+       {
+         "name": "Device/Pressure",
+         "alias": 1,
+         "datatype": 9,
+         "value": 101.3
+       }
+     ]
+   }
+   ```
+
+   > 说明：
+   >
+   > - 在 Sparkplug B 中，`datatype` 被定义为一个无符号整数。根据 Sparkplug B 规范，数值 `9` 表示 **Float** 数据类型。
+   > - EMQX 会在此时记录 alias -> name 映射。
+   > - 该步骤**必须先于 DDATA 执行**。
+
+2. 发送 DDATA（仅 alias）主题：`spBv1.0/group1/DDATA/eon1/device1`。
+
+   逻辑 Payload（示意）：
+
+   ```json
+   {
+     "metrics": [
+       { "alias": 0, "value": 73.1 },
+       { "alias": 1, "value": 100.9 }
+     ]
+   }
+   ```
+
+#### Step 4：验证解码结果
+
+在 MQTTX 中，你会在订阅的主题 `decoded/sparkplug/data` 下收到如下 JSON 消息：
+
+```json
+{
+  "metrics": [
+    {
+      "alias": 0,
+      "name": "Device/Temperature",
+      "value": 73.1
+    },
+    {
+      "alias": 1,
+      "name": "Device/Pressure",
+      "value": 100.9
+    }
+  ]
+}
+```
+
+可以看到：
+
+- 原始 DDATA 中没有 `name` 字段。
+- `spb_decode` 自动补全了：
+  - `"Device/Temperature"`
+  - `"Device/Pressure"`
+- 下游订阅者不需要维护 Sparkplug B 状态，也不需要解析 `alias`。
 
 ## 实用示例
 

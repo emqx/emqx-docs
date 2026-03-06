@@ -15,6 +15,7 @@ Thank you for your contributions to EMQX open-source project.
       - [Pull request](#pull-request)
     - [Local editing](#local-editing)
   - [PR automatic check](#pr-automatic-check)
+    - [Checking for broken links locally](#checking-for-broken-links-locally)
   - [How to get help](#how-to-get-help)
 
 
@@ -106,6 +107,62 @@ Document projects will be automatically checked according to the rules in the [D
 Only the PRs that passed the checks can be merged.
 If you encounter a `markdownlint check` failure when submitting PR, the error message will indicate which line in which file is the problem,
 so please follow the instructions to modify and update the PR.
+
+### Checking for broken links locally
+
+To ensure all external and internal links are valid before submitting a PR, you can use [lychee](https://github.com/lycheeverse/lychee), a fast link checker written in Rust.
+
+**Installation:**
+
+```bash
+# macOS
+brew install lychee
+
+# Linux/Windows (using cargo)
+cargo install lychee
+
+# Or download pre-built binaries from:
+# https://github.com/lycheeverse/lychee/releases
+```
+
+**Usage:**
+
+```bash
+# Check all links in English documentation
+lychee --config .lychee.toml en_US/
+
+# Check specific file or directory
+lychee --config .lychee.toml en_US/getting-started/
+
+# Check with verbose output
+lychee --config .lychee.toml --verbose en_US/
+
+# Check and show detailed results
+lychee --config .lychee.toml --format detailed en_US/
+```
+
+**Configuration:**
+
+The repository includes a `.lychee.toml` configuration file that:
+- Excludes common false positives (localhost, example URLs, version placeholders)
+- Excludes changelog directories
+- Sets appropriate timeouts and retry settings
+- **Throttles requests** to avoid 429 (Too Many Requests) errors:
+  - Max 5 concurrent requests
+  - Max 10 requests per second
+  - 5 second wait time between retries
+- Caches results to speed up subsequent runs
+
+**Common issues:**
+
+- **429 Too Many Requests**: The tool is already configured with throttling, but if you still encounter rate limiting, try:
+  - Checking smaller directories at a time
+  - Increasing the delay between requests in `.lychee.toml` (reduce `max_requests_per_second`)
+- **403 Forbidden errors**: Some sites block automated link checkers. These may need manual verification.
+- **Timeout errors**: Increase timeout in `.lychee.toml` if you have a slow connection.
+- **Fragment checking**: Disabled by default since VitePress generates anchors during build time.
+
+**Note:** Link checking is also performed automatically by CI on pull requests to release branches.
 
 ## How to get help
 

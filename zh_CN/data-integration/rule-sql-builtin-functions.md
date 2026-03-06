@@ -1346,6 +1346,33 @@ base64_decode('aGVsbG8=') = 'hello'
 bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```
 
+### base64_decode(Data: string, Option1: string, ...) -> bytes | string
+
+::: tip
+
+带多参数选项的函数自 EMQX 6.0.2 起引入。
+
+:::
+
+对 Data 进行 Base64 解码，支持可选参数来控制解码行为。
+
+**选项：**
+
+- **`no_padding`**：解码时不期望填充字符（`=`）。适用于解码没有填充的字符串。
+- **`urlsafe`**：使用 URL 安全的 Base64 变体进行解码，即将输入中的 - 和 _ 视为 + 和 /。
+
+您可以单独使用这些选项，也可以组合使用。组合选项时，顺序无关紧要。
+
+**示例：**
+
+```sql
+-- 解码 URL 安全的 Base64
+SELECT base64_decode(payload, 'urlsafe') as decoded FROM "t/#"
+
+-- 解码无填充的 URL 安全 Base64
+SELECT base64_decode(payload, 'urlsafe', 'no_padding') as decoded FROM "t/#"
+```
+
 ### base64_encode(Data: binary | string) -> string
 
 对 Data 进行 Base64 编码。示例：
@@ -1353,6 +1380,36 @@ bin2hexstr(base64_decode('y0jN')) = 'CB48CD'
 ```bash
 base64_encode('hello') = 'aGVsbG8='
 base64_encode(hexstr2bin('CB48CD')) = 'y0jN'
+```
+
+### base64_encode(Data: binary | string, Option1: string, ...) -> string
+
+::: tip
+
+带多参数选项的函数自 EMQX 6.0.2 起引入。
+
+:::
+
+对 Data 进行 Base64 编码，支持可选参数来控制编码行为。
+
+**选项：**
+
+- **`no_padding`**：编码时不添加填充字符（`=`）。适用于需要从编码字符串中移除填充的场景。
+- **`urlsafe`**：使用 URL 安全的 Base64 变体进行编码，用 `-` 和 `_` 替代 `+` 和 `/`，使编码结果可以直接嵌入到 URL 中而无需额外转义。
+
+您可以单独使用这些选项，也可以组合使用。组合选项时，顺序无关紧要。
+
+**示例：**
+
+```sql
+-- 无填充编码
+SELECT base64_encode(payload, 'no_padding') as encoded FROM "t/#"
+
+-- URL 安全字符编码
+SELECT base64_encode(payload, 'urlsafe') as encoded FROM "t/#"
+
+-- 同时使用两个选项（无填充和 URL 安全）
+SELECT base64_encode(payload, 'no_padding', 'urlsafe') as encoded FROM "t/#"
 ```
 
 ### json_decode(Data: string) -> array | map

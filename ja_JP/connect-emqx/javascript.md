@@ -1,6 +1,6 @@
 # JavaScript SDK を使った接続
 
-[MQTT.js](https://www.npmjs.com/package/mqtt) は、JavaScript で実装された MQTT プロトコルクライアント機能のモジュールであり、ブラウザおよび Node.js 環境で利用できます。
+[MQTT.js](https://github.com/mqttjs/MQTT.js) は、JavaScript で実装された MQTT プロトコルクライアント機能のモジュールであり、ブラウザおよび Node.js 環境で利用できます。
 
 JavaScript のシングルスレッド特性により、MQTT.js は完全に非同期の MQTT クライアントです。MQTT.js は MQTT と MQTT over WebSocket をサポートしており、各環境での対応状況は以下の通りです。
 

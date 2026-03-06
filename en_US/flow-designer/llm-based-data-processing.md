@@ -1,6 +1,6 @@
 # LLM-Based MQTT Data Processing
 
-Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT and Anthropic Claude. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
+Starting from EMQX 5.10.0, Flow Designer supports integrating Large Language Models (LLMs) such as OpenAI GPT, Anthropic Claude, and Google Gemini. With this feature, users can build intelligent message flows capable of summarizing logs, classifying sensor data, enriching MQTT messages, or generating real-time insights, all using natural language prompts.
 
 ## Feature Overview
 
@@ -14,7 +14,7 @@ Invoking an LLM and processing data takes time. The entire process may take seve
 
 ### Key Concepts
 
-- **LLM Provider**: A named configuration for an AI service (OpenAI / Anthropic).
+- **LLM Provider**: A named configuration for an AI service (OpenAI, Anthropic, or Gemini).
 - **Completion Profile**: A reusable bundle of LLM model parameters (model ID, system prompt, token limits, etc.).
 - **AI Completion Node**: A flow component that sends input to the LLM and stores its result as a user-defined alias.
 - `ai_completion`: A Rule SQL function that sends text/binary data to an LLM and returns its response.
@@ -34,7 +34,7 @@ graph LR
 
 1. The message enters the Flow via a **Messages** node (e.g., subscribed to a topic).
 2. A **Data Processing** node *(optional)* can extract or transform fields like `device_id`, `payload`, or `timestamp`.
-3. The **OpenAI** or **Anthropic** node uses the `ai_completion` function behind the scenes to:
+3. The **AI Completion Node** (OpenAI, Anthropic, or Gemini) uses the `ai_completion` function behind the scenes to:
 
      - Look up the selected **Completion Profile**, which includes provider info, model name, system message, and other parameters.
      - Send the selected input (e.g., `payload`) to the LLM.
@@ -51,8 +51,15 @@ graph LR
 
 EMQX 5.10.0 supports the following providers:
 
-- **OpenAI**: GPT-3.5, GPT-4, GPT-4o, etc.
-- **Anthropic**: Claude 3 models
+- **OpenAI**: GPT-4.1, o4-mini, etc.
+- **Anthropic**: claude-3-5-haiku, claude-3-7-sonnet, claude-sonnet-4, etc.
+- **Gemini**: gemini-2.0-flash, gemini-2.5-flash, gemini-2.5-pro, etc.
+
+::: tip Compatibility Note
+
+In addition to the officially listed providers, EMQX also supports any LLM service that is API-compatible with the OpenAI Platform.
+
+:::
 
 ## Configure LLM-Based Processing Nodes
 
@@ -78,12 +85,18 @@ To use an OpenAI node:
 
    - **Base URL**: Enter an optional custom endpoint. Leave empty to use OpenAI’s default endpoint.
 
-   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
-
      ::: tip
 
-     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+     You can use this field to connect to other OpenAI-compatible services by entering the provider’s API base URL and your API key.
 
+     :::
+
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+   
+     ::: tip
+   
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+   
      :::
 
 
@@ -113,9 +126,38 @@ To use an Anthropic node:
 
    - **Base URL**: Enter an optional custom endpoint. Leave empty to use Anthropic’s default endpoint.
 
-   - **Output Result Alias**: 
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
 
-   - Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
+     ::: tip
+
+     If the alias contains characters other than letters, numbers, and underscores, or starts with a number, or is a SQL keyword, please add double quotes to the alias.
+
+     :::
+
+
+4. Click **Save** to apply your configuration.
+
+### Configure a Gemini Node
+
+To use a Gemini node:
+
+1. Drag the **Gemini** node from the **Processing** panel.
+
+2. Connect it to a source or preprocessing node.
+
+3. Configure the following fields:
+
+   - **Input**: Type or select the source field. Options are: `event`, `id`, `clientid`, `username`, `payload`, etc.
+
+   - **System Message**: Enter the prompt message, used to guide AI models to generate outputs that meet expectations. Example: "Add up the values of numeric keys in the input JSON data and output the result; only return the output result".
+
+   - **Model**: Select the LLM provider, e.g., `gemini-2.0-flash`, `gemini-2.5-pro`.
+
+   - **API Key**: Enter your Gemini API key.
+
+   - **Base URL**: Enter an optional custom endpoint. Leave empty to use Gemini’s default endpoint.
+
+   - **Output Result Alias**: Variable name to hold the LLM output, used to reference output results in actions or subsequent processing, e.g., `summary`.
 
      ::: tip
 
@@ -132,6 +174,7 @@ The following two examples demonstrate how to quickly build and test Flows using
 
 - [Create a Flow Using OpenAI Node](./openai-node-quick-start.md): Use GPT models to summarize or transform MQTT messages.
 - [Create a Flow Using Anthropic Node](./anthropic-node-quick-start.md): Use Claude models to process numeric values in MQTT messages.
+- [Create a Flow Using Gemini Node](./gemini-node-quick-start.md): Use Gemini models to generate contextual responses based on prompts in MQTT messages, and route the results to per-client topics using the MQTT client ID.
 
 ## More Information
 

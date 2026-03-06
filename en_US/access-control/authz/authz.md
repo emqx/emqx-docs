@@ -254,7 +254,7 @@ authorization {
     { ...   },
     { ...   }
   ]
-  no_match = allow
+  no_match = deny
   deny_action = ignore
   cache {
     max_size = 32
@@ -268,7 +268,7 @@ Where,
 
 - `sources` (optional): An ordered array; each array element defines the data source of the corresponding authorizer. For detailed configurations, see the corresponding configuration file.
 
-- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; default:  `allow`. The setting also triggers the enabling of black/white list. 
+- `no_match`: Determines the default action for a publish/subscribe request if none of the configured authorizers find any authorization rules; optional value: `allow` or `deny`; starting from EMQX 6.0, the default value has been changed to `deny`.
 
 - `deny_action`: Determines the next step if a publish/subscribe operation is rejected; optional value: `ignore` or `disconnect`; default:  `ignore`. If set to `ignore`, the operation is silently ignored; if set to `disconnect`, the client connection is dropped.
 

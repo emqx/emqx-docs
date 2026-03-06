@@ -6,7 +6,6 @@
 
 - Ubuntu 24.04
 - Ubuntu 22.04
-- Ubuntu 20.04
 
 ## 使用 Apt 包管理器安装
 

@@ -2,7 +2,9 @@ name: PR Checks
 
 on:
   pull_request:
-
+    branches:
+      - 'release-[0-9].[0-9]'
+      - 'release-[0-9].[0-9][0-9]'
 jobs:
   pr-checks:
     runs-on: ubuntu-latest

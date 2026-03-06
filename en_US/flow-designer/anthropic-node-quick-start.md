@@ -124,6 +124,6 @@ Make sure you have a valid **Anthropic API Key** and set the correct API version
      
    - If the test results are unsuccessful, error messages will be displayed accordingly.
    
-   - To view the running statistics and metrics of the **Anthropic** node, click the node to open the Edit panel and click the **Overview** tab.
+   - To view the running statistics and metrics of the **Anthropic** node, exit the editing page, click the node to open the Edit panel and click the **Overview** tab.
    
      ![anthropic_node_statis](./assets/anthropic_node_statistics.png)

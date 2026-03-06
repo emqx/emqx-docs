@@ -4,7 +4,7 @@ EMQX Clustering refers to the deployment of multiple EMQX nodes working together
 
 ::: tip Note
 
-Clustering is available during the trial period, but once the trial period ends, you will need to purchase a Commercial License to continue using it. Without a valid Commercial License, the clustering feature will be disabled after the trial period expires.
+The clustering feature is available during the trial period. After the trial ends, a Commercial License is required; otherwise, the feature will be disabled.
 
 :::
 
