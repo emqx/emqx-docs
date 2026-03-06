@@ -89,13 +89,13 @@ timeline
 
 ### Configure the Update Strategy
 
-1. Create an `apps.emqx.io/v2beta1` EMQX CR and configure the update strategy.
+1. Create an `apps.emqx.io/v2` EMQX CR and configure the update strategy.
 
   ```yaml
-  apiVersion: apps.emqx.io/v2beta1
+  apiVersion: apps.emqx.io/v2
   kind: EMQX
   metadata:
-    name: emqx-ee
+    name: emqx
   spec:
     image: emqx/emqx:@EE_VERSION@
     config:
@@ -120,7 +120,7 @@ timeline
 
   ```bash
   $ kubectl apply -f emqx-update.yaml
-  emqx.apps.emqx.io/emqx-ee created
+  emqx.apps.emqx.io/emqx created
   ```
 
 3. Check the status of the EMQX cluster.
@@ -130,7 +130,7 @@ timeline
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
 ### Connect to EMQX Cluster
@@ -153,55 +153,49 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   In this example, we trigger the upgrade by modifying the Pod's `ImagePullPolicy`.
 
   ```bash
-  $ kubectl patch emqx emqx-ee --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
-  emqx.apps.emqx.io/emqx-ee patched
+  $ kubectl patch emqx emqx --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
+  emqx.apps.emqx.io/emqx patched
   ```
 
 2. Check the status of the upgrade process.
 
   ```bash
-  $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
+  $ kubectl get emqx emqx -o json | jq ".status.nodeEvacuationsStatus"
   [
     {
-      "connection_eviction_rate": 200,
-      "node": "emqx-ee@emqx-ee-54fc496fb4-2.emqx-ee-headless.default.svc.cluster.local",
-      "session_eviction_rate": 200,
-      "session_goal": 0,
-      "connection_goal": 22,
-      "session_recipients": [
-        "emqx-ee@emqx-ee-5d87d4c6bd-2.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-1.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-0.emqx-ee-headless.default.svc.cluster.local"
-      ],
+      "nodeName": "emqx@emqx-54fc496fb4-2.emqx-headless.default.svc.cluster.local",
+      "initialConnections": 33,
+      "initialSessions": 0,
+      "connectionEvictionRate": 200,
+      "sessionEvictionRate": 200,
       "state": "waiting_takeover",
-      "stats": {
-        "current_connected": 0,
-        "current_sessions": 0,
-        "initial_connected": 33,
-        "initial_sessions": 0
-      }
+      "sessionRecipients": [
+        "emqx@emqx-5d87d4c6bd-2.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-1.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-0.emqx-headless.default.svc.cluster.local"
+      ]
     }
   ]
   ```
 
-  | Field                   | Description                                                           |
-  |-------------------------|-----------------------------------------------------------------------|
-  | `node`                  | The node currently being evacuated.                                   |
-  | `state`                 | Node evacuation phase.                                                |
-  | `session_recipients`    | MQTT session recipients.                                              |
-  | `session_eviction_rate` | MQTT session eviction rate on this node (sessions per second).        |
-  | `connection_eviction_rate`| MQTT connection eviction rate on this node (connections per second).  |
-  | `initial_sessions`       | Initial number of sessions on this node.                              |
-  | `initial_connected`      | Initial number of connections on this node.                           |
-  | `current_sessions`       | Current number of sessions on this node.                              |
-  | `current_connected`      | Current number of connections on this node.                           |
+  | Field                   | Description                                                          |
+  |-------------------------|----------------------------------------------------------------------|
+  | `nodeName`              | The node currently being evacuated.                                  |
+  | `state`                 | Node evacuation phase.                                               |
+  | `sessionRecipients`     | MQTT session recipients.                                             |
+  | `sessionEvictionRate`   | MQTT session eviction rate on this node (sessions per second).       |
+  | `connectionEvictionRate`| MQTT connection eviction rate on this node (connections per second). |
+  | `initialSessions`       | Initial number of sessions on this node.                             |
+  | `initialConnections`    | Initial number of connections on this node.                          |
+
+  Progress of a node evacuation can be estimated by looking at `connections` and `sessions` counters in the respective [EMQX node status](../reference/v2-reference.md#emqxnode).
 
 3. Wait for the upgrade to complete.
 
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
   Make sure that the `STATUS` is `Ready`. Depending on the number of MQTT clients and sessions, the upgrade process may take a while.
@@ -214,10 +208,10 @@ The following monitoring graph shows the number of connections during the upgrad
 
 ![](./assets/configure-emqx-blueGreenUpdate/grafana.png)
 
-| Label/Prefix            | Description                                         |
-|-------------------------|-----------------------------------------------------|
-| Total                   | Total number of connections; shown as the top line in the graph. |
-| `emqx-ee-86f864f975`    | Name prefix for the set of 3 old EMQX nodes.    |
-| `emqx-ee-648c45c747`    | Name prefix for the set of 3 upgraded EMQX nodes. |
+| Label/Prefix         | Description                                         |
+|----------------------|-----------------------------------------------------|
+| Total                | Total number of connections; shown as the top line in the graph. |
+| `emqx-86f864f975`    | Name prefix for the set of 3 old EMQX nodes.    |
+| `emqx-648c45c747`    | Name prefix for the set of 3 upgraded EMQX nodes. |
 
 This timeline illustrates how EMQX Operator performs a smooth blue-green upgrade. Throughout the process, the total number of connections remained stable (subject to factors such as migration rate, server capacity, and client reconnection strategy). This approach ensures minimal disruption, prevents server overload, and enhances overall service stability.

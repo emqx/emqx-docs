@@ -15,7 +15,7 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 1. **设备连接到 EMQX**：IoT 设备通过 MQTT 协议成功连接后触发上线事件。该事件包括设备 ID、来源 IP 地址以及其他属性信息。
 2. **设备消息发布和接收**：设备通过特定主题发布遥测和状态数据。EMQX 接收这些消息，并在规则引擎中进行匹配。
 3. **规则引擎处理消息**：内置规则引擎根据主题匹配处理来自特定来源的消息和事件。它匹配相应的规则，并处理消息和事件，如数据格式转换、过滤特定信息或用上下文信息丰富消息。
-4. **写入 Azure Blob Storage**：规则触发一个动作，将消息写入存储容器。使用 Azure Blob Storage Sink，用户可以从处理结果中提取数据并发送到 Blob Storage。根据消息内容和 Sink 中的配置，消息可以以文本或二进制格式存储，或将多行结构化数据汇总到单个 CSV 文件或 JSON Lines 文件中。
+4. **写入 Azure Blob Storage**：规则触发一个动作，将消息写入存储容器。使用 Azure Blob Storage Sink，用户可以从处理结果中提取数据并发送到 Blob Storage。根据消息内容和 Sink 中的配置，消息可以以文本或二进制格式存储，或将多行结构化数据汇总为单个 CSV 文件、JSON Lines 文件或 Parquet 格式文件。
 
 事件和消息数据写入存储容器后，可以连接到 Azure Blob Storage 读取数据，以实现灵活的应用开发，例如：
 
@@ -60,7 +60,7 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 在添加 Azure Blob Storage 数据 Sink 之前，您需要创建相应的连接器。
 
-1. 转到 Dashboard **集成** -> **连接器** 页面。
+1. 转到 Dashboard **集成** -> **连接器**页面。
 2. 点击右上角的**创建**按钮。
 3. 选择 **Azure Blob Storage** 作为连接器类型，然后点击**下一步**。
 4. 输入连接器名称，名称应为大小写字母和数字的组合。在这里，输入 `my-azure`。
@@ -74,7 +74,7 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 ## 创建 Azure Blob Storage Sink 规则
 
-本节演示如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理结果写入 Azure Storage 中的 `iot-data` 容器。
+本节演示如何在 EMQX 中创建规则，以处理来自源 MQTT 主题 `t/#` 的消息，并通过配置的 Sink 将处理结果写入 Azure Blob Storage 中的 `iot-data` 容器。
 
 1. 转到 Dashboard **集成** -> **规则**页面。
 
@@ -105,8 +105,8 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
 8. 选择 **上传方式**。两种方式的区别如下：
 
-   - **直接上传**：每次触发规则时，数据会根据预设的对象键和值直接上传到 Azure Storage。这种方式适合存储二进制或大型文本数据，但可能会生成大量文件。
-   - **聚合上传**：此方式将多个规则触发结果打包到一个文件（如 CSV 文件）中，并上传到 Azure Storage，适合存储结构化数据。它可以减少文件数量并提高写入效率。
+   - **直接上传**：每次触发规则时，数据会根据预设的对象键和值直接上传到 Azure Blog Storage。这种方式适合存储二进制或大型文本数据，但可能会生成大量文件。
+   - **聚合上传**：此方式将多个规则触发结果打包到一个文件（如 CSV 文件）中，并上传到 Azure Blob Storage，适合存储结构化数据。它可以减少文件数量并提高写入效率。
 
    每种方式的配置参数不同。请根据选择的方式进行配置：
 
@@ -138,13 +138,17 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 
      请注意，如果模板中未使用所有标记为必需的占位符，这些占位符将自动添加到 Blob 名称作为路径后缀，以避免重复。所有其他占位符被视为无效。
 
-   - **增强类型**：目前仅支持 CSV 和 JSON Lines。
+   - **聚合上传文件格式**：定义用于在 Azure Storage 中存储批量 MQTT 消息的数据文件格式。支持以下取值：
 
-     - `CSV`：数据将以逗号分隔的 CSV 格式写入 Azure Storage。
+     - `CSV`：数据将以逗号分隔的 CSV 格式写入 Azure Blob Storage。
 
-     - `JSON Lines`：数据将以 [JSON Lines](https://jsonlines.org/) 格式写入 Azure Storage。
+     - `JSON Lines`：数据将以 [JSON Lines](https://jsonlines.org/) 格式写入 Azure Blob Storage。
 
-   - **列排序**（仅用于增强类型为 `CSV` 时）：通过下拉选择调整规则结果列的顺序。生成的 CSV 文件将首先按所选列排序，未选择的列按字母顺序排列在所选列之后。
+     - `Parquet`: 数据将以 [Apache Parquet](https://parquet.apache.org/) 格式写入 Azure Blob Storage。该格式是一种列式存储格式，专为大规模数据集的分析型查询进行优化。
+
+       > 如需了解详细的配置选项（包括 **Schema 定义**、**压缩方式**和**行组大小设置**等），请参阅 [Parquet 格式选项](#parquet-格式选项)。
+
+   - **列排序**（当聚合上传文件格式为 `CSV` 时）：通过下拉选择调整规则结果列的顺序。生成的 CSV 文件将首先按所选列排序，未选择的列按字母顺序排列在所选列之后。
 
    - **最大记录数**：当达到最大记录数时，将完成单个文件的聚合并上传，重置时间间隔。
 
@@ -165,6 +169,77 @@ EMQX 利用规则引擎和数据接收器将设备事件和数据转发到 Azure
 现在您已成功创建规则。您可以在**规则**页面上看到新创建的规则，以及在**动作 (Sink)** 选项卡上的新 Azure Blob Storage Sink。
 
 您还可以点击**集成** -> **Flow 设计器**查看拓扑。拓扑图形化地展示了主题 `t/#` 下的消息如何在被规则 `my_rule` 解析后写入 Azure Storage 容器中。
+
+## Parquet 格式选项
+
+当**聚合上传文件格式** 设置为 `parquet` 时，EMQX 会将聚合后的规则处理结果以 Apache Parquet 格式存储到目标存储中。Parquet 是一种列式、支持压缩的文件格式，针对大规模分析型工作负载进行了优化。
+
+本节介绍 Parquet 输出格式的可配置参数。
+
+### Parquet Schema (Avro)
+
+该选项定义 MQTT 消息字段与 Parquet 文件列之间的映射关系。EMQX 使用 Apache Avro 的 Schema 规范描述 Parquet 数据结构。
+
+可选择以下两种配置方式：
+
+- **Schema Registry 中已添加的 Avro Schema**: 使用已在 EMQX [Schema Registry](./schema-registry.md) 中注册的 [Avro Schema](./schema-registry-example-avro.md)。选择此项时，需要在 **Schema 名称** 字段中指定已注册的 Schema 名称。EMQX 会在写入 Parquet 文件时自动从注册表中加载对应的 Schema。
+
+  ::: tip
+
+  如果你希望集中管理数据结构并保持多系统间 Schema 的一致性，建议使用此方式。
+
+  :::
+
+- **Avro Schema 定义**：在 EMQX 中直接定义 Avro Schema。在 **Schema 定义**字段中输入以 JSON 格式定义的 Avro Schema。
+
+  **示例：**
+
+  ```json
+  {
+    "type": "record",
+    "name": "MessageRecord",
+    "fields": [
+      {"name": "clientid", "type": "string"},
+      {"name": "timestamp", "type": "long"},
+      {"name": "payload", "type": "string"}
+    ]
+  }
+  ```
+
+  ::: tip
+
+  请确保字段名称与规则 SQL 输出字段一致，否则可能导致写入 Parquet 时序列化失败。
+
+  :::
+
+### Parquet 默认压缩算法
+
+该选项指定用于压缩 Parquet 行组中数据页的默认压缩算法。压缩有助于减少存储空间，并在执行分析查询时提升 I/O 效率。
+
+支持的取值：
+
+| 取值             | 说明                                                   |
+| ---------------- | ------------------------------------------------------ |
+| `snappy`（默认） | 压缩速度快、解压高效、压缩率适中。推荐大多数场景使用。 |
+| `zstd`           | 压缩率更高但 CPU 开销略大，适合大规模或长期存储场景。  |
+| `None`           | 不使用压缩，仅用于调试或对压缩无需求的情况。           |
+
+### Parquet 最大行组大小
+
+该选项指定每个 Parquet 行组的最大缓冲大小（单位：MB）。行组是 Parquet 文件中读写数据的基本单位，当行组大小超过此值时，EMQX 将刷新当前行组并开始新的行组。
+
+- **默认值：** `128 MB`
+
+**使用建议：**
+
+- 增大该值可提高分析查询性能；
+- 减小该值可降低写入时的内存占用，适合小规模数据。
+
+::: tip
+
+Parquet 读取器以行组为单位读取数据。较大的行组可减少元数据开销，从而提升分析查询性能。
+
+:::
 
 ## 测试规则
 

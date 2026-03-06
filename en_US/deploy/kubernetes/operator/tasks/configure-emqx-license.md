@@ -11,15 +11,15 @@ You can apply for an EMQX Enterprise license for free on the EMQX official websi
 
 ## Configure EMQX Cluster
 
-EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for a complete configuration reference.
+EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster license through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for a complete configuration reference.
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
-     name: emqx-ee
+     name: emqx
    spec:
      config:
        data: |
@@ -43,7 +43,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license th
    Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
    ```bash
-   $ kubectl get emqx emqx-ee
+   $ kubectl get emqx emqx
    NAME   STATUS   AGE
    emqx   Ready    10m
    ```
@@ -53,7 +53,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license th
 1. View the license information.
 
    ```bash
-   $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
+   $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
    customer        : Evaluation
    email           : contact@emqx.io
    deployment      : default
@@ -70,7 +70,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license th
 2. Modify the EMQX CR to update the license.
 
    ```bash
-   $ kubectl edit emqx emqx-ee
+   $ kubectl edit emqx emqx
    ...
    spec:
      image: emqx/emqx:@EE_VERSION@
@@ -85,7 +85,7 @@ EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license th
 3. Verify that the license has been updated.
 
    ```bash
-   $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
+   $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
    customer        : Evaluation
    email           : contact@emqx.io
    deployment      : default

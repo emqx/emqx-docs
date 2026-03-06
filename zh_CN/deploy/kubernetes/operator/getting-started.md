@@ -7,46 +7,22 @@
 在部署 EMQX Operator 之前，请确保以下组件已准备就绪：
 
 - 运行 Kubernetes 1.24 或更高版本的 [Kubernetes](https://kubernetes.io/docs/concepts/overview/) 环境。
-
 - 一个可以访问 Kubernetes 集群的 [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) 工具。您可以使用 `kubectl cluster-info` 命令检查 Kubernetes 集群的状态。
-
-- [Helm](https://helm.sh) 3 或更高
 
 ## 安装 EMQX Operator
 
-1. 安装 `cert-manger`。
-
-   ::: tip
-   需要 `cert-manager` 版本 `1.1.6` 或更高。如果 `cert-manager` 已经安装并启动，请跳过此步骤。
-   :::
-
-   你可以使用 Helm 来安装 `cert-manager`。
+1. 使用以下命令安装 EMQX Operator：
 
    ```bash
-   $ helm repo add jetstack https://charts.jetstack.io
-   $ helm repo update
-   $ helm upgrade --install cert-manager jetstack/cert-manager \
-     --namespace cert-manager \
-     --create-namespace \
-     --set crds.enabled=true
+   $ kubectl apply --server-side=true -f https://github.com/emqx/emqx-operator/releases/latest/download/install.yaml
    ```
 
-   或者按照官方的 [cert-manager 安装指南](https://cert-manager.io/docs/installation/)来安装它。
-
-2. 运行以下命令来安装 EMQX Operator。
-
-   ```bash
-   $ helm repo add emqx https://repos.emqx.io/charts
-   $ helm repo update
-   $ helm upgrade --install emqx-operator emqx/emqx-operator \
-     --namespace emqx-operator-system \
-     --create-namespace
-   ```
+   该命令将下载最新的 2.3.x 版本，在整个集群范围内安装 EMQX 的 CRD（自定义资源定义），并将控制器服务部署到独立的 `emqx-operator-system` 命名空间中。
 
 3. 等待 EMQX Operator 就绪：
 
    ```bash
-   $ kubectl wait --for=condition=Ready pods -l "control-plane=controller-manager" -n emqx-operator-system
+   $ kubectl wait --for=condition=Ready pods --namespace emqx-operator-system -l "control-plane=controller-manager"
    pod/emqx-operator-controller-manager-57bd7b8bd4-h2mcr condition met
    ```
 
@@ -54,17 +30,13 @@ Operator 运行后，您可以继续部署 EMQX。
 
 ## 部署 EMQX
 
-:::: tabs type:card
-
-::: tab EMQX Enterprise 5
-
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
-      name: emqx-ee
+      name: emqx
    spec:
      image: emqx/emqx:@EE_VERSION@
      config:
@@ -81,39 +53,24 @@ Operator 运行后，您可以继续部署 EMQX。
    ```bash
    $ kubectl get emqx
    NAME      STATUS    AGE
-   emqx-ee   Ready     2m55s
-   ```
-
-   请确保 `STATUS` 为 `Ready`。EMQX 集群可能需要一些时间才能就绪。
-   :::
-
-::: tab EMQX Open Source 5
-
-1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
-
-   ```yaml
-   apiVersion: apps.emqx.io/v2beta1
-   kind: EMQX
-   metadata:
-      name: emqx
-   spec:
-      image: emqx/emqx:@CE_VERSION@
-   ```
-
-   有关 EMQX CRD 的更多详细信息，请查看 [参考文档](./reference/v2beta1-reference.md)。
-
-2. 等待 EMQX 集群就绪。
-
-   ```bash
-   $ kubectl get emqx
-   NAME      STATUS    AGE
    emqx      Ready     2m55s
    ```
 
-   请确保 `STATUS` 为 `Ready`。EMQX 集群可能需要一些时间才能就绪。后台会发生很多事情。
-   :::
+   请确保 `STATUS` 为 `Ready`。EMQX 集群可能需要一些时间才能就绪。
 
-::::
+## 故障排查
+
+EMQX Operator 会向 Kubernetes API 暴露有限数量的事件。
+
+```sh
+kubectl get events --sort-by=.lastTimestamp
+```
+
+另外，如果 EMQX 资源未能进入 `Ready` 状态条件，请查看 controller manager 的日志以获取更多详细信息：
+
+```sh
+kubectl logs -l "control-plane=controller-manager" --tail=-1 --namespace emqx-operator-system
+```
 
 ## 在公有云中部署 EMQX
 

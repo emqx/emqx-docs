@@ -84,7 +84,7 @@ Configure EMQX to authenticate devices using the same CA and identity-mapping ru
 
 ### Enable and Configure the mTLS Listener
 
-Configure EMQX to enable two-way SSL/TLS authentication (mTLS) on the SSL listener. For detailed information on SSL/TLS configuration, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md).
+Configure EMQX to enable two-way SSL/TLS authentication (mTLS) on the SSL listener. For detailed information on SSL/TLS configuration, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md).
 
 Open the EMQX configuration file (`emqx.conf`) and configure the SSL/TLS listener, or use the Dashboard (**Management** -> **Listeners**):
 

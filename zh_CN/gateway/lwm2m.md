@@ -1,7 +1,6 @@
 # LwM2M 协议网关
 
-[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/)
-是为物联网设备和机器对机器通信设计的协议。它是一种轻量级协议，对处理能力和内存
+[LwM2M (Lightweight Machine-to-Machine)](https://lwm2m.openmobilealliance.org/) 是为物联网设备和机器对机器通信设计的协议。它是一种轻量级协议，对处理能力和内存
 受限的设备非常友好。
 
 EMQX 中的 LwM2M 网关 可以接收 LwM2M 客户端连接并将其事件和消息转换为 MQTT Publish 消息。
@@ -22,7 +21,7 @@ EMQX 5.0 中，可以通过 Dashboard 配置并启用 LwM2M 网关，也可以�
 ::: tab REST API
 
 ```bash
-curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
@@ -109,7 +108,7 @@ LwM2M 网关仅支持 [HTTP Server 认证](../access-control/authn/http.md)。
 ::: tab REST API
 
 ```bash
-curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateway/lwm2m/authentication' \
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m/authentication' \
   -u <your-application-key>:<your-security-key> \
   -H 'Content-Type: application/json' \
   -d '{
@@ -773,6 +772,70 @@ Observe 命令的消息体格式应该为：
 - `{?RequestPath}`，String，与请求命令中的 `path` 字段相等。
 - `{?ResourcePath}`：String，请求的完全资源路径，即`31024/11/1`。
 - `{?Value}`：资源的最新值。
+
+## Block-Wise 传输
+
+LwM2M 协议底层使用 CoAP 进行通信，而 CoAP 基于 UDP，单个数据包的大小受到网络 MTU（通常约 1500 字节）的限制。当需要传输的数据超过这一限制时，例如向设备推送固件包（可能数百 KB 甚至数 MB）、或从设备读取包含大量资源的对象，数据传输就无法在一个 CoAP 数据包中完成。
+
+[CoAP Block-Wise Transfer (RFC 7959)](https://datatracker.ietf.org/doc/html/rfc7959) 正是为解决这一问题而设计的机制。它将大数据拆分为多个固定大小的块（Block），通过多次 CoAP 请求/响应逐块传输，最终在接收端重新组装为完整数据。
+
+EMQX 的 LwM2M 网关内置了 Block-Wise 传输的支持。启用后，网关会自动处理块的拆分和组装，MQTT 侧的用户无需关心底层的分块细节，发送和接收的始终是完整的数据。
+
+### 传输方向
+
+Block-Wise 传输支持两个方向：
+
+- **Block1（服务器 -> 设备）**：当服务器向设备写入大数据（如固件推送）时，EMQX 自动将负载拆分为多个 Block1 块，逐块发送给设备。例如，一个 256 字节的固件包在块大小为 16 字节时，将被拆分为 16 个块依次发送。
+- **Block2（设备 -> 服务器）**：当设备的响应数据过大（如读取设备信息对象 `/3/0`）时，设备会以多个 Block2 块发送响应，EMQX 自动将所有块重新组装为完整数据后再转发到 MQTT。
+
+### 配置 Block-Wise 传输
+
+可通过 REST API 或配置文件启用和配置 Block-Wise 传输参数。
+
+:::: tabs type:card
+
+::: tab REST API
+
+```bash
+curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/lwm2m' \
+  -u <your-application-key>:<your-security-key> \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "lwm2m",
+  "blockwise": {
+    "enable": true,
+    "max_block_size": 1024,
+    "max_body_size": "4MB",
+    "exchange_lifetime": "247s"
+  }
+}'
+```
+:::
+
+::: tab 配置文件
+
+```properties
+gateway.lwm2m {
+  blockwise {
+    enable = true
+    max_block_size = 1024
+    max_body_size = "4MB"
+    exchange_lifetime = "247s"
+  }
+}
+```
+:::
+
+::::
+
+Block-Wise 传输相关配置项说明如下：
+
+| 配置项                        | 类型       | 默认值   | 说明                                                         |
+| ----------------------------- | ---------- | -------- | ------------------------------------------------------------ |
+| `blockwise.enable`            | Boolean    | `true`   | 是否启用 Block-Wise 传输。                                   |
+| `blockwise.max_block_size`    | Block Size | `1024`   | Block-Wise 传输使用的最大块大小。可选值为 `16`、`32`、`64`、`128`、`256`、`512`、`1024`。 |
+| `blockwise.max_body_size`     | Byte Size  | `"4MB"`  | 组装后消息体的最大大小。                                     |
+| `blockwise.exchange_lifetime` | Duration   | `"247s"` | Block-Wise 交换状态的保持时间。                              |
 
 ## 用户层接口
 

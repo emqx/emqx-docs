@@ -16,11 +16,6 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
 - 在集群上安装 EMQX Operator
   - 有关更多详细信息，请参阅 [安装 EMQX Operator](./getting-started.md)。
 
-  ::: warning 注意
-
-  在 GKE 上使用默认设置安装 cert-manager 可能会导致引导问题。添加配置 `--set global.leaderElection.namespace=cert-manager` 以在领导者选举中使用不同的命名空间。有关详细信息，请参阅 [cert-manager 兼容性文档](https://cert-manager.io/docs/installation/compatibility/)。
-
-  :::
 
 ## 快速部署 EMQX 集群
 
@@ -35,7 +30,7 @@ EMQX Operator 允许在 Google Kubernetes Engine (GKE) 上部署 EMQX，这简�
     :::
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx
