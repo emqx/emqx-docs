@@ -183,7 +183,7 @@ You can also go to **Integration** -> **Flow Designer** to view the data flow to
 
    If the Python HTTP server is running, the terminal should display output similar to the following:
 
-   ```python
+   ```text
    python3 http_server.py
     * Serving Flask app 'http_server'
     * Environment: production
