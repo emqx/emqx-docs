@@ -65,7 +65,12 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
 本节将指导您使用 Okta 作为身份提供商 (IdP) 并配置单点登录。您需要分别完成 Okta (IdP) 侧和 EMQX Dashboard 侧的配置。
 
-### 第 1 步：将 OIDC 应用程序添加到 Okta 的应用程序目录
+### 步骤 1：在 EMQX Dashboard 中启用 OIDC
+
+1. 在 EMQX Dashboard 中，导航到**系统设置** -> **单点登录**。
+2. 点击 **OIDC** 卡片上的**启用**按钮。
+
+### 步骤 2：将 OIDC 应用程序添加到 Okta 的应用程序目录
 
 1. 以管理员身份登录 Okta，并进入 **Okta 管理控制台**。
 2. 转到 **Applications -> Applications** 页面，点击 **Create App integration** 按钮，并在弹出对话框中选择 `OIDC - OpenID Connect` 作为登录方式。
@@ -78,7 +83,7 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 
 有关更详细的说明，请参阅 [Okta 文档](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)。
 
-### 第 2 步：在 EMQX Dashboard 中启用 OIDC
+### 步骤 3：在 EMQX Dashboard 中启用 OIDC
 
 1. 在 EMQX Dashboard 中，导航到 **System** -> **SSO**。
 2. 在 **OIDC** 选项卡中点击**启用**按钮。
@@ -89,6 +94,21 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
    - **Client Secret**：从**第一步**创建的应用程序中复制。
    - **Dashboard 地址**：输入用户可以访问 Dashboard 的基本 URL，例如 `http://localhost:18083`。该地址将自动组合生成 **SSO Address** 和 **Metadata Address**，用于 IdP 端的配置。
 4. 点击**更新**完成配置。
+
+## 高级设置
+
+**高级设置**用于配置 OIDC 的一些高级参数，以控制 EMQX 如何从 OIDC 提供方获取用户信息以及认证相关行为。
+
+| 字段名称                | 描述                                                         | 默认值                                              |
+| ----------------------- | ------------------------------------------------------------ | --------------------------------------------------- |
+| **Scopes**              | 在认证过程中请求的 OIDC Scope，用于指定从身份提供方（IdP）获取哪些用户信息。至少需要包含 `openid` 作用域才能进行 OIDC 认证。 | `openid`                                            |
+| **名称变量**            | 用于将 OIDC 用户属性映射为 EMQX Dashboard 用户名的模板。该模板可以引用 IdP 返回的声明（claims）。 | `${sub}`                                            |
+| **名称变量来源**        | 指定从哪个来源提取用户信息以构建 Dashboard 用户名。可选值包括：<br/>**用户信息端点**：使用 `/userinfo` 端点返回的用户信息。<br/>**ID Token**：使用认证过程中返回的 ID Token 中包含的声明。 | `用户信息端点`                                      |
+| **会话过期**            | 用户通过 OIDC 登录后，Dashboard 会话保持有效的时间（单位：秒）。 | `30` 秒                                             |
+| **开启 PKCE**           | 启用 Proof Key for Code Exchange（PKCE），以增强授权码流程的安全性。 | 关闭                                                |
+| **首选认证方法**        | 定义与 Token Endpoint 通信时使用的客户端认证方法。可以配置多个方法，系统会按顺序尝试。 | `client_secret_post`、`client_secret_basic`、`none` |
+| **备用方法**            | 当身份提供方的元数据未明确指定签名算法时，用于验证 ID Token 的备用签名算法。 | `RS256`                                             |
+| **JSON Web 密钥 (JWK)** | 可选的静态 JSON Web Key 配置。当 IdP 未提供 JWKS Endpoint 时，可用于验证 Token 签名。 | `无`                                                |
 
 ## 登录和用户管理
 

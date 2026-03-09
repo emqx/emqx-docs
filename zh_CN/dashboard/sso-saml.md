@@ -70,14 +70,14 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 本节将指导您如何使用 Okta 作为身份提供商（IdP）并配置单点登录，您需要分别完成身份提供商（IdP）侧与 EMQX Dashboard 侧的配置。
 
-### 第 1 步：在  EMQX Dashboard 中启用 Okta
+### 步骤 1：在  EMQX Dashboard 中启用 Okta
 1. 转到 Dashboard **系统设置** -> **单点登录**页面。
 2. 选择 **SAML 2.0** 选项，点击**启用**按钮。
 3. 在配置页面中，输入以下信息：
    - **Dashboard 地址**：确保用户能够访问 Dashboard 的实际访问地址，不需要带具体路径。例如 `http://localhost:18083`。该地址将自动拼接生成**单点登录地址**与**元数据地址**供 IdP 侧配置使用。
    - **SAML 元数据 URL**：暂时留空，等待第 2 步配置生成。
 
-### 第 2 步：在 Okta 的应用程序目录添加 SAML 2.0 应用程序
+### 步骤 2：在 Okta 的应用程序目录添加 SAML 2.0 应用程序
 
 1. 以管理员身份登录 Okta，然后转至 **Okta 管理控制台**。
 
@@ -98,7 +98,7 @@ EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实�
 
 <img src="./assets/dashboard-sso-saml-create-okta-app.png" alt="Dashboard SSO Okta 创建应用" style="zoom:67%;" />
 
-### 第 3 步：完成 Dashboard 配置，在 Okta 中为应用分配用户与组
+### 步骤 3：完成 Dashboard 配置，在 Okta 中为应用分配用户与组
 
 1. 在 Okta 中，转到 **Sign On** 选项卡，复制 **Metadata URL**。
 2. 在 Dashboard 中，粘贴复制来的  **Metadata URL** 到第 1 步中的 **SAML 元数据 URL** 中，点击**更新**按钮。
