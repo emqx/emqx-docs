@@ -50,6 +50,24 @@ EMQX 插件有三个主要生命周期状态：
 
 :::
 
+### 配置文件路径
+
+插件有两个相关的配置文件路径：
+
+- 安装包内的默认配置文件：
+  - docker 部署：
+    `/opt/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
+  - deb/rpm 部署：
+    `/usr/lib/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
+
+- 通过 Dashboard 或 API 保存配置后，由 EMQX 管理的持久化配置文件：
+  - docker 部署：
+    `/opt/emqx/data/plugins/my_emqx_plugin/config.hocon`
+  - deb/rpm 部署：
+    `/var/lib/emqx/plugins/my_emqx_plugin/config.hocon`
+
+`priv/config.hocon` 是插件包自带的默认配置模板。`data/plugins/.../config.hocon` 是 EMQX 保存插件配置变更后使用的持久化配置文件路径。
+
 ### 启动
 
 可通过 Dashboard、API 或 CLI 手动启动插件。启动时：
@@ -209,6 +227,39 @@ EMQX 支持通过 Dashboard、CLI 和 API 安装、卸载和管理插件包。
    curl -s -u $KEY:$SECRET -X PUT \
      "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
+
+### 在 EMQX 启动前预装插件
+
+如果希望插件在 EMQX 启动时即可使用——例如构建自定义 Docker 镜像时——可以提前解压插件包并配置 EMQX。
+
+以下步骤以 Dockerfile 为例，但同样适用于其他部署方式（deb/rpm、裸机部署等）：
+
+1. 将插件包复制并解压到插件目录：
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN cd /opt/emqx/plugins && \
+       mkdir -p my_emqx_plugin-1.0.0 && \
+       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
+   ```
+
+2. 在 EMQX 基础配置文件中注册插件，使其在启动时自动加载：
+
+   ```dockerfile
+   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
+   plugins {
+       states = [
+           {
+               name_vsn = "my_emqx_plugin-1.0.0"
+               enable = true
+           }
+       ]
+   }
+   EOF
+   ```
+
+   设置 `enable = true` 可在启动时自动启用插件，设置 `enable = false` 则仅安装但不启动。
 
 ## 插件升级
 
