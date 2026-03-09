@@ -293,6 +293,7 @@
       # - messaging/nanomq
       # - messaging/neuron
     - durability/durability_introduction
+    - connect-emqx/curl
     - title_en: Client SDK
       title_cn: 客户端 SDK
       title_ja: クライアント SDK
@@ -905,6 +906,7 @@
       children:
         - mqtt-stream/mqtt-stream-task
         - mqtt-stream/mqtt-stream-quick-start
+    - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       title_ja: MQTT over QUIC
