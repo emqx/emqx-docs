@@ -80,9 +80,9 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
 4. On the **General Settings** tab, enter your application name, for example, `EMQX Dashboard`. Click **Next**.
 
-5. On the **LOGIN** tab, configure the settings using the information provided by the EMQX Dashboard in **Step 1**:
+5. On the **LOGIN** tab, configure the settings using the information provided by the EMQX Dashboard:
 
-   - **Sign-in redirect URIs**: Enter the **Sign-in Redirect URI** provided in the Dashboard, such as `http://localhost:18083/api/v5/sso/oidc/callback`.
+   - **Sign-in redirect URIs**: Enter the **Sign-in Redirect URI** provided in the Dashboard (on **OIDC Settings** page), such as `http://localhost:18083/api/v5/sso/oidc/callback`.
    - Additional settings are optional and can be configured according to your specific requirements.
    
 6. Review the settings and click **Save**.
@@ -91,7 +91,7 @@ For more detailed instructions, refer to the [Okta documentation](https://help.o
 
 ### Step 3: Complete the EMQX Dashboard Configuration
 
-1. On the configuration page, enter the following information:
+1. On the **OIDC Settings** page, enter the following information:
    - **Provider**: Choose `Okta` or select `Generic` for other providers.
    - **Issuer URL**: This is the URL of your Okta authorization server, e.g., `https://example-org.okta.com`.
    - **Client ID**: Copy it from the application created in **Step 2**.

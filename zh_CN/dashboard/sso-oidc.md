@@ -76,24 +76,22 @@ EMQX Dashboard 可以与支持 OIDC 协议的身份服务集成，以启用基�
 2. 转到 **Applications -> Applications** 页面，点击 **Create App integration** 按钮，并在弹出对话框中选择 `OIDC - OpenID Connect` 作为登录方式。
 3. 选择 `Web Application` 作为**Application type**，然后点击 **Next**。
 4. 在 **General Settings** 选项卡中，输入您的应用程序名称，例如 `EMQX Dashboard`。然后点击 **Next**。
-5. 在 **LOGIN** 选项卡中，使用 EMQX Dashboard 提供的信息配置设置（见**第 2 步**）：
-   - **Sign-in redirect URIs**：输入 Dashboard 提供的 **Sign-in Redirect URI**，例如 `http://localhost:18083/api/v5/sso/oidc/callback`。如果需要，您可以在完成**第 2 步**后更新此 URI。
+5. 在 **LOGIN** 选项卡中，使用 EMQX Dashboard 提供的信息配置：
+   - **Sign-in redirect URIs**：输入 Dashboard **OIDC 设置**页面中提供的 **Sign-in Redirect URI**，例如 `http://localhost:18083/api/v5/sso/oidc/callback`。
    - 其他设置是可选的，可以根据您的具体需求进行配置。
 6. 检查设置，然后点击 **Save**。
 
 有关更详细的说明，请参阅 [Okta 文档](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm)。
 
-### 步骤 3：在 EMQX Dashboard 中启用 OIDC
+### 步骤 3：在 EMQX Dashboard 中完成 OIDC 配置
 
-1. 在 EMQX Dashboard 中，导航到 **System** -> **SSO**。
-2. 在 **OIDC** 选项卡中点击**启用**按钮。
-3. 在配置页面中，输入以下信息：
+1. 在 **OIDC 设置**页面中，输入以下信息：
    - **提供商**：选择 `Okta` 或为其他提供商选择 `通用`。
    - **签发者 URL**：这是您的 Okta 授权服务器的 URL，例如 `https://example-org.okta.com`。
-   - **Client ID**：从**第一步**创建的应用程序中复制。
-   - **Client Secret**：从**第一步**创建的应用程序中复制。
+   - **Client ID**：从**步骤 2** 创建的应用程序中复制。
+   - **Client Secret**：从**步骤 2** 创建的应用程序中复制。
    - **Dashboard 地址**：输入用户可以访问 Dashboard 的基本 URL，例如 `http://localhost:18083`。该地址将自动组合生成 **SSO Address** 和 **Metadata Address**，用于 IdP 端的配置。
-4. 点击**更新**完成配置。
+2. 点击**更新**完成配置。
 
 ## 高级设置
 
