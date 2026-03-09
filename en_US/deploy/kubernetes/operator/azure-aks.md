@@ -24,7 +24,7 @@ The following example shows a basic configuration for an EMQX Custom Resource (C
 1. Save it as a YAML file and deploy with `kubectl apply`.
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

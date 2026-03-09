@@ -6,14 +6,14 @@ Change the EMQX configuration using the `.spec.config.data` field in the EMQX Cu
 
 ## Configure EMQX Cluster
 
-The EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for the complete configuration reference.
+The EMQX CRD `apps.emqx.io/v2` supports configuring the EMQX cluster through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for the complete configuration reference.
 
 EMQX uses [HOCON](../../../../configuration/configuration.md#hocon-configuration-format) as the configuration file format.
 
 1. Save the following as a YAML file and deploy it using `kubectl apply`:
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
       name: emqx

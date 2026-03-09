@@ -5,7 +5,7 @@ There are two ways to create a namespace in EMQX: explicit creation and automati
 - **Explicit creation** is suitable for tightly controlled environments.
 - **Automatic creation** is better for dynamic, large-scale deployments that benefit from reduced manual intervention.
 
-## Explicit Namespace Creation
+## Explicitly Create a Namespace
 
 You can manually create namespaces through the Dashboard or the REST API. Explicitly created namespaces can be directly managed, edited, and deleted.
 
@@ -29,21 +29,30 @@ POST /mt/ns/<namespace>
 
 Replace `<namespace>` with the desired namespace ID. No request body is required.
 
-## Automatic Namespace Creation
+## Automatically Create a Namespace
 
-When a client connects, EMQX can automatically create a namespace by extracting the `client_attrs.tns` attribute from the client's metadata. This method is typically used in large-scale, automated environments where manual creation is impractical.
+In EMQX, namespaces can also be created automatically when clients connect.
 
-**Use case**: Ideal for trusted client connection environments where each tenant or client should be assigned a separate namespace without manual setup.
+Automatic namespace creation is not based directly on the `client_attrs.tns` field itself, but instead depends on the **[Take Namespace From](./namespace-global-settings)** configuration.
+
+When a client connects, EMQX evaluates the configured **Take Namespace From** rule to derive the `tns` (tenant namespace) attribute from the client connection metadata. If the corresponding namespace does not already exist, EMQX automatically creates it.
+
+**Typical use cases**: This approach is suitable when client connections originate from trusted sources, the namespace identifier can be reliably derived from connection metadata, and namespaces need to be created dynamically for a large number of tenants or business units.
 
 ::: tip Note
-Automatically created namespaces **cannot be edited** via the Dashboard. They are only generated through configuration or extracted automatically from client metadata.
+
+Automatically created namespaces are read-only and cannot be edited in the Dashboard.
+
+Their configuration (such as session limits or rate limits) cannot be modified, as these namespaces are generated automatically based on the namespace source rules.
+
 :::
 
 ::: tip Note
-Automatic namespace creation is enabled only when the following configuration is set:
 
-```
-multi_tenancy.allow_only_managed_namespaces = false
-```
+Automatic namespace creation is only allowed when `multi_tenancy.allow_only_managed_namespaces = false`.
+
+When this configuration is set to `true`, only explicitly created namespaces are allowed, and automatic namespace creation is disabled.
+
+You can also control this behavior from the Dashboard using the **[Allow Only Explicitly Created Namespaces](./namespace-global-settings.md#allow-only-explicitly-created-namespaces)** setting.
 
 :::

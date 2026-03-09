@@ -1,6 +1,6 @@
 # Integrate with Prometheus
 
-EMQX supports integration with third-party monitoring systems, such as [Prometheus](https://prometheus.io/). It is the monitoring solution open-sourced by SoundCloud. It offers a versatile set of features, including support for multidimensional data models, flexible query language, and powerful alarm management.
+EMQX supports integration with third-party monitoring systems such as [Prometheus](https://prometheus.io/), an open-source monitoring solution originally developed by SoundCloud. Prometheus provides a multidimensional data model, flexible query language (PromQL), and powerful alerting capabilities.
 
 Using a third-party monitoring system can bring the following advantages:
 
@@ -13,15 +13,135 @@ EMQX supports two methods for integrating Prometheus metrics monitoring:
 - **Pull Mode**: Prometheus directly collects metrics through EMQX's REST API.
 - **Push Mode**: EMQX pushes metrics to the Pushgateway service, from which Prometheus collects the metrics.
 
-This page introduces the configuration steps for both methods. You can click **Management** -> **Monitoring** in the left navigation menu of the EMQX Dashboard, and in the **Integration** tab, select **Prometheus** to perform the configuration. You can also click the **Help** button on the page to view specific configuration steps for each mode.
+To configure Prometheus integration:
+
+1. Go to **Management** -> **Monitoring** in the EMQX Dashboard.
+2. Switch to the **Integration** tab.
+3. Select **Prometheus** as the monitoring platform.
+
+Depending on the selected mode, some configuration options apply only to Pull mode, while others affect both modes. You can click the **Help** button on the Dashboard page to view detailed configuration steps for each mode.
+
+<img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
+
+## Prometheus Configuration Options
+
+This section describes all configuration options available when selecting **Prometheus** in the Dashboard.
+
+### General Options (Affect Both Pull and Push Modes)
+
+#### Latency Buckets
+
+Specify histogram bucket boundaries for latency-related metrics.
+
+**Format**
+
+A comma-separated list of duration values:
+
+```
+10ms, 100ms, 1s, 5s, 30s
+```
+
+**Description**
+
+These values define how latency metrics are grouped into histogram buckets in Prometheus. Smaller bucket intervals provide finer granularity but may increase metric cardinality and storage usage.
+
+This setting affects how latency histogram metrics are generated internally and applies to:
+
+- Pull mode metrics
+- Push mode metrics (via Pushgateway)
+
+### Pull Mode Settings
+
+The following options apply only when Prometheus scrapes EMQX metrics via REST APIs.
+
+#### Enable Basic Auth
+
+Enable or disable HTTP Basic Authentication for Prometheus scrape APIs.
+
+By default, Prometheus Pull mode APIs do not require authentication. When this option is enabled:
+
+- Prometheus must use HTTP Basic Authentication to access:
+  - `/api/v5/prometheus/stats`
+  - `/api/v5/prometheus/auth`
+  - `/api/v5/prometheus/data_integration`
+- You must create an [API Key](../admin/api.md#authentication) in EMQX.
+- Configure the `basic_auth` section in your `prometheus.yaml`.
+
+This option applies only to Pull mode and does not affect Pushgateway integration. For details, see [Configure Pull Mode Integration](#configure-pull-mode-integration).
+
+#### Namespace Data Scraping Rate Limit
+
+Limit the maximum request rate when scraping namespace-related metrics.
+
+Namespace-level metrics are supported in multi-tenant deployments and can be exposed or aggregated by namespace. For details, see [Prometheus Metrics Isolation](../multi-tenancy/namespace-overview.md#multi-tenancy-capability-support).
+
+**Format**: `<requests>/<duration>`
+
+**Example**: `1/5s`, which means at most 1 request is allowed every 5 seconds. Additional requests within the time window will be rejected.
+
+**Behavior**:
+
+- Applies only to namespace-level metric scraping requests.
+- Requests targeting specific namespaces are not limited.
+- Applies only to Pull mode.
+
+This option helps prevent excessive load in large-scale or multi-namespace deployments.
+
+### Push Mode Settings
+
+Push mode allows EMQX to send metrics to a Pushgateway instance. By default, Push mode is disabled.
+
+#### Enable Pushgateway
+
+Enable or disable metric pushing to Pushgateway. When enabled, configure the following fields:
+
+#### Interval
+
+Specify how often EMQX pushes metrics to Pushgateway. The default value is `15` seconds.
+
+#### Pushgateway Server
+
+Specify the Pushgateway server URL. It is `http://127.0.0.1:9091` by default.
+
+#### Job Name
+
+Specify the job label used when pushing metrics to Pushgateway.
+
+You can construct the job label using variables derived from the EMQX node name and hostname. The default value is: `${name}/instance/${name}~${host}`.
+
+**Variables**:
+
+- `${name}`: EMQX node name (e.g., `emqx`)
+- `${host}`: Host IP address (e.g., `127.0.0.1`)
+
+For example, if the node name is `emqx@127.0.0.1`, then:
+
+- `${name}` = `emqx`
+- `${host}` = `127.0.0.1`
+
+#### Headers
+
+Optional HTTP headers sent when pushing metrics to Pushgateway.
+
+The value type is string. You can configure headers as key-value pairs, for example:
+
+```
+Authorization = "some-auth-token"
+```
+
+Click **Add** to insert additional headers.
 
 ## Configure Pull Mode Integration
 
-EMQX provides the following REST APIs for Prometheus to collect system metrics:
+In Pull mode, Prometheus scrapes metrics from EMQX through REST APIs.
+
+EMQX provides the following endpoints for metric collection:
 
 - `/api/v5/prometheus/stats`: Basic metrics and counters of EMQX.
 - `/api/v5/prometheus/auth`: Key metrics and counters in access control, including authentication and authorization.
 - `/api/v5/prometheus/data_integration`: Metrics and counters related to the rule engine, connectors, actions, Sink/Source, and encoding/decoding.
+
+### Metric Collection Modes
 
 When calling the above APIs to obtain metrics, you can use the URL query parameter `mode` to get different types of metric data. The meanings of different parameters are as follows:
 
@@ -95,13 +215,37 @@ This is the cluster unaggregated metric mode, returning the individual metrics o
 
 For more information about Prometheus pull endpoints, refer to the [EMQX Enterprise API documentation](https://docs.emqx.com/en/enterprise/v@EE_MINOR_VERSION@/admin/api-docs.html).
 
-::: tip 
+### Authentication (Optional)
 
-By default, the pull mode API does not require authentication. You can configure the **Enable Basic Auth** switch on the page to enable basic authentication for the interface. Once enabled, you need to create an [API key](../admin/api.md#authentication) on EMQX and apply it to the Prometheus configuration to obtain metric data.
+By default, Prometheus Pull mode APIs do not require authentication.
 
-:::
+If **Enable Basic Auth** is enabled in the EMQX Dashboard, Prometheus must authenticate using HTTP Basic Authentication.
 
-### Prometheus Configuration for Reference
+In this case:
+
+1. Create an [API key](../admin/api.md#authentication) in EMQX.
+2. Use the generated API Key and Secret Key in the Prometheus configuration.
+
+In the Prometheus configuration:
+
+```yaml
+basic_auth:
+  username: '<API_KEY>'
+  password: '<SECRET_KEY>'
+```
+
+Where:
+
+- `username` is the API Key.
+- `password` is the corresponding Secret Key.
+
+Prometheus will use these credentials when scraping EMQX metrics.
+
+### Prometheus Server Configuration Example
+
+To enable Prometheus to scrape EMQX metrics, configure the Prometheus server.
+
+Add the following configuration to your Prometheus configuration file, then restart the Prometheus service.
 
 ```yaml
 # prometheus.yaml
@@ -142,24 +286,13 @@ scrape_configs:
 
 ## Configure Push Mode Integration
 
-EMQX supports pushing metrics to Pushgateway, from which Prometheus can then collect these metrics. EMQX supports pushing metrics to Pushgateway, which is disabled by default. To enable the Pushgateway service, you can click the **Enable Pushgateway** toggle switch on the Prometheus configuration page in the Dashboard. 
+Push mode sends metrics from EMQX to Pushgateway.
 
-<img src="./assets/enable-push-gateway.png" alt="enable-push-gateway" style="zoom:40%;" />
+After enabling **Enable Pushgateway** in the Dashboard and configuring the required fields, click **Save Changes**.
 
-Configure the following fields according to your business needs, and then click **Save Changes**. 
+The Push mode currently only includes EMQX's basic metrics and counters from the `/api/v5/prometheus/stats` endpoint. For comprehensive monitoring, Pull mode is generally recommended.
 
-- **Interval**: Specify the time interval for reporting the monitoring metrics data to Pushgateway. The default value it `15` seconds.
-- **Pushgateway Server**: Type the URL of Prometheus server. It is `http://127.0.0.1:9091` by default.
-- **Job Name**: Specify variables that include the EMQX cluster name, node name, and hostname. The default value is `${name}/instance/${name}~${host}`. For example, when the EMQX node name is `emqx@127.0.0.1`, the `name` variable takes the value `emqx` and the `host` variable takes the value `127.0.0.1`.
-- **Headers**: Type the key and value of the HTTP headers for the monitoring metrics that are pushed to Pushgateway. You can add a list of headers by clicking the **Add** button. The type is string, for example, { Authorization = "some-authz-tokens"}.
-
-At the same time, you can click the **Help** button and refer to the steps on the **Use Pushgateway** tab for configuration.
-
-::: tip 
-
-The Push mode currently only includes EMQX's basic metrics and counters from the `/api/v5/prometheus/stats` endpoint, so the Pull mode is more recommended.
-
-:::
+### Configuration File Example
 
 You can also enable and configure the Pushgateway by adding the following configuration to the configuration file. For more information on configuration items, see [Configuration - Prometheus](../configuration/prometheus.md).
 
