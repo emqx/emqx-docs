@@ -12,7 +12,7 @@ For users who need to integrate with HTTP services but do not require data proce
 
 <video
   src="./assets/http_server_integration.mp4"
-  autoplay
+  preload="metadata"
   controls
   muted
   playsinline

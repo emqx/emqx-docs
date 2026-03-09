@@ -7,7 +7,7 @@ This page comprehensively introduces information related to Webhook, along with 
 
 <video
   src="./assets/webhook-integration.mp4"
-  autoplay
+  preload="metadata"
   controls
   muted
   playsinline
