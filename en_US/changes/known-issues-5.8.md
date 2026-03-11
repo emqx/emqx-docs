@@ -4,6 +4,7 @@
 
 | Since version | Issue                                                        | Workaround                                                   | Status            |
 | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| 5.8.9 | **Cannot set static client IDs for MQTT connector from the Dashboard** | Set static client IDs for each node from the configuration file. |  |
 | 5.1.0         | **Replicant nodes may hang on startup when new core nodes are added to the cluster**<br />During cluster changes that involve adding new core nodes, the newly added cores may occasionally fail to start replication-related processes required by replicant nodes. This, in turn, caused upgraded or newly added replicant nodes to hang during startup.<br />In Kubernetes deployments, this led to the controller repeatedly restarting replicant pods due to failing readiness probes.<br />This problem typically occurs during upgrade rollouts, for example, when expanding an existing 2-core + 2-replicant cluster by adding two new core nodes and two new replicants running a newer EMQX version. | If one or more replicant nodes hang during startup after being (re)deployed, consider forcefully restarting the newly added core nodes one at a time until the replicants unblock and complete startup. | Fixed in 5.8.9 |
 
 ## e5.8.8

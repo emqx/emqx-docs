@@ -1201,6 +1201,7 @@
 - [#15944](https://github.com/emqx/emqx/pull/15944) 改进了当资源被标记为 `disconnected` 时返回的信息，适用于以下连接器：LDAP、Syskeeper、IoTDB、Snowflake（聚合模式）、JWKS 认证。
 - [#15911](https://github.com/emqx/emqx/pull/15911) 对于 HTTP 动作，HTTP 请求超时时间现在与 `resource_opts.request_ttl` 保持一致。此前该值为固定且不可配置的 30 秒。
 - [#15845](https://github.com/emqx/emqx/pull/15845) 扩展了 MQTT 连接器的 `static_clientids` 配置，支持为每个 clientid 指定对应的用户名和密码。
+  注意：此配置目前无法从 Dashboard 更新，Dashboard 支持将在 5.8.10 版本中添加。
 
 ### 修复
 
