@@ -6,9 +6,11 @@ In some scenarios, you might need to apply custom encoding or decoding logic tha
 
 ## External HTTP API Specification
 
-To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single `POST` endpoint that handles the encoding or decoding requests from EMQX.  
+To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single endpoint that handles the encoding or decoding requests from EMQX. The schema can use either the `POST` method (default) or the `GET` method.
 
 ### Request Format
+
+#### POST request
 
 The request body is a JSON object with the following fields:
 
@@ -16,6 +18,17 @@ The request body is a JSON object with the following fields:
 - `type`: Either the `encode` or the `decode` string, depending on which function is evaluated, `schema_encode` or `schema_decode`.
 - `schema_name`: A string identifying the name of this External HTTP schema configured in EMQX.
 - `opts`: An arbitrary string that can be configured in EMQX to provide further options, which is passed unaltered to the HTTP server.
+
+#### GET request
+
+When the schema method is set to `GET`, EMQX sends the same fields as URL query parameters:
+
+- `payload`: URL-safe Base64 encoded without padding.
+- `type`: Either the `encode` or `decode` string.
+- `schema_name`: A string identifying the name of this External HTTP schema configured in EMQX.
+- `opts`: An arbitrary string passed through unchanged.
+
+If the schema URL already contains query parameters, EMQX appends these four parameters to the existing query string.
 
 ### Response Format
 
@@ -28,7 +41,7 @@ Suppose a device publishes a binary message, and you want to encode or decode th
 
 ### Build an External HTTP Service
 
-The following example demonstrates how to create and run a simple HTTP server using Python and Flask. The server receives Base64-encoded data and applies an XOR operation to the decoded payload.
+The following example demonstrates how to create and run a simple HTTP server using Python and Flask. The server accepts either `POST` or `GET` requests, decodes the incoming payload, and applies an XOR operation to it.
 
 <details>
 <summary><strong>Code for sample External HTTP Server</strong></summary>
@@ -47,13 +60,22 @@ import base64
 
 app = Flask(__name__)
 
-@app.route("/serde", methods=['POST'])
+
+def decode_payload(payload64):
+    if request.method == "GET":
+        # EMQX sends GET payload as URL-safe Base64 without padding.
+        payload64 += "=" * (-len(payload64) % 4)
+        return base64.urlsafe_b64decode(payload64)
+    return base64.b64decode(payload64)
+
+
+@app.route("/serde", methods=["POST", "GET"])
 def serde():
-    # The input payload is base64 encoded
-    body = request.get_json(force=True)
+    # POST uses a JSON body; GET uses query parameters.
+    body = request.args if request.method == "GET" else request.get_json(force=True)
     print("incoming request:", body)
     payload64 = body.get("payload")
-    payload = base64.b64decode(payload64)
+    payload = decode_payload(payload64)
     secret = 122
     response = bytes(b ^ secret for b in payload)
     # The response must also be base64 encoded
@@ -82,6 +104,8 @@ flask --app myapp --debug run -h 0.0.0.0 -p 9500
    - **Type**: `External HTTP`
 
    - **URL**: The full URI where your server is running.  For example: `http://server:9500/serde`.
+
+   - **Method**: Select `POST` or `GET`. `POST` is the default. Use `GET` only if your external service expects the request fields in the query string.
 
 4. Click **Create**.
 

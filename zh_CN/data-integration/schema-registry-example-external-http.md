@@ -6,9 +6,11 @@
 
 ## 外部 HTTP API 规范
 
-要实现与 EMQX 的 `schema_encode` 和 `schema_decode` 函数配套的外部 HTTP API，服务端需提供一个 `POST` 接口用于接收 EMQX 发起的编码或解码请求。
+要实现与 EMQX 的 `schema_encode` 和 `schema_decode` 函数配套的外部 HTTP API，服务端需提供一个用于接收 EMQX 编码或解码请求的接口。该 Schema 可使用 `POST`（默认）或 `GET` 方法。
 
 ### 请求格式
+
+#### POST 请求
 
 请求体是一个 JSON 对象，包含以下字段：
 
@@ -16,6 +18,17 @@
 - `type`：字符串，值为 `encode` 或 `decode`，用于区分当前执行的是 `schema_encode` 还是 `schema_decode`。
 - `schema_name`：当前在 EMQX 中配置的外部 HTTP Schema 名称。
 - `opts`：可选字符串，由 EMQX 配置传入，可用于携带额外参数，原样传递给 HTTP 服务。
+
+#### GET 请求
+
+当 Schema 的方法设置为 `GET` 时，EMQX 会将相同字段放到 URL 查询参数中：
+
+- `payload`：使用 URL-safe Base64 编码，且不带 padding。
+- `type`：值为 `encode` 或 `decode`。
+- `schema_name`：当前在 EMQX 中配置的外部 HTTP Schema 名称。
+- `opts`：原样透传的可选字符串。
+
+如果 Schema URL 已经包含查询参数，EMQX 会将这四个参数追加到现有查询字符串之后。
 
 ### 响应格式
 
@@ -29,7 +42,7 @@
 
 ### 构建外部 HTTP 服务
 
-以下示例展示了如何使用 Python + Flask 编写并运行一个简单的 HTTP 服务，用于将接收到的 Base64 消息进行 XOR 编码处理。
+以下示例展示了如何使用 Python + Flask 编写并运行一个简单的 HTTP 服务。该服务同时支持 `POST` 和 `GET`，会对接收到的 payload 进行解码并执行 XOR 处理。
 
 <details> <summary><strong>示例：外部 HTTP 服务</strong></summary>
 
@@ -47,13 +60,22 @@ import base64
 
 app = Flask(__name__)
 
-@app.route("/serde", methods=['POST'])
+
+def decode_payload(payload64):
+    if request.method == "GET":
+        # EMQX 在 GET 请求中使用不带 padding 的 URL-safe Base64。
+        payload64 += "=" * (-len(payload64) % 4)
+        return base64.urlsafe_b64decode(payload64)
+    return base64.b64decode(payload64)
+
+
+@app.route("/serde", methods=["POST", "GET"])
 def serde():
-    # 接收并解码 base64 编码的输入
-    body = request.get_json(force=True)
+    # POST 使用 JSON 请求体，GET 使用查询参数。
+    body = request.args if request.method == "GET" else request.get_json(force=True)
     print("incoming request:", body)
     payload64 = body.get("payload")
-    payload = base64.b64decode(payload64)
+    payload = decode_payload(payload64)
     secret = 122
     response = bytes(b ^ secret for b in payload)
     # 返回的结果也需进行 base64 编码
@@ -78,6 +100,7 @@ flask --app myapp --debug run -h 0.0.0.0 -p 9500
    - **名称**：`myhttp`
    - **类型**：`External HTTP`
    - **URL**：您的 HTTP 服务运行地址，例如 `http://server:9500/serde`。
+   - **方法**：选择 `POST` 或 `GET`。默认值为 `POST`。如果外部服务希望从查询字符串中读取请求字段，可使用 `GET`。
 4. 点击**创建**完成创建。
 
 ### 创建规则应用 Schema
