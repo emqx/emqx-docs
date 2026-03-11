@@ -11,7 +11,7 @@ For users who need to integrate with HTTP services but do not require data proce
 :::
 
 <video
-  src="./assets/http_server_integration.mp4"
+  src="https://assets.emqx.com/data/video/emqx-docs/data-integration/http_server_integration.mp4"
   preload="metadata"
   controls
   muted

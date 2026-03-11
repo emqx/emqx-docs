@@ -6,7 +6,7 @@ This page comprehensively introduces information related to Webhook, along with 
 
 
 <video
-  src="./assets/webhook-integration.mp4"
+  src="https://assets.emqx.com/data/video/emqx-docs/data-integration/webhook_integration.mp4"
   preload="metadata"
   controls
   muted
