@@ -145,10 +145,10 @@ GatewaysページのOCPPゲートウェイの**Actions**列にある**Settings**
 - **Heartbeat Checking Times Backoff**：ハートビートチェックのバックオフ回数、初期値：`1`
 - **Message Format Checking**：メッセージフォーマットの妥当性チェックを有効にするかどうか。EMQXはアップロード／ダウンロードストリームのメッセージをjson-schemaで定義されたフォーマットと照合し、チェックに失敗した場合は対応する応答メッセージを返します。設定可能な値は以下の通りです。
 
-    - `all`：すべてのメッセージをチェック
+    - `disable`：チェックを行わない。デフォルト値。
     - `upstream_only`：アップロードストリームのメッセージのみチェック
     - `dnstream_only`：ダウンロードストリームのメッセージのみチェック
-    - `disable`：チェックを行わない
+    - `all`：すべてのメッセージをチェック
 - **JSON Schema Directory**：OCPPメッセージ定義のJSONスキーマディレクトリ、初期値：`${application}/priv/schemas`
 - **JSON Schema ID Prefix**：OCPPメッセージスキーマのIDプレフィックス、初期値：`urn:OCPP:1.6:2019:12:`
 - **Idle Timeout**：非アクティブ状態が続いた場合に接続を切断するまでの最大待機時間（秒）

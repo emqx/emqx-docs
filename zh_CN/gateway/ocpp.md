@@ -145,10 +145,10 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 - **心跳检查退避倍数**：网关以多少倍的心跳时间来启动心跳定时器, 默认：`1` 倍。
 
 - **消息格式检查**：是否启用消息格式合法性检查。OCPP 网关会将上行数据流和下行数据流的消息格式与 JSON Schema 中定义的格式进行检查。当检查失败时，OCPP 网关会回复相应的错误消息。检查策略可以是以下值之一：
-    - `all`：检查上下行所有消息。 
+    - `disable`：不检查任何消息。默认值。
     - `upstream_only`：仅检查上行消息。
     - `dnstream_only`：仅检查下行消息。
-    - `disable`：不检查任何消息。
+    - `all`：检查上下行所有消息。
 
 - **JSON Schema 文件目录**：配置存放 OCPP 消息的 JSON Schema 文件目录，默认值：`${application}/priv/schemas`。
 
