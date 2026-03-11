@@ -55,13 +55,13 @@ After installation, plugin configuration can be updated through the Dashboard or
 There are two relevant config file locations:
 
 - Bundled default file inside the installed plugin package:
-  - docker:
+  - Docker:
     `/opt/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
   - deb/rpm:
     `/usr/lib/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
 
 - Persisted plugin config file managed by EMQX after config is saved via Dashboard or API:
-  - docker:
+  - Docker:
     `/opt/emqx/data/plugins/my_emqx_plugin/config.hocon`
   - deb/rpm:
     `/var/lib/emqx/plugins/my_emqx_plugin/config.hocon`
@@ -230,7 +230,7 @@ Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.g
 
 ### Pre-Install Plugins before EMQX Starts
 
-If you want a plugin to be available immediately when EMQX starts — for example, when building a custom Docker image — you can pre-install the plugin by extracting the package and configuring EMQX in advance.
+If you want a plugin to be available immediately when EMQX starts, for example, when building a custom Docker image, you can pre-install the plugin by extracting the package and configuring EMQX in advance.
 
 The following steps use a Dockerfile as an example, but the same approach applies to any deployment method (deb/rpm, bare metal, etc.):
 
