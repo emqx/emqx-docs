@@ -14,7 +14,7 @@ NATS 协议网关当前支持以下主要功能：
   - 消息传递与响应：`MSG`、`HMSG`
   - 心跳与状态响应：`PING`、`PONG`、`+OK`、`-ERR`
 - **Verbose 模式支持**：支持客户端通过 `CONNECT verbose=true` 开启消息确认响应。
-- **丰富的认证支持**：支持 `Token`、`NKey`、`JWT` 以及网关认证。
+- **丰富的认证支持**：支持 `Token`、`NKey`、`JWT` 以及用户名密码认证。
 
 ### 协议互通能力（与 MQTT）
 
