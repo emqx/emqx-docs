@@ -14,6 +14,7 @@ NATS 协议网关当前支持以下主要功能：
   - 消息传递与响应：`MSG`、`HMSG`
   - 心跳与状态响应：`PING`、`PONG`、`+OK`、`-ERR`
 - **Verbose 模式支持**：支持客户端通过 `CONNECT verbose=true` 开启消息确认响应。
+- **内置内部认证支持**：支持通过 `internal_authn` 配置有序的 `token`、`nkey`、`jwt` 认证方式。
 
 ### 协议互通能力（与 MQTT）
 
@@ -190,7 +191,39 @@ NATS 网关支持 TCP/SSL/WS/WSS 类型的监听器，其完整可配置的参�
 
 ### 配置接入认证
 
-NATS 协议支持多种认证方式，包括用户名/密码、Token 认证等。NATS 网关支持以下多种认证器类型，例如：
+NATS 网关支持两层认证能力：
+
+- **内部认证（`internal_authn`）**：按顺序执行的 NATS 原生认证方式。
+  - `token`：使用 `CONNECT` 报文中的 `auth_token` 字段。
+  - `nkey`：使用 `nkey` + `sig` 的 challenge/response 认证流程。
+  - `jwt`：使用 NATS JWT 凭证，并校验 JWT 信任链。
+- **网关认证（`authentication`）**：EMQX 认证器体系。
+
+当两层认证同时启用时，EMQX 按 `internal_authn` 数组顺序依次认证：
+
+1. 当前内部认证方式所需凭证缺失时，继续尝试下一种方式。
+2. 当前方式提供了凭证但校验失败时，立即拒绝连接，不再继续回退。
+3. 若内部认证方式都被跳过，且配置了网关认证器，则回退到网关认证。
+4. 若未启用任何内部认证方式且未配置网关认证器，则允许所有 NATS 客户端接入。
+
+NATS 网关从 `CONNECT` 报文提取以下认证字段：
+
+- **Client ID**：默认自动生成随机字符串。
+- **Username**：`user` 字段。
+- **Password**：`pass` 字段。
+- **Token**：`auth_token` 字段。
+- **NKey**：`nkey` 字段，对应签名字段为 `sig`。
+- **JWT**：`jwt` 字段，对应签名字段为 `sig`。
+
+::: tip
+
+使用 JWT 内部认证时，EMQX 可基于 JWT 的 `permissions` / `nats` 发布订阅权限进行校验。最终授权结果是 JWT 权限与 EMQX 授权规则的交集。
+
+:::
+
+#### 配置网关认证器
+
+NATS 网关支持以下认证器类型：
 - [内置数据库认证](../access-control/authn/mnesia.md)
 - [MySQL 认证](../access-control/authn/mysql.md)
 - [MongoDB 认证](../access-control/authn/mongodb.md)
@@ -200,13 +233,7 @@ NATS 协议支持多种认证方式，包括用户名/密码、Token 认证等�
 - [JWT 认证](../access-control/authn/jwt.md)
 - [LDAP 认证](../access-control/authn/ldap.md)
 
-与 MQTT 协议不同，网关仅支持创建一个认证器，而不是认证器列表（或认证链）。当不启用任何认证器时，表示允许所有的 NATS 客户端都具有接入的权限。
-
-NATS 网关使用 NATS 协议的 CONNECT 报文中的信息来生成客户端的认证信息。默认情况下：
-
-- Client ID：为随机生成的字符串。
-- Username：为 CONNECT 报文中的 `user` 字段的值。
-- Password：为 CONNECT 报文中的 `pass` 字段的值。
+与 MQTT 协议不同，网关认证器仅支持创建一个认证器，而不是认证器列表（或认证链）。
 
 #### 通过 Dashboard 配置
 
@@ -256,6 +283,52 @@ gateway.nats {
 }
 ```
 其他类型的认证器的配置格式参考每种 [EMQX 认证器](../access-control/authn/authn.md#emqx-认证器)的使用文档。
+
+#### 配置内部认证（internal_authn）
+
+可以通过 `internal_authn` 配置有序内部认证方式，示例如下：
+
+```properties
+gateway.nats {
+  internal_authn = [
+    {
+      type = token
+      token = "nats_token"
+    },
+    {
+      type = nkey
+      nkeys = [
+        "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
+    },
+    {
+      type = jwt
+      trusted_operators = [
+        "Oxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      ]
+      resolver {
+        type = memory
+        resolver_preload = [
+          {
+            pubkey = "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+            jwt = "<your-account-jwt>"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+说明：
+
+- `internal_authn` 按数组顺序从前到后执行。
+- `token` 支持明文和 bcrypt 哈希（`$2a$`、`$2b$`、`$2y$`）。
+- `nkeys` 需配置合法的用户 NKey（`U...`）。
+- `trusted_operators` 需配置合法的 Operator NKey（`O...`）。
+- `resolver.resolver_preload[].pubkey` 需配置合法的账号 NKey（`A...`）。
+- 使用 JWT 内部认证时，`trusted_operators` 与 `resolver.resolver_preload` 均为必填。
+- `resolver` 当前仅支持 `memory`。
 
 ### 配置用户层接口
 
