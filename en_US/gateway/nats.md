@@ -14,7 +14,7 @@ The NATS protocol gateway currently supports the following core features:
   - Message delivery and response: `MSG`, `HMSG`
   - Heartbeats and status: `PING`, `PONG`, `+OK`, `-ERR`
 - **Verbose mode support**: Enables response acknowledgment when clients connect with `CONNECT verbose=true`.
-- **Built-in internal authentication support**: Supports ordered `token`, `nkey`, and `jwt` authentication methods through `internal_authn`.
+- **Rich authentication support**: Supports `token`, `nkey`, `jwt`, and gateway authentication.
 
 ### Interoperability with MQTT
 
@@ -195,20 +195,18 @@ You can further customize your gateway by editing, deleting, or adding new liste
 
 ### Configure Authentication
 
-The NATS gateway supports two authentication layers:
+The NATS gateway supports authentication in two ways:
 
-- **Internal authentication (`internal_authn`)**: Native NATS authentication methods configured in order.
-  - `token`: Uses the `auth_token` field in the `CONNECT` packet.
-  - `nkey`: Uses the `nkey` + `sig` challenge/response flow.
-  - `jwt`: Uses NATS JWT credentials and verifies the JWT trust chain.
-- **Gateway authentication (`authentication`)**: EMQX authenticator backends.
+- **Internal gateway authentication (`internal_authn`)**: Native NATS methods evaluated in order.
+- **Gateway authentication (`authentication`)**: EMQX gateway authenticators, typically used for username/password-style backends.
 
-When both layers are enabled, EMQX evaluates `internal_authn` in array order:
+When both are enabled, EMQX evaluates authentication in this order:
 
-1. If credentials for the current internal method are missing, EMQX tries the next method.
-2. If credentials are provided but validation fails, EMQX rejects the connection immediately.
-3. If all internal methods are skipped and a gateway authenticator is configured, EMQX falls back to gateway authentication.
-4. If neither internal methods nor a gateway authenticator is configured, all NATS clients are allowed to connect.
+1. Evaluate `internal_authn` methods from top to bottom.
+2. If a method's required credentials are missing, try the next method.
+3. If credentials are present but verification fails, reject the connection immediately.
+4. If all internal methods are skipped and `authentication` is configured, fall back to gateway authentication.
+5. If neither internal methods nor a gateway authenticator is configured, all NATS clients are allowed to connect.
 
 The NATS gateway extracts authentication credentials from the `CONNECT` packet:
 
@@ -218,12 +216,6 @@ The NATS gateway extracts authentication credentials from the `CONNECT` packet:
 - **Token**: Value of the `auth_token` field.
 - **NKey**: Value of the `nkey` field, with signature in `sig`.
 - **JWT**: Value of the `jwt` field, with signature in `sig`.
-
-::: tip
-
-For JWT internal authentication, EMQX can enforce JWT `permissions` / `nats` publish-subscribe rules. The final authorization result is the intersection of JWT permissions and EMQX authorization rules.
-
-:::
 
 #### Configure Gateway Authentication
 
@@ -291,9 +283,15 @@ gateway.nats {
 
 For other authentication types, refer to the documentation on [EMQX Authenticators](../access-control/authn/authn.md#emqx-authenticators).
 
-#### Configure Internal Authentication
+#### Configure Internal Authentication (`internal_authn`)
 
 Use `internal_authn` to configure ordered internal authentication methods.
+
+##### 1) Token Authentication
+
+- Uses the `auth_token` field in the NATS `CONNECT` packet.
+- Supports plain tokens and bcrypt hashes (`$2a$`, `$2b$`, `$2y$`).
+- NATS reference: [Token authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/tokens)
 
 ```properties
 gateway.nats {
@@ -301,13 +299,42 @@ gateway.nats {
     {
       type = token
       token = "nats_token"
-    },
+    }
+  ]
+}
+```
+
+##### 2) NKey Authentication
+
+- Uses `nkey` + `sig` challenge/response from the NATS `CONNECT` packet.
+- `nkeys` must be valid NATS user public keys (`U...`).
+- NATS reference: [NKey authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/nkey_auth)
+
+```properties
+gateway.nats {
+  internal_authn = [
     {
       type = nkey
       nkeys = [
         "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       ]
-    },
+    }
+  ]
+}
+```
+
+##### 3) JWT Authentication (with ACL support)
+
+- Uses `jwt` + `sig` (and optional `nkey`) from the NATS `CONNECT` packet.
+- Requires both `trusted_operators` and `resolver.resolver_preload`.
+- `trusted_operators` must be valid operator NKeys (`O...`).
+- `resolver.resolver_preload[].pubkey` must be a valid account NKey (`A...`).
+- `resolver` currently supports only `memory`.
+- NATS reference: [JWT authentication](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro/jwt)
+
+```properties
+gateway.nats {
+  internal_authn = [
     {
       type = jwt
       trusted_operators = [
@@ -327,15 +354,26 @@ gateway.nats {
 }
 ```
 
-Notes:
+JWT user claims can also carry ACL rules. EMQX supports `permissions` and `nats.pub` / `nats.sub` claims. The final authorization result is the intersection of JWT ACL and EMQX authorization rules.
 
-- `internal_authn` methods are evaluated from left to right.
-- `token` supports both plain text and bcrypt hashes (`$2a$`, `$2b$`, `$2y$`).
-- `nkeys` must be valid user NKeys (`U...`).
-- `trusted_operators` must be valid operator NKeys (`O...`).
-- `resolver.resolver_preload[].pubkey` must be a valid account NKey (`A...`).
-- For JWT internal authentication, `trusted_operators` and `resolver.resolver_preload` are both required.
-- `resolver` currently supports only `memory`.
+Example JWT ACL claims:
+
+```json
+{
+  "sub": "Uxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "iss": "Axxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "nats": {
+    "pub": {
+      "allow": ["sensors.>"],
+      "deny": ["sensors.secret.>"]
+    },
+    "sub": {
+      "allow": ["alerts.>"],
+      "deny": ["alerts.internal.>"]
+    }
+  }
+}
+```
 
 ### Configure User-Level Interfaces
 
