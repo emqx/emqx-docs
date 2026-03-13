@@ -35,5 +35,5 @@ jobs:
 
     - name: check directory config
       run: |
-        python3 ./gen.py ce | tee directory.json
+        python3 ./gen.py ee | tee directory.json
         python3 .github/scripts/directory_check.py directory.json $(pwd)

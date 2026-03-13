@@ -1,42 +1,42 @@
-# STOMP Gateway
+# STOMP ゲートウェイ
 
-EMQX STOMP Gatewayは、[STOMP](https://stomp.github.io/stomp-specification-1.2.html)とMQTTプロトコル間の橋渡しを行うメッセージングプロトコルトランスレーターであり、これらのプロトコルを使用するクライアント同士の通信を可能にします。
+EMQX STOMP ゲートウェイは、[STOMP](https://stomp.github.io/stomp-specification-1.2.html) と MQTT プロトコル間の橋渡しを行うメッセージングプロトコルトランスレーターであり、これらのプロトコルを使用するクライアント同士の通信を可能にします。
 
-このSTOMP Gatewayは、クライアントとサーバーに対して軽量かつシンプルなメッセージングソリューションを提供し、さまざまなメッセージング環境でのメッセージ交換を実現します。TCPおよびSSLタイプのリスナーをサポートしており、柔軟で多用途なメッセージングシステム構築ツールです。
-
-::: tip
-
-STOMP Gatewayは[Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html)に基づいており、STOMP v1.0およびv1.1仕様とも互換性があります。
-
-:::
-
-## STOMP Gatewayの有効化
-
-EMQX 5では、STOMP GatewayはDashboard、HTTP API、設定ファイル`base.hocon`を通じて設定・有効化できます。本節ではDashboardを例に操作手順を説明します。
-
-EMQX Dashboardの左ナビゲーションメニューで **Management** -> **Gateways** をクリックします。**Gateways**ページにはサポートされているすべてのゲートウェイが一覧表示されます。**STOMP**を見つけ、**Actions**列の**Setup**をクリックすると、**Initialize STOMP**ページに遷移します。
+この STOMP ゲートウェイは、クライアントとサーバーに対して軽量かつシンプルなメッセージングソリューションを提供し、多様なメッセージング環境でのメッセージ交換を実現します。TCP および SSL タイプのリスナーをサポートしており、柔軟で多用途なメッセージングシステム構築ツールです。
 
 ::: tip
 
-EMQXをクラスターで運用している場合、DashboardやHTTP APIで行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md)で設定してください。
+STOMP ゲートウェイは [Stomp v1.2](https://stomp.github.io/stomp-specification-1.2.html) をベースにしており、STOMP v1.0 および v1.1 の仕様とも互換性があります。
 
 :::
 
-設定を簡略化するため、EMQXは**Gateways**ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合は、以下の3クリックでSTOMP Gatewayを有効化できます。
+## STOMP ゲートウェイの有効化
 
-1. **Basic Configuration**タブで**Next**をクリックし、すべてのデフォルト設定を受け入れます。  
-2. 次に**Listeners**タブに遷移し、EMQXがポート`61613`でUDPリスナーを事前設定しています。ここでも**Next**をクリックして設定を確定します。  
-3. 最後に**Enable**ボタンをクリックしてSTOMP Gatewayを起動します。
+EMQX 5 では、STOMP ゲートウェイはダッシュボード、REST API、および設定ファイル `base.hocon` を通じて設定および有効化が可能です。本節ではダッシュボードを用いた設定手順を例に説明します。
 
-ゲートウェイの有効化が完了すると、**Gateways**ページに戻り、STOMP Gatewayのステータスが**Enabled**になっていることを確認できます。
+EMQX ダッシュボードの左ナビゲーションメニューから **Management** -> **Gateways** をクリックします。**Gateways** ページにはサポートされているすべてのゲートウェイが一覧表示されます。**STOMP** を探し、**Actions** 列の **Setup** をクリックすると、**Initialize STOMP** ページに遷移します。
 
-<img src="./assets/STOMP-enabled.png" alt="STOMPゲートウェイが有効化された状態" style="zoom:50%;" />
+::: tip
 
-EMQX 5.0では、Dashboardを通じてStompゲートウェイの設定と有効化が可能です。
+EMQX をクラスターで運用している場合、ダッシュボードや REST API で行った設定はクラスター全体に影響します。特定のノードのみ設定を変更したい場合は、[`base.hocon`](../configuration/configuration.md) にて設定してください。
 
-上記の設定はHTTP APIでも行えます。
+:::
 
-**例:**
+設定を簡略化するために、EMQX は **Gateways** ページのすべての必須フィールドにデフォルト値を用意しています。大幅なカスタマイズが不要な場合、STOMP ゲートウェイは以下の3ステップで有効化できます。
+
+1. **Basic Configuration** タブで **Next** をクリックし、すべてのデフォルト設定を受け入れます。
+2. 続いて表示される **Listeners** タブでは、EMQX がポート `61613` で UDP リスナーを事前設定しています。ここでも **Next** をクリックして設定を確定します。
+3. 最後に **Enable** ボタンをクリックして STOMP ゲートウェイを有効化します。
+
+ゲートウェイの有効化が完了すると、**Gateways** ページに戻り、STOMP ゲートウェイのステータスが **Enabled** と表示されていることを確認できます。
+
+<img src="./assets/STOMP-enabled.png" alt="STOMP ゲートウェイが有効化された状態" style="zoom:50%;" />
+
+EMQX 5.0 では、ダッシュボードを通じて Stomp ゲートウェイの設定および有効化が可能です。
+
+上記の設定は REST API でも行えます。
+
+**サンプルコード:**
 
 ```bash
 curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/stomp' \
@@ -58,111 +58,115 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/stomp' \
 }'
 ```
 
-## STOMPクライアントとの連携
+## STOMP クライアントとの連携
 
 ### クライアントライブラリ
 
-STOMP Gatewayを構築した後は、STOMPクライアントツールを使って接続テストを行い、正常に動作するか確認できます。以下は推奨されるSTOMPクライアントツールの例です。
+STOMP ゲートウェイを構築した後は、STOMP クライアントツールを使って接続テストを行い、正常に動作しているか確認できます。以下は推奨される STOMP クライアントツールの例です。
 
 - [erlang-stomp-client](https://github.com/KodiEhf/erlang-stomp-client)
 - [stomp.py](https://github.com/jasonrbriggs/stomp.py)
 
 ### パブリッシュ／サブスクライブ
 
-STOMPプロトコルはPUB/SUBメッセージングモデルと完全に互換性があり、STOMP Gatewayは以下のように動作します。
+STOMP プロトコルは PUB/SUB メッセージングモデルと完全に互換性があり、STOMP ゲートウェイは以下のように動作します。
 
-- STOMPプロトコルの`SEND`メッセージをメッセージパブリッシュに使用します。`SEND`メッセージの`destination`フィールドがトピックを指定し、メッセージ内容は`SEND`メッセージのボディに含まれます。QoSは固定で0です。  
-- STOMPプロトコルの`SUBSCRIBE`メッセージをサブスクライブ要求に使用します。`SUBSCRIBE`メッセージの`destination`フィールドがトピックを指定します。QoSは固定で0であり、MQTTプロトコルで定義されたワイルドカードに対応しています。  
-- STOMPプロトコルの`UNSUBSCRIBE`メッセージをサブスクライブ解除要求に使用します。`UNSUBSCRIBE`メッセージの`destination`フィールドがトピックを指定します。
+- STOMP プロトコルの `SEND` メッセージをメッセージのパブリッシュに使用します。`SEND` メッセージの `destination` フィールドがトピックを指定し、メッセージ内容は `SEND` メッセージのボディに含まれます。QoS（サービス品質）は固定で 0 です。
+- STOMP プロトコルの `SUBSCRIBE` メッセージをサブスクライブ要求に使用します。`SUBSCRIBE` メッセージの `destination` フィールドがトピックを指定します。QoS は固定で 0 であり、MQTT プロトコルで定義されているワイルドカードもサポートします。
+- STOMP プロトコルの `UNSUBSCRIBE` メッセージをサブスクライブ解除要求に使用します。`UNSUBSCRIBE` メッセージの `destination` フィールドがトピックを指定します。
 
-## STOMP Gatewayのカスタマイズ
+## STOMP ゲートウェイのカスタマイズ
 
-デフォルト設定に加え、EMQXはさまざまな設定オプションを提供し、特定のビジネス要件に合わせて調整可能です。本節では**Gateways**ページで利用できる各種フィールドについて詳しく解説します。
+デフォルト設定に加え、EMQX はさまざまな設定オプションを提供し、特定のビジネス要件により適した構成を可能にしています。本節では **Gateways** ページで利用可能な各種フィールドについて詳しく解説します。
 
 ### 基本設定
 
-**Basic Configuration**タブでは、許容する最大ヘッダー数、ヘッダー長の最大値、統計情報の有効化、ゲートウェイのMountPoint文字列設定が可能です。以下に各フィールドの詳細を示します。
+**Basic Configuration** タブでは、許容される最大ヘッダー数、ヘッダー長の最大値、統計情報の有効化設定、ゲートウェイの MountPoint 文字列設定が可能です。以下に各フィールドの詳細を示します。
 
-<!--スクリーンショットは後日追加予定-->
+<!--後日スクリーンショットを追加予定-->
 
-1. **Max Header**: 許容するSTOMPヘッダーの最大数を設定します。デフォルトは`10`です。  
-2. **Max Each Header Length**: ヘッダー値の最大文字列長を設定します。デフォルトは`1024`です。  
-3. **Max Body Length**: STOMPパケットの最大バイト数を設定します。デフォルトは`65536`です。  
-4. **Idle Timeout**: 非アクティブ状態が続いた場合に接続を切断するまでの秒数を設定します。  
-5. **Enable Statistics**: ゲートウェイが統計情報を収集・報告するかどうかを設定します。デフォルトは`true`で、選択肢は`true`または`false`です。  
-6. **MountPoint**: パブリッシュやサブスクライブ時にすべてのトピックに接頭辞として付与される文字列を設定します。これにより異なるプロトコル間でのメッセージルーティングの分離が可能です。例：`stomp/`。
+1. **Max Header**: 許容される最大の STOMP ヘッダー数を設定します。デフォルトは `10` です。
 
-   **注意**: このトピック接頭辞はゲートウェイ側で管理されるため、クライアントはパブリッシュやサブスクライブ時に明示的にこの接頭辞を付ける必要はありません。
+2. **Max Each Header Length**: ヘッダー値の最大文字列長を設定します。デフォルトは `1024` です。
+
+3. **Max Body Length**: STOMP パケットの最大バイト数を設定します。デフォルトは `65536` です。
+
+4. **Idle Timeout**: 非アクティブ状態が続いた際に、STOMP フレームを待機する最大秒数を設定し、その時間を超えると接続を切断します。
+
+5. **Enable Statistics**: ゲートウェイが統計情報を収集・報告するかどうかを設定します。デフォルトは `true` で、選択肢は `true` または `false` です。
+
+6. **MountPoint**: パブリッシュおよびサブスクライブ時にすべてのトピックの前に付加される文字列を設定します。これにより異なるプロトコル間でのメッセージルーティングの分離を実現できます。例として *stomp/* などがあります。
+
+   **注意**: このトピックプレフィックスはゲートウェイが管理しており、クライアントはパブリッシュやサブスクライブ時に明示的にこのプレフィックスを付加する必要はありません。
 
 ### リスナーの追加
 
-ポート`61613`で名前が**default**のtcpリスナーが既に設定されており、最大16のアクセプターをプールし、最大1,024,000の同時接続をサポートします。より詳細な設定は**Settings**をクリックし、リスナーの削除は**Delete**をクリック、新規リスナーの追加は**+ Add Listener**をクリックしてください。
+ポート `61613` で名前が **default** の TCP リスナーが既に設定されており、最大 16 個のアクセプターをプールで管理し、最大 1,024,000 の同時接続をサポートしています。より詳細な設定を行う場合は **Settings** をクリックし、リスナーの削除は **Delete**、新規リスナーの追加は **+ Add Listener** をクリックしてください。
 
 ::: tip
 
-STOMP GatewayはTCPおよびSSLタイプのリスナーのみをサポートしています。
+STOMP ゲートウェイは TCP および SSL タイプのリスナーのみをサポートしています。
 
 :::
 
-**Add Listener**をクリックすると**Add Listener**ページが開き、以下の設定が可能です。
+**Add Listener** をクリックすると **Add Listener** ページが開き、以下の設定が可能です。
 
 **基本設定**
 
-- **Name**: リスナーの一意識別子を設定します。  
-- **Type**: プロトコルタイプを選択します。STOMPの場合は**tcp**または**ssl**を選択可能です。  
-- **Bind**: リスナーが接続を受け付けるポート番号を設定します。  
-- **MountPoint**（任意）: パブリッシュやサブスクライブ時にすべてのトピックに接頭辞として付与される文字列を設定し、異なるプロトコル間でのメッセージルーティング分離を実現します。
+- **Name**: リスナーの一意識別子を設定します。
+- **Type**: プロトコルタイプを選択します。STOMP では **tcp** または **ssl** が選択可能です。
+- **Bind**: リスナーが接続を受け付けるポート番号を設定します。
+- **MountPoint**（任意）: パブリッシュおよびサブスクライブ時にすべてのトピックの前に付加される文字列を設定し、異なるプロトコル間のメッセージルーティング分離を実現します。
 
 **リスナー設定**
 
-- **Acceptor**: アクセプタープールのサイズを設定します。デフォルトは**16**です。  
-- **Max Connections**: リスナーが処理可能な最大同時接続数を設定します。デフォルトは**1024000**です。  
-- **Max Connection Rate**: リスナーが1秒あたりに受け入れ可能な新規接続の最大レートを設定します。デフォルトは**1000**です。  
-- **Proxy Protocol**: EMQXが[ロードバランサー](../deploy/cluster/lb.md)の背後にある場合、プロトコルV1/V2を有効化します。  
-- **Proxy Protocol Timeout**: プロキシプロトコルパッケージを待機する最大秒数を設定し、非アクティブ時に接続を切断します。デフォルトは**3秒**です。
+- **Acceptor**: アクセプタープールのサイズを設定します。デフォルトは **16** です。
+- **Max Connections**: リスナーが処理可能な最大同時接続数を設定します。デフォルトは **1024000** です。
+- **Max Connection Rate**: リスナーが1秒あたりに受け入れ可能な新規接続の最大レートを設定します。デフォルトは **1000** です。
+- **Proxy Protocol**: EMQX が [ロードバランサー](../deploy/cluster/lb.md) の背後に配置されている場合に、プロトコル V1/V2 を有効化します。
+- **Proxy Protocol Timeout**: プロキシプロトコルパッケージを待機する最大秒数を設定し、その時間を超えると接続を切断します。デフォルトは **3s** です。
 
-**TCP設定**
+**TCP 設定**
 
-- **ActiveN**: ソケットの`{active, N}`オプションを設定します。これはソケットが能動的に処理可能な受信パケット数を意味します。詳細は[Erlang Documentation - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2)を参照してください。  
-- **Buffer**: 受信および送信パケットを格納するバッファサイズをKB単位で設定します。  
-- **TCP_NODELAY**: 接続に対して`TCP_NODELAY`フラグを有効にするか設定します。これはクライアントが前のデータのアックを待たずに追加データを送信できるかどうかを制御します。デフォルトは**false**で、選択肢は**true**または**false**です。  
-- **SO_REUSEADDR**: ポート番号のローカル再利用を許可するか設定します。  
-- **Send Timeout**: 送信タイムアウトの最大秒数を設定し、非アクティブ時に接続を切断します。デフォルトは**15秒**です。  
-- **Send Timeout**: 送信タイムアウト時に接続を切断するかどうかを設定します。
+- **ActiveN**: ソケットの `{active, N}` オプションを設定します。これはソケットが能動的に処理可能な受信パケット数を意味します。詳細は [Erlang Documentation - setopts/2](https://erlang.org/doc/man/inet.html#setopts-2) を参照してください。
+- **Buffer**: 受信および送信パケットを格納するバッファサイズを KB 単位で設定します。
+- **TCP_NODELAY**: 接続に対して `TCP_NODELAY` フラグを有効化するかどうかを設定します。これはクライアントが前回のデータのアックを待たずに追加データを送信できるかを制御します。デフォルトは **false**、選択肢は **true** または **false** です。
+- **SO_REUSEADDR**: ポート番号のローカル再利用を許可するかどうかを設定します。
+- **Send Timeout**: 送信タイムアウト時に接続を切断するかどうかを設定します。デフォルトは **15s** です。
 
-**SSL設定**（SSLリスナーのみ）
+**SSL 設定**（SSL リスナーのみ）
 
-TLS検証の有効化はトグルスイッチで設定可能ですが、その前に**TLS Cert**、**TLS Key**、**CA Cert**の関連情報をファイル内容の直接入力または**Select File**ボタンでアップロードして設定する必要があります。詳細は[Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md)を参照してください。
+TLS 検証の有効化はトグルスイッチで設定可能ですが、その前に関連する **TLS Cert**、**TLS Key**、および **CA Cert** の情報をファイル内容を入力するか、**Select File** ボタンでアップロードして設定する必要があります。詳細は [SSL/TLS 接続の有効化](../network/emqx-mqtt-tls.md) を参照してください。
 
-続けて以下を設定可能です。
+続いて以下の設定が可能です。
 
-- **SSL Versions**: サポートするSSLバージョンを設定します。デフォルトは**tlsv1.3**、**tlsv1.2**、**tlsv1.1**、**tlsv1**です。  
-- **Fail If No Peer Cert**: クライアントが空の証明書を送信した場合にEMQXが接続を拒否するか設定します。デフォルトは**false**で、選択肢は**true**または**false**です。  
-- **Intermediate Certificate Depth**: ピア証明書に続く有効な認証パスに含まれる自己発行でない中間証明書の最大数を設定します。デフォルトは**10**です。  
-- **Key Password**: プライベートキーがパスワード保護されている場合に使用するパスワードを設定します。
+- **SSL Versions**: サポートする SSL バージョンを設定します。デフォルトは **tlsv1.3**、**tlsv1.2**、**tlsv1.1**、**tlsv1** です。
+- **Fail If No Peer Cert**: クライアントが空の証明書を送信した場合に接続を拒否するかどうかを設定します。デフォルトは **false**、選択肢は **true** または **false** です。
+- **Intermediate Certificate Depth**: ピア証明書に続く有効な認証パスに含まれる自己発行でない中間証明書の最大数を設定します。デフォルトは **10** です。
+- **Key Password**: プライベートキーがパスワード保護されている場合に使用するユーザーパスワードを設定します。
 
 ## 認証の設定
 
-STOMPプロトコルの接続メッセージにはユーザー名とパスワードの概念が既に定義されているため、STOMPは以下のような多様な認証方式をサポートしています。
+STOMP プロトコルの接続メッセージにはユーザー名とパスワードの概念が既に定義されているため、STOMP は以下のような多様な認証方式をサポートしています。
 
-- [組み込みデータベース認証](../access-control/authn/mnesia.md)  
-- [MySQL認証](../access-control/authn/mysql.md)  
-- [MongoDB認証](../access-control/authn/mongodb.md)  
-- [PostgreSQL認証](../access-control/authn/postgresql.md)  
-- [Redis認証](../access-control/authn/redis.md)  
-- [HTTPサーバー認証](../access-control/authn/http.md)  
-- [JWT認証](../access-control/authn/jwt.md)  
-- [LDAP認証](../access-control/authn/ldap.md)
+- [組み込みデータベース認証](../access-control/authn/mnesia.md)
+- [MySQL 認証](../access-control/authn/mysql.md)
+- [MongoDB 認証](../access-control/authn/mongodb.md)
+- [PostgreSQL 認証](../access-control/authn/postgresql.md)
+- [Redis 認証](../access-control/authn/redis.md)
+- [HTTP サーバー認証](../access-control/authn/http.md)
+- [JWT 認証](../access-control/authn/jwt.md)
+- [LDAP 認証](../access-control/authn/ldap.md)
 
-STOMP GatewayはSTOMPプロトコルの`CONNECT`または`STOMP`メッセージに含まれる情報を使ってクライアントの認証フィールドを生成します。
+STOMP ゲートウェイは STOMP プロトコルの `CONNECT` または `STOMP` メッセージ内の情報を用いてクライアントの認証フィールドを生成します。
 
-- クライアントID: ランダム生成された文字列  
-- ユーザー名: `CONNECT`または`STOMP`メッセージヘッダーの`login`フィールドの値  
-- パスワード: `CONNECT`または`STOMP`メッセージヘッダーの`passcode`フィールドの値
+- クライアント ID: ランダムに生成される文字列
+- ユーザー名: `CONNECT` または `STOMP` メッセージヘッダーの `login` フィールドの値
+- パスワード: `CONNECT` または `STOMP` メッセージヘッダーの `passcode` フィールドの値
 
-HTTP APIを使ってStomp Gateway用の組み込みデータベース認証を作成することも可能です。
+REST API を使って Stomp ゲートウェイ用の組み込みデータベース認証を作成することも可能です。
 
-**例:**
+**サンプルコード:**
 
 ```bash
 curl -X 'POST' \
@@ -183,8 +187,8 @@ curl -X 'POST' \
 
 ::: tip
 
-MQTTプロトコルとは異なり、**ゲートウェイは認証器の作成のみをサポートし、認証器のリスト（または認証チェーン）はサポートしていません**。
+MQTT プロトコルとは異なり、**ゲートウェイは認証器のリスト（または認証チェーン）ではなく、単一の認証器の作成のみをサポートしています**。
 
-認証器が有効化されていない場合、すべてのSTOMPクライアントのログインが許可されます。
+認証器が有効化されていない場合、すべての STOMP クライアントはログインが許可されます。
 
 :::

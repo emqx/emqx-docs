@@ -124,7 +124,7 @@ On the **Permissions** page, you can edit or delete existing rules:
 
 ### Create Authorization Rules via REST API
 
-You can also manage authorization rules through the REST API. The API endpoints correspond directly to the Dashboard’s three scopes: Username, Client ID, and All Users.
+You can also manage authorization rules through the REST API. The API endpoints correspond directly to the Dashboard's three scopes: Username, Client ID, and All Users.
 
 #### Endpoints
 
@@ -138,12 +138,79 @@ You can also manage authorization rules through the REST API. The API endpoints 
   - `POST /authorization/sources/built_in_database/rules/all`: Create or replace global rules that apply to all clients/users.
   - There is no `PUT` request, just `POST` updating or creating all the rules.
 
-#### Example: Create Rules for a User
+#### Step 1: Obtain Authentication Token
+
+You need to authenticate with the EMQX Dashboard to obtain a token for API access:
 
 ```bash
-curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+export EMQX_TOKEN=$(curl --silent -X 'POST' "http://localhost:18083/api/v5/login" \
+  -H 'Accept: application/json' \
   -H 'Content-Type: application/json' \
-  -d '[
+  -d '{"username": "admin","password": "public"}' | jq -r ".token")
+```
+
+#### Step 2: Create the Built-in Database Authorization Source
+
+Before creating rules, ensure the Built-in Database authorization source is created:
+
+```bash
+curl -X 'POST' \
+  'http://localhost:18083/api/v5/authorization/sources' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "enable": true,
+        "max_rules": 100,
+        "type": "built_in_database"
+  }'
+```
+
+#### Step 3: Create Authorization Rules
+
+You can create rules for:
+
+- **A specific client by client ID**:
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/clients' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
+    {
+      "clientid": "client1",
+      "rules": [
+        {
+          "action": "publish",
+          "permission": "allow",
+          "topic": "test/topic/1"
+        },
+        {
+          "action": "subscribe",
+          "permission": "allow",
+          "topic": "test/topic/2"
+        },
+        {
+          "action": "all",
+          "permission": "deny",
+          "topic": "eq test/#"
+        }
+      ]
+    }
+  ]'
+  ```
+
+- **A specific client by username**:
+
+  ```bash
+  curl -X 'POST' \
+    'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users' \
+    -H "Authorization: Bearer $EMQX_TOKEN" \
+    -H 'Accept: */*' \
+    -H 'Content-Type: application/json' \
+    -d '[
     {
       "username": "user1",
       "rules": [
@@ -157,12 +224,13 @@ curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_datab
       ]
     }
   ]'
-```
+  ```
 
 #### Example: Update Rules for a User
 
 ```bash
 curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/users/user1' \
+  -H "Authorization: Bearer $EMQX_TOKEN" \
   -H 'Content-Type: application/json' \
   -d '{
     "username": "user1",
@@ -181,8 +249,9 @@ curl -X PUT 'http://localhost:18083/api/v5/authorization/sources/built_in_databa
 #### Example: Create Rules for All Users
 
 ```bash
-curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \
-  -H 'Content-Type: application/json' \
+curl -X POST 'http://localhost:18083/api/v5/authorization/sources/built_in_database/rules/all' \\
+  -H "Authorization: Bearer $EMQX_TOKEN" \\
+  -H 'Content-Type: application/json' \\
   -d '[
     {
       "rules": [

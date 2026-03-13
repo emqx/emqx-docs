@@ -28,9 +28,9 @@ Rules specify how to retrieve data from a **data source**, perform **data transf
   - [Console Output](./rule-get-started.md#add-console-output-action): Output the results to the console or logs.
   - [Forwarding to Sinks](./data-bridges.md#add-forwarding-with-sinks-action): Send the results to external data systems, such as MQTT services, Kafka, PostgreSQL, etc.
 
-For a step-by-step guide on creating a rule with the EMQX dashboard, see [Create Rules](./rule-get-started.md).
+For a step-by-step guide on creating a rule with the EMQX Dashboard, see [Create Rules](./rule-get-started.md).
 
-## Rule SQL Example
+## Rule SQL Examples
 
 Rule SQL is used to specify the data source of a rule and define the data processing procedure. Here is an example of an SQL statement:
 

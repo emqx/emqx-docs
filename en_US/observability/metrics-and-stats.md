@@ -11,7 +11,7 @@ EMQX provides users with multiple ways to view statistics and metrics. Most dire
 
 ## View Statistics on Dashboard
 
-On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Nodes** tab. Click the name of the node to see the statistics details on the right.
+On the EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Nodes** tab. Click the name of the node to see the statistics details on the right.
 
 <img src="./assets/node-statistics-ee.png" alt="node-statistics-ee" style="zoom:45%;" />
 
@@ -45,11 +45,19 @@ Statistics include two values: current values and historical maximums, for examp
 
 ## View Metrics on Dashboard
 
-On EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, you can see metrics by clicking the **Metrics** tab. EMQX Metrics currently covers four dimensions: bytes, packets, messages, and events.
+On the EMQX Dashboard, click **Monitoring** -> **Cluster Overview** from the left navigation menu. On the **Cluster Overview** page, click the **Metrics** tab to view runtime metrics for the cluster or a specific node.
+
+EMQX metrics are implemented as counters, which record the cumulative number of occurrences of specific events since the node started. These metrics help operators observe system behavior, evaluate workload patterns, and troubleshoot issues.
+
+Metrics on the Dashboard are grouped into the following categories:
+
+- **Connection and Session metrics**: client connections, sessions, and access control events
+- **Rules and Actions (Sink) metrics**: rule matching and action execution for data integration
+- **Messaging metrics**: bytes, packets, messages, and delivery statistics
 
 ### Connection and Session Metrics
 
-You can see the event-related metrics for the cluster or node, such as [client connection](#connections), [connection sessions](#sessions), and [client access](#access).
+This section displays event-related metrics for the cluster or a node, including [client connection](#connections), [connection sessions](#sessions), and [client access](#access).
 
 <img src="./assets/dashboard-event-metrics-ee.png" alt="dashboard-event-metrics-ee" style="zoom:50%;" />
 
@@ -89,9 +97,29 @@ You can see the event-related metrics for the cluster or node, such as [client c
 | client.authenticate         | The number of triggered authentication                       |
 | client.authorize            | The number of triggered authorization                        |
 
+### Rules and Actions (Sink)
+
+This section provides metrics related to Data Integration, which help you understand the number of times rules are matched and actions (sinks) are executed.
+
+These metrics are useful for assessing rule effectiveness, monitoring downstream data flows, and evaluating overall data integration usage.
+
+![dashboard-integration-metrics](./assets/rule-action-metrics.png)
+
+#### Rules
+
+| Metrics       | Description                                                  |
+| ------------- | ------------------------------------------------------------ |
+| rules.matched | The number of times rules are successfully matched when messages or events pass through the rule engine. |
+
+#### Actions (Sink)
+
+| Metrics          | Description                                                  |
+| ---------------- | ------------------------------------------------------------ |
+| actions.executed | The number of actions (sinks) that have been executed as a result of rule matching. |
+
 ### Messaging
 
-Scroll down the **Metrics** page, and you can see message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery).
+Scroll down the **Metrics** page to view message-related metrics, including [bytes](#bytes), [packets](#packets), [messages](#message-publish-packet), and [delivery](#delivery).
 
 <img src="./assets/dashboard-messaging-metrics-ee.png" alt="dashboard-messaging-metrics-ee" style="zoom:50%;" />
 

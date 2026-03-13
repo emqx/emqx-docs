@@ -115,7 +115,7 @@ sysctl -w net.ipv4.tcp_fin_timeout=15
 
 ## Erlang 虚拟机参数
 
-优化设置 Erlang 虚拟机启动参数，配置文件 etc/emqx.conf:
+优化设置 Erlang 虚拟机启动参数，配置文件 /etc/emqx/emqx.conf:
 
 ```bash
 ## 设置 Erlang 系统同时存在的最大端口数

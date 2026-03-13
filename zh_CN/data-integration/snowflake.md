@@ -50,70 +50,17 @@ EMQX 利用规则引擎和 Sink 将设备事件和数据转发到 Snowflake。�
 
 #### Linux
 
-EMQX 提供了一个[安装脚本](https://github.com/emqx/emqx/blob/master/scripts/install-snowflake-driver.sh)，仅适用用于在基于 Debian 的系统（如 Ubuntu）上快速部署 Snowflake ODBC 驱动，并配置所需的系统文件。
+运行以下脚本来安装 Snowflake ODBC 驱动程序并配置 `odbc.ini` 文件：
+
+```bash
+scripts/install-snowflake-driver.sh
+```
 
 ::: tip 注意
 
 该脚本仅用于测试环境，并非生产环境中 ODBC 驱动设置的推荐方式。请参考官方文档 [Installing for Linux](https://docs.snowflake.com/en/developer-guide/odbc/odbc-linux)。
 
 :::
-
-**执行安装脚本**
-
-将 `scripts/install-snowflake-driver.sh` 脚本复制到本地保存，同时添加执行权限并 sudo 执行脚本：
-
-```bash
-chmod a+x scripts/install-snowflake-driver.sh
-sudo ./scripts/install-snowflake-driver.sh
-```
-
-脚本将自动将 Snowflake ODBC 驱动 `.deb` 安装包 (如 `snowflake-odbc-3.4.1.x86_64.deb`) 下载到运行脚本的当前目录、完成驱动安装，并更新以下系统配置文件：
-
-- `/etc/odbc.ini`：添加 Snowflake 数据源配置
-- `/etc/odbcinst.ini`：注册 Snowflake 驱动路径
-
-**示例配置内容**
-
-运行以下命令查看 `/etc/odbc.ini` 文件配置：
-
-```
-emqx@emqx-0:~$ cat /etc/odbc.ini 
-
-[snowflake]
-Description=SnowflakeDB
-Driver=SnowflakeDSIIDriver
-Locale=en-US
-PORT=443
-SSL=on
-
-[ODBC Data Sources]
-snowflake = SnowflakeDSIIDriver
-```
-
-运行以下命令查看 `/etc/odbcinst.ini` 文件配置:
-
-```
-emqx@emqx-0:~$ cat /etc/odbcinst.ini 
-
-[ODBC Driver 18 for SQL Server]
-Description=Microsoft ODBC Driver 18 for SQL Server
-Driver=/opt/microsoft/msodbcsql18/lib64/libmsodbcsql-18.5.so.1.1
-UsageCount=1
-
-[ODBC Driver 17 for SQL Server]
-Description=Microsoft ODBC Driver 17 for SQL Server
-Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.10.so.6.1
-UsageCount=1
-
-[SnowflakeDSIIDriver]
-APILevel=1
-ConnectFunctions=YYY
-Description=Snowflake DSII
-Driver=/usr/lib/snowflake/odbc/lib/libSnowflake.so
-DriverODBCVer=03.52
-SQLLevel=1
-UsageCount=1
-```
 
 #### macOS
 
@@ -253,7 +200,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 
 在添加 Snowflake Sink 之前，您需要在 EMQX 中创建相应的连接器，以建立与 Snowflake 的连接。
 
-1. 进入 Dashboard **集成** -> **连接器**页面。
+1. 进入 Dashboard **集成** -> **连接器** 页面。
 
 2. 点击右上角的**创建**按钮。
 
@@ -262,11 +209,11 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
 4. 输入连接器名称，由大小写字母和数字组成。这里输入 `my-snowflake`。
 
 5. 输入连接信息：
+   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
+   
    - **服务器地址**：服务器地址为 Snowflake 的端点 URL，通常格式为 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名>.snowflakecomputing.com`。您需要用自己 Snowflake 实例的子域替换 `<你的 Snowflake 组织 ID>-<你的 Snowflake 账户名称>`。
    
    - **数据源名称**：输入 `snowflake`，与您在 ODBC 驱动设置中配置的 `.odbc.ini` 文件中的 DSN 名称相对应。
-   
-   - **账户**：输入您的 Snowflake 组织 ID 和账户名，用连字符（`-`）分隔，可以在 Snowflake 控制台中找到该信息，通常也是您访问 Snowflake 平台的 URL 中的一部分。
    
    - **用户名**：输入 `snowpipeuser`，这是之前设置过程中定义的用户名。
    
@@ -274,7 +221,7 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    
      - 在此处填写密码，例如： `Snowpipeuser99`，这是之前设置过程中定义的密码。
      - 或在系统的 `/etc/odbc.ini` 文件中配置；
-     - 如果使用密钥对认证，则无需提供密码。
+     - 如果使用密钥对认证（Key-pair authentication），则无需提供密码。
    
      ::: tip
    
@@ -282,11 +229,14 @@ openssl rsa -in snowflake_rsa_key.private.pem -pubout -out snowflake_rsa_key.pub
    
      :::
    
+   - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径必须在集群的所有节点上保持一致。路径必须以 `file://` 开头，例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。
+   
+   - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
+   
    - **代理**：用于通过 HTTP 代理服务器连接到 Snowflake 的配置。**不支持** HTTPS 代理。默认情况下不使用代理。若需启用代理支持，请选择`开启代理`并填写以下信息：
+   
      - **代理主机**：代理服务器的主机名或 IP 地址。
      - **代理端口**：代理服务器使用的端口号。
-   - **私钥路径**： 用于通过 ODBC 认证连接 Snowflake 的 RSA 私钥的绝对文件路径。此路径必须在集群的所有节点上保持一致。路径必须以 `file://` 开头，例如：`file:///etc/emqx/certs/snowflake_rsa_key.private.pem`。
-   - **私钥密码**：用于解密 RSA 私钥文件的密码（如果该私钥已加密）。如果私钥是在未加密的情况下生成的（例如使用 OpenSSL 的 `-nocrypt` 选项），则此字段应留空。
    
 6. 如果您想建立一个加密连接，单击**启用 TLS** 切换按钮。有关 TLS 连接的更多信息，请参见[启用 TLS 加密访问外部资源](../network/overview.md/#tls-for-external-resource-access)。
 

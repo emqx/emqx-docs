@@ -13,7 +13,7 @@
 - 发布/订阅（PUB/SUB）：每种类型的网关都定义了如何和 MQTT 协议的 PUB/SUB 消息模型进行适配，例如：
     * LwM2M 协议未定义发布/订阅的概念，那么在 LwM2M 网关中则需要定义使用哪些主题来发送和接收消息。
     * MQTT-SN 协议中定义了发布/订阅的概念，那么在 MQTT-SN 网关中则直接不需要预定义主题来发布/接收消息。
-- 用户层接口（User Interfaces）：定义了如何使用配置文件、HTTP API 来管理网关，客户端等。
+- 用户层接口（User Interfaces）：定义了如何使用配置文件、REST API 来管理网关，客户端等。
 
 ![gateway_struct](./assets/gateway_struct.png)
 
@@ -64,6 +64,7 @@
 - [OCPP](./ocpp.md) 
 - [GB/T 32960](./gbt32960.md)
 - [JT/T 808](./jt808.md)
+- [NATS](./nats.md)
 
 ## 使用与集成
 
@@ -71,11 +72,11 @@
 
 5.0 中，网关可以直接在 Dashboard 中进行启用和配置。
 
-也使用 HTTP API 或 emqx.conf 进行管理，例如：
+也使用 REST API 或 base.hocon 进行管理，例如：
 
 :::: tabs type:card
 
-::: tab HTTP API
+::: tab REST API
 
 ```bash
 curl -X 'POST' 'http://127.0.0.1:18083/api/v5/gateways' \
@@ -125,7 +126,7 @@ gateway.stomp {
 - [EMQX 企业版配置文档-网关配置](https://docs.emqx.com/zh/enterprise/v@EE_VERSION@/hocon/)
 
 ::: tip
-通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 HTTP API 进行配置则会在整个集群中生效。
+通过配置文件配置网关，需要在每个节点中进行修改，但通过 Dashboard 或者 REST API 进行配置则会在整个集群中生效。
 :::
 
 ### 监听器级认证和消息隔离
@@ -166,7 +167,7 @@ gateway.stomp {
 ```
 
 ::: tip
-在 EMQX 5.0  中给每个监听器配置不同的认证器功能，仅在配置文件中支持；暂未在 HTTP API 和 Dashboard 中支持。
+在 EMQX 5.0  中给每个监听器配置不同的认证器功能，仅在配置文件中支持；暂未在 REST API 和 Dashboard 中支持。
 :::
 
 ### 钩子和事件

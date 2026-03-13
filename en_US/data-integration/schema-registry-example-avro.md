@@ -10,13 +10,17 @@ For example, you need to republish a message with the `name` field equal to `Sha
 
 ### Create Schema
 
-1. Go to the Dashboard, select **Integration** -> **Schema** from the left navigation menu.
+To enable the rule engine to correctly decode or encode Avro messages, you must first register a schema that defines the structure of the Avro message using the Schema Registry.
 
-2. Create an Avro schema using the following parameters:
+1. Go to the Dashboard, select **Smart Data Hub** -> **Schema Registry** from the left navigation menu.
 
-   - **Name**: `avro_user`
+2. Under the **Internal Schema** tab, click **Create**.
 
-   - **Type**: `Avro`
+3. Create an Avro schema using the following parameters:
+
+   - **Name**: `avro_user`. This name will be used in encoding and decoding functions.
+
+   - **Type**: `Avro`.
 
    - **Schema**:
 
@@ -32,7 +36,7 @@ For example, you need to republish a message with the `name` field equal to `Sha
      }
      ```
 
-3. Click **Create**.
+4. Click **Create**.
 
 ![](./assets/schema_registry/avro_create1.png)
 

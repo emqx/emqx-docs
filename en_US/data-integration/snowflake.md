@@ -262,11 +262,11 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
 4. Enter the connector name, a combination of upper and lowercase letters and numbers. Here, enter `my-snowflake`.
 
 5. Enter the connection information.
+   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   
    - **Server Host**: The server host is the Snowflake endpoint URL, typically in the format `<Your Snowflake Organization ID>-<Your Snowflake Account Name>.snowflakecomputing.com`. You need to replace `<Your Snowflake Organization ID>-<Your Snowflake Account Name>` with the subdomain specific to your Snowflake instance.
    
-   - **Data Source Name(DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
-   
-   - **Account**: Enter your Snowflake Organization ID and Snowflake account name separated by a dash (`-`), which is part of the URL you use to access the Snowflake platform and can be found in your Snowflake console.
+   - **Data Source Name (DSN)**: Enter `snowflake`, which corresponds to the DSN configured in the `.odbc.ini` file during ODBC driver setup.
    
    - **Username**: Enter `snowpipeuser`, as defined during the previous setup process.
    
@@ -282,11 +282,15 @@ Before adding the Snowflake Sink, you need to create the corresponding connector
    
      :::
    
+   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example:
+      `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
+   
+   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
+   
    - **Proxy**: Configuration settings for connecting to Snowflake through an HTTP proxy server. HTTPS proxies are **not** supported. By default, no proxy is used. To enable proxy support, select the `Enable Proxy` and provide the following:
+   
      - **Proxy Host**: The hostname or IP address of the proxy server.
      - **Proxy Port**: The port number used by the proxy server.
-   - **Private Key Path**: The absolute file path to the private RSA key used for authenticating with Snowflake via ODBC. This path must be the same on all nodes of the cluster. The path must begin with `file://`, for example: `file:///etc/emqx/certs/snowflake_rsa_key.private.pem`.
-   - **Private Key Password**: The password used to decrypt the private RSA key file, if the key is encrypted. Leave this field blank if the key was generated without encryption (i.e., with the `-nocrypt` option in OpenSSL).
    
 6. If you want to establish an encrypted connection, click the **Enable TLS** toggle switch. For more information about TLS connection, see [TLS for External Resource Access](../network/overview.md/#tls-for-external-resource-access).
 

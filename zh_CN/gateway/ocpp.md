@@ -8,13 +8,13 @@ EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16
 
 ## 启用 OCPP 网关
 
-在 EMQX 中，可以通过 Dashboard、HTTP API 和 配置文件 `emqx.conf` 来启用 OCPP 网关。
+在 EMQX 中，可以通过 Dashboard、REST API 和 配置文件 `base.hocon` 来启用 OCPP 网关。
 
 以 Dashboard 为例，在 EMQX 仪表板上，点击左侧导航菜单中的 **管理** -> **网关**。在网关页面上，列出了所有支持的网关。找到 OCPP，点击配置。然后，您将被引导到初始化页面。
 
 ::: tip
 
-如果您使用集群方式运行 EMQX，通过 Dashboard 或 HTTP API 进行的设置将会在整个集群范围生效。如果您只想更改一个节点的设置，请使用 [`emqx.conf`](../configuration/configuration.md) 进行配置。
+如果您使用集群方式运行 EMQX，通过 Dashboard 或 REST API 进行的设置将会在整个集群范围生效。如果您只想更改一个节点的设置，请使用 [`base.hocon`](../configuration/configuration.md) 进行配置。
 
 :::
 
@@ -233,7 +233,7 @@ OCPP 网关使用 Websocket 握手消息中的 Basic Authentication 信息来生
 - **Username**：Basic Authentication 中的用户名的值。
 - **Password**：Basic Authentication 中的密码的值。
 
-您还可以使用 HTTP API 为 OCPP 网关创建内置数据库认证：
+您还可以使用 REST API 为 OCPP 网关创建内置数据库认证：
 
 **示例代码：**
 

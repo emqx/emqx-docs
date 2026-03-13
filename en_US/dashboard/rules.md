@@ -43,19 +43,19 @@ If the `412` error code prompt appears when executing SQL, it may be due to the 
 The simulated data source is the same as the real scenario, including some MQTT events. For the message part, you can select different message events to simulate data, including:
 
 - Message publish (mqtt topic)
-- Message delivered ($events/message_delivered)
-- Message acked ($events/message_acked)
-- Message dropped ($events/message_dropped)
+- Message delivered ($events/message/delivered)
+- Message acked ($events/message/acked)
+- Message dropped ($events/message/dropped)
 
 For other events, you can select different client and session events to simulate data, including:
 
-- Client connected ($events/client_connected)
-- Client disconnected ($events/client_disconnected)
-- Client connack ($events/client_connack)
-- Client check authorization complete ($events/client_check_authz_complete)
-- Client check authentication complete ($events/client_check_authn_complete)
-- Subscribed ($events/session_subscribed)
-- Unsubscribed ($events/session_unsubscribed)
+- Client connected ($events/client/connected)
+- Client disconnected ($events/client/disconnected)
+- Client connack ($events/client/connack)
+- Client check authorization complete ($events/auth/check_authz_complete)
+- Client check authentication complete ($events/auth/check_authn_complete)
+- Subscribed ($events/session/subscribed)
+- Unsubscribed ($events/session/unsubscribed)
 
 The corresponding data source needs to be consistent with the SQL statement in the editor. When you need to use some message events to get data, you need to fill in the corresponding event topic (the content in the brackets) into the SQL statement after the `FROM` keyword, and rules support the use of multiple events. For more details about data source and event explanations, see [SQL Data Source and Fields](../data-integration/rule-sql-events-and-fields.md).
 

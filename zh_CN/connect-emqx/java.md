@@ -12,7 +12,7 @@ Eclipse Paho Java Client 提供了MqttAsyncClient 和 MqttClient 异步和同步
 <dependency>
   <groupId>org.eclipse.paho</groupId>
 	<artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-	<version>1.2.2</version>
+       <version>1.2.5</version>
 </dependency>
 ```
 
