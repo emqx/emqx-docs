@@ -2,6 +2,13 @@
 
 本页将指导你使用 EMQX 插件模板开发自定义插件的全过程。
 
+EMQX 支持两种插件开发方式：
+
+- **独立项目**：在 EMQX monorepo 之外独立开发和打包，仅使用 `rebar3`。适合独立开发插件的场景。
+- **Monorepo 插件**：在 EMQX monorepo 的 `plugins/` 目录下开发，使用 Mix（Elixir 构建工具）完成编译、测试和打包流程。适合插件与特定 EMQX 版本紧密耦合的场景。
+
+以下章节涵盖两种方式。[独立插件开发](#独立插件开发)是完整的操作指南；[在 EMQX Monorepo 中开发插件](#在-emqx-monorepo-中开发插件)介绍 Monorepo 方式的差异与额外要求。
+
 ## 前提条件
 
 在开始之前，请确保你具备以下环境和知识：
@@ -9,9 +16,11 @@
 - 了解 EMQX 的[钩子机制](./hooks.md)。
 - 已配置构建环境（例如已安装 `build-essential` 和 `make`）。
 - 安装了 [rebar3](https://www.rebar3.org/)。
-- 安装了与目标 EMQX 版本相同主版本号的 Erlang/OTP。你可以查看 Docker 镜像中的 `org.opencontainers.image.otp.version` 标签，或参考 [.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions) 文件以获取使用的版本号。建议使用 [ASDF](https://asdf-vm.com/) 管理 Erlang 版本，或运行[这个脚本](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh) 拉取 emqx-builder 镜像。
+- 安装了与目标 EMQX 版本相同主版本号的 Erlang/OTP。你可以查看 Docker 镜像中的 `org.opencontainers.image.otp.version` 标签，或参考 [.tool-versions](https://github.com/emqx/emqx/blob/e5.9.0-beta.4/.tool-versions) 文件以获取使用的版本号。建议使用 [ASDF](https://asdf-vm.com/) 管理 Erlang 版本，或运行[这个脚本](https://github.com/emqx/emqx-builder/blob/main/show-latest-images.sh)拉取 emqx-builder 镜像。
 
-## 安装插件模板
+## 独立插件开发
+
+### 安装插件模板
 
 EMQX 提供了一个官方插件模板 [emqx-plugin-template](https://github.com/emqx/emqx-plugin-template)，可以帮助你快速构建插件项目。
 
@@ -30,7 +39,15 @@ $ popd
 
 :::
 
-## 生成插件项目结构
+运行以下命令验证安装是否成功：
+
+```shell
+$ rebar3 new help
+```
+
+输出中应列出 `emqx-plugin (custom)` 作为可用模板。
+
+### 生成插件项目结构
 
 通过如下命令使用模板创建插件项目：
 
@@ -199,7 +216,7 @@ my_emqx_plugin
 
 这些翻译信息会被引用到 `config_schema.avsc` 的 UI 提示中。更多内容请参考 `config_i18n.json.example` 和 `config_schema.avsc.enterprise.example`。
 
-## 实现插件功能
+### 实现插件功能
 
 在插件框架搭建完成后，接下来就可以开始实现插件的业务逻辑。通常需要实现以下功能：
 
@@ -326,7 +343,7 @@ on_client_authorize(_ClientInfo, _Pub, _Topic, Result) -> {ok, Result}.
 
 更多实现示例请参考[实现自定义插件逻辑](./plugin-example.md)。
 
-## 构建插件发布包
+### 构建插件发布包
 
 执行以下命令以构建插件发布版本：
 
@@ -380,3 +397,142 @@ tar 包中包含：
   "with_config_schema": true
 }
 ```
+
+## 在 EMQX Monorepo 中开发插件
+
+本方式适合与特定 EMQX 版本紧密耦合的插件。插件存放在 EMQX monorepo 的 `plugins/` 目录下，参与基于 Mix 的构建和测试工作流。
+
+### 前提条件
+
+除[通用前提条件](#前提条件)外，Monorepo 插件还需要 Mix（Elixir 构建工具），已内置于 monorepo 中。运行以下命令确保 `rebar3` 可用：
+
+```bash
+make ensure-rebar3
+```
+
+### 初始化步骤
+
+1. **选择插件名称**：必须全局唯一，且须与 Erlang 应用名称一致。
+
+2. **切换到对应的发布分支**，与目标 EMQX 版本匹配。例如，针对 EMQX 6.0 的开发请切换到 `release-60` 分支。
+
+3. **生成插件应用骨架**：
+
+   ```bash
+   cd plugins/
+   rebar3 new emqx-plugin {plugin_name}
+   ```
+
+   也可以将插件保存在独立仓库中，通过软链接引入：
+
+   ```bash
+   ln -s /path/to/{plugin_name} plugins/{plugin_name}
+   ```
+
+4. **添加 `mix.exs` 和 `VERSION` 文件**：
+
+   - 创建 `plugins/{plugin_name}/VERSION`，单行文件，内容为插件版本号，是版本的唯一来源。
+   - 创建 `plugins/{plugin_name}/mix.exs`，可参考 `plugins/emqx_username_quota/mix.exs`。
+
+   `mix.exs` 文件必须定义：
+
+   - `project/0`：OTP 应用名称、版本（从 `VERSION` 读取）、monorepo 构建路径及 `emqx_plugin` 元数据。必填的 monorepo 路径为：
+     - `build_path: "../../_build"`
+     - `deps_path: "../../deps"`
+     - `lockfile: "../../mix.lock"`
+   - `application/0`：OTP 元数据（例如 `mod`、`extra_applications`）。
+   - `deps/0`：包含 `{:emqx_mix, path: "../..", runtime: false}` 以启用插件构建工具。`:emqx_mix` 的 env 在测试 profile 中设置为 `:"emqx-enterprise-test"`，其他情况设置为 `:"emqx-enterprise"`。
+
+   如需支持 Common Test，还需定义：
+
+   - `erlc_paths/0`：仅在 `*-test` Mix env 中包含 `test` 目录。
+   - `erlc_options/0`：在 `*-test` Mix env 中启用 `{:d, :TEST}` 和 `{:parse_transform, :cth_readable_transform}`。
+   - 仅测试环境的依赖：`{:cth_readable, "1.5.1"}`。
+
+   `emqx_plugin/0` 函数需返回一个关键字列表，包含：
+
+   - `rel_vsn`（必填，通常为 `version()`）。
+   - `name`（可选，默认值为 `app`）。
+   - `rel_apps`（可选，默认值为 `[app]`）。
+   - `metadata` 关键字列表（例如 `description`、`authors`、`builder`、`repo`、`functionality`、`compatibility`）。注意：打包任务会将 `metadata` 中的字段展开为 `release.json` 的顶层字段，而非嵌套对象。
+
+### 开发与测试
+
+- 在 `plugins/{plugin_name}/src` 下实现插件代码。
+- 在 `plugins/{plugin_name}/test` 下添加 Common Test 测试套件。
+- 运行插件的 Common Test 测试：
+
+  ```bash
+  make plugins/{plugin_name}-ct
+  ```
+
+如需快速本地集成测试（无需将插件添加到 EMQX 启动应用列表中）：
+
+```bash
+scripts/run-plugin-dev.sh {plugin_name} [--attach]
+```
+
+### 构建插件发布包
+
+从 monorepo 根目录运行以下命令，使用 Mix 打包插件：
+
+```bash
+make plugin-{plugin_name}
+```
+
+该命令会在 `_build/plugins/` 下生成 `.tar.gz` 文件，可通过 `emqx ctl plugins` 命令安装。
+
+::: tip
+
+构建插件发布包不会自动加载或启动插件。需手动管理插件生命周期：
+
+```bash
+emqx ctl plugins install|enable|start
+```
+
+:::
+
+## 插件扩展 API 与 UI
+
+插件可通过 EMQX 插件 API 网关暴露自定义 HTTP 接口，并可选择在 Dashboard 中嵌入原生 UI。
+
+### 插件 HTTP API
+
+插件 API 网关将请求路由到以下路径：
+
+```
+/api/v5/plugin_api/{plugin_name}/...
+```
+
+要处理这些请求，需在插件应用模块中实现 `on_handle_api_call/4`，并按方法和路径进行分发。参考实现请见 `plugins/emqx_username_quota/src/emqx_username_quota_app.erl` 和 `emqx_username_quota_api.erl`。
+
+#### 回调函数签名
+
+```erlang
+on_handle_api_call(Method, PathRemainder, Request, Context) -> Result
+```
+
+| 参数            | 说明                                                                         |
+| --------------- | ---------------------------------------------------------------------------- |
+| `Method`        | `get \| post \| put \| patch \| delete`                                      |
+| `PathRemainder` | `{plugin_name}` 之后的路径段列表（已进行百分比解码），类型为二进制字符串     |
+| `Request`       | 包含 `query_string`、`headers` 和 `body`（非 GET/DELETE 请求的 JSON 体）的 Map |
+| `Context`       | 包含认证元数据和命名空间信息的 Map                                            |
+
+支持的返回值：
+
+- `{ok, StatusCode, Headers, Body}`
+- `{error, StatusCode, Headers, Body}`
+- `{error, not_found}`
+
+### 在 Dashboard 中嵌入原生 UI
+
+如果 `emqx_plugin` 元数据中包含 `index` 字段，EMQX Dashboard 会在 iframe 中展示插件的原生 UI。Dashboard 会在插件 API 基础路径前缀上拼接 `index`：
+
+```
+/api/v5/plugin_api/{plugin_name}{index}
+```
+
+例如，`index: "/ui"` 对应的完整路径为 `/api/v5/plugin_api/{plugin_name}/ui`。
+
+如不需要原生 UI，可省略 `index` 字段或将其设为空字符串。
