@@ -2,7 +2,7 @@
 
 ::: tip
 
-RockeMQ 数据集成是 EMQX 企业版功能。
+RocketMQ 数据集成是 EMQX 企业版功能。
 
 :::
 
@@ -12,7 +12,7 @@ RockeMQ 数据集成是 EMQX 企业版功能。
 
 ::: tip 注意
 
-此数据集成在使用阿里云托管的 RockstMQ 服务时不支持批量模式。
+此数据集成在使用阿里云托管的 RocketMQ 服务时不支持批量模式。
 
 :::
 
