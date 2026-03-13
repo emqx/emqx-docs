@@ -33,7 +33,7 @@ EMQX 服务团队为您提供专业的支持：
 
 - 您可以借助[专家支持和服务](https://www.emqx.com/zh/contact?product=emqx)来帮助您设计、部署和拓展，量身定制最佳实践的物联网解决方案；
 - 或浏览 [EMQX 技术支持](https://www.emqx.com/zh/support)页面，了解详细的商业支持列表。
-- 对于 EMQX 产品使用中遇到的任何问题，可以通过[提交工单](http://support.emqx.cn/hc/)的形式获取技术支持。
+- 对于 EMQX 产品使用中遇到的任何问题，可以[联系我们](https://www.emqx.com/zh/contact)获取技术支持。
 
 **商业服务等级**
 

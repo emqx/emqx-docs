@@ -77,10 +77,21 @@ Redis 授权器中添加的所有规则都是**允许**规则，即 Redis Author
      - 如果填写了用户名，则密码必须与 Redis ACL 中该用户配置的凭据一致。
      - 如果未填写用户名，则将使用该密码尝试以 `default` 用户身份进行身份认证（前提是该用户未被禁用）。
    
+   - **兼容模式**：控制是否启用与 EMQX 4.x Redis ACL 数据格式的兼容。
+
+     - `禁用（默认）`：使用当前规则格式。
+     - `v4`：启用对 EMQX 4.x 旧版 Redis ACL 数据的兼容，升级时可直接复用已有数据，无需修改。
+   
+     ::: tip
+   
+     该选项适用于从 EMQX 4.x 升级的场景，用于在不调整现有 Redis ACL 数据的情况下保持兼容。对于新部署，建议保持默认设置，并使用当前规则格式。
+   
+     :::
+   
    - **启用 TLS**：如果需要启用 TLS，加上开关即可开启。有关 TLS 配置的更多信息，请参阅[网络与 TLS](../../network/overview.md)。
-
+   
    - **命令**：根据数据结构填写 Redis 查询命令。
-
+   
    - **高级设置**：设置连接池大小和连接超时时间。
      - **连接池大小**（可选）：输入一个整数，表示每个 EMQX 节点与 Redis 建立的并发连接数量。默认值为 `8`。
    
@@ -88,13 +99,13 @@ Redis 授权器中添加的所有规则都是**允许**规则，即 Redis Author
 
 ## 使用配置项配置
 
-Redis 授权器由 `type=redis` 标识。<!--详细配置请参考 [redis_standalone](../../configuration/configuration-manual.html#authz:redis_standalone)、[authz:redis_sentinel](../../configuration/configuration-manual.html#authz:redis_sentinel) 与 [authz:redis_cluster](../../configuration/configuration-manual.html#authz:redis_cluster)。-->
+Redis 授权器由 `type=redis` 标识。
 
 Redis 授权器支持 3 种部署模式的 Redis。
 
 Standalone Redis:
 
-```hcl
+```hocon
 {
     type = redis
 
@@ -104,13 +115,14 @@ Standalone Redis:
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
 [Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/):
 
-```hcl
+```hocon
 {
     type = redis
 
@@ -121,13 +133,14 @@ Standalone Redis:
     cmd = "HGETALL mqtt_user:${username}"
     database = 1
     password = public
-
+    
+    compatibility_mode = disabled
 }
 ```
 
 [Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/):
 
-```hcl
+```hocon
 {
     type = redis
 
@@ -136,6 +149,8 @@ Standalone Redis:
 
     cmd = "HGETALL mqtt_user:${username}"
     password = public
+    
+    compatibility_mode = disabled
 }
 ```
 
@@ -149,7 +164,7 @@ Standalone Redis:
 
 ### cmd
 
-必选的字符串类型配置项。用于指定查询权限规则的命令，支持使用占位符。主题过滤器中允许使用 [主题占位符](./authz.md#主题占位符)。
+必选的字符串类型配置项。用于指定查询权限规则的命令，支持使用占位符。主题过滤器中允许使用[主题占位符](./authz.md#主题占位符)。
 
 ### database
 
@@ -157,7 +172,7 @@ Standalone Redis:
 
 ### password
 
-可选的字符串类型配置。指定用于 Redis [认证](https://redis.io/docs/latest/operate/oss_and_stack/management/security/#authentication) 的密码。
+可选的字符串类型配置。指定用于 Redis [认证](https://redis.io/docs/latest/operate/oss_and_stack/management/security/#authentication)的密码。
 
 ### auto_reconnect
 
@@ -191,4 +206,4 @@ Standalone Redis:
 
 #### sentinel
 
-必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的 [主服务器名称](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/#configuring-sentinel)。
+必选的字符串类型配置。用于指定 Redis Sentinel 配置需要的[主服务器名称](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/#configuring-sentinel)。

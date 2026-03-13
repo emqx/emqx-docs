@@ -212,7 +212,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認できます。トポロジーでは、トピック`t/#`のメッセージがルール`my_rule`で解析されKafkaに送信・保存される様子が直感的に把握できます。
 
-![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 ### Kafkaの動的トピック設定
 
@@ -274,7 +274,7 @@ EMQX v5.7.2では、ルールSQL処理中に[環境変数](../configuration/conf
    ```bash
    bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 \
      --topic testtopic-in
-
+   
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    {"payload":"payload string","kafka_topic":"testtopic-in"}
    ```
@@ -490,7 +490,7 @@ EMQXはApache Kafkaとのデータ統合に関する豊富な学習リソース�
 
 - [MQTTとKafkaによるコネクテッドビークルのストリーミングデータパイプライン構築：3分ガイド](https://www.emqx.com/en/blog/building-connected-vehicle-streaming-data-pipelines-with-mqtt-and-kafka)
 - [MQTTとKafka：IoTデータ統合の強化](https://www.emqx.com/en/blog/mqtt-and-kafka)
-- [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka統合](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-kafka-integration)
+- [MQTTパフォーマンスベンチマークテスト：EMQX-Kafka統合](https://www.emqx.com/en/resources/emqx-enterprise-performance-benchmark-testing-kafka-integration)
 
 **ベンチマークレポート：**
 

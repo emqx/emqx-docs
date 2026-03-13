@@ -90,13 +90,13 @@ timeline
 
 ### 配置更新策略
 
-1. 创建 `apps.emqx.io/v2beta1` EMQX CR 并配置更新策略。
+1. 创建 `apps.emqx.io/v2` EMQX CR 并配置更新策略。
 
   ```yaml
-  apiVersion: apps.emqx.io/v2beta1
+  apiVersion: apps.emqx.io/v2
   kind: EMQX
   metadata:
-    name: emqx-ee
+    name: emqx
   spec:
     image: emqx/emqx:@EE_VERSION@
     config:
@@ -121,7 +121,7 @@ timeline
 
   ```bash
   $ kubectl apply -f emqx-update.yaml
-  emqx.apps.emqx.io/emqx-ee created
+  emqx.apps.emqx.io/emqx created
   ```
 
 3. 检查 EMQX 集群的状态。
@@ -131,7 +131,7 @@ timeline
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
 ### 连接到 EMQX 集群
@@ -154,33 +154,27 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   在此示例中，我们通过修改 Pod 的 `ImagePullPolicy` 来触发升级。
 
   ```bash
-  $ kubectl patch emqx emqx-ee --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
-  emqx.apps.emqx.io/emqx-ee patched
+  $ kubectl patch emqx emqx --type=merge -p '{"spec": {"imagePullPolicy": "Never"}}'
+  emqx.apps.emqx.io/emqx patched
   ```
 
 2. 检查升级过程的状态。
 
   ```bash
-  $ kubectl get emqx emqx-ee -o json | jq ".status.nodeEvacuationsStatus"
+  $ kubectl get emqx emqx -o json | jq ".status.nodeEvacuationsStatus"
   [
     {
-      "connection_eviction_rate": 200,
-      "node": "emqx-ee@emqx-ee-54fc496fb4-2.emqx-ee-headless.default.svc.cluster.local",
-      "session_eviction_rate": 200,
-      "session_goal": 0,
-      "connection_goal": 22,
-      "session_recipients": [
-        "emqx-ee@emqx-ee-5d87d4c6bd-2.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-1.emqx-ee-headless.default.svc.cluster.local",
-        "emqx-ee@emqx-ee-5d87d4c6bd-0.emqx-ee-headless.default.svc.cluster.local"
-      ],
+      "nodeName": "emqx@emqx-54fc496fb4-2.emqx-headless.default.svc.cluster.local",
+      "initialConnections": 33,
+      "initialSessions": 0,
+      "connectionEvictionRate": 200,
+      "sessionEvictionRate": 200,
       "state": "waiting_takeover",
-      "stats": {
-        "current_connected": 0,
-        "current_sessions": 0,
-        "initial_connected": 33,
-        "initial_sessions": 0
-      }
+      "sessionRecipients": [
+        "emqx@emqx-5d87d4c6bd-2.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-1.emqx-headless.default.svc.cluster.local",
+        "emqx@emqx-5d87d4c6bd-0.emqx-headless.default.svc.cluster.local"
+      ]
     }
   ]
   ```
@@ -202,7 +196,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
   ```bash
   $ kubectl get emqx
   NAME      STATUS   AGE
-  emqx-ee   Ready    8m33s
+  emqx      Ready    8m33s
   ```
 
   确保 `STATUS` 为 `Ready`。根据 MQTT 客户端和会话的数量，升级过程可能需要一些时间。
@@ -218,7 +212,7 @@ mqttx bench conn -h ${IP} -p ${PORT} -c 3000
 | 标签/前缀            | 描述                                         |
 |-------------------------|-----------------------------------------------------|
 | Total                   | 连接总数；图中最上面的线。 |
-| `emqx-ee-86f864f975`    | 3 个旧 EMQX 节点集的名称前缀。    |
-| `emqx-ee-648c45c747`    | 3 个升级后的 EMQX 节点集的名称前缀。 |
+| `emqx-86f864f975`    | 3 个旧 EMQX 节点集的名称前缀。    |
+| `emqx-648c45c747`    | 3 个升级后的 EMQX 节点集的名称前缀。 |
 
 此时间线说明了 EMQX Operator 如何执行平滑的蓝绿升级。在整个过程中，连接总数保持稳定（受迁移速率、服务器容量和客户端重连策略等因素影响）。这种方法确保最小中断，防止服务器过载，并提高整体服务稳定性。

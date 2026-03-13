@@ -75,24 +75,26 @@ Rebalance(evacuation) started
 以下のCLIコマンドで退避状況を取得できます：
 
 ```bash
-./bin/emqx ctl rebalance node-status
+./bin/emqx ctl rebalance status
 ```
 
 返却例は以下の通りです：
 
 ```bash
-Rebalance type: evacuation
+./bin/emqx ctl rebalance status
+--------------------------------------------------------------------
+Node 'emqx@node1.emqx.io': evacuation
 Rebalance state: evicting_conns
-Connection eviction rate: 30 connections/second
-Session eviction rate: 30 sessions/second
+Connection eviction rate: 3 connections/second
+Session eviction rate: 3 sessions/second
 Connection goal: 0
 Session goal: 0
-Session recipient nodes: []
+Session recipient nodes: ['emqx@node2.emqx.io','emqx@node3.emqx.io']
 Channel statistics:
-  current_connected: 10
-  current_sessions: 0
-  initial_connected: 100
-  initial_sessions: 0
+  current_connected: 9
+  current_sessions: 30
+  initial_connected: 30
+  initial_sessions: 30
 ```
 
 #### ノード退避の停止
@@ -210,13 +212,14 @@ Rebalance started
 負荷再分散状況取得用CLIコマンドは以下の通りです：
 
 ```bash
-./bin/emqx ctl rebalance node-status
+./bin/emqx ctl rebalance status
 ```
 
 **例**
 
 ```bash
-./bin/emqx ctl rebalance node-status
+./bin/emqx ctl rebalance status
+--------------------------------------------------------------------
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'

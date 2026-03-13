@@ -108,6 +108,7 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
+                - deploy/kubernetes/operator/upgrade-operator
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
                   title_ja: 在阿里云中部署 EMQX
@@ -529,6 +530,10 @@
       title_cn: AWS S3 Tables
       title_ja: AWS S3 テーブル
       path: data-integration/s3-tables
+    - title_en: AWS Timestream
+      title_cn: AWS Timestream
+      title_ja: AWS Timestream
+      path: data-integration/timestream-for-influxdb
     - title_en: Azure Blob Storage
       title_cn: Azure Blob Storage
       title_ja: Azure Blob Storage
@@ -577,6 +582,11 @@
       title_cn: Elasticsearch
       title_ja: Elasticsearch
       path: data-integration/elasticsearch
+    - title_en: EMQX Tables
+      title_cn: EMQX Tables
+      title_ja: EMQX Tables
+      path: data-integration/emqx-tables
+      lang: en
     - title_en: GCP PubSub
       title_cn: GCP PubSub
       title_ja: GCP PubSub
@@ -761,6 +771,7 @@
             - dashboard/connections/connections
             - dashboard/subscriptions/overview
             - dashboard/retained
+            - dashboard/namespace
             - dashboard/delay-pub
             - dashboard/alarm_dashboard
         - title_en: Access Control
@@ -813,6 +824,7 @@
       children:
         - multi-tenancy/create-namespace
         - multi-tenancy/configure-manage-namespace
+        - multi-tenancy/namespace-global-settings
         - multi-tenancy/namespace-quick-start
     - title_en: Logs and Observability
       title_cn: 日志及可观测性
@@ -886,6 +898,14 @@
       children:
         - message-queue/message-queue-task
         - message-queue/message-queue-quick-start
+    - title_en: MQTT Streams
+      title_cn: MQTT 消息流
+      title_ja: MQTT Streams
+      path: mqtt-stream/mqtt-stream-concept
+      collapsed: true
+      children:
+        - mqtt-stream/mqtt-stream-task
+        - mqtt-stream/mqtt-stream-quick-start
     - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
@@ -1146,10 +1166,16 @@
       path: design/overview
       collapsed: true
       children:
-        - design/clustering
+        - title_en: EMQX Clustering
+          title_cn: EMQX 集群
+          title_ja: EMQX Clustering
+          path: design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
-        - design/durable-storage
+        - title_en: Durable Storage
+          title_cn: 持久存储
+          title_ja: Durable Storage
+          path: design/durable-storage
       # - design/design
       # - title_en: SDK & Tools
       #   title_cn: SDK 与工具
@@ -1201,8 +1227,8 @@
       title_ja: MQTT リーズンコード
       path: https://www.emqx.com/en/blog/mqtt5-new-features-reason-code-and-ack
 
-- title_en: EMQX Enterprise Release Notes
-  title_cn: EMQX 企业版版本发布历史
+- title_en: Release Notes
+  title_cn: 版本发布历史
   title_ja: EMQX エンタープライズ版リリースノート
   collapsed: true
   path: changes/all-changes-ee
@@ -1214,6 +1240,7 @@
       title_cn: 已知问题
       title_ja: 既知の問題
       children:
+        - changes/known-issues-6.1
         - changes/known-issues-6.0
         - changes/known-issues-5.9
         - changes/known-issues-5.8

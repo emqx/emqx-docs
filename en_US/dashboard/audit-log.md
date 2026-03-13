@@ -45,7 +45,7 @@ log.audit {
 
 Once the Audit Log is enabled, you can view the content of the audit logs on the Dashboard under **System** -> **Audit Log**.
 
-![image-20231214143911786](./assets/image-20231214143911786.png)
+![image-20231214143911786](./assets/audit_log_list.png)
 
 ### Search Filter
 

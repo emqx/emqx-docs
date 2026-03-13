@@ -53,7 +53,7 @@ With your CA certificate located, the next step is to configure the EMQX broker 
 
 The core of the migration is enabling two-way SSL/TLS authentication (mTLS) on an EMQX listener. This configuration instructs EMQX to demand a certificate from the connecting client and verify its authenticity against your CA.
 
-For detailed information on SSL/TLS configuration options, see [Enable SSL/TLS Connection](../network/emqx-mqtt-tls.md). For certificate management, see [TLS Certificates](../network/tls-certificate.md).
+For detailed information on SSL/TLS configuration options, see [Enable SSL/TLS Connections](../network/emqx-mqtt-tls.md). For certificate management, see [TLS Certificates](../network/tls-certificate.md).
 
 **Action**: Open the EMQX configuration file (e.g., `emqx.conf`) and configure the SSL/TLS listener, or use the Dashboard (**Management** -> **Listeners**):
 

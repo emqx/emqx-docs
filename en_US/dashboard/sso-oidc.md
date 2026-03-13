@@ -74,15 +74,15 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
 1. Log in to Okta as an administrator and go to the **Okta Admin Console**.
 
-2. Go to the **Applications -> Applications** page, click the **Create App integration** button, and select `OIDC - OpenID Connect` as the sign-in method in the pop-up dialog.
+2. Go to the **Applications** -> **Applications** page, click the **Create App integration** button, and select `OIDC - OpenID Connect` as the sign-in method in the pop-up dialog.
 
 3. Select the `Web Application` as the **Application type** and click **Next**.
 
 4. On the **General Settings** tab, enter your application name, for example, `EMQX Dashboard`. Click **Next**.
 
-5. On the **LOGIN** tab, configure the settings using the information provided by the EMQX Dashboard in **Step 1**:
+5. On the **LOGIN** tab, configure the settings using the information provided by the EMQX Dashboard:
 
-   - **Sign-in redirect URIs**: Enter the **Sign-in Redirect URI** provided in the Dashboard, such as `http://localhost:18083/api/v5/sso/oidc/callback`.
+   - **Sign-in redirect URIs**: Enter the **Sign-in Redirect URI** provided in the Dashboard (on **OIDC Settings** page), such as `http://localhost:18083/api/v5/sso/oidc/callback`.
    - Additional settings are optional and can be configured according to your specific requirements.
    
 6. Review the settings and click **Save**.
@@ -91,13 +91,28 @@ For more detailed instructions, refer to the [Okta documentation](https://help.o
 
 ### Step 3: Complete the EMQX Dashboard Configuration
 
-1. On the configuration page, enter the following information:
+1. On the **OIDC Settings** page, enter the following information:
    - **Provider**: Choose `Okta` or select `Generic` for other providers.
    - **Issuer URL**: This is the URL of your Okta authorization server, e.g., `https://example-org.okta.com`.
    - **Client ID**: Copy it from the application created in **Step 2**.
    - **Client Secret**: Copy it from the application created in **Step 2**.
    - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate the **SSO Address** and **Metadata Address** for configuration on the IdP side.
 2. Click **Update** to finish the configuration.
+
+## Advanced Settings
+
+The **Advanced Settings** section allows you to fine-tune how EMQX retrieves user information from the OIDC provider and manages authentication behavior.
+
+| Field name                           | Description                                                  | Default value                                       |
+| ------------------------------------ | ------------------------------------------------------------ | --------------------------------------------------- |
+| **Scopes**                           | The OIDC scopes requested during authentication. These scopes determine which user information the IdP returns. At minimum, the `openid` scope is required for OIDC authentication. | `openid`                                            |
+| **Name Variable**                    | A template used to map OIDC user attributes to the EMQX Dashboard username. The template can reference claims returned by the IdP. | `${sub}`                                            |
+| **Name Variable Source**             | Specifies the source from which the user information is extracted to construct the Dashboard username. Available options:<br />**User Info Endpoint**: Uses the user information returned from the `/userinfo` endpoint.<br />**ID Token**: Uses the claims contained in the ID token returned during authentication. | `User Info Endpoint`                                |
+| **Session Expiry**                   | The duration (in seconds) for which the Dashboard session remains valid after the user logs in via OIDC. | `30` seconds                                        |
+| **Enable PKCE**                      | Enables Proof Key for Code Exchange (PKCE) to enhance security for the authorization code flow. | Disabled                                            |
+| **Preferred Authentication Methods** | Defines the client authentication methods used when communicating with the token endpoint. Multiple methods can be configured and will be attempted in order. | `client_secret_post`, `client_secret_basic`, `none` |
+| **Fallback Methods**                 | Specifies the fallback signing algorithms used to verify ID Tokens when the provider metadata does not explicitly define them. | `RS256`                                             |
+| **JSON Web Key (JWK)**               | Optional static JSON Web Key configuration used to verify token signatures if the IdP does not provide a JWKS endpoint. | `None`                                              |
 
 ## Login and User Management
 

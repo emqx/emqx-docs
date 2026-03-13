@@ -17,12 +17,6 @@ Before deploying EMQX on GKE, ensure the following prerequisites are met:
 - EMQX Operator installed on the cluster
   - Refer to [Install EMQX Operator](./getting-started.md) for further details.
 
-  ::: warning Note
-  
-  Installing cert-manager on GKE with default settings may cause bootstrapping issues. Add the configuration `--set global.leaderElection.namespace=cert-manager` to use a different namespace in leader election. For details, see the [cert-manager compatibility documentation](https://cert-manager.io/docs/installation/compatibility/).
-  
-  :::
-
 ## Deploy EMQX Cluster Quickly
 
 The following example shows the basic EMQX Custom Resource (CR) configuration.
@@ -36,7 +30,7 @@ The following example shows the basic EMQX Custom Resource (CR) configuration.
     :::
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

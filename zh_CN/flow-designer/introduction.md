@@ -14,7 +14,7 @@ Flows 页面展示了通过规则引擎、Webhook 以及 Flow 设计器创建的
 
 点击右上角的**创建 Flow** 按钮，可进入 Flow 创建页面进行可视化配置。通过拖拽的方式选择每个步骤所需的节点，并将节点连线即可实现流程处理。
 
-![image-20230914175657995](./assets/image-20230914175657995.png)
+![drag_message_node](./assets/drag_message_node.png)
 
 ### Source
 

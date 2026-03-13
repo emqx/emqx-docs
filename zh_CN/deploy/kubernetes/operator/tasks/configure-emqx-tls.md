@@ -42,7 +42,7 @@ stringData:
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2beta1` 提供以下字段来为 EMQX 集群配置额外的卷和挂载点：
+EMQX CRD `apps.emqx.io/v2` 提供以下字段来为 EMQX 集群配置额外的卷和挂载点：
 * `.spec.coreTemplate.extraVolumes`
 * `.spec.coreTemplate.extraVolumeMounts`
 * `.spec.replicantTemplate.extraVolumes`
@@ -55,7 +55,7 @@ Volumes 的类型有很多种。有关 Volumes 的信息，请参阅 [Volumes](h
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
   ```yaml
-  apiVersion: apps.emqx.io/v2beta1
+  apiVersion: apps.emqx.io/v2
   kind: EMQX
   metadata:
     name: emqx

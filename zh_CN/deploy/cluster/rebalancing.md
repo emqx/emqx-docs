@@ -71,25 +71,26 @@ Rebalance(evacuation) started
 您可通过如下命令获取节点疏散状态：
 
 ```bash
-./bin/emqx ctl rebalance node-status
+./bin/emqx ctl rebalance status
 ```
 
 返回结果如下：
 
 ```bash
-./bin/emqx ctl rebalance node-status
-Rebalance type: evacuation
+./bin/emqx ctl rebalance status
+--------------------------------------------------------------------
+Node 'emqx@node1.emqx.io': evacuation
 Rebalance state: evicting_conns
-Connection eviction rate: 30 connections/second
-Session eviction rate: 30 sessions/second
+Connection eviction rate: 3 connections/second
+Session eviction rate: 3 sessions/second
 Connection goal: 0
 Session goal: 0
-Session recipient nodes: []
+Session recipient nodes: ['emqx@node2.emqx.io','emqx@node3.emqx.io']
 Channel statistics:
-  current_connected: 10
-  current_sessions: 0
-  initial_connected: 100
-  initial_sessions: 0
+  current_connected: 9
+  current_sessions: 30
+  initial_connected: 30
+  initial_sessions: 30
 ```
 
 #### 停止节点疏散
@@ -182,7 +183,7 @@ Rebalance(evacuation) stopped
 
 ```bash
 avg(源节点连接数) < avg(目标节点连接数) + abs_conn_threshold
-或 
+或
 avg(源节点连接数) < avg(目标节点连接数) * rel_conn_threshold
 ```
 
@@ -209,13 +210,14 @@ Rebalance started
 获取重平衡状态的命令如下：
 
 ```bash
-emqx ctl rebalance node-status
+emqx ctl rebalance status
 ```
 
 **示例**：
 
 ```bash
-./bin/emqx ctl rebalance node-status
+./bin/emqx ctl rebalance status
+--------------------------------------------------------------------
 Node 'emqx1@127.0.0.1': rebalance coordinator
 Rebalance state: evicting_conns
 Coordinator node: 'emqx1@127.0.0.1'
