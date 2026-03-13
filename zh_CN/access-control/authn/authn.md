@@ -256,8 +256,6 @@ SELECT password_hash, salt FROM mqtt_user where username = 'emqx_u' LIMIT 1
 
 - `${peerhost}`：将在运行时被替换为客户端的 IP 地址。EMQX 支持 [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt)，即使 EMQX 部署在某些 TCP 代理或负载均衡器之后，用户也可以使用此占位符获得真实 IP 地址。
 
-- `${peerport}`：将在运行时被客户端的 IP 端口替换。
-
 - `${peername}`：将在运行时被替换为客户端的 IP 地址和端口，格式为 `IP: PORT`。
 
 - `${cert_subject}`：将在运行时被替换为客户端 TLS 证书的主题（Subject）。如果证书信息是从负载均衡器发送到 EMQX 的 TCP 端口，需要确保负载均衡器使用的是 Proxy Protocol v2。
