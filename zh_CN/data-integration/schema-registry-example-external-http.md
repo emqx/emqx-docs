@@ -6,7 +6,7 @@
 
 ## 外部 HTTP API 规范
 
-要实现与 EMQX 的 `schema_encode` 和 `schema_decode` 函数配套的外部 HTTP API，服务端需提供一个用于接收 EMQX 编码或解码请求的接口。该 Schema 可使用 `POST`（默认）或 `GET` 方法。
+外部 HTTP 服务需要提供一个与 EMQX 的 `schema_encode` 和 `schema_decode` 函数配套的 HTTP 接口，用于接收 EMQX 发送的编码或解码请求。EMQX 支持通过 POST（默认）或 GET 方式调用该接口。
 
 ### 请求格式
 
@@ -33,8 +33,21 @@
 ### 响应格式
 
 - 服务端必须返回 HTTP 状态码 `200`。
-- 响应体应为一个 Base64 编码后的字符串，表示最终结果。
-- 注意：此 Base64 字符串应为纯文本，不应嵌套在 JSON 对象中返回。
+- 响应体应为一个 Base64 编码后的字符串，表示最终结果。注意：此 Base64 字符串应为纯文本，不应嵌套在 JSON 对象中返回。
+
+## Schema 配置参数说明
+
+在 Dashboard 中创建外部 HTTP Schema 时，可配置以下字段：
+
+| 字段         | 是否必填 | 说明                                                         |
+| ------------ | -------- | ------------------------------------------------------------ |
+| **名称**     | 是       | Schema 在 EMQX 中的唯一标识符。                              |
+| **类型**     | 是       | 选择 `外部 HTTP`。                                           |
+| **URL**      | 是       | 外部 HTTP 服务的完整地址，例如 `http://server:9500/serde`。  |
+| **方法**     | 是       | 调用接口所使用的 HTTP 方法，默认为 `POST`。如果外部服务需要通过 URL 参数接收请求数据，可使用 `GET`。 |
+| **参数**     | 否       | 可选字符串，会以 `opts` 字段的形式附加在每次请求中，可用于向服务传递额外的选项或配置信息。 |
+| **请求头**   | 否       | 每次请求中附带的 HTTP 请求头。默认已添加 `content-type: application/json`。点击**添加**可增加更多请求头，例如认证令牌。 |
+| **启用 TLS** | 否       | 如果外部 HTTP 服务需要 TLS 连接，请开启此选项。详见[启用 TLS 加密访问外部资源](../network/overview.md#启用-tls-加密访问外部资源)。 |
 
 ## 使用示例
 
@@ -94,13 +107,13 @@ flask --app myapp --debug run -h 0.0.0.0 -p 9500
 
 ### 在 EMQX 中创建 External HTTP Schema
 
-1. 进入 Dashboard，依次点击左侧导航栏的**数据智能中心** -> **Schema Registry**。
-2. 在到 **内部 Schema** 标签页中，点击 **创建**。
+1. 进入 Dashboard，点击左侧导航栏的**数据智能中心** -> **Schema Registry**。
+2. 在到**内部 Schema** 标签页中，点击**创建**。
 3. 使用以下参数创建外部 HTTP Schema：
    - **名称**：`myhttp`
-   - **类型**：`External HTTP`
+   - **类型**：`外部 HTTP`
    - **URL**：您的 HTTP 服务运行地址，例如 `http://server:9500/serde`。
-   - **方法**：选择 `POST` 或 `GET`。默认值为 `POST`。如果外部服务希望从查询字符串中读取请求字段，可使用 `GET`。
+   - **方法**：选择 `POST` 或 `GET`。默认值为 `POST`。如果外部服务需要通过 URL 参数接收请求数据，可使用 `GET`。
 4. 点击**创建**完成创建。
 
 ### 创建规则应用 Schema

@@ -6,7 +6,7 @@ In some scenarios, you might need to apply custom encoding or decoding logic tha
 
 ## External HTTP API Specification
 
-To implement a custom External HTTP API that integrates with EMQX's `schema_encode` and `schema_decode` functions, your External HTTP server must provide a single endpoint that handles the encoding or decoding requests from EMQX. The schema can use either the `POST` method (default) or the `GET` method.
+Your external HTTP server must expose a single endpoint that receives encoding and decoding requests from EMQX's `schema_encode` and `schema_decode` functions. EMQX can call this endpoint using either `POST` (default) or `GET` method.
 
 ### Request Format
 
@@ -34,6 +34,20 @@ If the schema URL already contains query parameters, EMQX appends these four par
 
 - The server must respond with HTTP status code `200`.
 - The response body must contain a base64-encoded string representing the result. Note that this base64 value must not be further JSON-encoded when replying to EMQX.
+
+## Schema Configuration Reference
+
+When creating an External HTTP schema in the Dashboard, the following fields are available:
+
+| Field        | Required | Description                                                                                                                                                      |
+| ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**     | Yes      | A unique identifier for the schema within EMQX.                                                                                                                  |
+| **Type**     | Yes      | Set to `External HTTP`.                                                                                                                                          |
+| **URL**      | Yes      | The full URL of the endpoint on your external HTTP server, for example, `http://server:9500/serde`.                                                              |
+| **Method**   | Yes      | HTTP method used to call the endpoint. Defaults to `POST`. Use `GET` only if your external service expects the request fields in the query string.               |
+| **Params**   | No       | An optional string passed as the `opts` field in every request. Use this to send extra options or configuration values to your service.                          |
+| **Headers**  | No       | HTTP headers included in every request. The `content-type: application/json` header is added by default. Click **Add** to include additional headers, for example authentication tokens. |
+| **Enable TLS** | No     | Toggle on if your external HTTP server requires a TLS connection. For details, see [TLS for External Resource Access](../network/overview.md#tls-for-external-resource-access). |
 
 ## Example Use Case
 
