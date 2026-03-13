@@ -141,33 +141,33 @@
                   path: deploy/kubernetes/operator/tasks/overview
                   collapsed: true
                   children:
-                    - title_en: Configure License (Enterprise)
-                      title_cn: 配置 License (企业版)
-                      title_ja: Configure License (Enterprise)
+                    - title_en: Manage License
+                      title_cn: 管理 License
+                      title_ja: Manage License
                       path: deploy/kubernetes/operator/tasks/configure-emqx-license
-                    - title_en: Enable TLS in EMQX
-                      title_cn: 在 EMQX 中开启 TLS
-                      title_ja: Enable TLS in EMQX
+                    - title_en: Enable TLS for Listeners
+                      title_cn: 为监听器启用 TLS
+                      title_ja: Enable TLS for Listeners
                       path: deploy/kubernetes/operator/tasks/configure-emqx-tls
-                    - title_en: Change EMQX Configurations
+                    - title_en: Change EMQX Configuration
                       title_cn: 修改 EMQX 配置
-                      title_ja: Change EMQX Configurations
+                      title_ja: Change EMQX Configuration
                       path: deploy/kubernetes/operator/tasks/configure-emqx-config
-                    - title_en: Enable Core + Replicant Cluster
-                      title_cn: 配置 Core + Replica 集群
-                      title_ja: Enable Core + Replicant Cluster
+                    - title_en: Enable Core-Replicant Deployment
+                      title_cn: 配置 Core-Replicant 集群
+                      title_ja: Enable Core-Replicant Deployment
                       path: deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
                     - title_en: Enable Persistence
                       title_cn: 开启持久化
                       title_ja: Enable Persistence
                       path: deploy/kubernetes/operator/tasks/configure-emqx-persistence
-                    - title_en: Access EMQX Cluster by LoadBalancer
-                      title_cn: 通过 LoadBalancer 访问 EMQX Cluster
-                      title_ja: Access EMQX Cluster by LoadBalancer
+                    - title_en: Access EMQX Cluster through LoadBalancer
+                      title_cn: 通过 LoadBalancer 访问 EMQX 集群
+                      title_ja: Access EMQX Cluster through LoadBalancer
                       path: deploy/kubernetes/operator/tasks/configure-emqx-service
-                    - title_en: Configure Blue-Green Upgrade
+                    - title_en: Perform Blue-Green Upgrade
                       title_cn: 配置蓝绿发布
-                      title_ja: Configure Blue-Green Upgrade
+                      title_ja: Perform Blue-Green Upgrade
                       path: deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
                     - title_en: Collect EMQX Logs
                       title_cn: 采集 EMQX 日志
@@ -181,15 +181,22 @@
                       title_cn: 监控 EMQX 集群
                       title_ja: Monitor EMQX Cluster
                       path: deploy/kubernetes/operator/tasks/configure-emqx-prometheus
-                    - title_en: Load Balance EMQX Cluster
-                      title_cn: 负载均衡 EMQX 集群
-                      title_ja: Load Balance EMQX Cluster
+                    - title_en: Rebalance Cluster Load
+                      title_cn: 重新平衡集群负载
+                      title_ja: Rebalance Cluster Load
                       path: deploy/kubernetes/operator/tasks/configure-emqx-rebalance
                     - title_en: Deploy EMQX Cluster in k8s with Restricted Access
                       title_ja: Deploy EMQX Cluster in k8s with Restricted Access
                       title_cn: 在受限的 k8s 环境中部署 EMQX 集群
                       path: deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
-                - deploy/kubernetes/operator/api-reference
+                - title_en: API Reference
+                  title_cn: API Reference
+                  title_ja: API Reference
+                  path: deploy/kubernetes/operator/reference/overview
+                  collapsed: true
+                  children:
+                    - deploy/kubernetes/operator/reference/v2-reference
+                    - deploy/kubernetes/operator/reference/v2beta1-reference
             - title_en: EMQX Helm Chart
               title_cn: EMQX Helm Chart
               title_ja: EMQX Helm Chart
@@ -474,6 +481,7 @@
       children:
         - flow-designer/openai-node-quick-start
         - flow-designer/anthropic-node-quick-start
+        - flow-designer/gemini-node-quick-start
 - title_en: Data Integration
   title_cn: 数据集成
   title_ja: データ統合
@@ -485,6 +493,10 @@
       title_cn: Webhook
       title_ja: Webhook
       path: data-integration/webhook
+    - title_en: AlloyDB
+      title_cn: AlloyDB
+      title_ja: AlloyDB
+      path: data-integration/alloydb
     - title_en: Apache Doris
       title_cn: Apache Doris
       title_ja: Apache Doris
@@ -505,6 +517,10 @@
       title_cn: AWS Kinesis
       title_ja: AWS Kinesis
       path: data-integration/data-bridge-kinesis
+    - title_en: AWS Redshift
+      title_cn: AWS Redshift
+      title_ja: AWS Redshift
+      path: data-integration/redshift
     - title_en: AWS S3
       title_cn: AWS S3
       title_ja: AWS S3
@@ -521,6 +537,10 @@
       title_cn: Azure Event Hubs
       title_ja: Azure Event Hubs
       path: data-integration/data-bridge-azure-event-hub
+    - title_en: BigQuery
+      title_cn: BigQuery
+      title_ja: BigQuery
+      path: data-integration/bigquery
     - title_en: Cassandra
       title_cn: Cassandra
       title_ja: Cassandra
@@ -529,6 +549,10 @@
       title_cn: ClickHouse
       title_ja: ClickHouse
       path: data-integration/data-bridge-clickhouse
+    - title_en: CockroachDB
+      title_cn: CockroachDB
+      title_ja: CockroachDB
+      path: data-integration/cockroachdb
     - title_en: Confluent
       title_cn: Confluent
       title_ja: Confluent
@@ -561,10 +585,6 @@
       title_cn: GreptimeDB
       title_ja: GreptimeDB
       path: data-integration/data-bridge-greptimedb
-    - title_en: HStreamDB
-      title_cn: HStreamDB
-      title_ja: HStreamDB
-      path: data-integration/data-bridge-hstreamdb
     - title_en: HTTP Server
       title_cn: HTTP Server
       title_ja: HTTP サーバー
@@ -742,6 +762,7 @@
             - dashboard/subscriptions/overview
             - dashboard/retained
             - dashboard/delay-pub
+            - dashboard/alarm_dashboard
         - title_en: Access Control
           title_cn: 访问控制
           title_ja: アクセスコントロール
@@ -857,6 +878,14 @@
   collapsed: true
   path: mqtt-over-quic/advanced-feature
   children:
+    - title_en: Message Queue
+      title_cn: 消息队列
+      title_ja: Message Queue
+      path: message-queue/message-queue-concept
+      collapsed: true
+      children:
+        - message-queue/message-queue-task
+        - message-queue/message-queue-quick-start
     - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
@@ -1016,6 +1045,28 @@
             #       path: emqx-ai/sdks/multimedia-ai/overview
             #       children:
             #         - emqx-ai/sdks/multimedia-ai/webrtc-typescript
+- title_en: Migration Guide
+  title_cn: 迁移指南
+  title_ja: 移行ガイド
+  path: migration/overview
+  collapsed: true
+  children:
+    - title_en: AWS IoT Core
+      title_cn: AWS IoT Core
+      title_ja: AWS IoT Core
+      path: migration/migrate-from-aws-iot-core
+    - title_en: Azure IoT Hub
+      title_cn: Azure IoT Hub
+      title_ja: Azure IoT Hub
+      path: migration/migrate-from-azure-iot-hub
+    - title_en: HiveMQ
+      title_cn: HiveMQ
+      title_ja: HiveMQ
+      path: migration/migrate-from-hivemq
+    - title_en: Mosquitto
+      title_cn: Mosquitto
+      title_ja: Mosquitto
+      path: migration/migrate-from-mosquitto
 - title_en: Tutorials
   title_cn: 实用教程
   title_ja: 実用的なチュートリアル
@@ -1098,6 +1149,7 @@
         - design/clustering
         - design/inflight-window-and-message-queue
         - design/retransmission
+        - design/durable-storage
       # - design/design
       # - title_en: SDK & Tools
       #   title_cn: SDK 与工具
@@ -1155,12 +1207,14 @@
   collapsed: true
   path: changes/all-changes-ee
   children:
+    - changes/changes-ee-v6
     - changes/changes-ee-v5
     - changes/changes-ee-v4
     - title_en: Known Issues
       title_cn: 已知问题
       title_ja: 既知の問題
       children:
+        - changes/known-issues-6.0
         - changes/known-issues-5.9
         - changes/known-issues-5.8
         - changes/known-issues-5.3
@@ -1170,6 +1224,7 @@
       title_ja: 非互換の変更
       collapsed: true
       children:
+        - changes/breaking-changes-6.0
         - changes/breaking-changes-5.10
         - changes/breaking-changes-ee-5.9
         - changes/breaking-changes-ee-5.8
@@ -1177,6 +1232,7 @@
         - changes/breaking-changes-ee-5.6
         - changes/breaking-changes-ee-5.5
         - changes/breaking-changes-ee-5.4
+    - changes/breaking-changes-6.0.0
     - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
       title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
       title_ja: EMQX 4.4 から EMQX 5.1 への非互換変更

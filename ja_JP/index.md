@@ -9,7 +9,7 @@ EMQX は「無制限の接続、シームレスな統合、どこでも展開」
 
 - [**大規模スケール**](https://www.emqx.com/en/blog/how-emqx-5-0-achieves-100-million-mqtt-connections): 単一クラスター内で20ノード以上の水平スケールにより1億 MQTT 接続を実現。
 - [**業務クリティカルな信頼性**](./deploy/cluster/mria-introduction.md): 組み込みの RocksDB データパーシステンスによりデータ損失を防止。
-- [**データセキュリティ**](https://www.emqx.com/en/use-cases/mqtt-security): エンドツーエンドのデータ暗号化と細粒度アクセス制御でデータを保護。
+- [**データセキュリティ**](./access-control/security-guide.md): エンドツーエンドのデータ暗号化と細粒度アクセス制御でデータを保護。
 - [**複数プロトコル対応**](https://www.emqx.com/en/blog/iot-protocols-mqtt-coap-lwm2m): MQTT、QUIC、CoAP、Stomp、LwM2M など多彩なプロトコルをサポート。
 - [**完全な MQTT 5.0 対応**](https://www.emqx.com/en/blog/introduction-to-mqtt-5): MQTT 5.0 と 3.x 両方の標準に完全準拠し、スケーラビリティ、セキュリティ、信頼性を向上。
 - [**高性能**](https://www.emqx.com/en/blog/mqtt-performance-benchmark-testing-emqx-single-node-supports-2m-message-throughput): ノードごとに毎秒数百万の MQTT メッセージを効率的に処理。
@@ -23,7 +23,7 @@ EMQX Enterprise は複数のコンポーネントで構成され、強力かつ�
 
 ### デバイス接続
 
-EMQX Enterprise は MQTT 5.0 と 3.x 仕様に100%準拠し、優れたスケーラビリティにより膨大な数の MQTT デバイスクライアント接続を容易に処理できます。[接続数の詳細](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections)。同時に HTTP、QUIC、LwM2M/CoAP などのオープン標準プロトコルもサポートし、多様な IoT デバイスやシナリオに対応。ファイル転送や遅延パブリッシュなどの機能も拡張し、利用シーンを豊かにしています。
+EMQX Enterprise は MQTT 5.0 と 3.x 仕様に100%準拠し、優れたスケーラビリティにより膨大な数の MQTT デバイスクライアント接続を容易に処理できます。[接続数の詳細](https://www.emqx.com/en/blog/reaching-100m-mqtt-connections-with-emqx-5-0)。同時に HTTP、QUIC、LwM2M/CoAP などのオープン標準プロトコルもサポートし、多様な IoT デバイスやシナリオに対応。ファイル転送や遅延パブリッシュなどの機能も拡張し、利用シーンを豊かにしています。
 
 #### MQTT over QUIC
 

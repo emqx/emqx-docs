@@ -1,18 +1,22 @@
-# Collect EMQX Logs In Kubernetes
+# Collect EMQX Logs in Kubernetes
 
-## Task Target
+## Objective
 
 Use ELK to collect EMQX cluster logs.
 
 ## Deploy ELK
 
-ELK is the capitalized abbreviation of the three open source frameworks of Elasticsearch, Logstash, and Kibana, and is also known as the Elastic Stack. [Elasticsearch](https://www.elastic.co/elasticsearch/) is a near-real-time search platform framework based on Lucene, distributed, and interactive through Restful, also referred to as: es. [Logstash](https://www.elastic.co/logstash/) is the central data flow engine of ELK, which is used to collect data in different formats from different targets (files/data storage/MQ), and supports after filtering Output to different destinations (file/MQ/redis/elasticsearch/kafka, etc.). [Kibana](https://www.elastic.co/kibana/) can display es data on a page and provide real-time analysis functions.
+**ELK** stands for Elasticsearch, Logstash, and Kibana (also known as the Elastic Stack):
+
+- [**Elasticsearch**](https://www.elastic.co/elasticsearch/): Distributed, near-real-time search and analytics engine based on Lucene providing REST APIs to interact with data.
+- [**Logstash**](https://www.elastic.co/logstash/): Primary data flow engine for collecting, transforming, and forwarding logs from various sources to different destinations.
+- [**Kibana**](https://www.elastic.co/kibana/): Web interface for visualizing and analyzing Elasticsearch data in real time.
 
 ### Deploy Single Node Elasticsearch
 
-The method of deploying single-node Elasticsearch is relatively simple. You can refer to the following YAML orchestration file to quickly deploy an Elasticsearch cluster.
+Deploying a single-node Elasticsearch cluster is relatively simple. You can use the following YAML configuration file to quickly deploy an Elasticsearch cluster.
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -104,6 +108,7 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
         containers:
         - image: docker.io/library/elasticsearch:7.9.3
           name: elasticsearch-logging
+          resources:
             limits:
               cpu: 1000m
               memory: 1Gi
@@ -164,9 +169,13 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
           requests:
             storage: 10Gi
   ```
-  > The `storageClassName` field indicates the name of `StorageClass`, you can use the command `kubectl get storageclass` to get the StorageClass that already exists in the Kubernetes cluster, or you can create a StorageClass according to your own needs.
+  :::tip
+  Use the `storageClassName` field to choose the appropriate [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/). Run `kubectl get storageclass` to list the StorageClasses that already exist in the Kubernetes cluster, or create a StorageClass according to your needs.
+  :::
 
-- Wait for the es to be ready, you can check the status of the es pod through the `kubectl get` command, make sure `STATUS` is `Running`
+2. Wait for Elasticsearch to be ready.
+
+  Check the status of the Elasticsearch pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=elasticsearch"
@@ -176,9 +185,9 @@ The method of deploying single-node Elasticsearch is relatively simple. You can 
 
 ### Deploy Kibana
 
-This article uses `Deployment` to deploy Kibana to visualize the collected logs. `Service` uses `NodePort`.
+This walkthrough uses a `Deployment` to deploy Kibana for visualizing the collected logs, and a `Service` of type `NodePort` to expose Kibana externally.
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -191,6 +200,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
       k8s-app: kibana
   spec:
     type: NodePort
+    ports:
     - port: 5601
       nodePort: 35601
       protocol: TCP
@@ -220,7 +230,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
       spec:
         containers:
-        -name: kibana
+        - name: kibana
           image: docker.io/kubeimages/kibana:7.9.3
           resources:
             limits:
@@ -237,7 +247,9 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
             protocol: TCP
   ```
 
-- Wait for Kibana to be ready, you can check the status of the Kibana pod through the `kubectl get` command, make sure `STATUS` is `Running`
+2. Wait for Kibana to be ready.
+
+  Check the status of the Kibana pod using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=kibana"
@@ -245,13 +257,13 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
   kibana-b7d98644-48gtm       1/1     Running            0          17m
   ```
 
-  Finally, in the browser, enter `http://{node_ip}:35601`, and you will enter the kibana web interface
+  Finally, in your browser, navigate to `http://{node_ip}:35601` to access the Kibana web interface.
 
 ### Deploy Filebeat
 
-[Filebeat](https://www.elastic.co/beats/filebeat) is a lightweight eating log collection component, which is part of the Elastic Stack and can work seamlessly with Logstash, Elasticsearch and Kibana. Whether you're transforming or enriching logs and files with Logstash, throwing around some data analysis in Elasticsearch, or building and sharing dashboards in Kibana, Filebeat makes it easy to get your data where it matters most.
+[Filebeat](https://www.elastic.co/beats/filebeat) is a lightweight log collection component that is part of the Elastic Stack and works seamlessly with Logstash, Elasticsearch, and Kibana.
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -259,7 +271,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
   kind: ConfigMap
   metadata:
     name: filebeat-config
-    namespace: kube-system
+    namespace: kube-logging
     labels:
       k8s-app: filebeat
   data:
@@ -369,10 +381,10 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           - name: varlibdockercontainers
             mountPath: /data/var/
             readOnly: true
-          -name: varlog
+          - name: varlog
             mountPath: /var/log/
             readOnly: true
-          -name: timezone
+          - name: timezone
             mountPath: /etc/localtime
         volumes:
         - name: config
@@ -382,7 +394,7 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
         - name: varlibdockercontainers
           hostPath:
             path: /data/var/
-        -name: varlog
+        - name: varlog
           hostPath:
             path: /var/log/
         - name: inputs
@@ -393,12 +405,14 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
           hostPath:
             path: /data/filebeat-data
             type: DirectoryOrCreate
-        -name: timezone
+        - name: timezone
           hostPath:
             path: /etc/localtime
   ```
 
-- Wait for Filebeat to be ready, you can check the status of the Filebeat pod through the `kubectl get` command, make sure `STATUS` is `Running`
+2. Wait for Filebeat to become ready.
+
+  Check the status of Filebeat pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=filebeat"
@@ -409,9 +423,11 @@ This article uses `Deployment` to deploy Kibana to visualize the collected logs.
 
 ### Deploy Logstash
 
-This is mainly to combine the business needs and the secondary utilization of logs, and Logstash is added for log cleaning. This article uses the [Beats Input plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-beats.html) of Logstash to collect logs, and uses the [Ruby filter plugin](https://www.elastic.co/guide/en/logstash/current/plugins-filters-ruby.html) to filter logs. Logstash also provides many other input and filtering plug-ins for users to use, and you can configure appropriate plug-ins according to your business needs.
+Logstash is used for log processing and cleaning.
 
-- Save the following content as a YAML file and deploy it via the `kubectl apply` command
+In this walkthrough, we use the [Beats Input plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-inputs-beats) of Logstash to collect logs and the [Ruby filter plugin](https://www.elastic.co/docs/reference/logstash/plugins/plugins-filters-ruby) to filter logs. Logstash also provides many other input and filtering plugins that you can configure according to your business needs.
+
+1. Save the following content as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   ---
@@ -419,7 +435,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
   kind: Service
   metadata:
     name: logstash
-    namespace: kube-system
+    namespace: kube-logging
   spec:
     ports:
     - port: 5044
@@ -432,7 +448,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
   kind: Deployment
   metadata:
     name: logstash
-    namespace: kube-system
+    namespace: kube-logging
   spec:
     selector:
       matchLabels:
@@ -460,7 +476,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
             mountPath: /etc/logstash_c/
           - name: config-yml-volume
             mountPath: /usr/share/logstash/config/
-          -name: timezone
+          - name: timezone
             mountPath: /etc/localtime
           resources:
             limits:
@@ -476,7 +492,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
             items:
             - key: logstash.conf
               path: logstash.conf
-        -name: timezone
+        - name: timezone
           hostPath:
             path: /etc/localtime
         - name: config-yml-volume
@@ -504,7 +520,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
         ruby {
           code => "
             ss = event.get('message').split(' ')
-            len = ss. length()
+            len = ss.length()
             level = ''
             index = ''
             msg = ''
@@ -543,7 +559,7 @@ This is mainly to combine the business needs and the secondary utilization of lo
   apiVersion: v1
   kind: ConfigMap
   metadata:
-    name: logstash
+    name: logstash-yml
     namespace: kube-logging
     labels:
       k8s-app: logstash
@@ -553,7 +569,9 @@ This is mainly to combine the business needs and the secondary utilization of lo
       xpack.monitoring.elasticsearch.hosts: http://elasticsearch-logging:9200
   ```
 
-- Wait for Logstash to be ready, you can view the status of the Logstash pod through the `kubectl get` command, make sure `STATUS` is `Running`
+2. Wait for Logstash to be ready.
+
+  Check the status of Logstash pods using the `kubectl get` command and ensure that `STATUS` is `Running`.
 
   ```bash
   $ kubectl get pod -n kube-logging -l "k8s-app=logstash"
@@ -564,20 +582,20 @@ This is mainly to combine the business needs and the secondary utilization of lo
 
 ## Deploy EMQX Cluster
 
-To deploy the EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md).
+To deploy an EMQX cluster, please refer to the document [Deploy EMQX](../getting-started.md).
 
 ## Verify Log Collection
 
-- First log in to the Kibana interface, open the stack management module in the menu, click on the index management, you can find that there are already collected log indexes
+1. Log in to the Kibana interface, open the stack management module in the menu, and click on _Index Management_. You can see that log indices have already been collected.
 
   ![](./assets/configure-log-collection/index-manage.png)
 
-- In order to be able to discover and view logs in Kibana, you need to set an index match, select index patterns, and click Create
+2. To discover and view logs in Kibana, you need to create an index pattern. Select index patterns and click _Create_.
 
   ![](./assets/configure-log-collection/create-index-0.png)
 
   ![](./assets/configure-log-collection/create-index-1.png)
 
-- Finally verify whether the EMQX cluster logs are collected
+3. Finally, verify that the EMQX cluster logs are collected.
 
   ![](./assets/configure-log-collection/log-collection.png)

@@ -58,7 +58,7 @@ EMQX 中的 [PSK 认证](../../network/psk-authentication.md) 提供了一个更
 | JWT      | --          | [JWT 认证](./jwt.md)                                |
 | 增强认证 | 内置数据库  | [MQTT 5.0 增强认证（SCRAM 认证）](./scram.md)       |
 | 增强认证 | HTTP 服务   | [基于 REST API 的 MQTT 5.0 增强认证 （SCRAM 认证）](./scram_restapi.md) |
-| 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos)          |
+| 增强认证 | Kerberos    | [MQTT 5.0 增强认证 - Kerberos](./kerberos.md)          |
 | 规则认证 | --          | [Client-info 认证](./cinfo.md)                      |
 
 ## 认证链

@@ -27,7 +27,7 @@ DASHSCOPE_API_KEY='sk-xxxxx'
 ```
 
 `DASHSCOPE_API_KEY` is an API key from the Alibaba Cloud Large Model Service platform. See
- [How to obtain an Alibaba Cloud large model API key](https://help.aliyun.com/zh/model-studio/get-api-key?) for details.
+ [How to obtain an Alibaba Cloud large model API key](https://alibabacloud.com/help/en/model-studio/first-api-call-to-qwen) for details.
 
 ## Start with Docker Compose
 

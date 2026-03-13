@@ -26,7 +26,7 @@ The workflow proceeds as follows:
 4. **Writing to Amazon S3 Tables**: The rule triggers the S3 Tables Sink action, which batches the transformed data and sends it to Amazon S3 Tables using the Iceberg-compatible write API. Data is persisted as Parquet files under Iceberg table partitions.
 5. **Query and Analytics**: Once ingested, data can be queried with Amazon Athena, joined with other datasets, or analyzed using Redshift Spectrum, Amazon EMR, or third-party analytics engines such as Presto and Trino.
 
-## Features and Advantages
+## Features and Benefits
 
 Using Amazon S3 Tables data integration in EMQX can bring the following features and advantages to your business:
 
@@ -71,7 +71,7 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
   To create and manage access keys for an IAM user, see the [AWS documentation on managing access keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html).
 
 - **Option 2: Automatically obtain temporary credentials (EC2 only)**
-   If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 API to fetch temporary credentials associated with that role.
+  If EMQX runs on an AWS EC2 instance and the instance has an attached IAM role with the necessary permissions, you can leave **Access Key ID** and **Secret Access Key** blank in the connector. EMQX will use IMDSv2 API to fetch temporary credentials associated with that role.
 
   To learn how to assign an IAM role to an EC2 instance, see the [AWS documentation on IAM roles for Amazon EC2](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html).
 
@@ -79,6 +79,7 @@ The S3 Tables connector supports two ways to obtain credentials. Choose based on
 
 - Ensure the instance role has sufficient permissions to the target S3 Tables (bucket/table) and Athena; otherwise, **Test Connectivity** may fail.
 - It’s recommended to use an IAM role attached to EC2 instance to manage temporary credentials; if you are not on EC2 or no role is attached, use **Option 1** and enter access keys manually.
+
    :::
 
 ### Prepare an S3 Tables Bucket

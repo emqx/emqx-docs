@@ -10,12 +10,61 @@
 
 ## 支持的 SAML 服务
 
-EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实现基于 SAML 的单点登录：
+EMQX Dashboard 可以与以下支持 SAML 2.0 协议的身份服务集成，实现基于 SAML 的单点登录，例如：
+
+- [Microsoft Entra ID](https://www.microsoft.com/zh-cn/security/business/identity-access/microsoft-entra-id)
 
 - [Okta](https://www.okta.com/)
 - [OneLogin](https://www.onelogin.com/)
 
 其他身份提供商正在适配中，将在后续版本提供。
+
+## 通过集成 Microsoft Entra ID 配置 SSO
+
+本节指导你如何使用 Microsoft Entra ID 作为身份提供方（IdP）并配置 SSO。您需要分别完成 IdP 侧与 EMQX Dashboard 侧的配置。
+
+### 步骤 1：在 EMQX Dashboard 中启用 SAML
+
+1. 在 Dashboard 中进入**系统设置** -> **单点登录**。
+2. 点击 **SAML 2.0** 卡片上的**启用**按钮。
+3. 在配置页面输入以下信息：
+   - **Dashboard 地址**：确保用户可以访问 Dashboard 的实际访问地址，不需要指定具体路径。例如 `http://localhost:18083`。此地址将被自动拼接以生成用于 IdP 侧配置的 **SSO Address** 和 **Metadata Address**。
+   - **SAML 元数据 URL**：暂时留空，等待步骤 2 的配置。
+
+### 步骤 2：注册一个应用以集成 Microsoft Entra ID
+
+1. 以管理员身份登录 [MS Azure Portal](https://portal.azure.com/)。
+
+2. 进入 **Microsoft Entra ID** -> **企业应用程序** -> **新建应用程序**，并点击 **创建你自己的应用程序**。
+
+   <img src="./assets/entra_id_create_own_app.png" alt="entra_id_create_own_app" style="zoom:50%;" />
+
+3. 输入应用名称，例如 `EMQX Dashboard`，选择**集成未在库中找到的任何其他应用程序(非库)**，并点击**创建**。
+
+   <img src="./assets/entra_id_saml_app_parameters.png" alt="entra_id_saml_app_parameters" style="zoom:50%;" />
+
+4. 点击**分配用户和组**以分配可以访问 EMQX Dashboard 应用的用户和组。
+
+5. 进入**单一登录**标签页，选择 **SAML**，并点击**基本 SAML 配置**区域中的**编辑**按钮。
+
+6. 使用步骤 1 中 Dashboard 提供的地址配置以下信息：
+
+   - **标识符 (实体 ID)**：输入 Dashboard 提供的**元数据地址**，例如 `http://localhost:18083/api/v5/sso/saml/metadata`。
+   - **回复 URL (断言使用者服务 URL)**：输入 Dashboard 提供的**单点登录地址**，例如 `http://localhost:18083/api/v5/sso/saml/acs`。
+
+   其他信息为可选项，可根据实际需求进行配置。
+
+7. 点击**保存**保存配置。
+
+### 步骤 3：完成 EMQX Dashboard 配置
+
+1. 在 Microsoft Entra ID 中，进入创建的应用的**单一登录**标签页，并在**令牌签名证书**区域中复制**应用联合元数据 URL**。
+
+   <img src="./assets/entra_id_saml_metadata_url.png" alt="entra_id_saml_metadata_url" style="zoom:50%;" />
+
+2. 在 Dashboard 中，将复制的 URL 粘贴到步骤 1 的 **SAML 元数据 URL** 中。
+
+3. 点击**更新**以完成配置。
 
 ## 集成 Okta 身份服务配置 SSO
 

@@ -1,71 +1,57 @@
-# License Configuration (EMQX Enterprise)
+# Manage License
 
-## Task Target
+## Objective
 
-- Configure EMQX Enterprise License.
-- Update EMQX Enterprise License.
+- Configure the EMQX Enterprise license.
+- Update EMQX Enterprise license.
 
 ## Configure License
 
-EMQX Enterprise License can be applied for free on EMQ official website: [Apply for EMQX Enterprise License](https://www.emqx.com/en/apply-licenses/emqx).
+You can apply for an EMQX Enterprise license for free on the EMQX official website: [Apply for EMQX Enterprise License](https://www.emqx.com/en/apply-licenses/emqx).
 
 ## Configure EMQX Cluster
 
-`apps.emqx.io/v2beta1 EMQX` supports configuring EMQX cluster license through `.spec.config.data`. For config.data configuration, please refer to the document: [Configuration Manual](../../../../configuration/configuration.md). This field is only allowed to be configured when creating an EMQX cluster, and does not support updating.
+EMQX CRD `apps.emqx.io/v2beta1` supports configuring the EMQX cluster license through the `.spec.config.data` field. Refer to the [Configuration Manual](https://docs.emqx.com/en/enterprise/v6.0.0/hocon/) for complete configuration reference.
 
-  > After the EMQX cluster is created, if the license needs to be updated, please update it through the EMQX Dashboard.
-
-+ Save the following content as a YAML file and deploy it via the `kubectl apply` command
+1. Save the following as a YAML file and deploy it using `kubectl apply`.
 
   ```yaml
   apiVersion: apps.emqx.io/v2beta1
   kind: EMQX
   metadata:
-    name: emqx
+    name: emqx-ee
   spec:
     config:
       data: |
         license {
           key = "..."
         }
-    image: emqx/emqx-enterprise:@EE_VERSION@
+    image: emqx/emqx:@EE_VERSION@
     dashboardServiceTemplate:
       spec:
         type: LoadBalancer
   ```
 
-  > The `license.key` in the `config.data` field represents the License content. In this example, the License content is omitted, please fill it in by the user.
+  ::: tip
+  The `license.key` in the `.spec.config.data` field represents the license content. In this example, the license content is omitted. Please fill it in with your own license key.
+  :::
 
-+ Wait for the EMQX cluster to be ready, you can check the status of the EMQX cluster through `kubectl get` command, please make sure `STATUS` is `Running`, this may take some time
+2. Wait for the EMQX cluster to become ready.
 
-  ```bash
-  $ kubectl get emqx emqx
-  NAME   IMAGE                              STATUS    AGE
-  emqx   emqx/emqx-enterprise:@EE_VERSION@  Running   10m
-  ```
-
-+ Obtain the Dashboard External IP of EMQX cluster and access EMQX console
-
-  EMQX Operator will create two EMQX Service resources, one is emqx-dashboard and the other is emqx-listeners, corresponding to EMQX console and EMQX listening port respectively.
+  Check the status of the EMQX cluster with `kubectl get` and ensure that `STATUS` is `Ready`. This may take some time.
 
   ```bash
-  $ kubectl get svc emqx-ee-dashboard -o json | jq '.status.loadBalancer.ingress[0].ip'
-  
-  192.168.1.200
+  $ kubectl get emqx emqx-ee
+  NAME   STATUS   AGE
+  emqx   Ready    10m
   ```
-
-  Access `http://192.168.1.200:18083` through a browser, and use the default username and password `admin/public` to login EMQX console.
 
 ## Update License
 
-+ View License information
-  ```bash
-  $ pod_name="$(kubectl get pods -l 'apps.emqx.io/instance=emqx,apps.emqx.io/db-role=core' -o json | jq --raw-output '.items[0].metadata.name')"
-  $ kubectl exec -it ${pod_name} -c emqx -- emqx_ctl license info
-  ```
+1. View the license information.
 
-  The following output can be obtained. From the output, we can see the basic information of the license we applied for, including applicant's information, maximum connection supported by the license, and expiration time of the license.
   ```bash
+  $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
   customer        : Evaluation
   email           : contact@emqx.io
   deployment      : default
@@ -77,12 +63,15 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
   expiry          : false
   ```
 
-+ Modify EMQX custom resources to update the License.
+  The output shows basic license information, including the applicant's information, the maximum number of connections supported by the license, and the expiration time.
+
+2. Modify the EMQX CR to update the license.
+
   ```bash
-  $ kubectl edit emqx emqx
+  $ kubectl edit emqx emqx-ee
   ...
   spec:
-    image: emqx/emqx-enterprise:@EE_VERSION@
+    image: emqx/emqx:@EE_VERSION@
     config:
       data: |
         license {
@@ -91,14 +80,10 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
   ...
   ```
 
-  + Check if the EMQX cluster license has been updated.
-  ```bash
-  $ pod_name="$(kubectl get pods -l 'apps.emqx.io/instance=emqx,apps.emqx.io/db-role=core' -o json | jq --raw-output '.items[0].metadata.name')"
-  $ kubectl exec -it ${pod_name} -c emqx -- emqx_ctl license info
-  ```
+3. Verify that the license has been updated.
 
-  It can be seen from the "max_connections" field that the content of the License has been updated, indicating that the EMQX Enterprise Edition License update is successful. If the certificate information is not updated, you can wait for a while as there may be some delay in updating the License.
   ```bash
+  $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
   customer        : Evaluation
   email           : contact@emqx.io
   deployment      : default
@@ -109,3 +94,6 @@ EMQX Enterprise License can be applied for free on EMQ official website: [Apply 
   customer_type   : 10
   expiry          : false
   ```
+
+  The updated `max_connections` field clearly indicates that the EMQX Enterprise license has been updated successfully. Keep in mind that the license update may take time, so you may need to retry the command.
+

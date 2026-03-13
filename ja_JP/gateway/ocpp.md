@@ -2,7 +2,7 @@
 
 [OCPP](https://www.openchargealliance.org/)（Open Charge Point Protocol）は、充電ステーションと中央管理システムを接続するためのオープンな通信プロトコルであり、電気自動車充電インフラの統一された通信標準を提供することを目的としています。OCPPゲートウェイはプロトコル変換器として機能し、OCPPとMQTTプロトコル間の橋渡しを行い、これらのプロトコルを使用するクライアント同士の通信を可能にします。
 
-EMQXは[OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/)向けのプロトコルゲートウェイを追加しており、OCPP仕様に準拠したさまざまなブランドの充電設備と接続可能です。ルールエンジン、データ統合、REST APIなどを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
+EMQXは[OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6)向けのプロトコルゲートウェイを追加しており、OCPP仕様に準拠したさまざまなブランドの充電設備と接続可能です。ルールエンジン、データ統合、REST APIなどを通じて管理システム（Central System）と連携し、ユーザーが迅速に電気自動車充電インフラを構築できるよう支援します。
 
 本ページでは、EMQXにおけるOCPPゲートウェイの設定および利用方法を紹介します。
 
@@ -145,10 +145,10 @@ GatewaysページのOCPPゲートウェイの**Actions**列にある**Settings**
 - **Heartbeat Checking Times Backoff**：ハートビートチェックのバックオフ回数、初期値：`1`
 - **Message Format Checking**：メッセージフォーマットの妥当性チェックを有効にするかどうか。EMQXはアップロード／ダウンロードストリームのメッセージをjson-schemaで定義されたフォーマットと照合し、チェックに失敗した場合は対応する応答メッセージを返します。設定可能な値は以下の通りです。
 
-    - `all`：すべてのメッセージをチェック
+    - `disable`：チェックを行わない。デフォルト値。
     - `upstream_only`：アップロードストリームのメッセージのみチェック
     - `dnstream_only`：ダウンロードストリームのメッセージのみチェック
-    - `disable`：チェックを行わない
+    - `all`：すべてのメッセージをチェック
 - **JSON Schema Directory**：OCPPメッセージ定義のJSONスキーマディレクトリ、初期値：`${application}/priv/schemas`
 - **JSON Schema ID Prefix**：OCPPメッセージスキーマのIDプレフィックス、初期値：`urn:OCPP:1.6:2019:12:`
 - **Idle Timeout**：非アクティブ状態が続いた場合に接続を切断するまでの最大待機時間（秒）

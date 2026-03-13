@@ -2,6 +2,12 @@
 
 EMQX 支持手动创建集群，也支持通过多种方式自动集群。本页将为您介绍手动和自动集群方式并指导您使用这两种不同的方式创建并管理 EMQX 集群。
 
+::: tip 注意
+
+集群模式仅在具有有效 License 密钥时可用。
+
+:::
+
 ## 基本概念
 
 您可以在[分布式集群介绍](./introduction.md)和[部署架构](./mria-introduction.md)中了解 EMQX 集群的基础知识和工作方式。想要创建集群，您还需要熟悉以下概念：
@@ -97,7 +103,7 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
 
 :::: tabs type:card
 
-::: tab 手动集群示例
+::: tab 手动集群示例（命令）
 
 1. 创建一个 Docker 网络，用于节点间通信。处于同一网络下的容器可以通过容器名或网络别名相互访问：
 
@@ -138,6 +144,28 @@ EMQX_NODE__NAME='emqx@s1.emqx.io'
    docker exec -it emqx2 \
        emqx ctl cluster join emqx@node1.emqx.com
    ```
+
+:::
+
+::: tab 手动集群示例（Dashboard）
+
+从 EMQX v5.9.0 开始，您可以直接在 Dashboard 中创建集群：
+
+1. 确保所有节点均已启动，具有正确的 `name@host` 格式节点名称、相同的 cookie，并且节点之间网络互通。
+
+2. 访问任意一个节点的 **Dashboard**。
+
+3. 进入**管理 > MQTT 设置 > 集群**页面。
+
+4. （可选）在**集群描述**字段中添加集群的用途或环境说明，点击**保存**。
+
+   > 此功能从 **EMQX v6.0.0** 开始提供。
+
+5. 点击**邀请**，输入节点名称（如 `emqx@node2.emqx.com`），并确认。
+
+6. 被邀请的节点将在状态同步完成后加入集群。
+
+更多信息，请参见[集群设置](../../dashboard/cluster_settings.md#集群)。
 
 :::
 
@@ -246,7 +274,7 @@ Cluster status: #{running_nodes =>
    Cluster status: [{running_nodes,['emqx@node1.emqx.com','emqx@node2.emqx.com']}]
    ```
 
-从 EMQX v5.9.0 开始，你还可以通过 Dashboard 邀请节点创建集群，详情参考[集群](../../dashboard/cluster_settings.md#集群)。
+从 EMQX v5.9.0 起，您也可以通过 Dashboard 创建集群，更加直观易用，适用于不熟悉命令行的用户。详见：[集群设置](../../dashboard/cluster_settings.md#集群)。
 
 ## 自动集群
 

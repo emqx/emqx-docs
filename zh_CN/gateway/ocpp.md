@@ -2,7 +2,7 @@
 
 [OCPP](https://www.openchargealliance.org/) (Open Charge Point Protocol) 是一个连接充电桩与中央管理系统的开放通信协议，旨在为电动汽车充电基础设施提供统一的通信规范。OCPP 网关是一个消息协议转换器，它弥补了 OCPP 和 MQTT 协议之间的差距，因此使用这些协议的客户端能够相互通信。
 
-EMQX 新增了 [OCPP 1.6-J](https://www.openchargealliance.org/protocols/ocpp-16/) 版本的协议网关，能够接入符合 OCPP 规范的各品牌充电桩设备，并通过规则引擎与数据集成、REST API 等方式与管理系统（Central System）集成，帮助用户快速构建电动汽车充电基础设施。
+EMQX 新增了 [OCPP 1.6-J](https://openchargealliance.org/protocols/open-charge-point-protocol/#OCPP1.6) 版本的协议网关，能够接入符合 OCPP 规范的各品牌充电桩设备，并通过规则引擎与数据集成、REST API 等方式与管理系统（Central System）集成，帮助用户快速构建电动汽车充电基础设施。
 
 本页介绍了如何在 EMQX 中配置和使用 OCPP 网关。
 
@@ -145,10 +145,10 @@ curl -X 'PUT' 'http://127.0.0.1:18083/api/v5/gateways/ocpp' \
 - **心跳检查退避倍数**：网关以多少倍的心跳时间来启动心跳定时器, 默认：`1` 倍。
 
 - **消息格式检查**：是否启用消息格式合法性检查。OCPP 网关会将上行数据流和下行数据流的消息格式与 JSON Schema 中定义的格式进行检查。当检查失败时，OCPP 网关会回复相应的错误消息。检查策略可以是以下值之一：
-    - `all`：检查上下行所有消息。 
+    - `disable`：不检查任何消息。默认值。
     - `upstream_only`：仅检查上行消息。
     - `dnstream_only`：仅检查下行消息。
-    - `disable`：不检查任何消息。
+    - `all`：检查上下行所有消息。
 
 - **JSON Schema 文件目录**：配置存放 OCPP 消息的 JSON Schema 文件目录，默认值：`${application}/priv/schemas`。
 

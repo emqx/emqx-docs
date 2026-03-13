@@ -95,7 +95,7 @@ gateway.lwm2m {
 Configuring the gateway in `base.hocon` requires changes on a per-node basis, but configuring it via Dashboard or the REST API will take effect across the cluster.
 :::
 
-The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](../configuration/configuration-manual.html)
+The LwM2M gateway only supports UDP and DTLS type listeners, for a complete list of configurable parameters refer to: [Gateway Configuration - Listeners](https://docs.emqx.com/en/enterprise/v@EE_VERSION@/hocon/#V-gateway-S-gateway-lwm2m-S-lwm2m-listeners)
 
 
 ## Authentication

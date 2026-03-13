@@ -1,6 +1,6 @@
 # Connect via JavaScript SDK
 
-[MQTT.js](https://www.npmjs.com/package/mqtt) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.
+[MQTT.js](https://github.com/mqttjs/MQTT.js) is a module written in JavaScript that implements the MQTT protocol client function and can be used in browsers and Node.js environments.
 
 Due to the single-threaded nature of JavaScript, MQTT.js is a fully asynchronous MQTT client. MQTT.js supports MQTT and [MQTT over WebSocket](./mqtt-over-websocket.md). The support in different operating environments is as follows:
 

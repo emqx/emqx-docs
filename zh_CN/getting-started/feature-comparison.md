@@ -10,9 +10,9 @@
 | **MQTT over QUIC**     | ✅                                 | ✅                   | ✅               | 全球领先支持                                                 |
 | **MQTT 扩展**          | ✅                                 | ❌                   | ✅               | [共享订阅](../messaging/mqtt-shared-subscription.md)<br>[排他订阅](../messaging/mqtt-exclusive-subscription.md)<br>[延迟发布](../messaging/mqtt-delayed-publish.md)<br>[自动订阅](../messaging/mqtt-auto-subscription.md)<br>[主题重写](../messaging/mqtt-topic-rewrite.md)<br>更多个性化选项 |
 | **多协议网关**         | ✅                                 | ❌                   | ✅               | 更多行业设备接入                                             |
-| **多租户**             | ✅                                 | ❌                   | ✅               | 更高的系统灵活性和利用率（即将发布）                         |
+| **多租户**             | ✅                                 | ❌                   | ✅               | 更高的系统灵活性和利用率                                     |
 | **集群连接**           | ✅                                 | ❌                   | ✅               | 设备和应用数据的无缝连接                                     |
-| **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构（即将发布）                         |
+| **消息队列**           | ✅                                 | ❌                   | ✅               | 数据传输和分析的统一架构                                     |
 | **流处理**             | ✅                                 | ❌                   | ✅               | 更高的可靠性和灾难恢复能力<br>（即将发布）                   |
 | **数据持久化**         | ✅ 内置 RocksDB 数据库或外部数据库 | N/A                 | N/A             | [提高稳定性和可靠性](../durability/durability_introduction.md) |
 | **Schema Registry**    | ✅                                 | ❌                   | ✅               | [编解码](../data-integration/schema-registry.md)保证数据一致性和可兼容性 |
@@ -23,8 +23,8 @@
 | **文件传输**           | ✅                                 | ❌                   | ✅ 已规划        | 统一平台数据传输                                             |
 | **Kafka 集成**         | ✅                                 | ✅                   | ✅               | [将 MQTT 数据传输到 Apache Kafka](../data-integration/data-bridge-kafka.md) |
 | **企业级数据集成**     | ✅ 40+                             | ✅                   | ✅ 40+           | [提升业务开发和发布速度](https://www.emqx.com/zh/integrations) |
-| **故障排查**           | ✅                                 | ❌                   | ✅               | [日志追踪](../observability/tracer.md)<br>[慢订阅统计](https://docs.emqx.com/zh/emqx/latest/observability/slow-subscribers-statistics.html) |
-| **Cloud-Native & K8s** | ✅                                 | N/A                 | N/A             | [降低系统部署和管理成本](https://www.emqx.com/zh/deployments) |
+| **故障排查**           | ✅                                 | ❌                   | ✅               | [日志追踪 (Trace)](../observability/tracer.md)<br>[慢订阅统计](../observability/slow-subscribers-statistics.md) |
+| **Cloud-Native & K8s** | ✅                                 | N/A                 | N/A             | [降低系统部署和管理成本](../deploy/kubernetes/kubernetes.md) |
 | **边缘计算**           | ✅                                 | ✅                   | ✅               | 降低数据传输延迟和成本<br>[Neuron](https://www.emqx.com/zh/products/neuronex)<br>[NanoMQ](https://www.emqx.com/zh/products/nanomq) |
 
 ## 可扩展性与性能
@@ -82,23 +82,23 @@
 
 ## 安全
 
-| 安全性                                           | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                |
-| ------------------------------------------------ | --------------- | ------------------- | --------------- | ----------------------------------------- |
-| **TLS/SSL**                                      | ✅               | ✅                   | ✅               | 保护数据传输安全：TLS 1.1, 1.2, 1.3       |
-| **QUIC**                                         | ✅               | ❌                   | ✅               | 提升弱网及移动网络数据传输效率            |
-| **OCSP Stapling**                                | ✅               | ❌                   | ✅               | 提供更灵活的安全实践                      |
-| **连接抖动**                                     | ✅               | ✅                   | ✅ 规划中        | 检测并拦截频繁上下线的连接                |
-| **审计日志**                                     | ✅               | ✅                   | ✅               | 支持重要操作的审计追踪                    |
+| 安全性                                           | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                                   |
+| ------------------------------------------------ | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
+| **TLS/SSL**                                      | ✅               | ✅                   | ✅               | 保护数据传输安全：TLS 1.1, 1.2, 1.3                          |
+| **QUIC**                                         | ✅               | ❌                   | ✅               | 提升弱网及移动网络数据传输效率                               |
+| **OCSP Stapling**                                | ✅               | ❌                   | ✅               | 提供更灵活的安全实践                                         |
+| **连接抖动**                                     | ✅               | ✅                   | ✅ 规划中        | 检测并拦截频繁上下线的连接                                   |
+| **审计日志**                                     | ✅               | ✅                   | ✅               | 支持重要操作的审计追踪                                       |
 | **Dashboard 单点登录（SSO）**                    | ✅               | ✅                   | ✅               | [安全简便的认证流程](../dashboard/sso.md) |
-| **Dashboard/REST API 基于角色的访问控制 (RBAC)** | ✅               | ✅                   | ✅               | 最小化权限以确保系统安全                  |
+| **Dashboard/REST API 基于角色的访问控制 (RBAC)** | ✅               | ✅                   | ✅               | 最小化权限以确保系统安全                                     |
 
 ## 认证与授权
 
 | 认证与授权            | 自托管 (企业版) | 云服务 (Serverless)     | 云服务 (专有版) | 备注与链接                                                   |
 | --------------------- | --------------- | ----------------------- | --------------- | ------------------------------------------------------------ |
-| **用户名/密码**       | ✅               | ✅                       | ✅               | [密码认证](../access-control/authn/pwoverview.md)            |
-| **JWT**               | ✅               | ❌                       | ✅               | [JWT 认证](../access-control/authn/jwt.md)                   |
-| **MQTT 5.0 增强认证** | ✅               | N/A                     | N/A             | [MQTT 5.0 增强认证](../access-control/authn/scram.md)        |
+| **用户名/密码**       | ✅               | ✅                       | ✅               | [密码认证](../access-control/authn/pwoverview.md) |
+| **JWT**               | ✅               | ❌                       | ✅               | [JWT 认证](../access-control/authn/jwt.md) |
+| **MQTT 5.0 增强认证** | ✅               | N/A                     | N/A             | [MQTT 5.0 增强认证](../access-control/authn/scram.md) |
 | **LDAP**              | ✅               | ❌                       | ✅ 已规划        |                                                              |
 | **PSK 验证**          | ✅               | ❌                       | ✅               | [启用 PSK 认证](../network/psk-authentication.md#enable-psk-authentication) |
 | **X.509 证书**        | ✅               | ✅（由 EMQX Cloud 管理） | ✅               |                                                              |
@@ -144,6 +144,7 @@
 | **Syskeeper**                | ✅               | ❌                   | ✅               |
 | **TDengine**                 | ✅               | ❌                   | ✅               |
 | **TimeScaleDB**              | ✅               | ❌                   | ✅               |
+
 ## 规则引擎
 
 | 规则引擎              | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                                   |
@@ -164,14 +165,14 @@
 
 ## 可扩展性
 
-| 可扩展性         | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                       |
-| ---------------- | --------------- | ------------------- | --------------- | -------------------------------- |
-| **钩子**         | ✅               | N/A                 | N/A             | [钩子](../extensions/hooks.md)   |
+| 可扩展性         | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                                   |
+| ---------------- | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
+| **钩子**         | ✅               | N/A                 | N/A             | [钩子](../extensions/hooks.md) |
 | **插件**         | ✅               | N/A                 | N/A             | [插件](../extensions/plugins.md) |
-| **插件热加载**   | ✅               | N/A                 | N/A             |                                  |
-| **插件热配置**   | ✅               | N/A                 | N/A             |                                  |
-| **网关**         | ✅               | N/A                 | N/A             |                                  |
-| **ExHooks/gRPC** | ✅               | N/A                 | N/A             |                                  |
+| **插件热加载**   | ✅               | N/A                 | N/A             |                                                              |
+| **插件热配置**   | ✅               | N/A                 | N/A             |                                                              |
+| **网关**         | ✅               | N/A                 | N/A             |                                                              |
+| **ExHooks/gRPC** | ✅               | N/A                 | N/A             |                                                              |
 
 ## 可操作性
 
@@ -205,9 +206,8 @@
 
 | 云原生与 K8S            | 自托管 (企业版) | 云服务 (Serverless) | 云服务 (专有版) | 备注与链接                                                   |
 | ----------------------- | --------------- | ------------------- | --------------- | ------------------------------------------------------------ |
-| **Docker**              | ✅               | N/A                 | N/A             | [emqx - Official Image \| Docker Hub](https://hub.docker.com/_/emqx)<br>[Docker](https://hub.docker.com/r/emqx/emqx) |
+| **Docker**              | ✅               | N/A                 | N/A             | [Docker Hub](https://hub.docker.com/r/emqx/emqx-enterprise) |
 | **Kubernetes Operator** | ✅               | N/A                 | N/A             | [EMQX Kubernetes Operator](https://www.emqx.com/zh/emqx-kubernetes-operator) |
-| **Terraform**           | ✅               | N/A                 | N/A             | [EMQX Terraform](https://www.emqx.com/zh/emqx-terraform)     |
 
 ## 云平台支持
 

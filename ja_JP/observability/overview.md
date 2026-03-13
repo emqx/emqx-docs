@@ -22,7 +22,7 @@ EMQX は、システムの監視、管理、診断を支援する一連のオブ
 
   [Prometheus](https://prometheus.io/) は SoundCloud がオープンソースで提供する監視ソリューションで、多次元データモデルのサポート、柔軟なクエリ言語、強力なアラーム管理機能が特徴です。EMQX は Prometheus と統合してシステムメトリクスを収集し、`pushgateway` へメトリクスをプッシュすることをサポートしています。
 
-- [Datadog との統合](./datadog)
+- [Datadog との統合](./datadog.md)
 
   [Datadog](https://www.datadoghq.com/) はアプリケーション向けに統合されたリアルタイムのオブザーバビリティおよびセキュリティソリューションを提供するプラットフォームです。EMQX は Datadog との統合をサポートしており、EMQX の稼働状況の把握、システムパフォーマンス問題の監視・トラブルシューティング、Datadog コンソール上でのメトリクス表示を支援します。
 
