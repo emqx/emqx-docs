@@ -42,7 +42,20 @@
         },
         {
           "title": "Dashboard",
-          "path": "getting-started/dashboard-ee"
+          "children": [
+            {
+              "title": "Dashboard 概览",
+              "path": "getting-started/dashboard-ee"
+            },
+            {
+              "title": "Dashboard 用户与角色管理",
+              "path": "getting-started/dashboard-users"
+            },
+            {
+              "title": "Dashboard 多因素认证 (MFA)",
+              "path": "getting-started/dashboard-mfa"
+            }
+          ]
         }
       ]
     },
@@ -125,6 +138,10 @@
         {
           "title": "飞行窗口与消息队列",
           "path": "advanced/inflight-window-and-message-queue"
+        },
+        {
+          "title": "API 访问密钥权限管理",
+          "path": "advanced/api-key-permissions"
         }
       ]
     },
@@ -279,6 +296,10 @@
         {
           "title": "客户端标签管理",
           "path": "modules/client_tag"
+        },
+        {
+          "title": "SAML 2.0 单点登录",
+          "path": "modules/saml_sso"
         }
       ]
     },
@@ -822,7 +843,20 @@
         },
         {
           "title": "Dashboard",
-          "path": "getting-started/dashboard-ee"
+          "children": [
+            {
+              "title": "Dashboard Overview",
+              "path": "getting-started/dashboard-ee"
+            },
+            {
+              "title": "Dashboard Users and Roles",
+              "path": "getting-started/dashboard-users"
+            },
+            {
+              "title": "Dashboard Multi-Factor Authentication (MFA)",
+              "path": "getting-started/dashboard-mfa"
+            }
+          ]
         }
       ]
     },
@@ -905,6 +939,10 @@
         {
           "title": "Inflight and Queue",
           "path": "advanced/inflight-window-and-message-queue"
+        },
+        {
+          "title": "API Key Permissions",
+          "path": "advanced/api-key-permissions"
         }
       ]
     },
@@ -1051,6 +1089,10 @@
         {
           "title": "Username Quota",
           "path": "modules/username_quota"
+        },
+        {
+          "title": "SAML 2.0 Single Sign-On",
+          "path": "modules/saml_sso"
         }
       ]
     },
