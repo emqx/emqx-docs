@@ -1091,6 +1091,10 @@
           "path": "modules/username_quota"
         },
         {
+          "title": "Client Tag Management",
+          "path": "modules/client_tag"
+        },
+        {
           "title": "SAML 2.0 Single Sign-On",
           "path": "modules/saml_sso"
         }
