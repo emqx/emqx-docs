@@ -47,7 +47,7 @@
           path: get-started/faq
     - title_en: Technical Support
       title_cn: 技术支持
-      path: get-started/technical-support
+      path: get-started/support/technical-support
 - title_en: Quick Start
   title_cn: 快速开始
   path: get-started/getting-started
@@ -239,10 +239,10 @@
       title_cn: MQTT Advanced
       lang: en
       path: get-started/mqtt-advanced
-    - title_en: MQTT 教程
-      title_cn: MQTT 教程
-      lang: cn
-      path: https://www.emqx.com/zh/mqtt-guide
+- title_en: MQTT 教程
+  title_cn: MQTT 教程
+  lang: cn
+  path: https://www.emqx.com/zh/mqtt-guide
 
 /develop/:
 - title_en: Developer Guide
@@ -281,7 +281,7 @@
     - title_en: EMQX 企业版 API 文档
       title_cn: EMQX 企业版 API 文档
       lang: cn
-      ath: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
+      path: https://docs.emqx.com/en/enterprise/v${EE_MINOR_VERSION}/admin/api-docs.html
     - title_en: EMQX Open Source API Docs
       title_cn: EMQX Open Source API Docs
       lang: en
@@ -369,10 +369,10 @@
           path: develop/data-integration/elasticsearch
         - title_en: GCP PubSub
           title_cn: GCP PubSub
-          path: develp/data-integration/data-bridge-gcp-pubsub
+          path: develop/data-integration/data-bridge-gcp-pubsub
         - title_en: GreptimeDB
           title_cn: GreptimeDB
-          path: develp/data-integration/data-bridge-greptimedb
+          path: develop/data-integration/data-bridge-greptimedb
         - title_en: HStreamDB
           title_cn: HStreamDB
           path: develop/data-integration/data-bridge-hstreamdb
@@ -502,9 +502,9 @@
     - develop/durability_introduction
     - develop/design/inflight-window-and-message-queue
     - develop/design/retransmission
-- title_en: Reference
-  title_cn: 参考指南
-  path: introduction/reference
+- title_en: MQTT Reference
+  title_cn: MQTT 参考指南
+  path: develop/mqtt-reference
   collapsed: true
   children:
     - title_en: MQTT 5.0 Specification
@@ -638,7 +638,7 @@
           collapsed: true
           children:
             - operate/access-control/authn/mnesia
-            - opereate/access-control/authn/mysql
+            - operate/access-control/authn/mysql
             - operate/access-control/authn/mongodb
             - operate/access-control/authn/postgresql
             - operate/access-control/authn/redis
@@ -679,103 +679,94 @@
             - operate/sso-saml
             - operate/sso-oidc
     - operate/api-keys
-
-    
+    - operate/dashboard-security
+    - operate/audit-log
+    - operate/rate-limit
+    - operate/backup-restore
 - title_en: MQTT Durable Sessions
   title_cn: MQTT 会话持久化
-  collapsed: true
+  collapsed: false
   children:
-    - durability/management
-    - durability/managing-replication
+    - operate/durability/management
+    - operate/durability/managing-replication
 - title_en: EMQX Dashboard
   title_cn: EMQX Dashboard
-  path: dashboard/introduction
+  path: operate/dashboard/introduction
   collapsed: true
   children:
-    - dashboard/dashboard
+    - operate/dashboard/dashboard
     - title_en: Monitoring
       title_cn: 监控
-      path: dashboard/monitoring
+      path: operate/dashboard/monitoring
       children:
-        - dashboard/connections/connections
-        - dashboard/subscriptions/overview
-        - dashboard/retained
-        - dashboard/delay-pub
+        - operate/dashboard/connections
+        - operate/dashboard/subscription-management
+        - operate/dashboard/retained
+        - operate/dashboard/delay-pub
     - title_en: Access Control
       title_cn: 访问控制
-      path: dashboard/acloverview
+      path: operate/dashboard/acloverview
       children:
-        - dashboard/authn
-        - dashboard/authz
+        - operate/dashboard/authn
+        - operate/dashboard/authz
     - title_en: Integration
       title_cn: 集成
-      path: dashboard/bridgeoverview
+      path: operate/dashboard/data-integration
       children:
-        - dashboard/rules
+        - operate/dashboard/rules
     - title_en: Management
       title_cn: 管理
-      path: dashboard/configuration
+      path: operate/dashboard/configuration
       children:
-        - dashboard/cluster_settings
-        - dashboard/advanced_mqtt
-        - dashboard/extensions
-    - dashboard/diagnose
-    - dashboard/system
-    
-    - dashboard/audit-log
-    - title_en: Rate Limit
-      title_cn: 速率限制
-      path: rate-limit/rate-limit
-    - title_en: Logs and Observability
-      title_cn: 日志及可观测性
-      path: observability/overview
+        - operate/dashboard/cluster_settings
+        - operate/dashboard/advanced_mqtt
+        - operate/dashboard/extensions
+    - operate/dashboard/diagnose
+    - operate/dashboard/system
+- title_en: Logs and Observability
+  title_cn: 日志及可观测性
+  path: operate/observability/overview
+  collapsed: true
+  children:
+    - operate/observability/metrics-and-stats
+    - operate/observability/alarms
+    - operate/observability/log
+    - operate/observability/topic-metrics
+    - operate/observability/slow-subscribers-statistics
+    - operate/observability/tracer
+    - operate/observability/mqtt-system-topics
+    - operate/observability/prometheus
+    - operate/observability/datadog
+    - title_en: Integrate with OpenTelemetry
+      title_cn: 集成 OpenTelemetry
+      path: operate/observability/opentelemetry/opentelemetry
       collapsed: true
       children:
-        - observability/metrics-and-stats
-        - observability/alarms
-        - observability/log
-        - observability/topic-metrics
-        - observability/slow-subscribers-statistics
-        - observability/tracer
-        - observability/mqtt-system-topics
-        - observability/prometheus
-        - observability/datadog
-        - title_en: Integrate with OpenTelemetry
-          title_cn: 集成 OpenTelemetry
-          path: observability/opentelemetry/opentelemetry
-          collapsed: true
-          children:
-            - title_en: Metrics
-              title_cn: 指标
-              path: observability/opentelemetry/metrics
-            - title_en: Logs
-              title_cn: 日志
-              path: observability/opentelemetry/logs
-            - title_en: Traces
-              title_cn: 追踪
-              path: observability/opentelemetry/traces
-            - title_en: End-to-end Traces
-              title_cn: 端到端追踪
-              path: observability/opentelemetry/e2e-traces
-    - title_en: Backup and Restore
-      title_cn: 备份与恢复
-      path: operations/backup-restore
-    - title_en: Plugin and Extension
-      title_cn: 插件与扩展
-      path: extensions/introduction
-      collapsed: true
-      children:
-        - extensions/hooks
-        - extensions/plugins
-        # - extensions/lang-lua
-        - extensions/exhook
-    - title_en: Telemetry
-      title_cn: 遥测
-      path: telemetry/telemetry
+        - title_en: Metrics
+          title_cn: 指标
+          path: operate/observability/opentelemetry/metrics
+        - title_en: Logs
+          title_cn: 日志
+          path: operate/observability/opentelemetry/logs
+        - title_en: Traces
+          title_cn: 追踪
+          path: operate/observability/opentelemetry/traces
+        - title_en: End-to-end Traces
+          title_cn: 端到端追踪
+          path: operate/observability/opentelemetry/e2e-traces
+- title_en: Plugin and Extension
+  title_cn: 插件与扩展
+  path: operate/extensions/introduction
+  collapsed: true
+  children:
+    - operate/extensions/hooks
+    - operate/extensions/plugins
+    - operate/extensions/exhook
+- title_en: Telemetry
+  title_cn: 遥测
+  path: operate/telemetry/telemetry
 
-
-
-
+/release-notes/:
 -  title_en: Release Notes
    title_cn: 版本发布历史
    collapsed: true
@@ -783,61 +774,61 @@
        - title_en: Release Notes
          title_cn: 版本发布历史
          collapsed: true
-         path: changes/all-changes-ee
+         path: release-notes/all-changes-ee
          children:
-             - changes/changes-ee-v5
-             - changes/changes-ee-v4
+             - release-notes/changes-ee-v5
+             - release-notes/changes-ee-v4
              - title_en: Known Issues
                title_cn: 已知问题
                children:
-                   - changes/known-issues-5.8
-                   - changes/known-issues-5.3
-                   - changes/known-issues-5.1
+                   - release-notes/known-issues-5.8
+                   - release-notes/known-issues-5.3
+                   - release-notes/known-issues-5.1
              - title_en: Incompatible Changes
                title_cn: 不兼容变更
                collapsed: true
                children:
-                   - changes/breaking-changes-ee-5.8
-                   - changes/breaking-changes-ee-5.7
-                   - changes/breaking-changes-ee-5.6
-                   - changes/breaking-changes-ee-5.5
-                   - changes/breaking-changes-ee-5.4
+                   - release-notes/breaking-changes-ee-5.8
+                   - release-notes/breaking-changes-ee-5.7
+                   - release-notes/breaking-changes-ee-5.6
+                   - release-notes/breaking-changes-ee-5.5
+                   - release-notes/breaking-changes-ee-5.4
                    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
                      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-                     path: changes/breaking-changes-5.1.0
+                     path: release-notes/breaking-changes-5.1.0
                      collapsed: true
                      children:
-                         - changes/auth-4.4-to-5.1-compatibility
-                         - changes/data-integration-4.4-to-5.1-incompatibility
-                         - changes/gateway-4.4-to-5.1-incompatibility
+                         - release-notes/auth-4.4-to-5.1-compatibility
+                         - release-notes/data-integration-4.4-to-5.1-incompatibility
+                         - release-notes/gateway-4.4-to-5.1-incompatibility
              - title_en: End of Life Dates
                title_cn: 产品生命周期结束日期
-               path: changes/eol-ee
+               path: release-notes/eol-ee
        - title_en: EMQX Open Source Release Notes
          title_cn: EMQX 开源版版本发布历史
          collapsed: true
-         path: changes/all-changes-ce
+         path: release-notes/all-changes-ce
          children:
-             - changes/changes-ce-v5
-             - changes/changes-ce-v4
+             - release-notes/changes-ce-v5
+             - release-notes/changes-ce-v4
              - title_en: Version 0.1 to 3.x
                title_cn: v0.1-v3.x 版本
-               path: changes/changes-ce-v3
+               path: release-notes/changes-ce-v3
              - title_en: Incompatible Changes
                title_cn: 不兼容变更
                collapsed: true
                children:
-                   - changes/breaking-changes-ce-5.8
-                   - changes/breaking-changes-ce-5.7
-                   - changes/breaking-changes-ce-5.6
-                   - changes/breaking-changes-ce-5.5
-                   - changes/breaking-changes-ce-5.4
+                   - release-notes/breaking-changes-ce-5.8
+                   - release-notes/breaking-changes-ce-5.7
+                   - release-notes/breaking-changes-ce-5.6
+                   - release-notes/breaking-changes-ce-5.5
+                   - release-notes/breaking-changes-ce-5.4
                    - title_en: Incompatible Changes between EMQX 4.4 and EMQX 5.1
                      title_cn: 从 EMQX 4.4 到 EMQX 5.1 的不兼容变更
-                     path: changes/breaking-changes-5.1.0
+                     path: release-notes/breaking-changes-5.1.0
                      collapsed: true
                      children:
-                         - changes/auth-4.4-to-5.1-compatibility
-                         - changes/data-integration-4.4-to-5.1-incompatibility
-                         - changes/gateway-4.4-to-5.1-incompatibility
+                         - release-notes/auth-4.4-to-5.1-compatibility
+                         - release-notes/data-integration-4.4-to-5.1-incompatibility
+                         - release-notes/gateway-4.4-to-5.1-incompatibility
 
