@@ -111,7 +111,8 @@ with open(r'dir.yaml', encoding='utf-8') as file:
 
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
-    en = parse(all, 'en', EDITION)
-    cn = parse(all, 'cn', EDITION)
+    all_items = [item for section in all.values() for item in section]
+    en = parse(all_items, 'en', EDITION)
+    cn = parse(all_items, 'cn', EDITION)
     res ={'en': en, 'cn': cn}
     json.dump(res, sys.stdout, indent=2, ensure_ascii=False)
