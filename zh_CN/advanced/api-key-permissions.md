@@ -86,7 +86,9 @@ AppSecret 在 API 响应中明文可见（包括创建和查询接口）。请�
 
 ## 权限类别
 
-每个 API Key 对以下五个类别各有独立的布尔权限。将某类别设为 `true` 则允许访问对应接口，设为 `false` 则拒绝访问。
+每个 API Key 对以下五个类别各有独立的布尔权限。权限控制的是对应接口的**写入操作**（PUT、POST、DELETE）。**所有 API 的查询（GET）请求始终允许**，不受权限设置影响。
+
+将某类别设为 `true` 则允许该 Key 对对应接口执行写入操作，设为 `false` 则拒绝写入（GET 请求仍然允许）。
 
 | 类别 | 权限键 | 覆盖的接口 |
 |------|--------|-----------|
@@ -96,24 +98,26 @@ AppSecret 在 API 响应中明文可见（包括创建和查询接口）。请�
 | 插件 | `plugins` | `/api/v4/plugins/` |
 | 模块 | `modules` | `/api/v4/modules/`、`/api/v4/trace/`、`/api/v4/topic-metrics/`、`/api/v4/quota/`、`/api/v4/client_tags/` |
 
-新创建的 API Key 默认将所有五个类别设为 `false`，遵循最小权限原则。按需开启所需权限。
+新创建的 API Key 默认将所有五个类别设为 `false`，遵循最小权限原则。按需开启所需的写入权限。所有 Key 始终可以对任意接口执行查询（GET）操作。
 
 ### `fallback` 设置
 
-许多常用接口不属于上述五个命名类别，例如 `/api/v4/clients/`、`/api/v4/subscriptions/`、`/api/v4/stats/`、`/api/v4/metrics/` 和 `/api/v4/nodes/`。`fallback` 参数控制 Key 访问这些接口时的行为：
+许多常用接口不属于上述五个命名类别，例如 `/api/v4/clients/`、`/api/v4/subscriptions/`、`/api/v4/stats/`、`/api/v4/metrics/` 和 `/api/v4/nodes/`。`fallback` 参数控制 Key 对这些接口执行**写入操作**时的行为：
 
-- `false`（默认）：拒绝访问。
-- `true`：允许访问。
+- `false`（默认）：拒绝写入访问。
+- `true`：允许写入访问。
+
+无论 `fallback` 如何设置，对这些接口的查询（GET）请求始终允许。
 
 ::: tip
 
-大多数只读监控类接口（客户端、订阅、统计、指标、节点）均属于 `fallback` 管控的"未覆盖"类别。若需要 API Key 读取监控数据，请将 `fallback` 设为 `true`。
+大多数只读监控类接口（客户端、订阅、统计、指标、节点）均属于 `fallback` 管控的"未覆盖"类别。由于 GET 请求始终允许，无需将 `fallback` 设为 `true` 即可读取监控数据。只有当需要对未分类接口执行写入操作时，才需要开启 `fallback`。
 
 :::
 
 ## 兼容模式
 
-在权限系统引入之前创建的 API Key 会以兼容模式运行。兼容模式下的 Key 可访问所有 API，等同于所有类别设为 `true` 且 `fallback` 设为 `true`。
+在权限系统引入之前创建的 API Key 会以兼容模式运行。兼容模式下的 Key 拥有所有 API 的完整读写权限，等同于所有类别设为 `true` 且 `fallback` 设为 `true`。
 
 通过 API 响应中的 `compatibility_mode: true` 字段可以识别兼容模式 Key。
 
@@ -312,8 +316,8 @@ AppID 或 AppSecret 无效的请求返回 HTTP `401`。禁用（`status: false`�
 
 ## 安全建议
 
-- **最小权限原则：** 只授予 Key 实际所需的权限。仅管理规则引擎的 CI/CD 流水线只需开启 `rule_engine: true`，其余保持 `false`。
-- **谨慎管理 `fallback`：** 除非该 Key 明确需要访问客户端或统计等监控接口，否则将 `fallback` 保持为 `false`。
+- **最小权限原则：** 只授予 Key 实际所需的写入权限。仅管理规则引擎的 CI/CD 流水线只需开启 `rule_engine: true`，其余保持 `false`。所有 Key 始终可以对任意接口执行查询（GET）操作。
+- **谨慎管理 `fallback`：** 除非该 Key 明确需要对未分类接口执行写入操作，否则将 `fallback` 保持为 `false`。查询（GET）请求始终允许。
 - **设置过期时间：** 对临时 Key 或短期流水线 Key，通过 `expired` 字段设置到期时间。
 - **定期轮换密钥：** 定期删除并重建 Key，或通过更新接口更换 `secret`。
 - **引导文件用于初始化，API 用于日常管理：** 用引导文件创建初始管理 Key，后续所有 Key 通过 API 管理。

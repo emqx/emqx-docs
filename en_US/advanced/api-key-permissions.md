@@ -86,7 +86,9 @@ The AppSecret is visible in API responses (both creation and lookup). Store it s
 
 ## Permission Categories
 
-Each API Key has an independent boolean permission for each of the following categories. Setting a category to `true` allows the key to call the corresponding endpoints. Setting it to `false` denies access.
+Each API Key has an independent boolean permission for each of the following categories. The permission controls **write access** (PUT, POST, DELETE) to the corresponding endpoints. **Read (GET) access to all APIs is always allowed**, regardless of permission settings.
+
+Setting a category to `true` allows the key to call write operations on the corresponding endpoints. Setting it to `false` denies write operations (GET requests are still allowed).
 
 | Category | Permission Key | Endpoints Controlled |
 |----------|---------------|----------------------|
@@ -96,24 +98,26 @@ Each API Key has an independent boolean permission for each of the following cat
 | Plugins | `plugins` | `/api/v4/plugins/` |
 | Modules | `modules` | `/api/v4/modules/`, `/api/v4/trace/`, `/api/v4/topic-metrics/`, `/api/v4/quota/`, `/api/v4/client_tags/` |
 
-New API keys are created with all five categories set to `false` by default. This follows the principle of least privilege — you grant only what the key actually needs.
+New API keys are created with all five categories set to `false` by default. This follows the principle of least privilege — you grant write access only for what the key actually needs. All keys can always read (GET) from any endpoint.
 
 ### The `fallback` Setting
 
-Many commonly used endpoints — such as `/api/v4/clients/`, `/api/v4/subscriptions/`, `/api/v4/stats/`, `/api/v4/metrics/`, and `/api/v4/nodes/` — do not belong to any of the five named categories. The `fallback` setting controls what happens when a key tries to access these endpoints:
+Many commonly used endpoints — such as `/api/v4/clients/`, `/api/v4/subscriptions/`, `/api/v4/stats/`, `/api/v4/metrics/`, and `/api/v4/nodes/` — do not belong to any of the five named categories. The `fallback` setting controls **write access** when a key tries to call write operations on these endpoints:
 
-- `false` (default): Access is denied.
-- `true`: Access is allowed.
+- `false` (default): Write access is denied.
+- `true`: Write access is allowed.
+
+Read (GET) requests to these endpoints are always allowed regardless of the fallback setting.
 
 ::: tip
 
-Most read-only monitoring APIs (clients, subscriptions, stats, metrics, nodes) fall into the unrecognized category governed by `fallback`. To allow an API key to read monitoring data, set `fallback` to `true`.
+Most read-only monitoring APIs (clients, subscriptions, stats, metrics, nodes) fall into the unrecognized category governed by `fallback`. Since GET is always allowed, you can read monitoring data without setting `fallback` to `true`. Only set `fallback: true` if you need to make write operations on uncategorized APIs.
 
 :::
 
 ## Compatibility Mode
 
-API keys created before the permission system was introduced operate in compatibility mode. A compatibility mode key has full access to all APIs, equivalent to setting all categories to `true` and `fallback` to `true`.
+API keys created before the permission system was introduced operate in compatibility mode. A compatibility mode key has full read and write access to all APIs, equivalent to setting all categories to `true` and `fallback` to `true`.
 
 You can identify a compatibility mode key by the `compatibility_mode: true` field in its API response.
 
@@ -312,8 +316,8 @@ Requests with an invalid AppID or AppSecret return HTTP `401`. Requests using a 
 
 ## Security Recommendations
 
-- **Principle of least privilege:** Grant only the permissions a key actually needs. A CI/CD pipeline that only manages rules should have `rule_engine: true` and everything else `false`.
-- **Control `fallback` carefully:** Leave `fallback` as `false` unless the key specifically needs access to monitoring endpoints like clients or stats.
+- **Principle of least privilege:** Grant only the write permissions a key actually needs. A CI/CD pipeline that only manages rules should have `rule_engine: true` and everything else `false`. All keys can still read (GET) any endpoint.
+- **Control `fallback` carefully:** Leave `fallback` as `false` unless the key specifically needs write access to uncategorized endpoints. GET requests are always allowed regardless.
 - **Use expiration dates:** Set the `expired` field for temporary keys used in short-lived pipelines or test environments.
 - **Rotate secrets:** Delete and recreate keys periodically, or update them with a new `secret` value.
 - **Bootstrap for setup, API for operations:** Use the bootstrap file to create your initial management key, then manage all subsequent keys through the API.
