@@ -108,6 +108,7 @@
               collapsed: true
               children:
                 - deploy/kubernetes/operator/getting-started
+                - deploy/kubernetes/operator/upgrade-operator
                 - title_en: 在阿里云中部署 EMQX
                   title_cn: 在阿里云中部署 EMQX
                   title_ja: 在阿里云中部署 EMQX
@@ -292,6 +293,7 @@
       # - messaging/nanomq
       # - messaging/neuron
     - durability/durability_introduction
+    - connect-emqx/curl
     - title_en: Client SDK
       title_cn: 客户端 SDK
       title_ja: クライアント SDK
@@ -904,6 +906,7 @@
       children:
         - mqtt-stream/mqtt-stream-task
         - mqtt-stream/mqtt-stream-quick-start
+    - connect-emqx/mqtt-over-websocket
     - title_en: MQTT over QUIC
       title_cn: MQTT over QUIC
       title_ja: MQTT over QUIC
@@ -1237,6 +1240,7 @@
       title_cn: 已知问题
       title_ja: 既知の問題
       children:
+        - changes/known-issues-6.1
         - changes/known-issues-6.0
         - changes/known-issues-5.9
         - changes/known-issues-5.8

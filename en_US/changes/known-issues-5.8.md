@@ -1,12 +1,19 @@
 # Known Issues in EMQX 5.8
 
+## e5.8.9
+
+| Since version | Issue                                                        | Workaround                                                   | Status            |
+| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
+| 5.8.9 | **Cannot set static client IDs for MQTT connector from the Dashboard** | Set static client IDs for each node from the configuration file. |  |
+| 5.1.0         | **Replicant nodes may hang on startup when new core nodes are added to the cluster**<br />During cluster changes that involve adding new core nodes, the newly added cores may occasionally fail to start replication-related processes required by replicant nodes. This, in turn, caused upgraded or newly added replicant nodes to hang during startup.<br />In Kubernetes deployments, this led to the controller repeatedly restarting replicant pods due to failing readiness probes.<br />This problem typically occurs during upgrade rollouts, for example, when expanding an existing 2-core + 2-replicant cluster by adding two new core nodes and two new replicants running a newer EMQX version. | If one or more replicant nodes hang during startup after being (re)deployed, consider forcefully restarting the newly added core nodes one at a time until the replicants unblock and complete startup. | Fixed in 5.8.9 |
+
 ## e5.8.8
 
 | Since version | Issue                                                        | Workaround                                                   | Status            |
 | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ | ----------------- |
 | 5.8.0         | **Disabling Message Transformation or Schema Validation has no effect after deleting a preceding item**<br />If you delete a Message Transformation or Schema Validation entry and then disable any subsequent entry in the list, the entry remains enabled. | Run the following command on any EMQX node:<br />`$ emqx eval "begin ets:delete_all_objects(emqx_message_transformation_index), emqx_message_transformation_config:load() end."` | Resolved in 5.8.8 |
 | 5.8.1         | **External Schema Registries are not loaded after a node restart** | -                                                            | Resolved in 5.8.8 |
-| 5.7.0         | **Cluster Link garbage collection may remove active routes**<br />When multiple independent Cluster Links are configured and some links remain down for relatively long periods, the garbage collection process may mistakenly remove active routes from the internal routing table. This can cause affected Cluster Links to forward only a subset of messages or stop forwarding messages entirely. | -                                                            |                   |
+| 5.7.0         | **Cluster Link garbage collection may remove active routes**<br />When multiple independent Cluster Links are configured and some links remain down for relatively long periods, the garbage collection process may mistakenly remove active routes from the internal routing table. This can cause affected Cluster Links to forward only a subset of messages or stop forwarding messages entirely. | -                                                            | Fixed in 5.8.9, 6.1.0 |
 
 ## e5.8.6
 

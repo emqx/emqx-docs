@@ -88,6 +88,7 @@ D1 -->|发布消息| E[客户端]
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
 - [Datalayers](./data-bridge-datalayers.md)
+- [Timestream for InfluxDB](./timestream-for-influxdb.md)
 
 **SQL**
 

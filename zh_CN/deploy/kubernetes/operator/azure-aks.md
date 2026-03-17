@@ -24,7 +24,7 @@ EMQX Operator 支持在 Azure Kubernetes Service (AKS) 上部署 EMQX。AKS 通�
 1. 将其保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

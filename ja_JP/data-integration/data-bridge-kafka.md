@@ -212,7 +212,7 @@ EMQXでKafkaコネクターを作成する際、Kafkaクラスターのセキュ
 
 また、**Integration** -> **Flow Designer**をクリックするとトポロジーを確認できます。トポロジーでは、トピック`t/#`のメッセージがルール`my_rule`で解析されKafkaに送信・保存される様子が直感的に把握できます。
 
-![Kafka_producer_bridge](./assets/Kafka_producer_bridge.png)
+![kafka_producer_bridge](./assets/kafka_producer_bridge.png)
 
 ### Kafkaの動的トピック設定
 

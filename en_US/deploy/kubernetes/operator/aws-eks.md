@@ -34,7 +34,7 @@ The following example demonstrates the relevant EMQX Custom Resource (CR) config
    provisioner: ebs.csi.aws.com
    volumeBindingMode: WaitForFirstConsumer
    ---
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
      name: emqx

@@ -45,9 +45,7 @@ The `<DS>` placeholder stands for "durable storage".  Currently, the available p
 
 #### Database Groups Configuration
 
-Starting from EMQX 6.1, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance.
-
-Database groups enable multiple durable storage databases to be managed together with shared resource limits, without modifying their logical data models. This feature is primarily intended for operators and managed deployments.
+Starting from EMQX 6.0.2, Durable Storage introduces [database groups](../design/durable-storage.md/#durable-storage-database-groups) to support node-level resource governance. Database groups enable multiple durable storage databases to be managed together with shared resource limits, without modifying their logical data models.
 
 By default, each durable storage database belongs to a database group named after the database itself, and each such group contains only that single database, preserving the behavior of earlier releases.
 
@@ -253,17 +251,6 @@ The following REST API endpoints are available for managing and monitoring the b
 
 See EMQX OpenAPI schema for more information.
 
-### Database Group APIs
-
-In addition to replica management APIs, EMQX 6.1 introduces database-group-related APIs for operators and advanced tooling.
-
-- `POST /ds/db_groups`: Creates a new durable storage database group.
-- `PUT /ds/db_groups/:group`: Updates configuration of an existing database group (for example, storage quota).
-- `GET /ds/db_groups`: Lists all database groups.
-- `GET /ds/db_groups/:group`: Retrieves details and current resource usage of a database group.
-
-These APIs are intended for operator-level management and may not be exposed in all deployments.
-
 ## Metrics
 
 The following Prometheus metrics are relevant to durable sessions:
@@ -390,7 +377,7 @@ Counts the number of times the Raft server turned into a candidate / follower / 
 
 Frequent state changes are a sign of instability. Consider checking the logs for details.
 
-### Database Group Metrics (EMQX 6.1+)
+### Database Group Metrics
 
 The following Prometheus metrics provide node-level visibility into durable storage database groups:
 

@@ -86,59 +86,104 @@ python3 http_server.py
 1. 转到 Dashboard **集成** -> **连接器**页面。
 2. 点击页面右上角的**创建**。
 3. 在连接器类型中选择 **HTTP 服务**，点击**下一步**。
-4. 输入连接器名称，要求是大小写英文字母和数字的组合，这里我们输入 `my_httpserver`。
-5. URL 为 `http://localhost:5000`，其他使用默认值即可。
-6. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
-7. 在点击**创建**之前，您可以点击**测试连接**来测试连接器是否能连接到 HTTP 服务。
-8. 点击最下方**创建**按钮完成规则创建。
+4. 为连接器输入名称，名称应由大小写字母或数字组成，例如：`httpserver`。
+5. 将 **URL** 设置为 HTTP 服务器的地址。例如：`http://localhost:5000`。
+6. 保持其他设置为默认值。
+7. 高级配置（可选）：详细请参考 [Sink 的特性](./data-bridges.md#sink-的特性)。
+8. 在点击**创建**之前，可以点击**测试连接性**，验证连接器是否能成功连接到 HTTP 服务器。
+9. 点击**创建**完成连接器配置。
 
-至此您已经完成连接器创建，接下来将继续创建一条规则和 Sink 来指定需要写入的数据。
+连接器创建成功后，弹出一个对话框，询问是否使用此连接器创建规则。
+
+- 点击**创建规则**，直接进入规则创建页面并继续配置集成。
+- 或者，点击**返回连接器列表**，返回到连接器列表页面，稍后从**集成** -> **规则**中创建规则。
+
+在此示例中，点击**创建规则**继续。
 
 ## 创建 HTTP 服务 Sink 规则
 
-1. 转到 Dashboard **集成** -> **规则**页面。
-2. 点击页面右上角的**创建**。
-3. 输入规则 ID `my_rule`，在 SQL 编辑器中输入规则，此处选择将 `t/#` 主题的 MQTT 消息发送到 HTTP 服务，此处规则 SQL 如下：
+本节演示如何创建规则并配置 HTTP 服务器 Sink，将 MQTT 消息发送到 HTTP 服务器。
 
-  ```sql
-  SELECT 
-    *
-  FROM
-    "t/#"
-  ```
+点击**创建规则**后，您将自动进入**创建规则**页面，页面右侧的动作添加面板（用于配置 HTTP 服务器 Sink）会自动弹出，并且连接器已经准备好使用。
 
-4. 添加动作，从**动作类型**下拉列表中选择 HTTP 服务，保持动作下拉框为默认的“创建动作”选项，您也可以从动作下拉框中选择一个之前已经创建好的 HTTP 服务动作。此处我们创建一个全新的 Sink 并添加到规则中。
-5. 在下方的表单中输入 Sink 的名称与描述。
-6. 在**连接器**下拉框中选择刚刚创建的 `my-httpserver` 连接器。您也可以点击下拉框旁边的创建按钮，在弹出框中快捷创建新的连接器，所需的配置参数按照参照[创建连接器](#创建连接器)。
-7. 设置 URL 为 `http://localhost:5000`，请求方法选择 `POST`，其他使用默认值即可。
-8. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
-9. 点击**创建**按钮完成 Sink 的创建，创建成功后页面将回到创建规则，新的 Sink 将添加到规则动作中。
-10. 回到规则创建页面，点击**创建**按钮完成整个规则创建。
+1. **动作类型**和**动作**会自动填充为 `HTTP 服务` 和`创建动作`以创建一个全新的 Sink 并添加到规则中。
 
-现在您已成功创建了规则，你可以点击**集成** -> **规则**页面看到新建的规则，同时在**动作(Sink)** 标签页看到新建的 HTTP 服务 Sink。
+2. 输入 Sink 的名称与描述。**连接器**会自动填充为您之前创建的 `httpserver` 连接器。
 
-您也可以点击 **集成** -> **Flow 设计器**查看拓扑，通过拓扑可以直观的看到，主题 `t/#` 下的消息在经过规则 `my_rule` 解析后被发送到 HTTP 服务。
+3. 配置 HTTP 请求：
+
+   - **URL 路径**：`/`
+   - **请求方法**： `POST`
+
+   最终的请求 URL 会由连接器的 URL 和此路径组合而成。
+
+4. 配置**请求体**，以将 MQTT 消息数据发送到 HTTP 服务器：
+
+   ```json
+   {
+     "topic": "${topic}",
+     "payload": ${payload},
+     "clientid": "${clientid}",
+     "qos": ${qos},
+     "timestamp": ${timestamp}
+   }
+   ```
+
+5. **备选动作（可选）**：如果您希望在消息投递失败时提升系统的可靠性，可以为 Sink 配置一个或多个备选动作。当 Sink 无法成功处理消息时，这些备选动作将被触发。更多信息请参见：[备选动作](./data-bridges.md#备选动作)。
+
+6. 在点击**创建**之前，您可以点击**测试连接**，验证 Sink 是否可以连接到 HTTP 服务器。
+
+7. 点击**创建**完成 Sink 配置。新创建的 Sink 将出现在**创建规则**页面中规则的**动作输出**部分。
+
+8. 输入规则 ID，该 ID 可以由系统随机生成，也可以由您自定义（可选），例如：`my_rule`。
+
+9. 在 **SQL 编辑器**中，输入以下 SQL 语句：
+
+   ```sql
+   SELECT 
+     *
+   FROM
+     "t/#"
+   ```
+
+   此规则匹配所有发布到 `t/#` 下的 MQTT 消息。
+
+   ::: tip
+
+   如果你想指定自定义 SQL 语法，请确保在 `SELECT` 部分包含 Sink 所需的所有字段。
+
+   :::
+
+10. 点击**保存**完成规则创建。
+
+规则创建后，发布到 `t/#` 下的消息将由规则处理，并转发到配置的 HTTP 服务器。
+
+您还可以进入**集成** -> **Flow 设计器**来查看规则和 HTTP 服务器 Sink 的数据流拓扑。
 
 ## 测试规则
 
-使用 MQTTX 向 `t/1` 主题发布消息，此操作同时会触发上下线事件：
+1. 使用 MQTTX 向主题 `t/1` 发送一条消息，以触发上下线事件。
 
-```bash
-mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello HTTP Server" }'
-```
+   ```bash
+   mqttx pub -i emqx_c -t t/1 -m '{ "msg": "hello HTTP Server" }'
+   ```
 
-查看 HTTP 服务 Sink 运行统计，命中、发送成功次数均 +1。
+2. 转到 Dashboard 中的**规则**页面，点击规则名称查看其统计信息。指标应显示一条新的传入消息和一条新的传出消息，表示消息已成功被 HTTP 服务器 Sink 处理并转发。
 
-查看消息是否已经转发到 HTTP 服务：
+3. 验证 HTTP 服务器是否已接收到请求。
 
-```shell
-python3 http_server.py
- * Serving Flask app 'http_server' (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
- * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+   如果 Python HTTP 服务器正在运行，终端应显示类似以下内容：
 
-got post request:  b'hello HTTP Server'
-```
+   ```text
+   python3 http_server.py
+    * Serving Flask app 'http_server'
+    * Environment: production
+      WARNING: This is a development server. Do not use it in a production deployment.
+      Use a production WSGI server instead.
+    * Debug mode: off
+    * Running on http://127.0.0.1:5000 (Press CTRL+C to quit)
+   
+   got post request:  b'{"topic":"t/1","payload":{"msg":"hello HTTP Server"},"clientid":"emqx_c","qos":0,"timestamp":1700000000000}'
+   ```
+
+   打印的内容显示，EMQX 已将 MQTT 消息以 JSON 格式转发到 HTTP 服务器。请求体中的字段对应 Sink 请求体模板中配置的变量。

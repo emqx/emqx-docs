@@ -6,14 +6,14 @@
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EMQX 集群。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
+EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 字段配置 EMQX 集群。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
 
 EMQX 使用 [HOCON](../../../../configuration/configuration.md#hocon-配置格式) 作为配置文件格式。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署：
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
       name: emqx

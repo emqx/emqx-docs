@@ -6,11 +6,11 @@ This page provides a complete overview of the Message Queue feature in EMQX, cov
 
 ## What is a Message Queue?
 
-A Message Queue in EMQX is a durable, server-side buffer that holds MQTT messages independently of subscriber availability. Each queue is associated with a specific topic filter, and automatically stores all messages that match the filter during its lifetime. 
+A Message Queue in EMQX is a named, durable server-side buffer that stores MQTT messages independently of subscriber availability. Each queue is identified by a unique queue name, while its topic filter defines which published messages are enqueued (but does not serve as the queue’s identity). Messages matching the configured topic filter are automatically persisted according to the queue’s retention and dispatch policies.
 
-Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$q/{topic}` format.
+Unlike traditional MQTT behavior, Message Queues persist messages even when no clients are online. Clients can consume these messages by subscribing to the special `$queue/<name>` or `$queue/<name>/topic_filter>` format.
 
-<img src="./assets/message_queque_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
+<img src="./assets/message_queue_routing_overview.png" alt="message_queque_routing_overview" style="zoom:50%;" />
 
 ## Why Use Message Queue?
 
@@ -43,24 +43,60 @@ Message Queue extends the MQTT protocol in EMQX. It allows messages to be persis
 
 - **Queue Name**
   
-   An MQTT topic or topic filter that identifies the queue. Messages published to matching topics are automatically enqueued.
+   A unique identifier that explicitly identifies a Message Queue.
    
-- **Queue Declaration**
-  
-   The process of creating a durable queue and defining its behavior through configurable properties.
+   Queue names may contain only:
    
-- **Queue Deletion**
+   - Alphanumeric characters (`A–Z`, `a–z`, `0–9`)
+   - Underscores (`_`)
+   - Hyphens (`-`)
+   - Dots (`.`)
+   
+   ::: tip
+   
+   Starting from EMQX 6.1.1, queues are addressed by name, not by topic filter. The topic filter is part of the queue’s configuration, but does not define its identity.
+   
+   :::
+   
+- **Topic Filter**
   
-   The removal of a queue along with all its stored messages.
+   An MQTT topic filter, such as `devices/+/command`, that determines which published messages are written into a queue. Only messages whose topics match the configured filter are enqueued. A single published message may match multiple queues and therefore be written into multiple queues.
+   
+   ::: tip
+   
+   The topic filter is the configuration metadata of a named queue and cannot be modified after the queue creation.
+   
+   :::
+   
+- **Queue Subscription**
+  
+   A special MQTT subscription used to consume messages from a queue. Clients subscribe using one of the following formats:
+   
+   ```
+   SUBSCRIBE $queue/<name>
+   SUBSCRIBE $queue/<name>/<topic_filter>
+   ```
+   
+   Where:
+   
+   - `<name>` is the queue name (required).
+   - `<topic_filter>` is optional when subscribing to an existing queue.
+   - When auto-creation is enabled, `$queue/<name>/<topic_filter>` allows EMQX to create the queue using the provided topic filter if it does not already exist.
+   
+   Queue subscriptions operate independently of regular MQTT subscriptions and are handled by the Message Queue consumer mechanism.
    
 - **Last-Value Semantics**
   
    An optional feature enabled by setting a **Queue Key Expression** during queue declaration. When enabled, EMQX will extract the `queue key` from each message as it enters the queue. A new message with the same key will overwrite any existing unconsumed message in the queue with that key. This behavior is ideal for stateful messaging or configuration updates, where only the latest value matters and older messages can be safely discarded.
    
-- **Topic Prefix**
+- **Queue Declaration**
   
-   Queue subscriptions use the special `$q/{topic}` prefix to distinguish them from regular MQTT subscriptions.
+   The process of creating a durable queue and defining its behavior through configurable properties such as topic filter, dispatch strategy, retention limits, and optional key expression.
    
+- **Queue Deletion**
+
+   The removal of a queue along with all its stored messages and associated state.
+
 - **Queue Properties**
   
    Customizable settings that control queue behavior, such as message retention time and dispatch strategy.
@@ -103,12 +139,12 @@ The diagram below shows the data flow between major Message Queue components:
 
 ### Subscribing and Consuming Workflow
 
-1. A client subscribes to a topic.
+1. A client subscribes to a queue using `$queue/<name>` or `$queue/<name>/<topic_filter>`.
 2. An MQ hook is triggered to handle the subscription.
-3. If the topic is a message queue topic (`$q/some/topic`), the hook initializes the subscription in the client session context and establishes a connection to the Message Queue Consumer.
-4. If no consumer exists for the queue, a new Message Queue Consumer is started.
-5. The consumer restores message consumption progress and starts to fetch data from the message database.
-6. The consumer dispatches received messages to the subscriber client sessions based on the configured dispatch strategy.
+3. The hook resolves the queue by its name, initializes the subscription within the client session context, and establishes a connection to the Message Queue Consumer.
+4. If no consumer process exists for the queue, a new Message Queue Consumer is started.
+5. The consumer restores the message consumption progress and begins fetching data from the message database.
+6. The consumer dispatches received messages to the subscriber client sessions according to the configured dispatch strategy.
 7. The subscriber client sessions deliver the messages to the clients via standard MQTT mechanisms.
 
 ## Message Queue Core Features
@@ -116,24 +152,28 @@ The diagram below shows the data flow between major Message Queue components:
 The Message Queue feature in EMQX provides a set of core capabilities that enable reliable, decoupled, and configurable message delivery.
 
 - **Enqueueing Messages**
-  Messages published to topics matching a declared queue are automatically enqueued. 
-
+  
+  Messages published to topics matching a queue's configured topic filter are automatically enqueued. 
+  
   If the queue is configured with a Queue Key Expression (for last-value semantics), the EMQX evaluates the expression against each message:
-
+  
   - If a key is derived, it replaces any unconsumed message with the same key.
   - If a key fails to evaluate for a last-value queue, the message is discarded.
-
+  
 - **Dequeueing Messages**
-  Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 to ensure reliable message delivery. Acknowledgments (for QoS 1) trigger message removal from the queue.
-
+  
+  Subscribed clients receive messages from the queue according to the configured dispatch strategy. All messages in Message Queues are delivered with QoS 1 (at-least-once) to ensure reliable message delivery. When a client acknowledges a message, it is removed from the queue.
+  
 - **Dispatch Strategies**
+  
    You can define how messages are distributed across subscribers:
 
   - `random`: Distribute randomly.
   - `round_robin`: Rotate among available subscribers.
-  - `least_inflight`: Prefer subscribers with fewer in-progress messages.
-
+   - `least_inflight`: Prefer subscribers with fewer in-progress messages.
+  
 - **Queue Management**
+  
    Full queue lifecycle operations (create, update, delete, query) are available via REST APIs.
 
 ## Use Cases
@@ -153,6 +193,40 @@ Message Queue builds upon MQTT and complements other messaging features in EMQX:
 - [Retained Messages](../messaging/mqtt-retained-message.md): Stores the last known message for a topic, but only delivers one retained message per topic to new subscribers.
 - [MQTT Durable Sessions](../durability/durability_introduction.md): Preserves session state (subscriptions and QoS 1/2 messages) for individual clients across reconnects.
 - [Rule Engine](../data-integration/rules.md): Enables the filtering and processing of queued messages using SQL-like rules for further transformation or forwarding.
+
+## Compatibility Notes
+
+This section summarizes compatibility considerations introduced in EMQX 6.1.1.
+
+### Named Queues
+
+Starting from EMQX 6.1.1, all queues are explicitly named resources. Queue identity is based on a unique name, not a topic filter.
+
+### Legacy Queues
+
+Previously created unnamed queues are automatically assigned names derived from their topic filters.
+
+Derived name format:
+
+```
+/<topic_filter>
+```
+
+> This derived name preserves backward compatibility with existing `$q/<topic_filter>` subscriptions.
+
+### Deprecated Prefix
+
+The `$q` prefix remains supported for legacy subscriptions but is deprecated.
+
+New deployments should use:
+
+```
+$queue/<name>
+```
+
+### Shared Subscription Restriction
+
+If Message Queue is enabled, the `$queue/` prefix is reserved for queue subscriptions and cannot be used for shared subscriptions.
 
 ## Next Steps
 

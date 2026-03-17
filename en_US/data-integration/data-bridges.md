@@ -94,6 +94,7 @@ EMQX supports data integrations with the following types of data systems:
 - [OpenTSDB](./data-bridge-opents.md)
 - [TimescaleDB](./data-bridge-timescale.md)
 - [Datalayers](./data-bridge-datalayers.md)
+- [Timestream for InfluxDB](./timestream-for-influxdb.md)
 
 **SQL**
 
@@ -118,6 +119,7 @@ EMQX supports data integrations with the following types of data systems:
 - [Redis](./data-bridge-redis.md)
 - [TDengine](./data-bridge-tdengine.md)
 - [Elasticsearch](./elasticsearch.md)
+- [EMQX Tables](./emqx-tables.md)
 
 **Message Queue**
 

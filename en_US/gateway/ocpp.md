@@ -146,10 +146,10 @@ On the Gateways page, clicking the **Settings** button in the **Actions** column
 - **Heartbeat Checking Times Backoff**: The backoff for heartbeat checking times, default: `1`.
 - **Message Format Checking**: Whether to enable message format legality checking. EMQX checks the message format of the upload stream and download stream against the format defined in json-schema. When the check fails, EMQX will reply with a corresponding answer message. The checking strategy can be one of the following values:
 
-    - `all`: Check all messages.
+    - `disable`: Do not check any messages. Default value.
     - `upstream_only`: Check upload stream messages only.
     - `dnstream_only`: Check download stream messages only.
-    - `disable`: Do not check any messages.
+    - `all`: Check all messages.
 - **JSON Schema Directory**: JSON Schema directory for OCPP message definitions, default: `${application}/priv/schemas`.
 - **JSON Schema ID Prefix**: The ID prefix for the OCPP message schemas, default: `urn:OCPP:1.6:2019:12:`.
 - **Idle Timeout**: Set the maximum amount of time in seconds that the gateway will wait for an OCPP frame before closing the connection due to inactivity.

@@ -11,15 +11,15 @@
 
 ## 配置 EMQX 集群
 
-EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EMQX 集群 License。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
+EMQX CRD `apps.emqx.io/v2` 支持通过 `.spec.config.data` 字段配置 EMQX 集群 License。有关完整的配置参考，请参阅[配置手册](https://docs.emqx.com/zh/enterprise/v6.0.0/hocon/)。
 
 1. 将以下内容保存为 YAML 文件，并使用 `kubectl apply` 部署。
 
    ```yaml
-   apiVersion: apps.emqx.io/v2beta1
+   apiVersion: apps.emqx.io/v2
    kind: EMQX
    metadata:
-     name: emqx-ee
+     name: emqx
    spec:
      config:
        data: |
@@ -41,7 +41,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EM
 2. 等待 EMQX 集群就绪。使用 `kubectl get` 检查 EMQX 集群的状态，并确保 `STATUS` 为 `Ready`。这可能需要一些时间。
 
    ```bash
-   $ kubectl get emqx emqx-ee
+   $ kubectl get emqx emqx
    NAME   STATUS   AGE
    emqx   Ready    10m
    ```
@@ -51,7 +51,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EM
 1. 查看 License 信息。
 
    ```bash
-   $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
+   $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
    customer        : Evaluation
    email           : contact@emqx.io
    deployment      : default
@@ -68,7 +68,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EM
 2. 修改 EMQX CR 以更新 License。
 
    ```bash
-   $ kubectl edit emqx emqx-ee
+   $ kubectl edit emqx emqx
    ...
    spec:
      image: emqx/emqx:@EE_VERSION@
@@ -83,7 +83,7 @@ EMQX CRD `apps.emqx.io/v2beta1` 支持通过 `.spec.config.data` 字段配置 EM
 3. 验证 License 是否已更新。
 
    ```bash
-   $ kubectl exec -it service/emqx-ee-headless -c emqx -- emqx ctl license info
+   $ kubectl exec -it service/emqx-headless -c emqx -- emqx ctl license info
    customer        : Evaluation
    email           : contact@emqx.io
    deployment      : default
