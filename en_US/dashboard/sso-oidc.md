@@ -46,22 +46,22 @@ This section guides you on how to use Microsoft Entra ID as an Identity Provider
 
 1. On the configuration page, enter the following information:
    - **Provider**: Leave `Generic`.
-   
+
    - **Issuer URL**: This corresponds to **OpenID Connect metadata document**, which you can find in the **Endpoints** tab of application overview page in **Step 2**, but without `/.well-known/openid-configuration` part because EMQX adds this automatically, e.g.`https://login.microsoftonline.com/<tenant_id>/v2.0`, where `<tenant_id>` is your Directory (tenant) ID.
-   
+
    - **Client ID**: This corresponds to **Application (client) ID** found on the application overview page in **Step 2**.
-   
+
      <img src="./assets/entra_id_oidc_app_config.png" alt="entra_id_oidc_app_config" style="zoom:50%;" />
-   
+
    - **Client Secret**: Use the secret value generated in **Step 2**.
-   
+
    - **Dashboard Address**: Enter the base URL where users can access the Dashboard, such as `http://localhost:18083`. This address will be automatically combined to generate the **SSO Address** and **Metadata Address** for configuration on the IdP side.
-   
+
      <img src="./assets/entra_id_oidc_dashboard.png" alt="entra_id_oidc_dashboard" style="zoom:50%;" />
 
 2. Click **Update** to finish the configuration.
 
-## Configure SSO by Integrating with Okta 
+## Configure SSO by Integrating with Okta
 
 This section guides you on how to use Okta as an Identity Provider (IdP) and configure SSO. You need to complete configurations on both the Okta and EMQX Dashboard sides.
 
@@ -84,7 +84,7 @@ This section guides you on how to use Okta as an Identity Provider (IdP) and con
 
    - **Sign-in redirect URIs**: Enter the **Sign-in Redirect URI** provided in the Dashboard (on **OIDC Settings** page), such as `http://localhost:18083/api/v5/sso/oidc/callback`.
    - Additional settings are optional and can be configured according to your specific requirements.
-   
+
 6. Review the settings and click **Save**.
 
 For more detailed instructions, refer to the [Okta documentation](https://help.okta.com/en-us/content/topics/apps/apps_app_integration_wizard_oidc.htm).
@@ -108,6 +108,10 @@ The **Advanced Settings** section allows you to fine-tune how EMQX retrieves use
 | **Scopes**                           | The OIDC scopes requested during authentication. These scopes determine which user information the IdP returns. At minimum, the `openid` scope is required for OIDC authentication. | `openid`                                            |
 | **Name Variable**                    | A template used to map OIDC user attributes to the EMQX Dashboard username. The template can reference claims returned by the IdP. | `${sub}`                                            |
 | **Name Variable Source**             | Specifies the source from which the user information is extracted to construct the Dashboard username. Available options:<br />**User Info Endpoint**: Uses the user information returned from the `/userinfo` endpoint.<br />**ID Token**: Uses the claims contained in the ID token returned during authentication. | `User Info Endpoint`                                |
+| **Role Source**             | Specifies the source from which the user information is extracted to construct the Dashboard user's role. Available options:<br />**User Info Endpoint**: Uses the user information returned from the `/userinfo` endpoint.<br />**ID Token**: Uses the claims contained in the ID token returned during authentication. | `User Info Endpoint`                                |
+| **Role Expression**                    | A [`jq`](https://jqlang.org/manual/) program used to map OIDC user attributes to the EMQX Dashboard user role. The program can reference claims returned by the IdP. The expression must return exactly one string, which must be a valid role.  Current valid roles are: <br/> `"viewer"` <br/> `"administrator"` <br/> Any result that is not a single value out of the above will forbid the user from being created.  If not set, will create a viewer user, or retain the existing role, if the user exists. | unset                                            |
+| **Namespace Source**             | Specifies the source from which the user information is extracted to construct the Dashboard user's multi-tenancy namespace. Available options:<br />**User Info Endpoint**: Uses the user information returned from the `/userinfo` endpoint.<br />**ID Token**: Uses the claims contained in the ID token returned during authentication. | `User Info Endpoint`                                |
+| **Namespace Expression**                    | A [`jq`](https://jqlang.org/manual/) program used to map OIDC user attributes to the EMQX Dashboard user namespace. The program can reference claims returned by the IdP. The expression must return exactly one value, which must be either a string with the name of an existing namespace, or a `null` value, which represents the global namespace.  Any result other than the described above will forbid the user from being created.  If not set, will create a user in the global namespace or retain existing namespace, if the user exists. | unset                                            |
 | **Session Expiry**                   | The duration (in seconds) for which the Dashboard session remains valid after the user logs in via OIDC. | `30` seconds                                        |
 | **Enable PKCE**                      | Enables Proof Key for Code Exchange (PKCE) to enhance security for the authorization code flow. | Disabled                                            |
 | **Preferred Authentication Methods** | Defines the client authentication methods used when communicating with the token endpoint. Multiple methods can be configured and will be attempted in order. | `client_secret_post`, `client_secret_basic`, `none` |
