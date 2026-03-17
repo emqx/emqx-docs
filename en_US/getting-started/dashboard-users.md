@@ -1,6 +1,6 @@
 # Dashboard Users and Role Management
 
-EMQX Dashboard supports multi-user access with role-based access control (RBAC). Each Dashboard account is assigned a role that determines what it can view and modify. This page describes how to manage Dashboard users, roles, and authentication.
+EMQX Dashboard supports multi-user access with role-based access control (RBAC). Each Dashboard account is assigned a role that determines what it can view and modify. This page describes how to manage Dashboard users, roles, and REST API authentication.
 
 ![Users List](./assets/dashboard_users.png)
 
@@ -17,39 +17,9 @@ EMQX Dashboard has two built-in roles:
 The default `admin` account has the `administrator` role and cannot be deleted. Make sure to change its password before deploying in production.
 :::
 
-## Authentication Methods
-
-Dashboard users can authenticate against the REST API using two methods.
-
-### Basic Auth
-
-Pass the username and password in the `Authorization` header, encoded as Base64:
-
-```
-Authorization: Basic base64(username:password)
-```
-
-Example:
-
-```bash
-curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
-```
-
-### Bearer Token
-
-Obtain a JWT token from the login API (`POST /api/v4/auth`), then pass it in the `Authorization` header:
-
-```
-Authorization: Bearer <token>
-```
-
-The Dashboard UI authenticates with Basic Auth on initial login, then uses Bearer tokens for all subsequent API calls within the session.
-
-:::warning
-Bearer tokens are invalidated when you log out or when the user account is deleted. Store tokens securely and avoid embedding them in client-side code.
-:::
-
 ## User Management
+
+This section covers creating, viewing, updating, and deleting Dashboard users, and changing passwords. All operations require the `administrator` role and can be performed via the Dashboard or REST API.
 
 ### Create User
 
@@ -77,7 +47,7 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/users/" \
 | `password` | String | Yes | Password. Must be 8-64 characters and contain at least 2 of the following: letters, numbers, special characters. ASCII only. |
 | `role` | String | No | `administrator` or `viewer`. Defaults to `viewer`. |
 | `tags` | String | No | Optional description or label for the user. |
-| `enable_mfa` | Boolean | No | When set to `true`, the user will be prompted to set up MFA on their first login. |
+| `enable_mfa` | Boolean | No | When set to `true`, the user will be prompted to set up MFA on their first login. See [Dashboard MFA](./dashboard-mfa.md). |
 
 **Response:**
 
@@ -88,6 +58,10 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/users/" \
 ```
 
 ### List Users
+
+**Via Dashboard:**
+
+Click **Users** from the left navigation menu to view all Dashboard users and their roles.
 
 **Via API:**
 
@@ -126,6 +100,12 @@ curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
 
 Use this endpoint to update a user's role or description. You cannot update the username or password through this endpoint.
 
+**Via Dashboard:**
+
+1. Click **Users** from the left navigation menu.
+2. Click the **Edit** button for the target user.
+3. Update the role or description and click **Confirm**.
+
 **Via API:**
 
 ```bash
@@ -152,6 +132,12 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/users/newuser" \
 
 ### Delete User
 
+**Via Dashboard:**
+
+1. Click **Users** from the left navigation menu.
+2. Click the **Delete** button for the target user.
+3. Click **Confirm** in the confirmation dialog.
+
 **Via API:**
 
 ```bash
@@ -170,6 +156,12 @@ Deleting a user immediately removes their MFA configuration and invalidates all 
 ### Change Password
 
 Users can change their own password. Administrators can change the password for any user.
+
+**Via Dashboard:**
+
+1. Click **Users** from the left navigation menu.
+2. Click the **Edit** button for the target user.
+3. Enter the new password and click **Confirm**.
 
 **Via API:**
 
@@ -194,7 +186,9 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/change_pwd/newuser" \
 
 ## Login and Logout
 
-### Login
+The login response reflects the user's account state: it returns the assigned role on success, and varies when MFA has been configured for the account by an administrator.
+
+### Login and Obtain a Token
 
 **API:** `POST /api/v4/auth`
 
@@ -204,9 +198,7 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/auth" \
   -d '{"username":"admin","password":"public"}'
 ```
 
-The response varies depending on the user's MFA configuration:
-
-**No MFA configured:**
+**No MFA configured** — the response confirms the user's assigned role:
 
 ```json
 {
@@ -229,7 +221,7 @@ The response varies depending on the user's MFA configuration:
 }
 ```
 
-**MFA setup required (user has not yet configured MFA):**
+**MFA setup required (administrator has enabled MFA but user has not yet completed setup):**
 
 ```json
 {
@@ -241,9 +233,9 @@ The response varies depending on the user's MFA configuration:
 }
 ```
 
-When `mfa_required` or `mfa_setup_required` is returned, use the `mfa_state_token` to complete the MFA flow before accessing the Dashboard.
+When `mfa_required` or `mfa_setup_required` is returned, use the `mfa_state_token` to complete the MFA flow before accessing the Dashboard. See [Dashboard MFA](./dashboard-mfa.md) for the full setup and login flows.
 
-### Logout
+### Logout and Invalidate Tokens
 
 **API:** `DELETE /api/v4/auth`
 
@@ -254,7 +246,45 @@ curl -i -X DELETE "http://127.0.0.1:18083/api/v4/auth" \
   -H "Authorization: Bearer <token>"
 ```
 
-Logging out destroys all active tokens for the authenticated user.
+Logging out destroys all active tokens for the user. Deleting a user account has the same effect — all their active tokens are immediately invalidated.
+
+## Dashboard API Authentication
+
+This section covers how to authenticate requests to the **Dashboard API (port 18083)**. The Dashboard API uses Dashboard user credentials, and is used for the Dashboard web UI and API key management.
+
+:::tip
+For programmatic access to client management, rule engine, plugins, and other integration endpoints, use the **Management API (port 8081)** with API Keys. See [API Key Permissions](../advanced/api-key-permissions.md).
+:::
+
+Dashboard users can authenticate requests to the Dashboard API using two methods.
+
+### Basic Auth
+
+Pass the username and password in the `Authorization` header, encoded as Base64:
+
+```
+Authorization: Basic base64(username:password)
+```
+
+Example:
+
+```bash
+curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
+```
+
+### Bearer Token
+
+Obtain a JWT token from the login API (`POST /api/v4/auth`), then pass it in the `Authorization` header:
+
+```
+Authorization: Bearer <token>
+```
+
+The Dashboard UI authenticates with Basic Auth on initial login, then uses Bearer tokens for all subsequent API calls within the session.
+
+:::warning
+Bearer tokens are invalidated when you log out or when the user account is deleted. Store tokens securely and avoid embedding them in client-side code.
+:::
 
 ## SSO Users
 
@@ -279,3 +309,5 @@ To grant an SSO user administrator access, update their role via `PUT /api/v4/us
 | `/api/v4/users/:username` | PUT | Update a user |
 | `/api/v4/users/:username` | DELETE | Delete a user |
 | `/api/v4/change_pwd/:username` | PUT | Change a user's password |
+
+For MFA-related endpoints, see [Dashboard MFA — API Reference](./dashboard-mfa.md#api-reference).

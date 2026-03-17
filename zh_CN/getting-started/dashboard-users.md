@@ -1,6 +1,6 @@
 # Dashboard 用户与角色管理
 
-EMQX Dashboard 支持多用户访问，并提供基于角色的访问控制（RBAC）。每个 Dashboard 账户都会被分配一个角色，该角色决定了账户可以查看和修改的内容。本页介绍如何管理 Dashboard 用户、角色与认证方式。
+EMQX Dashboard 支持多用户访问，并提供基于角色的访问控制（RBAC）。每个 Dashboard 账户都会被分配一个角色，该角色决定了账户可以查看和修改的内容。本页介绍如何管理 Dashboard 用户、角色与 REST API 认证方式。
 
 ![用户列表](./assets/dashboard_users.png)
 
@@ -17,39 +17,9 @@ EMQX Dashboard 内置两种角色：
 默认账户 `admin` 拥有 `administrator` 角色，且无法被删除。在生产环境部署前，请务必修改其密码。
 :::
 
-## 认证方式
-
-Dashboard 用户可以通过以下两种方式对 REST API 进行认证。
-
-### Basic Auth（基础认证）
-
-将用户名和密码经 Base64 编码后放入 `Authorization` 请求头：
-
-```
-Authorization: Basic base64(username:password)
-```
-
-示例：
-
-```bash
-curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
-```
-
-### Bearer Token（令牌认证）
-
-通过登录 API（`POST /api/v4/auth`）获取 JWT 令牌，然后将其放入 `Authorization` 请求头：
-
-```
-Authorization: Bearer <token>
-```
-
-Dashboard 界面在初次登录时使用 Basic Auth，之后的所有 API 调用均使用 Bearer Token。
-
-:::warning
-注销登录或删除用户账户后，对应的 Bearer Token 将立即失效。请妥善保管令牌，避免将其嵌入客户端代码中。
-:::
-
 ## 用户管理
+
+本节介绍如何创建、查看、更新和删除 Dashboard 用户，以及如何修改用户密码。所有操作均支持通过 Dashboard 界面或 REST API 执行，且需要 `administrator` 角色。
 
 ### 创建用户
 
@@ -77,7 +47,7 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/users/" \
 | `password` | String | 是 | 密码，长度为 8-64 个字符，至少包含以下两种字符类型：字母、数字、特殊字符。仅支持 ASCII 字符。 |
 | `role` | String | 否 | `administrator` 或 `viewer`，默认为 `viewer`。 |
 | `tags` | String | 否 | 用户的可选描述信息。 |
-| `enable_mfa` | Boolean | 否 | 设置为 `true` 时，该用户在首次登录时将被要求配置 MFA。 |
+| `enable_mfa` | Boolean | 否 | 设置为 `true` 时，该用户在首次登录时将被要求配置 MFA。详见 [Dashboard 多因素认证](./dashboard-mfa.md)。 |
 
 **响应示例：**
 
@@ -88,6 +58,10 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/users/" \
 ```
 
 ### 查看用户列表
+
+**通过 Dashboard：**
+
+在左侧导航菜单中点击**用户**，即可查看所有 Dashboard 用户及其角色信息。
 
 **通过 API：**
 
@@ -126,6 +100,12 @@ curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
 
 此接口用于更新用户的角色或描述信息。不支持通过此接口修改用户名或密码。
 
+**通过 Dashboard：**
+
+1. 在左侧导航菜单中点击**用户**。
+2. 在用户列表中点击目标用户的**编辑**按钮。
+3. 修改角色或描述信息后点击**确认**。
+
 **通过 API：**
 
 ```bash
@@ -152,6 +132,12 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/users/newuser" \
 
 ### 删除用户
 
+**通过 Dashboard：**
+
+1. 在左侧导航菜单中点击**用户**。
+2. 在用户列表中点击目标用户的**删除**按钮。
+3. 在确认弹窗中点击**确认**。
+
 **通过 API：**
 
 ```bash
@@ -170,6 +156,12 @@ curl -i -X DELETE "http://127.0.0.1:18083/api/v4/users/newuser" \
 ### 修改密码
 
 用户可以修改自己的密码。管理员可以修改任意用户的密码。
+
+**通过 Dashboard：**
+
+1. 在左侧导航菜单中点击**用户**。
+2. 在用户列表中点击目标用户的**编辑**按钮。
+3. 填写新密码后点击**确认**。
 
 **通过 API：**
 
@@ -194,7 +186,9 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/change_pwd/newuser" \
 
 ## 登录与注销
 
-### 登录
+登录响应反映用户的账户状态：登录成功时返回该用户的角色，当管理员为账户配置了 MFA 时，响应内容会有所不同。
+
+### 登录并获取 Token
 
 **接口：** `POST /api/v4/auth`
 
@@ -241,9 +235,9 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/auth" \
 }
 ```
 
-当响应中包含 `mfa_required` 或 `mfa_setup_required` 时，需使用 `mfa_state_token` 完成 MFA 流程后，才能正常访问 Dashboard。
+当响应中包含 `mfa_required` 或 `mfa_setup_required` 时，需使用 `mfa_state_token` 完成 MFA 流程后，才能正常访问 Dashboard，详见 [Dashboard 多因素认证](./dashboard-mfa.md)。
 
-### 注销
+### 注销并使 Token 失效
 
 **接口：** `DELETE /api/v4/auth`
 
@@ -255,6 +249,44 @@ curl -i -X DELETE "http://127.0.0.1:18083/api/v4/auth" \
 ```
 
 注销后，该用户的所有有效 Token 将被销毁。
+
+## Dashboard API 认证方式
+
+本节介绍如何向 **Dashboard API（端口 18083）**发起认证请求。Dashboard API 使用 Dashboard 用户凭证进行认证，适用于 Dashboard Web 界面及 API Key 管理等操作。
+
+:::tip
+如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key 进行认证，详见 [API Key 权限管理](../advanced/api-key-permissions.md)。
+:::
+
+Dashboard 用户可以通过以下两种方式向 Dashboard API 发起认证请求。
+
+### Basic Auth（基础认证）
+
+将用户名和密码经 Base64 编码后放入 `Authorization` 请求头：
+
+```
+Authorization: Basic base64(username:password)
+```
+
+示例：
+
+```bash
+curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
+```
+
+### Bearer Token（令牌认证）
+
+通过登录 API（`POST /api/v4/auth`）获取 JWT 令牌，然后将其放入 `Authorization` 请求头：
+
+```
+Authorization: Bearer <token>
+```
+
+Dashboard 界面在初次登录时使用 Basic Auth，之后的所有 API 调用均使用 Bearer Token。
+
+:::warning
+注销登录或删除用户账户后，对应的 Bearer Token 将立即失效。请妥善保管令牌，避免将其嵌入客户端代码中。
+:::
 
 ## SSO 用户
 
@@ -279,3 +311,5 @@ curl -i -X DELETE "http://127.0.0.1:18083/api/v4/auth" \
 | `/api/v4/users/:username` | PUT | 更新用户 |
 | `/api/v4/users/:username` | DELETE | 删除用户 |
 | `/api/v4/change_pwd/:username` | PUT | 修改用户密码 |
+
+MFA 相关接口详见 [Dashboard 多因素认证 — API 参考](./dashboard-mfa.md#api-参考)。

@@ -10,7 +10,7 @@ MFA 兼容所有符合 TOTP 标准的认证应用，包括：
 
 认证应用中显示的发行方名称为 **EMQX**。
 
-管理员可以为单个用户启用 MFA，也可以通过 SAML 模块的 `force_mfa` 参数强制所有 SAML SSO 用户使用 MFA。
+管理员可以为单个用户启用 MFA，也可以通过 SAML 模块的 `force_mfa` 参数强制所有 SAML SSO 用户使用 MFA。用户账户的创建与管理详见 [Dashboard 用户与角色管理](./dashboard-users.md)。
 
 ## MFA 工作原理
 

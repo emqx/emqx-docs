@@ -40,7 +40,7 @@ MFA state tokens expire after 5 minutes. If the user does not complete the MFA s
 
 :::
 
-## Enabling MFA for a User
+## Enable MFA for a User
 
 Admins can enable MFA for any Dashboard user via the API.
 
@@ -234,7 +234,7 @@ curl -H "Authorization: Bearer <mfa_state_token>" \
 
 The `token` is the Dashboard session token for use in subsequent API calls.
 
-## Disabling MFA
+## Disable MFA
 
 Admins can disable MFA for any user. Once disabled, the user can log in with username and password alone.
 
@@ -263,7 +263,7 @@ Even when the SAML module has `force_mfa=true`, an admin can still disable MFA f
 
 :::
 
-## Resetting MFA Secret
+## Reset MFA Secret
 
 If a user loses access to their authenticator app, the admin can reset their MFA secret. This invalidates the old secret and forces the user through the setup flow again on their next login.
 
@@ -284,7 +284,7 @@ If an admin resets their own MFA secret, the response includes a new QR code URI
 
 If an admin resets another user's secret, the user is placed back in **Setup Required** state and must complete the setup flow on their next login.
 
-## Checking MFA Status
+## Check MFA Status
 
 Admins can query the MFA status of any user.
 
