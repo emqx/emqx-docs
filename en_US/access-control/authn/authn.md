@@ -189,8 +189,6 @@ EMQX currently supports the following placeholders:
 
 - `${peerhost}`: It will be replaced with the client's IP address at runtime. EMQX supports [Proxy Protocol](http://www.haproxy.org/download/1.8/doc/proxy-protocol.txt), that is, even if EMQX is deployed behind some TCP proxy or load balancer, users can still use this placeholder to get the real IP address.
 
-- `${peerport}`: It will be replaced with the client's IP port in runtime.
-
 - `${cert_subject}`: It will be replaced by the subject of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
 
 - `${cert_common_name}`: It will be replaced by the Common Name of the client's TLS certificate at runtime. If the load balancer sends client certificate information to the TCP listener, ensure that Proxy Protocol v2 is in use.
@@ -302,4 +300,3 @@ PUT /api/v5/authentication/password_based%3Abuilt_in_database
 For authentication using [built-in database](./mnesia.md) and [MQTT 5.0 enhanced authentication](./scram.md), EMQX provides HTTP API to manage authentication data, including the operations such as creating, updating, deleting, and listing data. For more information, see [Manage authentication data with HTTP API](./user_management.md).
 
 For more detailed API requests and parameters, see [HTTP API](../../admin/api.md).
-
