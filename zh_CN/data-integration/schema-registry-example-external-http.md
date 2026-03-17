@@ -108,7 +108,7 @@ flask --app myapp --debug run -h 0.0.0.0 -p 9500
 ### 在 EMQX 中创建 External HTTP Schema
 
 1. 进入 Dashboard，点击左侧导航栏的**数据智能中心** -> **Schema Registry**。
-2. 在到**内部 Schema** 标签页中，点击**创建**。
+2. 在**内部 Schema** 标签页中，点击**创建**。
 3. 使用以下参数创建外部 HTTP Schema：
    - **名称**：`myhttp`
    - **类型**：`外部 HTTP`
