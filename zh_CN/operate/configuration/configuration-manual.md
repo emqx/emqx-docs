@@ -153,7 +153,7 @@ emqxN@127.0.0.1</code>, N 是一个数字，那么监听端口就是 5370 + N。
   *默认值*: `5369`
 
   RPC 本地服务使用的监听SSL端口。<br/>
-只有当 rpc.port_discovery 设置为 manual 且 <code> dirver </code> 设置为 <code>ssl</code>，
+只有当 rpc.port_discovery 设置为 manual 且 <code> driver </code> 设置为 <code>ssl</code>，
 此配置才会生效。
 
 
