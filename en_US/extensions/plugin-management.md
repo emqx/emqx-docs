@@ -50,6 +50,26 @@ After installation, plugin configuration can be updated through the Dashboard or
 
 :::
 
+### Config File Locations
+
+There are two relevant config file locations:
+
+- Bundled default file inside the installed plugin package:
+  - Docker:
+    `/opt/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
+  - deb/rpm:
+    `/usr/lib/emqx/plugins/my_emqx_plugin-1.0.0/my_emqx_plugin-1.0.0/priv/config.hocon`
+
+- Persisted plugin config file managed by EMQX after config is saved via Dashboard or API:
+  - Docker:
+    `/opt/emqx/data/plugins/my_emqx_plugin/config.hocon`
+  - deb/rpm:
+    `/var/lib/emqx/plugins/my_emqx_plugin/config.hocon`
+
+The `priv/config.hocon` file is the packaged default template. The
+`data/plugins/.../config.hocon` file is the persisted plugin config location
+used after EMQX saves plugin config changes.
+
 ### Starting
 
 The plugin is started manually via the Dashboard, API, or CLI. Upon starting:
@@ -207,6 +227,39 @@ Suppose your plugin is already built and the tarball `my_emqx_plugin-1.0.0.tar.g
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/start"
    $ curl -s -u $KEY:$SECRET -X PUT "http://$EMQX_HOST:18083/api/v5/plugins/my_emqx_plugin-1.0.0/stop"
    ```
+
+### Pre-Install Plugins before EMQX Starts
+
+If you want a plugin to be available immediately when EMQX starts, for example, when building a custom Docker image, you can pre-install the plugin by extracting the package and configuring EMQX in advance.
+
+The following steps use a Dockerfile as an example, but the same approach applies to any deployment method (deb/rpm, bare metal, etc.):
+
+1. Copy and extract the plugin tarball into the plugins directory:
+
+   ```dockerfile
+   COPY --chown=emqx:emqx my_emqx_plugin-1.0.0.tar.gz /opt/emqx/plugins/my_emqx_plugin-1.0.0.tar.gz
+
+   RUN cd /opt/emqx/plugins && \
+       mkdir -p my_emqx_plugin-1.0.0 && \
+       tar zxf my_emqx_plugin-1.0.0.tar.gz -C my_emqx_plugin-1.0.0
+   ```
+
+2. Register the plugin in EMQX configuration so it is started automatically on boot. Append the following to the EMQX base config file:
+
+   ```dockerfile
+   RUN cat <<EOF >> /opt/emqx/etc/base.hocon
+   plugins {
+       states = [
+           {
+               name_vsn = "my_emqx_plugin-1.0.0"
+               enable = true
+           }
+       ]
+   }
+   EOF
+   ```
+
+   Set `enable = true` to start the plugin automatically, or `enable = false` to install it without starting.
 
 ## Upgrade Plugins
 
