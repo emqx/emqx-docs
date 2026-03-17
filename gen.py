@@ -95,7 +95,7 @@ def move_manual(lang, edition):
         lang = 'zh'
     baseDir = 'en_US' if lang == 'en' else 'zh_CN'
     source_path = f'cfg-manual-docgen/configuration-manual-{edition}-{lang}.md'
-    target_path = f'{baseDir}/configuration/configuration-manual.md'
+    target_path = f'{baseDir}/operate/configuration/configuration-manual.md'
     shutil.copyfile(source_path, target_path)
 
 with open(r'dir.yaml', encoding='utf-8') as file:
