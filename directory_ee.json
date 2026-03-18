@@ -138,10 +138,6 @@
         {
           "title": "飞行窗口与消息队列",
           "path": "advanced/inflight-window-and-message-queue"
-        },
-        {
-          "title": "API 访问密钥权限管理",
-          "path": "advanced/api-key-permissions"
         }
       ]
     },
@@ -643,7 +639,13 @@
     },
     {
       "title": "HTTP API",
-      "path": "advanced/http-api"
+      "path": "advanced/http-api",
+      "children":[
+        {
+          "title": "API 访问密钥",
+          "path": "advanced/api-key"
+        }
+      ]
     },
     {
       "title": "参数配置",
@@ -1428,7 +1430,13 @@
     },
     {
       "title": "HTTP API",
-      "path": "advanced/http-api"
+      "path": "advanced/http-api",
+      "children":[
+        {
+          "title": "API Key",
+          "path": "advanced/api-key"
+        }
+      ]
     },
     {
       "title": "Configuration",

@@ -1,8 +1,32 @@
-# API Key 权限管理
+# API Key
 
 EMQX Enterprise 提供管理 API（默认端口 8081），用于通过程序方式访问集群管理操作。API Key 由 AppID 和 AppSecret 组成，用于对管理 API 的请求进行认证。每个 Key 可以限定为只访问特定的 API 类别，从而精细控制每个集成应用或自动化工具的操作权限。
 
+本文介绍 API Key 的创建、权限控制、认证方式及管理接口。
+
 ![API Key 权限管理](./assets/api_key_permissions.png)
+
+## 快速开始
+
+本节展示 API Key 的基本使用流程，包括创建 API Key 并调用管理 API。
+
+1. 通过 Dashboard（18083 端口）创建 API Key：在左侧导航栏点击 **管理** -> **应用**，点击**添加应用**。
+
+2. 填写必要信息（如名称、权限等）并保存。记录生成的 AppID 和 AppSecret。
+
+3. 使用该 Key 调用管理 API（8081 端口）：
+
+   ```bash
+   curl -u <app_id>:<app_secret> "http://127.0.0.1:8081/api/v4/clients"
+   ```
+
+4. 按需通过[权限类别](#权限类别)配置该 Key 可以执行的写入操作。例如，仅允许访问规则引擎相关写操作：
+
+   ```json
+   {
+     "rule_engine": true
+   }
+   ```
 
 ## 管理 API 与 Dashboard API 的区别
 
@@ -17,33 +41,78 @@ EMQX 提供两套独立的 HTTP API 服务，各自有独立的认证体系：
 
 两套服务共享同一个 `/api/v4/` 路径命名空间，但认证体系完全独立。一套服务的凭证无法用于另一套服务。
 
-**重要提示：** API Key 管理接口（`/api/v4/apps/`）属于 **Dashboard API（18083 端口）**，而不是管理 API（8081 端口）。使用 Dashboard 用户凭证创建和管理 API Key。
+::: tip **重要提示** 
+
+API Key 管理接口（`/api/v4/apps/`）属于 **Dashboard API（18083 端口）**，必须使用 Dashboard 用户凭证访问。
+
+:::
+
+## 管理 API 的认证方式
+
+::: tip
+
+本节仅适用于管理 API（端口 `8081`）。
+
+Dashboard API（端口 `18083`）使用 Dashboard 用户名和密码进行认证，不支持 API Key。
+
+:::
+
+调用管理 API（端口 `8081`）时，必须使用 API Key 进行认证。
+
+API Key 由 `AppID` 和 `AppSecret` 组成，认证方式为 HTTP Basic Auth：
+
+```
+Authorization: Basic base64(AppID:AppSecret)
+```
+
+大多数 HTTP 客户端可通过 `-u` 参数自动设置认证信息：
+
+```bash
+curl -u my_app_id:my_app_secret "http://127.0.0.1:8081/api/v4/clients"
+```
+
+### 认证失败
+
+在以下情况下，请求将返回 HTTP `401`：
+
+- `AppID` 或 `AppSecret` 无效
+- API Key 已被禁用（`status: false`）
+- API Key 已过期
 
 ## 创建 API Key
 
-### 通过 Dashboard
+本节介绍如何创建用于访问管理 API 的 API Key，包括通过 Dashboard 和 API 两种方式。
 
-1. 在左侧导航栏中，点击 **管理**，再点击 **应用**（HTTP API）。
-2. 点击 **添加应用**。
-3. 填写各字段并配置所需权限。
-4. 点击 **确认** 保存。
+### 通过 Dashboard 创建
 
-### 通过 API
+1. 在左侧导航栏中，点击**管理**，再点击**应用**（HTTP API）。
+2. 点击**添加应用**。
+3. 填写各字段并配置所需权限。有关权限详情，见[权限模型](#权限模型)。
+4. 点击**确认**保存。
+
+### 通过 API 创建
 
 **接口：** `POST /api/v4/apps/`
 
+**说明：**
+
+- 使用 Dashboard API（端口 `18083`）
+- 使用 Dashboard 用户凭证认证
+
 **请求参数（JSON）：**
+
+字段含义与 Dashboard 中配置项一致。
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `app_id` | string | 是 | API Key 的唯一标识符 |
-| `name` | string | 否 | 显示名称 |
-| `secret` | string | 否 | 自定义密钥。不填则自动生成 |
-| `desc` | string | 否 | 描述信息 |
-| `status` | boolean | 否 | 是否启用。默认为 `true` |
-| `expired` | integer | 否 | 过期时间戳（Unix 秒）。不填则永不过期 |
-| `permissions` | object | 否 | 以类别名为键的权限映射。参见[权限类别](#权限类别) |
-| `fallback` | boolean | 否 | 未覆盖路径的默认行为。默认为 `false`（拒绝） |
+| `app_id` | string | 是 | API Key 的唯一标识符。 |
+| `name` | string | 否 | 显示名称。 |
+| `secret` | string | 否 | 自定义密钥。不填则自动生成。 |
+| `desc` | string | 否 | 描述信息。 |
+| `status` | boolean | 否 | 是否启用。默认为 `true`。 |
+| `expired` | integer | 否 | 过期时间戳（Unix 秒）。不填则永不过期。 |
+| `permissions` | object | 否 | 以类别名为键的权限映射，参见[权限类别](#权限类别)。 |
+| `fallback` | boolean | 否 | 未覆盖路径的默认行为。默认为 `false`（拒绝），参见 [`fallback` 设置](#fallback-设置)。 |
 
 **示例：**
 
@@ -78,21 +147,27 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/apps/" \
 }
 ```
 
-::: warning
+::: warning 注意
 
-AppSecret 在 API 响应中明文可见（包括创建和查询接口）。请妥善保管。`/api/v4/apps/` 接口仅可通过 Dashboard API（18083 端口）使用 Dashboard 用户凭证访问，不能通过 API Key 访问。
+AppSecret 在创建和查询接口中明文返回，请妥善保管。`/api/v4/apps/` 仅支持通过 Dashboard API 访问，不能使用 API Key 调用。
 
 :::
 
-## 权限类别
+## 权限模型
 
-每个 API Key 对以下五个类别各有独立的布尔权限。权限控制的是对应接口的**写入操作**（PUT、POST、DELETE）。**所有 API 的查询（GET）请求始终允许**，不受权限设置影响。
+API Key 权限控制的是对应接口的写入操作（`PUT`、`POST`、`DELETE`）。所有 API 的查询（`GET`）请求始终允许，不受权限设置影响。
+
+**新建 API Key 默认拒绝所有写操作，按需开启。**
+
+### 权限类别
+
+每个 API Key 对以下五个类别各有独立的布尔权限。
 
 将某类别设为 `true` 则允许该 Key 对对应接口执行写入操作，设为 `false` 则拒绝写入（GET 请求仍然允许）。
 
 | 类别 | 权限键 | 覆盖的接口 |
 |------|--------|-----------|
-| 黑名单 | `banned` | `/api/v4/banned/` — 客户端黑名单管理 |
+| 黑名单 | `banned` | `/api/v4/banned/` （客户端黑名单管理） |
 | 规则引擎 | `rule_engine` | `/api/v4/rules/`、`/api/v4/actions/`、`/api/v4/rule_events/` |
 | 资源 | `resources` | `/api/v4/resources/`、`/api/v4/resource_types/` |
 | 插件 | `plugins` | `/api/v4/plugins/` |
@@ -102,7 +177,15 @@ AppSecret 在 API 响应中明文可见（包括创建和查询接口）。请�
 
 ### `fallback` 设置
 
-许多常用接口不属于上述五个命名类别，例如 `/api/v4/clients/`、`/api/v4/subscriptions/`、`/api/v4/stats/`、`/api/v4/metrics/` 和 `/api/v4/nodes/`。`fallback` 参数控制 Key 对这些接口执行**写入操作**时的行为：
+许多常用接口不属于上述五个命名类别，例如：
+
+- `/api/v4/clients/`
+- `/api/v4/subscriptions/`
+- `/api/v4/stats/`
+- `/api/v4/metrics/`
+- `/api/v4/nodes/`
+
+`fallback` 参数控制 Key 对这些接口执行**写入操作**时的行为：
 
 - `false`（默认）：拒绝写入访问。
 - `true`：允许写入访问。
@@ -115,21 +198,37 @@ AppSecret 在 API 响应中明文可见（包括创建和查询接口）。请�
 
 :::
 
-## 兼容模式
+### 兼容模式
 
 在权限系统引入之前创建的 API Key 会以兼容模式运行。兼容模式下的 Key 拥有所有 API 的完整读写权限，等同于所有类别设为 `true` 且 `fallback` 设为 `true`。
 
-通过 API 响应中的 `compatibility_mode: true` 字段可以识别兼容模式 Key。
+#### 识别方式
+
+通过 API 响应中的 `compatibility_mode` 字段可以识别兼容模式 Key。
+
+```json
+"compatibility_mode": true
+```
+
+#### 退出兼容模式
 
 若要对兼容模式 Key 应用权限限制，只需通过更新接口传入显式的 `permissions` 对象。此操作会退出兼容模式，并按照指定权限运行。
 
-::: warning
+```json
+{
+  "permissions": { ... }
+}
+```
+
+::: warning 注意
 
 将兼容模式 Key 更新为指定 `permissions` 后，模式转换不可逆。退出兼容模式后，该 Key 将在正常权限体系下运行。
 
 :::
 
 ## 管理 API Key
+
+本节介绍 API Key 的管理接口，包括列出、查询、更新和删除等操作。
 
 ### 列出所有 Key
 
@@ -212,7 +311,7 @@ curl -u admin:public "http://127.0.0.1:18083/api/v4/apps/my_automation"
 
 可以独立更新 `name`、`desc`、`status`、`expired`、`permissions` 和 `fallback`。请求体中只包含需要修改的字段。
 
-**示例 — 禁用 Key：**
+**禁用 Key 示例：**
 
 ```bash
 curl -i -X PUT "http://127.0.0.1:18083/api/v4/apps/my_automation" \
@@ -221,7 +320,7 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/apps/my_automation" \
   -d '{"status": false}'
 ```
 
-**示例 — 仅更新权限：**
+**仅更新权限示例：**
 
 ```bash
 curl -i -X PUT "http://127.0.0.1:18083/api/v4/apps/my_automation" \
@@ -259,9 +358,9 @@ curl -i -X DELETE "http://127.0.0.1:18083/api/v4/apps/my_automation" \
 {"code": 0}
 ```
 
-## 引导文件（Bootstrap File）
+## 使用引导文件预配置 API Key
 
-可以在 EMQX 启动之前通过引导文件预配置 API Key。这对于初始部署或容器化环境尤为实用，在任何 API 调用可用之前就能确保凭证已就绪。
+可以在 EMQX 启动之前通过引导文件（Bootstrap File）预配置 API Key。这对于初始部署或容器化环境尤为实用，在任何 API 调用可用之前就能确保凭证已就绪。
 
 **配置方式：**
 
@@ -287,22 +386,6 @@ another_app:another_secret
 建议使用引导文件创建初始管理 Key，用于管理其他 API Key。启动后再通过该管理 Key 创建权限受限的 Key 供各集成服务使用。
 
 :::
-
-## 认证方式
-
-所有管理 API 请求均需 HTTP Basic 认证：
-
-```
-Authorization: Basic base64(AppID:AppSecret)
-```
-
-大多数 HTTP 客户端通过 `-u` 参数自动处理：
-
-```bash
-curl -u my_app_id:my_app_secret "http://127.0.0.1:8081/api/v4/clients"
-```
-
-AppID 或 AppSecret 无效的请求返回 HTTP `401`。禁用（`status: false`）或已过期的 Key 同样返回 `401`。
 
 ## API 接口汇总
 

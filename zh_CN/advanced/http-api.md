@@ -4,10 +4,11 @@ EMQX 提供了 HTTP API 以实现与外部系统的集成，例如查询客户�
 
 EMQX 的 HTTP API 服务默认监听 8081 端口，可通过 `etc/plugins/emqx_management.conf` 配置文件修改监听端口，或启用 HTTPS 监听。[EMQX 4.0.0](https://github.com/emqx/emqx/releases/tag/v4.0.0) 以后的所有 API 调用均以 `api/v4` 开头。
 
-## 接口安全
+## API 认证
 
-EMQX 的 HTTP API 使用 [Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication) 方式，`id` 和 `password` 须分别填写 AppID 和 AppSecret。
-默认的 AppID 和 AppSecret 是：`admin/public`。你可以在 Dashboard 的左侧菜单栏里，选择 "管理" -> "应用" 来修改和添加 AppID/AppSecret。
+EMQX 的 HTTP API（端口 8081）使用 [HTTP Basic 认证](https://en.wikipedia.org/wiki/Basic_access_authentication)，需使用 API Key 的 AppID 和 AppSecret 作为认证凭据。默认的 AppID 和 AppSecret 为 `admin/public`。
+
+每个 API Key 可以独立配置对各类接口的写入权限，遵循最小权限原则。关于 API Key 的创建、权限配置和管理，请参阅 [API Key](./api-key.md)。
 
 ## 响应码
 
