@@ -2,8 +2,6 @@
 
 EMQX Dashboard 支持多用户访问，并提供基于角色的访问控制（RBAC）。每个 Dashboard 账户都会被分配一个角色，该角色决定了账户可以查看和修改的内容。本页介绍如何通过 Dashboard 界面和 API 两种方式管理 Dashboard 用户与角色。
 
-![用户列表](./assets/dashboard_users.png)
-
 ## 角色说明
 
 EMQX Dashboard 内置两种角色：
@@ -22,7 +20,7 @@ EMQX Dashboard 内置两种角色：
 Dashboard 用户凭证（用户名和密码）可直接用于调用 Dashboard API（端口 18083），适用于需要程序化操作 Dashboard 的场景，例如自动化用户管理或 API Key 管理。
 
 :::tip
-如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key，详见 [API Key](../advanced/api-key-permission.md)。
+如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key，详见 [API Key](../advanced/api-key.md)。
 :::
 
 D支持以下两种认证方式：
