@@ -4,13 +4,13 @@ EMQX Enterprise provides a Management API (port 8081 by default) for programmati
 
 This page covers how to create API Keys, configure permissions, authenticate requests, and manage keys through the API.
 
-![API Keys](./assets/api_key_permissions.png)
+![API Keys](./assets/api_key.png)
 
 ## Quick Start
 
 This section walks through the basic flow: create an API Key and use it to call the Management API.
 
-1. Create an API Key via the Dashboard (port 18083): in the left navigation panel, click **Manage** -> **Apps**, then click **Add App**.
+1. Create an API Key via the Dashboard (port 18083): in the left navigation panel, click **Manage** -> **Application**, then click **Create**.
 
 2. Fill in the required fields (name, permissions, etc.) and save. Record the generated AppID and AppSecret.
 

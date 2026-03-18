@@ -56,9 +56,7 @@ curl -H "Authorization: Bearer <token>" \
   "http://127.0.0.1:18083/api/v4/users/"
 ```
 
-获取 Bearer Token 的完整流程详见 [Dashboard 多因素认证](./dashboard-mfa.md)。
-
-:::warning
+:::warning 注意
 注销登录或删除用户账户后，对应的 Bearer Token 将立即失效。请妥善保管令牌，避免将其嵌入客户端代码中。
 :::
 
@@ -73,9 +71,14 @@ curl -H "Authorization: Bearer <token>" \
 **通过 Dashboard：**
 
 1. 在左侧导航菜单中点击**用户**。
+
 2. 点击**添加用户**。
+
 3. 填写用户名、密码、角色及可选描述。
+
 4. 点击**确认**。
+
+   ![create_user](./assets/create_user.png)
 
 **通过 API：**
 

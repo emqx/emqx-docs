@@ -12,6 +12,14 @@ MFA 兼容所有符合 TOTP 标准的认证应用，包括：
 
 管理员可以为单个用户启用 MFA，也可以通过 SAML 模块的 `force_mfa` 参数强制所有 SAML SSO 用户使用 MFA。用户账户的创建与管理详见 [Dashboard 用户与角色管理](./dashboard-users.md)。
 
+本页同时从管理员和用户的角度出发解释了如何为 EMQX Dashboard 设置和使用 MFA。
+
+## 关键概念
+
+- **MFA**：一种安全功能，要求提供两种身份验证方式：用户的密码和第二种因素，如由身份验证器应用生成的TOTP。
+- **TOTP**：由身份验证应用程序（如 Google Authenticator）生成的临时验证码，基于应用程序与服务器之间共享的密钥。
+- **二维码**：共享密钥的图形表示，可以通过身份验证应用程序扫描以简化设置过程。
+
 ## MFA 工作原理
 
 EMQX Dashboard 的 MFA 遵循状态机模型。每个用户的 MFA 状态按以下路径流转：
@@ -40,9 +48,57 @@ MFA 状态令牌 5 分钟后过期。若用户未在此时间窗口内完成 MFA
 
 :::
 
-## 为用户启用 MFA
+## 启用和配置 MFA
 
-管理员可通过 API 为任意 Dashboard 用户启用 MFA。
+MFA 默认为禁用状态。要为用户启用 MFA，管理员必须配置系统以支持 MFA，并为各个用户设置它。只有具有管理员权限的用户才能为其他用户启用或禁用 MFA。
+
+### 通过 EMQX Dashboard 启用 MFA
+
+管理员可以直接通过 Dashboard 启用 MFA，步骤如下：
+
+1. 在 Dashboard 中，点击左侧菜单的**通用** -> **用户**。
+2. 在**用户**页面中，您将看到一个用户列表。点击您要为其启用 MFA 的用户旁边的 **MFA 设置**。
+3. 在 **MFA 设置**对话框中，点击**启用 MFA** 为所选用户启用 MFA。
+
+启用后，用户将在下次登录时需要完成 MFA 设置过程。
+
+::: tip 提示
+
+如果您通过 Dashboard 为自己的账户启用 MFA，系统会在当前会话中立即提示您完成 MFA 设置（参见[首次设置](#首次设置)）。
+
+如果管理员为其他用户启用 MFA，MFA 绑定步骤将延后至该用户下次登录时进行。
+
+:::
+
+### 重置 TOTP 密钥
+
+设置了 MFA 后，如果用户需要重置其 TOTP 设置（例如，如果身份验证应用程序被卸载或密钥被泄露），管理员可以通过 **MFA 设置**对话框重置该用户的 TOTP 密钥。
+
+1. 在**通用** -> **用户**页面中，找到您要重置 TOTP 密钥的用户。点击该用户旁边的 **MFA 设置**。
+
+2. 在 **MFA 设置**对话框中，您将看到**重置 TOTP 密钥**按钮。点击该按钮将启动重置过程。
+
+   ![reset_totp](./assets/reset_totp.png)
+
+   会出现一个确认提示，通知您重置密钥将使之前的密钥无效。用户将在下次登录时需要设置一个新的 TOTP 密钥。
+
+3. 点击**确定**以继续重置。重置后，用户将在下次登录时需要遵循首次 MFA 设置过程（扫描新的二维码或将新密钥输入到身份验证应用程序中）。
+
+### 通过 REST API 启用和管理 MFA
+
+管理员可以通过 REST API 启用或管理用户的 MFA。
+
+::: tip
+
+在 `/users/{username}/mfa` 端点上使用 POST 和 DELETE 方法时，仅管理员或当前身份验证令牌（即 “Bearer token”）的所有者可以使用此接口。也就是说，具有“查看者”角色的用户无法修改其他用户的 MFA 设置。只有与当前身份验证令牌关联的用户（“Bearer token” 拥有者）才能修改自己的 MFA 设置。
+
+有关基于角色的访问控制（RBAC）的更多信息，请参见[角色说明](./dashboard-users.md)。
+
+:::
+
+#### 启用特定用户的 MFA
+
+要为特定用户启用 MFA，管理员可以向 `/users/{username}/mfa` API 端点发送 POST 请求：
 
 **请求：**
 
@@ -77,170 +133,17 @@ curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/enabl
 
 :::
 
-## MFA 设置流程
+#### 停用特定用户的 MFA
 
-当用户的 MFA 状态为**需要设置**时，下次登录将引导其完成一次性设置流程。
+管理员可为任意用户禁用 MFA。禁用后，用户只需使用用户名和密码即可登录。管理员可以向 `/users/{username}/mfa` API 端点发送 DELETE 请求。
 
-### 第一步：使用用户名和密码登录
-
-用户向标准登录接口提交凭据。
-
-```bash
-POST /api/v4/auth
-```
-
-```bash
-curl -u alice:password -X POST http://localhost:18083/api/v4/auth
-```
-
-由于需要设置 MFA，服务端不会返回会话令牌，而是返回设置标志和短期有效的 MFA 状态令牌。
-
-```json
-{
-  "code": 0,
-  "data": {
-    "mfa_setup_required": true,
-    "mfa_state_token": "<mfa_state_token>"
-  }
-}
-```
-
-### 第二步：获取 QR 码
-
-用户以 MFA 状态令牌作为 Bearer 令牌调用设置接口。
-
-```bash
-POST /api/v4/mfa/setup
-Authorization: Bearer <mfa_state_token>
-```
-
-```bash
-curl -H "Authorization: Bearer <mfa_state_token>" \
-     -X POST http://localhost:18083/api/v4/mfa/setup
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "secret": "BASE32ENCODEDSECRET",
-    "qr_uri": "otpauth://totp/EMQX:alice?secret=BASE32ENCODEDSECRET&issuer=EMQX",
-    "verification_token": "<verification_token>"
-  }
-}
-```
-
-`qr_uri` 遵循标准 `otpauth://totp/` 格式：
-
-```
-otpauth://totp/EMQX:<username>?secret=<base32_secret>&issuer=EMQX
-```
-
-### 第三步：扫描 QR 码
-
-用户打开认证应用，扫描 `qr_uri` 所对应的 QR 码。扫描完成后，应用开始每 30 秒生成一个新的 6 位 TOTP 码。
-
-![MFA Setup](./assets/dashboard_mfa_setup.png)
-
-### 第四步：验证 TOTP 码
-
-用户提交认证应用中当前显示的 TOTP 码以完成设置。
-
-```bash
-POST /api/v4/mfa/setup/verify
-Authorization: Bearer <verification_token>
-```
-
-```bash
-curl -H "Authorization: Bearer <verification_token>" \
-     -H "Content-Type: application/json" \
-     -X POST http://localhost:18083/api/v4/mfa/setup/verify \
-     -d '{"code": "123456"}'
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "token": "<session_token>"
-  }
-}
-```
-
-响应中的 `token` 是完整的 Dashboard 会话令牌，用户已成功登录，账户 MFA 状态变为**已启用**。
-
-:::warning
-
-请将密钥或备份码保存在安全位置。若认证应用丢失，需由管理员重置 MFA 密钥，详见[重置 MFA 密钥](#重置-mfa-密钥)。
-
-:::
-
-## MFA 登录流程
-
-MFA 设置完成后，后续每次登录均需执行以下两步流程。
-
-### 第一步：使用用户名和密码登录
-
-```bash
-POST /api/v4/auth
-```
-
-```bash
-curl -u alice:password -X POST http://localhost:18083/api/v4/auth
-```
-
-服务端识别到该用户已启用 MFA，返回 MFA 挑战响应而非会话令牌。
-
-```json
-{
-  "code": 0,
-  "data": {
-    "mfa_required": true,
-    "mfa_state_token": "<mfa_state_token>"
-  }
-}
-```
-
-### 第二步：提交 TOTP 码
-
-用户从认证应用获取当前 6 位 TOTP 码并提交。
-
-```bash
-POST /api/v4/auth/mfa_challenge
-Authorization: Bearer <mfa_state_token>
-```
-
-```bash
-curl -H "Authorization: Bearer <mfa_state_token>" \
-     -H "Content-Type: application/json" \
-     -X POST http://localhost:18083/api/v4/auth/mfa_challenge \
-     -d '{"code": "123456"}'
-```
-
-**响应：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "token": "<session_token>"
-  }
-}
-```
-
-`token` 即为 Dashboard 会话令牌，可用于后续 API 调用。
-
-## 禁用 MFA
-
-管理员可为任意用户禁用 MFA。禁用后，用户只需使用用户名和密码即可登录。
+**请求**：
 
 ```bash
 POST /api/v4/users/:username/mfa/disable
 ```
+
+**示例**：
 
 ```bash
 curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/disable
@@ -263,9 +166,9 @@ curl -u admin:public -X POST http://localhost:18083/api/v4/users/alice/mfa/disab
 
 :::
 
-## 重置 MFA 密钥
+#### 重置 TOTP 密钥
 
-若用户丢失了认证应用的访问权限，管理员可重置其 MFA 密钥。旧密钥立即失效，用户下次登录时将重新进入设置流程。
+管理员可使用以下请求重置 TOTP 密钥。旧密钥立即失效，用户下次登录时将重新进入设置流程。
 
 ```bash
 POST /api/v4/users/:username/mfa/enable
@@ -280,11 +183,11 @@ curl -u admin:public \
      -d '{"reset": true}'
 ```
 
-若管理员重置自己的 MFA 密钥，响应中会立即包含新的 QR 码 URI 和密钥。
+若管理员重置自己的密钥，响应中会立即包含新的 QR 码 URI 和密钥。
 
 若管理员重置其他用户的密钥，该用户将回到**需要设置**状态，下次登录时须重新完成设置流程。
 
-## 查询 MFA 状态
+#### 查询 MFA 状态
 
 管理员可查询任意用户的 MFA 状态。
 
@@ -324,18 +227,51 @@ GET /api/v4/users/
 }
 ```
 
+## 使用 MFA 登录
+
+当 MFA 为您的账户启用后，您需要按照以下步骤登录 EMQX Dashboard：
+
+### 首次设置
+
+在启用 MFA 后的首次登录时，您需要设置身份验证应用程序。
+
+1. **输入您的用户名和密码**： 在登录页面，按通常方式输入您的用户名和密码。
+
+2. **扫描二维码或输入设置密钥**： 在初步验证密码后，Dashboard 将提示您扫描二维码或手动将设置密钥输入到您的身份验证应用程序中以完成设置。
+
+   :::warning 注意
+
+   请将密钥或备份码保存在安全位置。若认证应用丢失，需由管理员重置 MFA 密钥，详见[重置 TOTP 密钥](#重置-totp-密钥)。
+
+   :::
+
+3. **验证应用程序中的代码**： 应用程序将生成未来登录的时效性验证码。输入应用程序中的验证码并点击**确定**。
+
+   该验证码仅在短时间内有效（通常为 30 秒），因此请确保快速输入。
+
+<img src="./assets/mfa_authentication.png" alt="mfa_authentication" style="zoom:67%;" />
+
+### 后续登录
+
+完成初次设置后，您可以使用身份验证应用程序登录。
+
+1. **输入您的用户名和密码**： 在后续的登录尝试中，输入您的用户名和密码。
+2. **输入 TOTP 代码**： 验证密码后，系统会提示您输入由身份验证应用程序生成的 TOTP 代码。
+3. **成功登录**： 如果验证码有效，您将成功登录 Dashboard。
+4. **验证码无效**： 如果验证码错误或过期，您将看到一条错误消息。在这种情况下，您可以尝试重新输入当前身份验证应用程序中的验证码。
+
 ## MFA 与 SAML SSO
 
 当 SAML 模块配置了 `force_mfa=true` 时，所有新 SSO 用户在首次登录时必须设置 MFA。SAML 登录重定向包含一个 `login_meta` 字段，指示所需操作：
 
-- `mfa_setup_required: true` — 用户必须先完成 MFA 设置才能访问 Dashboard
-- `mfa_required: true` — MFA 已配置，用户需提交 TOTP 码
+- `mfa_setup_required: true`：用户必须先完成 MFA 设置才能访问 Dashboard。
+- `mfa_required: true`：MFA 已配置，用户需提交 TOTP 码。
 
-SSO 用户的设置流程和挑战流程与[MFA 设置流程](#mfa-设置流程)和[MFA 登录流程](#mfa-登录流程)中描述的完全相同。
+SSO 用户的设置流程和挑战流程与 [首次设置](#首次设置)和[使用 MFA 登录](#使用-mfa-登录)中描述的完全相同。
 
 :::tip
 
-即使模块级别设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA，详见[禁用 MFA](#禁用-mfa)。
+即使模块级别设置了 `force_mfa=true`，管理员仍可为单个 SSO 用户禁用 MFA，详见[停用特定用户的 MFA](#停用特定用户的-mfa)。
 
 :::
 
@@ -345,7 +281,7 @@ SSO 用户的设置流程和挑战流程与[MFA 设置流程](#mfa-设置流程)
 - TOTP 密钥存储在服务端的 Mnesia 数据库中，并在集群所有节点间同步复制。
 - 未完成验证的待处理 MFA 会话每隔 5 分钟自动清理一次。
 
-:::warning
+:::warning 注意
 
 TOTP 码在其 30 秒周期前后的短暂时间窗口内有效。请确保服务器时钟与认证设备时钟同步，避免验证失败。
 

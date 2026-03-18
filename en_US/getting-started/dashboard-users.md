@@ -2,8 +2,6 @@
 
 EMQX Dashboard supports multi-user access with role-based access control (RBAC). Each Dashboard account is assigned a role that determines what it can view and modify. This page describes how to manage Dashboard users and roles via the Dashboard and API.
 
-![Users List](./assets/dashboard_users.png)
-
 ## Roles
 
 EMQX Dashboard has two built-in roles:
@@ -56,9 +54,7 @@ curl -H "Authorization: Bearer <token>" \
   "http://127.0.0.1:18083/api/v4/users/"
 ```
 
-For the full flow to obtain a Bearer Token, see [Dashboard MFA](./dashboard-mfa.md).
-
-:::warning
+::: warning Note
 Bearer tokens are invalidated when you log out or when the user account is deleted. Store tokens securely and avoid embedding them in client-side code.
 :::
 
@@ -68,14 +64,19 @@ The API examples in the sections below use Basic Auth (`-u admin:public`). You c
 
 This section covers creating, viewing, updating, and deleting Dashboard users, and changing passwords. All operations require the `administrator` role and can be performed via the Dashboard or REST API.
 
-### Create User
+### Create a User
 
 **Via Dashboard:**
 
 1. Click **Users** from the left navigation menu.
-2. Click **Add User**.
+
+2. Click **Create**.
+
 3. Fill in the username, password, role, and optional description.
+
 4. Click **Confirm**.
+
+   ![create_user](./assets/create_user.png)
 
 **Via API:**
 
@@ -94,7 +95,7 @@ curl -i -X POST "http://127.0.0.1:18083/api/v4/users/" \
 | `password` | String | Yes | Password. Must be 8-64 characters and contain at least 2 of the following: letters, numbers, special characters. ASCII only. |
 | `role` | String | No | `administrator` or `viewer`. Defaults to `viewer`. |
 | `tags` | String | No | Optional description or label for the user. |
-| `enable_mfa` | Boolean | No | When set to `true`, the user will be prompted to set up MFA on their first login. See [Dashboard MFA](./dashboard-mfa.md). |
+| `enable_mfa` | Boolean | No | When set to `true`, the user will be prompted to set up MFA on their first login. See [Dashboard Multi-Factor Authentication](./dashboard-mfa.md). |
 
 **Response:**
 

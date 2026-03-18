@@ -4,13 +4,13 @@ EMQX Enterprise 提供管理 API（默认端口 8081），用于通过程序方�
 
 本文介绍 API Key 的创建、权限控制、认证方式及管理接口。
 
-![API Key 权限管理](./assets/api_key_permissions.png)
+![API Key 权限管理](./assets/api_key.png)
 
 ## 快速开始
 
 本节展示 API Key 的基本使用流程，包括创建 API Key 并调用管理 API。
 
-1. 通过 Dashboard（18083 端口）创建 API Key：在左侧导航栏点击 **管理** -> **应用**，点击**添加应用**。
+1. 通过 Dashboard（18083 端口）创建 API Key：在左侧导航栏点击 **管理** -> **应用**，点击**创建**。
 
 2. 填写必要信息（如名称、权限等）并保存。记录生成的 AppID 和 AppSecret。
 
