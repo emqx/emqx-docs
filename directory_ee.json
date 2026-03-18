@@ -941,10 +941,6 @@
         {
           "title": "Inflight and Queue",
           "path": "advanced/inflight-window-and-message-queue"
-        },
-        {
-          "title": "API Key Permissions",
-          "path": "advanced/api-key-permissions"
         }
       ]
     },
