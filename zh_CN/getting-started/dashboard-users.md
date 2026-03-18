@@ -1,6 +1,6 @@
 # Dashboard 用户与角色管理
 
-EMQX Dashboard 支持多用户访问，并提供基于角色的访问控制（RBAC）。每个 Dashboard 账户都会被分配一个角色，该角色决定了账户可以查看和修改的内容。本页介绍如何管理 Dashboard 用户、角色与 REST API 认证方式。
+EMQX Dashboard 支持多用户访问，并提供基于角色的访问控制（RBAC）。每个 Dashboard 账户都会被分配一个角色，该角色决定了账户可以查看和修改的内容。本页介绍如何通过 Dashboard 界面和 API 两种方式管理 Dashboard 用户与角色。
 
 ![用户列表](./assets/dashboard_users.png)
 
@@ -16,6 +16,53 @@ EMQX Dashboard 内置两种角色：
 :::tip
 默认账户 `admin` 拥有 `administrator` 角色，且无法被删除。在生产环境部署前，请务必修改其密码。
 :::
+
+## 调用 Dashboard API
+
+Dashboard 用户凭证（用户名和密码）可直接用于调用 Dashboard API（端口 18083），适用于需要程序化操作 Dashboard 的场景，例如自动化用户管理或 API Key 管理。
+
+:::tip
+如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key，详见 [API Key](../advanced/api-key-permission.md)。
+:::
+
+D支持以下两种认证方式：
+
+### Basic Auth（基础认证）
+
+将用户名和密码经 Base64 编码后放入 `Authorization` 请求头：
+
+```
+Authorization: Basic base64(username:password)
+```
+
+示例：
+
+```bash
+curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
+```
+
+### Bearer Token（令牌认证）
+
+Bearer Token 仅适用于已启用 MFA 的用户。完成 MFA 登录流程后，将获得一个会话令牌，将其放入 `Authorization` 请求头即可用于后续 API 调用：
+
+```
+Authorization: Bearer <token>
+```
+
+示例：
+
+```bash
+curl -H "Authorization: Bearer <token>" \
+  "http://127.0.0.1:18083/api/v4/users/"
+```
+
+获取 Bearer Token 的完整流程详见 [Dashboard 多因素认证](./dashboard-mfa.md)。
+
+:::warning
+注销登录或删除用户账户后，对应的 Bearer Token 将立即失效。请妥善保管令牌，避免将其嵌入客户端代码中。
+:::
+
+以下各节的 API 示例均使用 Basic Auth（`-u admin:public`），可按需替换为 Bearer Token。
 
 ## 用户管理
 
@@ -183,110 +230,6 @@ curl -i -X PUT "http://127.0.0.1:18083/api/v4/change_pwd/newuser" \
 - 长度为 8 到 64 个字符
 - 至少包含以下两种字符类型：字母、数字、特殊字符
 - 仅支持 ASCII 字符
-
-## 登录与注销
-
-登录响应反映用户的账户状态：登录成功时返回该用户的角色，当管理员为账户配置了 MFA 时，响应内容会有所不同。
-
-### 登录并获取 Token
-
-**接口：** `POST /api/v4/auth`
-
-```bash
-curl -i -X POST "http://127.0.0.1:18083/api/v4/auth" \
-  -H "Content-Type: application/json" \
-  -d '{"username":"admin","password":"public"}'
-```
-
-响应内容因用户的 MFA 配置情况而有所不同：
-
-**未配置 MFA：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "role": "administrator"
-  }
-}
-```
-
-**已启用 MFA（用户需提供一次性密码）：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "mfa_required": true,
-    "mfa_state_token": "..."
-  }
-}
-```
-
-**需要完成 MFA 配置（用户尚未配置 MFA）：**
-
-```json
-{
-  "code": 0,
-  "data": {
-    "mfa_setup_required": true,
-    "mfa_state_token": "<mfa_state_token>"
-  }
-}
-```
-
-当响应中包含 `mfa_required` 或 `mfa_setup_required` 时，需使用 `mfa_state_token` 完成 MFA 流程后，才能正常访问 Dashboard，详见 [Dashboard 多因素认证](./dashboard-mfa.md)。
-
-### 注销并使 Token 失效
-
-**接口：** `DELETE /api/v4/auth`
-
-在 `Authorization` 请求头中传入 Bearer Token：
-
-```bash
-curl -i -X DELETE "http://127.0.0.1:18083/api/v4/auth" \
-  -H "Authorization: Bearer <token>"
-```
-
-注销后，该用户的所有有效 Token 将被销毁。
-
-## Dashboard API 认证方式
-
-本节介绍如何向 **Dashboard API（端口 18083）**发起认证请求。Dashboard API 使用 Dashboard 用户凭证进行认证，适用于 Dashboard Web 界面及 API Key 管理等操作。
-
-:::tip
-如需通过程序方式访问客户端管理、规则引擎、插件等集成接口，应使用**管理 API（端口 8081）**及 API Key 进行认证，详见 [API Key 权限管理](../advanced/api-key-permissions.md)。
-:::
-
-Dashboard 用户可以通过以下两种方式向 Dashboard API 发起认证请求。
-
-### Basic Auth（基础认证）
-
-将用户名和密码经 Base64 编码后放入 `Authorization` 请求头：
-
-```
-Authorization: Basic base64(username:password)
-```
-
-示例：
-
-```bash
-curl -u admin:public "http://127.0.0.1:18083/api/v4/users/"
-```
-
-### Bearer Token（令牌认证）
-
-通过登录 API（`POST /api/v4/auth`）获取 JWT 令牌，然后将其放入 `Authorization` 请求头：
-
-```
-Authorization: Bearer <token>
-```
-
-Dashboard 界面在初次登录时使用 Basic Auth，之后的所有 API 调用均使用 Bearer Token。
-
-:::warning
-注销登录或删除用户账户后，对应的 Bearer Token 将立即失效。请妥善保管令牌，避免将其嵌入客户端代码中。
-:::
 
 ## SSO 用户
 
