@@ -6,7 +6,7 @@ In some scenarios, you might need to apply custom encoding or decoding logic tha
 
 ## External HTTP API Specification
 
-Your external HTTP server must expose a single endpoint that receives encoding and decoding requests from EMQX's `schema_encode` and `schema_decode` functions. EMQX can call this endpoint using either `POST` (default) or `GET` method.
+Your external HTTP server must expose a single endpoint that receives encoding and decoding requests from EMQX's `schema_encode` and `schema_decode` functions. EMQX can call this endpoint using either the `POST` (default) or the `GET` method.
 
 ### Request Format
 
