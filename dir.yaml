@@ -832,3 +832,232 @@
                          - release-notes/data-integration-4.4-to-5.1-incompatibility
                          - release-notes/gateway-4.4-to-5.1-incompatibility
 
+/:
+- title_en: EMQX Overview
+  title_cn: EMQX 概览
+  path: './' # this is the index page, {en_US,zh_CN}/README.md is the content
+  collapsed: false
+  children:
+    - title_en: What's New
+      title_cn: 全新功能
+      path: get-started/new-features
+    - title_en: Feature Comparison
+      title_cn: 功能对比
+      path: get-started/feature-comparison
+    - title_en: Operating Limitations
+      title_cn: 使用限制
+      path: get-started/restrictions
+    - title_en: FAQ
+      title_cn: 常见问题解答
+      collapsed: false
+      children:
+        - title_en: Concept FAQs
+          title_cn: 概念问题
+          path: get-started/concept
+        - title_en: Deployment FAQs
+          title_cn: 部署问题
+          path: get-started/deployment
+        - title_en: Feature FAQs
+          title_cn: 功能问题
+          path: get-started/feature
+        - title_en: Usage FAQs
+          title_cn: 使用问题
+          path: get-started/faq
+    - title_en: Technical Support
+      title_cn: 技术支持
+      path: get-started/support/technical-support
+- title_en: Quick Start
+  title_cn: 快速开始
+  path: get-started/getting-started
+- title_en: Installation and Deployment
+  title_cn: 安装部署
+  path: get-started/deploy/install
+  collapsed: false
+  children:
+    - title_en: Install EMQX Enterprise
+      title_cn: 安装 EMQX 企业版
+      path: get-started/deploy/install-enterprise
+      collapsed: false
+      children:
+        - title_en: Docker
+          title_cn: Docker
+          path: get-started/deploy/install-docker
+        - title_en: Debian
+          title_cn: Debian
+          path: get-started/deploy/install-debian
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: get-started/deploy/install-ubuntu
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: get-started/deploy/install-rhel
+        - title_en: macOS
+          title_cn: macOS
+          path: get-started/deploy/install-macOS
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          path: get-started/deploy/kubernetes/kubernetes
+          collapsed: false
+          children:
+            - title_en: EMQX Operator
+              title_cn: EMQX Operator
+              path: get-started/deploy/kubernetes/operator/operator
+              collapsed: false
+              children:
+                - get-started/deploy/kubernetes/operator/getting-started
+                - title_en: 在阿里云中部署 EMQX
+                  title_cn: 在阿里云中部署 EMQX
+                  lang: cn
+                  path: get-started/deploy/kubernetes/operator/alibaba-cloud
+                - title_en: 在华为云中部署 EMQX
+                  title_cn: 在华为云中部署 EMQX
+                  lang: cn
+                  path: get-started/deploy/kubernetes/operator/huawei-cloud
+                - title_en: 在腾讯云中部署 EMQX
+                  title_cn: 在腾讯云中部署 EMQX
+                  lang: cn
+                  path: get-started/deploy/kubernetes/operator/tencent-cloud
+                - title_en: Deploy EMQX on AWS
+                  title_cn: 在 AWS 中部署 EMQX
+                  path: get-started/deploy/kubernetes/operator/aws-eks
+                - title_en: Deploy EMQX on Google cloud
+                  title_cn: 在 GCP 中部署 EMQX
+                  path: get-started/deploy/kubernetes/operator/gcp-gke
+                - title_en: Deploy EMQX on Azure
+                  title_cn: 在 Azure 中部署 EMQX
+                  path: get-started/deploy/kubernetes/operator/azure-aks
+                - title_en: Manage EMQX Cluster
+                  title_cn: 管理 EMQX 集群
+                  path: get-started/deploy/kubernetes/operator/tasks/overview
+                  collapsed: true
+                  children:
+                    - title_en: Configure License (Enterprise)
+                      title_cn: 配置 License (企业版)
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-license
+                    - title_en: Enable TLS in EMQX
+                      title_cn: 在 EMQX 中开启 TLS
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-tls
+                    - title_en: Change EMQX Configurations
+                      title_cn: 修改 EMQX 配置
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-config
+                    - title_en: Enable Core + Replicant Cluster
+                      title_cn: 配置 Core + Replica 集群
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-core-replicant
+                    - title_en: Enable Persistence
+                      title_cn: 开启持久化
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-persistence
+                    - title_en: Access EMQX Cluster by LoadBalancer
+                      title_cn: 通过 LoadBalancer 访问 EMQX Cluster
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-service
+                    - title_en: Configure Blue-Green Upgrade
+                      title_cn: 配置蓝绿发布
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-blueGreenUpdate
+                    - title_en: Collect EMQX Logs
+                      title_cn: 采集 EMQX 日志
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-collection
+                    - title_en: Change EMQX Log Level
+                      title_cn: 修改 EMQX 日志等级
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-log-level
+                    - title_en: Monitor EMQX Cluster
+                      title_cn: 监控 EMQX 集群
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-prometheus
+                    - title_en: Load Balance EMQX Cluster
+                      title_cn: 负载均衡 EMQX 集群
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-rebalance
+                    - title_en: Deploy EMQX Cluster in k8s with Restricted Access
+                      title_cn: 在受限的 k8s 环境中部署 EMQX 集群
+                      path: get-started/deploy/kubernetes/operator/tasks/configure-emqx-restricted-k8s
+                - get-started/deploy/kubernetes/operator/api-reference
+            - title_en: EMQX Helm Chart
+              title_cn: EMQX Helm Chart
+              path: get-started/deploy/kubernetes/chart
+        - title_en: Work with License
+          title_cn: 配置 License
+          path: get-started/deploy/license
+    - title_en: Install EMQX Open Source
+      title_cn: 安装 EMQX 开源版
+      path: get-started/deploy/install-open-source
+      collapsed: false
+      children:
+        - title_en: Docker
+          title_cn: Docker
+          path: get-started/deploy/install-docker-ce
+        - title_en: Debian
+          title_cn: Debian
+          path: get-started/deploy/install-debian-ce
+        - title_en: Ubuntu
+          title_cn: Ubuntu
+          path: get-started/deploy/install-ubuntu-ce
+        - title_en: CentOS/RHEL
+          title_cn: CentOS/RHEL
+          path: get-started/deploy/install-rhel-ce
+        - title_en: macOS
+          title_cn: macOS
+          path: get-started/deploy/install-macOS-ce
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: en
+          path: 'https://docs.emqx.com/en/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Kubernetes
+          title_cn: Kubernetes
+          lang: cn
+          path: 'https://docs.emqx.com/zh/emqx-operator/latest/getting-started/getting-started.html'
+        - title_en: Install from Source Code
+          title_cn: 源码编译安装
+          path: get-started/deploy/install-source
+    - title_en: Upgrade Guide
+      title_cn: 升级指南
+      collapsed: false
+      children:
+        - title_en: Rolling Upgrade
+          title_cn: 滚动升级
+          path: get-started/deploy/rolling-upgrades
+        - get-started/deploy/upgrade-cluster
+        - title_en: Upgrade EMQX on Kubernetes
+          title_cn: Upgrade EMQX on Kubernetes
+          lang: en
+          path: https://www.emqx.com/en/blog/how-to-upgrade-emqx-in-kubernetes
+        - title_en: 在 Kubernetes 中升级 EMQX
+          title_cn: 在 Kubernetes 中升级 EMQX
+          lang: cn
+          path: https://www.emqx.com/zh/blog/how-to-upgrade-emqx-in-kubernetes
+      # - deploy/hot-upgrades
+  # - title_en: Migrate to Enterprise
+  #   title_cn: 迁移到企业版
+  #   path: deploy/migrate-to-enterprise
+- title_en: Publish/Subscribe
+  title_cn: 发布订阅
+  path: get-started/messaging/introduction
+  collapsed: false
+  children:
+    - get-started/messaging/mqtt-concepts
+    - get-started/messaging/publish-and-subscribe
+  # - get-started/messaging/explore-mqtt
+    - get-started/messaging/mqtt-shared-subscription
+    - get-started/messaging/mqtt-retained-message
+    - get-started/messaging/mqtt-will-message
+    - get-started/messaging/mqtt-exclusive-subscription
+    - get-started/messaging/mqtt-delayed-publish
+    - get-started/messaging/mqtt-auto-subscription
+    - get-started/messaging/mqtt-topic-rewrite
+    - get-started/messaging/mqtt-wildcard-subscription
+      # - get-started/messaging/nanomq
+      # - get-started/messaging/neuron
+- title_en: MQTT Guide
+  title_cn: MQTT Guide
+  lang: en
+  path: get-started/mqtt-guide
+  collapsed: false
+  children:
+    - title_en: MQTT Basics
+      title_cn: MQTT Basics
+      lang: en
+      path: get-started/mqtt-basics
+    - title_en: MQTT Advanced
+      title_cn: MQTT Advanced
+      lang: en
+      path: get-started/mqtt-advanced
+- title_en: MQTT 教程
+  title_cn: MQTT 教程
+  lang: cn
+  path: https://www.emqx.com/zh/mqtt-guide
