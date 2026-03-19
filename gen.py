@@ -24,6 +24,14 @@ def is_lang_match(i, lang):
 
 EDITION = sys.argv[1]
 
+# Determine supported languages based on actual doc content
+SUPPORTED_LANGS = ['en', 'cn']
+if os.path.isdir('ja_JP'):
+    ja_dirs = [d for d in os.listdir('ja_JP')
+               if os.path.isdir(os.path.join('ja_JP', d)) and d != 'configuration']
+    if ja_dirs:
+        SUPPORTED_LANGS.append('ja')
+
 # parser document env file
 def parse_env_file(file_path):
     config = {}
@@ -127,26 +135,21 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(content, Loader=yaml.FullLoader)
-    move_manual('en', EDITION)
-    move_manual('cn', EDITION)
-    move_manual('ja', EDITION)
+    for lang in SUPPORTED_LANGS:
+        move_manual(lang, EDITION)
 
+    res = {}
     if isinstance(all, list):
         # Original format: dir.yaml is a flat list
-        en = parse(all, 'en', EDITION)
-        cn = parse(all, 'cn', EDITION)
-        ja = parse(all, 'ja', EDITION)
-        res = {'en': en, 'cn': cn, 'ja': ja}
+        for lang in SUPPORTED_LANGS:
+            res[lang] = parse(all, lang, EDITION)
     elif isinstance(all, dict):
         # Multi-path format: dir.yaml is a dict with path prefixes as keys
-        en = {}
-        cn = {}
-        ja = {}
+        for lang in SUPPORTED_LANGS:
+            res[lang] = {}
         for path_prefix, children in all.items():
-            en[path_prefix] = parse(children, 'en', EDITION)
-            cn[path_prefix] = parse(children, 'cn', EDITION)
-            ja[path_prefix] = parse(children, 'ja', EDITION)
-        res = {'en': en, 'cn': cn, 'ja': ja}
+            for lang in SUPPORTED_LANGS:
+                res[lang][path_prefix] = parse(children, lang, EDITION)
     else:
         print('dir.yaml must be a list or a dict', file=sys.stderr)
         exit(3)
@@ -159,9 +162,9 @@ with open(r'dir.yaml', encoding='utf-8') as file:
                 nav_content = nav_content.replace('${' + key + '}', version[key])
             nav_all = yaml.load(nav_content, Loader=yaml.FullLoader)
             if nav_all:
-                nav_en = parse(nav_all, 'en', EDITION)
-                nav_cn = parse(nav_all, 'cn', EDITION)
-                nav_ja = parse(nav_all, 'ja', EDITION)
-                res['nav'] = {'en': nav_en, 'cn': nav_cn, 'ja': nav_ja}
+                nav = {}
+                for lang in SUPPORTED_LANGS:
+                    nav[lang] = parse(nav_all, lang, EDITION)
+                res['nav'] = nav
 
     json.dump(res, sys.stdout, indent=2, ensure_ascii=False)
