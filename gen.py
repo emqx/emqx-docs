@@ -2,6 +2,7 @@
 
 import yaml
 import json
+import os
 import sys
 import shutil
 
@@ -50,8 +51,12 @@ def read_title_from_md(lang, path):
         dir = 'zh_CN'
     elif lang == 'ja':
         dir = 'ja_JP'
-    path = dir + '/' + path + '.md'
-    with open(path) as f:
+    full_path = dir + '/' + path + '.md'
+    if not os.path.isfile(full_path):
+        if lang != 'en':
+            return read_title_from_md('en', path)
+        return path
+    with open(full_path) as f:
         for line in f:
             if line.strip():
                 return line.strip('\n').strip('#').strip()
@@ -108,6 +113,8 @@ def move_manual(lang, edition):
         source_path = f'cfg-manual-docgen/configuration-manual-{edition}-en.md'
 
     target_path = f'{baseDir}/configuration/configuration-manual.md'
+    if not os.path.isfile(source_path) or not os.path.isdir(baseDir):
+        return
     shutil.copyfile(source_path, target_path)
 
 with open(r'dir.yaml', encoding='utf-8') as file:
@@ -145,7 +152,6 @@ with open(r'dir.yaml', encoding='utf-8') as file:
         exit(3)
 
     # Optionally parse nav.yaml for top navigation config
-    import os
     if os.path.isfile('nav.yaml'):
         with open('nav.yaml', encoding='utf-8') as nav_file:
             nav_content = nav_file.read()
