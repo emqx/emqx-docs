@@ -53,9 +53,7 @@ def read_title_from_md(lang, path):
         dir = 'ja_JP'
     full_path = dir + '/' + path + '.md'
     if not os.path.isfile(full_path):
-        if lang != 'en':
-            return read_title_from_md('en', path)
-        return path
+        return None
     with open(full_path) as f:
         for line in f:
             if line.strip():
@@ -82,6 +80,8 @@ def parse(children, lang, edition):
                 title = child['title_ja']
         else:
             title = read_title_from_md(lang, child)
+            if title is None:
+                continue
         _child = {'title': title}
 
         if isinstance(child, str):
