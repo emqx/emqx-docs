@@ -123,6 +123,7 @@ def move_manual(lang, edition):
     target_path = f'{baseDir}/configuration/configuration-manual.md'
     if not os.path.isfile(source_path) or not os.path.isdir(baseDir):
         return
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
     shutil.copyfile(source_path, target_path)
 
 with open(r'dir.yaml', encoding='utf-8') as file:
