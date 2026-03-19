@@ -14,10 +14,10 @@ if sys.argv[1] != r'ce' and sys.argv[1] != r'ee':
     exit(2)
 
 ## check if the 'lang' field matches expected input
-## when no 'lang' is defined, it matches both 'en' and 'cn'
-def is_lang_match(i, en_or_cn):
-    if 'lang' in i:
-        return i['lang'] == en_or_cn
+## when no 'lang' is defined, it matches both 'en', 'cn' and 'ja'
+def is_lang_match(i, lang):
+    if isinstance(i, dict) and ('lang' in i):
+        return i['lang'] == lang
     else:
         return True
 
@@ -43,10 +43,13 @@ def is_edition_match(i, ce_or_ee):
         return True
 
 def read_title_from_md(lang, path):
+    #print(f"Reading title from {path} for lang {lang}", file=sys.stderr)
     if lang == 'en':
         dir = 'en_US'
-    else:
+    elif lang == 'cn':
         dir = 'zh_CN'
+    elif lang == 'ja':
+        dir = 'ja_JP'
     path = dir + '/' + path + '.md'
     with open(path) as f:
         for line in f:
@@ -70,6 +73,8 @@ def parse(children, lang, edition):
             title = child['title_en']
             if lang == 'cn' and 'title_cn' in child:
                 title = child['title_cn']
+            elif lang == 'ja' and 'title_ja' in child:
+                title = child['title_ja']
         else:
             title = read_title_from_md(lang, child)
         _child = {'title': title}
@@ -93,9 +98,16 @@ def parse(children, lang, edition):
 def move_manual(lang, edition):
     if lang == 'cn':
         lang = 'zh'
-    baseDir = 'en_US' if lang == 'en' else 'zh_CN'
+        baseDir = 'zh_CN'
+    elif lang == 'ja':
+        baseDir = 'ja_JP'
+    else:
+        baseDir = 'en_US'
     source_path = f'cfg-manual-docgen/configuration-manual-{edition}-{lang}.md'
-    target_path = f'{baseDir}/operate/configuration/configuration-manual.md'
+    if lang == 'ja':
+        source_path = f'cfg-manual-docgen/configuration-manual-{edition}-en.md'
+
+    target_path = f'{baseDir}/configuration/configuration-manual.md'
     shutil.copyfile(source_path, target_path)
 
 with open(r'dir.yaml', encoding='utf-8') as file:
@@ -108,11 +120,42 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     # The FullLoader parameter handles the conversion from YAML
     # scalar values to Python the dictionary format
     all = yaml.load(content, Loader=yaml.FullLoader)
-
     move_manual('en', EDITION)
     move_manual('cn', EDITION)
-    all_items = [item for section in all.values() for item in section]
-    en = parse(all_items, 'en', EDITION)
-    cn = parse(all_items, 'cn', EDITION)
-    res ={'en': en, 'cn': cn}
+    move_manual('ja', EDITION)
+
+    if isinstance(all, list):
+        # Original format: dir.yaml is a flat list
+        en = parse(all, 'en', EDITION)
+        cn = parse(all, 'cn', EDITION)
+        ja = parse(all, 'ja', EDITION)
+        res = {'en': en, 'cn': cn, 'ja': ja}
+    elif isinstance(all, dict):
+        # Multi-path format: dir.yaml is a dict with path prefixes as keys
+        en = {}
+        cn = {}
+        ja = {}
+        for path_prefix, children in all.items():
+            en[path_prefix] = parse(children, 'en', EDITION)
+            cn[path_prefix] = parse(children, 'cn', EDITION)
+            ja[path_prefix] = parse(children, 'ja', EDITION)
+        res = {'en': en, 'cn': cn, 'ja': ja}
+    else:
+        print('dir.yaml must be a list or a dict', file=sys.stderr)
+        exit(3)
+
+    # Optionally parse nav.yaml for top navigation config
+    import os
+    if os.path.isfile('nav.yaml'):
+        with open('nav.yaml', encoding='utf-8') as nav_file:
+            nav_content = nav_file.read()
+            for key in version:
+                nav_content = nav_content.replace('${' + key + '}', version[key])
+            nav_all = yaml.load(nav_content, Loader=yaml.FullLoader)
+            if nav_all:
+                nav_en = parse(nav_all, 'en', EDITION)
+                nav_cn = parse(nav_all, 'cn', EDITION)
+                nav_ja = parse(nav_all, 'ja', EDITION)
+                res['nav'] = {'en': nav_en, 'cn': nav_cn, 'ja': nav_ja}
+
     json.dump(res, sys.stdout, indent=2, ensure_ascii=False)
