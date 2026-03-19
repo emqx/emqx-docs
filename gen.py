@@ -120,7 +120,7 @@ def move_manual(lang, edition):
     if lang == 'ja':
         source_path = f'cfg-manual-docgen/configuration-manual-{edition}-en.md'
 
-    target_path = f'{baseDir}/configuration/configuration-manual.md'
+    target_path = f'{baseDir}/operate/configuration/configuration-manual.md'
     if not os.path.isfile(source_path) or not os.path.isdir(baseDir):
         return
     os.makedirs(os.path.dirname(target_path), exist_ok=True)
