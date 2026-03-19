@@ -4,7 +4,6 @@ import yaml
 import json
 import os
 import sys
-import shutil
 
 if len(sys.argv) != 2:
     print('expecting ce or ee as arg1')
@@ -108,24 +107,6 @@ def parse(children, lang, edition):
         acc.append(_child)
     return acc
 
-def move_manual(lang, edition):
-    if lang == 'cn':
-        lang = 'zh'
-        baseDir = 'zh_CN'
-    elif lang == 'ja':
-        baseDir = 'ja_JP'
-    else:
-        baseDir = 'en_US'
-    source_path = f'cfg-manual-docgen/configuration-manual-{edition}-{lang}.md'
-    if lang == 'ja':
-        source_path = f'cfg-manual-docgen/configuration-manual-{edition}-en.md'
-
-    target_path = f'{baseDir}/operate/configuration/configuration-manual.md'
-    if not os.path.isfile(source_path) or not os.path.isdir(baseDir):
-        return
-    os.makedirs(os.path.dirname(target_path), exist_ok=True)
-    shutil.copyfile(source_path, target_path)
-
 with open(r'dir.yaml', encoding='utf-8') as file:
     # Read file and replace the str with env variable
     content = file.read()
@@ -133,11 +114,7 @@ with open(r'dir.yaml', encoding='utf-8') as file:
     for key in version:
         content = content.replace('${' + key + '}', version[key])
 
-    # The FullLoader parameter handles the conversion from YAML
-    # scalar values to Python the dictionary format
     all = yaml.load(content, Loader=yaml.FullLoader)
-    for lang in SUPPORTED_LANGS:
-        move_manual(lang, EDITION)
 
     res = {}
     if isinstance(all, list):
