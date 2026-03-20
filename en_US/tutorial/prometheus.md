@@ -62,6 +62,12 @@ http://localhost:8081/api/v4/emqx_prometheus?type=prometheus
 
 Starting from e4.4.34, EMQX Enterprise exposes two additional metrics for monitoring HTTP API request performance. These metrics are automatically included in the `emqx_prometheus` plugin data collection without additional configuration, and are available via both push mode and pull mode.
 
+To query the request counter directly in JSON format, use:
+
+```
+GET /api/v4/http_api_metrics
+```
+
 ### Metrics
 
 | Name | Type | Labels | Description |

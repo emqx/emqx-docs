@@ -113,6 +113,12 @@ http://localhost:8081/api/v4/emqx_prometheus?type=prometheus
 
 从 e4.4.34 开始，EMQX Enterprise 新增两个用于监控 HTTP API 请求性能的指标。这些指标会自动包含在 `emqx_prometheus` 插件的数据采集中，无需额外配置，可通过推送模式和拉取模式两种方式获取。
 
+如需直接以 JSON 格式查询请求计数，可使用以下端点：
+
+```
+GET /api/v4/http_api_metrics
+```
+
 ### 指标列表
 
 | 指标名 | 类型 | 标签 | 说明 |
