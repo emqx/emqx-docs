@@ -51,18 +51,16 @@ Prometheus Server → scrape → EMQX HTTP endpoint
 Configure Prometheus to scrape the following endpoint:
 
 ```
-http://localhost:8081/api/v4/emqx_prometheus
+http://localhost:8081/api/v4/emqx_prometheus?type=prometheus
 ```
+
+> Note: The default response format is JSON (`type=json`). Add `?type=prometheus` to get Prometheus text format.
 
 ## HTTP API Metrics
 
 > Available since EMQX Enterprise e4.4.34.
 
-Starting from e4.4.34, EMQX Enterprise exposes two additional metrics for monitoring HTTP API request performance. These metrics are automatically included in the `emqx_prometheus` plugin data collection without additional configuration:
-
-- **Push mode**: Metrics are periodically pushed to the PushGateway along with other metrics.
-- **Pull mode**: Available via `GET /api/v4/emqx_prometheus?type=prometheus`, which returns data in Prometheus text format.
-- **JSON mode**: Available via `GET /api/v4/emqx_prometheus` (default `type=json`), which returns counter data in JSON format.
+Starting from e4.4.34, EMQX Enterprise exposes two additional metrics for monitoring HTTP API request performance. These metrics are automatically included in the `emqx_prometheus` plugin data collection without additional configuration, and are available via both push mode and pull mode.
 
 ### Metrics
 

@@ -102,18 +102,16 @@ Prometheus Server → scrape → EMQX HTTP 端点
 在 Prometheus 中配置抓取以下端点：
 
 ```
-http://localhost:8081/api/v4/emqx_prometheus
+http://localhost:8081/api/v4/emqx_prometheus?type=prometheus
 ```
+
+> 注意：默认响应格式为 JSON（`type=json`），需添加 `?type=prometheus` 参数以获取 Prometheus text 格式数据。
 
 ## HTTP API 监控指标
 
 > 从 EMQX Enterprise e4.4.34 开始支持。
 
-从 e4.4.34 开始，EMQX Enterprise 新增两个用于监控 HTTP API 请求性能的指标。这些指标会自动包含在 `emqx_prometheus` 插件的数据采集中，无需额外配置：
-
-- **Push 模式**：指标随插件定时推送至 PushGateway。
-- **Pull 模式**：通过 `GET /api/v4/emqx_prometheus?type=prometheus` 端点拉取，返回 Prometheus text 格式数据。
-- **JSON 模式**：通过 `GET /api/v4/emqx_prometheus`（默认 `type=json`）获取，返回 JSON 格式的计数器数据。
+从 e4.4.34 开始，EMQX Enterprise 新增两个用于监控 HTTP API 请求性能的指标。这些指标会自动包含在 `emqx_prometheus` 插件的数据采集中，无需额外配置，可通过推送模式和拉取模式两种方式获取。
 
 ### 指标列表
 
